@@ -2,147 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD25154CFF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B287E54CFFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357296AbiFORcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S1349265AbiFORdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356452AbiFORb4 (ORCPT
+        with ESMTP id S237257AbiFORcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:31:56 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AB253A43
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:31:34 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id c2so17214236edf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w3YUx2QLwqjC4yt6Na4HDX+YOsTdcO8b9CpzZpDW+SU=;
-        b=SumGg4ML2+ipUmc7XA+lq9lEeAMN0G+c1nkIb8xlQdeSVIXK7p8gchHLt4JMr6H2DB
-         oay1lq5P2vRcbJXDcviUhEXtOuH0wnMLPDb9TSVPWMFmqsCzv/3C5/PS3UIUNxLhWLFF
-         stiOnXVgBnI1zKc+m2gV4bh+ZP9jm2By0atDyoqFmq9V6owXGPdCIBexAyREiyN/lqWP
-         sE0WUW66Z3ial6A4UoLjgKhJjd15EU91IEkibIDuhAx6QDoDtHXsAnahe4K9HdlDUCRk
-         bV02tDWRCArcwrkIhFBPyvdeAp0V7KDoiMmXTmMmQR0oyvjc0mW2aORSBPxsiKFydKXZ
-         joRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w3YUx2QLwqjC4yt6Na4HDX+YOsTdcO8b9CpzZpDW+SU=;
-        b=z/bUYWfqghRFRo4LKPNr9lSfFO2il7ve91+2z0dETAJidUujxF6uWxPttIjvHEK/NA
-         oCtRgvWMIogAR59JdsR2U5ECDB1nnujZGLzTPt3fg0fqhtkmMxX9oJSUVxPBhFDTAR2e
-         owqz9rG20+Hb+c6eoTlQHIks8qrr1SA/qBRoX6QLhfZ2dUPZL1Y3StER2AEUXa+uxQlh
-         dSsVLfrJIocQIOQHnx/VqGvOK6LBDCpQGCTi23SwgnafzH5nvXST9P6cCv1gE/5kK7K1
-         uokvdl+FHfAPTGnl+AWEURYScRUYZlqtK2Ja9UvjyeCwZ6JyCfy3l/zUWwsQMliD1EI1
-         Errw==
-X-Gm-Message-State: AJIora9iLAtGkbj8Vk11w/qvuOYi6EG9iNkvWTj4OqUt2AN05k/UeX+d
-        EmPsKLZasHRR6nw+rfHw5c7DHdqSwsmBYvda3/BTAw==
-X-Google-Smtp-Source: AGRyM1sS/o8uE5SIVvuRne76FHmKtTOxLuF/9qz0QiBkZZh/OtXHhO00qEM0M0U9FVkRkm0Vv+czaVupYJU60sZU7Ow=
-X-Received: by 2002:a05:6402:3325:b0:42d:e1d8:99e9 with SMTP id
- e37-20020a056402332500b0042de1d899e9mr1033464eda.87.1655314293062; Wed, 15
- Jun 2022 10:31:33 -0700 (PDT)
+        Wed, 15 Jun 2022 13:32:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C5E7627B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:32:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B736C153B;
+        Wed, 15 Jun 2022 10:32:42 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 661013F73B;
+        Wed, 15 Jun 2022 10:32:41 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 18:32:31 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 11/22] firmware: arm_scmi: Add SCMIv3.1 extended names
+ protocols support
+Message-ID: <YqoXgsbg6t46rZeI@e120937-lin>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-12-cristian.marussi@arm.com>
+ <6f865d7f-fde8-d923-3c7e-d12bfbc370a6@gmail.com>
+ <YqmVsMGgxKuIT5rx@e120937-lin>
+ <Yqmo/BiIR4gku0Y+@e120937-lin>
+ <c787dfe6-9639-8797-d07a-048c5ec69ddf@gmail.com>
+ <YqoI5hYa97nZwUjl@e120937-lin>
+ <f194f9b6-578d-ae08-16c3-6d464da10452@gmail.com>
 MIME-Version: 1.0
-References: <20220510235653.933868-1-tjmercier@google.com> <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
- <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
- <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
- <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
- <Yn6DpUsoSz1/15Kc@slm.duckdns.org> <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
- <YodHjYlMx1XGtM2+@slm.duckdns.org> <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
-In-Reply-To: <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 15 Jun 2022 10:31:21 -0700
-Message-ID: <CABdmKX0WV8VWgeafVGJ++nJ4xsJD7Wpz=3KX=BW1du=huttfvw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        John Stultz <jstultz@google.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f194f9b6-578d-ae08-16c3-6d464da10452@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 9:25 AM T.J. Mercier <tjmercier@google.com> wrote:
->
-> On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > Hello,
-> >
-> > On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
-> > > Thanks for your suggestion. This almost works. "dmabuf" as a key could
-> > > work, but I'd actually like to account for each heap. Since heaps can
-> > > be dynamically added, I can't accommodate every potential heap name by
-> > > hardcoding registrations in the misc controller.
-> >
-> > On its own, that's a pretty weak reason to be adding a separate gpu
-> > controller especially given that it doesn't really seem to be one with
-> > proper abstractions for gpu resources. We don't want to keep adding random
-> > keys to misc controller but can definitely add limited flexibility. What
-> > kind of keys do you need?
-> >
-> Well the dmabuf-from-heaps component of this is the initial use case.
-> I was envisioning we'd have additional keys as discussed here:
-> https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
-> So we'd end up with a well-defined core set of keys like "system", and
-> then drivers would be free to use their own keys for their own unique
-> purposes which could be complementary or orthogonal to the core set.
-> Yesterday I was talking with someone who is interested in limiting gpu
-> cores and bus IDs in addition to gpu memory. How to define core keys
-> is the part where it looks like there's trouble.
->
-> For my use case it would be sufficient to have current and maximum
-> values for an arbitrary number of keys - one per heap. So the only
-> part missing from the misc controller (for my use case) is the ability
-> to register a new key at runtime as heaps are added. Instead of
-> keeping track of resources with enum misc_res_type, requesting a
-> resource handle/ID from the misc controller at runtime is what I think
-> would be required instead.
->
-Quick update: I'm going to make an attempt to modify the misc
-controller to support a limited amount of dynamic resource
-registration/tracking in place of the new controller in this series.
+On Wed, Jun 15, 2022 at 10:19:53AM -0700, Florian Fainelli wrote:
+> On 6/15/22 09:29, Cristian Marussi wrote:
+> > On Wed, Jun 15, 2022 at 09:10:03AM -0700, Florian Fainelli wrote:
+> > > On 6/15/22 02:40, Cristian Marussi wrote:
+> > > > On Wed, Jun 15, 2022 at 09:18:03AM +0100, Cristian Marussi wrote:
+> > > > > On Wed, Jun 15, 2022 at 05:45:11AM +0200, Florian Fainelli wrote:
+> > > > > > 
+> > > > > > 
+> > > > > > On 3/30/2022 5:05 PM, Cristian Marussi wrote:
+> > > > > > > Using the common protocol helper implementation add support for all new
+> > > > > > > SCMIv3.1 extended names commands related to all protocols with the
+> > > > > > > exception of SENSOR_AXIS_GET_NAME.
+> > > > > > > 
+> > > > > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > > > > > 
+> > > > > > This causes the following splat on a platform where regulators fail to
+> > > > > > initialize:
+> > > > > > 
+> > > > > 
+> > > > > Hi Florian,
+> > > > > 
+> > > > > thanks for the report.
+> > > > > 
+> > > > > It seems a memory error while allocating so it was not meant to be
+> > > > > solved by the fixes, anyway, I've never seen this splat in my testing
+> > > > > and at first sight I cannot see anything wrong in the devm_k* calls
+> > > > > inside scmi_voltage_protocol_init...is there any particular config in
+> > > > > your setup ?
+> > > > > 
+> > > > > Moreover, the WARNING line 5402 seems to match v5.19-rc1 and it has
+> > > > > slightly changed with -rc-1, so I'll try rebasing on that at first and
+> > > > > see if I can reproduce the issue locally.
+> > > > > 
+> > > > 
+> > > > I just re-tested the series rebased on v519-rc1 plus fixes and I cannot
+> > > > reproduce in my setup with a few (~9) good and bad voltage domains.
+> > > > 
+> > > > How many voltage domains are advertised by the platform in your setup ?
+> > > 
+> > > There are 11 voltage regulators on this platform, and of course, now that I
+> > > am trying to reproduce the splat I reported I just cannot anymore... I will
+> > > let you know if there is anything that needs to be done. Thanks for being
+> > > responsive as usual!
+> > 
+> > ... you're welcome...
+> > 
+> > I'm trying to figure out where an abnormal mem request could happen...
+> 
+> I think the problem is/was with the number of voltage domains being reported
+> which was way too big and passed directly, without any clamping to
+> devm_kcalloc() resulting the splat indicating that the allocation was beyond
+> the MAX_ORDER. The specification allows for up to 2^16 domains which would
+> still be way too much to allocate using kmalloc() so we could/should
+> consider vmalloc() here eventually?
+> 
 
-Thanks everyone for the feedback.
--T.J.
+Yes I was suspicious about the same and I was starting to think about vmalloc
+in general across all domain enumerations even if this is may not be the case
+for your splat...
 
-> > Thanks.
-> >
-> > --
-> > tejun
+> In all likelihood though we probably won't find a system with 65k voltage
+> domains.
+> 
+> > 
+> > can you try adding this (for brutal debugging) when you try ?
+> > (...just to rule out funny fw replies.... :D)
+> 
+> Sure, nothing weird coming out and it succeeded in enumerating all of the
+> regulators, I smell a transient issue with our firmware implementation,
+> maybe...
+> 
+> [    0.560544] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.560617] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.560673] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.560730] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.560881] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.560940] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.560996] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.561054] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.561110] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.561168] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.561225] arm-scmi brcm_scmi@0: num_returned:1  num_remaining:0
+> [    0.561652] scmi-regulator scmi_dev.2: Regulator stb_vreg_2 registered
+> for domain [2]
+> [    0.561858] scmi-regulator scmi_dev.2: Regulator stb_vreg_3 registered
+> for domain [3]
+> [    0.562030] scmi-regulator scmi_dev.2: Regulator stb_vreg_4 registered
+> for domain [4]
+> [    0.562190] scmi-regulator scmi_dev.2: Regulator stb_vreg_5 registered
+> for domain [5]
+> [    0.564427] scmi-regulator scmi_dev.2: Regulator stb_vreg_6 registered
+> for domain [6]
+> [    0.564638] scmi-regulator scmi_dev.2: Regulator stb_vreg_7 registered
+> for domain [7]
+> [    0.564817] scmi-regulator scmi_dev.2: Regulator stb_vreg_8 registered
+> for domain [8]
+> [    0.565030] scmi-regulator scmi_dev.2: Regulator stb_vreg_9 registered
+> for domain [9]
+> [    0.565191] scmi-regulator scmi_dev.2: Regulator stb_vreg_10 registered
+> for domain [10]
+> 
+
+Ok, this was another place where a reply carrying a consistent number of
+non-segmented entries could trigger an jumbo-request to kmalloc...
+
+..maybe this is where a transient fw issue can reply with a dramatic
+numbers of possible (non-segmented) levels (num_returned+num_remaining)
+
+(I filter out replies carrying descriptors for segmented voltage-levels
+that does not come in triplets (returned:3  remaining:0) since they are out
+of spec...but I just hit today on another fw sending such out of spec
+reply for clocks and I will relax such req probably not to break too
+many out-of-spec blobs out in the wild :P)
+
+So let me know if got new splats...
+
+Thanks,
+Cristian
+

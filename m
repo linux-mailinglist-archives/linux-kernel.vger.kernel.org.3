@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E464E54C94C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F25154C950
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346663AbiFOM6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S1353779AbiFOM7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238939AbiFOM6K (ORCPT
+        with ESMTP id S1351582AbiFOM6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:58:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A01D1BEB9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655297881;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fSDv3pB77XuzeUNZezPJm4SyZkEnyUHPf0B4cMPJ4cY=;
-        b=MOR1nMTiKFcBNQsmD+SdiunXIzLy756HuoD08CUoAiVo0I+k1jt6O/m6+hKlh27/Jz1brs
-        xZAKkmhc9FC9+ZSITqkrHNPMOTMR3HVpWxwUzoh0sTJnTl/UMayEhsfhY6LQMWY9slirEy
-        lLrvjqNeLyMwPyGGXNp/G9V0TxAsauo=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-K5Qw2Al3Nzu4Wzl17xx88w-1; Wed, 15 Jun 2022 08:57:59 -0400
-X-MC-Unique: K5Qw2Al3Nzu4Wzl17xx88w-1
-Received: by mail-qv1-f69.google.com with SMTP id x17-20020a0cfe11000000b004645917e45cso8140562qvr.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:57:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fSDv3pB77XuzeUNZezPJm4SyZkEnyUHPf0B4cMPJ4cY=;
-        b=GpD1d28jR3qoaN70xuvy4u007Xni6lhSyYHW/9ebckgVKVdBWlGhTu4L6ZT/jv1l8e
-         pZ7C8bdGmTqf0zTyRscSqMOmkxCChlm7Cvd6tshO98Pmo9WYCceDa7rGGcTsSU/RgSWq
-         ZOpVk59JTRbgoBPavx/nk2mWJE+C0AxbQ+kl40ICZh8L1zvpKxIrR5rthnhzlmaEztaF
-         NuYFsxxdo5YgR8T9K0N7vKw/a9W9plYFkHdcajj1SxShkLU4aL933qHcxBCM36Mea0ni
-         EUtZBOTW87QGgY46aIZU5dvFjjW3JUSaoxLT6QfEOqN/utdJxDKPV8+0qrK1O/pEAklN
-         tvHw==
-X-Gm-Message-State: AJIora/jT4DEUGVhUTjNVayM/AJqWD8TtpDi9FlZCmwKtQHAjJnGrheV
-        ji9Met0CBMkcEy4MAMblVxcqCNUa9YuMzAHcXPAPd0hi12YDn8N8k/1nnPjTdWlZ/uAuSnLseaP
-        BswQBGPXe+Tq/DGnXKaWPOexN
-X-Received: by 2002:ac8:5805:0:b0:306:7772:286f with SMTP id g5-20020ac85805000000b003067772286fmr99496qtg.402.1655297878610;
-        Wed, 15 Jun 2022 05:57:58 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sCeCN28ZKU6d+OG8D7NjHn3G2vBu6R1QHB/HUCDHsoF3WNAM7jk+5+GNqy/PBi6xXTshARZQ==
-X-Received: by 2002:ac8:5805:0:b0:306:7772:286f with SMTP id g5-20020ac85805000000b003067772286fmr99485qtg.402.1655297878383;
-        Wed, 15 Jun 2022 05:57:58 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05620a408800b006a77e6df09asm10746678qko.24.2022.06.15.05.57.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 05:57:58 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 08:57:56 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ikent@redhat.com, onestero@redhat.com,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 1/3] radix-tree: propagate all tags in idr tree
-Message-ID: <YqnXVMtBkS2nbx70@bfoster>
-References: <20220614180949.102914-1-bfoster@redhat.com>
- <20220614180949.102914-2-bfoster@redhat.com>
- <Yqm+jmkDA+um2+hd@infradead.org>
+        Wed, 15 Jun 2022 08:58:32 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130070.outbound.protection.outlook.com [40.107.13.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45A342A3C;
+        Wed, 15 Jun 2022 05:58:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WhIWc3UW3eDozCULlAKb3X83EajZ43CEkQKEMjUHT7w6y+NRuvuhL8L8fpaJ0ASYLpF8wjmgKwVQYqKRxfnf8SNgsuVCA4h9wkTzo4+1da2quZG/J1mlffiZ5p2EZjEu60m1dETD0eUwx4k+oAalNnvEFUOjf/1eiriMv4VgzNHgqcfHS4/b5FPySbH+0R22jSX35y3g19a3+uDUG58FPVaWU5TDRfG5xKVzQQ5RySP6MKkO9qWcsYNN2EfAIh/ToG7MxPlaprdoRobaI6b2ofzErgkrAncAhdyUYLwPRNENISdTWLnhZSGFDK/28mxU1rENF7hCNJWl8p9+o9tGYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=33CSAiJwrANhWWc1/mZJ88f1WC724IXOdBoJuaDMZyI=;
+ b=DtdEF5UKC0HMewlAmMaDib33eBtFicUprZHfHywMZqZFhpg20tY/QJz0byQBsvyTRRSrHLFL0vMmH/CKrKxFTpmHkyP6Mv8b2eC/4jXXANzxymeWUt73WX0/Uf8BFwttdSYFKQvlKsi9fFvx/BwwEnk7GFPYKxb3HVJFGUd7RQqkgeWjkxtOJYSJ0Fij/h5G7Tug56OuGFdOROArAw0QPUfBejj2CEeFG+GvCKP5pJUmDTz62HSAMctzPa4g/tYTuBXMUASozgZa5nXwvZdzsf3tSnJqmErN402ruUNr6QF0mGWNV9SirvDOjBdwyi8oTrQpFSNI+fH5kmYXAT7dzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=33CSAiJwrANhWWc1/mZJ88f1WC724IXOdBoJuaDMZyI=;
+ b=KAI75/4rzbjeGDDFT3AW0Ac7cDC4K/OoNZkfhBla1cZPxGwmqv9JOEAbx5ja7jOSKoyqKhtP71IO026ij7ew7kltdFpqf3hU29SAWaQ6b6MJZ9QnLJcRahfbKnR1E0ufNESqhBXG+l16t0L7ZI0p8QGk4IuPNUVJ8r2Pcen1vCo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB8PR04MB7004.eurprd04.prod.outlook.com (2603:10a6:10:11c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Wed, 15 Jun
+ 2022 12:58:27 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a892:e4a9:4769:13a5]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a892:e4a9:4769:13a5%7]) with mapi id 15.20.5353.014; Wed, 15 Jun 2022
+ 12:58:27 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/2] mailbox: imx: support RST channel
+Date:   Wed, 15 Jun 2022 21:00:07 +0800
+Message-Id: <20220615130009.1457986-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0013.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::9) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqm+jmkDA+um2+hd@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 180388c0-463a-4fa2-b939-08da4ecebd44
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7004:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DB8PR04MB7004F43285739876C666E317C9AD9@DB8PR04MB7004.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mwzi6NWkt+0fMHQZGi8n/wxPH0YUeXjeZMLIg6lsjvAKEpOXQkBDEI7jXKUAmlodtaIyxHVDbw5PZs8ZB9ovdUrzRVkrLTXecNY6y9xyFLfLnUfhw6y9xe/3hiD4xX1quWJ0DIoVdOYqeIP4f4UiCzcrNgs9rSgImWSkxcBHVMQc50D5acT2mH7imMnYkH8/fz561808qgf0ysMR2OHY0Fp5zAfP2/wTmqjLtLE1sMJiYQVR+NUYJUEedSE4epQB8h8KaAUfwO6kAzVu5WWOK+DIPEqTZfsJWufCGBi7TC2yf/10pSGhLCyGjH78teC//uUeiLhX0r+2Lqvmnqzqxnwuzk5U+HNcvUtqwDB3A+YguSbKelJh8SgSYgyGQsi4T2DrqHlCgbUFna8sE/IBVxB+DnRylMl8m9bc5Gmony1xnXy+jZstJp4VDPd+hnS6c5+GqObn0nDhSCAQkAOpoRLIjw06KxAPMafzfkkgkIzt52Z6oI9zC2f/2TbCATvsnoXdnA/nQrYS/U8VZK7Uyq7pQkyspfELJbDbKSTwCOsBeYlpofO97IxQ2+7DxOHGgjA17kXMfI0TRbqjRsb0w/4348JouAxnRi5in0cxotQVwCZFhiYy+mnfuMZwPYc/TtFtitNl8YRtoWVJeeaYbzNfsxaMZnariyynUfd0Li5TrLV3Im+jBp0YliohuJA/zSEYcvOPZ89QzVJ9x70Uug==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(7416002)(15650500001)(2906002)(186003)(4744005)(83380400001)(316002)(508600001)(6666004)(6486002)(1076003)(2616005)(66946007)(8676002)(66476007)(6506007)(4326008)(52116002)(6512007)(26005)(5660300002)(86362001)(66556008)(38100700002)(8936002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HzgX4oEYZZ180WGm7JSUkreHUB8ihCnXWy61umo/YNw1Ca08euK3bu+1D9XO?=
+ =?us-ascii?Q?LH2OSfx6108OfSZgplI3GLAS5zaZnvdV+iZofNJ1ThhJnd4ttBGC4U73a6Bl?=
+ =?us-ascii?Q?zOGNeKqgPnAr4DF0iVpESv44JbFhKY8U5wiw7skjXu03FU+or/EbU7hEs9CH?=
+ =?us-ascii?Q?V3/KkgfxqsorQYCDay6HOJcKBu04fu04W2lHa//Llz4iPlANsTv2YswlsGM2?=
+ =?us-ascii?Q?4PQ/PfLMBWhsDThVISM4aWQOOKL5yFeJ7Q33eRaNmnq252Twc1SVxzn6McAo?=
+ =?us-ascii?Q?XfJIaOkUCi86flHAYxu49FPmcQuxqywQ5N5H7qbKMU4ZlH1Sn5RRYlroXUMh?=
+ =?us-ascii?Q?Mp5GLHechy/NFQtX5p5qdea603we6uytlt0M3i+eD07j0Tyd2tSgMH+Ez953?=
+ =?us-ascii?Q?A41nt4U2ZoAIVmEC9wFQtIuMsLcqTedlzlDjE25YzJ5g7y57Cboc5RmDdhHH?=
+ =?us-ascii?Q?tf9piFSq+CnjAsbL0fQIzS49qfSSRVccxaYeP5r51bW29FEa7XCaAvkUtOFM?=
+ =?us-ascii?Q?isZKp2rgj1JBvCBELQIAlHjKDkXsN54/etQGu3Lcwwa2F7D2roviwtUSlAfv?=
+ =?us-ascii?Q?z+DIwnpFZnXhLLIjf/lB7uWcuyWP+mQBRn4lFZuxeiFlpDd2lb1qatFEc4gu?=
+ =?us-ascii?Q?zFnyT32l1cIisZjnBYO4Q0EBxfiCee7WPpbwcR8wb7LW9+kJTS8boh9Oxdj/?=
+ =?us-ascii?Q?XdT9kaKfH2ifRJMMhMHqVsRtSqmErQLEo1BSjwGHjGZkIeSVpOZWmb24HyGj?=
+ =?us-ascii?Q?rgo9HyUtxxUb9z9z1HHfS6+F5CoYdBVrwk4eHva59D74YuB/RmmVKJJd3BO7?=
+ =?us-ascii?Q?4L+y2MFtOn68Ze97ei6/PWSKNJniwpUkSpprWboUo4SlFWwLds895zXgNkBS?=
+ =?us-ascii?Q?TgiG8Lp/bhaah/g0YYEboKUSUUwUdNx0O+aJpZInp3LaJ08P0VwAJBnf+9kp?=
+ =?us-ascii?Q?3bScfRa5cEMT6UmqRnDtQvoRZY1CK6raE/ROr53XcSzqlsW33M5FZKn1rJbo?=
+ =?us-ascii?Q?3jylZvY3P1u2Rj4rUIjXeY/Xm9g49cV3rRzn6t9mU8oHnz7R5syV72Dr65xU?=
+ =?us-ascii?Q?qZD5GW8rVMDF3EtmDvCpDqIGHGHVZy+9ktmKudBd605dmEHqMMjgzVEGclme?=
+ =?us-ascii?Q?zfZnjbYm6lpCCIx3+LK4Ji+OU18TiLoXAwPesIC/lj1GVIginxHI4nV9Gz0m?=
+ =?us-ascii?Q?UNmmpIjv8C25pDCF4GaqUbtq8eLQENJw5U2+53JZovAErPtldbXQ3QFIC+EA?=
+ =?us-ascii?Q?NqTo7QZxjTYZus7071Wi3vBHeZqw2Ml01BV6y8iLrJDYLqWZw6nYWHSJRsBD?=
+ =?us-ascii?Q?uD/sDFFoX8kkGjwtleq14MlpbpsTtqsW5TKauX8bHxM2FNTjvwebFcSG83lp?=
+ =?us-ascii?Q?tIvCZky9N976xyzKNvrY99wBGWSdjvmZUj7DhLQpO9BX0Zu7uFXPorgTkt/g?=
+ =?us-ascii?Q?Rsbtm3I6rPtRG4m46Cocm9vDMoFA5V2msbzklPTjmCrdh/FmlfpiXsdz/SLC?=
+ =?us-ascii?Q?FP07Qg7bovKmW8THEQyv939RSi921n685lUfT30ZT+TJOKjxdN6mSP1GpjFa?=
+ =?us-ascii?Q?R3TXr8k7FIm6fHDoXup3UsF9JHd4BOwu9cm+5fwPpExu76VLKdZT+wBJ7eJa?=
+ =?us-ascii?Q?D29Es+C47C+WxlxvTv558pDF5ZdH6ZP1QXPBKvGVZ3JvDzjXlUs388qYDggA?=
+ =?us-ascii?Q?WVTTAIY7o/qaoSEwsMH96DZiOEYg8NOLXlvbP7fDzXjKMixMuK6X1HFH2s0h?=
+ =?us-ascii?Q?GEHuUeJGDA=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 180388c0-463a-4fa2-b939-08da4ecebd44
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 12:58:27.6829
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bxWV1FoIcVcMjLE4Rvd1AWsuOO66MBXKdFi/7vTS+ABzAc8Sn2qgYywirWcz6QZZtAc0qtO7feNTskRfJAd+sw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7004
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 04:12:14AM -0700, Christoph Hellwig wrote:
-> On Tue, Jun 14, 2022 at 02:09:47PM -0400, Brian Foster wrote:
-> > The IDR tree has hardcoded tag propagation logic to handle the
-> > internal IDR_FREE tag and ignore all others. Fix up the hardcoded
-> > logic to support additional tags.
-> > 
-> > This is specifically to support a new internal IDR_TGID radix tree
-> > tag used to improve search efficiency of pids with associated
-> > PIDTYPE_TGID tasks within a pid namespace.
-> 
-> Wouldn't it make sense to switch over to an xarray here rather
-> then adding new features to the radix tree?
-> 
+From: Peng Fan <peng.fan@nxp.com>
 
-The xarray question crossed my mind when I first waded into this code
-and realized the idr tree seems to be some sort of offshoot or custom
-mode of the core radix tree. I eventually realized that the problem wrt
-to normal radix tree tags in the idr variant was that the tag
-propagation logic in the idr variant simply didn't care to handle
-traditional tags, presumably because they were unused in that mode. So
-this patch doesn't really add a feature to the radix-tree, it just fixes
-up some of the grotty idr tree logic to handle both forms of tags.
+V2:
+ Add R-b tag
+ Missed to add mailbox maintainer in V1, add in V2
 
-I assume it makes sense for this to move towards xarray in general, but
-I don't have enough context on either side to know what the sticking
-points are. In particular, does xarray support something analogous to
-IDR_FREE or otherwise solve whatever problem idr currently depends on it
-for (i.e. efficient id allocation)? I think Willy has done work in this
-area so I'm hoping he can chime in on some of that if he's put any
-thought into the idr thing specifically..
+ To i.MX generic MU, when linux stop remote core, the MU-B side is not
+ reset because of hardware design, so MU-B contains valid configuration
+ when remote core stops. Then when linux start remote core again, linux
+ may notify remote core before remote core is ready for incoming message.
+ So we need make sure MU is in reset state before remote core start. So
+ add a RST channel which is only to reset MU when shutdown the RST mbox
+ channel.
 
-WRT to this series, I really don't think it makes much sense to put a
-broad rework of the idr code in front of what is otherwise an
-incremental performance improvement based on using a mechanism that
-radix-tree pretty much already supports (i.e. tags). Is there some
-fundamental problem you see with this patch that apparently depends on
-xarray for some reason, or are you just calling it out as apparent
-technical debt in this area of code? If the latter, then I think it
-makes more sense to consider that as a followup effort.
+Peng Fan (2):
+  dt-bindings: mailbox: imx-mu: add RST channel
+  mailbox: imx: support RST channel
 
-Brian
+ .../devicetree/bindings/mailbox/fsl,mu.yaml   |  6 ++--
+ drivers/mailbox/imx-mailbox.c                 | 29 +++++++++++++++----
+ 2 files changed, 27 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
 

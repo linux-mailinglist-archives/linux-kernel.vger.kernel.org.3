@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBB654D18E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43EC54D196
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345912AbiFOT0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        id S1345683AbiFOT2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345719AbiFOT0X (ORCPT
+        with ESMTP id S1347903AbiFOT2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:26:23 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3508846651
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:26:22 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id t1so22272985ybd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:26:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+7ap878U9WJiqZiLJtB8+WDoIVBGF2CyyeANmhqBwmc=;
-        b=KtA+QsE4mywVenk5Gy1ER0/poJuM4+WHV2wmlEIamfsUNz3E2CsoWt3w0Iyctc7xJZ
-         x7KBpuIuC1qg7FsAwX7Vhwx6S5DExH4A8OQn4MVmzx5fD4HUKu+tt/AYxmc1pYXf0dHo
-         F+kMNtE3HrY3F+iYbkNSP6exnXcLXMXDKgqkk5X44eFrGHqgney3cPXC6Ax9vnHi756j
-         t+E076K7D4yVrNA155k1K3Ke/v7Mb90yeD3jbz0rGTDAFDZZwJxmRjCY5TbEoYqU5UKe
-         RLt4TRmayzVNLcEll4soeaPO2Y7Iqy7HMbxYAdBL5sawr/b4CEjnlsjf43KZcI0Pukyb
-         Yg4w==
+        Wed, 15 Jun 2022 15:28:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB70153709
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655321319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E4iNpZV57zc5+8qKldvmii2a0KVMkOhtMnZxn7FI/aI=;
+        b=iI4LJW3hP+ViJxVdniQ2mev0BlNG8HP8b2aQfKp8AQI45aZ/hy0cshrKVUFmHuUNl5iyWl
+        9BLsu7Ges8X90Nq0tZ3fJqeTuW1kahs3oqeDOs5X0ubYgimH9rs7DJ+84eA6nVWU/GnYmm
+        OVuCTQafGaw5JlLPOkI7T0vpJDi8sx0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-339-teA61MmJPJmfXfWcOin0nA-1; Wed, 15 Jun 2022 15:28:38 -0400
+X-MC-Unique: teA61MmJPJmfXfWcOin0nA-1
+Received: by mail-ej1-f72.google.com with SMTP id hg21-20020a1709072cd500b00718cd4dcf6eso3446256ejc.19
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:28:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+7ap878U9WJiqZiLJtB8+WDoIVBGF2CyyeANmhqBwmc=;
-        b=c9p84IWoJfCS474p+QL75pjzl3EbK+aQlqFexRuvbx4o939QXuREa1P0abFkgco/AH
-         bxaX7nHpO34PIJ5Qt4BK2zONjwxf3StiJMsbgfX0oa8TnRKvzSyCYa4FObuUmNdfMazF
-         KYZoKn0l+OGcii1hiKE4fyk036Ee2H8vCWNqwvBpeICF3YbvYhyG4Wr7B9ENLyX0y0bJ
-         tfUgmpZdssFN9sSvhRZPIjX8bYhumOcIoeq+K4oDpnnkfSLSR+33L1sHHmfQsaJkqwAD
-         5YY1/afl9y+VRk0qrcvWbHE/F9fz8Gl+LPUbeWOxzjiT0WpXpEYyno2+arqax0DlDFKJ
-         1W0Q==
-X-Gm-Message-State: AJIora9Ogw31d+NPvo3/yZlfSqsMr68B8SnXR+f3+itz9/Scp8NR2LT1
-        gAvruuOwFJaWf7o4HvXV/IFmjnvT9Q60jY94lnTH4w==
-X-Google-Smtp-Source: AGRyM1tvrcUsHTOVHdrJSj+Bv5J/r8X/AQcZj0tTScEAnnW9cIKrg6CY2Nf/BMod6r2Ss+T6SGurUcC9KPzrigBne9Q=
-X-Received: by 2002:a25:b51:0:b0:663:4ff1:d20d with SMTP id
- 78-20020a250b51000000b006634ff1d20dmr1499507ybl.608.1655321181295; Wed, 15
- Jun 2022 12:26:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E4iNpZV57zc5+8qKldvmii2a0KVMkOhtMnZxn7FI/aI=;
+        b=4y+5PTilKhxfHrKHkIA+O02cuwRjboKqz6kQlSF7v90ekZ4qghGVZAYyjN8pLG/ga5
+         /hatF62yt29yv7bDA6210dz3+WK+Pofbb/YLw8ZQ689V13UvX4C7quVey3v7c9sZrY7o
+         n15Vf70UTENbbOGm0a7l3IHnxE3d8SsxCTwdaWBMVi3YOxZ2Qjzlm5xjPU10884CFUW4
+         5abFAsdk7QbHiRCfkJ9dk45k+Me6TwRIIL717m3qHDmOfSUE4MhA2JM3M1dACcXHuMK2
+         mwjnwsN/iInC+KM7IoUuPBf0eiFR1VvemTbjW56LyFNvEhoiY6O4/hCSMYkpxHNMTN5C
+         YyRQ==
+X-Gm-Message-State: AJIora/1+r+99GTiDGS0ZOKfUg3tVwCrVx6EtVDAcB8MgExL3wn61jye
+        vVjqv1DaJCHosyzFh8MZkJG7pjRtIs92E7XuM8VlRUIgSfyxu0F2BLWzH+Kx4zxTWHBeHcxtWGG
+        GJe6F0x3oyPtYbU+8erbvok4d
+X-Received: by 2002:a17:906:d8af:b0:715:744d:7e29 with SMTP id qc15-20020a170906d8af00b00715744d7e29mr1171671ejb.715.1655321317311;
+        Wed, 15 Jun 2022 12:28:37 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u9eNwzg6ZDeFaOyUVQjIposxG0Zu9DD4wsVOVoKjZ9FcbTFHKA3qU9UWTNdpcbfsfZOJNNcQ==
+X-Received: by 2002:a17:906:d8af:b0:715:744d:7e29 with SMTP id qc15-20020a170906d8af00b00715744d7e29mr1171652ejb.715.1655321317065;
+        Wed, 15 Jun 2022 12:28:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id f7-20020a056402354700b0042bc5a536edsm28159edd.28.2022.06.15.12.28.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 12:28:36 -0700 (PDT)
+Message-ID: <6969ca0e-4a4c-c995-02a2-6645f875338c@redhat.com>
+Date:   Wed, 15 Jun 2022 21:28:35 +0200
 MIME-Version: 1.0
-References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
- <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
-In-Reply-To: <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 16 Jun 2022 00:56:10 +0530
-Message-ID: <CA+G9fYvifz5xDDNjoJBt2MRfdqwDtNf53teWXUs5QCOn2uhbfw@mail.gmail.com>
-Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
- drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] platform/x86: panasonic-laptop: allow to use all
+ hotkeys
+Content-Language: en-US
+To:     Stefan Seyfried <stefan.seyfried@googlemail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Kenneth Chan <kenneth.t.chan@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stefan Seyfried <seife+kernel@b1-systems.com>
+References: <20200821181433.17653-8-kenneth.t.chan@gmail.com>
+ <20220612090507.20648-1-stefan.seyfried@googlemail.com>
+ <20220612090507.20648-3-stefan.seyfried@googlemail.com>
+ <CAHp75Ve+vrfSu6pD+AKe-eCVA2pC5o520y4gVwLNg9Dtk0U5bw@mail.gmail.com>
+ <CAHp75VdFPUHTeDBY5ukFgVqJJn7BbTHxrxKUGOLB6P1UX-utAg@mail.gmail.com>
+ <d80789bc-a8fc-de5f-164a-75adf7097311@message-id.googlemail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <d80789bc-a8fc-de5f-164a-75adf7097311@message-id.googlemail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viresh,
+Hi Stefan,
 
-On Wed, 15 Jun 2022 at 10:55, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 15-06-22, 02:49, Naresh Kamboju wrote:
-> > Following kernel crash reported while booting arm64 db410c board with
-> > Linux next-20220614 [1] kfence enabled on this kernel.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Boot log:
-> > ---------
-> > [    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
->
-> A print like this normally comes when we hit a WARN or something.
->
-> Here is the line 2265 from above tag
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/opp/core.c?h=next-20220614#n2265
->
-> which doesn't have any such WARNs there. I wonder where exactly we hit the WARN
-> here and why it isn't showing up properly.
->
-> > dev_pm_opp_clear_config+0x174/0x17c
-> > [    0.850447] Modules linked in:
-> > [    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-> > 5.19.0-rc1-next-20220610 #1
-> > [    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > [    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
-> > [    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
-> > [    0.850513] sp : ffff80000802bb00
-> > [    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
-> > [    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
-> > [    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
-> > [    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
-> > [    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
-> > [    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
-> > [    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
-> > [    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
-> > [    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-> > [    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
-> > [    0.850704] Call trace:
-> > [    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
-> > [    0.850722]  platform_probe+0x74/0xf0
->
-> Nevertheless, I see one place from where such a WARN can be hit, which can be
-> fixed with:
->
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 58eae9de4b91..c3d4058d33fc 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2437,7 +2437,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_set_config);
->   */
->  void dev_pm_opp_clear_config(struct opp_table *opp_table)
->  {
-> -       if (WARN_ON(!opp_table))
-> +       if (!opp_table)
->                 return;
->
->         _opp_detach_genpd(opp_table);
->
-> Not sure it fixes the issue you reported here though.
->
-> Can you run the tests for my branch once, it has the updated fix as well.
+On 6/15/22 19:10, Stefan Seyfried wrote:
+> Hi Andy,
+> 
+> On 15.06.22 13:24, Andy Shevchenko wrote:
+>> On Wed, Jun 15, 2022 at 1:21 PM Andy Shevchenko
+>> <andy.shevchenko@gmail.com> wrote:
+>>> On Sun, Jun 12, 2022 at 3:54 PM <stefan.seyfried@googlemail.com> wrote:
+>>
+>>> We usually add module options in very bad cases where it's very useful
+>>> for debugging or when some devices require the opposite settings while
+>>> can't be distinguished automatically. Here I do not see either of such
+>>> cases. Hence, I would prefer to see a DMI based quirk as it's done a
+>>> lot in the PDx86 drivers. Can you do that?
+> 
+> I can do that, but... below ;-)
+> 
+>> Looking into the code of the culprit patch, have you tried to add a
+>> debug pr_info() and see what value is in the result? Perhaps you may
+>> just sort out by correcting that.
+> 
+> The driver is working fine, it's just that Kenneth's machine is getting most of the hotkey events (I'd guess all but sleep, hibernate, battery) twice. That's why he disabled the key generation from the panasonic_acpi driver for them. (My guess is that on his CF-W5, they are also coming in via normal keyboard input path). My CF-51 does only generate them via acpi, so if they are not generated, I get nothing.
+> Hence the module parameter so that the two known users of this module (Kenneth and me) can adjust this to their needs.
+> 
+> Now about the DMI match: I can do that.
+> But let's face it: the panasonic laptops are pretty rare in the wild, so even if I'm "whitelisting" the CF-51, then probably other models will need the same treatment and we have no real way of finding out which ones, unless people complain. (For example my CF-51 is about 17 years old now and I just pulled it out and updated it to the latest and greatest "because I can". That's also why it has taken me so long to even notice the driver was broken for me. So people not complaining will not mean "nothing is broken" but rather "this code has not many users").
+> So even if I add the DMI match (which is a good idea anyhow because then "my" model will work out of the box, while right now I need to add a module parameter or switch it on later), I'd still vote for having a possibility for overriding the DMI results.
+> Would that be OK?
 
-As per your suggestion, I have tested [1] this tree and branch and it worked.
-The reported kernel warning has been fixed.
-Thank you.
+Actually I agree with your original assessment that Kenneth's patch
+(ed83c9171829) which broke things on your laptop is wrong.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Back then I did not properly realize that it is effectively
+disabling event generation for most of the reported event codes.
 
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> --
-> viresh
+If anything there should be a DMI match for Kenneth's model and
+reporting the events normally should be the default.
 
-[1] https://lkft.validation.linaro.org/scheduler/job/5179605
+Kenneth, can you check with e.g. evemu-record or evtest
+where the double events are coming from ?  Obviously one of
+the events is coming from the panasonic-laptop driver, but
+where is the other event coming from. Is it coming from the
+atkbd driver; or ... ?   Maybe from the acpi-video driver
+for the brightness keys ?
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Regards,
+
+Hans
+
+

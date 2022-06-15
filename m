@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E15054C7BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C5E54C7CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344885AbiFOLup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S1345346AbiFOLuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239202AbiFOLul (ORCPT
+        with ESMTP id S239202AbiFOLur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:50:41 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C64AE0F;
-        Wed, 15 Jun 2022 04:50:40 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z7so15701525edm.13;
-        Wed, 15 Jun 2022 04:50:40 -0700 (PDT)
+        Wed, 15 Jun 2022 07:50:47 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85114B87F;
+        Wed, 15 Jun 2022 04:50:46 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kq6so22683633ejb.11;
+        Wed, 15 Jun 2022 04:50:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nIRvc0ONAOH4KeBatJrKu9r/BO2Atl4Fv8lTxvlA9V4=;
-        b=XjFqVY5CjGeNsB4WO+15swlrY97cAoa/7Rr9ZXozRJgxzZWMOXI5tZU0Amtmeiu5LF
-         rcGhGa+P/QC3zD9MRnEzwEnx55MOtR0GLLjdZi9Mu179EsRnjvK1Te9aATm5pcJ/HcaD
-         FzPO70IytC5LTDJzuGgtcLSVChuUWGfTwdYdB7d2vqQCnEWc5/PTRSDa8ejx6Lso17GE
-         f7LQZFg5ZhzzLwF47PYp0uMF/DV2PWTZkj5ukqelBNW0q5oZzDLnOefL1Q+tI0hfSCdi
-         Dt9qUcXf07N32MJXfeS0RtZERhwcTTKAQ8eMYBcBEM6lcLkqZSUa5L61XBd8tprD+Rdq
-         APgw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=b/+El1RbXEno0PmTWmHthMoKqcv8hQ3TpxlThfX8oNc=;
+        b=ld7NS/6t8p1aLSY4sodAPu7l1sxt7NqNpqMYVF8XpeB0j+H6cH1okJ7WXK3fQozb7S
+         UmihxyQwbGY388j9gJ8cLeVFPMfe1cEMgnvfTiwtV5YHAIvR9TaQbXOs5sPmkbPAFLjr
+         BuVcfYNJKnnr3tE8FntfnwHvGEQIwKBxqLJYTQo+NPH68Nic8qO2UydyrpJt956CdUHw
+         AMppTShvmHqmQ1ScyZ4S7er7mAyIOmE7kaBjLE9pi9RINNpO/1PDVr+GsnRH49BTPipY
+         C6d6uLJ6r1p7il0YaB2qCv9uTQFdMptXwFa4hcExC9ZHhh/LCHLSva6F1r8zM8RayL91
+         jjQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nIRvc0ONAOH4KeBatJrKu9r/BO2Atl4Fv8lTxvlA9V4=;
-        b=2N4pVuxvZUkXc3mZVcCE4NOV/BR6fxgAEzHQaef5tTGLoxjmDFd64a2jz1iIao3Q2J
-         Rwg09tHVrAkynUbbkz7JbRyqHD2gqzAZX6W+UWb6UrOIZkSXl2aIT5ThobzdSeSwoK+5
-         oZskiBf8i5XigMYx2lN6Wum+gLDP8k8d3VRNuGh8Gx+Z1dA+3PQPxCwvooebyZwBPrV8
-         1aU4NKPN7VT6MqbdhoMor8O+3Fl5JUkPT7R6ANJnwbXkJYZege9JiWiz9CBkVEAF80+4
-         Kc3jafy1eMNAS+Hgpye3NL9NFuLR1462/Ih0FHG5ziGhmTJVvpmoSgGfVAO5FwmwGdiJ
-         gkCQ==
-X-Gm-Message-State: AOAM530TYyplJX4gUH2USOwUs1w7iyB8WkjQ+trSNctLBz8NNbzDdD1y
-        XjetbeE/Vz/CKE3s7PWLD0c=
-X-Google-Smtp-Source: AGRyM1vmlsVma0i28k6gG0bFleMQyWIMb/6Gu8tm/KbSZmxHGGV+NkhwsaKkn15fwpNDrrj+HLVxdA==
-X-Received: by 2002:a05:6402:3482:b0:42d:e063:7c1d with SMTP id v2-20020a056402348200b0042de0637c1dmr12500732edc.40.1655293839096;
-        Wed, 15 Jun 2022 04:50:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=b/+El1RbXEno0PmTWmHthMoKqcv8hQ3TpxlThfX8oNc=;
+        b=mG2QBiSjhdj0g9nvzij8Noet37tNlB/fVd9DlkuQVk7QKBldf6ZfcIWruPny95UTjc
+         9XEEPInMfJsRECy7Bu9DJpTTfhwhkN7nh+PsLX9PVqq1hp868tOv+UbQ1Xy8442Fbkp3
+         3XlJUm0+HisgVmI8z11EhVmuc73+WIaCwS0QfRrE2GprUpoSYib8O4Ow8NqxurVxpJsu
+         7gZC7ZM4lxwjoQbdE0O/gmn+ge+nPfMA/SzifU/TNqCg35YFmnxisAW28ODCOOiCvPTQ
+         kpWXznCHyIWz+SBY9R9Yq32WfsWYymTfY/Nt1obgARYBzIDaJeidpYRYij2Wj04aMCQ+
+         Vfmw==
+X-Gm-Message-State: AOAM530PAH9VJWXMYCJyl7JqtSASHoAxNsfEsFceMAoV2LMZIReEis4N
+        V34BAgV2WQ+NShyRD04dGcw=
+X-Google-Smtp-Source: ABdhPJwH1Xjd8RKyfxooVYqDSVHMq6xPEhlSfpAF6+uiTfC9Bzctbk5X2SQllnFj+BOrm/VNj96KxA==
+X-Received: by 2002:a17:907:90c4:b0:710:456a:6981 with SMTP id gk4-20020a17090790c400b00710456a6981mr8623001ejb.484.1655293845238;
+        Wed, 15 Jun 2022 04:50:45 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.37
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 04:50:38 -0700 (PDT)
+        Wed, 15 Jun 2022 04:50:44 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+Cc:     Rob Herring <robh@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Denys Drozdov <denys.drozdov@toradex.com>,
         Fabio Estevam <festevam@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Li Yang <leoyang.li@nxp.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Marek Vasut <marex@denx.de>,
         Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org
-Subject: [PATCH v2 00/18] ARM: dts: imx6q-apalis: Misc improvements and newly added carrier
-Date:   Wed, 15 Jun 2022 13:49:48 +0200
-Message-Id: <20220615115006.45672-1-max.oss.09@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 01/18] dt-bindings: arm: fsl: Add carrier for toradex,apalis-imx6q
+Date:   Wed, 15 Jun 2022 13:49:49 +0200
+Message-Id: <20220615115006.45672-2-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220615115006.45672-1-max.oss.09@gmail.com>
+References: <20220615115006.45672-1-max.oss.09@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,89 +83,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
+Add binding for the Ixora V1.2 carrier board our Apalis iMX6D/Q
+may be mated with.
 
-This is a general update of the Apalis iMX6 device tree files.
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-The Toradex Apalis family is composed of a SoM that can be plugged on
-various carrier boards, with carrier boards allowing multiple optional
-accessories (e.g. display, camera, ...).
-
-The device tree sources are structured into a SoM dtsi and a carrier dts
-which then includes the SoM dtsi. The SoM dtsi defines and enables the
-functionality self contained on the SoM and prepares for functionality
-provided by the carrier HW or accessories, so that the carrier dts then
-can enable or amend nodes provided. Accessories are enabled in overlays
-depending on HW configuration.
-
-The series improves the existing Apalis carrier board device trees and
-adds a new device trees for the Ixora V1.2 carrier board.
-
-Improvements:
-- Specifies GPIO line names for use with libgpiod.
-- Disables optional accessories. They would be enabled in overlays
-  depending on HW configuration.
-- Lower power consumption after poweroff.
-- Move more functionality into the SoM dtsi file to reduce code
-  duplication.
-- General cleanup to adhere to dtbs bindings and missed alphabetically
-  ordering.
-- PWM backlight for backlights with inverted logic on its PWM input.
-
-Fixes:
-- STMPE ADC not functional due to wrong node name in dts.
-
-Adds:
-- imx6q-apalis-ixora-v1.2.dtb: used for a Apalis iMX6 mated in an Ixora
-  V1.2 carrier board.
-- Adds disable support for a OV5640 MIPI-CSI2 Camera and a ADV7280
-  Video ADC on a parallel video input.
-
+---
 
 Changes in v2:
-- Moved cleanup for things added in earlier commits of the series to
-  the those commit rather than cleaning up later.
-- Added reviewed-by tags
-- Fixed '-' vs. '_' in node name as pointed out by Fabio
-- Added "adv,force-bt656-4" property as suggested by Fabio.
-- Added commit "ARM: dts: imx6q-apalis: move gpio-keys to SoM dtsi"
-  and followed that in the commit adding the Ixora V1.2.
-- Rebased on top of imx/dt, 5.19-rc1
+- add Rob's reviewed-by tag
 
-Denys Drozdov (1):
-  ARM: dts: imx6q-apalis: Clean-up sd card support
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Max Krummenacher (11):
-  dt-bindings: arm: fsl: Add carrier for toradex,apalis-imx6q
-  Revert "ARM: dts: imx6qdl-apalis: Avoid underscore in node name"
-  ARM: dts: imx6q-apalis: Add gpio-line-names
-  ARM: dts: imx6q-apalis: Command pmic to standby for poweroff
-  ARM: dts: imx6q-apalis: Move Atmel MXT touch ctrl to SoM dtsi
-  ARM: dts: imx6q-apalis: move gpio-keys to SoM dtsi
-  ARM: dts: imx6q-apalis: Disable HDMI
-  ARM: dts: imx6q-apalis: Add support for Toradex Ixora V1.2 carrier
-    boards
-  ARM: dts: imx6q-apalis: backlight pwm: Simplify inverted backlight
-  ARM: dts: imx6q-apalis: backlight pwm: Adapt brightness steps
-  ARM: dts: imx6q-apalis: Cleanup
-
-Oleksandr Suvorov (6):
-  ARM: dts: imx6q-apalis: Move parallel rgb interface to SoM dtsi
-  ARM: dts: imx6q-apalis: Move pinmux groups to SoM dtsi
-  ARM: dts: imx6q-apalis: Add LVDS panel support
-  ARM: dts: imx6q-apalis: Disable stmpe touchscreen
-  ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
-  ARM: dts: imx6q-apalis: Add adv7280 video input
-
- .../devicetree/bindings/arm/fsl.yaml          |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/imx6q-apalis-eval.dts       | 127 +---
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 263 +-------
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts | 276 ++++++++
- arch/arm/boot/dts/imx6q-apalis-ixora.dts      | 113 +---
- arch/arm/boot/dts/imx6qdl-apalis.dtsi         | 638 ++++++++++++++----
- 7 files changed, 837 insertions(+), 582 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index ef524378d449..b964eba212f7 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -321,6 +321,7 @@ properties:
+           - enum:
+               - toradex,apalis_imx6q-ixora      # Apalis iMX6Q/D Module on Ixora Carrier Board
+               - toradex,apalis_imx6q-ixora-v1.1 # Apalis iMX6Q/D Module on Ixora V1.1 Carrier Board
++              - toradex,apalis_imx6q-ixora-v1.2 # Apalis iMX6Q/D Module on Ixora V1.2 Carrier Board
+               - toradex,apalis_imx6q-eval       # Apalis iMX6Q/D Module on Apalis Evaluation Board
+           - const: toradex,apalis_imx6q
+           - const: fsl,imx6q
 -- 
 2.20.1
 

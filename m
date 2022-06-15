@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA5554D347
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F12A54D34A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345033AbiFOVFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S243859AbiFOVGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344656AbiFOVFQ (ORCPT
+        with ESMTP id S233389AbiFOVGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:05:16 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B155229838
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:05:15 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so3321122pjm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:05:15 -0700 (PDT)
+        Wed, 15 Jun 2022 17:06:16 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F27535850
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:06:15 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 184so12448255pga.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:06:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=nSPGzfTdZ9LfoOSqIU6EOVEMTSn+8rXd/OcMmHhdRhA=;
-        b=SOMOfzNOEUkBuuBnOrR5RTa6rJffV6+Ngvrq9Yo+bQvLfiiuKPusw6MyqE2JjFK791
-         cu/E/2IDmPD/mfDAsU0A+uJvql58unDxr1ovqwFEfTHzBoULxjdbACa2fl0KBjXJVZP8
-         1wiGEJRBTny54swVMGmUotUJuI6S2TnDHt4lRZvq1V77GQoPYQD6iRdiPLvtMGoQSHUO
-         jC5BCI5T+P+2UwY5eBkJnOTZKmp8UaiZ/0mn1Fjp6JkJT98uQIG+pXXcejb4Od6y1+Q2
-         W4ZK+y7h+roufFwASTDkiZPldmpc9fW3WmW0v31OUBYpSvLixEdF80nsWaQUmwdGe/VC
-         C1JQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=EUkqd6v0LN1gANy7CrcHX8pJTcOEcqatn5lL+ysvCwU=;
+        b=v0VdZfUVd8lbYQvoe+AUT4cfAMa5jdk8tzVh1mqhWP7RbFcFqm956KAXBtIvyU47g1
+         yB0uhNfPqfmtKyQEo3/EdF0YgftqRpjZYoI6DkRQ8hmL8Pu3TYoYK1pSsUlJbKDZckMV
+         pXiSuwBQq9+GLPxvKxkSLk1pOD7847ByMQVhJSI8U6O1B8q0ROVJS86UhlvCLPf5qEAn
+         IEw6SvjMTroy4oBy06HCKRCsiYkKpF9ie4DSlfjH1v4C2DbeQrBmiVKweTKyUT3YWf7P
+         K3v6aBRHnLhr+1bgzabAX1sBewgKryHqPu0otqEmeQktjATQZ1P6qqL30NAlVbK0zZYW
+         TGHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nSPGzfTdZ9LfoOSqIU6EOVEMTSn+8rXd/OcMmHhdRhA=;
-        b=r5IGyi0c/bRvxieAqHwGwtQ4HP1Lh3zN0eQahDy8guRd+HFZ+kCM6/eV6ogKFYz1sR
-         6a3pnITX49cOHdBuHe1/Ei36r0RlRyYCKD/ehVkQsPeAIAJZ0oL4GN41wQgju2p3ZDcg
-         3Qv9teNOjKU7tEbXbaMEQiXpH57qAhMWYNmL02I/cHmDWEIV27RkZXPsYHrAC925WEpH
-         dAJj2Z3NulYfURWZ42DHJj+X55FtCTecVZHKbYMwETrnFFKQd7UXydI55VU6bFohwmsq
-         VPqLGNLzoHUOSldrgMfPZ5coThegusYy3e/2japjrpUoP5wZKI+5+jjE67VfV0PMqVrT
-         O0nA==
-X-Gm-Message-State: AJIora8dafr364mzF2eGxSMMAQPGX40NzztQ0ELCWdxlezUNodo5kesa
-        bGJRG/rExfPjRQVSQXaEtHNBwQ==
-X-Google-Smtp-Source: AGRyM1toehBrqqaMQr374mrNlBFnfbhQiBAgvhLstQXz4lea94d8XdLlbwxJ4Mn+NBAsGnu054oJHA==
-X-Received: by 2002:a17:902:d2c9:b0:167:1195:3a41 with SMTP id n9-20020a170902d2c900b0016711953a41mr1424179plc.126.1655327115240;
-        Wed, 15 Jun 2022 14:05:15 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id w9-20020a17090a780900b001ead46e77e2sm39944pjk.13.2022.06.15.14.05.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 14:05:14 -0700 (PDT)
-Message-ID: <7cc9c5d2-0c42-f24f-1611-0190b24504be@linaro.org>
-Date:   Wed, 15 Jun 2022 14:05:14 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=EUkqd6v0LN1gANy7CrcHX8pJTcOEcqatn5lL+ysvCwU=;
+        b=OmnZMnb+RRlQf+vzoQEY8DGN+BeI+fKoBqNNwYyUxbWb3rsQFH9e1lJI9zqJwrQoGx
+         uOODD1gSxVqxcjTPPkw1Levd+jzTjcJhPVRzAzuC+1jc6d7CewUb+FJ4NiA5DQA3jQaM
+         ruD6E/HlOeh6QOzRwxpTK6lyeyy4V76wNiynlVV6xJKSUHFb4CI6aoBDjw4oFvOth7vQ
+         +1WVIw10WEqDlj5fqPZ5z55uNWtVATR8YPEqfypk4p/3CWZmHMmrsTYpj+YeX7iB4uGw
+         q23zUYumRLKhZfBDuR7IHFXNaVurgg48e6mJNKishuomvWaHULLT8cxFzx1GfqK9HMod
+         DX9g==
+X-Gm-Message-State: AJIora/B84szvCYCFdCDvckeChcBXwsiTxvC2Aub/7ciQNkndcGIwkGD
+        lV+Q+UAQZE47ElQIiAHQdK6zXjSarBZnvkKk
+X-Google-Smtp-Source: AGRyM1u23bAIJTmn1Z8KywIe5wxumEvcHOq1w1HL3CJb9K9M34VXSZfDzISOM177YyTPrKupwuULzw==
+X-Received: by 2002:a05:6a00:248b:b0:51c:4f53:a932 with SMTP id c11-20020a056a00248b00b0051c4f53a932mr1243256pfv.51.1655327175047;
+        Wed, 15 Jun 2022 14:06:15 -0700 (PDT)
+Received: from google.com ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id p6-20020a62d006000000b00522c7bc96c7sm101797pfg.14.2022.06.15.14.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 14:06:14 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 22:06:12 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/4] mfd: asic3: Make asic3_gpio_remove() return void
+Message-ID: <YqpJxMF+7Z/2a42A@google.com>
+References: <20220530192430.2108217-1-u.kleine-koenig@pengutronix.de>
+ <20220530192430.2108217-2-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: dma: rework qcom,adm Documentation to yaml
- schema
-Content-Language: en-US
-To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615175043.20166-1-ansuelsmth@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220615175043.20166-1-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220530192430.2108217-2-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,49 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 10:50, Christian 'Ansuel' Marangi wrote:
-> Rework the qcom,adm Documentation to yaml schema.
-> This is not a pure conversion since originally the driver has changed
-> implementation for the #dma-cells and was wrong from the start.
-> Also the driver now handles the common DMA clients implementation with
-> the first cell that denotes the channel number and nothing else since
-> the client will have to provide the crci information via other means.
+On Mon, 30 May 2022, Uwe Kleine-König wrote:
+
+> Up to now asic3_gpio_remove() returns zero unconditionally. This makes it
+> easier to see in the caller that there is no error to handle.
 > 
-> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-
-Drop the quotes please.
-
-As discussed in other patch - trust for me is broken and I have no clue
-which identity is real.
-
+> This is a preparation for making platform remove callbacks return void.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->  .../devicetree/bindings/dma/qcom,adm.yaml     | 95 +++++++++++++++++++
->  .../devicetree/bindings/dma/qcom_adm.txt      | 61 ------------
->  2 files changed, 95 insertions(+), 61 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/dma/qcom,adm.yaml
->  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_adm.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/qcom,adm.yaml b/Documentation/devicetree/bindings/dma/qcom,adm.yaml
-> new file mode 100644
-> index 000000000000..77096a7c9405
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/dma/qcom,adm.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/dma/qcom,adm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm ADM DMA Controller
-> +
-> +maintainers:
-> +  - Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> Side note: asic3_mfd_probe() which is called by asic3_probe() could
+> return an error, but this isn't handled.
+> ---
+>  drivers/mfd/asic3.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 
-Add Bjorn here.
+Applied, thanks.
 
-> +
-
-
-Best regards,
-Krzysztof
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

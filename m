@@ -2,185 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBF154CF12
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6303754CF15
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345426AbiFOQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S1346347AbiFOQy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235833AbiFOQyo (ORCPT
+        with ESMTP id S230236AbiFOQy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:54:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0907545511
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:54:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1B3E9CE21D2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2972C34115;
-        Wed, 15 Jun 2022 16:54:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655312079;
-        bh=qigodSyMpeM2qgbpnbxrP+CBwYu821HecBtHR6HbIjg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRPkT2S4uVm3NNJNzHPYdKgpPnfMac/5SqGkLr5WDeitqfmBKfdNlPWhyykH9ukok
-         hQAp+46CROGXu+ze7gVks7gLWuMbLYyfenqlPpwQ0lWxylNy6qnwkpZ5pp6gV99QBf
-         MxqTq7mQAleB1279I6VbqkgfQxzWj0dMm1bA2oGFUP/MWpY5PWfyFB893xQlVjNTv2
-         CQs89IRahCcpSn2AtOy6XPJ65GewLluvThhzSIgWWonejWMIGOqYm9kvncLvpUfOVa
-         cTksbBN8X388BAQCHWzXdJu3vqUZxyEQQPxG0qFBIE7QVdiXa6JaRgeFSmKgqbAk9M
-         xUXzNFh2zpFUQ==
-Date:   Wed, 15 Jun 2022 09:54:37 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix iostat related lock protection
-Message-ID: <YqoOzdxeG78RniEK@google.com>
-References: <20220610183240.2269085-1-daeho43@gmail.com>
- <1815f3c2-0802-5b3f-7e98-9f89c5b9e07d@kernel.org>
+        Wed, 15 Jun 2022 12:54:56 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24A549F92;
+        Wed, 15 Jun 2022 09:54:55 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id m24so16151286wrb.10;
+        Wed, 15 Jun 2022 09:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O0ZNCzaGbIN6vYx92G4OUm186Sl4b3mFGrPcQiPkGOk=;
+        b=FWFfE/TrOsOqhKNBqDjPUw1E7PsUxALBEn9s+nTsX2df5Hx2wbVhzfUT/DUXRnQpnS
+         y1WJqF+s3WJHsn1DPXWQOQtlbNRQuDyptNEM4nr6MeSafsU1dPtHIULXL+MQ3fGzaqYM
+         NgASYW/jRkv6l0ZagU9DLznhoJ+G23wWKjS9X/eSpnNdUWMKuepQg/hFM8aVnvJVD1i7
+         58rvgMp5z0X4w/AZZn031OrSvk9Vo3t4oNimvCl2flH1cQxaoO9l5kVRc6IYg6tRnlDV
+         x3SSlYjYWZyFy79oPP8KftfTu34PQzBwjm1YJ8iuURHu1VsErk2pjiDI/K1c6Sr4M1Ce
+         n+JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O0ZNCzaGbIN6vYx92G4OUm186Sl4b3mFGrPcQiPkGOk=;
+        b=bOLt1jHa9uV/hYBJmdxIIRIXU5qXO0verrYv98jIxBMkT655GTQRBSbhxiF/Fr+Hgz
+         XmzKw10umJv/ZqMACSegUizRWfuWP2GAYBLZzroQClSn0+Z841WUBSaieRCfg+EwHnq2
+         41en80xQFk0Q/bAZ6MRFwQDVGm1wcvbgFJP3+hD+RKQ7aPMlMwdR7jr4V0jEsxJiKUNB
+         we9uEdfgCDKQhaSuRurfOuh/9OMjJcONtsI9syBkc7azmzW3TZjiwWUl9TJOlHFq5dAQ
+         nSj2oeTqqXcc8FCjEd9TMvCn2SVYQNGpCYPdK7bTn6fsE+yVUA7D/OPWt1y3jGJUjlBq
+         uGzw==
+X-Gm-Message-State: AJIora/U9SH/j3BwctqCmaiNJ7zzVQkPbOKF7Y6qTHUiIKlYNuqlJ4Fe
+        lB1wPbsxj9IjLCAOSMzdKvY=
+X-Google-Smtp-Source: AGRyM1upL28UfLmiDNOCmxFWdPZt1LH1eRzJbtxF7HVF5ZDTc2UCPQgDR6kt2epkDohPh0R41Pw3Xg==
+X-Received: by 2002:adf:e2cb:0:b0:20c:c1bb:9fcb with SMTP id d11-20020adfe2cb000000b0020cc1bb9fcbmr704620wrj.35.1655312094114;
+        Wed, 15 Jun 2022 09:54:54 -0700 (PDT)
+Received: from [192.168.0.36] ([37.223.143.134])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1c7416000000b0039c5a765388sm2890998wmc.28.2022.06.15.09.54.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 09:54:52 -0700 (PDT)
+Message-ID: <bd788f00-0328-e57d-d56f-7e975996a9d0@gmail.com>
+Date:   Wed, 15 Jun 2022 18:54:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1815f3c2-0802-5b3f-7e98-9f89c5b9e07d@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH RESEND v10 3/3] ARM: dts: Add PCIe support for Airoha
+ EN7523
+Content-Language: en-US
+To:     Felix Fietkau <nbd@nbd.name>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220615125335.96089-1-nbd@nbd.name>
+ <20220615125335.96089-3-nbd@nbd.name>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220615125335.96089-3-nbd@nbd.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/15, Chao Yu wrote:
-> On 2022/6/11 2:32, Daeho Jeong wrote:
-> > From: Daeho Jeong <daehojeong@google.com>
-> > 
-> > Made iostat related locks safe to be called from irq context again.
-> > 
-> 
-> Will be better to add a 'Fixes' line?
-
-Added some tags. Thanks,
-
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=f8ed39ad779fbc5d37d08e83643384fc06e4bae4
 
 
+On 15/06/2022 14:53, Felix Fietkau wrote:
+> This uses the MediaTek MT7622 PCIe driver, since the PCIe IP block is nearly
+> identical to the one in MT7622
 > 
-> Thanks,
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+
+applied to v5.19-next/dts32
+
+Thanks!
+
+> ---
+>   arch/arm/boot/dts/en7523-evb.dts |  8 +++++
+>   arch/arm/boot/dts/en7523.dtsi    | 58 ++++++++++++++++++++++++++++++++
+>   2 files changed, 66 insertions(+)
 > 
-> > Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> > ---
-> >   fs/f2fs/iostat.c | 31 ++++++++++++++++++-------------
-> >   1 file changed, 18 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-> > index be599f31d3c4..d84c5f6cc09d 100644
-> > --- a/fs/f2fs/iostat.c
-> > +++ b/fs/f2fs/iostat.c
-> > @@ -91,8 +91,9 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
-> >   	unsigned int cnt;
-> >   	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
-> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> > +	unsigned long flags;
-> > -	spin_lock_bh(&sbi->iostat_lat_lock);
-> > +	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> >   	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
-> >   		for (io = 0; io < NR_PAGE_TYPE; io++) {
-> >   			cnt = io_lat->bio_cnt[idx][io];
-> > @@ -106,7 +107,7 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
-> >   			io_lat->bio_cnt[idx][io] = 0;
-> >   		}
-> >   	}
-> > -	spin_unlock_bh(&sbi->iostat_lat_lock);
-> > +	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
-> >   	trace_f2fs_iostat_latency(sbi, iostat_lat);
-> >   }
-> > @@ -115,14 +116,15 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
-> >   {
-> >   	unsigned long long iostat_diff[NR_IO_TYPE];
-> >   	int i;
-> > +	unsigned long flags;
-> >   	if (time_is_after_jiffies(sbi->iostat_next_period))
-> >   		return;
-> >   	/* Need double check under the lock */
-> > -	spin_lock_bh(&sbi->iostat_lock);
-> > +	spin_lock_irqsave(&sbi->iostat_lock, flags);
-> >   	if (time_is_after_jiffies(sbi->iostat_next_period)) {
-> > -		spin_unlock_bh(&sbi->iostat_lock);
-> > +		spin_unlock_irqrestore(&sbi->iostat_lock, flags);
-> >   		return;
-> >   	}
-> >   	sbi->iostat_next_period = jiffies +
-> > @@ -133,7 +135,7 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
-> >   				sbi->prev_rw_iostat[i];
-> >   		sbi->prev_rw_iostat[i] = sbi->rw_iostat[i];
-> >   	}
-> > -	spin_unlock_bh(&sbi->iostat_lock);
-> > +	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
-> >   	trace_f2fs_iostat(sbi, iostat_diff);
-> > @@ -145,25 +147,27 @@ void f2fs_reset_iostat(struct f2fs_sb_info *sbi)
-> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> >   	int i;
-> > -	spin_lock_bh(&sbi->iostat_lock);
-> > +	spin_lock_irq(&sbi->iostat_lock);
-> >   	for (i = 0; i < NR_IO_TYPE; i++) {
-> >   		sbi->rw_iostat[i] = 0;
-> >   		sbi->prev_rw_iostat[i] = 0;
-> >   	}
-> > -	spin_unlock_bh(&sbi->iostat_lock);
-> > +	spin_unlock_irq(&sbi->iostat_lock);
-> > -	spin_lock_bh(&sbi->iostat_lat_lock);
-> > +	spin_lock_irq(&sbi->iostat_lat_lock);
-> >   	memset(io_lat, 0, sizeof(struct iostat_lat_info));
-> > -	spin_unlock_bh(&sbi->iostat_lat_lock);
-> > +	spin_unlock_irq(&sbi->iostat_lat_lock);
-> >   }
-> >   void f2fs_update_iostat(struct f2fs_sb_info *sbi,
-> >   			enum iostat_type type, unsigned long long io_bytes)
-> >   {
-> > +	unsigned long flags;
-> > +
-> >   	if (!sbi->iostat_enable)
-> >   		return;
-> > -	spin_lock_bh(&sbi->iostat_lock);
-> > +	spin_lock_irqsave(&sbi->iostat_lock, flags);
-> >   	sbi->rw_iostat[type] += io_bytes;
-> >   	if (type == APP_BUFFERED_IO || type == APP_DIRECT_IO)
-> > @@ -172,7 +176,7 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi,
-> >   	if (type == APP_BUFFERED_READ_IO || type == APP_DIRECT_READ_IO)
-> >   		sbi->rw_iostat[APP_READ_IO] += io_bytes;
-> > -	spin_unlock_bh(&sbi->iostat_lock);
-> > +	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
-> >   	f2fs_record_iostat(sbi);
-> >   }
-> > @@ -185,6 +189,7 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
-> >   	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
-> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> >   	int idx;
-> > +	unsigned long flags;
-> >   	if (!sbi->iostat_enable)
-> >   		return;
-> > @@ -202,12 +207,12 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
-> >   			idx = WRITE_ASYNC_IO;
-> >   	}
-> > -	spin_lock_bh(&sbi->iostat_lat_lock);
-> > +	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> >   	io_lat->sum_lat[idx][iotype] += ts_diff;
-> >   	io_lat->bio_cnt[idx][iotype]++;
-> >   	if (ts_diff > io_lat->peak_lat[idx][iotype])
-> >   		io_lat->peak_lat[idx][iotype] = ts_diff;
-> > -	spin_unlock_bh(&sbi->iostat_lat_lock);
-> > +	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
-> >   }
-> >   void iostat_update_and_unbind_ctx(struct bio *bio, int rw)
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
+> index a8d8bb0419a0..f23a25cce119 100644
+> --- a/arch/arm/boot/dts/en7523-evb.dts
+> +++ b/arch/arm/boot/dts/en7523-evb.dts
+> @@ -33,3 +33,11 @@ &gpio0 {
+>   &gpio1 {
+>   	status = "okay";
+>   };
+> +
+> +&pcie0 {
+> +	status = "okay";
+> +};
+> +
+> +&pcie1 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
+> index 2e705b87b6c1..7f839331a777 100644
+> --- a/arch/arm/boot/dts/en7523.dtsi
+> +++ b/arch/arm/boot/dts/en7523.dtsi
+> @@ -143,4 +143,62 @@ gpio1: gpio@1fbf0270 {
+>   		gpio-controller;
+>   		#gpio-cells = <2>;
+>   	};
+> +
+> +	pcie0: pcie@1fa91000 {
+> +		compatible = "airoha,en7523-pcie", "mediatek,mt7622-pcie";
+> +		device_type = "pci";
+> +		reg = <0x1fa91000 0x1000>;
+> +		reg-names = "port0";
+> +		linux,pci-domain = <0>;
+> +		#address-cells = <3>;
+> +		#size-cells = <2>;
+> +		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "pcie_irq";
+> +		clocks = <&scu EN7523_CLK_PCIE>;
+> +		clock-names = "sys_ck0";
+> +		bus-range = <0x00 0xff>;
+> +		ranges = <0x82000000 0 0x20000000  0x20000000  0 0x8000000>;
+> +		status = "disabled";
+> +
+> +		#interrupt-cells = <1>;
+> +		interrupt-map-mask = <0 0 0 7>;
+> +		interrupt-map = <0 0 0 1 &pcie_intc0 0>,
+> +				<0 0 0 2 &pcie_intc0 1>,
+> +				<0 0 0 3 &pcie_intc0 2>,
+> +				<0 0 0 4 &pcie_intc0 3>;
+> +		pcie_intc0: interrupt-controller {
+> +			interrupt-controller;
+> +			#address-cells = <0>;
+> +			#interrupt-cells = <1>;
+> +		};
+> +	};
+> +
+> +	pcie1: pcie@1fa92000 {
+> +		compatible = "airoha,en7523-pcie", "mediatek,mt7622-pcie";
+> +		device_type = "pci";
+> +		reg = <0x1fa92000 0x1000>;
+> +		reg-names = "port1";
+> +		linux,pci-domain = <1>;
+> +		#address-cells = <3>;
+> +		#size-cells = <2>;
+> +		interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "pcie_irq";
+> +		clocks = <&scu EN7523_CLK_PCIE>;
+> +		clock-names = "sys_ck1";
+> +		bus-range = <0x00 0xff>;
+> +		ranges = <0x82000000 0 0x28000000  0x28000000  0 0x8000000>;
+> +		status = "disabled";
+> +
+> +		#interrupt-cells = <1>;
+> +		interrupt-map-mask = <0 0 0 7>;
+> +		interrupt-map = <0 0 0 1 &pcie_intc1 0>,
+> +				<0 0 0 2 &pcie_intc1 1>,
+> +				<0 0 0 3 &pcie_intc1 2>,
+> +				<0 0 0 4 &pcie_intc1 3>;
+> +		pcie_intc1: interrupt-controller {
+> +			interrupt-controller;
+> +			#address-cells = <0>;
+> +			#interrupt-cells = <1>;
+> +		};
+> +	};
+>   };

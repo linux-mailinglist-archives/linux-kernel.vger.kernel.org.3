@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7225054CE7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B150F54CE8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355504AbiFOQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
+        id S1355124AbiFOQVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355006AbiFOQTf (ORCPT
+        with ESMTP id S232224AbiFOQVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:19:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998FACE17
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655309974; x=1686845974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MCvI0tPa54YnwXT8fiikTfMGu5joUrBKkdhVfxRHttg=;
-  b=ih22+P5rPvVWFzZ9z9UzfAFrLiKkDmPs/2jv2XZRmO2dIKKoDbAMIKzB
-   Jvu3eXpVqFjgZtDppxLisDncm6J5xdZc7ht94qXmR//IB6d9RZ45+0r+I
-   2am29k0VMDOWBMQfT6ZhFjpU0Dbot2FktfJaqFJMMKG9XiszevyMu2UB0
-   lG0k3Iyjra8KIgRl33HhaSxI9zJYuYHsLGEakpQO0rmGKLdDM0dNzkaPJ
-   0V+xqTEZMwevx4vmHNEVdtmq0knO0bnCqLA5+JaVIb+XPAcVdHN7f2acK
-   ls7K87wtNPqvuHkgoZqOxnxDxlDNnHoaB5YiSTQ31eVLDi23o4Uen3jlI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262040071"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="262040071"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 09:19:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="687384863"
-Received: from louislifei-optiplex-7090.sh.intel.com (HELO louislifei-OptiPlex-7090) ([10.239.146.218])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Jun 2022 09:19:28 -0700
-Date:   Thu, 16 Jun 2022 00:20:54 +0800
-From:   Li Fei1 <fei1.li@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, fei1.li@intel.com
-Subject: Re: [PATCH v1 1/1] virt: acrn: Mark the uuid field as unused
-Message-ID: <20220615162054.GA571776@louislifei-OptiPlex-7090>
-References: <20220607174120.34981-1-andriy.shevchenko@linux.intel.com>
+        Wed, 15 Jun 2022 12:21:30 -0400
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC139FD1;
+        Wed, 15 Jun 2022 09:21:29 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 184so11791181pga.12;
+        Wed, 15 Jun 2022 09:21:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oxwx2XCF+I1I4h/9eZc3yiqrH4E8gBYoc+9xhREdn5Y=;
+        b=CQhOQWWT+uBu3d7WHmxmNP04saC5VYeoZRnt5DSxhUjwBgW4j2GN/R+QbksL63Ide3
+         TwPgeRJJc96pzgmnsyW3y/FBD/JfFodYW9iAzbAOsS+oshqfNEkxxUZvAHSXsiLqoK3H
+         ITyWTSz3oarmdtBfoQn47beZy4X8p6jQdlMwEJDzoA87Wc3c3yua98e+tNtpZWTyPz37
+         dL6gzV8gvSp5WDcV5BAdA21VuCXXRfK6SLDuJglnH6VkuUtF7dpg6rxzVDAsoyaE55jA
+         ijJ5PBSN5meNQ4LDtZtb7tEL7Fsb9uSP5OcnuqR894OXsXhr7NyOSCXdb9wSohUZQsni
+         LnLQ==
+X-Gm-Message-State: AJIora8czxyHRqfXmnQXzfwYMD1tWNj3DK6z7+TQex1ZmFIZLqhQnpD6
+        o/IqLowrf7M8F30pgu0Q35M=
+X-Google-Smtp-Source: AGRyM1voI3CsDZUvl6kUayV5lUz/OC0ud0TYUc7dOhuNQy/iTKJCGRND7+ozOR8158DkbFk6UxzRxg==
+X-Received: by 2002:a05:6a00:4504:b0:51b:f04e:a130 with SMTP id cw4-20020a056a00450400b0051bf04ea130mr409348pfb.52.1655310088948;
+        Wed, 15 Jun 2022 09:21:28 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:36ac:cabd:84b2:80f6? ([2620:15c:211:201:36ac:cabd:84b2:80f6])
+        by smtp.gmail.com with ESMTPSA id m17-20020a056a00081100b0051b9c0af43dsm10224124pfk.155.2022.06.15.09.21.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 09:21:28 -0700 (PDT)
+Message-ID: <1c422582-b074-c15e-a2d2-94bddf089974@acm.org>
+Date:   Wed, 15 Jun 2022 09:21:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607174120.34981-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] scsi: support packing multi-segment in UNMAP command
+Content-Language: en-US
+To:     Chao Yu <chao@kernel.org>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615153402.2233825-1-chao@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220615153402.2233825-1-chao@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,79 +64,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 08:41:20PM +0300, Andy Shevchenko wrote:
-> After the commits for userspace [1][2] the uuid field is not being
-> used in the ACRN code. Update kernel to reflect these changes.
-> I.e. we do the following:
-> - adding a comment explaining that it's not used anymore
-> - replacing the specific type by a raw buffer
-> - updating the example code accordingly
-> 
-> [1]: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
-> [2]: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
-> 
-> Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
-> Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 6/15/22 08:34, Chao Yu wrote:
+> As SCSI SBC4 specification section 5.30.2 describes that it can
+> support unmapping one or more LBA range in single UNMAP command,
+> however, previously we only pack one LBA range in UNMAP command
+> by default no matter device gives the block limits that says it
+> can support in-batch UNMAP.
 
-Signed-off-by: Fei Li <fei1.li@intel.com>
+The above sentence is too long. Please split it.
 
-> ---
->  include/uapi/linux/acrn.h | 5 ++---
->  samples/acrn/vm-sample.c  | 3 ---
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
-> index ccf47ed92500..04fa83647ae5 100644
-> --- a/include/uapi/linux/acrn.h
-> +++ b/include/uapi/linux/acrn.h
-> @@ -12,7 +12,6 @@
->  #define _UAPI_ACRN_H
->  
->  #include <linux/types.h>
-> -#include <linux/uuid.h>
->  
->  #define ACRN_IO_REQUEST_MAX		16
->  
-> @@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
->   * @reserved0:		Reserved and must be 0
->   * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
->   * @reserved1:		Reserved and must be 0
-> - * @uuid:		UUID of the VM. Pass to hypervisor directly.
-> + * @uuid:		Reserved (used to be UUID of the VM)
->   * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
->   * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
->   *			hypervisor directly.
-> @@ -198,7 +197,7 @@ struct acrn_vm_creation {
->  	__u16	reserved0;
->  	__u16	vcpu_num;
->  	__u16	reserved1;
-> -	guid_t	uuid;
-> +	__u8	uuid[16];
->  	__u64	vm_flag;
->  	__u64	ioreq_buf;
->  	__u64	cpu_affinity;
-> diff --git a/samples/acrn/vm-sample.c b/samples/acrn/vm-sample.c
-> index b2dad47a77a0..7abd68b20153 100644
-> --- a/samples/acrn/vm-sample.c
-> +++ b/samples/acrn/vm-sample.c
-> @@ -29,8 +29,6 @@ static struct acrn_io_request *io_req_buf = (struct acrn_io_request *)io_request
->  
->  __u16 vcpu_num;
->  __u16 vmid;
-> -/* POST_STANDARD_VM_UUID1, refer to https://github.com/projectacrn/acrn-hypervisor/blob/master/hypervisor/include/common/vm_uuids.h */
-> -guid_t vm_uuid = GUID_INIT(0x385479d2, 0xd625, 0xe811, 0x86, 0x4e, 0xcb, 0x7a, 0x18, 0xb3, 0x46, 0x43);
->  
->  int hsm_fd;
->  int is_running = 1;
-> @@ -63,7 +61,6 @@ int main(int argc, char **argv)
->  	}
->  	hsm_fd = open("/dev/acrn_hsm", O_RDWR|O_CLOEXEC);
->  
-> -	memcpy(&create_vm.uuid, &vm_uuid, 16);
->  	create_vm.ioreq_buf = (__u64)io_req_buf;
->  	ret = ioctl(hsm_fd, ACRN_IOCTL_CREATE_VM, &create_vm);
->  	printf("Created VM! [%d]\n", ret);
-> -- 
-> 2.35.1
-> 
+> This patch tries to set max_discard_segments config according to
+              ^^^^^^^^^^^^
+Consider changing "tries to set" into "sets".
+
+> block limits of device, and supports in-batch UNMAP.
+
+Consider changing "in-batch UNMAP" into "unmapping multiple LBA ranges 
+with a single UNMAP command".
+
+> +	blk_queue_max_discard_segments(q, sdkp->max_block_desc_count);
+
+sdkp->max_block_desc_count is 32 bits wide while 
+blk_queue_max_discard_segments() accepts an unsigned short as second 
+argument. So the value 0x10002 will be converted into 2, which is not 
+correct. Consider changing the second argument into min(U16_MAX, 
+sdkp->max_block_desc_count).
+
+>   	sdkp->provisioning_mode = mode;
+>   
+>   	switch (mode) {
+> @@ -836,9 +837,10 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
+>   	struct scsi_device *sdp = cmd->device;
+>   	struct request *rq = scsi_cmd_to_rq(cmd);
+>   	struct scsi_disk *sdkp = scsi_disk(rq->q->disk);
+> -	u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
+> -	u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
+> -	unsigned int data_len = 24;
+> +	unsigned short segments = blk_rq_nr_discard_segments(rq);
+> +	unsigned int data_len = 8 + 16 * segments;
+> +	unsigned int data_offset = 8;
+
+Please rename 'data_offset' into 'descriptor_offset' to match the SBC-4 
+terminology.
+
+> @@ -2870,9 +2879,9 @@ static void sd_read_block_limits(struct scsi_disk *sdkp)
+>   			goto out;
+>   
+>   		lba_count = get_unaligned_be32(&vpd->data[20]);
+> -		desc_count = get_unaligned_be32(&vpd->data[24]);
+> +		sdkp->max_block_desc_count = get_unaligned_be32(&vpd->data[24]);
+
+Consider adding /* Extract the MAXIMUM UNMAP BLOCK DESCRIPTOR COUNT. */ 
+above the above statement.
+
+> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
+> index 5eea762f84d1..bda9db5e2322 100644
+> --- a/drivers/scsi/sd.h
+> +++ b/drivers/scsi/sd.h
+> @@ -119,6 +119,7 @@ struct scsi_disk {
+>   	u32		opt_xfer_blocks;
+>   	u32		max_ws_blocks;
+>   	u32		max_unmap_blocks;
+> +	u32		max_block_desc_count;
+
+I do not agree with the choice of the name of this member variable. The 
+name used in SBC-4 is "MAXIMUM UNMAP BLOCK DESCRIPTOR COUNT". Leaving 
+out "unmap" when abbreviating that description into a member name makes 
+it impossible to guess what the purpose of that member variable is.
+
+Thanks,
+
+Bart.

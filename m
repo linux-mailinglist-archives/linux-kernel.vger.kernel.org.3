@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A846554C8D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B392754C8DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348916AbiFOMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S1348413AbiFOMrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348894AbiFOMqD (ORCPT
+        with ESMTP id S234307AbiFOMq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:46:03 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A394617F;
-        Wed, 15 Jun 2022 05:46:02 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id i186so11702217vsc.9;
-        Wed, 15 Jun 2022 05:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g/6ADv8uBMw3tYXXr8BpAhjyxrjAv8DDj12L//6c3pA=;
-        b=J7Xg59BQ+HbpUll8w2rPc7iWZ/9gUxP23SizgRU8i/2ZTjELwGMhh0LhXQ4WQKXNh4
-         ydtAxlXuq+At3/4KaSIIknsP5fJuextlyX5np+xK0BesKhqjX1J6lDG5s6s9Gf04LS7I
-         OWD5q85jhDmNuMiaIQ7Idprz20oGA5JWUJfe2RqoPgLkR+ti9DX2YOQYqj6qNO07Anle
-         hhh1hiWIe7PyUGSQzo5Ku4S1iOn83OV88euWeHXb+qgkFYjr26m0JxfN9V2xK3jYjOPk
-         cjvYOosDhQXlAWtUz3apb/+8V2jIHrh45Q2Z9KI+7lzyJxpFSsqOhCqhSic1ZqTqjvEV
-         5c0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g/6ADv8uBMw3tYXXr8BpAhjyxrjAv8DDj12L//6c3pA=;
-        b=WmYVGTPRmO/TCo/8HkToXxgann+NjVoV9ShsrN8rm8Fh7joz9Vi/Z62fQzP76nmMCA
-         dwskgOJwyBZvZo6EevO++q5WQyUbD62y1lZSxnDqAg+ZFwNpMrElaVLaOBQ5aNo52cfm
-         CcoFXMfKqCipdDENi0I56gbteJvUd8SCjN3uMv1OeK4m+G+IhZBsnp7EphCGz20NZyiu
-         TSM1ccqlzIciAdYymJ4O8cPy9TgYhvDQhW6vkJqKC4raIUKwG3v9MqsN/t827XVTNu/Q
-         XVReL7Gk7aq9p6WxF6dzZHDlEVvlqiQ3y/f8sMtcuD/yuQHPX1CseIajTwm/eHb0d60e
-         4BeA==
-X-Gm-Message-State: AJIora/X7DkSP4PUn04ZHLBtDBJn9MLxhrlsgnypMIJ3ErClTdM3NCHZ
-        f0Ee0kiVbrwjjKAl9vd6VLnR0Om9yb0D/AkfvH8=
-X-Google-Smtp-Source: AGRyM1t9iDAoI6VdXvWqxQ8DPB0bnk7AHH8zSFsZGXHGm7FDKD4J58RwY6M556wiZaNsbSQ73uhcYUVUsvtfp3YUCcI=
-X-Received: by 2002:a67:d19c:0:b0:349:9ed:e5b0 with SMTP id
- w28-20020a67d19c000000b0034909ede5b0mr4738728vsi.62.1655297161944; Wed, 15
- Jun 2022 05:46:01 -0700 (PDT)
+        Wed, 15 Jun 2022 08:46:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488B146C8C;
+        Wed, 15 Jun 2022 05:46:57 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0603D1F913;
+        Wed, 15 Jun 2022 12:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655297216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kCc+fqfVJ1178TStTubhr5OsC5cJgYZfRKAp/t26xnE=;
+        b=tf+peZdELak5lxAWLvBE/N4XgbTrf1OHqfbVynRzidCnDm7YCzgsOqy5R1hqqLi6MgEzW+
+        m9aCUtSljjZszAUcNZTX5wDMOYljQlNoklg3LI2MYLhmpMtCZ1BSCPEt0iBCoacCy+6C7B
+        qMkgp2w0HVuDxJnSAcIiQSyGXQWKcrM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655297216;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kCc+fqfVJ1178TStTubhr5OsC5cJgYZfRKAp/t26xnE=;
+        b=0Y23oh85gCCILdW5DFoJ2AyTjGokSxU3hCB5zxczcBZvu/YA5YXYysripfCi1hQjrKBW5V
+        7E8IQ/eIJnstoGAw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DA5932C141;
+        Wed, 15 Jun 2022 12:46:45 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id AC595A062E; Wed, 15 Jun 2022 14:46:33 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 14:46:33 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        lczerner@redhat.com, enwlinux@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH v2 1/4] ext4: add EXT4_INODE_HAVE_XATTR_SPACE macro in
+ xattr.h
+Message-ID: <20220615124633.6uddzv5msnmwi7c4@quack3.lan>
+References: <20220615040630.808783-1-libaokun1@huawei.com>
+ <20220615040630.808783-2-libaokun1@huawei.com>
 MIME-Version: 1.0
-References: <20220614183720.512073672@linuxfoundation.org> <Yqmj7kkdooFqIv+V@debian>
-In-Reply-To: <Yqmj7kkdooFqIv+V@debian>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Wed, 15 Jun 2022 05:45:51 -0700
-Message-ID: <CAJq+SaAbbFZ3a5bEafCB=9KA2eTzc6n4sQxD8cvAx2h4f=C6-w@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/11] 5.15.48-rc1 review
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615040630.808783-2-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > This is the start of the stable review cycle for the 5.15.48 release.
-> > There are 11 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> > Anything received after that time might be too late.
->
+On Wed 15-06-22 12:06:27, Baokun Li wrote:
+> When adding an xattr to an inode, we must ensure that the inode_size is
+> not less than EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad. Otherwise,
+> the end position may be greater than the start position, resulting in UAF.
+> 
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Compiled and booted on x86 & arm64 test systems. No dmesg regressions.
+...
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+> +/*
+> + * If we want to add an xattr to the inode, we should make sure that
+> + * i_extra_isize is not 0 and that the inode size is not less than
+> + * EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad.
+> + *   EXT4_GOOD_OLD_INODE_SIZE   extra_isize header   entry   pad  data
+> + * |--------------------------|------------|------|---------|---|-------|
+> + */
+> +#define EXT4_INODE_HAVE_XATTR_SPACE(inode)				\
 
-Thanks.
+Gramatically correct would be EXT4_INODE_**HAS**_XATTR_SPACE and I'd be for
+using that. Otherwise the whole series looks good so feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,134 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC46454C5AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32E654C5B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244535AbiFOKQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S1343985AbiFOKS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiFOKQP (ORCPT
+        with ESMTP id S229590AbiFOKS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:16:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF7037BF4;
-        Wed, 15 Jun 2022 03:16:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Jun 2022 06:18:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3193DDCF;
+        Wed, 15 Jun 2022 03:18:24 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:7d5:f5ba:f463:c8a9] (unknown [IPv6:2a01:e0a:120:3210:7d5:f5ba:f463:c8a9])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87DE960C70;
-        Wed, 15 Jun 2022 10:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB11C34115;
-        Wed, 15 Jun 2022 10:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655288174;
-        bh=LzuKKmeaKzYyf1F4EGCFzObtFswa551XpejD5PM/0gU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=V2e4eedCwuT64uSq8EWZIlqOealrKlJhOjYwUPwzUjmJe3h1gZVozcylD0pHKd3xB
-         Ak6Oc8tweWPYhMTh9H3oadcrNqf+QiU9LPyAX/6yzLb9dednhlxc8YlZ9ce8PuC1Ja
-         NHZaZBVX97va3bcZW8Ev5S8x4pj3H+aSGwSujEXKe2YYokqjbd8o8kqjr+IR6la6s3
-         b+BdazS+sViwet2f8F/vjuwIdaqpG4Joh9L6TTujDPf1UclgVXVsul3UoHplJbGy38
-         U2r67XkRS9chQDQXsUdeJiHunFShBZ/xGbDIlCLcdCYRVMWuiRl/HXRfVkZxuaPp3H
-         f3taqgo3g7DTQ==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-fe32122311so15874740fac.7;
-        Wed, 15 Jun 2022 03:16:13 -0700 (PDT)
-X-Gm-Message-State: AJIora+HD5Dw5zsrzOD9yOe2H3eSWf8FMogwYJhfqJoeB/wpjeY/apXX
-        0L4LqohiaEksf3oqP2Cs38MLpxhqC6LnnQOYEro=
-X-Google-Smtp-Source: AGRyM1uN/3D1+5Ut4Xt2mabIT0hR6gzAEW7Im9WVGqBeGn3OnhJh0XIUKAqRs97/yUL1cD2/EM5eYL4/9b9oQIafJWE=
-X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
- v8-20020a05687105c800b000f33c1c126fmr5067969oan.126.1655288162336; Wed, 15
- Jun 2022 03:16:02 -0700 (PDT)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E9F066016CE;
+        Wed, 15 Jun 2022 11:18:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655288303;
+        bh=V7WoLBoKSld8AcdjidjXLlEz+rIIWI1rpx4mYKHlf0g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ReXebInobCF2yiDjK2XUuvUxqMFi01BFGPAMRXga+6F4dbs8pKr5KXz9HRgMFlvZs
+         KKEBFogBRSo26pAUM5uPDye7G6ZZETtdx+Y5Vt4myNkWt/FaHCBNbjvNk1dqNFHBHI
+         mixs+XsKD6hGCPYITzZlHhpPTXxtHQD40fz7KPae+UUTwUy7TFMOaFLZXAfKkqUg15
+         cQg+2/qDifBjQfH+F1VTh4XB8tWlZxl5SVYtzeGmXOqC30GIHzqUksRn1LUR5gdQXs
+         r0yXGhvjcgNNnu24HvFsUy5pvlead/dHqNXnwJfW4qgDoIin4Y3D7rTIgAl7TRt1k4
+         LpcPKqQ+D2MOw==
+Message-ID: <6cb4ab4f-1132-f386-6dd0-bf4eeab4433c@collabora.com>
+Date:   Wed, 15 Jun 2022 12:18:19 +0200
 MIME-Version: 1.0
-References: <20220614092156.1972846-1-mawupeng1@huawei.com> <YqmQIpQ8hzxYkMv2@kernel.org>
-In-Reply-To: <YqmQIpQ8hzxYkMv2@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 15 Jun 2022 12:15:51 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGytXz7VZh3xR=Vj-Mo7q+Wu3NUsqU9MFhPStm2=c9khw@mail.gmail.com>
-Message-ID: <CAMj1kXGytXz7VZh3xR=Vj-Mo7q+Wu3NUsqU9MFhPStm2=c9khw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/5] introduce mirrored memory support for arm64
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Wupeng Ma <mawupeng1@huawei.com>, Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>, songmuchun@bytedance.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        damien.lemoal@opensource.wdc.com,
-        Stephen Boyd <swboyd@chromium.org>,
-        Wei Liu <wei.liu@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, gpiccoli@igalia.com,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        vijayb@linux.microsoft.com,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 01/17] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>, mchehab@kernel.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, Hans Verkuil <hverkuil-cisco@xs4all.nl>
+References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
+ <20220614083614.240641-2-benjamin.gaignard@collabora.com>
+ <63052d74-d3c7-a9cc-cb18-a58f8937ec06@xs4all.nl>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <63052d74-d3c7-a9cc-cb18-a58f8937ec06@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 09:54, Mike Rapoport <rppt@kernel.org> wrote:
->
-> On Tue, Jun 14, 2022 at 05:21:51PM +0800, Wupeng Ma wrote:
-> > From: Ma Wupeng <mawupeng1@huawei.com>
-> >
-> > Patch #1 introduce mirrored memory support form arm64.
-> > Patch #2-#4 fix some bugs for arm64 if memory reliable is enabled.
-> > Patch #5 disable mirror feature if kernelcore is not specified.
-> >
-> > Thanks to Ard Biesheuvel's hard work [1], now kernel will perfer mirrored
-> > memory if kaslr is enabled.
-> >
-> > [1] https://lore.kernel.org/linux-arm-kernel/CAMj1kXEPVEzMgOM4+Yj6PxHA-jFuDOAUdDJSiSxy_XaP4P7LSw@mail.gmail.com/T/
-> >
-> >
-> > Ma Wupeng (5):
-> >   efi: arm64: Introduce ability to find mirrored memory ranges
-> >   mm: Ratelimited mirrored memory related warning messages
-> >   mm: Limit warning message in vmemmap_verify() to once
-> >   arm64: mm: Only remove nomap flag for initrd
-> >   memblock: Disable mirror feature if kernelcore is not specified
-> >
-> >  arch/arm64/mm/init.c            |  2 +-
-> >  arch/x86/include/asm/efi.h      |  4 ----
-> >  arch/x86/platform/efi/efi.c     | 23 -----------------------
-> >  drivers/firmware/efi/efi-init.c |  1 +
-> >  drivers/firmware/efi/efi.c      | 23 +++++++++++++++++++++++
-> >  include/linux/efi.h             |  3 +++
-> >  mm/internal.h                   |  2 ++
-> >  mm/memblock.c                   |  7 +++++--
-> >  mm/page_alloc.c                 |  2 +-
-> >  mm/sparse-vmemmap.c             |  2 +-
-> >  10 files changed, 37 insertions(+), 32 deletions(-)
->
-> For the series: Acked-by: Mike Rapoport <rppt@linux.ibm.com>
->
 
+Le 15/06/2022 à 11:33, Hans Verkuil a écrit :
+> Hi Benjamin,
+>
+> On 6/14/22 10:35, Benjamin Gaignard wrote:
+>> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>>
+>> Add a new flag that indicates that this control is a dynamically sized
+>> array. Also document this flag.
+>>
+>> Currently dynamically sized arrays are limited to one dimensional arrays,
+>> but that might change in the future if there is a need for it.
+>>
+>> The initial use-case of dynamic arrays are stateless codecs. A frame
+>> can be divided in many slices, so you want to provide an array containing
+>> slice information for each slice. Typically the number of slices is small,
+>> but the standard allow for hundreds or thousands of slices. Dynamic arrays
+>> are a good solution since sizing the array for the worst case would waste
+>> substantial amounts of memory.
+>>
+>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>> ---
+>>   .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
+>>   include/uapi/linux/videodev2.h                            | 1 +
+>>   2 files changed, 9 insertions(+)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+>> index 88f630252d98..a20dfa2a933b 100644
+>> --- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+>> +++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+>> @@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
+>>   	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
+>>   	streaming is in progress since most drivers do not support changing
+>>   	the format in that case.
+>> +    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
+>> +      - 0x0800
+>> +      - This control is a dynamically sized 1-dimensional array. It
+>> +        behaves the same as a regular array, except that the number
+>> +	of elements as reported by the ``elems`` field is between 1 and
+>> +	``dims[0]``. So setting the control with a differently sized
+>> +	array will change the ``elems`` field when the control is
+>> +	queried afterwards.
+> I am proposing a change to the dynamic array implementation: initially
+> dynamic array controls start off as empty arrays (0 elements). This also
+> allows userspace to set a dynamic array control to an empty array.
+>
+> It probably would also make sense to add a min_dyn_elems to set the minimum
+> allowed number of elements for a dynamic array. This would most likely be
+> either 0 or 1.
+>
+> In the context of this HEVC series, does it help to allow empty dynamic arrays?
+>
+> For V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS in particular it looks like
+> it would make sense since I think (correct me if I am wrong) there can be 0
+> entry point offsets. So with empty arrays supported would the field
+> num_entry_point_offsets still be needed?
 
-Thanks all, I've queued these up now.
+yes it possible to have 0 entry point offsets in bitstream but in this case
+I think the stack won't use V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS because
+it have not data to send.
+I have introduce num_entry_point_offsets field because most of the drivers
+only need this information and not the full offsets array so I think it is needed.
+For now none of the drivers use V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+control, it is here to be future proof.
+
+Regards,
+Benjamin
+
+>
+> If you want to test, then let me know and I mail a very simple patch adding
+> support for empty arrays (not yet min_dyn_elems, though).
+>
+> Regards,
+>
+> 	Hans
+>
+>>   
+>>   Return Value
+>>   ============
+>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>> index 5311ac4fde35..9018aa984db3 100644
+>> --- a/include/uapi/linux/videodev2.h
+>> +++ b/include/uapi/linux/videodev2.h
+>> @@ -1890,6 +1890,7 @@ struct v4l2_querymenu {
+>>   #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
+>>   #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
+>>   #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
+>> +#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+>>   
+>>   /*  Query flags, to be ORed with the control ID */
+>>   #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000

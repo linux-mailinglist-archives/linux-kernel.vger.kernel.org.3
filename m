@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C4854BFC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA11254BFC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345179AbiFOCno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S237792AbiFOCnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242752AbiFOCnc (ORCPT
+        with ESMTP id S243240AbiFOCnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:43:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2792321801;
-        Tue, 14 Jun 2022 19:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655261012; x=1686797012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9is4Wtv18iXnGG040jECVRF40gaLkbneYddeUdfg+z8=;
-  b=UdMIFU9lH5jQcO1ZYPzBQOXXOkMCsFd76HIHUfyFTpPASyP0OcjE7oiM
-   EWAiCyAkCFMDM/yKawlSQwhoTYkuRcBJXhueRiB8xhEl+DQh/QcRgllO+
-   hKNyEhKDl+WZiC0HWw9nCFeTaz7mqe2FsbnPqcdZOMbLFHHzvB4d7QI+d
-   p9bOmhAZlYSeJgyRjESOX6+6uoQhXceTs9WrahzF72l2LfQo3KyjMfXo7
-   eI81r8yI7ef2Xz13sJ4xWEM7HVgAcKnVdGulJVAxg2iGn15Pvz4dCG9xl
-   CoHzkC0deL3b7m9F8ApheZNVLcbyPjWOqWEBFAzHV5HTPy9yruAa+2J5w
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340473425"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="340473425"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 19:43:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="588834092"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 19:43:29 -0700
-Date:   Wed, 15 Jun 2022 10:43:16 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Kechen Lu <kechenl@nvidia.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, somduttar@nvidia.com,
+        Tue, 14 Jun 2022 22:43:25 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB02226555
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 19:43:23 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id q11so11315432iod.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 19:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+hzIaxhmwogHOnWV4sh6DA3hA7wytPVtgiohJR2puW4=;
+        b=hPvLHrVEDMpEYdgwSivWIkyOg0YM5SIgyqksP2eEs7q6I9f/L0y/4gqxOJksMAJT/1
+         rUpLjxAr4U2HN25VizspHdu/R4kpmWoQR3sLV1GgCi604ltv2kYqsVgvhoCXSP+O75pE
+         5vckx7ydSvxbqjJN/riO0WIQcZf8XvZHYvJg0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+hzIaxhmwogHOnWV4sh6DA3hA7wytPVtgiohJR2puW4=;
+        b=tNk1UzG0XvXvA2J+uebMo03ByOcZZN+IwnFU5eAD0fsbAwsk/oTQa2yZ+O2eM4l9bJ
+         HCXb7nMToes5TLpMl8rl8LWSY4a2+7m/y739AonTFiUqAmvbJV0Bah546Ve0hHigFf1V
+         IRC5cIP1CdKYuRDz6sGK5G5nMRkxIiABLS40e4rQVz8Z8e7/hMSXtQiVaubShitsN9z8
+         dDhN00WC/d1twRLXur6YbfcgsxYgSmdWX8UX0yKZGPfLjPePc6kyr7iLSdb+rLGYZKAv
+         H0ffJ+lQOCayAeQEEzOAvviQcbxNlmsSziAlVC/KKgoyljLjeSH9a3OjQOds2EadYDZ1
+         Vs5w==
+X-Gm-Message-State: AOAM532CETc3BTkViLe8fDGyBuW1/fICkaSatXf5fyYTAH8PVAlR0Wos
+        yH/gjV4AI6Bhn/2nAYUZbio04Q==
+X-Google-Smtp-Source: ABdhPJy+FEpp8X3TcCahEYaSD6441ju1NnWAb/zHEwXtiGjYmufD+rZTh/7U9xo8eP8t1a5TELVSiw==
+X-Received: by 2002:a05:6638:1686:b0:331:c1ed:9f55 with SMTP id f6-20020a056638168600b00331c1ed9f55mr4326996jat.201.1655261003057;
+        Tue, 14 Jun 2022 19:43:23 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id u11-20020a02aa8b000000b0032e1e0ac289sm5622214jai.8.2022.06.14.19.43.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 19:43:22 -0700 (PDT)
+Subject: Re: [PATCH 4.19 00/16] 4.19.248-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 5/7] KVM: x86: add vCPU scoped toggling for
- disabled exits
-Message-ID: <20220615024311.GA7808@gao-cwp>
-References: <20220615011622.136646-1-kechenl@nvidia.com>
- <20220615011622.136646-6-kechenl@nvidia.com>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220614183720.928818645@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e272c61c-e363-8a60-42b0-a49751edf325@linuxfoundation.org>
+Date:   Tue, 14 Jun 2022 20:43:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615011622.136646-6-kechenl@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614183720.928818645@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->@@ -5980,6 +5987,8 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_event,
-> int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> 			    struct kvm_enable_cap *cap)
-> {
->+	struct kvm_vcpu *vcpu;
->+	unsigned long i;
-> 	int r;
+On 6/14/22 12:40 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.248 release.
+> There are 16 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 	if (cap->flags)
->@@ -6036,14 +6045,17 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> 			break;
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
 > 
-> 		mutex_lock(&kvm->lock);
->-		if (kvm->created_vcpus)
->-			goto disable_exits_unlock;
->+		if (kvm->created_vcpus) {
->+			kvm_for_each_vcpu(i, vcpu, kvm) {
->+				kvm_ioctl_disable_exits(vcpu->arch, cap->args[0]);
->+				static_call(kvm_x86_update_disabled_exits)(vcpu);
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.248-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-IMO, this won't work on Intel platforms. Because, to manipulate a vCPU's
-VMCS, vcpu_load() should be invoked in advance to load the VMCS.
-Alternatively, you can add a request KVM_REQ_XXX and defer updating VMCS
-to the next vCPU entry.
+Compiled and booted on my test system. No dmesg regressions.
 
->+			}
->+		}
->+		mutex_unlock(&kvm->lock);
-> 
-> 		kvm_ioctl_disable_exits(kvm->arch, cap->args[0]);
-> 
-> 		r = 0;
->-disable_exits_unlock:
->-		mutex_unlock(&kvm->lock);
-> 		break;
-> 	case KVM_CAP_MSR_PLATFORM_INFO:
-> 		kvm->arch.guest_can_read_msr_platform_info = cap->args[0];
->-- 
->2.32.0
->
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

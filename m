@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231E054C2CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE8C54C2D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbiFOHmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S245326AbiFOHoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352263AbiFOHlx (ORCPT
+        with ESMTP id S1346795AbiFOHoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:41:53 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F3649CB7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:41:52 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g186so10675200pgc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YJ9dbVQWS3muelD2che4m2RkFNGOIFlrl7yE1kJ0cFU=;
-        b=FAT0EaCFsCTaNLOLBSejLQwRxm65I4tTblkI3UpdUWn8LkJheU8IAbeAn0cEdRFv5G
-         HMHwwyWCK03/LG0EK4eQM3EwWRXexrnrJF5oR7Z2FH5XXlhgw5NhRQNAJXCYkVLEVZWG
-         RKZ5n22b7d/tGYnTfUX7jKYrzcFznWrjpvjErE0BWVJor+v66JF4FLBXcF+Ic2BYXVYd
-         YplyLSfrWGnNk9fC4ud0d7jrAsUG9pE41yw1PG8/yM7kwb/ofjT6ZSPer/WG4/xsmqoT
-         hnsdfNQYKw9xopwkfLzim0SOOIsYyzn93dC14/ro8RYkNk7X7+EWP0aIVu97BB24EexL
-         AKrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YJ9dbVQWS3muelD2che4m2RkFNGOIFlrl7yE1kJ0cFU=;
-        b=gkZt33jnMo74zg5Xb/QEAmKyD0tBKUzq/3niVzFYDWINEML7NzgYQ3Fk/gmmVjBbcW
-         D0XMioE3pGlr6W0PEJQlJy2Rx+R1E/oK/7VjdB+s/bXa6xbuhL7JywIIAOv+cTEnRJG+
-         PSdTQWDiK808BE9jY9agI/vqhDv6ZZeV117+PfsBWLRfOWWHlZH0QTN4IhQ06jaUAgZG
-         UkMe9xbr7VeA4cu/DSs7zwy9DGr14o3hiCTItjOWdH8KbzeRuZcnRFmmbwRHxHcgL+Yf
-         pow2faAYSHC8QhoSTWIPeAvXIBuyTsAa2/LsVOB3cqk08ZDzdDTcZH00C2YhvgeXBDR6
-         njXw==
-X-Gm-Message-State: AOAM532PnmVFO/Ua06nb+lmp8aysGLtDeFY5LfWCTBArHe9xvblTJZxq
-        G8VOA2vN4g6/Y1h53wxTUxhPrm3eXvI=
-X-Google-Smtp-Source: ABdhPJwbTKseu/QIW7iTQ2w4314NirUemHlEitpOoFNS2Q1fWMlcyegVNTQB/TiFSFQAYqiWfzFOBQ==
-X-Received: by 2002:a65:67da:0:b0:3fc:6ca7:d58c with SMTP id b26-20020a6567da000000b003fc6ca7d58cmr7913724pgs.562.1655278911579;
-        Wed, 15 Jun 2022 00:41:51 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id ik24-20020a170902ab1800b001664d88aab3sm8553342plb.240.2022.06.15.00.41.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 00:41:51 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     linux@armlinux.org.uk
-Cc:     logang@deltatee.com, martin.oliveira@eideticom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ARM: dma-mapping: Use kvzalloc in __iommu_alloc_buffer
-Date:   Wed, 15 Jun 2022 07:41:46 +0000
-Message-Id: <20220615074146.912213-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Jun 2022 03:44:10 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFD63FDA5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:44:09 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNHM54571z1K9tw;
+        Wed, 15 Jun 2022 15:42:09 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 15:44:06 +0800
+Subject: Re: [PATCH] mm/page_alloc: make calling prep_compound_head more
+ reliable
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Joao Martins <joao.m.martins@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <20220607144157.36411-1-linmiaohe@huawei.com>
+ <20220607113257.84b1bdd993f19be26b8c4944@linux-foundation.org>
+ <65e5da9c-32d1-17d7-d8c6-96cbfac23fec@oracle.com>
+ <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
+ <YqiJaOiGnUzzB1+W@casper.infradead.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <40a07ce5-414a-a3b8-53ee-6c348635f03a@huawei.com>
+Date:   Wed, 15 Jun 2022 15:44:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YqiJaOiGnUzzB1+W@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,33 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On 2022/6/14 21:13, Matthew Wilcox wrote:
+> On Wed, Jun 08, 2022 at 08:17:35PM +0800, Miaohe Lin wrote:
+>> +++ b/mm/page_alloc.c
+>> @@ -6771,13 +6771,18 @@ static void __ref memmap_init_compound(struct page *head,
+>>                 set_page_count(page, 0);
+>>
+>>                 /*
+>> -                * The first tail page stores compound_mapcount_ptr() and
+>> -                * compound_order() and the second tail page stores
+>> -                * compound_pincount_ptr(). Call prep_compound_head() after
+>> -                * the first and second tail pages have been initialized to
+>> -                * not have the data overwritten.
+>> +                * The first tail page stores compound_mapcount_ptr(),
+>> +                * compound_order() and compound_pincount_ptr(). Call
+>> +                * prep_compound_head() after the first tail page have
+>> +                * been initialized to not have the data overwritten.
+>> +                *
+>> +                * Note the idea to make this right after we initialize
+>> +                * the offending tail pages is trying to take advantage
+>> +                * of the likelihood of those tail struct pages being
+>> +                * cached given that we will read them right after in
+>> +                * prep_compound_head().
+> 
+> It's not that we'll read them again, it's that the cacheline will still
+> be in cache, and therefore dirty.
 
-Use kvzalloc() in __iommu_alloc_buffer() instead of open-coding it.
+Thanks for pointing this out.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- arch/arm/mm/dma-mapping.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> Honestly, I don't think we need this extra explanation in a comment.
+> Just change the first paragraph to reflect reality and leave it at that.
 
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index 82ffac621854..940819eda182 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -1208,10 +1208,7 @@ static struct page **__iommu_alloc_buffer(struct device *dev, size_t size,
- 	int i = 0;
- 	int order_idx = 0;
- 
--	if (array_size <= PAGE_SIZE)
--		pages = kzalloc(array_size, GFP_KERNEL);
--	else
--		pages = vzalloc(array_size);
-+	pages = kvzalloc(array_size, GFP_KERNEL);
- 	if (!pages)
- 		return NULL;
- 
--- 
-2.25.1
+Will do it in next version if prep_compound_head is not moved outside loop.
 
+> 
+>>                  */
+>> -               if (pfn == head_pfn + 2)
+>> +               if (unlikely(pfn == head_pfn + 1))
+> 
+> We definitely don't need the unlikely here.
+
+Could you please give me a more detailed explanation? IIUC, the above if condition
+will only meet at a probability of 1/512. So unlikely tells the compiler to do some
+optimization around it. Or am I miss something?
+
+Thanks!
+
+> 
+>>                         prep_compound_head(head, order);
+>>         }
+>>  }
+>>
+>> Or am I miss something?
+>>
+>> Thanks!
+>>
+>>> .
+>>>
+>>
+> 
+> .
+> 
 

@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C7B54C5E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2252754C5D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346631AbiFOKUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
+        id S1346436AbiFOKTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239671AbiFOKUM (ORCPT
+        with ESMTP id S237034AbiFOKT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:20:12 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118A34BFF2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:19:55 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220615101953euoutp0216a2cff7bf6991ab17e89ef82170376f~4xAYvB8lU2943629436euoutp02D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:19:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220615101953euoutp0216a2cff7bf6991ab17e89ef82170376f~4xAYvB8lU2943629436euoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1655288393;
-        bh=bwZDXQMCqMHhu3ZuVm0AocKjdjGbQSZlDWP1ndwgqcc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IsnRcezjOXiALz83wEzrvdnlRnY+kZXZoQVFFEWvYvw9evcptXtOsuvwqnMJSYc0P
-         8IIlnoqCRamVvxdHGftchVRgmOuQt0530yccfh5h8RPRuyp1OqdjjesqSGh4Cl9Ia9
-         x3jSn9zK07ksmxSos9HsltT1N96m03ezesyOhA6k=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220615101951eucas1p18d84bd7b38d6657a6c512bd382ceedf6~4xAW0wNp51438314383eucas1p1I;
-        Wed, 15 Jun 2022 10:19:51 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 39.77.10067.742B9A26; Wed, 15
-        Jun 2022 11:19:51 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220615101951eucas1p238eb45e563bd9645af81bf16c56d98ec~4xAWbmb-F2114221142eucas1p2b;
-        Wed, 15 Jun 2022 10:19:51 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220615101951eusmtrp2c759d4ee173fff60b6c81fb090bf1131~4xAWarPxE0361403614eusmtrp2l;
-        Wed, 15 Jun 2022 10:19:51 +0000 (GMT)
-X-AuditID: cbfec7f4-dc1ff70000002753-9e-62a9b247678f
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 07.24.09038.742B9A26; Wed, 15
-        Jun 2022 11:19:51 +0100 (BST)
-Received: from localhost (unknown [106.210.248.244]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220615101950eusmtip1b23a4a7a289c85a785fe400b913c2e54~4xAVmPX1i1152711527eusmtip1J;
-        Wed, 15 Jun 2022 10:19:50 +0000 (GMT)
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     hch@lst.de, snitzer@redhat.com, damien.lemoal@opensource.wdc.com,
-        axboe@kernel.dk
-Cc:     bvanassche@acm.org, linux-kernel@vger.kernel.org,
-        jiangbo.365@bytedance.com, hare@suse.de, pankydev8@gmail.com,
-        dm-devel@redhat.com, jonathan.derrick@linux.dev,
-        gost.dev@samsung.com, dsterba@suse.com, jaegeuk@kernel.org,
-        linux-nvme@lists.infradead.org, Johannes.Thumshirn@wdc.com,
-        linux-block@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Subject: [PATCH v7 08/13] dm-zoned: ensure only power of 2 zone sizes are
- allowed
-Date:   Wed, 15 Jun 2022 12:19:15 +0200
-Message-Id: <20220615101920.329421-9-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220615101920.329421-1-p.raghav@samsung.com>
+        Wed, 15 Jun 2022 06:19:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8BF427F1;
+        Wed, 15 Jun 2022 03:19:26 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25F8Bx8Z020509;
+        Wed, 15 Jun 2022 10:19:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Ysak+bOxf2WK1p19LI1YGYc6xtN+QIwFGyYHHce1LNw=;
+ b=fl/as7pRKi3oyNScMPATmNbfNK0YO0fx4MY8Nmx1KOKF45ra5zOxC46BcuDxhAgmdwGK
+ 8lpqil8DUVLtYPtuBo3s/WrMiboehDAE0U/MUvsUqtvXpF1BL52bO891dH1n0IbDYo+x
+ hGpL4Vh6U73FJEjLhUIn2R0jCQgPGTaqu0L8aPUqriUYr9UZtt0kdBrc8nDjtdVBtKn4
+ XZQA/Kqa39MSQkedDiHf4IZi487So2B+yR1jIrzx4Sz5BamJE/ARFacj7/VxP8Sx0KEF
+ ADQVS/obYxeom9+IYE3vZVps/emG0sH2ULTbDPKr8pQaPEmeAnWadTVVgG2TdHMmFKzy xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gq8e4raju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 10:19:25 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25F8Rclr016427;
+        Wed, 15 Jun 2022 10:19:25 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gq8e4raj6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 10:19:25 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25FA6TT1018252;
+        Wed, 15 Jun 2022 10:19:23 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3gmjp94c9b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 10:19:23 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25FAJNmS25493976
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Jun 2022 10:19:24 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3648411C04A;
+        Wed, 15 Jun 2022 10:19:20 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D63411C050;
+        Wed, 15 Jun 2022 10:19:19 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.1.67])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Jun 2022 10:19:19 +0000 (GMT)
+Date:   Wed, 15 Jun 2022 12:19:16 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+Subject: Re: [PATCH v11 14/19] KVM: s390: pv: cleanup leftover protected VMs
+ if needed
+Message-ID: <20220615121916.77b039af@p-imbrenda>
+In-Reply-To: <0a13397a-86e0-7c25-0044-7a5733f61730@linux.ibm.com>
+References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
+        <20220603065645.10019-15-imbrenda@linux.ibm.com>
+        <0a13397a-86e0-7c25-0044-7a5733f61730@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBKsWRmVeSWpSXmKPExsWy7djP87rum1YmGdyfpG+x+m4/m8W0Dz+Z
-        LX6fPc9ssffdbFaLCz8amSxuHtjJZLFn0SQmi5WrjzJZPFk/i9mi58AHFou/XfeAYi0PgYpv
-        aVtc3jWHzWL+sqfsFjcmPGW0+Ly0hd1izc2nLBZtG78yOgh7XL7i7fHvxBo2j52z7rJ7XD5b
-        6rFpVSebx8KGqcwem5fUe+y+2QCUa73P6vF+31U2j74tqxg91m+5yuKx+XS1x+dNch7tB7qZ
-        AvijuGxSUnMyy1KL9O0SuDJ+3znDVvCLu6Jj3mGmBsY3nF2MnBwSAiYSE9vfsIPYQgIrGCW2
-        bLTrYuQCsr8wSvTs3MgKkfjMKPHsQx1Mw8PDS5ghipYzSjS8Pc4K4bxklLi0Yx1TFyMHB5uA
-        lkRjJ9hUEYFwiaN77jGB1DAL9DFLbD3XBzZVWCBYYv/BfUwgNouAqsTfvqMsIDavgJXE8Y6D
-        bBDb5CVmXvoONohTwFpix+weVogaQYmTM5+A1TMD1TRvnQ12kYTAOU6J3v1PmSCaXSS6Jr+G
-        soUlXh3fwg5hy0j83zkfKl4t8fTGb6jmFkaJ/p3r2UA+kADa1ncmB8RkFtCUWL9LH6LcUeLd
-        gqnsEBV8EjfeCkKcwCcxadt0Zogwr0RHmxBEtZLEzp9PoJZKSFxumsMCYXtIXP86gWkCo+Is
-        JM/MQvLMLIS9CxiZVzGKp5YW56anFhvlpZbrFSfmFpfmpesl5+duYgQmztP/jn/Zwbj81Ue9
-        Q4xMHIyHGCU4mJVEeM2CVyYJ8aYkVlalFuXHF5XmpBYfYpTmYFES503O3JAoJJCeWJKanZpa
-        kFoEk2Xi4JRqYGp4NPuC2qbV1R0qS5ftOxipW13ON0tPLFchdeGhXOFZPfmfLiVdXZqnE1IX
-        sUtKoa+/iVs8cm3HCdfzZ53TGzhdH/ldu2CXFHb1ad3mmVIO4pGrrLIKv75OEOhTrTG2Y3bR
-        abL3qhVfGf37a+bfGPuzbl1yS2amXneOt/56lOXstY6zX1ds+1B/98zRYp+GuurNUz8YfHC4
-        qLnO4I7Y/oMei8V+Ka3rSr7696CL444437KXN3Tkt03K+uW7T6uuYDmPsZ6g4UwZ+Z1P/Y9H
-        PhQN1Yzefepu/KuJyewFz+fMF10zOdXfY5noo8aaRWUdXOH82/mn7WwOiNv0ZMnza3JLNvZU
-        p2x+PfGT6fGPLEosxRmJhlrMRcWJAP1zcsMLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBIsWRmVeSWpSXmKPExsVy+t/xu7rum1YmGXz5KWyx+m4/m8W0Dz+Z
-        LX6fPc9ssffdbFaLCz8amSxuHtjJZLFn0SQmi5WrjzJZPFk/i9mi58AHFou/XfeAYi0PgYpv
-        aVtc3jWHzWL+sqfsFjcmPGW0+Ly0hd1izc2nLBZtG78yOgh7XL7i7fHvxBo2j52z7rJ7XD5b
-        6rFpVSebx8KGqcwem5fUe+y+2QCUa73P6vF+31U2j74tqxg91m+5yuKx+XS1x+dNch7tB7qZ
-        Avij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJ+
-        3znDVvCLu6Jj3mGmBsY3nF2MnBwSAiYSDw8vYe5i5OIQEljKKLEB6CqIhITE7YVNjBC2sMSf
-        a11sEEXPGSUaT+0DSnBwsAloSTR2gtWLCERLdN58D1bDLLCAWeL57VlsIAlhgUCJZccbmUBs
-        FgFVib99R1lAbF4BK4njHQfZIBbIS8y89B1sEKeAtcSO2T2sIPOFgGp2vYuHKBeUODnzCVgr
-        M1B589bZzBMYBWYhSc1CklrAyLSKUSS1tDg3PbfYSK84Mbe4NC9dLzk/dxMjMMq3Hfu5ZQfj
-        ylcf9Q4xMnEwHmKU4GBWEuE1C16ZJMSbklhZlVqUH19UmpNafIjRFOjsicxSosn5wDSTVxJv
-        aGZgamhiZmlgamlmrCTO61nQkSgkkJ5YkpqdmlqQWgTTx8TBKdXAVGqfM/9J7trGTYu3n9tg
-        4f+6KSlr6sv5XMxR4TEBV8I/7rsd7JjDtLRgWejBXSq/Yg8ucnnRobpMQmLKu7+l8w4sdJ5e
-        n8f+4FAJx0PWK3Z8z3gZsgMfSAh8i/HQWWHlZP/n3IatOxkaljuevx8hevV6r6pM/7bYL4+f
-        XWO0On3zzhMpv8Dj/J2lDRPLrV48XfZ+l131eaZHtncMtDR0BGf69/9MVEq8zXRhzi4HR9tl
-        uvb8L/QX3PeQOxcX4TXpQFrRw5kHIhfUbVCLWre/p64y6xDPxAI92YwA9VqRVy9Vf7von9cL
-        CGo44dS10dFQ0fvkjzXRh4KdJ2gE2554ryL78Ohj7jufGreXXkhtU2Ipzkg01GIuKk4EAHwS
-        U/N7AwAA
-X-CMS-MailID: 20220615101951eucas1p238eb45e563bd9645af81bf16c56d98ec
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220615101951eucas1p238eb45e563bd9645af81bf16c56d98ec
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220615101951eucas1p238eb45e563bd9645af81bf16c56d98ec
-References: <20220615101920.329421-1-p.raghav@samsung.com>
-        <CGME20220615101951eucas1p238eb45e563bd9645af81bf16c56d98ec@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YMSFfob9GrASPT3jG10CkjicSGUSQwCW
+X-Proofpoint-GUID: n1uBPQq9KFPwu3vX7eKS_Wchr_NSB4Rq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-15_03,2022-06-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ impostorscore=0 phishscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206150039
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,46 +97,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luis Chamberlain <mcgrof@kernel.org>
+On Wed, 15 Jun 2022 11:59:36 +0200
+Janosch Frank <frankja@linux.ibm.com> wrote:
 
-Today dm-zoned relies on the assumption that you have a zone size
-with a power of 2. Even though the block layer today enforces this
-requirement, these devices do exist and so provide a stop-gap measure
-to ensure these devices cannot be used by mistake
+> On 6/3/22 08:56, Claudio Imbrenda wrote:
+> > In upcoming patches it will be possible to start tearing down a
+> > protected VM, and finish the teardown concurrently in a different
+> > thread.  
+> 
+> s/,/
+> s/the/its/
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
----
- drivers/md/dm-zoned-target.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+will fix
 
-diff --git a/drivers/md/dm-zoned-target.c b/drivers/md/dm-zoned-target.c
-index 0ec5d8b9b..ad4228db5 100644
---- a/drivers/md/dm-zoned-target.c
-+++ b/drivers/md/dm-zoned-target.c
-@@ -792,6 +792,10 @@ static int dmz_fixup_devices(struct dm_target *ti)
- 				return -EINVAL;
- 			}
- 			zone_nr_sectors = blk_queue_zone_sectors(q);
-+			if (!is_power_of_2(zone_nr_sectors)) {
-+				ti->error = "Zone size not power of 2";
-+				return -EINVAL;
-+			}
- 			zoned_dev->zone_nr_sectors = zone_nr_sectors;
- 			zoned_dev->nr_zones =
- 				blkdev_nr_zones(zoned_dev->bdev->bd_disk);
-@@ -806,6 +810,10 @@ static int dmz_fixup_devices(struct dm_target *ti)
- 		q = bdev_get_queue(zoned_dev->bdev);
- 		zoned_dev->zone_nr_sectors = blk_queue_zone_sectors(q);
- 		zoned_dev->nr_zones = blkdev_nr_zones(zoned_dev->bdev->bd_disk);
-+		if (!is_power_of_2(zoned_dev->zone_nr_sectors)) {
-+			ti->error = "Zone size not power of 2";
-+			return -EINVAL;
-+		}
- 	}
- 
- 	if (reg_dev) {
--- 
-2.25.1
+> 
+> > 
+> > Protected VMs that are pending for tear down ("leftover") need to be
+> > cleaned properly when the userspace process (e.g. qemu) terminates.
+> > 
+> > This patch makes sure that all "leftover" protected VMs are always
+> > properly torn down.  
+> 
+> So we're handling the kvm_arch_destroy_vm() case here, right?
+
+yes
+
+> Maybe add that in a more prominent way and rework the subject:
+> 
+> KVM: s390: pv: cleanup leftover PV VM shells on VM shutdown
+
+ok, I'll change the description and rework the subject
+
+> 
+> > 
+> > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> > ---
+> >   arch/s390/include/asm/kvm_host.h |   2 +
+> >   arch/s390/kvm/kvm-s390.c         |   2 +
+> >   arch/s390/kvm/pv.c               | 109 ++++++++++++++++++++++++++++---
+> >   3 files changed, 104 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> > index 5824efe5fc9d..cca8e05e0a71 100644
+> > --- a/arch/s390/include/asm/kvm_host.h
+> > +++ b/arch/s390/include/asm/kvm_host.h
+> > @@ -924,6 +924,8 @@ struct kvm_s390_pv {
+> >   	u64 guest_len;
+> >   	unsigned long stor_base;
+> >   	void *stor_var;
+> > +	void *prepared_for_async_deinit;
+> > +	struct list_head need_cleanup;
+> >   	struct mmu_notifier mmu_notifier;
+> >   };
+> >   
+> > diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> > index fe1fa896def7..369de8377116 100644
+> > --- a/arch/s390/kvm/kvm-s390.c
+> > +++ b/arch/s390/kvm/kvm-s390.c
+> > @@ -2890,6 +2890,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+> >   	kvm_s390_vsie_init(kvm);
+> >   	if (use_gisa)
+> >   		kvm_s390_gisa_init(kvm);
+> > +	INIT_LIST_HEAD(&kvm->arch.pv.need_cleanup);
+> > +	kvm->arch.pv.prepared_for_async_deinit = NULL;
+> >   	KVM_EVENT(3, "vm 0x%pK created by pid %u", kvm, current->pid);
+> >   
+> >   	return 0;
+> > diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+> > index 6cffea26c47f..8471c17d538c 100644
+> > --- a/arch/s390/kvm/pv.c
+> > +++ b/arch/s390/kvm/pv.c
+> > @@ -17,6 +17,19 @@
+> >   #include <linux/mmu_notifier.h>
+> >   #include "kvm-s390.h"
+> >   
+> > +/**
+> > + * @struct leftover_pv_vm  
+> 
+> Any other ideas on naming these VMs?
+
+not really
+
+> Also I'd turn that around: pv_vm_leftover
+
+I mean, it's a leftover protected VM, it felt more natural to name it
+that way
+
+> 
+> > + * Represents a "leftover" protected VM that is still registered with the
+> > + * Ultravisor, but which does not correspond any longer to an active KVM VM.
+> > + */
+> > +struct leftover_pv_vm {
+> > +	struct list_head list;
+> > +	unsigned long old_gmap_table;
+> > +	u64 handle;
+> > +	void *stor_var;
+> > +	unsigned long stor_base;
+> > +};
+> > +  
+> 
+> I think we should switch this patch and the next one and add this struct 
+> to the next patch. The list work below makes more sense once the next 
+> patch has been read.
+
+but the next patch will leave leftovers in some circumstances, and
+those won't be cleaned up without this patch.
+
+having this patch first means that when the next patch is applied, the
+leftovers are already taken care of
+
+> >   static void kvm_s390_clear_pv_state(struct kvm *kvm)
+> >   {
+> >   	kvm->arch.pv.handle = 0;
+> > @@ -158,23 +171,88 @@ static int kvm_s390_pv_alloc_vm(struct kvm *kvm)
+> >   	return -ENOMEM;
+> >   }
+> >     
+> 
+> >     
+> 
 

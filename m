@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F16454BF65
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41F454BF67
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343547AbiFOBq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 21:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S1344029AbiFOBtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 21:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiFOBqz (ORCPT
+        with ESMTP id S232340AbiFOBtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 21:46:55 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0635C344E0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:46:54 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so322268wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=r9ef50fmTQlY+arQUpzjat8jbkWX2R7fnNOX1JGtMao=;
-        b=PnPEhnJXDYjIr+BURyj7QooqI4UBkjhJF1t46GkjuhDQEVf5o3gL8JmWqs/aw9L7dV
-         1uK9G/E5Pz5HYG+8u3c2Yb7KN6VtmW372a2zzmjmemApfNsCYzQ4eEYnRJFB3QJpsjXl
-         nuDcihVyWGshYC52PJqcapvthMn/V5lDba3SvmJNYt6n+S7nvpXMG8Hd8DLYaVnXKROt
-         O9Jl6Ee11exkCYXqMYgvakZ5eY4fm0LwmRXtXcpCdppe+U2BNWicoU83ehQ5Su5UFMd1
-         1E0KAbxWaH+9ogmWTBj20nYMu9tjbU5Th8e/j3HTvS4ObtAu32qYorlNDggI0dN8Kq18
-         fGWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=r9ef50fmTQlY+arQUpzjat8jbkWX2R7fnNOX1JGtMao=;
-        b=Zx5EyBlJWjr9ABXDp8R0ot9CcfC+leLz+x/OfhHJlKpVnHLOIJBk8u1ytVH7rCXvxD
-         13On9i7+Oj7xaY241WBKSn0Efe7oPd0Pu2V8pdCILjmOUqSfLhz6wgLAk/IduAMrxsTN
-         scsWXEpf6XhG8PfYIAD3SWRLoWjKvTBZVaHIYAX76IUY/NUYY1W3/rS0OpBrvyStjwPW
-         zCVya11CCClIt10toRGqwqz5TBr2vnWWvCFCTiPcXtQ0iFNlr4GEWfUyy4GIO6O36gav
-         MHNe9ALHpHeQBbfrrSoGAFGRH0JnOZButO8v8kJ+BPoGHcTADQztSOZYSp47Sv317cO4
-         j96w==
-X-Gm-Message-State: AOAM530voZev/qCQSXW9Zxis8vC1BFgpO8q2ms3w7zLlQhoI/JBnvNCy
-        XzI+Og6xNkmYjmuOq2DwqOHr4WdJVwbbKMklIW0=
-X-Google-Smtp-Source: ABdhPJxpF+hH6KbXRZccJQUsiMBmPmXIaiD4eJ2YqLSp1mdQx7ctnJSkH0lOxEQUWpkb+2FOK7rrem5oYx/iteB4tpM=
-X-Received: by 2002:a05:600c:3229:b0:39c:65b2:8935 with SMTP id
- r41-20020a05600c322900b0039c65b28935mr7094623wmp.155.1655257612283; Tue, 14
- Jun 2022 18:46:52 -0700 (PDT)
+        Tue, 14 Jun 2022 21:49:22 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE1748322
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:49:20 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LN7Th546Zz1K9xF;
+        Wed, 15 Jun 2022 09:47:20 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 09:49:17 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
+ 2022 09:49:16 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <akira.tsukamoto@gmail.com>,
+        <jszhang@kernel.org>, <wangkefeng.wang@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <alankao@andestech.com>
+CC:     <chenlifu@huawei.com>
+Subject: [PATCH -next] riscv: lib: uaccess: fix CSR_STATUS SR_SUM bit
+Date:   Wed, 15 Jun 2022 09:47:14 +0800
+Message-ID: <20220615014714.1650349-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:adf:ffcc:0:0:0:0:0 with HTTP; Tue, 14 Jun 2022 18:46:51
- -0700 (PDT)
-Reply-To: cfc.ubagroup09@gmail.com
-From:   Kristalina Georgieva <ilofab436@gmail.com>
-Date:   Tue, 14 Jun 2022 18:46:51 -0700
-Message-ID: <CANKxEgjogDtPV5-wexibj6ic+mmoc29vg=egRPipn=SQ0spnKQ@mail.gmail.com>
-Subject: GODA NYHETER
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-B=C3=A4sta f=C3=B6rm=C3=A5nstagare,
-Jag skickade det h=C3=A4r brevet till dig f=C3=B6r en m=C3=A5nad sedan, men=
- jag har
-inte h=C3=B6rt fr=C3=A5n dig, nej
-Jag =C3=A4r s=C3=A4ker p=C3=A5 att du fick den, och det var d=C3=A4rf=C3=B6=
-r jag skickade den
-till dig igen,
-F=C3=B6rst och fr=C3=A4mst =C3=A4r jag Kristalina Georgieva, verkst=C3=A4ll=
-ande direkt=C3=B6r och
-ordf=C3=B6rande f=C3=B6r Internationella valutafonden.
+Since commit 5d8544e2d007 ("RISC-V: Generic library routines and assembly")
+and commit ebcbd75e3962 ("riscv: Fix the bug in memory access fixup code"),
+if __clear_user and __copy_user return from an fixup branch,
+CSR_STATUS SR_SUM bit will be set, it is a vulnerability, so that
+S-mode memory accesses to pages that are accessible by U-mode will success.
+Disable S-mode access to U-mode memory should clear SR_SUM bit.
 
-Faktum =C3=A4r att vi har g=C3=A5tt igenom alla hinder och fr=C3=A5gor krin=
-g
-din ofullst=C3=A4ndiga transaktion och din of=C3=B6rm=C3=A5ga att uppfylla =
-avgifterna
-=C3=B6verf=C3=B6ringsavgifter som debiteras dig f=C3=B6r alternativen
-tidigare =C3=B6verf=C3=B6ringar, bes=C3=B6k v=C3=A5r webbplats f=C3=B6r bek=
-r=C3=A4ftelse 38
-=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W
+Fixes: 5d8544e2d007 ("RISC-V: Generic library routines and assembly")
+Fixes: ebcbd75e3962 ("riscv: Fix the bug in memory access fixup code")
 
-Vi =C3=A4r styrelsen, V=C3=A4rldsbanken och Valutafonden
-International (IMF) i Washington, DC, tillsammans med Department of
-United States Treasury och n=C3=A5gra andra utredningsorgan
-relevant h=C3=A4r i USA. har best=C3=A4llt
-v=C3=A5r Overseas Payment Remittance Unit, United Bank of
-Africa Lome Togo, f=C3=B6r att ge dig ett VISA-kort, d=C3=A4r $
-1,5 miljoner fr=C3=A5n din fond, f=C3=B6r ett st=C3=B6rre uttag fr=C3=A5n d=
-in fond.
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+---
+ arch/riscv/lib/uaccess.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Under v=C3=A5r utrednings g=C3=A5ng uppt=C3=A4ckte vi med
-best=C3=B6rtning =C3=B6ver att din betalning har f=C3=B6rsenats av korrupta=
- tj=C3=A4nstem=C3=A4n
-av banken som f=C3=B6rs=C3=B6ker avleda dina pengar till dina konton
-privat.
+diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
+index 8c475f4da308..ec486e5369d9 100644
+--- a/arch/riscv/lib/uaccess.S
++++ b/arch/riscv/lib/uaccess.S
+@@ -173,11 +173,11 @@ ENTRY(__asm_copy_from_user)
+ 	ret
+ 
+ 	/* Exception fixup code */
+ 10:
+ 	/* Disable access to user memory */
+-	csrs CSR_STATUS, t6
++	csrc CSR_STATUS, t6
+ 	mv a0, t5
+ 	ret
+ ENDPROC(__asm_copy_to_user)
+ ENDPROC(__asm_copy_from_user)
+ EXPORT_SYMBOL(__asm_copy_to_user)
+@@ -225,10 +225,10 @@ ENTRY(__clear_user)
+ 	j 3b
+ 
+ 	/* Exception fixup code */
+ 11:
+ 	/* Disable access to user memory */
+-	csrs CSR_STATUS, t6
++	csrc CSR_STATUS, t6
+ 	mv a0, a1
+ 	ret
+ ENDPROC(__clear_user)
+ EXPORT_SYMBOL(__clear_user)
+-- 
+2.35.1
 
-Och idag meddelar vi dig att din fond har krediterats p=C3=A5 ett kort
-VISA av UBA Bank och den =C3=A4r ocks=C3=A5 redo att levereras. Nu
-kontakta direkt=C3=B6ren f=C3=B6r UBA Bank, hans namn =C3=A4r Mr. Tony
-Elumelu, e-post: (cfc.ubagroup09@gmail.com)
-f=C3=B6r att ber=C3=A4tta hur du f=C3=A5r ditt ATM VISA-kort.
-
-V=C3=A4nliga h=C3=A4lsningar,
-
-Fru Kristalina Georgieva

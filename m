@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29A654CFE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73E754CFEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357575AbiFORaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S1357642AbiFORbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356282AbiFOR35 (ORCPT
+        with ESMTP id S1356209AbiFORa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:29:57 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582D64C418
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:29:44 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id u37so3633090pfg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:29:44 -0700 (PDT)
+        Wed, 15 Jun 2022 13:30:59 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D03517D8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:30:41 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y196so12050237pfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:30:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YtollJahbUnQdMIR/aYwe0ysfbXt4BsX5JTH7cAUXak=;
-        b=N4NuWQSKWQiM9FdTh0JRYtj0u28EsEtECIADCbJ92IumR+tzfD/GaDHyaEZCwEPZ45
-         ndkfZiW/jfRsteeB9yP9cN9gJTN6ydS9wdWzU+oLNT1WC4vOvwoBdzmDrBH+qpNvAxag
-         JpSIsvOqGHCmhbOYwzkelddRSkQVvjIZMqs7jmrSBxqN0FpowIgVL6ZXoXHpGmHD3PZ+
-         S2uzDoLcfArRPZ8Mne+aFujCMcOt0U6HXoPEWgUn+o315U9ROrtTdkAbIiHOPZYkP5fK
-         idIjGjTzUH0kLYHJQkeMhS/nKieRKIcCdF/6ipPVUxwBIgIBjV91PFInRIenewHra95S
-         GHdg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=B7cbRCNg26UF8ivWTlzn2A7fgILQXWbzOIRhYJWq/FA=;
+        b=supFxk6DUuphqiJojFl2H/H6UyNMffk7/gM9r72T4tQJooyDKuCJsbpMCf2eQPJBBi
+         v5iY9l6cmhbAPuVM00qdGipMMDv1s3kJKf8Eimwj4CYElenmWpCzyUupdZac+rPTy6u/
+         mXlk6dy2Kn/NVOvdBFZmLDhJW+Y6xnvsfExrXtX1qZIQQ5S6krDEMeKqGSW44w4YaIRS
+         U85ylBHqi5abPMOLD0rhNIfcm0vydLlag3hWi4t3oEFTgH4/eg8LhI5x5o/x7N4sADiy
+         jBE3Gyb7ZcWMvKebE6J2veK3U+hWIOXyyyz/gixScaVNvDi6oEhVKNknjc6biEJSDm2D
+         Qehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YtollJahbUnQdMIR/aYwe0ysfbXt4BsX5JTH7cAUXak=;
-        b=5rE3HVPnhTXGafy/OZbA2UDaX3QB7XQB+23K/fjjk4DrlO1W0oN7ffvWoLIPXahdoP
-         Bv9Ho5c1sOugPThS5DU1knWbA5gBdFPzIlyZmSsUJgRZqCb0extR94F7m19LPQz7jUuJ
-         IA/z0GsP+iYojsl6VElkNd4Jp146ABOo6+qeLlnPvB7NQlIITwjWlpxYP3jbo0aBs5Ib
-         aESLsJnhjtOKYDk1yiVz6+Vx133injfApfBC8m7ufBQyqHsoPaSiYxePFTCaYi0HRNC7
-         xcuG2+UwCDznlFryYEIlfnnHHT2e07ShKajJV/tclWWWF1nARf5skXXDswOZJ/kKcHfs
-         SKMw==
-X-Gm-Message-State: AJIora/8wbqTpm2pypA+Cf1Gmn34+S8pZneN/CYh8ffGCXS5OTmCHMeB
-        B+6hhZx/w/wCa3M+Tv8FXGc=
-X-Google-Smtp-Source: AGRyM1s7KETEepArG5JL8meMY5y+t8s8chQ/4O2VLPIxoO5+mpzvdwZBLrR6Ib9aQtPfZIU27L5KBg==
-X-Received: by 2002:a63:234f:0:b0:405:3981:be7 with SMTP id u15-20020a63234f000000b0040539810be7mr742484pgm.15.1655314183940;
-        Wed, 15 Jun 2022 10:29:43 -0700 (PDT)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id w14-20020a1709029a8e00b001676f87473fsm9552244plp.302.2022.06.15.10.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:29:43 -0700 (PDT)
-From:   Yang Shi <shy828301@gmail.com>
-To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, zokeefe@google.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [v4 PATCH 7/7] doc: proc: fix the description to THPeligible
-Date:   Wed, 15 Jun 2022 10:29:26 -0700
-Message-Id: <20220615172926.546974-8-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20220615172926.546974-1-shy828301@gmail.com>
-References: <20220615172926.546974-1-shy828301@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B7cbRCNg26UF8ivWTlzn2A7fgILQXWbzOIRhYJWq/FA=;
+        b=SrtXPKvjRYy5S7WUVeuVE4+lKM2ZTLahCxpbY0JYW6e/T38FWGPU/g18y92VWj1/uD
+         jKtXuxLCD4EC7ZhYVPNqPd+zchB8dazsoJqTsQF27OiTneZ1Khpfosj1wVok6zDRtfl4
+         x+eHYvGeDPLZwI4CUV2hreDCROtlprFWw34d4AG8fzkmBVhp8/Wq8jOJ0FywQ3U8+lbB
+         6PcP0FSI6OiA4D0H0IcQG8TkiQ8YRd1v7wp5LpJHCox/KhY/QiheFU20YVOU8gdhbYYN
+         r60av/D6WaFkJVUY4eMealhO7g/WVTTmzP4JGPXk9B0sxiB3mp3MKxBoI08mvKZqmnAo
+         LxJw==
+X-Gm-Message-State: AJIora/yhJ1fagSN7qFvziqrR+7Fw0rcHq09AP5NQt5rVG/xj62erD7Y
+        R2/K69Koctokp1vwLokPGBkDcA==
+X-Google-Smtp-Source: AGRyM1vF1fpZCiYd10o5djR4cMTz3jxdy9U8gdmikmzDuQcqp0xKZtHSrVJLo09rh1zFFSO0GO4H/A==
+X-Received: by 2002:a63:3fcc:0:b0:408:c856:dd6d with SMTP id m195-20020a633fcc000000b00408c856dd6dmr770211pga.354.1655314241467;
+        Wed, 15 Jun 2022 10:30:41 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id t8-20020a1709028c8800b001677d4a9665sm9501331plo.267.2022.06.15.10.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:30:41 -0700 (PDT)
+Message-ID: <cb89dd3d-18d8-38ef-bb0f-00b6688bd54e@linaro.org>
+Date:   Wed, 15 Jun 2022 10:30:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: dsp: mediatek: Use meaningful names
+ for mbox
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        YC Hung <yc.hung@mediatek.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
+ <20220609083101.24195-2-tinghan.shen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220609083101.24195-2-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The THPeligible bit shows 1 if and only if the VMA is eligible for
-allocating THP and the THP is also PMD mappable.  Some misaligned file
-VMAs may be eligible for allocating THP but the THP can't be mapped by
-PMD.  Make this more explictly to avoid ambiguity.
+On 09/06/2022 01:30, Tinghan Shen wrote:
+> Rename mbox according to action instead of 'mbox0' and 'mbox1'.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  .../devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml        | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> index b7e68b0dfa13..6cedd6868cc5 100644
+> --- a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> @@ -55,8 +55,8 @@ properties:
+>  
+>    mbox-names:
+>      items:
+> -      - const: mbox0
+> -      - const: mbox1
+> +      - const: rep
+> +      - const: req
+>  
 
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
- Documentation/filesystems/proc.rst | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+More common is rx/tx, which I proposed last time.
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 1bc91fb8c321..a5e41e636a1a 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -514,8 +514,10 @@ replaced by copy-on-write) part of the underlying shmem object out on swap.
- "SwapPss" shows proportional swap share of this mapping. Unlike "Swap", this
- does not take into account swapped out page of underlying shmem objects.
- "Locked" indicates whether the mapping is locked in memory or not.
-+
- "THPeligible" indicates whether the mapping is eligible for allocating THP
--pages - 1 if true, 0 otherwise. It just shows the current status.
-+pages as well as the THP is PMD mappable or not - 1 if true, 0 otherwise.
-+It just shows the current status.
- 
- "VmFlags" field deserves a separate description. This member represents the
- kernel flags associated with the particular virtual memory area in two letter
--- 
-2.26.3
 
+Best regards,
+Krzysztof

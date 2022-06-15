@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DD454CC85
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E7454CC89
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiFOPSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S1349036AbiFOPTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241916AbiFOPSA (ORCPT
+        with ESMTP id S1347617AbiFOPTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:18:00 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2891BEB9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:17:59 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id e66so11649914pgc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:17:59 -0700 (PDT)
+        Wed, 15 Jun 2022 11:19:09 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE8A2E09B;
+        Wed, 15 Jun 2022 08:19:07 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 20so19420013lfz.8;
+        Wed, 15 Jun 2022 08:19:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yW6NkFpJik+3SrdmNZi54Xr/3MC0mxPIBOSiFthGTNE=;
-        b=ugBE1vRMX3u9Xhm9TU3rvuixmLiTd8/ZwHOw7EUFGFlY44FCYKLVQxC0eLFC2lZXCq
-         eaC9tsO/y8+VEXRs0TIaBi2jOmm8wg9OfRycvPemolg7GoOFjCBFi0jAkGWL1py4eTPE
-         PjSDqcHWA2CeLJfJ1urmGFLiHPx7nQQjt3Jj+ac/3GZJVDR7FeoyaaALDP+gECNJGvXL
-         FRuE0Rj7vYnOpUeq6rvPyf507tGp4fPVHymer/JsO73G7ekG21NR9u6l72uZ2XwzgIaN
-         TN3gpR+L97xQ/aWVYI27Ad0MLWXpyAGINJeH9F8MVZGvpZ5sMljyRC47rytpPhCpF0p9
-         0qYA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rxmL7VaieafuZ6quU52kIVB4lyDd5PT6tuLwul05VPc=;
+        b=eDd+GB9xWpKXivIdy2gmo9fuwqLcBWKPc8BfczR/uUamhxb1rVI7w7DM1KAjO1OxXy
+         2++nHjCfTMjc2X/HhvDRlwlcJMI/0yk6t8S6slTGw8b+0Sj2RS/DH9Nc4A+pty4DbnX0
+         jzMOJtkxKns89wT26VSA7npXXthASfWZd0i9YloAKxRP7D3KSfvLMjwVyUSxSdMNGX5P
+         EdC1fkW7uY+Kv22aJMXe/QGYFZSp5rPJ93KFxGanGx5tW/XRO2bAINFaPXaguLgFYCsU
+         cXf7PSdkt9D5xk6PJ8bMCaRKHoZhsPrfAjzrGq6X7mYMdQV1eq4azoqIKiiwZMiDVJWY
+         y9eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yW6NkFpJik+3SrdmNZi54Xr/3MC0mxPIBOSiFthGTNE=;
-        b=0/BXhL2/Ywh4LWhOQ51qXAkNFG6Ut2KHm0s0J+haOlQ1QVMBz7jklov5VZr1DgXqEA
-         bnLt6bKydfDs/ghjyiWqcpK/PlWvPUZm6j9thE6wBTfoTMb5y94C69+Toy9HUTyU7IU4
-         9NQBGScHxkyIobxoNer/KRf+8a9XF6kgqV+mq+/2R2ftdtI5uEqenbFeFfR0D6wrypN6
-         5V601qxTpM7DFZ3o276n+iLXXsqGXVRaYguQYATEpQx9ITTsa2rGjsSCjMZr9Gbky4kz
-         KEDi02QFwpk/irE08kndBLFP4Wp0rmgYKbBbEP2shQEwb78vR9qCLkHXxiYeB9PX82lL
-         QTBA==
-X-Gm-Message-State: AJIora9p6daEUH1ecLLu13PKl6hJouVnDDm4wIi90mixTKwNeB4JCDOR
-        jO6QV9Bqg9GSOxrMtuUq/rsfmA==
-X-Google-Smtp-Source: AGRyM1vDFxi+osxlykT7Evu3Ect5uLDOFq3p51CX6y/2TV3zHt6O2LvDg4lG76dW8FOvSvxqFIfyBA==
-X-Received: by 2002:a63:9547:0:b0:408:be53:b599 with SMTP id t7-20020a639547000000b00408be53b599mr232147pgn.463.1655306279029;
-        Wed, 15 Jun 2022 08:17:59 -0700 (PDT)
-Received: from n131-251-240.byted.org ([121.30.179.88])
-        by smtp.gmail.com with ESMTPSA id cd6-20020a056a00420600b0050dc7628162sm9916231pfb.60.2022.06.15.08.17.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:17:58 -0700 (PDT)
-From:   Zhi Song <zhi.song@bytedance.com>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Zhi Song <zhi.song@bytedance.com>
-Subject: [PATCH v3] node: put_device after failing to device_register
-Date:   Wed, 15 Jun 2022 23:17:38 +0800
-Message-Id: <20220615151738.1766206-1-zhi.song@bytedance.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rxmL7VaieafuZ6quU52kIVB4lyDd5PT6tuLwul05VPc=;
+        b=USK80m7g4WB0rTUtelhRcAh7XbDdi5gRQIjBHxImFB7cJ8gaz4OxRBsiJK6evFu6CM
+         M2nOiKdguBkzmUgwll8NXwL0VeMgDvnZtyoDtuiX2x2eGnRvGUhZrGkUWrP03ESIPPBE
+         +EgZJ30TAvt1Gw/PCr/QvZlvz53fy+JF6Bh1k+l31l7cE1ehpRIWRTMR/l6qchNO4Dms
+         lqpy1wXOtUEF782oEcLW0PU87cM7okcQIDKE6n87EYjh5u31Hl1V9FNAx8hzJNWMFdJR
+         dUbBG2msDj4MoK8bViecNTEb+34V+OK5e+9OMDae4WTt4kcUINx4tRuA1s3pjbEWdRln
+         vDog==
+X-Gm-Message-State: AJIora+/CZCDwWEJK/WRAtnH8M9anyrhjm/FlwT/lzzs+1AwtOaMBkdv
+        XGk8lw9MIyHX66RKsF17w316YSFudyw9M5xWrg8=
+X-Google-Smtp-Source: AGRyM1tIVRm/39MptkbLVKBy49NSklljQ82n+xmsnIJa7nbocpR7rEVrKlPaIUmUunQHP0jLv+bO+LOC4SWPpVeUIns=
+X-Received: by 2002:a05:6512:234e:b0:479:3bb1:8d3c with SMTP id
+ p14-20020a056512234e00b004793bb18d3cmr19378lfu.478.1655306345755; Wed, 15 Jun
+ 2022 08:19:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-2-max.oss.09@gmail.com>
+ <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+From:   Max Krummenacher <max.oss.09@gmail.com>
+Date:   Wed, 15 Jun 2022 17:18:54 +0200
+Message-ID: <CAEHkU3Vw-Yt6COpJ=K-98CA5dH-iD6AnSHwuBFmQg8yfNsgb-w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/5] dt-bindings: power: Add bindings for a power
+ domain controlled by a regulator
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +78,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-device_register() is used to register a device with the system.
-We need to call put_device() to give up the reference initialized
-in device_register() when it returns an error and this will clean
-up correctly.
+Hi
 
-Fixes: 08d9dbe72b1f ("node: Link memory nodes to their compute nodes")
-Signed-off-by: Zhi Song <zhi.song@bytedance.com>
----
-V1 -> V2: Fix up the changelog text correct.
-V2 -> V3: Add a fixes tag line specifying the commit where this bug was
-introduced.
----
- drivers/base/node.c | 1 +
- 1 file changed, 1 insertion(+)
+On Tue, Jun 14, 2022 at 9:24 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Max,
+>
+> On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> > From: Max Krummenacher <max.krummenacher@toradex.com>
+> >
+> > Adds binding for a power domain provider which uses a regulator to control
+> > the power domain.
+> >
+> > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+>
+> Thanks for your patch!
+>
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/regulator-power-domain.yaml
+> > @@ -0,0 +1,58 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/regulator-power-domain.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Power domain controlled by a regulator
+> > +
+> > +maintainers:
+> > +  - Max Krummenacher <max.krummenacher@toradex.com>
+> > +
+> > +description: |+
+> > +  Power domain provider which uses a regulator to control
+> > +  the power domain.
+> > +
+> > +allOf:
+> > +  - $ref: "power-domain.yaml#"
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - regulator-pm-pd
+> > +
+> > +  power-supply:
+> > +    description: The regulator used to control the power domain.
+>
+> I guess there can be more than one?
 
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 0ac6376ef7a1..88a3337c546e 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -154,6 +154,7 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
- 	list_add_tail(&access_node->list_node, &node->access_list);
- 	return access_node;
- free_name:
-+	put_device(dev);
- 	kfree_const(dev->kobj.name);
- free:
- 	kfree(access_node);
--- 
-2.30.2
+The proposed implementation currently only uses one.
 
+When I did it I considered more than one regulator a rare use case and
+I was under the impression that the generic power domain code
+can handle multiple power domains. With that in mind I assumed that
+one would create multiple regulator-pm-pd instances each controlling
+one regulator and add all of them to the power-domains property of
+the power domain consumer.
+
+But it seems the implementation requires the power domain consumer
+to handle that case in its code rather than relying on the generic code. [1]
+
+Do you see a real world use case to handle multiple regulators?
+
+Max
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.c?id=8cb1cbd644d5bba5b72eedd632f249c1c677b792#n2290
+
+
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

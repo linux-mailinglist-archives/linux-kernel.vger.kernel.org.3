@@ -2,220 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F2054BEE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B7A54BEE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239628AbiFOAvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 20:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S240442AbiFOAwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 20:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234177AbiFOAvl (ORCPT
+        with ESMTP id S234177AbiFOAwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 20:51:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ADA4C424
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:51:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E7076194A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:51:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE10C3411B;
-        Wed, 15 Jun 2022 00:51:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655254298;
-        bh=zYDarweJh7/bEePUo2Am4AELnMD53gnyz/vvlfofoc4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=b/rQn2i+978Z0a7/w74jSGbY8T1i2C6Orf0JFjyIxM8/0K7vIwcdhH1Ef6LHy+XWB
-         gsvmy26fC+vMxf2xCY7i7k2Jdlr/3IlyIChS5S2gr7Tt9N3pN3q1sHdnYLau+dnRfu
-         p0PnxLdsko2QUrKXMw0kPGHdVc2E8w3t66GNW9U+/vfBmNpOZAAQFovCNsFQ6VOfnW
-         jV1toIBMy/jSB0PRPahqNwZA1fBpoHLDiPM9VuUuNy608w9ysYBvc1Uiae5KM1IeRE
-         KLkPM1X7SkXz0NSNxd/ZbUYPXCiwi/WoiQdM1tkEuwg9yi75a9jz5OamH1K3Axhw4X
-         1/Ip6QaTaaq1Q==
-Date:   Tue, 14 Jun 2022 17:51:37 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr <olekstysh@gmail.com>
-cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-Subject: Re: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages
- instead of real RAM ones
-In-Reply-To: <1266f8cb-bbd6-d952-3108-89665ce76fec@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2206141748150.1837490@ubuntu-linux-20-04-desktop>
-References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com> <1652810658-27810-3-git-send-email-olekstysh@gmail.com> <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop> <7f886dfb-2b42-bc70-d55f-14ecd8144e3e@gmail.com>
- <alpine.DEB.2.22.394.2206101644210.756493@ubuntu-linux-20-04-desktop> <1266f8cb-bbd6-d952-3108-89665ce76fec@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 14 Jun 2022 20:52:05 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC624C424
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:52:02 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220615005157epoutp0410895e08ae6adb56cdf1408623ecb3d7~4pQgqmw4e0215302153epoutp04V
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:51:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220615005157epoutp0410895e08ae6adb56cdf1408623ecb3d7~4pQgqmw4e0215302153epoutp04V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655254317;
+        bh=u77g1GwGZYoWxR6fg/coCgMy7PXyvYHKk69Uj7aqJm8=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=TotdMkDK8CmU8KEhc8zfA3HUip9Bkif6VkEwlHrDCL+EWAECALGFDKYQcjbqM31vq
+         Em8rnYrqSpbWZ0oMfT53GxrL3tSwUKpSELhrsID5/CJmcvIrPNssNv8tQoTSn32eO+
+         1tS93XoKLlkQIvC+jfJGa0EDnr1Dv1jlyYZsWk7w=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220615005157epcas1p27069642b6bf9825e9785df3ae2115c00~4pQgLB18r0466904669epcas1p2j;
+        Wed, 15 Jun 2022 00:51:57 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.36.225]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LN6Fm4jH0z4x9QG; Wed, 15 Jun
+        2022 00:51:56 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        66.16.10063.C2D29A26; Wed, 15 Jun 2022 09:51:56 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220615005156epcas1p1c124873ba59260e6f94f3793ef8d3f3c~4pQfRvhA00664806648epcas1p18;
+        Wed, 15 Jun 2022 00:51:56 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220615005156epsmtrp2eddaa7ee70159dc923d741f3ba969013~4pQfQwAMp0298802988epsmtrp2S;
+        Wed, 15 Jun 2022 00:51:56 +0000 (GMT)
+X-AuditID: b6c32a35-1f1ff7000000274f-f5-62a92d2ce564
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A5.DE.11276.B2D29A26; Wed, 15 Jun 2022 09:51:55 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.101.104]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220615005155epsmtip2e8e37abe0294d2876d4fbe0ca107731a~4pQfCe6DW0333403334epsmtip25;
+        Wed, 15 Jun 2022 00:51:55 +0000 (GMT)
+From:   JeongHyeon Lee <jhs2.lee@samsung.com>
+To:     snitzer@kernel.org
+Cc:     agk@redhat.com, dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        JeongHyeon Lee <jhs2.lee@samsung.com>
+Subject: [PATCH] dm verity: fixed ERROR: else should follow close brace '}'
+Date:   Wed, 15 Jun 2022 09:51:51 +0900
+Message-Id: <20220615005151.4907-1-jhs2.lee@samsung.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1366514938-1655254298=:1837490"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsWy7bCmga6O7sokg0V/lS3WnzrGbLH33WxW
+        i0v377BaXN41h83ixC1pB1aPTas62Tze77vK5tG3ZRWjx+dNcgEsUdk2GamJKalFCql5yfkp
+        mXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBrlRTKEnNKgUIBicXFSvp2NkX5
+        pSWpChn5xSW2SqkFKTkFZgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGZcXdbEVnGWvuL/uD3sD
+        Yx9bFyMnh4SAicSqBZ9Yuxi5OIQEdjBKTFvWzAqSEBL4xCgxfZUuROIbo8T8SbNYYDrurm1n
+        hEjsZZR4cf4cO4TzhVGi+8cLRpAqNgFtidstm9hBbBEBMYmG6xfBbGaBPInFL9qZQWxhAW+J
+        VQuvgdksAqoSl47/A1vNK2AhsffEUaht8hL7D55lhogLSpyc+YQFYo68RPPW2cwQNfvYJQ5/
+        VIGwXSSe9H1jhLCFJV4d38IOYUtJfH63F+rnbInrGw5BzS+R+L6uEWgOB5BtL/H+kgWIySyg
+        KbF+lz5EhaLEzt9zGSG28km8+9rDClHNK9HRJgRRoiSx4t81qIESEhsOd0Mt8pDYuekOG0i5
+        kECsxNczKRMY5WcheWUWkldmIexdwMi8ilEstaA4Nz212LDAEB6jyfm5mxjByU7LdAfjxLcf
+        9A4xMnEwHmKU4GBWEuGdfHFZkhBvSmJlVWpRfnxRaU5q8SFGU2DgTmSWEk3OB6bbvJJ4QxNL
+        AxMzIxMLY0tjMyVx3lXTTicKCaQnlqRmp6YWpBbB9DFxcEo1MN1TEIvr+7Jw05XyfqYS1dQp
+        NTn6ztPuSN7N45lvYSL4w6N1Qytnxhz5Rv7toTs4On04FzX8bL5QscNiUZLmzIa9GQbSkhtK
+        4tMSFXqzulheuPodt/nbv2+x1+9Hz/wKTO/d3mBy85h+MXPrQYst3Y0n3wbFqE06YaV8Yd60
+        2XuMNuh3/xET+rPQ/LpEksG92PJ5C8wPLtfa6vAszuWVWKHa1PicKgXl0xtrVRJfrODrm3bG
+        +rZNVK2T095p3AoOteYZ+heui0nyTljHmDWNe8KtF7uu3uCet/PUsrcHbZO78iLznxr1M6n8
+        PfTQqmbFJoHT9/esnLowM/3So5h41tYlF4K0XvVeelZ3MyuiVYmlOCPRUIu5qDgRAF/uskH/
+        AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLLMWRmVeSWpSXmKPExsWy7bCSvK627sokg0PvLCzWnzrGbLH33WxW
+        i0v377BaXN41h83ixC1pB1aPTas62Tze77vK5tG3ZRWjx+dNcgEsUVw2Kak5mWWpRfp2CVwZ
+        lxd1sRWcZa+4v+4PewNjH1sXIyeHhICJxN217YwgtpDAbkaJaz+sIOISEhs2rWXvYuQAsoUl
+        Dh8u7mLkAir5xCjx+9dqFpAaNgFtidstm9hBbBEBMYmG6xfBbGaBIonn+xaAzRcW8JZYtfAa
+        M4jNIqAqcen4P1YQm1fAQmLviaMsELvkJfYfPMsMEReUODnzCQvEHHmJ5q2zmScw8s1CkpqF
+        JLWAkWkVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZwCGpp7mDcvuqD3iFGJg7GQ4wS
+        HMxKIryTLy5LEuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNT
+        qoGJVdn88dZrjy6eT0g5m9Lz6CvrxPOenEt/u1j2BS3+ezfibcYqRrvn/gXiHsFfOOuv3qvd
+        ccTo5sIF558fevFg9xPJ8mdl3nG7uM7GXgv8LeJ1/PS58LNu7xeFqUzuLThxZM/vuYVR3BdT
+        5892Vzux4abWxfm1Uj0/+P7J/vrLcXWx5Np1Ip+n9XFdf/zg78WkXz/CL1/9onkqPfZuxxWF
+        BQ8P62sbqK/nuNLcsqWKI3+7yJbD5nVffzbcf+P/95ja74unDkt71KtLih6PfuOU48lnXTQv
+        r/sYy87vbRoflx7fevr5m+nW82uimWacX2Gvs3VbsvTtA/6nJWPETzz+f+NudPk+mbN7Njc0
+        f+Bpfv1biaU4I9FQi7moOBEA5s5TWbACAAA=
+X-CMS-MailID: 20220615005156epcas1p1c124873ba59260e6f94f3793ef8d3f3c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220615005156epcas1p1c124873ba59260e6f94f3793ef8d3f3c
+References: <CGME20220615005156epcas1p1c124873ba59260e6f94f3793ef8d3f3c@epcas1p1.samsung.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+This patch fixes the following checkpatch error,
+ERROR: else should follow close brace '}'
 
---8323329-1366514938-1655254298=:1837490
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Signed-off-by: JeongHyeon Lee <jhs2.lee@samsung.com>
+---
+ drivers/md/dm-verity-target.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-On Tue, 14 Jun 2022, Oleksandr wrote:
-> On 11.06.22 02:55, Stefano Stabellini wrote:
-> 
-> Hello Stefano
-> 
-> > On Thu, 9 Jun 2022, Oleksandr wrote:
-> > > On 04.06.22 00:19, Stefano Stabellini wrote:
-> > > Hello Stefano
-> > > 
-> > > Thank you for having a look and sorry for the late response.
-> > > 
-> > > > On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
-> > > > > From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> > > > > 
-> > > > > Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
-> > > > > DMAable (contiguous) pages will be allocated for grant mapping into
-> > > > > instead of ballooning out real RAM pages.
-> > > > > 
-> > > > > TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
-> > > > > fails.
-> > > > > 
-> > > > > Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> > > > > ---
-> > > > >    drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
-> > > > >    1 file changed, 27 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-> > > > > index 8ccccac..2bb4392 100644
-> > > > > --- a/drivers/xen/grant-table.c
-> > > > > +++ b/drivers/xen/grant-table.c
-> > > > > @@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
-> > > > >     */
-> > > > >    int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
-> > > > >    {
-> > > > > +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
-> > > > > +	int ret;
-> > > > This is an alternative implementation of the same function.
-> > > Currently, yes.
-> > > 
-> > > 
-> > > >    If we are
-> > > > going to use #ifdef, then I would #ifdef the entire function, rather
-> > > > than just the body. Otherwise within the function body we can use
-> > > > IS_ENABLED.
-> > > 
-> > > Good point. Note, there is one missing thing in current patch which is
-> > > described in TODO.
-> > > 
-> > > "Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages() fails." 
-> > > So I
-> > > will likely use IS_ENABLED within the function body.
-> > > 
-> > > If CONFIG_XEN_UNPOPULATED_ALLOC is enabled then gnttab_dma_alloc_pages()
-> > > will
-> > > try to call xen_alloc_unpopulated_dma_pages() the first and if fails then
-> > > fallback to allocate RAM pages and balloon them out.
-> > > 
-> > > One moment is not entirely clear to me. If we use fallback in
-> > > gnttab_dma_alloc_pages() then we must use fallback in
-> > > gnttab_dma_free_pages()
-> > > as well, we cannot use xen_free_unpopulated_dma_pages() for real RAM
-> > > pages.
-> > > The question is how to pass this information to the
-> > > gnttab_dma_free_pages()?
-> > > The first idea which comes to mind is to add a flag to struct
-> > > gnttab_dma_alloc_args...
-> >   You can check if the page is within the mhp_range range or part of
-> > iomem_resource? If not, you can free it as a normal page.
-> > 
-> > If we do this, then the fallback is better implemented in
-> > unpopulated-alloc.c because that is the one that is aware about
-> > page addresses.
-> 
-> 
-> I got your idea and agree this can work technically. Or if we finally decide
-> to use the second option (use "dma_pool" for all) in the first patch
-> "[RFC PATCH 1/2] xen/unpopulated-alloc: Introduce helpers for DMA allocations"
-> then we will likely be able to check whether a page in question
-> is within a "dma_pool" using gen_pool_has_addr().
-> 
-> I am still wondering, can we avoid the fallback implementation in
-> unpopulated-alloc.c.
-> Because for that purpose we will need to pull more code into
-> unpopulated-alloc.c (to be more precise, almost everything which
-> gnttab_dma_free_pages() already has except gnttab_pages_clear_private()) and
-> pass more arguments to xen_free_unpopulated_dma_pages(). Also I might mistake,
-> but having a fallback split between grant-table.c (to allocate RAM pages in
-> gnttab_dma_alloc_pages()) and unpopulated-alloc.c (to free RAM pages in
-> xen_free_unpopulated_dma_pages()) would look a bit weird.
-> 
-> I see two possible options for the fallback implementation in grant-table.c:
-> 1. (less preferable) by introducing new flag in struct gnttab_dma_alloc_args
-> 2. (more preferable) by guessing unpopulated (non real RAM) page using
-> is_zone_device_page(), etc
-> 
-> 
-> For example, with the second option the resulting code will look quite simple
-> (only build tested):
-> 
-> diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-> index 738029d..3bda71f 100644
-> --- a/drivers/xen/grant-table.c
-> +++ b/drivers/xen/grant-table.c
-> @@ -1047,6 +1047,23 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args
-> *args)
->         size_t size;
->         int i, ret;
-> 
-> +       if (IS_ENABLED(CONFIG_XEN_UNPOPULATED_ALLOC)) {
-> +               ret = xen_alloc_unpopulated_dma_pages(args->dev,
-> args->nr_pages,
-> +                               args->pages);
-> +               if (ret < 0)
-> +                       goto fallback;
-> +
-> +               ret = gnttab_pages_set_private(args->nr_pages, args->pages);
-> +               if (ret < 0)
-> +                       goto fail;
-> +
-> +               args->vaddr = page_to_virt(args->pages[0]);
-> +               args->dev_bus_addr = page_to_phys(args->pages[0]);
-> +
-> +               return ret;
-> +       }
-> +
-> +fallback:
->         size = args->nr_pages << PAGE_SHIFT;
->         if (args->coherent)
->                 args->vaddr = dma_alloc_coherent(args->dev, size,
-> @@ -1103,6 +1120,12 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args
-> *args)
-> 
->         gnttab_pages_clear_private(args->nr_pages, args->pages);
-> 
-> +       if (IS_ENABLED(CONFIG_XEN_UNPOPULATED_ALLOC) &&
-> +                       is_zone_device_page(args->pages[0])) {
-> +               xen_free_unpopulated_dma_pages(args->dev, args->nr_pages,
-> args->pages);
-> +               return 0;
-> +       }
-> +
->         for (i = 0; i < args->nr_pages; i++)
->                 args->frames[i] = page_to_xen_pfn(args->pages[i]);
-> 
-> 
-> What do you think?
- 
-I have another idea. Why don't we introduce a function implemented in
-drivers/xen/unpopulated-alloc.c called is_xen_unpopulated_page() and
-call it from here? is_xen_unpopulated_page can be implemented by using
-gen_pool_has_addr.
---8323329-1366514938-1655254298=:1837490--
+diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+index d6dbd47492a8..75b66dd67633 100644
+--- a/drivers/md/dm-verity-target.c
++++ b/drivers/md/dm-verity-target.c
+@@ -527,11 +527,10 @@ static int verity_verify_io(struct dm_verity_io *io)
+ 			if (v->validated_blocks)
+ 				set_bit(cur_block, v->validated_blocks);
+ 			continue;
+-		}
+-		else if (verity_fec_decode(v, io, DM_VERITY_BLOCK_TYPE_DATA,
+-					   cur_block, NULL, &start) == 0)
++		} else if (verity_fec_decode(v, io, DM_VERITY_BLOCK_TYPE_DATA,
++					   cur_block, NULL, &start) == 0) {
+ 			continue;
+-		else {
++		} else {
+ 			if (bio->bi_status) {
+ 				/*
+ 				 * Error correction failed; Just return error
+-- 
+2.34.1
+

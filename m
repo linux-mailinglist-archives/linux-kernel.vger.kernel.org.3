@@ -2,72 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A2554BFC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DDE54BFCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiFOCr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S1345714AbiFOCrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345378AbiFOCrX (ORCPT
+        with ESMTP id S242271AbiFOCrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:47:23 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6E14EA23
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 19:47:22 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id s124so13957143oia.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 19:47:22 -0700 (PDT)
+        Tue, 14 Jun 2022 22:47:45 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3652D248CC;
+        Tue, 14 Jun 2022 19:47:44 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id n197so7851496qke.1;
+        Tue, 14 Jun 2022 19:47:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jff6ZH02jJBQwtYlY7RoO8ETnlixa0XGME+E3MjWg7o=;
-        b=dO1InnttTBAsuSQbUR9QVlsiHpSEoN4CF5EeaPJxSTdCKYT5bhMitswmnt3DAWLsFA
-         z19RJS9fGMsJCJbKMUniqV3VjA79E3gjjOiu6YKyVpvDTiP1VeUt8UIfQ3oIMN7VGGui
-         THs+fnedNeyRQzyU4sa9wpc3fTxlxyZcXCuXk=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NX493qPAQUrj6ioWF1jnmkJZEbKs1Z+Hiz8Q7SOMdJc=;
+        b=CQVSPpZxgQLRrldrZt26nPVIEXM4/7qMFk8dKvjGgw1iaCmkhmgf1FIsFOFPyzgx3h
+         l2NsM46f9Tx+tDhapROO0VMF+f+h40YS5jDFP9l34So1j75zs3sLOKDE9NgOvg22zaHn
+         peDbKBfc+40NOpLm/mO2mNmi35eK3vL6W2o6IelRysxNBAIQcBAD5CrwS04wLzffuxAh
+         iAHKel08mQgQSIKMxN23DwfIU13+AODm07ZdW3ZRh5dnOR/yImnaPEOqnLbm5KL7idlW
+         ujWAV+QC7WAS7fvST9mMbnasGN30MJj5SoLVyExKJOUuJQPRd4dr7KJ/ycf9G2jhyTny
+         5Dzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jff6ZH02jJBQwtYlY7RoO8ETnlixa0XGME+E3MjWg7o=;
-        b=LNAAQrgmS3iN95znixQG5lpZ52qId3bSkPdihk8VJijKxAgVbGNIDA25C/Io15tPVw
-         9iap74JbZMLkgIYQHNQAOGVTz/6eZWPX1F+5DuJLxnm4V1QWg5kYmB0liwEfTOqBpBMP
-         B8VadacNXrn9AVDEleuoP9CTRgUFftLuoI60Uq6ILPXXWCX4pRMGUk2b+BuIrCI2e6q6
-         9c89Lp6wn+/jqDLGsBw3n1lEhIc15vkhzEX4/uTqpuPLLFyUTRLkgpko3iDXJFpNnmog
-         8fi2UN5lQU980ADurhrECmgLT/BMNegWFxQjR+z7m1sV4SI+cx+A3ijvJ4CizPzS8X+q
-         SPBA==
-X-Gm-Message-State: AOAM531iaObqAprmNDLrOVC3/9Ps0KqS4o51fkj8OgUdtKSCt1sV6n7v
-        q0kzNYvSZ1FMDjPylEhacqlEFg==
-X-Google-Smtp-Source: ABdhPJzRH2zVZV9on7Skus/karfp+jjOVaVkOdhx//TyMMkjoiJenLIGIB2K0xsdcVRLpLhgovbc5g==
-X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id k7-20020a0568080e8700b0032e47890d2cmr3613464oil.193.1655261241753;
-        Tue, 14 Jun 2022 19:47:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id go13-20020a056870da0d00b000f324b1e645sm6388540oab.22.2022.06.14.19.47.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 19:47:21 -0700 (PDT)
-Subject: Re: [PATCH 5.15 00/11] 5.15.48-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220614183720.512073672@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <02ce9b69-45eb-2561-56ad-d80189f5efa3@linuxfoundation.org>
-Date:   Tue, 14 Jun 2022 20:47:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NX493qPAQUrj6ioWF1jnmkJZEbKs1Z+Hiz8Q7SOMdJc=;
+        b=tFPxZmhqYwrFE63G8wm8f9p3n1RrV7iugYFA7NPxi7pZuigUF7oVfOc4qOf5ms1zFX
+         VL9urEsKX/sAAuM86uSYBUlN6eAjaL98JJ7fhLMmYPKQ1/B5CZ0z/OAwC7ZgcvRixW8/
+         EXTbBR74M3M286iaRACDqSw3ngQgvOUD/IEATQ1aDpW0xCavRk5ixx5MP1Uw0JPXLC8a
+         3PfD6N/mu+rDazxlP8dkmTS36Ik4kHfwIGvVUoMBVMzyziI3MKbPErU2V2lFb8HaEM5i
+         68/oyp+5D7C6+tHrTSJCMvxPr4hxjMKpY8mE07dSfrPqRi8RNoHKNwI7CGKIbSTW+qq8
+         HpDw==
+X-Gm-Message-State: AOAM531fv6CU2whE1+QrLP3DoK1ffnSn8bryuXcWndLpV7OSGKocQ6DZ
+        e6ev1oYOHgwv1H6URBoj6Qk=
+X-Google-Smtp-Source: ABdhPJyZHYuaU/D+eineQMFdV6J7BCxsJGvrMAhYxZZd+ZYmh9NyAi2OUYuTzAq1GpTH9fKhDPKa4A==
+X-Received: by 2002:a05:620a:4613:b0:6a7:1d69:2a6f with SMTP id br19-20020a05620a461300b006a71d692a6fmr6439311qkb.276.1655261263927;
+        Tue, 14 Jun 2022 19:47:43 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:6d39:b768:5789:ec2a])
+        by smtp.gmail.com with ESMTPSA id gd8-20020a05622a5c0800b002f93554c009sm8261258qtb.59.2022.06.14.19.47.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 19:47:43 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 19:47:42 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Message-ID: <YqlITqttNYqT/xpN@yury-laptop>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-3-alexandr.lobakin@intel.com>
+ <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
+ <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
+ <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
+ <20220613141947.1176100-1-alexandr.lobakin@intel.com>
+ <CANpmjNM0noP8ieQztyEvijz+MG-cDxxmfwaX_QTpnyT5G33EGA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220614183720.512073672@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNM0noP8ieQztyEvijz+MG-cDxxmfwaX_QTpnyT5G33EGA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,29 +98,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 12:40 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.48 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Jun 13, 2022 at 04:33:17PM +0200, Marco Elver wrote:
+> On Mon, 13 Jun 2022 at 16:21, Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > From: Marco Elver <elver@google.com>
+> > Date: Fri, 10 Jun 2022 18:32:36 +0200
+> >
+> > > On Fri, 10 Jun 2022 at 18:02, Luck, Tony <tony.luck@intel.com> wrote:
+> > > >
+> > > > > > +/**
+> > > > > > + * generic_test_bit - Determine whether a bit is set
+> > > > > > + * @nr: bit number to test
+> > > > > > + * @addr: Address to start counting from
+> > > > > > + */
+> > > > >
+> > > > > Shouldn't we add in this or in separate patch a big NOTE to explain that this
+> > > > > is actually atomic and must be kept as a such?
+> > > >
+> > > > "atomic" isn't really the right word. The volatile access makes sure that the
+> > > > compiler does the test at the point that the source code asked, and doesn't
+> > > > move it before/after other operations.
+> > >
+> > > It's listed in Documentation/atomic_bitops.txt.
+> >
+> > Oh, so my memory was actually correct that I saw it in the docs
+> > somewhere.
+> > WDYT, should I mention this here in the code (block comment) as well
+> > that it's atomic and must not lose `volatile` as Andy suggested or
+> > it's sufficient to have it in the docs (+ it's not underscored)?
 > 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.48-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Perhaps a quick comment in the code (not kerneldoc above) will be
+> sufficient, with reference to Documentation/atomic_bitops.txt.
 
-Compiled and booted on my test system. No dmesg regressions.
+If it may help, we can do:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+/*
+ * Bit testing is a naturally atomic operation because bit is 
+ * a minimal quantum of information.
+ */
+#define __test_bit test_bit
 
-thanks,
--- Shuah

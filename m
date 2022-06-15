@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39BE54D0EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662F354D0EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358464AbiFOS2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S1358473AbiFOS3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241911AbiFOS2u (ORCPT
+        with ESMTP id S1358471AbiFOS3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:28:50 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41703C499;
-        Wed, 15 Jun 2022 11:28:49 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id c21so16512570wrb.1;
-        Wed, 15 Jun 2022 11:28:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B1SFZ6MZWRb+dA4s/bCJZ/ZRO+w+dyhlktivoc3kZFU=;
-        b=kpmoCEusZIUb5cAtZvecB91+JUuCEJJSF39RxiQxrd0dLbg/59ReB6RSrwcMc/SBRF
-         49zPlC2I1JJk3GZh0BbmixH/jO4ZKbEw4NRziRoMGEAksMFeyMxMjnw6lLyKAFYwvxKu
-         YK2j1zlwUhWSbKq2cdNNlUrsM2WYRwXlEgrCZLgHmXQCrx52b6rviYf8M3ZaXiZUFSBJ
-         wetzU8SWwGLh++So50oe0EneSutVBlSFam4VeX2e84hc7R2bV9bE8naTeL3HKPtrnFna
-         0P3SWueuH3886IG2bu8IbhfW7ZW+pWRMQwFGCqJvudIbFG3i/BsXy/5n4oqLmiVLULtU
-         kl3w==
-X-Gm-Message-State: AJIora9z0pRTxy4FB8YrPxOZZwuRqJFQHNjgWt70jHVVxtPLeuRsfheK
-        NuwxnBDE+/kOxIVRtaDVM6c=
-X-Google-Smtp-Source: AGRyM1uVqkRyKPo9IPy3Znjd5I3YXbPg0SecgRP3nQPk9x9/HkOToyOmF/NisS4GUV9w/gu3cI4eOg==
-X-Received: by 2002:adf:fd0a:0:b0:210:32dc:7519 with SMTP id e10-20020adffd0a000000b0021032dc7519mr1043351wrr.181.1655317728299;
-        Wed, 15 Jun 2022 11:28:48 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id j20-20020a5d6e54000000b00212a83b93f3sm15386971wrz.88.2022.06.15.11.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 11:28:47 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 18:28:46 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>
-Subject: Re: [PATCH V3] x86/Hyper-V: Add SEV negotiate protocol support in
- Isolation VM
-Message-ID: <20220615182846.oliacmkrivhh5kx7@liuwe-devbox-debian-v2>
-References: <20220614014553.1915929-1-ltykernel@gmail.com>
- <PH0PR21MB30252886961F6D7EA7B7EBE6D7AA9@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Wed, 15 Jun 2022 14:29:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE3F3DDC4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:29:06 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 1XlHoHz3y26JC1XlHo1Z7E; Wed, 15 Jun 2022 20:29:04 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 15 Jun 2022 20:29:04 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <52d33450-44ae-3e05-9a3f-5835b3e97a7a@wanadoo.fr>
+Date:   Wed, 15 Jun 2022 20:29:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB30252886961F6D7EA7B7EBE6D7AA9@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] eventfd: Directly use ida_alloc()/free()
+Content-Language: fr
+To:     Bo Liu <liubo03@inspur.com>, viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615060314.2306-1-liubo03@inspur.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220615060314.2306-1-liubo03@inspur.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 04:50:36PM +0000, Michael Kelley (LINUX) wrote:
-> From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, June 13, 2022 6:46 PM
-> > 
-> > Hyper-V Isolation VM current code uses sev_es_ghcb_hv_call()
-> > to read/write MSR via GHCB page and depends on the sev code.
-> > This may cause regression when sev code changes interface
-> > design.
-> > 
-> > The latest SEV-ES code requires to negotiate GHCB version before
-> > reading/writing MSR via GHCB page and sev_es_ghcb_hv_call() doesn't
-> > work for Hyper-V Isolation VM. Add Hyper-V ghcb related implementation
-> > to decouple SEV and Hyper-V code. Negotiate GHCB version in the
-> > hyperv_init() and use the version to communicate with Hyper-V
-> > in the ghcb hv call function.
-> > 
-> > Fixes: 2ea29c5abbc2 ("x86/sev: Save the negotiated GHCB version")
-> > Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> > ---
-> > Change since v1:
-> >        - Negotiate ghcb version in Hyper-V init.
-> >        - use native_wrmsrl() instead of native_wrmsr() in the
-> >        	 wr_ghcb_msr().
-> > ---
-> >  arch/x86/hyperv/hv_init.c       |  6 +++
-> >  arch/x86/hyperv/ivm.c           | 84 ++++++++++++++++++++++++++++++---
-> >  arch/x86/include/asm/mshyperv.h |  4 ++
-> >  3 files changed, 88 insertions(+), 6 deletions(-)
-> > 
+Le 15/06/2022 à 08:03, Bo Liu a écrit :
+> Use ida_alloc()/ida_free() instead of
+> ida_simple_get()/ida_simple_remove().
+> The latter is deprecated and more verbose.
 > 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> 
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
 
-Applied to hyperv-fixes. Thanks.
+Hi,
+for what it's worth:
+
+Reviewed-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+> ---
+>   fs/eventfd.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/eventfd.c b/fs/eventfd.c
+> index 3627dd7d25db..e17a2ea53da9 100644
+> --- a/fs/eventfd.c
+> +++ b/fs/eventfd.c
+> @@ -89,7 +89,7 @@ EXPORT_SYMBOL_GPL(eventfd_signal);
+>   static void eventfd_free_ctx(struct eventfd_ctx *ctx)
+>   {
+>   	if (ctx->id >= 0)
+> -		ida_simple_remove(&eventfd_ida, ctx->id);
+> +		ida_free(&eventfd_ida, ctx->id);
+>   	kfree(ctx);
+>   }
+>   
+> @@ -423,7 +423,7 @@ static int do_eventfd(unsigned int count, int flags)
+>   	init_waitqueue_head(&ctx->wqh);
+>   	ctx->count = count;
+>   	ctx->flags = flags;
+> -	ctx->id = ida_simple_get(&eventfd_ida, 0, 0, GFP_KERNEL);
+> +	ctx->id = ida_alloc(&eventfd_ida, GFP_KERNEL);
+>   
+>   	flags &= EFD_SHARED_FCNTL_FLAGS;
+>   	flags |= O_RDWR;
+

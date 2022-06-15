@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF95454CBFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C8954CC04
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbiFOO66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S244812AbiFOO7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbiFOO6m (ORCPT
+        with ESMTP id S242891AbiFOO7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:58:42 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA553326CD
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:58:40 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id c4so19319059lfj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:58:40 -0700 (PDT)
+        Wed, 15 Jun 2022 10:59:42 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3489C101C9;
+        Wed, 15 Jun 2022 07:59:41 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so1312622wma.1;
+        Wed, 15 Jun 2022 07:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=p5WjwBxoG8hcN2wNzdX82aRVBrLb67GAEmI1dQxMZy0=;
-        b=r4gnFG1k9OgfmQ7EP/1Y+kdN2g5zJ3GOyFpW2D2CfDDrt/w87w3TdP8K++zTRXmZ1O
-         BUsJ3h/tq/C3iprUij5d3WqyvOGMw/I5Nw2LzaFWW8Kk0jJmwkKplMI+l41JN3y5PSh4
-         fnlFCyTAhS1yp+NaBsuAeFVDg+5EuG0LyQq5/dUn8T7aUi5OZPsYHQCp1xCWXpUZPDXd
-         rJIptAm7vdcpJ/0G+qLHiC/f1LoLW2Sc6al5aQ3TJyiMG5BWUbqQ6aJ5ktnFyy06b9xI
-         vu0WMbDHRbaiTdW1pIt4zXGO7csAzT3AsR+uTXqQIKxq3R7RPeMvVGoqtPSHqpYKJYto
-         cxjQ==
+        bh=6fopigGhBHUvToQDW8C96mevEAHmyd9RwH6T3VHGQno=;
+        b=aMm4UMWGVLS0PAt7bgDYcLdhm/CszdAgtdVdM0VB45miYsgwGwV09ga2eYkF4zV8yE
+         kUtl2fvYUcU7gIGTYYEkTyc6kdkn+RFFKlGwxZoASle2G2i0bcCNksb6K0Kc73gmP5qU
+         G1J8w5fZywh60Dj2gtTk22jbwzc1IhxKa5YXcVEdViPzZrOrJYAJu3ojR7mrJWPmlND2
+         2Z8qcYC60RFp6XpiM4BGr+2XVXKD1E7lHXhSAFHKx9eHClHe+2Un2u1GC2EzxzP1SIz4
+         Vw0e6Y3MBvEM+wL9S7jigJAfH3hZYTDU/M5Ys9NHbpq1jLpR21o0Agibudjy8rVbRB5P
+         ttjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=p5WjwBxoG8hcN2wNzdX82aRVBrLb67GAEmI1dQxMZy0=;
-        b=lecthBgUnPhwEh0kGvwzrn+thZ9/IwNFEBE5kl4a+e6H6Bw1rWhVVKwMWQhOv/PxP+
-         iy79x30oM5zlzo75/9TcxpVIgaJc8eX8hFnJVO1JeSVh41EiH4Iq2/flflPYdHsCroBL
-         HbKp5F7s6qc5m6w0VZWc98xy0V9ZxNzX5ABWlFjpQ+Kz/KNbNScbIMEsNXUCZ2T2McTa
-         xc2Ytr2augxfrp0qbjux0QEisbExms+rSaOqSIh7njXDVzEu1HOzTRn4dYZCraFX+JjT
-         4JGxYc/Dizbd190pZSCIlvECFQLr0m5mI+8oLWfSXKPMGGLLnaVFprzlbH3E8zOk+gN/
-         tuEg==
-X-Gm-Message-State: AJIora/PSAWpmeLWTTpeR4moEg5lfU764ULTo5xjGXbBF/YSWLc6n4t0
-        IpCIAAmGEcxqw5f5f6iKB/ox+yBJjES27fK/MnistYBHJ8194w==
-X-Google-Smtp-Source: AGRyM1tsa7MGR5pQIMXjpltWXkrdU447D/S/FlKYW140feHY76B0SAzLsFd6ea6D8NUxYt63ZdD7D4DNCzgzKnVlH+0=
-X-Received: by 2002:a05:6512:ba6:b0:47d:a6e3:ab37 with SMTP id
- b38-20020a0565120ba600b0047da6e3ab37mr6168253lfv.157.1655305118992; Wed, 15
- Jun 2022 07:58:38 -0700 (PDT)
+        bh=6fopigGhBHUvToQDW8C96mevEAHmyd9RwH6T3VHGQno=;
+        b=AuNE7RmAzoU8Lw+WUN2rGqFLnHOvONFIQ2Cby88ZMTKvVn9z14s8EYUAK9LuPi5/Qj
+         LoPMCNyQ2PTKJbdkfKWOhi3t99N5EZWYhSQxSDhEUOTfcdp7WAg0D8yLJjB8DzE+coVr
+         j1jEzKq9cFbuQ6/mfXIibWlZPLVoK/FQK40VqFmeO+0OLPwOUJ9QOGQEIPmAo9clhZ+c
+         tl/eokvq6ybwo1C/EBSYojqpBpGuSk+qS/5LhO9zqsB57x6cg+LCyZT/TJzWvMnsoMaK
+         NHdSiPNUuqo+5guizgwWZ9YyUa2lcDfuJLp6nEAxNZglHZVrEY7XnwZgyZqr8k8nlmJs
+         I5yQ==
+X-Gm-Message-State: AOAM53083Y9txYq3TusVOlK3nRpV1jublYyEmSZuvjx1w+RvjrQLciG4
+        Rj0R8PhT/hNue8/sgi1bc+0uE5GiAq8EwlJxG80=
+X-Google-Smtp-Source: ABdhPJwOdzB0phMq92UxkYkA4A0DK81tSFVTV8Pe3y2MmItWnkJUarOsTTIAMYPDNE2/mS2V7lGTfJqzy/ONnv84lkk=
+X-Received: by 2002:a05:600c:4f96:b0:39c:951e:66b7 with SMTP id
+ n22-20020a05600c4f9600b0039c951e66b7mr10636359wmq.84.1655305179680; Wed, 15
+ Jun 2022 07:59:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614021141.1101486-1-sashal@kernel.org> <CAG48ez1bRMCUzmkP2zpQ_4Jx0sqRw=b9-sDa-0QSqoGHpqZVJA@mail.gmail.com>
-In-Reply-To: <CAG48ez1bRMCUzmkP2zpQ_4Jx0sqRw=b9-sDa-0QSqoGHpqZVJA@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 15 Jun 2022 16:58:02 +0200
-Message-ID: <CAG48ez3nxe32Hv3dXO27_rK3qrSGZUW8Pp1sxLDxwKWkL1BaoQ@mail.gmail.com>
-Subject: Re: [PATCH MANUALSEL 5.15 1/4] KVM: x86: do not report a vCPU as
- preempted outside instruction boundaries
-To:     Sasha Levin <sashal@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, kvm@vger.kernel.org
+References: <20220610172055.2337977-1-robdclark@gmail.com> <42e52572-726b-d94d-6523-7b42dbeecff1@kali.org>
+In-Reply-To: <42e52572-726b-d94d-6523-7b42dbeecff1@kali.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 15 Jun 2022 07:59:44 -0700
+Message-ID: <CAF6AEGuTw3fMaNbvkt9z3EWqjND2R3nrRu+PP=GVQjx+TW0N9w@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/gem: Drop early returns in close/purge vma
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,45 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 4:53 PM Jann Horn <jannh@google.com> wrote:
+On Sat, Jun 11, 2022 at 11:16 AM Steev Klimaszewski <steev@kali.org> wrote:
 >
-> On Tue, Jun 14, 2022 at 4:11 AM Sasha Levin <sashal@kernel.org> wrote:
-> >
-> > From: Paolo Bonzini <pbonzini@redhat.com>
-> >
-> > [ Upstream commit 6cd88243c7e03845a450795e134b488fc2afb736 ]
-> >
-> > If a vCPU is outside guest mode and is scheduled out, it might be in the
-> > process of making a memory access.  A problem occurs if another vCPU uses
-> > the PV TLB flush feature during the period when the vCPU is scheduled
-> > out, and a virtual address has already been translated but has not yet
-> > been accessed, because this is equivalent to using a stale TLB entry.
-> >
-> > To avoid this, only report a vCPU as preempted if sure that the guest
-> > is at an instruction boundary.  A rescheduling request will be delivered
-> > to the host physical CPU as an external interrupt, so for simplicity
-> > consider any vmexit *not* instruction boundary except for external
-> > interrupts.
-> >
-> > It would in principle be okay to report the vCPU as preempted also
-> > if it is sleeping in kvm_vcpu_block(): a TLB flush IPI will incur the
-> > vmentry/vmexit overhead unnecessarily, and optimistic spinning is
-> > also unlikely to succeed.  However, leave it for later because right
-> > now kvm_vcpu_check_block() is doing memory accesses.  Even
-> > though the TLB flush issue only applies to virtual memory address,
-> > it's very much preferrable to be conservative.
-> >
-> > Reported-by: Jann Horn <jannh@google.com>
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> Hi Rob,
 >
-> This feature was introduced in commit f38a7b75267f1f (first in 4.16).
-> I think the fix has to be applied all the way back to there (so
-> additionally to what you already did, it'd have to be added to 4.19,
-> 5.4 and 5.10)?
->
-> But it doesn't seem to apply cleanly to those older branches. Paolo,
-> are you going to send stable backports of this?
+> On 6/10/22 12:20 PM, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Keep the warn, but drop the early return.  If we do manage to hit this
+> > sort of issue, skipping the cleanup just makes things worse (dangling
+> > drm_mm_nodes when the msm_gem_vma is freed, etc).  Whereas the worst
+> > that happens if we tear down a mapping the GPU is accessing is that we
+> > get GPU iova faults, but otherwise the world keeps spinning.
+> >
 
-Also, I think the same thing applies for "KVM: x86: do not set
-st->preempted when going back to user space"?
+forgot this initially:
+
+Reported-by: Steev Klimaszewski <steev@kali.org>
+
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >   drivers/gpu/drm/msm/msm_gem_vma.c | 6 ++----
+> >   1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
+> > index 3c1dc9241831..c471aebcdbab 100644
+> > --- a/drivers/gpu/drm/msm/msm_gem_vma.c
+> > +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
+> > @@ -62,8 +62,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+> >       unsigned size = vma->node.size;
+> >
+> >       /* Print a message if we try to purge a vma in use */
+> > -     if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
+> > -             return;
+> > +     GEM_WARN_ON(msm_gem_vma_inuse(vma));
+> >
+> >       /* Don't do anything if the memory isn't mapped */
+> >       if (!vma->mapped)
+> > @@ -128,8 +127,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
+> >   void msm_gem_close_vma(struct msm_gem_address_space *aspace,
+> >               struct msm_gem_vma *vma)
+> >   {
+> > -     if (GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped))
+> > -             return;
+> > +     GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped);
+> >
+> >       spin_lock(&aspace->lock);
+> >       if (vma->iova)
+>
+> I've seen the splat on the Lenovo Yoga C630 here, and have tested this
+> patch, and as described, the splat still happens, but the system is
+> still able to be used.
+>
+> Tested-by: Steev Klimaszewski <steev@kali.org>
+>

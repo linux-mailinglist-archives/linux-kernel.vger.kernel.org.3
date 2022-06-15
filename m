@@ -2,159 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF3A54D06A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D5754D06F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358262AbiFORxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        id S1349902AbiFORyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236365AbiFORxt (ORCPT
+        with ESMTP id S235028AbiFORyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:53:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDCD33E30
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:53:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k7so1681741plg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:53:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7490IR4u02XQR5Rx7eoe3R4qdOLni9htSGuUTdPLVYA=;
-        b=KEHOZIsr6INrHpmLs6MZXeDUYYHY5HNCqRxG73Sz35/4gussDzCfuA8qC4mRSt2T7l
-         DCyWH1tXqBXL9xls0S1CUuBnBuTFQl94uw8VYX4sp8DqBs1/LNJK4snKvrAwZcQALw0B
-         SZUpmdgm6YQTwtHKzfGs7GV8//2YR5wyOCyNBlK34b9gchnZIO9E9FsXClR7YZ2WzM2k
-         pkIaPoKdXz9iTmCS5VFCzRPsjGQALQrvGcY3i0frCGeOsfOFvMfMpxSUiAQzvns5lrpz
-         qh5wdbokPBfdKu4kHt8kxaqMYGUxsgN5q2OHdttc+Q2lOFnM53/KPUCzLX14G7n5H3Rf
-         1tpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7490IR4u02XQR5Rx7eoe3R4qdOLni9htSGuUTdPLVYA=;
-        b=VKwQvOAE9Rf8Cmku2w+TpLEt69znKg9VMs4EH3jNmDW99J6J1OE1W1RxujaEyc/EuI
-         SjGr+p1zWpQDjEECpf+QNaY5L5wYkUj2KCAYPAhMk/vT1+d9iOOKFh7ujVLtbtmPGlEa
-         UKLwaH8DtKOpHH3FPt4kaGj0sAOkqVpgIcqb1yzE7dToalPW0Iz3Rd1wBxbyh35iiibh
-         1Yd27ijStsACnIYO0y/IXVKkVpPx4hZOEOlrwQA69y6csKSzA4bsAhiz2OrSzDXxnfTT
-         RBhhyosIulzn+hcQEQbqQQ2LtAix6pqXfLR6f2T395fAuWyqDpDzmcC0hpiG7M0JpLJb
-         lf6A==
-X-Gm-Message-State: AJIora+FkCbE2bilqVs2wqZGgNCdBNcOzOqrWplVg3mW3zSqo/0gRSZn
-        +6xKxR0EQK6T+/w7DYi7wR7Dxh3tKNDuBZixwk4=
-X-Google-Smtp-Source: AGRyM1vPqbItoG7qZmRwvuecyIl7+jw3KNUfRZn6FWYRHajhbjya+hjZ9ZKi7WlcFjdgLC7Zd0Df81bUgvk9NSfonhs=
-X-Received: by 2002:a17:902:8492:b0:167:6cbf:145b with SMTP id
- c18-20020a170902849200b001676cbf145bmr953726plo.26.1655315628118; Wed, 15 Jun
- 2022 10:53:48 -0700 (PDT)
+        Wed, 15 Jun 2022 13:54:21 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634E26117;
+        Wed, 15 Jun 2022 10:54:20 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 33E96520291;
+        Wed, 15 Jun 2022 19:54:18 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.5) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Wed, 15 Jun
+ 2022 19:54:17 +0200
+Date:   Wed, 15 Jun 2022 19:54:12 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>
+CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
+        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>, Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4 1/3] initramfs: add file metadata
+Message-ID: <20220615175412.GA7029@lxhi-065>
+References: <20190523121803.21638-1-roberto.sassu@huawei.com>
+ <20190523121803.21638-2-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-4-linmiaohe@huawei.com>
-In-Reply-To: <20220611084731.55155-4-linmiaohe@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 15 Jun 2022 10:53:36 -0700
-Message-ID: <CAHbLzkpy-uR4ZhS6A6zybu-Mw=Uy5XunxtG6WviM6pfFHkA9NQ@mail.gmail.com>
-Subject: Re: [PATCH 3/7] mm/khugepaged: trivial typo and codestyle cleanup
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190523121803.21638-2-roberto.sassu@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.5]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> Fix some typos and tweak the code to meet codestyle. No functional
-> change intended.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Hello Roberto,
+Hello Mimi,
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
-
+On Thu, May 23, 2019 at 02:18:01PM +0200, Roberto Sassu wrote:
+> From: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> 
+> This patch adds metadata to a file from a supplied buffer. The buffer might
+> contains multiple metadata records. The format of each record is:
+> 
+> <metadata len (ASCII, 8 chars)><version><type><metadata>
+> 
+> For now, only the TYPE_XATTR metadata type is supported. The specific
+> format of this metadata type is:
+> 
+> <xattr #N name>\0<xattr #N value>
+> 
+> [kamensky: fixed restoring of xattrs for symbolic links by using
+>            sys_lsetxattr() instead of sys_setxattr()]
+> 
+> [sassu: removed state management, kept only do_setxattrs(), added support
+>         for generic file metadata, replaced sys_lsetxattr() with
+>         vfs_setxattr(), added check for entry_size, added check for
+>         hdr->c_size, replaced strlen() with strnlen(); moved do_setxattrs()
+>         before do_name()]
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> Signed-off-by: Victor Kamensky <kamensky@cisco.com>
+> Signed-off-by: Taras Kondratiuk <takondra@cisco.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  mm/khugepaged.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index a8adb2d1e9c6..1b5dd3820eac 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -260,7 +260,7 @@ static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
->         unsigned long max_ptes_none;
->
->         err = kstrtoul(buf, 10, &max_ptes_none);
-> -       if (err || max_ptes_none > HPAGE_PMD_NR-1)
-> +       if (err || max_ptes_none > HPAGE_PMD_NR - 1)
->                 return -EINVAL;
->
->         khugepaged_max_ptes_none = max_ptes_none;
-> @@ -286,7 +286,7 @@ static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
->         unsigned long max_ptes_swap;
->
->         err  = kstrtoul(buf, 10, &max_ptes_swap);
-> -       if (err || max_ptes_swap > HPAGE_PMD_NR-1)
-> +       if (err || max_ptes_swap > HPAGE_PMD_NR - 1)
->                 return -EINVAL;
->
->         khugepaged_max_ptes_swap = max_ptes_swap;
-> @@ -313,7 +313,7 @@ static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
->         unsigned long max_ptes_shared;
->
->         err  = kstrtoul(buf, 10, &max_ptes_shared);
-> -       if (err || max_ptes_shared > HPAGE_PMD_NR-1)
-> +       if (err || max_ptes_shared > HPAGE_PMD_NR - 1)
->                 return -EINVAL;
->
->         khugepaged_max_ptes_shared = max_ptes_shared;
-> @@ -599,7 +599,7 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
->         int none_or_zero = 0, shared = 0, result = 0, referenced = 0;
->         bool writable = false;
->
-> -       for (_pte = pte; _pte < pte+HPAGE_PMD_NR;
-> +       for (_pte = pte; _pte < pte + HPAGE_PMD_NR;
->              _pte++, address += PAGE_SIZE) {
->                 pte_t pteval = *_pte;
->                 if (pte_none(pteval) || (pte_present(pteval) &&
-> @@ -1216,7 +1216,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
->
->         memset(khugepaged_node_load, 0, sizeof(khugepaged_node_load));
->         pte = pte_offset_map_lock(mm, pmd, address, &ptl);
-> -       for (_address = address, _pte = pte; _pte < pte+HPAGE_PMD_NR;
-> +       for (_address = address, _pte = pte; _pte < pte + HPAGE_PMD_NR;
->              _pte++, _address += PAGE_SIZE) {
->                 pte_t pteval = *_pte;
->                 if (is_swap_pte(pteval)) {
-> @@ -1306,7 +1306,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
->                 /*
->                  * Check if the page has any GUP (or other external) pins.
->                  *
-> -                * Here the check is racy it may see totmal_mapcount > refcount
-> +                * Here the check is racy it may see total_mapcount > refcount
->                  * in some cases.
->                  * For example, one process with one forked child process.
->                  * The parent has the PMD split due to MADV_DONTNEED, then
-> @@ -1557,7 +1557,7 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
->                  * mmap_write_lock(mm) as PMD-mapping is likely to be split
->                  * later.
->                  *
-> -                * Not that vma->anon_vma check is racy: it can be set up after
-> +                * Note that vma->anon_vma check is racy: it can be set up after
->                  * the check but before we took mmap_lock by the fault path.
->                  * But page lock would prevent establishing any new ptes of the
->                  * page, so we are safe.
-> --
-> 2.23.0
->
->
+>  include/linux/initramfs.h | 21 ++++++++++
+>  init/initramfs.c          | 88 ++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 107 insertions(+), 2 deletions(-)
+>  create mode 100644 include/linux/initramfs.h
+
+[..]
+
+> +static int __init do_setxattrs(char *pathname, char *buf, size_t size)
+> +{
+> +	struct path path;
+> +	char *xattr_name, *xattr_value;
+> +	size_t xattr_name_size, xattr_value_size;
+> +	int ret;
+> +
+> +	xattr_name = buf;
+> +	xattr_name_size = strnlen(xattr_name, size);
+> +	if (xattr_name_size == size) {
+> +		error("malformed xattrs");
+> +		return -EINVAL;
+> +	}
+> +
+
+[..]
+
+> +
+> +		switch (hdr->c_type) {
+> +		case TYPE_XATTR:
+> +			do_setxattrs(pathname, buf + sizeof(*hdr),
+> +				     entry_size - sizeof(*hdr));
+
+Is it on purpose not to check the return value of do_setxattrs?
+
+I think I would have more comfort and piece of mind if I knew
+the return value is properly checked and acted upon. Otherwise,
+why returning an int from within do_setxattrs() at all?
+
+BR, Eugeniu

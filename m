@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB2054CCC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFD054CCBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351886AbiFOP1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S1352245AbiFOP1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349650AbiFOP0r (ORCPT
+        with ESMTP id S1349977AbiFOP0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:26:47 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594E13C732;
-        Wed, 15 Jun 2022 08:26:46 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id v1so23895655ejg.13;
-        Wed, 15 Jun 2022 08:26:46 -0700 (PDT)
+        Wed, 15 Jun 2022 11:26:49 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572A40914;
+        Wed, 15 Jun 2022 08:26:48 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id n10so23954489ejk.5;
+        Wed, 15 Jun 2022 08:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4F/tLpmbmUjdLbXnGXq4pBAB6Et74UQHxOQ2aUyA7m4=;
-        b=JHmoiqlAyf1dYxYP35NhIu+dOSPN7gOB9yv4WWTSIhzyi05IUx1nbo4ywVEmAClSup
-         2OFu1xrcqLSKEd9QfPRoqp1CVx/cCyJCrW9vBK57yUws/htRXKjYtZJ66/VDRSX34XFf
-         bVFJpMmL1173CJDylNcw67iRKZMgE+oxZRkgjybLUU3DFTFpPa8I8oUQxcg1wq230HSh
-         Qe+88kEcHf55q2F64wTw1iIvjISYn9MFIhrEp7IauG+iWU8tcp60m+EoOqg9/UzAJSMB
-         +AYmZ/sok96YpNEuLrYdkdMgpNUDXce19Jqu4bDGeBgeA/4ehMd/aBsYtpHLiGQ+97H2
-         R5VQ==
+        bh=2adNDon461xpHjX+1PUH+oB6KG0+MV4mU/JS/XJ+FXE=;
+        b=cI5OkNqkUvBhETcJKKnFnPMebRffRI8MNSUsjU/5HPdeJ+qyxV2mwXQf5HNBp00YgH
+         qxv73vbfRHalNNtCGrSHhEXAq0KdZQFChIEpt6DS3TIQoJ3XxMzZi2JIJ005I3WL9udh
+         m/5D7DE/A/W+8qQ2/IYBlVtfTam8gq+P7piY8iPaZDvrh2WwaP0UjIfto4WNIvEmOa9x
+         6VMT6SpArfe33YeWkA9CBWRAxtoTij55wgy1d6CF5/0LnGfU7JE34tEoDTNChSWYWJrg
+         RGmW1N5TFtQT8ZpVNF6ToX1SFiXqVlPFODDGtWM97qCotiSKYCzTOjWvVksLwqhClbJk
+         bXrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4F/tLpmbmUjdLbXnGXq4pBAB6Et74UQHxOQ2aUyA7m4=;
-        b=d+K1R0DzjteGYibGq43tCHVZDwDQtbGQH6U/8XPMgG3YbghlV18BmNYjeVe0gbvN37
-         3xtJ0eDb19b556iUh6A+U3EZCCIAxvoI9CuDbO1VxduOW3McivYU+DtzLwuD88/zEKTg
-         BohIGbzvTYDTSDjJhRe0SFf9g95TJ4FIVS1XYOOCfXXt6IcxKF4iRcRSe8ivZlZeNLXP
-         V6a7+eYdEk9rz2ddAe7qvocmtvvaVz5PLJtdZVqt3kyFRFwsr3+bd+3fTJ0oe7PltEy1
-         6qjh0bYtrYNDILhvh9mKATePDxvDZb1+mU04IrK87qjPFimKfH6exOA4zYk8mihBb9Aw
-         z7SA==
-X-Gm-Message-State: AJIora8anqQDOSaEk6pGh7jKkjNMf1r7+6qGvDVwOBKDCxiVW8kA5hpm
-        WIkMoJLTmiyv5VtrZ98ooLDfF9SviSEuzQ==
-X-Google-Smtp-Source: AGRyM1s+Xm+S5cqHLm8dYnASFxeHOahemB9JyKRhbpBV0LSorhGdjx4Rs5x7X7unE6tijHHY0VjkpQ==
-X-Received: by 2002:a17:907:7f14:b0:70c:67d9:7758 with SMTP id qf20-20020a1709077f1400b0070c67d97758mr309134ejc.195.1655306804896;
-        Wed, 15 Jun 2022 08:26:44 -0700 (PDT)
+        bh=2adNDon461xpHjX+1PUH+oB6KG0+MV4mU/JS/XJ+FXE=;
+        b=skCnoy1NXz7xHFmJzdgpe2Bl4XMKRHCOWeF6E2tOvl2SL9VjKlAbBWNGz/ObOXHXhN
+         xShEs/I4zOITGZw4WtXd8AffwuXf2uw5LCBBgkKqpnNqLf2Vc33IEtqGdWO4RgYinDRO
+         FDAK2gZDJNtXpj0O2qdIN7bUo0U/M00ZSrkWCmO94RKFjF35gL25BLmJAu0Tyz1Reg0i
+         itTYoeEe0SwK2YpeeW4ENjVpdCNFkJwew4Pit4wTGo44Uc8Ecyn5ZaYVd8JX9UTOCZGF
+         tT4KDAwuHFD+7jlCCw0wGlEDFm79xoPJJgegVYy092OI/cG7oVJCav0Uh5772WZrHpW7
+         35SQ==
+X-Gm-Message-State: AJIora8t2Uqwq0Dicel/0dzNWuf/jvaa8GDx6Hs6UW6xz+mMip5HFOw5
+        5/AnK3A/n4VeZX0khuH5CHrNqWT/0eqsGg==
+X-Google-Smtp-Source: AGRyM1ukN4/oxBFQLsgI+zoIm3aEYbu4RNsKlf3W2qX6XOHC2x1Vb+CPICgj/LMSlc1bohCgh5qz0g==
+X-Received: by 2002:a17:906:74c6:b0:712:10f2:7c87 with SMTP id z6-20020a17090674c600b0071210f27c87mr337542ejl.416.1655306806961;
+        Wed, 15 Jun 2022 08:26:46 -0700 (PDT)
 Received: from debianHome.localdomain (dynamic-077-003-151-196.77.3.pool.telefonica.de. [77.3.151.196])
-        by smtp.gmail.com with ESMTPSA id v14-20020aa7d9ce000000b0042bc97322desm9501224eds.43.2022.06.15.08.26.44
+        by smtp.gmail.com with ESMTPSA id v14-20020aa7d9ce000000b0042bc97322desm9501224eds.43.2022.06.15.08.26.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:26:44 -0700 (PDT)
+        Wed, 15 Jun 2022 08:26:46 -0700 (PDT)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Serge Hallyn <serge@hallyn.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [PATCH v3 5/8] fs: use new capable_any functionality
-Date:   Wed, 15 Jun 2022 17:26:19 +0200
-Message-Id: <20220615152623.311223-4-cgzones@googlemail.com>
+Cc:     Serge Hallyn <serge@hallyn.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 6/8] kernel: use new capable_any functionality
+Date:   Wed, 15 Jun 2022 17:26:20 +0200
+Message-Id: <20220615152623.311223-5-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220615152623.311223-1-cgzones@googlemail.com>
 References: <20220502160030.131168-8-cgzones@googlemail.com>
@@ -81,22 +88,22 @@ Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 v3:
    rename to capable_any()
 ---
- fs/pipe.c | 2 +-
+ kernel/fork.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 74ae9fafd25a..18ab3baeec44 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -776,7 +776,7 @@ bool too_many_pipe_buffers_hard(unsigned long user_bufs)
- 
- bool pipe_is_unprivileged_user(void)
- {
--	return !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN);
-+	return !capable_any(CAP_SYS_RESOURCE, CAP_SYS_ADMIN);
- }
- 
- struct pipe_inode_info *alloc_pipe_info(void)
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 9d44f2d46c69..1665fb4591c7 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2104,7 +2104,7 @@ static __latent_entropy struct task_struct *copy_process(
+ 	retval = -EAGAIN;
+ 	if (is_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+ 		if (p->real_cred->user != INIT_USER &&
+-		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
++		    !capable_any(CAP_SYS_RESOURCE, CAP_SYS_ADMIN))
+ 			goto bad_fork_cleanup_count;
+ 	}
+ 	current->flags &= ~PF_NPROC_EXCEEDED;
 -- 
 2.36.1
 

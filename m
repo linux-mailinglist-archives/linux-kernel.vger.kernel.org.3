@@ -2,112 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AE454CAE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC16154CB95
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357412AbiFOOLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S230355AbiFOOm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiFOOLk (ORCPT
+        with ESMTP id S1348322AbiFOOmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:11:40 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08312443C6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:11:38 -0700 (PDT)
-Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MMGZS-1oKfK30jEk-00JH7d for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022
- 16:11:37 +0200
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-30fdbe7467cso62674057b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:11:37 -0700 (PDT)
-X-Gm-Message-State: AJIora+wgUSE+WDb4UV56O/0IqKH/Q5pdi/0ik3gz5O7QWz15RDxCucD
-        EtnIvo9A+vI+S/HANSZh3RLBcc/BW7spifolA20=
-X-Google-Smtp-Source: AGRyM1vBDQKdEDubvQV9wU9Cy5NzYrd8xTnJ7sc9hg2rSEm1jso9QJej+BNPIXwj6f44jZiRi5f1Syb9OZoTJxIJ5Ug=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr12139024ywk.209.1655302296016; Wed, 15
- Jun 2022 07:11:36 -0700 (PDT)
+        Wed, 15 Jun 2022 10:42:23 -0400
+X-Greylist: delayed 1831 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 07:42:17 PDT
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E8AD3EF2C;
+        Wed, 15 Jun 2022 07:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=N3/Mt
+        kLzXrLRD+UKVMKP7QbmD7HARa8p9A8cQM7O1rk=; b=KytgcgfcwQxB1VKVIWE3A
+        83u2c2boVT7iSyFC6gR81619FEAfaEReROb5zWnFLAvRlZOoLY42QhEUlLi1knP5
+        jawTuBkryMBvOHNRmhnUVaulu7mJr5pd1L3ryr3AYWyXeL1ppZcR1adj+8obogtw
+        aw4CDuDaTE4YU/6vlF4bfM=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp8 (Coremail) with SMTP id NORpCgBnO1CM6KliFz2oFg--.54359S2;
+        Wed, 15 Jun 2022 22:11:25 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     miodrag.dinic@mips.com, paulburton@kernel.org,
+        tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arch: mips: generic: Add missing of_node_put() in board-ranchu.c
+Date:   Wed, 15 Jun 2022 22:11:23 +0800
+Message-Id: <20220615141123.3968401-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <202206091828.eNkyL2EI-lkp@intel.com>
-In-Reply-To: <202206091828.eNkyL2EI-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 15 Jun 2022 16:11:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Mu0MDRJU=he=gVxGKQYwzr1wePLKdgN37yLPSqm1iuQ@mail.gmail.com>
-Message-ID: <CAK8P3a3Mu0MDRJU=he=gVxGKQYwzr1wePLKdgN37yLPSqm1iuQ@mail.gmail.com>
-Subject: Re: drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1174:29: error:
- enumerator value for 'i40e_static_assert_i40e_aqc_cloud_filters_element_data'
- is not an integer constant
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Intel Wired LAN <intel-wired-lan@lists.osuosl.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Td4hP1DQsiifmGM3t9Pt5wjjk+EeEqvLvS9jTJWucIVcmJRJF32
- ZttJQLTc13ga0ZAQEeqtk1au2gj6G4sz/HrlyaJguQLpRp5hlMNEeeP9IL5iNXyK6YY8KDg
- 8Dcb9XGxzwr6zuk5ewVEnpDqY5ocHQmvq5zKH/zW/DCul43cvnfd+jTephTmFOi0csgQ01C
- U4bhEKXFLICmHpaX7B2CA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PDoA5K7rNV8=:sqcOuZD3LUxJnXMGWxKjqg
- Cb/NK59A6ewY/yt59IsOvJhOG0c/YdA02XbqNVdqgVeInLEPdQ2zTz7Q1b9tKIieZfFQ19VV5
- 1FwvUTJwAaaywLVy8UyqEINm0BhnDDheQVbbLXBqR214aulFzZUJynjKjoBVPtjIt8knhyerw
- 8fDrRXaji3YNe/JE0BseDBHPG343jPBU6d/4Wvk/M2TU1Q2OBCImqhINqj3gBEry0eWxTxURX
- NLqqqUS/t02j6NyLkpOMQrmouFZpoI35z9LyZm8jzIELe00sL9pNVIEtTJyOwDmW8cV+zfNVc
- 2siCpJxDUFxhKZHsuuGzli5Ebv1YINEBm2yZQuIwGp1v5CdxQ10M7TbGVL5W4/EI5sROcb6Co
- 0KjFcaahTMr9Akjqn0NmM2yPHf8Dq47DtgrmFetRi7VA9YhtARF4tYDBRegdXWq/blqq3IsJF
- N1Rwp1rrTMOIgIXO35YlJb9cMogdgIyCJOg41Fk8M84UExbw4xZBRfi3J2+4aI27oChnJjqle
- brnAYFx8A7c6ODAmYAHXupjNmjrtxwK+iLQBPtq/xjwrp921f/QsW4HyTUjtTv/eawRxfzSP7
- bP2uf1g7yN3qEyxdIR0vN8gsBDP2F4I4/RnlCyFQ0Xc2Lr0ZN1lcqRi7i9knFl0a6dB//l1T1
- HQCcyUOjKBXPpzb2GSSdPa4al4gkJ7xKmPG841n2gqkefTtgUrgYDP7Q5CY4Knn9ui4UQ7uDT
- f9oPogrDUgN8H8eGN/rrVs7R/iiR0OBoD7wGm2yAeb/ShFAJARGnEtyrb45gzN6+z+aPtIdVf
- DUWSHNVrYOX3U1l/H8ZKaGc9qtGetFLxtSjTkfuCbzJ34Ipns6ksPmZitJ2fV5mW23+4hYK9g
- KME8v01nfFGwizTnQmQQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgBnO1CM6KliFz2oFg--.54359S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1kKw4UWFy7Ar1UZw43Wrg_yoW3XwbEga
+        n7Z3ykWr1rXr4q9ay3ua13CwnIkwn3WrZ5Jr92q3WjyrWF9F47Wan7KrnrAw4IqrsIkrW5
+        GaykJrW8ArsF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtRRRJUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuA0hF2JVj4CirAAAs1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 12:25 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
-> commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
+In ranchu_measure_hpt_freq(), of_find_compatible_node() will return
+a node pointer with refcount incremented. We should use of_put_node()
+when it is not used anymore.
 
-This is not really related to my commit but it does disappear before
-this one when bisecting.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/mips/generic/board-ranchu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->    In file included from drivers/net/ethernet/intel/i40e/i40e_adminq.h:9,
->                     from drivers/net/ethernet/intel/i40e/i40e_type.h:10,
->                     from drivers/net/ethernet/intel/i40e/i40e.h:40,
->                     from drivers/net/ethernet/intel/i40e/i40e_main.c:12:
-> >> drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:301:39: warning: division by zero [-Wdiv-by-zero]
->      301 |         { i40e_static_assert_##X = (n)/((sizeof(struct X) == (n)) ? 1 : 0) }
->          |                                       ^
->    drivers/net/ethernet/intel/i40e/i40e_adminq_cmd.h:1174:1: note: in expansion of macro 'I40E_CHECK_STRUCT_LEN'
->     1174 | I40E_CHECK_STRUCT_LEN(0x40, i40e_aqc_cloud_filters_element_data);
->          | ^~~~~~~~~~~~~~~~~~~~~
+diff --git a/arch/mips/generic/board-ranchu.c b/arch/mips/generic/board-ranchu.c
+index a89aaad59cb1..930c45041882 100644
+--- a/arch/mips/generic/board-ranchu.c
++++ b/arch/mips/generic/board-ranchu.c
+@@ -44,6 +44,7 @@ static __init unsigned int ranchu_measure_hpt_freq(void)
+ 		      __func__);
+ 
+ 	rtc_base = of_iomap(np, 0);
++	of_node_put(np);
+ 	if (!rtc_base)
+ 		panic("%s(): Failed to ioremap Goldfish RTC base!", __func__);
+ 
+-- 
+2.25.1
 
-The bug is that 'i40e_aqc_cloud_filters_element_data' and some other
-structures in the
-same file are broken when building an ARM kernel without CONFIG_AEABI, which has
-unusual struct packing rules and triggers the static assertion.
-
-It's clearly a bug, but nobody is going to run this driver on an OABI
-kernel, so I think
-the options are:
-
-- add "__packed __aligned(4)" to each of these structure definitions
-- make the driver depend on !(ARM && AEABI) in Kconfig
-- ask lkp to stop testing CONFIG_AEABI=n kernels in randconfig builds
-  and ignore the problem along with others like it
-
-         Arnd

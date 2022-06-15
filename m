@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F375D54C06D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B92F54C06E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353967AbiFODzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 23:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S1353734AbiFODy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 23:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353892AbiFODyP (ORCPT
+        with ESMTP id S1353935AbiFODyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 23:54:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637771570D;
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DBD193FE;
         Tue, 14 Jun 2022 20:53:39 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LNBCb06twzRjSD;
-        Wed, 15 Jun 2022 11:50:19 +0800 (CST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNBF80r8Jz1K9hC;
+        Wed, 15 Jun 2022 11:51:40 +0800 (CST)
 Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
  (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
- 2022 11:53:36 +0800
+ 2022 11:53:37 +0800
 From:   Baokun Li <libaokun1@huawei.com>
 To:     <linux-ext4@vger.kernel.org>
 CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
@@ -29,9 +29,9 @@ CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
         <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
         <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
         <libaokun1@huawei.com>
-Subject: [PATCH v2 3/4] ext4: correct max_inline_xattr_value_size computing
-Date:   Wed, 15 Jun 2022 12:06:29 +0800
-Message-ID: <20220615040630.808783-4-libaokun1@huawei.com>
+Subject: [PATCH v2 4/4] ext4: correct the misjudgment in ext4_iget_extra_inode
+Date:   Wed, 15 Jun 2022 12:06:30 +0800
+Message-ID: <20220615040630.808783-5-libaokun1@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220615040630.808783-1-libaokun1@huawei.com>
 References: <20220615040630.808783-1-libaokun1@huawei.com>
@@ -51,29 +51,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the ext4 inode does not have xattr space, 0 is returned in the
-get_max_inline_xattr_value_size function. Otherwise, the function returns
-a negative value when the inode does not contain EXT4_STATE_XATTR.
+Use the EXT4_INODE_HAVE_XATTR_SPACE macro to more accurately
+determine whether the inode have xattr space.
 
 Signed-off-by: Baokun Li <libaokun1@huawei.com>
 ---
- fs/ext4/inline.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/ext4/inode.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-index cff52ff6549d..20032dbcd6f5 100644
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -35,6 +35,9 @@ static int get_max_inline_xattr_value_size(struct inode *inode,
- 	struct ext4_inode *raw_inode;
- 	int free, min_offs;
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 3dce7d058985..e7c6d7e1b531 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -4685,8 +4685,7 @@ static inline int ext4_iget_extra_inode(struct inode *inode,
+ 	__le32 *magic = (void *)raw_inode +
+ 			EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize;
  
-+	if (!EXT4_INODE_HAVE_XATTR_SPACE(inode))
-+		return 0;
-+
- 	min_offs = EXT4_SB(inode->i_sb)->s_inode_size -
- 			EXT4_GOOD_OLD_INODE_SIZE -
- 			EXT4_I(inode)->i_extra_isize -
+-	if (EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize + sizeof(__le32) <=
+-	    EXT4_INODE_SIZE(inode->i_sb) &&
++	if (EXT4_INODE_HAVE_XATTR_SPACE(inode)  &&
+ 	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
+ 		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
+ 		return ext4_find_inline_data_nolock(inode);
 -- 
 2.31.1
 

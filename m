@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C2F54D1B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C35854D1B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348904AbiFOTgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
+        id S1348662AbiFOTgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348581AbiFOTge (ORCPT
+        with ESMTP id S1348606AbiFOTf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:36:34 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C4A517FC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655321794; x=1686857794;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=912lfXbA2TMPI9StUYSbZRvoS20Y8/6I5QT4A9WD3PA=;
-  b=RwWrE5/98QicvV5JLILsh2+UTX7m5CClkCW2e0+RvB9AaMfAEcPaaNfM
-   oXEljB0o54VG1KQBj4E36AYTO213gPvHhet9lo1yhWotf4fCR2X3cL6fa
-   gF1nO1EpfZ3KBvl2N3TAososbtW+A5zVMGLWdEgiTgueX0jfpeY8Pk1p5
-   V9jbzwBfa/3ZZQZ8kI7h41oleUlH1k+MKdeuj3PogZ6Bc2dIEW0h8nn2u
-   86vjOW4himj/F22gIUhpxVsfirk4t7L3JyJ/EGUaWEgNrlkVXdysUZkTx
-   yUEjBns2cg2IsvkaLTQSIQX80wCakVjJgRliqsAbfQrKSJLFlz6O8HDxB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280119953"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="280119953"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 12:36:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="652835775"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2022 12:36:28 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1YoV-000N8b-Dn;
-        Wed, 15 Jun 2022 19:36:27 +0000
-Date:   Thu, 16 Jun 2022 03:35:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 84bf7291902acff4b946fc591c499fc3eb88ce47
-Message-ID: <62aa3488.7yXIqbi8talaYM8B%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 15 Jun 2022 15:35:56 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AAA3BF8F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:35:54 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso3072684pjl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/PMdbO94F+BOcABvS3JHoU7ACrUEqtckvCco1cnBf7g=;
+        b=j0cI7jN56r6MPQUqDJHVArfSuYNuReM5G0nvTMnvCAzHhJC5J6X+ZFHYZHyk1w7Y3V
+         CtC8I9wFXaLh3LAq8D+HG5tPc48IgMlZ2KFeNbLm/UI6CpGFRau31n8aQxT8sF395f1I
+         WI9HpKtiWeekM/tdyz91/X0A7KGDq5PG7lOy3fsi1RNQuSub2tXq8SjQBsgRMSv+5s+O
+         aAM51wtAg/hwviU2Ho0SV9Ep2UQeWjbhYyYdHU3BGIrr1xgjKJXJAj0fV2N/vhD8RI14
+         HQ8gbxuE/feMiiJwtIdjXo0ICsJypDC1/mNrU0S63YP18nbmE2ZGpiW3Nb7EPR+nI8H4
+         gnkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/PMdbO94F+BOcABvS3JHoU7ACrUEqtckvCco1cnBf7g=;
+        b=nL9G8KJGvgwE1YRJhusLa7fMgi2fG077pS+6F7C6UkmPdkNQqVlai65CsB4ms6EHAL
+         TGFCW5/S13rpkpH28W4uhBzU/+WMFFpHa23u+H++r1e8zozUsCHZWc+JE2CbgwimfVVQ
+         ICwFeaTDXtHbvoc0zWXNEFbVFjHGm9xsXrDs/gb3Xos1pZt4+z3Zce+2WOjJnMwGh0YC
+         QCrRxYjOJqyELh229sUA9LA/EgRhl1goLVKDUINWp4m1ZyM5QD2keMbTjD36LG1/Rww+
+         aQw9fPjaI62etXnHV/sw3lHWEayGYxr/xhPsa/6BIzwdVr0cCOrsv8/VV+slgbGjQkE7
+         FwKw==
+X-Gm-Message-State: AJIora9vGUXPLaBnIooA4OokUrMYBUXKgCt606saGjN9ZoPwrKk973gm
+        4tF79BPAT9ZMruDdIww27PsbgA==
+X-Google-Smtp-Source: AGRyM1s4dOTFMu9AD0Y9keD+388tiwLW1mLTHdurnbjHeWFtQgmBn8S9pS0/PvofaG/ow/eDwQHiMw==
+X-Received: by 2002:a17:902:d4d0:b0:163:d4dc:bff8 with SMTP id o16-20020a170902d4d000b00163d4dcbff8mr1185362plg.129.1655321753941;
+        Wed, 15 Jun 2022 12:35:53 -0700 (PDT)
+Received: from google.com ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id i9-20020a63b309000000b003fadfd7be5asm10257407pgf.18.2022.06.15.12.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 12:35:53 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 20:35:50 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rahul T R <r-ravikumar@ti.com>
+Cc:     robh+dt@kernel.org, nm@ti.com, vigneshr@ti.com, kishon@ti.com,
+        krzysztof.kozlowski+dt@linaro.org, rogerq@kernel.org,
+        devicetree@vger.kernel.org, kristo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        s-anna@ti.com
+Subject: Re: [PATCH v4 1/3] dt-bindings: mfd: ti,j721e-system-controller: Add
+ clock property
+Message-ID: <Yqo0lq2GipkXg8HG@google.com>
+References: <20220530101031.11357-1-r-ravikumar@ti.com>
+ <20220530101031.11357-2-r-ravikumar@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220530101031.11357-2-r-ravikumar@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,74 +77,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 84bf7291902acff4b946fc591c499fc3eb88ce47  Merge branch into tip/master: 'x86/mm'
+On Mon, 30 May 2022, Rahul T R wrote:
 
-elapsed time: 728m
+> Add a pattern property for clock-controller, also update the example
+> with a clock-controller node
+> 
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> ---
+>  .../bindings/mfd/ti,j721e-system-controller.yaml     | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
-configs tested: 55
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-parisc64                            defconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
+Applied, thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

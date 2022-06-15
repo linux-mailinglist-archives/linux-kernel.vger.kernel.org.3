@@ -2,61 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A7254C78C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EAE54C785
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348100AbiFOLdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S1347925AbiFOLbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345296AbiFOLdF (ORCPT
+        with ESMTP id S1347864AbiFOLbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:33:05 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3112C433B0;
-        Wed, 15 Jun 2022 04:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655292785; x=1686828785;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=J2xeVFHRhS32YajK2SQJsuNx2FZegiEhlRercXHKr34=;
-  b=pPksHNOvxVQktD+GcAmcawkCYt9qVp5vG8s1gtFbOyz5o4CKPEdSeH5n
-   dHeHBNCCqikkWjd6XXlqLBCiPBe8pDddFe3Pi0bLUib1MJFk0O3mjkZAA
-   Ixmjwsfagq6R0aP902UB0TSQQ2bc8wHqLJtwr3sWDblFXOYMxB5wN0pM1
-   iy//o/C0eH6EazuB0Vs3wLbgHTPTPej3vP7ODasx0mmdwDKdnRPhKttRE
-   ysbnBBbK4Rly8+QIK/sPPbr1H1inxUI0XvPIcNjCk629mmrCs/ij5cP85
-   7NZsH7SXE/E2TXOheHtnLKCQwPgd8tkEK3WpWG1Ivc4ThBH3iuduhGiGb
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="168507967"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 04:33:04 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 15 Jun 2022 04:33:04 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 15 Jun 2022 04:33:02 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        <linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] spi: microchip-core: fix passing zero to PTR_ERR warning
-Date:   Wed, 15 Jun 2022 12:30:22 +0100
-Message-ID: <20220615113021.2493586-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 15 Jun 2022 07:31:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 359C552E63
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:30:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655292657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=deu1fZ+rJg4vtIyzufwUH9tCrx+7IF3P/lvcMVMcMto=;
+        b=jOY+f9s5ny1+xF2LOeakdX57gA4kAOsuwKJlideOsv398UA6ruA9Va3a4K34d5B5XbanEo
+        6WfmCAFx1vMNlBLI5f0F6SDM7bJV2E4z2uqfAXDqO86LMHPmAK8c+xqldJc7TqBctjeVPJ
+        +5kOkWNAGb13DBbPLWPWyHYOSyx1rrI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-YOCOutogNE2o2X49mqNIbQ-1; Wed, 15 Jun 2022 07:30:56 -0400
+X-MC-Unique: YOCOutogNE2o2X49mqNIbQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h2-20020adfe982000000b002102da95c71so1751610wrm.23
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:30:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=deu1fZ+rJg4vtIyzufwUH9tCrx+7IF3P/lvcMVMcMto=;
+        b=gtAn9yJ33CK+qMDXkS44tfXm6LT1zegfeN3K5Hh9Br2GPYDd9iIQYujOILYXGJFGTG
+         O3OPticeHcmKSkUrTo2xBCHrSWcaLgfNTtfch/9CsBYDp8GBIqFjo14ViZKhJ6gheV/O
+         OeSaPcxiT2uPFhYdBB0uUcOpW0w96vVUv70rF1LCkAFG6O/ptkcwCJEJt+bh5FPz7bZi
+         AKqMO1qIeVrOWlh0Gw6DRXN1cMnv40fcZZVYhaFXfXulvh7c3gjb1iWCJV4YihJLVfIx
+         AiBoXt1ZnKx4+BrjvJ4o9Bt/76CtALDXhNiiWlYaI/XBk3srEGVtwP5yvaEy8gHQmRM2
+         P5eQ==
+X-Gm-Message-State: AJIora/SOklKUcDmCELjMZlRsk/SW6O/x4AxcEZN0Xv3Z8SH6JpliFYb
+        3GPT1E50VUx01VKnRu2VIymXk9STl1dv14IC4Qm4nRSWpMQTdhS0KUsG6CJuQp3w73DqNlRHeuq
+        yX18QU8suTSSe8VTxo/GqiXMI
+X-Received: by 2002:a05:6000:1808:b0:21a:1322:cd9b with SMTP id m8-20020a056000180800b0021a1322cd9bmr9793136wrh.164.1655292655039;
+        Wed, 15 Jun 2022 04:30:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v6ZjaAdpwX7tIwW3bDni1DiejlVqSRKsvOo3OuGN1wsYo5tjNHWI+jwvqWm6RPrB9yjf7DNQ==
+X-Received: by 2002:a05:6000:1808:b0:21a:1322:cd9b with SMTP id m8-20020a056000180800b0021a1322cd9bmr9793119wrh.164.1655292654831;
+        Wed, 15 Jun 2022 04:30:54 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id q17-20020adffed1000000b00219f9829b71sm12682321wrs.56.2022.06.15.04.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 04:30:54 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        wei.liu@kernel.org, robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+In-Reply-To: <87pmjbi90m.fsf@redhat.com>
+References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
+ <87sfo7igis.fsf@redhat.com> <87pmjbi90m.fsf@redhat.com>
+Date:   Wed, 15 Jun 2022 13:30:53 +0200
+Message-ID: <87ilp2i2oi.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,36 +89,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible that the error case for devm_clk_get() returns NULL,
-in which case zero will be passed to PTR_ERR() as shown by the Smatch
-static checker warning:
-drivers/spi/spi-microchip-core.c:557 mchp_corespi_probe()
-warn: passing zero to 'PTR_ERR'
+Vitaly Kuznetsov <vkuznets@redhat.com> writes:
 
-Fix the warning by explicitly returning an error if devm_clk_get()
-returns NULL.
+> Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+>
+>> Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
+>>
+>> ...
+>>
+>>>
+>>> As per the comments in arch/x86/kvm/vmx/evmcs.h, TSC multiplier field is
+>>> currently not supported in EVMCS.
+>>
+>> The latest version:
+>> https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_vmx_enlightened_vmcs
+>>
+>> has it, actually. It was missing before (compare with e.g. 6.0b version
+>> here:
+>> https://github.com/MicrosoftDocs/Virtualization-Documentation/raw/live/tlfs/Hypervisor%20Top%20Level%20Functional%20Specification%20v6.0b.pdf)
+>>
+>> but AFAIR TSC scaling wasn't advertised by genuine Hyper-V either.
+>> Interestingly enough, eVMCS version didn't change when these fields were
+>> added, it is still '1'.
+>>
+>> I even have a patch in my stash (attached). I didn't send it out because
+>> it wasn't properly tested with different Hyper-V versions.
+>
+> And of course I forgot a pre-requisite patch which updates 'struct
+> hv_enlightened_vmcs' to the latest:
+>
 
-Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/linux-spi/20220615091633.GI2168@kadam/
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/spi/spi-microchip-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The good news is that TscMultiplies seems to work fine for me, at least
+with an Azure Dv5 instance where I can see Tsc scaling exposed. The bad
+news is that a few more patches are needed:
 
-diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
-index 5b2aee30fa04..d44663cca071 100644
---- a/drivers/spi/spi-microchip-core.c
-+++ b/drivers/spi/spi-microchip-core.c
-@@ -554,7 +554,7 @@ static int mchp_corespi_probe(struct platform_device *pdev)
- 
- 	spi->clk = devm_clk_get(&pdev->dev, NULL);
- 	if (!spi->clk || IS_ERR(spi->clk)) {
--		ret = PTR_ERR(spi->clk);
-+		ret = !spi->clk ? -ENXIO : PTR_ERR(spi->clk);
- 		dev_err(&pdev->dev, "could not get clk: %d\n", ret);
- 		goto error_release_master;
- 	}
+1) Fix 'struct hv_enlightened_vmcs' definition:
+https://lore.kernel.org/kvm/20220613133922.2875594-20-vkuznets@redhat.com/
+
+2) Define VMCS-to-EVMCS conversion for the new fields :
+
+diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+index 6a61b1ae7942..707a8de11802 100644
+--- a/arch/x86/kvm/vmx/evmcs.c
++++ b/arch/x86/kvm/vmx/evmcs.c
+@@ -28,6 +28,8 @@ const struct evmcs_field vmcs_field_to_evmcs_1[] = {
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_HOST_GRP1),
+        EVMCS1_FIELD(HOST_IA32_EFER, host_ia32_efer,
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_HOST_GRP1),
++       EVMCS1_FIELD(HOST_IA32_PERF_GLOBAL_CTRL, host_ia32_perf_global_ctrl,
++                    HV_VMX_ENLIGHTENED_CLEAN_FIELD_HOST_GRP1),
+        EVMCS1_FIELD(HOST_CR0, host_cr0,
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_HOST_GRP1),
+        EVMCS1_FIELD(HOST_CR3, host_cr3,
+@@ -78,6 +80,8 @@ const struct evmcs_field vmcs_field_to_evmcs_1[] = {
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1),
+        EVMCS1_FIELD(GUEST_IA32_EFER, guest_ia32_efer,
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1),
++       EVMCS1_FIELD(GUEST_IA32_PERF_GLOBAL_CTRL, guest_ia32_perf_global_ctrl,
++                    HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1),
+        EVMCS1_FIELD(GUEST_PDPTR0, guest_pdptr0,
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1),
+        EVMCS1_FIELD(GUEST_PDPTR1, guest_pdptr1,
+@@ -126,24 +130,47 @@ const struct evmcs_field vmcs_field_to_evmcs_1[] = {
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1),
+        EVMCS1_FIELD(XSS_EXIT_BITMAP, xss_exit_bitmap,
+                     HV_VMX_ENLIGHTENED_CLEAN_FIELD_CONTROL_GRP2),
++       EVMCS1_FIELD(ENCLS_EXITING_BITMAP, encls_exiting_bitmap,
++                    HV_VMX_ENLIGHTENED_CLEAN_FIELD_CONTROL_GRP2),
++       EVMCS1_FIELD(TSC_MULTIPLIER, tsc_multiplier,
++                    HV_VMX_ENLIGHTENED_CLEAN_FIELD_CONTROL_GRP2),
+
+...
+
+so it is becoming more and more complicated to assemble for testing. Let
+me finish my testing and I'll put a series together and send it out to
+simplify the process. Stay tuned!
+
 -- 
-2.36.1
+Vitaly
 

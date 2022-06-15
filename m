@@ -2,133 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCBC54CCF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CB454CCF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353958AbiFOP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
+        id S1354767AbiFOPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355496AbiFOP2j (ORCPT
+        with ESMTP id S1355717AbiFOP2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:28:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01A342A06;
-        Wed, 15 Jun 2022 08:27:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6061BB81F0E;
-        Wed, 15 Jun 2022 15:27:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02093C385A5;
-        Wed, 15 Jun 2022 15:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655306866;
-        bh=7pc/xKe4ZdwnskrQCRUD+TTNRE6A+ErRUxrsSCmYE1E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qaq1+tBx1+bt4SshGdEjpnAntGkki8cqcHlFENHDJujz41uB5g3hWZyTnPexsguLs
-         IH68RjS9AS+BlNt1b5VYGzSm7Q4RPHbtjNFW2heHi2/37cayJje7Vrmd8/Zhr1fxGZ
-         XOvEXtxq81DyZaok2AIhQUEXMGlUv0DJ6t3oYpM6Psf/PocxKX47EctWpGmx4xEFnb
-         Oy6nHDBgLSzWgDNbHOMsIIlK3ho5hrnNtl/Yaz3TwniC4u4VIA7qBxqDZ/YM4gGRYS
-         6btexI/QV2/Knts39rsqhcwp4L4SI1D8XFHaEVlk2foWx+I8XlNcYIxp3STyq98n95
-         Hv5kWhYH6N68w==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1o1Uvm-00A4Js-Gn;
-        Wed, 15 Jun 2022 16:27:42 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        "Fei Yang" <fei.yang@intel.com>,
-        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
-        "Thomas Hellstrom" <thomas.hellstrom@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, mauro.chehab@linux.intel.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 6/6] drm/i915/gt: Serialize TLB invalidates with GT resets
-Date:   Wed, 15 Jun 2022 16:27:40 +0100
-Message-Id: <cd5696e3800fd29114ddf0cebc950b57a17bc1b8.1655306128.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1655306128.git.mchehab@kernel.org>
-References: <cover.1655306128.git.mchehab@kernel.org>
+        Wed, 15 Jun 2022 11:28:41 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45BA434AB
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655306872; x=1686842872;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SRHdAt5c+iG6nC47CDkQ4xDzPy+xva5pr4/9bMvN8yc=;
+  b=mAjhabvq/AesKvcCgutZ+c4HI0NUJ6gNbGOrE3HAmY2cSXR4q11hPD9h
+   GJS+kaPdqwip/JbRtxOYLCMSEtluGD9Yf8rxyxzAgtmTmjts8SceM+QEX
+   Kmrcprv8X2LOydUcB3fI5GH52jirS42aOYlEq/UoVrarC0Z2bXD3+1EWz
+   0Rz06jjm4t5IKvjap17TNIjXq7HedGY+NYt+JYXnq3uMrVEHQOmloZ7+Y
+   kzMrypW9uEclJWlMyMQp92DZF1dVSW6jhMLFWRP4fK9uWPIa5OGlygINf
+   gdiono5sPR5lRqj3ecZjRpiX79yXzj2bECG/EV8pOictGezciHRoPni6M
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340656982"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="340656982"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:27:52 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="559173120"
+Received: from mjortiz-mobl.amr.corp.intel.com (HELO [10.212.185.241]) ([10.212.185.241])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:27:52 -0700
+Message-ID: <051fd468-11e6-308b-66c8-4de16ff80deb@intel.com>
+Date:   Wed, 15 Jun 2022 08:27:52 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv4 3/3] x86/tdx: Handle load_unaligned_zeropad() page-cross
+ to a shared page
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+References: <20220614120135.14812-1-kirill.shutemov@linux.intel.com>
+ <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris.p.wilson@intel.com>
+On 6/14/22 05:01, Kirill A. Shutemov wrote:
+> load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
+> The unwanted loads are typically harmless. But, they might be made to
+> totally unrelated or even unmapped memory. load_unaligned_zeropad()
+> relies on exception fixup (#PF, #GP and now #VE) to recover from these
+> unwanted loads.
+> 
+> In TDX guests, the second page can be shared page and VMM may configure
+> it to trigger #VE.
+> 
+> Kernel assumes that #VE on a shared page is MMIO access and tries to
+> decode instruction to handle it. In case of load_unaligned_zeropad() it
+> may result in confusion as it is not MMIO access.
+> 
+> Fix it by detecting split page MMIO accesses and fail them.
+> load_unaligned_zeropad() will recover using exception fixups.
+> 
+> The issue was discovered by analysis. It was not triggered during the
+> testing.
 
-Avoid trying to invalidate the TLB in the middle of performing an
-engine reset, as this may result in the reset timing out. Currently,
-the TLB invalidate is only serialised by its own mutex, forgoing the
-uncore lock, but we can take the uncore->lock as well to serialise
-the mmio access, thereby serialising with the GDRST.
+I thought this whole exercise was kicked off by hitting this in testing.
+ Am I remembering this wrong?
 
-Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
-i915 selftest/hangcheck.
+> https://lore.kernel.org/all/20220517153444.11195-10-kirill.shutemov@linux.intel.com/
 
-Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+Says:
 
-Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc: stable@vger.kernel.org
-Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+> This is an actual, real-world problem which was discovered during TDX
+> testing.
 
-See [PATCH 0/6] at: https://lore.kernel.org/all/cover.1655306128.git.mchehab@kernel.org/
-
- drivers/gpu/drm/i915/gt/intel_gt.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-index fb4fd5273ca4..33eb93586858 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-@@ -1248,6 +1248,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 	mutex_lock(&gt->tlb_invalidate_lock);
- 	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
- 
-+	spin_lock_irq(&uncore->lock); /* seralise invalidate with GT reset */
-+
- 	awake = 0;
- 	for_each_engine(engine, gt, id) {
- 		struct reg_and_bit rb;
-@@ -1272,6 +1274,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 	     IS_ALDERLAKE_P(i915)))
- 		intel_uncore_write_fw(uncore, GEN12_OA_TLB_INV_CR, 1);
- 
-+	spin_unlock_irq(&uncore->lock);
-+
- 	for_each_engine_masked(engine, gt, awake, tmp) {
- 		struct reg_and_bit rb;
- 
--- 
-2.36.1
-
+Or were you considering this a different problem somehow?

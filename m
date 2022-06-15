@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2B154C2C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93FC54C1B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346853AbiFOHlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S1345724AbiFOGWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 02:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243125AbiFOHlO (ORCPT
+        with ESMTP id S233995AbiFOGWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:41:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCA03D1E0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:41:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12825B81C6F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74159C34115;
-        Wed, 15 Jun 2022 07:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655278870;
-        bh=Ha9BSiQXox2PfpxcDFD0A0nYSDvHgZn3nzqMn97d1VY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JefCOJN94QTLTZFrle1CmDPK/+MjXLb5cEoxCuEiXKGbUVJknrg5qCUM6akFSc5um
-         INfHdj24N5yl0LiD4E5cNgFjvoE/ro5ucYsMT4G00c8TPQyZqbyF4HIjnIKStCwTU2
-         NhwZz1d7lVixYCPX9Xzqup3wn9N7OyUpwplGh9wU=
-Date:   Wed, 15 Jun 2022 08:19:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     chi wu <wuchi.zero@gmail.com>
-Cc:     alexios.zavras@intel.com, allison@lohutok.net, armijn@tjaldur.nl,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lib/klist: Remove mb() before wake_up_process
-Message-ID: <Yql57cL4aFbnykfL@kroah.com>
-References: <20220614144443.6566-1-wuchi.zero@gmail.com>
- <YqiiC+4xES0DoV7X@kroah.com>
- <CA+tQmHAJbqDenRE47OacSurF5HZ-XWHu6dRBf+A=UqbhiLomAA@mail.gmail.com>
+        Wed, 15 Jun 2022 02:22:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B1B220C5;
+        Tue, 14 Jun 2022 23:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MR5dIhQ/3CQ+DJyAHEHewkMnjmVc/yPENWsA0gqfTtg=; b=M5S0w41Kf8KjwS8Y/YH1g3VGqI
+        fKC+3UZ0Gqzlee9RVFDTwF4pQDliSsnMrng57U317+1YRvOeI7ug8Eijrgi/YpyAVWQYvvt660dgW
+        rgQG6dfavqJrUDgF33SMs5t5QHZ14LYIW3+t2bzgjFSegvIgrlQDU4aXvXYsgndP6uX+SuAGQybWi
+        j8yBTqLuY7YuDbowkeeUE5LCCjJRHszEvGr3dMFj/nx6sbBVnWI7OuQVuaZSDVI58uBmhGxFp6lhd
+        KtI0uGc5w/fBrdS471ySYhhY9tfOnWe3hlDA2YmTc/qLzJR5o7KvIGt6jY+NZSmyX/jh1dTywBEnZ
+        +SwhQjbA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1MPZ-00CqTw-6O; Wed, 15 Jun 2022 06:21:53 +0000
+Date:   Tue, 14 Jun 2022 23:21:53 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     Ming Lei <ming.lei@redhat.com>, axboe@kernel.dk,
+        djeffery@redhat.com, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next] blk-mq: fix boot time regression for scsi drives
+ with multiple hctx
+Message-ID: <Yql6gbP2NmKsvFqH@infradead.org>
+References: <20220614071410.3571204-1-yukuai3@huawei.com>
+ <Yqg5QxSM+lub8DY0@T590>
+ <01cb0e49-1154-33db-f572-3960c972fe08@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+tQmHAJbqDenRE47OacSurF5HZ-XWHu6dRBf+A=UqbhiLomAA@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <01cb0e49-1154-33db-f572-3960c972fe08@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,31 +55,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:30:51AM +0800, chi wu wrote:
-> Greg KH <gregkh@linuxfoundation.org> 于2022年6月14日周二 22:58写道：
-> >
-> > On Tue, Jun 14, 2022 at 10:44:43PM +0800, wuchi wrote:
-> > > Function wake_up_process always executes a general memory barrier,
-> > > so remove the mb() before it.
-> >
-> > Really?  On all systems?  I do not see that, where does it happen?
-> >
-> As I understand it, it is on all systems.  Please help correct the
-> mistake, thanks.
+On Tue, Jun 14, 2022 at 09:15:36PM +0800, Yu Kuai wrote:
+> > for making so long, so I guess there must be other delay added by the feature
+> > of BLK_MQ_F_TAG_HCTX_SHARED.
 > 
-> 1. Follow  Documentation/memory-barriers.txt  line 2128 ~ 2278,
-> especially line 2187 ~ 2202 snippet:
->         A general memory barrier is executed by wake_up() if it wakes
-> something up.
->         If it doesn't wake anything up then a memory barrier may or may not be
->         executed; you must not rely on it.
+> Please see details in the reasons 2), scsi scan will call
+> __scsi_remove_device() a lot of times(each host, each channel, each
+> target).
 
-So as the documentation states, it might not be there, so if you have to
-have a memory barrier, you must not rely on this function to provide it.
-
-So unless you have testing proof otherwise, the code should be correct
-as-is.
-
-thanks,
-
-greg k-h
+Well, if the SCSI core does that you are falling back to a sequentical
+scan instad of using REPORT LUNS.  Which seems like a bug on its own
+that is worth investigation.

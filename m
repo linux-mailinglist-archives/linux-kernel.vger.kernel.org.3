@@ -2,83 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A95354CD1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3678554CD15
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346162AbiFOPdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S1348689AbiFOPd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244694AbiFOPdT (ORCPT
+        with ESMTP id S1346834AbiFOPdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:33:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971C11C120
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655307198; x=1686843198;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hr/Spzo+KlJMSRYPm1IaNGTgBVN+sjW/tx4ctcrcIcs=;
-  b=K8uKwXU02UndPZBr4kELvVgA+rmz486UT7Nsben/Ttl2Jd9Gj9Ubh8v+
-   NwVAjXhBA+hfqP5jpO00bwi9AVV9O9himQUXTCwnYJm4R6NCWFIrDs1yd
-   Ez2GiHKr3nyo9VeW8tkUll/QC0Btk+dCqPk2+92ZXVUhtJZx87DwIRD+l
-   6sfSY031bxSw5dm6havyeLqKmQQ5Nf52uKlU4mdPgCTF/kQP0UCcuXudA
-   Qx7ijwD71tdcoZMf0dWi0Yjp9Kg48Hdax/i8INLNGfPoJ3wW7YHEAMUVS
-   IDF5HPx9ypwDzEbVxiM3VUYpKWgBFNQ9qA2FMcag0o+0Iox0haIVU6RcW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="342960537"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="342960537"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:33:17 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="559177771"
-Received: from mjortiz-mobl.amr.corp.intel.com (HELO [10.212.185.241]) ([10.212.185.241])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:33:16 -0700
-Message-ID: <c69f2023-f518-72cd-9991-c672b40d3767@intel.com>
-Date:   Wed, 15 Jun 2022 08:33:17 -0700
+        Wed, 15 Jun 2022 11:33:53 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DA02251F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:33:50 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id i17-20020a7bc951000000b0039c4760ec3fso2384191wml.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J5eKPAN5lqKWqHRVMFEt8bECLi2YfU3n/Xvj8y2gEBE=;
+        b=Zv2JhKlV+WgmpireahD92+ZSg2KnCdRZZvKLhjp5oxI5lNh/Plc3RXY+mQgK5+7Vg0
+         YcEbwmKcYO+eUdZVm8cnx1XTn3jFZkr+/y958BJAt6RHw6tO4gb/qGpriKZF4237xYW8
+         XdcUnlcVAybauV76RUaKKOU+9Jk1HAP8Ybq8jFsO4UP/QfChfQnRT6ZMjB1JSUkSG5A+
+         eeKIxvMjnfgD/uvv36ColBnfjqbtL+d7YJ45Q6RgQZkCXiULCPAF4BJO7j+EvyygfMPL
+         eLCZ6VWgFpV+KubW52X0faomk4hEuBQnOj14ASkrNV4X772O83FKpX8IgKteHTah4Jpx
+         0t5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J5eKPAN5lqKWqHRVMFEt8bECLi2YfU3n/Xvj8y2gEBE=;
+        b=mstMSBu8VpitBWyaUb0lxaAlJqbcjzJnIdMcafx4gWXErpgZCDSemkcwAx3iRDke87
+         rrj3w5EHizDdeZZMC1R76MsOELuqV/2t8wqVN84eI1V1i63E2BfSX5TrxzH3n4b8ZEZc
+         NUATh8e3xAHFZOx1bXrTgyQdaGEPgngl8mR32UmUHWYcrDAscd/VzOZeg2lwoLUXQ/ez
+         /cmimkJZzm4JiaaCWXMV0RvR7C8QsuRxCbpYvkTscreaz5byA6IAOEo9Sj5cpC64vPrz
+         KL+G4rISSji8XM5xJaT7xGYSb8meoZWj2QeQjoWjXcmSogSlF+4BbZTquk0nnbSM5RrV
+         DKJA==
+X-Gm-Message-State: AJIora/oY5AHInhGCwHUWiy58+LAfmwXlahm2M2p6ppINyPXXwuAkTL/
+        5pbCccKXy/SRo+qvUw/3uO/MHISedHekMYW6mggQ
+X-Google-Smtp-Source: AGRyM1tbSXhyojX0sdqJuy36Y8CiIJerDEBwNNO0en1/SGp4CFCRbzqu86TVD3k4/Lh2/5SBr3CWSXHz2TZ3Gh292cQ=
+X-Received: by 2002:a05:600c:1d91:b0:39c:544b:abdd with SMTP id
+ p17-20020a05600c1d9100b0039c544babddmr20003wms.70.1655307229181; Wed, 15 Jun
+ 2022 08:33:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arch: x86: kernel: Add missing of_node_put() in
- devicetree.c
-Content-Language: en-US
-To:     Liang He <windhl@126.com>, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, robh@kernel.org, frank.rowand@sony.com,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org
-References: <20220615150325.3969911-1-windhl@126.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220615150325.3969911-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220608150942.776446-1-fred@cloudflare.com> <87tu8oze94.fsf@email.froward.int.ebiederm.org>
+ <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com> <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
+ <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com> <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
+ <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com> <20220615103031.qkzae4xr34wysj4b@wittgenstein>
+ <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com> <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
+In-Reply-To: <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 15 Jun 2022 11:33:38 -0400
+Message-ID: <CAHC9VhRSzXeAZmBdNSAFEh=6XR57ecO7Ov+6BV9b0xVN1YR_Qw@mail.gmail.com>
+Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
+To:     Ignat Korchagin <ignat@cloudflare.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederick Lawler <fred@cloudflare.com>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, serge@hallyn.com, amir73il@gmail.com,
+        kernel-team <kernel-team@cloudflare.com>,
+        Jeff Moyer <jmoyer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 08:03, Liang He wrote:
-> In dtb_setup_hpet(), of_find_compatible_node() will return a node
-> pointer with refcount incremented. We should use of_node_put() when it
-> is not used anymore.
-> 
-> Signed-off-by: Liang He <windhl@126.com>
+On Wed, Jun 15, 2022 at 11:06 AM Ignat Korchagin <ignat@cloudflare.com> wrote:
+> On Wed, Jun 15, 2022 at 3:14 PM Paul Moore <paul@paul-moore.com> wrote:
+> > On Wed, Jun 15, 2022 at 6:30 AM Christian Brauner <brauner@kernel.org> wrote:
 
-Seems like:
+...
 
-Fixes: ffb9fc68dff3 ("x86: dtb: Add device tree support for HPET")
+> > > Fwiw, from this commit it wasn't very clear what you wanted to achieve
+> > > with this. It might be worth considering adding a new security hook for
+> > > this. Within msft it recently came up SELinux might have an interest in
+> > > something like this as well.
+> >
+> > Just to clarify things a bit, I believe SELinux would have an interest
+> > in a LSM hook capable of implementing an access control point for user
+> > namespaces regardless of Microsoft's current needs.  I suspect due to
+> > the security relevant nature of user namespaces most other LSMs would
+> > be interested as well; it seems like a well crafted hook would be
+> > welcome by most folks I think.
+>
+> Just to get the full picture: is there actually a good reason not to
+> make this hook support this scenario? I understand it was not
+> originally intended for this, but it is well positioned in the code,
+> covers multiple subsystems (not only user namespaces), doesn't require
+> changing the LSM interface and it already does the job - just the
+> kernel internals need to respect the error code better. What bad
+> things can happen if we extend its use case to not only allocate
+> resources in LSMs?
 
-and would be appropriate, right?
+My concern is that the security_prepare_creds() hook, while only
+called from two different functions, ends up being called for a
+variety of different uses (look at the prepare_creds() and
+perpare_kernel_cred() callers) and I think it would be a challenge to
+identify the proper calling context in the LSM hook implementation
+given the current hook parameters.  One might be able to modify the
+hook to pass the necessary information, but I don't think that would
+be any cleaner than adding a userns specific hook.  I'm also guessing
+that the modified security_prepare_creds() hook implementations would
+also be more likely to encounter future maintenance issues as
+overriding credentials in the kernel seems only to be increasing, and
+each future caller would risk using the modified hook wrong by passing
+the wrong context and triggering the wrong behavior in the LSM.
 
-Also, how was this found, and what is the impact from not fixing it?
-Was it causing horrible problems in production, or was it just something
-that was found by inspection that's not causing any real problems in
-practice?
+-- 
+paul-moore.com

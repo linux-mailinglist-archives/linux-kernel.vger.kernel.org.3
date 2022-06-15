@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592A654C911
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D95F54C91F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349151AbiFOMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S1344604AbiFOMuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349267AbiFOMt6 (ORCPT
+        with ESMTP id S1349298AbiFOMuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:49:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E84E43CFE0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655297371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QSJfjgdN0vQG1u3bjjSqAwaUNHGoByzADLhrcH/GT+4=;
-        b=ZfdTr6OhziHqzYQ7mzYIFgSzVyo1V8PB6agI7qEunGV8LMtslInj26B3h6p7q6OYTP6pn6
-        Q1sQzKK389/lyBSY9KuxPGc1rDI7LnbFH92mvJeeQmdbYpA3AabWdzLszRi6b3JTitCJBH
-        0sfi3cx98inFjZijWOb1IG5GRBWpEfw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-397-Tb8qwV40NBWMMlUqXNkgow-1; Wed, 15 Jun 2022 08:49:28 -0400
-X-MC-Unique: Tb8qwV40NBWMMlUqXNkgow-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 15 Jun 2022 08:50:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737533ED08;
+        Wed, 15 Jun 2022 05:49:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 339C1100EB07;
-        Wed, 15 Jun 2022 12:49:28 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.203])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 78E35401E68;
-        Wed, 15 Jun 2022 12:49:26 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC v1 5/5] KVM: VMX: Support TSC scaling with enlightened VMCS
-Date:   Wed, 15 Jun 2022 14:49:15 +0200
-Message-Id: <20220615124915.3068295-6-vkuznets@redhat.com>
-In-Reply-To: <20220615124915.3068295-1-vkuznets@redhat.com>
-References: <20220615124915.3068295-1-vkuznets@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADA73B81CD1;
+        Wed, 15 Jun 2022 12:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6ECC34115;
+        Wed, 15 Jun 2022 12:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655297371;
+        bh=n/hkxLWRuo5jyYf4FAUgEaA1BVrJd2Czge4XtJelj/E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qj6YQSNKGJZ6a+adgoRSUFb4mC+naZNA9LBgxV4Y8CW9/nX6yNFtgtFL/pf3nkRN5
+         IJr9eyM2Cj4fqRRYl/rtf49sZiaVQCy0+wckzRIhLLnqt3EIDAyn668+1Cv3MW/UGr
+         28EchJqn9RIWxCmGt0zEMMk6XqWD8r8lQieBYh7/SImQvBNm5NnnwrD+1tNpnXfeaI
+         /o5ztXFa3TchU04uYEYKmHNilQja5DYYdz4KEPux81WCVHfJnBl+mC1ClqzVwhjZY4
+         ZM6f5e4w+QLwnLxM+/pUcwmkWuty57b6S6vFbavgoFRts5stS+2HZb3z72i/ipkozm
+         BaHVm90paq9ow==
+Date:   Wed, 15 Jun 2022 13:49:26 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     Daire.McNamara@microchip.com, Lewis.Hanly@microchip.com,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com
+Subject: Re: [PATCH] spi: microchip-core: fix passing zero to PTR_ERR warning
+Message-ID: <YqnVVizga14qNxkt@sirena.org.uk>
+References: <20220615113021.2493586-1-conor.dooley@microchip.com>
+ <YqnFLCbvrTxNbG1+@sirena.org.uk>
+ <7eda95bd-c7f5-767a-fe88-9f7109467cd8@microchip.com>
+ <YqnSlIcAadwxt1Q5@sirena.org.uk>
+ <630d60bc-1322-21a9-e4d1-3eb5af40f8a4@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9H7xqTDlMSNY1TLZ"
+Content-Disposition: inline
+In-Reply-To: <630d60bc-1322-21a9-e4d1-3eb5af40f8a4@microchip.com>
+X-Cookie: byob, v:
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,50 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enlightened VMCS v1 now includes the required field for TSC scaling
-feature so SECONDARY_EXEC_TSC_SCALING can remain unfiltered.
 
-While on it, update the comment why VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL/
-VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL are keept filtered out.
+--9H7xqTDlMSNY1TLZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/vmx/evmcs.h | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+On Wed, Jun 15, 2022 at 12:42:27PM +0000, Conor.Dooley@microchip.com wrote:
+> On 15/06/2022 13:37, Mark Brown wrote:
 
-diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-index f886a8ff0342..ffdf8955c62c 100644
---- a/arch/x86/kvm/vmx/evmcs.h
-+++ b/arch/x86/kvm/vmx/evmcs.h
-@@ -37,16 +37,14 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-  *	EPTP_LIST_ADDRESS               = 0x00002024,
-  *	VMREAD_BITMAP                   = 0x00002026,
-  *	VMWRITE_BITMAP                  = 0x00002028,
-- *
-- *	TSC_MULTIPLIER                  = 0x00002032,
-  *	PLE_GAP                         = 0x00004020,
-  *	PLE_WINDOW                      = 0x00004022,
-  *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
-- *      GUEST_IA32_PERF_GLOBAL_CTRL     = 0x00002808,
-- *      HOST_IA32_PERF_GLOBAL_CTRL      = 0x00002c04,
-  *
-- * Currently unsupported in KVM:
-- *	GUEST_IA32_RTIT_CTL		= 0x00002814,
-+ *	While GUEST_IA32_PERF_GLOBAL_CTRL and HOST_IA32_PERF_GLOBAL_CTRL
-+ *	are present in eVMCSv1, Windows 11 still has issues booting when
-+ *	VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL/VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL
-+ *	are exposed to it, keep them filtered out.
-  */
- #define EVMCS1_UNSUPPORTED_PINCTRL (PIN_BASED_POSTED_INTR | \
- 				    PIN_BASED_VMX_PREEMPTION_TIMER)
-@@ -58,7 +56,6 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
- 	 SECONDARY_EXEC_ENABLE_PML |					\
- 	 SECONDARY_EXEC_ENABLE_VMFUNC |					\
- 	 SECONDARY_EXEC_SHADOW_VMCS |					\
--	 SECONDARY_EXEC_TSC_SCALING |					\
- 	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
- #define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
- 	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
--- 
-2.35.3
+> >> But if spi->clk is NULL, this will return 0 from the probe
+> >> rather than returning an error?
+> >> If that's not what you meant, lmk
 
+> > Oh, hang on - what error conditions can clk_get() return 0 in?  The
+> > documentation doesn't mention any...
+
+> If !CONFIG_HAVE_CLK, (without which it won't boot on the coreplex)
+> but I don't think I can be sure that CONFIG_HAVE_CLK will /always/
+> be enabled for other uses of the FPGA.
+
+That's not an error, that's returning NULL as a dummy clock.  The
+expectation is that the driver will proceed as though it has a clock.
+
+--9H7xqTDlMSNY1TLZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKp1VUACgkQJNaLcl1U
+h9D1lQf/TmAxegjzbw14zJim5lch4dpip3+EARf1XdRuoGvxVWeIfrUb08R9z9ke
+k3jbrUT+FRSLKb6KedhVXfPVJJXJOo08oA4w2gxw0au6vNqcGD4rI27yWv81azM5
+fB7HKV6r3kDwhQcK6yYkao7NltNw6XJKEBlcnnVifo2rekh+guvyFifPX/lP7OWm
+jbMZXJG64MG1rzGuHAwoio0skpGjhXwov5D8yNEMLRjXj/JJd/9CV055P6LYYUsT
+I/9006E56Rr8XrBD4uJ6W0QokbfP9bAtmHhfcA9R2h3k33+1ERs3QkcmIlOUw3pR
+K1QGBayKlESUSDDKmUVS0sJS7MS6xA==
+=euyr
+-----END PGP SIGNATURE-----
+
+--9H7xqTDlMSNY1TLZ--

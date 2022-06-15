@@ -2,98 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CED54D053
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBF154CF12
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357624AbiFORrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S1345426AbiFOQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349899AbiFORrs (ORCPT
+        with ESMTP id S235833AbiFOQyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:47:48 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C442F1147F;
-        Wed, 15 Jun 2022 10:47:47 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id m24so16323263wrb.10;
-        Wed, 15 Jun 2022 10:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UEplRBRe8Not6/N/87KHMRBTXuTr13tJIbM6hc9f8sQ=;
-        b=Px0sxprY8EaTIf37otn4bHLOMuOiouEYqETuqdXAoedA3jFIrkkKeHZvQZcfi6IDQd
-         +gPo6UtC+5oE4EUy+jA8XQ7k3lqlL722vCj/oANcJfB4eG3pUwsqRPv0uGe/HecIqW06
-         cSNnPJbGMJNoz1TcKBBRCF+5+Gy+Cravzkx4VbGZqli8BcwNbigqDx4TMiTrEehL3wXu
-         /D+jaAoPIZIEEgXk+EJBQxt2H4K1b7kI15klNggExGmPBJhVD7tPrtpUq9FphpwM1H+2
-         rWMXGX3cud6Dblde43mQIlZpBjDyX+LwEaufSxZUdSU0FK7uOYBP2vVcdz9tV4MoyFOx
-         aIxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UEplRBRe8Not6/N/87KHMRBTXuTr13tJIbM6hc9f8sQ=;
-        b=XmkHLc8sQbZFr9+YfpUvC5ZH2Hs730EVQDCJXfaC4BlUx8++x44X979WJ4s0TAJEcf
-         czsDR6qCe9wnUxjxiDdhLWrNGMjlqo679z46Oa7fM9UHwFa3gTww8JQVgm1G6Itwr+M/
-         mdTBlLpMXq8xiCb5BwGgki6EZD1qqzSJhM7JK8V3HrWmZE9H2YLM2bvW/sORDZoc0oig
-         lzq1RJLQB3x87/qwijIk/z2JDOltq8t/LJNm2v6yj9rhMpd4wy4efYQAmjhUJgZ20oxo
-         pQctcnY0ZKJHdJHqVxWy6nI7KqBOCPVe7ddVTtomtBiFWsRmRgbnQ/aP+IO1APnnsscC
-         zddA==
-X-Gm-Message-State: AJIora9mYJz6gINCGfT/pH7z/3rHTopUqOAVwAyowjn4IwH/4UHSDIr8
-        V/LicxDMldimP+JMyy4OCeFowHQaquU=
-X-Google-Smtp-Source: AGRyM1sdCdaiNcC0qqAatgAXTIR/dGxEV0s1FBUtTraV7r7iycMccsJTIVFL8TKmFtDbKNmYjUCrwg==
-X-Received: by 2002:a05:6000:1548:b0:217:6480:e65 with SMTP id 8-20020a056000154800b0021764800e65mr934830wry.381.1655315266192;
-        Wed, 15 Jun 2022 10:47:46 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id l125-20020a1c2583000000b0039c4d9737f3sm3158157wml.34.2022.06.15.10.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:47:45 -0700 (PDT)
-Message-ID: <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
-X-Google-Original-Message-ID: <YqoOmlGklknRj8Yf@Ansuel-xps.>
-Date:   Wed, 15 Jun 2022 18:53:46 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
-References: <20220615163408.30154-1-ansuelsmth@gmail.com>
- <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
+        Wed, 15 Jun 2022 12:54:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0907545511
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:54:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B3E9CE21D2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2972C34115;
+        Wed, 15 Jun 2022 16:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655312079;
+        bh=qigodSyMpeM2qgbpnbxrP+CBwYu821HecBtHR6HbIjg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hRPkT2S4uVm3NNJNzHPYdKgpPnfMac/5SqGkLr5WDeitqfmBKfdNlPWhyykH9ukok
+         hQAp+46CROGXu+ze7gVks7gLWuMbLYyfenqlPpwQ0lWxylNy6qnwkpZ5pp6gV99QBf
+         MxqTq7mQAleB1279I6VbqkgfQxzWj0dMm1bA2oGFUP/MWpY5PWfyFB893xQlVjNTv2
+         CQs89IRahCcpSn2AtOy6XPJ65GewLluvThhzSIgWWonejWMIGOqYm9kvncLvpUfOVa
+         cTksbBN8X388BAQCHWzXdJu3vqUZxyEQQPxG0qFBIE7QVdiXa6JaRgeFSmKgqbAk9M
+         xUXzNFh2zpFUQ==
+Date:   Wed, 15 Jun 2022 09:54:37 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix iostat related lock protection
+Message-ID: <YqoOzdxeG78RniEK@google.com>
+References: <20220610183240.2269085-1-daeho43@gmail.com>
+ <1815f3c2-0802-5b3f-7e98-9f89c5b9e07d@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1815f3c2-0802-5b3f-7e98-9f89c5b9e07d@kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:43:10AM -0700, Krzysztof Kozlowski wrote:
-> On 15/06/2022 09:34, Christian 'Ansuel' Marangi wrote:
-> > Add pcm reset define for ipq806x lcc.
+On 06/15, Chao Yu wrote:
+> On 2022/6/11 2:32, Daeho Jeong wrote:
+> > From: Daeho Jeong <daehojeong@google.com>
 > > 
-> > Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-> To prevent any confusion about identities (we have strict rules about
-> these), I need to ask - who uses this email address?
+> > Made iostat related locks safe to be called from irq context again.
+> > 
 > 
-> https://lore.kernel.org/all/?q=ansuelsmth%40gmail.com
+> Will be better to add a 'Fixes' line?
+
+Added some tags. Thanks,
+
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=f8ed39ad779fbc5d37d08e83643384fc06e4bae4
+
+
 > 
-> Best regards,
-> Krzysztof
-
-Same person. Started using extended name, wanted to do this change from
-a long time but all the patch were already pushed so I couldn't change
-it since they were already proposed and on the various mailing list.
-
--- 
-	Ansuel
+> Thanks,
+> 
+> > Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> > ---
+> >   fs/f2fs/iostat.c | 31 ++++++++++++++++++-------------
+> >   1 file changed, 18 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+> > index be599f31d3c4..d84c5f6cc09d 100644
+> > --- a/fs/f2fs/iostat.c
+> > +++ b/fs/f2fs/iostat.c
+> > @@ -91,8 +91,9 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
+> >   	unsigned int cnt;
+> >   	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
+> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
+> > +	unsigned long flags;
+> > -	spin_lock_bh(&sbi->iostat_lat_lock);
+> > +	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
+> >   	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
+> >   		for (io = 0; io < NR_PAGE_TYPE; io++) {
+> >   			cnt = io_lat->bio_cnt[idx][io];
+> > @@ -106,7 +107,7 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
+> >   			io_lat->bio_cnt[idx][io] = 0;
+> >   		}
+> >   	}
+> > -	spin_unlock_bh(&sbi->iostat_lat_lock);
+> > +	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
+> >   	trace_f2fs_iostat_latency(sbi, iostat_lat);
+> >   }
+> > @@ -115,14 +116,15 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
+> >   {
+> >   	unsigned long long iostat_diff[NR_IO_TYPE];
+> >   	int i;
+> > +	unsigned long flags;
+> >   	if (time_is_after_jiffies(sbi->iostat_next_period))
+> >   		return;
+> >   	/* Need double check under the lock */
+> > -	spin_lock_bh(&sbi->iostat_lock);
+> > +	spin_lock_irqsave(&sbi->iostat_lock, flags);
+> >   	if (time_is_after_jiffies(sbi->iostat_next_period)) {
+> > -		spin_unlock_bh(&sbi->iostat_lock);
+> > +		spin_unlock_irqrestore(&sbi->iostat_lock, flags);
+> >   		return;
+> >   	}
+> >   	sbi->iostat_next_period = jiffies +
+> > @@ -133,7 +135,7 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
+> >   				sbi->prev_rw_iostat[i];
+> >   		sbi->prev_rw_iostat[i] = sbi->rw_iostat[i];
+> >   	}
+> > -	spin_unlock_bh(&sbi->iostat_lock);
+> > +	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
+> >   	trace_f2fs_iostat(sbi, iostat_diff);
+> > @@ -145,25 +147,27 @@ void f2fs_reset_iostat(struct f2fs_sb_info *sbi)
+> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
+> >   	int i;
+> > -	spin_lock_bh(&sbi->iostat_lock);
+> > +	spin_lock_irq(&sbi->iostat_lock);
+> >   	for (i = 0; i < NR_IO_TYPE; i++) {
+> >   		sbi->rw_iostat[i] = 0;
+> >   		sbi->prev_rw_iostat[i] = 0;
+> >   	}
+> > -	spin_unlock_bh(&sbi->iostat_lock);
+> > +	spin_unlock_irq(&sbi->iostat_lock);
+> > -	spin_lock_bh(&sbi->iostat_lat_lock);
+> > +	spin_lock_irq(&sbi->iostat_lat_lock);
+> >   	memset(io_lat, 0, sizeof(struct iostat_lat_info));
+> > -	spin_unlock_bh(&sbi->iostat_lat_lock);
+> > +	spin_unlock_irq(&sbi->iostat_lat_lock);
+> >   }
+> >   void f2fs_update_iostat(struct f2fs_sb_info *sbi,
+> >   			enum iostat_type type, unsigned long long io_bytes)
+> >   {
+> > +	unsigned long flags;
+> > +
+> >   	if (!sbi->iostat_enable)
+> >   		return;
+> > -	spin_lock_bh(&sbi->iostat_lock);
+> > +	spin_lock_irqsave(&sbi->iostat_lock, flags);
+> >   	sbi->rw_iostat[type] += io_bytes;
+> >   	if (type == APP_BUFFERED_IO || type == APP_DIRECT_IO)
+> > @@ -172,7 +176,7 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi,
+> >   	if (type == APP_BUFFERED_READ_IO || type == APP_DIRECT_READ_IO)
+> >   		sbi->rw_iostat[APP_READ_IO] += io_bytes;
+> > -	spin_unlock_bh(&sbi->iostat_lock);
+> > +	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
+> >   	f2fs_record_iostat(sbi);
+> >   }
+> > @@ -185,6 +189,7 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
+> >   	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
+> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
+> >   	int idx;
+> > +	unsigned long flags;
+> >   	if (!sbi->iostat_enable)
+> >   		return;
+> > @@ -202,12 +207,12 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
+> >   			idx = WRITE_ASYNC_IO;
+> >   	}
+> > -	spin_lock_bh(&sbi->iostat_lat_lock);
+> > +	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
+> >   	io_lat->sum_lat[idx][iotype] += ts_diff;
+> >   	io_lat->bio_cnt[idx][iotype]++;
+> >   	if (ts_diff > io_lat->peak_lat[idx][iotype])
+> >   		io_lat->peak_lat[idx][iotype] = ts_diff;
+> > -	spin_unlock_bh(&sbi->iostat_lat_lock);
+> > +	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
+> >   }
+> >   void iostat_update_and_unbind_ctx(struct bio *bio, int rw)
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

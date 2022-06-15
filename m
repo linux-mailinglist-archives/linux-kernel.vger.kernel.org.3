@@ -2,60 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5118D54C098
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 06:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602F154C09E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 06:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239354AbiFOEU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 00:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S240450AbiFOEXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 00:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbiFOEUx (ORCPT
+        with ESMTP id S239574AbiFOEXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 00:20:53 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2374A918;
-        Tue, 14 Jun 2022 21:20:50 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o1KWJ-007C2q-Im; Wed, 15 Jun 2022 14:20:45 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 15 Jun 2022 12:20:43 +0800
-Date:   Wed, 15 Jun 2022 12:20:43 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Simo Sorce <simo@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] certs: Add FIPS self-test for signature verification
-Message-ID: <YqleGzRD4ax4msjL@gondor.apana.org.au>
-References: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
+        Wed, 15 Jun 2022 00:23:36 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579184B1DD
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 21:23:34 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 25F4NUpF014744
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 00:23:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1655267012; bh=GaCulJnfo5iXBqtblbk9G1Lk4SsnNzEvugTOCcxnIdQ=;
+        h=Date:From:To:Subject;
+        b=V9oc/aS9y0ZlaejNmdFZsNaHMKr8C8guymChtYqW2TFlpOdAaK8ZVmIf9F0zDmCU+
+         +FGKClezPkGQEOLMujVjP0uy3ImEs+mO+aPwvScKmx9U+Yw552ob8ITHkR4BPmXQUx
+         XsSrpg5p+Hvo9DBlPgFn0XJDL9x8I0j1kFGXzDtEnlbKsraZG6IMH61zY3hZ263FZs
+         Bq+QyO5XR9DrKFLqhgwXl5euioQV0+QiSYZRs61irHyh4p0YOAdz2eng4D5W/3adsM
+         tz4PIiWFwdUgUvkMzCPZqLFGpGvJeMBS42tgnZwVRkPrRLdz0i9Adppy/MZHZosjaW
+         fyQvaQ4GfVXdg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id A847915C42F8; Wed, 15 Jun 2022 00:23:30 -0400 (EDT)
+Date:   Wed, 15 Jun 2022 00:23:30 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     linux-kernel@vger.kernel.org
+Subject: Maintainer's / Kernel Summit 2022 CFP
+Message-ID: <YqlewgIVl+b1wKZL@mit.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:56:54PM +0100, David Howells wrote:
-> 
-> Hi Herbert,
-> 
-> If you could look over this pair of patches?  The second patch adds a simple
-> selftest to allow the signature verification code so that it can be FIPS
-> compliant.  The first moves load_certificate_list() to the asymmetric key code
-> to make this easier and renames it.
+This year, the Maintainer's Summit will be held in Dublin on September
+15th, 2022, just after the Linux Plumber's Conference (September
+12-14).
 
-Hi David:
+As in previous years, the Maintainers Summit is invite-only, where the
+primary focus will be process issues around Linux Kernel Development.
+It will be limited to 30 invitees and a handful of sponsored
+attendees.
 
-It looks OK to me.
+Linus will be generating a core list of people to be invited to the
+Maintainers Summit.  The top ten people from that list will receive
+invites, and then program committee will use the rest of Linus's list
+as a starting point of people to be considered.  People who suggest
+topics that should be discussed at the Maintainers Summit will also
+be added to the list for consideration.  To make topic suggestions for
+the Maintainers Summit, please send e-mail to the
+ksummit-discuss@lists.linuxfoundation.org list with a subject prefix
+of [MAINTAINERS SUMMIT].
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+The Kernel Summit is organized as a track which is run in parallel
+with the other tracks at the Linux Plumbers Conference (LPC), and is
+open to all registered attendees of LPC.  The goal of the Kernel
+Summit track will be to provide a forum to discuss specific technical
+issues that would be easier to resolve in person than over e-mail.
+The program committee will also consider "information sharing" topics
+if they are clearly of interest to the wider development community
+(i.e., advanced training in topics that would be useful to kernel
+developers).
+
+To suggest a topic for the Kernel Summit, please do two things. by
+June 19th, 2022.  First, please tag your e-mail with [TECH TOPIC].  As
+before, please use a separate e-mail for each topic, and send the
+topic suggestions to the ksummit-discuss list.
+
+Secondly, please create a topic at the Linux Plumbers Conference
+proposal submission site and target it to the Kernel Summit track:
+
+	https://lpc.events/event/16/abstracts/
+
+Please do both steps.  I'll try to notice if someone forgets one or
+the other, but your chances of making sure your proposal gets the
+necessary attention and consideration are maximized by submitting both
+to the mailing list and the web site.
+
+If you were not subscribed on to the kernel-discuss mailing list from
+last year (or if you had removed yourself after the kernel summit),
+you can subscribe to the discuss list using mailman:
+
+   https://lists.linuxfoundation.org/mailman/listinfo/ksummit-discuss
+
+The program committee this year is composed of the following people:
+
+Greg KH
+Jens Axboe
+Ted Ts'o
+Arnd Bergmann
+Jon Corbet
+

@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9091954CD91
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8994054CD95
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242240AbiFOPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S1345080AbiFOPyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiFOPyL (ORCPT
+        with ESMTP id S1344198AbiFOPyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:54:11 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADE81D302;
-        Wed, 15 Jun 2022 08:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655308449; x=1686844449;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=hQbr63r6g12pXkWSUm16jYJVYXPNC3k9vGnZ4/4C+so=;
-  b=A0hZAtVW8y7mMMM9FwmWYhm2/swaB3W3VndrkMIVi1Z+eZNJy0fXfIbb
-   ORGxwbmbU36M6UcKqTPil/mOiO+D/ioUv95ZWvpf3QyGcrpsJxNI8SN21
-   Fxsl6u1t2JJSblEKyN4apqlptxKTyl0w+Z07cjPtSHq1gYyYc2ujnfPPP
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jun 2022 08:54:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:54:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 15 Jun 2022 08:54:07 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 15 Jun 2022 08:54:06 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7] drm/msm/dp: force link training for display resolution change
-Date:   Wed, 15 Jun 2022 08:53:57 -0700
-Message-ID: <1655308437-1924-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 15 Jun 2022 11:54:37 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482F22FFF0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655308476; x=1686844476;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qDm82Al5RdY5yk2Sk8uLzqG18X3zOv/St63Fun4bYIA=;
+  b=VP6yeWoSsGTucRRysjSIUBPmzjpDO3solq2OY7A0YQvPk4S8OpmRw/wb
+   TN/ippkcS8W6KafxFfOqLM/9LkoISKW0EmC9mukZrXoL1M3Btor31l4Fw
+   /OvBfajJ+znxlvLhVswrEM5Rv3OgHNtfxdkgeWE71OMWskr/gueFBRsQy
+   ES1mtx3qIxKnSEImb7PajtUWieMwzNwE34Zrkbrd66zr+Lmt3kDxqsn2t
+   a4YaNrR6fKE19wlvVzxkRnTjDReka0CHuktklPZA42urpTkPnUsiZbVqE
+   QKaJkG4eqZZTVFb6Dve+cQSZdd7SacVrajN7rmNWwmO6IlydudJMYaGhf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="340665774"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="340665774"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:54:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="652727965"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2022 08:54:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 67A85109; Wed, 15 Jun 2022 18:54:36 +0300 (EEST)
+Date:   Wed, 15 Jun 2022 18:54:36 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [PATCHv3 4/8] x86/mm: Handle LAM on context switch
+Message-ID: <20220615155436.5fvosccsqbpscli4@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-5-kirill.shutemov@linux.intel.com>
+ <d1a5615633f5e0376d7a75c1d8d12bbd89a7a63e.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1a5615633f5e0376d7a75c1d8d12bbd89a7a63e.camel@intel.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,174 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Display resolution change is implemented through drm modeset. Older
-modeset (resolution) has to be disabled first before newer modeset
-(resolution) can be enabled. Display disable will turn off both
-pixel clock and main link clock so that main link have to be
-re-trained during display enable to have new video stream flow
-again. At current implementation, display enable function manually
-kicks up irq_hpd_handle which will read panel link status and start
-link training if link status is not in sync state.
+On Fri, Jun 10, 2022 at 11:55:02PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2022-06-10 at 17:35 +0300, Kirill A. Shutemov wrote:
+> > @@ -687,6 +716,7 @@ void initialize_tlbstate_and_flush(void)
+> >         struct mm_struct *mm = this_cpu_read(cpu_tlbstate.loaded_mm);
+> >         u64 tlb_gen = atomic64_read(&init_mm.context.tlb_gen);
+> >         unsigned long cr3 = __read_cr3();
+> > +       u64 lam = cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
+> >  
+> >         /* Assert that CR3 already references the right mm. */
+> >         WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
+> > @@ -700,7 +730,7 @@ void initialize_tlbstate_and_flush(void)
+> >                 !(cr4_read_shadow() & X86_CR4_PCIDE));
+> >  
+> >         /* Force ASID 0 and force a TLB flush. */
+> > -       write_cr3(build_cr3(mm->pgd, 0));
+> > +       write_cr3(build_cr3(mm->pgd, 0, lam));
+> >  
+> 
+> Can you explain why to keep the lam bits that were in CR3 here? It
+> seems to be worried some CR3 bits got changed and need to be set to a
+> known state. Why not take them from the MM?
+> 
+> Also, it warns if the cr3 pfn doesn't match the mm pgd, should it warn
+> if cr3 lam bits don't match the MM's copy?
 
-However, there is rare case that a particular panel links status keep
-staying in sync for some period of time after main link had been shut
-down previously at display disabled. In this case, main link retraining
-will not be executed by irq_hdp_handle(). Hence video stream of newer
-display resolution will fail to be transmitted to panel due to main
-link is not in sync between host and panel.
+You are right, taking LAM mode from init_mm is more correct. And we need
+to update tlbstate with the new LAM mode. 
 
-This patch will bypass irq_hpd_handle() in favor of directly call
-dp_ctrl_on_stream() to always perform link training in regardless of
-main link status. So that no unexpected exception resolution change
-failure cases will happen. Also this implementation are more efficient
-than manual kicking off irq_hpd_handle function.
+I think both CR3 and init_mm should LAM disabled here as we are bringing
+CPU up. I'll add WARN_ON().
 
-Changes in v2:
--- set force_link_train flag on DP only (is_edp == false)
-
-Changes in v3:
--- revise commit  text
--- add Fixes tag
-
-Changes in v4:
--- revise commit  text
-
-Changes in v5:
--- fix spelling at commit text
-
-Changes in v6:
--- split dp_ctrl_on_stream() for phy test case
--- revise commit text for modeset
-
-Changes in v7:
--- drop 0 assignment at local variable (ret = 0)
-
-Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 31 +++++++++++++++++++++++--------
- drivers/gpu/drm/msm/dp/dp_ctrl.h    |  3 ++-
- drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
- 3 files changed, 31 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index af7a80c..01028b5 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1551,7 +1551,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
- 
- 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
- 	if (!ret)
--		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
-+		ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
- 	else
- 		DRM_ERROR("failed to enable DP link controller\n");
- 
-@@ -1807,7 +1807,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
- 	return dp_ctrl_setup_main_link(ctrl, &training_step);
- }
- 
--int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
-+int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-+{
-+	int ret;
-+	struct dp_ctrl_private *ctrl;
-+
-+	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-+
-+	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-+
-+	ret = dp_ctrl_enable_stream_clocks(ctrl);
-+	if (ret) {
-+		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	dp_ctrl_send_phy_test_pattern(ctrl);
-+
-+	return 0;
-+}
-+
-+int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
- {
- 	int ret = 0;
- 	bool mainlink_ready = false;
-@@ -1843,12 +1863,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
- 		goto end;
- 	}
- 
--	if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
--		dp_ctrl_send_phy_test_pattern(ctrl);
--		return 0;
--	}
--
--	if (!dp_ctrl_channel_eq_ok(ctrl))
-+	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
- 		dp_ctrl_link_retrain(ctrl);
- 
- 	/* stop txing train pattern to end link training */
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-index 0745fde..9a39b00 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-@@ -21,7 +21,8 @@ struct dp_ctrl {
- };
- 
- int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
--int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
-+int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
-+int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index c388323..b6d25ab 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
- 		return 0;
- 	}
- 
--	rc = dp_ctrl_on_stream(dp->ctrl);
-+	rc = dp_ctrl_on_stream(dp->ctrl, data);
- 	if (!rc)
- 		dp_display->power_on = true;
- 
-@@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 	int rc = 0;
- 	struct dp_display_private *dp_display;
- 	u32 state;
-+	bool force_link_train = false;
- 
- 	dp_display = container_of(dp, struct dp_display_private, dp_display);
- 	if (!dp_display->dp_mode.drm_mode.clock) {
-@@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 
- 	state =  dp_display->hpd_state;
- 
--	if (state == ST_DISPLAY_OFF)
-+	if (state == ST_DISPLAY_OFF) {
- 		dp_display_host_phy_init(dp_display);
-+		force_link_train = true;
-+	}
- 
--	dp_display_enable(dp_display, 0);
-+	dp_display_enable(dp_display, force_link_train);
- 
- 	rc = dp_display_post_enable(dp);
- 	if (rc) {
-@@ -1700,10 +1703,6 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 		dp_display_unprepare(dp);
- 	}
- 
--	/* manual kick off plug event to train link */
--	if (state == ST_DISPLAY_OFF)
--		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
--
- 	/* completed connection */
- 	dp_display->hpd_state = ST_CONNECTED;
- 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+ Kirill A. Shutemov

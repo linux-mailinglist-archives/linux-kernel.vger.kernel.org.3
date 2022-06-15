@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1DE54C4ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4EB54C4EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347167AbiFOJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S1347342AbiFOJoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346900AbiFOJn1 (ORCPT
+        with ESMTP id S1347328AbiFOJoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:43:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3113A4348C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:43:25 -0700 (PDT)
-Received: from [10.20.42.13] (unknown [10.20.42.13])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj96zqaliPYFDAA--.6230S3;
-        Wed, 15 Jun 2022 17:43:16 +0800 (CST)
-Subject: Re: [PATCH V12 01/10] APCI: irq: Add support for multiple GSI domains
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1655273250-23495-1-git-send-email-lvjianmin@loongson.cn>
- <1655273250-23495-2-git-send-email-lvjianmin@loongson.cn>
- <87k09ipfe2.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <5ca8542e-060e-bdd5-ee5b-f5a9ca6bbb3a@loongson.cn>
-Date:   Wed, 15 Jun 2022 17:43:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 15 Jun 2022 05:44:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B684550B;
+        Wed, 15 Jun 2022 02:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655286252; x=1686822252;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rTe92a/bs9IkgUgoRhKlJ8xhgRui05xFuusVGu40pq0=;
+  b=ERoQCGthYpgtH3sptZOnXVu934Bd7tAuNAU1OobU42PvgFAAykp8UZgX
+   4WFLBgpEB+KWPvHEK/waVdpX9QNFn3VgvquGKelkLwWI8Fo0R2z81CCsw
+   +UvjBDFs8v8f6iVoxH4+IVaUdCTWBn9N2BgdxAuadV8oURjTQEELnCVFg
+   Lu0x4wALQMmqmIbf09CjSOSVMnCZ1qnVC+gfwIzrpM1y8t7eppYF0p1LP
+   e1xfsi/UVSNS3alL7BUfPnlsF9950ns7CulgUF1qXkHCrRI4lJO0aTvoX
+   UXeEhbz388Z0+WiS2lmES6iBERy48W/WqCC2jIVMUBZwORV8Ds8Nl0VLc
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="178035279"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 02:44:12 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Jun 2022 02:44:13 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 15 Jun 2022 02:44:13 -0700
+Date:   Wed, 15 Jun 2022 15:14:11 +0530
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <lxu@maxlinear.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net-next 2/5] net: lan743x: Add support to Secure-ON WOL
+Message-ID: <20220615094411.237uekup24skoeu4@microsemi.com>
+References: <20220614103424.58971-1-Raju.Lakkaraju@microchip.com>
+ <20220614103424.58971-3-Raju.Lakkaraju@microchip.com>
+ <Yqj2qegsJ7UTEr0K@lunn.ch>
 MIME-Version: 1.0
-In-Reply-To: <87k09ipfe2.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxj96zqaliPYFDAA--.6230S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZry8XFyDJF1kCw1xWF47XFb_yoW5AF15pF
-        WfG3Wa9r4jqr1xWa13K34Y9Fyakas5t3y8Xr4fJ3srAr1DuF9akF10gFyFkFyDZFy3Gr42
-        vF1UtF4kuF1qyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvEb7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-        AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-        6F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxV
-        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28I
-        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_XrWUJr1UMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
-        cVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWI
-        evJa73UjIFyTuYvjxUqEoXUUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Yqj2qegsJ7UTEr0K@lunn.ch>
+User-Agent: NeoMutt/20180716-255-141487
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,97 +66,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
 
+Thank you for review comments.
 
-On 2022/6/15 下午3:14, Marc Zyngier wrote:
-> On Wed, 15 Jun 2022 07:07:21 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> From: Marc Zyngier <maz@kernel.org>
->>
->> In an unfortunate departure from the ACPI spec, the LoongArch
->> architecture split its GSI space across multiple interrupt
->> controllers.
->>
->> In order to be able to reuse sthe core code and prevent
->> architectures from reinventing an already square wheel, offer
->> the arch code the ability to register a dispatcher function
->> that will return the domain fwnode for a given GSI.
->>
->> The ARM GIC drivers are updated to support this (with a single
->> domain, as intended).
->>
->> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+The 06/14/2022 22:59, Andrew Lunn wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> I don't think this tag is appropriate here.
+> On Tue, Jun 14, 2022 at 04:04:21PM +0530, Raju Lakkaraju wrote:
+> > Add support to Magic Packet Detection with Secure-ON for PCI11010/PCI11414 chips
+> >
+> > Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+> > ---
+> >  .../net/ethernet/microchip/lan743x_ethtool.c  | 14 +++++++++
+> >  drivers/net/ethernet/microchip/lan743x_main.c | 29 +++++++++++++++++++
+> >  drivers/net/ethernet/microchip/lan743x_main.h | 10 +++++++
+> >  3 files changed, 53 insertions(+)
+> >
+> > diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.c b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+> > index 48b19dcd4351..b591a7aea937 100644
+> > --- a/drivers/net/ethernet/microchip/lan743x_ethtool.c
+> > +++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+> > @@ -1149,7 +1149,13 @@ static void lan743x_ethtool_get_wol(struct net_device *netdev,
+> >       wol->supported |= WAKE_BCAST | WAKE_UCAST | WAKE_MCAST |
+> >               WAKE_MAGIC | WAKE_PHY | WAKE_ARP;
+> >
+> > +     if (adapter->is_pci11x1x)
+> > +             wol->supported |= WAKE_MAGICSECURE;
+> > +
+> >       wol->wolopts |= adapter->wolopts;
+> > +     if (adapter->wolopts & WAKE_MAGICSECURE)
+> > +             memcpy(wol->sopass, adapter->sopass,
+> > +                    SOPASS_MAX * sizeof(wol->sopass[0]));
+> 
+> sizeof(wol->sopass) is simpler. That is what other drivers use.
 > 
 
-Ok, I'll drop it.
+Accepted. I'll change.
 
->> Signed-off-by: Marc Zyngier <maz@kernel.org>
->> Cc: Hanjun Guo <guohanjun@huawei.com>
->> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->> ---
->>   drivers/acpi/irq.c           | 40 +++++++++++++++++++++++-----------------
->>   drivers/irqchip/irq-gic-v3.c | 18 ++++++++++++------
->>   drivers/irqchip/irq-gic.c    | 18 ++++++++++++------
->>   include/linux/acpi.h         |  2 +-
->>   4 files changed, 48 insertions(+), 30 deletions(-)
->>
->> diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
->> index c68e694..b7460ab 100644
->> --- a/drivers/acpi/irq.c
->> +++ b/drivers/acpi/irq.c
->> @@ -12,7 +12,7 @@
->>   
->>   enum acpi_irq_model_id acpi_irq_model;
->>   
->> -static struct fwnode_handle *acpi_gsi_domain_id;
->> +static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
->>   
->>   /**
->>    * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
->> @@ -26,10 +26,7 @@
->>    */
->>   int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
->>   {
->> -	struct irq_domain *d = irq_find_matching_fwnode(acpi_gsi_domain_id,
->> -							DOMAIN_BUS_ANY);
->> -
->> -	*irq = irq_find_mapping(d, gsi);
->> +	*irq = acpi_register_gsi(NULL, gsi, -1, -1);
+> > +     if (wol->wolopts & WAKE_MAGICSECURE &&
+> > +         wol->wolopts & WAKE_MAGIC) {
+> > +             memcpy(adapter->sopass, wol->sopass,
+> > +                    SOPASS_MAX * sizeof(wol->sopass[0]));
+> > +             adapter->wolopts |= WAKE_MAGICSECURE;
+> > +     } else {
+> > +             memset(adapter->sopass, 0, sizeof(u8) * SOPASS_MAX);
+> > +     }
 > 
-> What is this?
+> Same here.
 > 
-> - This wasn't part of my initial patch, and randomly changing patches
->    without mentioning it isn't acceptable
-> 
-> - you *cannot* trigger a registration here, as this isn't what the API
->    advertises
-> 
-> - what makes you think that passing random values (NULL, -1... )to
->    acpi_register_gsi() is an acceptable thing to do?
-> 
-> The original patch had:
-> 
-> @@ -26,8 +26,10 @@ static struct fwnode_handle *acpi_gsi_domain_id;
->     */
->    int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
->    {
-> -	struct irq_domain *d = irq_find_matching_fwnode(acpi_gsi_domain_id,
-> -							DOMAIN_BUS_ANY);
-> +	struct irq_domain *d;
-> +
-> +	d = irq_find_matching_fwnode(acpi_get_gsi_domain_id(gsi),
-> +				     DOMAIN_BUS_ANY);
->      	*irq = irq_find_mapping(d, gsi);
->    	/*
-> 
-> and I don't think it needs anything else. If something breaks, let's
-> discuss it, but don't abuse the API nor the fact that I usually don't
-> review my own patches to sneak things in...
-> 
-> 	M.
-> 
+
+Accepted. I'll change.
+
+>      Andrew
+
+-- 
+
+Thanks,
+Raju
 

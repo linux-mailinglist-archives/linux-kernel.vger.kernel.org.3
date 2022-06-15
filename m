@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD9D54D28F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BE054D29D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346608AbiFOUaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S1345353AbiFOUdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346524AbiFOUaU (ORCPT
+        with ESMTP id S231149AbiFOUc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:30:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C60532EF;
-        Wed, 15 Jun 2022 13:30:18 -0700 (PDT)
+        Wed, 15 Jun 2022 16:32:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223DB7EF;
+        Wed, 15 Jun 2022 13:32:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96684B82178;
-        Wed, 15 Jun 2022 20:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C55C3411B;
-        Wed, 15 Jun 2022 20:30:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50A796174B;
+        Wed, 15 Jun 2022 20:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E81C3411A;
+        Wed, 15 Jun 2022 20:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655325016;
-        bh=AnXLp71TuqYK0g6z67fHoakYP3DmxNW4jxisvBDGrhY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=t/UqTHYSQXiQ3eZVd0rez2HL00OtT4f5LEJN6z0aag0h64JYXRj1s6oHM0B1BaYCU
-         isMQjs7OEvm8r5KXDsBen/8CsWNrl+PyHGkPyyhdHDinGnMcaoIywlnEjAReYKsLvu
-         N3LbF7J6n0DGQlt6zBEuMmRsWz1Snc/6rmWam1dp+SEm86seFWiZBVmeZX7N6WqZLG
-         A5ul0nfXV5zDqLz+Wbv5MrGcoxjpS6IP7X3iE7uz+ScZRAsdEKndwyX1iaZc3hhb2j
-         /AlhWuL5F+v8heMr7bFVEqT77u8GFVYbD18TGvvIldDzxESWzEC1uF4FhbJebQweu3
-         deDJ4QEhh06xQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D5B7F5C027A; Wed, 15 Jun 2022 13:30:15 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 13:30:15 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: Contextual conflict between kspp and rcu trees
-Message-ID: <20220615203015.GF1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+        s=k20201202; t=1655325175;
+        bh=xweyU4/oqSOwHkI/hoomOugSz3ECvQLAuoo5JQYmEfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TaEB3qqtKQ7sFL15nSzdXBJU4cC65s35LLseLFBizPWZY6R0fkh1UNU118TVUYK1o
+         +RgR2Kb7+JUTTRc6tXQLDV5Yr04FvNjjexnZN+hnW90VBWcBBSmrbQ/DXQNlArTmrO
+         88eeDrMzneYDF4mE5yZwMpYmHLHbGZJzvBkYY1WhFONh3L/S7j8pbx+i3oaleJ/16y
+         srDQGXS6Uj5dnKWP+vtWmZ2wEE+3fMfy6S0WYzEs60VGbb09bKpzasdEvB9av9Kcsp
+         1a9AufleimVC0Yf7ajnDauhN/ir1rOjEJDExZ/LCrCN22uG968pCcUBS8atRmknu0U
+         syD3CL+ZAGM4Q==
+Date:   Wed, 15 Jun 2022 22:32:48 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
+Message-ID: <YqpB8A2uBi+4epHM@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+ <20220422040803.2524940-4-quan@os.amperecomputing.com>
+ <Yn+9QBoPdH8fMm/m@shikoro>
+ <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ic1hM2GHeE5Hfcvc"
 Content-Disposition: inline
-In-Reply-To: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+In-Reply-To: <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,66 +83,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 12:55:53PM -0700, Nathan Chancellor wrote:
-> Hi Stephen et al.,
-> 
-> There is a contextual conflict between commit e1d337335207 ("cfi: Fix
-> __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
-> dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
-> the rcu tree, which is visible when building ARCH=arm64 defconfig +
-> CONFIG_LTO_CLANG_THIN=y + CONFIG_CFI_CLANG=y with clang:
-> 
->   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->                   rcu_irq_enter();
->                   ^
->   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
->   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declared here
->   void ct_irq_enter(void);
->        ^
->   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->                   rcu_irq_exit();
->                   ^
->   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
->   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declared here
->   void ct_irq_exit(void);
->        ^
->   2 errors generated.
-> 
-> 
-> Per the above RCU commit and commit 6c5218715286 ("context_tracking:
-> Take IRQ eqs entrypoints over RCU"), it appears that the following diff
-> is the proper fix up. Would you mind applying it to the merge of
-> whichever tree comes second if possible? I did build and boot test it
-> but it would not be a bad idea for Sami and Frederic to verify that it
-> is correct so that Kees/Paul can mention it to Linus :)
 
-Agreed on Frederic verifying it, but in the meantime, it looks good to
-me as well.
+--ic1hM2GHeE5Hfcvc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-							Thanx, Paul
+Hi Quan,
 
-> Cheers,
-> Nathan
-> 
-> diff --git a/kernel/cfi.c b/kernel/cfi.c
-> index 08102d19ec15..2046276ee234 100644
-> --- a/kernel/cfi.c
-> +++ b/kernel/cfi.c
-> @@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
->  	rcu_idle = !rcu_is_watching();
->  	if (rcu_idle) {
->  		local_irq_save(flags);
-> -		rcu_irq_enter();
-> +		ct_irq_enter();
->  	}
->  
->  	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-> @@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
->  		fn = find_module_check_fn(ptr);
->  
->  	if (rcu_idle) {
-> -		rcu_irq_exit();
-> +		ct_irq_exit();
->  		local_irq_restore(flags);
->  	}
->  
+> When tested with ast2500, it is observed that there's always a
+> I2C_SLAVE_WRITE_REQUESTED comes first then other I2C_SLAVE_WRITE_RECEIVED=
+'s
+> follow for all transactions.
+
+Yes, that's the design of the interface :)
+
+> In case slave is busy, the NAK will be asserted on the first occurrence of
+> I2C_SLAVE_WRITE_REQUESTED make host to stop the current transaction (host
+> later will retry with other transaction) until slave ready.
+>=20
+> This behavior is expected as we want host to drop all transactions while
+> slave is busy on working on the response. That is why we choose to assert
+> NAK on the first I2C_SLAVE_WRITE_REQUESTED of the transaction instead of
+> I2C_SLAVE_WRITE_RECEIVED.
+
+=46rom Documentation/i2c/slave-interface.rst:
+
+=3D=3D=3D
+
+About ACK/NACK
+--------------
+
+It is good behaviour to always ACK the address phase, so the master knows i=
+f a
+device is basically present or if it mysteriously disappeared. Using NACK to
+state being busy is troublesome. SMBus demands to always ACK the address ph=
+ase,
+while the I2C specification is more loose on that. Most I2C controllers also
+automatically ACK when detecting their slave addresses, so there is no opti=
+on
+to NACK them. For those reasons, this API does not support NACK in the addr=
+ess
+phase.
+
+=3D=3D=3D
+
+So, the proper design is to NACK on the first received byte. All EEPROMs
+do it this way when they are busy because of erasing a page.
+
+All the best,
+
+   Wolfram
+
+
+--ic1hM2GHeE5Hfcvc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKqQewACgkQFA3kzBSg
+KbaRvBAAhGHBikwxwBVjvxYQ3WkD53anNZCb8H7DLS+EBHUqZUhE3sB1E0xjhLw9
+/D56GGMOC0z26eO0epBcCjharkSDE5kolGFghi/5ymiKkHoS/wGCHuTr6nJVt0xO
+CXf1YVkIb4I3bHHxgiAPrOc+N6jw5e+Ujao7nOXjpaTuJ84RNT4hHPNKUcJIqZNR
+ciM/xRqC0CslNEW4RH2fapeCw97/HksITYb/1Ix3DabxRnLj6obVmAtuokUr7Tmd
+Aro8RsCKMzkJmknyhX4A/cbVuRKXGiWLthW3srmUKPCgu9dndoBsIoTty+E3vJXY
+QZO0uNLBRydxJOBXT/+skne0wB3xo4RNuAzYXov/RMVkTGO2r3n3Q99wjSyHv7Zh
+BWIy/QnYni2FguU4NtjgBXurWfvqguvLr37+5QMcruMLFsRKkeifb1zfOlVV9RVU
+whpoeJrrFrxE3wI/L4Ol3eBokDneI4Ldo4dUvFv+CQ2GNQgj1qLfZcUnqE/SKNKj
+JhcvsMNszDV7QXk8jIbzdkWbL5zxijQ4y+q+vOou/b3BZTVJ+d+wXXH72LeIxxPY
+JqQD9F2vzrULR55rbXw+ZBU0jESxcBrx3aC54ksz1vIPM7gsuOldNICk00eBI8tD
+HmatAjq9W/yS0VpX7XlTsBwk8w8MXJc2/VXzlJaO4M8yLddwLW0=
+=SfIi
+-----END PGP SIGNATURE-----
+
+--ic1hM2GHeE5Hfcvc--

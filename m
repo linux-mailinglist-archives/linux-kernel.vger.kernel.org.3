@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215D654CEA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE85654CEA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355989AbiFOQ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S1343951AbiFOQ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352279AbiFOQ2f (ORCPT
+        with ESMTP id S234917AbiFOQ3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:28:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9618B2937D;
-        Wed, 15 Jun 2022 09:28:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=QLrLutFCF/6krvgqQy1V+anw8vzmDDqVVQWXu6dHQBI=; b=ahTL5A/8lRfvOfzGz2hozhjzyR
-        oKgB9wtZ8W601SXKNSclYHxS9eqq7bxSPX+MAEUfJRsDyZ4iBdGCWsunOfqw10C+NICQffM+AeVi2
-        VR4kFIm7vK1neaBZcnpq5LiVl2WEt+e2JErA7Kpu4/do+Y17nd8KqONuAxijBpZrtci8Jki3mpzgE
-        dwpV5aZGxTVKUj2vN1LZskDVcLR4ipq3/YSq8qp8jUnH0DV+FEtLKovsv0NyAvG9xC6AM0BIRyUws
-        rygbDItAhKY1lOzt+9Rjg4bsWZf8GwDNxrwG522PEbARrZDgfobznVJi7SPcfjf27whR3RVQtlt4D
-        C6LLRylg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1VsV-008Ab9-Qh; Wed, 15 Jun 2022 16:28:26 +0000
-Message-ID: <1f8095db-a08f-7b6b-2cee-f530d914b9f8@infradead.org>
-Date:   Wed, 15 Jun 2022 09:28:19 -0700
+        Wed, 15 Jun 2022 12:29:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 356023A721
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:29:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E47B153B;
+        Wed, 15 Jun 2022 09:29:45 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFE0A3F7F5;
+        Wed, 15 Jun 2022 09:29:43 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 17:29:41 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 11/22] firmware: arm_scmi: Add SCMIv3.1 extended names
+ protocols support
+Message-ID: <YqoI5hYa97nZwUjl@e120937-lin>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-12-cristian.marussi@arm.com>
+ <6f865d7f-fde8-d923-3c7e-d12bfbc370a6@gmail.com>
+ <YqmVsMGgxKuIT5rx@e120937-lin>
+ <Yqmo/BiIR4gku0Y+@e120937-lin>
+ <c787dfe6-9639-8797-d07a-048c5ec69ddf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: Tree for Jun 15 (drivers/dma/apple-admac.c)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        dmaengine@vger.kernel.org
-References: <20220615160116.528c324b@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220615160116.528c324b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c787dfe6-9639-8797-d07a-048c5ec69ddf@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,21 +50,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/22 23:01, Stephen Rothwell wrote:
-> Hi all,
+On Wed, Jun 15, 2022 at 09:10:03AM -0700, Florian Fainelli wrote:
+> On 6/15/22 02:40, Cristian Marussi wrote:
+> > On Wed, Jun 15, 2022 at 09:18:03AM +0100, Cristian Marussi wrote:
+> > > On Wed, Jun 15, 2022 at 05:45:11AM +0200, Florian Fainelli wrote:
+> > > > 
+> > > > 
+> > > > On 3/30/2022 5:05 PM, Cristian Marussi wrote:
+> > > > > Using the common protocol helper implementation add support for all new
+> > > > > SCMIv3.1 extended names commands related to all protocols with the
+> > > > > exception of SENSOR_AXIS_GET_NAME.
+> > > > > 
+> > > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > > > 
+> > > > This causes the following splat on a platform where regulators fail to
+> > > > initialize:
+> > > > 
+> > > 
+> > > Hi Florian,
+> > > 
+> > > thanks for the report.
+> > > 
+> > > It seems a memory error while allocating so it was not meant to be
+> > > solved by the fixes, anyway, I've never seen this splat in my testing
+> > > and at first sight I cannot see anything wrong in the devm_k* calls
+> > > inside scmi_voltage_protocol_init...is there any particular config in
+> > > your setup ?
+> > > 
+> > > Moreover, the WARNING line 5402 seems to match v5.19-rc1 and it has
+> > > slightly changed with -rc-1, so I'll try rebasing on that at first and
+> > > see if I can reproduce the issue locally.
+> > > 
+> > 
+> > I just re-tested the series rebased on v519-rc1 plus fixes and I cannot
+> > reproduce in my setup with a few (~9) good and bad voltage domains.
+> > 
+> > How many voltage domains are advertised by the platform in your setup ?
 > 
-> Changes since 20220614:
-> 
+> There are 11 voltage regulators on this platform, and of course, now that I
+> am trying to reproduce the splat I reported I just cannot anymore... I will
+> let you know if there is anything that needs to be done. Thanks for being
+> responsive as usual!
 
-on i386:
+... you're welcome...
 
-../drivers/dma/apple-admac.c: In function 'admac_cyclic_write_one_desc':
-../drivers/dma/apple-admac.c:213:22: warning: right shift count >= width of type [-Wshift-count-overflow]
-  writel_relaxed(addr >> 32,       ad->base + REG_DESC_WRITE(channo));
-                      ^
+I'm trying to figure out where an abnormal mem request could happen...
+
+can you try adding this (for brutal debugging) when you try ?
+(...just to rule out funny fw replies.... :D)
+
+Thanks,
+Cristian
+
+--->8----
+
+diff --git a/drivers/firmware/arm_scmi/voltage.c b/drivers/firmware/arm_scmi/voltage.c
+index 895741b66f5a..fd841292df5c 100644
+--- a/drivers/firmware/arm_scmi/voltage.c
++++ b/drivers/firmware/arm_scmi/voltage.c
+@@ -108,6 +108,9 @@ static int scmi_init_voltage_levels(struct device *dev,
+                return -EINVAL;
+        }
+ 
++       dev_info(dev, "num_returned:%d  num_remaining:%d\n",
++                num_returned, num_remaining);
++
+        v->levels_uv = devm_kcalloc(dev, num_levels, sizeof(u32), GFP_KERNEL);
+        if (!v->levels_uv)
+                return -ENOMEM;
 
 
--- 
-~Randy
+> -- 
+> Florian

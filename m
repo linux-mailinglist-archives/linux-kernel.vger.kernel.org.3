@@ -2,147 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EDF54D539
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA4954D53F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245307AbiFOXZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 19:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
+        id S1346118AbiFOX0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 19:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiFOXZT (ORCPT
+        with ESMTP id S1344042AbiFOX0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:25:19 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F9810FFF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:25:15 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 25FNP2Qg8014168, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 25FNP2Qg8014168
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 16 Jun 2022 07:25:02 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 16 Jun 2022 07:25:02 +0800
-Received: from localhost.localdomain (172.21.177.191) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 16 Jun 2022 07:25:01 +0800
-From:   Edward Wu <edwardwu@realtek.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <surenb@google.com>, <minchan@google.com>, <edwardwu@realtek.com>
-Subject: [PATCH v2] mm: cma: sync everything after EBUSY
-Date:   Thu, 16 Jun 2022 07:24:55 +0800
-Message-ID: <20220615232455.26451-1-edwardwu@realtek.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220615021504.23358-1-edwardwu@realtek.com>
-References: <20220615021504.23358-1-edwardwu@realtek.com>
+        Wed, 15 Jun 2022 19:26:34 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5394310FFF;
+        Wed, 15 Jun 2022 16:26:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNhJj4D37z4xXj;
+        Thu, 16 Jun 2022 09:26:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655335590;
+        bh=4c1p9aoakWvVGQikpvG/RIE/yTK1928napcIErEfrMw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HqUXuBYrsYaQ9Agq+kquqWaFmqiy8v/6WqkfJS6gGemEapRtskCM/z71qyu2/Og7v
+         GRIe0wYNZp0swHZ8MhCq377lEbfYIWCtqDirAksUi4vGPshLDcUgeJkdRdYHYQ/eSA
+         W0OqIi8uvV0405Lz88IqG4bqMxnKjmNb7oIyett5cvS00/bzoOlKoTwXI23N/mkAHD
+         ksP293/YTB9AQAC/aUirOfEZ9x5BBgdsP+Cj3U99r979hQRcQmlmKAbRtGBFlbFszh
+         Io+/X7QzK/q5t8hlduK/u3rKtRPw7z9oaMzjEDO/iU3iUrW5deCc4sO1BPG1Xf280d
+         SrJZLy9CwaM7w==
+Date:   Thu, 16 Jun 2022 09:26:28 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Bhanuprakash Modem <bhanuprakash.modem@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: Re: linux-next: Tree for Jun 15
+ (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
+Message-ID: <20220616092628.7cd86f4c@canb.auug.org.au>
+In-Reply-To: <YqpGknQvigfwZU6b@dev-arch.thelio-3990X>
+References: <20220615160116.528c324b@canb.auug.org.au>
+        <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+        <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
+        <YqpACmvbwiEcUfta@dev-arch.thelio-3990X>
+        <CADnq5_OnrxUiM+aTWRLjixp=vY6adV3w4p2cfTkdS32uq_UsiQ@mail.gmail.com>
+        <YqpGknQvigfwZU6b@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.21.177.191]
-X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
- RTEXMBS03.realtek.com.tw (172.21.6.96)
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/15/2022 23:03:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzYvMTUgpFWkyCAxMDowMTowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bgju8kcfbeT8uFOogwBdnTS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since file-backed memory on CMA area could take long-term pinning.
+--Sig_/bgju8kcfbeT8uFOogwBdnTS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-By Minchan Kim's debug commit 151e084af494 ("mm: page_alloc:
-dump migrate-failed pages only at -EBUSY")
-We know the pinned page comes from buffer_head, ext4 journal, FS metadata.
+Hi all,
 
-Sync everything after EBUSY that can unpin most file-system pages.
-And raise the success rate at next time try.
+On Wed, 15 Jun 2022 13:52:34 -0700 Nathan Chancellor <nathan@kernel.org> wr=
+ote:
+>
+> On Wed, Jun 15, 2022 at 04:45:16PM -0400, Alex Deucher wrote:
+> > On Wed, Jun 15, 2022 at 4:24 PM Nathan Chancellor <nathan@kernel.org> w=
+rote: =20
+> > >
+> > > On Wed, Jun 15, 2022 at 03:28:52PM -0400, Alex Deucher wrote: =20
+> > > > On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org=
+> wrote: =20
+> > > > >
+> > > > >
+> > > > >
+> > > > > On 6/14/22 23:01, Stephen Rothwell wrote: =20
+> > > > > > Hi all,
+> > > > > >
+> > > > > > Changes since 20220614:
+> > > > > > =20
+> > > > >
+> > > > > on i386:
+> > > > > # CONFIG_DEBUG_FS is not set
+> > > > >
+> > > > >
+> > > > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: I=
+n function =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+> > > > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:65=
+99:2: error: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=
+=80=99; did you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimpl=
+icit-function-declaration]
+> > > > >   crtc_debugfs_init(crtc);
+> > > > >   ^~~~~~~~~~~~~~~~~
+> > > > >   amdgpu_debugfs_init
+> > > > >
+> > > > >
+> > > > > Full randconfig file is attached. =20
+> > > >
+> > > > I tried building with your config and I can't repro this.  As Harry
+> > > > noted, that function and the whole secure display feature depend on
+> > > > debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
+> > > > drivers/gpu/drm/amd/display/Kconfig:
+> > > > =20
+> > > > > config DRM_AMD_SECURE_DISPLAY
+> > > > >         bool "Enable secure display support"
+> > > > >         default n
+> > > > >         depends on DEBUG_FS
+> > > > >         depends on DRM_AMD_DC_DCN
+> > > > >         help
+> > > > >             Choose this option if you want to
+> > > > >             support secure display
+> > > > >
+> > > > >             This option enables the calculation
+> > > > >             of crc of specific region via debugfs.
+> > > > >             Cooperate with specific DMCU FW. =20
+> > > >
+> > > > amdgpu_dm_crtc_late_register is guarded by
+> > > > CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
+> > > > this. =20
+> > >
+> > > I think the problem is that you are not looking at the right tree.
+> > >
+> > > The kernel test robot reported [1] [2] this error is caused by commit
+> > > 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm"), which
+> > > is in the drm-misc tree on the drm-misc-next branch. That change remo=
+ves
+> > > the #ifdef around amdgpu_dm_crtc_late_register(), meaning that
+> > > crtc_debugfs_init() can be called without CONFIG_DRM_AMD_SECURE_DISPL=
+AY
+> > > and CONFIG_DEBUG_FS.
+> > >
+> > >   $ git show -s --format=3D'%h ("%s")'
+> > >   abf0ba5a34ea ("drm/bridge: it6505: Add missing CRYPTO_HASH dependen=
+cy")
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 mrproper defconfig
+> > >
+> > >   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 olddefconfig drivers/gpu/drm/am=
+d/amdgpu/../display/amdgpu_dm/amdgpu_dm.o
+> > >   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In fun=
+ction =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+> > >   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:9:=
+ error: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=80=
+=99; did you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimplici=
+t-function-declaration]
+> > >    6622 |         crtc_debugfs_init(crtc);
+> > >         |         ^~~~~~~~~~~~~~~~~
+> > >         |         amdgpu_debugfs_init
+> > >   cc1: all warnings being treated as errors
+> > >
+> > > Contrast that with the current top of your tree:
+> > >
+> > >   $ git show -s --format=3D'%h ("%s")'
+> > >   c435f61d0eb3 ("drm/amd/display: Drop unnecessary guard from DC reso=
+urce")
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 mrproper defconfig
+> > >
+> > >   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 olddefconfig drivers/gpu/drm/am=
+d/amdgpu/../display/amdgpu_dm/amdgpu_dm.o
+> > >
+> > >   $ echo $?
+> > >   0
+> > >
+> > > Randy's patch [3] seems like it should resolve the issue just fine but
+> > > it needs to be applied to drm-misc-next, not the amdgpu tree. =20
+> >=20
+> > Thanks for tracking this down.  I think something like the attached
+> > patch is cleaner since the whole thing is only valid for debugfs. =20
+>=20
+> Makes sense! I tested the below patch with and without DEBUG_FS and saw
+> no errors.
+>=20
+> > From b0bcacd86344998e0ca757f89c6c4cd3b6298999 Mon Sep 17 00:00:00 2001
+> > From: Alex Deucher <alexander.deucher@amd.com>
+> > Date: Wed, 15 Jun 2022 16:40:39 -0400
+> > Subject: [PATCH] drm/amdgpu/display: fix build when CONFIG_DEBUG_FS is =
+not set
+> >=20
+> > amdgpu_dm_crtc_late_register is only used when CONFIG_DEBUG_FS
+> > so make it dependent on that.
+> >=20
+> > Fixes: 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm")
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > Reported-by: Nathan Chancellor <nathan@kernel.org> =20
+>=20
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+>=20
+> > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> > ---
+> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/driver=
+s/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > index c9004f7e700d..33cd7a3d4ecb 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > @@ -6594,12 +6594,14 @@ dm_crtc_duplicate_state(struct drm_crtc *crtc)
+> >  	return &state->base;
+> >  }
+> > =20
+> > +#ifdef CONFIG_DEBUG_FS
+> >  static int amdgpu_dm_crtc_late_register(struct drm_crtc *crtc)
+> >  {
+> >  	crtc_debugfs_init(crtc);
+> > =20
+> >  	return 0;
+> >  }
+> > +#endif
+> > =20
+> >  static inline int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enabl=
+e)
+> >  {
+> > @@ -6693,7 +6695,9 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc=
+_funcs =3D {
+> >  	.enable_vblank =3D dm_enable_vblank,
+> >  	.disable_vblank =3D dm_disable_vblank,
+> >  	.get_vblank_timestamp =3D drm_crtc_vblank_helper_get_vblank_timestamp,
+> > +#if defined(CONFIG_DEBUG_FS)
+> >  	.late_register =3D amdgpu_dm_crtc_late_register,
+> > +#endif
+> >  };
+> > =20
+> >  static enum drm_connector_status
 
-Link: https://lkml.kernel.org/r/20220615021504.23358-1-edwardwu@realtek.com
-Signed-off-by: Edward Wu <edwardwu@realtek.com>
----
-v2:
-- Fix compile warning
+OK, I will apply that patch to the merge of the drm-misc tree from
+today (until someone actaully applies it to some tree).
+--=20
+Cheers,
+Stephen Rothwell
 
- mm/cma.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+--Sig_/bgju8kcfbeT8uFOogwBdnTS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-diff --git a/mm/cma.c b/mm/cma.c
-index eaa4b5c920a2..28391f8ce0fd 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -31,6 +31,7 @@
- #include <linux/highmem.h>
- #include <linux/io.h>
- #include <linux/kmemleak.h>
-+#include <linux/syscalls.h>
- #include <trace/events/cma.h>
- 
- #include "cma.h"
-@@ -410,6 +411,24 @@ static void cma_debug_show_areas(struct cma *cma)
- static inline void cma_debug_show_areas(struct cma *cma) { }
- #endif
- 
-+static inline void cma_sync_work(struct work_struct *work)
-+{
-+	ksys_sync();
-+	kfree(work);
-+	pr_debug("%s(): EBUSY Sync complete\n", __func__);
-+}
-+
-+static void cma_ebusy_sync_pinned_pages(void)
-+{
-+	struct work_struct *work;
-+
-+	work = kmalloc(sizeof(*work), GFP_ATOMIC);
-+	if (work) {
-+		INIT_WORK(work, cma_sync_work);
-+		schedule_work(work);
-+	}
-+}
-+
- /**
-  * cma_alloc() - allocate pages from contiguous area
-  * @cma:   Contiguous memory region for which the allocation is performed.
-@@ -430,6 +449,7 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 	unsigned long i;
- 	struct page *page = NULL;
- 	int ret = -ENOMEM;
-+	bool sys_synchronized = false;
- 
- 	if (!cma || !cma->count || !cma->bitmap)
- 		goto out;
-@@ -480,6 +500,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 		if (ret != -EBUSY)
- 			break;
- 
-+		if (!sys_synchronized) {
-+			sys_synchronized = true;
-+			cma_ebusy_sync_pinned_pages();
-+		}
-+
- 		pr_debug("%s(): memory range at %p is busy, retrying\n",
- 			 __func__, pfn_to_page(pfn));
- 
--- 
-2.17.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKqaqQACgkQAVBC80lX
+0Gwcggf9FBLTZUiwJO9ig0WmWxcqNdVIvnVUNHUD5Cu20ZtR8edh9MasQwu6j9EI
+4cJk0mnwG+5YNPs1/0dhL1HWa/RFCbg5UGaE1pAl+SBzoF/ukzGIVPV4xh7lRTbs
+MHfpLq+5KROvTQKQkVqsONnCDBIzUVQ99dBxwmsS+Qx4VtMkjWwXSro8NX+JHbqP
+0SqudKT+sTUDa9eRYWhC98ceDPwCsVdXc1kI5f68kC37T6euQalqK4LVmlyVMKha
+tIf+HlJrrrfnVgb4DCFxthesDymiObGWqWtCSk3hIOR1xlMqylvwThnEo/gIJsPh
+mJ0JJQjKySO+SoNTHxZkRvND+lqc7g==
+=Fcu+
+-----END PGP SIGNATURE-----
+
+--Sig_/bgju8kcfbeT8uFOogwBdnTS--

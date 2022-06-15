@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790CC54CA18
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBD154CA25
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345165AbiFONpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S1349915AbiFONrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344964AbiFONpG (ORCPT
+        with ESMTP id S1347236AbiFONq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:45:06 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C942F64C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:45:05 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id i15so10471048plr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:45:05 -0700 (PDT)
+        Wed, 15 Jun 2022 09:46:56 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1500036177
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:46:52 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id x5so16255756edi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TU7ppchr+vK4iQFEEkHyhNO3qYqSud0f/b8Qfi4fncE=;
-        b=P4lnu4PmKUs1hCeHvGYVFBJYqh0FxWE38HhkOsolR7DTsCZOW+2TyjdP+mV+jMtb9T
-         FQ/p8lpV2rBPj95AOnT8PFfTbyfL6o6RyTA1MztbW+BhEAdOx55slpKuJ94f+cV6iT8q
-         hFzf9dgkBd+ZZoOG1Cvs9MDvKwHQTmofmR3v+cL/L5+J0hmGGHfve5WDEDY8zYSvTVA0
-         o1hyzHcr5FaE9NGt3ot1Zemqv5eTeIv2uQXszG07S+1rw8OL1qUQR37lDbscCAZgcIf3
-         7LB4MO7Uj82e983wOHqE+d/9jvmqvd+XYCbtDfQsAebY9IoQIdDvuM0KWMado7LgUsRy
-         luAA==
+        d=dneg.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yEvIXRPucn+6BeLmS4BVfzZdrrJJq6QW6xPZWAKt890=;
+        b=TXvEcZJ6ukZF/jYGwYFRRsN7SSyIAITCDv6vV7w6T62/Sst+VBOlstW+1l9SjzNkee
+         iIPsLded/ZzOmM6pzdrksIWaVV3rO5ytVyiD9RnaENYVCROlCY7iuV+k/PfbBIhJm6dM
+         JAjCL6lO3TJHOWbm/8qNlZ/kCqjDLCj/MteoPaGcgG5cUZpwEdDDszdlokoPkUNtrX1h
+         K7oVdOfABXhFKkieeowcFzgPMjXnaoI1nPuRFJh5vTyHQhdoWlp81L5y2tQhtw32eUaj
+         MIgEsi9zxdqBuMsnvAiQ6OhQRtmlCQvzonbRdTwow7+I9auMZB5udDp1vdvRKHwUoQJv
+         oukA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TU7ppchr+vK4iQFEEkHyhNO3qYqSud0f/b8Qfi4fncE=;
-        b=ULygU2W9MAsExBcj4gO5tJWRyoKwBY/RpW7cn1YWl/s3Dh67ZIFCxAA7xPb0KTmd25
-         kkwFRiTjdVr1vuLuBkHutkMmUCzAr3Kb71cgiMgX81a4/wxWsoZNDc3Axl/tHnzyykOX
-         eLhLx7/hBhLDn9ZvVpNhMDDiuXSwCM6NH7xFPuhYkDQAWYHvnoOGMiKuQnG6oZ3cdVYL
-         RiUNM68XI5Q7j+qJWPI+3e4ed97FFOIL2jvfF64IxO+tKAb9fM82zU+XkXkzu6q75pYk
-         QBX9Ijl7NRnqRBhCypb77ysvlZDIMhLzHwd2su7WweifJ+J470uGxlkwL+nRhJ6Ppcv4
-         w3YQ==
-X-Gm-Message-State: AJIora+uqcpy3XRRNH9li/bj66Ml32h7NGvx9AEB0MFYgSQV/nvMk96A
-        R7rimFLTW/+bhOX5fjtZfKIumsKFQdqEkA==
-X-Google-Smtp-Source: ABdhPJx0T+YdeF+d3X92Xyp5Jiohtxc6kV2ZfTAC3PYSZ9oPTWeOvMnxmENVDIdLhvWiI9IlcP/kjQ==
-X-Received: by 2002:a17:902:7483:b0:167:cfa7:ff3d with SMTP id h3-20020a170902748300b00167cfa7ff3dmr9540876pll.61.1655300703882;
-        Wed, 15 Jun 2022 06:45:03 -0700 (PDT)
-Received: from [172.20.0.255] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id l13-20020a62be0d000000b0051ba90d55acsm9843057pff.207.2022.06.15.06.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 06:45:03 -0700 (PDT)
-Message-ID: <ae8812a8-5f31-1516-74c4-cb427740fea2@linaro.org>
-Date:   Wed, 15 Jun 2022 06:45:02 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yEvIXRPucn+6BeLmS4BVfzZdrrJJq6QW6xPZWAKt890=;
+        b=Ql7/TXto7Y5KyaH2dxFIWeZtDm7u7aXTiPZZwddEhoEN6Q68OvWHBVMLvo2Vd2mgMz
+         eg093/XMY1R8uoAnxuDc5m0evKxAzLanHDZwngJviKbu9HP8VJMC6kfRI4ZUwUyyNY6e
+         uoKF8DXwt6dbeTBGNIlo/CLjz/cuof+UF+wBZFDFebqYUikLi0ZxBt2Q1wTilietmU0g
+         A8ESVC/WDe9ZjPwz15FpkhouUc6AcJ+gp5GLbjdnSeYlx5+APyrgH+eMGNxqWZyya26x
+         fP7GI+wwGvA4QRQqS7J0D4O1sxIQVwaYwGUyL+sFsvawrF6JM58r8Tn+CPWBhH/SEcpP
+         zMcQ==
+X-Gm-Message-State: AOAM531FKG7gpUThlKrjm69FnmFU6TxqE8MuqFAecwIOpEACxedeZu4P
+        lF+GyK4ecpm/BNGDmTWWETDux6cXv7WeDiGNePd43A==
+X-Google-Smtp-Source: AGRyM1s8Cf0Mj8Z/SnwwdeplHCi9y7diCjvcjZeMNKYhT4Tcd2GK0VSRetUi9ShVrGPYME0EWDocAtyOZ3tSiSV9oJE=
+X-Received: by 2002:a50:9f88:0:b0:42d:f7d2:1b7b with SMTP id
+ c8-20020a509f88000000b0042df7d21b7bmr12938702edf.139.1655300811013; Wed, 15
+ Jun 2022 06:46:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] soc: samsung: Add missing of_node_put in exynos-pmu.c
-Content-Language: en-US
-To:     heliang <windhl@126.com>, alim.akhtar@samsung.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615085525.3961330-1-windhl@126.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220615085525.3961330-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <165516173293.21248.14587048046993234326.stgit@noble.brown>
+In-Reply-To: <165516173293.21248.14587048046993234326.stgit@noble.brown>
+From:   Daire Byrne <daire@dneg.com>
+Date:   Wed, 15 Jun 2022 14:46:14 +0100
+Message-ID: <CAPt2mGNjWXad6e7nSUTu=0ez1qU1wBNegrntgHKm5hOeBs5gQA@mail.gmail.com>
+Subject: Re: [PATCH RFC 00/12] Allow concurrent directory updates.
+To:     NeilBrown <neilb@suse.de>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,46 +69,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 01:55, heliang wrote:
-> In exynos_get_pmu_regmap(), of_find_matching_node() will return a
-> node pointer with refcount incremented. We should use of_node_put()
-> for that node pointer. We need a similar code logic in the function
-> syscon_regmap_lookup_by_compatible().
-> 
-> Signed-off-by: heliang <windhl@126.com>
+Neil,
 
-Please use full first and last name. It might be that transcription of
-your name to Latin alphabet looks a bit different.
+Firstly, thank you for your work on this. I'm probably the main
+beneficiary of this (NFSD) effort atm so I feel extra special and
+lucky!
 
+I have done some quick artificial tests similar to before where I am
+using a NFS server and client separated by an (extreme) 200ms of
+latency (great for testing parallelism). I am only using NFSv3 due to
+the NFSD_CACHE_SIZE_SLOTS_PER_SESSION parallelism limitations for
+NFSv4.
+
+Firstly, a client direct to server (VFS) with 10 simultaneous create
+processes hitting the same directory:
+
+client1 # for x in {1..1000}; do
+    echo /srv/server1/data/touch.$x
+done | xargs -n1 -P 10 -iX -t touch X 2>&1 | pv -l -a >|/dev/null
+
+Without the patch ( on the client), this reaches a steady state of 2.4
+creates/s and increasing the number of parallel create processes does
+not change this aggregate performance.
+
+With the patch, the creation rate increases to 15 creates/s and with
+100 processes, it further scales up to 121 creates/s.
+
+Now for the re-export case (NFSD) where an intermediary server
+re-exports the originating server (200ms away) to clients on it's
+local LAN, there is no noticeable improvement for a single (not
+patched) client. But we do see an aggregate improvement when we use
+multiple clients at once.
+
+# pdsh -Rssh -w 'client[1-10]' 'for x in {1..1000}; do echo
+/srv/reexport1/data/$(hostname -s).$x; done | xargs -n1 -P 10 -iX -t
+touch X 2>&1' | pv -l -a >|/dev/null
+
+Without the patch applied to the reexport server, the aggregate is
+around 2.2 create/s which is similar to doing it directly to the
+originating server from a single client (above).
+
+With the patch, the aggregate increases to 15 creates/s for 10 clients
+which again matches the results of a single patched client. Not quite
+a x10 increase but a healthy improvement nonetheless.
+
+However, it is at this point that I started to experience some
+stability issues with the re-export server that are not present with
+the vanilla unpatched v5.19-rc2 kernel. In particular the knfsd
+threads start to lock up with stack traces like this:
+
+[ 1234.460696] INFO: task nfsd:5514 blocked for more than 123 seconds.
+[ 1234.461481]       Tainted: G        W   E     5.19.0-1.dneg.x86_64 #1
+[ 1234.462289] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[ 1234.463227] task:nfsd            state:D stack:    0 pid: 5514
+ppid:     2 flags:0x00004000
+[ 1234.464212] Call Trace:
+[ 1234.464677]  <TASK>
+[ 1234.465104]  __schedule+0x2a9/0x8a0
+[ 1234.465663]  schedule+0x55/0xc0
+[ 1234.466183]  ? nfs_lookup_revalidate_dentry+0x3a0/0x3a0 [nfs]
+[ 1234.466995]  __nfs_lookup_revalidate+0xdf/0x120 [nfs]
+[ 1234.467732]  ? put_prev_task_stop+0x170/0x170
+[ 1234.468374]  nfs_lookup_revalidate+0x15/0x20 [nfs]
+[ 1234.469073]  lookup_dcache+0x5a/0x80
+[ 1234.469639]  lookup_one_unlocked+0x59/0xa0
+[ 1234.470244]  lookup_one_len_unlocked+0x1d/0x20
+[ 1234.470951]  nfsd_lookup_dentry+0x190/0x470 [nfsd]
+[ 1234.471663]  nfsd_lookup+0x88/0x1b0 [nfsd]
+[ 1234.472294]  nfsd3_proc_lookup+0xb4/0x100 [nfsd]
+[ 1234.473012]  nfsd_dispatch+0x161/0x290 [nfsd]
+[ 1234.473689]  svc_process_common+0x48a/0x620 [sunrpc]
+[ 1234.474402]  ? nfsd_svc+0x330/0x330 [nfsd]
+[ 1234.475038]  ? nfsd_shutdown_threads+0xa0/0xa0 [nfsd]
+[ 1234.475772]  svc_process+0xbc/0xf0 [sunrpc]
+[ 1234.476408]  nfsd+0xda/0x190 [nfsd]
+[ 1234.477011]  kthread+0xf0/0x120
+[ 1234.477522]  ? kthread_complete_and_exit+0x20/0x20
+[ 1234.478199]  ret_from_fork+0x22/0x30
+[ 1234.478755]  </TASK>
+
+For whatever reason, they seem to affect our Netapp mounts and
+re-exports rather than our originating Linux NFS servers (against
+which all tests were done). This may be related to the fact that those
+Netapps serve our home directories so there could be some unique
+locking patterns going on there.
+
+This issue made things a bit too unstable to test at larger scales or
+with our production workloads.
+
+So all in all, the performance improvements in the knfsd re-export
+case is looking great and we have real world use cases that this helps
+with (batch processing workloads with latencies >10ms). If we can
+figure out the hanging knfsd threads, then I can test it more heavily.
+
+Many thanks,
+
+Daire
+
+On Tue, 14 Jun 2022 at 00:19, NeilBrown <neilb@suse.de> wrote:
+>
+> VFS currently holds an exclusive lock on a directory during create,
+> unlink, rename.  This imposes serialisation on all filesystems though
+> some may not benefit from it, and some may be able to provide finer
+> grained locking internally, thus reducing contention.
+>
+> This series allows the filesystem to request that the inode lock be
+> shared rather than exclusive.  In that case an exclusive lock will be
+> held on the dentry instead, much as is done for parallel lookup.
+>
+> The NFS filesystem can easily support concurrent updates (server does
+> any needed serialiation) so it is converted.
+>
+> This series also converts nfsd to use the new interfaces so concurrent
+> incoming NFS requests in the one directory can be handled concurrently.
+>
+> As a net result, if an NFS mounted filesystem is reexported over NFS,
+> then multiple clients can create files in a single directory and all
+> synchronisation will be handled on the final server.  This helps hid
+> latency on link from client to server.
+>
+> I include a few nfsd patches that aren't strictly needed for this work,
+> but seem to be a logical consequence of the changes that I did have to
+> make.
+>
+> I have only tested this lightly.  In particular the rename support is
+> quite new and I haven't tried to break it yet.
+>
+> I post this for general review, and hopefully extra testing...  Daire
+> Byrne has expressed interest in the NFS re-export parallelism.
+>
+> NeilBrown
+>
+>
 > ---
->  drivers/soc/samsung/exynos-pmu.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/soc/samsung/exynos-pmu.c b/drivers/soc/samsung/exynos-pmu.c
-> index 732c86ce2be8..a44862c405a4 100644
-> --- a/drivers/soc/samsung/exynos-pmu.c
-> +++ b/drivers/soc/samsung/exynos-pmu.c
-> @@ -108,9 +108,13 @@ struct regmap *exynos_get_pmu_regmap(void)
->  {
->  	struct device_node *np = of_find_matching_node(NULL,
->  						      exynos_pmu_of_device_ids);
-> -	if (np)
-> -		return syscon_node_to_regmap(np);
-> -	return ERR_PTR(-ENODEV);
-> +	struct regmap *regmap;
-
-Blank line here.
-
-> +	if (!np)
-> +		return ERR_PTR(-ENODEV);
-> +	
-> +	regmap = syscon_node_to_regmap(np);
-> +	of_node_put(np);
-> +	return regmap;
->  }
->  EXPORT_SYMBOL_GPL(exynos_get_pmu_regmap);
->  
-
-
-Best regards,
-Krzysztof
+>
+> NeilBrown (12):
+>       VFS: support parallel updates in the one directory.
+>       VFS: move EEXIST and ENOENT tests into lookup_hash_update()
+>       VFS: move want_write checks into lookup_hash_update()
+>       VFS: move dput() and mnt_drop_write() into done_path_update()
+>       VFS: export done_path_update()
+>       VFS: support concurrent renames.
+>       NFS: support parallel updates in the one directory.
+>       nfsd: allow parallel creates from nfsd
+>       nfsd: support concurrent renames.
+>       nfsd: reduce locking in nfsd_lookup()
+>       nfsd: use (un)lock_inode instead of fh_(un)lock
+>       nfsd: discard fh_locked flag and fh_lock/fh_unlock
+>
+>
+>  fs/dcache.c            |  59 ++++-
+>  fs/namei.c             | 578 ++++++++++++++++++++++++++++++++---------
+>  fs/nfs/dir.c           |  29 ++-
+>  fs/nfs/inode.c         |   2 +
+>  fs/nfs/unlink.c        |   5 +-
+>  fs/nfsd/nfs2acl.c      |   6 +-
+>  fs/nfsd/nfs3acl.c      |   4 +-
+>  fs/nfsd/nfs3proc.c     |  37 +--
+>  fs/nfsd/nfs4acl.c      |   7 +-
+>  fs/nfsd/nfs4proc.c     |  61 ++---
+>  fs/nfsd/nfs4state.c    |   8 +-
+>  fs/nfsd/nfsfh.c        |  10 +-
+>  fs/nfsd/nfsfh.h        |  58 +----
+>  fs/nfsd/nfsproc.c      |  31 +--
+>  fs/nfsd/vfs.c          | 243 ++++++++---------
+>  fs/nfsd/vfs.h          |   8 +-
+>  include/linux/dcache.h |  27 ++
+>  include/linux/fs.h     |   1 +
+>  include/linux/namei.h  |  30 ++-
+>  19 files changed, 791 insertions(+), 413 deletions(-)
+>
+> --
+> Signature
+>

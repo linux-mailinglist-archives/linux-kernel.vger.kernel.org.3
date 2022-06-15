@@ -2,188 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37F954CDB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA5C54CDBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242845AbiFOQDn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 12:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S243695AbiFOQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiFOQDk (ORCPT
+        with ESMTP id S232197AbiFOQEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:03:40 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16F9237EF;
-        Wed, 15 Jun 2022 09:03:37 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNVRp2wCgz683yD;
-        Thu, 16 Jun 2022 00:01:58 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 15 Jun 2022 18:03:35 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 15 Jun 2022 18:03:35 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-CC:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "rob@landley.net" <rob@landley.net>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "niveditas98@gmail.com" <niveditas98@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYgM+mPH1HC/8x8Uq7oovD5MPpKK1QoLWg
-Date:   Wed, 15 Jun 2022 16:03:35 +0000
-Message-ID: <d6479ebe656d4a75909b556d4cbcee22@huawei.com>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <20220615155034.1271240-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220615155034.1271240-1-alexandr.lobakin@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 15 Jun 2022 12:04:53 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACD2255BE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:04:51 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o33-20020a17090a0a2400b001ea806e48c6so2476629pjo.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ePN6l7qq+5+AEApPN8ZIDny0v2CL19RcX8ZdNrMR7lM=;
+        b=aqM0+dFn+nn8gN9lgLMZUiyexrJiMRh9URiP1j+pSR5rH9FkZgHYRqWHAGfoOH7H/o
+         apqcb2Dt7BbllawEZXVjxmkejglQNMu8/m/ujk9rvIJO/2nl+oTm2L5DVPcLrN1HKfOj
+         bHAGlIQLWJssv8v2uPJdpwtXpYuCnhLLi1buEkKltNqWnc3wbTTrjB2zJhfAL11UH+CV
+         qbsmGDz4A0Ueag0lhEd2Dr+4z4HJ1BHWv8YWg2vD3pOsABM1ZdIkjDWkeoWUFl9QVlI7
+         6S6DAA+GJZm+8R4kiejkyXWgiRXnUGU4gp6fZAMJYI3csPLiA3mgAwppGQ44fA8W5EXb
+         O62w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ePN6l7qq+5+AEApPN8ZIDny0v2CL19RcX8ZdNrMR7lM=;
+        b=SfbheBBzXbMyhEpmiVS8qMecX5CsiVjp6uBQ7BCsYYCQ9A+yxAN0ZCvFrgEoSysnpb
+         swGMy81a5ZeydHd6OcEJUX9VuyJRAh6FNAwTWSbcDYaM0IyXk6IXd8ZNcWdfYD6DBPUh
+         hVr9Q1aQ2eswruABXJmrxMFFn6Wu8atopobPcUPNeMHY5EmTCjEGMMuFlaPe35rCEljq
+         hnVe0KI5DqzFJlD+BqmrnBqUhgZ2V0uhE7FVLpAXt3LzcSIo2oXctl0hrX+FsSc/ineC
+         mx318KOR0DmGCsvWNT/Hq3ixMnxCKsYR38+y6FsDre19eh9sr0YGzGcmA5JM1K/ps4pL
+         e2oA==
+X-Gm-Message-State: AJIora9JQB1Osy7kFXRZY4PM0apjRim7WwMeVizVJKaH+XuEMGfTXrrh
+        PBHIbqOCmsled7YqUMTSlhDNroUhUlNXwwRHo2Rf3A==
+X-Google-Smtp-Source: AGRyM1vn/ajc9Zhrglm4j7l6bDUl6hYAdrUf3Sb59Qp8Lv5t13DLZGtXd5FnN6EgUEj2g6o4jDoor9Cr7RKIsPEATO4=
+X-Received: by 2002:a17:902:f353:b0:167:7bc1:b1b9 with SMTP id
+ q19-20020a170902f35300b001677bc1b1b9mr84680ple.117.1655309090641; Wed, 15 Jun
+ 2022 09:04:50 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613163705.1531721-1-nfraprado@collabora.com> <9c8c712c-75d1-bd0f-0205-be769ce5e83d@collabora.com>
+In-Reply-To: <9c8c712c-75d1-bd0f-0205-be769ce5e83d@collabora.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 15 Jun 2022 18:04:39 +0200
+Message-ID: <CAG3jFysv_LSM2+j5jWmC-zM-jik0WdGjE7Mwm=quAabG_LzB6A@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: anx7625: Zero error variable when panel
+ bridge not present
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, kernel@collabora.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Alexander Lobakin [mailto:alexandr.lobakin@intel.com]
-> Sent: Wednesday, June 15, 2022 5:51 PM
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> Date: Thu, 23 May 2019 14:18:00 +0200
-> 
-> > This patch set aims at solving the following use case: appraise files from
-> > the initial ram disk. To do that, IMA checks the signature/hash from the
-> 
-> Hi,
-> is this[0] relatable somehow?
+On Tue, 14 Jun 2022 at 09:52, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 13/06/22 18:37, N=C3=ADcolas F. R. A. Prado ha scritto:
+> > While parsing the DT, the anx7625 driver checks for the presence of a
+> > panel bridge on endpoint 1. If it is missing, pdata->panel_bridge store=
+s
+> > the error pointer and the function returns successfully without first
+> > cleaning that variable. This is an issue since other functions later
+> > check for the presence of a panel bridge by testing the trueness of tha=
+t
+> > variable.
+> >
+> > In order to ensure proper behavior, zero out pdata->panel_bridge before
+> > returning when no panel bridge is found.
+> >
+> > Fixes: 9e82ea0fb1df ("drm/bridge: anx7625: switch to devm_drm_of_get_br=
+idge")
+> > Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> >
+>
+> I would've preferred s/zero out/cleanup/g but it's also fine as you wrote=
+ it.
+> Besides, good catch!
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+>
 
-Hi Alexander
-
-seems a separate problem. For that, we opted for having a dedicated
-kernel option:
-
-https://github.com/openeuler-mirror/kernel/commit/18a502f7e3b1de7b9ba0c70896ce08ee13d052da
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Yang Xi, Li He
-
-> > security.ima xattr. Unfortunately, this use case cannot be implemented
-> > currently, as the CPIO format does not support xattrs.
-> >
-> > This proposal consists in including file metadata as additional files named
-> > METADATA!!!, for each file added to the ram disk. The CPIO parser in the
-> > kernel recognizes these special files from the file name, and calls the
-> > appropriate parser to add metadata to the previously extracted file. It has
-> > been proposed to use bit 17:16 of the file mode as a way to recognize files
-> > with metadata, but both the kernel and the cpio tool declare the file mode
-> > as unsigned short.
-> >
-> > The difference from v2, v3 (https://lkml.org/lkml/2019/5/9/230,
-> > https://lkml.org/lkml/2019/5/17/466) is that file metadata are stored in
-> > separate files instead of a single file. Given that files with metadata
-> > must immediately follow the files metadata will be added to, image
-> > generators have to be modified in this version.
-> >
-> > The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that
-> > all files have the same name. The file metadata are added to is always the
-> > previous one, and the image generator in user space will make sure that
-> > files are in the correct sequence.
-> >
-> > The difference with another proposal
-> > (https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
-> > included in an image without changing the image format. Files with metadata
-> > will appear as regular files. It will be task of the parser in the kernel
-> > to process them.
-> >
-> > This patch set extends the format of data defined in patch 9/15 of the last
-> > proposal. It adds header version and type, so that new formats can be
-> > defined and arbitrary metadata types can be processed.
-> >
-> > The changes introduced by this patch set don't cause any compatibility
-> > issue: kernels without the metadata parser simply extract the special files
-> > and don't process metadata; kernels with the metadata parser don't process
-> > metadata if the special files are not included in the image.
-> >
-> > >>From the kernel space perspective, backporting this functionality to older
-> > kernels should be very easy. It is sufficient to add two calls to the new
-> > function do_process_metadata() in do_copy(), and to check the file name in
-> > do_name(). From the user space perspective, unlike the previous version of
-> > the patch set, it is required to modify the image generators in order to
-> > include metadata as separate files.
-> >
-> > Changelog
-> >
-> > v3:
-> > - include file metadata as separate files named METADATA!!!
-> > - add the possibility to include in the ram disk arbitrary metadata types
-> >
-> > v2:
-> > - replace ksys_lsetxattr() with kern_path() and vfs_setxattr()
-> >   (suggested by Jann Horn)
-> > - replace ksys_open()/ksys_read()/ksys_close() with
-> >   filp_open()/kernel_read()/fput()
-> >   (suggested by Jann Horn)
-> > - use path variable instead of name_buf in do_readxattrs()
-> > - set last byte of str to 0 in do_readxattrs()
-> > - call do_readxattrs() in do_name() before replacing an existing
-> >   .xattr-list
-> > - pass pathname to do_setxattrs()
-> >
-> > v1:
-> > - move xattr unmarshaling to CPIO parser
-> >
-> >
-> > Mimi Zohar (1):
-> >   initramfs: add file metadata
-> >
-> > Roberto Sassu (2):
-> >   initramfs: read metadata from special file METADATA!!!
-> >   gen_init_cpio: add support for file metadata
-> >
-> >  include/linux/initramfs.h |  21 ++++++
-> >  init/initramfs.c          | 137 +++++++++++++++++++++++++++++++++++++-
-> >  usr/Kconfig               |   8 +++
-> >  usr/Makefile              |   4 +-
-> >  usr/gen_init_cpio.c       | 137 ++++++++++++++++++++++++++++++++++++--
-> >  usr/gen_initramfs_list.sh |  10 ++-
-> >  6 files changed, 305 insertions(+), 12 deletions(-)
-> >  create mode 100644 include/linux/initramfs.h
-> >
-> > --
-> > 2.17.1
-> 
-> [0] https://lore.kernel.org/all/20210702233727.21301-1-alobakin@pm.me
-> 
-> Thanks,
-> Olek
+Applied to drm-misc-next

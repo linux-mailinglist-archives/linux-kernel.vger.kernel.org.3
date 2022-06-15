@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367C254C11E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2270554C125
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbiFOFZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 01:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S237797AbiFOFaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 01:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiFOFZd (ORCPT
+        with ESMTP id S229595AbiFOFaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 01:25:33 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A7A49909
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 22:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655270732; x=1686806732;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MO0KS2YphkZ1/QDHpSdxx9IO4iT8qrm+MdGB8kYbpJ4=;
-  b=EfQbLzxau/78beBnLZEdjlD96KfLxxBXEW/etX1pVR5KXWttxash9XoF
-   4GDojMOPftQ6FDBly0e2317F4jT5po8Pberq7JyvHGM73oxQ1bMMBGA/A
-   RnpkRS5LKZw2qGkCvrViBBjso3n6tkLQ/DVG2KhnnGs7R+4aMzwHx+gVi
-   MK9LlAHTovLET3PaFGYzJ6OOnEdiWTNoDl8Q9Lr/eghGIQ+4irik6MOkc
-   HcIl/2VvvZEub4Zlz9iPj1ppnFgNmnO+u5X+xQ5HYd3mfQQ0hs7nm7ekC
-   ZNwe+gGRy2j7oISBNxmhuwsoheKPpO8mA5Lc+1TLS1jZVHzRfASRlaaJu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279882828"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="279882828"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 22:25:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="618303150"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.32.80])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 22:25:30 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 3/5] perf record: Add new option to sample identifier
-Date:   Wed, 15 Jun 2022 08:25:11 +0300
-Message-Id: <20220615052511.4441-1-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAP-5=fVWOeqZ+BePoe3Te1fCaru_O5u+E0Lah8pGvSOfLDQaWQ@mail.gmail.com>
-References: <CAP-5=fVWOeqZ+BePoe3Te1fCaru_O5u+E0Lah8pGvSOfLDQaWQ@mail.gmail.com>
+        Wed, 15 Jun 2022 01:30:00 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4931A49937;
+        Tue, 14 Jun 2022 22:29:59 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id u12so20965843eja.8;
+        Tue, 14 Jun 2022 22:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JIWkiD2gp+DIgZxu8gKOEwEpgQ5/8fbIKpBeO6X4A6Y=;
+        b=hwECM+53CVSf51IQ6pQMNyVuwW269uKlYHDfaAtqb/U8PafUKk+ORP/TmMgQsgYmoF
+         0PUSzwNQuXGCiSlf27SiPK6C08J6W85qbr6VfOBOc8bZ8inlYzp0faqG8DXQ/WUTfcdi
+         1pRq8aglD/nu4d6+kAzx/oYYjHOdBP++YBYv1ua0BdLRvj93XgbZxX5HVECeBSb4MdBv
+         ubegmtRNBVhfT3icGdh+OkmQEd/9epG6UQejAsD590cQrpXaNG+zHDXaPcJizstK0cec
+         TbFwZP0dEAHXnXS+yv1t60CD3anvCsakpJImS4WCYl9179sN7cC2M4eBAqE6u0l9xqXn
+         swYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JIWkiD2gp+DIgZxu8gKOEwEpgQ5/8fbIKpBeO6X4A6Y=;
+        b=flCeLDfcMDiooZ3pgjgvzEIABgIX9C2vYi65YfYtYmCF7nmywVrSRDWdjo1Qs25Lig
+         nZ1Dsh5P1vzC9mPGrj/uW+LoOoobrvPRGUo6K74OcG1tx7W1Z9QMR/8ApTWM+/H0YX1q
+         nroL9LOyUIIBJ3XOnpaaTxZ2355LullXZodc8Owqr2NdSdkUb9iSoZu5rjccR36TobV6
+         L85eKsS+Gc9vGl4nMw8OpZ/YwprNF/1aq+wZzcYKU34e7cqwRYoRO9nMc3vJxkP8+hvh
+         ysaJmlEoNVNf7eBz2PJJOya7CSd8BPlt7xbsPjZd2llCxCkNNg20mvelAiwQtruYudBD
+         9rGg==
+X-Gm-Message-State: AJIora9RW8Kndak8mL+MEbE2AWByo5WDqo+TmKINGM8tbKqBZIveGZz1
+        iFk7MUZf8W6yI//ZXZfEEYo=
+X-Google-Smtp-Source: AGRyM1vOxWpwOvHY531EZDcFsmLeInua4DAR00pDq3a/iwIic7gxOq6uSLiFrvNwTyn2QtaDZAL71A==
+X-Received: by 2002:a17:907:9605:b0:6f5:c66:7c13 with SMTP id gb5-20020a170907960500b006f50c667c13mr7101498ejc.66.1655270997850;
+        Tue, 14 Jun 2022 22:29:57 -0700 (PDT)
+Received: from opensuse.localnet (host-87-16-96-199.retail.telecomitalia.it. [87.16.96.199])
+        by smtp.gmail.com with ESMTPSA id i2-20020a170906444200b006fed8dfcf78sm5832838ejp.225.2022.06.14.22.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 22:29:56 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Sterba <dsterba@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, dsterba@suse.cz,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>
+Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Date:   Wed, 15 Jun 2022 07:29:55 +0200
+Message-ID: <3619537.MHq7AAxBmi@opensuse>
+In-Reply-To: <YqjAVq+1PIpVIr0p@iweiny-desk3>
+References: <20220611135203.27992-1-fmdefrancesco@gmail.com> <8952566.CDJkKcVGEf@opensuse> <YqjAVq+1PIpVIr0p@iweiny-desk3>
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for recording sideband events in a virtual machine guest so
-that they can be injected into a host perf.data file.
+On marted=C3=AC 14 giugno 2022 19:07:34 CEST Ira Weiny wrote:
+> On Tue, Jun 14, 2022 at 06:28:48PM +0200, Fabio M. De Francesco wrote:
+> > On marted=C3=AC 14 giugno 2022 16:25:21 CEST David Sterba wrote:
+> > > On Tue, Jun 14, 2022 at 01:22:50AM +0200, Fabio M. De Francesco=20
+wrote:
+> > > > On luned=C3=AC 13 giugno 2022 20:39:13 CEST David Sterba wrote:
+> > > > > On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco=20
+> > >=20
+>=20
+> [snip]
+>=20
+> > > > A better solution is changing the prototype of __kunmap_local(); I
+> > > > suppose that Andrew won't object, but who knows?
+> > > >=20
+> > > > (+Cc Andrew Morton).
+> > > >=20
+> > > > I was waiting for your comments. At now I've done about 15=20
+conversions=20
+> > > > across the kernel but it's the first time I had to pass a pointer=20
+to=20
+> > const=20
+> > > > void to kunmap_local(). Therefore, I was not sure if changing the=20
+API=20
+> > were=20
+> > > > better suited (however I have already discussed this with Ira).
+> > >=20
+> > > IMHO it should be fixed in the API.
+> > >=20
+> > I agree with you in full.
+> >=20
+> > At the same time when you sent this email I submitted a patch to change=
+=20
+> > kunmap_local() and kunmap_atomic().
+> >=20
+> > After Andrew takes them I'll send v2 of this patch to zstd.c without=20
+those=20
+> > unnecessary casts.
+>=20
+> David,
+>=20
+> Would you be willing to take this through your tree as a pre-patch to the=
+=20
+kmap
+> changes in btrfs?
+>=20
+> That would be easier for Fabio and probably you and Andrew in the long=20
+run.
+>=20
+> Ira
 
-Add an option to always include sample type PERF_SAMPLE_IDENTIFIER.
+David,
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
+Please drop the first version of the changes[1] to the API and instead take=
+=20
+my second version.[2] I've only reworked the commit message (and subject,=20
+but this was involuntary) to make explicit that the fundamental reason=20
+behind these changes are semantic correctness.
+
+Thanks,
+
+=46abio
+
+[1] https://lore.kernel.org/lkml/20220614142531.16478-1-fmdefrancesco@gmail=
+=2Ecom/
+
+[2] https://lore.kernel.org/lkml/20220615051256.31466-1-fmdefrancesco@gmail=
+=2Ecom/
 
 
-Changes in V2:
-
-	Extend documntation for --sample-identifier
-
-
- tools/perf/Documentation/perf-record.txt | 5 +++++
- tools/perf/builtin-record.c              | 2 ++
- tools/perf/util/record.c                 | 2 +-
- tools/perf/util/record.h                 | 1 +
- 4 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index cf8ad50f3de1..6bd6d07021ba 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -313,6 +313,11 @@ OPTIONS
- --sample-cpu::
- 	Record the sample cpu.
- 
-+--sample-identifier::
-+	Record the sample identifier i.e. PERF_SAMPLE_IDENTIFIER bit set in
-+	the sample_type member of the struct perf_event_attr argument to the
-+	perf_event_open system call.
-+
- -n::
- --no-samples::
- 	Don't sample.
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 00c2a6cdf1be..40dca1fba4e3 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -3191,6 +3191,8 @@ static struct option __record_options[] = {
- 	OPT_BOOLEAN(0, "code-page-size", &record.opts.sample_code_page_size,
- 		    "Record the sampled code address (ip) page size"),
- 	OPT_BOOLEAN(0, "sample-cpu", &record.opts.sample_cpu, "Record the sample cpu"),
-+	OPT_BOOLEAN(0, "sample-identifier", &record.opts.sample_identifier,
-+		    "Record the sample identifier"),
- 	OPT_BOOLEAN_SET('T', "timestamp", &record.opts.sample_time,
- 			&record.opts.sample_time_set,
- 			"Record the sample timestamps"),
-diff --git a/tools/perf/util/record.c b/tools/perf/util/record.c
-index 5b09ecbb05dc..b529636ab3ea 100644
---- a/tools/perf/util/record.c
-+++ b/tools/perf/util/record.c
-@@ -121,7 +121,7 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
- 	evlist__for_each_entry(evlist, evsel)
- 		evsel__config_leader_sampling(evsel, evlist);
- 
--	if (opts->full_auxtrace) {
-+	if (opts->full_auxtrace || opts->sample_identifier) {
- 		/*
- 		 * Need to be able to synthesize and parse selected events with
- 		 * arbitrary sample types, which requires always being able to
-diff --git a/tools/perf/util/record.h b/tools/perf/util/record.h
-index be9a957501f4..4269e916f450 100644
---- a/tools/perf/util/record.h
-+++ b/tools/perf/util/record.h
-@@ -28,6 +28,7 @@ struct record_opts {
- 	bool	      sample_time;
- 	bool	      sample_time_set;
- 	bool	      sample_cpu;
-+	bool	      sample_identifier;
- 	bool	      period;
- 	bool	      period_set;
- 	bool	      running_time;
--- 
-2.25.1
 

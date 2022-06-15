@@ -2,175 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258DC54C887
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6587D54C88C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348459AbiFOM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S1348584AbiFOMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242459AbiFOM22 (ORCPT
+        with ESMTP id S242459AbiFOMaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:28:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BA3393FE;
-        Wed, 15 Jun 2022 05:28:26 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C559266016CB;
-        Wed, 15 Jun 2022 13:28:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655296105;
-        bh=4nU9NX8b9cZ1xmaDRmhjERV+Ti0iFHjk5ZJ4I5OHFKg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e5N5JyBggQ4zs0Fz6xkG5P2lTO0eO/wPkxz+z/OFofBarb38HNedfhq9yqtAGVf9l
-         0PUw9XO54LL0vF86XTinY+iAdtn0vk4Cog3WIh1GyrpJhL0kBf4f/JrH+vE8vJMuri
-         pL/55G3lZaHGC1ajx5gZtMmsLmHpwR2on5Znu0b6mjMQfw8tJamf5lPTj/n2ixxjGk
-         hVpxxfdyYxchxSCViNHYe/Kqhx1sSLwsAkfZyrJXGAGPpd5IG6TM/0O7yeZPiVNgvA
-         ms0JorOxWEy7yJA9A1FBIPkfTl/hfpPIPWev17eGOBt0zC3COek5AMRUVVVWrKGXb3
-         W0fO4VBtVmmyA==
-Message-ID: <e4a2c56e-8e38-b44c-04b4-fd792fbf2f74@collabora.com>
-Date:   Wed, 15 Jun 2022 14:28:22 +0200
+        Wed, 15 Jun 2022 08:30:15 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A313427F1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:30:14 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id v8so2035374ljj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5vGAXTFss+xRVWCjnDcb7Q0fDyWMmYQS1IlIisRz3kA=;
+        b=EOkJnIDxrEFF+7/lL50921cC8xj04yIhzL/gjXZ2b99hFK2rWxyrK9CAGQMtFmvcvf
+         ktSx+aJ1aXXVzZYdHssvQ+iY9tweS2bkxIJDvynoAHbIP+KiqZ+o+VFZnQHlHMaeWh1H
+         FopnjxWrPoqGWx0EgSR1oqfam4d36/hYw+7+qwSw8dojx8NTc4+Plcq0bv7m90zRwFb8
+         sL7i915LBomiiZ1YP7udhS3T1xO330Iy9eXS26A9J5Sms7GMlxoRiQ6d0aHFwZO1VAMr
+         zakJ7NDnHlnsXmcm4DGdaX+lY6lgKOFJ2SZQ33FeaUKD6OTMZIFTsnw4ohSUPk+hQii+
+         F4Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5vGAXTFss+xRVWCjnDcb7Q0fDyWMmYQS1IlIisRz3kA=;
+        b=SUbKzyWa7XCMVF0Xwh8VBz1fV19pf+BAvSxrvDfNKvc8FLLufJCHNOoiWNO57jnvQe
+         nCcQCYPC/xs973hhdnC9/JtmYmiGEgPVXauKiVV/Qh0ljCwUhffL1xRPUvFQ67bfUVTp
+         r7Oi+TbK2VM7piqeL0tmcuQkhCPEPvUbBeDD1QpCcMND+FQNQf+zrdrgzuzDUC/uPibC
+         wua09f/FDuksskdKNzNOB5ll0JDmvkGQBYhefZWatg0Uy3/P3j/w2ct/IC1QFpS+iOn0
+         Asp6E4qVjdkYZZagJB3qDwEgn0e4gwvRTH+swyQiuqRcBqCuOMM+N8XDw8IODOouT8yx
+         lHrA==
+X-Gm-Message-State: AJIora+yK06C5BApbjJBGXapYkaY7oyFQDpfeG/1S7pFRthGOtOzJU6v
+        65EckZUAIzQ+wrQtDXHFzmzHAw==
+X-Google-Smtp-Source: AGRyM1stEKOa97MHGOwvfFGeoSt3FuS+Eu5m4yHonr0NYFdvsXzMyJYZLHDcfQQpysoq8eIb4KKNAg==
+X-Received: by 2002:a05:651c:50b:b0:259:957:f2c6 with SMTP id o11-20020a05651c050b00b002590957f2c6mr4985704ljp.26.1655296212733;
+        Wed, 15 Jun 2022 05:30:12 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f27-20020a19381b000000b00479050b8260sm1782521lfa.104.2022.06.15.05.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 05:30:12 -0700 (PDT)
+Message-ID: <3f595dba-36e7-59ed-04d6-af1f1259b3ba@linaro.org>
+Date:   Wed, 15 Jun 2022 15:30:11 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 6/6] iommu: mtk_iommu: Lookup phandle to retrieve
- syscon to pericfg
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>, yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski@linaro.org
-References: <20220609100802.54513-1-angelogioacchino.delregno@collabora.com>
- <20220609100802.54513-7-angelogioacchino.delregno@collabora.com>
- <8b31b1d2-4ed7-11a1-2124-4641c8f3abcd@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <8b31b1d2-4ed7-11a1-2124-4641c8f3abcd@gmail.com>
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] drm/msm/dsi: Use single function for reset
+Content-Language: en-GB
+To:     Luca Weiss <luca@z3ntu.xyz>, dri-devel@lists.freedesktop.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220610220259.220622-1-luca@z3ntu.xyz>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220610220259.220622-1-luca@z3ntu.xyz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/06/22 14:09, Matthias Brugger ha scritto:
+On 11/06/2022 01:02, Luca Weiss wrote:
+> From: Vladimir Lypak <vladimir.lypak@gmail.com>
 > 
+> There is currently two function for performing reset: dsi_sw_reset and
+> dsi_sw_reset_restore. Only difference betwean those is that latter one
+> assumes that DSI controller is enabled. In contrary former one assumes
+> that controller is disabled and executed during power-on. However this
+> assumtion is not true mobile devices which have boot splash set up by
+> boot-loader.
 > 
-> On 09/06/2022 12:08, AngeloGioacchino Del Regno wrote:
->> On some SoCs (of which only MT8195 is supported at the time of writing),
->> the "R" and "W" (I/O) enable bits for the IOMMUs are in the pericfg_ao
->> register space and not in the IOMMU space: as it happened already with
->> infracfg, it is expected that this list will grow.
->>
->> Instead of specifying pericfg compatibles on a per-SoC basis, following
->> what was done with infracfg, let's lookup the syscon by phandle instead.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/iommu/mtk_iommu.c | 23 +++++++++++++----------
->>   1 file changed, 13 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
->> index 90685946fcbe..0ea0848581e9 100644
->> --- a/drivers/iommu/mtk_iommu.c
->> +++ b/drivers/iommu/mtk_iommu.c
->> @@ -138,6 +138,8 @@
->>   /* PM and clock always on. e.g. infra iommu */
->>   #define PM_CLK_AO            BIT(15)
->>   #define IFA_IOMMU_PCIE_SUPPORT        BIT(16)
->> +/* IOMMU I/O (r/w) is enabled using PERICFG_IOMMU_1 register */
->> +#define HAS_PERI_IOMMU1_REG        BIT(17)
+> This patch removes dsi_sw_reset_restore and makes dsi_sw_reset disable
+> DSI controller during reset sequence if it's enabled.
 > 
->  From what I can see MTK_IOMMU_TYPE_INFRA is only set in MT8195 which uses pericfg. 
-> So we don't need a new flag here. For me the flag name MTK_IOMMU_TYPE_INFRA was 
-> confusing as it has nothing to do with the use of infracfg. I'll hijack this patch 
-> to provide some feedback on the actual code, please see below.
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 48 +++++++++++++-----------------
+>   1 file changed, 21 insertions(+), 27 deletions(-)
 > 
->>   #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)    \
->>                   ((((pdata)->flags) & (mask)) == (_x))
->> @@ -187,7 +189,6 @@ struct mtk_iommu_plat_data {
->>       u32            flags;
->>       u32            inv_sel_reg;
->> -    char            *pericfg_comp_str;
->>       struct list_head    *hw_list;
->>       unsigned int        iova_region_nr;
->>       const struct mtk_iommu_iova_region    *iova_region;
->> @@ -1218,14 +1219,16 @@ static int mtk_iommu_probe(struct platform_device *pdev)
->>               goto out_runtime_disable;
->>           }
->>       } else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
->> -           data->plat_data->pericfg_comp_str) {
-> 
-> Check for pericfg_comp_str is not needed, we only have one platform that uses 
-> MTK_IOMMU_TYPE_INFRA.
-> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index a95d5df52653..bab2634ebd11 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -1080,12 +1080,32 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   
+>   static void dsi_sw_reset(struct msm_dsi_host *msm_host)
+>   {
+> +	u32 ctrl;
+> +
+> +	ctrl = dsi_read(msm_host, REG_DSI_CTRL);
+> +
+> +	if (ctrl & DSI_CTRL_ENABLE) {
+> +		dsi_write(msm_host, REG_DSI_CTRL, ctrl & ~DSI_CTRL_ENABLE);
+> +		/*
+> +		 * dsi controller need to be disabled before
+> +		 * clocks turned on
+> +		 */
+> +		wmb();
+> +	}
+> +
+>   	dsi_write(msm_host, REG_DSI_CLK_CTRL, DSI_CLK_CTRL_ENABLE_CLKS);
+>   	wmb(); /* clocks need to be enabled before reset */
+>   
+> +	/* dsi controller can only be reset while clocks are running */
+>   	dsi_write(msm_host, REG_DSI_RESET, 1);
+>   	msleep(DSI_RESET_TOGGLE_DELAY_MS); /* make sure reset happen */
+>   	dsi_write(msm_host, REG_DSI_RESET, 0);
+> +	wmb(); /* controller out of reset */
+> +
+> +	if (ctrl & DSI_CTRL_ENABLE) {
+> +		dsi_write(msm_host, REG_DSI_CTRL, ctrl);
+> +		wmb();	/* make sure dsi controller enabled again */
+> +	}
+>   }
+>   
+>   static void dsi_op_mode_config(struct msm_dsi_host *msm_host,
+> @@ -1478,32 +1498,6 @@ static int dsi_cmds2buf_tx(struct msm_dsi_host *msm_host,
+>   	return len;
+>   }
+>   
+> -static void dsi_sw_reset_restore(struct msm_dsi_host *msm_host)
+> -{
+> -	u32 data0, data1;
+> -
+> -	data0 = dsi_read(msm_host, REG_DSI_CTRL);
+> -	data1 = data0;
+> -	data1 &= ~DSI_CTRL_ENABLE;
+> -	dsi_write(msm_host, REG_DSI_CTRL, data1);
+> -	/*
+> -	 * dsi controller need to be disabled before
+> -	 * clocks turned on
+> -	 */
+> -	wmb();
+> -
+> -	dsi_write(msm_host, REG_DSI_CLK_CTRL, DSI_CLK_CTRL_ENABLE_CLKS);
+> -	wmb();	/* make sure clocks enabled */
+> -
+> -	/* dsi controller can only be reset while clocks are running */
+> -	dsi_write(msm_host, REG_DSI_RESET, 1);
+> -	msleep(DSI_RESET_TOGGLE_DELAY_MS); /* make sure reset happen */
+> -	dsi_write(msm_host, REG_DSI_RESET, 0);
+> -	wmb();	/* controller out of reset */
+> -	dsi_write(msm_host, REG_DSI_CTRL, data0);
+> -	wmb();	/* make sure dsi controller enabled again */
+> -}
+> -
+>   static void dsi_hpd_worker(struct work_struct *work)
+>   {
+>   	struct msm_dsi_host *msm_host =
+> @@ -1520,7 +1514,7 @@ static void dsi_err_worker(struct work_struct *work)
+>   
+>   	pr_err_ratelimited("%s: status=%x\n", __func__, status);
+>   	if (status & DSI_ERR_STATE_MDP_FIFO_UNDERFLOW)
+> -		dsi_sw_reset_restore(msm_host);
+> +		dsi_sw_reset(msm_host);
+>   
+>   	/* It is safe to clear here because error irq is disabled. */
+>   	msm_host->err_work_state = 0;
 
-Fair enough. I agree.
 
->> -        infracfg = 
->> syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
-> 
-> We can do something like this to make the code clearer:
-> data->pericfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
->          if (IS_ERR(data->pericfg)) {
-> 
-> Using infracfg variable here is confusing as it has nothing to do with infracfg 
-> used with HAS_4GB_MODE flag.
-
-Yes Matthias, using the infracfg variable is confusing - that's why I changed that
-already....
-
-> 
-> Regards,
-> Matthias
-> 
->> -        if (IS_ERR(infracfg)) {
->> -            ret = PTR_ERR(infracfg);
->> -            goto out_runtime_disable;
->> +           MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_PERI_IOMMU1_REG)) {
-
-
-
->> +        data->pericfg = syscon_regmap_lookup_by_phandle(dev->of_node, 
->> "mediatek,pericfg");
-
-....Here, where I'm assigning directly to data->pericfg :-P
-
-By the way, since it was only about one platform, my intention was to remove the
-pericfg_comp_str from struct iommu_plat_data (as you can see), but then, with the
-current code, I had to assign .....
-
-
->> +        if (IS_ERR(data->pericfg)) {
->> +            p = "mediatek,mt8195-pericfg_ao";
-
-...the string to 'p', because otherwise it would go over 100 columns.
-
-In any case, I just checked and, apparently, MT8195 is really the one and only SoC
-that needs this pericfg register to be managed by Linux... even the latest and
-greatest smartphone chip (Dimensity 9000, MT6983) doesn't need this (at least,
-from what I can read on a downstream kernel).
-
-On an afterthought, perhaps the best idea is to just leave this as it is and, as
-you proposed, avoid using that confusing infracfg variable, without adding the
-pericfg handle at all.
-
-After all, it's just one single SoC.
-
-I'll send a new version soon!
-
-Cheers,
-Angelo
-
+-- 
+With best wishes
+Dmitry

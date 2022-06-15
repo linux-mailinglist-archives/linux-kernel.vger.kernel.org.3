@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B8454C66D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF35A54C671
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347064AbiFOKo6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 06:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S1347033AbiFOKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiFOKo4 (ORCPT
+        with ESMTP id S237029AbiFOKqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:44:56 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B2A44ECF7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:44:55 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-15-KgCYn3nfPo6x7IeS2ioUCw-1; Wed, 15 Jun 2022 11:44:52 +0100
-X-MC-Unique: KgCYn3nfPo6x7IeS2ioUCw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 15 Jun 2022 11:44:50 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 15 Jun 2022 11:44:50 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ian Rogers' <rogers.email@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        "Kan Liang" <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Zhengjun Xing" <zhengjun.xing@linux.intel.com>,
-        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "Nick Forrington" <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "James Clark" <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
-        "ravi.bangoria@amd.com" <ravi.bangoria@amd.com>,
-        "santosh.shukla@amd.com" <santosh.shukla@amd.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
-CC:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Subject: RE: [PATCH v4 3/4] perf jevents: Switch build to use jevents.py
-Thread-Topic: [PATCH v4 3/4] perf jevents: Switch build to use jevents.py
-Thread-Index: AQHYgGTBf2pcanF4ukiDhmkMwHDNNq1QRgsQ
-Date:   Wed, 15 Jun 2022 10:44:50 +0000
-Message-ID: <9951ad2acd3d4454b39c4862da75d913@AcuMS.aculab.com>
-References: <20220615030438.51477-1-irogers@google.com>
- <20220615030438.51477-4-irogers@google.com>
-In-Reply-To: <20220615030438.51477-4-irogers@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 15 Jun 2022 06:46:11 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F1551585
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655289970; x=1686825970;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oQxuhjGD9lCIYMLV95OHuSL2ojSWpZXWYvCIMI/HCLg=;
+  b=J+QvQ6UZoFGAxE4mI+dJfuBCMlut86WyB36v17PjA8mNhObsPBpvVY7W
+   CttiDh3CAW4OS7Py3LLFqGV4Gguo+/dfyJPN5nrb25CPYIQ+tXNBn/wVQ
+   GQdFcJ+tvNWM8XPJciRQ0SABdx/Ok7BIhguR2UXbrZ+gnHQmUZQdEfBzR
+   qJOKcSAHNjs9WtuzARE4W4lv8bCpmVvNEK86vS2/wdqSXuaQFpEKYOnbe
+   mLUCyQdhCt6VS3luo/sPNH/hc8BNfuyEuyMGUL3Kw1BtDJj1Ozrrfsyzh
+   wq5PlqPVdpMNF2muM7/0GaXhAGfOhR6Hhip4k76XCnChDNSXb9zeZL2Ql
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="258768275"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="258768275"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:46:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="830973785"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2022 03:46:09 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1QXJ-000Mld-0u;
+        Wed, 15 Jun 2022 10:46:09 +0000
+Date:   Wed, 15 Jun 2022 18:45:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: xtensa-linux-ld: section .start VMA
+ [00000000d1000000,00000000d1000007] overlaps section .image VMA
+ [00000000d0003000,00000000d1535037]
+Message-ID: <202206151848.twvxfjn7-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ian Rogers
-> Sent: 15 June 2022 04:05
-> 
-> Generate pmu-events.c using jevents.py rather than the binary built from
-> jevents.c. Add a new config variable NO_JEVENTS that is set when there
-> is no architecture json or an appropriate python interpreter isn't present.
-> When NO_JEVENTS is defined the file pmu-events/empty-pmu-events.c is copied
-> and used as the pmu-events.c file.
-> 
-...
-> +    # jevents.py uses f-strings present in Python 3.6 released in Dec. 2016.
-> +    JEVENTS_PYTHON_GOOD := $(shell $(PYTHON) -c 'import sys;print("1" if(sys.version_info.major >= 3
-> and sys.version_info.minor >= 6) else "0")')
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   018ab4fabddd94f1c96f3b59e180691b9e88d5d8
+commit: da0a4e5c8fbcce3d1afebf9f2a967083bb19634d xtensa: only build windowed register support code when needed
+date:   8 months ago
+config: xtensa-buildonly-randconfig-r001-20220615 (https://download.01.org/0day-ci/archive/20220615/202206151848.twvxfjn7-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=da0a4e5c8fbcce3d1afebf9f2a967083bb19634d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout da0a4e5c8fbcce3d1afebf9f2a967083bb19634d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-You probably want a "2>/dev/null" in there.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I also think I remember seeing a `which python` in one of these patches.
-'which' is a bourne shell script that is trying to emulate a csh builtin.
-It can't actually work, and ISTR one of the distros might be
-trying to remove it.
-In a traditional bourne shell you should use `type python`, the posix
-equivalent (which any shell written in the last 30 years out to get
-right) is `command -V python`.
-Both type and command have to be shell builtins.
-Although I suspect some shells get command -V wrong.
+All errors (new ones prefixed by >>):
 
-	David
+>> xtensa-linux-ld: section .start VMA [00000000d1000000,00000000d1000007] overlaps section .image VMA [00000000d0003000,00000000d1535037]
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

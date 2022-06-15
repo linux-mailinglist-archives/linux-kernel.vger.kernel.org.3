@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5BB54BEA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B408354BEA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236977AbiFOALI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 20:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S236806AbiFOAOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 20:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiFOAKz (ORCPT
+        with ESMTP id S237070AbiFOANf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 20:10:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2065736176;
-        Tue, 14 Jun 2022 17:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655251854; x=1686787854;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rmwqOoory/BhG+mzzDYl/irO2wGnfPfD8xSW1RR8boc=;
-  b=WfuUk4EhdSwZLQ7jdTQiG9I/IPtcn81sX09oqnTKKYgH5jkMWEICy4y+
-   xxLT3wEp6s4zwYWTolnviBRJx2y0PNDJmvQ9y2LqlwaRDKQKwoDaw+PyX
-   O5bNDkpGJ1+CqZvfMTEWnn57Re3CCy8dse+yPA2pkKCParg3KWp999MAh
-   GV3l2eAa2ty3wVZKFa53iuN/GAic+A5z/T5onO3mS112Py96/uauoD/EC
-   v7HO412OvWP3Cw5G48pSLlWnDfNOD2Ix2j7wVecrL/RNhTlCViVub7FPF
-   MQPW7qC4lKzDm8bSc+9tfiUPSyzoRWsqJf2BNRhQnpMs+IhkgYqD4Js92
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="278825457"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="278825457"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 17:10:54 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="640662914"
-Received: from alison-desk.jf.intel.com (HELO localhost) ([10.54.74.41])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 17:10:53 -0700
-From:   alison.schofield@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Alison Schofield <alison.schofield@intel.com>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] cxl/core: Add sysfs attribute get_poison for list retrieval
-Date:   Tue, 14 Jun 2022 17:10:28 -0700
-Message-Id: <57644934bb7af8e1c692735f53c2c415a1ba16d1.1655250669.git.alison.schofield@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1655250669.git.alison.schofield@intel.com>
-References: <cover.1655250669.git.alison.schofield@intel.com>
+        Tue, 14 Jun 2022 20:13:35 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232451581C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:13:34 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso547858pjg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GK+RatNe7O7pymDTcdCOcSL1LPyziJES5KYjngnW3ls=;
+        b=PNsmbrR1clGfoGvo6PaeGg0wLXoEfuHMfpDBzKrPLaLUFvR1kRZQaqNcs/7sbT+01K
+         kdDp0sHcIAvapHzSwqM9jOR1mt8MOwQlcxf5QWfev3PocFcgqmx2n76EnUBJ8uRuB028
+         cX86nEKuSkyk16OdE4Nuweeip4qNvlavLfxEzTFjlgKXZPVfEv1a/xxaHE5C+Wv8eJUZ
+         MfV0C8FN6NRSgPnQo251cOnktt8FQ/2eosg0wfEfgXwfYELiwOXl7BJsTNdbSFamBjfs
+         biHMhicx9DLRcQmpiTcjGolXSkhz+EFzNL4UXNYubm9gSs+pFC1zLYRQgfDL+iAPirkd
+         0JmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GK+RatNe7O7pymDTcdCOcSL1LPyziJES5KYjngnW3ls=;
+        b=dbEjrNVHXZZDy6D2+DomAvK/niEFZTubvRA/lnyWjL4qih95Dy5CbxADKctfgYkpkQ
+         XPDQTWqqDaOG+A5wtJUOaeaSFKfOpft5xhhjLfeQcmzPgjwUXtgb1WOxvhY2Z6l0Sqgh
+         lkhrw4AP44SZ0ADyOHckf0f2iqXladS0S6p60B8wK1vKCpejN3Q/NzfbY8lhuttbmz+m
+         eU5tej+SeZ0LBYsMuFzYByYhxOovZf80Er3+2tgH4RHTuqvstG++gj4zlP9nCPLrUZd1
+         svrRKTHyAqnzhyZ+GH49rGh8VJ8X7OrLXsG0YQr6rOA6sora9tUerPbhjdKXqh3lZ0t6
+         qyeA==
+X-Gm-Message-State: AJIora/682bysPFbXaaszHkCbVCmffWVsKKf8kNEcdiD1P/vMQvhhyFw
+        4hUYYFUvTwPEto2q3RPdIHpw7w==
+X-Google-Smtp-Source: ABdhPJxszaGJA28msG+FfNo21WuIAW9xfufswsUUxnO4OB/tFQWMQ/e5Iu4mjDLDJKL+V5vYkLvc1A==
+X-Received: by 2002:a17:902:8f86:b0:168:9a69:fd4c with SMTP id z6-20020a1709028f8600b001689a69fd4cmr6539782plo.141.1655252013309;
+        Tue, 14 Jun 2022 17:13:33 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170903024300b001620960f1dfsm7822937plh.198.2022.06.14.17.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 17:13:32 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 17:13:28 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, aarcange@redhat.com,
+        willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
+        neilb@suse.de, apopple@nvidia.com, david@redhat.com,
+        surenb@google.com, peterx@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] mm/khugepaged: remove unneeded shmem_huge_enabled()
+ check
+Message-ID: <YqkkKCnNe42dAPrP@google.com>
+References: <20220611084731.55155-1-linmiaohe@huawei.com>
+ <20220611084731.55155-2-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220611084731.55155-2-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alison Schofield <alison.schofield@intel.com>
+On 11 Jun 16:47, Miaohe Lin wrote:
+> If we reach here, hugepage_vma_check() has already made sure that hugepage
+> is enabled for shmem. Remove this duplicated check.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/khugepaged.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 476d79360101..73570dfffcec 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -2153,8 +2153,6 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
+>  		if (khugepaged_scan.address < hstart)
+>  			khugepaged_scan.address = hstart;
+>  		VM_BUG_ON(khugepaged_scan.address & ~HPAGE_PMD_MASK);
+> -		if (shmem_file(vma->vm_file) && !shmem_huge_enabled(vma))
+> -			goto skip;
+>  
+>  		while (khugepaged_scan.address < hend) {
+>  			int ret;
+> -- 
+> 2.23.0
+> 
+> 
 
-The sysfs attribute, get_poison, allows user space to request the
-retrieval of a CXL devices poison list for its persistent memory.
+Thanks for these cleanups, Miaohe.
 
-From Documentation/ABI/.../sysfs-bus-cxl
-        (WO) When a '1' is written to this attribute the memdev
-        driver retrieves the poison list from the device. The list
-        includes addresses that are poisoned or would result in
-        poison if accessed, and the source of the poison. This
-        attribute is only visible for devices supporting the
-        capability. The retrieved errors are logged as kernel
-        trace events with the label: cxl_poison_list.
-
-Signed-off-by: Alison Schofield <alison.schofield@intel.com>
----
- Documentation/ABI/testing/sysfs-bus-cxl | 13 ++++++++++
- drivers/cxl/core/memdev.c               | 32 +++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-index 7c2b846521f3..9d0c3988fdd2 100644
---- a/Documentation/ABI/testing/sysfs-bus-cxl
-+++ b/Documentation/ABI/testing/sysfs-bus-cxl
-@@ -163,3 +163,16 @@ Description:
- 		memory (type-3). The 'target_type' attribute indicates the
- 		current setting which may dynamically change based on what
- 		memory regions are activated in this decode hierarchy.
-+
-+What:		/sys/bus/cxl/devices/memX/get_poison
-+Date:		June, 2022
-+KernelVersion:	v5.20
-+Contact:	linux-cxl@vger.kernel.org
-+Description:
-+		(WO) When a '1' is written to this attribute the memdev
-+		driver retrieves the poison list from the device. The list
-+		includes addresses that are poisoned or would result in
-+		poison if accessed, and the source of the poison. This
-+		attribute is only visible for devices supporting the
-+		capability. The retrieved errors are logged as kernel
-+		trace events with the label: cxl_poison_list.
-diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-index f7cdcd33504a..5ef9ffaa934a 100644
---- a/drivers/cxl/core/memdev.c
-+++ b/drivers/cxl/core/memdev.c
-@@ -106,12 +106,34 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(numa_node);
- 
-+static ssize_t get_poison_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t len)
-+
-+{
-+	int rc;
-+
-+	if (!sysfs_streq(buf, "1")) {
-+		dev_err(dev, "%s: unknown value: %s\n", attr->attr.name, buf);
-+		return -EINVAL;
-+	}
-+
-+	rc = cxl_mem_get_poison_list(dev);
-+	if (rc) {
-+		dev_err(dev, "Failed to retrieve poison list %d\n", rc);
-+		return rc;
-+	}
-+	return len;
-+}
-+static DEVICE_ATTR_WO(get_poison);
-+
- static struct attribute *cxl_memdev_attributes[] = {
- 	&dev_attr_serial.attr,
- 	&dev_attr_firmware_version.attr,
- 	&dev_attr_payload_max.attr,
- 	&dev_attr_label_storage_size.attr,
- 	&dev_attr_numa_node.attr,
-+	&dev_attr_get_poison.attr,
- 	NULL,
- };
- 
-@@ -130,6 +152,16 @@ static umode_t cxl_memdev_visible(struct kobject *kobj, struct attribute *a,
- {
- 	if (!IS_ENABLED(CONFIG_NUMA) && a == &dev_attr_numa_node.attr)
- 		return 0;
-+
-+	if (a == &dev_attr_get_poison.attr) {
-+		struct device *dev = container_of(kobj, struct device, kobj);
-+		struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-+		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-+
-+		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-+			      cxlds->enabled_cmds))
-+			return 0;
-+	}
- 	return a->mode;
- }
- 
--- 
-2.31.1
-
+Reviewed-by: Zach O'Keefe <zokeefe@google.com>

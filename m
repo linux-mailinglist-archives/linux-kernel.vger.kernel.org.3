@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5464554C7E2
+	by mail.lfdr.de (Postfix) with ESMTP id 07E0954C7E1
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347863AbiFOLvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S1347608AbiFOLvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347204AbiFOLvG (ORCPT
+        with ESMTP id S1347229AbiFOLvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Jun 2022 07:51:06 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9663F4EDF8;
-        Wed, 15 Jun 2022 04:50:58 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x5so15761191edi.2;
-        Wed, 15 Jun 2022 04:50:58 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAEE4EF79;
+        Wed, 15 Jun 2022 04:50:59 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id d14so15697623eda.12;
+        Wed, 15 Jun 2022 04:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cl1dcczO96rBtCg5ygEOypyWeJ90Qx/W0l9Ehf8BH4M=;
-        b=QCoS3wSh7xzDJh42Kjkbhg2/y1eEQ+j+Zb72WzIpKlKJZbMiMdQXiVm52iPgs4hBg1
-         uhzvAhjaseNimjJUAdncHPTEsYFVb/D2bn5Va4fbtN3LSn7J07MuYD/UwHC6yvJmEvpe
-         Bf3pbUA2CIPb988FRhaVXILig2m8/ZbhKp85bEmtNA6tRRoOpqjnOGN1desIoGiTO5OG
-         ERrR50qwYHQhTD85fEjWG5H0R2NtAVexwy9azQQSnAnDRpL/2Od54PxH4GzZl3zG+mM4
-         mNP2EtvTD7915qmEYOLaVJBX5FgqITRf7crxWaPGkcolEBB/anzB8SlFt1Wm0y9KCpx0
-         ZsYw==
+        bh=HENmXPwQgZrLvgBCOSxbn3j3qup91Vw70nnac08YVQI=;
+        b=DUgSbBif0rvoVLNJXtj/ChM9YSBp5WGCaDECnnql+GX3hRdyoqgIuQ2xRZFqjedHAf
+         cnEJo5iClqIkgWsSOUF8paCNyTTFWHdWmuvUrd0CEjfkhgikfT+jbe6lbSKDZrKwELoJ
+         22EmOIDiL+3X0CxgGcJ3i5ogwduadexq5qYRuM1L03r294jQwybtnqgQdHrbmKzdgK8a
+         De2+Y8SBzqolsZauWOELhNie/rBqvlLIMw3SflSQvAdwyAYNRfjUCH5oFZcgtv6XrKSP
+         NcSF4PrhRiOXbY0o5a6a+3xvgGdk4fWeRuQx2TmqZjpReXX+XO6l+3KLKH97sniqnNUL
+         LBdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cl1dcczO96rBtCg5ygEOypyWeJ90Qx/W0l9Ehf8BH4M=;
-        b=D+4uEyXwEQIymVwkXnqlVcs5wr6IvxLpyTn7PjWySpZHkiHw+CE/KhWdhgHYNRh59k
-         6vemQf7277yXgyON1QLrq/MSXf3WUblc0qPDSAFL0yxyQRE3xh+nBoG/Cgl7VqhPBode
-         xLox/LNzo8OsTKD7kpXD+E4x/WteixMDHeOV1vNtJfjozyf2IeAyl4sag51III1Br4Ir
-         wX/X8XFuRjNP5z3Ul7jOTCpq0hUVmP1nHHfPtmsW0pQQFi9i/L8qWY6RD8050IO/sNyz
-         J3su46PFJNGsge324io1WgUPLHO2GqREZaCpYRvHmI72xzMTV3UyELLN98XftvRBFPWs
-         TqwA==
-X-Gm-Message-State: AOAM533x0m5jHo41QKOQGKmd3Bc7JUDppAQtfmWhjOUv1C91I+l3utan
-        J2eW+XaQyQdUKFaFRUuDHlY=
-X-Google-Smtp-Source: ABdhPJwtUg/5+Cq6iOM/mEbJDKECBlI5ltgZntMeaKelklR1yr8vyLEtxsPhjovrN8Dbxg+8xZkN5w==
-X-Received: by 2002:a05:6402:249c:b0:431:3883:967a with SMTP id q28-20020a056402249c00b004313883967amr12490255eda.264.1655293857158;
-        Wed, 15 Jun 2022 04:50:57 -0700 (PDT)
+        bh=HENmXPwQgZrLvgBCOSxbn3j3qup91Vw70nnac08YVQI=;
+        b=XCNdOFY+cG1rDk1Wys3GMerkMvGBRfsfQZBznBxCOVZcKda5fGsJ8qn36vgufM2b0C
+         2uFAxwQIQkwbKj0VBrpSzjTGchBDIvXUTyMGFUyI4L04UBuAntCYFvv4peOSx31Pgl5i
+         74n/1nI47+dM3VVNaPOrXXmdzQqneY2RXNwhgfx+8nHyKQlPwK7fb+7UmytPyyzv2VRL
+         zG2AJ1hXJE4zgBPmnyH/qRd6bzL6rqzqy7YJZYI4bpai6tebk9PpDyFA69w51NYldL3V
+         dQ4C2s3PiiqxOuhiMxXj/FhXOz5kx1whnxmcYsClPhWDJAZBCYcKEypVGixrF0tU4XGe
+         bImw==
+X-Gm-Message-State: AJIora8ay/MpcbixmrFkuKIR4hM/mIeUpmYne+2X6YtijsbCQeyb6Qgx
+        ELJZHP6Bry5QsooqAlmvH0Q=
+X-Google-Smtp-Source: ABdhPJxqZWDzakNuE6KjaWfgvQSS+/by8OipbRpgC430xggG4gd/kgHQG9SoHcWJf/IeTObyU0iXwA==
+X-Received: by 2002:a05:6402:32a6:b0:42d:ed8b:3d8 with SMTP id f38-20020a05640232a600b0042ded8b03d8mr12220196eda.225.1655293858511;
+        Wed, 15 Jun 2022 04:50:58 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.56
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 04:50:56 -0700 (PDT)
+        Wed, 15 Jun 2022 04:50:58 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
 Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
@@ -59,9 +59,9 @@ Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/18] ARM: dts: imx6q-apalis: Disable stmpe touchscreen
-Date:   Wed, 15 Jun 2022 13:49:59 +0200
-Message-Id: <20220615115006.45672-12-max.oss.09@gmail.com>
+Subject: [PATCH v2 12/18] ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
+Date:   Wed, 15 Jun 2022 13:50:00 +0200
+Message-Id: <20220615115006.45672-13-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220615115006.45672-1-max.oss.09@gmail.com>
 References: <20220615115006.45672-1-max.oss.09@gmail.com>
@@ -79,40 +79,129 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 
-Unify its label with other toradex SoM dtbs.
-This allows to enable it in an overlay per the current
-system configuration.
+The Apalis iMX6 modules allow connecting a mipi-csi video input.
+Add support for our OV5640 camera module but have it disabled.
+This allows to enable it in an overlay per the current system
+configuration.
 
 Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+
 ---
 
-(no changes since v1)
+Changes in v2:
+- Fixed '-' vs. '_' in node name as pointed out by Fabio
+- Sorted properties alphabetical in the newly added node
 
- arch/arm/boot/dts/imx6qdl-apalis.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 67 ++++++++++++++++++++++++++-
+ 1 file changed, 66 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-index 636b04139a5b..b4742ad85f56 100644
+index b4742ad85f56..bbd838acb8d6 100644
 --- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-@@ -592,7 +592,7 @@
- 		/* ADC conversion time: 80 clocks */
- 		st,sample-time = <4>;
+@@ -29,6 +29,12 @@
+ 		status = "disabled";
+ 	};
  
--		stmpe_touchscreen: stmpe_touchscreen {
-+		stmpe_ts: stmpe_touchscreen {
- 			compatible = "st,stmpe-ts";
- 			/* 8 sample average control */
- 			st,ave-ctrl = <3>;
-@@ -607,6 +607,7 @@
- 			st,settling = <3>;
- 			/* 5 ms touch detect interrupt delay */
- 			st,touch-det-delay = <5>;
-+			status = "disabled";
- 		};
++	clk_ov5640_osc: clk-ov5640-osc {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+@@ -110,6 +116,26 @@
+ 		regulator-always-on;
+ 	};
  
- 		stmpe_adc: stmpe_adc {
++	reg_ov5640_1v8_d_o_vdd: regulator-ov5640-1v8-d-o-vdd {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-max-microvolt = <1800000>;
++		regulator-min-microvolt = <1800000>;
++		regulator-name = "DOVDD/DVDD_1.8V";
++		/* Note: The CSI module uses on-board 3.3V_SW supply */
++		vin-supply = <&reg_module_3v3>;
++	};
++
++	reg_ov5640_2v8_a_vdd: regulator-ov5640-2v8-a-vdd {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-max-microvolt = <2800000>;
++		regulator-min-microvolt = <2800000>;
++		regulator-name = "AVDD/AFVDD_2.8V";
++		/* Note: The CSI module uses on-board 3.3V_SW supply */
++		vin-supply = <&reg_module_3v3>;
++	};
++
+ 	reg_usb_otg_vbus: regulator-usb-otg-vbus {
+ 		compatible = "regulator-fixed";
+ 		pinctrl-names = "default";
+@@ -452,7 +478,6 @@
+ 		reset-gpios = <&gpio6 9 GPIO_ACTIVE_LOW>;	/* MXM3_13 */
+ 		status = "disabled";
+ 	};
+-
+ };
+ 
+ /*
+@@ -631,6 +656,30 @@
+ 	scl-gpios = <&gpio3 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	sda-gpios = <&gpio3 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "disabled";
++
++	ov5640_csi_cam: ov5640_mipi@3c {
++		compatible = "ovti,ov5640";
++		AVDD-supply = <&reg_ov5640_2v8_a_vdd>;
++		DOVDD-supply = <&reg_ov5640_1v8_d_o_vdd>;
++		DVDD-supply = <&reg_ov5640_1v8_d_o_vdd>;
++		clock-names = "xclk";
++		clocks = <&clks IMX6QDL_CLK_CKO2>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_cam_mclk>;
++		/* These GPIOs are muxed with the iomuxc node */
++		powerdown-gpios = <&gpio2 5 GPIO_ACTIVE_HIGH>;
++		reg = <0x3c>;
++		reset-gpios = <&gpio2 4 GPIO_ACTIVE_LOW>;
++		status = "disabled";
++
++		port {
++			ov5640_to_mipi_csi2: endpoint {
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++				remote-endpoint = <&mipi_csi_from_ov5640>;
++			};
++		};
++	};
+ };
+ 
+ &ipu1_di1_disp1 {
+@@ -661,6 +710,22 @@
+ 	};
+ };
+ 
++&mipi_csi {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "disabled";
++
++	port@0 {
++		reg = <0>;
++
++		mipi_csi_from_ov5640: endpoint {
++			clock-lanes = <0>;
++			data-lanes = <1 2>;
++			remote-endpoint = <&ov5640_to_mipi_csi2>;
++		};
++	};
++};
++
+ &pwm1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_pwm1>;
 -- 
 2.20.1
 

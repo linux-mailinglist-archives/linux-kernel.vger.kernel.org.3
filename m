@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD02954D0AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9426154D0B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358377AbiFOSIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S1345638AbiFOSKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358174AbiFOSIc (ORCPT
+        with ESMTP id S231737AbiFOSKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:08:32 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC722CDDF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:08:30 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id i186so12503347vsc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bifXozJGbo2KT995FRrx29MncDAj30k/nMYRikNI7Us=;
-        b=k67Cqug/KGcfDfJvUGzGpDoRMkM0wQGv3NOMJFcL85FnMSa/n+LmSaJrbs8kgHdf/+
-         0AhX+ZANP6ffNUhunuMIwTOc0dHv9naqexOTZFgK7Gmbgjvo1Oe7KoaiPAqPoZdfwAIM
-         SdKZNTFvMfU9hqOlDyKaCAUaawN2yJjBYfQowfwnsZ30l6I6IzRyUB5QJGx1qCb/w7yx
-         kUaSet8RG8bneb51mfOK8eEUq7HDBM5l4TwNBU2IWwkPs80mgMwQZPx26uKoHWQVUfqV
-         ka9aYYCNP5aqGB1zHAdqhuetl5szBdwsuiwefa/98RZ/uoq43Mm1VzzXpfi3zSc4Mut5
-         /+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bifXozJGbo2KT995FRrx29MncDAj30k/nMYRikNI7Us=;
-        b=xou/4PduOhbZtY1FyuXNf+vc9xVYoJU3lclb/4tL0Pf//uaStWWRXnLxWwC+H0T5+X
-         dRZ2nAIcZVfv495u4yqJUkuIUH1J5TSpjM2aES1cOcdQyIepfEWsekrbqZfZti1ZI2Zu
-         M2PEiueiW6BHRnJekziyQLAW2G3kGAsYd9Qd2j3pnhT9g0T2g0n8S48f1FFjc2t9wRaZ
-         ovGqilCCWk6r+VO53iGJcPlL5vvR77TVqiorusvVCbL/CdXU+F67D8OvmKyqb4TgU1K1
-         xcBAasN50g1T5iSJSHXh2lpCfGp51bkSrZATjD87hB2Iwg0GvvD67CQABcE3ucIE7qWB
-         1qzQ==
-X-Gm-Message-State: AJIora/dVhHJlGIbm+XNzpAfeTvr3d/CqFNhHmQxwOhBfXlYXhEuwVXo
-        2Qu6S1Aze5fbLHgskUQeETpfL2HRbzXI1HTjjBTabg==
-X-Google-Smtp-Source: AGRyM1vm4MUmXMdIsm7m17iINrr4Dp60T17s5/so7x4+sgCh08nPSiYN7VN7nJSpqFOJcZkWGdPRZwQ/W1Hg5KzJEWA=
-X-Received: by 2002:a67:f3d0:0:b0:34b:b52d:d676 with SMTP id
- j16-20020a67f3d0000000b0034bb52dd676mr520254vsn.6.1655316509460; Wed, 15 Jun
- 2022 11:08:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220504002554.654642-1-Liam.Howlett@oracle.com>
- <20220504011345.662299-1-Liam.Howlett@oracle.com> <20220504011345.662299-13-Liam.Howlett@oracle.com>
- <Yp3udPy0vuDK8khc@qian> <20220606161940.fh5edq5nyz4jru2u@revolver>
- <Yp4uD8uWB3rit/Ee@qian> <CAOUHufZk+3xCqK38CuVdWg_ZiWaLyke+Y+=CYJpraET6nKQ=yQ@mail.gmail.com>
- <CAOUHufbOz66HPebrCuJXfnfapY0qxu42-1Ppbti86Yii-GYsAQ@mail.gmail.com> <20220615142508.mtp65w6tdiurtvcn@revolver>
-In-Reply-To: <20220615142508.mtp65w6tdiurtvcn@revolver>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 15 Jun 2022 12:07:53 -0600
-Message-ID: <CAOUHufaoZ99qkBfsRWwCAx6fspL5KJYgCGe=nOVR07_2dF6URQ@mail.gmail.com>
-Subject: Re: [PATCH v9 28/69] mm/mmap: reorganize munmap to use maple states
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Qian Cai <quic_qiancai@quicinc.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Wed, 15 Jun 2022 14:10:31 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85A84B403;
+        Wed, 15 Jun 2022 11:10:30 -0700 (PDT)
+Received: from [127.0.0.1] (nyx.walle.cc [158.255.213.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 73E5B22249;
+        Wed, 15 Jun 2022 20:10:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1655316627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TS3jYFS6YTAvU3pgkMvxRJI/YD6CxfyrTdrG5rg9tDU=;
+        b=OlchZqjIeXpxF5LKa+OEpi2uZeC6CUN/XH0rxxwQ/x/J6nLbOgm5MbIm2Z9R9PJXpyqyWh
+        ITd9PIHV0TBR+EcsaFzL0mjm/aMwRtzQ1p1ctjGfEYFVgvSbeoDaUZi2Gr+pYPueUu74xN
+        GK5/IzzwgjecRTSUsCYOo2rolRVGf+4=
+Date:   Wed, 15 Jun 2022 20:10:13 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
+        <oocheret@cisco.com>
+CC:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
+Subject: Re: [PATCH] mtd: spi-nor: handle unsupported FSR opcodes properly
+User-Agent: K-9 Mail for Android
+In-Reply-To: <YqmrIsOEsFoKTwEK@lahna>
+References: <YmZUCIE/ND82BlNh@lahna> <20220610191548.3626218-1-oocheret@cisco.com> <YqbWt9f3of+7Z76e@lahna> <BYAPR11MB27570F2863F7BCDFE629B3DFCDAA9@BYAPR11MB2757.namprd11.prod.outlook.com> <YqmrIsOEsFoKTwEK@lahna>
+Message-ID: <6A852B9E-D84C-4F80-9C17-62BFBB98CC8A@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 8:25 AM Liam Howlett <liam.howlett@oracle.com> wrote:
+Am 15=2E Juni 2022 11:49:22 OEZ schrieb Mika Westerberg <mika=2Ewesterberg@=
+linux=2Eintel=2Ecom>:
+>Hi,
 >
-> * Yu Zhao <yuzhao@google.com> [220611 17:50]:
-> > On Sat, Jun 11, 2022 at 2:11 PM Yu Zhao <yuzhao@google.com> wrote:
-> > >
-> > > On Mon, Jun 6, 2022 at 10:40 AM Qian Cai <quic_qiancai@quicinc.com> wrote:
-> > > >
-> > > > On Mon, Jun 06, 2022 at 04:19:52PM +0000, Liam Howlett wrote:
-> > > > > Does your syscall fuzzer create a reproducer?  This looks like arm64
-> > > > > and says 5.18.0-next-20220603 again.  Was this bisected to the patch
-> > > > > above?
-> > > >
-> > > > This was triggered by running the fuzzer over the weekend.
-> > > >
-> > > > $ trinity -C 160
-> > > >
-> > > > No bisection was done. It was only brought up here because the trace
-> > > > pointed to do_mas_munmap() which was introduced here.
-> > >
-> > > Liam,
-> > >
-> > > I'm getting a similar crash on arm64 -- the allocator is madvise(),
-> > > not mprotect(). Please take a look.
-> >
-> > Another crash on x86_64, which seems different:
+>On Tue, Jun 14, 2022 at 05:56:54PM +0000, Oleksandr Ocheretnyi -X (oocher=
+et - GLOBALLOGIC INC at Cisco) wrote:
+>>    Hello Mika,
+>>=20
+>>    in my case (I work with memory chip n25q128a13 for recent kernels) I=
+'m
+>>    getting return value -ENOTSUPP from spi_mem_exec_op() call in the
+>>    micron_st_nor_read_fsr() method
+>>    [[1]https://elixir=2Ebootlin=2Ecom/linux/v5=2E19-rc2/source/drivers/=
+spi/spi-m
+>>    em=2Ec#L326]=2E So I decided to provide the same errorcode to
+>>    intel_spi_hw_cycle() method because older kernel versions throw the
+>>    error there=2E It is fine to use -EOPNOTSUPP return value instead=2E
+>>=20
+>>    I suspect we need to cover both cases to check -ENOTSUPP as well as
+>>    -EOPNOTSUPP to let the driver work properly=2E
+>>=20
+>>    if (ret =3D=3D -ENOTSUPP || ret =3D=3D -EOPNOTSUPP)
 >
-> Thanks for this.  I was able to reproduce the other crashes that you and
-> Qian reported.  I've sent out a patch set to Andrew to apply to the
-> branch which includes the fix for them and an unrelated issue discovered
-> when I wrote the testcases to cover what was going on here.
+>I think we should follow the same in the Intel driver and return
+>-ENOTSUPP too=2E
 
-Thanks. I'm restarting the test and will report the results in a few hours.
+AFAIK ENOTSUPP is for nfs and shouldn't be used=2E
 
-> > BUG: KASAN: slab-out-of-bounds in mab_mas_cp+0x2d9/0x6c0
-> > Write of size 136 at addr ffff88c5a2319c80 by task stress-ng/18461
-                                                       ^^^^^^^^^
-
-> As for this crash, I was unable to reproduce and the code I just sent
-> out changes this code a lot.  Was this running with "trinity -c madvise"
-> or another use case/fuzzer?
-
-This is also stress-ng (same as the one on arm64). The test stopped
-before it could try syzkaller (fuzzer).
+-michael

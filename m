@@ -2,72 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D66854DB4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A58E54DB52
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358908AbiFPHMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        id S1358984AbiFPHOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358853AbiFPHMh (ORCPT
+        with ESMTP id S229817AbiFPHON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:12:37 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F5F51;
-        Thu, 16 Jun 2022 00:12:34 -0700 (PDT)
-X-UUID: 450dc388895640b8bb5be844d54c3dc1-20220616
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:e5f7ed83-ef2d-4e55-a1e2-0bd5cfe595ce,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:e5f7ed83-ef2d-4e55-a1e2-0bd5cfe595ce,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:765873f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:91b86b891a75,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 450dc388895640b8bb5be844d54c3dc1-20220616
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 481259333; Thu, 16 Jun 2022 15:12:29 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 16 Jun 2022 15:12:28 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 16 Jun 2022 15:12:28 +0800
-Message-ID: <3de597c1ab963cc8f6dd89da089c6f0660517f34.camel@mediatek.com>
-Subject: Re: [PATCH] clk: mediatek: clk-mt8195-vdo0: Set rate on
- vdo0_dp_intf0_dp_intf's parent
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>
-CC:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "Miles Chen =?UTF-8?Q?=28=E9=99=B3=E6=B0=91=E6=A8=BA=29?=" 
-        <Miles.Chen@mediatek.com>,
-        "chun-jie.chen@mediatek.com" <chun-jie.chen@mediatek.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <jitao.shi@mediatek.com>, <mandyjh.liu@mediatek.com>
-Date:   Thu, 16 Jun 2022 15:12:28 +0800
-In-Reply-To: <20220614091020.21472-1-angelogioacchino.delregno@collabora.com>
-References: <20220614091020.21472-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 16 Jun 2022 03:14:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF145B3D6;
+        Thu, 16 Jun 2022 00:14:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92166B82281;
+        Thu, 16 Jun 2022 07:14:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A597C34114;
+        Thu, 16 Jun 2022 07:14:07 +0000 (UTC)
+Message-ID: <39a83a7e-caaf-1dac-1072-72cd2f5d8bf5@xs4all.nl>
+Date:   Thu, 16 Jun 2022 09:14:05 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] media: cedrus: fix HEVC decoding
+Content-Language: en-US
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, wens@csie.org, samuel@sholland.org,
+        benjamin.gaignard@collabora.com, nicolas.dufresne@collabora.com,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220615204436.137377-1-jernej.skrabec@gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220615204436.137377-1-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,95 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 17:10 +0800, AngeloGioacchino Del Regno wrote:
-> Add the CLK_SET_RATE_PARENT flag to the CLK_VDO0_DP_INTF0_DP_INTF
-> clock: this is required to trigger clock source selection on
-> CLK_TOP_EDP, while avoiding to manage the enablement of the former
-> separately from the latter in the displayport driver.
+
+
+On 6/15/22 22:44, Jernej Skrabec wrote:
+> After detailed comparison of register names to vendor library I noticed
+> that one register has completely different name. After some testing I
+> discovered that it was misnamed and used incorrectly. This patch series
+> fixes it. With that, 3 more reference bitstreams are now correctly
+> decoded. It is also possible that this fixes instability issue I had
+> after decoding such bitstreams. Running Fluster test suite very often
+> locked up my board, but after applying this fix, I never experienced it
+> again. It might still be completely coincidental, but I doubt this is
+> the case.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/clk/mediatek/clk-mt8195-vdo0.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> Note: Patch 2 clashes with HEVC uAPI destaging. In current form, it can
+> be easily backported. However, there are few users of Cedrus HEVC and
+> skipping this fix wouldn't be that bad.
 > 
-> diff --git a/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> index 261a7f76dd3c..07b46bfd5040 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> @@ -37,6 +37,10 @@ static const struct mtk_gate_regs vdo0_2_cg_regs =
-> {
->  #define GATE_VDO0_2(_id, _name, _parent, _shift)			
-> \
->  	GATE_MTK(_id, _name, _parent, &vdo0_2_cg_regs, _shift,
-> &mtk_clk_gate_ops_setclr)
->  
-> +#define GATE_VDO0_2_FLAGS(_id, _name, _parent, _shift, _flags)	
-> 	\
-> +	GATE_MTK_FLAGS(_id, _name, _parent, &vdo0_2_cg_regs, _shift,	
-> \
-> +		       &mtk_clk_gate_ops_setclr, _flags)
-> +
->  static const struct mtk_gate vdo0_clks[] = {
->  	/* VDO0_0 */
->  	GATE_VDO0_0(CLK_VDO0_DISP_OVL0, "vdo0_disp_ovl0", "top_vpp",
-> 0),
-> @@ -85,7 +89,8 @@ static const struct mtk_gate vdo0_clks[] = {
->  	/* VDO0_2 */
->  	GATE_VDO0_2(CLK_VDO0_DSI0_DSI, "vdo0_dsi0_dsi", "top_dsi_occ",
-> 0),
->  	GATE_VDO0_2(CLK_VDO0_DSI1_DSI, "vdo0_dsi1_dsi", "top_dsi_occ",
-> 8),
-> -	GATE_VDO0_2(CLK_VDO0_DP_INTF0_DP_INTF, "vdo0_dp_intf0_dp_intf",
-> "top_edp", 16),
-> +	GATE_VDO0_2_FLAGS(CLK_VDO0_DP_INTF0_DP_INTF,
-> "vdo0_dp_intf0_dp_intf",
-> +			  "top_edp", 16, CLK_SET_RATE_PARENT),
->  };
->  
->  static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
-> -- 
-> 2.35.1
+> Please let me know which way to go:
+> 1) wait for destaging, send rebased v2 and not care about backporting
+
+Let's go with 1. There is not much point in backporting since destaging
+the HEVC API will also change it, so userspace will need to adapt. It's
+a staging driver anyway (although hopefully not for long).
+
+If you post a v2 on top of the latest series from Benjamin, then that
+should almost certainly work fine when Benjamin posts what will hopefully
+be the final version of his series. When it is all OK, then I put both in
+the same PR.
+
+Regards,
+
+	Hans
+
+> 2) merge before destaging, but v9 of HEVC uAPI destaging would need to
+>    be rebased.
+> 3) something else?
 > 
-
-Hello Angelo,
-
-Thanks for this patch.
-Another dp clock should also be fix.
-After confirming with Jitao who is our dp expert.
-The parent of CLK_VDO1_DPINTF should be top_dp instead of top_vpp.
-
-Thanks!
-
---- a/drivers/clk/mediatek/clk-mt8195-vdo1.c
-+++ b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-@@ -43,6 +43,9 @@ static const struct mtk_gate_regs vdo1_3_cg_regs = {
- #define GATE_VDO1_2(_id, _name, _parent,
-_shift)                       \
-        GATE_MTK(_id, _name, _parent, &vdo1_2_cg_regs, _shift,
-&mtk_clk_gate_ops_setclr)
-
-+#define GATE_VDO1_2_FLAGS(_id, _name, _parent, _shift,
-_flags)                 \
-+       GATE_MTK_FLAGS(_id, _name, _parent, &vdo1_2_cg_regs, _shift,
-&mtk_clk_gate_ops_setclr, _flags)
-+
- #define GATE_VDO1_3(_id, _name, _parent,
-_shift)                       \
-        GATE_MTK(_id, _name, _parent, &vdo1_3_cg_regs, _shift,
-&mtk_clk_gate_ops_setclr)
-
-@@ -99,7 +102,7 @@ static const struct mtk_gate vdo1_clks[] = {
-        GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPI0,
-"vdo1_disp_monitor_dpi0", "top_vpp", 1),
-        GATE_VDO1_2(CLK_VDO1_DPI1, "vdo1_dpi1", "top_vpp", 8),
-        GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPI1,
-"vdo1_disp_monitor_dpi1", "top_vpp", 9),
--       GATE_VDO1_2(CLK_VDO1_DPINTF, "vdo1_dpintf", "top_vpp", 16),
-+       GATE_VDO1_2_FLAGS(CLK_VDO1_DPINTF, "vdo1_dpintf", "top_dp", 16,
-CLK_SET_RATE_PARENT),
-
-BRs,
-Bo-Chen
-
+> Best regards,
+> Jernej
+> 
+> Jernej Skrabec (2):
+>   media: cedrus: h265: Fix flag name
+>   media: cedrus: h265: Fix logic for not low delay flag
+> 
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  | 29 ++++++++++++++++++-
+>  .../staging/media/sunxi/cedrus/cedrus_regs.h  |  3 +-
+>  2 files changed, 29 insertions(+), 3 deletions(-)
+> 

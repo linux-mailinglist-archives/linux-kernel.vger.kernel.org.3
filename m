@@ -2,174 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED0054DCE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD12954DCEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiFPI3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S230468AbiFPIas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359662AbiFPI3t (ORCPT
+        with ESMTP id S229531AbiFPIar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:29:49 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096565DA6F;
-        Thu, 16 Jun 2022 01:29:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ITwq+Mbfvcj29sRAu75Op70X2WQyC7bJnZIwiH8QrYzMyCqxxCeRFvOeReXN4PnyKg1n/K6UFGu4hNTAmIHHxblgSCMyf2AcMBZBfmF0mz9l+1PFlMFiPMgK4J7BNv7KAZ69T6DXWMgmDt2a9iX0PbpBmYUPfSOvY9fjZtqSj4GT0UPE2r1Vz1Zzj9a5zFmZtqCAqcSABnPvePBp0RWxeCIXRU3cKPB+ZYXYcsPCYmUjJJASwVyhmZbA+8XqbtcWckw/dQDeqL6qwWeztjjHC6m2eF3lD8alD5RyJgejQl6fJZRFNGXVKyB+jjm+u7jyoWeXXW4lw0AAbJqzg2QNJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rS7yOKzT7/G8Zzxz54idBsHmMrKjS/hHGjLuE+219qg=;
- b=SyYk0aJlOxBeSPzYzLv6YIlgKTVoupzgCuFFTyZarz9JhFDMfhAEHgyy4A7EwiikyQxIQ2zgTdUo9fujmCLKeAJZlNEIBvid26Y/0BdvYt3eDG/Hjuqtr8pPeCzc5JTofuPRXVrjVVnyt7NejO1fxFGEJWS0+nWDOBK3w/vesEqGn8IHr6UgQ5ok+hjhbQS+otOnpbVwSWt/y5HjEhbuvDlzJMzMpyfNcBC8uvS1YgJzCI1cA/B5VZ3bmNXnZRwN5RGqRZqoM0QjtLk5oTQPRyf+BC9qEtLedW6oCNYiILzJLMPzXX3BQRkpdxpeITWNTkGPCGwwOAH30KUsd4CLUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rS7yOKzT7/G8Zzxz54idBsHmMrKjS/hHGjLuE+219qg=;
- b=PQE6DB2F0MJxn0oLxCbEpMKm5Edn6f0/t4RsF29soxq47LtYHitdiJE6wroKarOzscTb/050BofPPHfn79vMq/jUJZQgUASrSUSbTYbMoaUQO+TJD2xWLGukWMEbnf5lohtKBuE64hurYWtmMfLbMTC8QCsz+XTKeizmB26Fnsv3rPeAJEUx4iMvE3xYiMvNp/YvA80yFYWY0T0/ng3BVP649qqvVJgFkjaPc6ROSX5IOZf+4uZOOoS8N8/84Bq60Lx87G/3UORFBjA6dIEScUfwMTuWbs8FdOdkXLHeB+yEmJuuWtQ9yrHJIXnIyfQTNPiwKOSB7cA++YIiIE1Ulw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- CY5PR12MB6252.namprd12.prod.outlook.com (2603:10b6:930:20::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Thu, 16 Jun 2022 08:29:41 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::f954:6840:ce82:c54f]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::f954:6840:ce82:c54f%4]) with mapi id 15.20.5353.014; Thu, 16 Jun 2022
- 08:29:41 +0000
-Message-ID: <e2d8a005-90ca-7047-4594-6fa25c494ddb@nvidia.com>
-Date:   Thu, 16 Jun 2022 09:29:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.4 00/15] 5.4.199-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20220614183721.656018793@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20220614183721.656018793@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0081.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1e::7) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Thu, 16 Jun 2022 04:30:47 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532075DA3A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:30:46 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LNwN82MwNzDqqF;
+        Thu, 16 Jun 2022 16:30:16 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 16:30:42 +0800
+Subject: Re: [PATCH v6 1/1] mm/memory-failure: disable unpoison once hw error
+ happens
+To:     zhenwei pi <pizhenwei@bytedance.com>, <naoya.horiguchi@nec.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <david@redhat.com>, <gregkh@linuxfoundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220615093209.259374-1-pizhenwei@bytedance.com>
+ <20220615093209.259374-2-pizhenwei@bytedance.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <61092273-ea3f-449a-8993-a917837e1cf0@huawei.com>
+Date:   Thu, 16 Jun 2022 16:30:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c3bbeee2-cf4e-4f67-1fe2-08da4f725bda
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6252:EE_
-X-Microsoft-Antispam-PRVS: <CY5PR12MB62528C739836AAEF0048E6AFD9AC9@CY5PR12MB6252.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e05JsT4GTYbf5P6XMLEXZcXBLxndX27uCuG4K1ULIIsGK/7QV8/Pl5Y2M/2Ef//QxPzT4NRjfhW+e40aBQ5JvC8EchUHypbAKN6N3oOB7wNDnHg35HNdhk67vxZjZwpj8HBROytyd1tP77uW7QmOAFXa0DkmT4bWThCABDsh4343FlhAIMalJ0WvjIeDM8xUQ74Okmthf4Q0NesQvz1SLhXyzP7yEQa1DnExukvcW87ND3aoTfczBIyITmukJZVdEzY9Ehz+UO7alaUDUtFEKMrOtW3gW6LCjSvv9a+8Fo95FlJO3zy+dsmKdMmwXQemUxyUei9YsOWOa48B+/42b6FsZQEruaB0l0dKGXCOIX+4K1CD6hyQS5y1wGgPON2pdjjO52Y0hWSMsPbq2nL4WuI5DkUNtpY+39tRRFtXuUf2SBb0T4pM2V09c/fTiELdDcILx+DV4VjeE+tPtQGq+v35bwyZGyqntdOeGyScJEGDBsfZ+gp1vmqIu54/1j89weMBA/giCIBZn+jSZpyVDUvu1KLpEeZXgHJRFFDosaq0BPttYLXYhmUF69kL4BxpSj4qpDoC5jTOxTC+8749YbvgAcmNLmkYIhTyrCVoiWPpzQa9p07Y1z8OWYmrlXevUrqIJACk7XWLu0aLGXMF8xPtMpbn3Dnvexatip6J2z4zXEj66x+0Ru+G5PWqfdRCG/U32UBkzHA/xM8C7ttGp2EyqRKDSGkemLPNbvE7NC7WMomFct8KlVl5mOaKaA6Z18tlQcqWm/lp4GMaDmE0GyNNpqGHzg/rZcZB/8ZTnmmmrw4DRHQuH0Yf9ab2AllXJAC20jcCGPpwGdTNHfBSIA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(86362001)(38100700002)(31696002)(8936002)(508600001)(316002)(6486002)(2906002)(7416002)(966005)(8676002)(6666004)(36756003)(5660300002)(66476007)(66946007)(4326008)(186003)(66556008)(6506007)(53546011)(55236004)(2616005)(6512007)(26005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnhhSExmQUk0U1g4ZlNKYXU3cWs0NmRENmdzZTlWeUxLR285SlJMK3A2WGJN?=
- =?utf-8?B?MHhOK0NjOFBQSC93S0VlSEs3Wk1BQ3JLbGFXVUV2UVh4UEFOQUxGSmYxQnBH?=
- =?utf-8?B?cVU0bUMwU0RmY2NOcGp5M1RUTkZXUGZDNU1XMHQ2R1R4Tit4SG9yVXJtenhQ?=
- =?utf-8?B?Ui9Ka0VRMFg5ejdUd2dRSUQ4U1pMQ0VoblNCS2JUc1BpVXNlYTg0dmoxUlN4?=
- =?utf-8?B?dWRxN0V2Mi81RTBDcEE0bllnNFR5K0FEMEE1NmpCdGpDSEtJRFdROFpNRjVR?=
- =?utf-8?B?U3hkY0lsckh2OWZvc2EyYWFoVEltakFROXhxVHVOTERzbzFHUVVzRDh1eDBT?=
- =?utf-8?B?dk8zejdrUDk1dllMMGtNQkQrWW55UEZvY2xnd2xxakExOXBadzNEcjlRU0hR?=
- =?utf-8?B?dlBQeDA4WmIzYmJPQnRqRm1yVG80M3VsNWorazdTa25LV05XdFhweHlEQXRQ?=
- =?utf-8?B?aExtQmxjdXhETTA5cmdLK3lSRTJibEFnVHZYb2JTTUhzSnpobW5QbTFydHpn?=
- =?utf-8?B?c2RXVW9KK3I5Z0llOTRBcDQrZ0pNZDNJQzRLcXF0Mm5BOHIwV0ZDczJNclhE?=
- =?utf-8?B?V2dBNVRTUGtYRVpSakRMTlUwc0FYcEpUc0VvU3J5czhub3ZUV2JWSGhBUnFJ?=
- =?utf-8?B?bkh6RG9yL2o3MkxzSFFwbThKNVd6WUJBdnByKys1QmRmTVN0NlFPVXpZNXpo?=
- =?utf-8?B?MWtnQlM1Q0l5dmZob2txRE10aDhRQmxkUUtpTm84SXJqZVlyYjJGMDRkeGc1?=
- =?utf-8?B?WGRpaEd3M2lQYWdhZ2dWb25hWWpYR2grTTZrdS82dCt4d2tZNDJHMTRwRGlx?=
- =?utf-8?B?NFlYNFJENDN5dWU3VWVYMGR2SlhXSXVQRTcraXBaeHpYUkJyRkw1bzB1em5M?=
- =?utf-8?B?dXdxVXZlU0Fwa2VHZGF3YWlpeGplaXlpQk1oZzF1QXloRUJWR3Rjbmt6RHdy?=
- =?utf-8?B?bmtqRGpSNEM5V1NwMUVGUGR0TndyRFNhbVc4bGhPUExOa2xubDhlYmV3cjMy?=
- =?utf-8?B?dnUzNGVoczJrOHNMblJ5NGZYb095c2F3bFZ1eHdXMFpHMEpIL0tsbFJXM1Vx?=
- =?utf-8?B?eGowQkhhTERHZG5tL1JNTjNDUmRub3BQNm15TGVQdFBIeHpDOVlITExjYVA3?=
- =?utf-8?B?SXhWYThpU2k2RkxVc3NtS0RQUGlFcmN6VzN1VTR5eTd0L3RYYUt3Y2JYdHJm?=
- =?utf-8?B?a0VEeGxTSFl1RFdiRWcvamk5bm0zUnZQbjg1dlh1R1p0SEgwOWhtMDJFNGtD?=
- =?utf-8?B?UHZpakJSSEtqZzVDbWJPK3d0V3o2WnBsK2pmMDVGblFvazBQWURNNGh4V3Zs?=
- =?utf-8?B?QUJGTitEN2ErRHJLdmh3L2cxdE9TeU5XU3VxNnFXcFJUYmZOdUF1MXlIVFdO?=
- =?utf-8?B?b2Z5bFZJNTFkakNMa2VTM2dHYnNPdDhGZVRyY3Zna2dWZlVUN0VsL2gycm1W?=
- =?utf-8?B?WmNEQ2UxVUpiZW1oOHJTSmhOU2xxMTR3K3FvV1l2eDRVSUtwM1RvSms0Wm5P?=
- =?utf-8?B?M3doL2laYjlkcEZxcEtiMUdzU0JxQUxiZXBpenBJZkUyU3kyUGMxR3h3bm5p?=
- =?utf-8?B?ZkhaeHFEWWZKR2g0MWZtM0VmdlBRT1I4Ri9lV3dFRUtSbk5RRncxblNhdllZ?=
- =?utf-8?B?UCtta2c1K2VtWWVwL1oyRXZPeUZCaWgyVEdvZUpYalFQUHRDcDZmNWVEQXV4?=
- =?utf-8?B?NkFOaDNmd2xuUlY5Qm1iSzIyUWRMM3ZCZURCeGN6TGJScktEU3F6WVVqLy9C?=
- =?utf-8?B?ejBiWUVNQWxya2V3UWJEanRMRDNCTGdDWis1bTF1TGFlcGNmRTYzUEJzdFly?=
- =?utf-8?B?SFZ0bmErWHZzSEJvUEVHMXBlRm5UMDV0dnc3c3hsZXRoR21oTkJGdDFCQzBT?=
- =?utf-8?B?bzlwY0lGVjRBUUpWNmhobVVWdGZsazJWbjhNNHJKdS9KKy9YOFkyUDdRbUky?=
- =?utf-8?B?Qmc4K1JkR0RSUnIwbHVrZm4rdXVNa05aOWZNZ1NLTS9hbWs4bURPTVZHS0w5?=
- =?utf-8?B?MFBJQ25nMFpuK2NUVVorRHpTTGlMY1hRV0JON25aY1pmS2lGUTFYWkF2bmtC?=
- =?utf-8?B?WkU4ZlluSFlKRSt4VUZBTXp1SmRwZHFtRVBLYlppcStpeGFENHhZemZWdmdK?=
- =?utf-8?B?MDdCdXJ4VVdSMDFhQWYzRFpyc3VmaHFWR3ZuNGgydzFhaUNlM0ZmRVlncTVW?=
- =?utf-8?B?eEYwR0lFKzA1cjdGcGpqSzZOMTZXTjMzZWZKTGR0Q3llbDJzYTdKeUI5THRJ?=
- =?utf-8?B?dlU5TldTcFBScll2UGViUDIwRVY1NWwyNjYyNmlOWm5FVVJ0TmtTaGpMMm5v?=
- =?utf-8?B?RmJyNFdjSGNNNmhYZWNkS3FQNFJqYWh2SG8wQ21BNEFwUHZHV2MyMnJlSGpv?=
- =?utf-8?Q?QMsSM8JliHy1IR0k=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3bbeee2-cf4e-4f67-1fe2-08da4f725bda
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 08:29:41.4577
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hVwo3l6uowgiiVlSWN6E4X9Zh8V3tTdw5YMEYMhrDKaehVJKWRIaOHE2OQBg4rheTAn9TXVhd1niEGVJVNL1ow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6252
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220615093209.259374-2-pizhenwei@bytedance.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 14/06/2022 19:40, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.199 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2022/6/15 17:32, zhenwei pi wrote:
+> Currently unpoison_memory(unsigned long pfn) is designed for soft
+> poison(hwpoison-inject) only. Since 17fae1294ad9d, the KPTE gets
+> cleared on a x86 platform once hardware memory corrupts.
 > 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+> Unpoisoning a hardware corrupted page puts page back buddy only,
+> the kernel has a chance to access the page with *NOT PRESENT* KPTE.
+> This leads BUG during accessing on the corrupted KPTE.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.199-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Suggested by David&Naoya, disable unpoison mechanism when a real HW error
+> happens to avoid BUG like this:
 > 
-> thanks,
+>  Unpoison: Software-unpoisoned page 0x61234
+>  BUG: unable to handle page fault for address: ffff888061234000
+>  #PF: supervisor write access in kernel mode
+>  #PF: error_code(0x0002) - not-present page
+>  PGD 2c01067 P4D 2c01067 PUD 107267063 PMD 10382b063 PTE 800fffff9edcb062
+>  Oops: 0002 [#1] PREEMPT SMP NOPTI
+>  CPU: 4 PID: 26551 Comm: stress Kdump: loaded Tainted: G   M       OE     5.18.0.bm.1-amd64 #7
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996) ...
+>  RIP: 0010:clear_page_erms+0x7/0x10
+>  Code: ...
+>  RSP: 0000:ffffc90001107bc8 EFLAGS: 00010246
+>  RAX: 0000000000000000 RBX: 0000000000000901 RCX: 0000000000001000
+>  RDX: ffffea0001848d00 RSI: ffffea0001848d40 RDI: ffff888061234000
+>  RBP: ffffea0001848d00 R08: 0000000000000901 R09: 0000000000001276
+>  R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000001
+>  R13: 0000000000000000 R14: 0000000000140dca R15: 0000000000000001
+>  FS:  00007fd8b2333740(0000) GS:ffff88813fd00000(0000) knlGS:0000000000000000
+>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  CR2: ffff888061234000 CR3: 00000001023d2005 CR4: 0000000000770ee0
+>  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>  PKRU: 55555554
+>  Call Trace:
+>   <TASK>
+>   prep_new_page+0x151/0x170
+>   get_page_from_freelist+0xca0/0xe20
+>   ? sysvec_apic_timer_interrupt+0xab/0xc0
+>   ? asm_sysvec_apic_timer_interrupt+0x1b/0x20
+>   __alloc_pages+0x17e/0x340
+>   __folio_alloc+0x17/0x40
+>   vma_alloc_folio+0x84/0x280
+>   __handle_mm_fault+0x8d4/0xeb0
+>   handle_mm_fault+0xd5/0x2a0
+>   do_user_addr_fault+0x1d0/0x680
+>   ? kvm_read_and_reset_apf_flags+0x3b/0x50
+>   exc_page_fault+0x78/0x170
+>   asm_exc_page_fault+0x27/0x30
 > 
-> greg k-h
+> Fixes: 847ce401df392 ("HWPOISON: Add unpoisoning support")
+> Fixes: 17fae1294ad9d ("x86/{mce,mm}: Unmap the entire page if the whole page is affected and poisoned")
+> Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+> ---
+>  Documentation/vm/hwpoison.rst |  3 ++-
+>  drivers/base/memory.c         |  2 +-
+>  include/linux/mm.h            |  1 +
+>  mm/hwpoison-inject.c          |  2 +-
+>  mm/madvise.c                  |  2 +-
+>  mm/memory-failure.c           | 12 ++++++++++++
+>  6 files changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/vm/hwpoison.rst b/Documentation/vm/hwpoison.rst
+> index c742de1769d1..b9d5253c1305 100644
+> --- a/Documentation/vm/hwpoison.rst
+> +++ b/Documentation/vm/hwpoison.rst
+> @@ -120,7 +120,8 @@ Testing
+>    unpoison-pfn
+>  	Software-unpoison page at PFN echoed into this file. This way
+>  	a page can be reused again.  This only works for Linux
+> -	injected failures, not for real memory failures.
+> +	injected failures, not for real memory failures. Once any hardware
+> +	memory failure happens, this feature is disabled.
+>  
+>    Note these injection interfaces are not stable and might change between
+>    kernel versions
+> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+> index 084d67fd55cc..bc60c9cd3230 100644
+> --- a/drivers/base/memory.c
+> +++ b/drivers/base/memory.c
+> @@ -558,7 +558,7 @@ static ssize_t hard_offline_page_store(struct device *dev,
+>  	if (kstrtoull(buf, 0, &pfn) < 0)
+>  		return -EINVAL;
+>  	pfn >>= PAGE_SHIFT;
+> -	ret = memory_failure(pfn, 0);
+> +	ret = memory_failure(pfn, MF_SW_SIMULATED);
+>  	if (ret == -EOPNOTSUPP)
+>  		ret = 0;
+>  	return ret ? ret : count;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index bc8f326be0ce..4346e51484ba 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3232,6 +3232,7 @@ enum mf_flags {
+>  	MF_MUST_KILL = 1 << 2,
+>  	MF_SOFT_OFFLINE = 1 << 3,
+>  	MF_UNPOISON = 1 << 4,
+> +	MF_SW_SIMULATED = 1 << 5,
+>  };
+>  extern int memory_failure(unsigned long pfn, int flags);
+>  extern void memory_failure_queue(unsigned long pfn, int flags);
+> diff --git a/mm/hwpoison-inject.c b/mm/hwpoison-inject.c
+> index 5c0cddd81505..65e242b5a432 100644
+> --- a/mm/hwpoison-inject.c
+> +++ b/mm/hwpoison-inject.c
+> @@ -48,7 +48,7 @@ static int hwpoison_inject(void *data, u64 val)
+>  
+>  inject:
+>  	pr_info("Injecting memory failure at pfn %#lx\n", pfn);
+> -	err = memory_failure(pfn, 0);
+> +	err = memory_failure(pfn, MF_SW_SIMULATED);
+>  	return (err == -EOPNOTSUPP) ? 0 : err;
+>  }
+>  
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index d7b4f2602949..0316bbc6441b 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1112,7 +1112,7 @@ static int madvise_inject_error(int behavior,
+>  		} else {
+>  			pr_info("Injecting memory failure for pfn %#lx at process virtual address %#lx\n",
+>  				 pfn, start);
+> -			ret = memory_failure(pfn, MF_COUNT_INCREASED);
+> +			ret = memory_failure(pfn, MF_COUNT_INCREASED | MF_SW_SIMULATED);
+>  			if (ret == -EOPNOTSUPP)
+>  				ret = 0;
+>  		}
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index b85661cbdc4a..da39ec8afca8 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -69,6 +69,8 @@ int sysctl_memory_failure_recovery __read_mostly = 1;
+>  
+>  atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+> +static bool hw_memory_failure __read_mostly = false;
 
-All tests passing for Tegra ...
+IIUC, this variable is updated every time when hardware memory corrupt happens. So
+adding __read_mostly macro here doesn't look very appropriate. But when compared to
+soft unpoison, this should be much rare. So __read_mostly should make sense from this
+point of view. No strong opinion.
 
-Test results for stable-v5.4:
-     10 builds:	10 pass, 0 fail
-     26 boots:	26 pass, 0 fail
-     59 tests:	59 pass, 0 fail
+Anyway, the patch looks good to me. Thanks!
 
-Linux version:	5.4.199-rc1-gd05ea6389e7e
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                 tegra194-p2972-0000, tegra20-ventana,
-                 tegra210-p2371-2180, tegra210-p3450-0000,
-                 tegra30-cardhu-a04
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> +
+>  static bool __page_handle_poison(struct page *page)
+>  {
+>  	int ret;
+> @@ -1768,6 +1770,9 @@ int memory_failure(unsigned long pfn, int flags)
+>  
+>  	mutex_lock(&mf_mutex);
+>  
+> +	if (!(flags & MF_SW_SIMULATED))
+> +		hw_memory_failure = true;
+> +
+>  	p = pfn_to_online_page(pfn);
+>  	if (!p) {
+>  		res = arch_memory_failure(pfn, flags);
+> @@ -2103,6 +2108,13 @@ int unpoison_memory(unsigned long pfn)
+>  
+>  	mutex_lock(&mf_mutex);
+>  
+> +	if (hw_memory_failure) {
+> +		unpoison_pr_info("Unpoison: Disabled after HW memory failure %#lx\n",
+> +				 pfn, &unpoison_rs);
+> +		ret = -EOPNOTSUPP;
+> +		goto unlock_mutex;
+> +	}
+> +
+>  	if (!PageHWPoison(p)) {
+>  		unpoison_pr_info("Unpoison: Page was already unpoisoned %#lx\n",
+>  				 pfn, &unpoison_rs);
+> 
 
-Jon
--- 
-nvpublic

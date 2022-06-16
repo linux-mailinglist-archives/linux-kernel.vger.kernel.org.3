@@ -2,151 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34AC54DBD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36DD54DBDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359465AbiFPHeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S1359303AbiFPHec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359454AbiFPHdy (ORCPT
+        with ESMTP id S1359478AbiFPHea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:33:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F72831F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:33:52 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LNv361hD4zSh0Y;
-        Thu, 16 Jun 2022 15:30:26 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 16 Jun 2022 15:33:44 +0800
-Subject: Re: [PATCH 7/7] mm/khugepaged: try to free transhuge swapcache when
- possible
-To:     Zach O'Keefe <zokeefe@google.com>
-CC:     <akpm@linux-foundation.org>, <aarcange@redhat.com>,
-        <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
-        <neilb@suse.de>, <apopple@nvidia.com>, <david@redhat.com>,
-        <surenb@google.com>, <peterx@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220611084731.55155-1-linmiaohe@huawei.com>
- <20220611084731.55155-8-linmiaohe@huawei.com> <YqoTU7SNM7d3MlNs@google.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <bec17d69-1002-25c3-d0f5-cc155ca65a67@huawei.com>
-Date:   Thu, 16 Jun 2022 15:33:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 16 Jun 2022 03:34:30 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F525F75;
+        Thu, 16 Jun 2022 00:34:24 -0700 (PDT)
+X-UUID: 8d913bc540484203ac33d2b2bc4efc2e-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:cc6d52a1-2bd3-443a-885a-1c3d93f54167,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:c56874f6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 8d913bc540484203ac33d2b2bc4efc2e-20220616
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 495931524; Thu, 16 Jun 2022 15:34:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Jun 2022 15:34:19 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jun 2022 15:34:19 +0800
+Message-ID: <29fd9902d02654fa5098000732f92d6dc89defc4.camel@mediatek.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: dsp: mediatek: add mt8186 dsp
+ document
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        YC Hung <yc.hung@mediatek.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 16 Jun 2022 15:34:19 +0800
+In-Reply-To: <acac2ec1-759a-dee0-8f08-df83b63b96f5@linaro.org>
+References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
+         <20220609083101.24195-4-tinghan.shen@mediatek.com>
+         <acac2ec1-759a-dee0-8f08-df83b63b96f5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <YqoTU7SNM7d3MlNs@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/16 1:13, Zach O'Keefe wrote:
-> On 11 Jun 16:47, Miaohe Lin wrote:
->> Transhuge swapcaches won't be freed in __collapse_huge_page_copy().
->> It's because release_pte_page() is not called for these pages and
->> thus free_page_and_swap_cache can't grab the page lock. These pages
->> won't be freed from swap cache even if we are the only user until
->> next time reclaim. It shouldn't hurt indeed, but we could try to
->> free these pages to save more memory for system.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  include/linux/swap.h | 5 +++++
->>  mm/khugepaged.c      | 1 +
->>  mm/swap.h            | 5 -----
->>  3 files changed, 6 insertions(+), 5 deletions(-)
->>
->> diff --git a/include/linux/swap.h b/include/linux/swap.h
->> index 8672a7123ccd..ccb83b12b724 100644
->> --- a/include/linux/swap.h
->> +++ b/include/linux/swap.h
->> @@ -456,6 +456,7 @@ static inline unsigned long total_swapcache_pages(void)
->>  	return global_node_page_state(NR_SWAPCACHE);
->>  }
->>  
->> +extern void free_swap_cache(struct page *page);
->>  extern void free_page_and_swap_cache(struct page *);
->>  extern void free_pages_and_swap_cache(struct page **, int);
->>  /* linux/mm/swapfile.c */
->> @@ -540,6 +541,10 @@ static inline void put_swap_device(struct swap_info_struct *si)
->>  /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=0 */
->>  #define free_swap_and_cache(e) is_pfn_swap_entry(e)
->>  
->> +static inline void free_swap_cache(struct page *page)
->> +{
->> +}
->> +
->>  static inline int add_swap_count_continuation(swp_entry_t swp, gfp_t gfp_mask)
->>  {
->>  	return 0;
->> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->> index ee0a719c8be9..52109ad13f78 100644
->> --- a/mm/khugepaged.c
->> +++ b/mm/khugepaged.c
->> @@ -756,6 +756,7 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
->>  	list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
->>  		list_del(&src_page->lru);
->>  		release_pte_page(src_page);
->> +		free_swap_cache(src_page);
->>  	}
->>  }
-> 
-> Aside: in __collapse_huge_page_isolate() (and also here) why can't we just check
-> PageCompound(page) && page == compound_head(page) to only act on compound pages
-> once? AFAIK this would alleviate this compound_pagelist business..
-> 
-> Anyways, as-is, free_page_and_swap_cache() won't be able to do
-> try_to_free_swap(), since it can't grab page lock, put it will call put_page().
-> I think (?) the last page ref might be dropped in release_pte_page(), so should
-> free_swap_cache() come before it?
+Hi Krzysztof,
 
-Thanks for catching this! If page is not in swapcache, the last page ref might be dropped.
-So it's bad to call free_swap_cache() after it. Thanks!
+On Wed, 2022-06-15 at 10:32 -0700, Krzysztof Kozlowski wrote:
+> On 09/06/2022 01:31, Tinghan Shen wrote:
+> > This patch adds mt8186 dsp document. The dsp is used for Sound Open
+> > Firmware driver node. It includes registers, clocks, memory regions,
+> > and mailbox for dsp.
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >  .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 91 +++++++++++++++++++
+> >  1 file changed, 91 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+> > b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+> > new file mode 100644
+> > index 000000000000..33c78f89d296
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+> > @@ -0,0 +1,91 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/dsp/mediatek,mt8186-dsp.yaml*__;Iw!!CTRNKA9wMg0ARbw!0iJc3XTOVoKM_s-soALULRxog7f0GZLppKL0FCcIrYfh91fW2HmlpzSUZjVmoUR5PrasY2BmVGvmvv_IwZtlmOdXYw$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!0iJc3XTOVoKM_s-soALULRxog7f0GZLppKL0FCcIrYfh91fW2HmlpzSUZjVmoUR5PrasY2BmVGvmvv_IwZujnl7wMw$
+> >  
+> > +
+> > +title: MediaTek mt8186 DSP core
+> > +
+> > +maintainers:
+> > +  - Tinghan Shen <tinghan.shen@mediatek.com>
+> > +
+> > +description: |
+> > +  MediaTek mt8186 SoC contains a DSP core used for
+> > +  advanced pre- and post- audio processing.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mediatek,mt8186-dsp
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: Address and size of the DSP config registers
+> > +      - description: Address and size of the DSP SRAM
+> > +      - description: Address and size of the DSP secure registers
+> > +      - description: Address and size of the DSP bus registers
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: cfg
+> > +      - const: sram
+> > +      - const: sec
+> > +      - const: bus
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: mux for audio dsp clock
+> > +      - description: mux for audio dsp local bus
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: audiodsp
+> > +      - const: adsp_bus
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  mboxes:
+> > +    items:
+> > +      - description: ipc reply between host and audio DSP.
+> > +      - description: ipc request between host and audio DSP.
+> 
+> "IPC request between" does not specify who sends the request. Host or DSP?
+> 
+> See existing bindings for some better examples, e.g.:
+> Documentation/devicetree/bindings/serial/nvidia,tegra194-tcu.yaml
+> which clearly states who receives from who.
+> 
+> > +
+> > +  mbox-names:
+> > +    items:
+> > +      - const: rep
+> > +      - const: req
+> 
+> tx/rx
+> 
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
 
-> 
->>  
->> diff --git a/mm/swap.h b/mm/swap.h
->> index 0193797b0c92..863f6086c916 100644
->> --- a/mm/swap.h
->> +++ b/mm/swap.h
->> @@ -41,7 +41,6 @@ void __delete_from_swap_cache(struct page *page,
->>  void delete_from_swap_cache(struct page *page);
->>  void clear_shadow_from_swap_cache(int type, unsigned long begin,
->>  				  unsigned long end);
->> -void free_swap_cache(struct page *page);
->>  struct page *lookup_swap_cache(swp_entry_t entry,
->>  			       struct vm_area_struct *vma,
->>  			       unsigned long addr);
->> @@ -81,10 +80,6 @@ static inline struct address_space *swap_address_space(swp_entry_t entry)
->>  	return NULL;
->>  }
->>  
->> -static inline void free_swap_cache(struct page *page)
->> -{
->> -}
->> -
->>  static inline void show_swap_cache_info(void)
->>  {
->>  }
->> -- 
->> 2.23.0
->>
->>
-> .
-> 
+OK. I'll update in the next version.
+
+Thanks,
+TingHan
 

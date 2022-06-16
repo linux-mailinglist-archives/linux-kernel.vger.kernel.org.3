@@ -2,202 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66654E66D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E75754E66C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235942AbiFPPxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S1377749AbiFPPxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377763AbiFPPxn (ORCPT
+        with ESMTP id S235942AbiFPPxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:53:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6468E2E6AA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:53:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso1890987pjk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:53:42 -0700 (PDT)
+        Thu, 16 Jun 2022 11:53:38 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE342DD4A;
+        Thu, 16 Jun 2022 08:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=soZ7Z/kpV8xfUd7TwDWGDyhSUZL5/aKbtE1H8BWznbY=;
-        b=ALXXbN/beUYRTTZ5Parx1g8FvpVXPo7FUkg1yB3NJT3YrGYfREprfS4eN7h8M/xOyn
-         5pJlexqpbjbMHbjLHVj8X3IBDTuE0iSiVJLefdXt/4xB0F/3+kvHnD1yGuGmTefLOSfS
-         tzaF3Ec5EBOs/Mpn9ORW/uyIIA4JL6TbRABvZxIMV7cTZJz2fWSZ3NEFenN6gSvg2vN0
-         GR0lOSNB2RiwgdFbGWGDTxncxFNzIZKvdrTc7Wb4/LbGj5TtBLrqm8NQqiyZfPybSvwG
-         9owOYbeP3wiRgnsb9uKRM5vGkAas1C0Cv5hTyUm18on0yUy3KFYUQVlHxnieFiXF7EtD
-         +dJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=soZ7Z/kpV8xfUd7TwDWGDyhSUZL5/aKbtE1H8BWznbY=;
-        b=lpWeahpMvSg6wspdU68e625smkDyW3TgJNcrhrPwSAZAcKW1Pm6+In4b89OKhnRiho
-         jyDyXJgWu848kM0GjlQNeGDPHUdcMWJpN3QDeTF+oYc88heY+YM20ffj9XdVQ5u7VIxo
-         hOY6+SQYie4Ts3OnMQLP++tBsJrLiWWDJTl1VABbJiea24CgHpMB5U4S1kFrjfJbMn+n
-         /LC0BSROXCGCM5yzofPASngmZyJmW1cW2Xwt0iaSDGZXhnzmDhe33YQP/b3AVQWCFWsY
-         cF4ILUOGF6kQ0Lykpm3999cTcDO2oXeNKqEbwjMaj6YbaGJkpZHqMerPWFA3C6ph3MnA
-         LcsQ==
-X-Gm-Message-State: AJIora/3JZPrqBdEtvr9ZqjAiJUx4cydoU/McKCyKoSkgWm+34iWodIK
-        qkAgerTK3EeiaRAPPSGdylWRinsfu/qDBzdAbfQ=
-X-Google-Smtp-Source: AGRyM1szceTmJvxBZDzYIbp8ZWRdBS34Xb5GVhAHComIv9CyqCx8/p7Ht9+z/srDnTdeCQWSDcrDfEaabYT1T5+eyzc=
-X-Received: by 2002:a17:902:c40a:b0:163:d38e:3049 with SMTP id
- k10-20020a170902c40a00b00163d38e3049mr5237599plk.87.1655394821875; Thu, 16
- Jun 2022 08:53:41 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655394817; x=1686930817;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WmK1MXD+N37chLB8AYdBW9QaOSGoVeEYXK1g4pVy3Fs=;
+  b=jU1l/FpyZkc1YK0UPEkGS5+F3EmiR2xl7s3oRLZycCZHsBgPXT5pyEI5
+   4uo6lqv0ZmknlZvBXuCFkZs52QGxB1pdcbkq/cPfsJi2XLBB+4jtIwkZH
+   pItdwVMER5ionFgysHJbKx3nPCPrBnBBqSZq1ZWaw0yQv3oy7vBi62YZC
+   Y=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 16 Jun 2022 08:53:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 08:53:37 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 16 Jun 2022 08:53:36 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 16 Jun
+ 2022 08:53:35 -0700
+Message-ID: <1c48ef5b-65c0-501d-db55-714a8a4388b2@quicinc.com>
+Date:   Thu, 16 Jun 2022 09:53:34 -0600
 MIME-Version: 1.0
-References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-8-linmiaohe@huawei.com>
- <CAHbLzkoYkN+QzdfSUkHbLMUYX=zkrgGCrqM6xRaVssFSJh9KqA@mail.gmail.com> <87617483-7945-30e2-471e-578da4f4d9c7@huawei.com>
-In-Reply-To: <87617483-7945-30e2-471e-578da4f4d9c7@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 16 Jun 2022 08:53:29 -0700
-Message-ID: <CAHbLzkqAJK3C8svOm4mhCP_oP6od=NMKpeW9=oRcczDJ=FXPcw@mail.gmail.com>
-Subject: Re: [PATCH 7/7] mm/khugepaged: try to free transhuge swapcache when possible
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
+ power down
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     Qiang Yu <quic_qianyu@quicinc.com>, <quic_hemantk@quicinc.com>,
+        <loic.poulain@linaro.org>, <mhi@lists.linux.dev>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_cang@quicinc.com>
+References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
+ <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
+ <9659ecb9-9727-a146-e286-d28d656483c3@quicinc.com>
+ <9a11394d-f7df-e549-8afb-0834f7d30202@quicinc.com>
+ <8eceb966-b5c1-8913-ac97-95348f92650d@quicinc.com>
+ <b3f5e49d-8917-79ab-8f59-29ad6cec3973@quicinc.com>
+ <20220615211621.GD3606@thinkpad>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20220615211621.GD3606@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 12:42 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> On 2022/6/16 7:58, Yang Shi wrote:
-> > On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
-> >>
-> >> Transhuge swapcaches won't be freed in __collapse_huge_page_copy().
-> >> It's because release_pte_page() is not called for these pages and
-> >> thus free_page_and_swap_cache can't grab the page lock. These pages
-> >> won't be freed from swap cache even if we are the only user until
-> >> next time reclaim. It shouldn't hurt indeed, but we could try to
-> >> free these pages to save more memory for system.
-> >
-> >
-> >>
-> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> >> ---
-> >>  include/linux/swap.h | 5 +++++
-> >>  mm/khugepaged.c      | 1 +
-> >>  mm/swap.h            | 5 -----
-> >>  3 files changed, 6 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> >> index 8672a7123ccd..ccb83b12b724 100644
-> >> --- a/include/linux/swap.h
-> >> +++ b/include/linux/swap.h
-> >> @@ -456,6 +456,7 @@ static inline unsigned long total_swapcache_pages(void)
-> >>         return global_node_page_state(NR_SWAPCACHE);
-> >>  }
-> >>
-> >> +extern void free_swap_cache(struct page *page);
-> >>  extern void free_page_and_swap_cache(struct page *);
-> >>  extern void free_pages_and_swap_cache(struct page **, int);
-> >>  /* linux/mm/swapfile.c */
-> >> @@ -540,6 +541,10 @@ static inline void put_swap_device(struct swap_info_struct *si)
-> >>  /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=0 */
-> >>  #define free_swap_and_cache(e) is_pfn_swap_entry(e)
-> >>
-> >> +static inline void free_swap_cache(struct page *page)
-> >> +{
-> >> +}
-> >> +
-> >>  static inline int add_swap_count_continuation(swp_entry_t swp, gfp_t gfp_mask)
-> >>  {
-> >>         return 0;
-> >> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> >> index ee0a719c8be9..52109ad13f78 100644
-> >> --- a/mm/khugepaged.c
-> >> +++ b/mm/khugepaged.c
-> >> @@ -756,6 +756,7 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
-> >>         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
-> >>                 list_del(&src_page->lru);
-> >>                 release_pte_page(src_page);
-> >> +               free_swap_cache(src_page);
-> >
-> > Will this really work? The free_swap_cache() will just dec refcounts
-> > without putting the page back to buddy. So the hugepage is not
-> > actually freed at all. Am I missing something?
->
-> Thanks for catching this! If page is on percpu lru_pvecs cache, page will
-> be released when lru_pvecs are drained. But if not, free_swap_cache() won't
-> free the page as it assumes the caller has a reference on the page and thus
-> only does page_ref_sub(). Does the below change looks sense for you?
+On 6/15/2022 3:16 PM, Manivannan Sadhasivam wrote:
+> On Mon, Jun 13, 2022 at 07:07:02AM -0600, Jeffrey Hugo wrote:
+>> On 6/12/2022 7:48 PM, Qiang Yu wrote:
+>>>
+>>> On 6/10/2022 10:00 PM, Jeffrey Hugo wrote:
+>>>> On 6/9/2022 9:21 PM, Qiang Yu wrote:
+>>>>> On 6/9/2022 9:54 PM, Jeffrey Hugo wrote:
+>>>>>
+>>>>>> On 6/9/2022 7:43 AM, Qiang Yu wrote:
+>>>>>>> EP tends to read MSI address/data once and cache them
+>>>>>>> after BME is set.
+>>>>>>> So host should avoid changing MSI address/data after BME is set.
+>>>>>>>
+>>>>>>> In pci reset function, host invokes free_irq(), which also clears MSI
+>>>>>>> address/data in EP's PCIe config space. If the invalid address/data
+>>>>>>> are cached and used by EP, MSI triggered by EP wouldn't be received by
+>>>>>>> host, because an invalid MSI data is sent to an invalid MSI address.
+>>>>>>>
+>>>>>>> To fix this issue, after host runs request_irq() successfully during
+>>>>>>> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
+>>>>>>> request_irq()/free_irq() when we want to power on and power down MHI.
+>>>>>>> Meanwhile, Host should invoke free_irq() when mhi host driver is
+>>>>>>> removed.
+>>>>>>
+>>>>>> I don't think this works for hotplug, nor cases where there
+>>>>>> are multiple MHI devices on the system.
+>>>>>>
+>>>>>> The EP shouldn't be caching this information for multiple
+>>>>>> reasons. Masking the MSIs, disabling the MSIs, changing the
+>>>>>> address when the affinity changes, etc.
+>>>>>>
+>>>>>> It really feels like we are solving the problem in the wrong place.
+>>>>>>
+>>>>>> Right now, this gets a NACK from me.
+>>>>>>
+>>>>> After free_irq(), MSI is still enabled but MSI address and data
+>>>>> are cleared. So there is a chance that device initiates MSI
+>>>>> using zero address. How to fix this race conditions.
+>>>>
+>>>> On what system is MSI still enabled?  I just removed the AIC100
+>>>> controller on an random x86 system, and lspci is indicating MSIs are
+>>>> disabled -
+>>>>
+>>>> Capabilities: [50] MSI: Enable- Count=32/32 Maskable+ 64bit+
+>>>
+>>> system: Ubuntu18.04, 5.4.0-89-generic,  Intel(R) Core(TM) i7-6700 CPU @
+>>> 3.40GHz
+>>>
+>>> After removing MHI driver, I also see MSI enable is cleared.  But I
+>>> don't think free_irq clears it. I add log before free_irq and after
+>>> free_irq as following show:
+>>>
+>>> [62777.625111] msi cap before free irq
+>>> [62777.625125] msi control=0x1bb, address=0xfee00318, data=0x0
+>>> [62777.625301] msi cap after free irq
+>>> [62777.625313] msi control=0x1bb, address=0x0, data=0x0
+>>> [62777.625496] mhi-pci-generic 0000:01:00.0: mhi_pci_remove end of line,
+>>> block 90 secs.
+>>> # lspci -vvs 01:00.0
+>>>           Capabilities: [50] MSI: Enable+ Count=8/32 Maskable+ 64bit+
+>>>                   Address: 0000000000000000  Data: 0000
+>>>                   Masking: ffffffff  Pending: 00000000
+>>
+>> At this point, the MSI functionality is still enabled, but every MSI is
+>> masked out (Masking), so per the PCIe spec, the endpoint may not trigger a
+>> MSI to the host.  The device advertises that it supports maskable MSIs
+>> (Maskable+), so this is appropiate.
+>>
+>> If your device can still send a MSI at this point, then it violates the PCIe
+>> spec.
+>>
+>> disable_irq() will not help you with this as it will do the same thing.
+>>
+>> I still think you are trying to fix an issue in the wrong location (host vs
+>> EP), and causing additional issues by doing so.
+>>
+> 
+> Irrespective of caching the MSI data in endpoint, I'd like to get rid of
+> request_irq/free_irq during the mhi_{power_down/power_up} time. As like the MHI
+> endpoint stack, we should just do disable/enable irq. Because, the MHI device
+> may go down several times while running and we do not want to deallocate the
+> IRQs all the time. And if the device gets removed, ultimately the MHI driver
+> will get removed and we are fine while loading it back (even if MSI count
+> changes).
+> 
+> I didn't had time to look into the patch in detail but I'm in favour of
+> accepting the proposal.
+> 
+> @Jeff: Any specific issue you are seeing with hotplug etc...?
 
-THP gets drained immediately so they won't stay in pagevecs.
+Perhaps I'm getting confused by the commit text of this change.
 
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 52109ad13f78..b8c96e33591d 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -755,8 +755,12 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
->
->         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
->                 list_del(&src_page->lru);
-> -               release_pte_page(src_page);
-> +               mod_node_page_state(page_pgdat(src_page),
-> +                                   NR_ISOLATED_ANON + page_is_file_lru(src_page),
-> +                                   -compound_nr(src_page));
-> +               unlock_page(src_page);
->                 free_swap_cache(src_page);
-> +               putback_lru_page(src_page);
+The issue described is that we free the irq, and then the EP sends a 
+MSI, and the host doesn't receive it.  To me, that is expected.  The 
+host doesn't care about the irq anymore because it freed it, therefore 
+it would be expected that the host doesn't receive the irq.  So, the 
+described issue is not an issue since it is expected behavior from what 
+I can tell.
 
-I'm not sure if it is worth it or not for a rare corner case since THP
-should not stay in swapcache unless try_to_unmap() in vmscan fails
-IIUC. And it is not guaranteed that free_swap_cache() will get the
-page lock.
+The proposed fix, is to disable the interrupts, and not free them until 
+the driver is removed.  I interpret removing the driver as "rmmod mhi". 
+  Based on this, the problem I see is a scenario where we have N devices 
+in a system, and one device is hotplugged.  On hotplug, we would want to 
+clean up all resources (free irq), but according to the description, we 
+need to rmmod mhi, which is both not automatic and also affects the 
+other N-1 devices which are presumed to be operational.
 
->         }
->  }
->
-> Thanks!
->
-> >
-> >>         }
-> >>  }
-> >>
-> >> diff --git a/mm/swap.h b/mm/swap.h
-> >> index 0193797b0c92..863f6086c916 100644
-> >> --- a/mm/swap.h
-> >> +++ b/mm/swap.h
-> >> @@ -41,7 +41,6 @@ void __delete_from_swap_cache(struct page *page,
-> >>  void delete_from_swap_cache(struct page *page);
-> >>  void clear_shadow_from_swap_cache(int type, unsigned long begin,
-> >>                                   unsigned long end);
-> >> -void free_swap_cache(struct page *page);
-> >>  struct page *lookup_swap_cache(swp_entry_t entry,
-> >>                                struct vm_area_struct *vma,
-> >>                                unsigned long addr);
-> >> @@ -81,10 +80,6 @@ static inline struct address_space *swap_address_space(swp_entry_t entry)
-> >>         return NULL;
-> >>  }
-> >>
-> >> -static inline void free_swap_cache(struct page *page)
-> >> -{
-> >> -}
-> >> -
-> >>  static inline void show_swap_cache_info(void)
-> >>  {
-> >>  }
-> >> --
-> >> 2.23.0
-> >>
-> >>
-> > .
-> >
->
+Now, if we throw all of that out the window, and say that the goal is to 
+register the irqs when the controller is registered, free them when the 
+controller is unregistered, and enable/disable based on power up/down as 
+a optimization, that could be sane.  If that is what this change is 
+attempting to do, it is not what the commit text describes.
+
+Under the assumption that you want the optimization I just described, I 
+will re-review the code next week when I get back from my travel. 
+Assuming the implementation is good (other than what I've already 
+pointed out), I think the commit text needs to be rewritten.
+
+Does that clarify things for you?

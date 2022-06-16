@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB41454E1D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E63B54E1DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbiFPNYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S232033AbiFPNZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiFPNYR (ORCPT
+        with ESMTP id S233148AbiFPNZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:24:17 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F8033EB6;
-        Thu, 16 Jun 2022 06:24:15 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 56957520290;
-        Thu, 16 Jun 2022 15:24:13 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.14) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 16 Jun
- 2022 15:24:12 +0200
-Date:   Thu, 16 Jun 2022 15:24:08 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
-        <zohar@linux.vnet.ibm.com>, <silviu.vlasceanu@huawei.com>,
-        <dmitry.kasatkin@huawei.com>, <takondra@cisco.com>,
-        <kamensky@cisco.com>, <hpa@zytor.com>, <arnd@arndb.de>,
-        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
-        <niveditas98@gmail.com>, Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Message-ID: <20220616132408.GA4018@lxhi-065>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
+        Thu, 16 Jun 2022 09:25:05 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9BA3BBF9;
+        Thu, 16 Jun 2022 06:25:04 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id l20so1525984lji.0;
+        Thu, 16 Jun 2022 06:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IVAdZ2cu7L3Nr+75vrL+6JqYK3CgcW1j0SYA+lfIJLQ=;
+        b=qc5RA3CqMtq7kity/XbtWctiL0VY0iVEy8yUIvYPUfxdQNePbUsmntBMMVFiGci3++
+         BW4fxPxP9Vf1Cai8MSQEfWoqAuFjQHrFrPAtdrscmRGdZLloFzTZ9ka2ZOh6scvRIY6k
+         tcdmh/6avsxXWIWtxpOsltIW5QjQAElzto8X6biQtuTX3wgpBh9/m2OVHME2+9H4EiVE
+         VnXmDAudrQMAooZ9J4gfl2D205JnNZlUq2bEdkcVbdFseye2DjqVz8iW17cp1IW4/zdW
+         ZNTKd6BlXwAzMAuSLm9NxKlNNvcEEvNCEAAfnyzBOmuANPws5zTOzdlqm10tXZ69Tl7r
+         wwjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IVAdZ2cu7L3Nr+75vrL+6JqYK3CgcW1j0SYA+lfIJLQ=;
+        b=Cp4w/ljNWfqN7CEUtCTkef49j8qUTUYQ9VVQnEUjAFcQAEva4mqa/NUZNodKPw4Jnw
+         Zg0p4S0AQ+v9zI9lucV4aROX8acdtZPDwQHKNCBN5Md0OQHzBI0Jw4ilKI7XJjmShJNM
+         thsI3Fpyq0i7gIUEJsel/2W3ezFLNvQP6z9fN+2Ny+GZoTKFDLzuW47XZYuePQOwxwz2
+         AEhi6L9gH4vNsFxNCH+/yyKvGYgmMYlXHUF8xY+smGq4U89GwWSr8/7fOi+oeAts5Uwh
+         esfO5BTXyoMUmcaRnrVwud9k62d+INEBmDmJM5Z0krVpgqNDn/hiNpV5C2T/rJOBBFNl
+         FLRw==
+X-Gm-Message-State: AJIora/EGZ7DwEU0C/CMs3T/3rr8ebid/dR/VJ+PPgXepeGtEzo9Sns6
+        Uwgl0xWcKM6zf7pHiETdrnDh99OUx9il/RjSxWY=
+X-Google-Smtp-Source: AGRyM1sMIqhxO0a1eovqh9hUTJBdq4SnBO6X8MSu1qVhrgr5+6Viw7wFZSIoHnhV7Ij/CuwAW4lkNFj5d8MDUPe9o4I=
+X-Received: by 2002:a2e:6817:0:b0:258:b235:7812 with SMTP id
+ c23-20020a2e6817000000b00258b2357812mr2526199lja.83.1655385902856; Thu, 16
+ Jun 2022 06:25:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190523121803.21638-1-roberto.sassu@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.14]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-13-tmaimon77@gmail.com>
+ <add025b6-c622-b204-d39e-67b31878d37f@linaro.org> <CAP6Zq1iDbB+X5QPE4Nsqk4nV41bZiVzQZExS1pQTuKEBz-iYew@mail.gmail.com>
+ <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org> <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
+ <e6e478a5-9080-fb2f-9ccd-2490cdfab4c7@linaro.org>
+In-Reply-To: <e6e478a5-9080-fb2f-9ccd-2490cdfab4c7@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Thu, 16 Jun 2022 16:24:51 +0300
+Message-ID: <CAP6Zq1gy=rj-wyqqNQF+Pt1dtHsf+90AnTGTqt-v9madj8tfGA@mail.gmail.com>
+Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for NPCM8XX
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Yamada-san,
+Hi Krzysztof,
 
-On Do, Mai 23, 2019 at 02:18:00 +0200, Roberto Sassu wrote:
-> This patch set aims at solving the following use case: appraise files from
-> the initial ram disk. To do that, IMA checks the signature/hash from the
-> security.ima xattr. Unfortunately, this use case cannot be implemented
-> currently, as the CPIO format does not support xattrs.
-> 
-> This proposal consists in including file metadata as additional files named
-> METADATA!!!, for each file added to the ram disk. The CPIO parser in the
-> kernel recognizes these special files from the file name, and calls the
-> appropriate parser to add metadata to the previously extracted file. It has
-> been proposed to use bit 17:16 of the file mode as a way to recognize files
-> with metadata, but both the kernel and the cpio tool declare the file mode
-> as unsigned short.
-> 
-> The difference from v2, v3 (https://lkml.org/lkml/2019/5/9/230,
-> https://lkml.org/lkml/2019/5/17/466) is that file metadata are stored in
-> separate files instead of a single file. Given that files with metadata
-> must immediately follow the files metadata will be added to, image
-> generators have to be modified in this version.
-> 
-> The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that
-> all files have the same name. The file metadata are added to is always the
-> previous one, and the image generator in user space will make sure that
-> files are in the correct sequence.
-> 
-> The difference with another proposal
-> (https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
-> included in an image without changing the image format. Files with metadata
-> will appear as regular files. It will be task of the parser in the kernel
-> to process them.
-> 
-> This patch set extends the format of data defined in patch 9/15 of the last
-> proposal. It adds header version and type, so that new formats can be
-> defined and arbitrary metadata types can be processed.
-> 
-> The changes introduced by this patch set don't cause any compatibility
-> issue: kernels without the metadata parser simply extract the special files
-> and don't process metadata; kernels with the metadata parser don't process
-> metadata if the special files are not included in the image.
-> 
-> >From the kernel space perspective, backporting this functionality to older
-> kernels should be very easy. It is sufficient to add two calls to the new
-> function do_process_metadata() in do_copy(), and to check the file name in
-> do_name(). From the user space perspective, unlike the previous version of
-> the patch set, it is required to modify the image generators in order to
-> include metadata as separate files.
+On Wed, 15 Jun 2022 at 20:03, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 13/06/2022 02:25, Tomer Maimon wrote:
+> > Hi Krzysztof,
+> >
+> > Thanks for your clarification.
+> >
+> > We can remove the dt-binding file and use numbers in the DTS,
+> > appreciate if you can answer few additional questions:
+> > 1. Do you suggest adding all NPCM reset values to the NPCM reset
+> > document or the reset values should describe in the module
+> > documentation that uses it?
+>
+> What is "NPCM reset document"? Are these reset values anyhow different
+> than interrupts or pins?
+No, they represent the same values.
+>
+> > 2. Some of the NPCM7XX document modules describe the reset value they
+> > use from the dt-binding for example:
+> > https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/nuvoton%2Cnpcm750-adc.yaml#L61
+>
+> This is NPCM750
+>
+> > If we remove the NPCM8XX dt-binding file should we describe the
+> > NPCM8XX values in the NPCM-ADC document file?
+>
+> What is NPCM-ADC document file? What do you want to describe there?
+> Again - how is it different than interrupts?
+It is not different from the interrupts.
+I will remove the dt-binding reset include file, the reset property
+will use numbers and not macro's.
+>
+>
+>
+> Best regards,
+> Krzysztof
 
-Since this patch series most likely falls under your jurisdiction and
-also given your recent commits [*] in the same area, I am curious if
-there are any early signs which would prevent your final acceptance
-and would potentially result in a no-Go?
+Best regards,
 
-Can we have an early confirmation that, upon rebasing and handling of
-all the review comments, you would be willing to accept the patches?
-
-[*] Most recent commits touching usr/gen_initramfs.sh
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7168965ec7b10b8a2c7dea1f82f1ebadf44d64ba
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=65e00e04e5aea34b256814cfa21b32e3b94a2402
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=469e87e89fd61de804bd29f6dd0380a399b567a7
-
-Thanks,
-Eugeniu.
+Tomer

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE6F54E2E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D461554E2E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377481AbiFPOFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S1377517AbiFPOFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376712AbiFPOFF (ORCPT
+        with ESMTP id S1377498AbiFPOFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:05:05 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21582381B3;
-        Thu, 16 Jun 2022 07:05:04 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id d123so1557507iof.10;
-        Thu, 16 Jun 2022 07:05:04 -0700 (PDT)
+        Thu, 16 Jun 2022 10:05:06 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07E139825;
+        Thu, 16 Jun 2022 07:05:05 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id y79so1578045iof.2;
+        Thu, 16 Jun 2022 07:05:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=QHrVv7NXWiujBosHB8gys2mN+dR79RUZ7jVtVzSWvms=;
-        b=jjF+JjEe9DXDWtxSjMhIEiT5qaz69K9kGEEwbP8OhxCEVzDlCPy5RgVYZ2l2ppG5NW
-         AKaUyom+FufuVKJmIoyQEFOJJx/Fm0t5VHvDcq3awZkdjtZ1dp2Y9T9aYKTLl2/LxEe9
-         kORB1iphu0Q10uyeykH/z7SAgLKsCFYqycGDH4HtKRgniQL8KEhrbGGtkdbRhzExkFuS
-         44Qc441f7mtdEFt7tukrpB8D6K6Eu/AI6ZBqcB8t5cSgqVk8kge/YOMIukamWwuYGDbl
-         csadTn842RACmLB+U3yi+4yxTHwTlD77+GGl6sl9VPpPPPBmY+Ch5o2tSJUgvrFQfbW4
-         M5ow==
-X-Gm-Message-State: AJIora8J3A2gNWJZfZxPIMXu5caa3QU2y5SlhBZ/hMbjSKiJ2WYGsNFs
-        2bBzq463yFe9Ma2JJKP7qQ==
-X-Google-Smtp-Source: AGRyM1tmMBpewtMPlbEJ5qaei0T+/HbeN+LtCnmNuQ4BMbDmbM2P9VoMHC/89YMSuzPAVYkshEC1gw==
-X-Received: by 2002:a05:6638:1a0e:b0:331:9a26:57c3 with SMTP id cd14-20020a0566381a0e00b003319a2657c3mr2714961jab.310.1655388302928;
-        Thu, 16 Jun 2022 07:05:02 -0700 (PDT)
+        bh=HBau3VRzdZhTfclTyBibLg9xFVR5jMynJXtllb1vDUo=;
+        b=rZKJL16v/5+VbUL7F+VIncxIJlDqjPihG3CPpreK2kmlHFebVil6SEvRfi10OvuPim
+         cqc7ynl1SCmXrN0tIFutY/hvFLXzEy1Ua17+8LKQlPBBMaxU/JbwU3Uq1/L3EdyYrOyO
+         q91lbPwMPqsAnb5SZ2hFIotYoyN5PM7JkvX0DdxXTFY6CHjsfSERWFzhA5ZHdID7o00/
+         1ojOUMj69XKDHR1mifgkPglqOiuoMaWvq780kwITJO/sF6jjerByW6CP58qmkUHMJh9p
+         j21U36GklvfszHBV+Ws4NWoTMrZuVcJw+XT7Oo8ygk0SBAp1Z4pY+NRQIWCFXofQpfoG
+         slWA==
+X-Gm-Message-State: AJIora/MwYX1NKAZd1imTpCj0nGASyaO2+LVeMfwgO4XBgfC61xmQkaV
+        WALMVC80Ego+xM3GSBI2Lw==
+X-Google-Smtp-Source: AGRyM1tOnixooJOH4Sxqu1VRF06xA/edeQ5bII29Z4i9C2fE+igWgZDtX/wd2w6p11/kf8obcYbEeg==
+X-Received: by 2002:a05:6638:1b5:b0:331:acf2:1111 with SMTP id b21-20020a05663801b500b00331acf21111mr2817467jaq.115.1655388305114;
+        Thu, 16 Jun 2022 07:05:05 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id s20-20020a6bdc14000000b0066579afd3cbsm1171751ioc.50.2022.06.16.07.05.01
+        by smtp.gmail.com with ESMTPSA id n41-20020a027169000000b00331a3909e46sm910313jaf.68.2022.06.16.07.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 07:05:02 -0700 (PDT)
-Received: (nullmailer pid 3391578 invoked by uid 1000);
+        Thu, 16 Jun 2022 07:05:04 -0700 (PDT)
+Received: (nullmailer pid 3391581 invoked by uid 1000);
         Thu, 16 Jun 2022 14:05:01 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, vdonnefort@google.com,
-        maz@kernel.org, will@kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20220616092737.1713667-2-sebastianene@google.com>
-References: <20220616092737.1713667-1-sebastianene@google.com> <20220616092737.1713667-2-sebastianene@google.com>
-Subject: Re: [PATCH v6 1/2] dt-bindings: vcpu_stall_detector: Add qemu,vcpu-stall-detector compatible
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <20220615235404.3457-1-ansuelsmth@gmail.com>
+References: <20220615235404.3457-1-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: dma: rework qcom,adm Documentation to yaml schema
 Date:   Thu, 16 Jun 2022 08:05:01 -0600
-Message-Id: <1655388301.043228.3391577.nullmailer@robh.at.kernel.org>
+Message-Id: <1655388301.055791.3391580.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,47 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 09:27:38 +0000, Sebastian Ene wrote:
-> The VCPU stall detection mechanism allows to configure the expiration
-> duration and the internal counter clock frequency measured in Hz.
-> Add these properties in the schema.
+On Thu, 16 Jun 2022 01:54:03 +0200, Christian Marangi wrote:
+> Rework the qcom,adm Documentation to yaml schema.
+> This is not a pure conversion since originally the driver has changed
+> implementation for the #dma-cells and was wrong from the start.
+> Also the driver now handles the common DMA clients implementation with
+> the first cell that denotes the channel number and nothing else since
+> the client will have to provide the crci information via other means.
 > 
-> While this is a memory mapped virtual device, it is expected to be loaded
-> when the DT contains the compatible: "qemu,vcpu-stall-detector" node.
-> In a protected VM we trust the generated DT nodes and we don't rely on
-> the host to present the hardware peripherals.
-> 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  .../bindings/misc/vcpu_stall_detector.yaml    | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml
+> v2:
+> - Change Sob to Christian Marangi
+> - Add Bjorn in the maintainers list
+> 
+>  .../devicetree/bindings/dma/qcom,adm.yaml     | 96 +++++++++++++++++++
+>  .../devicetree/bindings/dma/qcom_adm.txt      | 61 ------------
+>  2 files changed, 96 insertions(+), 61 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/qcom,adm.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_adm.txt
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml: properties:timeout-sec: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml: ignoring, error in schema: properties: timeout-sec
-Documentation/devicetree/bindings/misc/vcpu_stall_detector.example.dtb:0:0: /example-0/vmwdt@9030000: failed to match any schema with compatible: ['qemu,vcpu-stall-detector']
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
+dma-controller@18300000: reset-names:1: 'c0' was expected
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+dma-controller@18300000: reset-names:2: 'c1' was expected
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+dma-controller@18300000: reset-names:3: 'c2' was expected
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
 
-pip3 install dtschema --upgrade
+dma-controller@18300000: reset-names: ['clk', 'pbus', 'c0', 'c1', 'c2'] is too long
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
 
-Please check and re-submit.
+dma-controller@18300000: resets: [[11, 13], [11, 12], [11, 11], [11, 10], [11, 9]] is too long
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
 

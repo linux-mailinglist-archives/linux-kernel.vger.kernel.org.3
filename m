@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE5154ED3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6412654ED49
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378904AbiFPWYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S1378965AbiFPW0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378814AbiFPWYV (ORCPT
+        with ESMTP id S1378918AbiFPW0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:24:21 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AD861616
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:24:18 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u12so5314032eja.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s5OVQxNBYmyEQ0OmaCMiLE8dcvy12XT+9uj6YfV0c7M=;
-        b=V7kHqBNdSi12xPeBhfaIA4C8WeNusqT1JThDMUUuzy19EBFoEVKJ2/UNjtsY2Bij3C
-         GBj/s38zp3vbo7WX6a6J8u49ZDbEa+otOpNDdO47/SHcGcOS4mXzF2NKcKolLkODp7ZV
-         G/kLA8v2g0bhg7Kmz4GIsP+2JTFbKAU3l4/YpidzxaFtGu2zoHmFddvquR0xqseNCXkg
-         +RYWGp+PogNA/lcHTt4BEZie4ySvZ/bH7rZXJGnTe69Bj5stpStnFXnfcgOBI3hPaXV4
-         /+Zgqdl3upX3iupiljH/6MBjdh2oNFFjaSNh8j85KA+tikFQH/bCfhW22iQ6HNUgNG5C
-         zllQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s5OVQxNBYmyEQ0OmaCMiLE8dcvy12XT+9uj6YfV0c7M=;
-        b=ZqybNTIGFOhwV3v6wfwlgCbpLtSpiPlZ/o2gihLVszPvJqsoyFEMgWAb5Mww3SuSEN
-         F/XW0mvGLJ3gl9Cjh23LJwqYOoushctiX69ELpjYm0Ih+mNaUo65swWax9r4K/3T6Mq1
-         EZ8uWCntEp+mHZdjYNOrmNTaGaH0dgvXO2eFOIAjfLzm1IMvSd4JwdC1/u5m/DctjURK
-         t266LhF775Sw0YGNQ0R/F/yBDiK7a9Spu8k1ZG7BpLjuH5gNWXf8IhkifxaRx2OOnu2a
-         mMVThk9fefPAmNITnHJTZFv6Z06d2pdaHPVXZjY5Fa3Iehke8nF3UrZBS6bBd4mHi0ju
-         sZTw==
-X-Gm-Message-State: AJIora9Qi5RhqQlAP/C988XUryIGMHp8qd5yeFembQGkNYy5DJ5i12LU
-        KB8KyL9m27cJTac1IaJ4o+SWww==
-X-Google-Smtp-Source: AGRyM1v4PTRpYJnGjT6DqWqt/rtDzyXA3kNaGhkSm5VBADyv1wVpQ5I4Cr3z61H+DiLds+uhcpAkVQ==
-X-Received: by 2002:a17:906:d84:b0:715:7f3d:403f with SMTP id m4-20020a1709060d8400b007157f3d403fmr6646452eji.406.1655418256867;
-        Thu, 16 Jun 2022 15:24:16 -0700 (PDT)
-Received: from [192.168.1.12] ([195.24.90.54])
-        by smtp.googlemail.com with ESMTPSA id c26-20020a170906171a00b006fed9a0eb17sm1249215eje.187.2022.06.16.15.24.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:24:16 -0700 (PDT)
-Message-ID: <aa1334b2-49db-2425-6895-c186566374e8@linaro.org>
-Date:   Fri, 17 Jun 2022 01:24:14 +0300
+        Thu, 16 Jun 2022 18:26:19 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770AC60B84
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:26:18 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id A1BEF19920F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:26:17 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 1xwPozFsBghj81xwPoWSNF; Thu, 16 Jun 2022 17:26:17 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=h5zz4gXmeyKQq141JoXnEndda8Y+1z5nbmNrA8Hh7GI=; b=ZddVWYugTRVwUQ9+xBSOwoZ69g
+        hAnA0CIMArl+brdZzHTgR+mPlYeHw1d0B5EPigNcn+dKjHAtRTLm0jlubb5ZgclL3NcST+CaIYOWr
+        WALaCQJOlvqogBmS8BKirX1Fp26FMgm3zAwdfT9+FvQeid7zjgA8h3AhSPXI8wKmTrgbubh+HwQkL
+        WXAZblsgYOmmL/5vrFocIKlW7Q3wk9+J1pzO4Jx/5pGCiJ1znVKhOjEzvGSH8J+Hr9x98IifLjIO+
+        BdhaEx5H9GjmhnXzpvSyUI4V+x6Es9Ijs0m/KwG01A958+VsnmKwsJTFrcpOhwvy3vHZqG1slFvI2
+        1V0sqDhw==;
+Received: from 193.254.29.93.rev.sfr.net ([93.29.254.193]:36014 helo=[192.168.0.101])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1o1xwN-002J6q-Me;
+        Thu, 16 Jun 2022 17:26:16 -0500
+Message-ID: <1a60b867-1551-5301-f6f4-19bd93420d36@embeddedor.com>
+Date:   Fri, 17 Jun 2022 00:26:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v3] venus: Add support for SSR trigger using fault
- injection
+Subject: Re: [PATCH] hinic: Replace memcpy() with direct assignment
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, quic_vgarodia@quicinc.com
-References: <1655377322-14195-1-git-send-email-quic_dikshita@quicinc.com>
- <CAE-0n51HOy84c9osif0wXd90c5D_MQZ=9sa1g93iZHG3mWxREA@mail.gmail.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <CAE-0n51HOy84c9osif0wXd90c5D_MQZ=9sa1g93iZHG3mWxREA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220616052312.292861-1-keescook@chromium.org>
+ <YqtmIIAOH7uRNAZ5@dev-arch.thelio-3990X>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <YqtmIIAOH7uRNAZ5@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 93.29.254.193
+X-Source-L: No
+X-Exim-ID: 1o1xwN-002J6q-Me
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 193.254.29.93.rev.sfr.net ([192.168.0.101]) [93.29.254.193]:36014
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,31 +93,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Dikshita.
 
-On 6/16/22 21:37, Stephen Boyd wrote:
-> Quoting Dikshita Agarwal (2022-06-16 04:02:02)
->> Here we introduce a new fault injection for SSR trigger.
->>
->> To trigger the SSR:
->>  echo 100 >  /sys/kernel/debug/venus/fail_ssr/probability
->>  echo 1 >  /sys/kernel/debug/venus/fail_ssr/times
->>
->> Co-developed-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->> signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> 
-> This line should come last and the 's' should be capitalized.
 
-Thanks Stephen, will fix that while applying.
+On 6/16/22 19:19, Nathan Chancellor wrote:
 
-> 
->> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->> ---
-> 
-> Code looks good
-> 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
--- 
-regards,
-Stan
+I think in this case the tag should be "Build-tested-by" instead.
+
+Thanks
+--
+Gustavo

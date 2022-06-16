@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B7054EDA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D624154EDA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379213AbiFPWyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378857AbiFPWyf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1379123AbiFPWyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 16 Jun 2022 18:54:35 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EC462233;
-        Thu, 16 Jun 2022 15:54:29 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id b138so2925591iof.13;
-        Thu, 16 Jun 2022 15:54:29 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349040AbiFPWyb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Jun 2022 18:54:31 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D449C6212F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:54:28 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q11so3513742oih.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:54:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=qs/jEqJkbgzcEUoEFkoJzijODSfrMvSC/4IDtEIJDn8=;
-        b=WjRKkIJn6q5BG9lml+FODpDUwiGYbSeSCEGJjoiTU8puE6GioJLPlR3ur43+Zl8eVa
-         JYSYI6wkpSEjFKvB0xQ1oMJtPyOS/+97eX+SvoE1QEC5fkV+k7rxPi1ca+X9o78l9s4s
-         JnUdxEDtjSArSHSUJ245Yo2LYB37pK5OZ6MAhkod9cv2J+WncJelVdx04qkgVcMWkTB5
-         SrtlapNOsUmD/2RET8qBFIoZMDE6uKhy+/JVh8k5H4lEA4v74mIauFejTvurZkmeEzDK
-         wPcVZaP8OtYzB6rFKjb6JnDOY+3L28ylA9j14bIERuK27v1PX3qytxRwiTswckP3dU91
-         jXbg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7wV78KF4dgnUbQxk8pc94OHUoJRSZfwr41EF876rjV4=;
+        b=DNbvDqObxLMXa/rES4xAoWU4Civ7qJLfBw5zxQx08WrRR7NVxi8Yzg408cwdWX+QH5
+         9dI2+M35fzecclwkWTTDSaRchm8T7VNkAQYYlab/R3Ecj5LgVXjZIXOOQQQIRqcx596j
+         GtHWaX+RqlOcJcM5E4yqqQoF94qQLPi5aOnxw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=qs/jEqJkbgzcEUoEFkoJzijODSfrMvSC/4IDtEIJDn8=;
-        b=ptp1ibB4rP2ytF1uvtNd37n3XJ9GufPKU+kxZaGpz53vl8LWlSdYG74UNHGRPTgs/M
-         0bXE3Vi3Rfd7HRvHhIwMcXHAeBlQIDc4AlYD5+7JNM50hXEj5LcBZf+z2BWj44vgvwpb
-         PYRy1ON2zEuh/K0sqYmhbTN+hn9A62I7CK2GIVXlztdcW2cw8ZDYZDbnrHNNPjAOueMV
-         vqHPAtIlt8M9Ovfv0uX/hUSAYF0t2YgdD1pxEIpiDSe45KK6yApA68Q4EbhMbcnrFE+j
-         VSKUxaAM4M4W1F1ZwOo+WFzardV4U8zPIIWrr8dyBTmuATdvkM7hzPjd6Quqp6z5gG1E
-         442A==
-X-Gm-Message-State: AJIora9ud+mqcV+e6IQwuKuhmrLdLDsEbiD4we/dc1hd56o2X8FdlGG9
-        XngyogeqHceCWdF5SxA8LnxdBHlON4EKZzOsJww=
-X-Google-Smtp-Source: AGRyM1uKdkKdJAzIlavmx5oXJrk63yzsq+ZrVSqDjHhWQ5Uv3WPJBAwZR+oPnlHYsM4MTJI2hXZ6Nx2NtgUAcgf1DBY=
-X-Received: by 2002:a05:6602:26cb:b0:648:f391:c37d with SMTP id
- g11-20020a05660226cb00b00648f391c37dmr3617629ioo.198.1655420068983; Thu, 16
- Jun 2022 15:54:28 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7wV78KF4dgnUbQxk8pc94OHUoJRSZfwr41EF876rjV4=;
+        b=hLgSRthmA3jgP6QuJzw/xPk4pGChNZdk+Z/0DYeumse0/hMQ2v+PAgwcb2q/X/45BK
+         ZAoTr0UZg9c0MCUIqwTR0IKQBxFEWq2NSPlBkJqPkLDv1XIwu1OhrswaBByHZaQMB1k7
+         iv4PvZ++RTR6W3scJyA1JqCivsbnquEribEslNaT8vpyAlejUUceeDfkIgWtOnqwOO/M
+         o+7aD5mIdrUzmfNdiTrtiCpnuFR/jG8La7L4QX6cZ8X3GADwd1QdR/kpfEodq92rU1Nf
+         zEiktQrgfval+6MdLpfp5OJJbRFn9Yl/mYoM+sCkV4khCQuFk8CEntLLU77STteH0LC9
+         nn5g==
+X-Gm-Message-State: AOAM5309x6uj5y04vo8RtPIiMsN3RLt6kCXubvjkX7fyYmogMT69uDr2
+        t2y9malmTOyDLBkAb2dt03PxEQ==
+X-Google-Smtp-Source: ABdhPJzLEct5qbxT7S+CBrXpkdvX1y1NWqaQyDVrCZHbJaUGj+dQ0MODTBXf676ihx2engLwfu0p9w==
+X-Received: by 2002:a05:6808:2117:b0:32e:f441:8cbe with SMTP id r23-20020a056808211700b0032ef4418cbemr8919388oiw.167.1655420068100;
+        Thu, 16 Jun 2022 15:54:28 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id u19-20020a056870951300b000f309d52933sm1501573oal.47.2022.06.16.15.54.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 15:54:27 -0700 (PDT)
+Subject: Re: [PATCH 2/2] selftests/x86/amx: Fix the test to avoid failure when
+ AMX is unavailable
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220401221014.13556-1-chang.seok.bae@intel.com>
+ <20220401221014.13556-3-chang.seok.bae@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <aaab50d2-592c-69e4-58a6-0a0926669de3@linuxfoundation.org>
+Date:   Thu, 16 Jun 2022 16:54:26 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220616104541.16289-1-jslaby@suse.cz> <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
-In-Reply-To: <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 17 Jun 2022 00:53:53 +0200
-Message-ID: <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     masahiroy@kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220401221014.13556-3-chang.seok.bae@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,55 +75,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
-> >
-> > Until the link-vmlinux.sh split (cf. the commit below), the linker was
-> > run with jobserver set in MAKEFLAGS. After the split, the command in
-> > Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
-> > is lost.
-> >
-> > Restore it as linkers working in parallel (esp. the LTO ones) make a use
-> > of it.
-> >
-> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Michal Marek <michal.lkml@markovi.net>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
-> > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->
-> Nice catch.
-> ( I have seen some slowdown in my build-time. Will test and report. )
->
-> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
->
+On 4/1/22 4:10 PM, Chang S. Bae wrote:
+> When a CPU does not have AMX, the test fails. But this is wrong as it
+> should be runnable regardless. Skip the test instead.
+> 
+> Reported-by: Thomas Gleixner <tglx@linutronix.de>
+> Fixes: 6a3e0651b4a ("selftests/x86/amx: Add test cases for AMX state management")
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>   tools/testing/selftests/x86/amx.c | 42 +++++++++++++++++++++++--------
+>   1 file changed, 31 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+> index 3615ef4a48bb..14abb6072a7d 100644
+> --- a/tools/testing/selftests/x86/amx.c
+> +++ b/tools/testing/selftests/x86/amx.c
+> @@ -106,6 +106,12 @@ static void clearhandler(int sig)
+>   
+>   #define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
+>   #define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
+> +
+> +static struct {
+> +	unsigned xsave:   1;
+> +	unsigned osxsave: 1;
+> +} cpuinfo;
+> +
 
-No measurable difference in build-time.
+Why is this needed? Also naming this cpuinfo is confuing.
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+>   static inline void check_cpuid_xsave(void)
+>   {
+>   	uint32_t eax, ebx, ecx, edx;
+> @@ -118,10 +124,8 @@ static inline void check_cpuid_xsave(void)
+>   	eax = 1;
+>   	ecx = 0;
+>   	cpuid(&eax, &ebx, &ecx, &edx);
+> -	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+> -		fatal_error("cpuid: no CPU xsave support");
+> -	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+> -		fatal_error("cpuid: no OS xsave support");
+> +	cpuinfo.xsave = !!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK);
+> +	cpuinfo.osxsave = !!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK);
 
--Sedat-
+Why add this complexity. Why not just Skip here?
 
->
-> > ---
-> >  scripts/Makefile.vmlinux_o | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> > index 3c97a1564947..d032f625b576 100644
-> > --- a/scripts/Makefile.vmlinux_o
-> > +++ b/scripts/Makefile.vmlinux_o
-> > @@ -65,7 +65,7 @@ define rule_ld_vmlinux.o
-> >  endef
-> >
-> >  vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> > -       $(call if_changed_rule,ld_vmlinux.o)
-> > +       +$(call if_changed_rule,ld_vmlinux.o)
-> >
-> >  targets += vmlinux.o
-> >
-> > --
-> > 2.36.1
-> >
+>   }
+>   
+>   static uint32_t xbuf_size;
+> @@ -161,14 +165,31 @@ static void check_cpuid_xtiledata(void)
+>   	 * eax: XTILEDATA state component size
+>   	 * ebx: XTILEDATA state component offset in user buffer
+>   	 */
+> -	if (!eax || !ebx)
+> -		fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
+> -				eax, ebx);
+> -
+>   	xtiledata.size	      = eax;
+>   	xtiledata.xbuf_offset = ebx;
+>   }
+>   
+> +static bool amx_available(void)
+> +{
+> +	check_cpuid_xsave();
+> +	if (!cpuinfo.xsave) {
+> +		printf("[SKIP]\tcpuid: no CPU xsave support\n");
+> +		return false;
+> +	} else if (!cpuinfo.osxsave) {
+> +		printf("[SKIP]\tcpuid: no OS xsave support\n");
+> +		return false;
+> +	}
+> +
+> +	check_cpuid_xtiledata();
+> +	if (!xtiledata.size || !xtiledata.xbuf_offset) {
+> +		printf("[SKIP]\txstate cpuid: no tile data (size/offset: %d/%d)\n",
+> +		       xtiledata.size, xtiledata.xbuf_offset);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+
+I am not seeing any value in adding this layer of abstraction.
+Keep it simple and do the handling in main()
+
+>   /* The helpers for managing XSAVE buffer and tile states: */
+>   
+>   struct xsave_buffer *alloc_xbuf(void)
+> @@ -826,9 +847,8 @@ static void test_context_switch(void)
+>   
+>   int main(void)
+>   {
+> -	/* Check hardware availability at first */
+> -	check_cpuid_xsave();
+> -	check_cpuid_xtiledata();
+> +	if (!amx_available())
+> +		return 0;
+
+This should KSFT_SKIP for this to be reported as a skip. Returning 0
+will be reported as a Pass.
+
+>   
+>   	init_stashed_xsave();
+>   	sethandler(SIGILL, handle_noperm, 0);
+> 
+
+thanks,
+-- Shuah

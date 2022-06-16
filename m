@@ -2,142 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9A454EC21
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D94E54EC25
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378947AbiFPVIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S1379020AbiFPVIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiFPVID (ORCPT
+        with ESMTP id S1378976AbiFPVIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:08:03 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82745119
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:08:02 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id i186so2336438vsc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:08:02 -0700 (PDT)
+        Thu, 16 Jun 2022 17:08:43 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492CA606FD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:08:41 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so1272144pjm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:08:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QYZC9iLsYDsaByy8JmaeJ2G98wNd/D+AjNOCL1AQkNs=;
-        b=F6ti4Z21S49N0+AFdXj43ViP0q+ENG4foOKMonRNclvKZBW2Lz71cWLsGLb3e0pxmh
-         c7zxQp9KWZHNh2Z1LHpAYqy64o69U1exvhyBf179TaHvNv6tq6qJ025FmKxQFzD4jcJx
-         QhTSdSd4ThqXTzQZW8iLRFyIiSvv05+u2ihxE9uerdH8SaVYCuqk3DwSfA9RNFJl8Cn5
-         DLEKdPcR1QoIPoldZX9tsbV2NDOJlMnXHMAfLXR0/9AVab9W2U4acuCBFVLwGR4zVuqN
-         2ZOBN5vi/s88FNqX9UHmMxL3XBdFHS3CRJZ8kAE1bEaFZQbfwIyj3biE0daSpRINUZaq
-         KTWw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HwbgezfQwk0Xu1pd/5zyik8R0QppWmV3ImE0Oh/38WA=;
+        b=TlNoPzPnoqLcG8glyixDbYt4HuvHv1RJUrpBYBd26D/AENq5Lr2UaRi+x5RiPhoQG+
+         QIc0APs6AnViZ/1aS6T9H37/g52R3nd3wFk0eHws+3wm4G03m1d69G5YUgEEHh/pIjOv
+         I1a0qgibONul/Ujsu2SA/nAu2q1VPG7DyvkyI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QYZC9iLsYDsaByy8JmaeJ2G98wNd/D+AjNOCL1AQkNs=;
-        b=XExp//RRX5DavusxKdC4T+HVkm8XDuBMZ0a9shpn4vREY2CJvX8lT88gRUb9xNk4mW
-         ivhbkQ5PoVkZxYJd9qPpY4lE+EeWuUnQGefhcv8Z6iEHBOpPg5MJVMsvI+uYhrJ9LV6V
-         D9FnmaEzCKf0GAAa9Ju3xLCJVVcr6qG2u8qxQJBAu6RQvbv9DyuvQA2P6h8MSvmlX1L7
-         v/TfVRq0T0r9X0GYzG0mvj+VEyFYByDkKB/EPXl0PuCEPTw+QH64UI/OGN4aHEW377t6
-         7o1yfe+at9ao2kiE+ZW6075GJ6q/OdAsg1Jb/affUy4rzTB/VflZpAbW7xgGMHhm4ZfM
-         H1+w==
-X-Gm-Message-State: AJIora8BoRQ6WFnfuwIQi8JOvxjpqZ7U6txOYADnYbY0z/TNrxsMD2ef
-        owPeLm6GeJowQXZWyINns/zxoEv7WBY8ShxxK+I5Zg==
-X-Google-Smtp-Source: AGRyM1uFolbScaQC6FfwKtMgJbBm1M0CZmgiZxWFQphbt2Z6rX7ZCeXMZ+tOLGbXinOqLYqUo+b1hhp8iEXBMc37I8s=
-X-Received: by 2002:a05:6102:3e23:b0:34b:b6b0:2ae7 with SMTP id
- j35-20020a0561023e2300b0034bb6b02ae7mr3534210vsv.81.1655413681460; Thu, 16
- Jun 2022 14:08:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613125622.18628-1-mgorman@techsingularity.net>
- <20220613125622.18628-8-mgorman@techsingularity.net> <43033655-2e78-621b-cc76-c3dc53024d00@suse.cz>
-In-Reply-To: <43033655-2e78-621b-cc76-c3dc53024d00@suse.cz>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 16 Jun 2022 15:07:25 -0600
-Message-ID: <CAOUHufaHV9Aua3sneOnQvPhrtuxxDuJ5+c+A-zy8RufoDkmeMQ@mail.gmail.com>
-Subject: Re: [PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HwbgezfQwk0Xu1pd/5zyik8R0QppWmV3ImE0Oh/38WA=;
+        b=XHAr3pD2hMnaeah2SH5Gk0JSw6wf1JzNtjsgmkh+9eOm1LK3tX1kMpg1wpawIxv+k0
+         Q5u0BVHy4mfBhlUEuZNxMTzHqIw3w1aTBh8NXPJqNT9Yl8LrId8HIM1CYy34G95Yxn2V
+         c/9xets9FhQCwJYWP0ZxqeYCZYdnWk80u5/rJ0/DG8+rzalsXaAcPs9mFih8PkFFhEpc
+         t41A2MWYfsSDhIW8/W0HsA37bekr6VePHWgx0L+07HWPwV/WXjCyBAYAX+IY2G+gWldS
+         dt+9PfJheKDGsE/oWl4SseteNVs6RTAzp5dFyQU49qf/mWDpJUoj0Z+JDQ/AD1/e50IX
+         AZZg==
+X-Gm-Message-State: AJIora991qt4yLb0p6jp7qg8+mwq7JxIfKKFJ1yEAew3JyzXTwugmICJ
+        n/C2X8vb1GtCSolSJogg92Ytng==
+X-Google-Smtp-Source: AGRyM1uc79Do6zsutgPjcjN2T3RytlgvAFKrJijqceHy6/hr47dr1Tlqvrk1p9JFum7it8re0r3fnA==
+X-Received: by 2002:a17:90b:341:b0:1e0:cf43:df4f with SMTP id fh1-20020a17090b034100b001e0cf43df4fmr7041722pjb.126.1655413721353;
+        Thu, 16 Jun 2022 14:08:41 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:4ef5:7e3b:63ba:fc4])
+        by smtp.gmail.com with UTF8SMTPSA id g30-20020aa79dde000000b0050dc76281b8sm2215073pfq.146.2022.06.16.14.08.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 14:08:40 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 14:08:39 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
+Message-ID: <Yqub17iT4O7aqFMi@google.com>
+References: <20220609192000.990763-1-mka@chromium.org>
+ <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com>
+ <YqpprpUHmlD62YzI@google.com>
+ <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 11:02 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 6/13/22 14:56, Mel Gorman wrote:
-> > struct per_cpu_pages is no longer strictly local as PCP lists can be
-> > drained remotely using a lock for protection. While the use of local_lock
-> > works, it goes against the intent of local_lock which is for "pure
-> > CPU local concurrency control mechanisms and not suited for inter-CPU
-> > concurrency control" (Documentation/locking/locktypes.rst)
+On Thu, Jun 16, 2022 at 01:12:32PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Jun 15, 2022 at 4:22 PM Matthias Kaehlcke <mka@chromium.org> wrote:
 > >
-> > local_lock protects against migration between when the percpu pointer is
-> > accessed and the pcp->lock acquired. The lock acquisition is a preemption
-> > point so in the worst case, a task could migrate to another NUMA node
-> > and accidentally allocate remote memory. The main requirement is to pin
-> > the task to a CPU that is suitable for PREEMPT_RT and !PREEMPT_RT.
+> > > > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+> > > > +{
+> > > > +       int i;
+> > > > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
+> > > > +       struct device_node *np, *npc;
+> > > > +       struct platform_device *pdev = NULL;
+> > > > +       struct pdev_list_entry *pdle;
+> > > > +
+> > > > +       if (!parent_hub->dev.of_node)
+> > > > +               return;
+> > > > +
+> > > > +       for (i = 1; i <= parent_hub->maxchild; i++) {
+> > > > +               np = usb_of_get_device_node(parent_hub, i);
+> > > > +               if (!np)
+> > > > +                       continue;
+> > > > +
+> > > > +               if (!of_is_onboard_usb_hub(np))
+> > > > +                       goto node_put;
+> > > > +
+> > > > +               npc = of_parse_phandle(np, "companion-hub", 0);
+> > > > +               if (npc) {
+> > > > +                       /*
+> > > > +                        * Hubs with companions share the same platform device.
+> > > > +                        * Create the plaform device only for the hub that is
+> > > > +                        * connected to the primary HCD (directly or through
+> > > > +                        * other hubs).
+> > > > +                        */
+> > > > +                       if (!usb_hcd_is_primary_hcd(hcd)) {
+> > > > +                               of_node_put(npc);
+> > > > +                               goto node_put;
+> > > > +                       }
+> > > > +
+> > > > +                       pdev = of_find_device_by_node(npc);
+> > > > +                       of_node_put(npc);
+> > > > +               } else {
+> > > > +                       /*
+> > > > +                        * For root hubs this function can be called multiple times
+> > > > +                        * for the same root hub node (the HCD node). Make sure only
+> > > > +                        * one platform device is created for this hub.
+> > > > +                        */
+> > > > +                       if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
+> > > > +                               goto node_put;
+> > >
+> > > I don't understand the "else" case above. What case exactly are we
+> > > handling again? This is when:
+> > > * the hub is presumably just a 2.0 hub since there is no companion.
+> > > * our parent is the root hub and the USB 2.0 hub we're looking at is
+> > > not the primary
 > >
-> > Replace local_lock with helpers that pin a task to a CPU, lookup the
-> > per-cpu structure and acquire the embedded lock. It's similar to local_lock
-> > without breaking the intent behind the API. It is not a complete API
-> > as only the parts needed for PCP-alloc are implemented but in theory,
-> > the generic helpers could be promoted to a general API if there was
-> > demand for an embedded lock within a per-cpu struct with a guarantee
-> > that the per-cpu structure locked matches the running CPU and cannot use
-> > get_cpu_var due to RT concerns. PCP requires these semantics to avoid
-> > accidentally allocating remote memory.
+> > The 'else' case can be entered for hubs connected to a root hub or to another
+> > hub further down in the tree, but we bail out only for first level hubs.
 > >
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
->
-> ...
->
-> > @@ -3367,30 +3429,17 @@ static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone,
-> >       return min(READ_ONCE(pcp->batch) << 2, high);
-> >  }
+> > > ...but that doesn't make a lot of sense to me? I must have missed something...
 > >
-> > -/* Returns true if the page was committed to the per-cpu list. */
-> > -static bool free_unref_page_commit(struct page *page, int migratetype,
-> > -                                unsigned int order, bool locked)
-> > +static void free_unref_page_commit(struct per_cpu_pages *pcp, struct zone *zone,
-> > +                                struct page *page, int migratetype,
-> > +                                unsigned int order)
->
-> Hmm given this drops the "bool locked" and bool return value again, my
-> suggestion for patch 5/7 would result in less churn as those woudn't need to
-> be introduced?
->
-> ...
->
-> > @@ -3794,19 +3805,29 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
-> >       struct list_head *list;
-> >       struct page *page;
-> >       unsigned long flags;
-> > +     unsigned long __maybe_unused UP_flags;
+> > It's not super-obvious, this bit is important: "this function can be called
+> > multiple times for the same root hub node". For any first level hub we only
+> > create a pdev if this function is called on behalf of the primary HCD. That
+> > is also true of a hub connected to the secondary HCD. We only want to create
+> > one pdev and there is supposedly always a primary HCD.
 > >
-> > -     local_lock_irqsave(&pagesets.lock, flags);
-> > +     /*
-> > +      * spin_trylock_irqsave is not necessary right now as it'll only be
-> > +      * true when contending with a remote drain. It's in place as a
-> > +      * preparation step before converting pcp locking to spin_trylock
-> > +      * to protect against IRQ reentry.
-> > +      */
-> > +     pcp_trylock_prepare(UP_flags);
-> > +     pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
-> > +     if (!pcp)
->
-> Besides the missing unpin Andrew fixed, I think also this is missing
-> pcp_trylock_finish(UP_flags); ?
+> > Maybe it would be slightly clearer if the function returned before the loop
+> > if this condition is met.
+> 
+> I guess I'm still pretty confused. You say "For root hubs this
+> function can be called multiple times for the same root hub node".
+> Does that mean that the function will be called multiple times with
+> the same "parent_hub", or something else.
 
-spin_trylock only fails when trylock_finish is a NOP.
+It is called with a different "parent_hub", however for root hubs the
+DT node is the same for both root hubs (it's the DT node of the
+controller since there are no dedicated nodes for the root hubs).
+
+Just to make sure this isn't the source of the confusion: the root hubs
+are part of the USB controller, not 'external' hubs which are directly
+connected to the controller. I call the latter 'first level hubs'.
+
+> Unless it's called with the same "parent_hub" then it seems like if
+> the USB device has a device tree node and that device tree node is for
+> a onboard_usb_hub and there's no companion node then we _always_ want
+> to create the platform device, don't we? If it is called with the same
+> "parent_hub" then I'm confused how your test does something different
+> the first time the function is called vs. the 2nd.
+
+Let's use an adapted trogdor DT with only a USB 2.x hub as an example:
+
+usb_1_dwc3 {
+         dr_mode = "host";
+	 #address-cells = <1>;
+	 #size-cells = <0>;
+
+	 /* 2.x hub on port 1 */
+	 usb_hub_2_x: hub@1 {
+	         compatible = "usbbda,5411";
+	         reg = <1>;
+	         vdd-supply = <&pp3300_hub>;
+	 };
+};
+
+1st call: the 'parent_hub' corresponds to the USB 3.x root hub of
+usb_1_dwc3, the DT node of the hub is 'usb_1_dwc3'. The function
+iterates over the ports, finds usb_hub_2_x, enters the else branch
+(no companion hub), checks that the function was called on behalf
+of the primary controller and creates the pdev.
+
+2nd call: the 'parent_hub' corresponds to the USB 2.x root hub of
+usb_1_dwc3, the DT node of the hub is also 'usb_1_dwc3'. The function
+iterates over the ports, finds usb_hub_2_x, enters the else branch
+(no companion hub), sees that it is not called on behalf of the
+primary controller and does not create a second (unnecessary) pdev.
+
+Is it clearer now?

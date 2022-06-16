@@ -2,75 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1489154E32D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA6554E32F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376387AbiFPORM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S1377617AbiFPORz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiFPORJ (ORCPT
+        with ESMTP id S1377611AbiFPORs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:17:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DD3344C6;
-        Thu, 16 Jun 2022 07:17:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD619B8216D;
-        Thu, 16 Jun 2022 14:17:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2E2C34114;
-        Thu, 16 Jun 2022 14:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655389026;
-        bh=4N0hBtR+SyS25pTqTpY1XXhf0OdTDS8HRBE+v+SkUaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VU2a/TXPByQwnAX7hH2naRcQHMYUTMhF1YLcALCrrLHhovVp/GLqM+6+b7gwLFRDA
-         /pTXQE4B8T3waGUgshRjaEIZK0l0z0GUJTVhHq7Yq+qbljhu5d+Bm0ujVqOw8MoubK
-         4GVKzdCQ65tCJ4+bsH3uc/JSJ4yZe2d7Tz+5+GPc6ObWb8Ii0yAjXRB5UASFPyg6nx
-         CbQOnSQCmi0NcWY9PNbilmjeFNZad4M1AvNal16z8T83TZFSJyThfml1Usthi9B/Gy
-         a+yasFWIttcRUy4NKt+aGl8NUMegAXBkEHZ2/zoaluHy9NrAjcz5ov15x8tKMgkUAG
-         +DpEU4Pu5zAXg==
-Date:   Thu, 16 Jun 2022 07:17:05 -0700
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dmaengine: apple-admac: Use {low,upp}er_32_bits() to
- split 64-bit address
-Message-ID: <Yqs7YSR12L42zFL5@matsya>
-References: <20220616141312.1953819-1-geert@linux-m68k.org>
+        Thu, 16 Jun 2022 10:17:48 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B67A1EED9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:17:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M+6IjnZ6hNt8A6C6btYjbAsgaqujJ9QY5TSS44IkQzaTUDYIjeJWnmXg632YsCvGRXMPzw9HDEMDjp9nGwZCDa4yrVyqIe4T5GpRJv0G8P43fFWMqvgjG+1Ct6lhmZsJQIt98OPhmmFmzRF8qVtcB2O6s1CgxDsqYALeDHeoRj4fVm4g59KtumRS+kYQNJdR+4Hosx6EjO3uaSRZ2haW7fv50bb4DYwPOYXTT91ZTzOLvps7tw6wHLKy5YYADeOSfe7wtzDxiBTrOCaRDf5ITaUUhQJAi/tIrtsRTLNY4ePPuf/wUmMJazPJDDNTLwPNGs8oH3CAv7i3fgeBuvi9nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lFV9vS8U1FRaLDFVrIscdACXQ2Xiy7z2scvKE2S1JXw=;
+ b=k8GnZO69ccY7SCWwUC9WoWW1m9yQp0ZEq4y0GUGqGN2LPUn1idytMjYnIezOrWfdBmNdXlwOLpuZX3VRyqi699pv81HiaWtbdncDpaJpqkulALQqOq6TurI42vtBenfBd/C5DTatuDcQfjvEAT8JxkBcnFWyUKOFhsqrwV9Da9yJQ2NtiCUBPR6U14mVSLwLdz4STilVAtTnlOyuirtbb4pwL7IPIvUTrwdF84sH8D0LJZxCFDjj0V0G7jjAmHPqsgqgG81BZopx/WeIzfMQFKDwHFGiMd8lY2bnxBStdnvkE4IzhJ6WYaTs3GCSsMmFlpGk3pEQ3+wzS8FRtYKm/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=ideasonboard.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lFV9vS8U1FRaLDFVrIscdACXQ2Xiy7z2scvKE2S1JXw=;
+ b=XLUJcdInEN7hp8w75yyf5AmLcIJrBAMAI2CDfbCKLYvCs9btfz5p7gCA3I7lpwE2yKZ0ywlYCLYb4A0Y3LFboVJfpdNfF4KW9UrarSo7ezRfUBiWBQbTuu6ptv7g/4MA8g7xmgFAdMm3eCJBEt/+E+i32rnYhO7RXt+MS3esEb4=
+Received: from SA9PR13CA0114.namprd13.prod.outlook.com (2603:10b6:806:24::29)
+ by DM6PR02MB5276.namprd02.prod.outlook.com (2603:10b6:5:46::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.17; Thu, 16 Jun
+ 2022 14:17:45 +0000
+Received: from SN1NAM02FT0048.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:24:cafe::ce) by SA9PR13CA0114.outlook.office365.com
+ (2603:10b6:806:24::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.6 via Frontend
+ Transport; Thu, 16 Jun 2022 14:17:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0048.mail.protection.outlook.com (10.97.4.223) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Thu, 16 Jun 2022 14:17:45 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 16 Jun 2022 07:17:44 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 16 Jun 2022 07:17:44 -0700
+Envelope-to: laurent.pinchart@ideasonboard.com,
+ sam@ravnborg.org,
+ dri-devel@lists.freedesktop.org,
+ airlied@linux.ie,
+ daniel@ffwll.ch,
+ linux-kernel@vger.kernel.org
+Received: from [172.23.135.119] (port=58106 helo=xhdvgannava41x.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <venkateshwar.rao.gannavarapu@xilinx.com>)
+        id 1o1qJc-000507-DS; Thu, 16 Jun 2022 07:17:44 -0700
+From:   Venkateshwar Rao Gannavarapu 
+        <venkateshwar.rao.gannavarapu@xilinx.com>
+To:     <laurent.pinchart@ideasonboard.com>, <sam@ravnborg.org>,
+        <dri-devel@lists.freedesktop.org>
+CC:     <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <linux-kernel@vger.kernel.org>, <vgannava@xilinx.com>,
+        Venkateshwar Rao Gannavarapu 
+        <venkateshwar.rao.gannavarapu@xilinx.com>
+Subject: [PATCH V2 0/2] Add Xilinx DSI-Tx subsystem DRM driver
+Date:   Thu, 16 Jun 2022 19:47:34 +0530
+Message-ID: <1655389056-37044-1-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616141312.1953819-1-geert@linux-m68k.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 37d0fb75-ee98-45e1-6d85-08da4fa2fbca
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5276:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB5276D8B832ABFDD7566C67F6B1AC9@DM6PR02MB5276.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ColoefgM7ZhimTqEVnZ6W9ZSjvi7ifr5vBqODLcNTeoPNz92V9T10+PpiH8/dAaQ9SJ+AOqaXXMRrBCY7632ZsfCxKe6nccBmQ6jVkiU00pG+UhqoBrqU/ikIlQnucMFpwJEAHnyLOWGf182BSacBOydtYlRnMbl52N3LaUSF5vJN/heetds7cnE79fwGBCEG4wxVrDwlg47nN5P4bnwrg4eX28WtyB7Z1RqEZKPlsMG5w4I82Fw5iwYxaBCCgV+n5cl66amBRnRI/BwaOWxwRJQNo50kqPkT2AElBM4mC528dI2HbMzjLbrQ9JYPaYdiuvytWcHniOqVw12RRgPrTUm/HlHi285O6YKJXqkzKYWlds8sV36JOrIM6cqkCyr+IFkb+H8UNkLb5fpewHPG36lgF3599xHc6scv0qd18b32jNlQmXU/6ouRTjB/eYopWcs6Qik+9SZpaBjsUxaqNuLlPUb1pUckMnJB06v/MIkt7+Mc8+nksfuOsrmJ4WjLs4UuTvMP5U0mSk7SHgyQ4DTXpSSpDh0du4tSl8QLi6ER48lPMpAv+qlwiadcnNMZ/zfRFQM6POtyJItm+GYHLXmhXKht8/erjvekjR085RUGBKnjhHbBIpyU+Q/0awBiU5ghbYwoITr8QnLKugH0dAizHvOzxsWo2Zb7dChI89IDnpZpDZr/DvH2g5Mqo5eA8EeBzDyQQgz1XUrTw6xqQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(46966006)(40470700004)(36840700001)(82310400005)(107886003)(36756003)(83380400001)(70206006)(8676002)(316002)(110136005)(54906003)(2616005)(4326008)(7696005)(70586007)(508600001)(7636003)(2906002)(356005)(8936002)(6666004)(186003)(336012)(47076005)(40460700003)(426003)(5660300002)(9786002)(26005)(36860700001)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 14:17:45.3209
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37d0fb75-ee98-45e1-6d85-08da4fa2fbca
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0048.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5276
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-06-22, 16:13, Geert Uytterhoeven wrote:
-> If CONFIG_PHYS_ADDR_T_64BIT is not set:
-> 
->     drivers/dma/apple-admac.c: In function ‘admac_cyclic_write_one_desc’:
->     drivers/dma/apple-admac.c:213:22: error: right shift count >= width of type [-Werror=shift-count-overflow]
->       213 |  writel_relaxed(addr >> 32,       ad->base + REG_DESC_WRITE(channo));
->           |                      ^~
-> 
-> Fix this by using the {low,upp}er_32_bits() helper macros to obtain the
-> address parts.
+MIPI DSI TX subsystem allows you to quickly create systems based on the
+MIPI protocol. It interfaces between the video processing subsystems and
+MIPI-based displays. An internal high-speed physical layer design, D-PHY,
+is provided to allow direct connection to display peripherals.
 
-Applied, thanks
+The subsystem consists of the following sub-blocks:
+- MIPI D-PHY
+- MIPI DSI TX Controller
+- AXI Crossbar
+
+Please refer pg238 [1].
+
+The DSI TX Controller receives stream of image data through an input stream
+interface. At design time, this subsystem can be configured to number of lanes
+and pixel format.
+
+This patch series adds the dt-binding and DRM driver for Xilinx DSI-Tx soft IP.
+
+Changes in V2:
+    - Rebased on 5.19 kernel
+    - Moved mode_set functionality to atomic_enable as its deprecrated
+    - Mask fixes
+    - Replaced panel calls with bridge API's
+    - Added mandatory atomic operations
+    - Removed unnecessary logging
+    - Added ARCH_ZYNQMP dependency in Kconfig
+    - Fixed YAML warnings
+    - Cleanup
+
+Venkateshwar Rao Gannavarapu (2):
+  dt-bindings: display: xlnx: Add DSI 2.0 Tx subsystem documentation
+  drm: xlnx: dsi: Add Xilinx MIPI DSI-Tx subsystem driver
+
+ .../bindings/display/xlnx/xlnx,dsi-tx.yaml         | 101 +++++
+ drivers/gpu/drm/xlnx/Kconfig                       |  12 +
+ drivers/gpu/drm/xlnx/Makefile                      |   1 +
+ drivers/gpu/drm/xlnx/xlnx_dsi.c                    | 429 +++++++++++++++++++++
+ 4 files changed, 543 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
+ create mode 100644 drivers/gpu/drm/xlnx/xlnx_dsi.c
 
 -- 
-~Vinod
+1.8.3.1
+

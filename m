@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9A354ED29
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6AC54ED2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378792AbiFPWQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S1378813AbiFPWRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiFPWQ2 (ORCPT
+        with ESMTP id S229457AbiFPWRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:16:28 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA9356391;
-        Thu, 16 Jun 2022 15:16:27 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fu3so5300762ejc.7;
-        Thu, 16 Jun 2022 15:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DVRo4CvEL41HYQa+CoQccyZMSsu+VyU+c+CNeOdKaAY=;
-        b=hSRY3xSKb+x0uxV1uqJd1PPuvsy44iHgFHSbyyMzsPCKdgXOM18U7eh3uCpbyPaHIh
-         qPqfWbwppxrw7rLBlkVYMjaPg5kash4tvtUuY648vyCmsworvOcsJujcPDx2EZw2Aj74
-         SnFpJUTah/V/Gpt7hveDUVbKj+GFPSE3Rs+y65r8lM0Egns0HjmNDd0C8M+y+EqO3aJf
-         bdRyONKYLVolgL1xN18ijUKYAPBbtakwkirPXhmPOfsnJtb5gzaCFIc/y2ZLgfQc+3Od
-         V52ztJYcwQLGTnxiQGbpMv1fTcpY+lfO6pmjf7JghoXMPBbzUiHdRorTHZ0l01U1sEAb
-         VyMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DVRo4CvEL41HYQa+CoQccyZMSsu+VyU+c+CNeOdKaAY=;
-        b=TNtwH3/028qRrEW0HPq25139lslMdkkPJliOakxpia+IgEOKUEwsXt/n59skxZ050I
-         DPI77pGM/Sg6jItpdYy+L14W+xceoJ0Stg6wurVKlyiqwPv2BMsv71gHTebP1weLavIO
-         TtwcDYsw2eq7eDuq7g73rlxzJr6TRZ/La9SHuK0buwd1ONoqLfAeqSxwpPsZULqbmXLW
-         yV9vAcGqJhrPW+MXQVQQysfyRAQ+LsrZPICojDG6XN6I4uYycMbOGqArOixkuiHGHp/M
-         9G7QFYOSEUfyQ+y836tbg+zeCgQx8m33U2DlInOUr+uhJE0OMMxdTwFIEPKi0R88vbj7
-         rs4g==
-X-Gm-Message-State: AJIora+edfEeFyn14gfFhqzPD/6e/8bZwtA34uFYript4fdLo9k6gYOp
-        1Sb0yXkySkK+fl6It1d/DUc=
-X-Google-Smtp-Source: AGRyM1tM9sbDP5+nf78h0PyaUU0M5ak6/lgXRf4DpIfVxQ1sVPb0Gujh4AdJFUO/wy9JsWqFQGORBg==
-X-Received: by 2002:a17:906:5350:b0:711:f866:ed8 with SMTP id j16-20020a170906535000b00711f8660ed8mr6205922ejo.441.1655417786075;
-        Thu, 16 Jun 2022 15:16:26 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id u9-20020a1709061da900b006fef557bb7asm1276340ejh.80.2022.06.16.15.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 15:16:25 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Christian 'Ansuel' Marangi" <ansuelsmth@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: [net-next PATCH] net: ethernet: stmmac: remove select QCOM_SOCINFO and make it optional
-Date:   Fri, 17 Jun 2022 00:15:54 +0200
-Message-Id: <20220616221554.22040-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 16 Jun 2022 18:17:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F15640F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655417841; x=1686953841;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DG7ij0akZlfheq7gBv50KZjX2DwXbyq1iuxXFk3wasY=;
+  b=gQCDk5kRS/LfwLSUITeN+hzLI6XOPDl7KSxwbDli44ZBHosIjm1BaFtk
+   lYni3tSl5/ovIkJR9K7ge4IP10vh37QaqGopluPc0PiLmX5PH2zDU/P7G
+   y9roERv5MjBmCBgTnsO8yMRioTRrm4b/OHVA5TOcgUVut3Btbo7oqtiG1
+   xItQMWXQYUzwQKSW6V4Zp3Gk7FHgW973OVa2zcn30kVSkyROh8omVmnDW
+   mqoym04fmksODaZRmou7TgckhU30tAZEPTo9jXJYmiWVBsBKz+AhebnmR
+   287Av/Q69PviRa5kxjV4VthH7t8AbUFhnbOj2hxuGPH+XLADXPVQdNbhj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341019168"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="341019168"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:17:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="583806160"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2022 15:17:18 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1xng-000Oof-Dc;
+        Thu, 16 Jun 2022 22:17:16 +0000
+Date:   Fri, 17 Jun 2022 06:17:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [jkirsher-next-queue:master 1/5] kismet: WARNING: unmet direct
+ dependencies detected for QCOM_SOCINFO when selected by DWMAC_IPQ806X
+Message-ID: <202206170615.6N5Xn5zs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QCOM_SOCINFO depends on QCOM_SMEM but is not selected, this cause some
-problems with QCOM_SOCINFO getting selected with the dependency of
-QCOM_SMEM not met.
-To fix this remove the select in Kconfig and add additional info in the
-DWMAC_IPQ806X config description.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git master
+head:   5dcb50c009c9f8ec1cfca6a81a05c0060a5bbf68
+commit: 9ec092d2feb69045dd289845024301fb91c064ee [1/5] net: ethernet: stmmac: add missing sgmii configure for ipq806x
+config: (https://download.01.org/0day-ci/archive/20220617/202206170615.6N5Xn5zs-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git/commit/?id=9ec092d2feb69045dd289845024301fb91c064ee
+        git remote add jkirsher-next-queue https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git
+        git fetch --no-tags jkirsher-next-queue master
+        git checkout 9ec092d2feb69045dd289845024301fb91c064ee
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_QCOM_SOCINFO --selectors CONFIG_DWMAC_IPQ806X -a=arm64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm64 olddefconfig
 
+If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 9ec092d2feb6 ("net: ethernet: stmmac: add missing sgmii configure for ipq806x")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/net/ethernet/stmicro/stmmac/Kconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-index c4bca16dae57..31ff35174034 100644
---- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-+++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-@@ -83,7 +83,6 @@ config DWMAC_IPQ806X
- 	default ARCH_QCOM
- 	depends on OF && (ARCH_QCOM || COMPILE_TEST)
- 	select MFD_SYSCON
--	select QCOM_SOCINFO
- 	help
- 	  Support for QCA IPQ806X DWMAC Ethernet.
- 
-@@ -92,6 +91,9 @@ config DWMAC_IPQ806X
- 	  acceleration features available on this SoC. Network devices
- 	  will behave like standard non-accelerated ethernet interfaces.
- 
-+	  Select the QCOM_SOCINFO config flag to enable specific dwmac
-+	  fixup based on the ipq806x SoC revision.
-+
- config DWMAC_LPC18XX
- 	tristate "NXP LPC18xx/43xx DWMAC support"
- 	default ARCH_LPC18XX
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for QCOM_SOCINFO when selected by DWMAC_IPQ806X
+   
+   WARNING: unmet direct dependencies detected for QCOM_SOCINFO
+     Depends on [n]: QCOM_SMEM [=n]
+     Selected by [y]:
+     - DWMAC_IPQ806X [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_STMICRO [=y] && STMMAC_ETH [=y] && STMMAC_PLATFORM [=y] && OF [=y] && (ARCH_QCOM [=y] || COMPILE_TEST [=n])
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,101 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC8D54E1FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741EA54E209
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiFPN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S1376765AbiFPNeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiFPN3w (ORCPT
+        with ESMTP id S232908AbiFPNef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:29:52 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABCB140C5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:29:51 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-313a8a8b95aso13882637b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S4Rth2T8dY5O32h9DT2ztkebr91/U2eF/Sf0RxQK/FQ=;
-        b=G10a5zdkOQdNTP0AbXjEj6kRfJFY2b6IvG1bgL75n9mc+TJdfZwMmtveVAjC4++975
-         OubqAvI2DCGbh7pZMPqAZfSJWj7JS+XCC0bdm99zn4hhVYqWBd2whUKxDP78IxVcDnDH
-         sFoPUQ2r6Z7o4+2ke3bBYqW8ozlObTsMAVqB2O2U8q+v6gh+gJrwnJU8XRbmJ7WImqLP
-         PDagWx2QfGCMizzni9CLLSXiAxdFcEbuaK6U/IQoRqFkObWPu4rec0K1jiyYjHA/co4l
-         KH5N0AuDpn8k+baLVP/79rQxke959qyd7KqnFulN5I8lVwgOrsfPcJsIZPTaKoRuvVA3
-         TqAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S4Rth2T8dY5O32h9DT2ztkebr91/U2eF/Sf0RxQK/FQ=;
-        b=QzCKsBrGynjo0ciMvMdDniAnlWhYmvo/WGDkuwiiGzaIwjQBcISmX08AkxfdO4AJDY
-         StptNffMlKx9PGwAfcJxHZG6exPKCww7R7SqMvqyGv5p/pZo0xX5in/NS/64qitQJ7xQ
-         ZS7zbWtnDutBJbzdhOmcCtDXiSzJ6QEp3nunJ80FyfHndsnQqfqt3l/DHE6N8RnQCIZM
-         hDrFE6yjul7lUs8IQ+/u5qtdBSc1BTEP0Dkof92EwacQvtV6vHGzxmKb/rn2au1KXCIh
-         w4SWf03ecrq6BCJMKCVnQ+tGQzbHt4qwljcls0AfApZiPGllxZ2ON2xZrX+v234KmWWi
-         nuYg==
-X-Gm-Message-State: AJIora8aLSDg7uTNdfi8zhO+9mNzFAGOedH9LRiUTfWDmBVAf2pymz7H
-        1KK+vs35CB9fJGVnOoRC8ixOa6N0u1CAU85P1UfAaA==
-X-Google-Smtp-Source: AGRyM1uXkiUuSLdEs1ASKLxAXK6AYMSIEjGeNtbA1b/G6Effm6lpPwlZAq6cTbaG9DSHKdJ0ukrhCskqThLfiMIs5P0=
-X-Received: by 2002:a81:1154:0:b0:2fe:d5a4:f26b with SMTP id
- 81-20020a811154000000b002fed5a4f26bmr5792489ywr.140.1655386190157; Thu, 16
- Jun 2022 06:29:50 -0700 (PDT)
+        Thu, 16 Jun 2022 09:34:35 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C221FCDB;
+        Thu, 16 Jun 2022 06:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=uQ4d+/hCDpXIIuZA6ifN1eXUKkJ4wcl+niFQzW1KPWg=; b=1DqtUF+rjV/XZiC/scS+elV2ov
+        JhbCgVmhK8D7fZlYN0fobs4BcsSYsHPad6IxRsc/+LoQfWpZs8o18AK8CZgdQBqRgmQN18NXa6lkD
+        nRProzG3HaUzlPlGAZgT9pjJHJKO5UV3jBY8V/GEy23EUNNiKfxjDGNsCwR/gbQIs8Qc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o1pda-007Bvi-6c; Thu, 16 Jun 2022 15:34:18 +0200
+Date:   Thu, 16 Jun 2022 15:34:18 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: ar9331: fix potential dead
+ lock on mdio access
+Message-ID: <YqsxWv79Ge1AFiQx@lunn.ch>
+References: <20220616112550.877118-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20220613145709.3729053-1-robh@kernel.org>
-In-Reply-To: <20220613145709.3729053-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 16 Jun 2022 15:29:39 +0200
-Message-ID: <CACRpkdb6KCRfqOMEqm+9SfQORNwWPyWa7-XL1+n2BLr3MfDpRg@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: display: Add Arm virtual platforms display
-To:     Rob Herring <robh@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616112550.877118-1-o.rempel@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 4:57 PM Rob Herring <robh@kernel.org> wrote:
+>  static int ar9331_mdio_read(void *ctx, const void *reg_buf, size_t reg_len,
+> @@ -849,6 +849,8 @@ static int ar9331_mdio_read(void *ctx, const void *reg_buf, size_t reg_len,
+>  		return 0;
+>  	}
+>  
+> +	mutex_lock_nested(&sbus->mdio_lock, MDIO_MUTEX_NESTED);
+> +
 
-> 'arm,rtsm-display' is a panel for Arm, Ltd. virtual platforms (e.g. FVP).
-> The binding has been in use for a long time, but was never documented.
->
-> Some users and an example have a 'panel-dpi' compatible, but that's not
-> needed without a 'panel-timing' node which none of the users have since
-> commit 928faf5e3e8d ("arm64: dts: fvp: Remove panel timings"). The
-> example does have a 'panel-timing' node, but it should not for the
-> same reasons the node was removed in the dts files. So update the
-> example in arm,pl11x.yaml to match the schema.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Andre Przywara <andre.przywara@arm.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2:
->  - Make arm,rtsm-display its own schema file instead of using
->    panel-simple.
+Do you know about mdiobus_read_nested() and
+mdiobus_write_nested(). The mv88e6xxx driver uses these.
 
-Thanks for fixing this Rob!
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+	Andrew

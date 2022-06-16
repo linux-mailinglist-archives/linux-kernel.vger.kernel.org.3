@@ -2,105 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A081754D89C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1985754D89F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350484AbiFPCrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 22:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
+        id S1350634AbiFPCsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 22:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiFPCrN (ORCPT
+        with ESMTP id S229693AbiFPCsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 22:47:13 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF7046B17
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:47:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1655347629; x=1686883629;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V39QHtDc8ZGDX6evTrJaCU7/qqstpDRwkxEs8NSe5TQ=;
-  b=dPtMpuxJ7iBLGOphz+yJcFMzJQe0gJujwhx5GYC/QVRS9lvuarOIDO/p
-   Lccq3NHGYS6W+yUGHmpx+xzbMx9HYbn+MfA4l+gdLbh5znhf9pcVn0nfB
-   P5dfGFMfj4OrjVNSi8HxIlBNPd0sVYzsByYF+aRJae5AfGY8Ze+nQahPY
-   e0qpew1GnJoLT/n6oeArrIJ6irm81nsW/2CaV7MeS7X1CGUTosKjOpNbD
-   m+sZ8sTVrAtc1jT9M+BdOUh15gb8kssGQyPCCK5HiTb+ZAVKb3GcJsFzO
-   L9jakY4VbJm471z1jlkt6cOoajlR/BubdQbCBM3gMikLf2maTf6YIv2D4
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,302,1647273600"; 
-   d="scan'208";a="315364292"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 16 Jun 2022 10:47:09 +0800
-IronPort-SDR: fJprAIa4DXztqPNQeZ/FKZeE3T8sWIVyeRtGQO0qMC8EbitSQ8HHQiuUkJnqn3BUe5X+oBEvOH
- 0Jb1vFjMHgNbLJ27sbQF4BMewXiHF7+ZjpidtSogUyCw18+PxjEvNwGnvrfXGUgbrwwXysL1jl
- 8rESV0xfI2QjnTYXFKnFSf7WKzO1/iN6AEpW9/j+mnxfLmoMWYJuyMsgef2ICvKtpJyh2IKlxm
- mTnAGZEEr0iHgQMAY/3qUslJEwDUJn6mlWV12TmdFoXTBF/KmWRHQ8FZhEDKXHohXJuV2NN1FT
- P8jgEf+ye9yzUlsIrWPJ8HuI
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 19:09:58 -0700
-IronPort-SDR: FB5AAJYNbAwl1yUWc2yDFJhEMI2P6aJRowZKEoi1qzgP/E+4w2atN/U1LMBWl+DnFe+RAQ6gHn
- gWIRu88+VQCPDJ2MDG20VHwh5hs31dyPnBdOxzpApBtRp9AZyi3VvXj/sZpg7p/fhXc5GSGekk
- v8EcJggQVqr3yjVgQpyvdO91XCodnDrbEvCiOF1Ozzr0OTkfZ2WUSNzX1Y/RLZBqFi9icK9SYZ
- olzMRZmdccptJnSh/yb1ntjzHkNrIhRTT6mUa6lMhwYhrIGGmJaW9Z4P/nPeEieGVWLxQMWEKC
- Yfc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 19:47:09 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNmmD2pNMz1SVp3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:47:08 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1655347627; x=1657939628; bh=V39QHtDc8ZGDX6evTrJaCU7/qqstpDRwkxE
-        s8NSe5TQ=; b=qyf84KIgbeM9gHqxzGhqEchppSklzUAsS48UHw/vSFoMxpem7f1
-        MJkvZ2RLdbrLGAghTnzYpw0sghTNZp55aqKDASg8JQnA9SPzOfkPxjNGqPaoAU5z
-        YIj4WpTWCPshSrgGUudeUuyCpkjrvpjEp8QG6PW289e0GS461+krfSa8LtqYIR7l
-        TRZazRy8rV+VmYv7zpsUtV06fKTHu+dS1iFEngax+9nLg9Kr/Sb+62/QKqXzHDXi
-        VzjRjzzuDWcBWU7kfDlHKJl8yQ7UsjGRAwO2uvU2EAG0lWJzyFuryATBhuvGcDdv
-        JEG16aBJrtXTevSTn3F+9dY8/x/xaDTqeaQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0lngzF8sUG5t for <linux-kernel@vger.kernel.org>;
-        Wed, 15 Jun 2022 19:47:07 -0700 (PDT)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNmm91mxvz1Rvlc;
-        Wed, 15 Jun 2022 19:47:05 -0700 (PDT)
-Message-ID: <c702f06e-b7da-92be-3c4f-5dd405600235@opensource.wdc.com>
-Date:   Thu, 16 Jun 2022 11:47:03 +0900
+        Wed, 15 Jun 2022 22:48:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 264AD56F96
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655347697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nm47lN81/en9RFa7PC7KN5HytoLN2v81StHx1wCGkys=;
+        b=OL058jx4U8Fj5xDYFf4itSQOYnbfSURaHDWF5EfdIiTH/IHYk2gP6DIuuTiX1iuHOwkSg+
+        vRItWb2muYVrjh3r/BjiK4EFIb5+zMJkbfe0GJAtDAzb0RqBbAJ/Jb8r1rUA28OfOWEO59
+        hO/tqQF79YlK/RhQ9Vc4TgJmBE5C2KM=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-240-sQ8b5I9oMiGFOBgmPbkAPg-1; Wed, 15 Jun 2022 22:48:13 -0400
+X-MC-Unique: sQ8b5I9oMiGFOBgmPbkAPg-1
+Received: by mail-pg1-f198.google.com with SMTP id n6-20020a654886000000b003fda8768883so11205pgs.14
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:48:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nm47lN81/en9RFa7PC7KN5HytoLN2v81StHx1wCGkys=;
+        b=Zuw8Kw77mH+ybuwPOF9hFi8k+HkTcg8QeeSmrilG7QPutacgCseHTXuG8DcCXlX1pc
+         07CX4UCik6at3U3PRaTGdARh6rOa3mbW1IZPLikI2GznhRb04YNkSigdofw2Odc4mrrS
+         Bw0uT8CJb5iPJeB6Io6IRjl5HB0MKEhxq0799mJXvE7TJ7MPMzRn3zuQlshKC9f1FAco
+         kJTVJuZdenxeWEpiVOYLqdXVgQ8cM90oKpdXgeaThh5/+pIjAQrBns9OxF7KVKGvVFf0
+         MJm22H3coF2pib+Yf+2UpV0MsklJXczMu4m6w+lJJ6xvSKJ9ExrWSufHB4FZq6YyvOa+
+         kgWw==
+X-Gm-Message-State: AJIora8YKUZ2co4jLC4p1F3xaYyfy2b0m+TkVmnilvIeIxKIXnWiu0ft
+        DtKIhqeOFk69m4VGFqrqIXv5+JZjOk0hSLFKNRtANbrWyEYjX8mJWDpdLLGeKL4OCNpPgZCa9A6
+        CI/ONxZ7tTWgeG+ejLgmFWdM7
+X-Received: by 2002:a17:90b:3845:b0:1e2:e175:be04 with SMTP id nl5-20020a17090b384500b001e2e175be04mr2713657pjb.50.1655347692640;
+        Wed, 15 Jun 2022 19:48:12 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vNxKCZA5WfH/QsdIwkuqJGtpe52oai0trhWKfXSevkSeFUljebxiedwE3bOi8tGXLV9uMwZA==
+X-Received: by 2002:a17:90b:3845:b0:1e2:e175:be04 with SMTP id nl5-20020a17090b384500b001e2e175be04mr2713631pjb.50.1655347692362;
+        Wed, 15 Jun 2022 19:48:12 -0700 (PDT)
+Received: from localhost.localdomain.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902f7ca00b001621ce92196sm354573plw.86.2022.06.15.19.48.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 19:48:11 -0700 (PDT)
+From:   Tao Liu <ltao@redhat.com>
+To:     bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tao Liu <ltao@redhat.com>
+Subject: [PATCH] kdump: round up the total memory size to 128M for crashkernel reservation
+Date:   Thu, 16 Jun 2022 10:48:03 +0800
+Message-Id: <20220616024803.5091-1-ltao@redhat.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
- handling
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
-        hare@suse.de, hch@lst.de
-Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        chenxiang66@hisilicon.com
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-4-git-send-email-john.garry@huawei.com>
- <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
- <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
- <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
- <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,92 +74,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 16:35, John Garry wrote:
-> On 15/06/2022 00:43, Damien Le Moal wrote:
->> On 6/15/22 03:20, Bart Van Assche wrote:
->>> On 6/13/22 00:01, Damien Le Moal wrote:
->>>> On 6/9/22 19:29, John Garry wrote:
->>>>> +=C2=A0=C2=A0=C2=A0 /*
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * This determines how many commands the H=
-BA will set aside
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * for internal commands. This number will=
- be added to
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * @can_queue to calcumate the maximum num=
-ber of simultaneous
->>>>
->>>> s/calcumate/calculate
->>>>
->>>> But this is weird. For SATA, can_queue is 32. Having reserved comman=
-ds,
->>>> that number needs to stay the same. We cannot have more than 32 tags=
-.
->>>> I think keeping can_queue as the max queue depth with at most
->>>> nr_reserved_cmds tags reserved is better.
->>>>
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * commands sent to the host.
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>> +=C2=A0=C2=A0=C2=A0 int nr_reserved_cmds;
->>>
->>> +1 for Damien's request. I also prefer to keep can_queue as the maxim=
-um
->>> queue depth, whether or not nr_reserved_cmds has been set.
->>
->> For non SATA drives, I still think that is a good idea. However, for=20
->> SATA,
->> we always have the internal tag command that is special. With John's
->> change, it would have to be reserved but that means we are down to 31 =
-max
->> QD,
->=20
-> My intention is to keep regular tag depth at 32 for SATA. We add an=20
-> extra tag as a reserved tag. Indeed, this is called a 'tag', but it's=20
-> just really the placeholder for what will be the ATA_TAG_INTERNAL reque=
-st.
->=20
-> About how we set scsi_host.can_queue, in this series we set .can_queue=20
-> as max regular tags, and the handling is as follows:
->=20
-> scsi_mq_setup_tags():
-> tag_set->queue_depth =3D shost->can_queue + shost->nr_reserved_cmds
-> tag_set->reserved_tags =3D shost->nr_reserved_cmds
->=20
-> So we honour the rule that blk_mq_tag_set.queue_depth is the total tag=20
-> depth, including reserved.
->=20
-> Incidentally I think Christoph prefers to keep .can_queue at total max=20
-> tags including reserved:
-> https://lore.kernel.org/linux-scsi/337339b7-6f4a-a25c-f11c-7f701b42d6a8=
-@suse.de/=20
->=20
->=20
->> so going backward several years... That internal tag for ATA does not
->> need to be reserved since this command is always used when the drive i=
-s
->> idle and no other NCQ commands are on-going.
->=20
-> So do you mean that ATA_TAG_INTERNAL qc is used for other commands apar=
-t=20
-> from internal commands?
+The total memory size we get in kernel is usually slightly less than 2G
+with a 2G memory module machine. The main reason is bios/firmware
+reserve some area it will not export all memory as usable to Linux.
 
-No. It is used only for internal commands. What I meant to say is that=20
-currently, internal commands are issued only on device scan, device=20
-revalidate and error handling. All of these phases are done with the=20
-device under EH with the issuing path stopped and all commands=20
-completed, so no regular commands can be issued. Only internal ones, non=20
-NCQ, using the ATA_TAG_INTERNAL. So strictly speaking, we should not=20
-need to reserve that internal tag at all.
+2G memory X86 kvm guest test result of the total_mem value:
+UEFI boot with ovmf: 0x7ef10000
+Legacy boot kvm guest: 0x7ff7cc00
+This is also a problem on arm64 UEFI booted system according to my test.
 
->=20
->>
->> So the solution to all this is a likely a little more complicated if w=
-e
->> want to keep ATA max QD to 32.
->>
->=20
-> thanks,
-> John
+Thus for example crashkernel=1G-2G:128M, if we have a 1G memory
+machine, we get total size 1023M from firmware then it will not fall
+into 1G-2G thus no memory reserved.  User will never know that, it is
+hard to let user to know the exact total value we get in kernel
 
+An option is to use dmi/smbios to get physical memory size, but it's not
+reliable as well. According to Prarit hardware vendors sometimes screw
+this up. Thus round up total size to 128M to workaround this problem.
 
---=20
-Damien Le Moal
-Western Digital Research
+This patch is a resend of [1] and rebased onto v5.19-rc2, and the
+original credit goes to Dave Young <dyoung@redhat.com>.
+
+[1]: http://lists.infradead.org/pipermail/kexec/2018-April/020568.html
+
+Signed-off-by: Tao Liu <ltao@redhat.com>
+---
+ kernel/crash_core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+index 71122e01623c..f6c1ffce9d5a 100644
+--- a/kernel/crash_core.c
++++ b/kernel/crash_core.c
+@@ -9,6 +9,7 @@
+ #include <linux/init.h>
+ #include <linux/utsname.h>
+ #include <linux/vmalloc.h>
++#include <linux/sizes.h>
+ 
+ #include <asm/page.h>
+ #include <asm/sections.h>
+@@ -43,6 +44,15 @@ static int __init parse_crashkernel_mem(char *cmdline,
+ 					unsigned long long *crash_base)
+ {
+ 	char *cur = cmdline, *tmp;
++	unsigned long long total_mem = system_ram;
++
++	/*
++	 * Firmware sometimes reserves some memory regions for it's own use.
++	 * so we get less than actual system memory size.
++	 * Workaround this by round up the total size to 128M which is
++	 * enough for most test cases.
++	 */
++	total_mem = roundup(total_mem, SZ_128M);
+ 
+ 	/* for each entry of the comma-separated list */
+ 	do {
+@@ -87,13 +97,13 @@ static int __init parse_crashkernel_mem(char *cmdline,
+ 			return -EINVAL;
+ 		}
+ 		cur = tmp;
+-		if (size >= system_ram) {
++		if (size >= total_mem) {
+ 			pr_warn("crashkernel: invalid size\n");
+ 			return -EINVAL;
+ 		}
+ 
+ 		/* match ? */
+-		if (system_ram >= start && system_ram < end) {
++		if (total_mem >= start && total_mem < end) {
+ 			*crash_size = size;
+ 			break;
+ 		}
+-- 
+2.33.1
+

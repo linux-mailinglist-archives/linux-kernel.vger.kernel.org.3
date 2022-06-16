@@ -2,143 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A061554D986
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E1154D98B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347007AbiFPFE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 01:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S1344862AbiFPFJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 01:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349153AbiFPFE0 (ORCPT
+        with ESMTP id S229694AbiFPFJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 01:04:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B536A5A154;
-        Wed, 15 Jun 2022 22:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655355861; x=1686891861;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=BLWxLUoPpHR0Mx/K28WEXQm09XW/3QsGGK6+7EjrGps=;
-  b=YqicQFhf27pgy/EYaHH4rHemWejTPzjOvhddlF0K2tfvUNmCkR3wyJRW
-   I5bxU9kEnKsh5y8U4wMZ/AjYnCgOnBcnGqBCU2bnXpNyDWQAfuWts62DV
-   yYSDhaz8mvtJSpYG5UwW8FhexNAhKwg6t2Dhd+tyCVBtCuQZwzVVsgXyt
-   A01PeGN6WZv3ZvqWMf9lJpNjobklYg2md8FOGfbAQFAgksDj4MNUsg3Co
-   dlyyIAvlHKV66nZ8SqR3BVKs1ccffKqe2APsmszX7t4xGXkdtk0qdw/dd
-   8pGJIw1Qfsx/0tW0Nj2joOIOC1l1noz4zGgQPyVies1ZwjcdP4U4dAJNg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="277963358"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="277963358"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 22:04:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="589477564"
-Received: from mngueron-mobl1.amr.corp.intel.com ([10.252.60.248])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 22:04:16 -0700
-Date:   Thu, 16 Jun 2022 08:04:09 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH v7 5/6] serial: Support for RS-485 multipoint addresses
-In-Reply-To: <Yqno+b/+W2RP8rnh@smile.fi.intel.com>
-Message-ID: <ae5c2e50-1a19-7a8f-7dbf-d7ef84128be6@linux.intel.com>
-References: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com> <20220615124829.34516-6-ilpo.jarvinen@linux.intel.com> <Yqno+b/+W2RP8rnh@smile.fi.intel.com>
+        Thu, 16 Jun 2022 01:09:45 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8385E56B35;
+        Wed, 15 Jun 2022 22:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=8mZ1bXeHffFC/kHmIXWI5Muej2f+NxPZdpt2fFJLCPg=; b=pwLr72dcqADpqWELJCQtWR6StY
+        fuboEy9QOQJ/IPzSuw2Mjmq9P95HaWH/L+Gl7M+ZJ43parY5YaQQMmS2FWsxQfso5RDLoLVsujWFt
+        HZIkOnTrJ76lQxPhS1gs/J95YzxEXr8Vbdv+w8YyfVM+ffGs7qWvpI04jcuME70RoQBgMGKnun4J8
+        IIZ41IPOjTu7Yb8uWhimoxa9ICjR3sU3X7TcSFf2YzcMpEM4gurASEm5mDBBU2m8g61Hse2WfLC52
+        C3xW4LM3pX8Q8LQlWftdVdqykqCTZ8D5mui0YOoIL64wYNycVGcJIHkLx8Y5Lzft2nc0v4ben4wkv
+        qFH6n6Fw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1hlC-008KMC-CQ; Thu, 16 Jun 2022 05:09:39 +0000
+Message-ID: <e04450b6-822e-ca66-484b-a48856e94a9e@infradead.org>
+Date:   Wed, 15 Jun 2022 22:09:31 -0700
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1441432405-1655355860=:1693"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 3/4] i2c: ch341: add I2C MFD cell driver for the CH341
+Content-Language: en-US
+To:     frank zago <frank@zago.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20220616013747.126051-1-frank@zago.net>
+ <20220616013747.126051-4-frank@zago.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220616013747.126051-4-frank@zago.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi--
 
---8323329-1441432405-1655355860=:1693
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 15 Jun 2022, Andy Shevchenko wrote:
-
-> On Wed, Jun 15, 2022 at 03:48:28PM +0300, Ilpo Järvinen wrote:
-> > Add support for RS-485 multipoint addressing using 9th bit [*]. The
-> > addressing mode is configured through .rs485_config().
-> > 
-> > ADDRB in termios indicates 9th bit addressing mode is enabled. In this
-> > mode, 9th bit is used to indicate an address (byte) within the
-> > communication line. ADDRB can only be enabled/disabled through
-> > .rs485_config() that is also responsible for setting the destination and
-> > receiver (filter) addresses.
-> > 
-> > [*] Technically, RS485 is just an electronic spec and does not itself
-> > specify the 9th bit addressing mode but 9th bit seems at least
-> > "semi-standard" way to do addressing with RS485.
-> > 
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: linux-api@vger.kernel.org
-> > Cc: linux-doc@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-arch@vger.kernel.org
+On 6/15/22 18:37, frank zago wrote:
+> The I2C interface can run at 4 different speeds. This driver currently
+> only offer 100kHz. Tested with a variety of I2C sensors, and the IIO
+> subsystem.
 > 
-> Hmm... In order to reduce commit messages you can move these Cc:s after the
-> cutter line ('---').
-
-Ok, although the toolchain I use didn't support preserving --- content
-so I had to create hack to preserve them, hopefully nothing backfires due 
-to the hack. :-)
-
-> > -	__u32	padding[5];		/* Memory is cheap, new structs
-> > -					   are a royal PITA .. */
-> > +	__u8	addr_recv;
-> > +	__u8	addr_dest;
-> > +	__u8	padding[2 + 4 * sizeof(__u32)];		/* Memory is cheap, new structs
-> > +							 * are a royal PITA .. */
+> Signed-off-by: frank zago <frank@zago.net>
+> ---
+>  MAINTAINERS                    |   1 +
+>  drivers/i2c/busses/Kconfig     |  10 +
+>  drivers/i2c/busses/Makefile    |   1 +
+>  drivers/i2c/busses/i2c-ch341.c | 377 +++++++++++++++++++++++++++++++++
+>  4 files changed, 389 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-ch341.c
 > 
-> I'm not sure it's an equivalent. I would leave u32 members  untouched, so
-> something like
-> 
-> 	__u8	addr_recv;
-> 	__u8	addr_dest;
-> 	__u8	padding0[2];		/* Memory is cheap, new structs
-> 	__u32	padding1[4];		 * are a royal PITA .. */
-> 
-> And repeating about `pahole` tool which may be useful here to check for ABI
-> potential changes.
 
-I cannot take __u32 padding[] away like that, this is an uapi header. Or 
-do you mean I should create anonymous union? ...I'm skeptical that can be 
-pulled off w/o breaking user-space compile in some circumstances. Anon 
-unions were only introduced by C11 but is it ok to rely on C11 in uapi/ 
-headers?
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index a1bae59208e3..db9797345ad5 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -1199,6 +1199,16 @@ config I2C_RCAR
+>  
+>  comment "External I2C/SMBus adapter drivers"
+>  
+> +config I2C_CH341
+> +	tristate "CH341 USB to I2C support"
+> +	select MFD_CH341
+> +	help
+> +	  If you say yes to this option, I2C support will be included for the
+> +	  WCH CH341, a USB to I2C/SPI/GPIO interface.
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called i2c-ch341.
 
-Even making padding smaller has some unwanted consequences if somebody is 
-clearing just .padding. In retrospect, having padding as a direct member 
-doesn't seem a good idea. That padding[5] should have been within an union 
-right from the start to make this easily extendable.
+I haven't tested it, but just from reading, it looks like
+this one needs a "depends on USB" since it selects MFD_CH341, which
+depends on USB, and since 'select' ignores dependency chains.
 
-Maybe create a copy of that struct under another name which is just equal 
-sized, that would give more freedom on member naming. But can I change 
-ioctl's param type to another struct (in _IOR/_IOWR) w/o breaking 
-something?
+The GPIO driver (patch 2/4) already depends on USB.
 
 -- 
- i.
-
---8323329-1441432405-1655355860=:1693--
+~Randy

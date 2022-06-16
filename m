@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B1854DFEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D0554DFED
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376769AbiFPLWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S1376781AbiFPLWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376760AbiFPLWB (ORCPT
+        with ESMTP id S1376767AbiFPLWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:22:01 -0400
+        Thu, 16 Jun 2022 07:22:03 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D7A5E74B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:22:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0365E74B;
+        Thu, 16 Jun 2022 04:22:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655378520; x=1686914520;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gVAOPrYdyN88lp1FnfB/fZGdtgWlNMDbMjGfTka/AZs=;
-  b=B0n7ZgygK88aSHD6kU4HNTWKZ3a9SYldt58KentycnAaovdSLq+P3RO/
-   HlXlrmSyW59nEm74+zR6KUPjsvXMF6WDsKg0eFGLYv6VPjUwNQpKd//UG
-   7oLRdWwqphOlOAy1AM91sbvrEEJFulcoPmL7FzVttcTgy2KNJW6uQ3tTf
-   Auu+mtI5rw45IVxG5cU/jcsf47QmMqLSERzzvpTOjwT0Xhepue67lAtC9
-   5wq2EtheBVRP7P73WDM/ydyvIGiBIcGCCvtx9Dy7GcqSAjz/d/5yL8a17
-   v2HIXkRwlebkhrixh1edtaceVFywJ0aDC3+0wdMu8DF+kms8rFoEK4QLc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280259648"
+  t=1655378522; x=1686914522;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Wa3Kw7moqG+Xhp8cnm6XR1a7p5TXdG+ruXsnZQXyjSY=;
+  b=Fcghyy8cYobYiAwsD5/LRgP6GJZT27jJxju2tmd9P6VzGsI0Ub4GApWt
+   xnyp/+HXSsYw8t3vMya5OIjAqWnCxl3rBoJNeYnjLhwoO4qHYwYCdZChs
+   7wZXMgYP6p48rADBgxvMX8szUYf4WLdagRMI3TqUW5fFaTRSrOl1hBgW1
+   sG/kgItORRqobABR6ePKs4OP6ziZDbhG+Y5UfqDV79Irve8kkL7dYIhCO
+   iUJExuBtjal1jcD0BTEWH6gelXUJNzovGT0iikfT9KZMBMmabajOpEEvL
+   7cy9GzwtMuzVd2AigdyqnEDt21UvJgSTCEYrTPSqVYhlJorwK3GUyfp3f
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280259657"
 X-IronPort-AV: E=Sophos;i="5.91,305,1647327600"; 
-   d="scan'208";a="280259648"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 04:21:59 -0700
+   d="scan'208";a="280259657"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 04:22:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,305,1647327600"; 
-   d="scan'208";a="589602849"
+   d="scan'208";a="762827224"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 04:21:57 -0700
+  by orsmga005.jf.intel.com with ESMTP; 16 Jun 2022 04:21:57 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o1nZV-000OK9-1h;
+        id 1o1nZV-000OKB-2n;
         Thu, 16 Jun 2022 11:21:57 +0000
-Date:   Thu, 16 Jun 2022 19:21:11 +0800
+Date:   Thu, 16 Jun 2022 19:21:12 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
 Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-ringless-2 14/24]
- net/rxrpc/call_event.c:230:28: sparse: sparse: cast from restricted __be32
-Message-ID: <202206161957.eovAN5Rc-lkp@intel.com>
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V4 09/20] rv/monitor: wip instrumentation and
+ Makefile/Kconfig entries
+Message-ID: <202206161937.RukeWKWk-lkp@intel.com>
+References: <9c05a95927c18bebcf0eb79bef15ec59667bc08c.1655368610.git.bristot@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <9c05a95927c18bebcf0eb79bef15ec59667bc08c.1655368610.git.bristot@kernel.org>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,204 +82,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-ringless-2
-head:   3f41f1279858b9676cd6724d54e4323696e1ac07
-commit: 2b15e54aaf0e0c739cb4d55f77d7f7d9d80eeedc [14/24] rxrpc: Fix Tx resend by saving last ACK packet rather than marking packet ring
-config: arc-randconfig-s032-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161957.eovAN5Rc-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce:
+Hi Daniel,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on tip/sched/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220616-164837
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: riscv-randconfig-r004-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161937.RukeWKWk-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/2b15e54aaf0e0c739cb4d55f77d7f7d9d80eeedc
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-ringless-2
-        git checkout 2b15e54aaf0e0c739cb4d55f77d7f7d9d80eeedc
+        # https://github.com/intel-lab-lkp/linux/commit/a76032130de277ff6f39fc08277a70823fd85bf3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220616-164837
+        git checkout a76032130de277ff6f39fc08277a70823fd85bf3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash net/rxrpc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/trace/rv/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> net/rxrpc/call_event.c:230:28: sparse: sparse: cast from restricted __be32
->> net/rxrpc/call_event.c:230:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] seq1 @@     got restricted __be32 [usertype] @@
-   net/rxrpc/call_event.c:230:28: sparse:     expected unsigned int [usertype] seq1
-   net/rxrpc/call_event.c:230:28: sparse:     got restricted __be32 [usertype]
-   net/rxrpc/call_event.c:230:53: sparse: sparse: cast from restricted __be32
->> net/rxrpc/call_event.c:230:53: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] seq2 @@     got restricted __be32 [usertype] @@
-   net/rxrpc/call_event.c:230:53: sparse:     expected unsigned int [usertype] seq2
-   net/rxrpc/call_event.c:230:53: sparse:     got restricted __be32 [usertype]
+   In file included from kernel/trace/rv/monitors/wip/wip.c:8:
+   kernel/trace/rv/monitors/wip/wip.c: In function 'start_wip':
+   include/rv/instrumentation.h:15:17: error: implicit declaration of function 'check_trace_callback_type_preempt_disable'; did you mean 'check_trace_callback_type_irq_disable'? [-Werror=implicit-function-declaration]
+      15 |                 check_trace_callback_type_##tp(rv_handler);                             \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c:61:9: note: in expansion of macro 'rv_attach_trace_probe'
+      61 |         rv_attach_trace_probe("wip", preempt_disable, handle_preempt_disable);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/printk.h:11,
+                    from include/linux/kernel.h:29,
+                    from include/linux/interrupt.h:6,
+                    from include/linux/trace_recursion.h:5,
+                    from include/linux/ftrace.h:10,
+                    from kernel/trace/rv/monitors/wip/wip.c:2:
+   include/rv/instrumentation.h:16:27: error: implicit declaration of function 'register_trace_preempt_disable'; did you mean 'register_trace_prio_irq_disable'? [-Werror=implicit-function-declaration]
+      16 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+         |                           ^~~~~~~~~~~~~~~
+   include/linux/once_lite.h:15:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+      15 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   include/rv/instrumentation.h:16:17: note: in expansion of macro 'WARN_ONCE'
+      16 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+         |                 ^~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c:61:9: note: in expansion of macro 'rv_attach_trace_probe'
+      61 |         rv_attach_trace_probe("wip", preempt_disable, handle_preempt_disable);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/trace/rv/monitors/wip/wip.c:8:
+   include/rv/instrumentation.h:15:17: error: implicit declaration of function 'check_trace_callback_type_preempt_enable'; did you mean 'check_trace_callback_type_irq_enable'? [-Werror=implicit-function-declaration]
+      15 |                 check_trace_callback_type_##tp(rv_handler);                             \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c:62:9: note: in expansion of macro 'rv_attach_trace_probe'
+      62 |         rv_attach_trace_probe("wip", preempt_enable, handle_preempt_enable);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/printk.h:11,
+                    from include/linux/kernel.h:29,
+                    from include/linux/interrupt.h:6,
+                    from include/linux/trace_recursion.h:5,
+                    from include/linux/ftrace.h:10,
+                    from kernel/trace/rv/monitors/wip/wip.c:2:
+   include/rv/instrumentation.h:16:27: error: implicit declaration of function 'register_trace_preempt_enable'; did you mean 'register_trace_prio_irq_enable'? [-Werror=implicit-function-declaration]
+      16 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+         |                           ^~~~~~~~~~~~~~~
+   include/linux/once_lite.h:15:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+      15 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   include/rv/instrumentation.h:16:17: note: in expansion of macro 'WARN_ONCE'
+      16 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+         |                 ^~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c:62:9: note: in expansion of macro 'rv_attach_trace_probe'
+      62 |         rv_attach_trace_probe("wip", preempt_enable, handle_preempt_enable);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/trace/rv/monitors/wip/wip.c:8:
+   kernel/trace/rv/monitors/wip/wip.c: In function 'stop_wip':
+   include/rv/instrumentation.h:22:17: error: implicit declaration of function 'unregister_trace_preempt_disable'; did you mean 'unregister_trace_irq_disable'? [-Werror=implicit-function-declaration]
+      22 |                 unregister_trace_##tp(rv_handler, NULL);                                \
+         |                 ^~~~~~~~~~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c:72:9: note: in expansion of macro 'rv_detach_trace_probe'
+      72 |         rv_detach_trace_probe("wip", preempt_disable, handle_preempt_disable);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   include/rv/instrumentation.h:22:17: error: implicit declaration of function 'unregister_trace_preempt_enable'; did you mean 'unregister_trace_irq_enable'? [-Werror=implicit-function-declaration]
+      22 |                 unregister_trace_##tp(rv_handler, NULL);                                \
+         |                 ^~~~~~~~~~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c:73:9: note: in expansion of macro 'rv_detach_trace_probe'
+      73 |         rv_detach_trace_probe("wip", preempt_enable, handle_preempt_enable);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/rv/monitors/wip/wip.c: At top level:
+>> kernel/trace/rv/monitors/wip/wip.c:91:5: warning: no previous prototype for 'register_wip' [-Wmissing-prototypes]
+      91 | int register_wip(void)
+         |     ^~~~~~~~~~~~
+>> kernel/trace/rv/monitors/wip/wip.c:97:6: warning: no previous prototype for 'unregister_wip' [-Wmissing-prototypes]
+      97 | void unregister_wip(void)
+         |      ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-vim +230 net/rxrpc/call_event.c
 
-   126	
-   127	/*
-   128	 * Perform retransmission of NAK'd and unack'd packets.
-   129	 */
-   130	static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
-   131	{
-   132		struct rxrpc_ackpacket *ack = NULL;
-   133		struct rxrpc_txbuf *txb;
-   134		struct sk_buff *ack_skb = NULL;
-   135		unsigned long resend_at;
-   136		rxrpc_seq_t transmitted = READ_ONCE(call->tx_transmitted);
-   137		ktime_t now, max_age, oldest, ack_ts;
-   138		bool unacked = false;
-   139		unsigned int i;
-   140		LIST_HEAD(retrans_queue);
-   141	
-   142		_enter("{%d,%d}", call->acks_hard_ack, call->tx_top);
-   143	
-   144		now = ktime_get_real();
-   145		max_age = ktime_sub_us(now, jiffies_to_usecs(call->peer->rto_j));
-   146		oldest = now;
-   147	
-   148		/* See if there's an ACK saved with a soft-ACK table in it. */
-   149		if (call->acks_soft_tbl) {
-   150			spin_lock_bh(&call->acks_ack_lock);
-   151			ack_skb = call->acks_soft_tbl;
-   152			if (ack_skb) {
-   153				rxrpc_get_skb(ack_skb, rxrpc_skb_ack);
-   154				ack = (void *)ack_skb->data + sizeof(struct rxrpc_wire_header);
-   155			}
-   156			spin_unlock_bh(&call->acks_ack_lock);
-   157		}
-   158	
-   159		if (list_empty(&call->tx_buffer))
-   160			goto no_resend;
-   161	
-   162		spin_lock(&call->tx_lock);
-   163	
-   164		if (list_empty(&call->tx_buffer))
-   165			goto no_further_resend;
-   166	
-   167		trace_rxrpc_resend(call);
-   168		txb = list_first_entry(&call->tx_buffer, struct rxrpc_txbuf, call_link);
-   169	
-   170		/* Scan the soft ACK table without dropping the lock and resend any
-   171		 * explicitly NAK'd packets.
-   172		 */
-   173		if (ack) {
-   174			for (i = 0; i < ack->nAcks; i++) {
-   175				rxrpc_seq_t seq;
-   176	
-   177				if (ack->acks[i] & 1)
-   178					continue;
-   179				seq = ntohl(ack->firstPacket) + i;
-   180				if (after(txb->seq, transmitted))
-   181					break;
-   182				if (after(txb->seq, seq))
-   183					continue; /* A new hard ACK probably came in */
-   184				list_for_each_entry_from(txb, &call->tx_buffer, call_link) {
-   185					if (txb->seq == seq)
-   186						goto found_txb;
-   187				}
-   188				goto no_further_resend;
-   189	
-   190			found_txb:
-   191				if (after(ntohl(txb->wire.serial), call->acks_highest_serial))
-   192					continue; /* Ack point not yet reached */
-   193	
-   194				rxrpc_see_txbuf(txb, rxrpc_txbuf_see_unacked);
-   195	
-   196				if (list_empty(&txb->tx_link)) {
-   197					rxrpc_get_txbuf(txb, rxrpc_txbuf_get_retrans);
-   198					rxrpc_get_call(call, rxrpc_call_got_tx);
-   199					list_add_tail(&txb->tx_link, &retrans_queue);
-   200					set_bit(RXRPC_TXBUF_RESENT, &txb->flags);
-   201				}
-   202	
-   203				trace_rxrpc_retransmit(call, txb->seq,
-   204						       ktime_to_ns(ktime_sub(txb->last_sent,
-   205									     max_age)));
-   206	
-   207				if (list_is_last(&txb->call_link, &call->tx_buffer))
-   208					goto no_further_resend;
-   209				txb = list_next_entry(txb, call_link);
-   210			}
-   211		}
-   212	
-   213		/* Fast-forward through the Tx queue to the point the peer says it has
-   214		 * seen.  Anything between the soft-ACK table and that point will get
-   215		 * ACK'd or NACK'd in due course, so don't worry about it here; here we
-   216		 * need to consider retransmitting anything beyond that point.
-   217		 *
-   218		 * Note that ACK for a packet can beat the update of tx_transmitted.
-   219		 */
-   220		if (after_eq(READ_ONCE(call->acks_prev_seq), READ_ONCE(call->tx_transmitted)))
-   221			goto no_further_resend;
-   222	
-   223		list_for_each_entry_from(txb, &call->tx_buffer, call_link) {
-   224			if (before_eq(txb->seq, READ_ONCE(call->acks_prev_seq)))
-   225				continue;
-   226			if (after(txb->seq, READ_ONCE(call->tx_transmitted)))
-   227				break; /* Not transmitted yet */
-   228	
-   229			if (ack && ack->reason == RXRPC_ACK_PING_RESPONSE &&
- > 230			    before(htonl(txb->wire.serial), htonl(ack->serial)))
-   231				goto do_resend; /* Wasn't accounted for by a more recent ping. */
-   232	
-   233			if (ktime_after(txb->last_sent, max_age)) {
-   234				if (ktime_before(txb->last_sent, oldest))
-   235					oldest = txb->last_sent;
-   236				continue;
-   237			}
-   238	
-   239		do_resend:
-   240			unacked = true;
-   241			if (list_empty(&txb->tx_link)) {
-   242				rxrpc_get_txbuf(txb, rxrpc_txbuf_get_retrans);
-   243				list_add_tail(&txb->tx_link, &retrans_queue);
-   244				set_bit(RXRPC_TXBUF_RESENT, &txb->flags);
-   245			}
-   246		}
-   247	
-   248	no_further_resend:
-   249		spin_unlock(&call->tx_lock);
-   250	no_resend:
-   251		rxrpc_free_skb(ack_skb, rxrpc_skb_freed);
-   252	
-   253		resend_at = nsecs_to_jiffies(ktime_to_ns(ktime_sub(now, oldest)));
-   254		resend_at += jiffies + rxrpc_get_rto_backoff(call->peer,
-   255							     !list_empty(&retrans_queue));
-   256		WRITE_ONCE(call->resend_at, resend_at);
-   257	
-   258		if (unacked)
-   259			rxrpc_congestion_timeout(call);
-   260	
-   261		/* If there was nothing that needed retransmission then it's likely
-   262		 * that an ACK got lost somewhere.  Send a ping to find out instead of
-   263		 * retransmitting data.
-   264		 */
-   265		if (list_empty(&retrans_queue)) {
-   266			rxrpc_reduce_call_timer(call, resend_at, now_j,
-   267						rxrpc_timer_set_for_resend);
-   268			ack_ts = ktime_sub(now, call->acks_latest_ts);
-   269			if (ktime_to_us(ack_ts) < (call->peer->srtt_us >> 3))
-   270				goto out;
-   271			rxrpc_send_ACK(call, RXRPC_ACK_PING, 0,
-   272				       rxrpc_propose_ack_ping_for_lost_ack);
-   273		}
-   274	
-   275		while ((txb = list_first_entry_or_null(&retrans_queue,
-   276						       struct rxrpc_txbuf, tx_link))) {
-   277			list_del_init(&txb->tx_link);
-   278			rxrpc_send_data_packet(call, txb);
-   279			rxrpc_put_txbuf(txb, rxrpc_txbuf_put_trans);
-   280	
-   281			trace_rxrpc_retransmit(call, txb->seq,
-   282					       ktime_to_ns(ktime_sub(txb->last_sent,
-   283								     max_age)));
-   284		}
-   285	
-   286	out:
-   287		_leave("");
-   288	}
-   289	
+vim +/register_wip +91 kernel/trace/rv/monitors/wip/wip.c
+
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   90  
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  @91  int register_wip(void)
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   92  {
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   93  	rv_register_monitor(&rv_wip);
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   94  	return 0;
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   95  }
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   96  
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  @97  void unregister_wip(void)
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   98  {
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16   99  	if (rv_wip.enabled)
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  100  		stop_wip();
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  101  
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  102  	rv_unregister_monitor(&rv_wip);
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  103  }
+15679ffb99664f Daniel Bristot de Oliveira 2022-06-16  104  
 
 -- 
 0-DAY CI Kernel Test Service

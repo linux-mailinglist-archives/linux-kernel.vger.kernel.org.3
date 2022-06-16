@@ -2,164 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AD854DF38
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43F954DF43
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359427AbiFPKh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S1359688AbiFPKjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiFPKhY (ORCPT
+        with ESMTP id S230394AbiFPKjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:37:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 458AD5DBF8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655375842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3qiH3O3kz9G2/mcshIbbtQDuhVY5iI/CJh4BS6LwMAk=;
-        b=C5xGubDVcoA+UYvYdwpD4UuUGC+9ipyvYY7HCKBzG2BVPM+uFoaDsU4idm0qSgdOrJU2gh
-        o9LQP95pW1xibW36XKzKbqU2Yzn7pVuSPRmNVkXG1NP7U9QdK5q5cSJzg9yvqLht4PvAgg
-        OThcZ5IDIRtUZNOxWEhk8Fsh2QeKee8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-oJrB_IL0PZilEtGh9jkOpw-1; Thu, 16 Jun 2022 06:37:20 -0400
-X-MC-Unique: oJrB_IL0PZilEtGh9jkOpw-1
-Received: by mail-ed1-f69.google.com with SMTP id f9-20020a056402354900b0042ded146259so962714edd.20
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:37:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=3qiH3O3kz9G2/mcshIbbtQDuhVY5iI/CJh4BS6LwMAk=;
-        b=P7E56HHMwz9pGCArnktSmRL76jxTU2QfS2DxhI4xqdCc4hdYlN6Sf+qHQGPe3OtQva
-         wO/9AetaKOuDz/IQeQc+6LWmCBTF8AFSiKXhrbBVcfRzwCgm0/ftSl7P6W2QgS3xgcFg
-         YEpWXIfgsNxbB3/sqoBJwQyElMkhN1cMkCVkoUm5DMcvT/T9lA+3eQQQrr+6x0TtgK1g
-         JleBmuzQn12mgC73YYoj8AyFouSB798SOAeMHjyA8E5CeR993sIugcXP1nqVAOINrbFh
-         8EuT2a+jLynSg0pOftq9NVlJMror/m3IdRR+f2ilAKRYgUFsuTSkuSyESS23FtMDI4BF
-         nhXQ==
-X-Gm-Message-State: AJIora/rGZ6O/FcjHTlWRi7SJU41lnEa+XJdvVjK2mypCgTpt9blxAwv
-        5u1QAPq/9OETPVhDniE/3k/mlEInrPNioWatxikP9tnfsp08IYgF9SR/DPX29381dLh+LHnEYeY
-        q1w3bfre5+U6p4yLmoyjKIQ8d
-X-Received: by 2002:a17:906:656:b0:6f4:ebc2:da81 with SMTP id t22-20020a170906065600b006f4ebc2da81mr3779635ejb.757.1655375839630;
-        Thu, 16 Jun 2022 03:37:19 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tpI5iDF0Jq2lWg1MpnqxJiZyIFIu+vXgIZxIANhxAEWjLZGVU62uuALdDhDr4itQLGZ3jyDA==
-X-Received: by 2002:a17:906:656:b0:6f4:ebc2:da81 with SMTP id t22-20020a170906065600b006f4ebc2da81mr3779619ejb.757.1655375839398;
-        Thu, 16 Jun 2022 03:37:19 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id i25-20020a50fc19000000b0042bc54296a1sm1448107edr.91.2022.06.16.03.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 03:37:17 -0700 (PDT)
-Message-ID: <69fac460-ff29-ca76-d9a8-d2529cf02fa2@redhat.com>
-Date:   Thu, 16 Jun 2022 12:37:13 +0200
+        Thu, 16 Jun 2022 06:39:23 -0400
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 27AB75B3EC;
+        Thu, 16 Jun 2022 03:39:18 -0700 (PDT)
+Received: from fedora33.wangsu.com (unknown [59.61.78.232])
+        by app2 (Coremail) with SMTP id SyJltAAnHAgyCKtikEYEAA--.7274S2;
+        Thu, 16 Jun 2022 18:38:49 +0800 (CST)
+From:   Lin Feng <linf@wangsu.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linf@wangsu.com
+Subject: [PATCH] cgroup.c: add helper __cset_cgroup_from_root to cleanup duplicated codes
+Date:   Thu, 16 Jun 2022 18:38:30 +0800
+Message-Id: <20220616103830.197458-1-linf@wangsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Like Xu <like.xu.linux@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220531175450.295552-1-pbonzini@redhat.com>
- <20220531175450.295552-2-pbonzini@redhat.com> <YpZgU+vfjkRuHZZR@google.com>
- <ce2b4fed-3d9e-a179-a907-5b8e09511b7d@gmail.com>
- <YpeWPAHNhQQ/lRKF@google.com>
- <cbb9a8b5-f31f-dd3b-3278-01f12d935ebe@gmail.com>
- <YqoqZjH+yjYJTxmT@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: vmx, pmu: accept 0 for absent MSRs when
- host-initiated
-In-Reply-To: <YqoqZjH+yjYJTxmT@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: SyJltAAnHAgyCKtikEYEAA--.7274S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFykWw4fZFyfWrWkAF43Jrb_yoW8tF4fpF
+        srArZ3tw4rW3W5Ww4Sq3y0va4Sgay8Xw17KrW7Zw4rAr1xArWYqF1xu34fXryYyasrG3W3
+        KF4YkrWSgw1IqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+        x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+        z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4
+        xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r4j6F4UMcIj6x8ErcxFaVAv
+        8VW8GwAv7VCY1x0262k0Y48FwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2
+        IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8twCF04k20xvY
+        0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r48MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvj
+        fUFdb1DUUUU
+X-CM-SenderInfo: holqwq5zdqw23xof0z/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 20:52, Sean Christopherson wrote:
-> On Thu, Jun 02, 2022, Like Xu wrote:
->> I actually agree and understand the situation of maintainers/reviewers.
->> No one wants to maintain flawed code, especially in this community
->> where the majority of previous contributors disappeared after the code
->> was merged in. The existing heavy maintenance burden is already visible.
+No funtionality change, but save us some lines.
 
-I don't think this is true.  I think it's relatively rare for 
-contributors to disappear.
+Signed-off-by: Lin Feng <linf@wangsu.com>
+---
+ kernel/cgroup/cgroup.c | 58 ++++++++++++++++++++----------------------
+ 1 file changed, 27 insertions(+), 31 deletions(-)
 
->> Thus we may have a maintainer/reviewers scalability issue. Due to missing
->> trust, competence or mastery of rules, most of the patches sent to the list
->> have no one to point out their flaws.
-> 
-> Then write tests and run the ones that already exist.  Relying purely on reviewers
-> to detect flaws does not and cannot scale.  I agree that we currently have a
-> scalability issue, but I have different views on how to improve things.
-> 
->> I have privately received many complaints about the indifference of our
->> community, which is distressing.
-
-You're welcome to expand on these complaints.  But I suspect that a lot 
-of these would come from people that have been told "review other 
-people's work", "write tests" and/or "you submitted a broken patch" before.
-
-"Let's try to accept" is basically what I did for PEBS and LBR, both of 
-which I merged basically out of guilt after a little-more-than-cursory 
-review.  It turns out that both of them were broken in ways that weren't 
-subtle at all; and as a result, other work already queued to 5.19 had to 
-be bumped to 5.20.
-
-Honestly I should have complained and un-merged them right after seeing 
-the msr.flat failure.  Or perhaps I should have just said "write tests 
-and then I'll consider the series", but I "tried to accept" and we can 
-already see it was a failure.
-
->> Obviously, "try to accept" is not a 100% commitment and it will fail with high
->> probability, but such a stance (along with standard clarifications and requirements)
->> from reviewers and maintainers will make the contributors more concerned,
->> attract potential volunteers, and focus the efforts of our nominated reviewers.
-
-If it "fails with high probability", all that happened was a waste of 
-time for everyone involved.  Including the submitter who has waited for 
-weeks for a reviews only to be told "test X fails".
-
-> I completely agree on needing better transparency for the lifecycle of patches
-> going through the KVM tree.  First and foremost, there need to be formal, documented
-> rules for the "official" kvm/* branches, e.g. everything in kvm/queue passes ABC
-> tests, everything in kvm/next also passes XYZ tests.  That would also be a good
-> place to document expectations, how things works, etc...
-
-Agreed.  I think this is a more general problem with Linux development 
-and I will propose this for maintainer summit.
-
-But again, the relationship between contributors and maintainers should 
-be of mutual benefit.  Rules help contributors, but contributors should 
-themselves behave and not throw broken patches at maintainers.  And 
-again, guess what the best way is to tell maintainers your patch is not 
-broken?  Include a test.  It shows that you are paying attention.
-
-> I fully realize that writing tests is not glamorous, and that some of KVM's tooling
-> and infrastructure is lacking,
-
-I wouldn't say lacking.  Sure it's complicated, but between selftests 
-and kvm-unit-tests the tools *are* there.  selftests that allow you to 
-test migration at an instruction boundary, for example, are not that 
-hard to write and were very important for features such as nested state 
-and AMX.  They're not perfect, but they go a long way towards giving 
-confidence in the code; and it's easier to catch weird ioctl policies 
-from reviewing comprehensive tests than from reviewing the actual KVM code.
-
-We're not talking of something like SEV or TDX here, we're talking about 
-very boring MSR emulation and only slightly less boring PMU passthrough.
-
-Paolo
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 1779ccddb734..a8a46eb66f21 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1376,6 +1376,31 @@ static void cgroup_destroy_root(struct cgroup_root *root)
+ 	cgroup_free_root(root);
+ }
+ 
++static inline struct cgroup *__cset_cgroup_from_root(struct css_set *cset,
++					    struct cgroup_root *root)
++{
++	struct cgroup *res_cgroup = NULL;
++
++	if (cset == &init_css_set) {
++		res_cgroup = &root->cgrp;
++	} else if (root == &cgrp_dfl_root) {
++		res_cgroup = cset->dfl_cgrp;
++	} else {
++		struct cgrp_cset_link *link;
++
++		list_for_each_entry(link, &cset->cgrp_links, cgrp_link) {
++			struct cgroup *c = link->cgrp;
++
++			if (c->root == root) {
++				res_cgroup = c;
++				break;
++			}
++		}
++	}
++
++	return res_cgroup;
++}
++
+ /*
+  * look up cgroup associated with current task's cgroup namespace on the
+  * specified hierarchy
+@@ -1391,22 +1416,8 @@ current_cgns_cgroup_from_root(struct cgroup_root *root)
+ 	rcu_read_lock();
+ 
+ 	cset = current->nsproxy->cgroup_ns->root_cset;
+-	if (cset == &init_css_set) {
+-		res = &root->cgrp;
+-	} else if (root == &cgrp_dfl_root) {
+-		res = cset->dfl_cgrp;
+-	} else {
+-		struct cgrp_cset_link *link;
+-
+-		list_for_each_entry(link, &cset->cgrp_links, cgrp_link) {
+-			struct cgroup *c = link->cgrp;
++	res = __cset_cgroup_from_root(cset, root);
+ 
+-			if (c->root == root) {
+-				res = c;
+-				break;
+-			}
+-		}
+-	}
+ 	rcu_read_unlock();
+ 
+ 	BUG_ON(!res);
+@@ -1422,22 +1433,7 @@ static struct cgroup *cset_cgroup_from_root(struct css_set *cset,
+ 	lockdep_assert_held(&cgroup_mutex);
+ 	lockdep_assert_held(&css_set_lock);
+ 
+-	if (cset == &init_css_set) {
+-		res = &root->cgrp;
+-	} else if (root == &cgrp_dfl_root) {
+-		res = cset->dfl_cgrp;
+-	} else {
+-		struct cgrp_cset_link *link;
+-
+-		list_for_each_entry(link, &cset->cgrp_links, cgrp_link) {
+-			struct cgroup *c = link->cgrp;
+-
+-			if (c->root == root) {
+-				res = c;
+-				break;
+-			}
+-		}
+-	}
++	res = __cset_cgroup_from_root(cset, root);
+ 
+ 	BUG_ON(!res);
+ 	return res;
+-- 
+2.31.1
 

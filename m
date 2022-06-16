@@ -2,221 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE7154E59A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40A454E5A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377826AbiFPPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S1377777AbiFPPER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377782AbiFPPDX (ORCPT
+        with ESMTP id S1377764AbiFPPEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:03:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D334248FC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655391801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sU1/eCcg6yRW4nibZ27Ei/SlX0WtSksIdirbQsLBVsA=;
-        b=hojGSdSyaK1vsJTr71s5pvf2J+zVRVXOrMrr2YivsELWg2f2p3sAX5HC7Thh5C4K2aTHhG
-        Ns2CX+EhU0mvIGu+ZnTvh7v3OsWvEghtm4kOy6RhJRvhfsgSU8WzT/AStQ6b+spAcdTh13
-        DLWn+tPDc6V+R/HYRVS6Iafgd0JA/1Y=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-60-1kl-aHTLO-6Oxs9iFrzb5A-1; Thu, 16 Jun 2022 11:03:19 -0400
-X-MC-Unique: 1kl-aHTLO-6Oxs9iFrzb5A-1
-Received: by mail-wm1-f70.google.com with SMTP id l4-20020a05600c1d0400b0039c60535405so754946wms.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:03:18 -0700 (PDT)
+        Thu, 16 Jun 2022 11:04:14 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554CE3EABE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:04:11 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1011df6971aso2217270fac.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zoPzQU7tFCHKbazE96n62nKhOYL6lpl30iCKAfHWF3k=;
+        b=hzB+iWkLegyX/YVU4Z4Uk20/fD5mQ12Bb87V6Eh8E5BihrifNpR/2Kid3c5IL3kULj
+         /Kav66ARa+qN/N67YFml7VO4vjU3H+d51tIoMenFO1qIG1cNa0TEMy6orpmxvFp0gMGw
+         /kiER4gc6alC0Jl/FnyoXaEN+XA94MiTxlaik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=sU1/eCcg6yRW4nibZ27Ei/SlX0WtSksIdirbQsLBVsA=;
-        b=mIMq+nxMKSbdXBw8Cj/6Lc+3G03PK3RpbQj8opM1FtwpEh6nyUBlGld4e17l4c6Anq
-         IskjBHe+S74Y/ET9HqjZjjfr1QMGBXcwjsUydr2ErRuwy1pAJkcUTAkly46oe07I5gi9
-         3zTNE7xJh7rYtLpWFI2uvdpUNt2k6hUHrR10EI3sU/lDd6pKKabKmPZVh3OQEY6q5ti2
-         J0R/vrebwVULI+6ZcuW+lBiinkPJL/eNUe4nKU6iaXKdSrX/9pKmOMZVOM+CpWI8Wl37
-         KFwErRzViRd8EHUKdinQDCtcb/cAPflgSuRTFD8LcxCeYINppXwrzv87m6b2XA7wXXn3
-         6bsg==
-X-Gm-Message-State: AJIora8LBtr/a9gi55x/Sbfp6UWXG0tOVA3OJEWq0HLvswkh0jor4VA4
-        Fk/WWP7loA9kl47ISGbim9UN1sa0iaiqiIsAjxxHnMlduiCF3ZXaUArsgMmUNjQ+dkbsrtdfmth
-        o3ptZd2gj5aq7s6T8QbpVWa/l
-X-Received: by 2002:a05:600c:1991:b0:39c:88ba:2869 with SMTP id t17-20020a05600c199100b0039c88ba2869mr5389420wmq.14.1655391797685;
-        Thu, 16 Jun 2022 08:03:17 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1un6/x5EK3gX2NjOv2Ng9CzA86bVIABMgzjcFEcizAaklAzsMgY7pQ1TOk+gIpJce1/3+sDgw==
-X-Received: by 2002:a05:600c:1991:b0:39c:88ba:2869 with SMTP id t17-20020a05600c199100b0039c88ba2869mr5389407wmq.14.1655391797463;
-        Thu, 16 Jun 2022 08:03:17 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id 64-20020a1c1943000000b0039c6390730bsm6107323wmz.29.2022.06.16.08.03.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 08:03:16 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Vit Kabele <vit.kabele@sysgo.com>, linux-hyperv@vger.kernel.org
-Cc:     mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        kys@microsoft.com
-Subject: Re: [RFC PATCH] Hyper-V: Initialize crash reporting before vmbus
-In-Reply-To: <YqtAyitIGRAHL7V0@czspare1-lap.sysgo.cz>
-References: <YqtAyitIGRAHL7V0@czspare1-lap.sysgo.cz>
-Date:   Thu, 16 Jun 2022 17:03:16 +0200
-Message-ID: <874k0kirbf.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zoPzQU7tFCHKbazE96n62nKhOYL6lpl30iCKAfHWF3k=;
+        b=BleaRndOe5rqSHkGLyuMj5El9UY/U1LaKFfVcRV3s6FXuPpRqTeLzRkkBidaDLxD5y
+         YQjXehfPs5nnC3fMrZJIl7/m4eBYQRri6BtLQKB/LBrmb0+4w3EvsqSaaP1URkpSU9hZ
+         SEQdYZstUxcLCvu7jpFLFYGqreYyq0e7SC3y2XDuw5JCnGGJ/n25UtWwBZ0dmJhLLLUb
+         Msv0CdqBoZKrzXx0LTdEAySrIF8S1qCqXQg+A5C3UDudshx6b/D7seUb0s6pZXkOovAz
+         3syklN0OyPnQU5f9LQLDTq+3k9t9POG0xVIg9RxvYcMvdBVGkPLKPYiISEihC+wYhoMw
+         dB/A==
+X-Gm-Message-State: AJIora/n4dKUoPvQDeJ3/XlO055/Dynib2VG0NldpoAiwa9AVO9s+aN3
+        WRUb847+FE4c6hDb7gWibDq7Eg==
+X-Google-Smtp-Source: AGRyM1t/ql2JMv1ewpAojMoM3/cs4LVSN9IuvwaxwKyqaHE21iNNhZqbPJBxqQN/Cljh9oFWXsyihg==
+X-Received: by 2002:a05:6870:c181:b0:f1:ea2f:f7f7 with SMTP id h1-20020a056870c18100b000f1ea2ff7f7mr8618905oad.18.1655391849854;
+        Thu, 16 Jun 2022 08:04:09 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id n5-20020a4ab345000000b0035eb4e5a6d6sm1098587ooo.44.2022.06.16.08.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 08:04:08 -0700 (PDT)
+Message-ID: <9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com>
+Date:   Thu, 16 Jun 2022 10:04:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ignat Korchagin <ignat@cloudflare.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, serge@hallyn.com, amir73il@gmail.com,
+        kernel-team <kernel-team@cloudflare.com>,
+        Jeff Moyer <jmoyer@redhat.com>
+References: <20220608150942.776446-1-fred@cloudflare.com>
+ <87tu8oze94.fsf@email.froward.int.ebiederm.org>
+ <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
+ <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
+ <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com>
+ <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
+ <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com>
+ <20220615103031.qkzae4xr34wysj4b@wittgenstein>
+ <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com>
+ <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
+ <CAHC9VhRSzXeAZmBdNSAFEh=6XR57ecO7Ov+6BV9b0xVN1YR_Qw@mail.gmail.com>
+ <1c4b1c0d-12f6-6e9e-a6a3-cdce7418110c@schaufler-ca.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <1c4b1c0d-12f6-6e9e-a6a3-cdce7418110c@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vit Kabele <vit.kabele@sysgo.com> writes:
+On 6/15/22 10:55 AM, Casey Schaufler wrote:
+> On 6/15/2022 8:33 AM, Paul Moore wrote:
+>> On Wed, Jun 15, 2022 at 11:06 AM Ignat Korchagin 
+>> <ignat@cloudflare.com> wrote:
+>>> On Wed, Jun 15, 2022 at 3:14 PM Paul Moore <paul@paul-moore.com> wrote:
+>>>> On Wed, Jun 15, 2022 at 6:30 AM Christian Brauner 
+>>>> <brauner@kernel.org> wrote:
+>> ...
+>>
+>>>>> Fwiw, from this commit it wasn't very clear what you wanted to achieve
+>>>>> with this. It might be worth considering adding a new security hook 
+>>>>> for
+>>>>> this. Within msft it recently came up SELinux might have an 
+>>>>> interest in
+>>>>> something like this as well.
+>>>> Just to clarify things a bit, I believe SELinux would have an interest
+>>>> in a LSM hook capable of implementing an access control point for user
+>>>> namespaces regardless of Microsoft's current needs.  I suspect due to
+>>>> the security relevant nature of user namespaces most other LSMs would
+>>>> be interested as well; it seems like a well crafted hook would be
+>>>> welcome by most folks I think.
+>>> Just to get the full picture: is there actually a good reason not to
+>>> make this hook support this scenario? I understand it was not
+>>> originally intended for this, but it is well positioned in the code,
+>>> covers multiple subsystems (not only user namespaces), doesn't require
+>>> changing the LSM interface and it already does the job - just the
+>>> kernel internals need to respect the error code better. What bad
+>>> things can happen if we extend its use case to not only allocate
+>>> resources in LSMs?
+>> My concern is that the security_prepare_creds() hook, while only
+>> called from two different functions, ends up being called for a
+>> variety of different uses (look at the prepare_creds() and
+>> perpare_kernel_cred() callers) and I think it would be a challenge to
+>> identify the proper calling context in the LSM hook implementation
+>> given the current hook parameters.  One might be able to modify the
+>> hook to pass the necessary information, but I don't think that would
+>> be any cleaner than adding a userns specific hook.  I'm also guessing
+>> that the modified security_prepare_creds() hook implementations would
+>> also be more likely to encounter future maintenance issues as
+>> overriding credentials in the kernel seems only to be increasing, and
+>> each future caller would risk using the modified hook wrong by passing
+>> the wrong context and triggering the wrong behavior in the LSM.
+> 
+> We don't usually have hooks that do both attribute management and
+> access control. Some people seem excessively concerned about "cluttering"
+> calling code with security_something() instances, but for the most
+> part I think we're past that. I agree that making security_prepare_creds()
+> multi-purpose is a bad idea. Shared cred management isn't simple, and
+> adding access checks there is only going to make it worse.
+> 
 
-> The Hyper-V crash reporting feature is initialized after a successful
-> vmbus setup. The reporting feature however does not require vmbus at all
-> and Windows guests can indeed use the reporting capabilities even with
-> the minimal Hyper-V implementation (as described in the Minimal
-> Requirements document).
->
-> Reorder the initialization callbacks so that the crash reporting
-> callbacks are registered before the vmbus initialization starts.
->
-> Nevertheless, I am not sure about following:
->
-> 1/ The vmbus_initiate_unload function is called within the panic handler
-> even when the vmbus initialization does not finish (there might be no
-> vmbus at all). This should probably not be problem because the vmbus
-> unload function always checks for current connection state and does
-> nothing when this is "DISCONNECTED". For better readability, it might be
-> better to add separate panic notifier for vmbus and crash reporting.
->
-> 2/ Wouldn't it be better to extract the whole reporting capability out
-> of the vmbus module, so that it stays present in the kernel even when
-> the vmbus module is possibly unloaded?
+Sounds like we've reached the conclusion not to proceed with a v4 of 
+this patch. I'll pivot to propose a new hook instead.
 
-IMHO yes but as you mention hyperv_panic_event() currently does to
-things:
-1) Initiates VMBus unload
-2) Reports panic to the hypervisor
+Thanks for the feedback everyone :)
 
-I think untangling them moving the later to arch/x86/hyper-v (and
-arch/arm64/hyperv/) makes sense.
-
->
-> Signed-off-by: Vit Kabele <vit.kabele@sysgo.com>
->
-> ---
->  drivers/hv/vmbus_drv.c | 77 +++++++++++++++++++++++-------------------
->  1 file changed, 42 insertions(+), 35 deletions(-)
->
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 714d549b7b46..97873f03aa7a 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -1509,41 +1509,6 @@ static int vmbus_bus_init(void)
->  	if (hv_is_isolation_supported())
->  		sysctl_record_panic_msg = 0;
->  
-> -	/*
-> -	 * Only register if the crash MSRs are available
-> -	 */
-> -	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
-> -		u64 hyperv_crash_ctl;
-> -		/*
-> -		 * Panic message recording (sysctl_record_panic_msg)
-> -		 * is enabled by default in non-isolated guests and
-> -		 * disabled by default in isolated guests; the panic
-> -		 * message recording won't be available in isolated
-> -		 * guests should the following registration fail.
-> -		 */
-> -		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
-> -		if (!hv_ctl_table_hdr)
-> -			pr_err("Hyper-V: sysctl table register error");
-> -
-> -		/*
-> -		 * Register for panic kmsg callback only if the right
-> -		 * capability is supported by the hypervisor.
-> -		 */
-> -		hyperv_crash_ctl = hv_get_register(HV_REGISTER_CRASH_CTL);
-> -		if (hyperv_crash_ctl & HV_CRASH_CTL_CRASH_NOTIFY_MSG)
-> -			hv_kmsg_dump_register();
-> -
-> -		register_die_notifier(&hyperv_die_block);
-> -	}
-> -
-> -	/*
-> -	 * Always register the panic notifier because we need to unload
-> -	 * the VMbus channel connection to prevent any VMbus
-> -	 * activity after the VM panics.
-> -	 */
-> -	atomic_notifier_chain_register(&panic_notifier_list,
-> -			       &hyperv_panic_block);
-> -
->  	vmbus_request_offers();
->  
->  	return 0;
-> @@ -2675,6 +2640,46 @@ static struct syscore_ops hv_synic_syscore_ops = {
->  	.resume = hv_synic_resume,
->  };
->  
-> +static void __init crash_reporting_init(void)
-> +{
-> +	/*
-> +	 * Only register if the crash MSRs are available
-> +	 */
-> +	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
-> +		u64 hyperv_crash_ctl;
-> +		/*
-> +		 * Panic message recording (sysctl_record_panic_msg)
-> +		 * is enabled by default in non-isolated guests and
-> +		 * disabled by default in isolated guests; the panic
-> +		 * message recording won't be available in isolated
-> +		 * guests should the following registration fail.
-> +		 */
-> +		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
-> +		if (!hv_ctl_table_hdr)
-> +			pr_err("Hyper-V: sysctl table register error");
-> +
-> +		/*
-> +		 * Register for panic kmsg callback only if the right
-> +		 * capability is supported by the hypervisor.
-> +		 */
-> +		hyperv_crash_ctl = hv_get_register(HV_REGISTER_CRASH_CTL);
-> +		if (hyperv_crash_ctl & HV_CRASH_CTL_CRASH_NOTIFY_MSG)
-> +			hv_kmsg_dump_register();
-> +
-> +		register_die_notifier(&hyperv_die_block);
-> +	}
-> +
-> +	/*
-> +	 * Always register the panic notifier because we need to unload
-> +	 * the VMbus channel connection to prevent any VMbus
-> +	 * activity after the VM panics.
-> +	 */
-> +	atomic_notifier_chain_register(&panic_notifier_list,
-> +			       &hyperv_panic_block);
-> +
-> +
-> +}
-> +
->  static int __init hv_acpi_init(void)
->  {
->  	int ret, t;
-> @@ -2687,6 +2692,8 @@ static int __init hv_acpi_init(void)
->  
->  	init_completion(&probe_event);
->  
-> +	crash_reporting_init();
-> +
->  	/*
->  	 * Get ACPI resources first.
->  	 */
-
--- 
-Vitaly
-
+Fred

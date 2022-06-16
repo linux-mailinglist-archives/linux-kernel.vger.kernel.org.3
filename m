@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C199D54E15F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EEC54E164
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376367AbiFPNDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S1376439AbiFPNER convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Jun 2022 09:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiFPNDx (ORCPT
+        with ESMTP id S229838AbiFPNEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:03:53 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BA920BE0;
-        Thu, 16 Jun 2022 06:03:48 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id o8so1812595wro.3;
-        Thu, 16 Jun 2022 06:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=1dVwRcvX/zX2ZvyZyllNzIEz5OjgRw64ZDWPHeywZC8=;
-        b=NLgcwNvhdW5LkWEv0Uj6WMcBuQS0Z1MM6opxaEO69IsazSgL5o/21eqAo114sQwXs2
-         ZkXtQWXYFdjoNejhiOflb2NYwFTOrZCmVk+R4LosZsDdyZD9GX1+SdXppbuI+3Pl4Dwj
-         oZ8LDWShTIDXYFrDt/VL60KBQZskZjrfS9Ujd846ylIsSkNqoYV821AlLBcV1M9k4Uni
-         hvgWGjpA7tm8/uhmXNgYXzdZOlb/YAz+dFGZZ3YQFjV1IgK0SCNKEgtcekb73M/l0LwD
-         Ea1mOJ4TPFkQ1t9gp7J5SSIcpPoZBufsHPVIxTtW0SXqdT9uP7HfY8MR7wZZT1DYNsT9
-         tDIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=1dVwRcvX/zX2ZvyZyllNzIEz5OjgRw64ZDWPHeywZC8=;
-        b=edCvNqg0eYqn2FkCzWDQA+PHmAEgguvUjdfIoVY2XiN+64yU/PXB0kV6z6koBF15ps
-         MxI++wt6YrGBSGHhGkdfkF7B8FhDGEpBnzahF29mHHiBmr/2zlXU7syu/QSqEGXcwgId
-         RlSLd+PJtqzptTfNqXfrYJhM7WysrGderjHqPJqbSCLpwDByeps9+vTk1Peyyu1K8LDo
-         xDSsfZX7ieEGvP6pM0tZk/wqrBHK6976fuZxXujcoS7dkv1UL5L3ubFoszfmw6Huo8Hk
-         ISBUznSMbfczVgJKOkTJoLaKa8VDvoTsOtnN/xSMukdSley+HlRIjlWrIeCUqFABJFXY
-         dk5A==
-X-Gm-Message-State: AJIora90OzoGcX85wbQfhdc6I61cnd7wKsfLJGgbyNm9PQpS/0nZmnXD
-        kMtAmZlqUXt6Qcm7mN4LgBQ=
-X-Google-Smtp-Source: AGRyM1sv4JO3boUQn0I7JKR24E8LVGw6lqUPTDh/dIC/Y2zXeT22ejoujCVHN0znkQkj4DjGS0zThA==
-X-Received: by 2002:a05:6000:a0b:b0:219:f87e:86b with SMTP id co11-20020a0560000a0b00b00219f87e086bmr4647358wrb.570.1655384627020;
-        Thu, 16 Jun 2022 06:03:47 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m15-20020a05600c4f4f00b0039748be12dbsm6319155wmq.47.2022.06.16.06.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 06:03:46 -0700 (PDT)
-Message-ID: <f47513f3-e1a9-1764-9954-cdf6931281a9@gmail.com>
-Date:   Thu, 16 Jun 2022 15:03:44 +0200
+        Thu, 16 Jun 2022 09:04:14 -0400
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCDD394;
+        Thu, 16 Jun 2022 06:04:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1655384636; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=AEN95sGjxRSbBuRwqaRVyJYQx25EMLOa61YyBMDj28YVFphVir9d9Kg5QKq7DkCGgmIFcafpxuTO+ZwLmPzfzn9rxn1/3PGgZYzHT9I+ZB5+38Q37n5ksSxW9ogM5OLdbv0yN4IBqOkaKefhR3X3iFxfjaACztpDX2hIP77d0r0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1655384636; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=RGG6vIU0Ipg7U+iqtSPlaA0Lh59OCg08S0bLfZinpTo=; 
+        b=YGxKoJbjhhk3pRah/STeBwuMkeB9nvR+j4UudtGsp4p0oxhbUfjzGRDM5zNp6zEq1wLbAA8ZUKcQmgKsv2UAx3habCRGhV+S6eHhx0+iE9ZmG+PASRk/5uJAcAtR3BRf50ZeFK65tIyIRmnkRXhw84PCh0mcquqbtjnf7REypmw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1655384633496875.2065492508191; Thu, 16 Jun 2022 06:03:53 -0700 (PDT)
+Message-ID: <8ed1c322b6f3dc36427c6a5704df0caab2dcec11.camel@mniewoehner.de>
+Subject: Re: [PATCH v5 10/10] tpm, tpm_tis: Enable interrupt test
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James.Bottomley@hansenpartnership.com,
+        twawrzynczak <twawrzynczak@chromium.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
+In-Reply-To: <1c90aba2-5874-7251-ff19-4b6c5bc19962@gmx.de>
+References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
+         <20220610110846.8307-11-LinoSanfilippo@gmx.de> <YqokW/cNLrrsZ2ib@iki.fi>
+         <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
+         <1c90aba2-5874-7251-ff19-4b6c5bc19962@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Thu, 16 Jun 2022 15:03:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski@linaro.org, miles.chen@mediatek.com
-References: <20220616110830.26037-1-angelogioacchino.delregno@collabora.com>
- <20220616110830.26037-6-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v4 5/5] iommu/mediatek: Cleanup pericfg lookup flow
-In-Reply-To: <20220616110830.26037-6-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: 8BIT
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lino,
 
-
-On 16/06/2022 13:08, AngeloGioacchino Del Regno wrote:
-> Since only the INFRA type IOMMU needs to modify register(s) in the
-> pericfg iospace, it's safe to drop the pericfg_comp_str NULL check;
-> also, directly assign the regmap handle to data->pericfg instead of
-> to the infracfg variable to improve code readability.
+On Thu, 2022-06-16 at 01:30 +0200, Lino Sanfilippo wrote:
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->   drivers/iommu/mtk_iommu.c | 12 +++++-------
->   1 file changed, 5 insertions(+), 7 deletions(-)
+> Hi Michael,
 > 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 90685946fcbe..b2ae84046249 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -1217,15 +1217,13 @@ static int mtk_iommu_probe(struct platform_device *pdev)
->   			dev_err(dev, "mm dts parse fail(%d).", ret);
->   			goto out_runtime_disable;
->   		}
-> -	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
-> -		   data->plat_data->pericfg_comp_str) {
-> -		infracfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
-> -		if (IS_ERR(infracfg)) {
-> -			ret = PTR_ERR(infracfg);
-> +	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
-> +		p = data->plat_data->pericfg_comp_str;
-> +		data->pericfg = syscon_regmap_lookup_by_compatible(p);
-> +		if (IS_ERR(data->pericfg)) {
-> +			ret = PTR_ERR(data->pericfg);
->   			goto out_runtime_disable;
->   		}
-> -
-> -		data->pericfg = infracfg;
->   	}
->   
->   	platform_set_drvdata(pdev, data);
+> On 15.06.22 at 23:54, Michael Niewöhner wrote:
+> 
+> > 
+> > Hi guys,
+> > 
+> > for me this series causes boot problems - somehow feels like an interrupt
+> > storm...
+> 
+> 
+> Thanks for this info. Which hardware do you use?
+> 
+> > Not sure yet, which commit is causing that
+> > @Tim could you test on any of your devices, please?
+> > 
+> > BR
+> > Michael
+> > 
+> 
+> Regards,
+> Lino
+
+looks like something was wrong with the devices firmware... I flashed a fresh
+image and everything is totally fine now - TPM gets detected without the
+"interrupts not working" error! :-)
+
+Test device: Clevo L140MU, FW v1.07.12, TPM 2.0 Infineon SLB9670 (SPI)
+
+BR
+Michael

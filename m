@@ -2,219 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186C654D9C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D8554D9C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358492AbiFPFg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 01:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S1358852AbiFPFiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 01:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242913AbiFPFg5 (ORCPT
+        with ESMTP id S1358705AbiFPFhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 01:36:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB025B3C3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:36:56 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so4648639pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8VvB5cP8XpJaCAMqO5do3F/JBWBM4/eP8xN9r0iP2ZE=;
-        b=QRlKg40WepExwXx4ITl36DcMiKlONXzjcoIYe1YCxxNxa160Uwfmk8J2wd1Ur+ecm9
-         qACZXB++MKTKxRF5skD8FP2TXNnoRI/MaySoXbuspnWeU+aTSAR3rOOzJ6X6PK8CfHqe
-         ydB4d1vdWYUsnA0sQkznYfHobMCsDgcwgiTuA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8VvB5cP8XpJaCAMqO5do3F/JBWBM4/eP8xN9r0iP2ZE=;
-        b=RIGHSHNTZ0Il1AjdHx44wfjwwYr7zu7cqHE9VkYAA+RuXO/L3H42Kac+O60bUYSwYM
-         euWuhGnCStKlNIue1Qdl8yJOzWh1P/YapIYyOJ7Ktid/8NNa1ANL03tK6+oLZViL+uw/
-         40+rcESfq3xvlE6nVt3gwap8lewr8Npk5Xivl5m46qkWM898sI7eSNAhRti4nPGPrZbp
-         58xqUwto6GG+kIqbSj23iTJdk0yWMaHQG20GEJl5lj+gPQTICh71x1Qm2Def8O6zLCgw
-         kaGYLizd28wwaPWb4VarTAAcJAHh2OhyFVlIq7zh/LoAYhtymfN1euYlZosdDY4znaX1
-         KpYg==
-X-Gm-Message-State: AJIora95ZlIBgTKJLQw9Or+7F3jYQzPK77X3Jcd38NieMrYE8gO+/uAf
-        +m5CRJFuagQFH3REC73ilRadSfQTgJw47Q==
-X-Google-Smtp-Source: AGRyM1u1yfJsO6JQiPI/cS0mNrZQ90lnEJf4H298TQ7uNVIe7cET5tpqTJnbT+ld+HS8Fv9pWgNbAw==
-X-Received: by 2002:a17:90b:1bc1:b0:1ea:8403:92b5 with SMTP id oa1-20020a17090b1bc100b001ea840392b5mr3209374pjb.116.1655357815610;
-        Wed, 15 Jun 2022 22:36:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170903024300b001624965d83bsm617411plh.228.2022.06.15.22.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 22:36:55 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 22:36:54 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dao Lu <daolu@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ard Biesheuvel <ardb@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:EXTENSIBLE FIRMWARE INTERFACE (EFI)" 
-        <linux-efi@vger.kernel.org>
-Subject: Re: [PATCH] arch/riscv: Add support for STACKLEAK gcc plugin
-Message-ID: <202206152234.DE7FC51F9@keescook>
-References: <20220615213834.3116135-1-daolu@rivosinc.com>
+        Thu, 16 Jun 2022 01:37:42 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0C221833;
+        Wed, 15 Jun 2022 22:37:37 -0700 (PDT)
+X-UUID: 7159031185264cbe8c3ed82499ac59c5-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:15b8930b-3d90-4be5-8982-943dea47cfec,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:c05b6ff6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 7159031185264cbe8c3ed82499ac59c5-20220616
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1951251212; Thu, 16 Jun 2022 13:37:27 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Jun 2022 13:37:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jun 2022 13:37:26 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v5 00/11] scsi: ufs: Fix PMC and low-power mode on MediaTek UFS platforms
+Date:   Thu, 16 Jun 2022 13:37:14 +0800
+Message-ID: <20220616053725.5681-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615213834.3116135-1-daolu@rivosinc.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 02:38:29PM -0700, Dao Lu wrote:
-> This adds support for STACKLEAK gcc plugin to ricv by implementing
+Hi Martin,
 
-typo: riscv
+This series provides some fixes on MediaTek UFS platforms, please consider this patch series for kernel v5.20.
 
-> stackleak_check_alloca, based heavily on the arm64 version, and adding
+- Provide workaround for power mode change for HS-G5
+- Fix and provide regulator features
 
-stackleak_check_alloca does not exist. Was this maybe from an older
-commit log?
+Changes compared to v4:
+- Add one patch to disable unused VCCQx
+- Fix the invoking location of ufs_mtk_vreg_fix_vccqx()
 
-> the two helpers used by the stackleak common code:
-> current_top_of_stack() and on_thread_stack(). This also adds the missing
-> helper functions for riscv, on_stack() and on_task_stack().
-> Additionally, this disables the plugin for EFI stub code for riscv.
+Changes compared to v3:
+- Rewrite and simplify SMC call wrappers
+- Fix coding styles
 
-I can't speak to the arch-specific bits here, but if this passes the
-current LKDTM tests, then that should be a good indication that it's
-working. :)
+Changes compared to v2:
+- Add patches to support multiple VCC sources
 
-> 
-> Signed-off-by: Dao Lu <daolu@rivosinc.com>
-> ---
->  arch/riscv/Kconfig                    |  1 +
->  arch/riscv/include/asm/processor.h    | 18 ++++++++++++++++++
->  arch/riscv/include/asm/stacktrace.h   | 27 +++++++++++++++++++++++++++
->  arch/riscv/kernel/entry.S             |  3 +++
->  drivers/firmware/efi/libstub/Makefile |  2 +-
->  5 files changed, 50 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index c22f58155948..22aa146acd25 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -80,6 +80,7 @@ config RISCV
->  	select HAVE_ARCH_MMAP_RND_BITS if MMU
->  	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
->  	select HAVE_ARCH_SECCOMP_FILTER
-> +	select HAVE_ARCH_STACKLEAK
->  	select HAVE_ARCH_TRACEHOOK
->  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
->  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
-> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-> index 21c8072dce17..3a7505ab7f58 100644
-> --- a/arch/riscv/include/asm/processor.h
-> +++ b/arch/riscv/include/asm/processor.h
-> @@ -85,6 +85,24 @@ int riscv_of_parent_hartid(struct device_node *node);
->  extern void riscv_fill_hwcap(void);
->  extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
->  
-> +/*
-> + * For CONFIG_GCC_PLUGIN_STACKLEAK
-> + *
-> + * These need to be macros because otherwise we get stuck in a nightmare
-> + * of header definitions for the use of task_stack_page.
-> + */
-> +
-> +struct stack_info {
-> +	unsigned long low;
-> +	unsigned long high;
-> +};
-> +
-> +/*
-> + * The top of the current task's task stack
-> + */
-> +#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
-> +#define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1, NULL))
-> +
->  #endif /* __ASSEMBLY__ */
->  
->  #endif /* _ASM_RISCV_PROCESSOR_H */
-> diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
-> index 3450c1912afd..afb66b677b6a 100644
-> --- a/arch/riscv/include/asm/stacktrace.h
-> +++ b/arch/riscv/include/asm/stacktrace.h
-> @@ -16,4 +16,31 @@ extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *re
->  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
->  			   const char *loglvl);
->  
-> +static inline bool on_stack(unsigned long sp, unsigned long size,
-> +			    unsigned long low, unsigned long high,
-> +			    struct stack_info *info)
-> +{
-> +	if (!low)
-> +		return false;
-> +
-> +	if (sp < low || sp + size < sp || sp + size > high)
-> +		return false;
-> +
-> +	if (info) {
-> +		info->low = low;
-> +		info->high = high;
-> +	}
-> +	return true;
-> +}
-> +
-> +static inline bool on_task_stack(const struct task_struct *tsk,
-> +				 unsigned long sp, unsigned long size,
-> +				 struct stack_info *info)
-> +{
-> +	unsigned long low = (unsigned long)task_stack_page(tsk);
-> +	unsigned long high = low + THREAD_SIZE;
-> +
-> +	return on_stack(sp, size, low, high, info);
-> +}
-> +
->  #endif /* _ASM_RISCV_STACKTRACE_H */
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 2e5b88ca11ce..65d441cb560f 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -264,6 +264,9 @@ ret_from_exception:
->  	bnez s0, resume_kernel
->  
->  resume_userspace:
-> +#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
-> +	call stackleak_erase
-> +#endif
->  	/* Interrupts must be disabled here so flags are checked atomically */
->  	REG_L s0, TASK_TI_FLAGS(tp) /* current_thread_info->flags */
->  	andi s1, s0, _TIF_WORK_MASK
-> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> index d0537573501e..5e1fc4f82883 100644
-> --- a/drivers/firmware/efi/libstub/Makefile
-> +++ b/drivers/firmware/efi/libstub/Makefile
-> @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->  				   -fno-builtin -fpic \
->  				   $(call cc-option,-mno-single-pic-base)
->  cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> -				   -fpic
-> +				   -fpic $(DISABLE_STACKLEAK_PLUGIN)
->  
->  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
->  
-> -- 
-> 2.25.1
-> 
+Changes compared to v1:
+- Add patches to fix and provide VCCQx low-power support
+
+CC Chou (1):
+  scsi: ufs-mediatek: Introduce workaround for power mode change
+
+Peter Wang (1):
+  scsi: ufs-mediatek: Support low-power mode for VCCQ
+
+Po-Wen Kao (2):
+  scsi: ufs-mediatek: Fix the timing of configuring device regulators
+  scsi: ufs-mediatek: Prevent device regulators setting as LPM
+    incorrectly
+
+Stanley Chu (7):
+  scsi: ufs: Export ufshcd_uic_change_pwr_mode()
+  scsi: ufs: Fix ADAPT logic for HS-G5
+  scsi: ufs-mediatek: Support flexible parameters for smc calls
+  scsi: ufs-mediatek: Support low-power mode for parents of VCCQx
+  scsi: ufs: Export regulator functions
+  scsi: ufs-mediatek: Support multiple VCC sources
+  scsi: ufs-mediatek: Disable unused VCCQx power rails
+
+ drivers/ufs/core/ufshcd.c        |   8 +-
+ drivers/ufs/host/ufs-mediatek.c  | 255 +++++++++++++++++++++++++++----
+ drivers/ufs/host/ufs-mediatek.h  |  58 +++++++
+ drivers/ufs/host/ufshcd-pltfrm.c |   5 +-
+ drivers/ufs/host/ufshcd-pltfrm.h |   2 +
+ include/ufs/ufshcd.h             |   3 +
+ include/ufs/unipro.h             |   1 +
+ 7 files changed, 295 insertions(+), 37 deletions(-)
 
 -- 
-Kees Cook
+2.18.0
+

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713FE54EB31
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A4154EB32
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378684AbiFPU3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S1378686AbiFPU3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378670AbiFPU3L (ORCPT
+        with ESMTP id S1378680AbiFPU3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:29:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD355C766;
-        Thu, 16 Jun 2022 13:29:09 -0700 (PDT)
+        Thu, 16 Jun 2022 16:29:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600D95DE56;
+        Thu, 16 Jun 2022 13:29:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07603B825FB;
-        Thu, 16 Jun 2022 20:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20233C34114;
-        Thu, 16 Jun 2022 20:29:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F726B825C6;
+        Thu, 16 Jun 2022 20:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6149CC34114;
+        Thu, 16 Jun 2022 20:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655411346;
-        bh=2QTNhmLA5hWHCcKhZRTumnrveKImZcwK8CtdtQayAoE=;
+        s=k20201202; t=1655411368;
+        bh=kTJqaZh9D0KEgjXW0Y0EXJOrai2Wo9fwvtWAQlG13c8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hs6c0RnXox/mNK3dnZ3yTDrPlSHohs/p3cAGlpK6QrHt/m9tv5C5UHnYEUr1lFhP/
-         oPwZDDlevz6Ab93gtpiIsPi+ft7nytV7T9vIB82XftLJb+QWeZ9AALtCAWzBMwHNo3
-         76iJwPd3a/qySXP6QgR80JzJ6JQqobnH+F/5fcEG6nG2yBMmUsoMFgP68m9GsTKzxW
-         f0MRvtV9fPPzy8KwiGkvYjaqGcbCg/QfTpRdmlv5azmwis9dgMfgjU+WvrnOn0bfzs
-         SVX20bPC7B2ku4RgV1xVdmfN4bPtkFopm4d2vPKuqMczg1fHDRF+qVL7lOfmdMpIIv
-         u7PW1I7FDzjxw==
-Date:   Fri, 17 Jun 2022 01:59:04 +0530
+        b=Ad8YADGn9RLcnFI6kfXZqIvKgEWC1N0Gx6JD++XyRllYdV9VsJ9JeEY53lD89X4o3
+         oQVAq7UCz1NMbl2IBIVlni2iXv2zSmX24ueoZxa6brr/FKBLv2iYdZEKzA2jR4T1Vo
+         tkq7+Avyj1fJ0ridkAz6yfSUYIg9/m/urFaaQ0JQDXHIbx8eMrezLOvgoatmoKn6O3
+         sm1URj8sbVNCB/gmOCJI6iFYZIRcqs1vBZHibMJZRf6GIXuhi36qxz88jbhm8+bJS8
+         UrmpMNQuGYMF34Ev/K7/uvA7dCWOpQP5fNzlKYqwe+KsFjUUDkUVugmY2W5yjkbphq
+         ZI9QOl40CTJOg==
+Date:   Fri, 17 Jun 2022 01:59:26 +0530
 From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -42,18 +42,18 @@ Cc:     Andy Gross <agross@kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/3] mtd: nand: raw: qcom_nandc: reorder
+Subject: Re: [PATCH v8 1/3] mtd: nand: raw: qcom_nandc: reorder
  qcom_nand_host struct
-Message-ID: <20220616202904.GB2889@thinkpad>
-References: <20220615000612.3119-1-ansuelsmth@gmail.com>
- <20220615000612.3119-2-ansuelsmth@gmail.com>
+Message-ID: <20220616202926.GC2889@thinkpad>
+References: <20220616001835.24393-1-ansuelsmth@gmail.com>
+ <20220616001835.24393-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615000612.3119-2-ansuelsmth@gmail.com>
+In-Reply-To: <20220616001835.24393-2-ansuelsmth@gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,10 +64,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 02:06:10AM +0200, Ansuel Smith wrote:
+On Thu, Jun 16, 2022 at 02:18:33AM +0200, Christian Marangi wrote:
 > Reorder structs in nandc driver to save holes.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
 Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 

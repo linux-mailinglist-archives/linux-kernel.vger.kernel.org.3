@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2748B54DFBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F1D54DFC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiFPLIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S1376736AbiFPLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376707AbiFPLIo (ORCPT
+        with ESMTP id S1376717AbiFPLIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:08:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02C75E154;
-        Thu, 16 Jun 2022 04:08:43 -0700 (PDT)
+        Thu, 16 Jun 2022 07:08:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B065E159;
+        Thu, 16 Jun 2022 04:08:44 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB10C6601755;
-        Thu, 16 Jun 2022 12:08:41 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB0C66601756;
+        Thu, 16 Jun 2022 12:08:42 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655377722;
-        bh=bxI13qYR6i+Qbu3k0FjubHCH9lucInKe+lBf6R85H4s=;
+        s=mail; t=1655377723;
+        bh=Ym8V4C7cqusZmnKUp44mYzfUNnjhU5hnhfnX8Zm9pqA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SU7bp+YuqjQvSEWyPZ80x4Ek4Eb2q/aHXqf5vRtCA1X8e7bqnvd0aaNVjf3eYR6D/
-         b22pDjD7cpHquZu/ko2QgcHmr8y+jLM98NKj973KxJg8mCbgwcxdF0cgo+szu6eseV
-         e+RziHxVQaZ8Ds8Ja1WH1wijmVTf/43nMGwtGlxKeq4xYWW7yAE6/8LQ864y8xj1Hc
-         FFZFdirB4hUmB3T/ztjUrFL6MaXMImQBul7ohbKRiScy8hvrwZuFSodpNjQQdhMzTO
-         CZJQ5cnK+sX1WnhHMdXvSP/rEsPn6XScmlammVvFedur2hX9OsDXKrAOnh4qaawl++
-         IoYi7THqnsQLg==
+        b=NmtPN0WvcM9Ve1t1pov1LUxFbiFgFsHXn7r1U0/dBzpD2ev+nNt/AsBREsxoLTnvg
+         1MXrkjTKKJ2o3BdglJrC/B/r0wtT7q/Bd1JOTv4SG0kt9axG22fWfGU61cHQUDFq8G
+         sGjjCszu4KJdE/J7JzQ5U7AP45Msq8+2TkLltrtmxCq2CPMnRIMMDCGxZZhvAIbgFL
+         wusIWrO6ZpaBFJOSF6Du39eqV3BaWwFAPhGtE3zlRKZHppx0Qy2rh6BvZ+aXB+DvyO
+         0NXS43OHcFjvEcxekxmHDZwzuA/EpVcnhbEyBSPSDcEnjVvkMn9TpG8mtQelh9vn0T
+         svphRSs2SqIIg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -43,9 +43,9 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski@linaro.org, miles.chen@mediatek.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v4 4/5] arm64: dts: mediatek: mt2712e: Add mediatek,infracfg phandle for IOMMU
-Date:   Thu, 16 Jun 2022 13:08:29 +0200
-Message-Id: <20220616110830.26037-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v4 5/5] iommu/mediatek: Cleanup pericfg lookup flow
+Date:   Thu, 16 Jun 2022 13:08:30 +0200
+Message-Id: <20220616110830.26037-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220616110830.26037-1-angelogioacchino.delregno@collabora.com>
 References: <20220616110830.26037-1-angelogioacchino.delregno@collabora.com>
@@ -60,41 +60,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IOMMU driver now looks for the "mediatek,infracfg" phandle as a
-new way to retrieve a syscon to that:
-even though the old way is retained, it has been deprecated and the
-driver will write a message in kmsg advertising to use the phandle
-way instead.
-
-For this reason, assign the right phandle to mediatek,infracfg in
-the iommu node.
+Since only the INFRA type IOMMU needs to modify register(s) in the
+pericfg iospace, it's safe to drop the pericfg_comp_str NULL check;
+also, directly assign the regmap handle to data->pericfg instead of
+to the infracfg variable to improve code readability.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iommu/mtk_iommu.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-index 623eb3beabf2..4797537cb368 100644
---- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-@@ -329,6 +329,7 @@ iommu0: iommu@10205000 {
- 		interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
-+		mediatek,infracfg = <&infracfg>;
- 		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
- 				 <&larb3>, <&larb6>;
- 		#iommu-cells = <1>;
-@@ -346,6 +347,7 @@ iommu1: iommu@1020a000 {
- 		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
-+		mediatek,infracfg = <&infracfg>;
- 		mediatek,larbs = <&larb4>, <&larb5>, <&larb7>;
- 		#iommu-cells = <1>;
- 	};
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 90685946fcbe..b2ae84046249 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -1217,15 +1217,13 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 			dev_err(dev, "mm dts parse fail(%d).", ret);
+ 			goto out_runtime_disable;
+ 		}
+-	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
+-		   data->plat_data->pericfg_comp_str) {
+-		infracfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
+-		if (IS_ERR(infracfg)) {
+-			ret = PTR_ERR(infracfg);
++	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
++		p = data->plat_data->pericfg_comp_str;
++		data->pericfg = syscon_regmap_lookup_by_compatible(p);
++		if (IS_ERR(data->pericfg)) {
++			ret = PTR_ERR(data->pericfg);
+ 			goto out_runtime_disable;
+ 		}
+-
+-		data->pericfg = infracfg;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, data);
 -- 
 2.35.1
 

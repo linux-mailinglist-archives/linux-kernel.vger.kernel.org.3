@@ -2,130 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B524D54ED7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10F954EDBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379090AbiFPWpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S1379301AbiFPW7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiFPWpJ (ORCPT
+        with ESMTP id S1379286AbiFPW7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:45:09 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB8F62130
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:45:08 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y6so2655186pfr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L3HdybHGUtNACL7l/Pk8oMmY4aoVEX/SxxB7u2X+yMM=;
-        b=IxehsYAyj3S6S9LPLwFh3RZTGkD3A8CJr0/4sQIlV0K6bW5S8wMRKfY1J0/3Oo8hMt
-         TPnNyVeFt6I3DWs6ouz5XkMlxWmwY6MKffRmIfFTenG4344Sq7nolpkFdT8t1UJ28XER
-         egpJAMNhPLtXYhQuTluRQwSapOh6LYKG2Q0xfEz8hpPvPoeDKNN7WQYADpholuOIQMoD
-         LdBbY+QumHJBban2LuEHz28MhqqnzKDirFuV9/L55Z1zwHfm/kvTAXxWTXz+w543ZfFL
-         0tZ99oDPkKEI5xKbHsXbB9e8n4gGz4JIUHWZeDK1/7AgB9YrmtZDZCyIdNhfZUDwK2fY
-         rlcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L3HdybHGUtNACL7l/Pk8oMmY4aoVEX/SxxB7u2X+yMM=;
-        b=eA+GwV7WC5VyZS2XoJsjwADGzNjWhrQ45qrjmCHhp1s6nMl/0k5FMEcWV6omhDGyfb
-         W4k2TPXtmDJ79wXB0yyCevI2AMoq48eCmsMX1dK1EqjQA5101KFOiNxS0RBxDmxqViLX
-         d9Wv5AfYjVb2jToEbPRdWQoitVxau3X6ziYwN8cj0qX5hmJslTADPohiQicFg1ypj6zr
-         hnZJpB5GvmEu4T1ZiLWDBQORTuQxTxKpDKFYcsnMchQQngYTh//vMhougGQaZJo7MYfn
-         GJNGfOHxDjPkUcQ/VGZIt+JgoHkJ5ku1xcRpCc09q4P9kFAOxzO2h68OYt92EJwzqEm+
-         CQeg==
-X-Gm-Message-State: AJIora+yL6RSIQ/R0D40LMfP9N87WZ0pomsuUSHutqB4lJLixfv7IN2F
-        BnVbe0LZ4xh9nNfC4cyVTm1JWA==
-X-Google-Smtp-Source: AGRyM1vQLIwZzEZ5T+MW897jGjrH5RpIeWnJX/eon8DHTxeHY8/I1G1vCX/YcGBLONlhCCz3eVZ6qg==
-X-Received: by 2002:a05:6a00:179e:b0:518:9e1d:1cbd with SMTP id s30-20020a056a00179e00b005189e1d1cbdmr6983483pfg.12.1655419507895;
-        Thu, 16 Jun 2022 15:45:07 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id e23-20020a170902ed9700b001678dcb4c5asm2152309plj.100.2022.06.16.15.45.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:45:07 -0700 (PDT)
-Message-ID: <3cf1540f-7185-96dc-7691-fb9ce6bfc566@linaro.org>
-Date:   Thu, 16 Jun 2022 15:45:06 -0700
+        Thu, 16 Jun 2022 18:59:44 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3525962A1E;
+        Thu, 16 Jun 2022 15:59:42 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 987F7121DA9;
+        Thu, 16 Jun 2022 22:59:41 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 2039C121D8E;
+        Thu, 16 Jun 2022 22:59:41 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655420381; a=rsa-sha256;
+        cv=none;
+        b=B85/YcjPapY22mVOAwMM4r5F6nEaSu94rVTx+MvJNpaOn5e+mDWFTOtZjWYyv8Jb3QyHun
+        W6bV216mtDytsG0qLvwtgcDDqefR0Rd2btmO0UAjLki/bxnYbaej9F436VvYumKyrbNQM2
+        Kjb0TMNvHXWlfAq7hUOj6wSVwqWqBwt20wiHr0q0dn9Bf/1nepthbfbPdNq5+TnRVWFtBy
+        d5nx5xULo24gALh0xB3uVnGBYItp4HzDu0Y5p68V1Mxd6Y7AWoTtX3j5MK3AA9b9g98ZLI
+        iNzxO+NLBY+EsDEyVj6wo7TrdNAEbVCTt6Okj4xnmDCNQZ4S9UFHu/e77sxetA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1655420381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=KMUJjasGhtZ6xtzJgMJ6iOnVpbo7qM4ta3eH7kPU4uY=;
+        b=ybQzlj9KH9kXIUILAj32OwMxa1xTUg72X4S1bIGRT2v58P5an51znBQanqyB/zP/8ORgPr
+        6EiHW7fNYXMIhavRHnzncqLh3ShU/ReLluU2PTX/60WRuLvt2mMOrKPnCDD+x3ZWNwKDfk
+        xSzz13zX2Lnk9+Nte3cjamZWK1ldTf6PKb/JDrl92h9ul0Znkfot1Vaxvvo2sLbSzkTtRe
+        3bq314IJ91aQiBGJUnF96Nxr9dWvg3K03X53gFvGk1M+lWV7oB+X2UHq9h5m9fGXp1g91R
+        6AvDkJ8A44A+ejheaVFQ2sDGDMQwjVMd5gNGBiMm/7ZwZ9uWn2errQSyw//iig==
+ARC-Authentication-Results: i=1;
+        rspamd-786f5898df-9jkmw;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Duck-Turn: 14413558197c5ca4_1655420381448_582639351
+X-MC-Loop-Signature: 1655420381448:1891084837
+X-MC-Ingress-Time: 1655420381448
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.112.55.213 (trex/6.7.1);
+        Thu, 16 Jun 2022 22:59:41 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LPHgJ1P4szCY;
+        Thu, 16 Jun 2022 15:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1655420380;
+        bh=KMUJjasGhtZ6xtzJgMJ6iOnVpbo7qM4ta3eH7kPU4uY=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=JEO7plbhII07lJxR/lL+83K9pMnfPPGk9KxDsztsv1Rtb3c+hKRIJyPI0PQcp6moT
+         h2+oo9gkiQeIGFePYy0BTGhXWjbaRp3X2JIWEJco+mTW0DSvTtabSqQ7SQGbIrbdkC
+         os69Zfq2hA5I6jflJjXZIqwVhpqaGFRRZ0S5lxZzXxhLFfH2uUEuU5xN6qHpJQqNzs
+         tt6YEYRNptkbguHN5Tu4+SS/KWDty26C7Oz6XMCRecO2mvMfUV7fL6nG/AAAU00iYk
+         JGLM+HygCI4HJ3Bm3FLeqrjvxbJ5rLAvMpiQZ+Ohu6bzdT6WEzI4oIFNV0ddxbbdX/
+         YHziBk0rNi4Sg==
+Date:   Thu, 16 Jun 2022 15:45:25 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "a.manzanares@samsung.com" <a.manzanares@samsung.com>
+Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
+Message-ID: <20220616224525.fufa4dnpw4vl344n@offworld>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+ <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+ <20220616194334.pvorvoozt4rrzr66@offworld>
+ <20220616203400.GA1529208@alison-desk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: mfd: atmel,flexcom: Convert to
- json-schema
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, UNGLinuxDriver@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220612152604.24280-1-kavyasree.kotagiri@microchip.com>
- <20220612152604.24280-2-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220612152604.24280-2-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220616203400.GA1529208@alison-desk>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2022 08:26, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
-> v2 -> v3:
->  - used enum for compatible string.
->  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
->  - fixed dtschema errors.
-> 
-> v1 -> v2:
->  - Fix title.
-> 
->  .../bindings/mfd/atmel,flexcom.yaml           | 103 ++++++++++++++++++
->  .../devicetree/bindings/mfd/atmel-flexcom.txt |  63 -----------
->  2 files changed, 103 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> new file mode 100644
-> index 000000000000..cee9c93ce4b9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> @@ -0,0 +1,103 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/atmel,flexcom.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel Flexcom (Flexible Serial Communication Unit)
-> +
-> +maintainers:
-> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> +
-> +description:
-> +  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
-> +  an I2C controller and an USART. Only one function can be used at a
-> +  time and is chosen at boot time according to the device tree.
-> +
-> +properties:
-> +  compatible:
-> +    enum: atmel,sama5d2-flexcom
+On Thu, 16 Jun 2022, Alison Schofield wrote:
 
-This is not correct syntax. Use `git grep -C` to find nice examples.
+>cxl list --media-errors -m mem1
+>	lists media errors for requested memdev
+>
+>cxl list --media-errors -r region#
 
+A quick question on the tooling front: the above goes nicely with
+cxl-list, but what about the rest of the poisoning cmds? Do you have
+anything in mind? Do we want something specific for media and poison
+management instead? Ie:
 
-Best regards,
-Krzysztof
+cxl media --list-errors <params>
+cxl media --inject-errors <params>
+cxl media --clear-errors <params>
+
+Thanks,
+Davidlohr

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E82954EA04
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C8854EA03
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378282AbiFPTUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
+        id S1378327AbiFPTUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbiFPTT4 (ORCPT
+        with ESMTP id S1377680AbiFPTT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:19:56 -0400
+        Thu, 16 Jun 2022 15:19:57 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC95554BB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09DE5623A;
         Thu, 16 Jun 2022 12:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=TqznKfD7muouxLbcabxY3rl2UiNCi1GG48QLUynPBk8=; b=TtqiVFP3QPkvf5CnjXYEln8JuL
-        1UqOuOCt/ntx4DInt92dOdN9bp7T/FnGUqN9AXMVMACp5GbxXJjd1Ew454rA6h80MbAd1T1Hj0Tpt
-        GRBgcRnpYhnhYNak1x6AJ8qXO9XsNAwy26J5AstpVhsBulUTuYKNtb2XsSHHAqeLQd8GJlkURCdbh
-        fGyg9v8rgvSlk3dZEzcCrTuQl1ydO70erknUx0yYFaM6capagHKS4N90/QT2gpuZU99vG2OFmCybq
-        hoOdqn5di2+SCCw0fLaknSRBWc8xuz7skfPB79KHuevlBbE82/WqJZ0f8Rbx3wIJntydFKvdyiB3L
-        JkQ1xdQA==;
+        bh=5N+DuwbwjsNtA6MiAkyKqthsWUBtdpGk6ol5t9owlgA=; b=OEtl1eZgooRbxWrxo2k7IkqbRT
+        D8nwWEVRc/mKxskHhRw6wqZE5vOTOBA00gp/MOIQnFT1KggEX02XM7FrWa69FsBpkj2feDmLbW3EO
+        H7FrtkAuXxR/JByBS0mouVXUWOq97R6hoWfej0lppTMOvD84eT/UyiVqZh5ewL4aGwSp2zzohkjUM
+        GwI2mUxMSpwGz90KtW6Ip3vN6LNDWR9DJJhfW2eegy4+5XMMxzY+vyB03GTPub1oihoXT5yLR841U
+        S7k0v/bhI67zO1b3d5ZwHXMUqGYe1/MN1ovchnzuowKyozuTCx1Twj2gc4XPA2msxubUm+J3sXj6h
+        FaMBzNSQ==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1o1v20-0092il-0m; Thu, 16 Jun 2022 13:19:52 -0600
+        id 1o1v1z-0092ii-T0; Thu, 16 Jun 2022 13:19:52 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1o1v1w-0006FY-1Q; Thu, 16 Jun 2022 13:19:48 -0600
+        id 1o1v1w-0006Fc-6c; Thu, 16 Jun 2022 13:19:48 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -42,8 +42,8 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>,
         Christoph Hellwig <hch@lst.de>
-Date:   Thu, 16 Jun 2022 13:19:39 -0600
-Message-Id: <20220616191945.23935-10-logang@deltatee.com>
+Date:   Thu, 16 Jun 2022 13:19:40 -0600
+Message-Id: <20220616191945.23935-11-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220616191945.23935-1-logang@deltatee.com>
 References: <20220616191945.23935-1-logang@deltatee.com>
@@ -58,56 +58,130 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v3 09/15] md/raid5: Refactor for loop in raid5_make_request() into while loop
+Subject: [PATCH v3 10/15] md/raid5: Keep a reference to last stripe_head for batch
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The for loop with retry label can be more cleanly expressed as a while
-loop by moving the logical_sector increment into the success path.
+When batching, every stripe head has to find the previous stripe head to
+add to the batch list. This involves taking the hash lock which is
+highly contended during IO.
 
-No functional changes intended.
+Instead of finding the previous stripe_head each time, store a
+reference to the previous stripe_head in a pointer so that it doesn't
+require taking the contended lock another time.
+
+The reference to the previous stripe must be released before scheduling
+and waiting for work to get done. Otherwise, it can hold up
+raid5_activate_delayed() and deadlock.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
 ---
- drivers/md/raid5.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/md/raid5.c | 52 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 40 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 345350d34623..17ddaa41147c 100644
+index 17ddaa41147c..34f8d6c18bd3 100644
 --- a/drivers/md/raid5.c
 +++ b/drivers/md/raid5.c
-@@ -5974,22 +5974,23 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- 	}
- 	md_account_bio(mddev, &bi);
- 	prepare_to_wait(&conf->wait_for_overlap, &w, TASK_UNINTERRUPTIBLE);
--	for (; logical_sector < last_sector; logical_sector += RAID5_STRIPE_SECTORS(conf)) {
--	retry:
-+	while (logical_sector < last_sector) {
- 		res = make_stripe_request(mddev, conf, &ctx, logical_sector,
- 					  bi);
- 		if (res == STRIPE_FAIL)
- 			break;
+@@ -843,7 +843,8 @@ static bool stripe_can_batch(struct stripe_head *sh)
+ }
  
- 		if (res == STRIPE_RETRY)
--			goto retry;
-+			continue;
+ /* we only do back search */
+-static void stripe_add_to_batch_list(struct r5conf *conf, struct stripe_head *sh)
++static void stripe_add_to_batch_list(struct r5conf *conf,
++		struct stripe_head *sh, struct stripe_head *last_sh)
+ {
+ 	struct stripe_head *head;
+ 	sector_t head_sector, tmp_sec;
+@@ -856,15 +857,20 @@ static void stripe_add_to_batch_list(struct r5conf *conf, struct stripe_head *sh
+ 		return;
+ 	head_sector = sh->sector - RAID5_STRIPE_SECTORS(conf);
+ 
+-	hash = stripe_hash_locks_hash(conf, head_sector);
+-	spin_lock_irq(conf->hash_locks + hash);
+-	head = find_get_stripe(conf, head_sector, conf->generation, hash);
+-	spin_unlock_irq(conf->hash_locks + hash);
+-
+-	if (!head)
+-		return;
+-	if (!stripe_can_batch(head))
+-		goto out;
++	if (last_sh && head_sector == last_sh->sector) {
++		head = last_sh;
++		atomic_inc(&head->count);
++	} else {
++		hash = stripe_hash_locks_hash(conf, head_sector);
++		spin_lock_irq(conf->hash_locks + hash);
++		head = find_get_stripe(conf, head_sector, conf->generation,
++				       hash);
++		spin_unlock_irq(conf->hash_locks + hash);
++		if (!head)
++			return;
++		if (!stripe_can_batch(head))
++			goto out;
++	}
+ 
+ 	lock_two_stripes(head, sh);
+ 	/* clear_batch_ready clear the flag */
+@@ -5794,6 +5800,8 @@ enum stripe_result {
+ };
+ 
+ struct stripe_request_ctx {
++	/* a reference to the last stripe_head for batching */
++	struct stripe_head *batch_last;
+ 	/* the request had REQ_PREFLUSH, cleared after the first stripe_head */
+ 	bool do_flush;
+ };
+@@ -5888,8 +5896,13 @@ static enum stripe_result make_stripe_request(struct mddev *mddev,
+ 		goto out_release;
+ 	}
+ 
+-	if (stripe_can_batch(sh))
+-		stripe_add_to_batch_list(conf, sh);
++	if (stripe_can_batch(sh)) {
++		stripe_add_to_batch_list(conf, sh, ctx->batch_last);
++		if (ctx->batch_last)
++			raid5_release_stripe(ctx->batch_last);
++		atomic_inc(&sh->count);
++		ctx->batch_last = sh;
++	}
+ 
+ 	if (ctx->do_flush) {
+ 		set_bit(STRIPE_R5C_PREFLUSH, &sh->state);
+@@ -5984,6 +5997,18 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ 			continue;
  
  		if (res == STRIPE_SCHEDULE_AND_RETRY) {
++			/*
++			 * Must release the reference to batch_last before
++			 * scheduling and waiting for work to be done,
++			 * otherwise the batch_last stripe head could prevent
++			 * raid5_activate_delayed() from making progress
++			 * and thus deadlocking.
++			 */
++			if (ctx.batch_last) {
++				raid5_release_stripe(ctx.batch_last);
++				ctx.batch_last = NULL;
++			}
++
  			schedule();
  			prepare_to_wait(&conf->wait_for_overlap, &w,
  					TASK_UNINTERRUPTIBLE);
--			goto retry;
-+			continue;
- 		}
-+
-+		logical_sector += RAID5_STRIPE_SECTORS(conf);
- 	}
+@@ -5995,6 +6020,9 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
  
  	finish_wait(&conf->wait_for_overlap, &w);
+ 
++	if (ctx.batch_last)
++		raid5_release_stripe(ctx.batch_last);
++
+ 	if (rw == WRITE)
+ 		md_write_end(mddev);
+ 	bio_endio(bi);
 -- 
 2.30.2
 

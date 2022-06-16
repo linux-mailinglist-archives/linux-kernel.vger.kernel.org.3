@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB2554D63A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF9654D641
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345483AbiFPAq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 20:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S1346372AbiFPAsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 20:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiFPAq1 (ORCPT
+        with ESMTP id S1344835AbiFPAso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 20:46:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5511FA67;
-        Wed, 15 Jun 2022 17:46:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F7B861B44;
-        Thu, 16 Jun 2022 00:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60D4C3411C;
-        Thu, 16 Jun 2022 00:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655340385;
-        bh=Ka9NDcozxCqNwltwXXzj3Lfwvi1TlTiVEFw4V4KHWD8=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=r/puVxYETDOZCxUQCfuaj3xXycJAnIOLqJqr4OOZTzcpAusNRdD+sCDBhqnXBpd+L
-         VEAGcTDgHRjE5+O25FTl58K22H6Yw7+197rqfH+5H+CmNQeobZYub+ENenC77gC904
-         k8E1xcE3wRKqn04oGvPXf/O4TA64eAIR3HZwkvrfvRkGQfg+Fl4piPH10FsW19Pcoe
-         G6h+Oauivdpdzp8Ib1Y9Y7+Epav727KmZOpLUN9LGTgF3iQZIslfzbULvlewkXu4zJ
-         Ced5EICzRsQZ8dZkIgGGxDcPklA/wfKqbe6ZIuNJJKgtUKSyYiWuJqWcwNu4BTAnJ6
-         35XJb/LMqK6VQ==
-Received: by mail-wr1-f49.google.com with SMTP id q9so153484wrd.8;
-        Wed, 15 Jun 2022 17:46:25 -0700 (PDT)
-X-Gm-Message-State: AJIora+bLlqVQ6ADlOtS9MtbzTZ8687WorUO6HamDcTPTAVkxPE6CtBo
-        xjQfSnqmT0MXEpvk0Jncod8kJclHO+mjZDoBOpg=
-X-Google-Smtp-Source: AGRyM1tljmyc4LcN3jmT6djVfMgx8ZZLu1PyXYU1jz9TRziGsSv7ycvdKNWpR1ICxQlVLqmfXWmIhAwh+tZ7Go7CFCg=
-X-Received: by 2002:adf:ed45:0:b0:210:2f9c:f269 with SMTP id
- u5-20020adfed45000000b002102f9cf269mr2254360wro.470.1655340384125; Wed, 15
- Jun 2022 17:46:24 -0700 (PDT)
+        Wed, 15 Jun 2022 20:48:44 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5457156FB9;
+        Wed, 15 Jun 2022 17:48:43 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 25G0m84q9029397, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 25G0m84q9029397
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 16 Jun 2022 08:48:08 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 16 Jun 2022 08:48:08 +0800
+Received: from localhost.localdomain (172.21.177.191) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 16 Jun 2022 08:48:07 +0800
+From:   Edward Wu <edwardwu@realtek.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        Edward Wu <edwardwu@realtek.com>, Tejun Heo <tj@kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] ata: libata: add qc->flags in ata_qc_complete_template tracepoint
+Date:   Thu, 16 Jun 2022 08:48:02 +0800
+Message-ID: <20220616004803.12145-1-edwardwu@realtek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220616001615.11636-1-edwardwu@realtek.com>
+References: <20220616001615.11636-1-edwardwu@realtek.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6000:18ad:0:0:0:0 with HTTP; Wed, 15 Jun 2022 17:46:23
- -0700 (PDT)
-In-Reply-To: <SEZPR06MB526945BC172186A13FA60B11E8A69@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20220607024942.811-1-frank.li@vivo.com> <CAKYAXd99NAbQP6m93P3bcjvWTN-T8Qy59DHJyfyTHqdH-7aWBQ@mail.gmail.com>
- <SEZPR06MB526945BC172186A13FA60B11E8A69@SEZPR06MB5269.apcprd06.prod.outlook.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Thu, 16 Jun 2022 09:46:23 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd_j-MAYP_8a3xEi2MmxZ9Po8t2di5_yi+7V1xXJuD006A@mail.gmail.com>
-Message-ID: <CAKYAXd_j-MAYP_8a3xEi2MmxZ9Po8t2di5_yi+7V1xXJuD006A@mail.gmail.com>
-Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIXSBleGZhdDogaW50b3JkdWNlIHNraXBfc3RyZWFtX2NoZQ==?=
-        =?UTF-8?B?Y2sgbW91bnQgb3B0?=
-To:     =?UTF-8?B?5p2O5oms6Z+s?= <frank.li@vivo.com>
-Cc:     "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.21.177.191]
+X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
+ RTEXMBS03.realtek.com.tw (172.21.6.96)
+X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/16/2022 00:26:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzYvMTUgpFWkyCAxMDoxODowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-06-10 22:07 GMT+09:00, =E6=9D=8E=E6=89=AC=E9=9F=AC <frank.li@vivo.com>=
-:
-> HI Namjae,
->
->> Still having problem on linux-exfat after recovering it using windows
->> chkdsk?
->
-> After repairing with the chkdsk tool on the windows platform, the current
-> file can be accessed normally on linux.
-> However, it can be accessed normally on the Windows platform itself, and =
-no
-> tools are required to repair it.
-> Imagine that if some users do not have a Windows environment and do not
-> understand repair tools, they
-> cannot access these files on Linux.
->
-> Why not just skip the stream entry like Windows does and allow access
-> without fixing it?
-If the name hash is not checked, file lookup performance will degrade.
-Probably you don't want the overall performance degrade for a few
-corrupted files. I suggest fixing it by fsck in exfatprogs before
-mounting. We are preparing repair function release in fsck to do that
-in next month.
+Add flags value to check the result of ata completion
 
-Thanks!
->
-> Thx,
-> Yangtao
->
+Fixes: 255c03d15a29 ("libata: Add tracepoints")
+Link: https://lkml.kernel.org/r/20220616001615.11636-1-edwardwu@realtek.com
+Signed-off-by: Edward Wu <edwardwu@realtek.com>
+---
+v2:
+- Add Fixes tag
+
+ include/trace/events/libata.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/trace/events/libata.h b/include/trace/events/libata.h
+index d4e631aa976f..6025dd8ba4aa 100644
+--- a/include/trace/events/libata.h
++++ b/include/trace/events/libata.h
+@@ -288,6 +288,7 @@ DECLARE_EVENT_CLASS(ata_qc_complete_template,
+ 		__entry->hob_feature	= qc->result_tf.hob_feature;
+ 		__entry->nsect		= qc->result_tf.nsect;
+ 		__entry->hob_nsect	= qc->result_tf.hob_nsect;
++		__entry->flags		= qc->flags;
+ 	),
+ 
+ 	TP_printk("ata_port=%u ata_dev=%u tag=%d flags=%s status=%s " \
+-- 
+2.17.1
+

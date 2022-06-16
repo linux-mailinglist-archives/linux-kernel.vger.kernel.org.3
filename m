@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237BF54EDC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FF454EDC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379322AbiFPXDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 19:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S1379267AbiFPXFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379320AbiFPXDh (ORCPT
+        with ESMTP id S1379122AbiFPXFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 19:03:37 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F556C1D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:03:34 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so3055289pjl.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:03:34 -0700 (PDT)
+        Thu, 16 Jun 2022 19:05:50 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782305F248;
+        Thu, 16 Jun 2022 16:05:49 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id i15so2443473plr.1;
+        Thu, 16 Jun 2022 16:05:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=wDHYazrSJbs5DQzniIUtQnffNw9K72mrEtU5mGnXyTM=;
-        b=CDhgd1tWWuBnt3ODMFgRWChX4ZlhHDlNvk/KAnZvEM2Uh/2LxA7JlQqCAmIaIJ62Uq
-         rjXr/O6k48kIcIKrhSGjKh010fJuX9FsZ1rt562IC6L5MxUV3swhFUMnabNLL65hn5aC
-         O930jLdTFS18cl69MGnuTRlHwpjEb15YQyeuu3kf3gijZfiKPFgA2/6NAd/Xq/LNyy9h
-         zTZMtfii0pTLVp0GC9cS6axH6lcZ27aHXQcLo4kMkovEhlsML1g7Mr140bcS+b5UGtEb
-         3nH6yHy10Jz8Uqv9yjX/uc/MFdPj1BroBrZCEIenEA71dKuCij6itLoQ5Ln6P+jrzm9F
-         ue0A==
+        bh=mHgod+Kwm8xVpSdotXQQvx7e6tmha0GKj/Bf2zOifHk=;
+        b=OXWRYmk3bowxbdyaVslq9VNcPeawn20YbaR1OPvyh0O7ygcQjUnHi5Qg61SiPX0GiD
+         00kM6ArXf8CqTpduim9SzIvSIBZca8RVcSQ4m7rFl9SEJL+3DW3oChYVuto32I+tfuFM
+         rPBpeQAXOPKzRk2RVhHs4VW2Ku4w8yfbvtIXnmHG+fak80AA9glfnvAnNGMa7BpQ7H8D
+         vwJnjbH0/tm/LaRdEIG+EE+7vrGCHG68A4gIXlRaINU8FaXyB/pCvIO4i2qK3csYJm/W
+         rLeXyiQVUJFDUHGh0WXdbXFyOFooWXsM3Wl3U+26BsH3+UBYtGIhgEMNISZerXdasd80
+         NaCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :mime-version:content-transfer-encoding;
-        bh=wDHYazrSJbs5DQzniIUtQnffNw9K72mrEtU5mGnXyTM=;
-        b=SPosz9EZh9AxomRIRGUnelTl9k9uyQfTgl1UGKXjOvP6DQ96wiaW0pxD0JA55Hq/9a
-         ZHf7ikfO5UL5N09754THIy3piawH81ANfvvLMoSH7z8vUslG9FRgqSDGqe3cF2tyF9WA
-         8WUIAGB4VxPA48X0GJxi37yigEoLgMFB1Qyr+RAl6bvYMnvjlq/+JNVuqZyZ/TqzXccF
-         KD99fOniCnlwHpjNUfXWYJHuGlYePIQZqDuWJImf1J97p+NV11XRl5I4vzRzhffqDJJI
-         VsLIxhKGNB+o57UKkive0afg2O6042Iks1sfeSlHHl9uh5gQe6pNgIUYiAllZqIgcRs0
-         qz5A==
-X-Gm-Message-State: AJIora9vFzy+Aw+Wh0uGoG2P9m8HjemINRFrboYYizFEBNF3Vm68KiFv
-        ONwIC9So6M/c2tL/BqTyzRyHl+Cd+Y2CRQ==
-X-Google-Smtp-Source: AGRyM1v6twEO75FBFVmu5dVRkWLbjc9Dpk9I3qAW4EUEVPN2f0MjYr+iMVrV7WSlrqlRKeASGwu5rQ==
-X-Received: by 2002:a17:902:e30c:b0:16a:2ee:c232 with SMTP id q12-20020a170902e30c00b0016a02eec232mr1288991plc.123.1655420613404;
-        Thu, 16 Jun 2022 16:03:33 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id x16-20020a17090a165000b001e667f932cdsm4291967pje.53.2022.06.16.16.03.31
+        bh=mHgod+Kwm8xVpSdotXQQvx7e6tmha0GKj/Bf2zOifHk=;
+        b=KlSbriLHBS0UY1b2A+vUlmXjiPPvEoUYsX0+hV8/w0y0I8estSsj38OgcF9M5LxMjb
+         mT+QXsIYX7lWEyT72nf6m/DquhJNe4l1caQ2SKrZeIG2AwqfcyA+bJxVF+aw0x3CyB7c
+         qmuqew33je78icN1T/TagtgS+XMwyxppcPA+f/M7D1fZl3SXFUEfbcGptP69ONPPfTaa
+         cuZpAARRL/dPPABMzCY22h3P//Y3hvCIJktS0AV/b48Rzk9h+OQBD52q0Yvn14HnjAFp
+         MUpPAyh90t1Y5szZPqH3Wy1OqiyscyyMCg8tHjG78XKubxQ5ElN7KBlW139bMRSBOvxX
+         oIsw==
+X-Gm-Message-State: AJIora+NBHE2ZXdouENWayCFgfUtwWiPinbeSKyiIwHZYbTaiX5Ce4/L
+        eQZ/tZoBj49VYBjyLsAo0TI=
+X-Google-Smtp-Source: AGRyM1uV6/odU4A50BOArugcTBNxGR1W4NDH3lx5sugfaP1Topmwxuko/J/qzy6expDqJmVv/wCQXw==
+X-Received: by 2002:a17:90b:1611:b0:1ec:6ce7:5e11 with SMTP id la17-20020a17090b161100b001ec6ce75e11mr2613639pjb.146.1655420748778;
+        Thu, 16 Jun 2022 16:05:48 -0700 (PDT)
+Received: from balhae.corp.google.com ([2620:15c:2c1:200:1253:816e:a3a1:fc8b])
+        by smtp.gmail.com with ESMTPSA id p48-20020a056a0026f000b0050dc7628184sm2321457pfw.94.2022.06.16.16.05.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 16:03:32 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 16:03:32 -0700 (PDT)
-X-Google-Original-Date: Thu, 16 Jun 2022 16:03:29 PDT (-0700)
-Subject:     Re: [PATCH v2 0/5] riscv: some svpbmt fixes
-In-Reply-To: <20220526205646.258337-1-heiko@sntech.de>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, mick@ics.forth.gr,
-        samuel@sholland.org, cmuellner@linux.com, philipp.tomsich@vrull.eu,
-        Christoph Hellwig <hch@lst.de>, heiko@sntech.de
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     heiko@sntech.de
-Message-ID: <mhng-55ae586c-07b7-4e6e-b695-6df8608b87d5@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 16 Jun 2022 16:05:48 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v2] perf test: Add ARM SPE system wide test
+Date:   Thu, 16 Jun 2022 16:05:46 -0700
+Message-Id: <20220616230546.1390813-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 13:56:41 PDT (-0700), heiko@sntech.de wrote:
-> Some additionals comments and notes from autobuilders received
-> after the series got applied, warranted some changes.
->
-> So this is a small collection of cleanups for the svpbmt v10 series.
->
-> changes in v2:
-> - add Guo's Review
-> - add patch dropping the use of function pointers in code
->   that can run before relocation
->
-> Heiko Stuebner (5):
->   riscv: drop cpufeature_apply_feature tracking variable
->   riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol
->   riscv: make patch-function pointer more generic in
->     cpu_manufacturer_info struct
->   riscv: fix dependency for t-head errata
->   riscv: remove usage of function-pointers from cpufeatures and t-head
->     errata
->
->  arch/riscv/Kconfig               |  9 ++++++--
->  arch/riscv/Kconfig.erratas       |  1 +
->  arch/riscv/errata/thead/errata.c | 38 ++++++++++----------------------
->  arch/riscv/kernel/alternative.c  | 18 +++++++--------
->  arch/riscv/kernel/cpufeature.c   | 37 +++++++++----------------------
->  5 files changed, 40 insertions(+), 63 deletions(-)
+In the past it had a problem not setting the pid/tid on the sample
+correctly when system-wide mode is used.  Although it's fixed now it'd
+be nice if we have a test case for it.
 
-IMO only three of these are actually fixes, the rest are cleanups.  I've 
-got ahead and put everything on a branch, with
+Cc: German Gomez <german.gomez@arm.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+* skip if system-wide record was failed
 
-    riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol
-    riscv: drop cpufeature_apply_feature tracking variable
-    riscv: fix dependency for t-head errata
+ tools/perf/tests/shell/test_arm_spe.sh | 28 +++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-first.  Those are on fixes, the whole thing is in for-next.
+diff --git a/tools/perf/tests/shell/test_arm_spe.sh b/tools/perf/tests/shell/test_arm_spe.sh
+index e59044edc406..962841a51f27 100755
+--- a/tools/perf/tests/shell/test_arm_spe.sh
++++ b/tools/perf/tests/shell/test_arm_spe.sh
+@@ -23,17 +23,20 @@ glb_err=0
+ cleanup_files()
+ {
+ 	rm -f ${perfdata}
++	rm -f ${perfdata}.old
+ 	exit $glb_err
+ }
+ 
+ trap cleanup_files exit term int
+ 
+ arm_spe_report() {
+-	if [ $2 != 0 ]; then
++	if [ $2 = 0 ]; then
++		echo "$1: PASS"
++	elif [ $2 = 2 ]; then
++		echo "$1: SKIPPED"
++	else
+ 		echo "$1: FAIL"
+ 		glb_err=$2
+-	else
+-		echo "$1: PASS"
+ 	fi
+ }
+ 
+@@ -85,5 +88,24 @@ arm_spe_snapshot_test() {
+ 	arm_spe_report "SPE snapshot testing" $err
+ }
+ 
++arm_spe_system_wide_test() {
++	echo "Recording trace with system-wide mode $perfdata"
++	perf record -o ${perfdata} -e arm_spe// -a \
++		-- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
++
++	if [ $? != 0 ]; then
++		arm_spe_report "SPE system-wide testing" 2
++		return
++	fi
++
++	perf_script_samples dd &&
++	perf_report_samples dd
++
++	err=$?
++	arm_spe_report "SPE system-wide testing" $err
++}
++
+ arm_spe_snapshot_test
++arm_spe_system_wide_test
++
+ exit $glb_err
+-- 
+2.36.1.476.g0c4daa206d-goog
 
-Thanks!

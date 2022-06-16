@@ -2,121 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C4954EC1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB80354EC13
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379111AbiFPVHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
+        id S1379147AbiFPVHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379084AbiFPVHM (ORCPT
+        with ESMTP id S1379026AbiFPVHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:07:12 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC7E61291;
-        Thu, 16 Jun 2022 14:06:52 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id h23so4007521lfe.4;
-        Thu, 16 Jun 2022 14:06:52 -0700 (PDT)
+        Thu, 16 Jun 2022 17:07:08 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E936A60D8E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:06:43 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d13so2205357plh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:06:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tXQDZ/38qZYh6K2LSUfy/ZlT8ca4F2f6CeQBxW8J2Rw=;
-        b=YDDhbkaybl0y166vNMC1zU/AMyxZSa1wcvpawfckZDS+0veCRECtb+eHxdFvjVPT7P
-         wO1LRRPLOuoTjxwgD5VEXxLr+NZ+EgeUi9NDjZRH01fXPmipDyk7/uF1wJN3kvtwk3/U
-         JfrA6OSvZfqAbZVajthuEb2rpTZia9iycWK7jiahkz0avp1ktbYECFxKartVglBoZgh1
-         0BHOZuj9t8wzYpytbCSWWNGDp036jHPTc1BBUjwa2vf1WDBcrD8kU3us7vSCzA4N+joz
-         1uysTJkCI43qnFz7mpV0Wqkai0Kz9yNHLfyqhrfzf/ymN3sVDjRqF1KRLJsSyvfovGZd
-         iZAg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VtmK4PlOvwmg8uG2yB4Iza9UeAeTmHfNh0gkImG1Z7Y=;
+        b=AfSPntI6oxl4+O84tcbZn9AlYby5A4XPDEpOw3VBVXQfEnkB5Zd+1/AnjwHEhI6tAW
+         2kpzxagrIGyEC5orssmUh3dmYlI2dcfJ3CddYCnZLFn5wPwvhC3TISHn1bu80xrXK6Dw
+         FAwg0Sz6bbeINYT2pNrE2zKzi7iItDE66Nb46/s5r3YaBXnFNhj0TmN0DKo/blsATQ4K
+         /+V34zlE/Gr9gawoF7DRfk3FnxT6iZf0CKNLBRwDI4SQLtlVUbqLmqsCOyIT8Fno+L/8
+         qvGNeJRjC9HmsTfE2nxHsmE1cDKUgQNg34dN8SQkqtgc818mkFNcRn0SJtBSVE+uZzE4
+         65gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tXQDZ/38qZYh6K2LSUfy/ZlT8ca4F2f6CeQBxW8J2Rw=;
-        b=z5VRDKCIk3GcVX4bXobZi1Atvby7AnMZQ0nNl8eyT4WWINdO3Bl65BQrGaBuFwcaGe
-         B/Cg82udQgMFanOl6kL3zb/Cz31eRx6bQN9Gk+PNS6+wXPSG7RXm2BCwnW7YBe6cRyGN
-         vgtUYI5P46TxVEE8uPo++QdvgB2o5fR/OVkYtyzU9/N7NU2JlykD2i3NAzV2mT8feiCK
-         u8477DM11j8tuTqcxIZwnb5xyrarOCVNM1DX7Ho/GdgS3yivWJTefDdH0q1XrBa/Kapr
-         OgJFk6MRL3N+TufGVz3Xkelk05EWflm80Vviy+g2L4yWl+WyXrzZ1ENrL5uLBQW7WyYN
-         KPTg==
-X-Gm-Message-State: AJIora9wnR9leR0QSRS6zu/Xa3TgxN7uzsxYoX/A7GaW8z7Nhw4DjPlx
-        OFduCXY7s2fqexwuW6yORBQhYa27nOxWJhuPEuU=
-X-Google-Smtp-Source: AGRyM1tunwARBCrCvdwXIujxrW/QSjMvLQ9m2XGDJxT+oiqV5+SW8+0Z9kjKeE1FSlj8rczzvaUAiVUFzlL41fLDXk0=
-X-Received: by 2002:a05:6512:1052:b0:479:1f92:13b4 with SMTP id
- c18-20020a056512105200b004791f9213b4mr3606425lfb.200.1655413610945; Thu, 16
- Jun 2022 14:06:50 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VtmK4PlOvwmg8uG2yB4Iza9UeAeTmHfNh0gkImG1Z7Y=;
+        b=vBmi6rRY9lC5XbOgFK7TQo8e5+0sx5r//A3O5FYLku9uPhv8Bi6UmK5DYcGPlKmfJu
+         4rbW8Mxak2US3J6T5C95w+1VKGbxqeD5w5vHSmyDGUha4QE5KXT7svv0q5dc0bZIGWR6
+         srUlz/QyDuGo64W6PG83hMnAxiwBLLF4916T0bdikvlHjTbOq9kGp6mLuG3F17XTjLan
+         RpCtw+cJG1w/VfrDrPCK1HwuVRiKhtZWOavD+YxCbsipZAPOw07MzaUbBuA74HI0ycQX
+         nOKxOE9YuwIJHPUsZ2uub8tu86hDK0e7B6xAZQkK7zvqziC1Xt11hYUVPk5N7WLmtxmW
+         HxrQ==
+X-Gm-Message-State: AJIora8xBzytHTxvw7Q6O9z/A+A6NXSfpBiSYix4nYj/gI4jw+pgc/In
+        kK60Q1QJnM0Z0EG8z8ZO4XM7Hw==
+X-Google-Smtp-Source: AGRyM1uoWZHt0T98ywktREBlYQc26uVL0feT2aArCGGme4dAjDJxMF+QrxIhVpQEzb94h1kNG0iEnw==
+X-Received: by 2002:a17:902:cec2:b0:166:4277:e0c0 with SMTP id d2-20020a170902cec200b001664277e0c0mr6288631plg.107.1655413603366;
+        Thu, 16 Jun 2022 14:06:43 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id c9-20020a62f849000000b00522d32a6a38sm2165252pfm.121.2022.06.16.14.06.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 14:06:43 -0700 (PDT)
+Message-ID: <f6ad5cef-22d8-307b-5c9b-acfd3e784093@linaro.org>
+Date:   Thu, 16 Jun 2022 14:06:41 -0700
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-6-tmaimon77@gmail.com>
- <CAK8P3a2CNxijmy0AO6NEfg=hxQZn5WxgQij4JgkTjDTfZZSScA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2CNxijmy0AO6NEfg=hxQZn5WxgQij4JgkTjDTfZZSScA@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Fri, 17 Jun 2022 00:06:40 +0300
-Message-ID: <CAP6Zq1h+PzkD1vjx787F_tbk30rAZHEkZp9uNUOmrFSd4gLO=g@mail.gmail.com>
-Subject: Re: [PATCH v2 05/20] watchdog: npcm_wdt: Add NPCM845 watchdog support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 01/15] dt-bindings: usb: Add Mediatek MT6370 TCPC
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, jic23@kernel.org,
+        lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-2-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613111146.25221-2-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 13/06/2022 04:11, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add Mediatek MT6370 TCPC binding documentation.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 
-On Wed, 8 Jun 2022 at 16:05, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >
-> > Add Nuvoton BMC NPCM845 watchdog support.
-> > The NPCM845 uses the same watchdog as the NPCM750.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
->
-> This one should no longer be needed if the timers are compatible with the
-> old ones and correctly described in the DT.
-by timers do you mean clocks?
->
->       Arnd
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
-
-Tomer
+Krzysztof

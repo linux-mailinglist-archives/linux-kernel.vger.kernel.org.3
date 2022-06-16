@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F8454DCBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5077A54DCB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359169AbiFPIVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
+        id S1359635AbiFPIU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359431AbiFPIU5 (ORCPT
+        with ESMTP id S229462AbiFPIUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:20:57 -0400
-Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 414855D672;
-        Thu, 16 Jun 2022 01:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=kdfWx
-        6XZzO9qni6lYYIV53hUL9pVC8liXgCxesDNue4=; b=fDdsfZSOIjmmMME9HNlGp
-        s3ZAOyD1rJd6nF/EL5bezm4dK64DttUz9gL3AfeqUsPeVyen774bO5c6T/SDB2bc
-        mpZU01Kl0/Bcm0E8R5zmORY058MsoCAoiKD56jemA6V1kN968Smea6aHeHB6EY4L
-        IIEHVZQgw/FZ9Xd90mEz30=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
- (Coremail) ; Thu, 16 Jun 2022 16:19:41 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Thu, 16 Jun 2022 16:19:41 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Stephen Boyd" <sboyd@kernel.org>, Conor.Dooley@microchip.com
-Cc:     jonathanh@nvidia.com, mturquette@baylibre.com,
-        pdeschrijver@nvidia.com, pgaikwad@nvidia.com,
-        thierry.reding@gmail.com, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH v2] clk: tegra: (clk-tegra30) Add missing
- of_node_put()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <20220616060037.5AEB8C34114@smtp.kernel.org>
-References: <20220616033622.3975621-1-windhl@126.com>
- <20220616060037.5AEB8C34114@smtp.kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Thu, 16 Jun 2022 04:20:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE7E5C840;
+        Thu, 16 Jun 2022 01:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4424B82292;
+        Thu, 16 Jun 2022 08:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60F48C3411B;
+        Thu, 16 Jun 2022 08:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655367616;
+        bh=dB/CPPMhNm1buUrV4IgV1CCH8HWEcDujPAHshjsbK04=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nCzhGbpDvd2LNSYKc2BtB7/N94nxXV17DzGact8Wx1iYSFSTYJk9/2HedKZYA/wEn
+         vLNIs1qRodYLq6KXei3EsrajIVEiPPXdEybjbx/EV8IYInvOOuII/D18mu4HhFZCfp
+         FH8gXMulbvzByI38ojJQGUoREtTDlNuWlVE37KB1Uhf2W3zIsQDYu2bLQ5AuzSXzY5
+         QWgdm+wLDkiflfM5CxT8c70O8uK25Vbvw20+RkKssrfh1aeIBR63L1/PR5JbUZiZCn
+         vFWp0SlspscG8/H5RZS9yGtEBWdST/9prIkc+v4RwIuNYekuyBnastmWt74LpflRrv
+         +58fOG1ASLZEA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3C581FD99FF;
+        Thu, 16 Jun 2022 08:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Message-ID: <1a776c99.5e5c.1816b98bfee.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GMqowABHTyef56pi0jA3AA--.10921W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGhQiF1-HZTyeegACsc
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next PATCH v2 1/2] net: ethernet: stmmac: add missing sgmii
+ configure for ipq806x
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165536761624.29035.5999130282955171127.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Jun 2022 08:20:16 +0000
+References: <20220614112228.1998-1-ansuelsmth@gmail.com>
+In-Reply-To: <20220614112228.1998-1-ansuelsmth@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKQXQgMjAyMi0wNi0xNiAxNDowMDozNSwgIlN0ZXBoZW4gQm95ZCIgPHNib3lkQGtlcm5l
-bC5vcmc+IHdyb3RlOgo+VGhlIHN1YmplY3Qgc2hvdWxkIG1hdGNoIGhpc3RvcmljYWwgc3ViamVj
-dHMKPgo+ICQgZ2l0IGxvZyAtLW9uZWxpbmUgLTMgLS0gZHJpdmVycy9jbGsvdGVncmEvY2xrLXRl
-Z3JhMzAuYwo+Cj5zaG93cyBtb3N0bHkgImNsazogdGVncmE6ICIuIENhbiB5b3UgYWxzbyBjb21i
-aW5lIHRoaXMgd2l0aCB0aGUgb3RoZXIKPnRlZ3JhIHBhdGNoPyBEb24ndCB0aGluayB3ZSBuZWVk
-IHR3byBwYXRjaGVzIGZvciBlc3NlbnRpYWxseSB0aGUgc2FtZQo+dGhpbmcuCj4KPlF1b3Rpbmcg
-TGlhbmcgSGUgKDIwMjItMDYtMTUgMjA6MzY6MjIpCj4+IEluIHRlZ3JhMzBfY2xvY2tfaW5pdCwg
-b2ZfZmluZF9tYXRjaGluZ19ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlCj4+IHBvaW50ZXIgd2l0
-aCByZWZjb3VudCBpbmNyZW1lbnRlZC4gV2Ugc2hvdWxkIHVzZSBvZl9ub2RlX3B1dCgpIHdoZW4K
-Pj4gdGhlIG5vZGUgcG9pbnRlciBpcyBub3QgdXNlZCBhbnltb3JlLgo+PiAKPj4gU2lnbmVkLW9m
-Zi1ieTogTGlhbmcgSGUgPHdpbmRobEAxMjYuY29tPgo+PiAtLS0KPj4gIGNoYW5nZWxvZzoKPj4g
-Cj4+ICB2MjogdXNlIHJlYWwgbmFtZSBmb3IgU29iCj4KPlRoYW5rcyEKPgo+PiAgdjE6IGZpeCBt
-aXNzaW5nIGJ1ZwoKU29ycnkgZm9yIG15IGZhdWx0LiBJIGhhdmUgYmVlbiBhZHZpc2VkIHRvIHVz
-ZSByZWFsIG5hbWUgYW5kIEkgcmVzZW5kIGEgUEFUQ0ggdjIgd2l0aCBteSByZWFsIG5hbWUsIGJ1
-dCByZWFsbHkgd2l0aCB0aGUgc2FtZSBwYXRjaCBjb2RlLgoKU28gaG93IGNhbiBJIHdpdGhkcmF3
-IHRoZSBmaXJzdCBwYXRjaCBvciByZXNlbmQgb3RoZXIgdGhpbmc/IEkgYW0gY29uZnVzZWQuIAoK
-Q2FuIHlvdSBoZWxwIG1lLCBDb25vcj8K
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Tue, 14 Jun 2022 13:22:27 +0200 you wrote:
+> The different gmacid require different configuration based on the soc
+> and on the gmac id. Add these missing configuration taken from the
+> original driver.
+> 
+> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  1 +
+>  .../ethernet/stmicro/stmmac/dwmac-ipq806x.c   | 93 +++++++++++++++----
+>  2 files changed, 78 insertions(+), 16 deletions(-)
+
+Here is the summary with links:
+  - [net-next,v2,1/2] net: ethernet: stmmac: add missing sgmii configure for ipq806x
+    https://git.kernel.org/netdev/net-next/c/9ec092d2feb6
+  - [net-next,v2,2/2] net: ethernet: stmmac: reset force speed bit for ipq806x
+    https://git.kernel.org/netdev/net-next/c/8bca458990dd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

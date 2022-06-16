@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06A654DF84
+	by mail.lfdr.de (Postfix) with ESMTP id 98D3F54DF83
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376589AbiFPKvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S1376549AbiFPKvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376484AbiFPKvo (ORCPT
+        with ESMTP id S1376529AbiFPKvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:51:44 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4337D5DE48;
-        Thu, 16 Jun 2022 03:51:43 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25GApV0d091863;
-        Thu, 16 Jun 2022 05:51:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655376691;
-        bh=AplBO2dgFdhgppnaG/hf43xYN+u1cgW5+n0ebc5nfVE=;
-        h=From:To:CC:Subject:Date;
-        b=kOEJ1RS3CrrLucyBb2DVRA8xRZHOrfUyNP6A3oEmzvifQsSdVJaBHcUcECoTqASQs
-         Omh3yNa7mxSOQDlEiwz747BBNU+M6z8xenBboo75itnCtJaxLDKazKKYF1Uji/NzM4
-         Fi8W0RAv513oGJp39FXzAtiGikrng4daNgdY4TOc=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25GApV3A010184
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Jun 2022 05:51:31 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 16
- Jun 2022 05:51:31 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 16 Jun 2022 05:51:31 -0500
-Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25GApOXS018038;
-        Thu, 16 Jun 2022 05:51:26 -0500
-From:   Matt Ranostay <mranostay@ti.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Matt Ranostay <mranostay@ti.com>, Marc Zyngier <maz@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j721s2: fix overlapping GICD memory region
-Date:   Thu, 16 Jun 2022 03:51:12 -0700
-Message-ID: <20220616105112.289719-1-mranostay@ti.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 16 Jun 2022 06:51:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4B85DE65;
+        Thu, 16 Jun 2022 03:51:39 -0700 (PDT)
+X-UUID: 9b50985884a84c46adb1bdf62b903f58-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:d6659d84-6966-4c58-b866-1cd65f7fccde,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:d6659d84-6966-4c58-b866-1cd65f7fccde,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:4e537cf6-e099-41ba-a32c-13b8bfe63214,C
+        OID:37c0074fa499,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9b50985884a84c46adb1bdf62b903f58-20220616
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 244618540; Thu, 16 Jun 2022 18:51:32 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Jun 2022 18:51:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jun 2022 18:51:31 +0800
+Message-ID: <bd0183b088c4c2849837f49b4b35b26d9079ac5f.camel@mediatek.com>
+Subject: Re: [PATCH v11 12/12] drm/mediatek: dpi: Add matrix_sel helper
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 16 Jun 2022 18:51:31 +0800
+In-Reply-To: <de65caa980c270e4dedcf134d45185d41cd4c0ae.camel@mediatek.com>
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+         <20220613064841.10481-13-rex-bc.chen@mediatek.com>
+         <de65caa980c270e4dedcf134d45185d41cd4c0ae.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,38 +72,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GICD region was overlapping with GICR causing the latter to not map
-successfully, and in turn the gic-v3 driver would fail to initialize.
+On Tue, 2022-06-14 at 14:20 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
+> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > 
+> > Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
+> > register depending on the color format.
+> 
+> Why set DPI_MATRIX_SET? New feature or bug fix? What does this matrix
+> work for?
+> 
+> Regards,
+> CK
+> 
 
-This issue was hidden till commit 2b2cd74a06c3 ("irqchip/gic-v3: Claim iomem resources")
-replaced of_iomap() calls with of_io_request_and_map() that internally
-called request_mem_region().
+Matrix selection is a new feature for both dpi and dpintf of MT8195.
+I will add this in next version.
 
-Respective console output before this patchset:
-
-[    0.000000] GICv3: /bus@100000/interrupt-controller@1800000: couldn't map region 0
-
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Nishanth Menon <nm@ti.com>
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-index be7f39299894..19966f72c5b3 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-@@ -33,7 +33,7 @@ gic500: interrupt-controller@1800000 {
- 		ranges;
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
--		reg = <0x00 0x01800000 0x00 0x200000>, /* GICD */
-+		reg = <0x00 0x01800000 0x00 0x100000>, /* GICD */
- 		      <0x00 0x01900000 0x00 0x100000>, /* GICR */
- 		      <0x00 0x6f000000 0x00 0x2000>,   /* GICC */
- 		      <0x00 0x6f010000 0x00 0x1000>,   /* GICH */
--- 
-2.36.1
+> > 
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 21 +++++++++++++++++++++
+> >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
+> >  2 files changed, 24 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index 9668bd5dd14a..dc355a512963 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -387,6 +387,25 @@ static void mtk_dpi_config_disable_edge(struct
+> > mtk_dpi *dpi)
+> >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+> > EDGE_SEL_EN);
+> >  }
+> >  
+> > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi, enum
+> > mtk_dpi_out_color_format format)
+> > +{
+> > +	u32 matrix_sel = 0;
+> > +
+> > +	switch (format) {
+> > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+> > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+> > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
+> > +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+> > +		if (dpi->mode.hdisplay <= 720)
+> > +			matrix_sel = 0x2;
+> > +		break;
+> > +	default:
+> > +		break;
+> > +	}
+> > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+> > INT_MATRIX_SEL_MASK);
+> > +}
+> > +
+> >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+> >  					enum mtk_dpi_out_color_format
+> > format)
+> >  {
+> > @@ -394,6 +413,7 @@ static void mtk_dpi_config_color_format(struct
+> > mtk_dpi *dpi,
+> >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+> >  		mtk_dpi_config_yuv422_enable(dpi, false);
+> >  		mtk_dpi_config_csc_enable(dpi, true);
+> > +		mtk_dpi_matrix_sel(dpi, format);
+> >  		if (dpi->conf->swap_input_support)
+> >  			mtk_dpi_config_swap_input(dpi, false);
+> >  		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> > @@ -401,6 +421,7 @@ static void mtk_dpi_config_color_format(struct
+> > mtk_dpi *dpi,
+> >  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+> >  		mtk_dpi_config_yuv422_enable(dpi, true);
+> >  		mtk_dpi_config_csc_enable(dpi, true);
+> > +		mtk_dpi_matrix_sel(dpi, format);
+> >  		if (dpi->conf->swap_input_support)
+> >  			mtk_dpi_config_swap_input(dpi, true);
+> >  		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > index f7f0272dbd6a..96c117202d0d 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > @@ -230,4 +230,7 @@
+> >  #define EDGE_SEL_EN			BIT(5)
+> >  #define H_FRE_2N			BIT(25)
+> >  
+> > +#define DPI_MATRIX_SET		0xB4
+> > +#define INT_MATRIX_SEL_MASK	(0x1F << 0)
+> > +
+> >  #endif /* __MTK_DPI_REGS_H */
+> 
+> 
 

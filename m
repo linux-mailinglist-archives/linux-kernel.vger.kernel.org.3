@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5C354ED01
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F307954ED02
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378619AbiFPWBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S1378652AbiFPWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiFPWBs (ORCPT
+        with ESMTP id S232277AbiFPWCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:01:48 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5545EDE1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:01:47 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso6283621pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pZ7qfgE5IBdgVJoYRaIAeb/PTgCf5tyJzbso75rd1uI=;
-        b=k0lz/NPZslwwsj5hNhTXgJmCJc1/gk966a/N39al5fRU9+aWzuvv+uX12zZvGMESOd
-         v1deIduQNQKgRpXO/cVx0LwJWlV6/9EajzD10KwaQC0m283642skovLdq6Nn6I53nyeL
-         DaQSuA5qEmcaaMkX8i1xyASa4sZc3x+1jAppw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pZ7qfgE5IBdgVJoYRaIAeb/PTgCf5tyJzbso75rd1uI=;
-        b=0uu03hasovnEbTe5TRoOspk/CE7bF5RioRH2IPc/zGH08jjVnvLq4CImCb4SfGr/di
-         ZcWm30OUxX4e91TYTmWgNDtBsxCanPn5rfhHs5DdNQfV9ownUgd4L8z4isZyQ8wjFeMY
-         qBuOzVKRIrEJfhLVhdLkiUtoEKRjD8jGwIrOaP359256j9R8KsK8cRvGmD5oMas6XLnC
-         hjZ8CBY1vcKnlucEQkQsEnmP2sztbqJeNWXu2vX2IPmnycyuKtleI/k5co2aRwK/0Ucj
-         JBlv4RGwyo74SVMz+vz6JPxEwmLlA/4s2FhZPNyXKPRghPRbOoJCHZmraFPxlW+J/nar
-         9X6Q==
-X-Gm-Message-State: AJIora+paBa9cqavrUbDXJ83Bb+f/axIfKo+4VzKvyirBVklOeLqn07Y
-        M0iekE2s7Uw9JgjcQCwIg1mBTA==
-X-Google-Smtp-Source: AGRyM1uWd502I9tsE3/R8dLJJC02mibO8hea17EzLupG+bUPnb/MbeucBjnsf/2zY1dHV9c38ZiWVA==
-X-Received: by 2002:a17:90b:48cf:b0:1e8:789c:4a9c with SMTP id li15-20020a17090b48cf00b001e8789c4a9cmr18403261pjb.98.1655416906449;
-        Thu, 16 Jun 2022 15:01:46 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:4ef5:7e3b:63ba:fc4])
-        by smtp.gmail.com with UTF8SMTPSA id d4-20020a62f804000000b00518c3307266sm2302542pfh.170.2022.06.16.15.01.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:01:46 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 15:01:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YquoSMiQS+RG8rOM@google.com>
-References: <20220609192000.990763-1-mka@chromium.org>
- <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com>
- <YqpprpUHmlD62YzI@google.com>
- <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
- <Yqub17iT4O7aqFMi@google.com>
- <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
+        Thu, 16 Jun 2022 18:02:13 -0400
+Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F755F244;
+        Thu, 16 Jun 2022 15:02:00 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 0AD845A112B;
+        Thu, 16 Jun 2022 22:01:57 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 567C65A1148;
+        Thu, 16 Jun 2022 22:01:56 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655416916; a=rsa-sha256;
+        cv=none;
+        b=gAlM3pEvYGb+PcujE0VemFbVMF7b9AI7F4yX8jjgxtg+p2s4dkNsteo/9Hgve8rZK+w5Jg
+        SoakfLY0MNysMbCRQ7QdmOMdT/KbClv9+KDu1xT1RSZ+jdiIFIFQowlLNLoOH7SDzbckKA
+        kWifN3WF4/d5Ok0RkFureOGRwiaOXZCHe8+7hLo0yMJcxgjoYjgt4CWIongQ17ET5ZmrBW
+        eCs7knRQ6nH1ovAAUigtBTpht/66aOwobLY7ptROXZvKkcmIS3/RArcVcCIyGVZySNET7f
+        N0TQt1dULZ0wIfLCzSE7PkO2QHq0jjchL0Wn4edi04g3KTAPMC3+hQTv04yo6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1655416916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=jaV1cEWlUUbavbepQJk3fTL3IGGiH6h9qUmoQS9HXgc=;
+        b=XqtOTKf0Jl+v31ljUedtvGEON7VzggbiBDM992L29xZkqdXIJoEm4j3AZZ8755lkrr6VXm
+        +dfvOb2hQ2PivUh8OjKn91n+ErnXo8OLgoRjvdGoOOYVQ3izG0ETMvCpD7RaqbVBoc2gMo
+        aTGV9KuZqDq8aWbRts/zS3MEwDNd9/8pF1cYg5D7/zmmdU0GJIMHxWfX49d3e3mavGOBm8
+        2KO2ATWoXfhYgRKo8bmBPGGB2nWXvHZ+F+evdHjwPs3deDWUEs3bNiO7nbPCmvL51q5unK
+        0YM54a4fof3loVia+1IGxoKprrJPxX8EcDzd5EkrdHUtjdgt1eSh7kXkFrh8/w==
+ARC-Authentication-Results: i=1;
+        rspamd-848669fb87-bl2b8;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Lonely-Shoe: 2eaf72531c924813_1655416916834_3785307436
+X-MC-Loop-Signature: 1655416916834:136269040
+X-MC-Ingress-Time: 1655416916834
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.98.242.216 (trex/6.7.1);
+        Thu, 16 Jun 2022 22:01:56 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LPGNg2kWPzCY;
+        Thu, 16 Jun 2022 15:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1655416916;
+        bh=jaV1cEWlUUbavbepQJk3fTL3IGGiH6h9qUmoQS9HXgc=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=aqRmcH8KzSI7ZwcAWtBdznhQpmvxDDyeIXi2DuM4bW2swPLHqF53Q751KOqUOC1PC
+         zv0ih4Uk84EDRPvqObVwxs87fTA3bqoJnbTv6FOaQPwbIUWrhdRvkzRRIVnLzDePY1
+         7C+MWSFhYJ9sYRsDNIpBiE1YnJ7CA28xwt9LxKf/Dy2/Y3AZ3POE7nyo/GPswkla7M
+         cFjuSIJTh8wIpBjPi55yVACug6TqQqgUOLoM1JW9K+08CeNnD1SMTdBrfYsVhIsTyD
+         xzSWVg4xSM4QUnGl0yahe319uK5xsKYJhfviO7t04Upt5e3aQz/yf8T/+Ax9nLto8l
+         vE8UduBmSN/CA==
+Date:   Thu, 16 Jun 2022 14:47:40 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "a.manzanares@samsung.com" <a.manzanares@samsung.com>
+Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
+Message-ID: <20220616214740.7pyjagx3gosni7mw@offworld>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+ <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+ <20220616194334.pvorvoozt4rrzr66@offworld>
+ <20220616203400.GA1529208@alison-desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220616203400.GA1529208@alison-desk>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,152 +107,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 02:28:38PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Jun 16, 2022 at 2:08 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > On Thu, Jun 16, 2022 at 01:12:32PM -0700, Doug Anderson wrote:
-> > > Hi,
-> > >
-> > > On Wed, Jun 15, 2022 at 4:22 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > >
-> > > > > > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
-> > > > > > +{
-> > > > > > +       int i;
-> > > > > > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
-> > > > > > +       struct device_node *np, *npc;
-> > > > > > +       struct platform_device *pdev = NULL;
-> > > > > > +       struct pdev_list_entry *pdle;
-> > > > > > +
-> > > > > > +       if (!parent_hub->dev.of_node)
-> > > > > > +               return;
-> > > > > > +
-> > > > > > +       for (i = 1; i <= parent_hub->maxchild; i++) {
-> > > > > > +               np = usb_of_get_device_node(parent_hub, i);
-> > > > > > +               if (!np)
-> > > > > > +                       continue;
-> > > > > > +
-> > > > > > +               if (!of_is_onboard_usb_hub(np))
-> > > > > > +                       goto node_put;
-> > > > > > +
-> > > > > > +               npc = of_parse_phandle(np, "companion-hub", 0);
-> > > > > > +               if (npc) {
-> > > > > > +                       /*
-> > > > > > +                        * Hubs with companions share the same platform device.
-> > > > > > +                        * Create the plaform device only for the hub that is
-> > > > > > +                        * connected to the primary HCD (directly or through
-> > > > > > +                        * other hubs).
-> > > > > > +                        */
-> > > > > > +                       if (!usb_hcd_is_primary_hcd(hcd)) {
-> > > > > > +                               of_node_put(npc);
-> > > > > > +                               goto node_put;
-> > > > > > +                       }
-> > > > > > +
-> > > > > > +                       pdev = of_find_device_by_node(npc);
-> > > > > > +                       of_node_put(npc);
-> > > > > > +               } else {
-> > > > > > +                       /*
-> > > > > > +                        * For root hubs this function can be called multiple times
-> > > > > > +                        * for the same root hub node (the HCD node). Make sure only
-> > > > > > +                        * one platform device is created for this hub.
-> > > > > > +                        */
-> > > > > > +                       if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
-> > > > > > +                               goto node_put;
-> > > > >
-> > > > > I don't understand the "else" case above. What case exactly are we
-> > > > > handling again? This is when:
-> > > > > * the hub is presumably just a 2.0 hub since there is no companion.
-> > > > > * our parent is the root hub and the USB 2.0 hub we're looking at is
-> > > > > not the primary
-> > > >
-> > > > The 'else' case can be entered for hubs connected to a root hub or to another
-> > > > hub further down in the tree, but we bail out only for first level hubs.
-> > > >
-> > > > > ...but that doesn't make a lot of sense to me? I must have missed something...
-> > > >
-> > > > It's not super-obvious, this bit is important: "this function can be called
-> > > > multiple times for the same root hub node". For any first level hub we only
-> > > > create a pdev if this function is called on behalf of the primary HCD. That
-> > > > is also true of a hub connected to the secondary HCD. We only want to create
-> > > > one pdev and there is supposedly always a primary HCD.
-> > > >
-> > > > Maybe it would be slightly clearer if the function returned before the loop
-> > > > if this condition is met.
-> > >
-> > > I guess I'm still pretty confused. You say "For root hubs this
-> > > function can be called multiple times for the same root hub node".
-> > > Does that mean that the function will be called multiple times with
-> > > the same "parent_hub", or something else.
-> >
-> > It is called with a different "parent_hub", however for root hubs the
-> > DT node is the same for both root hubs (it's the DT node of the
-> > controller since there are no dedicated nodes for the root hubs).
-> >
-> > Just to make sure this isn't the source of the confusion: the root hubs
-> > are part of the USB controller, not 'external' hubs which are directly
-> > connected to the controller. I call the latter 'first level hubs'.
-> >
-> > > Unless it's called with the same "parent_hub" then it seems like if
-> > > the USB device has a device tree node and that device tree node is for
-> > > a onboard_usb_hub and there's no companion node then we _always_ want
-> > > to create the platform device, don't we? If it is called with the same
-> > > "parent_hub" then I'm confused how your test does something different
-> > > the first time the function is called vs. the 2nd.
-> >
-> > Let's use an adapted trogdor DT with only a USB 2.x hub as an example:
-> >
-> > usb_1_dwc3 {
-> >          dr_mode = "host";
-> >          #address-cells = <1>;
-> >          #size-cells = <0>;
-> >
-> >          /* 2.x hub on port 1 */
-> >          usb_hub_2_x: hub@1 {
-> >                  compatible = "usbbda,5411";
-> >                  reg = <1>;
-> >                  vdd-supply = <&pp3300_hub>;
-> >          };
-> > };
-> >
-> > 1st call: the 'parent_hub' corresponds to the USB 3.x root hub of
-> > usb_1_dwc3, the DT node of the hub is 'usb_1_dwc3'. The function
-> > iterates over the ports, finds usb_hub_2_x, enters the else branch
-> > (no companion hub), checks that the function was called on behalf
-> > of the primary controller and creates the pdev.
-> >
-> > 2nd call: the 'parent_hub' corresponds to the USB 2.x root hub of
-> > usb_1_dwc3, the DT node of the hub is also 'usb_1_dwc3'. The function
-> > iterates over the ports, finds usb_hub_2_x, enters the else branch
-> > (no companion hub), sees that it is not called on behalf of the
-> > primary controller and does not create a second (unnecessary) pdev.
-> >
-> > Is it clearer now?
-> 
-> Ah, I get it now! Sorry for being so dense...
+On Thu, 16 Jun 2022, Alison Schofield wrote:
+>I'm headed in this direction -
 
-No worries, it's certainly not obvious and probably my commentary could
-have been clearer.
+I like these interfaces, btw.
 
-> So like this:
+>cxl list --media-errors -m mem1
+>	lists media errors for requested memdev
+
+But in this patchset you're only listing for persistent configurations.
+So if there is a volatile partion, or the whole device is volatile,
+this would not consider that.
+
+So unless I'm missing something, we need to consider ram_range as well.
+
+>cxl list --media-errors -r region#
+>	lists region errors with HPA addresses
+>	(So here cxl tool will collect the poison for all the regions
+>	 memdevs and do the DPA to HPA translation)
+
+I was indeed thinking along these lines. But similar to the above,
+the region driver also has plans to enumarate volatile regions
+configured by BIOS.
+
 >
-> Root hubs (those hubs with no parent) are all created with the same
-> device_node, the one for the controller itself. We don't want to
-> iterate through the same children multiple times, so we bail right
-> away if we're detect that `parent_hub` is a root hub and we're not on
-> the primary HCD.
+>To answer your question, I wasn't thinking of limiting
+>the range within the memdev, but certainly could. And if we were
+>taking in ranges, those ranges would need to be checked.
 
-yep
+My question was originally considering poisoning only within pmem DPA
+ranges, but now I'm wondering if all this also applies equally to volatile
+parts as well... Reading the spec I interpret both, but reading the
+T3 Memory Device Software Guide '2.13.19' it only mentions persistent
+capacity.
 
-> For all other cases the primary and secondary controllers have distinct
-> device_nodes.
+>
+>$cxl list --media-errors -m mem1 --range-start=  --range-end|len=
 
-You probably mean that all non-root hubs have distinct nodes, so for these
-the function is only called once.
+I figure this kind of like the above with regions being very arbitrary
+and dynamic.
 
-> I guess in theory that test could go before the "companion-hub" test,
-> though I don't see any case where it truly matters...
+>Now, if I left the sysfs interface as is, the driver will read the
+>entire poison list for the memdev and then cxl tool will filter it
+>for the range requested.
+>
+>Or, maybe we should implement in libcxl (not sysfs), with memdev and
+>range options and only collect from the device the range requested.
 
-Yeah, I'm still wondering whether it would be slightly less confusing to
-bail before the loop (besides saving a few cycles), it would eliminate
-the conflation with the 'companion-hub' check.
+I wonder if the latter may be the better option considering that always
+scanning the entire memdev would cause unnecessary media scan wait times,
+specially for large capacities.
+
+Thanks,
+Davidlohr

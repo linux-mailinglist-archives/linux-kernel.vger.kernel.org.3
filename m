@@ -2,112 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AA554E22C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428D654E231
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377078AbiFPNjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S1377169AbiFPNk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377132AbiFPNjB (ORCPT
+        with ESMTP id S1377129AbiFPNkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:39:01 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36EC2B251
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:39:00 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id z17so1544839pff.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:39:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tZJ0udOOwaCxWMXlTkBG0pv6kYWe5fFc5cXr8AFWGxw=;
-        b=IwB4vF+O7bkw0gmnipzROvuYX3jurvUS9fS3KCU/sdTK5DVzRyzIRSso7yMWQoR4XB
-         +Ly595kBXCxhOfpHUDyAuLED/Td18kNYUEs6tzy2QG/BQb9uh5ederuqiMvkM0hVkDPx
-         SfKvDeJfQDtbX0O0Mt57c/vkA5TO+7QYEtpRHBUcqW8tNQ9p0cgQt7NNm69X5UgNvq0b
-         ZqK7E7hlY9kvnStImocycSZF3pBAgUAqcgarP02SUIQS3uM4BQFX8Jg7sBxjf8W53zxB
-         YCPn7MuPyS4SMinubCY6953K6Qe+2cYsTo6UuP4BkvGxHlfxc9stUYIJFUq72+T/2o0Y
-         TFKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tZJ0udOOwaCxWMXlTkBG0pv6kYWe5fFc5cXr8AFWGxw=;
-        b=bPLshLSbBHDdIs+774tZI0xv6p1cZyRj3eEJEJoe3rM5Qu4vWK49H4XiG+1mzToUYI
-         w5eL/AePE15uvnmB+yHM4kbjNg0Ger7AFWgc6b7xgeNNjgsq0T0Etj6A8jNINbY0DYmm
-         h7taPQC+vkDUePPDFUpqT5HaZhV4EiF6MlvvR7WAGDSox6JQ9m0o/eFb9TIWEqr8LFxm
-         E+M2H6YXfU+YyGzUG1W+rI+betj4irqhmx9sIZC+pChRyOQ8uvgHlvkmXEHzUmiHUSkB
-         LuoIy39y+8/a6BmmfwSo5YewyfaaLcUvbkc7lb4ZgbGkZVNo9a8D4oCvf6+vEjFH/QhO
-         tbng==
-X-Gm-Message-State: AJIora8s7/UmpP0Pn1DN9QGpiFfCtPNUZFfPHdI5ndOzLKN9utk3gLzO
-        Iv2IZh+/w85D+2dhAtarOzyVZw==
-X-Google-Smtp-Source: AGRyM1s1cA2evr96a50L5BABFDORqGyFaQ17SBTfpLNuKCJK5lJgbJW8qW9c08KC/QyKvvh+ZdCv8w==
-X-Received: by 2002:a63:3e0b:0:b0:40c:42db:6601 with SMTP id l11-20020a633e0b000000b0040c42db6601mr161415pga.586.1655386740360;
-        Thu, 16 Jun 2022 06:39:00 -0700 (PDT)
-Received: from [172.20.0.255] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id x16-20020a17090a165000b001e667f932cdsm3822017pje.53.2022.06.16.06.38.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 06:39:00 -0700 (PDT)
-Message-ID: <d3432cce-079e-3d6d-91df-6da10bd69d08@linaro.org>
-Date:   Thu, 16 Jun 2022 06:38:56 -0700
+        Thu, 16 Jun 2022 09:40:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5122AE19
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD5A561D07
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:40:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A112C34114;
+        Thu, 16 Jun 2022 13:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655386822;
+        bh=4bEH/kbG55Y08Mp86j28vOeWevK1UpmrmH0W1NDUr5s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=i+FjDDLImPY9kbXcBjiL4PtjSIIyZY0xOkdtkqPQxxC6Hnh0JkAU1h7bKGUdYRZWo
+         6fjgEhNYlYFnPZLmWuHMqILi0/U11oAd7otPjbZBtbE3j00U+56i8vMmI9+F2E27S9
+         erK9ShSIGPGSOxwff2Y3/nuAgFQs7Pd/3AhFDNbLr7E6nE+9oZTS5FG6gnggOvufns
+         4wOFBNGB3JZVij/THG44H6RNjCvXRa2BAVeOLmig8LfAxyXPJYozB2WKCT8fopXleA
+         sIMDVwmERaS/E27AvNV47/VZE0X2xOtUsXOUoCBa3JwMm9hvBwpBCMtSjfkUFQ+yyW
+         TKRqL3eKOh8VA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B1C135C0546; Thu, 16 Jun 2022 06:40:21 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 06:40:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marco Elver <elver@google.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, dvyukov@google.com
+Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/pmladek.2022.06.15a
+ 133/140] vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to
+ __kasan_check_read() leaves .noinstr.text section
+Message-ID: <20220616134021.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202206160411.v3iL3YC0-lkp@intel.com>
+ <20220615204039.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220615211717.GA972937@paulmck-ThinkPad-P17-Gen-1>
+ <CANpmjNMswUJhqfttxZGbkfN7X5d5FLiS1yPXzzGDivLtWDB9=g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for
- NPCM8XX
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-13-tmaimon77@gmail.com>
- <add025b6-c622-b204-d39e-67b31878d37f@linaro.org>
- <CAP6Zq1iDbB+X5QPE4Nsqk4nV41bZiVzQZExS1pQTuKEBz-iYew@mail.gmail.com>
- <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
- <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
- <e6e478a5-9080-fb2f-9ccd-2490cdfab4c7@linaro.org>
- <CAP6Zq1gy=rj-wyqqNQF+Pt1dtHsf+90AnTGTqt-v9madj8tfGA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1gy=rj-wyqqNQF+Pt1dtHsf+90AnTGTqt-v9madj8tfGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMswUJhqfttxZGbkfN7X5d5FLiS1yPXzzGDivLtWDB9=g@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -116,49 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2022 06:24, Tomer Maimon wrote:
-> Hi Krzysztof,
+On Thu, Jun 16, 2022 at 10:19:18AM +0200, Marco Elver wrote:
+> On Wed, 15 Jun 2022 at 23:17, Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Jun 15, 2022 at 01:40:39PM -0700, Paul E. McKenney wrote:
+> > > On Thu, Jun 16, 2022 at 04:26:16AM +0800, kernel test robot wrote:
+> > > > tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/pmladek.2022.06.15a
+> > > > head:   0ba7324b44282870af740a5a121add62c7f5f730
+> > > > commit: db21b02f8044e812f8a5e3811f602409290e3ede [133/140] context_tracking: Convert state to atomic_t
+> > > > config: x86_64-randconfig-r003-20220516 (https://download.01.org/0day-ci/archive/20220616/202206160411.v3iL3YC0-lkp@intel.com/config)
+> > > > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > > > reproduce (this is a W=1 build):
+> > > >         # https://github.com/ammarfaizi2/linux-block/commit/db21b02f8044e812f8a5e3811f602409290e3ede
+> > > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> > > >         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/pmladek.2022.06.15a
+> > > >         git checkout db21b02f8044e812f8a5e3811f602409290e3ede
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> > > >
+> > > > If you fix the issue, kindly add following tag where applicable
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > >
+> > > > All warnings (new ones prefixed by >>):
+> > > >
+> > > > >> vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to __kasan_check_read() leaves .noinstr.text section
+> > > > >> vmlinux.o: warning: objtool: __ct_user_enter+0x7f: call to __kasan_check_read() leaves .noinstr.text section
+> > >
+> > > Marco, Dmitry, my guess is that this is due to the ct->active check in
+> > > both functions.  Are we supposed to do something to make this sort of
+> > > thing safe for KASAN?
+> >
+> > This time actually CCing Marco and Dmitry...
 > 
-> On Wed, 15 Jun 2022 at 20:03, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 13/06/2022 02:25, Tomer Maimon wrote:
->>> Hi Krzysztof,
->>>
->>> Thanks for your clarification.
->>>
->>> We can remove the dt-binding file and use numbers in the DTS,
->>> appreciate if you can answer few additional questions:
->>> 1. Do you suggest adding all NPCM reset values to the NPCM reset
->>> document or the reset values should describe in the module
->>> documentation that uses it?
->>
->> What is "NPCM reset document"? Are these reset values anyhow different
->> than interrupts or pins?
-> No, they represent the same values.
+> It's due to the atomic_read()s within the noinstr function. Within
+> noinstr you can use arch_atomic_read() to avoid the instrumentation.
 
+Thank you, will fix!
 
-We do not document in the bindings actual pin or interrupt numbers...
-
->>
->>> 2. Some of the NPCM7XX document modules describe the reset value they
->>> use from the dt-binding for example:
->>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/nuvoton%2Cnpcm750-adc.yaml#L61
->>
->> This is NPCM750
->>
->>> If we remove the NPCM8XX dt-binding file should we describe the
->>> NPCM8XX values in the NPCM-ADC document file?
->>
->> What is NPCM-ADC document file? What do you want to describe there?
->> Again - how is it different than interrupts?
-> It is not different from the interrupts.
-> I will remove the dt-binding reset include file, the reset property
-> will use numbers and not macro's.
-
-I have no clue what are you referring now... This is NPCM8xx and it has
-no binding header with reset values. What to remove then?
-
-
-Best regards,
-Krzysztof
+							Thanx, Paul

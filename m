@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983F354E595
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE7154E59A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377753AbiFPPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S1377826AbiFPPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiFPPDL (ORCPT
+        with ESMTP id S1377782AbiFPPDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:03:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82686B4A1;
-        Thu, 16 Jun 2022 08:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=eXP8JImYusYVmz1XFgz6F/idOIpZUqokxeO9uXWtnWI=; b=KRUEUBUyuLXtfTp3+c4njGOSw9
-        vEDot6VYfqIJ01TjLkccAS9FePTHekgVapd/ZzYWPmXEXA+RSFIUCXgcE4i50W6m4fCnG86csGQyX
-        2fPfw/RqUdF4HEmx4JlxDoLwTB0EWagiVnntZpQaqWknDkJxM4E1QP0tjaadRQit0B1awN3dL+OZu
-        ZsZePFuAxZdy2RY5zt1kIpOlK2HQCMVQRqiaBTPCUQZRHL01dW8Ib9Xq+0BcfW1mwxgzWyFa88QqN
-        FSAPYfcU9mx5op4/SWDy3jKI0BU4lwAqlSxpSWdiQOCvm8mzCemKd14GlH1PVzlSGikdp93WSV3Ok
-        ZbnXZCJA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1r0x-008RS8-4P; Thu, 16 Jun 2022 15:02:32 +0000
-Message-ID: <fb8e7e35-7f26-15bc-9fbb-2949fc80a18b@infradead.org>
-Date:   Thu, 16 Jun 2022 08:02:22 -0700
+        Thu, 16 Jun 2022 11:03:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D334248FC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655391801;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sU1/eCcg6yRW4nibZ27Ei/SlX0WtSksIdirbQsLBVsA=;
+        b=hojGSdSyaK1vsJTr71s5pvf2J+zVRVXOrMrr2YivsELWg2f2p3sAX5HC7Thh5C4K2aTHhG
+        Ns2CX+EhU0mvIGu+ZnTvh7v3OsWvEghtm4kOy6RhJRvhfsgSU8WzT/AStQ6b+spAcdTh13
+        DLWn+tPDc6V+R/HYRVS6Iafgd0JA/1Y=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-60-1kl-aHTLO-6Oxs9iFrzb5A-1; Thu, 16 Jun 2022 11:03:19 -0400
+X-MC-Unique: 1kl-aHTLO-6Oxs9iFrzb5A-1
+Received: by mail-wm1-f70.google.com with SMTP id l4-20020a05600c1d0400b0039c60535405so754946wms.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:03:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=sU1/eCcg6yRW4nibZ27Ei/SlX0WtSksIdirbQsLBVsA=;
+        b=mIMq+nxMKSbdXBw8Cj/6Lc+3G03PK3RpbQj8opM1FtwpEh6nyUBlGld4e17l4c6Anq
+         IskjBHe+S74Y/ET9HqjZjjfr1QMGBXcwjsUydr2ErRuwy1pAJkcUTAkly46oe07I5gi9
+         3zTNE7xJh7rYtLpWFI2uvdpUNt2k6hUHrR10EI3sU/lDd6pKKabKmPZVh3OQEY6q5ti2
+         J0R/vrebwVULI+6ZcuW+lBiinkPJL/eNUe4nKU6iaXKdSrX/9pKmOMZVOM+CpWI8Wl37
+         KFwErRzViRd8EHUKdinQDCtcb/cAPflgSuRTFD8LcxCeYINppXwrzv87m6b2XA7wXXn3
+         6bsg==
+X-Gm-Message-State: AJIora8LBtr/a9gi55x/Sbfp6UWXG0tOVA3OJEWq0HLvswkh0jor4VA4
+        Fk/WWP7loA9kl47ISGbim9UN1sa0iaiqiIsAjxxHnMlduiCF3ZXaUArsgMmUNjQ+dkbsrtdfmth
+        o3ptZd2gj5aq7s6T8QbpVWa/l
+X-Received: by 2002:a05:600c:1991:b0:39c:88ba:2869 with SMTP id t17-20020a05600c199100b0039c88ba2869mr5389420wmq.14.1655391797685;
+        Thu, 16 Jun 2022 08:03:17 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1un6/x5EK3gX2NjOv2Ng9CzA86bVIABMgzjcFEcizAaklAzsMgY7pQ1TOk+gIpJce1/3+sDgw==
+X-Received: by 2002:a05:600c:1991:b0:39c:88ba:2869 with SMTP id t17-20020a05600c199100b0039c88ba2869mr5389407wmq.14.1655391797463;
+        Thu, 16 Jun 2022 08:03:17 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id 64-20020a1c1943000000b0039c6390730bsm6107323wmz.29.2022.06.16.08.03.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 08:03:16 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Vit Kabele <vit.kabele@sysgo.com>, linux-hyperv@vger.kernel.org
+Cc:     mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        kys@microsoft.com
+Subject: Re: [RFC PATCH] Hyper-V: Initialize crash reporting before vmbus
+In-Reply-To: <YqtAyitIGRAHL7V0@czspare1-lap.sysgo.cz>
+References: <YqtAyitIGRAHL7V0@czspare1-lap.sysgo.cz>
+Date:   Thu, 16 Jun 2022 17:03:16 +0200
+Message-ID: <874k0kirbf.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
-Content-Language: en-US
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Wolfram Sang <wsa@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220615090259.1121405-1-quan@os.amperecomputing.com>
- <20220615090259.1121405-2-quan@os.amperecomputing.com>
- <8b7841a9-9313-b1d5-8a80-a65cfa8e7b4d@infradead.org>
- <74f94464-a095-f539-746a-853b8f1d52ca@os.amperecomputing.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <74f94464-a095-f539-746a-853b8f1d52ca@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +75,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Vit Kabele <vit.kabele@sysgo.com> writes:
 
+> The Hyper-V crash reporting feature is initialized after a successful
+> vmbus setup. The reporting feature however does not require vmbus at all
+> and Windows guests can indeed use the reporting capabilities even with
+> the minimal Hyper-V implementation (as described in the Minimal
+> Requirements document).
+>
+> Reorder the initialization callbacks so that the crash reporting
+> callbacks are registered before the vmbus initialization starts.
+>
+> Nevertheless, I am not sure about following:
+>
+> 1/ The vmbus_initiate_unload function is called within the panic handler
+> even when the vmbus initialization does not finish (there might be no
+> vmbus at all). This should probably not be problem because the vmbus
+> unload function always checks for current connection state and does
+> nothing when this is "DISCONNECTED". For better readability, it might be
+> better to add separate panic notifier for vmbus and crash reporting.
+>
+> 2/ Wouldn't it be better to extract the whole reporting capability out
+> of the vmbus module, so that it stays present in the kernel even when
+> the vmbus module is possibly unloaded?
 
-On 6/16/22 00:25, Quan Nguyen wrote:
-> On 15/06/2022 23:06, Randy Dunlap wrote:
->>
->>
->> On 6/15/22 02:02, Quan Nguyen wrote:
->>> diff --git a/drivers/char/ipmi/Kconfig b/drivers/char/ipmi/Kconfig
->>> index b061e6b513ed..18a89093d64e 100644
->>> --- a/drivers/char/ipmi/Kconfig
->>> +++ b/drivers/char/ipmi/Kconfig
->>> @@ -169,6 +169,17 @@ config ASPEED_BT_IPMI_BMC
->>>         found on Aspeed SOCs (AST2400 and AST2500). The driver
->>>         implements the BMC side of the BT interface.
->>>   +config SSIF_IPMI_BMC
->>> +    tristate "SSIF IPMI BMC driver"
->>> +    select I2C
->>
->> No. That should be:
->>     depends on I2C
->>
->> We don't select an entire subsystem just to satisfy one driver.
->>
->>> +    select I2C_SLAVE
->>> +    help
->>> +      This enables the IPMI SMBus system interface (SSIF) at the
->>> +      management (BMC) side.
->>> +
->>> +      The driver implements the BMC side of the SMBus system
->>> +      interface (SSIF).
->>> +
->>
->> Thanks.
-> 
-> Thanks Randy,
-> it should be change to "depends on I2C && I2C_SLAVE"
+IMHO yes but as you mention hyperv_panic_event() currently does to
+things:
+1) Initiates VMBus unload
+2) Reports panic to the hypervisor
 
-Either way is OK for I2C_SLAVE AFAIK.
+I think untangling them moving the later to arch/x86/hyper-v (and
+arch/arm64/hyperv/) makes sense.
 
-thanks.
+>
+> Signed-off-by: Vit Kabele <vit.kabele@sysgo.com>
+>
+> ---
+>  drivers/hv/vmbus_drv.c | 77 +++++++++++++++++++++++-------------------
+>  1 file changed, 42 insertions(+), 35 deletions(-)
+>
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 714d549b7b46..97873f03aa7a 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -1509,41 +1509,6 @@ static int vmbus_bus_init(void)
+>  	if (hv_is_isolation_supported())
+>  		sysctl_record_panic_msg = 0;
+>  
+> -	/*
+> -	 * Only register if the crash MSRs are available
+> -	 */
+> -	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
+> -		u64 hyperv_crash_ctl;
+> -		/*
+> -		 * Panic message recording (sysctl_record_panic_msg)
+> -		 * is enabled by default in non-isolated guests and
+> -		 * disabled by default in isolated guests; the panic
+> -		 * message recording won't be available in isolated
+> -		 * guests should the following registration fail.
+> -		 */
+> -		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
+> -		if (!hv_ctl_table_hdr)
+> -			pr_err("Hyper-V: sysctl table register error");
+> -
+> -		/*
+> -		 * Register for panic kmsg callback only if the right
+> -		 * capability is supported by the hypervisor.
+> -		 */
+> -		hyperv_crash_ctl = hv_get_register(HV_REGISTER_CRASH_CTL);
+> -		if (hyperv_crash_ctl & HV_CRASH_CTL_CRASH_NOTIFY_MSG)
+> -			hv_kmsg_dump_register();
+> -
+> -		register_die_notifier(&hyperv_die_block);
+> -	}
+> -
+> -	/*
+> -	 * Always register the panic notifier because we need to unload
+> -	 * the VMbus channel connection to prevent any VMbus
+> -	 * activity after the VM panics.
+> -	 */
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> -			       &hyperv_panic_block);
+> -
+>  	vmbus_request_offers();
+>  
+>  	return 0;
+> @@ -2675,6 +2640,46 @@ static struct syscore_ops hv_synic_syscore_ops = {
+>  	.resume = hv_synic_resume,
+>  };
+>  
+> +static void __init crash_reporting_init(void)
+> +{
+> +	/*
+> +	 * Only register if the crash MSRs are available
+> +	 */
+> +	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
+> +		u64 hyperv_crash_ctl;
+> +		/*
+> +		 * Panic message recording (sysctl_record_panic_msg)
+> +		 * is enabled by default in non-isolated guests and
+> +		 * disabled by default in isolated guests; the panic
+> +		 * message recording won't be available in isolated
+> +		 * guests should the following registration fail.
+> +		 */
+> +		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
+> +		if (!hv_ctl_table_hdr)
+> +			pr_err("Hyper-V: sysctl table register error");
+> +
+> +		/*
+> +		 * Register for panic kmsg callback only if the right
+> +		 * capability is supported by the hypervisor.
+> +		 */
+> +		hyperv_crash_ctl = hv_get_register(HV_REGISTER_CRASH_CTL);
+> +		if (hyperv_crash_ctl & HV_CRASH_CTL_CRASH_NOTIFY_MSG)
+> +			hv_kmsg_dump_register();
+> +
+> +		register_die_notifier(&hyperv_die_block);
+> +	}
+> +
+> +	/*
+> +	 * Always register the panic notifier because we need to unload
+> +	 * the VMbus channel connection to prevent any VMbus
+> +	 * activity after the VM panics.
+> +	 */
+> +	atomic_notifier_chain_register(&panic_notifier_list,
+> +			       &hyperv_panic_block);
+> +
+> +
+> +}
+> +
+>  static int __init hv_acpi_init(void)
+>  {
+>  	int ret, t;
+> @@ -2687,6 +2692,8 @@ static int __init hv_acpi_init(void)
+>  
+>  	init_completion(&probe_event);
+>  
+> +	crash_reporting_init();
+> +
+>  	/*
+>  	 * Get ACPI resources first.
+>  	 */
 
 -- 
-~Randy
+Vitaly
+

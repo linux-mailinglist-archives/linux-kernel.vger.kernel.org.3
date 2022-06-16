@@ -2,182 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003A354ED93
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99D854ED9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378708AbiFPWsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S1379142AbiFPWty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379146AbiFPWsF (ORCPT
+        with ESMTP id S1378446AbiFPWtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:48:05 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9854AE33
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso6338367pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D4wYNhCrugPOLx6NQzh5DQYpCR2JYLvdgRSxgN/KnFY=;
-        b=NAJ2unUhWosiXfMkbjIrpO0dDiluf91z8///fATeLpwgILwfiE+kM5YBdFpaUIGq17
-         5Um6HU+xdw4baxlCIWd0jms6yo85llzLBx9PA94P4f+5xbogFjqL+R9fGYtsmx9TavHG
-         4U6P+fkeo1BWzuHlFczZV7V9vLQXom6j4Dgm+ZcAssevg5Lvhzh1Jq3LzX84t3yl6lTX
-         fhSPUkSh9H+GQ3sCWePzR9BGpoUAiFh3rDz9jUbV49abC41Pf0U9T9eCCaS3QXXs+/iM
-         uRcaJnnBxkLPV6yOfXH1DDlEvA2wCJe5KDfvvp4hgl8Lumv5/dZCJKD28YBg1Ad9RtBr
-         sPpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D4wYNhCrugPOLx6NQzh5DQYpCR2JYLvdgRSxgN/KnFY=;
-        b=0QXUWEBrXwqZGbnUrlA66rFBz7dztijDDkFdTraKlguamxIa0O+xk0kiHbzlviS0L/
-         ec2Ssc7lBfflYZCWtfmiHTHBLjUXwMoN1VqhNsKUwTSkLI8rbiYlh5m9X/3DypXapLRs
-         zobmUs9vzIhht/aaIPDhiuFLd4DteclqRrZl8Oy8See3gGTzmjFwG91H909VxBuzzppH
-         BjJj0d2AP80NSwjUWtoNnVucKjGxVGP8ylyVyvNbSNQwOp3RCh6BMkkdC3qQimBwK4t5
-         rncKL2fSd3Vnz7VOIlZp9pWPg32KnR2Pk9rF2kBQJj7rQ3BhzvLmRJNPhzhHkq6xJ2qG
-         dJ9A==
-X-Gm-Message-State: AJIora9usjKDLnnU51RTqUxwM8YnfHlmlPFEOAk1tTaoHR5j0T1vNMmU
-        +ccnPY8Ko9sp83uWUAEiltSLHQ==
-X-Google-Smtp-Source: AGRyM1vc+vcRuQ2TZeqUJaBdLXB66+ueezXpaJBqAh1uNNDMle811gM+06V92iS2MmAk6l2OcEBXJQ==
-X-Received: by 2002:a17:902:8e86:b0:168:d6d6:660f with SMTP id bg6-20020a1709028e8600b00168d6d6660fmr6404813plb.35.1655419683436;
-        Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170902b69200b0015ee24acf38sm2096401pls.212.2022.06.16.15.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
-Message-ID: <ddbaa8fa-dff5-671d-c476-fe8fd616587f@linaro.org>
-Date:   Thu, 16 Jun 2022 15:48:02 -0700
+        Thu, 16 Jun 2022 18:49:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FCD6221C;
+        Thu, 16 Jun 2022 15:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655419790; x=1686955790;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M/kbs4hpuxBedGBjPKpdONcCTJKC9Sqi4XBKaUNYaVM=;
+  b=R2A7fMHwoC30MyqZiuv5LXESoHnUwaULj3GnUGvXe+2nmS5uVj+drsIH
+   O8jqULkwWqSh9Mnp8bMguNUAm28X4qGGWsmL2ymb70DKkgN1/3+gfQz9M
+   qMmTS1r2az0cB/trJOaNz1qzEs8QiXOSYhAycCW4a8WbFVEKpL/oxY3aG
+   +06nNhO+1LO/GQxdwkL2NoUkaywCu6v7SOG5zFlxA6R19ARPRZFCIqenS
+   nHAT8SfJGSpbtP6hVxWl+oRLt1wzSZSr4nt3YJJU+GUtOdsyb4yjvGa0m
+   zTHmvEMTIyxBchv0B6bGxB1Jy/nb4j/JwtD14UQhreiYg0jpszPDzLwPL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280083249"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280083249"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:49:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="583816357"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2022 15:49:47 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3B35E109; Fri, 17 Jun 2022 01:49:51 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] platform/x86: thinkpad_acpi: Sort headers for better maintenance
+Date:   Fri, 17 Jun 2022 01:49:50 +0300
+Message-Id: <20220616224951.66660-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: mfd: atmel,flexcom: Add new
- compatible string for lan966x
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, UNGLinuxDriver@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220612152604.24280-1-kavyasree.kotagiri@microchip.com>
- <20220612152604.24280-3-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220612152604.24280-3-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2022 08:26, Kavyasree Kotagiri wrote:
-> LAN966x SoC flexcoms has two optional I/O lines. Namely, CS0 and CS1
-> in flexcom SPI mode. CTS and RTS in flexcom USART mode. These pins
-> can be mapped to lan966x FLEXCOM_SHARED[0-20] pins and usage depends on
-> functions being configured.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
-> v2 -> v3:
->  - Add reg property of lan966x missed in v2.
-> 
-> v1 -> v2:
->  - Use allOf:if:then for lan966x dt properties
-> 
->  .../bindings/mfd/atmel,flexcom.yaml           | 75 ++++++++++++++++++-
->  1 file changed, 73 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> index cee9c93ce4b9..d9b0fe2b0211 100644
-> --- a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> @@ -16,10 +16,13 @@ description:
->  
->  properties:
->    compatible:
-> -    enum: atmel,sama5d2-flexcom
-> +    enum:
-> +      - atmel,sama5d2-flexcom
-> +      - microchip,lan966x-flexcom
+It's quite hard to understand in that zillions of headers that are included
+if any specific one is already listed. Sort headers for better maintenance.
 
-And here you have correct syntax...
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/platform/x86/thinkpad_acpi.c | 58 +++++++++++++++-------------
+ 1 file changed, 31 insertions(+), 27 deletions(-)
 
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->  
->    clocks:
->      maxItems: 1
-> @@ -46,6 +49,27 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      enum: [1, 2, 3]
->  
-> +  microchip,flx-shrd-pins:
-> +    description: Specify the Flexcom shared pins to be used for flexcom
-> +      chip-selects.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      minimum: 0
-> +      maximum: 20
-> +
-> +  microchip,flx-cs:
-> +    description: Flexcom chip selects. Here, value of '0' represents "cts" line
-> +      of flexcom USART or "cs0" line of flexcom SPI and value of '1' represents
-> +      "rts" line of flexcom USART or "cs1" line of flexcom SPI.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      minimum: 0
-> +      maximum: 1
-> +
->  patternProperties:
->    "^serial@[0-9a-f]+$":
->      description: See atmel-usart.txt for details of USART bindings.
-> @@ -72,6 +96,25 @@ required:
->    - ranges
->    - atmel,flexcom-mode
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: microchip,lan966x-flexcom
-> +
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +          maxItems: 2
+diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+index e6cb4a14cdd4..eab50d47f567 100644
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -34,46 +34,50 @@
+  *			    thanks to Chris Wright <chrisw@osdl.org>
+  */
+ 
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/init.h>
+-#include <linux/types.h>
+-#include <linux/string.h>
+-#include <linux/list.h>
+-#include <linux/mutex.h>
+-#include <linux/sched.h>
+-#include <linux/sched/signal.h>
+-#include <linux/kthread.h>
+-#include <linux/freezer.h>
+-#include <linux/delay.h>
+-#include <linux/slab.h>
+-#include <linux/nvram.h>
+-#include <linux/proc_fs.h>
+-#include <linux/seq_file.h>
+-#include <linux/sysfs.h>
++#include <linux/acpi.h>
+ #include <linux/backlight.h>
+ #include <linux/bitops.h>
++#include <linux/delay.h>
++#include <linux/dmi.h>
+ #include <linux/fb.h>
+-#include <linux/platform_device.h>
++#include <linux/freezer.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
++#include <linux/init.h>
+ #include <linux/input.h>
+-#include <linux/leds.h>
+-#include <linux/rfkill.h>
+-#include <linux/dmi.h>
+ #include <linux/jiffies.h>
+-#include <linux/workqueue.h>
+-#include <linux/acpi.h>
++#include <linux/kernel.h>
++#include <linux/kthread.h>
++#include <linux/leds.h>
++#include <linux/list.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/nvram.h>
+ #include <linux/pci.h>
+-#include <linux/power_supply.h>
++#include <linux/platform_device.h>
+ #include <linux/platform_profile.h>
+-#include <sound/core.h>
+-#include <sound/control.h>
+-#include <sound/initval.h>
++#include <linux/power_supply.h>
++#include <linux/proc_fs.h>
++#include <linux/rfkill.h>
++#include <linux/sched.h>
++#include <linux/sched/signal.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/sysfs.h>
++#include <linux/types.h>
+ #include <linux/uaccess.h>
++#include <linux/workqueue.h>
++
+ #include <acpi/battery.h>
+ #include <acpi/video.h>
++
+ #include <drm/drm_privacy_screen_driver.h>
++
++#include <sound/control.h>
++#include <sound/core.h>
++#include <sound/initval.h>
++
+ #include "dual_accel_detect.h"
+ 
+ /* ThinkPad CMOS commands */
+-- 
+2.35.1
 
-maxItems are not needed here.
-
-> +          items:
-> +            - description: Flexcom base regsiters map
-> +            - description: Flexcom shared registers map
-> +      required:
-> +        - microchip,flx-shrd-pins
-> +        - microchip,flx-cs
-
-You need "else:" setting reg to maxItems:1 and disallowing the
-properties (microchip,flx-cs:false). See for example:
-https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/media/renesas,vsp1.yaml#L53
-
-
-
-Best regards,
-Krzysztof

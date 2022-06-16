@@ -2,115 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3CA54DE2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B32B54DE26
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbiFPJ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 05:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S232022AbiFPJ1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 05:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiFPJ3g (ORCPT
+        with ESMTP id S231664AbiFPJ1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 05:29:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C573BA67
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:29:35 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1o1loV-0006Nn-3D; Thu, 16 Jun 2022 11:29:19 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1o1loR-000qKx-HY; Thu, 16 Jun 2022 11:29:16 +0200
-Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1o1loS-0036eS-5M; Thu, 16 Jun 2022 11:29:16 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>, kernel@pengutronix.de,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: hci_sync: complete LE connection on any event
-Date:   Thu, 16 Jun 2022 11:24:20 +0200
-Message-Id: <20220616092418.738877-1-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 16 Jun 2022 05:27:47 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F202E02A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:27:46 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id p24-20020a05600c1d9800b0039c51c2da19so2600620wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=+H/wSPyu5uczonE1k1L2bhSkK66QAXKBlpMSPoCTbK0=;
+        b=Q5tv5KmfFvwqkF5kUXEudbXagRp6WdZbDbUMIk/kUF29mSf7TOoaX0sF94KSFWmh29
+         VrQnbNmduhtScCE2UtAul+nkWce7Hy/m9Ayt9eHxIdIpkPNW9MhS8Egl8kXjqPQp0Fbh
+         Sso3A4Q8uwJ60cBfDrxKAlxgnlecNcrowBH50mmz+Q6/txV6IMs9aJjcvqkwaINyoubc
+         z9YVVrk4UEyB3ZEF1CY+6SS8qz8izORX8bxymoSZxOV4cB1P53ktlmITZIKjJNwPswaQ
+         6WYDMSVjjzPx3pynb0UnY3edpA3Tic9mpszHKuctlZVuxBnVIlRZzjZVK87mvS/bEKDA
+         rOAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=+H/wSPyu5uczonE1k1L2bhSkK66QAXKBlpMSPoCTbK0=;
+        b=Eve015q+x2UFzuPvaH+x/goJt+8z3LKXQrrmnDb/L3gdworgOoM58h6zWBeqm5HMXS
+         CJ6eJvGTeswdo1GmHjsAT3E6Omqn8r7O2hVc7uK9YxyjOgnkhIClaJkK5cx2w7N2emhr
+         CyzB764whLC3crJ0khuKMnwCXJCzdjKbDy3D9yTr4FGDrgz6Wm7jFtyzd4nnNd6TinEG
+         +gVfMV9jyoUVwkT5vD3PMSE076TXUAwPOvtjoq4hdCyzJE+VT1OGj109SRqN8zU22vY+
+         Ckqp02nn9qdFELZdEOakrIyrGOORd/y0v1DXE9Yc8pn1Rmx16u0xNA8LmCsqjyUc2Zxl
+         YHnQ==
+X-Gm-Message-State: AOAM531UiKTwu9SUKyRFG1jhemVBqlsohvAl0CRHxrzwV9dIbG2YUdZB
+        zhlEDVBukIzRYKA2VL6f/fxbZx7RxnaYoGw4MIw=
+X-Google-Smtp-Source: ABdhPJwUrDJJtSWT8abdH4WhUDqQF6uWj02J4NIfOp2vqhK17Ccu//uO65P5TPb8qJsVMteGQmf4taif3bFghHShOPM=
+X-Received: from sene.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:27c4])
+ (user=sebastianene job=sendgmr) by 2002:a05:600c:3052:b0:39c:6540:c280 with
+ SMTP id n18-20020a05600c305200b0039c6540c280mr790770wmh.1.1655371663864; Thu,
+ 16 Jun 2022 02:27:43 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:27:36 +0000
+Message-Id: <20220616092737.1713667-1-sebastianene@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH v6 0/2] Detect stalls on guest vCPUS
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, vdonnefort@google.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Ene <sebastianene@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6cd29ec6ae5e ("Bluetooth: hci_sync: Wait for proper events when
-connecting LE") changed HCI core to wait for specific events before
-posting completion for a new LE connection. This commit introduced
-regressions partially fixed in commits a56a1138cbd8
-("Bluetooth: hci_sync: Fix not using conn_timeout") and
-and c9f73a2178c1 ("Bluetooth: hci_conn: Fix hci_connect_le_sync").
+This adds a mechanism to detect stalls on the guest vCPUS by creating a
+per CPU hrtimer which periodically 'pets' the host backend driver.
+On a conventional watchdog-core driver, the userspace is responsible for
+delivering the 'pet' events by writing to the particular /dev/watchdogN node.
+In this case we require a strong thread affinity to be able to
+account for lost time on a per vCPU basis.
 
-Yet, a regression still remains where devices that worked previously
-now timeout[1][2]. Restore working order by reverting the commit in
-question until this issue can be properly resolved.
+This device driver acts as a soft lockup detector by relying on the host
+backend driver to measure the elapesed time between subsequent 'pet' events.
+If the elapsed time doesn't match an expected value, the backend driver
+decides that the guest vCPU is locked and resets the guest. The host
+backend driver takes into account the time that the guest is not
+running. The communication with the backend driver is done through MMIO
+and the register layout of the virtual watchdog is described as part of
+the backend driver changes.
 
-[1]: https://lore.kernel.org/linux-bluetooth/a1ce1743-e450-6cdb-dfab-56a3e3eb9aed@pengutronix.de/
-[2]: https://github.com/bluez/bluez/issues/340
+The host backend driver is implemented as part of:
+https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
 
-Fixes: 6cd29ec6ae5e ("Bluetooth: hci_sync: Wait for proper events when connecting LE")
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-Event callbacks like hci_le_meta_evt() use hci_skb_event(hdev->sent_cmd)
-for matching. I suspect the timeout is due to intermittent frames,
-e.g. because of remote unpairing, replacing the sent_cmd and thus
-breaking renewed pairing as the frames couldn't be matched. This is too
-complex for me to fix and we have been carrying this fix for a month now,
-so I think it's best we revert this upstream for now.
+Changelog v6:
+ - fix issues reported by lkp@intel robot
 
-#regzb Link: https://lore.kernel.org/linux-bluetooth/a1ce1743-e450-6cdb-dfab-56a3e3eb9aed@pengutronix.de/
-Cc: kernel@pengutronix.de
----
- net/bluetooth/hci_sync.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Changelog v5:
+ - fix dt warnings
+ - rename %s/watchdog/stall_detector/g
+ - rename the config from Kconfig VM_WATCHDOG -> VCPU_STALL_DETECTOR
 
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 286d6767f017..4cecf15922d4 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -5272,7 +5272,7 @@ static int hci_le_ext_create_conn_sync(struct hci_dev *hdev,
- 
- 	return __hci_cmd_sync_status_sk(hdev, HCI_OP_LE_EXT_CREATE_CONN,
- 					plen, data,
--					HCI_EV_LE_ENHANCED_CONN_COMPLETE,
-+					0,
- 					conn->conn_timeout, NULL);
- }
- 
-@@ -5366,9 +5366,7 @@ int hci_le_create_conn_sync(struct hci_dev *hdev, struct hci_conn *conn)
- 	 */
- 	err = __hci_cmd_sync_status_sk(hdev, HCI_OP_LE_CREATE_CONN,
- 				       sizeof(cp), &cp,
--				       use_enhanced_conn_complete(hdev) ?
--				       HCI_EV_LE_ENHANCED_CONN_COMPLETE :
--				       HCI_EV_LE_CONN_COMPLETE,
-+				       0,
- 				       conn->conn_timeout, NULL);
- 
- done:
+Changelog v4:
+ - rename the source from vm-wdt.c -> vm-watchdog.c
+ - convert all the error logging calls from pr_* to dev_* calls
+ - rename the DTS node "clock" to "clock-frequency"
+
+Changelog v3:
+ - cosmetic fixes, remove pr_info and version information
+ - improve description in the commit messag
+ - improve description in the Kconfig help section
+
+Sebastian Ene (2):
+  dt-bindings: vcpu_stall_detector: Add qemu,vcpu-stall-detector
+    compatible
+  misc: Add a mechanism to detect stalls on guest vCPUs
+
+ .../bindings/misc/vcpu_stall_detector.yaml    |  49 ++++
+ drivers/misc/Kconfig                          |  12 +
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/vcpu_stall_detector.c            | 222 ++++++++++++++++++
+ 4 files changed, 284 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml
+ create mode 100644 drivers/misc/vcpu_stall_detector.c
+
 -- 
-2.30.2
+2.36.1.476.g0c4daa206d-goog
 

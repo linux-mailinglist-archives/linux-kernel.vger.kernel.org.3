@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDFA54E5BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B656354E5C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377877AbiFPPLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S1377294AbiFPPOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377712AbiFPPLV (ORCPT
+        with ESMTP id S237142AbiFPPOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:11:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDAD40A1D;
-        Thu, 16 Jun 2022 08:11:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A50F661DE2;
-        Thu, 16 Jun 2022 15:11:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CC28C3411A;
-        Thu, 16 Jun 2022 15:11:18 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jXF2QEYd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655392277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d2DN+YoilJcfNhQF3J8D+7tBnhEoZyvKc0fHsQfwhas=;
-        b=jXF2QEYdM5lgiSYc+P/0hThSxSSBQzvJcN0PIckvy2xibqgRXzsRZyvHi5PqPLQ22MmKaP
-        SSPAtPgnmo8GYjEKnSehqrt3GfT4H2eySeEL+t/bP282RDRUhHw/d/ZweAuIxweF3+jsww
-        AGObg8VJw3tvpzLOTGH9Fcn1Ks2+Dfo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 710a274d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 16 Jun 2022 15:11:17 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 17:11:13 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
-Message-ID: <YqtIEeX8Jx5rBHif@zx2c4.com>
-References: <20220616143617.449094-1-Jason@zx2c4.com>
- <YqtAShjjo1zC6EgO@casper.infradead.org>
- <YqtDXPWdFQ/fqgDo@zx2c4.com>
+        Thu, 16 Jun 2022 11:14:30 -0400
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AA831529;
+        Thu, 16 Jun 2022 08:14:29 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id r3so1124507ilt.8;
+        Thu, 16 Jun 2022 08:14:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SHTgK05tyQDk/p4I1IuzEx4HHbym5o2z7SW1D/t5csQ=;
+        b=z3gZ1RHATaH1duxXzfT+dXxzsQgKBh7VkI5ek7PmriQaoPaJsLbWiiorPIvKBu3alp
+         XEzCSr/PevYl72fG74jW3GnsLh4UNsFngwQVC8qH3PN6dIYViO7ESOoSi/nXl/6wVfJq
+         EMh5sR006hQ/wa8Bzfxv+uSdnSwFRL9/CyBYpuk6BjPeDJGjE/LOYPu7EiaJtcPT9E6W
+         cpWw/ovcjFQn6N9gMHlwRnqE3DN5MJn7bGU5vJqN9kqnZOafKXK6Awvv3yLs2uhyGPZn
+         PHstG5KxQaeXvxAaKZIJ+z+v2YlEM/0wFn2YFqh+my/OYFJP905PV7ylrJetQCMmfNI/
+         961A==
+X-Gm-Message-State: AJIora++IW53umMdu8hs/z1yiCNhMOhunE72O635HdDJX9XWr9o/Dtf7
+        HJ78Ivhdtczi+61uonxstg==
+X-Google-Smtp-Source: AGRyM1seksdmYC/rsKfzOtS0UIDbEz+8IFwb6rVjipUAuQlJZLhmJey7HBdaGWD11yJHAU3pJY8grA==
+X-Received: by 2002:a05:6e02:1788:b0:2d1:ed04:88df with SMTP id y8-20020a056e02178800b002d1ed0488dfmr3212770ilu.226.1655392468841;
+        Thu, 16 Jun 2022 08:14:28 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id o14-20020a056e0214ce00b002cc20b48163sm1112539ilk.3.2022.06.16.08.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 08:14:28 -0700 (PDT)
+Received: (nullmailer pid 3487684 invoked by uid 1000);
+        Thu, 16 Jun 2022 15:14:26 -0000
+Date:   Thu, 16 Jun 2022 09:14:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joe Perches <joe@perches.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        patches@opensource.cirrus.com, Stephen Boyd <sboyd@kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Move lochnagar.h to
+ dt-bindings/clock
+Message-ID: <20220616151426.GA3487574-robh@kernel.org>
+References: <20220613081632.2159-1-lukas.bulwahn@gmail.com>
+ <20220613081632.2159-2-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqtDXPWdFQ/fqgDo@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220613081632.2159-2-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 04:51:08PM +0200, Jason A. Donenfeld wrote:
-> If that's a "dinosaur approach" that "has to stop", it'd certainly be
-> news to me (and I'm guessing others on the list too). I've never really
-> seen anybody question the kernel's `unsigned long` usage before.
+On Mon, 13 Jun 2022 10:16:31 +0200, Lukas Bulwahn wrote:
+> Most of the clock-related dt-binding header files are located in
+> include/dt-bindings/clock. It would be good to keep all the similar
+> header files at a single location.
 > 
-> So hopefully some outcome of this discussion will make it clear, and
-> then either this patch will go in, or I'll get to work on carefully
-> adjusting my code that uses `unsigned long` at the moment.
+> This was discovered while investigating the state of ownership of the files
+> in include/dt-bindings/ according to the MAINTAINERS file.
+> 
+> This change here is similar to commit 8e28918a85a0 ("dt-bindings: clock:
+> Move ti-dra7-atl.h to dt-bindings/clock") and commit 35d35aae8177
+> ("dt-bindings: clock: Move at91.h to dt-bindigs/clock").
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml | 2 +-
+>  MAINTAINERS                                                 | 2 +-
+>  drivers/clk/clk-lochnagar.c                                 | 2 +-
+>  include/dt-bindings/{clk => clock}/lochnagar.h              | 0
+>  4 files changed, 3 insertions(+), 3 deletions(-)
+>  rename include/dt-bindings/{clk => clock}/lochnagar.h (100%)
+> 
 
-Searching through list archives, there's not much, but I did find [1]
-from Linus:
-
-    PPS. And btw, the warning is unacceptable too. Cast the thing to
-    "unsigned long" (or uintptr_t, but quite frankly, in the kernel I'd
-    suggest "unsigned long" rather than the more obscure standard types)
-    after you've fixed the macro argument problem.
- 
- [1] https://lore.kernel.org/lkml/AANLkTineDxntR0ZTXdgXrc6qx6pATTORgOwFR5+w5MLN@mail.gmail.com/
+Acked-by: Rob Herring <robh@kernel.org>

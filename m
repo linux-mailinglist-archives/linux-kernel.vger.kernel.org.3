@@ -2,318 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BAB54D624
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AEB54D621
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346891AbiFPAcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 20:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S1347734AbiFPAdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 20:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242913AbiFPAcm (ORCPT
+        with ESMTP id S1347666AbiFPAda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 20:32:42 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6781137
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:32:41 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id y6so15949plg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S4sxB7mKhpG8kKijL49RJFhdwBOQCob12ez2AgqPWMs=;
-        b=chwEQBeCytguQxa2cWmKV4T980cMNhAHE1A/QXU1FfEWxUE2DY9ec7nDdeW8wjZiKp
-         6EPES01SBA7zzzD+3rCaRGk37a8saToMt0YQhJuw6mNAQINBosuCFxDlKg62aeTS73gq
-         E71RpNMhDmCM/NfyqhqeLFm9kISX2pbbVh+FQ64yNnKwOnPdy4wmQusqY8MszRRvLoyx
-         7xe9ShyPYqgFdiuu3kFceMHrGnFso3NQw0fNKcjjhpY9wTCJuHumRqPXGID8q6d4d9IR
-         DHxLQqBrN5cWyLSldl1W5GW6587U6npQoPQsUKZm/aJXGj/MbZWi6+TEEsmZ1yfAtEDu
-         0nRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S4sxB7mKhpG8kKijL49RJFhdwBOQCob12ez2AgqPWMs=;
-        b=26EvbGc0E6gGKaZ8WLADedBEoUr5e02Lwx1Q2bxwsoQmm7PyRjkuL+UaIFMKZW8MGF
-         rJKAE+OEvY2Wz84exIpy7wUab4Lycl9FqkQPfbT8v9rPtpRRMMHlm98vgfHNCny5/6Af
-         5jXuuJjXxCcqbgfuhIoH3SSGDAICqtqPhT+dZx10Rtevpw1+VnCXQKntkUpQlMNI2FAr
-         uVXSvxcTGeiPKemMbwsUjyVNGBeB7TIRbEmYpGYwuy7PC3jwANUUzbhp35fXm75SLw/M
-         1rbBqcBqiGbAUpVsdIKvJRKRgAAlWna0x05iGjR6lGCFQsgPKcW1oWTKuqJ5TGOxDXLr
-         00UA==
-X-Gm-Message-State: AJIora++R2uvHqBTC/OfGp37IXG7z6l2UmGOxEX4hmUiN6vU3VSRzY9t
-        t79Hl8OjFbldhQoMAQ0xpoQqR7W+JPMOv+wexoE=
-X-Google-Smtp-Source: AGRyM1v3fngWwHsxPa4gsFxzpnzmut5VyBt05f4GZOETrtYzvj4EJkiIgdk5A8UdvxKPykYyGOdQfyFivy2iaj7oHNM=
-X-Received: by 2002:a17:90a:ce84:b0:1e4:d803:fad with SMTP id
- g4-20020a17090ace8400b001e4d8030fadmr13330263pju.99.1655339560561; Wed, 15
- Jun 2022 17:32:40 -0700 (PDT)
+        Wed, 15 Jun 2022 20:33:30 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650E81054B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655339609; x=1686875609;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MBRiA3OhDc8T/PLUdbazDe1hOAsO2DxX0LERaRgF55U=;
+  b=O7wK858m6W7/6Hibg9cpf3cmbtbS/RijHenJP7nNB/DEvGaU/pDgsurF
+   fj8ysyVDb8T6hlqZYJpilib/JVbM574LOx3FwA12ecz1qyMLafMZ8Rbpo
+   k3aZi/d4zi7s2WtvLgFNnSnMHomKUCaj1hU3ZZa+58mtFIoouMyO2Acel
+   VAC2mxCXeBK5hH7/JglRn6S0y5wEAjm06+moohC/LGP5RNOYF50vl6UoB
+   4F9NRpmBai/53oCyxGcTi8MCVKPGAopiYUuoV2vsnBN0kkRAU2aAzx2vG
+   uYQSAZL5CDgcZh3X29jSL5p4r7YnKwLZrbCbh7yVwCGYg0CBwpnWUjxl9
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647273600"; 
+   d="scan'208";a="307573865"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Jun 2022 08:33:26 +0800
+IronPort-SDR: UL4PpwRmcR2yvN4Tetot1MZeUM0lmWKNr/gxdOojTCkq1FByfXYOySVKYbu4RSRuzF063ps916
+ mcm9DiQgcaq9yz9w8GW5qtmvgrfEliDiTt/6JeK7kZbdnqeTcBRf/hoGSe73F5WqQ7KWCOcaR8
+ dcM67NAhEfAvLBTSVvrtwY+aCwrofwL20pZ1WDhTidGzngu7ZdTSrzNcOHnjiopQCsa+Q1xgyz
+ hF1/GtPHdmkCXiJqG4+qA2ugmhF9xkirUE1c94MDDuH58FyW+toVJaUzrtp22qssS5jECCnMQQ
+ VoNTPNvrw2z3xteeJSgFQC5t
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 16:51:50 -0700
+IronPort-SDR: FelsHwCUvpbydmJrvbL3BZ/TzYej6hstgk/+JxRPymGpvEVMXYQ9CSE8IG7SWnacNAVC+9Etov
+ fjudXF677M1bu0eUS5W+nmKQiybc09IL8FmDUcHrrOS8V43GfusRuyj4vcCHuQC3ZcnpiWdvqL
+ xMktv4jBm1gFHFnxG7r5iu0stevwJxip4bmBKndaOHWJ4LGDwpS2w3a+MwQh/FFKE9bFHLbT+Q
+ UPEj/zNVhvw7ag1dbbnYWO5nOjrmQe3azpIiNJHRNzbNyr5BelGFWkKxFxDslgMUbrgIrcx4Zc
+ VCo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 17:33:27 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNjny1TtHz1SVp4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:33:26 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655339605; x=1657931606; bh=MBRiA3OhDc8T/PLUdbazDe1hOAsO2DxX0LE
+        RaRgF55U=; b=NQ4xGNcQzg1Zyef+8rgqEIjYNd8niORzlDHXxrfykwqLeJ6C9SH
+        kR/EIsOZCp0/vFPaby6+AkXO2nrb1Lt2Erk1IdVAHN2nsR5m0iNV7YbyCAlzk1tB
+        cijbbxoH+HHjFtjqk/SF1ndzYzDIT0bpmzvoFWeZ3075/injaYqwUVnHLfdiJMY+
+        qgP9fSaj4Yn6xMy+fmSe3F/zLalPsIBqlgucVxY728XynQg99Vf69JZXI+LIQ5EN
+        gNzl/0f+TZj2nqReCr7mmbHMSGZyi6OB8eJfb0EONr+uLXBjloM6ORkQATO4OCTf
+        EWsRGHC6spuSCTMORLwlwL7ZSAbYYWHaWrA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Qr0V3_KgcOcQ for <linux-kernel@vger.kernel.org>;
+        Wed, 15 Jun 2022 17:33:25 -0700 (PDT)
+Received: from [10.89.84.185] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.84.185])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNjnv4BqNz1Rvlc;
+        Wed, 15 Jun 2022 17:33:23 -0700 (PDT)
+Message-ID: <5f1edbd8-018a-bcd0-10f2-94767f341b45@opensource.wdc.com>
+Date:   Thu, 16 Jun 2022 09:33:22 +0900
 MIME-Version: 1.0
-References: <20220615172926.546974-1-shy828301@gmail.com> <20220615172926.546974-5-shy828301@gmail.com>
- <Yqp2j6sf7m3wmwou@google.com>
-In-Reply-To: <Yqp2j6sf7m3wmwou@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 15 Jun 2022 17:32:28 -0700
-Message-ID: <CAHbLzkp2DD=4P-ynkKcoOYjHwcQUwHjL5nY5krkJHJOP58TrdQ@mail.gmail.com>
-Subject: Re: [v4 PATCH 4/7] mm: thp: kill transparent_hugepage_active()
-To:     "Zach O'Keefe" <zokeefe@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v4 19/23] ata: ahci: Add DWC AHCI SATA controller support
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-20-Sergey.Semin@baikalelectronics.ru>
+ <52c9ca79-769f-4426-db94-7aad05a68258@opensource.wdc.com>
+ <20220615214802.ke6owp5cuv5l77hu@mobilestation>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220615214802.ke6owp5cuv5l77hu@mobilestation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 5:17 PM Zach O'Keefe <zokeefe@google.com> wrote:
->
-> On 15 Jun 10:29, Yang Shi wrote:
-> > The transparent_hugepage_active() was introduced to show THP eligibility
-> > bit in smaps in proc, smaps is the only user.  But it actually does the
-> > similar check as hugepage_vma_check() which is used by khugepaged.  We
-> > definitely don't have to maintain two similar checks, so kill
-> > transparent_hugepage_active().
-> >
-> > This patch also fixed the wrong behavior for VM_NO_KHUGEPAGED vmas.
-> >
-> > Also move hugepage_vma_check() to huge_memory.c and huge_mm.h since it
-> > is not only for khugepaged anymore.
-> >
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > ---
-> >  fs/proc/task_mmu.c         |  2 +-
-> >  include/linux/huge_mm.h    | 11 ++++++++-
-> >  include/linux/khugepaged.h |  2 --
-> >  mm/huge_memory.c           | 50 +++++++++++++++++++++++++++++++-------
-> >  mm/khugepaged.c            | 48 +++---------------------------------
-> >  5 files changed, 56 insertions(+), 57 deletions(-)
-> >
-> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > index 37ccb5c9f4f8..39a40ec181e7 100644
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> > @@ -863,7 +863,7 @@ static int show_smap(struct seq_file *m, void *v)
-> >       __show_smap(m, &mss, false);
-> >
-> >       seq_printf(m, "THPeligible:    %d\n",
-> > -                transparent_hugepage_active(vma));
-> > +                hugepage_vma_check(vma, vma->vm_flags, true));
-> >
-> >       if (arch_pkeys_enabled())
-> >               seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
-> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> > index 8a5a8bfce0f5..aeb13119ee28 100644
-> > --- a/include/linux/huge_mm.h
-> > +++ b/include/linux/huge_mm.h
-> > @@ -202,7 +202,9 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
-> >              !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
-> >  }
-> >
-> > -bool transparent_hugepage_active(struct vm_area_struct *vma);
->
-> Like v3, I think this also needs to be deleted from !CONFIG_TRANSPARENT_HUGEPAGE
+On 2022/06/16 6:48, Serge Semin wrote:
+[...]
+>> MODULE_LICENSE("GPL v2");
+>>
+>> To match the file header SPDX.
+> 
+> No. Please see the commit bf7fbeeae6db ("module: Cure the
+> MODULE_LICENSE "GPL" vs. "GPL v2" bogosity") and what checkpatch.pl
+> says should the "GPL v2" string is used in the module license block.
+> More info regarding this macro and the possible license values are
+> described here:
+> Documentation/process/license-rules.rst
 
-Oops, thanks for catching this. Will fix it.
+ah ! OK. I was not 100% sure. Doing a quick grep, there is still a lot of (half
+?) of "GPL v2" vs "GPL".
 
->
-> Otherwise can add
->
-> Reviewed-by: Zach O'Keefe <zokeefe@google.com>
->
-> > +bool hugepage_vma_check(struct vm_area_struct *vma,
-> > +                     unsigned long vm_flags,
-> > +                     bool smaps);
-> >
-> >  #define transparent_hugepage_use_zero_page()                         \
-> >       (transparent_hugepage_flags &                                   \
-> > @@ -368,6 +370,13 @@ static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
-> >       return false;
-> >  }
-> >
-> > +static inline bool hugepage_vma_check(struct vm_area_struct *vma,
-> > +                                    unsigned long vm_flags,
-> > +                                    bool smaps)
-> > +{
-> > +     return false;
-> > +}
-> > +
-> >  static inline void prep_transhuge_page(struct page *page) {}
-> >
-> >  #define transparent_hugepage_flags 0UL
-> > diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-> > index 31ca8a7f78f4..ea5fd4c398f7 100644
-> > --- a/include/linux/khugepaged.h
-> > +++ b/include/linux/khugepaged.h
-> > @@ -10,8 +10,6 @@ extern struct attribute_group khugepaged_attr_group;
-> >  extern int khugepaged_init(void);
-> >  extern void khugepaged_destroy(void);
-> >  extern int start_stop_khugepaged(void);
-> > -extern bool hugepage_vma_check(struct vm_area_struct *vma,
-> > -                            unsigned long vm_flags);
-> >  extern void __khugepaged_enter(struct mm_struct *mm);
-> >  extern void __khugepaged_exit(struct mm_struct *mm);
-> >  extern void khugepaged_enter_vma(struct vm_area_struct *vma,
-> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> > index b530462c4493..a28c6100b491 100644
-> > --- a/mm/huge_memory.c
-> > +++ b/mm/huge_memory.c
-> > @@ -69,21 +69,53 @@ static atomic_t huge_zero_refcount;
-> >  struct page *huge_zero_page __read_mostly;
-> >  unsigned long huge_zero_pfn __read_mostly = ~0UL;
-> >
-> > -bool transparent_hugepage_active(struct vm_area_struct *vma)
-> > +bool hugepage_vma_check(struct vm_area_struct *vma,
-> > +                     unsigned long vm_flags,
-> > +                     bool smaps)
-> >  {
-> > -     /* The addr is used to check if the vma size fits */
-> > -     unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
-> > +     if (!transhuge_vma_enabled(vma, vm_flags))
-> > +             return false;
-> > +
-> > +     if (vm_flags & VM_NO_KHUGEPAGED)
-> > +             return false;
-> > +
-> > +     /* Don't run khugepaged against DAX vma */
-> > +     if (vma_is_dax(vma))
-> > +             return false;
-> >
-> > -     if (!transhuge_vma_suitable(vma, addr))
-> > +     /* Check alignment for file vma and size for both file and anon vma */
-> > +     if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
-> >               return false;
-> > -     if (vma_is_anonymous(vma))
-> > -             return __transparent_hugepage_enabled(vma);
-> > -     if (vma_is_shmem(vma))
-> > +
-> > +     /* Enabled via shmem mount options or sysfs settings. */
-> > +     if (shmem_file(vma->vm_file))
-> >               return shmem_huge_enabled(vma);
-> > -     if (transhuge_vma_enabled(vma, vma->vm_flags) && file_thp_enabled(vma))
-> > +
-> > +     if (!khugepaged_enabled())
-> > +             return false;
-> > +
-> > +     /* THP settings require madvise. */
-> > +     if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-> > +             return false;
-> > +
-> > +     /* Only regular file is valid */
-> > +     if (file_thp_enabled(vma))
-> >               return true;
-> >
-> > -     return false;
-> > +     if (!vma_is_anonymous(vma))
-> > +             return false;
-> > +
-> > +     if (vma_is_temporary_stack(vma))
-> > +             return false;
-> > +
-> > +     /*
-> > +      * THPeligible bit of smaps should show 1 for proper VMAs even
-> > +      * though anon_vma is not initialized yet.
-> > +      */
-> > +     if (!vma->anon_vma)
-> > +             return smaps;
-> > +
-> > +     return true;
-> >  }
-> >
-> >  static bool get_huge_zero_page(void)
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index 5baa394e34c8..3afd87f8c0b1 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -437,46 +437,6 @@ static inline int khugepaged_test_exit(struct mm_struct *mm)
-> >       return atomic_read(&mm->mm_users) == 0;
-> >  }
-> >
-> > -bool hugepage_vma_check(struct vm_area_struct *vma,
-> > -                     unsigned long vm_flags)
-> > -{
-> > -     if (!transhuge_vma_enabled(vma, vm_flags))
-> > -             return false;
-> > -
-> > -     if (vm_flags & VM_NO_KHUGEPAGED)
-> > -             return false;
-> > -
-> > -     /* Don't run khugepaged against DAX vma */
-> > -     if (vma_is_dax(vma))
-> > -             return false;
-> > -
-> > -     /* Check alignment for file vma and size for both file and anon vma */
-> > -     if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
-> > -             return false;
-> > -
-> > -     /* Enabled via shmem mount options or sysfs settings. */
-> > -     if (shmem_file(vma->vm_file))
-> > -             return shmem_huge_enabled(vma);
-> > -
-> > -     if (!khugepaged_enabled())
-> > -             return false;
-> > -
-> > -     /* THP settings require madvise. */
-> > -     if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-> > -             return false;
-> > -
-> > -     /* Only regular file is valid */
-> > -     if (file_thp_enabled(vma))
-> > -             return true;
-> > -
-> > -     if (!vma->anon_vma || !vma_is_anonymous(vma))
-> > -             return false;
-> > -     if (vma_is_temporary_stack(vma))
-> > -             return false;
-> > -
-> > -     return true;
-> > -}
-> > -
-> >  void __khugepaged_enter(struct mm_struct *mm)
-> >  {
-> >       struct mm_slot *mm_slot;
-> > @@ -513,7 +473,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
-> >  {
-> >       if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
-> >           khugepaged_enabled()) {
-> > -             if (hugepage_vma_check(vma, vm_flags))
-> > +             if (hugepage_vma_check(vma, vm_flags, false))
-> >                       __khugepaged_enter(vma->vm_mm);
-> >       }
-> >  }
-> > @@ -958,7 +918,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
-> >
-> >       if (!transhuge_vma_suitable(vma, address))
-> >               return SCAN_ADDRESS_RANGE;
-> > -     if (!hugepage_vma_check(vma, vma->vm_flags))
-> > +     if (!hugepage_vma_check(vma, vma->vm_flags, false))
-> >               return SCAN_VMA_CHECK;
-> >       /*
-> >        * Anon VMA expected, the address may be unmapped then
-> > @@ -1448,7 +1408,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
-> >        * the valid THP. Add extra VM_HUGEPAGE so hugepage_vma_check()
-> >        * will not fail the vma for missing VM_HUGEPAGE
-> >        */
-> > -     if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE))
-> > +     if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE, false))
-> >               return;
-> >
-> >       /* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
-> > @@ -2143,7 +2103,7 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
-> >                       progress++;
-> >                       break;
-> >               }
-> > -             if (!hugepage_vma_check(vma, vma->vm_flags)) {
-> > +             if (!hugepage_vma_check(vma, vma->vm_flags, false)) {
-> >  skip:
-> >                       progress++;
-> >                       continue;
-> > --
-> > 2.26.3
-> >
+Ignore this then.
+
+> 
+> -Sergey
+> 
+>>
+>>> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+>>> index 9b56490ecbc3..8f5572a9f8f1 100644
+>>> --- a/drivers/ata/ahci_platform.c
+>>> +++ b/drivers/ata/ahci_platform.c
+>>> @@ -80,9 +80,7 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
+>>>  static const struct of_device_id ahci_of_match[] = {
+>>>  	{ .compatible = "generic-ahci", },
+>>>  	/* Keep the following compatibles for device tree compatibility */
+>>> -	{ .compatible = "snps,spear-ahci", },
+>>>  	{ .compatible = "ibm,476gtr-ahci", },
+>>> -	{ .compatible = "snps,dwc-ahci", },
+>>>  	{ .compatible = "hisilicon,hisi-ahci", },
+>>>  	{ .compatible = "cavium,octeon-7130-ahci", },
+>>>  	{ /* sentinel */ }
+>>
+>>
+>> -- 
+>> Damien Le Moal
+>> Western Digital Research
+> 
+
+
+-- 
+Damien Le Moal
+Western Digital Research

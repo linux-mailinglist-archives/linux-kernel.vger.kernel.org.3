@@ -2,131 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5075254E310
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA26B54E318
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377569AbiFPOLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S1377582AbiFPOMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377558AbiFPOLj (ORCPT
+        with ESMTP id S1377558AbiFPOMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:11:39 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5365149928;
-        Thu, 16 Jun 2022 07:11:38 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 0B084C01E; Thu, 16 Jun 2022 16:11:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655388697; bh=6fLEu8wAlSIhYMNp84lmaEuPjTbe/YpTHYdRdU5qRks=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t6uTnZ/bhgyYCOwpTf0dxtMmGQuPxvV2LhTjL8VpZ2Qd1bEDnLnRqxVQ9arzZjg3G
-         jZTbPNQBThVvlK2+UksBw2JVgaT5WcPkoxvQB70wz8pIBhLFBZsmqcFenUkkmm0vf9
-         ETZIuVs/JtzHvCBiSmI01weqKzDAI8H0VzASWhMr9Eu4k0McdMFhFZIYl2badc9fYp
-         vGB8BVa5nP7wTRmEgY8urlofplOhceUlPCIx5ZiI71AKr9K9wjaQfrXVOkGbVjSqnE
-         mOqEDfu1eacpwbMelldreAnV5jxeHvbF/zujCZ8nXigTT0AaoulF4GF6AxcqONlG9l
-         JDWEoU8SL4wnw==
+        Thu, 16 Jun 2022 10:12:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F59DCC5;
+        Thu, 16 Jun 2022 07:12:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14FD761DA8;
+        Thu, 16 Jun 2022 14:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6399AC34114;
+        Thu, 16 Jun 2022 14:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655388756;
+        bh=LN6NdWmuHmn+ihd4j5niLzMO2IXykudy2gjoFVJWRdM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fLQMTRZ6nV2AEFyjN8ZaAzEXUlMRmI5VxPpWXA9uRR827hIijWT9iFAXx8kmw5lPx
+         O20DBZI6gS8OzBkKvd46HexHX3L3RRsq7PqXAHd1LS8q/VzZY50uLc/Ij/XTayzsyQ
+         etlfwWi9WXlQ8h4Ir5hiCAWQCZaLVyay1rDTeU02qqnZpOzzzaCWEV1FdLMWD8msGm
+         AtGiEhs4wTZ2zKKd3+5UwMa+/pD0+VxuwXTj9p26mDM+tT5vFnvsy0W/F1Y2WopISG
+         4Nr4/X4N2MHJUgdpt4TzNqBpRYUHVqFqLkrgYk6ze8Ce7FzViRroaexj4NvP2ULeIp
+         NglVHD5WaoqtA==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jarkko.nikula@linux.intel.com
+Cc:     dinguyen@kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCHv5 1/2] i2c: designware: introduce a custom scl recovery for SoCFPGA platforms
+Date:   Thu, 16 Jun 2022 09:12:29 -0500
+Message-Id: <20220616141230.858409-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id DD91BC009;
-        Thu, 16 Jun 2022 16:11:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655388696; bh=6fLEu8wAlSIhYMNp84lmaEuPjTbe/YpTHYdRdU5qRks=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WQLfbC1cYoX14kKZ3N5dB9eRYeWQUnIS8zXTCcPAcfIlZA1HuLsqHZaobqOoRfgtb
-         4jh/0vpIJb3xMrkKUR5EP9ozmJgdKkscRFg9VeNVig5d0hIoGAMav0FZ7burj/mw/V
-         eOT2o2qDglyUTveKwfwQZ6CICIWNX3VDUK3z7JcoCT34Kri1HL1PPuaXqAwnRVtCIg
-         fk45DkIeIZJo77r02GpIfD+ndUQli8+avOcOMIhUAp7HG3L59uoMkGGS28KZqoZX+R
-         ejJN8yMpxR3lnXFZVfo8r970t19z5MohR4waRc7Zfe9lVyzkxmY8gHQWTgLk9FqSxX
-         ombdi8OZY+KyA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 6e9c3609;
-        Thu, 16 Jun 2022 14:11:31 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 23:11:16 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        David Howells <dhowells@redhat.com>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] 9p: fix EBADF errors in cached mode
-Message-ID: <Yqs6BPVc3rNZ9byJ@codewreck.org>
-References: <YqW5s+GQZwZ/DP5q@codewreck.org>
- <YqiC8luskkxUftQl@codewreck.org>
- <1796737.mFSqR1lx0c@silver>
- <22073313.PYDa2UxuuP@silver>
- <Yqs1Y8G/Emi/q+S2@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yqs1Y8G/Emi/q+S2@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dominique Martinet wrote on Thu, Jun 16, 2022 at 10:51:31PM +0900:
-> > Did your patch work there for you? I mean I have not applied the other pending
-> > 9p patches, but they should not really make difference, right? I won't have
-> > time today, but I will continue to look at it tomorrow. If you already had
-> > some thoughts on this, that would be great of course.
-> 
-> Yes, my version passes basic tests at least, and I could no longer
-> reproduce the problem.
+The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+thus cannot be recovered by the default method of by doing a GPIO access.
+Only a reset of the I2C IP block can a recovery be successful.
 
-For what it's worth I've also tested a version of your patch:
+The assignment of the recover_bus needs to get done before the call to
+devm_gpiod_get_optional(), otherwise, the assignment is not taking place
+because of an error after returning from devm_gpiod_get_optional().
 
------
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index a8f512b44a85..d0833fa69faf 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -58,8 +58,21 @@ static void v9fs_issue_read(struct netfs_io_subrequest *subreq)
-  */
- static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
- {
-+	struct inode *inode = file_inode(file);
-+	struct v9fs_inode *v9inode = V9FS_I(inode);
- 	struct p9_fid *fid = file->private_data;
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+v5: remove stray nextline
+    add Reviewed-by
+v4: re-arrange code per Andy Shevchenko's recommendation
+v3: simplify the function
+    update commit message
+v2: remove change to MODEL_MASK
+    s/i2c_custom_scl_recovery/i2c_socfpga_scl_recovery
+---
+ drivers/i2c/busses/i2c-designware-core.h    |  1 +
+ drivers/i2c/busses/i2c-designware-master.c  | 49 ++++++++++++++++++---
+ drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
+ 3 files changed, 45 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 70b80e710990..7b22ec1d6a96 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -303,6 +303,7 @@ struct dw_i2c_dev {
+ #define MODEL_MSCC_OCELOT	BIT(8)
+ #define MODEL_BAIKAL_BT1	BIT(9)
+ #define MODEL_AMD_NAVI_GPU	BIT(10)
++#define MODEL_SOCFPGA		BIT(11)
+ #define MODEL_MASK		GENMASK(11, 8)
  
-+	BUG_ON(!fid);
+ /*
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 44a94b225ed8..fa2ea162acbd 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -813,10 +813,26 @@ static void i2c_dw_unprepare_recovery(struct i2c_adapter *adap)
+ 	i2c_dw_init_master(dev);
+ }
+ 
+-static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
++static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
++{
++	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
 +
-+	/* we might need to read from a fid that was opened write-only
-+	 * for read-modify-write of page cache, use the writeback fid
-+	 * for that */
-+	if (rreq->origin == NETFS_READ_FOR_WRITE &&
-+			(fid->mode & O_ACCMODE) == O_WRONLY) {
-+		fid = v9inode->writeback_fid;
-+		BUG_ON(!fid);
++	bri->prepare_recovery(adap);
++	bri->unprepare_recovery(adap);
++
++	return 0;
++}
++
++static int i2c_dw_init_socfpga_recovery_info(struct dw_i2c_dev *dev,
++					     struct i2c_bus_recovery_info *rinfo)
++{
++	rinfo->recover_bus = i2c_socfpga_scl_recovery;
++	return 1;
++}
++
++static int i2c_dw_init_generic_recovery_info(struct dw_i2c_dev *dev,
++					     struct i2c_bus_recovery_info *rinfo)
+ {
+-	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+-	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+ 
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+@@ -831,13 +847,34 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 	rinfo->sda_gpiod = gpio;
+ 
+ 	rinfo->recover_bus = i2c_generic_scl_recovery;
+-	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
+-	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
+-	adap->bus_recovery_info = rinfo;
+ 
+ 	dev_info(dev->dev, "running with gpio recovery mode! scl%s",
+ 		 rinfo->sda_gpiod ? ",sda" : "");
+ 
++	return 1;
++}
++
++static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
++{
++	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
++	struct i2c_adapter *adap = &dev->adapter;
++	int ret;
++
++	switch (dev->flags & MODEL_MASK) {
++	case MODEL_SOCFPGA:
++		ret = i2c_dw_init_socfpga_recovery_info(dev, rinfo);
++		break;
++	default:
++		ret = i2c_dw_init_generic_recovery_info(dev, rinfo);
++		break;
 +	}
++	if (ret <= 0)
++		return ret;
 +
- 	refcount_inc(&fid->count);
- 	rreq->netfs_priv = fid;
++	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
++	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
++	adap->bus_recovery_info = rinfo;
++
  	return 0;
------
+ }
+ 
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 70ade5306e45..b33e015e6732 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -153,6 +153,7 @@ static const struct of_device_id dw_i2c_of_match[] = {
+ 	{ .compatible = "snps,designware-i2c", },
+ 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+ 	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
++	{ .compatible = "intel,socfpga-i2c", .data = (void *)MODEL_SOCFPGA },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
+-- 
+2.25.1
 
-And this also seems to work alright.
-
-I was about to ask why the original code did writes with the writeback
-fid, but I'm noticing now the current code still does (through
-v9fs_vfs_write_folio_locked()), so that part hasn't changed from the old
-code, and init_request will only be getting reads? Which actually makes
-sense now I'm thinking about it because I recall David saying he's
-working on netfs writes now...
-
-So that minimal version is probably what we want, give or take style
-adjustments (only initializing inode/v9inode in the if case or not) -- I
-sure hope compilers optimizes it away when not needed.
-
-
-I'll let you test one or both versions and will fixup the commit message
-again/credit you/resend if we go with this version, unless you want to
-send it.
-
---
-Dominique

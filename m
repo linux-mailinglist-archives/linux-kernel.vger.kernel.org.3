@@ -2,150 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DB054E6BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8582854E6C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378089AbiFPQNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S237613AbiFPQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378061AbiFPQM7 (ORCPT
+        with ESMTP id S234913AbiFPQQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:12:59 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4163FEA0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:12:58 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 25so2862136edw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B7nG0bqPdDQFZmSsFMUEcSWlp2CbGSXVxl7p6eJduFo=;
-        b=P53257MRq0PaCsnXR0yo3W9NK8xQW/61/UG/ASXpReWpNC4QQ4/sCTBKq1QbtQuXIc
-         P4JQ95jDMrDVHrQSgnN6Kff9BQSy0ixclTE0nn0kcYQNSzYiY9ct4iZ57jyvEhCUWTLJ
-         2iQT2Qc5OTEnrylWq4IoFB8fqMPhD8qamKT0o=
+        Thu, 16 Jun 2022 12:16:08 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D162DAA0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:16:08 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id b11-20020a92340b000000b002d3dbbc7b15so1111554ila.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:16:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B7nG0bqPdDQFZmSsFMUEcSWlp2CbGSXVxl7p6eJduFo=;
-        b=HErFBFNcVR6ReAfS8jOAiWuIlPvT8yFFCAmvMYxAAXdIa2GWXmT7dJA2rBK4IQdWNH
-         KV0/xES+KvCwrfhS1jynML62KzLidtd+GKrsLT3zisKu27XZGxdrC5h88uYAyLmk0UeP
-         nRBtW99gRqO8+IYeYRklO0iVt58dKpv3kfm9+BPO5+NapO9qo7qk8eMH48HkY7zrX0Ul
-         wKOv8zWENUpt899iP4Q7DIzBGf08vjTV2hBA58LJPsgie+YZM0dO189BZ4StRg+TxLSp
-         oOVkz2NOs0EXaCfNlTnU5MGMpIbtYhTid4f5V4ByMuiM287AvJFKJTbj5w0oe7Su7z7u
-         aAmA==
-X-Gm-Message-State: AJIora+j7u7eIrRtTfu+9GUoeoIs8u2/sXu/UCvgqC24urt7p1QJOb/s
-        XsbYcWjqdCMjjI+i5g/+bxt+1orwfF0ydlTzBAE=
-X-Google-Smtp-Source: AGRyM1u3ijwLmhU93IIPrsqbOfPAsaroKX2EnvKh8gZ0HJEyByJHM1iCCRnwkmQDcciJ/y0T+x65/A==
-X-Received: by 2002:a05:6402:3514:b0:42f:dd01:922 with SMTP id b20-20020a056402351400b0042fdd010922mr7483305edd.324.1655395976588;
-        Thu, 16 Jun 2022 09:12:56 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id j12-20020aa7ca4c000000b0042e0385e724sm2061970edt.40.2022.06.16.09.12.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 09:12:55 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id w17so2494153wrg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:12:54 -0700 (PDT)
-X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
- h4-20020a05600016c400b0020fcd5d4797mr5320732wrf.193.1655395974456; Thu, 16
- Jun 2022 09:12:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=oWnjpWJQCWY+S/E/agUEvcTBnBsQ+e7DZvG/gt38KI8=;
+        b=ugOjNCUZX3mU7GZUD2iUtqjD6rdJMQdx5XZLw98MbbbZi6CwSisP97GTY1mN6fJwau
+         AKCr6GA3VJLSeqJSZMdoUGYdHdIFLo5PVm36qRBb5rR1zrMQ2K99rbsyL/oZ6PlERv/z
+         8cQ8qztofXgukdewGHQL3hrjoe680/wTxIkQ6D30m5KXVfvUuPPyKeWxzSTB+bNDJPn0
+         4k4YN52jNjdKcQuJw0BTJx52H/zmKEqX3AaPeRiLr3c+MoSoBBsDnk8M7f8mP3bn7pcN
+         c5yYDrOceOJ2DY1bLNIMJGkueHMFWIT6Kc1YQ/MI/noBG1x4SC1w+ov2deWrzehQoPHB
+         lcvg==
+X-Gm-Message-State: AJIora/mFs5dnZosjp+U9+MrWqXbRvhqNB+3285s4AlNeiNTBLe9RZsu
+        1zvHMYVlMweJPlf4DRCr6/I3FeDQl127ak8reNWsdTuBGtrC
+X-Google-Smtp-Source: AGRyM1vV0N/tKLraOOPR9S+/i6TgAicdwoR1XKueqQldhy7cDxNeyKTJUFJfcoezuGLHHorG1+4tYg5Ic9AB1mJ7RCUizi/DHLIY
 MIME-Version: 1.0
-References: <20220616143617.449094-1-Jason@zx2c4.com> <YqtAShjjo1zC6EgO@casper.infradead.org>
- <YqtDXPWdFQ/fqgDo@zx2c4.com> <YqtKjAZRPBVjlE8S@casper.infradead.org> <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
-In-Reply-To: <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 16 Jun 2022 09:12:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgSvPVGZp56uFCjOZoKcgQp7xpsj3P-Hhg+NXvhPnzszg@mail.gmail.com>
-Message-ID: <CAHk-=wgSvPVGZp56uFCjOZoKcgQp7xpsj3P-Hhg+NXvhPnzszg@mail.gmail.com>
-Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>
+X-Received: by 2002:a05:6e02:792:b0:2d7:ae5d:e2fd with SMTP id
+ q18-20020a056e02079200b002d7ae5de2fdmr3303260ils.315.1655396167642; Thu, 16
+ Jun 2022 09:16:07 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:16:07 -0700
+In-Reply-To: <20220616132136.2669-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000088f98505e192f46e@google.com>
+Subject: Re: [syzbot] WARNING: ODEBUG bug in route4_destroy
+From:   syzbot <syzbot+2e3efb5eb71cb5075ba7@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 8:59 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So no. There is ABSOLUTELY ZERO reason to ever use 'uintptr_t' in the
-> kernel. It's wrong. It's wrong *even* for actual user space interfaces
-> where user space might use 'uintptr_t', because those need to be
-> specific kernel types so that we control them (think for compat
-> reasons etc).
+Hello,
 
-Ok, so I wrote that just because that particular issue has happened
-before with other types.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-But then I actually grepped for uintptr_t use in the kernel.
+Reported-and-tested-by: syzbot+2e3efb5eb71cb5075ba7@syzkaller.appspotmail.com
 
-And guess what you find when you do that?
+Tested on:
 
-You find
+commit:         018ab4fa netfs: fix up netfs_inode_init() docbook comm..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=10c31fbff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f21890d74080ef72
+dashboard link: https://syzkaller.appspot.com/bug?extid=2e3efb5eb71cb5075ba7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1627e7a0080000
 
-  #ifdef BINDER_IPC_32BIT
-  typedef __u32 binder_size_t;
-  typedef __u32 binder_uintptr_t;
-  #else
-  typedef __u64 binder_size_t;
-  typedef __u64 binder_uintptr_t;
-  #endif
-
-exactly because user space interfaces used this broken sh*t-for-brains
-traditional model that we've done over and over, and that has been a
-big mistake.
-
-We have similar mistakes in things like 'off_t', where we have a
-mishmash of different versions (off_t, loff_t, __kernel_loff_t,
-compat_loff_t) and several duplicate interfaces due to that.
-
-The drm people (who end up having had more of this kind of stuff than
-most) actually learnt their lesson, and made things be fixed-size.
-We've done that in some other places too. It turns out that "u64" is a
-fairly good type, but even *that* has caused problems, because we
-really should have had a special "naturally aligned" version of it so
-that you don't get the odd alignment issues (x86-32: 'u64' is 4-byte
-aligned. m68k: u64 is 2-byte aligned).
-
-So yeah. size_t and uintptr_t are both disasters in the kernel.
-
-size_t we just have to live with. But that doesn't mean we want to
-deal with uintptr_t.
-
-Another issue is that we can't always control where user space defines
-their types. Which is why we really don't want to use POSIX namespace
-types in any interfaces anyway. It turns out that "u8..u64" are great
-types, and adding two underscores to them for the uapi headers is
-simple and straightforward enough.
-
-Because using other types ends up being really nasty from a namespace
-and "core compiler header files declare them in compiler-specific
-places" etc. Sometimes they are literally hardcoded *inside* the
-compiler (size_t being that kind of type).
-
-Anyway, that's more of an explanation of why the whole "just use the
-standard types" is simply NOT a good argument at all. We end up often
-having to actively avoid them, and the ones we do use are very *very*
-core and traditional
-
-So the whole "just use the standard type" _sounds_ sane. But it really
-isn't, and has some real issues, and we actively avoid it for good
-reasons.
-
-                 Linus
+Note: testing is done by a robot and is best-effort only.

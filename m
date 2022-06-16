@@ -2,127 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B189254E5FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0C354E622
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377888AbiFPP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S1377940AbiFPPeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377466AbiFPP0B (ORCPT
+        with ESMTP id S236304AbiFPPeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:26:01 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06752E09A;
-        Thu, 16 Jun 2022 08:25:59 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 20so2735020lfz.8;
-        Thu, 16 Jun 2022 08:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8ZuOwtq+9/VZTy3ADMx01Z5TJDecADF7IqscILS0mik=;
-        b=UpuPv1+qHiaeoBAs0xq2geW/piGdYhV79fhXrIXnZK6hzwORi8+yDhUNvIFCZbBAY7
-         W/d4GwXJAHWEdjxkQN8M6vw+9OGo1XHxXNP952NiyVyAFfAm/3pHSrpwxGBUuJupyEQy
-         U1ViGSyDAW56Au/YCMrcwo5cC8HGN+yKj49jC5wrBTOTX3iujMBifuFUI30tmH7AkGXb
-         tHIHW/+wUTbldWGvSZpO+iK0+JaIa0VsZleIGia4qruIM02pjSJGJo/oXbk0X6HYQWVV
-         r+umFUHOujGvtKTtDKuqiy2J6KeoYFIGRQK5dV5gfhmEPCY/2lcg9CZcoXzuR79KZ0hx
-         Mvug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8ZuOwtq+9/VZTy3ADMx01Z5TJDecADF7IqscILS0mik=;
-        b=Dawb9dBILlXFn8ghAm2OzSh27b9FbKKw+0/z530DigtkCfceLPg/ZKbNlTvQLFOXgj
-         WBfl6F/29jfF+cToNm/VUCyTMzRVlbINKfO0qkjX/3+IVgZxQCbWnGJFj9nddVqzQ9f5
-         LbianYlnmiuK/Sf9moHyXs+aE8EE9UR8mAuT0/YpUvgEkBMMAPrQuETXFAV4xy91WorT
-         kqty4TEnKBCqwO9WG8qL+1qGdY/2SsUZcrR9PdLeU5w9m9sHXR7BRbluYstULyYkMpPy
-         2jTbi5Nc20HS4wzOI91EDxOQIqYHc0J7VHpoL9BeHobSsHebqfo4jdsHRm1/ePer1n8b
-         xwUA==
-X-Gm-Message-State: AJIora9rglcQHcO5VRjpB3yNSJ/5YXK8/EQEM9nAipGECnniqgs4di2L
-        /BVlmKiqjS9GmmcOKfwCi9w=
-X-Google-Smtp-Source: AGRyM1swYi8yLV5/KLt9zHbj7cSXbJfccEEblBu6x3wtEFG6lr+CfAaV+P0StJVkAcVnu2+Qtluupw==
-X-Received: by 2002:a05:6512:1050:b0:47d:c714:10ba with SMTP id c16-20020a056512105000b0047dc71410bamr2962362lfb.165.1655393158203;
-        Thu, 16 Jun 2022 08:25:58 -0700 (PDT)
-Received: from localhost.localdomain (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id a10-20020a19660a000000b0047e789b9700sm272794lfc.118.2022.06.16.08.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 08:25:57 -0700 (PDT)
-From:   Peter Ujfalusi <peter.ujfalusi@gmail.com>
-To:     dmitry.torokhov@gmail.com
-Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH] Input: twl4030-vibra - Drop legacy, non DT boot support
-Date:   Thu, 16 Jun 2022 18:33:23 +0300
-Message-Id: <20220616153323.29464-1-peter.ujfalusi@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 16 Jun 2022 11:34:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F852DAA3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:34:03 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o1rVN-0003f5-5R; Thu, 16 Jun 2022 17:33:57 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o1rVM-0006BN-HX; Thu, 16 Jun 2022 17:33:56 +0200
+Date:   Thu, 16 Jun 2022 17:33:56 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: phy: at803x: fix NULL pointer
+ dereference on AR9331 PHY
+Message-ID: <20220616153356.GC28995@pengutronix.de>
+References: <20220616113105.890373-1-o.rempel@pengutronix.de>
+ <YqsyRxNsG3AYrfnX@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YqsyRxNsG3AYrfnX@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Legacy or non DT boot is no longer possible on systems where the
-tw4030/5030 is used.
+On Thu, Jun 16, 2022 at 03:38:15PM +0200, Andrew Lunn wrote:
+> On Thu, Jun 16, 2022 at 01:31:05PM +0200, Oleksij Rempel wrote:
+> > Latest kernel will explode on the PHY interrupt config, since it depends
+> > now on allocated priv. So, run probe to allocate priv to fix it.
+> > 
+> > Fixes: 3265f4218878 ("net: phy: at803x: add fiber support")
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/net/phy/at803x.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+> > index 6a467e7817a6..b72a807f2e03 100644
+> > --- a/drivers/net/phy/at803x.c
+> > +++ b/drivers/net/phy/at803x.c
+> > @@ -2072,6 +2072,8 @@ static struct phy_driver at803x_driver[] = {
+> >  	/* ATHEROS AR9331 */
+> >  	PHY_ID_MATCH_EXACT(ATH9331_PHY_ID),
+> >  	.name			= "Qualcomm Atheros AR9331 built-in PHY",
+> > +	.probe			= at803x_probe,
+> > +	.remove			= at803x_remove,
+> >  	.suspend		= at803x_suspend,
+> >  	.resume			= at803x_resume,
+> >  	.flags			= PHY_POLL_CABLE_TEST,
+> 
+> Is the same change needed for some of the other PHYs? QCA8081?
+> QCA9561?
 
-Drop the support for handling legacy pdata.
+Yes, good point.
 
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
----
- drivers/input/misc/twl4030-vibra.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/input/misc/twl4030-vibra.c b/drivers/input/misc/twl4030-vibra.c
-index e0ff616fb857..5619996da86f 100644
---- a/drivers/input/misc/twl4030-vibra.c
-+++ b/drivers/input/misc/twl4030-vibra.c
-@@ -163,14 +163,10 @@ static int __maybe_unused twl4030_vibra_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(twl4030_vibra_pm_ops,
- 			 twl4030_vibra_suspend, twl4030_vibra_resume);
- 
--static bool twl4030_vibra_check_coexist(struct twl4030_vibra_data *pdata,
--			      struct device_node *parent)
-+static bool twl4030_vibra_check_coexist(struct device_node *parent)
- {
- 	struct device_node *node;
- 
--	if (pdata && pdata->coexist)
--		return true;
--
- 	node = of_get_child_by_name(parent, "codec");
- 	if (node) {
- 		of_node_put(node);
-@@ -182,13 +178,12 @@ static bool twl4030_vibra_check_coexist(struct twl4030_vibra_data *pdata,
- 
- static int twl4030_vibra_probe(struct platform_device *pdev)
- {
--	struct twl4030_vibra_data *pdata = dev_get_platdata(&pdev->dev);
- 	struct device_node *twl4030_core_node = pdev->dev.parent->of_node;
- 	struct vibra_info *info;
- 	int ret;
- 
--	if (!pdata && !twl4030_core_node) {
--		dev_dbg(&pdev->dev, "platform_data not available\n");
-+	if (!twl4030_core_node) {
-+		dev_dbg(&pdev->dev, "twl4030 OF node is missing\n");
- 		return -EINVAL;
- 	}
- 
-@@ -197,7 +192,7 @@ static int twl4030_vibra_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	info->dev = &pdev->dev;
--	info->coexist = twl4030_vibra_check_coexist(pdata, twl4030_core_node);
-+	info->coexist = twl4030_vibra_check_coexist(twl4030_core_node);
- 	INIT_WORK(&info->play_work, vibra_play_work);
- 
- 	info->input_dev = devm_input_allocate_device(&pdev->dev);
+Regards,
+Oleksij
 -- 
-2.36.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

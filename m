@@ -2,86 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C377E54DA45
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240E254DA49
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359082AbiFPGJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S1359005AbiFPGJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359016AbiFPGJd (ORCPT
+        with ESMTP id S1359010AbiFPGJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:09:33 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C708C2E9DD;
-        Wed, 15 Jun 2022 23:09:29 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 41B063200A57;
-        Thu, 16 Jun 2022 02:09:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 16 Jun 2022 02:09:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1655359767; x=1655446167; bh=Q6
-        7Ot5tdbFGVjczMQOtyiP3EgCUjO/QaLYKLX+IzOvo=; b=eyFK0Vy99b3mJB/2NK
-        fT1vC3q0wpxdZxR6Egmp65PmMxB08X14az1d72oN3D9SyD11p8w28Gi5cULbrz18
-        cihax6t8H4fq5SOlqf6N3PqUb5dGlEoWO/12aduSmB8irN/MJzxMAdZQVrjo5k1/
-        RbLLX7l4hUqb7gKwXo1Q7GxjElFbfaPh3oIAlLyVDGaVvR9lOCOGlz6E0tA3saJZ
-        CMzZgXE/53s3R8iH6+0ZWlZcYyJNkpAa7UmdYchCoXlFY6Z6/dXUkeOyIerxJ3VI
-        s47VuwRUz289oCS5s5pV4qA5Fs+7cFDH/lmECUIZfhXaBKG4jF0N+glOxx3cqYd2
-        Bj+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1655359767; x=1655446167; bh=Q67Ot5tdbFGVj
-        czMQOtyiP3EgCUjO/QaLYKLX+IzOvo=; b=UwcL5PYe3LP6t/voujdgO89tALhl+
-        7iojztLB1Yr50yWzUBUjx+Wrx2KDX5V+AiM6ChCk4aqPyCLPnihQeb/3FFajFRIa
-        P02ZG3eHJRf82mbxO1V2/F6LFE2OBj9E7721uMQ4kkKGCOPUyKiIMsuQWLbdfPx4
-        80vQn/JUJ9I+Fb1Sb9VxBKX88HmGT9VtmakSDzyOdOtEypSIaFLOM3xaeSEHFoKe
-        txyp3lSGRruLU5Q8xXd5WOOMjhREMKK7avfyREWz6s0QfcVtIFyLFt95WbscrOd3
-        0QB81t/7QMevEFoUY8rOZYcEzVnUphIyyNIlv5qAYIpBkyUMflYQTpyMg==
-X-ME-Sender: <xms:F8mqYt6n9ZrB2dtrePeZSJpDyjXBkF5hkbY7Abzu9eNnO7Zr1YnDbg>
-    <xme:F8mqYq4JCDwuKV2ZUTyIbDFL4giJ99JuF11K5g4j9hu6tMKZ4akB0ndx7Imsb7W_3
-    N5lAexFIYB9O1Ymkw>
-X-ME-Received: <xmr:F8mqYkfL5o_f2mZXAthD1Zi1guGVofk8XiFcDPHq91aacmxvE-to7OtpxmPZVoCqtVWN7ZyZVoxE-Ik6yvtluhFGX_16fr5ZCtYwJABienOroDt5oykGU0Uele1MzRjneYfUZA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvvddguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:F8mqYmLDPdwWV-JYxHn0iIGEfglpct-1D4sEX7lNDPzvc_ss_4iqNw>
-    <xmx:F8mqYhIBcpohnLBz-vbe_Z0hw4XPPMk_OEQgODSIeUMJTDvAgt1QSQ>
-    <xmx:F8mqYvw8_0j6HE0hYwTiKHzF7SShcwbkYJ4lsoTdrqXFqp6pJeTSDA>
-    <xmx:F8mqYo8TC0uGegXBmx8_S-WMF16UvJaLjL6j75Dd6yoKGxZ214akIA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Jun 2022 02:09:27 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>, Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] ARM: dts: axp22x/axp809: Add GPIO controller nodes
-Date:   Thu, 16 Jun 2022 01:09:15 -0500
-Message-Id: <20220616060915.48325-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220616060915.48325-1-samuel@sholland.org>
-References: <20220616060915.48325-1-samuel@sholland.org>
+        Thu, 16 Jun 2022 02:09:30 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BBD2A71B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:09:26 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y6so514443plg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=0wP+cMH+Uc8nndXud5ubhnBWs0aIbuoS+iQdIEaJNiI=;
+        b=j3pNVhiqRfcJsT5F+t4Xia4CIwJMeKOYOmX0EX/ojefR78yfC+MYC+A80po+5TVvTt
+         z7NflypW4GI0b1aWqcCJkcXYb3Ael0//cXPkFG2CjZoPhgbLGtpK0nzmbTNC+mpmoMUm
+         BTyo3acf/YQkGq0VZpwV3o0xGP6N9s+1MwAafGgGULeobIlnCYONxNuPqyqt54/r4ki9
+         pHf0uRhX+CE1QHTzNDIOEVdpc8/SoKxIwvJnp50YHna9qXhKVQ+pw6GH/Vy7POwpJRNK
+         SZI4fY0AmrHkd7HcPTAKBeLTvGNmtX2R2RDADYIzxZPBTRXzFK6rYEk1+yR78csXkcOC
+         /8Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0wP+cMH+Uc8nndXud5ubhnBWs0aIbuoS+iQdIEaJNiI=;
+        b=vl03jC2LzbsyxKPBh7OkpI+MFmc35vIHPCj6JmB16s0rVkH3TLXLr5qpu/fDnexib2
+         rDg8RSX4Kf7f7v9u/l2qSPJ1gB/pyt+QK2zc5JeWPp3g11XIjU8bnqURbusJMDbM7PlL
+         FF54F2U9Jyll6mlNLIVmeEIYpeqYZkG6ns5v2ZtHwciO0blf+d1tOeehJNwu0qASA8aS
+         UXpEVNn3WoFHQ68hoSC5hucg9SO7nZLv7/KouIv5ctwKxwDxyazs5mEpgI1EonUhekOa
+         YoKnWANo4hTrlPHWK7eugb+c546VahjXjYXM1S938CB+KBkqguOtQpPzlPybUXW5uOPu
+         VQtg==
+X-Gm-Message-State: AJIora/DNp6ilm/mKMLONstorx8+6HTpeWUgPyaqVNizMFSZTHoGgIyx
+        /GvwIhysTXEIzPXjwOMsEF7dbg==
+X-Google-Smtp-Source: AGRyM1vXN4pBq4tJYBrUoaqp9fFqKxyIt0So1hcfx92hSBOT96m8/K5gDXj9amAFYWhcO6+K6k6BFw==
+X-Received: by 2002:a17:90a:bd89:b0:1e3:50de:5ccf with SMTP id z9-20020a17090abd8900b001e350de5ccfmr3376576pjr.104.1655359765668;
+        Wed, 15 Jun 2022 23:09:25 -0700 (PDT)
+Received: from [10.5.8.36] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id d16-20020a637350000000b003fdd2aa9811sm704365pgn.60.2022.06.15.23.09.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 23:09:25 -0700 (PDT)
+Message-ID: <29b3bbe6-24dc-d0ee-8426-7cb3b6cfbc1e@bytedance.com>
+Date:   Thu, 16 Jun 2022 14:09:21 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH] ext4: fix trim range leak
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220614044647.21846-1-hanjinke.666@bytedance.com>
+ <20220615084017.xwexup5ckrrpevhe@fedora>
+From:   hanjinke <hanjinke.666@bytedance.com>
+In-Reply-To: <20220615084017.xwexup5ckrrpevhe@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,73 +73,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These PMICs all contain a GPIO controller. Now that the binding is
-documented, wire up the controller in the device tree.
+hi
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+thanks for your reply.
 
- arch/arm/boot/dts/axp22x.dtsi | 18 ++++++++++++++++++
- arch/arm/boot/dts/axp809.dtsi | 19 +++++++++++++++++++
- 2 files changed, 37 insertions(+)
+Your point mentioned in the last email is very useful to me.
 
-diff --git a/arch/arm/boot/dts/axp22x.dtsi b/arch/arm/boot/dts/axp22x.dtsi
-index a020c12b2884..5c233c84be92 100644
---- a/arch/arm/boot/dts/axp22x.dtsi
-+++ b/arch/arm/boot/dts/axp22x.dtsi
-@@ -67,6 +67,24 @@ battery_power_supply: battery-power {
- 		status = "disabled";
- 	};
- 
-+	axp_gpio: gpio {
-+		compatible = "x-powers,axp221-gpio";
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		/omit-if-no-ref/
-+		gpio0_ldo: gpio0-ldo-pin {
-+			pins = "GPIO0";
-+			function = "ldo";
-+		};
-+
-+		/omit-if-no-ref/
-+		gpio1_ldo: gpio1-ldo-pin {
-+			pins = "GPIO1";
-+			function = "ldo";
-+		};
-+	};
-+
- 	regulators {
- 		/* Default work frequency for buck regulators */
- 		x-powers,dcdc-freq = <3000>;
-diff --git a/arch/arm/boot/dts/axp809.dtsi b/arch/arm/boot/dts/axp809.dtsi
-index ab8e5f2d9246..da92b105f3b0 100644
---- a/arch/arm/boot/dts/axp809.dtsi
-+++ b/arch/arm/boot/dts/axp809.dtsi
-@@ -50,4 +50,23 @@ &axp809 {
- 	compatible = "x-powers,axp809";
- 	interrupt-controller;
- 	#interrupt-cells = <1>;
-+
-+	axp_gpio: gpio {
-+		compatible = "x-powers,axp809-gpio",
-+			     "x-powers,axp221-gpio";
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		/omit-if-no-ref/
-+		gpio0_ldo: gpio0-ldo-pin {
-+			pins = "GPIO0";
-+			function = "ldo";
-+		};
-+
-+		/omit-if-no-ref/
-+		gpio1_ldo: gpio1-ldo-pin {
-+			pins = "GPIO1";
-+			function = "ldo";
-+		};
-+	};
- };
--- 
-2.35.1
+I also think performance gains should be based on impeccable logic and 
+the semantic of trim should be promised too.
 
+Can I send a patch v2 based on your suggestion ?
+
+Jinke
+
+在 2022/6/15 下午4:40, Lukas Czerner 写道:
+> On Tue, Jun 14, 2022 at 12:46:47PM +0800, Jinke Han wrote:
+>> From: hanjinke <hanjinke.666@bytedance.com>
+>>
+>> When release group lock, a large number of blocks may be alloc from
+>> the group(e.g. not from the rest of target trim range). This may
+>> lead end of the loop and leave the rest of trim range unprocessed.
+> 
+> Hi,
+> 
+> you're correct. Indeed it's possible to miss some of the blocks this
+> way.
+> 
+> But I wonder how much of a problem this actually is? I'd think that the
+> optimization you just took out is very usefull, especially with larger
+> minlen and more fragmented free space it'll save us a lot of cycles.
+> Do you have any performance numbers for this change?
+> 
+> Perhaps we don't have to remove it completely, rather zero the
+> free_count every time bb_free changes? Would that be worth it?
+> 
+> -Lukas
+> 
+>>
+>> Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+>> ---
+>>   fs/ext4/mballoc.c | 6 +-----
+>>   1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+>> index 9f12f29bc346..45eb9ee20947 100644
+>> --- a/fs/ext4/mballoc.c
+>> +++ b/fs/ext4/mballoc.c
+>> @@ -6345,14 +6345,13 @@ static int ext4_try_to_trim_range(struct super_block *sb,
+>>   __acquires(ext4_group_lock_ptr(sb, e4b->bd_group))
+>>   __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+>>   {
+>> -	ext4_grpblk_t next, count, free_count;
+>> +	ext4_grpblk_t next, count;
+>>   	void *bitmap;
+>>   
+>>   	bitmap = e4b->bd_bitmap;
+>>   	start = (e4b->bd_info->bb_first_free > start) ?
+>>   		e4b->bd_info->bb_first_free : start;
+>>   	count = 0;
+>> -	free_count = 0;
+>>   
+>>   	while (start <= max) {
+>>   		start = mb_find_next_zero_bit(bitmap, max + 1, start);
+>> @@ -6367,7 +6366,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+>>   				break;
+>>   			count += next - start;
+>>   		}
+>> -		free_count += next - start;
+>>   		start = next + 1;
+>>   
+>>   		if (fatal_signal_pending(current)) {
+>> @@ -6381,8 +6379,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+>>   			ext4_lock_group(sb, e4b->bd_group);
+>>   		}
+>>   
+>> -		if ((e4b->bd_info->bb_free - free_count) < minblocks)
+>> -			break;
+>>   	}
+>>   
+>>   	return count;
+>> -- 
+>> 2.20.1
+>>
+> 

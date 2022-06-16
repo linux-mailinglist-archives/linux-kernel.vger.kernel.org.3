@@ -2,90 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDE554E606
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8DB54E60C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377576AbiFPP2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S233352AbiFPP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377879AbiFPP1t (ORCPT
+        with ESMTP id S1377889AbiFPP2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:27:49 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678BC237FC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:27:48 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id a10so1816894ioe.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=upatriLmkO3sefxdPr9OKsvWnO7y75tD7XP4VtTCKA8=;
-        b=0aISl+G8eIq7A8ZAxYGuTONwi911a0KTDFYa2Ba8tjGlempPy0Y4GLQevVM+uagLOX
-         1gYBr1pxdL0s3ClG29zPK2GSBRghvvpsO/o30CbhqAiiNyD72PS8p44xSQs2xNla7lu8
-         qf8ER/gUPEE1BJmDXSAbO4PXt4YCeVREGUJFpq4wt3s8oPooz0BTxBdbNXlKkAKSQyzs
-         h8JR4CsShfdQ5iFlwWoTCVU+9mqKaJeycRZx0x47n/4EtIlNZ51Sh4PVAeYSPzsFd+5Z
-         KgmLJz90llUBVYTYMbE1xXoDqf+N43mRiQs2YrJidVhV2vXTENPQjxrWqqvpyuPVufpl
-         E3Ng==
+        Thu, 16 Jun 2022 11:28:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 247D62DAAE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655393325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XskGf25OAiPtPSUK4BxcnPczRA0Oydi/igOaaTpXUSQ=;
+        b=bdDBnxXql2SOny0hceigHtBqaMQQEQeNGOv8yJdKDVIWqxcdrE0YHy2hAdDU1Lib9mWMOc
+        FFLTWBu+k2XFHJyfRYAMiqO9A2R+2RQ3Pgu6hlVnpkyNS//GIrTuPKXnWknevWxw3NU+3j
+        EJFnXXN5KfVdQRTyOCYv/RfDszXny8I=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-BnyuoktHN_SaLjW42qgQeA-1; Thu, 16 Jun 2022 11:28:43 -0400
+X-MC-Unique: BnyuoktHN_SaLjW42qgQeA-1
+Received: by mail-ej1-f72.google.com with SMTP id kf3-20020a17090776c300b0070d149300e9so755929ejc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:28:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=upatriLmkO3sefxdPr9OKsvWnO7y75tD7XP4VtTCKA8=;
-        b=O7Y9G85f+cyNziWRQ2pvFIimRCd3HtSyfgMyHDX+dWIXMRTDF43PRkK0aqKKSleCds
-         ka1k1wHObvHntC6YtBhUdadQxRRs0wH6pRETBGewXsFzTN/RPlZqBzyrj3PKyX5nL86r
-         rkDiPq7XTze/bfx77Yix49EExNfxPe8tj2UXVA8wNhdmeiH/zJkBtO+fcHMDQBx0/BDk
-         E7BIT/ZFaHL8Aq1lTWzH5z68CBA5Lh+jKRyqG/GfoJyi0x1JHZstqGQZu11sGJ+oxu/H
-         VEnx0g3OQf6J/caN+0e+/v2LILvso1WkUO3E4gI7jdQcd6XRAuGkjJDay9xWR0vFA62m
-         9pmA==
-X-Gm-Message-State: AJIora+xrQd91eyN93AtB8XFm+IbGBxYjcPm8UpbYQOu8ByMhahwnuyG
-        qQFU6aFkuq5eDQxKv9ynxFKvtC3kGx4GSA==
-X-Google-Smtp-Source: AGRyM1sWGtz2ujc9bODZa2fJQWRkvHASOIH+uKiPq4diLwYftOeavGtp/uolR+hwk0xMV+9lt7sgYA==
-X-Received: by 2002:a05:6638:2053:b0:331:6410:1e6d with SMTP id t19-20020a056638205300b0033164101e6dmr3099100jaj.98.1655393266404;
-        Thu, 16 Jun 2022 08:27:46 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id z4-20020a926504000000b002d11c598e12sm1116480ilb.61.2022.06.16.08.27.45
+        bh=XskGf25OAiPtPSUK4BxcnPczRA0Oydi/igOaaTpXUSQ=;
+        b=FJK65J+aOj/BgAJ3zV48EpH1Lh41t5TS8wnGYR5BQcHAVj6HV8+lHwNMaeUHt7nudi
+         hKI7i2IvXivMN8rFFoJek4aDugcOVfG5cxDVk4D98IcXUrz3uEdf+bQlvBnZ6gHHRJlS
+         piiOruUGGv6/g/qYkktllwHy3IX96DjdNIoIrgxE+MxCc4wy1YI03RpOI91ugyADST/U
+         +G7yBeDpamVsFwg86sHsKptuKTDgguLNGReeZZupGWEtzUJiGDXMC+pBfe2UPjBkPQM8
+         Isn+JrhnNo5Rp06EqAuG2LOgX/4q3Q5YjwWrINFbQ2ICSVbtdCz5A7HOEGRaKM6+ns69
+         MFyg==
+X-Gm-Message-State: AJIora/53l9lZsiZyqDBeu78tVhrtyOWsWEqMPdCh1hrmL6nruUf/4a+
+        /I72dyHo+v23YpwEtFVd5bCH7NFOQW6lv9MJpspwT+c0d6ZH5rAG0F3OP0UeDBenXz/tog/q68f
+        yHhpvYZ3yLopO2SV5ilCoYwvn
+X-Received: by 2002:a17:906:7a4a:b0:712:c6d:46df with SMTP id i10-20020a1709067a4a00b007120c6d46dfmr5085391ejo.314.1655393322558;
+        Thu, 16 Jun 2022 08:28:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vJsE6d4JZOi53Tz2XAP/rgRHZ/OSAOnXOCoxVH7wTJZGlMIVUlbi95yyig9j53CDCfTpb6Jw==
+X-Received: by 2002:a17:906:7a4a:b0:712:c6d:46df with SMTP id i10-20020a1709067a4a00b007120c6d46dfmr5085361ejo.314.1655393322317;
+        Thu, 16 Jun 2022 08:28:42 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id w12-20020a056402268c00b0042aaaf3f41csm2083977edd.4.2022.06.16.08.28.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 08:27:46 -0700 (PDT)
-Message-ID: <281b7645-5ce3-0339-78d9-bbc737e4c50e@kernel.dk>
-Date:   Thu, 16 Jun 2022 09:27:43 -0600
+        Thu, 16 Jun 2022 08:28:41 -0700 (PDT)
+Message-ID: <8a38488d-fb6e-72f9-3529-b098a97d8c97@redhat.com>
+Date:   Thu, 16 Jun 2022 17:28:40 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [RFC PATCHv2] block: set bdi congested when no tag available
 Content-Language: en-US
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com
-References: <1655382631-3037-1-git-send-email-zhaoyang.huang@unisoc.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <1655382631-3037-1-git-send-email-zhaoyang.huang@unisoc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Yang Weijiang <weijiang.yang@intel.com>, seanjc@google.com,
+        x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rick.p.edgecombe@intel.com
+References: <20220616084643.19564-1-weijiang.yang@intel.com>
+ <YqsB9upUystxvl+d@hirez.programming.kicks-ass.net>
+ <62d4f7f0-e7b2-83ad-a2c7-a90153129da2@redhat.com>
+ <Yqs7qjjbqxpw62B/@hirez.programming.kicks-ass.net>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 00/19] Refresh queued CET virtualization series
+In-Reply-To: <Yqs7qjjbqxpw62B/@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/22 6:30 AM, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On 6/16/22 16:18, Peter Zijlstra wrote:
+> On Thu, Jun 16, 2022 at 12:21:20PM +0200, Paolo Bonzini wrote:
+>> On 6/16/22 12:12, Peter Zijlstra wrote:
+>>> Do I understand this right in that a host without X86_KERNEL_IBT cannot
+>>> run a guest with X86_KERNEL_IBT on? That seems unfortunate, since that
+>>> was exactly what I did while developing the X86_KERNEL_IBT patches.
+>>>
+>>> I'm thinking that if the hardware supports it, KVM should expose it,
+>>> irrespective of the host kernel using it.
+>>
+>> For IBT in particular, I think all processor state is only loaded and stored
+>> at vmentry/vmexit (does not need XSAVES), so it should be feasible.
 > 
-> In previous version, block layer will set bdi to be congested when
-> get_request fail, which may throttle direct_reclaim. Move them back
-> under current blk-mq design.
+> That would be the S_CET stuff, yeah, that's VMCS managed. The U_CET
+> stuff is all XSAVE though.
 
-bdi congestion doesn't exist anymore, not sure what this patch is
-against?
+What matters is whether XFEATURE_MASK_USER_SUPPORTED includes 
+XFEATURE_CET_USER.  If you build with !X86_KERNEL_IBT, KVM can still 
+rely on the FPU state for U_CET state, and S_CET is saved/restored via 
+the VMCS independent of X86_KERNEL_IBT.
 
--- 
-Jens Axboe
+Paolo
+
+> But funny thing, CPUID doesn't enumerate {U,S}_CET separately. It *does*
+> enumerate IBT and SS separately, but for each IBT/SS you have to
+> implement both U and S.
+> 
+> That was a problem with the first series, which only implemented support
+> for U_CET while advertising IBT and SS (very much including S_CET), and
+> still is a problem with this series because S_SS is missing while
+> advertised.
 

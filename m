@@ -2,125 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C73654E56D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C965554E574
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377323AbiFPOyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
+        id S1377453AbiFPOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbiFPOys (ORCPT
+        with ESMTP id S1377403AbiFPOzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:54:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B87CE2BB1E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655391285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1cICD+IJ7/ONnZC/LuWzYTAkQtdI3gcDnjHQFrlNn6s=;
-        b=CMHUCruMM+cGLA1rUqthgTk3l2ARntw4SSePv27TWKA1gxwjMbGvvpx1vZQ8C3hF3+qH1l
-        4/YwPr3/gHMFJu+81S5rzJquDJZqbhWczT0UNX8jqcPIlG1kBpi1OWr7pP/n9gib/4/DET
-        PbjPUVRrMQ/aW/xFviiGQ2BA1kCGbzc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-oUCb3boEMrCkrfYYPhKn9A-1; Thu, 16 Jun 2022 10:54:40 -0400
-X-MC-Unique: oUCb3boEMrCkrfYYPhKn9A-1
-Received: by mail-ej1-f69.google.com with SMTP id z7-20020a170906434700b007108b59c212so721220ejm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:54:39 -0700 (PDT)
+        Thu, 16 Jun 2022 10:55:22 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3501E326C3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:55:21 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id o16so2216364wra.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=i61TpzN79pFd8jTgYBxbOsIXd3ZePgcEGIUlQDrP1oA=;
+        b=M/0k6QEAATbj8kUW5XwyTvB1JajbQWDuSL/nFsg2g4nuZM6ljYMq0q3I0sLs2205Dl
+         9Pewsmz/LnfdEd+7a2J0V9T4JScjQUlSwbRcl9v7EWkC2nsARiDxxKfrOGQvMTPLjVXF
+         Bt6OjKJuvmG6yndpzucExvXSGXyHVv+ffey0bSoaGLk94nMaxPao93IKOcDj48zpuG/M
+         9cH6aBjoaQOkknW2oQlhQ3N7WbWeNVf7WPjwpGNE11abmuMGgRxBiXgony8A2AY9bTPA
+         dRhUeY37FIi4i5E79o/M5TRMbzmHFmcBj9+M60rkByb2PgJT5hKqaHRN6enYys9bDtUn
+         PFbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1cICD+IJ7/ONnZC/LuWzYTAkQtdI3gcDnjHQFrlNn6s=;
-        b=cgS1pmbsYfd/xucuknncRLIkKYknseNpP4rE5xScp+oNbSCsW7nsLaybvtkYIIRmQw
-         rmckhG57g2g4dFG1nWXZTbT7ELLIHAnrhYtCUea5BynGNbWhzbF2bfU+/+VjWhSJkYJG
-         6Y8U9n5kdNFdkHDEfIy62LwzxMOYPxQ8mW0fzKYJN5MjmNvf9SD4nmIzt6xFP+LSqRAz
-         6Y7l5kpCWEC8nFjh7WpQWWBM4LnIFFBwMcUaR907q0++/KZg5Tx+LSMcGjQU7Rh4otIZ
-         R/FXGaovfMcrjaAtAyTCHs0dI4fZm4rwilqNLlsUCjXp4g11QAMyuRRiHjI101/SsMnk
-         MTIg==
-X-Gm-Message-State: AJIora/6arLKobpmanTCzR0+fiu+OFoHYjX/sctWaM+h9oZ4n7VeLZ04
-        wwk2EgyhsP4ZJzfI8TcSq1Qeq01vBUTbdShuHfSpPqfhAujqLjeK4x8xvgWp4bCbnZeAEtApvtE
-        Kag0S5ARRrRuctpTQMdDhMsQz
-X-Received: by 2002:a05:6402:11d1:b0:433:4a09:3f49 with SMTP id j17-20020a05640211d100b004334a093f49mr6891859edw.357.1655391275523;
-        Thu, 16 Jun 2022 07:54:35 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tz5m+CaNItXHHf5d7bcmJBR3NWAYfylhg778tBfOwYbogq00BMubl8ww1j2446kZCToO+fSw==
-X-Received: by 2002:a05:6402:11d1:b0:433:4a09:3f49 with SMTP id j17-20020a05640211d100b004334a093f49mr6891844edw.357.1655391275329;
-        Thu, 16 Jun 2022 07:54:35 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id h18-20020a056402281200b0043173ab6728sm2090037ede.7.2022.06.16.07.54.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 07:54:34 -0700 (PDT)
-Message-ID: <3dccee6c-8682-66c8-6a22-e58630825443@redhat.com>
-Date:   Thu, 16 Jun 2022 16:54:33 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=i61TpzN79pFd8jTgYBxbOsIXd3ZePgcEGIUlQDrP1oA=;
+        b=kNtXjoWhGUeO+EDOi2lirQ/OIVq0ZX+MfbVdBZEF0mv1l0M8u7VVbedtEo0LKXLk5o
+         PJJKKrqL9ty0+qzdMy2mvMWSs7fXygpEDXHV/m9uG/5XeT2fHBIuyo+EW3AK/BAtR6uY
+         xd8a9GuLLitA7HP+bcfjD5roroQy8pppeBu+lXCaPJcrNH/7x45oBbSX06wFNnPu0gaC
+         v/jnh7Wub8dwNI4bmYugL0gsCG47Wh3BpgfU+oHvcY7QMIWTDPtomuJB2BvyaAFT0Jsb
+         buIfghuAfnnTqZnsRpwnlO9Kq8kRcK9Zc/uqgyI8JP13E11FBREDTbxxk1A1Fnw41+s1
+         NaLA==
+X-Gm-Message-State: AJIora96pP3jCOPbHtTzALySd0e0VF59iuS3xPW7QIFwNbKfQSl8sUms
+        ifVqS+q5+/bEmVU/c2mdUO702w6vTcPQqMLi8koiKg==
+X-Google-Smtp-Source: AGRyM1vln/RJNFB5gnVroReIptb3DCyDVdXiSGVTD0fsO1X/g7WEyvgJkHlyCbvxclOodYlVPdUzKesDei1IR6d9Itk=
+X-Received: by 2002:a05:6000:1889:b0:218:4de1:25a3 with SMTP id
+ a9-20020a056000188900b002184de125a3mr5084396wri.622.1655391319594; Thu, 16
+ Jun 2022 07:55:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 01/10] KVM: Do not zero initialize 'pfn' in hva_to_pfn()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429010416.2788472-1-seanjc@google.com>
- <20220429010416.2788472-2-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220429010416.2788472-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220615135824.15522-1-maira.canal@usp.br>
+In-Reply-To: <20220615135824.15522-1-maira.canal@usp.br>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 16 Jun 2022 22:55:08 +0800
+Message-ID: <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
+Subject: Re: [PATCH 00/10] drm: selftest: Convert to KUnit
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        dri-devel@lists.freedesktop.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/22 03:04, Sean Christopherson wrote:
-> Drop the unnecessary initialization of the local 'pfn' variable in
-> hva_to_pfn().  First and foremost, '0' is not an invalid pfn, it's a
-> perfectly valid pfn on most architectures.  I.e. if hva_to_pfn() were to
-> return an "uninitializd" pfn, it would actually be interpeted as a legal
-> pfn by most callers.
-> 
-> Second, hva_to_pfn() can't return an uninitialized pfn as hva_to_pfn()
-> explicitly sets pfn to an error value (or returns an error value directly)
-> if a helper returns failure, and all helpers set the pfn on success.
-> 
-> Note, the zeroing of 'pfn' was introduced by commit 2fc843117d64 ("KVM:
-> reorganize hva_to_pfn"), and was unnecessary and misguided paranoia even
-> then.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   virt/kvm/kvm_main.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 0848430f36c6..04ed4334473c 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2567,7 +2567,7 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
->   		     bool write_fault, bool *writable)
->   {
->   	struct vm_area_struct *vma;
-> -	kvm_pfn_t pfn = 0;
-> +	kvm_pfn_t pfn;
->   	int npages, r;
->   
->   	/* we can do it either atomically or asynchronously, not both */
+On Wed, Jun 15, 2022 at 9:59 PM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
+:
+>
+> KUnit unifies the test structure and provides helper tools that simplify
+> the development of tests. The basic use case allows running tests as regu=
+lar
+> processes, which makes it easier to run unit tests on a development machi=
+ne
+> and to integrate the tests into a CI system.
+>
+> That said, the conversion of selftests for DRM to KUnit tests is benefici=
+al
+> as it unifies the testing API by using the KUnit API.
+>
+> KUnit is beneficial for developers as it eases the process to run unit te=
+sts.
+> It is possible to run the tests by using the kunit-tool on userspace with=
+ the
+> following command:
+>
+> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/tests =
+--arch=3Dx86_64
+>
+> For CI system, it is possible to execute during the build. But, we also t=
+hink
+> about IGT: we are developing a patch to introduce KUnit to IGT.
+>
+> These patches were developed during a KUnit hackathon [0] last October. N=
+ow,
+> we believe that both the IGT side and the Kernel side are in good shape f=
+or
+> submission.
+>
+> If you are willing to check the output, here is the Pastebin with the out=
+put
+> and execution times [1].
+>
+> [0] https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
+> [1] https://pastebin.com/FJjLPKsC
+>
+> - Arthur Grillo, Isabella Basso, and Ma=C3=ADra Canal
 
-I wonder if it was needed to avoid uninitialized variable warnings on 
-"return pfn;"...
+Great to see these going upstream!
 
-Paolo
+I've tested them on my machine, both with x86_64 qemu and with UML using:
+./tools/testing/kunit/kunit.py run
+--kunitconfig=3Ddrivers/gpu/drm/tests/.kunitconfig \
+--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy \
+--kconfig_add CONFIG_VIRTIO_UML=3Dy
 
+And all 114 tests pass, and everything looks good. My only minor notes
+(from a quick look at the results, rather than a detailed review of
+the code) are that the test names have a few small oddities:
+- The suites all end in _tests (or _test, in the case of
+drm_plane_helper_test). This is a bit redundant (and while there is
+only one drm_plane_helper_test, the inconsistency with the others is a
+bit awkward), so removing the suffix may be cleaner. (Or at least
+being optimistic, and making drm_plane_helper_test plural.)
+- The drm_cmdline_parser_tests suite's tests have some inconsistencies
+name-wise: they're the only ones to start with drm_, not igt_, and
+they have a few capital letters in some of the
+'drm_cmdline_test_force_D_' tests. (It's also technically redundant to
+start all of the test names with drm_cmdline_test, given the suite
+name.)
+
+Of course, if you're trying to keep compatibility with existing tests
+or tooling, or there's some deeper reason they're named like this,
+it's definitely not a dealbreaker.
+
+Either way, this whole series is:
+
+Tested-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David

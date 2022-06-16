@@ -2,172 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B924E54DDF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F8354DDFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376642AbiFPJL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 05:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S232005AbiFPJNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 05:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358507AbiFPJLY (ORCPT
+        with ESMTP id S230217AbiFPJNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 05:11:24 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC725537E;
-        Thu, 16 Jun 2022 02:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655370682; x=1686906682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=RAIhqL2xeDknD95cNLZqPbz62ihnEMqznkDfqUykBmo=;
-  b=nXxCyTE8/3lbaqdCmB8/BhVuvZNTnA1d533K8fHP60oPPKEvW2cxm5lj
-   JrQnA99JFBXzrISSCVj362kN+qGXVqnIC/x2pOZTfQWlKTlOwaTgShHKx
-   tskdjFerqty+Ue94ivZsBW/VAuiLzcdH7DNyGGbwHMUzJ9H5QI6BRcgGT
-   4=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Jun 2022 02:11:21 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 02:11:21 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 16 Jun 2022 02:11:21 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 16 Jun 2022 02:11:14 -0700
-Date:   Thu, 16 Jun 2022 14:41:10 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com>
- <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com>
- <YqjLHyUVEjf7I3MI@google.com>
+        Thu, 16 Jun 2022 05:13:31 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741C33883;
+        Thu, 16 Jun 2022 02:13:27 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 1F4B45FD03;
+        Thu, 16 Jun 2022 12:13:24 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1655370804;
+        bh=7i+WbrLGyhdDOl6otfE2hBmeiw1ub8XtTLQ9Gron/CM=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=Q/BfUyIrX8XAPUKkEdTfTwwO2ReVQ79g9+tHkoEXFxfaflwkphpBsnXoFsxXv9os7
+         9aX85PJXEOtpveZuXbhl48iLoW0sjk6KPCDrskZSR+uEavT7xxCUCJuNpinDjyFRJq
+         GvLMzClFFF3TDuN6U1kvikm4EVf3mpLQDY0tt0MdmNqP380TMxPIeP02+MkHTcKy6i
+         Nb5y4cjKPtmsuw9s9LQPnSLdO+BSaM1ROyQ+NSUe4OOdOOfrNuoydUvPE0/LaomefS
+         oM1zS7HTYc6me8zrItEqv9La3o3liQzDSxmeqOdwt6yzpTWyyO93Sx7fTs/UiOuRle
+         tNNU+Gc0n3ZRA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 16 Jun 2022 12:13:13 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "noname.nuno@gmail.com" <noname.nuno@gmail.com>
+CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rockosov@gmail.com" <rockosov@gmail.com>
+Subject: Re: [PATCH v3] iio: trigger: warn about non-registered iio trigger
+ getting attempt
+Thread-Topic: [PATCH v3] iio: trigger: warn about non-registered iio trigger
+ getting attempt
+Thread-Index: AQHYep3lZdCBX5wfLkWR1miHp7T4Oq1Rmw8A
+Date:   Thu, 16 Jun 2022 09:13:00 +0000
+Message-ID: <20220616091308.miwqkdfc77mm72hz@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220607183907.20017-1-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220607183907.20017-1-ddrokosov@sberdevices.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D19CDFDB05224149A75226ED13463973@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YqjLHyUVEjf7I3MI@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/16 03:12:00 #19783897
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias/Krishna,
+Hello Jonathan,
 
-On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
-> On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
-> > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
-> > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
-> > > > Hi Krishna,
-> > > > 
-> > > > with this version I see xHCI errors on my SC7180 based system, like
-> > > > these:
-> > > > 
-> > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
-> > > > 
-> > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
-> > > > 
-> > > > After resume a downstream hub isn't enumerated again.
-> > > > 
-> > > > So far I didn't see those with v13, but I aso saw the first error with
-> > > > v16.
-> > > 
-> > > It also happens with v13, but only when a wakeup capable vUSB <= 2
-> > > device is plugged in. Initially I used a wakeup capable USB3 to
-> > > Ethernet adapter to trigger the wakeup case, however older versions
-> > > of this series that use usb_wakeup_enabled_descendants() to check
-> > > for wakeup capable devices didn't actually check for vUSB > 2
-> > > devices.
-> > > 
-> > > So the case were the controller/PHYs is powered down works, but
-> > > the controller is unhappy when the runtime PM path is used during
-> > > system suspend.
-> > 
-> > The issue isn't seen on all systems using dwc3-qcom and the problem starts
-> > during probe(). The expected probe sequence is something like this:
-> > 
-> > dwc3_qcom_probe
-> >   dwc3_qcom_of_register_core
-> >     dwc3_probe
-> > 
-> >   if (device_can_wakeup(&qcom->dwc3->dev))
-> >     ...
-> > 
-> > The important part is that device_can_wakeup() is called after dwc3_probe()
-> > has completed. That's what I see on a QC SC7280 system, where wakeup is
-> > generally working with these patches.
-> > 
-> > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
-> > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
-> > With that the controller/driver ends up in an unhappy state after system
-> > suspend.
-> > 
-> > Probing is deferred on SC7180 because device_links_check_suppliers() finds
-> > that '88e3000.phy' isn't ready yet.
-> 
-> It seems device links could be used to make sure the dwc3 core is present:
-> 
->   Another example for an inconsistent state would be a device link that
->   represents a driver presence dependency, yet is added from the consumer’s
->   ->probe callback while the supplier hasn’t probed yet: Had the driver core
->   known about the device link earlier, it wouldn’t have probed the consumer
->   in the first place. The onus is thus on the consumer to check presence of
->   the supplier after adding the link, and defer probing on non-presence.
-> 
->   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
-> 
-> 
-> You could add something like this to dwc3_qcom_of_register_core():
-> 
-> 
->   device_link_add(dev, &qcom->dwc3->dev,
->   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
-> 
->   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
->       ret = -EPROBE_DEFER;
-> 
-> 
-I am not very sure how the device_link_add() API works. we are the parent and
-creating a depdency on child probe. That does not sound correct to me. Any
-ways, I have another question.
+I notice the patchset from=20
+https://lore.kernel.org/all/20220524181150.9240-1-ddrokosov@sberdevices.ru/
+is not merged to stable yet.
+I think if this WARN() patch is okay for you, maybe it's better to merge
+it together with the previous one. It will notify developers about this
+problem as you suggested before, and the previous patchset resolves the iss=
+ue
+in the all IIO drivers.
 
-When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
-goto depopulate label which calls of_platform_depopulate() which destroy the
-child devices that are populated. how does that ensure that child probe is
-completed by the time, our probe is called again. The child device it self is
-gone. Is this working because when our probe is called next time, the child
-probe depenencies are resolved?
+What do you think about it?
 
-Thanks,
-Pavan
+On Tue, Jun 07, 2022 at 06:39:18PM +0000, Dmitry Rokosov wrote:
+> As a part of patch series about wrong trigger register() and get()
+> calls order in the some IIO drivers trigger initialization path:
+>=20
+> https://lore.kernel.org/all/20220524181150.9240-1-ddrokosov@sberdevices.r=
+u/
+>=20
+> runtime WARN_ONCE() is added to alarm IIO driver authors who make such
+> a mistake.
+>=20
+> When an IIO driver allocates a new IIO trigger, it should register it
+> before calling the get() operation. In other words, each IIO driver
+> must abide by IIO trigger alloc()/register()/get() calls order.
+>=20
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+> Changes:
+> v1 -> v2: totally reworked the patch, used trig->list entry instead of
+>           trig->owner as driver registration indicator.
+>           It works perfectly for both builtin and built as a module
+>           drivers.
+>=20
+> v2 -> v3: changed WARN() call to WARN_ONCE() to avoid warn spamming
+>           during deferred probe() as Andy suggested.
+> ---
+>  drivers/iio/industrialio-trigger.c | 2 ++
+>  include/linux/iio/trigger.h        | 5 +++++
+>  2 files changed, 7 insertions(+)
+>=20
+> diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industriali=
+o-trigger.c
+> index f504ed351b3e..d6277e72d515 100644
+> --- a/drivers/iio/industrialio-trigger.c
+> +++ b/drivers/iio/industrialio-trigger.c
+> @@ -581,6 +581,8 @@ struct iio_trigger *viio_trigger_alloc(struct device =
+*parent,
+>  	if (trig->name =3D=3D NULL)
+>  		goto free_descs;
+> =20
+> +	INIT_LIST_HEAD(&trig->list);
+> +
+>  	trig->subirq_chip.name =3D trig->name;
+>  	trig->subirq_chip.irq_mask =3D &iio_trig_subirqmask;
+>  	trig->subirq_chip.irq_unmask =3D &iio_trig_subirqunmask;
+> diff --git a/include/linux/iio/trigger.h b/include/linux/iio/trigger.h
+> index 4c69b144677b..03b1d6863436 100644
+> --- a/include/linux/iio/trigger.h
+> +++ b/include/linux/iio/trigger.h
+> @@ -93,6 +93,11 @@ static inline void iio_trigger_put(struct iio_trigger =
+*trig)
+>  static inline struct iio_trigger *iio_trigger_get(struct iio_trigger *tr=
+ig)
+>  {
+>  	get_device(&trig->dev);
+> +
+> +	WARN_ONCE(list_empty(&trig->list),
+> +		  "Getting non-registered iio trigger %s is prohibited\n",
+> +		  trig->name);
+> +
+>  	__module_get(trig->owner);
+> =20
+>  	return trig;
+> --=20
+> 2.36.0
+
+--=20
+Thank you,
+Dmitry=

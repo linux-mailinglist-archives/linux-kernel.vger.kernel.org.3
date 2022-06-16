@@ -2,162 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F4C54E2BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07EF54E2C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377446AbiFPN6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S1377489AbiFPN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377326AbiFPN5l (ORCPT
+        with ESMTP id S1377453AbiFPN6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:57:41 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF0C10D2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:57:33 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id l7-20020a6b7007000000b00669b2a0d497so959726ioc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:57:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=TyPOt0yJwwiVzwhZL6932xCsniSIc1nJmBUoZIQlk3U=;
-        b=rUeNedUyLOaELuM2twNDrvPHGa5CfOcCG4VZ2XkXFB0BNLUJy7zpuPuFfFvZ8fl+LO
-         GaV3HMiNFOiAjn+Rm1zGXJ1/jAcFxdI/Se3VMgCDIZeFNeLAfZlD2wly8XbuNywJHefz
-         dkYox5dEhd1BGbfJtIrze3/W3WtsfhcKk+Gu7pBS4rPCRmLQT9Ej0XHZQAcz1KootNdz
-         pvYL1IIJQdG2hbZ4YJiKYrYLcCloTi7aKZMOyMebGz3z7v354dJf8bI6IpMYsacI+S8/
-         ij++HAQg4jjrMqYMmPq9u6ZCYr91w4O32DRRmv2FrA0pI4jYdFHGI8LPHtY9iq0l0vf3
-         rpRw==
-X-Gm-Message-State: AJIora96Je71tlC6U0gWcErpSIdd4zJOWk5v2J5h4dMNO58zppSc68rY
-        o7DovOQowZX0OiG0aziTGK0kwcS8hLPS0bmHCRZtEHwWDthc
-X-Google-Smtp-Source: AGRyM1sg3smBqvQULwfGQDJAxwblcUgJun7P/SxhjIWWg9NygJSkcHJwZbL2XOyt74isJ16ZElXQBUhJuDJVwnXuu5tXrRAmLPm7
+        Thu, 16 Jun 2022 09:58:23 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45062F657
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C8HUoWbkEZfFi5Ww+b/aIrWTUO0EXGNVkEGEo9LVJjo=; b=nGXEooabTbb0KLw5oHlgpsPeqx
+        fPen/6rTxyKZGwJnQ0odoQUTMevOda2oR5cGjcV/WHjZ2cU/vnLk0Pu4ebiiZ0/Ypknuk2hdNVhNt
+        igkit05wkwuyzfIBeeldUwXMzhFeoXk+gvHB8+U8bRfoct1HrVD6NsZXWHypy2pT3ShcPi2rKvDFP
+        +xaiMXmZLXwOGyuqCH41y1mL7M+6bqy79sCWKcEXWtd04gnqfqu5QiXy2TV2w/F/6yAmVzvJXqml1
+        SMjsMCswQo9c2WHhlfjZwM3EC8d0zQ7scoomQ8TU2hFZPpJuXXrmbLvLsEbbV9kmJKzs2Ghnekx2X
+        zR+c3IGA==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1q0R-008QMy-3Z; Thu, 16 Jun 2022 13:57:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C474F300372;
+        Thu, 16 Jun 2022 15:57:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B17BF2029FD42; Thu, 16 Jun 2022 15:57:51 +0200 (CEST)
+Date:   Thu, 16 Jun 2022 15:57:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Subject: Re: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific
+ implementation
+Message-ID: <Yqs235037JrOOhBA@hirez.programming.kicks-ass.net>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+ <20220523175548.922671-5-sv@linux.ibm.com>
+ <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
+ <59170f18-1356-1140-70e3-30cb627f00bc@linux.vnet.ibm.com>
+ <578ec055-0d63-e579-0caa-ad57846b8995@csgroup.eu>
+ <f1decbb7-b441-a241-469a-4ba118e08212@csgroup.eu>
+ <c1e2cf35-2a8d-87e6-3a7e-7f144392db23@csgroup.eu>
+ <1655386289.uh0k7sgl1r.naveen@linux.ibm.com>
+ <30f3791c-0fdd-e635-4a85-ec457f990fae@csgroup.eu>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12ce:b0:2d3:de67:9f96 with SMTP id
- i14-20020a056e0212ce00b002d3de679f96mr3018159ilm.261.1655387852665; Thu, 16
- Jun 2022 06:57:32 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 06:57:32 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec7b7d05e1910402@google.com>
-Subject: [syzbot] memory leak in __register_sysctl_table
-From:   syzbot <syzbot+9f160a43b2cf201cbe65@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        keescook@chromium.org, kpsingh@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org, netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com, yzaikin@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30f3791c-0fdd-e635-4a85-ec457f990fae@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 16, 2022 at 01:40:34PM +0000, Christophe Leroy wrote:
+> sizeof(u64) is always 8 by definition.
+> 
+> So if size is 8 we are working on a binary file for a 64 bits target, if 
+> not it means we are working for a 32 bits target.
 
-syzbot found the following issue on:
+Cross-builds invalidate this I think. Best to look at something like:
 
-HEAD commit:    7a68065eb9cd Merge tag 'gpio-fixes-for-v5.19-rc2' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1432d953f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8e07e4ed17ee546
-dashboard link: https://syzkaller.appspot.com/bug?extid=9f160a43b2cf201cbe65
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1297ba43f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14bf34a7f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9f160a43b2cf201cbe65@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff8881016dfa00 (size 256):
-  comm "syz-executor201", pid 3662, jiffies 4294969093 (age 12.970s)
-  hex dump (first 32 bytes):
-    00 90 da 0d 81 88 ff ff 00 00 00 00 01 00 00 00  ................
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816fe96b>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff816fe96b>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff816fe96b>] __register_sysctl_table+0x7b/0x7f0 fs/proc/proc_sysctl.c:1344
-    [<ffffffff82219a5a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
-    [<ffffffff822196d2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822196d2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de6c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e88b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845abc55>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845abc55>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-BUG: memory leak
-unreferenced object 0xffff88810edf7b00 (size 256):
-  comm "syz-executor201", pid 3662, jiffies 4294969093 (age 12.970s)
-  hex dump (first 32 bytes):
-    78 7b df 0e 81 88 ff ff 00 00 00 00 01 00 00 00  x{..............
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816fee99>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff816fee99>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff816fee99>] new_dir fs/proc/proc_sysctl.c:978 [inline]
-    [<ffffffff816fee99>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
-    [<ffffffff816fee99>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
-    [<ffffffff82219a5a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
-    [<ffffffff822196d2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822196d2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de6c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e88b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845abc55>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845abc55>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-BUG: memory leak
-unreferenced object 0xffff888101926f00 (size 256):
-  comm "syz-executor201", pid 3662, jiffies 4294969093 (age 12.970s)
-  hex dump (first 32 bytes):
-    78 6f 92 01 81 88 ff ff 00 00 00 00 01 00 00 00  xo..............
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816fee99>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff816fee99>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff816fee99>] new_dir fs/proc/proc_sysctl.c:978 [inline]
-    [<ffffffff816fee99>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
-    [<ffffffff816fee99>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
-    [<ffffffff82219a5a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
-    [<ffffffff822196d2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822196d2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de6c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e88b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845abc55>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845abc55>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+  elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

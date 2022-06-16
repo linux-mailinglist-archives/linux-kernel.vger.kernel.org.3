@@ -2,151 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300CC54DF32
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC3E54DF35
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiFPKgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S232500AbiFPKgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiFPKf7 (ORCPT
+        with ESMTP id S231492AbiFPKgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:35:59 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B75DBFB;
-        Thu, 16 Jun 2022 03:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655375735; x=1686911735;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=bfn7Kr/6Mg81QIsDd2mRVCMs364rPZOp5AMz87j7Fog=;
-  b=C+HO0dlgTSRS5BfiNc1wvbzLqRPtBxh4lxKP++PeFC57ARyGINKRpntX
-   0zyMKWsvVTNVYHuC6ewnc1eT2T4K4Edtlllg948WtjDY9EIBPNC1wEAi/
-   7MfO3q6B4v1XjQ564zn8Ec5n0B0cSC96prihpGOri1RhurvnFojyhC6o0
-   /jnxvSYj/40fOFsU13bsfC0UY/6V2aLPs+4Dccvg5a2qUxrOAYdrBM4P8
-   VDXzqMJHj65sGGZQOgeMOONPgWe26/IQevpSVxwI4BHXe1cHfVlF1GsPE
-   StZzrOtvrn6Phr2ycnJFnCt+KR0bxXIWRt/thukjN0Cdtt3+qtzXu++Cv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="259681977"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="259681977"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:35:35 -0700
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="727840496"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:35:31 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 16 Jun 2022 13:35:28 +0300
-Date:   Thu, 16 Jun 2022 13:35:28 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
-        <oocheret@cisco.com>
-Cc:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
-Subject: Re: [PATCH v2] mtd: spi-nor: handle unsupported FSR opcodes properly
-Message-ID: <YqsHcL5NPcZ4De77@lahna>
-References: <6A852B9E-D84C-4F80-9C17-62BFBB98CC8A@walle.cc>
- <20220615191153.3017939-1-oocheret@cisco.com>
- <YqrAGKLUazeNH1XK@lahna>
- <BYAPR11MB2757B1146457E3860389F4D1CDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
+        Thu, 16 Jun 2022 06:36:46 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185375DA02;
+        Thu, 16 Jun 2022 03:36:44 -0700 (PDT)
+X-UUID: f64867246d454b2ea8a3edf5c0c17e71-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:b5e36c6b-1f88-4956-9cce-bdbd5923cc85,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:0f47bf48-4c92-421c-ad91-b806c0f58b2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: f64867246d454b2ea8a3edf5c0c17e71-20220616
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1702781592; Thu, 16 Jun 2022 18:36:38 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 16 Jun 2022 18:36:37 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 16 Jun 2022 18:36:37 +0800
+Message-ID: <2200b1296a527340d1fa556e0f8ed929cff01c9c.camel@mediatek.com>
+Subject: Re: [PATCH v11 04/12] drm/mediatek: dpi: implement a swap_input
+ toggle in SoC config
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 16 Jun 2022 18:36:36 +0800
+In-Reply-To: <e431cca23add678bb39dbc75d783d239914d256a.camel@mediatek.com>
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+         <20220613064841.10481-5-rex-bc.chen@mediatek.com>
+         <e431cca23add678bb39dbc75d783d239914d256a.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BYAPR11MB2757B1146457E3860389F4D1CDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 2022-06-14 at 13:27 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
+> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > 
+> > The hardware design of dp_intf does not support input swap, so we
+> > add
+> > a bit of flexibility to support SoCs without swap_input support.
+> > 
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > [Bo-Chen: Add modification reason in commit message.]
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 14 +++++++++++---
+> >  1 file changed, 11 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index 15218c1e8c11..c1438c744120 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -126,6 +126,7 @@ struct mtk_dpi_conf {
+> >  	const u32 *output_fmts;
+> >  	u32 num_output_fmts;
+> >  	bool is_ck_de_pol;
+> > +	bool swap_input_support;
+> >  	const struct mtk_dpi_yc_limit *limit;
+> >  };
+> >  
+> > @@ -378,18 +379,21 @@ static void
+> > mtk_dpi_config_color_format(struct
+> > mtk_dpi *dpi,
+> >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+> >  		mtk_dpi_config_yuv422_enable(dpi, false);
+> >  		mtk_dpi_config_csc_enable(dpi, true);
+> > -		mtk_dpi_config_swap_input(dpi, false);
+> > +		if (dpi->conf->swap_input_support)
+> > +			mtk_dpi_config_swap_input(dpi, false);
+> >  		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> >  	} else if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_422) ||
+> >  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+> >  		mtk_dpi_config_yuv422_enable(dpi, true);
+> >  		mtk_dpi_config_csc_enable(dpi, true);
+> > -		mtk_dpi_config_swap_input(dpi, true);
+> > +		if (dpi->conf->swap_input_support)
+> > +			mtk_dpi_config_swap_input(dpi, true);
+> 
+> In this case, we need swap input, but hardware does not support, so
+> just skip config hardware and everything works fine? Should print any
+> error message?
+> 
+> Regards,
+> CK
+> 
 
-On Thu, Jun 16, 2022 at 07:40:18AM +0000, Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco) wrote:
->    Hi Mika,
-> 
->      > Originally commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for
->      n25q*
->      > entries") and following one 8f93826 ("mtd: spi-nor: micron-st:
->      convert
->      > USE_FSR to a manufacturer flag") enabled SPINOR_OP_RDFSR opcode
->      handling
->      > ability, however some controller drivers still cannot handle it
->      properly
->      > in the micron_st_nor_ready() call what breaks some mtd callbacks
->      with
->      > next error logs:
->      >
->      > mtdblock: erase of region [address1, size1] on "BIOS" failed
->      > mtdblock: erase of region [address2, size2] on "BIOS" failed
->      >
->      > The Intel SPI controller does not support low level operations,
->      like
->      > reading the flag status register (FSR). It only exposes a set of
->      high
->      > level operations for software to use. For this reason check the
->      return
->      > value of micron_st_nor_read_fsr() and if the operation was not
->      > supported, use the status register value only. This allows the
->      chip to
->      > work even when attached to Intel SPI controller (there are such
->      systems
->      > out there).
->      >
-> 
->    > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
->      I don't think I signed this off.
-> 
->    I thought if I take your case (-EOPNOTSUPP) and update it with
->    (-ENOTSUPP) I need to keep
-> 
->    your Sighed-off-by: note as well.
+ok, I will add warning message for this.
 
-That's not how it typically works. People will give their tag explicitly
-and then you can add those.
-
->    > Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
->    > Link: [1]https://lore.kernel.org/lkml/YmZUCIE%2FND82BlNh@lahna/
->    > ---
+> >  		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> >  	} else {
+> >  		mtk_dpi_config_yuv422_enable(dpi, false);
+> >  		mtk_dpi_config_csc_enable(dpi, false);
+> > -		mtk_dpi_config_swap_input(dpi, false);
+> > +		if (dpi->conf->swap_input_support)
+> > +			mtk_dpi_config_swap_input(dpi, false);
+> >  		mtk_dpi_config_channel_swap(dpi,
+> > MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> >  	}
+> >  }
+> > @@ -808,6 +812,7 @@ static const struct mtk_dpi_conf mt8173_conf =
+> > {
+> >  	.output_fmts = mt8173_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> >  	.is_ck_de_pol = true,
+> > +	.swap_input_support = true,
+> >  	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> > @@ -819,6 +824,7 @@ static const struct mtk_dpi_conf mt2701_conf =
+> > {
+> >  	.output_fmts = mt8173_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> >  	.is_ck_de_pol = true,
+> > +	.swap_input_support = true,
+> >  	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> > @@ -829,6 +835,7 @@ static const struct mtk_dpi_conf mt8183_conf =
+> > {
+> >  	.output_fmts = mt8183_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> >  	.is_ck_de_pol = true,
+> > +	.swap_input_support = true,
+> >  	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> > @@ -839,6 +846,7 @@ static const struct mtk_dpi_conf mt8192_conf =
+> > {
+> >  	.output_fmts = mt8183_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> >  	.is_ck_de_pol = true,
+> > +	.swap_input_support = true,
+> >  	.limit = &mtk_dpi_limit,
+> >  };
+> >  
 > 
->    What changed between v1 and v2?
 > 
->    ​I updated v1 patch taking into account your changes
->    [2]https://lore.kernel.org/linux-mtd/20220506105158.43613-1-mika.wester
->    berg@linux.intel.com to check -EOPNOTSUPP case as well. After I
->    combined both patches I've got v2.
 
-Please put that information after the '---' in the patch.
-
->    And did you take into consideration the comments I gave?
-> 
->    ​If you say about keeping -ENOTSUPP as intel driver errorcode - I took
->    it however doubted to use it here because of note about nfs above.
->    There is no problem to restore previous variant with -ENOTSUPP in intel
->    driver errorcode.
-
-Well we would need to get some feedback from SPI-NOR maintainers. I
-would personally keep using ENOTSUPP to be consistent with the rest of
-the code in SPI-NOR code (or convert it to use EOPNOTSUPP everywhere)
-but it is not up to me ;-)
-
-For Intel driver it is fine to use either (whetever the decision of
-SPI-NOR maintainers' is).

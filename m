@@ -2,53 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D2954E289
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F3554E292
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377300AbiFPNyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S1377322AbiFPNzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376717AbiFPNyG (ORCPT
+        with ESMTP id S1377315AbiFPNzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:54:06 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF99344DD;
-        Thu, 16 Jun 2022 06:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655387645; x=1686923645;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8DBLbS3wVl/9ObJhboDBWvo7NIEiATgLdaJKo4so8Xc=;
-  b=HdRg/IFmDEUntWqG/BMRiMWtKpeR+t91m9KWknExv1oJ91eW9/DcIdRM
-   bXwvlaMnhBd0q4x5RlzqPbOHySTLbUz5X5lEdPYfMdZIi1FoCFGjwDSp1
-   iCwklxdz/2YhzckOafF3fjTDWjXHYqv5vrj8jw5WWtoET6MVYG8XbCBQx
-   g/lWAFZLz/qo2l397h19Y9H3OEp0SVLTCf9nI04sRTZ5L4edh/uwBtEaF
-   JpgBU7Tx0ib6YBbTSY0B2cV+PhzME9BqyQ8xFUJ2XHcy/L0oTPX0sS2H5
-   pQGruU/me4EFQT5+YwiTLGaJ+znmzK8Dkvb56faiR6n4kKE7gRxdu0fSi
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="278048124"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="278048124"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 06:54:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="641549582"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 06:54:04 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Fix rcu_read_unlock_strict() strict QS reporting
-Date:   Thu, 16 Jun 2022 21:53:47 +0800
-Message-Id: <20220616135347.1351441-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Jun 2022 09:55:10 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443023A5D5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:55:09 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z14so1482680pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AqCBBKJhjvVRevpKirub+RjdcNJhrbWsjFdQsoZidsM=;
+        b=MLMlzJpHqLk2NTSkk+4CI6/9tDS/CcuAuC6dpww7mHmyJkrttmtnJO/CzsKVctLzxk
+         uSWmtfHFtdcmmtcODHtKBEZjJDTXUKdKe+WmLecqFOF6zJKiqunDohh3PU0vQalFwjKA
+         d7uiDUPkWwPHlwOvs19l2d58ZAWsYV0fw7sePeBQIPrYPZsiYO5IJW3+TGPBkwJCdCpZ
+         TUBQgm+PUj2fx8W3A7arprSw311qJKS2AT37ChtVeYVsgIJHCEUXmpBrOLlt79rnM7iI
+         clLazAQA26Ptz+LYSgDLQKTFIA8N4Iutdz2ZSrAPnlzZqxBBCdvCpomjVI7MWbyu93Wf
+         ZrzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AqCBBKJhjvVRevpKirub+RjdcNJhrbWsjFdQsoZidsM=;
+        b=0ys1CN3RrjgToCkKWleIA6M8rOzoMXoBskvpoOSXuWlpZQ1nTBZE0SGFsAy6EDgVPl
+         m6L8Yf1D95ABHUu3mVUDHWEh/R+2O3sxSlHmySHRe5wyK7NasgVwgadWOBpwX4pkaUrk
+         HJbIPFnbSCxnLxSmKKIx5raww6X5n2l8QDLmZ5za0v1XkEMY5ydJsDxTnv7DCUhrcuBs
+         17p+L6dsu3jauXOUlM4DMTuFRzhXNY9mraeu+VVnLDz9fT+FVNPbTPt0AHiPLH091Ydb
+         lGUnLHgTwyiDwehKBB1gOP4u1lZG4TLjYV9D6kSlr2JlTqj+oeGgJLXMlNGuaL90vitu
+         hCFg==
+X-Gm-Message-State: AJIora+7zK+2OrwZ4Hg8g2H46PLB2UnCHQY9WAfiSHqlojYM4/4/ILJh
+        s1swclGXJlVQOXhaP13K1pV2+Q==
+X-Google-Smtp-Source: AGRyM1vD8xThX01mXSwdjH5o86512U3eYCtOXz7Tt7aA/zrrnyjP12qDLwKDYDuqb3ZyVxcfG86VdA==
+X-Received: by 2002:a17:902:c94b:b0:168:fb7a:e5a0 with SMTP id i11-20020a170902c94b00b00168fb7ae5a0mr4755533pla.56.1655387708715;
+        Thu, 16 Jun 2022 06:55:08 -0700 (PDT)
+Received: from [172.20.0.255] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id p2-20020a62b802000000b0051bc3f9a1f6sm1823305pfe.55.2022.06.16.06.55.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 06:55:08 -0700 (PDT)
+Message-ID: <629e761b-e3ad-0861-1937-ad660a8a900b@linaro.org>
+Date:   Thu, 16 Jun 2022 06:55:06 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: dsp: mediatek: Use meaningful names
+ for mbox
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, YC Hung <yc.hung@mediatek.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220616073042.13229-1-tinghan.shen@mediatek.com>
+ <20220616073042.13229-2-tinghan.shen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616073042.13229-2-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,33 +93,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running a kerenl with CONFIG_PREEMPT=n and
-CONFIG_RCU_STRICT_GRACE_PERIOD=y, the QS state will be reported
-directly after exiting the last level of RCU critical section and
-in non irqs-disable context, but maybe the CPU's rcu_data
-structure's ->cpu_no_qs.b.norm is not cleared, as a result the
-rcu_report_qs_rdp() will exit early, and not report QS state.
+On 16/06/2022 00:30, Tinghan Shen wrote:
+> Rename mbox according to actions instead of 'mbox0' and 'mbox1'.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  .../devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml   | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> index b7e68b0dfa13..ca8d8661f872 100644
+> --- a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> @@ -50,13 +50,13 @@ properties:
+>  
+>    mboxes:
+>      items:
+> -      - description: ipc reply between host and audio DSP.
+> -      - description: ipc request between host and audio DSP.
+> +      - description: mailbox for receiving audio DSP requests.
+> +      - description: mailbox for transmitting requests to audio DSP.
+>  
+>    mbox-names:
+>      items:
+> -      - const: mbox0
+> -      - const: mbox1
+> +      - const: rx
+> +      - const: tx
+>  
 
-This commit will clear CPU's rcu_data structure's ->cpu_no_qs.b.norm
-before invoke rcu_report_qs_rdp().
+Commit msg lacks important piece - do you break any users with this? Do
+you have any users of this binding?
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_plugin.h | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index b2c01919b92c..dc78726b993f 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -824,6 +824,7 @@ void rcu_read_unlock_strict(void)
- 	if (irqs_disabled() || preempt_count() || !rcu_state.gp_kthread)
- 		return;
- 	rdp = this_cpu_ptr(&rcu_data);
-+	rdp->cpu_no_qs.b.norm = false;
- 	rcu_report_qs_rdp(rdp);
- 	udelay(rcu_unlock_delay);
- }
--- 
-2.25.1
-
+Best regards,
+Krzysztof

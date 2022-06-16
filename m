@@ -2,532 +2,512 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA1F54E60F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFF854E613
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377640AbiFPP33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S1377914AbiFPPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236071AbiFPP31 (ORCPT
+        with ESMTP id S1377893AbiFPPaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:29:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9907213EB5;
-        Thu, 16 Jun 2022 08:29:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 211FA61E4E;
-        Thu, 16 Jun 2022 15:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08F7C34114;
-        Thu, 16 Jun 2022 15:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655393364;
-        bh=4z0o2ovvRhlJJjfaCjnTVT3y9Zvl6rUTRQFYtk/YLFo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gzLXPExoxkaq0loMGJADRESMJGNePUFfZ0eN0O+QgA8yVCEkvq/kiVwuxa6gNOYEX
-         19uBNwZPWVM3x62aH8YG7zREb6I8wO6fKgP7aWP8cY0UkMTq03YB4lJn9CPhuRm/WX
-         /07GEgcGn+q6puXtYCmAk4tyOAIlrlsdO7rNoeS1aubdWFm8ycMi34FncfhWeWRLdY
-         /opcRYxMX8pN8ChIz479xVa4MwC+DXfN8w37ivHNJ1joUSa9Vq/jiYLUEYBUZnaOto
-         +mRayH8BQQngdTXABRt2HbtSA8t6SJ5wG15yHtt1fYsHD4A15Q7rMxwTpKQ6avkBT3
-         s4p3C1s76zvHw==
-Message-ID: <04ca385b-47dc-5535-419e-1b814a383d1a@kernel.org>
-Date:   Thu, 16 Jun 2022 17:29:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V4 18/20] rv/monitor: Add safe watchdog monitor
+        Thu, 16 Jun 2022 11:30:18 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA8C2E9CF;
+        Thu, 16 Jun 2022 08:30:16 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25G5PoWY002362;
+        Thu, 16 Jun 2022 08:30:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=jK93FpCkg7jvoR6GT+eEaVcZG7TZeEYRktaAjHvJFEg=;
+ b=eqATSxGuVTkeqlGYeofq50jXF3Q2CVjVTdMVvK8W4/AytGuFXz58bK/lWqmCKRD0j6XF
+ LH79maSsHjicU3RFXiQbqYbEbElc0rRoIFPgYNZrp0gwcPVV1jLyOEDwGsQ9Y0o+7Mx5
+ ZhXuwZ62PzBPmHPrs/QjPV9GPRuGWRM+4Wg= 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gqxc5w52s-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jun 2022 08:30:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jQAGVeaJAhQ9VBygq3T4aNefML76FU0Xg9GkvRezUz9Gk+39GXPU2FJCCQ/AMMXx9Iiwg2p997LdgYzlF+qSp9zcc14VP2rnlaDx8so5uMkOdTV0asUiQwKdfdRy7dvycqCxwq+mFUjzSLXU+nt023lTwY4tJxWTu7EgouL5T9ZbiK8xcy0KaL/VRF0QDZIHg1GlRV2O23gN96MPIJId3rfptAJrfTaEerhiUSmtzrB7qGB1B3Wo6KKTn7FnfuXl6jU6ZEls+U7jYKkbFdFJDjX2WDmaxD7XUAAvxjOfyTdDjINFmqfUKg2+q2H/h25Rj+wOa1q6oJN3XktNXy5IsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jK93FpCkg7jvoR6GT+eEaVcZG7TZeEYRktaAjHvJFEg=;
+ b=dp+apfwT3S1do8mbuREd7q0TylnTpnnn/VvD3CC4+Z86lKr5qx83FYxA0z5OD5C57tcEQ/1KmCJOa0ahnY4wMIilGuQ4KcN5AKtjKPXcGoAzXV2YG3JV88uXoTkyiWocc7V8yTZnEyKm44+58dz0yBQOdzlfG6vqI2oC0NPZi+ahJJin75oiBVb2P2pHSCYlykckmn5kzjvFCR1OfjzI1JSQmzaQbb3+nZY0ZiulgcFepSbTY6hRUQm6KUDQO0uLbS/sBiWxQx/BBw24Fyp0L0BXVfyoORFIGgHCWbB62UvKaBMEL5zDEL2y0LpBJcokBRWMkYZXCxGBxS6NG5i68Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
+ by BY3PR15MB4884.namprd15.prod.outlook.com (2603:10b6:a03:3c3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 16 Jun
+ 2022 15:30:11 +0000
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::1dd0:f1c9:43d7:b7ab]) by SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::1dd0:f1c9:43d7:b7ab%8]) with mapi id 15.20.5353.015; Thu, 16 Jun 2022
+ 15:30:11 +0000
+From:   Jonathan McDowell <noodles@fb.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Baoquan He <bhe@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Subject: [PATCH v6] x86/kexec: Carry forward IMA measurement log on kexec
+Thread-Topic: [PATCH v6] x86/kexec: Carry forward IMA measurement log on kexec
+Thread-Index: AQHYgZX3ey/aWxd0WE+EiviZrAsROg==
+Date:   Thu, 16 Jun 2022 15:30:11 +0000
+Message-ID: <YqtMf9ivGR8Rkl8u@noodles-fedora.dhcp.thefacebook.com>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+ <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+ <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
+In-Reply-To: <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1655368610.git.bristot@kernel.org>
- <6366fdc89d65b8d9b14ccd1e42fa0d793fbe9f73.1655368610.git.bristot@kernel.org>
- <168af019-70d1-3237-dc9c-56a82beb5990@roeck-us.net>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <168af019-70d1-3237-dc9c-56a82beb5990@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cfde81c7-13e0-4161-f626-08da4fad1a43
+x-ms-traffictypediagnostic: BY3PR15MB4884:EE_
+x-microsoft-antispam-prvs: <BY3PR15MB48844DE7D1166916313B12E3C1AC9@BY3PR15MB4884.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hS0HAlm7ZVZQ7FgoKpQZuq6sKkizGT+qzHavA06gtB5nTwgo1rctyh6wRVJrG+XUeQQJdUI+B+fod7j2/U9hSZKzmvhBhBfwtuQnP4Oq24SZxrr+dnouqjvmAawW1FdWzuXANbDSjyAtyixhj5uspQT3wwgL2hPfGtkfn3tJmCPzIQSIdrqZfJGASYmTOgr8lX+jBK8Rs6YBC9Dq8onusmfnM1i3Qq3h8QspVP5GAIhkpTEmQWosYR2gW0xU8rPpq3EkOULCibSd0LuscQlxRoi+I21GPH3vU4Ojgb/Z6rjXUzdfAJeTTGdVWezVit0S4mAMBkTSkn4CMJE4XcwdPFnAud0nAWVW+GAXtpmHk1YWHIGN4VSMlxWvfRosC+9whw0QVRfvlNrslpZ5Nnfo1G//N3c4nd7IUCLQZwHgqCYjprnhwgOdABXEf59fnUNNEP6K62dq1X05pmkGX0LsG2Oi1bR6YJk7RL0TcL4rvjcw1Cx/O/DGdplDhobREv4d0JV4p8HGOUtALnOFRhtV8JbViEauG3lJUKhVM84wFbUehp6bGkj4M9WSFh+AtbgtVvAJlFA28z2vJZXR0gu4iYbTGVJKuoqEyLK+crnTjbJY+7n0m4Euv46VucCL4apoI9a6cK7K3UfzASf9IeH6GPdyrlpxPplzTyMeo1IFC9mR2bz2rhE3hw0sPf6ismJKFACinoAtAQHHNl1eFRyL3FqAKSLR3Dmgj2YKnUvSIkMyDnmLTi/lmesiqdQAZS+PkU5dS7lFK9bnF11/eVl+VA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(2906002)(316002)(6486002)(26005)(8936002)(508600001)(91956017)(110136005)(54906003)(6506007)(4326008)(38100700002)(8676002)(66946007)(76116006)(66446008)(83380400001)(66476007)(64756008)(66556008)(30864003)(7416002)(5660300002)(86362001)(38070700005)(71200400001)(6512007)(9686003)(921005)(186003)(122000001)(46800400005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?obrQzwNkQ1DIF7t1tQ3zUqWvkG2tYJCt+5PzZSQ5k64rCyCSoR+H77sYDROi?=
+ =?us-ascii?Q?E6MCV+Qb5I4k3BThm8NbUfaBittvtRZMcH4N/GCd2R4lmFgyw272hamQSKsZ?=
+ =?us-ascii?Q?nMydE9wisKXr/iG9flSECE6xByztbcfspkK47nd6uP9qpJmGBRc4/LSEkmL3?=
+ =?us-ascii?Q?MDxHJFsT0rPNsDIXKKZxN5OdzM8yI51Zimp+zX6+EmMojBt2pni9xOlRX4jq?=
+ =?us-ascii?Q?UeakLHR2uEAKFtlbvfRuJJvORzKLh9fvQVDPzOsG91cgrPy5jejb2NTnGYmj?=
+ =?us-ascii?Q?zUZN6kGxRAh48cvMl1bqxs5ZbpmuPTG0PK6isgOkdBWwrQm65gfpo2oIDugH?=
+ =?us-ascii?Q?fzgEWnP1fWsxH9xEDIpSJLnH6Qu0BXrEGxBQ4aClhYZD8DJHgxAYVJjrILMG?=
+ =?us-ascii?Q?ZWcn6fYJvDkrojGzxeqfM9irkpMMkssHGa3wOWpekqzJxHF9S3DJB0ooQ17u?=
+ =?us-ascii?Q?w30NQcFboGkh+HBZ45TgW6ZZhu+UzEyadrjtkUkzGi/r6XK75ixa+FdHXkGD?=
+ =?us-ascii?Q?0P8HVcgdWUD0EDOX4nq0E5IFzL1lrczRnfOkpVOQThZdoHRtBUHsE7gz2NI5?=
+ =?us-ascii?Q?/l3oIIPzmyILbgMQxcIryQHq/Se0OczGN+2a5qDLu2qSnZ6o9bAktjPWfGn+?=
+ =?us-ascii?Q?Unhso/bcMsqc8OFgYLNMcXVDe49inGn+aYoHsqJ3rZHQ3/m6+SB3RSpBG35/?=
+ =?us-ascii?Q?tI+63y0VJGvzEBn5Xo4UVp3fdZM/xt4iULeTLVI7vD6Z5ef2eq6AScf7a5h6?=
+ =?us-ascii?Q?xjCsCC3eQ+aE2avdAjH0iXg+zMVGMy3ct/12a0reYmWK9ku51q4qiUKHkFN8?=
+ =?us-ascii?Q?WE5ZJVFtJjrVC7uRWEtwfdGPDPaJ2SsDnjRIZ0SXN5wOZKg8w62FZ1MYJng5?=
+ =?us-ascii?Q?093VwWqIIxvKEtqe2rMgwB1V9hxnSTG1iK/WD/sS+vRYqOqJA537uKxTHQWN?=
+ =?us-ascii?Q?UN9LiY/XWEOsJx1Iix+E83W7oMEvIMRCB5h4IL1lqM6hgKoeTjlrHkMWB/J7?=
+ =?us-ascii?Q?Iwa+R6DOAIGFGCEqOhjgzLT+1YQx/2jcibjwA1laGbfAlZUGk4p4/2PKCN58?=
+ =?us-ascii?Q?7Po3vIyojwS5vjDjMC7X7sLyE33ND1MPlgNqLrMVM7/4HNh+utYqQj0sYq9j?=
+ =?us-ascii?Q?TeJgz7aVSpBN5FCM6wqZnBgUQ5PxySb/fh7/AVgzdFDCRu2bHuJXBqQoJpLI?=
+ =?us-ascii?Q?1qQSA2X+litig3rOw3Mj2G5hP6xOcLmOpnCe3iihbbUXsEalL/zD9LEvImkR?=
+ =?us-ascii?Q?aCLXg31OcusR3PGGzwPUTKUAtDv+q9sueD0V6QiaNScNkjmK00V7ulxGJEpC?=
+ =?us-ascii?Q?s+8L5ypGu1Dr+AQC1S4A+InkAQuyVgGOiUiXJ4CIy/5b2uCePz6A8U+OiSmR?=
+ =?us-ascii?Q?1fUBMlY4xD1c2HABOMmDEhFI4jfyBScT/13VWg0R5J5Je0Jz4g7X2MYSZ4H/?=
+ =?us-ascii?Q?73qvmGwXyTiBltV/EhLiFcTFiLlCB5hdaA8JlxZ2tI+dRY0dZ9FMQQLohbvL?=
+ =?us-ascii?Q?IlvxWeVMV3yHVgBadQyFt/kXcnKIAC2QNmALFiWmqyVvhO20QXR2hzESIC8K?=
+ =?us-ascii?Q?CBoXNmQ79oUNZFcqYUPXp1lGjxkproROTw02Vn1G9hfpX9EVgg+ZGoUkwgch?=
+ =?us-ascii?Q?PNqcMo2wT8z43VTauGv1sieNvnSQlFRYU3VvL1ioXWlh/bhMoXrkaib7/sC4?=
+ =?us-ascii?Q?Gk5b9YOld8/OiJ/2YTNKzITwyueWMObKUvDzbCkmKcHw3Z6FIRgtY6YM8kt6?=
+ =?us-ascii?Q?No3d4zecXA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BAF0104D6155E14D8912CA2741FF70E1@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfde81c7-13e0-4161-f626-08da4fad1a43
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2022 15:30:11.4788
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: chfjgEynrKNcr/ADKXtrP7uOp8IP0OEuSItpxvrpLcsFteHQgI/BrUYtmEMfVKZ9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR15MB4884
+X-Proofpoint-GUID: vjgtnR1ph3rpj2hZZPSsduVjgQiA-lZb
+X-Proofpoint-ORIG-GUID: vjgtnR1ph3rpj2hZZPSsduVjgQiA-lZb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-16_11,2022-06-16_01,2022-02-23_01
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+On kexec file load Integrity Measurement Architecture (IMA) subsystem
+may verify the IMA signature of the kernel and initramfs, and measure
+it. The command line parameters passed to the kernel in the kexec call
+may also be measured by IMA. A remote attestation service can verify
+a TPM quote based on the TPM event log, the IMA measurement list, and
+the TPM PCR data. This can be achieved only if the IMA measurement log
+is carried over from the current kernel to the next kernel across
+the kexec call.
 
-On 6/16/22 15:36, Guenter Roeck wrote:
-> On 6/16/22 01:45, Daniel Bristot de Oliveira wrote:
->> The watchdog is an essential building block for the usage of Linux in
->> safety-critical systems because it allows the system to be monitored from
->> an external element - the watchdog hardware, acting as a safety-monitor.
->>
->> A user-space application controls the watchdog device via the watchdog
->> interface. This application, hereafter safety_app, enables the watchdog
->> and periodically pets the watchdog upon correct completion of the safety
->> related processing.
->>
->> If the safety_app, for any reason, stops pinging the watchdog,
->> the watchdog hardware can set the system in a fail-safe state. For
->> example, shutting the system down.
->>
->> Given the importance of the safety_app / watchdog hardware couple,
->> the interaction between these software pieces also needs some
->> sort of monitoring. In other words, "who monitors the monitor?"
->>
->> The safe watchdog (safe_wtd) RV monitor monitors the interaction between
->> the safety_app and the watchdog device, enforcing the correct sequence of
->> events that leads the system to a safe state.
->>
->> Furthermore, the safety_app can monitor the RV monitor by collecting the
->> events generated by the RV monitor itself via tracing interface. In this way,
->> closing the monitoring loop with the safety_app.
->>
->> To reach a safe state, the safe_wtd RV monitor requires the
->> safety_app to:
->>
->>     - Open the watchdog device
->>     - Start the watchdog
->>     - Set a timeout
->>     - ping at least once
->>
->> The RV monitor also avoids some undesired actions. For example, to have
->> other threads to touch the watchdog.
->>
->> The monitor also has a set of options, enabled via kernel command
->> line/module options. They are:
->>
->>     - watchdog_id: the device id to monitor (default 0).
->>     - dont_stop: once enabled, do not allow the RV monitor to be stopped
->>         (default off);
->>     - safe_timeout: define a maximum safe value that an user-space
->>         application can set as the watchdog timeout
->>         (default unlimited).
->>     - check_timeout: After every ping, check if the time left in the
->>         watchdog is less than or equal to the last timeout set
->>         for the watchdog. It only works for watchdog devices that
->>         provide the get_timeleft() function (default off).
->>
->> For further information, please refer to:
->>     Documentation/trace/rv/watchdog-monitor.rst
->>
->> The monitor specification was developed together with Gabriele Paoloni,
->> in the context of the Linux Foundation Elisa Project.
->>
->> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: Steven Rostedt <rostedt@goodmis.org>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Marco Elver <elver@google.com>
->> Cc: Dmitry Vyukov <dvyukov@google.com>
->> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Shuah Khan <skhan@linuxfoundation.org>
->> Cc: Gabriele Paoloni <gpaoloni@redhat.com>
->> Cc: Juri Lelli <juri.lelli@redhat.com>
->> Cc: Clark Williams <williams@redhat.com>
->> Cc: linux-doc@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Cc: linux-trace-devel@vger.kernel.org
->> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
->> ---
->>   include/trace/events/rv.h                    |  11 +
->>   kernel/trace/rv/Kconfig                      |  10 +
->>   kernel/trace/rv/Makefile                     |   1 +
->>   kernel/trace/rv/monitors/safe_wtd/safe_wtd.c | 300 +++++++++++++++++++
->>   kernel/trace/rv/monitors/safe_wtd/safe_wtd.h |  84 ++++++
->>   5 files changed, 406 insertions(+)
->>   create mode 100644 kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
->>   create mode 100644 kernel/trace/rv/monitors/safe_wtd/safe_wtd.h
->>
->> diff --git a/include/trace/events/rv.h b/include/trace/events/rv.h
->> index 00f11a8dac3b..895eb3435ed7 100644
->> --- a/include/trace/events/rv.h
->> +++ b/include/trace/events/rv.h
->> @@ -66,6 +66,17 @@ DEFINE_EVENT(error_da_monitor, error_wip,
->>            TP_PROTO(char *state, char *event),
->>            TP_ARGS(state, event));
->>   #endif /* CONFIG_RV_MON_WIP */
->> +
->> +#ifdef CONFIG_RV_MON_SAFE_WTD
->> +DEFINE_EVENT(event_da_monitor, event_safe_wtd,
->> +         TP_PROTO(char *state, char *event, char *next_state, bool safe),
->> +         TP_ARGS(state, event, next_state, safe));
->> +
->> +DEFINE_EVENT(error_da_monitor, error_safe_wtd,
->> +         TP_PROTO(char *state, char *event),
->> +         TP_ARGS(state, event));
->> +#endif /* CONFIG_RV_MON_SAFE_WTD */
->> +
->>   #endif /* CONFIG_DA_MON_EVENTS_IMPLICIT */
->>     #ifdef CONFIG_DA_MON_EVENTS_ID
->> diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
->> index 21f03fb3101a..b14ae63e792b 100644
->> --- a/kernel/trace/rv/Kconfig
->> +++ b/kernel/trace/rv/Kconfig
->> @@ -45,6 +45,16 @@ config RV_MON_WWNR
->>         illustrates the usage of per-task monitor. The model is
->>         broken on purpose: it serves to test reactors.
->>   +config RV_MON_SAFE_WTD
->> +    select DA_MON_EVENTS_IMPLICIT
->> +    bool "Safety watchdog"
->> +    help
->> +      Enable safe_wtd, this monitor observes the interaction
->> +      between a user-space safety monitor and a watchdog device.
->> +
->> +      For futher information see:
->> +        Documentation/trace/rv/safety-monitor.rst
->> +
->>   config RV_REACTORS
->>       bool "Runtime verification reactors"
->>       default y if RV
->> diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
->> index 963d14875b45..904db96c7eae 100644
->> --- a/kernel/trace/rv/Makefile
->> +++ b/kernel/trace/rv/Makefile
->> @@ -3,6 +3,7 @@
->>   obj-$(CONFIG_RV) += rv.o
->>   obj-$(CONFIG_RV_MON_WIP) += monitors/wip/wip.o
->>   obj-$(CONFIG_RV_MON_WWNR) += monitors/wwnr/wwnr.o
->> +obj-$(CONFIG_RV_MON_SAFE_WTD) += monitors/safe_wtd/safe_wtd.o
->>   obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
->>   obj-$(CONFIG_RV_REACT_PRINTK) += reactor_printk.o
->>   obj-$(CONFIG_RV_REACT_PANIC) += reactor_panic.o
->> diff --git a/kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
->> b/kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
->> new file mode 100644
->> index 000000000000..9856e0770d0d
->> --- /dev/null
->> +++ b/kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
->> @@ -0,0 +1,300 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <linux/ftrace.h>
->> +#include <linux/tracepoint.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/init.h>
->> +#include <linux/rv.h>
->> +#include <rv/instrumentation.h>
->> +#include <rv/da_monitor.h>
->> +
->> +#include <linux/watchdog.h>
->> +#include <linux/moduleparam.h>
->> +
->> +#include <trace/events/rv.h>
->> +#include <trace/events/watchdog.h>
->> +
->> +#define MODULE_NAME "safe_wtd"
->> +
->> +/*
->> + * This is the self-generated part of the monitor. Generally, there is no need
->> + * to touch this section.
->> + */
->> +#include "safe_wtd.h"
->> +
->> +/*
->> + * Declare the deterministic automata monitor.
->> + *
->> + * The rv monitor reference is needed for the monitor declaration.
->> + */
->> +struct rv_monitor rv_safe_wtd;
->> +DECLARE_DA_MON_GLOBAL(safe_wtd, char);
->> +
->> +/*
->> + * custom: safe_timeout is the maximum value a watchdog monitor
->> + * can set. This value is registered here to duplicate the information.
->> + * In this way, a miss-behaving monitor can be detected.
->> + */
->> +static int safe_timeout = ~0;
->> +module_param(safe_timeout, int, 0444);
->> +
->> +/*
->> + * custom: if check_timeout is set, the monitor will check if the time left
->> + * in the watchdog is less than or equals to the last safe timeout set by
->> + * user-space. This check is done after each ping. In this way, if any
->> + * code by-passed the watchdog dev interface setting a higher (so unsafe)
->> + * timeout, this monitor will catch the side effect and react.
->> + */
->> +static int last_timeout_set = 0;
->> +static int check_timeout = 0;
->> +module_param(check_timeout, int, 0444);
->> +
->> +/*
->> + * custom: if dont_stop is set the monitor will react if stopped.
->> + */
->> +static int dont_stop = 0;
->> +module_param(dont_stop, int, 0444);
->> +
->> +/*
->> + * custom: there are some states that are kept after the watchdog is closed.
->> + * For example, the nowayout state.
->> + *
->> + * Thus, the RV monitor needs to keep track of these states after a start/stop
->> + * of the RV monitor itself, and should not reset after each restart -
->> keeping the
->> + * know state until the system shutdown.
->> + *
->> + * If for an unknown reason an RV monitor would like to reset the RV monitor
->> at each
->> + * RV monitor start, set it to one.
->> + */
->> +static int reset_on_restart = 0;
->> +module_param(reset_on_restart, int, 0444);
->> +
->> +/*
->> + * open_pid takes note of the first thread that opened the watchdog.
->> + *
->> + * Any other thread that generates an event will cause an "other_threads"
->> + * event in the monitor.
->> + */
->> +static int open_pid = 0;
-> 
-> Userspace could open a watchdog, create a child process, and handle it
-> from the child. That is perfectly valid.
+powerpc and ARM64 both achieve this using device tree with a
+"linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+device tree, so use the setup_data mechanism to pass the IMA buffer to
+the new kernel.
 
-Right! It is a correct usage of the watchdog subsystem.
+Signed-off-by: Jonathan McDowell <noodles@fb.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com> # IMA function definitions
+Reviewed-by: Baoquan He <bhe@redhat.com>
+---
+v6:
+ - Remove IS_ENABLED(CONFIG_HAVE_IMA_KEXEC) check from
+   ima_(free|get)_kexec_buffer now they have the ifdef guard.
+v5:
+ - Guard ima_(free|get)_kexec_buffer functions with
+   CONFIG_HAVE_IMA_KEXEC (kernel test robot)
+ - Use setup_data_offset in setup_boot_parameters and update rather than
+   calculating in call to setup_ima_state.
+v4:
+ - Guard ima.h function prototypes with CONFIG_HAVE_IMA_KEXEC
+v3:
+ - Rebase on tip/master
+ - Pull ima_(free|get)_kexec_buffer into x86 code
+ - Push ifdefs into functions where possible
+ - Reverse fir tree variable declarations
+ - Fix section annotation on ima_free_kexec_buffer (__meminit)
+ - Only allocate ima_setup_data space when IMA_KEXEC is enabled
+v2:
+ - Fix operation with EFI systems
+---
+ arch/x86/Kconfig                      |  1 +
+ arch/x86/include/uapi/asm/bootparam.h |  9 ++++
+ arch/x86/kernel/e820.c                |  6 +--
+ arch/x86/kernel/kexec-bzimage64.c     | 42 +++++++++++++++++-
+ arch/x86/kernel/setup.c               | 62 +++++++++++++++++++++++++++
+ drivers/of/kexec.c                    |  9 ++--
+ include/linux/ima.h                   |  5 +++
+ include/linux/of.h                    |  2 -
+ security/integrity/ima/ima_kexec.c    |  2 +-
+ 9 files changed, 124 insertions(+), 14 deletions(-)
 
-However, the idea here is to allow a "restricted" set of operations based on the
-safety analysis made by people in the LF Elisa Workgroup (Gabriele Paoloni in Cc:).
-
-One of the specifications says that: only one process should touch the watchdog.
-
-There are details about it in the "watchdog-monitor.rst," section "RV monitor
-specification."
-
-There could be another monitor, a less resticted one, in which the operation you
-mention would be allowed.
-
-I will complement this commit log in the next version of the patch set,
-clarifying that it is not a "full representation of the watchdog operations" but
-a restricted set of operations specified by...
-
->> +
->> +/*
->> + * watchdog_id: the watchdog to monitor
->> + */
->> +static int watchdog_id = 0;
->> +module_param(watchdog_id, int, 0444);
-> 
-> Limiting the watcher to a single watchdog sounds less than perfect.
-> What if the system supports more than one, more than one is enabled,
-> and the non-monitored watchdog misbehaves ?
-
-I can add one monitor per watchdog dev. The easiest way would be adding a
-"struct da_monitor" variable in the watchdog_device structure, e.g.,
-
-struct watchdog_device {
-...
-	#ifdef CONFIG_RV_MON_SAFE_WTD
-	struct da_monitor da_mon;
-	#endif
-...
-}
-
-A simplified version of the the "per task" monitor, in the patch 01, changes in
-include/linux/sched.h.
-
->> +
->> +static void handle_nowayout(void *data, struct watchdog_device *wdd)
->> +{
->> +    if (wdd->id != watchdog_id)
->> +        return;
->> +
->> +    da_handle_init_run_event_safe_wtd(nowayout_safe_wtd);
->> +}
->> +
->> +static void handle_close(void *data, struct watchdog_device *wdd)
->> +{
->> +    if (wdd->id != watchdog_id)
->> +        return;
->> +
->> +    if (open_pid && current->pid != open_pid) {
->> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
->> +    } else {
->> +        da_handle_event_safe_wtd(close_safe_wtd);
->> +        open_pid = 0;
->> +    }
->> +}
->> +
->> +static void handle_open(void *data, struct watchdog_device *wdd)
->> +{
->> +    if (wdd->id != watchdog_id)
->> +        return;
->> +
->> +    if (open_pid && current->pid != open_pid) {
->> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
->> +    } else {
->> +        da_handle_init_run_event_safe_wtd(open_safe_wtd);
->> +        open_pid = current->pid;
->> +    }
->> +}
->> +
->> +static void blocked_events(void *data, struct watchdog_device *wdd)
->> +{
->> +    if (wdd->id != watchdog_id)
->> +        return;
->> +
->> +    if (open_pid && current->pid != open_pid) {
->> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
->> +        return;
->> +    }
->> +    da_handle_event_safe_wtd(other_threads_safe_wtd);
->> +}
->> +
->> +static void blocked_events_timeout(void *data, struct watchdog_device *wdd,
->> u64 timeout)
->> +{
->> +    blocked_events(data, wdd);
->> +}
->> +
->> +static void handle_ping(void *data, struct watchdog_device *wdd)
->> +{
->> +    char msg[128];
->> +    unsigned int timeout;
->> +
->> +    if (wdd->id != watchdog_id)
->> +        return;
->> +
->> +    if (open_pid && current->pid != open_pid) {
->> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
->> +        return;
->> +    }
->> +
->> +    da_handle_event_safe_wtd(ping_safe_wtd);
->> +
->> +    if (!check_timeout)
->> +        return;
->> +
->> +    if (wdd->ops->get_timeleft) {
->> +        timeout = wdd->ops->get_timeleft(wdd);
->> +        if (timeout > last_timeout_set) {
->> +            snprintf(msg, 128,
->> +                 "watchdog timeout is %u > than previously set (%d)\n",
->> +                 timeout, last_timeout_set);
->> +            cond_react(msg);
->> +        }
->> +    } else {
->> +        snprintf(msg, 128, "error getting timeout: option not supported\n");
-> 
-> This is not an error. The get_timeleft callback is optional.
-
-Right... but this part of the code is only reachable if the user explicitly
-asked to check the timeout (if (!check_timeout)...return before this code).
-
-So, if the user only considers the system safe if the monitor also checks the
-written timeout, but the watchdog is one of those that do not have the callback
-implemented (which is ok for a Linux watchdog), the monitor captures this
-"undesired" behavior.
-
-This monitor is not checking if the watchdog subsystem is correct at its
-plenitude, it is checking if the watchdog usage is following a set of
-specifications (raised by people in the LF Elisa workgroup).
-
->> +        cond_react(msg);
->> +    }
->> +}
->> +
-
-[...]
-
->> +
->> +struct automaton_safe_wtd automaton_safe_wtd = {
->> +    .state_names = {
->> +        "init",
->> +        "closed_running",
->> +        "closed_running_nwo",
->> +        "nwo",
->> +        "opened",
->> +        "opened_nwo",
->> +        "reopened",
->> +        "safe",
->> +        "safe_nwo",
->> +        "set",
->> +        "set_nwo",
->> +        "started",
->> +        "started_nwo",
->> +        "stoped"
->> +    },
->> +    .event_names = {
->> +        "close",
->> +        "nowayout",
->> +        "open",
->> +        "other_threads",
->> +        "ping",
->> +        "set_safe_timeout",
->> +        "start",
->> +        "stop"
->> +    },
->> +    .function = {
->> +        {                          -1,                nwo_safe_wtd,             opened_safe_wtd,               init_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
->> +        {                          -1, closed_running_nwo_safe_wtd,           reopened_safe_wtd,     closed_running_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
->> +        {                          -1, closed_running_nwo_safe_wtd,        started_nwo_safe_wtd, closed_running_nwo_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
->> +        {                          -1,                nwo_safe_wtd,         opened_nwo_safe_wtd,                nwo_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
->> +        {               init_safe_wtd,                          -1,                          -1,                          -1,                          -1,                          -1,           started_safe_wtd,                          -1 },
->> +        {                nwo_safe_wtd,                          -1,                          -1,                          -1,                          -1,                          -1,       started_nwo_safe_wtd,                          -1 },
->> +        {     closed_running_safe_wtd,                          -1,                          -1,                          -1,                          -1,                set_safe_wtd,                          1,             opened_safe_wtd },
->> +        {     closed_running_safe_wtd,                          -1,                          -1,                          -1,               safe_safe_wtd,                          -1,                          1,             stoped_safe_wtd },
->> +        { closed_running_nwo_safe_wtd,                          -1,                          -1,                          -1,           safe_nwo_safe_wtd,                          -1,                         -1,                          -1 },
->> +        {                          -1,                          -1,                          -1,                          -1,               safe_safe_wtd,                          -1,                         -1,                          -1 },
->> +        {                          -1,                          -1,                          -1,                          -1,           safe_nwo_safe_wtd,                          -1,                         -1,                          -1 },
->> +        {     closed_running_safe_wtd,                          -1,                          -1,                          -1,                          -1,                set_safe_wtd,                         -1,             stoped_safe_wtd },
->> +        { closed_running_nwo_safe_wtd,                          -1,                          -1,                          -1,                          -1,            set_nwo_safe_wtd,                         -1,                          -1 },
->> +        {               init_safe_wtd,                          -1,                          -1,                          -1,                          -1,                          -1,                         -1,                          -1 },
->> +    },
->> +    .initial_state = init_safe_wtd,
->> +    .final_states = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-> 
-> I find this event table all but impossible to verify.
-
-It is a matrix. Lines are states, and columns are events.
-
-On a given state/line, receiving a given event/column, the data is the next
-state/row.
-
-For instance, let's say "init" (row 0), event "nwo" (column 1), and the next
-state is the "nwo" (row 3).
-
--1 means invalid/blocked state (yeah, maybe it is better to have an #define
-INVALID_STATE -1).
-
-This is the C representation of an automaton, following the formal definition of
-a deterministic automaton. I've added an explanation of this representation in
-the documentation (patch 15, file da_monitor_synthesis.rst).
-
-A deeper look into this subject is here (peer-reviewed conference paper at
-Software Engineer and Formal Methods 2019):
-https://bristot.me/wp-content/uploads/2019/09/paper.pdf
-
-One could translate it back to the automaton's graphical format... to a format
-of by a tool used to analyze automaton properties... that is the good point of
-using a well-established formalism. (The bad part is that they are often
-boring... c'est la vie :-)).
-
--- Daniel
-> 
->> +};
-> 
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index be0b95e51df6..670e0edc074f 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2033,6 +2033,7 @@ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
+ 	select BUILD_BIN2C
++	select HAVE_IMA_KEXEC if IMA
+ 	depends on X86_64
+ 	depends on CRYPTO=y
+ 	depends on CRYPTO_SHA256=y
+diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+index bea5cdcdf532..ca0796ac4403 100644
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -11,6 +11,7 @@
+ #define SETUP_APPLE_PROPERTIES		5
+ #define SETUP_JAILHOUSE			6
+ #define SETUP_CC_BLOB			7
++#define SETUP_IMA			8
+ 
+ #define SETUP_INDIRECT			(1<<31)
+ 
+@@ -172,6 +173,14 @@ struct jailhouse_setup_data {
+ 	} __attribute__((packed)) v2;
+ } __attribute__((packed));
+ 
++/*
++ * IMA buffer setup data information from the previous kernel during kexec
++ */
++struct ima_setup_data {
++	__u64 addr;
++	__u64 size;
++} __attribute__((packed));
++
+ /* The so-called "zeropage" */
+ struct boot_params {
+ 	struct screen_info screen_info;			/* 0x000 */
+diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+index f267205f2d5a..9dac24680ff8 100644
+--- a/arch/x86/kernel/e820.c
++++ b/arch/x86/kernel/e820.c
+@@ -1017,10 +1017,10 @@ void __init e820__reserve_setup_data(void)
+ 		e820__range_update(pa_data, sizeof(*data)+data->len, E820_TYPE_RAM, E820_TYPE_RESERVED_KERN);
+ 
+ 		/*
+-		 * SETUP_EFI is supplied by kexec and does not need to be
+-		 * reserved.
++		 * SETUP_EFI and SETUP_IMA are supplied by kexec and do not need
++		 * to be reserved.
+ 		 */
+-		if (data->type != SETUP_EFI)
++		if (data->type != SETUP_EFI && data->type != SETUP_IMA)
+ 			e820__range_update_kexec(pa_data,
+ 						 sizeof(*data) + data->len,
+ 						 E820_TYPE_RAM, E820_TYPE_RESERVED_KERN);
+diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+index 170d0fd68b1f..c63974e94272 100644
+--- a/arch/x86/kernel/kexec-bzimage64.c
++++ b/arch/x86/kernel/kexec-bzimage64.c
+@@ -186,11 +186,38 @@ setup_efi_state(struct boot_params *params, unsigned long params_load_addr,
+ }
+ #endif /* CONFIG_EFI */
+ 
++static void
++setup_ima_state(const struct kimage *image, struct boot_params *params,
++		unsigned long params_load_addr,
++		unsigned int ima_setup_data_offset)
++{
++#ifdef CONFIG_IMA_KEXEC
++	struct setup_data *sd = (void *)params + ima_setup_data_offset;
++	unsigned long setup_data_phys;
++	struct ima_setup_data *ima;
++
++	if (!image->ima_buffer_size)
++		return;
++
++	sd->type = SETUP_IMA;
++	sd->len = sizeof(*ima);
++
++	ima = (void *)sd + sizeof(struct setup_data);
++	ima->addr = image->ima_buffer_addr;
++	ima->size = image->ima_buffer_size;
++
++	/* Add setup data */
++	setup_data_phys = params_load_addr + ima_setup_data_offset;
++	sd->next = params->hdr.setup_data;
++	params->hdr.setup_data = setup_data_phys;
++#endif /* CONFIG_IMA_KEXEC */
++}
++
+ static int
+ setup_boot_parameters(struct kimage *image, struct boot_params *params,
+ 		      unsigned long params_load_addr,
+ 		      unsigned int efi_map_offset, unsigned int efi_map_sz,
+-		      unsigned int efi_setup_data_offset)
++		      unsigned int setup_data_offset)
+ {
+ 	unsigned int nr_e820_entries;
+ 	unsigned long long mem_k, start, end;
+@@ -245,8 +272,15 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
+ #ifdef CONFIG_EFI
+ 	/* Setup EFI state */
+ 	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
+-			efi_setup_data_offset);
++			setup_data_offset);
++	setup_data_offset += sizeof(struct setup_data) +
++			sizeof(struct efi_setup_data);
+ #endif
++
++	/* Setup IMA log buffer state */
++	setup_ima_state(image, params, params_load_addr,
++			setup_data_offset);
++
+ 	/* Setup EDD info */
+ 	memcpy(params->eddbuf, boot_params.eddbuf,
+ 				EDDMAXNR * sizeof(struct edd_info));
+@@ -403,6 +437,10 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 				sizeof(struct setup_data) +
+ 				sizeof(struct efi_setup_data);
+ 
++	if (IS_ENABLED(CONFIG_IMA_KEXEC))
++		kbuf.bufsz += sizeof(struct setup_data) +
++			      sizeof(struct ima_setup_data);
++
+ 	params = kzalloc(kbuf.bufsz, GFP_KERNEL);
+ 	if (!params)
+ 		return ERR_PTR(-ENOMEM);
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index bd6c6fd373ae..c9f375045e0d 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -11,6 +11,7 @@
+ #include <linux/dma-map-ops.h>
+ #include <linux/dmi.h>
+ #include <linux/efi.h>
++#include <linux/ima.h>
+ #include <linux/init_ohci1394_dma.h>
+ #include <linux/initrd.h>
+ #include <linux/iscsi_ibft.h>
+@@ -140,6 +141,11 @@ __visible unsigned long mmu_cr4_features __ro_after_init;
+ __visible unsigned long mmu_cr4_features __ro_after_init = X86_CR4_PAE;
+ #endif
+ 
++#ifdef CONFIG_IMA
++static phys_addr_t ima_kexec_buffer_phys;
++static size_t ima_kexec_buffer_size;
++#endif
++
+ /* Boot loader ID and version as integers, for the benefit of proc_dointvec */
+ int bootloader_type, bootloader_version;
+ 
+@@ -330,6 +336,59 @@ static void __init reserve_initrd(void)
+ }
+ #endif /* CONFIG_BLK_DEV_INITRD */
+ 
++static void __init add_early_ima_buffer(u64 phys_addr)
++{
++#ifdef CONFIG_IMA
++	struct ima_setup_data *data;
++
++	data = early_memremap(phys_addr + sizeof(struct setup_data),
++			      sizeof(*data));
++	if (!data) {
++		pr_warn("setup: failed to memremap ima_setup_data entry\n");
++		return;
++	}
++	if (data->size != 0) {
++		memblock_reserve(data->addr, data->size);
++		ima_kexec_buffer_phys = data->addr;
++		ima_kexec_buffer_size = data->size;
++	}
++	early_memunmap(data, sizeof(*data));
++#else
++	pr_warn("Passed IMA kexec data, but CONFIG_IMA not set. Ignoring.\n");
++#endif
++}
++
++#if defined(CONFIG_HAVE_IMA_KEXEC) && !defined(CONFIG_OF_FLATTREE)
++int __meminit ima_free_kexec_buffer(void)
++{
++	int rc;
++
++	if (ima_kexec_buffer_size == 0)
++		return -ENOENT;
++
++	rc = memblock_phys_free(ima_kexec_buffer_phys,
++				ima_kexec_buffer_size);
++	if (rc)
++		return rc;
++
++	ima_kexec_buffer_phys = 0;
++	ima_kexec_buffer_size = 0;
++
++	return 0;
++}
++
++int __init ima_get_kexec_buffer(void **addr, size_t *size)
++{
++	if (ima_kexec_buffer_size == 0)
++		return -ENOENT;
++
++	*addr = __va(ima_kexec_buffer_phys);
++	*size = ima_kexec_buffer_size;
++
++	return 0;
++}
++#endif
++
+ static void __init parse_setup_data(void)
+ {
+ 	struct setup_data *data;
+@@ -355,6 +414,9 @@ static void __init parse_setup_data(void)
+ 		case SETUP_EFI:
+ 			parse_efi_setup(pa_data, data_len);
+ 			break;
++		case SETUP_IMA:
++			add_early_ima_buffer(pa_data);
++			break;
+ 		default:
+ 			break;
+ 		}
+diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+index 8d374cc552be..d3ec430fa403 100644
+--- a/drivers/of/kexec.c
++++ b/drivers/of/kexec.c
+@@ -9,6 +9,7 @@
+  *  Copyright (C) 2016  IBM Corporation
+  */
+ 
++#include <linux/ima.h>
+ #include <linux/kernel.h>
+ #include <linux/kexec.h>
+ #include <linux/memblock.h>
+@@ -115,6 +116,7 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_HAVE_IMA_KEXEC
+ /**
+  * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+  * @addr:	On successful return, set to point to the buffer contents.
+@@ -129,9 +131,6 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+ 	size_t tmp_size;
+ 	const void *prop;
+ 
+-	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+-		return -ENOTSUPP;
+-
+ 	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
+ 	if (!prop)
+ 		return -ENOENT;
+@@ -156,9 +155,6 @@ int ima_free_kexec_buffer(void)
+ 	size_t size;
+ 	struct property *prop;
+ 
+-	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+-		return -ENOTSUPP;
+-
+ 	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
+ 	if (!prop)
+ 		return -ENOENT;
+@@ -173,6 +169,7 @@ int ima_free_kexec_buffer(void)
+ 
+ 	return memblock_phys_free(addr, size);
+ }
++#endif
+ 
+ /**
+  * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 426b1744215e..ff4bd993e432 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -140,6 +140,11 @@ static inline int ima_measure_critical_data(const char *event_label,
+ 
+ #endif /* CONFIG_IMA */
+ 
++#ifdef CONFIG_HAVE_IMA_KEXEC
++int ima_free_kexec_buffer(void);
++int ima_get_kexec_buffer(void **addr, size_t *size);
++#endif
++
+ #ifdef CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
+ extern bool arch_ima_get_secureboot(void);
+ extern const char * const *arch_get_ima_policy(void);
+diff --git a/include/linux/of.h b/include/linux/of.h
+index f0a5d6b10c5a..20a4e7cb7afe 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -441,8 +441,6 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
+ 				   unsigned long initrd_load_addr,
+ 				   unsigned long initrd_len,
+ 				   const char *cmdline, size_t extra_fdt_size);
+-int ima_get_kexec_buffer(void **addr, size_t *size);
+-int ima_free_kexec_buffer(void);
+ #else /* CONFIG_OF */
+ 
+ static inline void of_core_init(void)
+diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+index 13753136f03f..419dc405c831 100644
+--- a/security/integrity/ima/ima_kexec.c
++++ b/security/integrity/ima/ima_kexec.c
+@@ -137,7 +137,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+ /*
+  * Restore the measurement list from the previous kernel.
+  */
+-void ima_load_kexec_buffer(void)
++void __init ima_load_kexec_buffer(void)
+ {
+ 	void *kexec_buffer = NULL;
+ 	size_t kexec_buffer_size = 0;
+-- 
+2.36.1

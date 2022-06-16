@@ -2,158 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92A954E063
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85DA54E093
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359357AbiFPL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S229555AbiFPMKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 08:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiFPL7k (ORCPT
+        with ESMTP id S1376779AbiFPMKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:59:40 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C25DD07
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:59:39 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id v143so1572379oie.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tKhLhAU1VwnhstyxXFD1uOF/c3hqPPQcj1y5Vx8V8sI=;
-        b=FPNp7AlEq73YPzIn+VQs0w+sTCDNSZtdGNK6FPZOOnRz6tQLqIUmO8x3K13QLdj6Z5
-         0p5nDdLps78jmHX/rEKQ7uQv7kMSIlNmcnauti/kss8KH/eL6uo7WLnbNJAAhDkzVC6k
-         Z6eQ1ZtGu6YoTrh2Wwr5cHKM3Wu6Gjujtq4ikFRqAGxPQnwA5i0s6UxRT6KyBosqZXQC
-         IOGwceh2lXzSbYZASloqNUkNauKwA2/slJXb0K+7SyIRe4MRHNOTrxBwCmX4YK79bueL
-         rwm3FIwM0OINR1dWM8TM1rAUk4YIKvYzrj0kg5SwkVuIW2piinJhFupsSiIQA8wVodOg
-         ekxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tKhLhAU1VwnhstyxXFD1uOF/c3hqPPQcj1y5Vx8V8sI=;
-        b=L2xbHdRX+7zdBV8NIaWsB5BJOTvYDkPKnqpxw+Bzs9FupNxl0wF2Bpdqt58u5eJZPb
-         yz+vCjVLn8h0b+rhfXQOg3PfPxDEnbztC0PPxLfHft5ItOaGxisKbRgFB4F+9Yu49eDF
-         tQ0JH9ycoZzDkQ5lcLDOvxosz7notyB64XfGZsxbYGKOaPBJRr6PfaUFSpX8LpSc2PF0
-         jKFU0VAFBLrYiZxVZQ7ygEQSNDdx1QKQgAIr2+ufeoLdnCq8U0i9NekK2TYJ94duUgVN
-         7ZgiB4JbPZ6tJPRiURQLAyYb19OpzVf0vC+50tD3SEh6WN/DL9gYabZAOwpdAAkBmgim
-         q+FA==
-X-Gm-Message-State: AJIora9OXiHfNzzT9KhynvbraFnk+cpJc7Id4UJBlNjfDwRot4hPVJhr
-        tcJvGOO69VpPlGttCQE0/RPkpEDiobUP7uwTQN6hYg==
-X-Google-Smtp-Source: AGRyM1t7lM8G2J40rKKfaP+sqAb2CfdR7uixK9NuYWauryhEjnCDAH/meWhs+RFb3oju1l6Qg41d5r4eVixvaBXv190=
-X-Received: by 2002:a05:6808:10c1:b0:331:39ca:a500 with SMTP id
- s1-20020a05680810c100b0033139caa500mr2341417ois.137.1655380779203; Thu, 16
- Jun 2022 04:59:39 -0700 (PDT)
+        Thu, 16 Jun 2022 08:10:37 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 753BB2CCBA;
+        Thu, 16 Jun 2022 05:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=oC2+/
+        LNKAYJzJDGB6msmArnHeDnp+bcp6dLSZ6JHMXA=; b=MQMsx6u6GvxCI91gf03b1
+        lYJ7o+0OMyZYyczF+tw0veVE/0lNLwFAGkPZwKidyrKZk5qPa9v0K/qrQ8ltt4PA
+        4JM8iGQD5jn4jd29bk0BypaFJnE0jv4VVG/hyz5oHoUeUHqRu3MGacyCfOWsvuLK
+        9hMOiiv/Ma3QgRSArdoAdw=
+Received: from carlis-virtual-machine (unknown [218.17.89.92])
+        by smtp10 (Coremail) with SMTP id DsCowAAHhx_8Gatiy3J6IA--.11358S2;
+        Thu, 16 Jun 2022 19:54:37 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     hare@suse.de, jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Subject: [PATCH] scsi: fcoe: convert sysfs snprintf to sysfs_emit
+Date:   Thu, 16 Jun 2022 19:54:35 +0800
+Message-Id: <20220616115435.9980-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220512112347.18717-1-andrew@daynix.com> <CACGkMEvH1yE0CZYdstAK32DkEucejNO+V7PEAZD_641+rp2aKA@mail.gmail.com>
- <CABcq3pFJcsoj+dDf6tirT_hfTB6rj9+f6KNFafwg+usqYwTdDA@mail.gmail.com>
- <CACGkMEtaigzuwy25rE-7N40TQGvXVmJVQivavmuwrCuw0Z=LUQ@mail.gmail.com> <CABcq3pFzzSHA3pqbKFEsLaFg7FkFZkdxs+N_ET_n_XLBaWVnHA@mail.gmail.com>
-In-Reply-To: <CABcq3pFzzSHA3pqbKFEsLaFg7FkFZkdxs+N_ET_n_XLBaWVnHA@mail.gmail.com>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Thu, 16 Jun 2022 14:59:28 +0300
-Message-ID: <CABcq3pHkqxunsaZ8qt=FicL1361D0EktxZhqib+MGDJ=DVB6FA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/5] TUN/VirtioNet USO features support.
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, mst <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowAAHhx_8Gatiy3J6IA--.11358S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF4DWF13Ar1rKF1xuF4Durg_yoW8KryDpF
+        4kJa45uay7GFn5Kr15G3WDur909as7Jr9rG395J3s7W3Z5ArWDKF1kAa9F9F1fJ348GryU
+        JF4qkr98ua10yr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jdDGOUUUUU=
+X-Originating-IP: [218.17.89.92]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbBOQohhV-PN8x1rQACsm
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jason
-Apparently, your patch should work.
-For now, I have an issue where segmentation between two guests on one
-host still occurs.
-Neither previous "hack" nor your patch helps.
-Now I'm looking what the issue may be.
-If you have some suggestions on where may I look, it would be helpful, thanks!
+Fix the following coccicheck warnings:
 
-On Thu, May 26, 2022 at 3:18 PM Andrew Melnichenko <andrew@daynix.com> wrote:
->
-> I'll check it, thank you!
->
-> On Thu, May 26, 2022 at 9:56 AM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Tue, May 24, 2022 at 7:07 PM Andrew Melnichenko <andrew@daynix.com> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > The issue is that host segments packets between guests on the same host.
-> > > Tests show that it happens because SKB_GSO_DODGY skb offload in
-> > > virtio_net_hdr_from_skb().
-> > > To do segmentation you need to remove SKB_GSO_DODGY or add SKB_GSO_PARTIAL
-> > > The solution with DODGY/PARTIAL offload looks like a dirty hack, so
-> > > for now, I've lived it as it is for further investigation.
-> >
-> > Ok, I managed to find the previous discussion. It looks to me the
-> > reason is that __udp_gso_segment will segment dodgy packets
-> > unconditionally.
-> >
-> > I wonder if the attached patch works? (compile test only).
-> >
-> > Thanks
-> >
-> > >
-> > >
-> > > On Tue, May 17, 2022 at 9:32 AM Jason Wang <jasowang@redhat.com> wrote:
-> > > >
-> > > > On Thu, May 12, 2022 at 7:33 PM Andrew Melnychenko <andrew@daynix.com> wrote:
-> > > > >
-> > > > > Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
-> > > > > Technically they enable NETIF_F_GSO_UDP_L4
-> > > > > (and only if USO4 & USO6 are set simultaneously).
-> > > > > It allows to transmission of large UDP packets.
-> > > > >
-> > > > > Different features USO4 and USO6 are required for qemu where Windows guests can
-> > > > > enable disable USO receives for IPv4 and IPv6 separately.
-> > > > > On the other side, Linux can't really differentiate USO4 and USO6, for now.
-> > > > > For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
-> > > > > In the future, there would be a mechanism to control UDP_L4 GSO separately.
-> > > > >
-> > > > > Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
-> > > > >
-> > > > > New types for VirtioNet already on mailing:
-> > > > > https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
-> > > > >
-> > > > > Also, there is a known issue with transmitting packages between two guests.
-> > > >
-> > > > Could you explain this more? It looks like a bug. (Or any pointer to
-> > > > the discussion)
-> > > >
-> > > > Thanks
-> > > >
-> > > > > Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
-> > > > >
-> > > > > Andrew (5):
-> > > > >   uapi/linux/if_tun.h: Added new offload types for USO4/6.
-> > > > >   driver/net/tun: Added features for USO.
-> > > > >   uapi/linux/virtio_net.h: Added USO types.
-> > > > >   linux/virtio_net.h: Support USO offload in vnet header.
-> > > > >   drivers/net/virtio_net.c: Added USO support.
-> > > > >
-> > > > >  drivers/net/tap.c               | 10 ++++++++--
-> > > > >  drivers/net/tun.c               |  8 +++++++-
-> > > > >  drivers/net/virtio_net.c        | 19 +++++++++++++++----
-> > > > >  include/linux/virtio_net.h      |  9 +++++++++
-> > > > >  include/uapi/linux/if_tun.h     |  2 ++
-> > > > >  include/uapi/linux/virtio_net.h |  4 ++++
-> > > > >  6 files changed, 45 insertions(+), 7 deletions(-)
-> > > > >
-> > > > > --
-> > > > > 2.35.1
-> > > > >
-> > > >
-> > >
+drivers/scsi/fcoe/fcoe_sysfs.c:376:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/fcoe/fcoe_sysfs.c:268:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/fcoe/fcoe_sysfs.c:253:8-16:
+WARNING: use scnprintf or sprintf
+
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+ drivers/scsi/fcoe/fcoe_sysfs.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/scsi/fcoe/fcoe_sysfs.c b/drivers/scsi/fcoe/fcoe_sysfs.c
+index af658aa38fed..eabab69f9861 100644
+--- a/drivers/scsi/fcoe/fcoe_sysfs.c
++++ b/drivers/scsi/fcoe/fcoe_sysfs.c
+@@ -239,7 +239,6 @@ static char *fcf_state_names[] = {
+ 	[ FCOE_FCF_STATE_CONNECTED ]    = "Connected",
+ };
+ fcoe_enum_name_search(fcf_state, fcf_state, fcf_state_names)
+-#define FCOE_FCF_STATE_MAX_NAMELEN 50
+ 
+ static ssize_t show_fcf_state(struct device *dev,
+ 			      struct device_attribute *attr,
+@@ -250,7 +249,7 @@ static ssize_t show_fcf_state(struct device *dev,
+ 	name = get_fcoe_fcf_state_name(fcf->state);
+ 	if (!name)
+ 		return -EINVAL;
+-	return snprintf(buf, FCOE_FCF_STATE_MAX_NAMELEN, "%s\n", name);
++	return sysfs_emit(buf, "%s\n", name);
+ }
+ static FCOE_DEVICE_ATTR(fcf, state, S_IRUGO, show_fcf_state, NULL);
+ 
+@@ -265,8 +264,7 @@ static ssize_t show_ctlr_mode(struct device *dev,
+ 	name = get_fcoe_ctlr_mode_name(ctlr->mode);
+ 	if (!name)
+ 		return -EINVAL;
+-	return snprintf(buf, FCOE_MAX_MODENAME_LEN,
+-			"%s\n", name);
++	return sysfs_emit(buf, "%s\n", name);
+ }
+ 
+ static ssize_t store_ctlr_mode(struct device *dev,
+@@ -361,7 +359,6 @@ static char *ctlr_enabled_state_names[] = {
+ };
+ fcoe_enum_name_search(ctlr_enabled_state, ctlr_enabled_state,
+ 		      ctlr_enabled_state_names)
+-#define FCOE_CTLR_ENABLED_MAX_NAMELEN 50
+ 
+ static ssize_t show_ctlr_enabled_state(struct device *dev,
+ 				       struct device_attribute *attr,
+@@ -373,8 +370,7 @@ static ssize_t show_ctlr_enabled_state(struct device *dev,
+ 	name = get_fcoe_ctlr_enabled_state_name(ctlr->enabled);
+ 	if (!name)
+ 		return -EINVAL;
+-	return snprintf(buf, FCOE_CTLR_ENABLED_MAX_NAMELEN,
+-			"%s\n", name);
++	return sysfs_emit(buf, "%s\n", name);
+ }
+ 
+ static FCOE_DEVICE_ATTR(ctlr, enabled, S_IRUGO | S_IWUSR,
+-- 
+2.34.1
+

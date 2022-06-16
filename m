@@ -2,122 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8FB54E671
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9044454E66F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377980AbiFPP4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S1377814AbiFPP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbiFPP43 (ORCPT
+        with ESMTP id S235974AbiFPP40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:56:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C19530559;
-        Thu, 16 Jun 2022 08:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655394989; x=1686930989;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vl6QQxwjCAX4+CqE6Wqd7HLf/CcgifYO4slix8mPH74=;
-  b=SfXsXRNLqq/aRYCWuJ1kU9xgGroTHI8U+tavOH2CjNTnls3L5yiYzD31
-   /5rWT2Ni0z3Inw5rruVSScKBIU9+EpoIWjgDC5DBVx/DnXdb1nlUq6uJX
-   iVv8wmwQSdka+3KNnZCCZ8zrHqRRSuYo90/MqxJIjclycvouXzr35+Dyz
-   F+f5ohxXLMSlmlP35krC37A7DC6u9eTViL9h9sqV4kKI1tHebxFHouCxd
-   vHqMFwPvrMNRT01qlIxvdcRTAuLnvbe4quDCchLuoB+m50YdVaJ6qRK70
-   Jc5/y0HB3f3sDhHIvSYy6mCDDSOXmW7U8AqS8F6SZAdKoSisOcbTdI2BW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278074937"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="278074937"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 08:56:29 -0700
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="675079729"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.255.30.124]) ([10.255.30.124])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 08:56:26 -0700
-Message-ID: <8d104ff6-5f31-5388-90f9-7dd6474440c9@intel.com>
-Date:   Thu, 16 Jun 2022 23:56:17 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 19/19] KVM: x86: Enable supervisor IBT support for guest
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Thu, 16 Jun 2022 11:56:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6932F645;
+        Thu, 16 Jun 2022 08:56:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DC71B8247C;
+        Thu, 16 Jun 2022 15:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9C9C3411A;
+        Thu, 16 Jun 2022 15:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655394982;
+        bh=Uig/+Nmy6hndeL7nse9511BoQKMIV0erkOstTyQxEHA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=m52+t7VdmErDE6JLTaYv5tPzbMcsH8lDIk30SC0M9sEAzEL4LWH2xbmEWh+OIWUl8
+         YpHijZwpGHzCd7JW2zDYLHi2Nr17I6wRaS/ofWLWldMDIKyRrabQDsFnwU1dyKjmOJ
+         uVcpWJM0jlllMZdKeQYhT+Ok3ixw04Cx6RBPnjRvvbi795CgScI4IOKk5V6CuA//Z6
+         7VUkZILF01TXh5iAf9RdSa9hrjuFGeYiWyxPjiWFJurf1aBrfhOHjsiW1wWqifOEms
+         sEjUuUBpBjfK/mEGXiQ3KiUBwriy0QCje4/lqu+e6OrkNzvYyYK6eHn2gpU8vPMP8R
+         LOCZf1WcS20uA==
+Date:   Thu, 16 Jun 2022 10:56:19 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-References: <20220616084643.19564-1-weijiang.yang@intel.com>
- <20220616084643.19564-20-weijiang.yang@intel.com>
- <YqsRttmgmbthHWVR@worktop.programming.kicks-ass.net>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <YqsRttmgmbthHWVR@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v12 09/13] PCI: imx6: Turn off regulator when system is
+ in suspend mode
+Message-ID: <20220616155619.GA1089749@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR04MB8676919AEB21FDA9F632CA4A8CAC9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 16, 2022 at 02:23:29AM +0000, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: 2022年6月16日 7:31
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; Lucas Stach
+> > <l.stach@pengutronix.de>; Rob Herring <robh+dt@kernel.org>; Mark Brown
+> > <broonie@kernel.org>; Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>; Fabio
+> > Estevam <festevam@gmail.com>; Francesco Dolcini
+> > <francesco.dolcini@toradex.com>
+> > Cc: linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+> > <linux-imx@nxp.com>; Bjorn Helgaas <bhelgaas@google.com>
+> > Subject: Re: [PATCH v12 09/13] PCI: imx6: Turn off regulator when system is in
+> > suspend mode
+> > 
+> > On Wed, Jun 15, 2022 at 06:15:47PM -0500, Bjorn Helgaas wrote:
+> > > From: Richard Zhu <hongxing.zhu@nxp.com>
+> > >
+> > > The driver should undo any enables it did itself. The regulator
+> > > disable shouldn't be basing decisions on regulator_is_enabled().
+> > >
+> > > Move the regulator_disable to the suspend function, turn off regulator
+> > > when the system is in suspend mode.
+> > >
+> > > To keep the balance of the regulator usage counter, disable the
+> > > regulator in shutdown.
+> > >
+> > > Link:
+> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore
+> > > .kernel.org%2Fr%2F1655189942-12678-6-git-send-email-hongxing.z&amp;d
+> > at
+> > >
+> > a=05%7C01%7Chongxing.zhu%40nxp.com%7C8dea46d908d34cb4825808da4
+> > f270eaf%
+> > >
+> > 7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6379093264156415
+> > 35%7CUnkn
+> > >
+> > own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1
+> > haWwi
+> > >
+> > LCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=tqzlcCmtSkUNxNzJ0Fr5o
+> > CR3X2CTH
+> > > 4dwUJS4NXt5KRc%3D&amp;reserved=0
+> > > hu@nxp.com
+> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > ---
+> > >  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++------------
+> > >  1 file changed, 7 insertions(+), 12 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
+> > > b/drivers/pci/controller/dwc/pci-imx6.c
+> > > index 6eddd0b5f628..537b8a2e0e3b 100644
+> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
+> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> > > @@ -670,8 +670,6 @@ static void imx6_pcie_clk_disable(struct imx6_pcie
+> > > *imx6_pcie)
+> > >
+> > >  static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
+> > > {
+> > > -	struct device *dev = imx6_pcie->pci->dev;
+> > > -
+> > >  	switch (imx6_pcie->drvdata->variant) {
+> > >  	case IMX7D:
+> > >  	case IMX8MQ:
+> > > @@ -702,14 +700,6 @@ static void imx6_pcie_assert_core_reset(struct
+> > imx6_pcie *imx6_pcie)
+> > >  		break;
+> > >  	}
+> > >
+> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie->vpcie) > 0) {
+> > > -		int ret = regulator_disable(imx6_pcie->vpcie);
+> > > -
+> > > -		if (ret)
+> > > -			dev_err(dev, "failed to disable vpcie regulator: %d\n",
+> > > -				ret);
+> > > -	}
+> > > -
+> > >  	/* Some boards don't have PCIe reset GPIO. */
+> > >  	if (gpio_is_valid(imx6_pcie->reset_gpio))
+> > >  		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
+> > > @@ -722,7 +712,7 @@ static int imx6_pcie_deassert_core_reset(struct
+> > imx6_pcie *imx6_pcie)
+> > >  	struct device *dev = pci->dev;
+> > >  	int ret, err;
+> > >
+> > > -	if (imx6_pcie->vpcie && !regulator_is_enabled(imx6_pcie->vpcie)) {
+> > > +	if (imx6_pcie->vpcie) {
+> > >  		ret = regulator_enable(imx6_pcie->vpcie);
+> > >  		if (ret) {
+> > >  			dev_err(dev, "failed to enable vpcie regulator: %d\n", @@
+> > -796,7
+> > > +786,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie
+> > *imx6_pcie)
+> > >  	return 0;
+> > >
+> > >  err_clks:
+> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie->vpcie) > 0) {
+> > > +	if (imx6_pcie->vpcie) {
+> > >  		ret = regulator_disable(imx6_pcie->vpcie);
+> > >  		if (ret)
+> > >  			dev_err(dev, "failed to disable vpcie regulator: %d\n", @@
+> > -1023,6
+> > > +1013,9 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
+> > >  		break;
+> > >  	}
+> > >
+> > > +	if (imx6_pcie->vpcie)
+> > > +		regulator_disable(imx6_pcie->vpcie);
+> > 
+> > This is a little bit ugly because imx6_pcie_suspend_noirq() and
+> > imx6_pcie_resume_noirq() are not symmetric.
+> > 
+> > We call regulator_disable() directly here in imx6_pcie_suspend_noirq(), but the
+> > corresponding regulator_enable() is buried in imx6_pcie_deassert_core_reset().
+> > 
+> > It would be nicer if the suspend and resume paths looked more similar, as
+> > rockchip_pcie_suspend_noirq() and rockchip_pcie_resume_noirq() do, for
+> > example.
+> Yes, it is. The regulator_disable()/regulator_enable() are not invoked
+>  symmetrically.
+> 
+> In the original codes, the regulator_disable() is contained in
+> imx6_pcie_assert_core_reset() and with _eanbled() check.
+> And regulator_enable() is embedded in imx6_pcie_deassert_core_reset().
+> Both the regulator disable and enable are invoked in resume before.
+> I move the regulator_disable to suspend mode refer to Lucas' comments.
+> 
+> Refer to the current situation, how about to move the regulator_disable()
+>  out of imx6_pcie_deassert_core_reset() too?
 
-On 6/16/2022 7:19 PM, Peter Zijlstra wrote:
-> On Thu, Jun 16, 2022 at 04:46:43AM -0400, Yang Weijiang wrote:
->> Mainline kernel now supports supervisor IBT for kernel code,
->> to make s-IBT work in guest(nested guest), pass through
->> MSR_IA32_S_CET to guest(nested guest) if host kernel and KVM
->> enabled IBT. Note, s-IBT can work independent to host xsaves
->> support because guest MSR_IA32_S_CET can be stored/loaded from
->> specific VMCS field.
->
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index fe049d0e5ecc..c0118b33806a 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -1463,6 +1463,7 @@ static const u32 msrs_to_save_all[] = {
->>   	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
->>   	MSR_IA32_XSS,
->>   	MSR_IA32_U_CET, MSR_IA32_PL3_SSP, MSR_KVM_GUEST_SSP,
->> +	MSR_IA32_S_CET,
->>   };
->
-> So much like my local kvm/qemu hacks; this patch suffers the problem of
-> not exposing S_SHSTK. What happens if a guest tries to use that?
-With current solution, I think guest kernel will hit #GP while 
-reading/writing PL0_SSP.
->
-> Should we intercept and reject setting those bits or complete this patch
-> and support full S_SHSTK? (with all the warts and horrors that entails)
->
-> I don't think throwing this out in this half-finished state makes much
-> sense (which is why I never much shared my hacks).
+I think it's important to tweak this closer to the pattern of other
+drivers like exynos and rockchip.
 
-You reminded me to think over these cases even I don't have a solution now,
+exynos_pcie_resume_noirq() calls exynos_pcie_host_init().
+imx6_pcie_resume_noirq() is VERY similar to imx6_pcie_host_init(), and
+I think it should call imx6_pcie_host_init() instead of duplicating
+that code.  The only real difference is that imx6_pcie_host_init()
+calls imx6_setup_phy_mpll() while imx6_pcie_resume_noirq() does not.
+I suspect that's a bug.
 
-thank you!
+I don't think "regulator_enable(imx6_pcie->vpcie)" really has anything
+to do with imx6_pcie_deassert_core_reset() and it should be moved out.
+The typical pattern is to enable regulators in *_probe() and
+*_resume_noirq() and disable them in *_remove() and *_suspend_noirq().
+I think you should do the same unless there's some reason you can't.
 
->
->
->> @@ -11830,7 +11835,13 @@ int kvm_arch_hardware_setup(void *opaque)
->>   	/* Update CET features now as kvm_caps.supported_xss is finalized. */
->>   	if (!kvm_cet_user_supported()) {
->>   		kvm_cpu_cap_clear(X86_FEATURE_SHSTK);
->> -		kvm_cpu_cap_clear(X86_FEATURE_IBT);
->> +		/* If CET user bit is disabled due to cmdline option such as
->> +		 * noxsaves, but kernel IBT is on, this means we can expose
->> +		 * kernel IBT alone to guest since CET user mode msrs are not
->> +		 * passed through to guest.
->> +		 */
-> Invalid multi-line comment style.
-Oops, last minute change messed it up :-(
->
->> +		if (!cet_kernel_ibt_supported())
->> +			kvm_cpu_cap_clear(X86_FEATURE_IBT);
+Can you give this a try, starting with this v12 posting?
+
+Bjorn

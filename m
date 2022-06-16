@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0251354DE8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5671D54DF28
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359714AbiFPKBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S231419AbiFPKct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiFPKBU (ORCPT
+        with ESMTP id S229643AbiFPKcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:01:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6808B5C872
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CgVWCHgWJJT3XNAbwXXT31wUhHpLBydJuqr4cEkRcRg=; b=svndT7e0vHjSg2FVR5ABLL492R
-        IBtvGgXVEG5zhGj5aNFh88vSwSzeRBdB1MBdUnYvsy9jCMe2cA+Wt0G4hjDRsv7wJbDrxi6i7BIDU
-        7R1xPG91BSSXR6pN3fWYbtYx8ONsk5qrJgZBqZUqfCP1UHoZ2miHsNV1Gac7VMH747b5J1vn/1ijN
-        VyRNaMy9QDV+NANfFtZ+IfN5dRQ+wvP3CezJog+UrECePy2EoNzEmF68hlLHwODy9dd5ylyEQF9pY
-        2y98Qiax+HEcswDRZS2wlgcugb3gUJ3VVKg+ORcJKrjVJWkGX9gSOmvCVWRkOvyHlcaH++RCuqJsc
-        4W4FsX0A==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1mJ9-001r0b-S3; Thu, 16 Jun 2022 10:00:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1BE763006C2;
-        Thu, 16 Jun 2022 12:00:58 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F2E97201A4015; Thu, 16 Jun 2022 12:00:57 +0200 (CEST)
-Date:   Thu, 16 Jun 2022 12:00:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 OPTIONAL 8/8] x86/mm: Extend LAM to support to LAM_U48
-Message-ID: <Yqr/WdgRb1IEDMVk@hirez.programming.kicks-ass.net>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-9-kirill.shutemov@linux.intel.com>
+        Thu, 16 Jun 2022 06:32:47 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9657B1582F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:32:44 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:5439:2bcc:4a70:48e8])
+        by michel.telenet-ops.be with bizsmtp
+        id jmYi270064lJ8fu06mYioK; Thu, 16 Jun 2022 12:32:42 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o1mRv-004AbF-4n; Thu, 16 Jun 2022 12:10:03 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o1kY2-007ZgO-8u; Thu, 16 Jun 2022 10:08:14 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Ioannis Angelakopoulos <iangelak@fb.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] btrfs: Fix 64-bit divisions in btrfs_commit_stats_show() on 32-bit
+Date:   Thu, 16 Jun 2022 10:08:14 +0200
+Message-Id: <20220616080814.1805417-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610143527.22974-9-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 05:35:27PM +0300, Kirill A. Shutemov wrote:
-> LAM_U48 allows to encode 15 bits of tags into address.
-> 
-> LAM_U48 steals bits above 47-bit for tags and makes it impossible for
-> userspace to use full address space on 5-level paging machine.
-> 
-> Make these features mutually exclusive: whichever gets enabled first
-> blocks the other one.
+On 32-bit (e.g. m68k):
 
-This patch is broken in that it doesn't fix untag_pointer()
+    ERROR: modpost: "__udivdi3" [fs/btrfs/btrfs.ko] undefined!
 
-*If* you really want to continue down this road; you'll need something
-like:
+Fix this by using div_u64() instead.
 
-#define untagged_addr(mm, addr)        ({                              \
-       u64 __addr = (__force u64)(addr);                               \
-       s64 sign = (s64)__addr >> 63;                                   \
-       __addr ^= sign;                                                 \
-       __addr &= (mm)->context.untag_mask[sign & 1];                   \
-       __addr ^= sign;                                                 \
-       (__force __typeof__(addr))__addr;                               \
-})
+Reported-by: noreply@ellerman.id.au
+Fixes: e665ec2ab6e1ae36 ("btrfs: Expose the BTRFS commit stats through sysfs")
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+ fs/btrfs/sysfs.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Which uses a different mask for kernel and user pointers.
+diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
+index bce2573b02861149..a24cf7e0900a23cb 100644
+--- a/fs/btrfs/sysfs.c
++++ b/fs/btrfs/sysfs.c
+@@ -9,6 +9,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/completion.h>
+ #include <linux/bug.h>
++#include <linux/math64.h>
+ #include <crypto/hash.h>
+ 
+ #include "ctree.h"
+@@ -1002,9 +1003,9 @@ static ssize_t btrfs_commit_stats_show(struct kobject *kobj,
+ 		"max_commit_ms %llu\n"
+ 		"total_commit_ms %llu\n",
+ 		fs_info->commit_stats.commit_count,
+-		fs_info->commit_stats.last_commit_dur / NSEC_PER_MSEC,
+-		fs_info->commit_stats.max_commit_dur / NSEC_PER_MSEC,
+-		fs_info->commit_stats.total_commit_dur / NSEC_PER_MSEC);
++		div_u64(fs_info->commit_stats.last_commit_dur, NSEC_PER_MSEC),
++		div_u64(fs_info->commit_stats.max_commit_dur, NSEC_PER_MSEC),
++		div_u64(fs_info->commit_stats.total_commit_dur, NSEC_PER_MSEC));
+ }
+ 
+ static ssize_t btrfs_commit_stats_store(struct kobject *kobj,
+-- 
+2.25.1
 
-Anyway, without this U48 patch on, the mask could be a constant, no need
-to keep this variable, we can unconditionally unmask U57.
-
-Let me go reply to that other mail too.

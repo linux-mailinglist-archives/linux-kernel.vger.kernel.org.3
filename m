@@ -2,252 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE2254DCDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF3054DCE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiFPI3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S230432AbiFPI3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiFPI3B (ORCPT
+        with ESMTP id S230097AbiFPI31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:29:01 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A287D5DA30
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:29:00 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-fe023ab520so1046684fac.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=0AalHbH5lNk201mZ98hB412vqqVqDD6OSz4kp0XaI6E=;
-        b=DORHNi2iEHtlclkLAQZX/cSf3ItqnU9R+RT+8QZHLTApDHQO4QLd84/xxSUCpCqNuR
-         9Rr6ePdkSrdUxed7grdE8AYhIWbYwkXrhfUVeXfM11odlC+BXoAjqSTyn+1KfNf52kis
-         DAvOMzPboaHtVXDC2uLwsKeWcEhnRpMSWSNqM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=0AalHbH5lNk201mZ98hB412vqqVqDD6OSz4kp0XaI6E=;
-        b=wh5tE50+YIsH6yex6CkSzu506L9gETAfHrLkLhW+OBa5AM8P6M5yY6hnnYbIJT77aK
-         0igCNBUJ97/i1cRUDqxVrmiTd/S6BFecaUjeVjkiCf+uVKll/KfteQ8r8uSC9n1C6eQ9
-         K7SZ60ShthN0VRGzzgM8YW5rgvM5mPG+ftavtVXN/ntHX14h7R9tB6gaQOnw96VCuABG
-         WqIwsupnn+yQXi/xJ4U8ZX631f5MFKJoPGvRTh32YwtNZCooW3bSgj2UF9/5oKTOYgO8
-         CkTFao8tXT+6Yn2rFj1H4GxA2i6PtB+huE3Y+Ux31UtX5QEUPVemIZ53L+Br1mza+eho
-         nrJA==
-X-Gm-Message-State: AJIora+h1T1giDxFl2sVce0Hhi5xy9hgliP0W3M+/Lb0mSy+k/Q269U8
-        QQDkSVQ65yRJ9fpfJ2yPqGNHS/Zk7wHrdJJAq6cRpQ==
-X-Google-Smtp-Source: AGRyM1uXgNqoIVp4zh6blYrU2GpEEzoJ+XSdI2WTm44if1kvy/PfW44B2udC0Qj+WYiDz6t6gB3iSjNtvCg+Mvyc1Gc=
-X-Received: by 2002:a05:6870:b48a:b0:101:40eb:63a3 with SMTP id
- y10-20020a056870b48a00b0010140eb63a3mr1935706oap.193.1655368138768; Thu, 16
- Jun 2022 01:28:58 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 16 Jun 2022 01:28:58 -0700
+        Thu, 16 Jun 2022 04:29:27 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2081.outbound.protection.outlook.com [40.107.96.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D825DA44;
+        Thu, 16 Jun 2022 01:29:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TdwaF28XkHeVw/9PHtXeMq6dQX9t64eXJCfGrl2nMgS58dirngldSYA/EOu8tBhHMDM6F15+7XxpmDnAGzqSdUDUqvKYwOTgwBzzOARnDUJGwOAKLb3l2zYX+nN2fIh5JjWgSzmWC4oo/YlZg+f8yzhAdKBNr2sYZcF9iYnATH1RlonP5A9nrUFhiLWrcCXjjV4OXJtjwd7BXVaduinULkkEQN2b0KN2Jn2innEF46Lb4xY7vlM55H3J95yZsYowiUev0sWzOr5boCdo2LZp5oek4lmOpP4reoGiT39WQY7pmK+NLWYEJE4nzxf4vSOGDCO57RHQUf8T61Vyv/ECaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2HVuNi2LyYz46BNbnravuZd3CYtCFSMPk86XPXr8Hlg=;
+ b=Whhli7gxXIozbbFIxF0aeSDFbwcqI/2oHNFMJUppiL5Zm6ZkYtwk16op/cWf/uX2vpGkN9ICfPn8jbb+eW9E0wl7r0XVO/ZdQoMgBKE7aiIIlyi26QeffrlzABHfDkrFzjEPt8rQ6AKCk6a/Yt+QLf01nQcukO28/SuhjN8L2cQqIGvEQkbzxHxSLzM8I70WGWd37WsEHemIOuBO1Ep44v1k+Z/6/NO5k/h1rAS9opQLjg3QW6HWN1xtyOUpJ7C7k+lqFObUq3KQmUm5UGBuWjTKsELggEFbC9iEESiA+XipzJ8i2Om4w7Prm6uybNr4PriYi2KIJeChoGK+5t9i/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2HVuNi2LyYz46BNbnravuZd3CYtCFSMPk86XPXr8Hlg=;
+ b=dpQLl3/pzLEZBqdQstxe3hPnLJKSVa6LWX3wRbUscWLO1HaAAV+YGVgshHw6jABLCFyHISh8IPDD6eh9dyegEScamYVEKoNcO0mZd/nO1cNrcF6yl9ufRinETO80xOSLAkve0YRu7K/2HJxN/ZP+NOel096z9DbNJsVARcgHAN+9k8kPbqa2nK9dD8nhYeaeQDtB5RUAvHb9MknpwzJOs4pzCjtO6fek7iKWUWfXaaNXQ2qaWoou1t5JVCbQ0Y2lLOxsvU6PIDNudYnWnxF3tqatzqyr2fFxzSq5wst7lMsU+STMXURx2qdiE4m6/VWC0SArqM2KCcxulMfo3KZJFw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM4PR12MB6662.namprd12.prod.outlook.com (2603:10b6:8:bb::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.22; Thu, 16 Jun 2022 08:29:25 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f954:6840:ce82:c54f]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f954:6840:ce82:c54f%4]) with mapi id 15.20.5353.014; Thu, 16 Jun 2022
+ 08:29:25 +0000
+Message-ID: <ae0b5ced-414e-2cd0-e6e8-b9f9ce9f0aa6@nvidia.com>
+Date:   Thu, 16 Jun 2022 09:29:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4.19 00/16] 4.19.248-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20220614183720.928818645@linuxfoundation.org>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220614183720.928818645@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0079.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::19) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-In-Reply-To: <20220613205032.2652374-1-robdclark@gmail.com>
-References: <20220613205032.2652374-1-robdclark@gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 16 Jun 2022 01:28:58 -0700
-Message-ID: <CAE-0n51ADDijFnPwAQNwYE=62Rj4ZeQ38G7D=Xx3s5x7MRm18A@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/gem: Drop obj lock in msm_gem_free_object()
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7b541fe9-f264-481e-c906-08da4f72520d
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6662:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB666241A60E4B31BADCBD5CFDD9AC9@DM4PR12MB6662.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4u+r6dfGzG1nvGWfzk5hJVPW1hF3SsKiC8+Nho61B7+V6wrw7Jj8r+QqowsaX7o3NJN/a55Yz6PbNpswbL5OWWOjyKI0ZrsBEPka06eqjqkzU6eIWedii4DUOVRHDGe0PZwQ34lPsGHboQw4nFhB+V5WkGm7KnUbtSu/jRpsIdLgWi6AtLJycLQHdr0nVAM3HMp2GyPe9C2sUx9HlteSkny7cEixBG/5r7ZHDEfMiMeSWMqEFG3qAJLJndBbnP5W2gZw98ne7cC1r/VZLA6WhGTuaY7RMJKOP4FZTdlctYvPXSQK/G7nOmmbdysmKw+RjAr0b2MEUWwiyBv7wEt0cX/pLfDzQgewsWh1TQhqvMMS0Znhbge5Bl7gN2LWQ+bi41zHjDYfceVYj1YgloYjWzE68I43c0qzV2WbvY3LcGj4J37Cz3GXmQb8xrHMNGDHZ1SI0OK1Vdb+GR+X4E3FplBpGUvxt2ZuYOfLnjpCFLHPjJG5KdIK/HUKkOOsaVOwCD+4jVdRBv0zakajvHdPMUnMwj1n/fta6wENvpEZV5Tpc02gfkRkoWFSuMZpc4JCihlrH5X01Mi68F9vQH8m4EYfv14OyP61eXhS997cP1gdT6seVI9OvncXS9NRoj2f4nkj4Bs08uIfTmMpPG/KxnvTgQY90TMOgcklO1+vn/82W/UHTy2waQuWoiTk9QjsL/apng06cCDablpnPeCC89J7YZhfZwi2BWO2kWmzE5XPQTLi51frj8DDUlLB/kNLKVNOuc5vZFAa37CVhgpXfKdBIEtTJyrZuAxFFkzHhkPGElFVUlN4pvUfUNXGsMGOcsGy01XWXMlUBCdrZNiDFQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(36756003)(31686004)(2906002)(966005)(8936002)(6486002)(316002)(6666004)(66946007)(508600001)(31696002)(66556008)(4326008)(8676002)(6506007)(66476007)(26005)(5660300002)(186003)(55236004)(2616005)(38100700002)(53546011)(86362001)(6512007)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnlaTHVQNGxtZVEwem44VEJFWTZkR1NIWDhqTFl2Z3JRR1JuQWZ1T1UzaWx0?=
+ =?utf-8?B?UVIxWFJkNHlqZHplUzAvcGQrVkZrQ3BtOVJuQ05kWUovdTRBc1RHeWlVMXpw?=
+ =?utf-8?B?YXBuV0dDZCt4OW9DT3lyalV4OWloeEVNSm1CbHhyZUh6Vjh6eVlwVlRyRW12?=
+ =?utf-8?B?N2NYaXAvNmpKS3FvQkNwTHJrYnFyMU1Kd2ZCdmVLOGptQ3ZSNmhWTEZFMXhE?=
+ =?utf-8?B?M25wTFp3ZXRWM1ZySUNrSVFGSkhIcTlyNkVoNGpIMk9ESGc3UHVrNW1ndFVM?=
+ =?utf-8?B?K08vYW1acG9mVGlzTFpVV3lmcDA2cUJNQVVoM2gyZDVBRUI2SlRoaTNOUlF5?=
+ =?utf-8?B?SDJOSklWNU9IellvTjdLbXVnZUoxaGVIUTU1UU04K1BZMG4wQ3IyU2UyVDRu?=
+ =?utf-8?B?OU9aVlBXaTBFeE9oWGRvTXRIMFJxNHF1L3dKRWxFVk9jS1VjYTRibWJ2Z1Z5?=
+ =?utf-8?B?UC9pN0NyRUlQVmhZT0IyNTlBaGsrSzBRQ3Z4N0UvczNsa1h5bFlBWHp5aWhB?=
+ =?utf-8?B?dFR0eTdkVWZ4M1FFWVdMcHVzcFl3cmloN1Y4YmR6RU5ETit4SXR2Zm52UGd0?=
+ =?utf-8?B?SnNJV0FQNkhzd0ZQUnhQZnhxbk1xUWxQZ0t5OHErN3FmMDE0N1NWT00wWEZR?=
+ =?utf-8?B?UkQvQVJyK3FIQTVJaElCRTkrNWhZRTVNL2VrYi9LTzNqZDhhY2s4L2RJWjdO?=
+ =?utf-8?B?MGhEeDlySndxVUFHdUFnSmFuODVrNnRxdW5MVFU4aHZMYzRFb2tVVmFnOXFG?=
+ =?utf-8?B?OWFpbHB5Nmw5U3RiYVQvQ3R2LytzeHFvOXc4VWFPUFBsN0c4RW1kQTljcEgr?=
+ =?utf-8?B?K3VmRHc1KzdhbC9uVUo2Ri9YY3VTK3NyczJjbmIwNjcrMmRZc0NYZzMza2Nt?=
+ =?utf-8?B?aDk1YVVkays4cnE3ekxXaTRrV2ZYRGF6UXQ2RzZCamlrNktrTWcxTnlsVTBB?=
+ =?utf-8?B?NWM0U1BLVVRrKzlBRXh3Sm9aYm5WU1VtT1VlOVhSOE9ncjlpb1RGZnFHMGV4?=
+ =?utf-8?B?SjlXQ0txdGVna3FBcW5aQnhmMC8zNG5rREp0aHBQNjdLbjhvcGlha0Yrbko4?=
+ =?utf-8?B?MThFZzhaaFRPNUp0ZVY1cERVRGdJRUQ1YisxWWtmTlVteUh1UTJMM0VmWlpS?=
+ =?utf-8?B?OG5OT2xqckhPRE1sUkQwNVl4Q29KWG9mZ21LMmFrcDZFOERYbWcwYUNBUTlR?=
+ =?utf-8?B?YjFIQU1PUWE2MVN0ZTF6anVzKzVTdVRvVFc3YnhUS1FyZEZQUzlBb1gxcTVj?=
+ =?utf-8?B?dzRyQUszZDV4TzZwc3pzYitaaW9RZFJjYXJsM1YwYlJFQVBKVUNUUGFIMW15?=
+ =?utf-8?B?WCt2Qm9McXphSmlrOFZKek15eG1lN09VYVFQdXg4Ymxva3ZMMFBxaUd0UVRk?=
+ =?utf-8?B?U0tzcUdJdmwxd2VHWjZ6QVFzQXdrczY5STJCNzZYTFd1VGZHenY3UUdYK2dy?=
+ =?utf-8?B?WG5NMDFacGx6ZGZodHNkRUxDTVhDUnkxN3lHRHUvSmJrdUt4NWVsdlZxMmpa?=
+ =?utf-8?B?UFJKWDJvTGg1MkNGN1dRaHF2dkU5ZWtwTkdOSk91c0tBN2ZDdGdaU2tFOFBW?=
+ =?utf-8?B?VHE0ZXRSRDF1UExXaHdldXBFazN5bmlDZHJEVkJoV01WQllYcjIwcGp5VmU2?=
+ =?utf-8?B?Q3NNZ2g4WHJCZ3dGc2VkWW1nb0pvVGJ0cUxlZ1c1WDdNUnAySnJYcGRTbFM0?=
+ =?utf-8?B?NlkyckhVUjRwSFlrcUh3Y1JQV1lpNTN2Qkl2MHRHNmxOUUZyYjlqMjN5aTF0?=
+ =?utf-8?B?VEhnZWhQakM5djhoKzVHV0hCS0Z2VTU5SE81dXZMbCtXNXk2azdtWVZaM3h1?=
+ =?utf-8?B?ZTVxMWgwMkYzTks1ZDdlRUMwZExZeStxb1c3TW5rL1lXdmc4cjZJYVN3dk9N?=
+ =?utf-8?B?QWw4ZkFlVmtpeVU5cG0xdXBCa05HYTB5MVRTS3I1ZnV2VFM0cnRPMTB4Y2h3?=
+ =?utf-8?B?MndMTmdXZVpsNDN5N1p5cjdZN2ZGaUdRQTVNWFJXNi93MGdaazE4TitzREhQ?=
+ =?utf-8?B?WTlLSFBTMlNtQjJuWVBBeWxNbUw0Q1Nia0JHb2ZOK3crY1FiSEJrWE9kdVEr?=
+ =?utf-8?B?N1h1VFc0STEyOGVqYVpiUGg3b0IxeUNqWXdlczZraXp6bDRUY0w4QzhiVEg0?=
+ =?utf-8?B?QUdqdk9KQzJZeWhCZk9qcTR6QjBmYmEyczh2TzVZcHkybTJkVEVURXFOMlhM?=
+ =?utf-8?B?ZUo1YmJHbk44emNxd0FBRTRxa25NcXp1ZnpNOTl4eCtvQTMzYm45b1hCcVFZ?=
+ =?utf-8?B?T2krRjVoOVd5a2ZnbURVenM4aEJXZG42WkVjaFRSUkI5cFk4U0VPM3NlOGZm?=
+ =?utf-8?B?ZUxpY29JYklSRDhHeU92SE94UGFnMno1YjlSRUJnTlZGbkdFdVdhaWF5Ujl2?=
+ =?utf-8?Q?Nq7YoNKz3l0niLnk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b541fe9-f264-481e-c906-08da4f72520d
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 08:29:25.0347
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ra72gPh1ASZydlEfFnmCoSWCXCJE7yW0Fy+2Iy/FcHSoWTRuIxVrRzBhiDLqpMc9Sr7Ak0XJWm8tns1o7rYunA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6662
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Clark (2022-06-13 13:50:32)
-> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-> index d608339c1643..432032ad4aed 100644
-> --- a/drivers/gpu/drm/msm/msm_gem.h
-> +++ b/drivers/gpu/drm/msm/msm_gem.h
-> @@ -229,7 +229,19 @@ msm_gem_unlock(struct drm_gem_object *obj)
->  static inline bool
->  msm_gem_is_locked(struct drm_gem_object *obj)
->  {
-> -       return dma_resv_is_locked(obj->resv);
-> +       /*
-> +        * Destroying the object is a special case.. msm_gem_free_object()
-> +        * calls many things that WARN_ON if the obj lock is not held.  But
-> +        * acquiring the obj lock in msm_gem_free_object() can cause a
-> +        * locking order inversion between reservation_ww_class_mutex and
-> +        * fs_reclaim.
-> +        *
-> +        * This deadlock is not actually possible, because no one should
-> +        * be already holding the lock when msm_gem_free_object() is called.
-> +        * Unfortunately lockdep is not aware of this detail.  So when the
-> +        * refcount drops to zero, we pretend it is already locked.
-> +        */
-> +       return dma_resv_is_locked(obj->resv) || (kref_read(&obj->refcount) == 0);
 
-Instead of modifying this function can we push down the fact that this
-function is being called from the free path and skip checking this
-condition in that case? Or add some "_locked/free_path" wrappers that
-skip the lock assertion? That would make it clearer to understand while
-reading the code that it is locked when it is asserted to be locked, and
-that we don't care when we're freeing because all references to the
-object are gone.
+On 14/06/2022 19:40, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.248 release.
+> There are 16 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.248-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Here's a totally untested patch to show the idea. The comment about
-pretending the lock is held can be put in msm_gem_free_object() to
-clarify why it's OK to call the locked variants of the functions.
+All tests passing for Tegra ...
 
----8<---
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 97d5b4d8b9b0..01f19d37bfb6 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -346,13 +346,11 @@ static void del_vma(struct msm_gem_vma *vma)
-  * mapping.
-  */
- static void
--put_iova_spaces(struct drm_gem_object *obj, bool close)
-+put_iova_spaces_locked(struct drm_gem_object *obj, bool close)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
- 	struct msm_gem_vma *vma;
+Test results for stable-v4.19:
+     10 builds:	10 pass, 0 fail
+     22 boots:	22 pass, 0 fail
+     40 tests:	40 pass, 0 fail
 
--	GEM_WARN_ON(!msm_gem_is_locked(obj));
--
- 	list_for_each_entry(vma, &msm_obj->vmas, list) {
- 		if (vma->aspace) {
- 			msm_gem_purge_vma(vma->aspace, vma);
-@@ -362,18 +360,28 @@ put_iova_spaces(struct drm_gem_object *obj, bool close)
- 	}
- }
+Linux version:	4.19.248-rc1-g3a3ddc084a29
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                 tegra194-p2972-0000, tegra20-ventana,
+                 tegra210-p2371-2180, tegra30-cardhu-a04
 
--/* Called with msm_obj locked */
-+static void put_iova_spaces(struct drm_gem_object *obj, bool close)
-+{
-+	GEM_WARN_ON(!msm_gem_is_locked(obj));
-+	put_iova_spaces_locked(obj, close);
-+}
-+
-+/* Called with msm_obj locked or on the free path */
- static void
--put_iova_vmas(struct drm_gem_object *obj)
-+put_iova_vmas_locked(struct drm_gem_object *obj)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
- 	struct msm_gem_vma *vma, *tmp;
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
--	GEM_WARN_ON(!msm_gem_is_locked(obj));
--
--	list_for_each_entry_safe(vma, tmp, &msm_obj->vmas, list) {
-+	list_for_each_entry_safe(vma, tmp, &msm_obj->vmas, list)
- 		del_vma(vma);
--	}
-+}
-+
-+static void
-+put_iova_vmas(struct drm_gem_object *obj)
-+{
-+	GEM_WARN_ON(!msm_gem_is_locked(obj));
-+	put_iova_vmas_locked(obj);
- }
+Jon
 
- static struct msm_gem_vma *get_vma_locked(struct drm_gem_object *obj,
-@@ -795,12 +803,10 @@ void msm_gem_evict(struct drm_gem_object *obj)
- 	update_inactive(msm_obj);
- }
-
--void msm_gem_vunmap(struct drm_gem_object *obj)
-+static void msm_gem_vunmap_locked(struct drm_gem_object *obj)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
-
--	GEM_WARN_ON(!msm_gem_is_locked(obj));
--
- 	if (!msm_obj->vaddr || GEM_WARN_ON(!is_vunmapable(msm_obj)))
- 		return;
-
-@@ -808,6 +814,12 @@ void msm_gem_vunmap(struct drm_gem_object *obj)
- 	msm_obj->vaddr = NULL;
- }
-
-+void msm_gem_vunmap(struct drm_gem_object *obj)
-+{
-+	GEM_WARN_ON(!msm_gem_is_locked(obj));
-+	msm_gem_vunmap_locked(obj);
-+}
-+
- void msm_gem_active_get(struct drm_gem_object *obj, struct msm_gpu *gpu)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
-@@ -1021,12 +1033,11 @@ void msm_gem_free_object(struct drm_gem_object *obj)
- 	list_del(&msm_obj->mm_list);
- 	mutex_unlock(&priv->mm_lock);
-
--	msm_gem_lock(obj);
--
- 	/* object should not be on active list: */
- 	GEM_WARN_ON(is_active(msm_obj));
-
--	put_iova_spaces(obj, true);
-+	put_iova_spaces_locked(obj, true);
-+
-
- 	if (obj->import_attach) {
- 		GEM_WARN_ON(msm_obj->vaddr);
-@@ -1036,19 +1047,13 @@ void msm_gem_free_object(struct drm_gem_object *obj)
- 		 */
- 		kvfree(msm_obj->pages);
-
--		put_iova_vmas(obj);
--
--		/* dma_buf_detach() grabs resv lock, so we need to unlock
--		 * prior to drm_prime_gem_destroy
--		 */
--		msm_gem_unlock(obj);
-+		put_iova_vmas_locked(obj);
-
- 		drm_prime_gem_destroy(obj, msm_obj->sgt);
- 	} else {
--		msm_gem_vunmap(obj);
-+		msm_gem_vunmap_locked(obj);
- 		put_pages(obj);
--		put_iova_vmas(obj);
--		msm_gem_unlock(obj);
-+		put_iova_vmas_locked(obj);
- 	}
-
- 	drm_gem_object_release(obj);
-diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-index c75d3b879a53..b2998a074de7 100644
---- a/drivers/gpu/drm/msm/msm_gem.h
-+++ b/drivers/gpu/drm/msm/msm_gem.h
-@@ -253,7 +253,6 @@ static inline bool is_purgeable(struct
-msm_gem_object *msm_obj)
-
- static inline bool is_vunmapable(struct msm_gem_object *msm_obj)
- {
--	GEM_WARN_ON(!msm_gem_is_locked(&msm_obj->base));
- 	return (msm_obj->vmap_count == 0) && msm_obj->vaddr;
- }
-
-diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c
-b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-index 086dacf2f26a..afff3a79e925 100644
---- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
-+++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-@@ -175,6 +175,7 @@ static const int vmap_shrink_limit = 15;
- static bool
- vmap_shrink(struct msm_gem_object *msm_obj)
- {
-+	GEM_WARN_ON(!msm_gem_is_locked(&msm_obj->base));
- 	if (!is_vunmapable(msm_obj))
- 		return false;
+-- 
+nvpublic

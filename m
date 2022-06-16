@@ -2,89 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2851D54D8E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0241254D8ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358391AbiFPD3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 23:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        id S1349626AbiFPDcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 23:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350046AbiFPD3C (ORCPT
+        with ESMTP id S236391AbiFPDcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 23:29:02 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5539859314;
-        Wed, 15 Jun 2022 20:29:02 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2B1DC20C3274;
-        Wed, 15 Jun 2022 20:29:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2B1DC20C3274
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1655350142;
-        bh=7jSOC8VzgCsTBmwkshQmXqH9l66nAl3pOVDxXncaRcg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NJ8fX7QfMRhBXjwYnEXebBqMVzfaFOhhtloDr2PjXQW1ZhCFRIEPAeokFWBgXS8uF
-         tgqs8x0vIX/jm1rkq48rclGw6pr4iURLIVi7rH0baVPcUXl2YR0kj1F4KDOQ0mOmZ5
-         jRrm7+5x0PmpXU4FTXD+iW2eVEl1Xyfq2L51p9cs=
-Date:   Wed, 15 Jun 2022 22:28:58 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/11] 5.10.123-rc1 review
-Message-ID: <20220616032858.GB396338@sequoia>
-References: <20220614183719.878453780@linuxfoundation.org>
+        Wed, 15 Jun 2022 23:32:10 -0400
+X-Greylist: delayed 420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 20:32:08 PDT
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BA2D5930C;
+        Wed, 15 Jun 2022 20:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=CyCwT
+        NVUp2aw6tPR5VloYtflIPPfgirxy7R55hi2yiI=; b=LKZ1Y15zBbGwx6OYcQBTm
+        dtx5kwrdLXoalwG7oCjv4m8OQqNn+x08VBR2K7tqyMd/B53JDyWb+XoY4/03ANCF
+        DrLdFYtjJy0s9MtLxbMkpQr0YUHsAA+1xvP98SnAJBKNk41dIV09nsaWmRWb2GU/
+        h2Wz0FiHJdRzovM/hAa3m8=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp10 (Coremail) with SMTP id NuRpCgBHlGgnpKpiJDH8Eg--.22565S2;
+        Thu, 16 Jun 2022 11:31:51 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH v2] clk: tegra: (clk-tegra124) Add missing of_node_put()
+Date:   Thu, 16 Jun 2022 11:31:50 +0800
+Message-Id: <20220616033150.3975316-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614183719.878453780@linuxfoundation.org>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NuRpCgBHlGgnpKpiJDH8Eg--.22565S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFyrKF4xGw1xZw1xCF15Arb_yoW3urb_XF
+        15Xry7Zw15CwsayFZxur43ZryIyryfWrs0qFWSya17Gw18Zr4UWrs0vrn2k3srWa9rWFW5
+        Ja4ktw4Fy3s0vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRibAwDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgciF18RPTV5+AAAs7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-14 20:40:22, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.123 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.123-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+In tegra124_132_clock_init_pre, of_find_matching_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-Hi Greg - I successfully tested this release candidate in x86_64 Hyper-V
-Azure VMs with speculation controls both enabled and disabled.
-Speculation controls are passed through to the guest and, of particular
-interest for this release candidate, set the FB_CLEAR bit in the
-IA32_ARCH_CAPABILITIES MSR.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ changelog:
 
-The FB_CLEAR bit's presence is accurately conveyed in the kernel log
-messages during boot and in the
-/sys/devices/system/cpu/vulnerabilities/mmio_stale_data file.
+ v2: use real name
+ v1: fix missing bug
 
-I did a full LTP run in both scenarios (the results were the same) and
-also compared the results to a previous run against the v5.10.118
-release (there were no regressions).
+ drivers/clk/tegra/clk-tegra124.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Tested-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+diff --git a/drivers/clk/tegra/clk-tegra124.c b/drivers/clk/tegra/clk-tegra124.c
+index 934520aab6e3..a9d4efcef2d4 100644
+--- a/drivers/clk/tegra/clk-tegra124.c
++++ b/drivers/clk/tegra/clk-tegra124.c
+@@ -1471,6 +1471,7 @@ static void __init tegra124_132_clock_init_pre(struct device_node *np)
+ 	}
+ 
+ 	pmc_base = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!pmc_base) {
+ 		pr_err("Can't map pmc registers\n");
+ 		WARN_ON(1);
+-- 
+2.25.1
 
-Tyler

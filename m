@@ -2,279 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C561654DCF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FBB54DCF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358711AbiFPIbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S1359647AbiFPIch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348251AbiFPIbp (ORCPT
+        with ESMTP id S229436AbiFPIce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:31:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2771C5DA5F;
-        Thu, 16 Jun 2022 01:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655368304; x=1686904304;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LLQKWpBbbH2gL+fmhc1WDqRYlnfOMa7XL0kc10V7SSQ=;
-  b=UBO56ep8LpHuDcJZLaMw4ubNY605XQIutJypwJis3s7QrHCmDVPjBycf
-   fnCwLaVyRmd2sMhtAEk3ilFLoi5ATBphVsTRXvjQbJAhA1pwwbx9mmvkG
-   XJenprUusTprm7PVzbBAxR/uFz4K/KLhlIz0XxvOJz5S5UImuubQPd2Yx
-   lVm5qT/9i8kJGXyFG9Zju2fHLIFnoq8W6cCkg+cZb/8DPOrJYR0xP2NhS
-   asILvQOQngT3tpYlkwuYTzYRomu6N5b9ULcfwhbQe6N5tukjnNOZ8t74Y
-   1VFNXFZomwfPGo8E3FHboyV/ua73LzC1wDZwir7wr/v2F64TBIqscFC7D
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="267887691"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="267887691"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 01:31:42 -0700
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="641437890"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.6.2]) ([10.238.6.2])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 01:31:39 -0700
-Message-ID: <bc4d4c51-27ee-d8ef-a190-e5c7e587447b@linux.intel.com>
-Date:   Thu, 16 Jun 2022 16:31:37 +0800
+        Thu, 16 Jun 2022 04:32:34 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A9F298;
+        Thu, 16 Jun 2022 01:32:32 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id z9so355432wmf.3;
+        Thu, 16 Jun 2022 01:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=IpTr1iwz7d98pqMzRt5Ihqw6LdIAcQBAhe8eExhGZJg=;
+        b=GnnSw75Dhoe9LDJYyTlzLVNWAVRDSqFaEIzlKN3s8JFwa3bD+jjJL6tabOKqEA3JlP
+         7hXCxrUwtfe3YfBXoqtSLI+6KQaNB2nyaESCaFPUu1Wj6NGNG3aF3lEpJtPh2IzTTrDY
+         a1sqdLoQ1mhM686ZnvkTt2ijdULvJXdT4TaoVOHirDyNbGOGYtmaa8nudUZC1BH+9RGw
+         XiItoZZxOFyLiu62/x81tTt+MAME9HouEhrT+QPjDszJPrZ1A2JRzahKMkOAitfckH/c
+         ZHRTlvpo0kZMUTRcWO0A+vCtxDiVtnTrmbOn+9I40aape6slqxDeEi13P7XvUrFKX94J
+         XC/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=IpTr1iwz7d98pqMzRt5Ihqw6LdIAcQBAhe8eExhGZJg=;
+        b=5ICwMVVhA79D70gs1VUNdxCQwSCvDdMPFIdnRPwABy8ZpEqsLGuhkdfy1GWAwAD/Pn
+         a+PRXvGn/RQ1U7m9SpcXqOSIHED25MsJ4HRZrZiDImLPCoJdnz7LtsRfJxmIejx8+1jm
+         54Hlj/wWmBMcyoqf5Vzevh3zTnVxdhUNOsp8l5IvaC4I161lPU+N9ZOJOSs31cRb9t0Z
+         H9kinwFAUciyBrJXJvJi7qrZ1TDWaJk1qz9EuZY7Ar6edWUfl+lTEGGaE1J0CouQ6FGK
+         fn0qRaW3Sat3eW4JYR1THv5TTB2QK2wb0whL6uckXVPV84y7fuqsS78OTXlY7weKx/UU
+         WWCQ==
+X-Gm-Message-State: AJIora+HaeHTFCSmDad2fg9cbUpml+c/r6PydokdToqEx3JjjhGhplnq
+        8mmdm0tF/+wYmPOu9kaKOwk=
+X-Google-Smtp-Source: AGRyM1t/qpw+ONg1Dnsx7PS7KOKQP96TVnuPH3/WfEXB2egWJuHROr1EQdoPH+mEWi/V9/dWLbbSWw==
+X-Received: by 2002:a05:600c:d0:b0:39c:5927:3fa7 with SMTP id u16-20020a05600c00d000b0039c59273fa7mr3780929wmm.36.1655368350680;
+        Thu, 16 Jun 2022 01:32:30 -0700 (PDT)
+Received: from localhost.localdomain (host-87-16-96-199.retail.telecomitalia.it. [87.16.96.199])
+        by smtp.gmail.com with ESMTPSA id g16-20020a05600c4ed000b003974860e15esm6161404wmq.40.2022.06.16.01.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 01:32:29 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Sterba <dsterba@suse.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Filipe Manana <fdmanana@kernel.org>
+Subject: [PATCH v3 2/2] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Date:   Thu, 16 Jun 2022 10:32:25 +0200
+Message-Id: <20220616083225.14928-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <https://lore.kernel.org/lkml/20220616081133.14144-1-fmdefrancesco@gmail.com/T/#ma6b3315779fb36350b66dd49108ff9b3af50177c>
+References: <https://lore.kernel.org/lkml/20220616081133.14144-1-fmdefrancesco@gmail.com/T/#ma6b3315779fb36350b66dd49108ff9b3af50177c>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] perf record: Support "--cputype" option for hybrid events
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-References: <20220615150823.2230349-1-zhengjun.xing@linux.intel.com>
- <CAP-5=fVnD=jiSav=UAV9E_mc8XtcHad107ww8JSeiJ2y4ucxDw@mail.gmail.com>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <CAP-5=fVnD=jiSav=UAV9E_mc8XtcHad107ww8JSeiJ2y4ucxDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+The use of kmap() is being deprecated in favor of kmap_local_page(). With
+kmap_local_page(), the mapping is per thread, CPU local and not globally
+visible.
 
-On 6/15/2022 11:16 PM, Ian Rogers wrote:
-> On Wed, Jun 15, 2022 at 8:07 AM <zhengjun.xing@linux.intel.com> wrote:
->>
->> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->>
->> perf stat already has the "--cputype" option to enable events only on the
->> specified PMU for the hybrid platform, this commit extends the "--cputype"
->> support to perf record.
->>
->> Without "--cputype", it reports events for both cpu_core and cpu_atom.
->>
->>   # ./perf record  -e cycles -a sleep 1 | ./perf report
->>
->>   # To display the perf.data header info, please use --header/--header-only options.
->>   #
->>   [ perf record: Woken up 1 times to write data ]
->>   [ perf record: Captured and wrote 0.000 MB (null) ]
->>   #
->>   # Total Lost Samples: 0
->>   #
->>   # Samples: 335  of event 'cpu_core/cycles/'
->>   # Event count (approx.): 35855267
->>   #
->>   # Overhead  Command          Shared Object      Symbol
->>   # ........  ...............  .................  .........................................
->>   #
->>       10.31%  swapper          [kernel.kallsyms]  [k] poll_idle
->>        9.42%  swapper          [kernel.kallsyms]  [k] menu_select
->>        ...    ...               ...               ... ...
->>
->>   # Samples: 61  of event 'cpu_atom/cycles/'
->>   # Event count (approx.): 16453825
->>   #
->>   # Overhead  Command        Shared Object      Symbol
->>   # ........  .............  .................  ......................................
->>   #
->>       26.36%  snapd          [unknown]          [.] 0x0000563cc6d03841
->>        7.43%  migration/13   [kernel.kallsyms]  [k] update_sd_lb_stats.constprop.0
->>        ...    ...            ...                ... ...
->>
->> With "--cputype", it reports events only for the specified PMU.
->>
->>   # ./perf record --cputype core  -e cycles -a sleep 1 | ./perf report
->>
->>   # To display the perf.data header info, please use --header/--header-only options.
->>   #
->>   [ perf record: Woken up 1 times to write data ]
->>   [ perf record: Captured and wrote 0.000 MB (null) ]
->>   #
->>   # Total Lost Samples: 0
->>   #
->>   # Samples: 221  of event 'cpu_core/cycles/'
->>   # Event count (approx.): 27121818
->>   #
->>   # Overhead  Command          Shared Object      Symbol
->>   # ........  ...............  .................  .........................................
->>   #
->>       11.24%  swapper          [kernel.kallsyms]  [k] e1000_irq_enable
->>        7.77%  swapper          [kernel.kallsyms]  [k] mwait_idle_with_hints.constprop.0
->>        ...    ...              ...                ... ...
-> 
-> This is already possible by having the PMU name as part of the event,
-> cpu_atom/cycles/ or cpu_core/cycles/. I don't know why we're adding
-> "hybrid" all over the code base, I wish it would stop. You are asking
-> for an option here for an implied PMU for events that don't specify a
-> PMU. The option should be called --pmutype and consider all PMUs. We
-> should remove the "hybrid" PMU list and make all of the "hybrid" code
-> generic.
-> 
+Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in
+this file the mappings are per thread and are not visible in other
+contexts; meanwhile refactor zstd_compress_pages() to comply with nested
+local mapping / unmapping ordering rules.
 
-I can change the option name from "cputype" to "pmutype". We have 
-planned to clean up the hybrid code, and try to reduce the code with "if 
-perf_pmu__has_hybrid()", this will be done step by step, from this 
-patch, we have begun to do some clean-up, move the hybrid API from the 
-common file to the hybrid-specific files. For the clean-up, Do you have 
-any ideas? Thanks.
+Tested with xfstests on QEMU + KVM 32 bits VM with 4GB of RAM and
+HIGHMEM64G enabled. These changes passed all tests of the "compress" group.
 
-> Thanks,
-> Ian
-> 
->> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
->> ---
->>   tools/perf/Documentation/perf-record.txt |  4 ++++
->>   tools/perf/builtin-record.c              |  3 +++
->>   tools/perf/builtin-stat.c                | 20 --------------------
->>   tools/perf/util/pmu-hybrid.c             | 19 +++++++++++++++++++
->>   tools/perf/util/pmu-hybrid.h             |  2 ++
->>   5 files changed, 28 insertions(+), 20 deletions(-)
->>
->> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
->> index cf8ad50f3de1..ba8d680da1ac 100644
->> --- a/tools/perf/Documentation/perf-record.txt
->> +++ b/tools/perf/Documentation/perf-record.txt
->> @@ -402,6 +402,10 @@ Enable weightened sampling. An additional weight is recorded per sample and can
->>   displayed with the weight and local_weight sort keys.  This currently works for TSX
->>   abort events and some memory events in precise mode on modern Intel CPUs.
->>
->> +--cputype::
->> +Only enable events on applying cpu with this type for hybrid platform(e.g. core or atom).
->> +For non-hybrid events, it should be no effect.
->> +
->>   --namespaces::
->>   Record events of type PERF_RECORD_NAMESPACES.  This enables 'cgroup_id' sort key.
->>
->> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->> index 9a71f0330137..e1edd4e98358 100644
->> --- a/tools/perf/builtin-record.c
->> +++ b/tools/perf/builtin-record.c
->> @@ -3183,6 +3183,9 @@ static struct option __record_options[] = {
->>          OPT_INCR('v', "verbose", &verbose,
->>                      "be more verbose (show counter open errors, etc)"),
->>          OPT_BOOLEAN('q', "quiet", &quiet, "don't print any message"),
->> +       OPT_CALLBACK(0, "cputype", &record.evlist, "hybrid cpu type",
->> +                    "Only enable events on applying cpu with this type for hybrid platform (e.g. core or atom)",
->> +                    parse_hybrid_type),
->>          OPT_BOOLEAN('s', "stat", &record.opts.inherit_stat,
->>                      "per thread counts"),
->>          OPT_BOOLEAN('d', "data", &record.opts.sample_address, "Record the sample addresses"),
->> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
->> index 4ce87a8eb7d7..0d95b29273f4 100644
->> --- a/tools/perf/builtin-stat.c
->> +++ b/tools/perf/builtin-stat.c
->> @@ -1184,26 +1184,6 @@ static int parse_stat_cgroups(const struct option *opt,
->>          return parse_cgroups(opt, str, unset);
->>   }
->>
->> -static int parse_hybrid_type(const struct option *opt,
->> -                            const char *str,
->> -                            int unset __maybe_unused)
->> -{
->> -       struct evlist *evlist = *(struct evlist **)opt->value;
->> -
->> -       if (!list_empty(&evlist->core.entries)) {
->> -               fprintf(stderr, "Must define cputype before events/metrics\n");
->> -               return -1;
->> -       }
->> -
->> -       evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
->> -       if (!evlist->hybrid_pmu_name) {
->> -               fprintf(stderr, "--cputype %s is not supported!\n", str);
->> -               return -1;
->> -       }
->> -
->> -       return 0;
->> -}
->> -
->>   static struct option stat_options[] = {
->>          OPT_BOOLEAN('T', "transaction", &transaction_run,
->>                      "hardware transaction statistics"),
->> diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
->> index f51ccaac60ee..5c490b5201b7 100644
->> --- a/tools/perf/util/pmu-hybrid.c
->> +++ b/tools/perf/util/pmu-hybrid.c
->> @@ -13,6 +13,7 @@
->>   #include <stdarg.h>
->>   #include <locale.h>
->>   #include <api/fs/fs.h>
->> +#include "util/evlist.h"
->>   #include "fncache.h"
->>   #include "pmu-hybrid.h"
->>
->> @@ -87,3 +88,21 @@ char *perf_pmu__hybrid_type_to_pmu(const char *type)
->>          free(pmu_name);
->>          return NULL;
->>   }
->> +
->> +int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused)
->> +{
->> +       struct evlist *evlist = *(struct evlist **)opt->value;
->> +
->> +       if (!list_empty(&evlist->core.entries)) {
->> +               fprintf(stderr, "Must define cputype before events/metrics\n");
->> +               return -1;
->> +       }
->> +
->> +       evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
->> +       if (!evlist->hybrid_pmu_name) {
->> +               fprintf(stderr, "--cputype %s is not supported!\n", str);
->> +               return -1;
->> +       }
->> +
->> +       return 0;
->> +}
->> diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
->> index 2b186c26a43e..26101f134a3a 100644
->> --- a/tools/perf/util/pmu-hybrid.h
->> +++ b/tools/perf/util/pmu-hybrid.h
->> @@ -5,6 +5,7 @@
->>   #include <linux/perf_event.h>
->>   #include <linux/compiler.h>
->>   #include <linux/list.h>
->> +#include <subcmd/parse-options.h>
->>   #include <stdbool.h>
->>   #include "pmu.h"
->>
->> @@ -18,6 +19,7 @@ bool perf_pmu__hybrid_mounted(const char *name);
->>   struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
->>   bool perf_pmu__is_hybrid(const char *name);
->>   char *perf_pmu__hybrid_type_to_pmu(const char *type);
->> +int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused);
->>
->>   static inline int perf_pmu__hybrid_pmu_num(void)
->>   {
->> --
->> 2.25.1
->>
+Cc: Filipe Manana <fdmanana@kernel.org>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
+v3->v4: Cc Maintainers and lists that had been overlooked when v3 was
+	sent (mostly regarding patch 1/2).
+
+v2->v3: Remove unnecessary casts to arguments of kunmap_local() now that
+	this API can take pointers to const void.
+
+v1->v2: No changes.
+
+Thanks to Ira Weiny for his invaluable help and persevering support.
+Thanks also to Filipe Manana for identifying a fundamental detail I had
+overlooked in RFC:
+https://lore.kernel.org/lkml/20220611093411.GA3779054@falcondesktop/
+
+
+ fs/btrfs/zstd.c | 42 +++++++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 19 deletions(-)
+
+diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
+index 0fe31a6f6e68..5d2ab0bac9d2 100644
+--- a/fs/btrfs/zstd.c
++++ b/fs/btrfs/zstd.c
+@@ -391,6 +391,8 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 	*out_pages = 0;
+ 	*total_out = 0;
+ 	*total_in = 0;
++	workspace->in_buf.src = NULL;
++	workspace->out_buf.dst = NULL;
+ 
+ 	/* Initialize the stream */
+ 	stream = zstd_init_cstream(&params, len, workspace->mem,
+@@ -403,7 +405,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 
+ 	/* map in the first page of input data */
+ 	in_page = find_get_page(mapping, start >> PAGE_SHIFT);
+-	workspace->in_buf.src = kmap(in_page);
++	workspace->in_buf.src = kmap_local_page(in_page);
+ 	workspace->in_buf.pos = 0;
+ 	workspace->in_buf.size = min_t(size_t, len, PAGE_SIZE);
+ 
+@@ -415,7 +417,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		goto out;
+ 	}
+ 	pages[nr_pages++] = out_page;
+-	workspace->out_buf.dst = kmap(out_page);
++	workspace->out_buf.dst = kmap_local_page(out_page);
+ 	workspace->out_buf.pos = 0;
+ 	workspace->out_buf.size = min_t(size_t, max_out, PAGE_SIZE);
+ 
+@@ -450,9 +452,9 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		if (workspace->out_buf.pos == workspace->out_buf.size) {
+ 			tot_out += PAGE_SIZE;
+ 			max_out -= PAGE_SIZE;
+-			kunmap(out_page);
++			kunmap_local(workspace->out_buf.dst);
+ 			if (nr_pages == nr_dest_pages) {
+-				out_page = NULL;
++				workspace->out_buf.dst = NULL;
+ 				ret = -E2BIG;
+ 				goto out;
+ 			}
+@@ -462,7 +464,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 				goto out;
+ 			}
+ 			pages[nr_pages++] = out_page;
+-			workspace->out_buf.dst = kmap(out_page);
++			workspace->out_buf.dst = kmap_local_page(out_page);
+ 			workspace->out_buf.pos = 0;
+ 			workspace->out_buf.size = min_t(size_t, max_out,
+ 							PAGE_SIZE);
+@@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		/* Check if we need more input */
+ 		if (workspace->in_buf.pos == workspace->in_buf.size) {
+ 			tot_in += PAGE_SIZE;
+-			kunmap(in_page);
++			kunmap_local(workspace->out_buf.dst);
++			kunmap_local(workspace->in_buf.src);
+ 			put_page(in_page);
+-
+ 			start += PAGE_SIZE;
+ 			len -= PAGE_SIZE;
+ 			in_page = find_get_page(mapping, start >> PAGE_SHIFT);
+-			workspace->in_buf.src = kmap(in_page);
++			workspace->in_buf.src = kmap_local_page(in_page);
+ 			workspace->in_buf.pos = 0;
+ 			workspace->in_buf.size = min_t(size_t, len, PAGE_SIZE);
++			workspace->out_buf.dst = kmap_local_page(out_page);
+ 		}
+ 	}
+ 	while (1) {
+@@ -510,9 +513,9 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 
+ 		tot_out += PAGE_SIZE;
+ 		max_out -= PAGE_SIZE;
+-		kunmap(out_page);
++		kunmap_local(workspace->out_buf.dst);
+ 		if (nr_pages == nr_dest_pages) {
+-			out_page = NULL;
++			workspace->out_buf.dst = NULL;
+ 			ret = -E2BIG;
+ 			goto out;
+ 		}
+@@ -522,7 +525,7 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 			goto out;
+ 		}
+ 		pages[nr_pages++] = out_page;
+-		workspace->out_buf.dst = kmap(out_page);
++		workspace->out_buf.dst = kmap_local_page(out_page);
+ 		workspace->out_buf.pos = 0;
+ 		workspace->out_buf.size = min_t(size_t, max_out, PAGE_SIZE);
+ 	}
+@@ -538,12 +541,12 @@ int zstd_compress_pages(struct list_head *ws, struct address_space *mapping,
+ out:
+ 	*out_pages = nr_pages;
+ 	/* Cleanup */
+-	if (in_page) {
+-		kunmap(in_page);
++	if (workspace->out_buf.dst)
++		kunmap_local(workspace->out_buf.dst);
++	if (workspace->in_buf.src) {
++		kunmap_local(workspace->in_buf.src);
+ 		put_page(in_page);
+ 	}
+-	if (out_page)
+-		kunmap(out_page);
+ 	return ret;
+ }
+ 
+@@ -567,7 +570,7 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ 		goto done;
+ 	}
+ 
+-	workspace->in_buf.src = kmap(pages_in[page_in_index]);
++	workspace->in_buf.src = kmap_local_page(pages_in[page_in_index]);
+ 	workspace->in_buf.pos = 0;
+ 	workspace->in_buf.size = min_t(size_t, srclen, PAGE_SIZE);
+ 
+@@ -603,14 +606,15 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ 			break;
+ 
+ 		if (workspace->in_buf.pos == workspace->in_buf.size) {
+-			kunmap(pages_in[page_in_index++]);
++			kunmap_local(workspace->in_buf.src);
++			page_in_index++;
+ 			if (page_in_index >= total_pages_in) {
+ 				workspace->in_buf.src = NULL;
+ 				ret = -EIO;
+ 				goto done;
+ 			}
+ 			srclen -= PAGE_SIZE;
+-			workspace->in_buf.src = kmap(pages_in[page_in_index]);
++			workspace->in_buf.src = kmap_local_page(pages_in[page_in_index]);
+ 			workspace->in_buf.pos = 0;
+ 			workspace->in_buf.size = min_t(size_t, srclen, PAGE_SIZE);
+ 		}
+@@ -619,7 +623,7 @@ int zstd_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ 	zero_fill_bio(cb->orig_bio);
+ done:
+ 	if (workspace->in_buf.src)
+-		kunmap(pages_in[page_in_index]);
++		kunmap_local(workspace->in_buf.src);
+ 	return ret;
+ }
+ 
 -- 
-Zhengjun Xing
+2.36.1
+

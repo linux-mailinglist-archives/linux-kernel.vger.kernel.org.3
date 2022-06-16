@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B8B54E287
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D2954E289
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377291AbiFPNxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S1377300AbiFPNyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiFPNxK (ORCPT
+        with ESMTP id S1376717AbiFPNyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:53:10 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4916318B0A;
-        Thu, 16 Jun 2022 06:53:09 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id D7F94C01A; Thu, 16 Jun 2022 15:53:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655387587; bh=4nSqo7I8x65gGtDiG32GUmCNchdtE9/QOARXVTfLdiY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k57/XhKo9tUpFUuhpqwOCB2RHT9tUhhu1njN/0NozwWeiiH9fwY2+RqkXV/FMJHZU
-         SmNekz5eNPwo4uGG6kdWjgU02Y1OVG9UFahh2hVF8RqPYS+wUt7o/TK9vJ4QI8p8Wt
-         ZzNgqSeQTuRHS5JHdP+VHnrCaXYhFlM5R3us/KNUV7wRfjtuh/n1rdaMe5qBp26wdG
-         LXkq3z7CkGFmdBwtX4wfomHMj0+MJfqwXzgbCS3mx+l5wQJsvRBrw7MvmI6IOfhhcA
-         eHjwjRzWo6Hoxwg3obreXpJjht2BsAHkSFvesMtJ8RF6Y1o4h3hr3N9tQdCovAm4Qz
-         xHvdHRH871/Ag==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 9ACA0C009;
-        Thu, 16 Jun 2022 15:53:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655387587; bh=4nSqo7I8x65gGtDiG32GUmCNchdtE9/QOARXVTfLdiY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k57/XhKo9tUpFUuhpqwOCB2RHT9tUhhu1njN/0NozwWeiiH9fwY2+RqkXV/FMJHZU
-         SmNekz5eNPwo4uGG6kdWjgU02Y1OVG9UFahh2hVF8RqPYS+wUt7o/TK9vJ4QI8p8Wt
-         ZzNgqSeQTuRHS5JHdP+VHnrCaXYhFlM5R3us/KNUV7wRfjtuh/n1rdaMe5qBp26wdG
-         LXkq3z7CkGFmdBwtX4wfomHMj0+MJfqwXzgbCS3mx+l5wQJsvRBrw7MvmI6IOfhhcA
-         eHjwjRzWo6Hoxwg3obreXpJjht2BsAHkSFvesMtJ8RF6Y1o4h3hr3N9tQdCovAm4Qz
-         xHvdHRH871/Ag==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 20e706e1;
-        Thu, 16 Jun 2022 13:53:02 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     stable@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] 9p: fix EBADF errors in cached mode
-Date:   Thu, 16 Jun 2022 22:52:55 +0900
-Message-Id: <20220616135256.1787252-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <22073313.PYDa2UxuuP@silver>
-References: <22073313.PYDa2UxuuP@silver>
+        Thu, 16 Jun 2022 09:54:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF99344DD;
+        Thu, 16 Jun 2022 06:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655387645; x=1686923645;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8DBLbS3wVl/9ObJhboDBWvo7NIEiATgLdaJKo4so8Xc=;
+  b=HdRg/IFmDEUntWqG/BMRiMWtKpeR+t91m9KWknExv1oJ91eW9/DcIdRM
+   bXwvlaMnhBd0q4x5RlzqPbOHySTLbUz5X5lEdPYfMdZIi1FoCFGjwDSp1
+   iCwklxdz/2YhzckOafF3fjTDWjXHYqv5vrj8jw5WWtoET6MVYG8XbCBQx
+   g/lWAFZLz/qo2l397h19Y9H3OEp0SVLTCf9nI04sRTZ5L4edh/uwBtEaF
+   JpgBU7Tx0ib6YBbTSY0B2cV+PhzME9BqyQ8xFUJ2XHcy/L0oTPX0sS2H5
+   pQGruU/me4EFQT5+YwiTLGaJ+znmzK8Dkvb56faiR6n4kKE7gRxdu0fSi
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="278048124"
+X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
+   d="scan'208";a="278048124"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 06:54:05 -0700
+X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
+   d="scan'208";a="641549582"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 06:54:04 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu: Fix rcu_read_unlock_strict() strict QS reporting
+Date:   Thu, 16 Jun 2022 21:53:47 +0800
+Message-Id: <20220616135347.1351441-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cached operations sometimes need to do invalid operations (e.g. read
-on a write only file)
-Historic fscache had added a "writeback fid" for this, but the conversion
-to new fscache somehow lost usage of it: use the writeback fid instead
-of normal one.
+When running a kerenl with CONFIG_PREEMPT=n and
+CONFIG_RCU_STRICT_GRACE_PERIOD=y, the QS state will be reported
+directly after exiting the last level of RCU critical section and
+in non irqs-disable context, but maybe the CPU's rcu_data
+structure's ->cpu_no_qs.b.norm is not cleared, as a result the
+rcu_report_qs_rdp() will exit early, and not report QS state.
 
-Note that the way this works (writeback fid being linked to inode) means
-we might use overprivileged fid for some operations, e.g. write as root
-when we shouldn't.
-Ideally we should keep both fids handy, and only use the writeback fid
-when really required e.g. reads to a write-only file to fill in the page
-cache (read-modify-write); but this is the situation we've always had
-and this commit only fixes an issue we've had for too long.
+This commit will clear CPU's rcu_data structure's ->cpu_no_qs.b.norm
+before invoke rcu_report_qs_rdp().
 
-Link: https://lkml.kernel.org/r/20220614033802.1606738-1-asmadeus@codewreck.org
-Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do reads and caching")
-Cc: stable@vger.kernel.org
-Cc: David Howells <dhowells@redhat.com>
-Reported-By: Christian Schoenebeck <linux_oss@crudebyte.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 ---
- fs/9p/vfs_addr.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ kernel/rcu/tree_plugin.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index a8f512b44a85..7f924e671e3e 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -58,7 +58,17 @@ static void v9fs_issue_read(struct netfs_io_subrequest *subreq)
-  */
- static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
- {
--	struct p9_fid *fid = file->private_data;
-+	struct inode *inode = file_inode(file);
-+	struct v9fs_inode *v9inode = V9FS_I(inode);
-+	struct p9_fid *fid = v9inode->writeback_fid;
-+
-+	/* If there is no writeback fid this file only ever has had
-+	 * read-only opens, so we can use file's fid which should
-+	 * always be set instead */
-+	if (!fid)
-+		fid = file->private_data;
-+
-+	BUG_ON(!fid);
- 
- 	refcount_inc(&fid->count);
- 	rreq->netfs_priv = fid;
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index b2c01919b92c..dc78726b993f 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -824,6 +824,7 @@ void rcu_read_unlock_strict(void)
+ 	if (irqs_disabled() || preempt_count() || !rcu_state.gp_kthread)
+ 		return;
+ 	rdp = this_cpu_ptr(&rcu_data);
++	rdp->cpu_no_qs.b.norm = false;
+ 	rcu_report_qs_rdp(rdp);
+ 	udelay(rcu_unlock_delay);
+ }
 -- 
-2.35.1
+2.25.1
 

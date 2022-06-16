@@ -2,45 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1871B54D918
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE22554D917
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358581AbiFPEEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 00:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S1358562AbiFPEE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 00:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358546AbiFPEEU (ORCPT
+        with ESMTP id S229450AbiFPEER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 00:04:20 -0400
-Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 130AF424B3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=teE+F
-        0bmrMKR1mJWBjATd3JGAZ0qoeCzoswrsTOyPFo=; b=mlT/sTUf0mnr9bnDqLk/Z
-        xqkM1SaQ0AzKS2OVR06HxW37gdOCKsiSNtsxE6XIj/e5kpulCblKNXIFTQneFF4b
-        VMm2iKE28zbUTGW5wv/pvrH3DaQ1QyibOK9YYPoVMtgoJcU6w6i+JW0ZYA5NBltd
-        OgRFUNuN/TSzyAOMNoO/qA=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp7 (Coremail) with SMTP id DsmowADXFvanq6piOjydDQ--.65253S2;
-        Thu, 16 Jun 2022 12:03:51 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     nm@ti.com, ssantosh@kernel.org, linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH v2] mach-keystone: (pm_domain) Add missing of_node_put()
-Date:   Thu, 16 Jun 2022 12:03:48 +0800
-Message-Id: <20220616040348.3976883-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Jun 2022 00:04:17 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A958C403DC;
+        Wed, 15 Jun 2022 21:04:16 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id e11so405159pfj.5;
+        Wed, 15 Jun 2022 21:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EBsCfC8tb7+VRmR4uxZN/fE3y4thkUkKWOj8JXNyy+g=;
+        b=WYfGsOEBWAiYj75J6GKjXBriS615QdJQM56UXhmjNBj4dVQWPdbTAdvXoJgl12L5CP
+         HA8tDeGwkXMovPCxUc51p8i4MsqlS+MBZf011uJipIn/wmXlazQa5wutuj/7+djtSDx9
+         xFxPie59kZDH/MndCtZDCcTufPhnvo15fHA0LyTltop1U/qELKOgSalYVSZftdv1+Gmm
+         +OAYjaeZw5zBSnxOMyvI+GEd2fVQisNZ0muCkz3BZsJP1kKKZyPlzs+CpSmKA5BqmEno
+         XZhaTXmbyMr3HrJNxmibvlowNEGyMASbaXC11gpiT6QQ/Q7GbyOSolDwGrA6VWDT7dlR
+         YYuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EBsCfC8tb7+VRmR4uxZN/fE3y4thkUkKWOj8JXNyy+g=;
+        b=Q1+uO0cdp5TrMkEUVnMPxstefrX/rVP73N8Y+yvAqfmDGEl7iDhNCGQDpk2u9UmRfc
+         rZvdiMW34TcLWa32X6eiFF2tebO3yiiZxXyqWG/v/ly/XuomwpdTB8GcKJLvw5D2jUva
+         yw4ZhmnKW1RjwF9+UzFTYCtyZ34kMzWauRD1H65ul1A6n2oyoRIWmIC6ikzaax2yVAx0
+         jtqUHH+c2U9E/sqUjKNsBHFqwhGjZaijj5DiBs2ZS5AFP5BQKmCA1o35QSPGcJ+vpZXU
+         di0bJe2XAw1IJF/YCQzZCLepQa2dMM5ORfZRMPmlJk0i8GDQTvBSAvvvpMM9YNgLftfE
+         /PAg==
+X-Gm-Message-State: AJIora+VZ/V83QjWaLOc+FB4LL8JDmOuZOASzxJTfOMt7tQAW70n6Z0Z
+        sG+AWgk28F6SYHF49lBJuKg=
+X-Google-Smtp-Source: AGRyM1sPDZL+FbDkRT64NbubG8JmSPcOdo+aN/qnrQCfjkiWzgw4rxYdSoCA4vmzhG+JDygnWJg8XA==
+X-Received: by 2002:a05:6a00:23c6:b0:51b:f8e3:2e5c with SMTP id g6-20020a056a0023c600b0051bf8e32e5cmr2897544pfc.43.1655352256180;
+        Wed, 15 Jun 2022 21:04:16 -0700 (PDT)
+Received: from localhost ([2406:7400:63:5d34:e6c2:4c64:12ae:aa11])
+        by smtp.gmail.com with ESMTPSA id 72-20020a17090a0fce00b001e310303275sm384123pjz.54.2022.06.15.21.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 21:04:15 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:34:11 +0530
+From:   Ritesh Harjani <ritesh.list@gmail.com>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, lczerner@redhat.com,
+        enwlinux@gmail.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH v3 3/4] ext4: correct max_inline_xattr_value_size
+ computing
+Message-ID: <20220616040411.5vsnxz5fc4yq4zri@riteshh-domain>
+References: <20220616021358.2504451-1-libaokun1@huawei.com>
+ <20220616021358.2504451-4-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsmowADXFvanq6piOjydDQ--.65253S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JFyUCr15GrW3ZryDJw4DCFg_yoW3CFX_J3
-        4xXa13WF1fJFs7WrWkAw43WrsIqw1kWrsFq343Xw4agF4UJw17ZFsrtrsavrW7XrW2krW3
-        JayDAr1aywn29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_YFAtUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QkiF1pEANT7YQAAsB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616021358.2504451-4-libaokun1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,32 +74,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In keystone_pm_runtime_init(), of_find_matching_node() will return a
-node pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
+On 22/06/16 10:13AM, Baokun Li wrote:
+> If the ext4 inode does not have xattr space, 0 is returned in the
+> get_max_inline_xattr_value_size function. Otherwise, the function returns
+> a negative value when the inode does not contain EXT4_STATE_XATTR.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- changelog:
+Yes, this looks good to me.
 
- v2: use real name for Sob
- v1: fix missing bug
+Feel free to add -
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
- arch/arm/mach-keystone/pm_domain.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/mach-keystone/pm_domain.c b/arch/arm/mach-keystone/pm_domain.c
-index 5eea01cbecf0..00c9c0230575 100644
---- a/arch/arm/mach-keystone/pm_domain.c
-+++ b/arch/arm/mach-keystone/pm_domain.c
-@@ -44,6 +44,7 @@ int __init keystone_pm_runtime_init(void)
- 	if (!np)
- 		return 0;
- 
-+	of_node_put(np);
- 	pm_clk_add_notifier(&platform_bus_type, &platform_domain_notifier);
- 
- 	return 0;
--- 
-2.25.1
-
+>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>  fs/ext4/inline.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+> index cff52ff6549d..da5de43623dd 100644
+> --- a/fs/ext4/inline.c
+> +++ b/fs/ext4/inline.c
+> @@ -35,6 +35,9 @@ static int get_max_inline_xattr_value_size(struct inode *inode,
+>  	struct ext4_inode *raw_inode;
+>  	int free, min_offs;
+>
+> +	if (!EXT4_INODE_HAS_XATTR_SPACE(inode))
+> +		return 0;
+> +
+>  	min_offs = EXT4_SB(inode->i_sb)->s_inode_size -
+>  			EXT4_GOOD_OLD_INODE_SIZE -
+>  			EXT4_I(inode)->i_extra_isize -
+> --
+> 2.31.1
+>

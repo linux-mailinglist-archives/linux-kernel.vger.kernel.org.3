@@ -2,173 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9901354DCBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00B954DCC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359507AbiFPIVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S1359628AbiFPIXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiFPIVf (ORCPT
+        with ESMTP id S1359377AbiFPIXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:21:35 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2060.outbound.protection.outlook.com [40.107.236.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852645D658;
-        Thu, 16 Jun 2022 01:21:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M8TeDOyFxzWMnKyMA4gB9aM/AEQ7HaQb+2B/Zh2YLjngT2VvJqHXu5VxSub9IcrnUsb7qLKOVOaoR/IWf/TSnvGaqhIFzP/g0okFY+xb08NmxYFgiB0YqxcKD+2R10u2/oRNOrJwh48Yh5pddhw7o+uy7lVTRt6KFbxl8olQg5dWeCG3EShQgxeDMuz5xAGk3pJkhgWoR33RFgoVKAlRdOAumgi/OGb6cPMPme9q8wjamPQIdy4NWSyKmxMInXZpzGhDB8EZ6yHKROceP7ohqnr8pTsgbzYcHPzUC8+UlVOTiNY9DWmXfjoXyQfwKcINuCNYvv2Gx9LmIyF/Bz8qTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xpDJR3Axed+5HnJwBFUw0sYqz44nD1fTlCkrVYN2Cmg=;
- b=a+jq7FgztGn+isQX95X/I7DTFPZgQx0jU2h22DgmfFD+vyPFUNHq3plmoy0gJ+OBwV54aTXZpLUbuENCxwYb6DXrhFshS8NRZtKaIShbEmms2K2hZ/QvnqLZQC1fefnbQWoCkFKS4jxQXhT/oSpjHm88dL2l8ljX4OLdZxTSxPmGRisxcYvwB084i4kr6yN2ultZ06xynrXgqObOadW3IN1SXGh4nWNy6uiuEhppf+6hy5y+AGB4GD8mdD6k8/KiyD236bc1rEcPmY0oI7/LAvkQc33n5NZxVQx0Fx3RnUL5aKnxYxLfXyGCxk9y6rw2in4z3TKMR3tOTG8qbH37nQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xpDJR3Axed+5HnJwBFUw0sYqz44nD1fTlCkrVYN2Cmg=;
- b=oTv92HrvT+HsycM6WPaYfYbHfUXNj+AIzIOQFVFvLIMXdLL0i6sBMsBVhymMsn59x4YEkiYrcI0FDNEtGeJBm7XbxZs/c0yl2Qi44qIMv9aDpNFuzwVAVVlkx0Midwc5FdwBTC2LsvHuMa+aZEnnU8rMtHKZ1fVy/87s4zUMKweUKcDTQRiCZXtVWFcJut5NksoGLd3zfyPPqrLwTsY37ZgZJGgFJyXvDAvDo1VDTFsDUnB5YzFY6D5v50YbzUCKxsE49nggLGE53RYIdRC00vZg5zDspcuCEJ1DdfIKKTjF1xi6e5BTYTDlSov750z8GZ2QINDtWsCjbHRIuKLoog==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MW3PR12MB4393.namprd12.prod.outlook.com (2603:10b6:303:2c::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Thu, 16 Jun 2022 08:21:32 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::f954:6840:ce82:c54f]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::f954:6840:ce82:c54f%4]) with mapi id 15.20.5353.014; Thu, 16 Jun 2022
- 08:21:32 +0000
-Message-ID: <afee065e-2022-14f4-a4a5-0b2599744f5f@nvidia.com>
-Date:   Thu, 16 Jun 2022 09:21:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4.9 00/20] 4.9.319-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20220614183722.061550591@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20220614183722.061550591@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0077.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2bd::8) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Thu, 16 Jun 2022 04:23:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C06B23167
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:23:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A7C6E1FAD8;
+        Thu, 16 Jun 2022 08:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655367794; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AUtA210qzdZ6fUsIsgH+SNKu39X41m219nLUSwZSKSI=;
+        b=x48p8S9rEBW7ROB6oU5fxO/F+ubrR2bW19nxIQ4OFVb05QFFt6UeB941rbdkiNot/Ly3MW
+        a84vmC35p1IBHOPIigJm0wC1XWyBOdpw7iojpe5mD3IZTB7Pi5yH4Io2p4Bv63HdgaHOy1
+        8ItwmWGf5bSJDMnPy56o+P9CSXtY1vw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655367794;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AUtA210qzdZ6fUsIsgH+SNKu39X41m219nLUSwZSKSI=;
+        b=zuqSic0tew8V31tKSaYi8+u2Od5jxQ7D5n53XNn2tx9ObuOxGMIGrFGzTBVQuT1ffvaJYc
+        gVqZbQm48eM0HbBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 713F21344E;
+        Thu, 16 Jun 2022 08:23:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CMLvGnLoqmJYLgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 16 Jun 2022 08:23:14 +0000
+Message-ID: <fe6362b2-c399-7d51-b0e4-15e6ed445767@suse.cz>
+Date:   Thu, 16 Jun 2022 10:23:14 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 438dc7db-0c14-4bd5-3080-08da4f71385f
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4393:EE_
-X-Microsoft-Antispam-PRVS: <MW3PR12MB43934C12024702414B443B93D9AC9@MW3PR12MB4393.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ip7p84Csnusxw0vQOxK/FBHozoY/DMXtFOEZAGFM+u/c2ejoKQZFrK+hFeY2kz0wxfVTf6VWoClPp6CLvCH1FhXCUiIrFclVmA7pJdphSYc3dOQmoBfLNbVvV8cJGy10LnjAxpJZ5lviBRjkoB2lqvNdlFYeRvNAWpOdHZvi7PmoHqup7rumVEjMGvnzB6TomwbKWCiSCw0eSbe/fQXv6Ajr9yzf03gSzVjbCUyrmxRG/JgIc3CSvElDzxkRHkrljgfAqqHkd9JDusiHHaxD/LHeSQ4RaWotLwn6Z5byz8URATr6gbeUxSqLPvGyTWXlUd7tJXYSVMAjo6dL5skY5uy69jqEDH8QiGPfp1QRy158g4NUhF+i+86iNisPu83uMBHmEIUaO1xvjt/8qbGjaIBdJWU8v/fNL8Ybb7fQ61Lkfw/8ul1NRja+8UkSuYYIbnJ34RDxjfh88px8Cv3LxA11yem7KI69kqnBB2cMyQQSD/amUdLnFgs0LCuqVnE+AEabuZy3s6hZeqtWXRpuhRXK6yKJvyDwnRFrz1fjRN/yk280cKn04MYwVzGhSjvobmr02Z7WlpbPP7ANb1R8IJRhU7sXnIX/W67vSjsdwZRFvpV2aCJO3vY79AlXlUut94hnGaD/YTmhVsMJs06FIzpi4r2UxxDNhlZxDavMSnHG9V4FlhA2mUIPdeZd1zDsRGNFrwge4xKomnjLD4BZch5bxvqs8G4RE7Z5D/IxjqRTg+vCQfk74+yFP6aJiuV7C1lUYk8+dTfwSGATJS3+6fpZHOSw2DDuOagiOd/ivD+iFugWuTZV3bNfkDUUW081eROhYLjOEce0MVTwM0dNeA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(38100700002)(186003)(86362001)(2616005)(2906002)(31696002)(66946007)(66556008)(31686004)(36756003)(8676002)(316002)(4326008)(66476007)(53546011)(966005)(508600001)(6512007)(6486002)(26005)(6666004)(8936002)(7416002)(55236004)(5660300002)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REpyYUFtUkZDanlHb2w2d3I1YkJ5YzJMZ3JsRWs0ZzVucG4rRkdVQzFJNjhj?=
- =?utf-8?B?MHRCWnYxU3hWdHJ4cFhoOGVTb2MyMnRhTDRiR0lNb21MOU52eWsxOW5taDRO?=
- =?utf-8?B?S0FraU1Wa3YrZXlLc2JEU29wK3RObFNNbmFaeUpHYitYVkdlamVsNVd6N1Rw?=
- =?utf-8?B?d1RYeEJLYmR0bE82Sk5IMklOUjdyaGpjMUNydzA2NkJCeHJLWEpFMHVLNTk4?=
- =?utf-8?B?dTVRRUlMVGdqeFZicDh5ekFBTEJ5L21xa0szNG5iTTJHT3EvVzRjdjlhcEh0?=
- =?utf-8?B?anZUWXhBTDJsWmpBa0Y3U1FYT0ZTb3JTeGhROEErckxkRnhMbzdqeXJwZVd3?=
- =?utf-8?B?czRxUGFWSmpwVVdRMDVpS2RtSDFIRWlZN2FxdWloWW84aCtIdWZtZHc2VHNy?=
- =?utf-8?B?TXIxNHc3d20yQ0k1SDdIMmVPeHJRMlBwWE5MZ2FpeFN6YWxSb3E3L0RSUm0z?=
- =?utf-8?B?aEJiOHNhOURFbVFlNlZQZkxQSTVzSEdPOXlFZS9meENNd1MxN2NnR1dYdFBI?=
- =?utf-8?B?ZGY1QkpWSHdsV3NnYzdheS9vNHhzS09ZNjVXL1d2Z2xSNld3UWpBdUF1SE1j?=
- =?utf-8?B?amRlVUdwblZKZ0hIODR1VytmTDB2UDVSOGVqbyt1V3kvYnRnb0hPMFV3a2hq?=
- =?utf-8?B?ckVGK3hwektlalZwMEJmTStoSm0vK29yR2tLOFA5L1htd1I3Yk1jYUFkRWoy?=
- =?utf-8?B?UTZDQ3R4alNsci9XTTNyQTBvUVRRdWE5emxCN2dkVXVIUGpQajUvVEoyU3RK?=
- =?utf-8?B?YWRzVDNPaTlpajFVSm9VOUhKbmFxcHg5MEthNURCTFoxY2M5STVMMG02Y2ZP?=
- =?utf-8?B?U2U1THFVM1UzU1d4aHp6bVhxdUluaWZUNnZydGFYN3BkQXovUHlGVFE1WU9T?=
- =?utf-8?B?bnZSVXpqMG5CNlU3VGs2bGs3MWQzRDRZSUtxczlma055Qm11eDNIVXlZbHE4?=
- =?utf-8?B?SUtRT3NUcm1lanZvYXB6eitpLzBOSlhFM1ZYRDg2L1VKZG1CRmFlcVEwQ1Rz?=
- =?utf-8?B?Z0VKd0lZSm96d1YzanRCMXZ2MWlBc2R5YW83Qlh3UktkTElnS3dBWVFkbWQ2?=
- =?utf-8?B?alJGaTZHWHpWR3dWa2dTS3BhcFAxZ2VHK1hvZlA5TldsbStYZ0kzZnd3ejEw?=
- =?utf-8?B?RlI3SUt6bnhIZXRSVHFsbXpVc0NOUGhpZ09SNVpVQTFEcHJiZVRyOFMySDB1?=
- =?utf-8?B?UVowS3hwNitHTk9OZ0ZCUEIyOEk1TldpbmFqYkpFci9pVFpnOWEvdUdtTDZt?=
- =?utf-8?B?cjFjRHdCek8rSGNkaHZlQklQN3dtTXdwR3JUQldGYlJIMXlkWUM5ZjlPREQx?=
- =?utf-8?B?NFhZc3pVLzhxTk5HYjQ5SW5DUzAyeUV0YlFGS3RPN3NEQlJoY09FZERDbzZT?=
- =?utf-8?B?Y25MNkxaNlR3dGxMOFpUa2w0V1haRGtaWDFCdEk5U09yd1ZlcXcwMnNSYjN1?=
- =?utf-8?B?QjN6NjJQZGNMbHYwaHlaVEhJUGxSQ3dZOUpxU29VcWVJR0QzUkg0T1dzWUNF?=
- =?utf-8?B?bmY4OFVKME52djFZU1RTenJQckowczJnaEtkaFg0N0dNTHovVitIWWZNbTEw?=
- =?utf-8?B?dTZGeHZuQUZwdEpIRjJhU1JmSSs4Um9nWkJ4UDd2dEQxT2kxWlo5TlIzZDkx?=
- =?utf-8?B?R1Jsb1FQSDJpbVcyeVljaHEvdkx2Y29KQWh5aktzY2NzRzI2NmlQbmtNQit6?=
- =?utf-8?B?eFpva1o5eW1Pbk4rOEh6eXBpZTJCcHo0T2dMSmkvU3pkYW92WWd5ZmIybTQz?=
- =?utf-8?B?N0xCM1laa1V6VmRTQ0dZcGdpekwxdlJzSXZhNU9MMVZHVEtwTUIvU1ZRUHN0?=
- =?utf-8?B?c0ZZNEhwZTd2WHppL2ViWjlxUGJjV3B4TXFxU3d0SnhFUmpzSGwxRm1ySDJZ?=
- =?utf-8?B?K3lENFhOZkp6T3F0bkl5L2NZRjlHWjYxck1PRitPeDZFaXo5VGZ0ZmVtNEJL?=
- =?utf-8?B?MU4ybi9YQXNyMjBvQU9qR1hqZFVYRTRndWEzRFYrdlN1MnRodWdwWXZNaE1q?=
- =?utf-8?B?WWZrV0d5UzNYR0t2RDZibGRaYjdWcE1zRWtZdGhwWEd3VW9NZlJodnFLNGRw?=
- =?utf-8?B?aEZvTUh0S0I0UktNNDljekk0THB2RnErUk1YQUdaMW1CTjFIWXV2azRnL0Vw?=
- =?utf-8?B?VFB0cmdyQXRGU0dsVU5uelFNOGFlYms1MytrK3VkR2NoREJqaXhwR1M3UjM0?=
- =?utf-8?B?N3U3MW1oYStLdVdLSjRRaGd5ejhucmdiWC9UUkwxdnI5bFIvZWJIbjBaNWdl?=
- =?utf-8?B?QXlsbGpkTEVhQVRwY0sya25GVEE5ak5qRndwVkp4R3RZMXhPWFI2MXl2Qk5x?=
- =?utf-8?B?U2JPSUxyckM0Wk5JS0JrdGpPVnNqaUVjdG1Ock03ZmZLRWFrVnlTS3NwV3RY?=
- =?utf-8?Q?GH7TGm1A9ft5PeuY=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 438dc7db-0c14-4bd5-3080-08da4f71385f
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 08:21:32.4351
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WXroOubicMRePQRuN2Bloup6T4CNU7ujZmLeDHjw95+9asdWUyc1uGYOlfHHBfk5qlY375lmm8sAQtvzfLz1UQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4393
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 2/2] [PATCH 2/2] mm: add merging after mremap resize
+Content-Language: en-US
+To:     =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, mhocko@kernel.org,
+        mgorman@techsingularity.net, willy@infradead.org,
+        liam.howlett@oracle.com, hughd@google.com, kirill@shutemov.name,
+        riel@surriel.com, rostedt@goodmis.org, peterz@infradead.org
+References: <20220603145719.1012094-1-matenajakub@gmail.com>
+ <20220603145719.1012094-3-matenajakub@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220603145719.1012094-3-matenajakub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 14/06/2022 19:39, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.319 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 6/3/22 16:57, Jakub Matěna wrote:
+> When mremap call results in expansion, it might be possible to merge the
+> VMA with the next VMA which might become adjacent. This patch adds
+> vma_merge call after the expansion is done to try and merge.
 > 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+> ---
+>  mm/mremap.c                              | 19 +++++++++-
+>  tools/testing/selftests/vm/mremap_test.c | 47 +++++++++++++++++++++++-
+>  2 files changed, 63 insertions(+), 3 deletions(-)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.319-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> diff --git a/mm/mremap.c b/mm/mremap.c
+> index 0b93fac76851..66970dcd636a 100644
+> --- a/mm/mremap.c
+> +++ b/mm/mremap.c
+> @@ -9,6 +9,7 @@
+>   */
+>  
+>  #include <linux/mm.h>
+> +#include <linux/mm_inline.h>
+>  #include <linux/hugetlb.h>
+>  #include <linux/shm.h>
+>  #include <linux/ksm.h>
+> @@ -23,6 +24,7 @@
+>  #include <linux/mmu_notifier.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/userfaultfd_k.h>
+> +#include <linux/mempolicy.h>
+>  
+>  #include <asm/cacheflush.h>
+>  #include <asm/tlb.h>
+> @@ -1014,6 +1016,9 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+>  		/* can we just expand the current mapping? */
+>  		if (vma_expandable(vma, new_len - old_len)) {
+>  			long pages = (new_len - old_len) >> PAGE_SHIFT;
+> +			unsigned long extension_start = addr + old_len;
+> +			unsigned long extension_end = addr + new_len;
+> +			pgoff_t extension_pgoff = vma->vm_pgoff + (old_len >> PAGE_SHIFT);
+>  
+>  			if (vma->vm_flags & VM_ACCOUNT) {
+>  				if (security_vm_enough_memory_mm(mm, pages)) {
+> @@ -1022,8 +1027,18 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+>  				}
+>  			}
+>  
+> -			if (vma_adjust(vma, vma->vm_start, addr + new_len,
+> -				       vma->vm_pgoff, NULL)) {
+> +			/*
+> +			 * Function vma_merge() is called on the extension we are adding to
+> +			 * the already existing vma, vma_merge() will merge this extension with
+> +			 * the already existing vma (expand operation itself) and possibly also
+> +			 * with the next vma if it becomes adjacent to the expanded vma and
+> +			 * otherwise compatible.
+> +			 */
+> +			vma = vma_merge(mm, vma, extension_start, extension_end,
+> +					vma->vm_flags, vma->anon_vma, vma->vm_file,
+> +					extension_pgoff, vma_policy(vma),
+> +					vma->vm_userfaultfd_ctx, anon_vma_name(vma));
+> +			if (!vma) {
+>  				vm_unacct_memory(pages);
+>  				ret = -ENOMEM;
+>  				goto out;
+> diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+> index db0270127aeb..0865a6cb5bdb 100644
+> --- a/tools/testing/selftests/vm/mremap_test.c
+> +++ b/tools/testing/selftests/vm/mremap_test.c
+> @@ -118,6 +118,48 @@ static unsigned long long get_mmap_min_addr(void)
+>  	return addr;
+>  }
+>  
+> +/*
+> + * This test validates that merge is called when expanding a mapping.
+> + * Mapping containing three pages is created, middle page is unmapped
+> + * and then the mapping containing the first page is expanded so that
+> + * it fills the created hole. The two parts should merge creating
+> + * single mapping with three pages.
+> + */
+> +static void mremap_expand_merge(unsigned long page_size)
+> +{
+> +	char *test_name = "mremap expand merge";
+> +	FILE *fp;
+> +	char *line = NULL;
+> +	size_t len = 0;
+> +	bool success = false;
+> +
+> +	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	munmap(start + page_size, page_size);
+> +	mremap(start, page_size, 2 * page_size, 0);
+> +
+> +	fp = fopen("/proc/self/maps", "r");
+> +	if (fp == NULL) {
+> +		ksft_test_result_fail("%s\n", test_name);
+> +		return;
+> +	}
+> +
+> +	while(getline(&line, &len, fp) != -1) {
+> +		char *first = strtok(line,"- ");
+> +		void *first_val = (void *) strtol(first, NULL, 16);
+> +		char *second = strtok(NULL,"- ");
+> +		void *second_val = (void *) strtol(second, NULL, 16);
+> +		if (first_val == start && second_val == start + 3 * page_size) {
+> +			success = true;
+> +			break;
+> +		}
+> +	}
+> +	if (success)
+> +		ksft_test_result_pass("%s\n", test_name);
+> +	else
+> +		ksft_test_result_fail("%s\n", test_name);
+> +	fclose(fp);
+> +}
+> +
+>  /*
+>   * Returns the start address of the mapping on success, else returns
+>   * NULL on failure.
+> @@ -336,6 +378,7 @@ int main(int argc, char **argv)
+>  	int i, run_perf_tests;
+>  	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
+>  	unsigned int pattern_seed;
+> +	int num_expand_tests = 1;
+>  	struct test test_cases[MAX_TEST];
+>  	struct test perf_test_cases[MAX_PERF_TEST];
+>  	int page_size;
+> @@ -407,12 +450,14 @@ int main(int argc, char **argv)
+>  				(threshold_mb * _1MB >= _1GB);
+>  
+>  	ksft_set_plan(ARRAY_SIZE(test_cases) + (run_perf_tests ?
+> -		      ARRAY_SIZE(perf_test_cases) : 0));
+> +		      ARRAY_SIZE(perf_test_cases) : 0) + num_expand_tests);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
+>  		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
+>  				     pattern_seed);
+>  
+> +	mremap_expand_merge(page_size);
+> +
+>  	if (run_perf_tests) {
+>  		ksft_print_msg("\n%s\n",
+>  		 "mremap HAVE_MOVE_PMD/PUD optimization time comparison for 1GB region:");
 
-All tests passing for Tegra ...
-
-Test results for stable-v4.9:
-     8 builds:	8 pass, 0 fail
-     16 boots:	16 pass, 0 fail
-     32 tests:	32 pass, 0 fail
-
-Linux version:	4.9.319-rc1-g2b5bd1d9ab58
-Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
-                 tegra210-p2371-2180, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
-
--- 
-nvpublic

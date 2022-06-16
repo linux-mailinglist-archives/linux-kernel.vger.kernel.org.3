@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9209754ED19
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6527454ED05
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378995AbiFPWFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S232277AbiFPWEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379008AbiFPWFj (ORCPT
+        with ESMTP id S229793AbiFPWEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:05:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667FD6129B;
-        Thu, 16 Jun 2022 15:05:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5C90F1F37E;
-        Thu, 16 Jun 2022 22:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655417111;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=60VPT8oMa+JleU+N4k5yeM0YGzH9c1yMuWkZXfIBx2Q=;
-        b=ca/Kx249PJn3ys4VBzyp8/pOEdhfXS0ESJyjgZfo2iKJgnaucGHtVdSkSkTpL+Hatc2Hh9
-        2TRztA2paZKxpaWGXRHRfayguUH53QpQEQlxBY7ul4RQ7/024zYecknQetmqgUm7Fw335m
-        rNMHYIrGj4aGKHsQtv6a0dm7auCkXgY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655417111;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=60VPT8oMa+JleU+N4k5yeM0YGzH9c1yMuWkZXfIBx2Q=;
-        b=FLgB+caB+gYGr0bWmD0mtEnjkKf/cqHeHwUYYI2sjy31hWj4InPzEe/GRSEa7I/U0epV5u
-        VZWRQL2/8E2wGTAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 277271344E;
-        Thu, 16 Jun 2022 22:05:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wcaJCBepq2ICRAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 16 Jun 2022 22:05:11 +0000
-Date:   Fri, 17 Jun 2022 00:00:36 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        David Sterba <dsterba@suse.com>, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-btrfs@vger.kernel.org,
-        lkp@lists.01.org
-Subject: Re: [btrfs]  66a7a2412f: xfstests.btrfs.131.fail
-Message-ID: <20220616220036.GF20633@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        David Sterba <dsterba@suse.com>, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-btrfs@vger.kernel.org,
-        lkp@lists.01.org
-References: <20220607154229.9164-1-dsterba@suse.com>
- <20220616143710.GF25633@xsang-OptiPlex-9020>
- <Yqud1/SooVDamiuP@casper.infradead.org>
+        Thu, 16 Jun 2022 18:04:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A695F257
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655417078; x=1686953078;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dtS68tJQspJzkn5mxiwBgJrb7I6MfCT13tBpLas9pUs=;
+  b=HE+VcZMFtmSLzh0oNGlasdj2HVD6QNUFr0XjOL3Ap2HDcK40pticYbeN
+   wsHMRVFbRB1q47PRxg+EKnE/lAxyYoaGfb/v3B0mhayzxSiLt834xDJN6
+   m9C+5TzvuspDM0agdutzVTh0SJSb262tPJqbQDLeO19FhIWDPxlCzShT1
+   zvc2BY9nQs6EqtnDTqXgrmQejoAYhTyp/Hx/L7YJNWFYTJkfEYv6OyCsi
+   R7iAjQiXnEDi8MkN+Q/13GI6OxnrqTlQOgYPY50j60UBJsZ30iBhKs92v
+   gqXGOhSFgfdzKDsYLXulfF5tX/Dq3vVMR22wOvgV0aaDZATcDDlh8K2DW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="276936388"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="276936388"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:04:38 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="728084954"
+Received: from buckkenx-mobl.amr.corp.intel.com (HELO pbossart-mobl3.intel.com) ([10.212.52.70])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:04:37 -0700
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+To:     alsa-devel@alsa-project.org
+Cc:     tiwai@suse.de, broonie@kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lianjie Zhang <zhanglianjie@uniontech.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 01/11] ASoC: Intel: catpt: use pm_runtime_resume_and_get()
+Date:   Thu, 16 Jun 2022 17:04:17 -0500
+Message-Id: <20220616220427.136036-2-pierre-louis.bossart@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220616220427.136036-1-pierre-louis.bossart@linux.intel.com>
+References: <20220616220427.136036-1-pierre-louis.bossart@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqud1/SooVDamiuP@casper.infradead.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,36 +71,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 10:17:11PM +0100, Matthew Wilcox wrote:
-> On Thu, Jun 16, 2022 at 10:37:10PM +0800, kernel test robot wrote:
-> > btrfs/131	- output mismatch (see /lkp/benchmarks/xfstests/results//btrfs/131.out.bad)
-> >     --- tests/btrfs/131.out	2022-06-13 17:10:24.000000000 +0000
-> >     +++ /lkp/benchmarks/xfstests/results//btrfs/131.out.bad	2022-06-15 18:54:06.505508542 +0000
-> >     @@ -2,9 +2,9 @@
-> >      Using free space cache
-> >      free space tree is disabled
-> >      Enabling free space tree
-> >     -free space tree is enabled
-> >     +free space tree is disabled
-> 
-> I think I know what's going on here:
-> 
->         compat_ro="$($BTRFS_UTIL_PROG inspect-internal dump-super "$SCRATCH_DEV"
->  | \
->                      sed -rn 's/^compat_ro_flags\s+(.*)$/\1/p')"
->         if ((compat_ro & 0x1)); then
->                 echo "free space tree is enabled"
->         else
->                 echo "free space tree is disabled"
->         fi
-> 
-> dump-super is reading the super block out of the page cache, but this
-> change makes the page cache incoherent with what's on disc.  We could
-> fix that by invalidating the page out of the page cache, but it may be
-> easier to just dump this patch and fix how we use the page cache to
-> write back the superblocks?
+The current code does not check for errors and does not release the
+reference on errors.
 
-The build bot picks up the branch with some delay, I've removed it from
-the pushed branches. It's interesting to see that using the page cache
-vs direct write does have effects in tests, so it would need to be
-unified in kernel and user space.
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+---
+ sound/soc/intel/catpt/pcm.c   | 26 ++++++++++++++++++++------
+ sound/soc/intel/catpt/sysfs.c |  4 +++-
+ 2 files changed, 23 insertions(+), 7 deletions(-)
+
+diff --git a/sound/soc/intel/catpt/pcm.c b/sound/soc/intel/catpt/pcm.c
+index a26000cd5cebc..30ca5416c9a3f 100644
+--- a/sound/soc/intel/catpt/pcm.c
++++ b/sound/soc/intel/catpt/pcm.c
+@@ -667,7 +667,9 @@ static int catpt_dai_pcm_new(struct snd_soc_pcm_runtime *rtm,
+ 	if (!memcmp(&cdev->devfmt[devfmt.iface], &devfmt, sizeof(devfmt)))
+ 		return 0;
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	ret = catpt_ipc_set_device_format(cdev, &devfmt);
+ 
+@@ -853,9 +855,12 @@ static int catpt_mixer_volume_get(struct snd_kcontrol *kcontrol,
+ 		snd_soc_kcontrol_component(kcontrol);
+ 	struct catpt_dev *cdev = dev_get_drvdata(component->dev);
+ 	u32 dspvol;
++	int ret;
+ 	int i;
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	for (i = 0; i < CATPT_CHANNELS_MAX; i++) {
+ 		dspvol = catpt_mixer_volume(cdev, &cdev->mixer, i);
+@@ -876,7 +881,9 @@ static int catpt_mixer_volume_put(struct snd_kcontrol *kcontrol,
+ 	struct catpt_dev *cdev = dev_get_drvdata(component->dev);
+ 	int ret;
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	ret = catpt_set_dspvol(cdev, cdev->mixer.mixer_hw_id,
+ 			       ucontrol->value.integer.value);
+@@ -897,6 +904,7 @@ static int catpt_stream_volume_get(struct snd_kcontrol *kcontrol,
+ 	struct catpt_dev *cdev = dev_get_drvdata(component->dev);
+ 	long *ctlvol = (long *)kcontrol->private_value;
+ 	u32 dspvol;
++	int ret;
+ 	int i;
+ 
+ 	stream = catpt_stream_find(cdev, pin_id);
+@@ -906,7 +914,9 @@ static int catpt_stream_volume_get(struct snd_kcontrol *kcontrol,
+ 		return 0;
+ 	}
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	for (i = 0; i < CATPT_CHANNELS_MAX; i++) {
+ 		dspvol = catpt_stream_volume(cdev, stream, i);
+@@ -937,7 +947,9 @@ static int catpt_stream_volume_put(struct snd_kcontrol *kcontrol,
+ 		return 0;
+ 	}
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	ret = catpt_set_dspvol(cdev, stream->info.stream_hw_id,
+ 			       ucontrol->value.integer.value);
+@@ -1013,7 +1025,9 @@ static int catpt_loopback_switch_put(struct snd_kcontrol *kcontrol,
+ 		return 0;
+ 	}
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	ret = catpt_ipc_mute_loopback(cdev, stream->info.stream_hw_id, mute);
+ 
+diff --git a/sound/soc/intel/catpt/sysfs.c b/sound/soc/intel/catpt/sysfs.c
+index 9579e233a15db..1bdbcc04dc712 100644
+--- a/sound/soc/intel/catpt/sysfs.c
++++ b/sound/soc/intel/catpt/sysfs.c
+@@ -15,7 +15,9 @@ static ssize_t fw_version_show(struct device *dev,
+ 	struct catpt_fw_version version;
+ 	int ret;
+ 
+-	pm_runtime_get_sync(cdev->dev);
++	ret = pm_runtime_resume_and_get(cdev->dev);
++	if (ret < 0 && ret != -EACCES)
++		return ret;
+ 
+ 	ret = catpt_ipc_get_fw_version(cdev, &version);
+ 
+-- 
+2.34.1
+

@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F1D54DFC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5642C54DFCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376736AbiFPLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S1376751AbiFPLLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376717AbiFPLIp (ORCPT
+        with ESMTP id S1376718AbiFPLLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:08:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B065E159;
-        Thu, 16 Jun 2022 04:08:44 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB0C66601756;
-        Thu, 16 Jun 2022 12:08:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655377723;
-        bh=Ym8V4C7cqusZmnKUp44mYzfUNnjhU5hnhfnX8Zm9pqA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NmtPN0WvcM9Ve1t1pov1LUxFbiFgFsHXn7r1U0/dBzpD2ev+nNt/AsBREsxoLTnvg
-         1MXrkjTKKJ2o3BdglJrC/B/r0wtT7q/Bd1JOTv4SG0kt9axG22fWfGU61cHQUDFq8G
-         sGjjCszu4KJdE/J7JzQ5U7AP45Msq8+2TkLltrtmxCq2CPMnRIMMDCGxZZhvAIbgFL
-         wusIWrO6ZpaBFJOSF6Du39eqV3BaWwFAPhGtE3zlRKZHppx0Qy2rh6BvZ+aXB+DvyO
-         0NXS43OHcFjvEcxekxmHDZwzuA/EpVcnhbEyBSPSDcEnjVvkMn9TpG8mtQelh9vn0T
-         svphRSs2SqIIg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski@linaro.org, miles.chen@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v4 5/5] iommu/mediatek: Cleanup pericfg lookup flow
-Date:   Thu, 16 Jun 2022 13:08:30 +0200
-Message-Id: <20220616110830.26037-6-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220616110830.26037-1-angelogioacchino.delregno@collabora.com>
-References: <20220616110830.26037-1-angelogioacchino.delregno@collabora.com>
+        Thu, 16 Jun 2022 07:11:04 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76285C86F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655377863; x=1686913863;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ElqTQA2q3JJdVEoPTlRhlCy86mX4DEjMIOBabJdatbE=;
+  b=dkA5RvRjwjMYW6Rc13TKek+yej6iFta8v07ZMUo5UNhY+xo0WauNkxWM
+   FsgU3CVDveZEmO7q7TacNN5IuRd8UZaSEMvzsGC5CgINbuLEz4qSlZ7x7
+   +fozZjHdYUXn9PMWsp7bC1yp0vQ+xZub2uoNjpoiPyjNqkbMivDsW3Qbb
+   s2aNExQBVLfj5E9Kwi6tGiESzN+6muKX2GWooK2fC6G4J36HDOF4whs5G
+   099VFm8WvTHZxlnCZBFlJMXacre+RJVfUIpUjNh5rcWd9T+FbkZypL39P
+   mmiIrvq0nWFL7kACqky/44/KLjsl8Ma3kInyYxWSdlf1QX0Y3CuI39UFp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280258051"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="280258051"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 04:11:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="583594878"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2022 04:11:02 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1nOq-000OJf-Og;
+        Thu, 16 Jun 2022 11:10:56 +0000
+Date:   Thu, 16 Jun 2022 19:10:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 7/29] arch/riscv/kernel/smp.c:166:50:
+ sparse: sparse: incorrect type in argument 4 (different address spaces)
+Message-ID: <202206161946.96McdGxQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since only the INFRA type IOMMU needs to modify register(s) in the
-pericfg iospace, it's safe to drop the pericfg_comp_str NULL check;
-also, directly assign the regmap handle to data->pericfg instead of
-to the infracfg variable to improve code readability.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   00790a8b765d864a8a1d0be2f7985954cb719031
+commit: 018fd952c6dfbad5bd2abd914c5b955a0bffb3b9 [7/29] RISC-V: Treat IPIs as normal Linux IRQs
+config: riscv-randconfig-s032-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161946.96McdGxQ-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-30-g92122700-dirty
+        # https://github.com/avpatel/linux/commit/018fd952c6dfbad5bd2abd914c5b955a0bffb3b9
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 018fd952c6dfbad5bd2abd914c5b955a0bffb3b9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/iommu/mtk_iommu.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 90685946fcbe..b2ae84046249 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1217,15 +1217,13 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 			dev_err(dev, "mm dts parse fail(%d).", ret);
- 			goto out_runtime_disable;
- 		}
--	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
--		   data->plat_data->pericfg_comp_str) {
--		infracfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
--		if (IS_ERR(infracfg)) {
--			ret = PTR_ERR(infracfg);
-+	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
-+		p = data->plat_data->pericfg_comp_str;
-+		data->pericfg = syscon_regmap_lookup_by_compatible(p);
-+		if (IS_ERR(data->pericfg)) {
-+			ret = PTR_ERR(data->pericfg);
- 			goto out_runtime_disable;
- 		}
--
--		data->pericfg = infracfg;
- 	}
- 
- 	platform_set_drvdata(pdev, data);
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/riscv/kernel/smp.c:166:50: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int * @@
+   arch/riscv/kernel/smp.c:166:50: sparse:     expected void [noderef] __percpu *percpu_dev_id
+   arch/riscv/kernel/smp.c:166:50: sparse:     got int *
+
+vim +166 arch/riscv/kernel/smp.c
+
+   151	
+   152	void riscv_ipi_set_virq_range(int virq, int nr)
+   153	{
+   154		int i, err;
+   155	
+   156		if (WARN_ON(ipi_virq_base))
+   157			return;
+   158	
+   159		WARN_ON(nr < IPI_MAX);
+   160		nr_ipi = min(nr, IPI_MAX);
+   161		ipi_virq_base = virq;
+   162	
+   163		/* Request IPIs */
+   164		for (i = 0; i < nr_ipi; i++) {
+   165			err = request_percpu_irq(ipi_virq_base + i, handle_IPI,
+ > 166						 "IPI", &ipi_virq_base);
+   167			WARN_ON(err);
+   168	
+   169			ipi_desc[i] = irq_to_desc(ipi_virq_base + i);
+   170			irq_set_status_flags(ipi_virq_base + i, IRQ_HIDDEN);
+   171		}
+   172	
+   173		/* Enabled IPIs for boot CPU immediately */
+   174		riscv_ipi_enable();
+   175	}
+   176	EXPORT_SYMBOL_GPL(riscv_ipi_set_virq_range);
+   177	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

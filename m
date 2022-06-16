@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D328554E083
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106B354E085
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377032AbiFPMEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 08:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S1376881AbiFPMFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 08:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377055AbiFPMEI (ORCPT
+        with ESMTP id S1376991AbiFPMFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 08:04:08 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1214A5F262;
-        Thu, 16 Jun 2022 05:04:08 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id c21so1602868wrb.1;
-        Thu, 16 Jun 2022 05:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NvTotWv8XnzVZu+pHQebgM4bWsTTZKNeIdjOwDoju7E=;
-        b=FW7I1cA/aAcawnoclOF3N/CI0+ENH8qb6obcOzoQ6ODb2/OGq0INjFy8zF8ZxnNa20
-         XLceFXJ3I08a7I7hyt26nZjN+3I4pehoxfIVgpkM11DhEh3oef7rnCC5X0ile71OJtCN
-         xaBtR2bmdVgf8LreqXb4Ahr+9eqK6QePgB1O6OxUudDYvuk7EZASerj/LCDO9nJJvLBb
-         7Hju6O1R+SHO/mTFJ4/V3GxBq2l1IZzF6EDusy63YRAMNLbhyRLIpa4/yDWq9PuCnMa2
-         AEvKYYTowKDUBPWQCc8VlqIyLVWBINn/5sxWbrFJssiHVtuC7/AW6NidGcJcuk1zLBnT
-         /SXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NvTotWv8XnzVZu+pHQebgM4bWsTTZKNeIdjOwDoju7E=;
-        b=awlF6vR41aE2Rf5A4/ITvy/GAQ8G8HPoF7HFqDQOrgr5/YEF+OczLxt8PgD/uBfNIS
-         Aqk4FMGYWBTz4Cu24S1CrsLfQVYMB2bdt21QGtbk7QXmJc5bbU4EGnYgu4J9jez1CoG8
-         xAyLCYTcXptUo3G3Ju15UEsDiOOwdQwNdHwZOOyjF7ngXzP1qLo1XerwdTMumxjQsyvo
-         2k7D7jkf3GXw1yzrXgwJjdRuls7CzKfkuxG7xKHbek+bgP0lvFL/eCUfiHsNzpev0zZx
-         UIP+L/ekmTfIfEMjkcT4xtVeSQ2xzBfWfeGjgS7UK399iVEPy5okLg5zMIwueoc6wdOD
-         uaGA==
-X-Gm-Message-State: AJIora8wYlJ2UDgKHVIBRV7fi5LV19JmiCFWlfnVDqHn82TDnsQESq/Q
-        QAiAS2xpVDnPZyOLCKvhp4M=
-X-Google-Smtp-Source: AGRyM1vGe0hqTNQlFi19vRGu0VDlfq55drHnbDnjclViV5t5NFO8MwRfAtbD0ugYV3SFtgr/4mg+fw==
-X-Received: by 2002:a5d:6a0e:0:b0:213:1f7f:e1cc with SMTP id m14-20020a5d6a0e000000b002131f7fe1ccmr4373123wru.31.1655381046289;
-        Thu, 16 Jun 2022 05:04:06 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id f3-20020adff583000000b002100316b126sm1700890wro.6.2022.06.16.05.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 05:04:05 -0700 (PDT)
-Message-ID: <62ab1c35.1c69fb81.9ea8e.2cb0@mx.google.com>
-X-Google-Original-Message-ID: <YqscMzlPDIT0mbTQ@Ansuel-xps.>
-Date:   Thu, 16 Jun 2022 14:04:03 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH] net: ethernet: stmicro: stmmac: permit MTU
- change with interface up
-References: <20220614224141.23576-1-ansuelsmth@gmail.com>
- <20220615195507.52ee19df@kernel.org>
+        Thu, 16 Jun 2022 08:05:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7B1F5F277
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655381112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TICsQghcR62JQXfxCsN53MgwAaUAtpaLR2E5wd3Qxuo=;
+        b=MceYUEA3rGXtZbUKdpQDgBsAG/BM+MsGDnou3C4pTdxOX5AthKjIWtYdm1XUjxINbL8v9e
+        ye2hqB5AKKhF0q1NVzkks2CAM6Ach51ogeG8ObgbdWUURkOjegxIVHNsHGxaIVLKA0pSBl
+        EpDenDRLHpaG8IYocBedgaPAx61WhBE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-339-nZelTl9LNsafj9LSI5mfmQ-1; Thu, 16 Jun 2022 08:05:09 -0400
+X-MC-Unique: nZelTl9LNsafj9LSI5mfmQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2DDE110665A4;
+        Thu, 16 Jun 2022 12:05:08 +0000 (UTC)
+Received: from localhost (ovpn-12-237.pek2.redhat.com [10.72.12.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 61FA6404E4C3;
+        Thu, 16 Jun 2022 12:05:07 +0000 (UTC)
+Date:   Thu, 16 Jun 2022 20:05:03 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        akpm@linux-foundation.org, catalin.marinas@arm.com,
+        will@kernel.org, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] arm64/hugetlb: Implement arm64 specific
+ hugetlb_mask_last_hp
+Message-ID: <Yqscbw0l9dL9Eldd@MiWiFi-R3L-srv>
+References: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615195507.52ee19df@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 07:55:07PM -0700, Jakub Kicinski wrote:
-> On Wed, 15 Jun 2022 00:41:41 +0200 Christian 'Ansuel' Marangi wrote:
-> > +	if (netif_running(dev)) {
-> > +		netdev_dbg(priv->dev, "restarting interface to change its MTU\n");
-> > +		stmmac_release(dev);
-> > +
-> > +		stmmac_open(dev);
-> > +		stmmac_set_filter(priv, priv->hw, dev);
+On 06/16/22 at 11:34am, Baolin Wang wrote:
+> The HugeTLB address ranges are linearly scanned during fork, unmap and
+> remap operations, and the linear scan can skip to the end of range mapped
+> by the page table page if hitting a non-present entry, which can help
+> to speed linear scanning of the HugeTLB address ranges.
 > 
-> What if stmmac_open() fails because the memory is low or is fragmented?
+> So hugetlb_mask_last_hp() is introduced to help to update the address in
+> the loop of HugeTLB linear scanning with getting the last huge page mapped
+> by the associated page table page[1], when a non-present entry is encountered.
 > 
-> You'd need to invest more effort into this change and try to allocate
-> all the resources before shutting the device down.
+> Considering ARM64 specific cont-pte/pmd size HugeTLB, this patch implemented
+> an ARM64 specific hugetlb_mask_last_hp() to help this case.
+> 
+> [1] https://lore.kernel.org/linux-mm/20220527225849.284839-1-mike.kravetz@oracle.com/
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+> Note: this patch is based on the series: "hugetlb: speed up linear
+> address scanning" from Mike. Mike, please fold it into your series.
+> Thanks.
+> ---
+>  arch/arm64/mm/hugetlbpage.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index e2a5ec9..958935c 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -368,6 +368,26 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+>  	return NULL;
+>  }
+>  
+> +unsigned long hugetlb_mask_last_hp(struct hstate *h)
+> +{
+> +	unsigned long hp_size = huge_page_size(h);
 
-Well what I'm doing here is following what is done with other similar
-function in stmmac. For example the reinit_queues and reinit_ringparam
-doesn't do such check.
+hp_size may not be a good name, it reminds me of hotplug. I would name
+it hpage_size even though a little more characters are added.
 
-But ok you are right, will see a good solution to change stmmac_open to
-preallocate the buffers.
+> +
+> +	switch (hp_size) {
+> +	case PUD_SIZE:
+> +		return PGDIR_SIZE - PUD_SIZE;
+> +	case CONT_PMD_SIZE:
+> +		return PUD_SIZE - CONT_PMD_SIZE;
+> +	case PMD_SIZE:
+> +		return PUD_SIZE - PMD_SIZE;
+> +	case CONT_PTE_SIZE:
+> +		return PMD_SIZE - CONT_PTE_SIZE;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return ~0UL;
+> +}
+> +
+>  pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
+>  {
+>  	size_t pagesize = 1UL << shift;
+> -- 
+> 1.8.3.1
+> 
+> 
 
--- 
-	Ansuel

@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5E854E2C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C3954E2CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiFPN7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S1377472AbiFPOAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377285AbiFPN6N (ORCPT
+        with ESMTP id S1377456AbiFPOAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:58:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19A126132;
-        Thu, 16 Jun 2022 06:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655387890; x=1686923890;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=D/GW/lXKpR6TmmSVXUJ9+ZueanAvikeiMgT1O9er88U=;
-  b=IiZKzGYVXd8/CF7JtP0hWT0f0GiqzvrDIgXL/3I1m9HAd7iASuGeOKQV
-   mnZ+LjMa9cZfky2Z/C+kYJMjvCqJXKQbY6NQq1R14XsVMejaocgonnnGs
-   xfsyZDp/6MYdYJY0lvFmbW0L7DuZaVYTr0T0sJx4I4GHgVoqq5AKiOj1m
-   LmxkM7aV+ozUC6opIqL23+W22RyAmV6LDipDq332XZet+/tgJDQTeknht
-   dccXNb5IbegN7ueqgoPbYtIUJsypTGVEe2g79HYlOhV/n7xGstydWUyGY
-   +16ElDZvG5bQX0rLkXYQ8J/IxjZDl1lbj+LwVNN2DTeX6MBIPV4fKERyP
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="168685559"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2022 06:58:10 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 16 Jun 2022 06:58:09 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 16 Jun 2022 06:58:07 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <patrice.chotard@foss.st.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 4/4] serial: st-asc: remove include of pm_runtime.h
-Date:   Thu, 16 Jun 2022 17:00:24 +0300
-Message-ID: <20220616140024.2081238-5-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220616140024.2081238-1-claudiu.beznea@microchip.com>
-References: <20220616140024.2081238-1-claudiu.beznea@microchip.com>
+        Thu, 16 Jun 2022 10:00:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6815F1117D;
+        Thu, 16 Jun 2022 07:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03E4961D1C;
+        Thu, 16 Jun 2022 14:00:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D194C34114;
+        Thu, 16 Jun 2022 14:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655388043;
+        bh=pKgQ77f7AWoe2hHXLYJ53r5cbt+P7h1gE3OFfrvcHWM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UmsqnIA/2brT0/MV1yKq7bDBTYUlh8sqkw6sE5iUqQdZTaF1HEgnnMWDzKeZ4CrXG
+         XNAjlyfCiJdvjvUh+SlWhp6fNARA3rfpw2lbNQJxYSXD1vaUdF5k+xaqxtdAbPnADo
+         5pMdH2ZSt0zXnoRDQmO32Dbihl8g9Fv4RyxZKb8mItBBJ4nxrkOkJIFPkkq0y4zHzf
+         0pBOOF+wcRL95h9UhYzym744AvbpiskjhTI2JsXJ/FKQEOFdgO++tPxYR6tOa0UXvZ
+         iSdmmLPRdZ/efgaNhF6sX9hedcbMkSPLKgZSEQ7ifZrhnwibb2dBcrEW6AxBOAm7Et
+         6GI/jl5uLSXqw==
+Date:   Thu, 16 Jun 2022 07:00:42 -0700
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     dmaengine@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add include/dt-bindings/dma to DMA GENERIC
+ OFFLOAD ENGINE SUBSYSTEM
+Message-ID: <Yqs3ikEB+ZYWyv1c@matsya>
+References: <20220613110326.18126-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613110326.18126-1-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +55,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-st-asc driver doesn't use helpers from pm_runtime.h thus remove its
-include.
+On 13-06-22, 13:03, Lukas Bulwahn wrote:
+> Maintainers of the directory Documentation/devicetree/bindings/dma
+> are also the maintainers of the corresponding directory
+> include/dt-bindings/dma.
+> 
+> Add the file entry for include/dt-bindings/dma to the appropriate
+> section in MAINTAINERS.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/tty/serial/st-asc.c | 1 -
- 1 file changed, 1 deletion(-)
+Applied, thanks
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 1b0da603ab54..cce42f4c9bc2 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -17,7 +17,6 @@
- #include <linux/tty_flip.h>
- #include <linux/delay.h>
- #include <linux/spinlock.h>
--#include <linux/pm_runtime.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/serial_core.h>
 -- 
-2.34.1
-
+~Vinod

@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65C054E089
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FBC54E08F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376902AbiFPMHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 08:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S230156AbiFPMKG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Jun 2022 08:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241568AbiFPMHd (ORCPT
+        with ESMTP id S229555AbiFPMKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 08:07:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D79CB182;
-        Thu, 16 Jun 2022 05:07:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64DF3113E;
-        Thu, 16 Jun 2022 05:07:29 -0700 (PDT)
-Received: from [10.57.82.209] (unknown [10.57.82.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 749E83F73B;
-        Thu, 16 Jun 2022 05:07:28 -0700 (PDT)
-Message-ID: <9b005c7d-e434-c215-288d-3926f483b07a@arm.com>
-Date:   Thu, 16 Jun 2022 13:07:23 +0100
+        Thu, 16 Jun 2022 08:10:04 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE0928E10;
+        Thu, 16 Jun 2022 05:10:02 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o1oJo-0005ZY-OM; Thu, 16 Jun 2022 14:09:48 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Christoph Hellwig <hch@lst.de>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wefu@redhat.com, guoren@kernel.org,
+        cmuellner@linux.com, philipp.tomsich@vrull.eu, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, Atish Patra <atish.patra@wdc.com>
+Subject: Re: [PATCH 2/3] riscv: Implement Zicbom-based cache management operations
+Date:   Thu, 16 Jun 2022 14:09:47 +0200
+Message-ID: <2041345.KlZ2vcFHjT@diego>
+In-Reply-To: <20220616115342.GA11289@lst.de>
+References: <20220610004308.1903626-1-heiko@sntech.de> <1752040.TLkxdtWsSY@diego> <20220616115342.GA11289@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: fix overlapping GICD memory
- region
-Content-Language: en-GB
-To:     Matt Ranostay <mranostay@ti.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220616105112.289719-1-mranostay@ti.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220616105112.289719-1-mranostay@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-16 11:51, Matt Ranostay wrote:
-> GICD region was overlapping with GICR causing the latter to not map
-> successfully, and in turn the gic-v3 driver would fail to initialize.
+Am Donnerstag, 16. Juni 2022, 13:53:42 CEST schrieb Christoph Hellwig:
+> On Thu, Jun 16, 2022 at 11:46:45AM +0200, Heiko Stübner wrote:
+> > Without CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE and friends
+> > dev_is_dma_coherent() will always return true otherwise the dma_coherent
+> > attribute. Hence the "coherent" value for every system not managing things
+> > will suddenly show as non-coherent where it showed as coherent before.
 > 
-> This issue was hidden till commit 2b2cd74a06c3 ("irqchip/gic-v3: Claim iomem resources")
-> replaced of_iomap() calls with of_io_request_and_map() that internally
-> called request_mem_region().
+> Yes.
 > 
-> Respective console output before this patchset:
+> > As we already have detection-points for non-coherent systems (zicbom
+> > detection, t-head errata detection)
 > 
-> [    0.000000] GICv3: /bus@100000/interrupt-controller@1800000: couldn't map region 0
-
-Oh, it's nice that this finds bugs, but it seems I hadn't fully 
-considered that making the simple easy change in the DT paths results in 
-different behaviour from ACPI.
-
-Marc, would you like a fix for this to remain non-fatal even in the face 
-of a dodgy DT, or are you happy with being a bit stricter now?
-
-Thanks,
-Robin.
-
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> No, we don't.  There are plenty of reasons to support Zicbom without
+> every having any non-coherent DMA periphals.  Or just some non-coherent
+> ones.  So that alone is not a good indicator at all.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index be7f39299894..19966f72c5b3 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -33,7 +33,7 @@ gic500: interrupt-controller@1800000 {
->   		ranges;
->   		#interrupt-cells = <3>;
->   		interrupt-controller;
-> -		reg = <0x00 0x01800000 0x00 0x200000>, /* GICD */
-> +		reg = <0x00 0x01800000 0x00 0x100000>, /* GICD */
->   		      <0x00 0x01900000 0x00 0x100000>, /* GICR */
->   		      <0x00 0x6f000000 0x00 0x2000>,   /* GICC */
->   		      <0x00 0x6f010000 0x00 0x1000>,   /* GICH */
+> The proper interface for that in DT-based setups i of_dma_is_coherent(),
+> which looks at the dma-coherent DT property.  And given that RISC-V
+> started out as all coherent we need to follow the powerpc way
+> (CONFIG_OF_DMA_DEFAULT_COHERENT) and default to coherent with an
+> explcit propery for non-coherent devices, and not the arm/arm64 way
+> where non-coherent is the default and coherent devices need the property.
+
+I did look at the dma-coherent-property -> of_dma_is_coherent()
+	 -> of_dma_configure_id() -> arch_setup_dma_ops() chain yesterday
+which setups the value dev_is_dma_coherent() returns.
+
+The Zicbom extension will only be in new platforms, so none of the currently
+supported ones will have that. So my thinking was that we can default to
+true in arch_setup_dma_ops() and only use the read coherency value when
+actual cache-managment-operations are defined.
+
+My guess was that new platforms implementing cache-management will want
+to be non-coherent by default?
+
+So if the kernel is running on a platform not implementing cache-management
+dev_is_dma_coherent() would always return true as it does now, while on a
+new platform implementing cache-management we'd default to non-coherent
+and expect that new devicetree/firmware to specify the coherent devices.
+
+
+
+

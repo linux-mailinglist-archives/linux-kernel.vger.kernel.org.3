@@ -2,98 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E96D54E9EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDC754E9FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236066AbiFPTTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S1378234AbiFPTUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiFPTTS (ORCPT
+        with ESMTP id S233994AbiFPTTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:19:18 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49FB55498
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:19:17 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w27so3483694edl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xpcGuEMSHNtJO6AL8yUFZTbd1w1Zp8LDaZt4zG7HQg8=;
-        b=egGfdeT+mpO40XdFqHUt/mNRkwROuAaGPwmvBbc9V8CKQtgzMIeJ5dydpj2F6YqAWD
-         jWaLyXMYcKZAUkbCHTdiuA4JkddfCRJMKfg3Rr2z7QYsJo+0kuIs2gL8w23PGhI7/UU1
-         zp0PY/UWDuWBbGaf5HZQqxyladpYTQRU+gj7E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xpcGuEMSHNtJO6AL8yUFZTbd1w1Zp8LDaZt4zG7HQg8=;
-        b=tIyi1aW2+E8kUrrU/DzetbUqTtpXwu54e4Fp+Wr1l8SohjU03Q7ILHIX9EUG3MRhRP
-         mBk1TTIc7JIcK7Kd9zUP5QeizgsrGHLO0CtiEATauG136WxXWc9AuEanM1YlnfbqKNp6
-         Wy4o60QswaiOsgsETNF6lYif/7mklR6ve9u4m6bTAL2XufjVTTUfG2x+VaGMZYiqqeyt
-         25geK5b26d4XF0cO9qzxy9HvXF2afbvYAuMpjVKHs3JVjh6eBLmHAbyKJOizq1L6ItOp
-         ZtmuK2fSHQnz3I+BeBxz3CwvkVdRccerml14PEGsS99nxJpiEO6VSAIEZ3O2tpqpByqO
-         4gFQ==
-X-Gm-Message-State: AJIora8CsMeV8AWI/nGXMAOWZ2Q3v/gedOZ9vtQ/8jEJewsTnU5BYJeD
-        TWW+QJlqPPVoUl2+l2xXbnQLcJNuplNbSK6V
-X-Google-Smtp-Source: AGRyM1sKdczklSjtx9f9RcireLDCs9ku45Sy2khR2rFrC+gzGE4YzlHKLKLILFI+wg/dpvcGSiP1Xw==
-X-Received: by 2002:a05:6402:2714:b0:431:6a31:6530 with SMTP id y20-20020a056402271400b004316a316530mr8376771edd.245.1655407156090;
-        Thu, 16 Jun 2022 12:19:16 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id y21-20020a056402441500b0042dcbc3f302sm2395462eda.36.2022.06.16.12.19.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 12:19:14 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id o8so3076928wro.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:19:14 -0700 (PDT)
-X-Received: by 2002:a5d:47aa:0:b0:218:5ac8:f3a8 with SMTP id
- 10-20020a5d47aa000000b002185ac8f3a8mr6159072wrb.442.1655407153820; Thu, 16
- Jun 2022 12:19:13 -0700 (PDT)
+        Thu, 16 Jun 2022 15:19:55 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28566562DC;
+        Thu, 16 Jun 2022 12:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
+        :references:content-disposition:in-reply-to;
+        bh=PvAePjomhr1jSYt1ijrsImUFjSzKKPrrv6LIN+9RNIw=; b=Mjrk8nB53u0s/Ol+lLKtXMDKKR
+        XcMkKel2i4R4qOCVQnSNkhiZJ1i6zlifgr3Y9gV1+qaOmWNvYgSKPo8PoPc+jU18BuASPsZ9tbcgh
+        LdZCXqxwESBJml6A0XTy6RqSxbzmSUyFGVDvGJgg0GYfAJ46byXG8W/OIHIxIt/4eMBfBkTs/rFwT
+        aSdQy2QZv6ajBTf3k78+cdzgIoyyF5M0Jg4+EOd8n+mhzc9lhIIeCeisn+OAiAr8Vne0XjxhwPMiR
+        trKzQS5ZFHkYrCT1hyWgrjMhMgUrU+eV7ie8yOAvDIMaS8njzDu9esDvPLqzs4mc04DVEeMhSzM8h
+        zGQZ01Hw==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1o1v1y-0092ii-51; Thu, 16 Jun 2022 13:19:50 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1o1v1u-0006F5-Q7; Thu, 16 Jun 2022 13:19:46 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Date:   Thu, 16 Jun 2022 13:19:30 -0600
+Message-Id: <20220616191945.23935-1-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220616143617.449094-1-Jason@zx2c4.com> <YqtAShjjo1zC6EgO@casper.infradead.org>
- <YqtDXPWdFQ/fqgDo@zx2c4.com> <YqtKjAZRPBVjlE8S@casper.infradead.org>
- <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
- <Yqtd6hTS52mbb9+q@casper.infradead.org> <CAHk-=wj_K2MnhC6N_LyY6ezmQyWzqBnfobXC354HJuKdqMePzA@mail.gmail.com>
- <CAHk-=whS3xhJ=quD5bzDb6JsAhKd0vem4K-U=DhUGf-tDJUMHg@mail.gmail.com>
-In-Reply-To: <CAHk-=whS3xhJ=quD5bzDb6JsAhKd0vem4K-U=DhUGf-tDJUMHg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 16 Jun 2022 12:18:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi28vwsG-JNJEz_kc=qwPkYtYfh_14eHOUZsaGESDBDBA@mail.gmail.com>
-Message-ID: <CAHk-=wi28vwsG-JNJEz_kc=qwPkYtYfh_14eHOUZsaGESDBDBA@mail.gmail.com>
-Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 00/15] Improve Raid5 Lock Contention
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 12:14 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> In that situation, we'd probably just see "long long" being 128-bit
-> ("I32LP64LL128").
+Hi,
 
-Looking around, it looks like people prefer "long long long" (or in
-the kernel, just "u128") for this, because so many have already gotten
-used to "long long" being 64-bit, and 32-bit architectures (where
-"long" is 32-bit and "long long" is 64-bit) are still relevant enough
-that people want to keep that.
+Now that I've done some cleanup of the mdadm testing infrastructure
+as well as a lot of long run testing and bug fixes I'm much more
+confident in the correctness of this series. The previous posting is
+at [1].
 
-             Linus
+Patch 14 has been completely reworked from the previous series (where
+much of the feedback was on). Rare bugs were found with the original
+method where if the array changed shape at just the right time while
+first_wrap was true, the algorithm would fail and blocks would not be
+written correctly. To fix this, the new version uses a bitmap to track
+which pages have been added to the stripe_head. This requires
+limitting the size of the request but to a size greater than the
+current limit (which is based on the number of segments). I've also
+included another patch to remove the limit on the number of segments
+(seeing it is not needed) and the limit on the number of sectors is
+higher and ends up with less bio splitting and fewer bios that are
+unaligned with the chunk size.
+
+--
+
+I've been doing some work trying to improve the bulk write performance
+of raid5 on large systems with fast NVMe drives. The bottleneck appears
+largely to be lock contention on the hash_lock and device_lock. This
+series improves the situation slightly by addressing a couple of low
+hanging fruit ways to take the lock fewer times in the request path.
+
+Patch 11 adjusts how batching works by keeping a reference to the
+previous stripe_head in raid5_make_request(). Under most situtations,
+this removes the need to take the hash_lock in stripe_add_to_batch_list()
+which should reduce the number of times the lock is taken by a factor of
+about 2.
+
+Patch 14 pivots the way raid5_make_request() works. Before the patch, the
+code must find the stripe_head for every 4KB page in the request, so each
+stripe head must be found once for every data disk. The patch changes this
+so that all the data disks can be added to a stripe_head at once and the
+number of times the stripe_head must be found (and thus the number of
+times the hash_lock is taken) should be reduced by a factor roughly equal
+to the number of data disks.
+
+Patch 16 increases the restriction on block layer IO size to reduce the
+amount of bio splitting which decreases the amount of broken batches that
+occur with large IOs due to the unecessary splitting.
+
+I've also included Patch 15 which changes some debug prints to make
+debugging a bit easier.
+
+The remaining patches are just cleanup and prep patches for those two
+patches.
+
+Doing apples to apples testing this series on a small VM with 5 ram
+disks, I saw a bandwidth increase of roughly 14% and lock contentions
+on the hash_lock (as reported by lock stat) reduced by more than a factor
+of 5 (though it is still significantly contended).
+
+Testing on larger systems with NVMe drives saw similar small bandwidth
+increases from 3% to 20% depending on the parameters. Oddly small arrays
+had larger gains, likely due to them having lower starting bandwidths; I
+would have expected larger gains with larger arrays (seeing there
+should have been even fewer locks taken in raid5_make_request()).
+
+This series is based on the current md/md-next (facef3b96c5b9565). A git
+branch is available here:
+
+  https://github.com/sbates130272/linux-p2pmem raid5_lock_cont_v3
+
+Logan
+
+[1] https://lkml.kernel.org/r/20220420195425.34911-1-logang@deltatee.com
+
+--
+
+Changes since v2:
+  - Rebased on current md-next branch (facef3b96c5b9565)
+  - Reworked Pivot patch with bitmap due to unfixable bug
+  - Changed to a ternary operator in ahead_of_reshape() helper (per Paul)
+  - Seperated out the functional change from non-functional change in
+    the first patch (per Paul)
+  - Dropped an unecessary hash argument in __find_stripe() (per
+    Christoph)
+  - Fixed some minor commit message and comment errors
+  - Collected tags from Christoph and Guoqing
+
+Changes since v1:
+  - Rebased on current md-next branch (190a901246c69d79)
+  - Added patch to create a helper for checking if a sector
+    is ahead of the reshape (per Christoph)
+  - Reworked the __find_stripe() patch to create a find_get_stripe()
+    helper (per Christoph)
+  - Added more patches to further refactor raid5_make_request() and
+    pull most of the loop body into a helper function (per Christoph)
+  - A few other minor cleanups (boolean return, droping casting when
+    printing sectors, commit message grammar) as suggested by Christoph.
+  - Fixed two uncommon but bad data corruption bugs in that were found.
+
+--
+
+Logan Gunthorpe (15):
+  md/raid5: Make logic blocking check consistent with logic that blocks
+  md/raid5: Factor out ahead_of_reshape() function
+  md/raid5: Refactor raid5_make_request loop
+  md/raid5: Move stripe_add_to_batch_list() call out of add_stripe_bio()
+  md/raid5: Move common stripe get code into new find_get_stripe()
+    helper
+  md/raid5: Factor out helper from raid5_make_request() loop
+  md/raid5: Drop the do_prepare flag in raid5_make_request()
+  md/raid5: Move read_seqcount_begin() into make_stripe_request()
+  md/raid5: Refactor for loop in raid5_make_request() into while loop
+  md/raid5: Keep a reference to last stripe_head for batch
+  md/raid5: Refactor add_stripe_bio()
+  md/raid5: Check all disks in a stripe_head for reshape progress
+  md/raid5: Pivot raid5_make_request()
+  md/raid5: Improve debug prints
+  md/raid5: Increase restriction on max segments per request
+
+ drivers/md/raid5.c | 641 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 418 insertions(+), 223 deletions(-)
+
+
+base-commit: facef3b96c5b9565fa0416d7701ef990ef96e5a6
+--
+2.30.2

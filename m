@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA2654E2A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4984054E2B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377365AbiFPN5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S231378AbiFPN6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiFPN5D (ORCPT
+        with ESMTP id S1377352AbiFPN5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:57:03 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1601646C90
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:57:03 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s135so1300522pgs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WF4lAn49sjJB9tDcffvKOR2ZsYx014rUPjpNYWe2CH4=;
-        b=n1wLv515CJx4S59bI6gUm/jJzYE1Jd4ZyAEjXYZY41fVhqp0NKiqt1/QkpPk1D8t82
-         iuMkt6sHeax+j1qVZLhL8P9r910GR29TsPcyG7zghs7Ifd1tgKZ16/3DDAi4smkoKOxP
-         Esri746E8NxIhzUMoDZT/xDm89MVNCHpLxf2Wiu0m+w3vUNUhaaPneZg/8bqliICfZkp
-         t6YRYoINqDoA2xIX7/ZqzCzF2N8+cH7NITpfqyKhEclO+zJ2HNeXjaXOobyxPW3J/UT/
-         RIWVO8F9JCy+oiYbnClKxhyepZU6oLJPWlUTAymbkx5n3TGn2CG+1g09mtAmsUrK1k5A
-         GpxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WF4lAn49sjJB9tDcffvKOR2ZsYx014rUPjpNYWe2CH4=;
-        b=4HSa5DscYmE9uexGtO7dajIqVuSJeTtxtbnw0AElkUY2FgdV4vFrLJLx/xTT6xMgsw
-         lBubJLDD+fkjoAkaQIlnADqp1xgeR+CL6x9FNkVq5CwM5TcorEerT0DgTcQLOGy8GEG0
-         P81DVnabnepGLIZcqwKcFjuhdftdWlVizlKQl1tWqAEmKsqweoObCkinQ3bKZDhX5oH2
-         WVyL0eZp6uljyjihdD6/xuLzqZfLuWhpp5V6H4cWGIdZkLKv9TfRdQ47of6voZoRSYKS
-         d+ZQWDg7QkcD62evZ8Fm88wP7O8uZx2U1TLgLZRkKvV8l2PLe/5FF8ozJ+/zy1F30ewq
-         XjSw==
-X-Gm-Message-State: AJIora8IBeeiypmnOFXfjV/qWHJWNrmoffwiwgY9NpMlVNo42LPGgjuN
-        PJAx+HWNdm6JGlfCrOXHj+BjAv1KFBQNOA==
-X-Google-Smtp-Source: AGRyM1sHbtQQLESsZ+61Z/D9ovq2bt4L/GoaAb4iwdCOR9MeEktPEh/7EQdFda5Tek+t1qulAbQlmQ==
-X-Received: by 2002:a05:6a00:a16:b0:518:ffe0:7229 with SMTP id p22-20020a056a000a1600b00518ffe07229mr5022001pfh.49.1655387822594;
-        Thu, 16 Jun 2022 06:57:02 -0700 (PDT)
-Received: from [172.20.0.255] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id jd12-20020a170903260c00b0015e8d4eb1dbsm1693992plb.37.2022.06.16.06.57.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 06:57:02 -0700 (PDT)
-Message-ID: <b12be0e9-4fbe-ff92-6a75-ab65dbaf5160@linaro.org>
-Date:   Thu, 16 Jun 2022 06:57:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] dt-bindings: gpio: Add AXP221/AXP223/AXP809
- compatibles
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thu, 16 Jun 2022 09:57:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF01CD0;
+        Thu, 16 Jun 2022 06:57:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48E8EB823C4;
+        Thu, 16 Jun 2022 13:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5616C34114;
+        Thu, 16 Jun 2022 13:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655387847;
+        bh=7OGNMTwV/KFRHTVu5XLpdbkyVzZASMOM/AiJOgjfH0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ADTKtU0M4BMysZHUWVTX6MILWsaoSnp2ganp0Mdr2spIMzSfITiAbGnHuQ5QTpzAY
+         WxADUUDkxr2aywRH8sPIdjcNYhO3FvCxvfkr8HKMhQCtz4AfqCs4cLGcvO+QkDlMX9
+         9RVePZuXTELG5kx0Ln/BROb2FEhItNzc2CKDF8yp2c/NUNtpiQWBLVALnTXCq0mGWD
+         VzY86WCRoNKbY2IRMjC4QNOlBmXBBRVi+kr/lD+yzaTBKOWuJSc7IhHoxz/vD6LlEa
+         x0SqzrPZUL1Ug6cAwfgAMJ4s/9i6bTPSivAVeohwjQCzEFmeLa5cv9E20Bu6SYBR5R
+         /cAmJ8zDISJzQ==
+Date:   Thu, 16 Jun 2022 06:57:27 -0700
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220616060915.48325-1-samuel@sholland.org>
- <20220616060915.48325-2-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616060915.48325-2-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] dt-bindings: dma: apple,admac: Fix example interrupt
+ parsing
+Message-ID: <Yqs2x+BPbCxJvI6I@matsya>
+References: <20220614152503.1410755-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614152503.1410755-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,40 +57,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 23:09, Samuel Holland wrote:
-> These PMICs each have 2 GPIOs with the same register layout as AXP813,
-> but without an ADC function.
+On 14-06-22, 09:25, Rob Herring wrote:
+> Commit 873971f8fb08 ("dt-bindings: dma: Add Apple ADMAC") has a warning
+> in its example:
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
+> Documentation/devicetree/bindings/dma/apple,admac.example.dtb: dma-controller@238200000: interrupts-extended: [[0], [4294967295, 0, 626, 4, 0, 0]] is too short
+> 	From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/dma/apple,admac.yaml
 > 
->  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml     | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> index 0f628b088cec..6faa3ef28960 100644
-> --- a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> @@ -19,7 +19,14 @@ properties:
->      oneOf:
->        - enum:
->            - x-powers,axp209-gpio
-> +          - x-powers,axp221-gpio
->            - x-powers,axp813-gpio
-> +      - items:
-> +          - const: x-powers,axp223-gpio
-> +          - const: x-powers,axp221-gpio
-> +      - items:
-> +          - const: x-powers,axp809-gpio
+> The problem is the number of interrupt cells can't be guessed when
+> there are empty '0' entries. So the example must have a valid interrupt
+> controller defining the number of interrupt cells.
 
-This is just an enum with 223 and 809. No need for two separate entries
-here.
+Applied, thanks
 
-> +          - const: x-powers,axp221-gpio
->        - items:
->            - const: x-powers,axp803-gpio
->            - const: x-powers,axp813-gpio
-
-
-Best regards,
-Krzysztof
+-- 
+~Vinod

@@ -2,124 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F8654E1BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96EC54E1C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376981AbiFPNRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S233400AbiFPNUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376829AbiFPNRs (ORCPT
+        with ESMTP id S230063AbiFPNUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:17:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C80172528B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655385465;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i5RADxigDcqh0YvPeRXWIXmEeyc1rLKtSi/HgTqXy+8=;
-        b=HTpGPOWcZ/9DHqVnpfmZNEHrZLQ2U+9MOnR0H7cp0E2Efsf1KpT+M+R+MPk/08i6LCoh5F
-        q/YMq6vHOeXzjsCMie3e1ZMAA9p4PZYPENrLwDdJ4fVvG0iBcspVa5fxat4ao+UPpFTF2o
-        xRewhXhrLiyrSIcCR8qRDs5PonlNYLA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-Vaa9Q1p_O2qKExQL9JnB_Q-1; Thu, 16 Jun 2022 09:17:40 -0400
-X-MC-Unique: Vaa9Q1p_O2qKExQL9JnB_Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 16 Jun 2022 09:20:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF1C42EF8;
+        Thu, 16 Jun 2022 06:20:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 06ABA811E76;
-        Thu, 16 Jun 2022 13:17:40 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.18.25.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED6B02026985;
-        Thu, 16 Jun 2022 13:17:39 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id A8F0E2209F9; Thu, 16 Jun 2022 09:17:39 -0400 (EDT)
-Date:   Thu, 16 Jun 2022 09:17:39 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Singh <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v4 1/1] Allow non-extending parallel direct writes on the
- same file.
-Message-ID: <Yqstc/0F8y+vvVMd@redhat.com>
-References: <20220605072201.9237-1-dharamhans87@gmail.com>
- <20220605072201.9237-2-dharamhans87@gmail.com>
- <Yp/CYjONZHoekSVA@redhat.com>
- <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com>
- <Yp/KnF0oSIsk0SYd@redhat.com>
- <3d189ccc-437e-d9c0-e9f1-b4e0d2012e3c@ddn.com>
- <YqH7PO7KtoiXkmVH@redhat.com>
- <CAJfpegsbNPuy3YmGZ1prUyir_h_5noGZLN8R__o0=iz8n4Y9og@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31E8DB82411;
+        Thu, 16 Jun 2022 13:20:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2826FC34114;
+        Thu, 16 Jun 2022 13:20:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LGQ/8lxd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1655385646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mpx3Cbe6UECgdt/hmJPPtsrz3KuyrD1FOkyrZL0lfSs=;
+        b=LGQ/8lxdXrWCwzOeeWThI7CwOHak7ywC7OSt5GOdA6UgdLHRo90ECFJ1b0EzwH9KHiV/4X
+        dMqm78XZNtF3y2LLeAlJEpipAkrhboNsC1y07os0sqeKhhiUQOZWNAwz/HpBb3yuNsr0H2
+        ZhDAql1Gvap44OwY16pAxPJmZEZU93U=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 59d13479 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 16 Jun 2022 13:20:45 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
+        Jon Hunter <jonathanh@nvidia.com>, Ron Economos <re@w6rz.net>
+Subject: [PATCH] random: quiet urandom warning ratelimit suppression message
+Date:   Thu, 16 Jun 2022 15:20:29 +0200
+Message-Id: <20220616132029.443033-1-Jason@zx2c4.com>
+In-Reply-To: <81bda7cc-fd95-8f54-4ad7-3fad9a81b831@nvidia.com>
+References: <81bda7cc-fd95-8f54-4ad7-3fad9a81b831@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegsbNPuy3YmGZ1prUyir_h_5noGZLN8R__o0=iz8n4Y9og@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 11:01:59AM +0200, Miklos Szeredi wrote:
-> On Thu, 9 Jun 2022 at 15:53, Vivek Goyal <vgoyal@redhat.com> wrote:
-> 
-> > Right. If user space is relying on kernel lock for thread synchronization,
-> > it can not enable parallel writes.
-> >
-> > But if it is not relying on this, it should be able to enable parallel
-> > writes. Just keep in mind that ->i_size check is not sufficient to
-> > guarantee that you will not get "two extnding parallel writes". If
-> > another client on a different machine truncated the file, it is
-> > possible this client has old cached ->i_size and it will can
-> > get multiple file extending parallel writes.
-> 
-> There are two cases:
-> 
-> 1. the filesystem can be changed only through a single fuse instance
-> 
-> 2. the filesystem can be changed externally.
-> 
-> In case 1 the fuse client must ensure that data is updated
-> consistently (as defined by e.g. POSIX).  This is what I'm mostly
-> worried about.
-> 
-> Case 2 is much more difficult in the general case, and network
-> filesystems often have a relaxed consistency model.
-> 
-> 
-> > So if fuse daemon enables parallel extending writes, it should be
-> > prepared to deal with multiple extending parallel writes.
-> >
-> > And if this is correct assumption, I am wondering why to even try
-> > to do ->i_size check and try to avoid parallel extending writes
-> > in fuse kernel. May be there is something I am not aware of. And
-> > that's why I am just raising questions.
-> 
-> We can probably do that, but it needs careful review of where i_size
-> is changed and where i_size is used so we can never get into an
-> inconsistent state.
+random.c ratelimits how much it warns about uninitialized urandom reads
+using __ratelimit. When the RNG is finally initialized, it prints the
+number of missed messages due to ratelimiting.
 
-Ok. Agreed that non-extending parallel writes are safer option. Atleast
-for the case 1) above. For case 2) we can get multiple parallel extending
-writes with these patches if another client on another machine truncates
-file.
+It has been this way since that functionality was introduced back in
+2018. Recently, cc1e127bfa95 ("random: remove ratelimiting for in-kernel
+unseeded randomness") put a bit more stress on the urandom ratelimiting,
+which teased out a bug in the implementation.
 
-So I don't have any objections to these patches. I just wanted to
-understand it better.
+Specifically, when under pressure, __ratelimit() will print its own
+message and reset the count back to 0, making the final message at the
+end less useful. Secondly, it does so as a pr_warn(), which apparently
+is undesirable for people's CI.
 
-Thanks
-Vivek
+Fortunately, __ratelimit() has the RATELIMIT_MSG_ON_RELEASE flag exactly
+for this purpose, so we set the flag.
+
+Fixes: 4e00b339e264 ("random: rate limit unseeded randomness warnings")
+Cc: stable@vger.kernel.org
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Reported-by: Ron Economos <re@w6rz.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c           |  2 +-
+ include/linux/ratelimit_types.h | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index d0e4c89c4fcb..07a022e24057 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -87,7 +87,7 @@ static struct fasync_struct *fasync;
+ 
+ /* Control how we warn userspace. */
+ static struct ratelimit_state urandom_warning =
+-	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
++	RATELIMIT_STATE_INIT_FLAGS("urandom_warning", HZ, 3, RATELIMIT_MSG_ON_RELEASE);
+ static int ratelimit_disable __read_mostly =
+ 	IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM);
+ module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
+diff --git a/include/linux/ratelimit_types.h b/include/linux/ratelimit_types.h
+index c21c7f8103e2..002266693e50 100644
+--- a/include/linux/ratelimit_types.h
++++ b/include/linux/ratelimit_types.h
+@@ -23,12 +23,16 @@ struct ratelimit_state {
+ 	unsigned long	flags;
+ };
+ 
+-#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) {		\
+-		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),	\
+-		.interval	= interval_init,			\
+-		.burst		= burst_init,				\
++#define RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, flags_init) { \
++		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),		  \
++		.interval	= interval_init,				  \
++		.burst		= burst_init,					  \
++		.flags		= flags_init,					  \
+ 	}
+ 
++#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) \
++	RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, 0)
++
+ #define RATELIMIT_STATE_INIT_DISABLED					\
+ 	RATELIMIT_STATE_INIT(ratelimit_state, 0, DEFAULT_RATELIMIT_BURST)
+ 
+-- 
+2.35.1
 

@@ -2,191 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0291454DEB4
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB9954DEB5
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376331AbiFPKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S1376360AbiFPKKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiFPKJu (ORCPT
+        with ESMTP id S230038AbiFPKKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:09:50 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3275E5D1A4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:09:47 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220616100945euoutp01f9c521d0c8aa61d3e55c05273b8a1686~5Eg0ormVo2835528355euoutp01B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:09:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220616100945euoutp01f9c521d0c8aa61d3e55c05273b8a1686~5Eg0ormVo2835528355euoutp01B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1655374185;
-        bh=SNZKke2AUzG3V8CFrqXh/S1Uz32bt9gnCWWev1s381g=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=qvbb4SK/9smZywa6v/TDbYBXZG9Q/QlL4HhdW4hT7CvAZ4VdHXE2Y/QtBgmYLtbqn
-         LB2k7afcx/ZQl9xKj0xMQ+iKI+mNSQc0IQuKvHGJgme6dM6y2xNQii2DibxFaHNtU8
-         WohBjVmQmtMCTPVGOXjEMH/ZeFp4GG3/wo9hh8Y8=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220616100945eucas1p16ff092593c3eb81dd46a4cf3be3997aa~5Eg0SG-ds0058100581eucas1p1j;
-        Thu, 16 Jun 2022 10:09:45 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id B3.8D.09580.9610BA26; Thu, 16
-        Jun 2022 11:09:45 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220616100944eucas1p15c06e5002e0f2cd08babcd1217fd63c6~5Egz281Dc0058100581eucas1p1i;
-        Thu, 16 Jun 2022 10:09:44 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220616100944eusmtrp1c6ff48f087ed07ae172bf766a0ec7b31~5Egz2GWCJ0211102111eusmtrp1i;
-        Thu, 16 Jun 2022 10:09:44 +0000 (GMT)
-X-AuditID: cbfec7f5-9adff7000000256c-52-62ab0169c443
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id B6.16.09038.8610BA26; Thu, 16
-        Jun 2022 11:09:44 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220616100944eusmtip12c538773222f85799ce3294eb6f54db1~5EgzpPmzg1755917559eusmtip16;
-        Thu, 16 Jun 2022 10:09:44 +0000 (GMT)
-Received: from [192.168.1.12] (106.210.248.244) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 16 Jun 2022 11:09:38 +0100
-Message-ID: <e04db101-5628-2a1d-6b5c-997090484d7d@samsung.com>
-Date:   Thu, 16 Jun 2022 12:09:35 +0200
+        Thu, 16 Jun 2022 06:10:01 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC05D5D8;
+        Thu, 16 Jun 2022 03:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655374200; x=1686910200;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0izFwO+9xB6GKaTHQ0MxXZ7mwTnqS7PFUmBq+gHPimI=;
+  b=diKav6NwsJYOZB0fTcxFBxRG2JDPPbAYpsmkNqmlDiCHvaXkC8+Gooo+
+   rrNYTQf7zYuPI4F7XD3rrB0JD8LBIyj4iR+516sJJVgeSMeT+4WRDc1SO
+   Azz/6DElkgVXk2WAGpTKYO2DbZe02h7GWX2zEpPCyQzPfKTijfJlArpKV
+   lf6lEgTbCZxcGtBzG/4pm+XdgoGv8UJl3jE5fbEVfRhxke59NPV7Bxr4h
+   FKB/RmLmG0VtrnjVK+teDsJVPn1uxf/6XMw9i074UiaIqN82LlkZbJHXZ
+   EbgHh+wUe4UJg91n5sVfCooogSSNhlvgmOczYCgsOxeiQZxrykOF64TXD
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="278011972"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="278011972"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:09:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="618828287"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2022 03:09:55 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1mRn-000OHB-2h;
+        Thu, 16 Jun 2022 10:09:55 +0000
+Date:   Thu, 16 Jun 2022 18:09:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kbuild-all@lists.01.org, festevam@gmail.com, linux-imx@nxp.com,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        marex@denx.de, aford173@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2 4/8] soc: imx: add icc paths for i.MX8MP media blk ctrl
+Message-ID: <202206161757.tudlinMv-lkp@intel.com>
+References: <20220616073953.2204978-5-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.9.1
-Subject: Re: [dm-devel] [PATCH v7 02/13] block: allow blk-zoned devices to
- have non-power-of-2 zone size
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, <hch@lst.de>,
-        <snitzer@redhat.com>, <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>
-CC:     <pankydev8@gmail.com>, <gost.dev@samsung.com>,
-        <jiangbo.365@bytedance.com>, <linux-nvme@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <dm-devel@redhat.com>, <jonathan.derrick@linux.dev>,
-        <Johannes.Thumshirn@wdc.com>, <dsterba@suse.com>,
-        <jaegeuk@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <857c444a-02b9-9cef-0c5b-2ecdb2fd46f6@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [106.210.248.244]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAKsWRmVeSWpSXmKPExsWy7djP87qZjKuTDBa0CFisvtvPZjHtw09m
-        i99nzzNb7H03m9Xiwo9GJouVq48yWTxZP4vZoufABxaLv133gGItD4FKbmlbXN41h81i/rKn
-        7BY3JjxltFhz8ymLRdvGr4wOAh6Xr3h7/Duxhs1j56y77B6Xz5Z6bFrVyeaxsGEqs8fmJfUe
-        u282AOVa77N6vN93lc1j/ZarLB6fN8l5tB/oZgrgjeKySUnNySxLLdK3S+DK2P/yO2PBPKGK
-        J5vusTYwNvN3MXJySAiYSLQ8aWLrYuTiEBJYwSjx+N9uFgjnC6PEgh2HWCGcz4wSjY8eMsO0
-        NKx8wAyRWM4o8eP+VXa4qrVv/0P172KUeDPpFytIC6+AncTuvv9ALRwcLAKqErt3FkCEBSVO
-        znzCAmKLCkRIrGx9wwJSIiyQJTFnZjxImFlAXOLWk/lMICNFBFoZJY5O3A3mMAvcY5JoO3Od
-        EaSBTUBLorGTHaSBU8BaYsmpO8wQzZoSrdt/s0PY8hLNW2eDnSAhoCzxbyfUM7USa4+dAbtf
-        QuAbp8TEb21sEAkXiUM916BsYYlXx7ewQ9gyEqcn97BA2NUST2/8ZoZobmGU6N+5ng1igbVE
-        35kciBpHiScXOqHCfBI33gpCnMMnMWnbdOYJjKqzkEJiFpKXZyH5YBaSDxYwsqxiFE8tLc5N
-        Ty02zkst1ytOzC0uzUvXS87P3cQITJSn/x3/uoNxxauPeocYmTgYDzFKcDArifCaBa9MEuJN
-        SaysSi3Kjy8qzUktPsQozcGiJM6bnLkhUUggPbEkNTs1tSC1CCbLxMEp1cBk+m6K/6UVngb8
-        Aqxpu2ax7ryitXPexT/LZ2iFXJs+xfDokc1KRh612hqpG52SrQ0233jE2+h2ZXaC9axgixfV
-        8xjsbrs7ZHBpeqX+r/omdD3punX+7KD8r07Xvs5nfbat5bVT7i63n5rT3h0tUvjwbq2zvJt0
-        ib4rl/SJBCvBAwJi3Zmia8XYwyYJLG2rkDvUdssp3bjd6OG9c4ecLlZfra9rTVCL2xB/abpz
-        +uLXT6IztvUnKtROjvoq8ii3ea98tqRMxKPG6kOfFR/v5Oo1zEtLvLVwf8tqPW4tTx8OD8bN
-        j6w/GvIo3+mNDZ40uTxL8CFz6d2Qb9sSJucf/9gzZ/I/lrWzz9/Wja0ov6fEUpyRaKjFXFSc
-        CABNZ45nAwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKKsWRmVeSWpSXmKPExsVy+t/xu7oZjKuTDNauMLBYfbefzWLah5/M
-        Fr/Pnme22PtuNqvFhR+NTBYrVx9lsniyfhazRc+BDywWf7vuAcVaHgKV3NK2uLxrDpvF/GVP
-        2S1uTHjKaLHm5lMWi7aNXxkdBDwuX/H2+HdiDZvHzll32T0uny312LSqk81jYcNUZo/NS+o9
-        dt9sAMq13mf1eL/vKpvH+i1XWTw+b5LzaD/QzRTAG6VnU5RfWpKqkJFfXGKrFG1oYaRnaGmh
-        Z2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CXsf/ld8aCeUIVTzbdY21gbObvYuTkkBAwkWhY
-        +YC5i5GLQ0hgKaPEvXV3WCASMhKfrnxkh7CFJf5c62KDKPrIKLHjwQWojl2MEvu2bwCr4hWw
-        k9jd9x8owcHBIqAqsXtnAURYUOLkzCdgQ0UFIiQ+LZvAClIiLJAlMWdmPEiYWUBc4taT+Uwg
-        I0UEWhklbq/8wgriMAvcY5J49ekbK8SyD4wS109cBVvAJqAl0dgJtpdTwFpiyak7zBCTNCVa
-        t/9mh7DlJZq3zgYrlxBQlvi3kxnimVqJV/d3M05gFJ2F5LxZSO6YhWTSLCSTFjCyrGIUSS0t
-        zk3PLTbSK07MLS7NS9dLzs/dxAhML9uO/dyyg3Hlq496hxiZOBgPMUpwMCuJ8JoFr0wS4k1J
-        rKxKLcqPLyrNSS0+xGgKDKKJzFKiyfnABJdXEm9oZmBqaGJmaWBqaWasJM7rWdCRKCSQnliS
-        mp2aWpBaBNPHxMEp1cDEcbjl5B8W68Jee/8/r69LMV4LKkrYuXZ29ceFv/5LMfR15ducvXjq
-        d/66y4VLeStOla89tF1VlltKfk3htsKHXtXVCxSs+cUuf3x/6+iZix+kT16alGfgumOVCuu8
-        r1NWiQZsOpD7qupVs07t1LLTXTdf38u6JK0W2rW57rHonYa9n5QF9y2ovmz/ZtHeEI6TP8y1
-        iqyX2jutM5s0qcLRyHBZj3d2fKdkNf/klSqX9nNOPGZzfmJzcP1vu4uLPD8mBv7UfqKXrsgW
-        YLWq7enr17Ompp64brDf6Wbss+ezdVi0a2cEek9fLtXsYSt0Qb1nkfi199VPf7567XiE871U
-        y7eHx6cJ1XW+mmH9UyedT4mlOCPRUIu5qDgRABEoH/e4AwAA
-X-CMS-MailID: 20220616100944eucas1p15c06e5002e0f2cd08babcd1217fd63c6
-X-Msg-Generator: CA
-X-RootMTR: 20220615101931eucas1p15ed09ae433a2c378b599e9086130d8eb
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220615101931eucas1p15ed09ae433a2c378b599e9086130d8eb
-References: <20220615101920.329421-1-p.raghav@samsung.com>
-        <CGME20220615101931eucas1p15ed09ae433a2c378b599e9086130d8eb@eucas1p1.samsung.com>
-        <20220615101920.329421-3-p.raghav@samsung.com>
-        <857c444a-02b9-9cef-0c5b-2ecdb2fd46f6@acm.org>
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616073953.2204978-5-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-15 22:28, Bart Van Assche wrote:
-isk_name, zone->len);
->> +        if (zone->len == 0) {
->> +            pr_warn("%s: Invalid zone size", disk->disk_name);
->> +            return -ENODEV;
->> +        }
->> +
->> +        /*
->> +         * Don't allow zoned device with non power_of_2 zone size with
->> +         * zone capacity less than zone size.
->> +         */
-> 
+Hi "Peng,
 
-> Please change "power_of_2" into "power-of-2".
-> 
-Ok.
->> +        if (!is_power_of_2(zone->len) && zone->capacity < zone->len) {
->> +            pr_warn("%s: Invalid zone capacity for non power of 2
->> zone size",
->> +                disk->disk_name);
->>               return -ENODEV;
->>           }
-> 
-> The above check seems wrong to me. I don't see why devices that report a
-> capacity that is less than the zone size should be rejected.
-> 
-This was brought up by Damien during previous reviews. The argument was
-that the reason to allow non power-of-2 zoned device is to remove the
-gaps between zone size and zone capacity. Allowing a npo2 zone size with
-a different capacity, even though it is technically possible, it does
-not make any practical sense. That is why this check was introduced.
-Does that answer your question?
->> +        /*
->> +         * Division is used to calculate nr_zones for both power_of_2
->> +         * and non power_of_2 zone sizes as it is not in the hot path.
->> +         */
-> 
-> Shouldn't the above comment be moved to the patch description? I'm not
-> sure whether having such a comment in the source code is valuable.
-> 
-Yeah, I will remove it. Maybe it is very obvious at this point.
->> +static inline sector_t blk_queue_offset_from_zone_start(struct
->> request_queue *q,
->> +                            sector_t sec)
->> +{
->> +    sector_t zone_sectors = blk_queue_zone_sectors(q);
->> +    u64 remainder = 0;
->> +
->> +    if (!blk_queue_is_zoned(q))
->> +        return false;
-> 
-> "return false" should only occur in functions returning a boolean. This
-> function returns type sector_t.
-> 
-Good catch. It was a copy paste mistake. Fixed it.
-> Thanks,
-> 
-> Bart.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on shawnguo/for-next linus/master v5.19-rc2 next-20220616]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/Add-interconnect-for-i-MX8MP-blk-ctrl/20220616-153932
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arc-randconfig-r043-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161757.tudlinMv-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/118c632adf7409c5a51e85fa0c61286665116b10
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/Add-interconnect-for-i-MX8MP-blk-ctrl/20220616-153932
+        git checkout 118c632adf7409c5a51e85fa0c61286665116b10
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/soc/imx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/soc/imx/imx8m-blk-ctrl.c: In function 'imx8m_blk_ctrl_probe':
+>> drivers/soc/imx/imx8m-blk-ctrl.c:247:23: error: implicit declaration of function 'devm_of_icc_bulk_get'; did you mean 'of_icc_bulk_get'? [-Werror=implicit-function-declaration]
+     247 |                 ret = devm_of_icc_bulk_get(dev, data->num_paths, domain->paths);
+         |                       ^~~~~~~~~~~~~~~~~~~~
+         |                       of_icc_bulk_get
+   cc1: some warnings being treated as errors
+
+
+vim +247 drivers/soc/imx/imx8m-blk-ctrl.c
+
+   178	
+   179	static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
+   180	{
+   181		const struct imx8m_blk_ctrl_data *bc_data;
+   182		struct device *dev = &pdev->dev;
+   183		struct imx8m_blk_ctrl *bc;
+   184		void __iomem *base;
+   185		int i, ret;
+   186	
+   187		struct regmap_config regmap_config = {
+   188			.reg_bits	= 32,
+   189			.val_bits	= 32,
+   190			.reg_stride	= 4,
+   191		};
+   192	
+   193		bc = devm_kzalloc(dev, sizeof(*bc), GFP_KERNEL);
+   194		if (!bc)
+   195			return -ENOMEM;
+   196	
+   197		bc->dev = dev;
+   198	
+   199		bc_data = of_device_get_match_data(dev);
+   200	
+   201		base = devm_platform_ioremap_resource(pdev, 0);
+   202		if (IS_ERR(base))
+   203			return PTR_ERR(base);
+   204	
+   205		regmap_config.max_register = bc_data->max_reg;
+   206		bc->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
+   207		if (IS_ERR(bc->regmap))
+   208			return dev_err_probe(dev, PTR_ERR(bc->regmap),
+   209					     "failed to init regmap\n");
+   210	
+   211		bc->domains = devm_kcalloc(dev, bc_data->num_domains,
+   212					   sizeof(struct imx8m_blk_ctrl_domain),
+   213					   GFP_KERNEL);
+   214		if (!bc->domains)
+   215			return -ENOMEM;
+   216	
+   217		bc->onecell_data.num_domains = bc_data->num_domains;
+   218		bc->onecell_data.xlate = imx8m_blk_ctrl_xlate;
+   219		bc->onecell_data.domains =
+   220			devm_kcalloc(dev, bc_data->num_domains,
+   221				     sizeof(struct generic_pm_domain *), GFP_KERNEL);
+   222		if (!bc->onecell_data.domains)
+   223			return -ENOMEM;
+   224	
+   225		bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
+   226		if (IS_ERR(bc->bus_power_dev))
+   227			return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
+   228					     "failed to attach power domain\n");
+   229	
+   230		for (i = 0; i < bc_data->num_domains; i++) {
+   231			const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
+   232			struct imx8m_blk_ctrl_domain *domain = &bc->domains[i];
+   233			int j;
+   234	
+   235			domain->data = data;
+   236	
+   237			for (j = 0; j < data->num_clks; j++)
+   238				domain->clks[j].id = data->clk_names[j];
+   239	
+   240			for (j = 0; j < data->num_paths; j++) {
+   241				domain->paths[j].name = data->path_names[j];
+   242				/* Fake value for now, just let ICC could configure NoC mode/priority */
+   243				domain->paths[j].avg_bw = 1;
+   244				domain->paths[j].peak_bw = 1;
+   245			}
+   246	
+ > 247			ret = devm_of_icc_bulk_get(dev, data->num_paths, domain->paths);
+   248			if (ret) {
+   249				dev_err_probe(dev, ret, "failed to get noc entries\n");
+   250				goto cleanup_pds;
+   251			}
+   252	
+   253			ret = devm_clk_bulk_get(dev, data->num_clks, domain->clks);
+   254			if (ret) {
+   255				dev_err_probe(dev, ret, "failed to get clock\n");
+   256				goto cleanup_pds;
+   257			}
+   258	
+   259			domain->power_dev =
+   260				dev_pm_domain_attach_by_name(dev, data->gpc_name);
+   261			if (IS_ERR(domain->power_dev)) {
+   262				dev_err_probe(dev, PTR_ERR(domain->power_dev),
+   263					      "failed to attach power domain\n");
+   264				ret = PTR_ERR(domain->power_dev);
+   265				goto cleanup_pds;
+   266			}
+   267			dev_set_name(domain->power_dev, "%s", data->name);
+   268	
+   269			domain->genpd.name = data->name;
+   270			domain->genpd.power_on = imx8m_blk_ctrl_power_on;
+   271			domain->genpd.power_off = imx8m_blk_ctrl_power_off;
+   272			domain->bc = bc;
+   273	
+   274			ret = pm_genpd_init(&domain->genpd, NULL, true);
+   275			if (ret) {
+   276				dev_err_probe(dev, ret, "failed to init power domain\n");
+   277				dev_pm_domain_detach(domain->power_dev, true);
+   278				goto cleanup_pds;
+   279			}
+   280	
+   281			/*
+   282			 * We use runtime PM to trigger power on/off of the upstream GPC
+   283			 * domain, as a strict hierarchical parent/child power domain
+   284			 * setup doesn't allow us to meet the sequencing requirements.
+   285			 * This means we have nested locking of genpd locks, without the
+   286			 * nesting being visible at the genpd level, so we need a
+   287			 * separate lock class to make lockdep aware of the fact that
+   288			 * this are separate domain locks that can be nested without a
+   289			 * self-deadlock.
+   290			 */
+   291			lockdep_set_class(&domain->genpd.mlock,
+   292					  &blk_ctrl_genpd_lock_class);
+   293	
+   294			bc->onecell_data.domains[i] = &domain->genpd;
+   295		}
+   296	
+   297		ret = of_genpd_add_provider_onecell(dev->of_node, &bc->onecell_data);
+   298		if (ret) {
+   299			dev_err_probe(dev, ret, "failed to add power domain provider\n");
+   300			goto cleanup_pds;
+   301		}
+   302	
+   303		bc->power_nb.notifier_call = bc_data->power_notifier_fn;
+   304		ret = dev_pm_genpd_add_notifier(bc->bus_power_dev, &bc->power_nb);
+   305		if (ret) {
+   306			dev_err_probe(dev, ret, "failed to add power notifier\n");
+   307			goto cleanup_provider;
+   308		}
+   309	
+   310		dev_set_drvdata(dev, bc);
+   311	
+   312		return 0;
+   313	
+   314	cleanup_provider:
+   315		of_genpd_del_provider(dev->of_node);
+   316	cleanup_pds:
+   317		for (i--; i >= 0; i--) {
+   318			pm_genpd_remove(&bc->domains[i].genpd);
+   319			dev_pm_domain_detach(bc->domains[i].power_dev, true);
+   320		}
+   321	
+   322		dev_pm_domain_detach(bc->bus_power_dev, true);
+   323	
+   324		return ret;
+   325	}
+   326	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

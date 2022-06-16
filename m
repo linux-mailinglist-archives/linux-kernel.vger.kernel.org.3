@@ -2,66 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA0D54DA3B
+	by mail.lfdr.de (Postfix) with ESMTP id D424A54DA3D
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348986AbiFPGIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S1358935AbiFPGJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358995AbiFPGId (ORCPT
+        with ESMTP id S1358690AbiFPGJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:08:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB625C78
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9IlCM4qscouDgJZ0O1z3XWz1+iaMBhBno5bdb5wFRH8=; b=M8OgglVh3AX1hsPInRYzOJXos9
-        SuP6xskoKN4YfAz5d3S2WUsmR+vgytQC6M7HzxKyIraBfBZuYr6kF5e1QnGAE4HdzpfQuMPcp9h36
-        8BxfiRzAFYRduVUtPF1YLq1LSAc9Wz45p+p0ylZdIN2oA8rSrwVdEXrqIdo4Kt3oPR4ejgmxEosA0
-        +Iyf57annfxAa5EMyqriqPM22o6xIWyl7xgA4hH6wtXfrBdHow11TS/6Lmn/ZEAaCZHwXjp3dZwsZ
-        WfQNrPeCfELcXAtZhNAQyagR6ogOL/VqYRVCkUhIAmaBy0gWyq1iYiuAObZ4iOWcJDrUeIFPgdI4V
-        RxpNzhRg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1ig2-000gS2-Ji; Thu, 16 Jun 2022 06:08:22 +0000
-Date:   Wed, 15 Jun 2022 23:08:22 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mm@kvack.org, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandru Elisei <alexandru.elisei@arm.com>
-Subject: Re: [PATCH] init: Initialize noop_backing_dev_info early
-Message-ID: <YqrI1kS/BxEQ+39V@infradead.org>
-References: <20220615214815.6901-1-jack@suse.cz>
+        Thu, 16 Jun 2022 02:09:01 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC6E13DED
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:08:58 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNsBn43vzz1K9yC;
+        Thu, 16 Jun 2022 14:06:57 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 14:08:23 +0800
+Subject: Re: [PATCH 2/7] mm/khugepaged: stop swapping in page when
+ VM_FAULT_RETRY occurs
+To:     Yang Shi <shy828301@gmail.com>, Zach O'Keefe <zokeefe@google.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220611084731.55155-1-linmiaohe@huawei.com>
+ <20220611084731.55155-3-linmiaohe@huawei.com> <Yqn3WLLy+5MnqZn3@google.com>
+ <CAHbLzkrJJJHS-4MKPSdRsSjUwU-=q4y7xJfUx_ZRTohc034J_w@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <3ab39c38-eef5-502c-d290-d745aff7b0bd@huawei.com>
+Date:   Thu, 16 Jun 2022 14:08:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615214815.6901-1-jack@suse.cz>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHbLzkrJJJHS-4MKPSdRsSjUwU-=q4y7xJfUx_ZRTohc034J_w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:48:15PM +0200, Jan Kara wrote:
-> +extern int bdi_init(struct backing_dev_info *bdi);
+On 2022/6/16 1:51, Yang Shi wrote:
+> On Wed, Jun 15, 2022 at 8:14 AM Zach O'Keefe <zokeefe@google.com> wrote:
+>>
+>> On 11 Jun 16:47, Miaohe Lin wrote:
+>>> When do_swap_page returns VM_FAULT_RETRY, we do not retry here and thus
+>>> swap entry will remain in pagetable. This will result in later failure.
+>>> So stop swapping in pages in this case to save cpu cycles.
+>>>
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>>  mm/khugepaged.c | 19 ++++++++-----------
+>>>  1 file changed, 8 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>>> index 73570dfffcec..a8adb2d1e9c6 100644
+>>> --- a/mm/khugepaged.c
+>>> +++ b/mm/khugepaged.c
+>>> @@ -1003,19 +1003,16 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
+>>>               swapped_in++;
+>>>               ret = do_swap_page(&vmf);
+>>>
+>>> -             /* do_swap_page returns VM_FAULT_RETRY with released mmap_lock */
+>>> +             /*
+>>> +              * do_swap_page returns VM_FAULT_RETRY with released mmap_lock.
+>>> +              * Note we treat VM_FAULT_RETRY as VM_FAULT_ERROR here because
+>>> +              * we do not retry here and swap entry will remain in pagetable
+>>> +              * resulting in later failure.
+>>> +              */
+>>>               if (ret & VM_FAULT_RETRY) {
+>>>                       mmap_read_lock(mm);
+>>> -                     if (hugepage_vma_revalidate(mm, haddr, &vma)) {
+>>> -                             /* vma is no longer available, don't continue to swapin */
+>>> -                             trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+>>> -                             return false;
+>>> -                     }
+>>> -                     /* check if the pmd is still valid */
+>>> -                     if (mm_find_pmd(mm, haddr) != pmd) {
+>>> -                             trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+>>> -                             return false;
+>>> -                     }
+>>> +                     trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+>>> +                     return false;
+>>>               }
+>>>               if (ret & VM_FAULT_ERROR) {
+>>>                       trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+>>> --
+>>> 2.23.0
+>>>
+>>>
+>>
+>> I've convinced myself this is correct, but don't understand how we got here.
+>> AFAICT, we've always continued to fault in pages, and, as you mention, don't
+>> retry ones that have failed with VM_FAULT_RETRY - so
+>> __collapse_huge_page_isolate() should fail. I don't think (?) there is any
+>> benefit to continuing to swap if we don't handle VM_FAULT_RETRY appropriately.
+>>
+>> So, I think this change looks good from that perspective. I suppose the only
+>> other question would be: should we handle the VM_FAULT_RETRY case? Maybe 1
+>> additional attempt then fail? AFAIK, this mostly (?) happens when the page is
+>> locked.  Maybe it's not worth the extra complexity though..
+> 
+> It should be unnecessary for khugepaged IMHO since it will scan all
+> the valid mm periodically, so it will come back eventually.
 
-No need for the extern.
+I tend to agree with Yang. Khugepaged will come back eventually so it's not
+worth the extra complexity.
 
-Otherwise looks good:
+Thanks both!
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> 
+>>
+> .
+> 
 
-And this remind me that I really want to kill noop_backing_dev_info
-and just use a NULL bdi for this case eventually..

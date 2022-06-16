@@ -2,242 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8620154EC79
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ED354EC73
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378833AbiFPVXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S1379154AbiFPVW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378999AbiFPVXF (ORCPT
+        with ESMTP id S1378999AbiFPVWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:23:05 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BEB248E3;
-        Thu, 16 Jun 2022 14:23:04 -0700 (PDT)
+        Thu, 16 Jun 2022 17:22:53 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783DC1EC6A;
+        Thu, 16 Jun 2022 14:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655414584; x=1686950584;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=lxoo1CWEFbOsadOkVkKpZ+ne4Wd8d/42gZd+pwBprYQ=;
-  b=JDcEnwz7w3yiA2d/0LuKWj7QBGJJuq23/Yedwa+ArhOkpq4ex2SWwo7e
-   p/9rDjupW5RT2y7mrwdVhZQusg5Qa7Km2tQtPe8U9fNLSkBzx9bi88xzJ
-   g7H8EgkZ/t0DyNdw7e5XmpeoFa/vw8aMFEVbaZcKnPITJf2gEs/KYYcNf
-   1vh4iHHCWQDa2z/EHex0pviGgu56Nu0IQOgGDmTWC6oNvNlyNgoTZX5aV
-   jr36lC59Gy326YXjy+jjveqms8GFxY7xC3JTxviH0X1GogmodTWO82PZc
-   jzOuIU+zrMSNp10LbFa19YpAUjh8uym3C4zBjgmelRQ/M7MSI+gSkqSd+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280069519"
+  t=1655414572; x=1686950572;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eIVB2Wcg0d4KNkOlM5BOJs0iOIDhUm5jxxQVobMAAIM=;
+  b=RP2YCFWJTKa74eNpADc52RfwyjDAvZ8LbqtQ+29QXXL8TwRbvjSWS7Ba
+   pq99M69aIQ9JNjTvJTyVDW//G+jY7TSkumi1VWip/2CpHCCXM6c6TDOdt
+   ovkJ3Yi3iryHnvVyD2y26qw2tMuSleKA/emETgYWmPoT1kmV2lQAziBjw
+   O3q86x2LyuYnnhk+Vs+DKTvFCxrgF97TC4OmRtb6/SSLEM/JP4XfqNzIy
+   uBWpPFsIMbGc2UKu+E2AO9bfY2POAwfylNkeUEpgS6fQsCe6X4buSH60h
+   /gpL6lhB831yaHj1bisym9RyaHXfKLRndrfm290x2hFX1FL/TzwTh4/0s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259207705"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280069519"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 14:23:03 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="259207705"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 14:22:51 -0700
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="653337977"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jun 2022 14:23:03 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 16 Jun 2022 14:22:59 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 16 Jun 2022 14:22:58 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.45) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 16 Jun 2022 14:22:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZGTGIKNfTSSnD47lvVrQmWghj98/Zgm+yrKWXmX0DtpI6CtvmE2JYwzDS8E1JSASpNePP59+9StCTWR+vU+9BSgU65noaYWWTRZGqQ6zd4KhFO4Py2ZPr33W4VDnwCF0LMoRYB2l5pi88dOQFsiYmwl1mgsDBsnE+v0HhuD7rYwZEYAQ99Uho1yQfhO3z2ZAFSzXxjZlNzIfSwjdcTjBeaRRvSILIcQZA8I3DzVtKAuy0YgGP/RIZgxWRkv5dOzTrn9TryKvfC/RuDPKdlLKTsBG4fgaJ1oYXlxgTVfCSGGiABUeHOUlOFZ21HLjW6/kBdvhYR9dxOOEPGQjmpRw3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PRSbHdbJt8rIojAfpJT80VoTGgEb0e9W7kfQhz/cEw4=;
- b=D6ZPH5AQBZVtH5joxZ5M24n8N7zxZFSOjFzH37hMJgJbOnaAOuAtgtALtU/BH+eNZAB08uPrJUpwbWXsIoK3dCzd+iZgcew15Bqt+ZWBoX7birx0wtYVpVMFSGO8bFBJoPZ4gY2dmLuKVkp20OIU+QyxBVVWSXNL5p34amE8pOyDqHoJDynKXmbF9gY2y03fXO6f+vKapugpYBwQSxVQNgdI4w1s8g67BoKadp2ovDe1uvxwNm/1c3CU4yiNaI/aJYHC/KGweqIZ/lLw3uNTmZQ3hExIO4sRdkGuYQWkVEQn/n2lE14mh42dPpdokJI3DXm0tHAq8p0sta2B8eYkcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by CY5PR11MB6212.namprd11.prod.outlook.com
- (2603:10b6:930:24::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Thu, 16 Jun
- 2022 21:22:56 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf%7]) with mapi id 15.20.5332.023; Thu, 16 Jun 2022
- 21:22:56 +0000
-Date:   Thu, 16 Jun 2022 14:22:54 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <bp@alien8.de>, <tony.luck@intel.com>
-Subject: RE: [RFC][PATCH] fix short copy handling in copy_mc_pipe_to_iter()
-Message-ID: <62ab9f2eb6456_734c32944b@dwillia2-xfh.notmuch>
-References: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
-X-ClientProxiedBy: MWHPR11CA0001.namprd11.prod.outlook.com
- (2603:10b6:301:1::11) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+   d="scan'208";a="560027674"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 14:22:51 -0700
+Date:   Thu, 16 Jun 2022 14:26:56 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        rostedt@goodmis.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+Message-ID: <20220616142656.4b1acc4a@jacob-builder>
+In-Reply-To: <Yqb45vclY2KVL0wZ@hirez.programming.kicks-ass.net>
+References: <20220608142723.103523089@infradead.org>
+        <20220608144516.172460444@infradead.org>
+        <20220609164921.5e61711d@jacob-builder>
+        <Yqb45vclY2KVL0wZ@hirez.programming.kicks-ass.net>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2d1d050c-28a8-433b-412f-08da4fde614d
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6212:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <CY5PR11MB6212215DE04D27DB3AAB253FC6AC9@CY5PR11MB6212.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yJrhUYxwTaAbuURQD80A7BwwcO093ZvdMBagHxzYZnXSX8X15IB+iXbkRwS8W4/F235B4lfP0A627RAcRZY7q+bOKknq8Y28sc8Sdfm66Y9zw1vm84EaN2kX+A5nOkxiuIF8tWEZFb420TkTkrlWJhaA/cksFzI1KyblBlqeeb9VHNwSqa38kbZWx3YPFQcaizRzy86G8Cm9X5cb+j8ynqm+L0RryDrNdWpy/T75mfvZapF9fv+sWfLjFVMfauuR001Do1WZU7K8Yg5cKdICCK2ISVE4yOcfYxCn1sIjAPsTKjNmrpG6lRv1eM8Ie2f/3KLD/BuZYDEtkGwc7QEHwzSUGi1CNKa6qBAhxIRlDueNk4K0k3/HHF1Ff2kbAMVkSxygVrIJmJGCPFVE79XqvAMwlxZALCqhjhGPbUC8Wlkt537o+fr15lURLgk9LREYyMcupXREYtiC+RE558gR9ws8JsXu0EZQBvlfuXZLuKR8HoDAAiArKUCrBOOOagUIuSF8nNzpCILMTcjv7ax4Er/fu/hYxp5th2Qrhn20DniQr3MFed2HYGS/dIfP7s92bJErxQpo3JoCSF24dvR82jXsmkf/KqlHLeIolrjKA7TLGNzp8SIeT6g2L4so0pz+V6CbqR3jFgE1vDG+e/9a2Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(6506007)(6486002)(82960400001)(107886003)(508600001)(83380400001)(186003)(26005)(5660300002)(8936002)(66946007)(2906002)(9686003)(6512007)(66476007)(4326008)(66556008)(316002)(8676002)(38100700002)(110136005)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aIB1+rhi997KX57LiJrZ8i4Pj1fZGza3yirLf3vSPH1KCZTHychFJutJY4Ma?=
- =?us-ascii?Q?T2/4ZSTHtdiSA1VgPMSj+INdQ2ULiCHTfo77u32pPI8Oo5yd/5f3eekeZy53?=
- =?us-ascii?Q?5ZbdDWHlzZAbj6uIpJLrK3XHQORVYV/V2rX0qPLPLZ69VPyCx2IEpR5v0SBk?=
- =?us-ascii?Q?0ndCt+6DyKL/x58XWTprEDwM14k81qsjx0xdw4RZB6DM/WbEJIDWFQeG8/W2?=
- =?us-ascii?Q?uBsru5T1E0AwIw6rhObGgUjGA+wZHbOrlVCdrw320JXbBvLjXJxBbNkNcHRC?=
- =?us-ascii?Q?VRHsM8rgrB5fnkYTvT4KKXnC+r15526AA42nk9NPUA8H5jLR4qynCDLzY8oa?=
- =?us-ascii?Q?5b4jnIZBNpePuMNtME0B8/MnkecFNBIVJnVXC2lcvIA4sgSCUdYsykcUjeWH?=
- =?us-ascii?Q?GT1uM4hw+eEMtIDFP9IIDHByhhL7Rn/pOPQ0PxVWKvE7n5UxeBS55JJ2GNY4?=
- =?us-ascii?Q?Imv8TDtfNqIJQf2ImoxiuqXM1nHlRE15jq+npwdxJktEIafJi6pF8NwVBOIZ?=
- =?us-ascii?Q?A4LhmMG9mjL13VZEtlzbyUF36SVqtJSgEu55YlkKqul1venUSqjsYWamtdrt?=
- =?us-ascii?Q?uz5exPe37z5JGpdFy6EjSpzJljN1LFcIPafM7vwKt5HnW2Y1kd819wsuGa3H?=
- =?us-ascii?Q?6IirN12Y2jz6Ib/31Yht9SgeI0vbRpRgh5S2jZTo+TJaRSmnXebQFTdqOF8W?=
- =?us-ascii?Q?ChDI7n1j9Vberx/DXF4nOpmp01kb5oB0pkDAI1/70EmHskH/3bm70rFTRT2a?=
- =?us-ascii?Q?2An7zb+bRKinLB93v8d39IYEAlDGem202m5EBtbpsboFKu0mMm/oDMHVJIMb?=
- =?us-ascii?Q?b12RaIzlI2e7mi4E/3cM0xXcSLcKXVHZbZe/YILEv95d+NcDVnyLKpNYOWc2?=
- =?us-ascii?Q?rdNbfOKVkZ7dZ7rMXBzCFcD+KVV/uy73atQqx6SKJbB20ScSLXsLt6N8pCWh?=
- =?us-ascii?Q?2duAWGsMIZ03b8kAySb+EpZ6DxDhy1vzcuUuua2vZwi8XB9vmBKMjN380zsa?=
- =?us-ascii?Q?8BaNZBNn5VLxMUUtQbk4khig8HsxBXFHBYrall7jEqxeKVY9E8UsVDCDqpzi?=
- =?us-ascii?Q?9pl5jCECV6X+eAbYUoQEbz/tq1zZ4MduOAqx5mGzM0CRGVGtM3R2vmHMoC5j?=
- =?us-ascii?Q?7YXIZuhoUuFNrg3Vwl4hf0YS2dwjFJ9Q7nlyhdvx8Xz/5T9taHtNug8CwRav?=
- =?us-ascii?Q?ZQZL6OoBHaase4JsW2BOejgJtZljpCPkIkiy4Dd4Xbug528eXGF3n1DQIylg?=
- =?us-ascii?Q?Tjr26EBGCoTMbw2gd84JqsF5c99ZKB5yQ50jy99vzawfh+EjOqJDiLge8Uar?=
- =?us-ascii?Q?vdrptK75Oh4LKsigqI6xl6xhg/5YKErw+p6PUSXo7KFV3AOFBCE/rUVbAx4D?=
- =?us-ascii?Q?aLEXjI3lrDvUFo3e0437uMw+fjSgsK1hnILIBJcZaPvPN9LVQI1T6mCEwF/P?=
- =?us-ascii?Q?rauHdI77/D79BRpHqbuXsZT/tgA59YiKWnwhjhcVTM8jSOyWSznQoIqTMmja?=
- =?us-ascii?Q?S458eF/S2JJ63sEKjeN2ecY4UQn8y85oo3lRVOeTXNT7V6cNX1WNILuZy244?=
- =?us-ascii?Q?j1Gfhxtye87312Wx6ZIDPJcckNTWGIvLr6Ntjuf3TLvCaPzTFF55SW1PD4pB?=
- =?us-ascii?Q?8Ou75dmO/06PaQNaYZxTgfZILl6JYRkwZjEjuZzVmmWWCoob8PqOp7UcLHut?=
- =?us-ascii?Q?/qgaYwl9PY791vSUJRABh2wGCLif4jO7IGAkGZfpJLMZvTu7o0eSrrnMeABM?=
- =?us-ascii?Q?XU33VIeKDaECGCLbhuMQiXXQze5U0M4=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d1d050c-28a8-433b-412f-08da4fde614d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 21:22:56.2633
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c+JQBgcWK6v96Ai+5Ce4ZfF4cAp1s6aT67L4YrmlMwUH4cgkwE/d0SmS+OFRoj0OZGClU+BkFRZA7ZdzAwv4jpke2uZ2PrpBYbu0uCv8cDY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6212
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ add Tony and Boris ]
+Hi Peter,
 
-Al Viro wrote:
-> [commit in question sits in vfs.git#fixes]
+On Mon, 13 Jun 2022 10:44:22 +0200, Peter Zijlstra <peterz@infradead.org>
+wrote:
+
+> On Thu, Jun 09, 2022 at 04:49:21PM -0700, Jacob Pan wrote:
+> > Hi Peter,
+> > 
+> > On Wed, 08 Jun 2022 16:27:27 +0200, Peter Zijlstra
+> > <peterz@infradead.org> wrote:
+> >   
+> > > Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
+> > > Xeons") wrecked intel_idle in two ways:
+> > > 
+> > >  - must not have tracing in idle functions
+> > >  - must return with IRQs disabled
+> > > 
+> > > Additionally, it added a branch for no good reason.
+> > > 
+> > > Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on
+> > > Xeons") Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > ---
+> > >  drivers/idle/intel_idle.c |   48
+> > > +++++++++++++++++++++++++++++++++++----------- 1 file changed, 37
+> > > insertions(+), 11 deletions(-)
+> > > 
+> > > --- a/drivers/idle/intel_idle.c
+> > > +++ b/drivers/idle/intel_idle.c
+> > > @@ -129,21 +137,37 @@ static unsigned int mwait_substates __in
+> > >   *
+> > >   * Must be called under local_irq_disable().
+> > >   */  
+> > nit: this comment is no long true, right?  
 > 
-> Unlike other copying operations on ITER_PIPE, copy_mc_to_iter() can
-> result in a short copy.  In that case we need to trim the unused
-> buffers, as well as the length of partially filled one - it's not
-> enough to set ->head, ->iov_offset and ->count to reflect how
-> much had we copied.  Not hard to fix, fortunately...
+> It still is, all the idle routines are called with interrupts disabled,
+> but must also exit with interrupts disabled.
 > 
-> I'd put a helper (pipe_discard_from(pipe, head)) into pipe_fs_i.h,
-> rather than iov_iter.c - it has nothing to do with iov_iter and
-> having it will allow us to avoid an ugly kludge in fs/splice.c.
-> We could put it into lib/iov_iter.c for now and move it later,
-> but I don't see the point going that way...
+> If the idle method requires interrupts to be enabled, it must be sure to
+> disable them again before returning. Given all the RCU/tracing concerns
+> it must use raw_local_irq_*() for this though.
+Makes sense, it is just little confusing when the immediate caller does
+raw_local_irq_enable() which does not cancel out local_irq_disable().
 
-Apologies for the delay in responding (reworking my email workflow after
-a loss of Gmail access for my intel.com address). This looks good to me:
+Thanks,
 
-Acked-by: Dan Williams <dan.j.williams@intel.com>
-
-...and I also share the concern from Linus about the lack of testing
-this gets outside of systems with the necessary hardware/firmware to do
-error injection testing.
-
-Boris and I had agreed to remove some software error injection machinery
-for copy_mc_* in commit 3adb776384f2 ("x86, libnvdimm/test: Remove
-COPY_MC_TEST"). Is there an appetite to see some of that return and
-write a regression test for this bug?
-
-> 
-> Fixes: ca146f6f091e "lib/iov_iter: Fix pipe handling in _copy_to_iter_mcsafe()"
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> ---
-> diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
-> index cb0fd633a610..4ea496924106 100644
-> --- a/include/linux/pipe_fs_i.h
-> +++ b/include/linux/pipe_fs_i.h
-> @@ -229,6 +229,15 @@ static inline bool pipe_buf_try_steal(struct pipe_inode_info *pipe,
->  	return buf->ops->try_steal(pipe, buf);
->  }
->  
-> +static inline void pipe_discard_from(struct pipe_inode_info *pipe,
-> +		unsigned int old_head)
-> +{
-> +	unsigned int mask = pipe->ring_size - 1;
-> +
-> +	while (pipe->head > old_head)
-> +		pipe_buf_release(pipe, &pipe->bufs[--pipe->head & mask]);
-> +}
-> +
->  /* Differs from PIPE_BUF in that PIPE_SIZE is the length of the actual
->     memory allocation, whereas PIPE_BUF makes atomicity guarantees.  */
->  #define PIPE_SIZE		PAGE_SIZE
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index 0b64695ab632..2bf20b48a04a 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -689,6 +689,7 @@ static size_t copy_mc_pipe_to_iter(const void *addr, size_t bytes,
->  	struct pipe_inode_info *pipe = i->pipe;
->  	unsigned int p_mask = pipe->ring_size - 1;
->  	unsigned int i_head;
-> +	unsigned int valid = pipe->head;
->  	size_t n, off, xfer = 0;
->  
->  	if (!sanity(i))
-> @@ -702,11 +703,17 @@ static size_t copy_mc_pipe_to_iter(const void *addr, size_t bytes,
->  		rem = copy_mc_to_kernel(p + off, addr + xfer, chunk);
->  		chunk -= rem;
->  		kunmap_local(p);
-> -		i->head = i_head;
-> -		i->iov_offset = off + chunk;
-> -		xfer += chunk;
-> -		if (rem)
-> +		if (chunk) {
-> +			i->head = i_head;
-> +			i->iov_offset = off + chunk;
-> +			xfer += chunk;
-> +			valid = i_head + 1;
-> +		}
-> +		if (rem) {
-> +			pipe->bufs[i_head & p_mask].len -= rem;
-> +			pipe_discard_from(pipe, valid);
->  			break;
-> +		}
->  		n -= chunk;
->  		off = 0;
->  		i_head++;
-
-
+Jacob

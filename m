@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A63554E672
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075E054E678
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377816AbiFPP51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S1378006AbiFPP5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiFPP5Z (ORCPT
+        with ESMTP id S1378019AbiFPP5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:57:25 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EE72FE71
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:57:24 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id e5so1029161wma.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=x+qCp/PIALvKkyHuuSMxH6g0K4aMNeDFtao/lYcSdV0=;
-        b=eeXvTyGIvYEENE4EBbgxKRwF1N6RXVfsFOj4hRYxgsG4WHIYQ+ilmz4RReG261USM2
-         Jpo+qpjF11Qb7gL/EMJoc3IEJJKeUZq3e81dTO73K+Q96gdPRfldhoCZYgzXdNUCwzPt
-         CKVEsD5kx5cmfXV4+nem+euno/6L+i1owLUKM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=x+qCp/PIALvKkyHuuSMxH6g0K4aMNeDFtao/lYcSdV0=;
-        b=nJkWLvgmxG8eAandLyvnA/iItV2zDUqTYVHOAyf53XvYMCj8NnMlLCmNjUYN2hjuJG
-         SbvsGgcB0vrRPX5lLe9jSmqiCr4YBGIFopFmkz9UKDUcWOZDSvzSFlLrFNIiWCxdu9Jv
-         RB8iAi2xguge7ejH0PxDcRr+B43EyV10w+5WeYVrjps3nRtBfY9fIhp1O7CVOb8jQ8hX
-         2h8KPSLtPm7d5O+40GXre0j3Q0XXS1k+038L6CO0NH5STXKmpQeGkO7Q3bSkJCLi9pLp
-         BHl9foEd1DVFatw7Mmqnek2NOxAmt3szBUtT/PjnyFa7YbOuVcPTcNNjk1ad/YhDU/0w
-         Lo1g==
-X-Gm-Message-State: AJIora+mqzslkIg2IIeeHfprF17gzNPbxMt4NjQi+C7VUwtvXnDXu+t0
-        pOxF4CEdbRd6JmZUVW/HGrJUmUB34bHs8w==
-X-Google-Smtp-Source: AGRyM1viKXSPJjBRIqZFdGDIYYNNfew2vfVZvjdK0FMdXFZK+PXSuSNtORvSK+UxeAhra2kt7RWCvA==
-X-Received: by 2002:a05:600c:35c2:b0:39b:fa1f:4f38 with SMTP id r2-20020a05600c35c200b0039bfa1f4f38mr5766130wmq.22.1655395042858;
-        Thu, 16 Jun 2022 08:57:22 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::5:8b4b])
-        by smtp.gmail.com with ESMTPSA id h28-20020adfa4dc000000b0020fff0ea0a3sm2241327wrb.116.2022.06.16.08.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 08:57:22 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 16:57:21 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     linux-kernel@vger.kernel.org
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [RFC PATCH v2] printk: console: Allow each console to have its
- own loglevel
-Message-ID: <YqtS4W8Pl3YmVEQg@chrisdown.name>
-References: <YoeQLxhDeIk4VSmx@chrisdown.name>
+        Thu, 16 Jun 2022 11:57:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4984B0C;
+        Thu, 16 Jun 2022 08:57:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90BDCB82497;
+        Thu, 16 Jun 2022 15:57:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F75C34114;
+        Thu, 16 Jun 2022 15:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655395054;
+        bh=aqS2dz4O//iR1Vr0NtpXde5TYZF+050+yENkyO3WUu0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m8tvtkJLsS/ugQn516qNZWTnQY8dHCyKOTGgP0oJi7Yk9+twCEFaIV663ybl30euo
+         ojM7S0QgTEqok47JvzzH0GBwoean8N8QwLkobrSQZqyv0QVOjyhIsZT4O15IUK3VQ8
+         MqliFW/8Hhuy3+kKfp1HKyBVYAJnpRfuXzrqlz18DZ0bBzaWBwM8ePty1LOP8ILrB7
+         GMHUrTZCyDkKNYBWy0iMW1X1eoItNv/DFjMiVYczaMxcHlNDZFl3pdouG2y6Dfc0qM
+         wnN1E0dsx+if2F1G6xxI/nnuDP1gqBRnvbysKZN/85jNmP6vH14ydM5B32ehxMXvxv
+         oX2KJM2RAARtQ==
+Date:   Thu, 16 Jun 2022 08:57:32 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Michal Kubecek <mkubecek@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        kernel@pengutronix.de, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
+Message-ID: <20220616085732.7bc7ef30@kernel.org>
+In-Reply-To: <20220616093451.GA28995@pengutronix.de>
+References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
+        <YqS+zYHf6eHMWJlD@lunn.ch>
+        <20220613125552.GA4536@pengutronix.de>
+        <YqdQJepq3Klvr5n5@lunn.ch>
+        <20220614185221.79983e9b@kernel.org>
+        <YqlUCtJhR1Iw3o3F@lunn.ch>
+        <20220614220948.5f0b4827@kernel.org>
+        <Yqo8BuxL+XKw8U+a@lunn.ch>
+        <20220616093451.GA28995@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YoeQLxhDeIk4VSmx@chrisdown.name>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,10 +66,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just to update on v3: I planned to quickly get it out today but it turns out 
-that there's some work needed to add compatibility for John's threaded console 
-printing patches for 5.19.
+On Thu, 16 Jun 2022 11:34:51 +0200 Oleksij Rempel wrote:
+> > It is also a bit unclear, but at the moment, i think user
+> > space. However, i can see the kernel making use of maybe RF TEST to
+> > ask the link peer to go quiet in order to perform a cable test.
+> > 
+> > Oleksij, what are your use cases?  
+> 
+> Currently I was thinking only about diagnostic:
+> - request transmit pause for cable testing
+> - request remote loopback for selftest. In this case I will need to use
+>   vendor specific NextPage to request something like this.
 
-I'll add support for threaded console printing and send v3 when I'm back from 
-being away at the beginning of July. In the meantime, any further feedback on 
-the general concept is welcome. :-)
+Both of those are performed by the kernel, so perhaps we should focus
+the interface on opting into the remote fault support but have the
+kernel trigger setting and clearing the bits?

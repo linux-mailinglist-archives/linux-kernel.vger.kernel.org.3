@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F276F54EB64
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460A654EB65
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378593AbiFPUkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S1378481AbiFPUkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiFPUkK (ORCPT
+        with ESMTP id S1378124AbiFPUkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:40:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7D5DE49;
-        Thu, 16 Jun 2022 13:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655412010; x=1686948010;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3kyqj7rQYGnntBXVKFnHRuP3Q3HC8rJ+VtXx7y0r3mc=;
-  b=SlIUK2d7mfB28gMtqN/IJ+hj88Jvgj9kVBHq/h7tEI38NmGAF/2a0BIS
-   SRgYmceLYY6EdxVY8WAicJdtHuEI8yqGfDJhreV10WvLwgiplKnbVLdlo
-   6MDsELvNPSPyN4hnWE5sg4KSN63ii5rS4Yfozy297BZz1Dli/Q6u3KTqS
-   9aU80FhE+ztuQN1EUxRsl/6ndLUn6D8Z5yeoL6UTPe0AWaLLz9hUGWojE
-   kD5UnGR8VsnZuVVS6ngXqwR27QcYYT7SMGSehv0NjMX/quahiU/iAvUT+
-   7XR12WDK2k2UzEKKFkbtjgJetefzkx1KwJBenhwE/TOMuDfv9Q97ZwsG1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278143651"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278143651"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:40:09 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="641719392"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:40:09 -0700
-Date:   Thu, 16 Jun 2022 13:39:49 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] cxl/core: Add sysfs attribute get_poison for list
- retrieval
-Message-ID: <20220616203949.GB1529208@alison-desk>
-References: <cover.1655250669.git.alison.schofield@intel.com>
- <57644934bb7af8e1c692735f53c2c415a1ba16d1.1655250669.git.alison.schofield@intel.com>
- <20220616160412.00000c34@Huawei.com>
+        Thu, 16 Jun 2022 16:40:02 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48105DBE4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:40:01 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id r5so2263254pgr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JtBNgW1ARnpZB6Usfv9UpMfEN0Bux+WIpRpd7bK6hxQ=;
+        b=OSvwT9JLcNTz2PhtzapCz8T4/EZ5bjSd/8SuAYqCmqs9XM+JGPsYPVpZ0Hs6+4PIuA
+         a7bYZtU1CVgpeFZFwwMIZ7jZvcgSn8+4wedjyZZRF7y72wvf/W5QFky8iHWAP9FShTxx
+         w/B5oRXmdgzFfKAcEI9wfz/+TXI16XsDH5fnI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JtBNgW1ARnpZB6Usfv9UpMfEN0Bux+WIpRpd7bK6hxQ=;
+        b=gkT0c2qx0myUgQLR7H2rXSG5FVF2qK9Y2pNAMB/8hwdzPAkgXCDyFDwJLJLqodxpJH
+         B01EJbWCBDPr1IrWQHSKbManK3I80dt+AdzWJYrTrQ2U+W104Sp0HqO4kVwpX1ExsttO
+         YBZ+hj9PLWIKmOlMDTyn81I1Memfpjd4h0MfG+mmRUwWGfqddB4XtPPmK4gBlJFf/RE8
+         fWklmAyij+7IhztZ5lqIibQLQQB8iKfvFz1jEu2Gj6ac+Q+066OZiHpoIyGpc4Y5HZ5b
+         Ftc8FLypTYR9WWqQp7QmxJ/LdmW6CvHpaA5OoDEXB2fasPgWx9ABE5+WhdkVDHzRFqQQ
+         Y5Jg==
+X-Gm-Message-State: AJIora8ET+6hpwpnnGdy3nTYuD993mIkrfA7yrdmCZsBb08nLpZlfwDT
+        Wo8kN3ab1P2wyMKASQdTXCwNXA==
+X-Google-Smtp-Source: AGRyM1t4XwzbfHdrXzUb66ogKwmRbMD2im+YephNe2bZ85fDvw0CEazfFrh+x12rE1Kl9iAlqYEZ5w==
+X-Received: by 2002:a05:6a00:26cf:b0:4f6:fc52:7b6a with SMTP id p15-20020a056a0026cf00b004f6fc527b6amr6529975pfw.39.1655412001211;
+        Thu, 16 Jun 2022 13:40:01 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:4709:a407:1ca6:24ea])
+        by smtp.gmail.com with ESMTPSA id jc15-20020a17090325cf00b00168dadc7354sm2064393plb.78.2022.06.16.13.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 13:40:00 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 13:39:58 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Chen-Yu Tsai <wenst@chromium.org>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] arm64: dts: rk3399: i2s: switch BCLK to GPIO
+Message-ID: <YquVHsUoSbKfd2CS@google.com>
+References: <20220616155836.3401420-1-judyhsiao@chromium.org>
+ <20220616155836.3401420-3-judyhsiao@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616160412.00000c34@Huawei.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220616155836.3401420-3-judyhsiao@chromium.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,83 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 08:04:12AM -0700, Jonathan Cameron wrote:
-> On Tue, 14 Jun 2022 17:10:28 -0700
-> alison.schofield@intel.com wrote:
-> 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > The sysfs attribute, get_poison, allows user space to request the
-> > retrieval of a CXL devices poison list for its persistent memory.
-> > 
-> > From Documentation/ABI/.../sysfs-bus-cxl
-> >         (WO) When a '1' is written to this attribute the memdev
-> >         driver retrieves the poison list from the device. The list
-> >         includes addresses that are poisoned or would result in
-> >         poison if accessed, and the source of the poison. This
-> >         attribute is only visible for devices supporting the
-> >         capability. The retrieved errors are logged as kernel
-> >         trace events with the label: cxl_poison_list.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> 
-> Hi Alison,
-> 
-> I'm planning to throw together QEMU support for this and test
-> it. In meantime a few quick comments / suggestions inline.
+Hi,
 
-Thanks Jonathan.
-I've tested with a test patch that returns contrived output payloads,
-and will look fwd to trying out w qemu,
+On Thu, Jun 16, 2022 at 03:58:35PM +0000, Judy Hsiao wrote:
+> We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
+> may cause the speaker melting issue. Removing LRCLK while BCLK
+> is present can cause unexpected output behavior including a large
+> DC output voltage as described in the Max98357a datasheet.
+> 
+> In order to:
+>   1. prevent BCLK from turning on by other component.
+>   2. keep BCLK and LRCLK being present at the same time
+> 
+> This patch adjusts the device tree to allow BCLK to switch
+> to GPIO func before LRCLK output, and switch back during
+> LRCLK is output.
+> 
+> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
 
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-> > ---
-snip
-> > +
-> > +	if (!sysfs_streq(buf, "1")) {
-> 
-> Maybe kstrtobool?  If you do then fine to leave the documentation claiming
-> it's tighter as that'll tell people who actually read it to expect to
-> write a 1.
-> 
-Got it.
 
-> > +		dev_err(dev, "%s: unknown value: %s\n", attr->attr.name, buf);
-> 
-> Feels noisy when I'd expect -EINVAL to be enough info to indicate an invalid
-> parameter.
-> 
-Got it.
+> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> @@ -1662,9 +1662,10 @@ i2s0: i2s@ff880000 {
+>  		dma-names = "tx", "rx";
+>  		clock-names = "i2s_clk", "i2s_hclk";
+>  		clocks = <&cru SCLK_I2S0_8CH>, <&cru HCLK_I2S0_8CH>;
+> -		pinctrl-names = "default";
+> +		pinctrl-names = "bclk_on", "bclk_off";
+>  		pinctrl-0 = <&i2s0_8ch_bus>;
+>  		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+> +		pinctrl-1 = <&i2s0_8ch_bus_bclk_off>;
 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	rc = cxl_mem_get_poison_list(dev);
-> > +	if (rc) {
-> > +		dev_err(dev, "Failed to retrieve poison list %d\n", rc);
-> 
-> Here I'd expect the error code to returned on the write to probably be enough
-> info so not sure this error print is useful either.
-> 
-Got it.
+It seems like 'pinctrl-1' may make sense after pinctrl-0, not here.
+Perhaps you're interacting with my RFC PATCH that removes this
+'power-domains' property?
 
-> > +
-snip
-> > +	if (a == &dev_attr_get_poison.attr) {
-> > +		struct device *dev = container_of(kobj, struct device, kobj);
-> > +		struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-> > +		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> > +
-> > +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-> > +			      cxlds->enabled_cmds))
-> 			      to_cxl_memdev(dev)->enabled_cmds))
-> and drop the local variable is shorter and I don't htink it loses
-> any readability.
-> 
-Got it.
+https://lore.kernel.org/linux-rockchip/20220613183556.RFC.1.I9ca71105e505f024d53b7e0ba4462230813ebb8d@changeid/
 
-Thanks Jonathan!
+But that most likely isn't landing upstream as-is.
+
+Otherwise, this patch looks good to me:
+
+Reviewed-by: Brian Norris <briannorris@chromium.org>
+
+>  		#sound-dai-cells = <0>;
+>  		status = "disabled";
+>  	};

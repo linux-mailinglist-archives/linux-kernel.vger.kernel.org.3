@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D4D54D8B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B390654D8B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351973AbiFPC6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 22:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S1355146AbiFPC7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 22:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354969AbiFPC60 (ORCPT
+        with ESMTP id S1350287AbiFPC7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 22:58:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9268745067;
-        Wed, 15 Jun 2022 19:58:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Jun 2022 22:59:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EA1F5A151
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655348378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SyBYL1pY81YOYBd6hVWvRLbn1C7svVUvtneGDVFIWeM=;
+        b=IE3PZx/SIVepSm/nwDu3yOCCcOhajU5uYADJxPUH53yCqLfrDxPhVEP8+AvgZEOf44vTo1
+        a1pjlwcHKz5l21I9ORgbq4ehZnP6tuHbhGwrwxfbWgtTjYEvTZi/ueF2VkeZyTlVXyn0Vt
+        S5cu+Rb/6p1RlwUlrovG6d0g6FAhfws=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-e7JYHVoOPaK7Uddguyd0jw-1; Wed, 15 Jun 2022 22:59:33 -0400
+X-MC-Unique: e7JYHVoOPaK7Uddguyd0jw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E81AB8216B;
-        Thu, 16 Jun 2022 02:58:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36849C3411A;
-        Thu, 16 Jun 2022 02:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655348302;
-        bh=MYARrI0icKzl8Vl3RaBlTKSY/Yl0mbW1jC39SgVEBe4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OrFPbkGkm/zaRGKMQToihB2mlz2IPh6CBHfXFie+Q6idaKU4NP+maR9uQbxCqoRwA
-         pMslRWioJ9DsHGUE2D+a11D1GIBhNMNGE7G6QOR6j3Pni2znLz7A6BQ/sHzjTSHccB
-         NCpFYEjgeGjnnxzQW8rDPegHBS+i9CwAwqwtkNIrIRJDUsYB2FK16XsoZe4V3EQ1fq
-         Qm+KWHeyRU5VoL0gBdTUp9OlN/ddGatkfixDybUlpMKImZru95o7HQvrrgeU2EhMyo
-         6suvLs0y6wnwtq/10DxJZ54Jg5zltfIK37I2zXLRaJ2bmArJhez2sden4UInEpxcfe
-         zKuPpzb1uRN2A==
-Date:   Wed, 15 Jun 2022 19:58:20 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, allan.nielsen@microchip.com,
-        joergen.andreasen@microchip.com, horatiu.vultur@microchip.com,
-        UNGLinuxDriver@microchip.com, alexandre.belloni@bootlin.com,
-        fido_max@inbox.ru, alexandru.marginean@nxp.com,
-        claudiu.manoil@nxp.com, vladimir.oltean@nxp.com,
-        leoyang.li@nxp.com, yangbo.lu@nxp.com
-Subject: Re: [net] net: dsa: felix: update base time of time-aware shaper
- when adjusting PTP time
-Message-ID: <20220615195820.53bae850@kernel.org>
-In-Reply-To: <20220615033610.35983-1-xiaoliang.yang_1@nxp.com>
-References: <20220615033610.35983-1-xiaoliang.yang_1@nxp.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5FE9802C17;
+        Thu, 16 Jun 2022 02:59:32 +0000 (UTC)
+Received: from localhost (ovpn-12-237.pek2.redhat.com [10.72.12.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B4881410DD8;
+        Thu, 16 Jun 2022 02:59:31 +0000 (UTC)
+Date:   Thu, 16 Jun 2022 10:59:27 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jonathan McDowell <noodles@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Subject: Re: [PATCH v5] x86/kexec: Carry forward IMA measurement log on kexec
+Message-ID: <Yqqcj0/j+fC6/K5v@MiWiFi-R3L-srv>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+ <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+ <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
+ <60813f86e960d12ed3738531a14382769a061a02.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60813f86e960d12ed3738531a14382769a061a02.camel@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,28 +77,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 11:36:10 +0800 Xiaoliang Yang wrote:
-> When adjusting the PTP clock, the base time of the TAS configuration
-> will become unreliable. We need reset the TAS configuration by using a
-> new base time.
+On 06/13/22 at 05:01pm, Mimi Zohar wrote:
+> On Mon, 2022-06-13 at 10:30 +0000, Jonathan McDowell wrote:
+> > On kexec file load Integrity Measurement Architecture (IMA) subsystem
+> > may verify the IMA signature of the kernel and initramfs, and measure
+> > it. The command line parameters passed to the kernel in the kexec call
+> > may also be measured by IMA. A remote attestation service can verify
+> > a TPM quote based on the TPM event log, the IMA measurement list, and
+> > the TPM PCR data. This can be achieved only if the IMA measurement log
+> > is carried over from the current kernel to the next kernel across
+> > the kexec call.
+> > 
+> > powerpc and ARM64 both achieve this using device tree with a
+> > "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> > device tree, so use the setup_data mechanism to pass the IMA buffer to
+> > the new kernel.
+> > 
+> > (Mimi, Baoquan, I haven't included your reviewed-bys because this has
+> >  changed the compile guards around the ima_(free|get)_kexec_buffer
+> >  functions in order to fix the warning the kernel test robot found. I
+> >  think this is the right thing to do and avoids us compiling them on
+> >  platforms where they won't be used. The alternative would be to drop
+> >  the guards in ima.h that Mimi requested for v4.)hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+> > 
+> > Signed-off-by: Jonathan McDowell <noodles@fb.com>
+> > ---
+> > v5:
+> >  - Guard ima_(free|get)_kexec_buffer functions with
+> >    CONFIG_HAVE_IMA_KEXEC (kernel test robot)
+> >  - Use setup_data_offset in setup_boot_parameters and update rather than
+> >    calculating in call to setup_ima_state.
+> > v4:
+> >  - Guard ima.h function prototypes with CONFIG_HAVE_IMA_KEXEC
 > 
-> For example, if the driver gets a base time 0 of Qbv configuration from
-> user, and current time is 20000. The driver will set the TAS base time
-> to be 20000. After the PTP clock adjustment, the current time becomes
-> 10000. If the TAS base time is still 20000, it will be a future time,
-> and TAS entry list will stop running. Another example, if the current
-> time becomes to be 10000000 after PTP clock adjust, a large time offset
-> can cause the hardware to hang.
+> > diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+> > index 8d374cc552be..42a6c5721a43 100644
+> > --- a/drivers/of/kexec.c
+> > +++ b/drivers/of/kexec.c
+> > @@ -9,6 +9,7 @@
+> >   *  Copyright (C) 2016  IBM Corporation
+> >   */
+> >  
+> > +#include <linux/ima.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/kexec.h>
+> >  #include <linux/memblock.h>
+> > @@ -115,6 +116,7 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+> >  	return 0;
+> >  }
+> >  
+> > +#ifdef CONFIG_HAVE_IMA_KEXEC
+> >  /**
+> >   * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+> >   * @addr:	On successful return, set to point to the buffer contents.
+> > @@ -173,6 +175,7 @@ int ima_free_kexec_buffer(void)
+> >  
+> >  	return memblock_phys_free(addr, size);
+> >  }
+> > +#endif
 > 
-> This patch introduces a tas_clock_adjust() function to reset the TAS
-> module by using a new base time after the PTP clock adjustment. This can
-> avoid issues above.
+> Inside ima_{get,free}_kexec_buffer(), there's no need now to test
+> whether CONFIG_HAVE_IMA_KEXEC is enabled.
 > 
-> Due to PTP clock adjustment can occur at any time, it may conflict with
-> the TAS configuration. We introduce a new TAS lock to serialize the
-> access to the TAS registers.
-> 
-> Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+>         if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+>                 return -ENOTSUPP;
 
-You missed some CCs (./scripts/get_maintainer.pl) and there needs to 
-be a Fixes tag if you're targeting net.
+Indeed. The #ifdef added by Jonathan is redundant. Not sure if the
+original IS_ENABLED(CONFIG_HAVE_IMA_KEXEC) checking inside
+ima_{get,free}_kexec_buffer() is intended. I ever reviewed below patch,
+the IS_ENABLED(CONFIG_XX) inside static function will make the function
+compiled, and will be optimized out if the CONFIG_XX is not enabled.
+However, it only has effect on static function. Here,
+ima_{get,free}_kexec_buffer() is not static, likely we should remove the
+inside IS_ENABLED() checking.
+
+commit 4ece09be9913a87ff99ea347fd7e7adad5bdbc8f
+Author: Jisheng Zhang <jszhang@kernel.org>
+Date:   Wed Mar 23 16:06:39 2022 -0700
+
+    x86/setup: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+    
+    Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE" by a
+    check for "IS_ENABLED(CONFIG_KEXEC_CORE)", to simplify the code and
+    increase compile coverage.
+
+Other than this one Mimi pointed out, this patch looks good to me, thx.
+
+Reviewed-by: Baoquan He <bhe@redhat.com>
+
+> 
+> 
+> >  
+> >  /**
+> >   * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+> > diff --git a/include/linux/ima.h b/include/linux/ima.h
+> 
+> 
+

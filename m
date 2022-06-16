@@ -2,61 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7B054DAA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7766B54DAA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358256AbiFPG3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S1358932AbiFPGaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358783AbiFPG3r (ORCPT
+        with ESMTP id S1359156AbiFPG37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:29:47 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BC756B19;
-        Wed, 15 Jun 2022 23:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=COuN5Zz+YBR/xeVdeWv1MuY4NtQSVs4UMHwcz0WDnnQ=; b=26COe9EvreWGEeNT1/sD1d3kfz
-        6eiHSoJj3HJNczxIgN6ZNyHhGyF8lkqwkIOL2rgXq98uxDdUx8uC3Lu2IAjIfP6R/f0aliM5EVC6O
-        1IhASH35qFwNzseZJ4XUFc3+jdZJ4c7Xluvv7sbbyUQTCbN3yrpBR/WmIvNi7io2ncbPNVRlOnIDy
-        hqQ2OPazzRsUwaxn27aCXA9ZVEcHgflQQLkk46TasGiAi8tRAQZfnChJgkw8OGb0eXj325Mwkt6LL
-        e0wbU4YbmLMbwRPuPBtRocrTHAynRb7PqFxnUF7o6IDlLRxUJhNefflB5q17jn1tsA4Npc8hfXRTy
-        ddSAS+0w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1j0i-000jIM-EX; Thu, 16 Jun 2022 06:29:44 +0000
-Date:   Wed, 15 Jun 2022 23:29:44 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
-Message-ID: <YqrN2J6r4Z+BIN+o@infradead.org>
-References: <20220518235011.153058-1-ebiggers@kernel.org>
- <20220518235011.153058-2-ebiggers@kernel.org>
- <YobNXbYnhBiqniTH@magnolia>
- <20220520032739.GB1098723@dread.disaster.area>
- <YqgbuDbdH2OLcbC7@sol.localdomain>
- <YqnapOLvHDmX/3py@infradead.org>
- <YqpzqZQgu0Zz+vW1@sol.localdomain>
- <YqrIlVtI85zF9qyO@infradead.org>
- <YqrLdORPM5qm9PC0@sol.localdomain>
+        Thu, 16 Jun 2022 02:29:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A1556B10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:29:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2E5761A6D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284EEC3411F;
+        Thu, 16 Jun 2022 06:29:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655360997;
+        bh=NZ469P3aR2+wNptm85yXJetrNw20aY789hYp+lOYVXY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o6gK3fsaQYXmn8QOhXFWF8gu6hPfOmd+WzlsumNICIzeCZToJNtpA7UmqDOhTE9Ou
+         pWDbkb0sJURBdbUWMD72J0FajA5RCpwv0ghBb/i3BhD138EhvBjvO5b0CJk/nfqiqq
+         Vxxf69AgofpNQKr25PEj/O8sMfKI0F9EDzwpqvWE=
+Date:   Thu, 16 Jun 2022 08:29:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hans =?iso-8859-1?Q?M=FCller?= <schreibemirhalt@gmail.com>
+Cc:     arve@android.com, christian@brauner.io, hch@lst.de,
+        hridya@google.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, maco@android.com,
+        surenb@google.com, tkjos@android.com
+Subject: Re: [PATCH] staging: remove ashmem
+Message-ID: <YqrN38V/qS9ljk8+@kroah.com>
+References: <YjCTL/2ZJW8EWLHL@kroah.com>
+ <3f8d25aa-17a6-e6aa-4b6d-d3388ef35201@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YqrLdORPM5qm9PC0@sol.localdomain>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3f8d25aa-17a6-e6aa-4b6d-d3388ef35201@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,21 +55,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:19:32PM -0700, Eric Biggers wrote:
-> Yes I know that.  The issue is that the inode that statx() is operating on is
-> the device node, so *all* the other statx fields come from that inode.  Size,
-> nlink, uid, gid, mode, timestamps (including btime if the filesystem supports
-> it), inode number, device number of the containing filesystem, mount ID, etc.
-> If we were to randomly grab one field from the underlying block device instead,
-> that would be inconsistent with everything else.
+On Thu, Jun 16, 2022 at 07:27:48AM +0200, Hans Müller wrote:
+> It is not only Android itself that broke but also Anbox
+> (https://en.wikipedia.org/wiki/Anbox):
+> https://github.com/anbox/anbox/issues/2042
+> 
+> I use that regularly on my system... I know there is Waydroid and I do use
+> it sometimes but it is not a full replacement (especially since it makes the
+> whole system slower over time and spams the tty).
+> 
+> Could you consider reverting that change until the Anbox people found a way
+> which allows Anbox to not depend on ashmem anymore?
 
-At least on XFS we have a magic hardcoded st_blksize for block devices,
-but it seems like the generic doesn't do that.
+That is a "Android 7-based" system?  That's old, how are they supporting
+that anymore with the security stuff that has happened since then?
 
-But I'm really much more worried about an inconsistency where we get
-usefull information or some special files rather than where we acquire
-this information from.  So I think going to the block device inode, and
-also going to it for stx_blksize is the right thing as it actually
-makes the interface useful.  We just need a good helper that all
-getattr implementations can use to be consistent and/or override these
-fields after the call to ->getattr.
+Anyway, if this were to come back, I need a maintainer who agrees to
+maintain it and fix and support it.  Are you able to do that?  If so, I
+think it would probably be easier to fix up anbox to use memfd instead,
+is anyone doing that (I couldn't figure that out from the github
+issue...)
+
+thanks,
+
+greg k-h

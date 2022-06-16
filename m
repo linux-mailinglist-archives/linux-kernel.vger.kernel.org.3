@@ -2,151 +2,493 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345F354E939
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 20:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226BE54E94A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 20:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbiFPSU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 14:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S1377612AbiFPSZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 14:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiFPSU1 (ORCPT
+        with ESMTP id S233686AbiFPSZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 14:20:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9344FC6A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 11:20:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 065CAB82529
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 18:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253CEC34114;
-        Thu, 16 Jun 2022 18:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655403623;
-        bh=8D4UPmPWJGZms6MD3CREfq52BmU6+/z5BRR65651Wts=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=QsraUgbu9SU0YBwZZ6+jQn/BdglCIeXx3J/wTE5X92rlzaZtaXCdcqPnksQFUwwqk
-         nR3E/JqTMu5QiPX43myf+PnQgP0uXbshq4YYw4jDwK/6o30SkKIqfIIj2Mvq2rMq0M
-         L2+0mVIHciDqg5RIE5393kLTwHkheBNoCgZqfHCNHTZVRutblqQNPKGO5K4AsSklsI
-         zNTHdgC/93EJ45M/IaQmGJMCK6scVHAmm2kU3sGpfgPQ5wwJWqG/X59ETWlXe2ndnM
-         8DPG5D4wIQIQjhwJUB4CamjR3kMrr02DVWsP2JDnhAkyB+KC0ucby3huL6M8JoiQjI
-         FHBxkahj3NqQw==
-Date:   Thu, 16 Jun 2022 11:20:22 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Juergen Gross <jgross@suse.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        viresh.kumar@linaro.org, hch@infradead.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v2] xen: don't require virtio with grants for non-PV
- guests
-In-Reply-To: <20220616053715.3166-1-jgross@suse.com>
-Message-ID: <alpine.DEB.2.22.394.2206161106020.10483@ubuntu-linux-20-04-desktop>
-References: <20220616053715.3166-1-jgross@suse.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 16 Jun 2022 14:25:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3055044A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 11:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655403931; x=1686939931;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MMLRM+uN4vDM2IW962qIFRZNfliR5WiWkfUE0aH2Qww=;
+  b=d7rEyla8zAevCMuIqVL2s3T48w42i+cejKJHKRn6uIAxYbstH50F5kUq
+   r6dukIsFeNYZ6GCmv37FLfbVcfqDwFGQRhOkBtWbnBaSpb+gzj0o1p5bN
+   XZL1AWep4Jm53cBfRnJ4RYkETl50XI+54zNXoAwNqHyALwcyXC/f7IBdT
+   8as0jl3vnSw5zCnYogOKPwcO8Xvmu5uQE5ujJxAmJIaJHMoKCZnXdmsLP
+   f44ke2adZgQd1lPpLyhuucVP6zyglAqUutWk0JxDuyLSyuR3RB05mMQ6F
+   nSqaOSzbBpSebazY0YgzDJQBZbHXU7vRFp8LYSN9Uq/B41CJv02sa8rV7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280034963"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280034963"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 11:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="613259378"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2022 11:25:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 00F80109; Thu, 16 Jun 2022 21:25:33 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>
+Subject: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to crc
+Date:   Thu, 16 Jun 2022 21:25:16 +0300
+Message-Id: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Juergen Gross wrote:
-> Commit fa1f57421e0b ("xen/virtio: Enable restricted memory access using
-> Xen grant mappings") introduced a new requirement for using virtio
-> devices: the backend now needs to support the VIRTIO_F_ACCESS_PLATFORM
-> feature.
-> 
-> This is an undue requirement for non-PV guests, as those can be operated
-> with existing backends without any problem, as long as those backends
-> are running in dom0.
-> 
-> Per default allow virtio devices without grant support for non-PV
-> guests.
-> 
-> Add a new config item to always force use of grants for virtio.
-> 
-> Fixes: fa1f57421e0b ("xen/virtio: Enable restricted memory access using Xen grant mappings")
-> Reported-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
-> V2:
-> - remove command line parameter (Christoph Hellwig)
-> ---
->  drivers/xen/Kconfig | 9 +++++++++
->  include/xen/xen.h   | 2 +-
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-> index bfd5f4f706bc..a65bd92121a5 100644
-> --- a/drivers/xen/Kconfig
-> +++ b/drivers/xen/Kconfig
-> @@ -355,4 +355,13 @@ config XEN_VIRTIO
->  
->  	  If in doubt, say n.
->  
-> +config XEN_VIRTIO_FORCE_GRANT
-> +	bool "Require Xen virtio support to use grants"
-> +	depends on XEN_VIRTIO
-> +	help
-> +	  Require virtio for Xen guests to use grant mappings.
-> +	  This will avoid the need to give the backend the right to map all
-> +	  of the guest memory. This will need support on the backend side
-> +	  (e.g. qemu or kernel, depending on the virtio device types used).
-> +
->  endmenu
-> diff --git a/include/xen/xen.h b/include/xen/xen.h
-> index 0780a81e140d..4d4188f20337 100644
-> --- a/include/xen/xen.h
-> +++ b/include/xen/xen.h
-> @@ -56,7 +56,7 @@ extern u64 xen_saved_max_mem_size;
->  
->  static inline void xen_set_restricted_virtio_memory_access(void)
->  {
-> -	if (IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain())
-> +	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain())
->  		platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
->  }
+The core part is misleading since its only purpose to serve Crystal Cove PMIC,
+although for couple of different platforms. Merge core part into crc one.
 
-Hi Juergen, you might have seen my email:
-https://marc.info/?l=linux-kernel&m=165533636607801&w=2
+Advantages among others are:
+- speed up a compilation and build
+- decreasing the code base
+- reducing noise in the namespace by making some data static and const
 
-Linux is always running as HVM on ARM, so if you want to introduce
-XEN_VIRTIO_FORCE_GRANT, then XEN_VIRTIO_FORCE_GRANT should be
-automatically selected on ARM. I don't think there should be a visible
-menu option for XEN_VIRTIO_FORCE_GRANT on ARM.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/mfd/Makefile              |   3 +-
+ drivers/mfd/intel_soc_pmic_core.c | 160 -----------------------------
+ drivers/mfd/intel_soc_pmic_core.h |  25 -----
+ drivers/mfd/intel_soc_pmic_crc.c  | 162 ++++++++++++++++++++++++++++--
+ 4 files changed, 157 insertions(+), 193 deletions(-)
+ delete mode 100644 drivers/mfd/intel_soc_pmic_core.c
+ delete mode 100644 drivers/mfd/intel_soc_pmic_core.h
 
-I realize we have a conflict between HVM guests on ARM and x86:
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 858cacf659d6..61db669f864c 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -236,8 +236,7 @@ obj-$(CONFIG_MFD_RT4831)	+= rt4831.o
+ obj-$(CONFIG_MFD_RT5033)	+= rt5033.o
+ obj-$(CONFIG_MFD_SKY81452)	+= sky81452.o
+ 
+-intel-soc-pmic-objs		:= intel_soc_pmic_core.o intel_soc_pmic_crc.o
+-obj-$(CONFIG_INTEL_SOC_PMIC)	+= intel-soc-pmic.o
++obj-$(CONFIG_INTEL_SOC_PMIC)		+= intel_soc_pmic_crc.o
+ obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)	+= intel_soc_pmic_bxtwc.o
+ obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)	+= intel_soc_pmic_chtwc.o
+ obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)	+= intel_soc_pmic_chtdc_ti.o
+diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
+deleted file mode 100644
+index 5e8c94e008ed..000000000000
+--- a/drivers/mfd/intel_soc_pmic_core.c
++++ /dev/null
+@@ -1,160 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Intel SoC PMIC MFD Driver
+- *
+- * Copyright (C) 2013, 2014 Intel Corporation. All rights reserved.
+- *
+- * Author: Yang, Bin <bin.yang@intel.com>
+- * Author: Zhu, Lejun <lejun.zhu@linux.intel.com>
+- */
+-
+-#include <linux/acpi.h>
+-#include <linux/i2c.h>
+-#include <linux/interrupt.h>
+-#include <linux/module.h>
+-#include <linux/mfd/core.h>
+-#include <linux/mfd/intel_soc_pmic.h>
+-#include <linux/platform_data/x86/soc.h>
+-#include <linux/pwm.h>
+-#include <linux/regmap.h>
+-
+-#include "intel_soc_pmic_core.h"
+-
+-/* PWM consumed by the Intel GFX */
+-static struct pwm_lookup crc_pwm_lookup[] = {
+-	PWM_LOOKUP("crystal_cove_pwm", 0, "0000:00:02.0", "pwm_pmic_backlight", 0, PWM_POLARITY_NORMAL),
+-};
+-
+-static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
+-				    const struct i2c_device_id *i2c_id)
+-{
+-	struct device *dev = &i2c->dev;
+-	struct intel_soc_pmic_config *config;
+-	struct intel_soc_pmic *pmic;
+-	int ret;
+-
+-	if (soc_intel_is_byt())
+-		config = &intel_soc_pmic_config_byt_crc;
+-	else
+-		config = &intel_soc_pmic_config_cht_crc;
+-
+-	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
+-	if (!pmic)
+-		return -ENOMEM;
+-
+-	dev_set_drvdata(dev, pmic);
+-
+-	pmic->regmap = devm_regmap_init_i2c(i2c, config->regmap_config);
+-	if (IS_ERR(pmic->regmap))
+-		return PTR_ERR(pmic->regmap);
+-
+-	pmic->irq = i2c->irq;
+-
+-	ret = regmap_add_irq_chip(pmic->regmap, pmic->irq,
+-				  config->irq_flags | IRQF_ONESHOT,
+-				  0, config->irq_chip,
+-				  &pmic->irq_chip_data);
+-	if (ret)
+-		return ret;
+-
+-	ret = enable_irq_wake(pmic->irq);
+-	if (ret)
+-		dev_warn(dev, "Can't enable IRQ as wake source: %d\n", ret);
+-
+-	/* Add lookup table for crc-pwm */
+-	pwm_add_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
+-
+-	/* To distuingish this domain from the GPIO/charger's irqchip domains */
+-	irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
+-				    DOMAIN_BUS_NEXUS);
+-
+-	ret = mfd_add_devices(dev, -1, config->cell_dev,
+-			      config->n_cell_devs, NULL, 0,
+-			      regmap_irq_get_domain(pmic->irq_chip_data));
+-	if (ret)
+-		goto err_del_irq_chip;
+-
+-	return 0;
+-
+-err_del_irq_chip:
+-	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
+-	return ret;
+-}
+-
+-static int intel_soc_pmic_i2c_remove(struct i2c_client *i2c)
+-{
+-	struct intel_soc_pmic *pmic = dev_get_drvdata(&i2c->dev);
+-
+-	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
+-
+-	/* remove crc-pwm lookup table */
+-	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
+-
+-	mfd_remove_devices(&i2c->dev);
+-
+-	return 0;
+-}
+-
+-static void intel_soc_pmic_shutdown(struct i2c_client *i2c)
+-{
+-	struct intel_soc_pmic *pmic = dev_get_drvdata(&i2c->dev);
+-
+-	disable_irq(pmic->irq);
+-
+-	return;
+-}
+-
+-#if defined(CONFIG_PM_SLEEP)
+-static int intel_soc_pmic_suspend(struct device *dev)
+-{
+-	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+-
+-	disable_irq(pmic->irq);
+-
+-	return 0;
+-}
+-
+-static int intel_soc_pmic_resume(struct device *dev)
+-{
+-	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+-
+-	enable_irq(pmic->irq);
+-
+-	return 0;
+-}
+-#endif
+-
+-static SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
+-			 intel_soc_pmic_resume);
+-
+-static const struct i2c_device_id intel_soc_pmic_i2c_id[] = {
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(i2c, intel_soc_pmic_i2c_id);
+-
+-#if defined(CONFIG_ACPI)
+-static const struct acpi_device_id intel_soc_pmic_acpi_match[] = {
+-	{ "INT33FD" },
+-	{ },
+-};
+-MODULE_DEVICE_TABLE(acpi, intel_soc_pmic_acpi_match);
+-#endif
+-
+-static struct i2c_driver intel_soc_pmic_i2c_driver = {
+-	.driver = {
+-		.name = "intel_soc_pmic_i2c",
+-		.pm = &intel_soc_pmic_pm_ops,
+-		.acpi_match_table = ACPI_PTR(intel_soc_pmic_acpi_match),
+-	},
+-	.probe = intel_soc_pmic_i2c_probe,
+-	.remove = intel_soc_pmic_i2c_remove,
+-	.id_table = intel_soc_pmic_i2c_id,
+-	.shutdown = intel_soc_pmic_shutdown,
+-};
+-
+-module_i2c_driver(intel_soc_pmic_i2c_driver);
+-
+-MODULE_DESCRIPTION("I2C driver for Intel SoC PMIC");
+-MODULE_LICENSE("GPL v2");
+-MODULE_AUTHOR("Yang, Bin <bin.yang@intel.com>");
+-MODULE_AUTHOR("Zhu, Lejun <lejun.zhu@linux.intel.com>");
+diff --git a/drivers/mfd/intel_soc_pmic_core.h b/drivers/mfd/intel_soc_pmic_core.h
+deleted file mode 100644
+index d490685845eb..000000000000
+--- a/drivers/mfd/intel_soc_pmic_core.h
++++ /dev/null
+@@ -1,25 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Intel SoC PMIC MFD Driver
+- *
+- * Copyright (C) 2012-2014 Intel Corporation. All rights reserved.
+- *
+- * Author: Yang, Bin <bin.yang@intel.com>
+- * Author: Zhu, Lejun <lejun.zhu@linux.intel.com>
+- */
+-
+-#ifndef __INTEL_SOC_PMIC_CORE_H__
+-#define __INTEL_SOC_PMIC_CORE_H__
+-
+-struct intel_soc_pmic_config {
+-	unsigned long irq_flags;
+-	struct mfd_cell *cell_dev;
+-	int n_cell_devs;
+-	const struct regmap_config *regmap_config;
+-	const struct regmap_irq_chip *irq_chip;
+-};
+-
+-extern struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc;
+-extern struct intel_soc_pmic_config intel_soc_pmic_config_cht_crc;
+-
+-#endif	/* __INTEL_SOC_PMIC_CORE_H__ */
+diff --git a/drivers/mfd/intel_soc_pmic_crc.c b/drivers/mfd/intel_soc_pmic_crc.c
+index 5bb0367bd974..b5974dfcc603 100644
+--- a/drivers/mfd/intel_soc_pmic_crc.c
++++ b/drivers/mfd/intel_soc_pmic_crc.c
+@@ -2,18 +2,21 @@
+ /*
+  * Device access for Crystal Cove PMIC
+  *
+- * Copyright (C) 2013, 2014 Intel Corporation. All rights reserved.
++ * Copyright (C) 2012-2014 Intel Corporation. All rights reserved.
+  *
+  * Author: Yang, Bin <bin.yang@intel.com>
+  * Author: Zhu, Lejun <lejun.zhu@linux.intel.com>
+  */
+ 
++#include <linux/acpi.h>
++#include <linux/i2c.h>
+ #include <linux/interrupt.h>
+-#include <linux/regmap.h>
++#include <linux/module.h>
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/intel_soc_pmic.h>
+-
+-#include "intel_soc_pmic_core.h"
++#include <linux/platform_data/x86/soc.h>
++#include <linux/pwm.h>
++#include <linux/regmap.h>
+ 
+ #define CRYSTAL_COVE_MAX_REGISTER	0xC6
+ 
+@@ -132,7 +135,20 @@ static const struct regmap_irq_chip crystal_cove_irq_chip = {
+ 	.mask_base = CRYSTAL_COVE_REG_MIRQLVL1,
+ };
+ 
+-struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc = {
++/* PWM consumed by the Intel GFX */
++static struct pwm_lookup crc_pwm_lookup[] = {
++	PWM_LOOKUP("crystal_cove_pwm", 0, "0000:00:02.0", "pwm_pmic_backlight", 0, PWM_POLARITY_NORMAL),
++};
++
++struct intel_soc_pmic_config {
++	unsigned long irq_flags;
++	struct mfd_cell *cell_dev;
++	int n_cell_devs;
++	const struct regmap_config *regmap_config;
++	const struct regmap_irq_chip *irq_chip;
++};
++
++static const struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc = {
+ 	.irq_flags = IRQF_TRIGGER_RISING,
+ 	.cell_dev = crystal_cove_byt_dev,
+ 	.n_cell_devs = ARRAY_SIZE(crystal_cove_byt_dev),
+@@ -140,10 +156,144 @@ struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc = {
+ 	.irq_chip = &crystal_cove_irq_chip,
+ };
+ 
+-struct intel_soc_pmic_config intel_soc_pmic_config_cht_crc = {
++static const struct intel_soc_pmic_config intel_soc_pmic_config_cht_crc = {
+ 	.irq_flags = IRQF_TRIGGER_RISING,
+ 	.cell_dev = crystal_cove_cht_dev,
+ 	.n_cell_devs = ARRAY_SIZE(crystal_cove_cht_dev),
+ 	.regmap_config = &crystal_cove_regmap_config,
+ 	.irq_chip = &crystal_cove_irq_chip,
+ };
++
++static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
++				    const struct i2c_device_id *i2c_id)
++{
++	const struct intel_soc_pmic_config *config;
++	struct device *dev = &i2c->dev;
++	struct intel_soc_pmic *pmic;
++	int ret;
++
++	if (soc_intel_is_byt())
++		config = &intel_soc_pmic_config_byt_crc;
++	else
++		config = &intel_soc_pmic_config_cht_crc;
++
++	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
++	if (!pmic)
++		return -ENOMEM;
++
++	dev_set_drvdata(dev, pmic);
++
++	pmic->regmap = devm_regmap_init_i2c(i2c, config->regmap_config);
++	if (IS_ERR(pmic->regmap))
++		return PTR_ERR(pmic->regmap);
++
++	pmic->irq = i2c->irq;
++
++	ret = regmap_add_irq_chip(pmic->regmap, pmic->irq,
++				  config->irq_flags | IRQF_ONESHOT,
++				  0, config->irq_chip,
++				  &pmic->irq_chip_data);
++	if (ret)
++		return ret;
++
++	ret = enable_irq_wake(pmic->irq);
++	if (ret)
++		dev_warn(dev, "Can't enable IRQ as wake source: %d\n", ret);
++
++	/* Add lookup table for crc-pwm */
++	pwm_add_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
++
++	/* To distuingish this domain from the GPIO/charger's irqchip domains */
++	irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
++				    DOMAIN_BUS_NEXUS);
++
++	ret = mfd_add_devices(dev, -1, config->cell_dev,
++			      config->n_cell_devs, NULL, 0,
++			      regmap_irq_get_domain(pmic->irq_chip_data));
++	if (ret)
++		goto err_del_irq_chip;
++
++	return 0;
++
++err_del_irq_chip:
++	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
++	return ret;
++}
++
++static int intel_soc_pmic_i2c_remove(struct i2c_client *i2c)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(&i2c->dev);
++
++	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
++
++	/* remove crc-pwm lookup table */
++	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
++
++	mfd_remove_devices(&i2c->dev);
++
++	return 0;
++}
++
++static void intel_soc_pmic_shutdown(struct i2c_client *i2c)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(&i2c->dev);
++
++	disable_irq(pmic->irq);
++
++	return;
++}
++
++#if defined(CONFIG_PM_SLEEP)
++static int intel_soc_pmic_suspend(struct device *dev)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
++
++	disable_irq(pmic->irq);
++
++	return 0;
++}
++
++static int intel_soc_pmic_resume(struct device *dev)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
++
++	enable_irq(pmic->irq);
++
++	return 0;
++}
++#endif
++
++static SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
++			 intel_soc_pmic_resume);
++
++static const struct i2c_device_id intel_soc_pmic_i2c_id[] = {
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, intel_soc_pmic_i2c_id);
++
++#if defined(CONFIG_ACPI)
++static const struct acpi_device_id intel_soc_pmic_acpi_match[] = {
++	{ "INT33FD" },
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, intel_soc_pmic_acpi_match);
++#endif
++
++static struct i2c_driver intel_soc_pmic_i2c_driver = {
++	.driver = {
++		.name = "intel_soc_pmic_i2c",
++		.pm = &intel_soc_pmic_pm_ops,
++		.acpi_match_table = ACPI_PTR(intel_soc_pmic_acpi_match),
++	},
++	.probe = intel_soc_pmic_i2c_probe,
++	.remove = intel_soc_pmic_i2c_remove,
++	.id_table = intel_soc_pmic_i2c_id,
++	.shutdown = intel_soc_pmic_shutdown,
++};
++
++module_i2c_driver(intel_soc_pmic_i2c_driver);
++
++MODULE_DESCRIPTION("I2C driver for Intel SoC PMIC");
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Yang, Bin <bin.yang@intel.com>");
++MODULE_AUTHOR("Zhu, Lejun <lejun.zhu@linux.intel.com>");
+-- 
+2.35.1
 
-- on ARM, PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS should be enabled when
-  "xen,grant-dma" is present
-- on x86, due to the lack of "xen,grant-dma", it should be off by
-  default and based on a kconfig or command line option
-
-To be honest, like Christoph suggested, I think even on x86 there should
-be a firmware table to trigger setting
-PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS. We have 2 Xen-specific ACPI
-tables, and we could have 1 more to define this. Or an HVM param or
-a feature flag?
-
-I think that would be the cleanest way to do this, but it is a lot of
-more work compared to adding a couple of lines of code to Linux, so this
-is why I suggested:
-https://marc.info/?l=linux-kernel&m=165533636607801&w=2
-
-ARM uses "xen,grant-dma" to detect whether
-PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS needs setting.
-
-One day x86 could check an ACPI property or HVM param or feature flag.
-None of them are available now, so for now use a command line option as
-a workaround. It is totally fine to use an x86-only kconfig option
-instead of a command line option.
-
-Would you be OK with that?

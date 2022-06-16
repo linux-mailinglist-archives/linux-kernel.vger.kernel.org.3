@@ -2,134 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6240D54DE5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F406754DE60
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359413AbiFPJqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 05:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S1359463AbiFPJrM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Jun 2022 05:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiFPJqp (ORCPT
+        with ESMTP id S231479AbiFPJrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 05:46:45 -0400
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2897A5A151
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:46:43 -0700 (PDT)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 95CE910047FA7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:46:43 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 1m5KoetWvNVEz1m5LoHigu; Thu, 16 Jun 2022 09:46:43 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=I5+g+Psg c=1 sm=1 tr=0 ts=62aafc03
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=JPEYwPQDsx4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=mVZf0fXdk7trcMvNlOsA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WLgbi3u8pNg7vhNOmwuDvv3Xld8l+MmAnMfEqYEXpUQ=; b=JvgRnxXXzW1sMEwuw/D4LGYsAk
-        QNT22VMxFkSQzmSiVse3sfLcdxoV55A8G6Ge2gPq6wDDY6YzAy6TANdL8wFxjc80sUU3Ns3nCfbb6
-        kEHO2Pnx+o+epC8F+5ShHqiYzovXX7phKn1LmSC/Y1ynkpHe95j60i2XKd9p4nyFisqqGM+SsyLMF
-        P4n9Mlc+D2H1eHFCDCn8dduGeg4Tik33B6/j9GVn82rQyy+lZU6A19FNvrwv3Ff0sBEmcKfJgGZGO
-        s1sbOwFKHCgpgoYPjHzHNBjbZ4V0gmmVxeXsNYFIb53YGFzhAEWYldkHJ7ra8HV2kNHOqfXnJZxSX
-        /D6pPvkA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:44504 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1o1m5J-0000VG-Pi;
-        Thu, 16 Jun 2022 03:46:41 -0600
-Subject: Re: [PATCH 5.10 00/11] 5.10.123-rc1 review
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220614183719.878453780@linuxfoundation.org>
- <9e43b35e-31da-7e51-006c-1aa69acb10d4@nvidia.com>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <9e43b35e-31da-7e51-006c-1aa69acb10d4@nvidia.com>
-Message-ID: <a05678bb-29f8-23ea-9260-cc1cece3f480@w6rz.net>
-Date:   Thu, 16 Jun 2022 02:46:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 16 Jun 2022 05:47:08 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9295A2C8;
+        Thu, 16 Jun 2022 02:47:03 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o1m5O-0004rx-Ut; Thu, 16 Jun 2022 11:46:46 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Christoph Hellwig <hch@lst.de>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, wefu@redhat.com, guoren@kernel.org,
+        cmuellner@linux.com, philipp.tomsich@vrull.eu, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, Atish Patra <atish.patra@wdc.com>
+Subject: Re: [PATCH 2/3] riscv: Implement Zicbom-based cache management operations
+Date:   Thu, 16 Jun 2022 11:46:45 +0200
+Message-ID: <1752040.TLkxdtWsSY@diego>
+In-Reply-To: <20220615174910.GA26607@lst.de>
+References: <20220610004308.1903626-1-heiko@sntech.de> <110361853.nniJfEyVGO@diego> <20220615174910.GA26607@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1o1m5J-0000VG-Pi
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:44504
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 3
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/22 1:48 AM, Jon Hunter wrote:
->
-> On 14/06/2022 19:40, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 5.10.123 release.
->> There are 11 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.123-rc1.gz 
->>
->> or in the git tree and branch at:
->>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git 
->> linux-5.10.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
->
-> No new regressions for Tegra. I am seeing the following kernel warning 
-> that is causing a boot test to fail, but this has been happening for a 
-> few releases now (I would have reported it earlier but we have been 
-> having some infrastructure issues) ...
->
->  WARNING KERN urandom_read_iter: 82 callbacks suppressed
->
-> This appears to be introduced by commit "random: convert to using 
-> fops->read_iter()" [0]. Interestingly, I am not seeing this in the 
-> mainline as far as I can tell and so I am not sure if there is 
-> something else that is missing?
->
-I'm also seeing this on RISC-V. 5.15 and 5.17, but not 5.18.
+Hi,
+
+Am Mittwoch, 15. Juni 2022, 19:49:10 CEST schrieb Christoph Hellwig:
+> On Wed, Jun 15, 2022 at 06:56:40PM +0200, Heiko St�bner wrote:
+> > If I'm reading things correctly [0], the default for those functions
+> > is for those to be empty - but defined in the coherent case.
+> 
+> That's not the point.
+> 
+> Zicbom is just an extension that allows the CPU to support managing
+> cache state.  Non-coherent DMA is just one of the use cases there
+> are others like persistent memory.  And when a CPU core supports
+> Zicbom it might or might not have any non-coherent periphals.  Or
+> even some coherent and some non-coherent ones, something that
+> is pretty common in arm/arm64 CPUs, where PCIe is usually cache
+> coherent, but some other cheap periphals might not be.
+> 
+> That is why Linux ports require the plaform (usually through
+> DT or ACPI) to mark which devices are coherent and which ones
+> are not.
+
+I "get" it now I think. I was somewhat struggling what you were aiming
+at, but that was something of not seeing "the forest for the trees" on
+my part. And of course you were right in recognizing that issue :-) .
+
+Without CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE and friends
+dev_is_dma_coherent() will always return true otherwise the dma_coherent
+attribute. Hence the "coherent" value for every system not managing things
+will suddenly show as non-coherent where it showed as coherent before.
+
+
+As we already have detection-points for non-coherent systems (zicbom
+detection, t-head errata detection) I guess just also switching some boolean
+might solve that, so that arch_setup_dma_ops() will set the dma_coherent
+attribute to true always except when some non-coherent system is detected.
+
+
+void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+                const struct iommu_ops *iommu, bool coherent)
+{
+        /* only track coherent attributes, if cache-management is available */
+        if (enable_noncoherency)
+                dev->dma_coherent = coherent;
+        else
+                dev->dma_coherent = true;
+}
+
+
+Heiko
+
 

@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE5754DA1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0314354DA5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358851AbiFPGAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S1359024AbiFPGN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFPGAj (ORCPT
+        with ESMTP id S1358989AbiFPGNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:00:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A234A1CB12;
-        Wed, 15 Jun 2022 23:00:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02EB461947;
-        Thu, 16 Jun 2022 06:00:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AEB8C34114;
-        Thu, 16 Jun 2022 06:00:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655359237;
-        bh=NNnILUBInXhE03zKMmprxCx+9V9Y5yxU7wfeUteCX0k=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=sChJCXGScaKUfNyG807me1PLVDKKuLPNI0xji9h2rVvkokzayL8rbsefMmSCKdXu2
-         sKU0djUcd3ulPlzhSCScAXapZjFBDCnDZVpZV2CypISFMGxdgC0OmVLDfi7rpTq+me
-         nrUPHXf3S5szbYWvEfW8JXeKduhg+fsz6SBQbCJX6t1fqpWAIMBYbBJzuqaMd6jcIK
-         +R9Fs5X95pCneWrpWy5Ma3/n7vAjjzqGi/F5V1+NqxpgY6DCugkQWvlE1Rt4jBekro
-         MzlhrCRYMUKg88FUlKyyAVBv7HeG6q0u+JFKlDSLPAIgOw9sxRLh+XFfT1x6S1rrn4
-         m2ZdaDTBhHsaw==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Jun 2022 02:13:54 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D057533883
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:13:50 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id KCD00144;
+        Thu, 16 Jun 2022 14:13:44 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201601.home.langchao.com (10.100.2.1) with Microsoft SMTP Server id
+ 15.1.2308.27; Thu, 16 Jun 2022 14:13:45 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <johan@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] gnss: Remove usage of the deprecated ida_simple_xxx API
+Date:   Thu, 16 Jun 2022 00:47:33 -0400
+Message-ID: <20220616044733.3605-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220616033622.3975621-1-windhl@126.com>
-References: <20220616033622.3975621-1-windhl@126.com>
-Subject: Re: [PATCH v2] clk: tegra: (clk-tegra30) Add missing of_node_put()
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, windhl@126.com
-To:     Liang He <windhl@126.com>, jonathanh@nvidia.com,
-        mturquette@baylibre.com, pdeschrijver@nvidia.com,
-        pgaikwad@nvidia.com, thierry.reding@gmail.com
-Date:   Wed, 15 Jun 2022 23:00:35 -0700
-User-Agent: alot/0.10
-Message-Id: <20220616060037.5AEB8C34114@smtp.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   20226161413449a8fcf6a1089cae2fb28a060a6c8d695
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The subject should match historical subjects
+Use ida_alloc_xxx()/ida_free() instead of
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
 
- $ git log --oneline -3 -- drivers/clk/tegra/clk-tegra30.c
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ drivers/gnss/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-shows mostly "clk: tegra: ". Can you also combine this with the other
-tegra patch? Don't think we need two patches for essentially the same
-thing.
+diff --git a/drivers/gnss/core.c b/drivers/gnss/core.c
+index e6f94501cb28..1e82b7967570 100644
+--- a/drivers/gnss/core.c
++++ b/drivers/gnss/core.c
+@@ -217,7 +217,7 @@ static void gnss_device_release(struct device *dev)
+ 
+ 	kfree(gdev->write_buf);
+ 	kfifo_free(&gdev->read_fifo);
+-	ida_simple_remove(&gnss_minors, gdev->id);
++	ida_free(&gnss_minors, gdev->id);
+ 	kfree(gdev);
+ }
+ 
+@@ -232,7 +232,7 @@ struct gnss_device *gnss_allocate_device(struct device *parent)
+ 	if (!gdev)
+ 		return NULL;
+ 
+-	id = ida_simple_get(&gnss_minors, 0, GNSS_MINORS, GFP_KERNEL);
++	id = ida_alloc_max(&gnss_minors, GNSS_MINORS - 1, GFP_KERNEL);
+ 	if (id < 0) {
+ 		kfree(gdev);
+ 		return NULL;
+-- 
+2.27.0
 
-Quoting Liang He (2022-06-15 20:36:22)
-> In tegra30_clock_init, of_find_matching_node() will return a node
-> pointer with refcount incremented. We should use of_node_put() when
-> the node pointer is not used anymore.
->=20
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  changelog:
->=20
->  v2: use real name for Sob
-
-Thanks!
-
->  v1: fix missing bug

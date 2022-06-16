@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133AB54EB01
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063F554EB05
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378530AbiFPUY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S1378540AbiFPUZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378368AbiFPUY1 (ORCPT
+        with ESMTP id S1378359AbiFPUZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:24:27 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B572D5B895;
-        Thu, 16 Jun 2022 13:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655411066; x=1686947066;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=u7s3vzw8pok7nOqE3kB+YqdXs3ysm3lKy+WAyqtMJpg=;
-  b=Hq0qUsiPn71fY6AmoCFoEq+ssV/SmquTT/k6SZ96l+La1t344v9feHf0
-   qYoNTRSNj0WZVrCLxDGy+iHJFS0lz3dX3+QNu57VefMLmp6wSYVAJRMci
-   TWG3RUjYoVDA/WFsgsisGJxS0FQ+UlbD/ZZBZ3XOX3KJLuguR1+lj67ea
-   0BLr4tBzHP9YoRgSRpq+UbrMCaA1mPZhnZhhMYkL43Pw3xA67EgdBCDik
-   nY0/Kd58ogptcS6Bd3/BiFqtOh1/8M82s/XWix0RUYzMttVnkswMG5i9H
-   H1XcYNM7Lft+2fQkCbO3xgHiGGtZfht7jkNrdalqGruXzav3IkLRgHAl7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278140500"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278140500"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:24:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="641715046"
-Received: from rrmiller-mobl.amr.corp.intel.com (HELO [10.212.205.54]) ([10.212.205.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:24:25 -0700
-Message-ID: <9f1d9f74-e6fd-c6cc-4999-61eccadc7bf2@intel.com>
-Date:   Thu, 16 Jun 2022 13:24:26 -0700
+        Thu, 16 Jun 2022 16:25:22 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85165B895;
+        Thu, 16 Jun 2022 13:25:20 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z7so3658447edm.13;
+        Thu, 16 Jun 2022 13:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AcjgtAok98U2SdMAJ0Kw//o2AG36vAJD03liJbGmfKA=;
+        b=QmCRISHCtLT+nw3UyvqMWIcz2JHpZRJ3D/RM3RoaQUco5QZdlnmA6O44Y4WVp8YSWs
+         yoHUczvN/fqgBGNgXJQEUtGy95ns7Fu6s1kSfrF9F7zUoGf4l6EonDRTo8TIvRO/T9GM
+         9NgleDUsZiDfY5O4grl6ShE0f9roHAPrIg4HW2S4Nnq6NSyaNoLWbnFxhiz949wGw2iS
+         kJA4EcIAwVU9R1/GLXGN1Qj4Q5uBMUJ44WhV06KKSICX3GxrpLY6KEGF5XpuDEpopsAu
+         SAwZmkBveS9R8OE2GX5hPiM7RK587tFIMSaal5EUQ7CQOLOsOSJmYLuxKx4o6VMHNqNK
+         U6VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AcjgtAok98U2SdMAJ0Kw//o2AG36vAJD03liJbGmfKA=;
+        b=rGEFqUQodDZYJibvuv+n1Vm29CfpkCFVplO6cLSDgyUFlHsy4F4WG7BK2EkuiURuwN
+         akDf9Kj0zEBG9eyuxO0K8xNvvd/47ghT5JZhILGWme5CuDF7sRiQHqG7Ay7AJWuSdVE4
+         5XfP6VeQMSl2v19h56w4ch03njRfIamPURR8cpHNVlbO69fWEgNMutEhehQ2wDq1IRWU
+         zeZoFcmO21IVM7qrjmQoPNtnWydCCrqcTXTMAWGzdhdOGgLrRjKYeyzH/oZMmpdmwL9T
+         lkVbZ28KOtgvI+P8VKFDFlYV99pyrgdr06k7lqO8GEAKniTiK+SQO+OcYuuhOlTOhs/T
+         Kk5g==
+X-Gm-Message-State: AJIora/EVhBA+cqWNAEn0Gigy3Xe1C1WkFTujkGqsOcOgmArz7x5KtVR
+        qWbRJ+gNN4zhQOZgbkTUD5fhpkf3yQ/6NQ==
+X-Google-Smtp-Source: AGRyM1va8bmngwqVTSbwaYJ/gAA2ee63zz6lO5d5tNZrnNA6y3P7Nr9g2uZFj4UdnOWIR3Jiv9JYjA==
+X-Received: by 2002:a05:6402:60d:b0:42f:ac38:af75 with SMTP id n13-20020a056402060d00b0042fac38af75mr8463062edv.203.1655411119232;
+        Thu, 16 Jun 2022 13:25:19 -0700 (PDT)
+Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170906329500b006fe8a4ec62fsm1186760ejw.4.2022.06.16.13.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 13:25:18 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        benjamin.gaignard@collabora.com, nicolas.dufresne@collabora.com,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH v2 0/7] media: hantro: Add 10-bit support
+Date:   Thu, 16 Jun 2022 22:25:06 +0200
+Message-Id: <20220616202513.351039-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 3/6] testing/pkeys: Add additional test for
- pkey_alloc()
-Content-Language: en-US
-To:     Sohil Mehta <sohil.mehta@intel.com>, ira.weiny@intel.com,
-        linux-api@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20220610233533.3649584-1-ira.weiny@intel.com>
- <20220610233533.3649584-4-ira.weiny@intel.com>
- <b4f8ca28-f24a-d619-3682-d92fb35db56d@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <b4f8ca28-f24a-d619-3682-d92fb35db56d@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,10 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/22 12:25, Sohil Mehta wrote:
-> Should we have different return error codes when compile support is 
-> disabled vs when runtime support is missing?
+This series adds support for 10-bit format handling in Hantro driver.
+Most patches adjust postproc behaviour to be more universal. There is
+a lot of assumptions, which need to be replaced with more generalized.
 
-It doesn't *really* matter.  Programs have to be able to run on old
-kernels which will return ENOSYS.  So, _when_ new kernels return ENOSYS
-or ENOSPC is pretty immaterial.
+Tested on Allwinner H6. Tested with vp92-2-20-10bit-yuv420.webm sample,
+which produces correct checksum.
+
+Please take a look.
+
+Best regards,
+Jernej
+
+Changes from RFC:
+- fixed typo in function name
+- removed merged patch (P010 format)
+- removed broken patch (sunxi frequency change)
+- added new patch (media: hantro: postproc: Properly calculate chroma offset)
+- added r-b from Ezequiel
+
+Ezequiel Garcia (1):
+  media: Add P010 tiled format
+
+Jernej Skrabec (6):
+  media: hantro: Support format filtering by depth
+  media: hantro: postproc: Fix buffer size calculation
+  media: hantro: postproc: Fix legacy regs configuration
+  media: hantro: postproc: Properly calculate chroma offset
+  media: hantro: Store VP9 bit depth in context
+  media: hantro: sunxi: Enable 10-bit decoding
+
+ drivers/media/v4l2-core/v4l2-common.c         |  1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+ drivers/staging/media/hantro/hantro.h         |  4 ++
+ drivers/staging/media/hantro/hantro_drv.c     | 23 +++++++++
+ .../staging/media/hantro/hantro_g2_vp9_dec.c  |  8 ---
+ .../staging/media/hantro/hantro_postproc.c    | 38 +++++++++++---
+ drivers/staging/media/hantro/hantro_v4l2.c    | 50 +++++++++++++++++--
+ drivers/staging/media/hantro/hantro_v4l2.h    |  3 ++
+ drivers/staging/media/hantro/sunxi_vpu_hw.c   | 27 ++++++++++
+ include/uapi/linux/videodev2.h                |  1 +
+ 10 files changed, 136 insertions(+), 20 deletions(-)
+
+-- 
+2.36.1
+

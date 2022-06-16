@@ -2,135 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FC454DAF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2EE54DAE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358992AbiFPGr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S1359069AbiFPGk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiFPGrZ (ORCPT
+        with ESMTP id S1359228AbiFPGkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:47:25 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDA45AEC0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:47:20 -0700 (PDT)
-X-UUID: 72cfa3363cb6482f891f5acbba363967-20220616
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:f54830ad-cf65-4c36-b30c-35111088470e,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:b14ad71,CLOUDID:378ab548-4c92-421c-ad91-b806c0f58b2a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 72cfa3363cb6482f891f5acbba363967-20220616
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 262145049; Thu, 16 Jun 2022 14:47:14 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 16 Jun 2022 14:47:13 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Thu, 16 Jun 2022 14:47:13 +0800
-From:   <yf.wang@mediatek.com>
-To:     <robin.murphy@arm.com>
-CC:     <Libo.Kang@mediatek.com>, <iommu@lists.linux-foundation.org>,
-        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>, <ning.li@mediatek.com>,
-        <will@kernel.org>, <wsd_upstream@mediatek.com>,
-        <yf.wang@mediatek.com>, <yong.wu@mediatek.com>
-Subject: Re: [PATCH v9 2/3] iommu/mediatek: Rename MTK_IOMMU_TLB_ADDR to MTK_IOMMU_ADDR
-Date:   Thu, 16 Jun 2022 14:40:24 +0800
-Message-ID: <20220616064024.10683-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <949c22c4-5f64-47cf-673c-14fcadcc1d27@arm.com>
-References: <949c22c4-5f64-47cf-673c-14fcadcc1d27@arm.com>
+        Thu, 16 Jun 2022 02:40:45 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E6F580E9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:40:39 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id AFA5C3200B29;
+        Thu, 16 Jun 2022 02:40:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 16 Jun 2022 02:40:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1655361637; x=1655448037; bh=zm
+        ZeppPZ05wI/evFnRfJ039u6Qr5P+abvVXy/2awP+c=; b=GFay1IcafnQ4DMeWxc
+        MzZ9RRX+pVxfMUiKQxg4Z0FcxFSJcbMjzG0tQKde4XlKB3bLxtW9Sw/4htLDu7TC
+        o3lrdvDqC/9ZF/lxom7+wnxpLvUR3eMB9zmZlFpqSbvi1byuxZX2nHZTri3ZYKHT
+        JF7FY90LAgBx4fV5G2r7XlrG54wpbU/NWl8u/Ejy9WCKNk11m6KCjyhusxqBbeyI
+        nnOn0LoJSPTaaU9Ubp/F3iHO4ug2gm3Fed/T10PoEOI01h798mE6rHegTiXhatve
+        9z9Orbg77qagT1UbL57I1rfjU5NacDqsTgyvIP1d5kFqNjSsu+3dyjagJzR4RsLp
+        F09Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1655361637; x=1655448037; bh=zmZeppPZ05wI/
+        evFnRfJ039u6Qr5P+abvVXy/2awP+c=; b=n1m1QpN+hpl1bdOl4OUaYK/103A7P
+        Twup2+9q8fRn5Ye8KgKlGuTcFHU2rw83jveJC0+WviqoMkQB3wO12zHOKE6SQiUJ
+        4Xfj/M/NC6w/thVE/1b0i5Hc+95B7dUozvVROm2yIFk+NoLJjGPCy1ScGwmdCqBJ
+        0MSpJ+qV7Kj4MjH/IvYarVWNpA9wGL1UujPhuintHZbkm1eJOifooHMCNNKzasMP
+        hxWICQLeYaWcxiANa3bZfCOHaOZAvKV67+tiZIeRUt8GjQhkddzTjRow7VXBMKfE
+        7yr2ZNBFwLWuVBCQFnyfbCzCjmmt26UcLN1i3VnAqAHdU+683F3RGd5mA==
+X-ME-Sender: <xms:ZNCqYgAChbAsQNhN6o2xke4d0Pix18PaxLNiPboAHW7H6FEzv_Nq6Q>
+    <xme:ZNCqYij2Y8gySxJ6c9YnvC3dAChvvr905vTxAnoHUEhEfgOdvhJCsu4GlQmOTqNy7
+    Yh4DlTynNQtpV0rGw>
+X-ME-Received: <xmr:ZNCqYjkX-LUXELfIGO5KxYX4AUaCFjFBTCJxFPOReL-J6TwiF8vFZ11aQtW7NMV3opmrietIjUdYmvMZvcTWf_nnXSDcM9yPa4sjSTB2yAiFw-4EYTz1tZBG7VF27vP3CjlnXQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvvddguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
+    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:ZNCqYmyF7nr-ZxSp4n58cp3zs9egIPQJFr-3ykxAmgO7kjs064lEPQ>
+    <xmx:ZNCqYlSbQYeYVs6kJG6Yt_SHwlSTbV1tlQWeLqbgdx30Ky9vET-vfw>
+    <xmx:ZNCqYhY30xKOJTTKF3uD2vax0OyN6gILUdENz1OmNSfQPr0uAJwoOA>
+    <xmx:ZdCqYkILVPB3zhy6IBPtY3cBpW2Xxzxi2QniRFIJoYWoo2azRuMgfg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Jun 2022 02:40:36 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Guo Ren <guoren@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v2 2/6] genirq: GENERIC_IRQ_IPI depends on SMP
+Date:   Thu, 16 Jun 2022 01:40:24 -0500
+Message-Id: <20220616064028.57933-3-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220616064028.57933-1-samuel@sholland.org>
+References: <20220616064028.57933-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-15 at 18:14 +0100, Robin Murphy wrote:
-> On 2022-06-15 17:12, yf.wang--- via iommu wrote:
-> > From: Yunfei Wang <yf.wang@mediatek.com>
-> > 
-> > Rename MTK_IOMMU_TLB_ADDR to MTK_IOMMU_ADDR, and update
-> > MTK_IOMMU_ADDR
-> > definition for better generality.
-> > 
-> > Signed-off-by: Ning Li <ning.li@mediatek.com>
-> > Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> > ---
-> >   drivers/iommu/mtk_iommu.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> > index bb9dd92c9898..3d62399e8865 100644
-> > --- a/drivers/iommu/mtk_iommu.c
-> > +++ b/drivers/iommu/mtk_iommu.c
-> > @@ -265,8 +265,8 @@ static const struct iommu_ops mtk_iommu_ops;
-> >   
-> >   static int mtk_iommu_hw_init(const struct mtk_iommu_data *data,
-> > unsigned int bankid);
-> >   
-> > -#define MTK_IOMMU_TLB_ADDR(iova) ({				
-> > 	\
-> > -	dma_addr_t _addr = iova;					\
-> > +#define MTK_IOMMU_ADDR(addr) ({					
-> > 	\
-> > +	unsigned long long _addr = addr;				\
-> 
-> If phys_addr_t is 64-bit, then dma_addr_t is also 64-bit, so there is
-> no 
-> loss of generality from using an appropriate type - IOVAs have to
-> fit 
-> into dma_addr_t for iommu-dma, after all. However, since IOVAs also
-> have 
-> to fit into unsigned long in the general IOMMU API, as "addr" is
-> here, 
-> then this is still just as broken for 32-bit LPAE as the existing
-> code is.
-> 
-> Thanks,
-> Robin.
-> 
+The generic IPI code depends on the affinity mask being set for IPI
+IRQs. The affinity mask will not be allocated if SMP is disabled.
 
-Hi Robin,
-According to Path#1's suggestion, next version will keep ttbr to encoded 32 bits,
-then will don't need to modify it.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-Thanks,
-Yunfei.
+Changes in v2:
+ - New patch to prevent GENERIC_IRQ_IPI from being selected on !SMP
 
+ drivers/irqchip/Kconfig | 4 ++--
+ kernel/irq/Kconfig      | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-> >   	((lower_32_bits(_addr) & GENMASK(31, 12)) |
-> > upper_32_bits(_addr));\
-> >   })
-> >   
-> > @@ -381,8 +381,8 @@ static void
-> > mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
-> >   		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-> >   			       base + data->plat_data->inv_sel_reg);
-> >   
-> > -		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova), base +
-> > REG_MMU_INVLD_START_A);
-> > -		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova + size - 1),
-> > +		writel_relaxed(MTK_IOMMU_ADDR(iova), base +
-> > REG_MMU_INVLD_START_A);
-> > +		writel_relaxed(MTK_IOMMU_ADDR(iova + size - 1),
-> >   			       base + REG_MMU_INVLD_END_A);
-> >   		writel_relaxed(F_MMU_INV_RANGE, base +
-> > REG_MMU_INVALIDATE);
-> >
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 6f74c144a7cc..68be9eccc897 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -177,7 +177,7 @@ config MADERA_IRQ
+ config IRQ_MIPS_CPU
+ 	bool
+ 	select GENERIC_IRQ_CHIP
+-	select GENERIC_IRQ_IPI if SYS_SUPPORTS_MULTITHREADING
++	select GENERIC_IRQ_IPI if SMP && SYS_SUPPORTS_MULTITHREADING
+ 	select IRQ_DOMAIN
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+ 
+@@ -322,7 +322,7 @@ config KEYSTONE_IRQ
+ 
+ config MIPS_GIC
+ 	bool
+-	select GENERIC_IRQ_IPI
++	select GENERIC_IRQ_IPI if SMP
+ 	select MIPS_CM
+ 
+ config INGENIC_IRQ
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index a2a8df39c2bc..db3d174c53d4 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -83,6 +83,7 @@ config IRQ_FASTEOI_HIERARCHY_HANDLERS
+ # Generic IRQ IPI support
+ config GENERIC_IRQ_IPI
+ 	bool
++	depends on SMP
+ 	select IRQ_DOMAIN_HIERARCHY
+ 
+ # Generic MSI interrupt support
+-- 
+2.35.1
+

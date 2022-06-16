@@ -2,54 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A23654E095
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8796054E099
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiFPMMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 08:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S233024AbiFPMNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 08:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbiFPMMC (ORCPT
+        with ESMTP id S230122AbiFPMNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 08:12:02 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44F33B576;
-        Thu, 16 Jun 2022 05:12:01 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 464AD67373; Thu, 16 Jun 2022 14:11:57 +0200 (CEST)
-Date:   Thu, 16 Jun 2022 14:11:57 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc:     Christoph Hellwig <hch@lst.de>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wefu@redhat.com, guoren@kernel.org,
-        cmuellner@linux.com, philipp.tomsich@vrull.eu, samuel@sholland.org,
-        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
-        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
-        drew@beagleboard.org, Atish Patra <atish.patra@wdc.com>
-Subject: Re: [PATCH 2/3] riscv: Implement Zicbom-based cache management
- operations
-Message-ID: <20220616121157.GA11657@lst.de>
-References: <20220610004308.1903626-1-heiko@sntech.de> <1752040.TLkxdtWsSY@diego> <20220616115342.GA11289@lst.de> <2041345.KlZ2vcFHjT@diego>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2041345.KlZ2vcFHjT@diego>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 16 Jun 2022 08:13:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450BD7662;
+        Thu, 16 Jun 2022 05:13:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE90E617AD;
+        Thu, 16 Jun 2022 12:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C9D8C34114;
+        Thu, 16 Jun 2022 12:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655381585;
+        bh=FRdTpLu9CQJzvii1sK4lK43LEr0qKdnJ9tF8pfXexXI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XjKVJbRUIYL6ShT/rdD/HWalflU32g0ExKhGy1Lr1rOxuRMykl/Y02//OWB0tYis8
+         u7g3YuPwmSrj3d+FwNlcQUfmMoDz6n5I3iO/Vk7Cy2lYLI2L/6HbXcd+42/qkBMZtb
+         7SDvpwojO1LlIXlyia4wmmmQ4wTgq3TI2Ma0GfpXvWfk3hbPfKyQ4gxPTazAq70IC2
+         h63EiWzl+xHrtYNwtgE9ucCRm4gR6CjmNktiMKV2dPuPK+/gSTURxVBdLtlGmiwGB9
+         HZ39SS7L2dmKYjLNE9nTpxvd09gvvaeOYYLTtkmLa1lW0zEdb6FX3W/KcXu9dvTSKR
+         LPXqMWOeepoiQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o1oMw-0013L3-WE;
+        Thu, 16 Jun 2022 13:13:03 +0100
+Date:   Thu, 16 Jun 2022 13:13:02 +0100
+Message-ID: <87y1xw3iy9.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Matt Ranostay <mranostay@ti.com>, Nishanth Menon <nm@ti.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: fix overlapping GICD memory region
+In-Reply-To: <9b005c7d-e434-c215-288d-3926f483b07a@arm.com>
+References: <20220616105112.289719-1-mranostay@ti.com>
+        <9b005c7d-e434-c215-288d-3926f483b07a@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robin.murphy@arm.com, mranostay@ti.com, nm@ti.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 02:09:47PM +0200, Heiko Stübner wrote:
-> My guess was that new platforms implementing cache-management will want
-> to be non-coherent by default?
+On Thu, 16 Jun 2022 13:07:23 +0100,
+Robin Murphy <robin.murphy@arm.com> wrote:
+> 
+> On 2022-06-16 11:51, Matt Ranostay wrote:
+> > GICD region was overlapping with GICR causing the latter to not map
+> > successfully, and in turn the gic-v3 driver would fail to initialize.
+> > 
+> > This issue was hidden till commit 2b2cd74a06c3 ("irqchip/gic-v3: Claim iomem resources")
+> > replaced of_iomap() calls with of_io_request_and_map() that internally
+> > called request_mem_region().
+> > 
+> > Respective console output before this patchset:
+> > 
+> > [    0.000000] GICv3: /bus@100000/interrupt-controller@1800000: couldn't map region 0
+> 
+> Oh, it's nice that this finds bugs, but it seems I hadn't fully
+> considered that making the simple easy change in the DT paths results
+> in different behaviour from ACPI.
+> 
+> Marc, would you like a fix for this to remain non-fatal even in the
+> face of a dodgy DT, or are you happy with being a bit stricter now?
 
-No.  Cache incoherent DMA is absolutely horrible and almost impossible
-to get right for the corner cases.  It is a cost cutting measure seen on
-cheap SOCs and mostly avoided for more enterprise grade products.
+I'd rather we work around it. I shout at people for breaking existing
+DTs, so this should apply to the GIC as well. A nice WARN_ON_ONCE()
+should do, if you don't mind writing the patch.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

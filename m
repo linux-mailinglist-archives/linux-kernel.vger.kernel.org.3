@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BC454E282
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B234154E27D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377284AbiFPNv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S1377232AbiFPNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377275AbiFPNv4 (ORCPT
+        with ESMTP id S1377184AbiFPNvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:51:56 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A659B41608;
-        Thu, 16 Jun 2022 06:51:54 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 1CED5C01D; Thu, 16 Jun 2022 15:51:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655387513; bh=2Hb1WIC7htcZUnTVocd9sTq0i8DWUd+UIspEOkNnz10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rdxn534uKTaSDTnJiKZKi3gw63uExrASQ8SFeMr3Ze1hbArPYP1vZ4blzabc8AMAA
-         tRTYSmBpprD6zoelusqs7oaZOgz8lZxCCmEPCSeh8nw109GGqJjdPFP8MV7ieaslqq
-         JRO90MUCrLC2rGp3Cv2VCAgZt0mOYsNk5nDBgmu+y/SWxFNyVLRpoypJz/NS71r/S3
-         mFQWkcluCHS0ml4fH0tpAbVHkTZvpIyXRtsxdV2B4VSGPbKf5K9NGCgsJ0KtkNZPgN
-         iKjIitmiBo1KOxxv7lmA/O6fk0ZCseUFiLa0Tqh0sT8Zc7D0pPrfl8T0S9XYeXltUH
-         HQad/TpMqM7WA==
+        Thu, 16 Jun 2022 09:51:41 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561C7433A8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:51:40 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y196so1570671pfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ftHZyHw/wNXSXOb7JE7tzZIShYwLppug3sKDdxarxV0=;
+        b=MSTj0O1uiObYq3RmWcwpgd2XlA+q3StSV+EY7/gO0RfsvbeHdumMIDv3rtsYW0etPl
+         lXNHPJmMeve8eyJUs1tMPqPX4dzBhFL1AlZvo46UvFavAZtHNGszAxdIKEf5RvmEJn7y
+         xSNmT9oxEzfl9hSXSqPGwB9bBLO5m9fIaskr5TdovjEkO6DIygXDriPM4p5otH6bcWuC
+         QcOw0i+vyeVSwxWvFIULjpA7WtaeQGCifwWtkjJgkJ62mvof5qP68nJR+2zEO2mCgbtp
+         Pt0B3nuvnaGFcLhtCwxhF8lwd80dr1EpnGkToOoo+amBn/o0S12mYk2AktizYvhrIHCo
+         c/SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ftHZyHw/wNXSXOb7JE7tzZIShYwLppug3sKDdxarxV0=;
+        b=jr9uek6/PYre18N7hB8V6g5proquSTSw0jkcUCPcLoSyEE/6yBmkg+jtmF5MFvX7aw
+         +chX897sQOUshA8T8ep7dauE/kPgL4dOm24c9m/eGsTd3rfVjyvdbGP0lDuQPxyifqs/
+         elj3dxtk8kdLM1nMaYU2Rt0SjNaTIqhHmoBdZgeO/jupvzHiqTM2/6KvA7xYRAlvL3Kw
+         uE/ajZnVN4GNRfLlSgbsLL7C6duitjpnnN4LbQ0XzYUsszTJQLWARkjWjyHj4RTr8sV1
+         vO9WULgM9p1/lSLqC0XpESwmtL26iKAmX2jngGAxCQZmG2c1UX75oShYCEr4iocgZPAd
+         fVCw==
+X-Gm-Message-State: AJIora821pM9JbykpAMUeSWsGNTeRe1WyLhEG20hnYv3j/BdzKjFyg09
+        J2rK+Ve+H6pu3D3qhejkZbBu4w==
+X-Google-Smtp-Source: AGRyM1tjArtHfSvBr9dHM79YJP+gIsvNtTxmzvobAhS9iAdqa601s5ctpq9flyl1E+ympHGNh6ORjQ==
+X-Received: by 2002:a05:6a00:10d3:b0:4fe:5d:75c8 with SMTP id d19-20020a056a0010d300b004fe005d75c8mr4874387pfu.6.1655387499862;
+        Thu, 16 Jun 2022 06:51:39 -0700 (PDT)
+Received: from [172.20.0.255] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b00518424f8922sm1799565pfi.77.2022.06.16.06.51.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 06:51:39 -0700 (PDT)
+Message-ID: <e1a9b1b4-19ab-38dc-3343-017d05655922@linaro.org>
+Date:   Thu, 16 Jun 2022 06:51:38 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: mfd: mt6397: Add compatibles for
+ MT6331 RTC and keys
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, lee.jones@linaro.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, johnson.wang@mediatek.com,
+        hsin-hsiung.wang@mediatek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220616091531.12646-1-angelogioacchino.delregno@collabora.com>
+ <20220616091531.12646-2-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616091531.12646-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 319D6C009;
-        Thu, 16 Jun 2022 15:51:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655387512; bh=2Hb1WIC7htcZUnTVocd9sTq0i8DWUd+UIspEOkNnz10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QTlFwM8XKRVvm2Y//7ChStOXQIIwD2Lu4eHvWvT2h0qHXFRtDtdO1mT0YWLnSyG6X
-         nYBJiK36PBA9rueqp54TNCCcrmJzMC4GMxd0km7GjC3PuSd1Y+/vvfTGBpSjtIvY1w
-         XcprBK83g+J5v1zhy32WW0zgbl0TyxGpZF7uvVDkYsz33vcbYKCz5N/BKodb5eKryM
-         0nM/nilLra97HaoleGvFSO77l8v/5n96g0BDhPA5TjLwjIblOO3u1rmzjSvBt06t5c
-         IqKmEZySzErOC20CfAPn7X3N7ApmdVnIgR3qFJs5AKe3++/Dzh/HzTTeoDFqHemJlH
-         N0JIVIUu35rIw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c6d6cc5f;
-        Thu, 16 Jun 2022 13:51:46 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 22:51:31 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        David Howells <dhowells@redhat.com>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] 9p: fix EBADF errors in cached mode
-Message-ID: <Yqs1Y8G/Emi/q+S2@codewreck.org>
-References: <YqW5s+GQZwZ/DP5q@codewreck.org>
- <YqiC8luskkxUftQl@codewreck.org>
- <1796737.mFSqR1lx0c@silver>
- <22073313.PYDa2UxuuP@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <22073313.PYDa2UxuuP@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Schoenebeck wrote on Thu, Jun 16, 2022 at 03:35:59PM +0200:
-> 2. I fixed the conflict and gave your patch a test spin, and it triggers
-> the BUG_ON(!fid); that you added with that patch. Backtrace based on
-> 30306f6194ca ("Merge tag 'hardening-v5.19-rc3' ..."):
+On 16/06/2022 02:15, AngeloGioacchino Del Regno wrote:
+> The MT6331 PMIC provides many sub modules: regulators, audio
+> codec, LED controller, keys, RTC and some GPIOs.
+> It is always paired with a MT6332 Companion PMIC, which provides
+> thermistors, WLEDs (display LED backlight), secondary AP cluster
+> regulators, modem clocks, battery charger and fuel gauge.
+> 
+> Add the necessary compatibles to start implementing the basics.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-hm, that's probably the version I sent without the fallback to
-private_data fid if writeback fid was sent (I've only commented without
-sending a v2)
 
-> 1. your EBADF patch is based on you recent get/put refactoring patch, so it won't apply on stable.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-ugh, you are correct, that was wrong as well in the version I sent by
-mail... I've hurried that way too much.
 
-The patch that's currently on the tip of my 9p-next branch should be
-alright though, I'll resend it now so you can apply cleanly if you don't
-want to fetch https://github.com/martinetd/linux/commits/9p-next
-
-> Did your patch work there for you? I mean I have not applied the other pending
-> 9p patches, but they should not really make difference, right? I won't have
-> time today, but I will continue to look at it tomorrow. If you already had
-> some thoughts on this, that would be great of course.
-
-Yes, my version passes basic tests at least, and I could no longer
-reproduce the problem.
-
-Without the if (!fid) fid = file->private_data though it does fail
-horribly like you've found out.
-
---
-Dominique
+Best regards,
+Krzysztof

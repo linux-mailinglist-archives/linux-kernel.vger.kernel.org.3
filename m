@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DF154E8AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EF054E8AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235097AbiFPRdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 13:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S234108AbiFPRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 13:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiFPRdR (ORCPT
+        with ESMTP id S230386AbiFPRbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 13:33:17 -0400
-Received: from 8.mo584.mail-out.ovh.net (8.mo584.mail-out.ovh.net [188.165.33.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D29D29CAA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:33:15 -0700 (PDT)
-Received: from player715.ha.ovh.net (unknown [10.111.208.149])
-        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 1F5C524319
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:25:27 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player715.ha.ovh.net (Postfix) with ESMTPSA id 3BFCD2B80DAF4;
-        Thu, 16 Jun 2022 17:25:17 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-100R003a676edd3-a7cb-46ee-872e-e4d31dc7dcc1,
-                    EEA695ED62D0B30D35F9F30395731DD21189161B) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Stephen Kitt <steve@sk2.org>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] drm/panel: Use backlight helper
-Date:   Thu, 16 Jun 2022 19:23:13 +0200
-Message-Id: <20220616172316.1355133-2-steve@sk2.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 16 Jun 2022 13:31:34 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C4F2AE0E;
+        Thu, 16 Jun 2022 10:31:33 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id t1so3330397ybd.2;
+        Thu, 16 Jun 2022 10:31:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=irnPXDDs9giqZixb3bVvb0MoUIRIDyuwHiNhzsO5+C4=;
+        b=4hK5hLrqQ3HzQqlkrFWj7oCH/NdTeQ1ZX9JZ07dXs3AwQ/gW9hckpNmXOrva4I6M+h
+         /WEC45HQdR8QFbgo9v/yqIGmkrVI6GCUH3mCsDK6X6myYVCKeMBhXWYqE92MFZ2o5b6i
+         xwOBjO6yi5Ew0R6OEn35FKDRuE+HHMoUYUXJANQk7u2MLjPZvcu3uHK/cz+hxIAFimBh
+         wZh/VJYQUSDCYaafxEI7+O3//WPwZyQFqb5nNVcY4r0KFW97ooT2DEsXAEf+WGLKo+s+
+         sa7RnKoZOllMnKBS/uXgsBbjX9aEzj+lNCwGnDsmC8gMK0s6OzlNv+LGkifBDqt1JhNY
+         skhw==
+X-Gm-Message-State: AJIora+DimyjG8F+2rpWBxR99sArFv9vZWjwY3PhzXONS5qDTCD9o/+J
+        SA6NNn8JY0Oi+R8KEHKVk1+NWADIdkTxs86atsU=
+X-Google-Smtp-Source: AGRyM1vOEjiPb25k6E6zUt4jvZQIEK/MmQe5h6fqDF85t8MOVMtMD693ctQIewxPENLk6VF/02yz4vAev58TJ4Ji1qQ=
+X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
+ x10-20020a2584ca000000b0065cb5a43d0amr6539892ybm.137.1655400692553; Thu, 16
+ Jun 2022 10:31:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 7459649832906032859
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddvfedguddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejudehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekge
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
+ <2726954.BEx9A2HvPv@kreacher> <Yqpfj5sa3x/gmZmM@google.com>
+In-Reply-To: <Yqpfj5sa3x/gmZmM@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Jun 2022 19:31:21 +0200
+Message-ID: <CAJZ5v0gFjgWbxVLe63Xfc+kfmfPzRkZ+72eLqiKDm68agT-ugA@mail.gmail.com>
+Subject: Re: [PATCH v2 13/16] mfd: core: Use acpi_dev_for_each_child()
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-backlight_properties.fb_blank is deprecated. The states it represents
-are handled by other properties; but instead of accessing those
-properties directly, drivers should use the helpers provided by
-backlight.h.
+On Thu, Jun 16, 2022 at 12:39 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Mon, 13 Jun 2022, Rafael J. Wysocki wrote:
+>
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Instead of walking the list of children of an ACPI device directly,
+> > use acpi_dev_for_each_child() to carry out an action for all of
+> > the given ACPI device's children.
+> >
+> > This will help to eliminate the children list head from struct
+> > acpi_device as it is redundant and it is used in questionable ways
+> > in some places (in particular, locking is needed for walking the
+> > list pointed to it safely, but it is often missing).
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >
+> > v1 -> v2:
+> >    * Add R-by from Andy.
+> >
+> > ---
+> >  drivers/mfd/mfd-core.c |   31 ++++++++++++++++++++++++-------
+> >  1 file changed, 24 insertions(+), 7 deletions(-)
+>
+> Applied, thanks.
 
-Instead of retrieving the backlight brightness in struct
-backlight_properties manually, and then checking whether the backlight
-should be on at all, use backlight_get_brightness() which does all
-this and insulates this from future changes.
+Thank you!
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
----
- drivers/gpu/drm/panel/panel-asus-z00t-tm5p5-n35596.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Can you please expose a branch containing it for integration?
 
-diff --git a/drivers/gpu/drm/panel/panel-asus-z00t-tm5p5-n35596.c b/drivers/gpu/drm/panel/panel-asus-z00t-tm5p5-n35596.c
-index 44674ebedf59..174ff434bd71 100644
---- a/drivers/gpu/drm/panel/panel-asus-z00t-tm5p5-n35596.c
-+++ b/drivers/gpu/drm/panel/panel-asus-z00t-tm5p5-n35596.c
-@@ -215,14 +215,9 @@ static const struct drm_panel_funcs tm5p5_nt35596_panel_funcs = {
- static int tm5p5_nt35596_bl_update_status(struct backlight_device *bl)
- {
- 	struct mipi_dsi_device *dsi = bl_get_data(bl);
--	u16 brightness = bl->props.brightness;
-+	u16 brightness = backlight_get_brightness(bl);
- 	int ret;
- 
--	if (bl->props.power != FB_BLANK_UNBLANK ||
--	    bl->props.fb_blank != FB_BLANK_UNBLANK ||
--	    bl->props.state & (BL_CORE_SUSPENDED | BL_CORE_FBBLANK))
--		brightness = 0;
--
- 	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
- 
- 	ret = mipi_dsi_dcs_set_display_brightness(dsi, brightness);
--- 
-2.30.2
-
+The last patch in the series depends on this one.

@@ -2,150 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5655654E7B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5688F54E7DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238983AbiFPQoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
+        id S1378162AbiFPQpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbiFPQn4 (ORCPT
+        with ESMTP id S1377280AbiFPQoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:43:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 219A9286CF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655397831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjMtM8OGnDrbMwcn+8vKnlZdrkOGRhE/5nADc7InRc4=;
-        b=TSQFJkRBWy3mvIQerMvPzNPpML8zeT0oOJPe6Z6WXrAzfYtgo0XC38GHDJkICj+3i9k/ps
-        8EzERBrf4TEe/rq3FmxDsc86RgyXxqLg1QyMeKB+nFZe8gNAeVoHRcN1ka5A7y1DkBF6u7
-        xwdZ7fI3mYdQdGrwQICBt86RGeIjSW0=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-rzlTIEnfORamicqTFLj-pw-1; Thu, 16 Jun 2022 12:43:49 -0400
-X-MC-Unique: rzlTIEnfORamicqTFLj-pw-1
-Received: by mail-wr1-f72.google.com with SMTP id i10-20020a5d55ca000000b002103d76ffcaso383212wrw.17
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:43:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AjMtM8OGnDrbMwcn+8vKnlZdrkOGRhE/5nADc7InRc4=;
-        b=JFWJNhssbwF4vHlRmq0WIXHh0J8No5SqdNOjHF8gX7/3EjTa5goqPzto0KSpJCfs7G
-         YK0hdl10qDqYKuGP4T/fNfmzHcNX2JTF7ai5gWOR3Mkzc6geyXtdeM7m5kXpUHn0bljN
-         zEalcX47ZFV8qagZU/pMN8cwiKOYR/wq/hL3cwOJjag58C1rtSRS+3v8jKRFRN+8K/0L
-         uzwCPaln+EmxRZekNQxEvDO7xRPeVDlgsCcUygF3lTj1PwRhncpUNbmtHUE8rxh76rRX
-         gC+tU9Z96AaE1k1bVJJ1NkFiprNDsRlJcSDnMyXqY4Jdi4m1FMnuYwEzDZB/aZPd/hBO
-         NQPQ==
-X-Gm-Message-State: AOAM533qf8LXMxnUGO+cDEg992337PgvJlDKL/fRQUb50D7MNY7oGxDo
-        dqgNzNE94Kp8Nzt3R95nXnUkIJEagvfpOMpFz82trErSmBZMyyna2gvlUfuxGywRCDxzWE7N7QY
-        1goc3gpfabJcFRNMuTILMntUY
-X-Received: by 2002:a05:600c:10cf:b0:39c:8270:7b86 with SMTP id l15-20020a05600c10cf00b0039c82707b86mr16724431wmd.180.1655397828436;
-        Thu, 16 Jun 2022 09:43:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz8+fKsEXIAvNyB94ZpK27ofIlM12w0GekOLSDeZEFo92yryX6GxBCFSwKJr3GgRIgUlCaqhQ==
-X-Received: by 2002:a05:600c:10cf:b0:39c:8270:7b86 with SMTP id l15-20020a05600c10cf00b0039c82707b86mr16724402wmd.180.1655397828203;
-        Thu, 16 Jun 2022 09:43:48 -0700 (PDT)
-Received: from [172.20.10.8] ([185.124.31.117])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfeb8f000000b0020e63ab5d78sm2381222wrn.26.2022.06.16.09.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 09:43:47 -0700 (PDT)
-Message-ID: <d6c00532-5546-ea4a-1927-9d4ea5e83741@redhat.com>
-Date:   Thu, 16 Jun 2022 18:43:44 +0200
+        Thu, 16 Jun 2022 12:44:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C743289A6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:44:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE656B82346
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1E6C34114;
+        Thu, 16 Jun 2022 16:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655397856;
+        bh=EolkjpCPZI2MjBzt62Su7lhjjW4xiamLc2eTna4D4RY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=t/4p6pGthRLYB+t18wzKMBvG8YhBSmOj9OtlHdRZkkzCg6TPbfVT8Ym9er2q+OG/T
+         eU5+83JXJEKYQUx/QfhsWf37Dp7FF1iKXdivRNJra/69Vw+popfCVdqFGw90ruWGPR
+         dZTvPbCQ7oUJXojmCDmvO1AOOW2IKp1m5X9pbW2IYE10EWjb7spFHlCFQI9H23suvy
+         9LNu+aVdWeUD7Mi9cjocgqhLlSEMBpqZoT6Qp0r6r7DaA+HCQbNR4s+qfLMezv5Tf5
+         oN/ocqb4jVxWj1pdBu8t2496S3rgRAm/yaldO+WHgA735SDWRM/MIkHZsEsv7UXoIa
+         uTsl0FD9FSzQw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1DDD05C0546; Thu, 16 Jun 2022 09:44:16 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:44:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marco Elver <elver@google.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, dvyukov@google.com
+Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/pmladek.2022.06.15a
+ 133/140] vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to
+ __kasan_check_read() leaves .noinstr.text section
+Message-ID: <20220616164416.GA2130702@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202206160411.v3iL3YC0-lkp@intel.com>
+ <20220615204039.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220615211717.GA972937@paulmck-ThinkPad-P17-Gen-1>
+ <CANpmjNMswUJhqfttxZGbkfN7X5d5FLiS1yPXzzGDivLtWDB9=g@mail.gmail.com>
+ <20220616134021.GP1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 00/10] drm: selftest: Convert to KUnit
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        dri-devel@lists.freedesktop.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-References: <20220615135824.15522-1-maira.canal@usp.br>
- <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616134021.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/22 16:55, David Gow wrote:
-> On Wed, Jun 15, 2022 at 9:59 PM Maíra Canal <maira.canal@usp.br> wrote:
->>
->> KUnit unifies the test structure and provides helper tools that simplify
->> the development of tests. The basic use case allows running tests as regular
->> processes, which makes it easier to run unit tests on a development machine
->> and to integrate the tests into a CI system.
->>
->> That said, the conversion of selftests for DRM to KUnit tests is beneficial
->> as it unifies the testing API by using the KUnit API.
->>
->> KUnit is beneficial for developers as it eases the process to run unit tests.
->> It is possible to run the tests by using the kunit-tool on userspace with the
->> following command:
->>
->> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests --arch=x86_64
->>
->> For CI system, it is possible to execute during the build. But, we also think
->> about IGT: we are developing a patch to introduce KUnit to IGT.
->>
->> These patches were developed during a KUnit hackathon [0] last October. Now,
->> we believe that both the IGT side and the Kernel side are in good shape for
->> submission.
->>
->> If you are willing to check the output, here is the Pastebin with the output
->> and execution times [1].
->>
->> [0] https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
->> [1] https://pastebin.com/FJjLPKsC
->>
->> - Arthur Grillo, Isabella Basso, and Maíra Canal
+On Thu, Jun 16, 2022 at 06:40:21AM -0700, Paul E. McKenney wrote:
+> On Thu, Jun 16, 2022 at 10:19:18AM +0200, Marco Elver wrote:
+> > On Wed, 15 Jun 2022 at 23:17, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > On Wed, Jun 15, 2022 at 01:40:39PM -0700, Paul E. McKenney wrote:
+> > > > On Thu, Jun 16, 2022 at 04:26:16AM +0800, kernel test robot wrote:
+> > > > > tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/pmladek.2022.06.15a
+> > > > > head:   0ba7324b44282870af740a5a121add62c7f5f730
+> > > > > commit: db21b02f8044e812f8a5e3811f602409290e3ede [133/140] context_tracking: Convert state to atomic_t
+> > > > > config: x86_64-randconfig-r003-20220516 (https://download.01.org/0day-ci/archive/20220616/202206160411.v3iL3YC0-lkp@intel.com/config)
+> > > > > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > > > > reproduce (this is a W=1 build):
+> > > > >         # https://github.com/ammarfaizi2/linux-block/commit/db21b02f8044e812f8a5e3811f602409290e3ede
+> > > > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+> > > > >         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/pmladek.2022.06.15a
+> > > > >         git checkout db21b02f8044e812f8a5e3811f602409290e3ede
+> > > > >         # save the config file
+> > > > >         mkdir build_dir && cp config build_dir/.config
+> > > > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> > > > >
+> > > > > If you fix the issue, kindly add following tag where applicable
+> > > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > >
+> > > > > All warnings (new ones prefixed by >>):
+> > > > >
+> > > > > >> vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to __kasan_check_read() leaves .noinstr.text section
+> > > > > >> vmlinux.o: warning: objtool: __ct_user_enter+0x7f: call to __kasan_check_read() leaves .noinstr.text section
+> > > >
+> > > > Marco, Dmitry, my guess is that this is due to the ct->active check in
+> > > > both functions.  Are we supposed to do something to make this sort of
+> > > > thing safe for KASAN?
+> > >
+> > > This time actually CCing Marco and Dmitry...
+> > 
+> > It's due to the atomic_read()s within the noinstr function. Within
+> > noinstr you can use arch_atomic_read() to avoid the instrumentation.
 > 
-> Great to see these going upstream!
->
+> Thank you, will fix!
 
-Indeed, this is pretty awesome!
+And please see below for an alleged fix.
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 81e24ca26ee9933bcacf67a61e3f6ae41a025442
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Thu Jun 16 09:30:37 2022 -0700
+
+    context_tracking: Use arch_atomic_read() in __ct_state for KASAN
+    
+    Context tracking's __ct_state() function can be invoked from noinstr state
+    where RCU is not watching.  This means that its use of atomic_read()
+    causes KASAN to invoke the non-noinstr __kasan_check_read() function
+    from the noinstr function __ct_state().  This is problematic because
+    someone tracing the __kasan_check_read() function could get a nasty
+    surprise because of RCU not watching.
+    
+    This commit therefore replaces the __ct_state() function's use of
+    atomic_read() with arch_atomic_read(), which KASAN does not attempt to
+    add instrumention to.
+    
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Frederic Weisbecker <frederic@kernel.org>
+    Cc: Marco Elver <elver@google.com>
+
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 0aecc07fb4f50..81c51e5f03143 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -49,7 +49,7 @@ DECLARE_PER_CPU(struct context_tracking, context_tracking);
  
-I haven't reviewed the patches yet but just have a meta comment. There's a TODO
-entry for this [0] in Documentation/gpu/todo.rst, so I think that you could add
-a patch removing that as a part of this series.
-
-[0]: https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#n620
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+ static __always_inline int __ct_state(void)
+ {
+-	return atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
++	return arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
+ }
+ #endif
+ 

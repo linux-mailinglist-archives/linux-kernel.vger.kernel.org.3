@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D2554EDCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF3954EDCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379344AbiFPXNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 19:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S1379356AbiFPXPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiFPXNx (ORCPT
+        with ESMTP id S231500AbiFPXPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 19:13:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE715D648;
-        Thu, 16 Jun 2022 16:13:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA7DB612E3;
-        Thu, 16 Jun 2022 23:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C38C34114;
-        Thu, 16 Jun 2022 23:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655421231;
-        bh=Ejx2DTxm/7UIK+VC+L1RteDR9DsxwnAj5eYVDoMkO4Y=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eaA7OMkSsxkf1sWe94biqKhLOdZAJNvCqlCufdt04pueooz+KhapEvI2RSVqaKGuL
-         AIiDRWSqe/kkFL4d6TRx/xAyYAnbP9gZhqSO5WY169uHl4aRjU3TKHb94QlcQxNitj
-         orb+TbBIoSSnTPsFRbvNT4thWIdFL/qeOAyKXJnBE2e3+o/Kb+FU8xYc2pB6BJ2ssg
-         jwlRA4yCaomvIjmQRRjXWrG1fjLsvljLLdfrrihO93mGrzBBZyBOl+nG8MQto28D/Z
-         UYBvFv0auHw6hxwTSf/RJKzuqWatwgeco/wVAA3EwGfQvmaDkqIx6IuTKtMASDBvIA
-         ibPJM7CD3G26Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C6D8F5C1363; Thu, 16 Jun 2022 16:13:50 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 16:13:50 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>, catalin.marinas@arm.com,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        arnd@arndb.de, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v4 1/2] asm-generic: Add memory barrier dma_mb()
-Message-ID: <20220616231350.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220523113126.171714-1-wangkefeng.wang@huawei.com>
- <20220523113126.171714-2-wangkefeng.wang@huawei.com>
- <CANpmjNNPf5J2OcVxoMgVtFYjWJhJ2JE+UBFyqnt6+WrPobPOHQ@mail.gmail.com>
+        Thu, 16 Jun 2022 19:15:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247762A0A;
+        Thu, 16 Jun 2022 16:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655421343; x=1686957343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Bm9Vb0LSbnkJ7TNyPuwbBBz6WhULyCYNAtvB1EzVugQ=;
+  b=fiPggnN5C5hqmotl01zdGdbaq+K7HhdKsw/7lQitFVjHU9KTmBQFWApb
+   VOly4cEvI0JrtA7uWQlIBNeY2hRmwyBym2owfhwplg3ng09oWDEMPe+in
+   ZaYIigP6AymKLlJXhodagZLd8s6yJ83T6eKBW0rv8NmKIAgJhUnPTPP4o
+   +LfuTzgUMxkPjaTdRdOvjZZExU8nlh0hTs7ZOHfE+dn0qdmB2R1C4BzXm
+   DLxOKjbKHJ8A8JXHtEh96w34fgTijEuNP1XITvsh7VfGhNKWcGAaNz1VK
+   4HSN66/a9f8QxVp03jWmDNbQOb2EDr3+XrFp3JHAA8rqmiUX90iTM8DIJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259225680"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="259225680"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 16:15:43 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="641767275"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 16:15:43 -0700
+Date:   Thu, 16 Jun 2022 16:15:22 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "a.manzanares@samsung.com" <a.manzanares@samsung.com>
+Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
+Message-ID: <20220616231522.GA1529779@alison-desk>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+ <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+ <20220616194334.pvorvoozt4rrzr66@offworld>
+ <20220616203400.GA1529208@alison-desk>
+ <20220616224525.fufa4dnpw4vl344n@offworld>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANpmjNNPf5J2OcVxoMgVtFYjWJhJ2JE+UBFyqnt6+WrPobPOHQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220616224525.fufa4dnpw4vl344n@offworld>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,84 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 01:35:27PM +0200, Marco Elver wrote:
-> On Mon, 23 May 2022 at 13:21, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> >
-> > The memory barrier dma_mb() is introduced by commit a76a37777f2c
-> > ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
-> > which is used to ensure that prior (both reads and writes) accesses
-> > to memory by a CPU are ordered w.r.t. a subsequent MMIO write.
-> >
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de> # for asm-generic
-> > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+On Thu, Jun 16, 2022 at 03:45:25PM -0700, Davidlohr Bueso wrote:
+> On Thu, 16 Jun 2022, Alison Schofield wrote:
 > 
-> Reviewed-by: Marco Elver <elver@google.com>
+> >cxl list --media-errors -m mem1
+> >	lists media errors for requested memdev
+> >
+> >cxl list --media-errors -r region#
+> 
+> A quick question on the tooling front: the above goes nicely with
+> cxl-list, but what about the rest of the poisoning cmds? Do you have
+> anything in mind? Do we want something specific for media and poison
+> management instead? Ie:
+> 
+> cxl media --list-errors <params>
+Not clear how this one differs. Seems like we can get any piece of 
+the list w cxl list.
 
-Just checking...  Did these ever get picked up?  It was suggested
-that they go up via the arm64 tree, if I remember correctly.
+> cxl media --inject-errors <params>
+> cxl media --clear-errors <params>
+For inject/clear I'd probably start w what ndctl does today.
+ndctl inject−error  <namespace> [<options>]
+where option -d --uninject performs the clear.
 
-							Thanx, Paul
-
-> > ---
-> >  Documentation/memory-barriers.txt | 11 ++++++-----
-> >  include/asm-generic/barrier.h     |  8 ++++++++
-> >  2 files changed, 14 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> > index b12df9137e1c..832b5d36e279 100644
-> > --- a/Documentation/memory-barriers.txt
-> > +++ b/Documentation/memory-barriers.txt
-> > @@ -1894,6 +1894,7 @@ There are some more advanced barrier functions:
-> >
-> >   (*) dma_wmb();
-> >   (*) dma_rmb();
-> > + (*) dma_mb();
-> >
-> >       These are for use with consistent memory to guarantee the ordering
-> >       of writes or reads of shared memory accessible to both the CPU and a
-> > @@ -1925,11 +1926,11 @@ There are some more advanced barrier functions:
-> >       The dma_rmb() allows us guarantee the device has released ownership
-> >       before we read the data from the descriptor, and the dma_wmb() allows
-> >       us to guarantee the data is written to the descriptor before the device
-> > -     can see it now has ownership.  Note that, when using writel(), a prior
-> > -     wmb() is not needed to guarantee that the cache coherent memory writes
-> > -     have completed before writing to the MMIO region.  The cheaper
-> > -     writel_relaxed() does not provide this guarantee and must not be used
-> > -     here.
-> > +     can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
-> > +     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
-> > +     to guarantee that the cache coherent memory writes have completed before
-> > +     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
-> > +     this guarantee and must not be used here.
-> >
-> >       See the subsection "Kernel I/O barrier effects" for more information on
-> >       relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
-> > diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> > index fd7e8fbaeef1..961f4d88f9ef 100644
-> > --- a/include/asm-generic/barrier.h
-> > +++ b/include/asm-generic/barrier.h
-> > @@ -38,6 +38,10 @@
-> >  #define wmb()  do { kcsan_wmb(); __wmb(); } while (0)
-> >  #endif
-> >
-> > +#ifdef __dma_mb
-> > +#define dma_mb()       do { kcsan_mb(); __dma_mb(); } while (0)
-> > +#endif
-> > +
-> >  #ifdef __dma_rmb
-> >  #define dma_rmb()      do { kcsan_rmb(); __dma_rmb(); } while (0)
-> >  #endif
-> > @@ -65,6 +69,10 @@
-> >  #define wmb()  mb()
-> >  #endif
-> >
-> > +#ifndef dma_mb
-> > +#define dma_mb()       mb()
-> > +#endif
-> > +
-> >  #ifndef dma_rmb
-> >  #define dma_rmb()      rmb()
-> >  #endif
-> > --
-> > 2.35.3
-> >
+> 
+> Thanks,
+> Davidlohr

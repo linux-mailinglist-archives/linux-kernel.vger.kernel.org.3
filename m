@@ -2,86 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF1B54E8D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D8354E8D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbiFPRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 13:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S235525AbiFPRsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 13:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiFPRs3 (ORCPT
+        with ESMTP id S234947AbiFPRss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 13:48:29 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FD54C419;
-        Thu, 16 Jun 2022 10:48:28 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id r5so2222342iod.5;
-        Thu, 16 Jun 2022 10:48:28 -0700 (PDT)
+        Thu, 16 Jun 2022 13:48:48 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5454C419
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:48:48 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso1277823pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h8VaiU+wdtwucND04NHMKvGiEcGRAR+Ek42xLKO1//A=;
+        b=PikuA1lQkVNweJNVfn6BCJXBju5d1DFaJ9fL4AntcPB4EvTITObGabCUoTMC4Agh5v
+         eAcgU2U7Nb84ZqgwRmpGKMDKhsS979FlE8SEt+Fzq7sMAc5//f5M24DbxFsEUK1yVaFc
+         Snu/uHQlH79PbD8S21Kz4K45Jqcs3T5y3seLR3z3sYsV7f04Uz53ZwWB8e/SpQWGDY3p
+         WFVZgDBXllGal6fHOCbofyBQvRfc9dQAh6rQ6GttvJ/6mabZyrX0agrFLAfm0XEXGgIy
+         WyNx1/h1QUn0cpBoIj9rHEyRHi+JsTA8PHB+X4MZCCD14UqV0Lo8ctf36e+0alGXsgmy
+         9ofQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8PRZvVfxrwvO+Gtg+me/nbumG0ROGVptfpPPQu8bk/g=;
-        b=dMpQe/5Ov6vsTU9FcfCd/bSnE3i1XWveGUu8MOzi3gPHu1/xjvG0CoQjI70/pvsHmZ
-         QbXutu+yfXyMUfPmdt84uDCFGvEMXN66HG80WH+aBZfMR6waSch3ToWU0UIYAN64t6tb
-         gELAFIYvSEHd4kEYRQYvw6b2qBdhoY1RYfc+LzH8ILLGmvmGqnnf+emhpzPTqT+949CP
-         sZTZsIvx/WksaOZkuLmTTwrPkC6GWDmH4KERLjTaFwY6nQHswFdj4AibGDfwlA8xlTtS
-         HtR0qoGxsAYwCJaYQbEJCRhvGNJU3ZY7G0oD5q8YEjg7chuCXEOFPangjtTPMi5MXZo2
-         nkXg==
-X-Gm-Message-State: AJIora+4H52yT6BpZ5Bc6t6q/IWi2ABQ20PqRcl7lrw+X+0ptXJNMGBs
-        lZYrsSpwM9defA8RJMF7GQ==
-X-Google-Smtp-Source: AGRyM1uStzsNCcUCj1nK3GKFUp81TU3fcKgTNQUHLYhagMD1LobI/qIqbi5gYRYzXNdJb3ar1mUyPQ==
-X-Received: by 2002:a05:6602:2d44:b0:669:ef11:523a with SMTP id d4-20020a0566022d4400b00669ef11523amr3141947iow.44.1655401707803;
-        Thu, 16 Jun 2022 10:48:27 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y1-20020a927d01000000b002d3aff5d8b0sm1250089ilc.14.2022.06.16.10.48.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h8VaiU+wdtwucND04NHMKvGiEcGRAR+Ek42xLKO1//A=;
+        b=JUtxibiZiSYwnVzqJeyO7T9fGjjKZcQrvtusCBG7aB4SYUN/wOqgEvSaZBxO/K4jhb
+         Yi84ZlDwDGezP2Got7n3hx5jLNqaUcKLEetT14Dta9Yp8O/EXlFE5N9M70I9UxKUr5eY
+         lkprLEOgnrlOEvE2+V2fcxyNwFI5/rfVsKfeO/VouZU2ytPNefqCZ2TQZvkj0LU4vB0h
+         6zVr17aOlWYok7ieLyBCfezLkFDISaGiRjY7EBhBECo8rYd4rf+UNRlz6A+8VpB+tudw
+         yyeJHuTQdR80tVzlCFq/ed+a3Ct7v64D7HID2F5J7nJCxMnIkQEimuBfuslzjmDbxvKr
+         BYbg==
+X-Gm-Message-State: AJIora9MkowR0kl/KCABfCly93eVfYniJGIMMsg8aAFBP2ZYzPZsjkvZ
+        I5R8mYDCMf3S2XSFq+aFixM=
+X-Google-Smtp-Source: AGRyM1v7tKkwxdWNJ9mjdIS8jxopiWFrNTrXTbrer4mCD+IvQj4oczh1vhpUKF2XMNAK6WYP2ARxPg==
+X-Received: by 2002:a17:90b:1b05:b0:1e2:a053:2fad with SMTP id nu5-20020a17090b1b0500b001e2a0532fadmr17088907pjb.209.1655401727540;
+        Thu, 16 Jun 2022 10:48:47 -0700 (PDT)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id z21-20020a17090a8b9500b001e8520b211bsm1818289pjn.53.2022.06.16.10.48.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 10:48:27 -0700 (PDT)
-Received: (nullmailer pid 3710861 invoked by uid 1000);
-        Thu, 16 Jun 2022 17:48:25 -0000
-Date:   Thu, 16 Jun 2022 11:48:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>, phone-devel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: qcom-iommu: Add Qualcomm MSM8953
- compatible
-Message-ID: <20220616174825.GA3710771-robh@kernel.org>
-References: <20220612092218.424809-1-luca@z3ntu.xyz>
- <20220612092218.424809-2-luca@z3ntu.xyz>
+        Thu, 16 Jun 2022 10:48:46 -0700 (PDT)
+From:   Yang Shi <shy828301@gmail.com>
+To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
+        willy@infradead.org, zokeefe@google.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [mm-unstable v5 PATCH 0/7] Cleanup transhuge_xxx helpers
+Date:   Thu, 16 Jun 2022 10:48:33 -0700
+Message-Id: <20220616174840.1202070-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220612092218.424809-2-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Jun 2022 11:22:13 +0200, Luca Weiss wrote:
-> Document the compatible used for IOMMU on the msm8953 SoC.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Changes from v1:
-> - new patch
-> 
->  Documentation/devicetree/bindings/iommu/qcom,iommu.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+v5: * Removed transparent_hugepage_active() for !THP, per Zach.
+      Patch 4/7 and 5/7 were updated accordingly.
+    * Collected review tags.
+v4: * Consolidated the transhuge_vma_size_ok() helper proposed in the
+      earlier versions into transhuge_vma_suitable(), per Zach.
+    * Fixed the regression introduced by patch 3/7, per Zach and Miaohe.
+    * Reworded the comment for transhuge_vma_suitable(), per Zach.
+    * Removed khugepaged_enter() per Miaohe.
+    * More comments for hugepage_vma_check(), per Zach.
+    * Squashed patch 4/7 (mm: khugepaged: use transhuge_vma_suitable replace open-code)
+      in the earlier version into patch 2/7 of this version.
+    * Minor correction to the doc about THPeligible (patch 7/7), so the
+      total number of patches is kept 7. 
+v3: * Fixed the comment from Willy
+v2: * Rebased to the latest mm-unstable
+    * Fixed potential regression for smaps's THPeligible
+
+This series is the follow-up of the discussion about cleaning up transhuge_xxx
+helpers at https://lore.kernel.org/linux-mm/627a71f8-e879-69a5-ceb3-fc8d29d2f7f1@suse.cz/.
+
+THP has a bunch of helpers that do VMA sanity check for different paths, they
+do the similar checks for the most callsites and have a lot duplicate codes.
+And it is confusing what helpers should be used at what conditions.
+
+This series reorganized and cleaned up the code so that we could consolidate
+all the checks into hugepage_vma_check().
+
+The transhuge_vma_enabled(), transparent_hugepage_active() and
+__transparent_hugepage_enabled() are killed by this series.
+
+
+Yang Shi (7):
+      mm: khugepaged: check THP flag in hugepage_vma_check()
+      mm: thp: consolidate vma size check to transhuge_vma_suitable
+      mm: khugepaged: better comments for anon vma check in hugepage_vma_revalidate
+      mm: thp: kill transparent_hugepage_active()
+      mm: thp: kill __transhuge_page_enabled()
+      mm: khugepaged: reorg some khugepaged helpers
+      doc: proc: fix the description to THPeligible
+
+ Documentation/filesystems/proc.rst |  4 ++-
+ fs/proc/task_mmu.c                 |  2 +-
+ include/linux/huge_mm.h            | 80 +++++++++++++++++++----------------------------------------
+ include/linux/khugepaged.h         | 30 ----------------------
+ mm/huge_memory.c                   | 81 +++++++++++++++++++++++++++++++++++++++++++++++++++--------
+ mm/khugepaged.c                    | 84 +++++++++++++++++++-------------------------------------------
+ mm/memory.c                        |  7 ++++--
+ 7 files changed, 130 insertions(+), 158 deletions(-)
+

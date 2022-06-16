@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8117754DA24
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B733E54DA2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358905AbiFPGDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        id S1358878AbiFPGGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358907AbiFPGDK (ORCPT
+        with ESMTP id S1348986AbiFPGGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:03:10 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C53A20BF5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:03:08 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id l20so408383lji.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:03:08 -0700 (PDT)
+        Thu, 16 Jun 2022 02:06:11 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4508FC2B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:06:08 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id s37so580518pfg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Z/6CysC4KQFR6QV0a+LcXqbeuRwoBK9qA3xXzR01nNA=;
-        b=jJBZf5sR+X/C0YJwR0nZXdlcP6Mg/UWZcz8pvAkxXWXvjtleJI2UT67Q1pyo/Zg3x3
-         GMQOwt66Ow7g0H3TZ3boR173BdYaRDZuZcKwV5mTsMphMY5zkUze9XFajqwbN137oH7p
-         9nXdbizZiMoQdjChe0JA+k1Q/nZc4RsC3XyCGmzBPcBamRUXXsertcCrfoIBIzKVpAY7
-         T4RpbmlA4Kyer4WlrLJIj5mdeIWW526RKjW7IEdyAGeLqdNoXV4Ko4NGwk6WeUzCm8lD
-         qT0W9NNYySWjIcRgJwO9EYetjK/yhYXNUC+NZBLl/XKRoJ7uORUn4ESP+qHJuaYkfF/N
-         Qm8A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tFNNWBV1JwdjHL2prY8/fO/Im7Us5TFxYzhpaCO//zQ=;
+        b=wTvGlVeyaYvcuomaOTVvYAp9OewZ3hUW5qJ+0r60n/Vot9b6CEqm1hQ+cc4rdV9szQ
+         2vQNXNm9zAGFnYgFwkA2gWaZP7uzsNNYDSy2lIHG332A1usd/oIS9eYjgSTLDzmTVtut
+         6xAVBoqkqt0Sw7YF5rC8Ciw6rOClp8lm5u2seYN6B5QX+dZ/g+ZS/4NSQA4VevYK1NDf
+         Ja2FiUbjGEFpt394//5TIMECzEl8RLHR9pMHWztahRRH1/preISjHonaa8lAvsc/scBK
+         DAWIL3dTz0IO7yeR4UID3hw2eGJsxDEWvwYAaUzy1GvsAJlkhdbRwCZ8CkoA6UFUd5hi
+         xOaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Z/6CysC4KQFR6QV0a+LcXqbeuRwoBK9qA3xXzR01nNA=;
-        b=JbLPpCx52AeYXk2udp9skwRUpTKJk12Ar2X4mAaA5IfRGL5wyEa3zYlbtpgZqbr5b/
-         JGd0m6cV2QSm4NSmkwgF3D7CSeJw7l+eqyKQQvubDnt/ZiH6fjwvndwibOCqYiYGORal
-         b1v/vFLHmjSSf/Y28twewrIsaVzwucBVlYJJG8hpDWR0O5WjzxUMXWPUyXnHCZAN2r1l
-         MFWb6igHbtx0+oqfY7Y94dcn3KFXEczpPgTRP4TJTxdGhDluSGN/gbQCOFu0uYAuEVri
-         SikxhHkujnJNvLC8J3bf4egCBSUjReCWDKgTFnlI2OsnmrLxluM4x7SgIaJi8/hc/1CS
-         flxw==
-X-Gm-Message-State: AJIora+QYFMzZj+x/jvv28CPTTJ1+JlwGgx+vwmjLnyuSWiURQTVa9ii
-        eKJwwmOLfRGxtLtnTaudu83+Uw==
-X-Google-Smtp-Source: AGRyM1v86oTwwWaYY30N6Fge9WAZr/mqmx1kTvvedOKhIeoDmVomiiB8oAcjcTIUh/5Z5daZ7v4RjQ==
-X-Received: by 2002:a2e:2e07:0:b0:25a:4bb3:a2c2 with SMTP id u7-20020a2e2e07000000b0025a4bb3a2c2mr75328lju.450.1655359386925;
-        Wed, 15 Jun 2022 23:03:06 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u10-20020a2e9b0a000000b0025a43eb8c64sm119450lji.65.2022.06.15.23.03.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 23:03:06 -0700 (PDT)
-Message-ID: <297160e7-3999-e20e-c25b-ee60758a8f5d@linaro.org>
-Date:   Thu, 16 Jun 2022 09:03:05 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] drm/msm/dp: check core_initialized before disable
- interrupts at dp_display_unbind()
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tFNNWBV1JwdjHL2prY8/fO/Im7Us5TFxYzhpaCO//zQ=;
+        b=B1f3Vzi3WC3ZaMj5RyRJOfkZAw1tkgQXZmwo5dL/I3wAba/GFatX6MsWzoC5tXDfhK
+         ULes/8KHkjtrGjtyx4ngBgjhMKNpxVuf3dPbDO/WgX2hKKpou7EWdJaupy3PNbVEoqpV
+         5fdFeEv3BR7KkUuFReb781tM7emjLSXulaaJx1XWrDKbqR1Swu3+Zs3KhjZox4T04H2r
+         NtYg121poLmsAWClpAzz/gOzcyJkWd3pYZzI/ogHrR20muPt1ssawkNfzgsmGvYnBU8C
+         ER5jughvoeLCSnHUioRc+/4KpknFaIWpUygHdousi53gkMw2cw3AzhmoSQr+bgnLnH65
+         ZRoA==
+X-Gm-Message-State: AJIora975QaZ2wLPpcs11Ba2hNp4bKRM17wchyrEYLPqAxGRFeIE1v8o
+        2SoN8DhNjt9j4s71UbWGsBPMeg==
+X-Google-Smtp-Source: AGRyM1t56y1brgraV4Sa61pENGIETGkOWiC7Z2PTRF71blSxFIFMKJWRHUd4QMe92IHZyNkvMjWcBQ==
+X-Received: by 2002:a05:6a00:198e:b0:51c:3511:4aff with SMTP id d14-20020a056a00198e00b0051c35114affmr3268042pfl.20.1655359567572;
+        Wed, 15 Jun 2022 23:06:07 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id fa17-20020a17090af0d100b001eae908b67dsm726639pjb.15.2022.06.15.23.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 23:06:07 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 11:36:05 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Liang He <windhl@126.com>
+Cc:     vireshk@kernel.org, shiraz.linux.kernel@gmail.com, soc@kernel.org,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <1654538139-7450-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1654538139-7450-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH] arch: arm: mach-spear: Add missing of_node_put() in
+ time.c
+Message-ID: <20220616060605.jtbgai74w4f7ddyh@vireshk-i7>
+References: <20220615123912.3965902-1-windhl@126.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615123912.3965902-1-windhl@126.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,75 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 20:55, Kuogee Hsieh wrote:
-> During msm initialize phase, dp_display_unbind() will be called to undo
-> initializations had been done by dp_display_bind() previously if there is
-> error happen at msm_drm_bind. In this case, core_initialized flag had to
-> be check to make sure clocks is on before update DP controller register
-> to disable HPD interrupts. Otherwise system will crash due to below NOC
-> fatal error.
+On 15-06-22, 20:39, Liang He wrote:
+> In spear_setup_of_timer(), of_find_matching_node() will return a
+> node pointer with refcount incrementd. We should use of_node_put()
+> in each fail path or when it is not used anymore.
 > 
-> QTISECLIB [01f01a7ad]CNOC2 ERROR: ERRLOG0_LOW = 0x00061007
-> QTISECLIB [01f01a7ad]GEM_NOC ERROR: ERRLOG0_LOW = 0x00001007
-> QTISECLIB [01f0371a0]CNOC2 ERROR: ERRLOG0_HIGH = 0x00000003
-> QTISECLIB [01f055297]GEM_NOC ERROR: ERRLOG0_HIGH = 0x00000003
-> QTISECLIB [01f072beb]CNOC2 ERROR: ERRLOG1_LOW = 0x00000024
-> QTISECLIB [01f0914b8]GEM_NOC ERROR: ERRLOG1_LOW = 0x00000042
-> QTISECLIB [01f0ae639]CNOC2 ERROR: ERRLOG1_HIGH = 0x00004002
-> QTISECLIB [01f0cc73f]GEM_NOC ERROR: ERRLOG1_HIGH = 0x00004002
-> QTISECLIB [01f0ea092]CNOC2 ERROR: ERRLOG2_LOW = 0x0009020c
-> QTISECLIB [01f10895f]GEM_NOC ERROR: ERRLOG2_LOW = 0x0ae9020c
-> QTISECLIB [01f125ae1]CNOC2 ERROR: ERRLOG2_HIGH = 0x00000000
-> QTISECLIB [01f143be7]GEM_NOC ERROR: ERRLOG2_HIGH = 0x00000000
-> QTISECLIB [01f16153a]CNOC2 ERROR: ERRLOG3_LOW = 0x00000000
-> QTISECLIB [01f17fe07]GEM_NOC ERROR: ERRLOG3_LOW = 0x00000000
-> QTISECLIB [01f19cf89]CNOC2 ERROR: ERRLOG3_HIGH = 0x00000000
-> QTISECLIB [01f1bb08e]GEM_NOC ERROR: ERRLOG3_HIGH = 0x00000000
-> QTISECLIB [01f1d8a31]CNOC2 ERROR: SBM1 FAULTINSTATUS0_LOW = 0x00000002
-> QTISECLIB [01f1f72a4]GEM_NOC ERROR: SBM0 FAULTINSTATUS0_LOW = 0x00000001
-> QTISECLIB [01f21a217]CNOC3 ERROR: ERRLOG0_LOW = 0x00000006
-> QTISECLIB [01f23dfd3]NOC error fatal
-> 
-> changes in v2:
-> -- drop the first patch (drm/msm: enable msm irq after all initializations are done successfully at msm_drm_init()) since the problem had been fixed by other patch
-> 
-> Fixes: a65c95ff88f2 ("drm/msm/dp: stop event kernel thread when DP unbind")
-
-Please. Stop using commit IDs from the private git tree.  I thought we 
-have stumbled upon this during the last cycle, thus we won't see rogue 
-commit IDs anymore. But I was wrong. I've got another complaint from 
-Stephen. I'm going to fix this one manually, but please make sure to 
-stop sending wrong Fixes tags in the future.
-
-Generally I feel like this is a sign of an incorrect process on your 
-side. The patches should be developed and tested against one of upstream 
-trees (linux-next, msm-next or msm-next-lumag) and then backported to 
-your integration/backports/stable/whatever. Since today the 
-msm-next-lumag is included into the linux-next, so you can use 
-linux-next as a basis.
-
-
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Signed-off-by: Liang He <windhl@126.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/arm/mach-spear/time.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index da5c03a..2b72639 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -309,7 +309,8 @@ static void dp_display_unbind(struct device *dev, struct device *master,
->   	struct msm_drm_private *priv = dev_get_drvdata(master);
->   
->   	/* disable all HPD interrupts */
-> -	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
-> +	if (dp->core_initialized)
-> +		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
->   
->   	kthread_stop(dp->ev_tsk);
->   
+> diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
+> index d1fdb6066f7b..a1b6635b4ecb 100644
+> --- a/arch/arm/mach-spear/time.c
+> +++ b/arch/arm/mach-spear/time.c
+> @@ -217,16 +217,20 @@ void __init spear_setup_of_timer(void)
+>  
+>  	irq = irq_of_parse_and_map(np, 0);
+>  	if (!irq) {
+> +		of_node_put(np);
+>  		pr_err("%s: No irq passed for timer via DT\n", __func__);
+>  		return;
+>  	}
+>  
+>  	gpt_base = of_iomap(np, 0);
+>  	if (!gpt_base) {
+> +		of_node_put(np);
+>  		pr_err("%s: of iomap failed\n", __func__);
+>  		return;
+>  	}
+> -
+> +	
+> +	of_node_put(np);
+> +	
+>  	gpt_clk = clk_get_sys("gpt0", NULL);
+>  	if (IS_ERR(gpt_clk)) {
+>  		pr_err("%s:couldn't get clk for gpt\n", __func__);
 
+Since this routine already have error labels, for consistence it would be better
+to add another one "err_put_np" and use goto to that ?
 
 -- 
-With best wishes
-Dmitry
+viresh

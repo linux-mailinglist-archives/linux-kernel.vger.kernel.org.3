@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E1654EBAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61CA54EBB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378707AbiFPU5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S1378771AbiFPU6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiFPU5O (ORCPT
+        with ESMTP id S1378764AbiFPU5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:57:14 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974E65FF1F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655413033; x=1686949033;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zGb98EreHsN25CXV/01rJqWNIbdOu/CzDE/l/VN7VXo=;
-  b=JwyJ5Bim5XlEFW1h5oKHHWy5PZ+en3+zCkWGzlhBh5RC++DRTeVsbCtG
-   1m5Sbc2IE0eYFjwx1bDTwKpv28gwTCVST0BGM+mN3a7bQ+/UoNXpoVsoI
-   T3UXSLBODpASawQTQBrKA4S5AHzaCQtYAIDUwxoeFu225SbDy/7q+fcrp
-   XLN9zpfcy4wtyNsI+JJ/Kk+2CJofOxSm5aQR+VW2MiWfQd7SmpuybSxLM
-   OD/tqvCYXMAxl1vYQ1jOd/oW5Pi8SWw+VVfqUsAKWKuWoTlZVi8NDhZcL
-   zuHUHbzOiYZzMIatO09/tAzVoxcJDqeeNgAfHmfvwO37Et2q8/SGM5yDz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343310876"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="343310876"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:57:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="831731727"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jun 2022 13:56:16 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1wXG-000Om1-LC;
-        Thu, 16 Jun 2022 20:56:14 +0000
-Date:   Fri, 17 Jun 2022 04:55:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Subject: [jkirsher-next-queue:master 1/5] ld.lld: error: undefined symbol:
- qcom_smem_get
-Message-ID: <202206170405.fqVbBgOE-lkp@intel.com>
+        Thu, 16 Jun 2022 16:57:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E041A390;
+        Thu, 16 Jun 2022 13:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=PFkZtmLsuxj6bFObgpPU6iJZEmrUQykuqBIHQOpbhl4=; b=cuX/SlokYz6n6ygd+FK3a+KLZl
+        6eSamUGtmBtIJ90sI7e5gZb1TzmkOGAlYjR72r+YIxYReWXZPK5+a+sjn/2pIU39me3XJcxkvjhU+
+        cWfgFNAJ2m+/oLXStROeiJ5aUO+NwyXTS1r9qnnDuG3JSCB7YpzXPQnv8SWhF0CiTVc3T95ameoLS
+        6ry08EDrIdN57xShRHdNb13StyXqX8qlDeDWI9GzViN2l2sSKBHFbvsaItzywqXFwhZKfhjju6TVT
+        jcs0q3TGBjLxjV+f6716pwUvsMIat5iFBAItAEAI9LNTPavd5G5SPieFqwMAU4/Ot7RjdP98j7R18
+        6smoYBzQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1wYE-008Vqk-0r; Thu, 16 Jun 2022 20:57:14 +0000
+Message-ID: <2a54bec4-5902-b22a-13f2-2237f4b10164@infradead.org>
+Date:   Thu, 16 Jun 2022 13:57:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V4 18/20] rv/monitor: Add safe watchdog monitor
+Content-Language: en-US
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1655368610.git.bristot@kernel.org>
+ <6366fdc89d65b8d9b14ccd1e42fa0d793fbe9f73.1655368610.git.bristot@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <6366fdc89d65b8d9b14ccd1e42fa0d793fbe9f73.1655368610.git.bristot@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,41 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git master
-head:   5dcb50c009c9f8ec1cfca6a81a05c0060a5bbf68
-commit: 9ec092d2feb69045dd289845024301fb91c064ee [1/5] net: ethernet: stmmac: add missing sgmii configure for ipq806x
-config: riscv-randconfig-r042-20220616 (https://download.01.org/0day-ci/archive/20220617/202206170405.fqVbBgOE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git/commit/?id=9ec092d2feb69045dd289845024301fb91c064ee
-        git remote add jkirsher-next-queue https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git
-        git fetch --no-tags jkirsher-next-queue master
-        git checkout 9ec092d2feb69045dd289845024301fb91c064ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hi--
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 6/16/22 01:45, Daniel Bristot de Oliveira wrote:
+> diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
+> index 21f03fb3101a..b14ae63e792b 100644
+> --- a/kernel/trace/rv/Kconfig
+> +++ b/kernel/trace/rv/Kconfig
+> @@ -45,6 +45,16 @@ config RV_MON_WWNR
+>  	  illustrates the usage of per-task monitor. The model is
+>  	  broken on purpose: it serves to test reactors.
+>  
+> +config RV_MON_SAFE_WTD
+> +	select DA_MON_EVENTS_IMPLICIT
+> +	bool "Safety watchdog"
+> +	help
+> +	  Enable safe_wtd, this monitor observes the interaction
+> +	  between a user-space safety monitor and a watchdog device.
+> +
+> +	  For futher information see:
+> +	    Documentation/trace/rv/safety-monitor.rst
 
-All errors (new ones prefixed by >>):
+I'm curious about what "WTD" means.
 
->> ld.lld: error: undefined symbol: qcom_smem_get
-   >>> referenced by socinfo.c
-   >>>               soc/qcom/socinfo.o:(qcom_socinfo_probe) in archive drivers/built-in.a
-   >>> referenced by socinfo.c
-   >>>               soc/qcom/socinfo.o:(qcom_socinfo_probe) in archive drivers/built-in.a
+I see lots of WDT in drivers/watchdog/Kconfig
+(where it means WatchDog Timer AFAIK).
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for QCOM_SOCINFO
-   Depends on QCOM_SMEM
-   Selected by
-   - DWMAC_IPQ806X && NETDEVICES && ETHERNET && NET_VENDOR_STMICRO && STMMAC_ETH && STMMAC_PLATFORM && OF && (ARCH_QCOM || COMPILE_TEST
-
+thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

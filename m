@@ -2,233 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BD454EB21
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EBB54EB25
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378388AbiFPU1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S1378541AbiFPU2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378486AbiFPU1H (ORCPT
+        with ESMTP id S230434AbiFPU2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:27:07 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1575B89B;
-        Thu, 16 Jun 2022 13:27:01 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id s1so1713733ilj.0;
-        Thu, 16 Jun 2022 13:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SsJY7P3jisvIHHNgMnMfhfTU+j7BrzVjUHUb60jK/yY=;
-        b=gmVDginzPKhGopFMuxnIaJgoXctH5rT+joAZIaV5r2mT3QTDOWq8ECncyWDHnXL1dC
-         oHxC/EYQHWI5/hwcOTcP/96DoHeM83/PhmVTEc3RqdOcCujBPtAIWn+mMDheKN4Wak7m
-         qr4gToYI1blM9ThtKQWGJQJZAxjnySq/LdT57Bk1sQkQ6pTNXluZX2CqUKy4uN9f0ZRt
-         Pw7Gar5N3qd6NO4VSnFrQEPFZ8gA0YBwRtvfiFwfYwYlip/FhCTDI+uGDxyjYh31+ogs
-         DXd7wr2QhMIJ3H5eQD7wZmQRWsoOYGIZMlewoYqcL+MzKUm5F40rJbsbJLT3+arBVeJh
-         bAng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SsJY7P3jisvIHHNgMnMfhfTU+j7BrzVjUHUb60jK/yY=;
-        b=hbiWX+NcItIZTkDztNnkrTsfc+muHPw67JRooVO4ofcGe5ru+p1LpRD1nFn9iEZWm6
-         Q6GJPX3UEIo14vyGDDz7R74YZ0nxVz98FcjYnxFPSW7jrtuYZrE/XnyrNT+3tknPyoUc
-         cW2h3YNHOH1egpZENASDh4G33iFoqs3a3QhII3zYJBQ/A6/Va3CNTlIXAxyn1P+3ZXYL
-         VPS1O1VUniYf5lL0FuNgd2aa9REWTfh0Ke8LyfKiRX4ZacMQb7E/kiAwiJaIR5tjNk4B
-         iv6qH2+wSbphNY+rUFp9aR4rUfGIZN7ojckTFc02ie42npddFdGfbpBxAmU4qymeFnxk
-         /3FA==
-X-Gm-Message-State: AJIora+JwA8ugowvLpwmCPx3OvuwrxQ8pcqXO+IUIWJBclQ/KwiKZihi
-        NdVWmvgplOJ6zG2fXHvjbqBub0p4JUlXb8h/
-X-Google-Smtp-Source: AGRyM1vvlN1n/ci4DNl2/+810XdfpCysIlotnk/8vNyQ0FNGYJtIclLv00X8l27SSYgIDNEUdtOU/A==
-X-Received: by 2002:a05:6e02:1c44:b0:2d7:6bc3:9960 with SMTP id d4-20020a056e021c4400b002d76bc39960mr3935563ilg.194.1655411221180;
-        Thu, 16 Jun 2022 13:27:01 -0700 (PDT)
-Received: from tremont-lap.lan ([2604:2d80:d289:7400:7af5:ac5e:1454:9e62])
-        by smtp.gmail.com with ESMTPSA id n4-20020a02a904000000b0032e583132e4sm1283700jam.123.2022.06.16.13.26.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 13:27:00 -0700 (PDT)
-From:   David Owens <daowens01@gmail.com>
-X-Google-Original-From: David Owens <dowens@precisionplanting.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@bitmer.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     David Owens <dowens@precisionplanting.com>,
-        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] ASoC: ti: omap-mcbsp: duplicate sysfs error
-Date:   Thu, 16 Jun 2022 15:26:45 -0500
-Message-Id: <20220616202645.1645972-1-dowens@precisionplanting.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 16 Jun 2022 16:28:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC1150019;
+        Thu, 16 Jun 2022 13:28:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F47C61DAC;
+        Thu, 16 Jun 2022 20:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9341C34114;
+        Thu, 16 Jun 2022 20:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655411279;
+        bh=1iWy/ljKYElgWvDw6knPHtMncy4SKW9L+9GNYD0GiEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tt2N8xqfAdA2d6/lfRAvRWUHCYVfXnAb682TR+kRWZ4azlKOj/JaAKZzrgtj938bD
+         KpttTPxkvmdl6ux4g7yJfMh91PXy4P/BhNuPFJWt6t64L8NXK75SdlC5utT6fVc6s9
+         nt4yTxj66qWmvOdX31NtapfLrE1JRbkPUiWdxAmPFe03b7a1QkqJnfZIwxR9P4o5pI
+         8lEtsYfSdWffb4jMsVQvzaDrofGcLv6J6CLvWBKRCBGaUOgCz3znRVG+TAgRZrM6rv
+         Mf+BEKAathNREnmtiPc4sQdA3FvZ+rOa/5g0zrOv512z/K8bNNRzySHPZDp2Xv4Yu6
+         qLF/6Q1ij9QcA==
+Date:   Fri, 17 Jun 2022 01:57:57 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] mtd: nand: raw: qcom_nandc: reorder
+ qcom_nand_host struct
+Message-ID: <20220616202757.GA2889@thinkpad>
+References: <20220615000612.3119-1-ansuelsmth@gmail.com>
+ <20220615000612.3119-2-ansuelsmth@gmail.com>
+ <20220615171132.GA3606@thinkpad>
+ <62aa76ad.1c69fb81.7e2d3.0c8e@mx.google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <62aa76ad.1c69fb81.7e2d3.0c8e@mx.google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert to managed versions of sysfs and clk allocation to simplify
-unbinding and error handling in probe.  Managed sysfs node
-creation specifically addresses the following error seen the second time
-probe is attempted after sdma_pcm_platform_register() previously requested
-probe deferral:
+On Thu, Jun 16, 2022 at 02:18:08AM +0200, Ansuel Smith wrote:
+> On Wed, Jun 15, 2022 at 10:41:32PM +0530, Manivannan Sadhasivam wrote:
+> > On Wed, Jun 15, 2022 at 02:06:10AM +0200, Ansuel Smith wrote:
+> > > Reorder structs in nandc driver to save holes.
+> > > 
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > 
+> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> > 
+> > Thanks,
+> > Mani
+> >
+> 
+> I'm sending v8 with a different Sob so I'm not adding the review tag (in
+> v8).
+> In short the new Sob is what I will use onwards, wanted to keep the
+> Ansuel reference but it was suggested to use Christian Marangi and
+> nothing more. It's just a name change and we are the same person and
+> nobody is stealing ownership of the patch.
+> Sorry for the mess.
+> 
 
-sysfs: cannot create duplicate filename '/devices/platform/68000000.ocp/49022000.mcbsp/max_tx_thres'
+That's fine but you could've kept the review tags... Anyway, I'll give mine.
 
-Signed-off-by: David Owens <dowens@precisionplanting.com>
----
+Thanks,
+Mani
 
-Changes in v3:
- * Whitespace changes only to allow clean applly
+> > > ---
+> > >  drivers/mtd/nand/raw/qcom_nandc.c | 107 +++++++++++++++++-------------
+> > >  1 file changed, 62 insertions(+), 45 deletions(-)
+> > > 
+> > > diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+> > > index 1a77542c6d67..f2990d721733 100644
+> > > --- a/drivers/mtd/nand/raw/qcom_nandc.c
+> > > +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+> > > @@ -238,6 +238,9 @@ nandc_set_reg(chip, reg,			\
+> > >   * @bam_ce - the array of BAM command elements
+> > >   * @cmd_sgl - sgl for NAND BAM command pipe
+> > >   * @data_sgl - sgl for NAND BAM consumer/producer pipe
+> > > + * @last_data_desc - last DMA desc in data channel (tx/rx).
+> > > + * @last_cmd_desc - last DMA desc in command channel.
+> > > + * @txn_done - completion for NAND transfer.
+> > >   * @bam_ce_pos - the index in bam_ce which is available for next sgl
+> > >   * @bam_ce_start - the index in bam_ce which marks the start position ce
+> > >   *		   for current sgl. It will be used for size calculation
+> > > @@ -250,14 +253,14 @@ nandc_set_reg(chip, reg,			\
+> > >   * @rx_sgl_start - start index in data sgl for rx.
+> > >   * @wait_second_completion - wait for second DMA desc completion before making
+> > >   *			     the NAND transfer completion.
+> > > - * @txn_done - completion for NAND transfer.
+> > > - * @last_data_desc - last DMA desc in data channel (tx/rx).
+> > > - * @last_cmd_desc - last DMA desc in command channel.
+> > >   */
+> > >  struct bam_transaction {
+> > >  	struct bam_cmd_element *bam_ce;
+> > >  	struct scatterlist *cmd_sgl;
+> > >  	struct scatterlist *data_sgl;
+> > > +	struct dma_async_tx_descriptor *last_data_desc;
+> > > +	struct dma_async_tx_descriptor *last_cmd_desc;
+> > > +	struct completion txn_done;
+> > >  	u32 bam_ce_pos;
+> > >  	u32 bam_ce_start;
+> > >  	u32 cmd_sgl_pos;
+> > > @@ -267,25 +270,23 @@ struct bam_transaction {
+> > >  	u32 rx_sgl_pos;
+> > >  	u32 rx_sgl_start;
+> > >  	bool wait_second_completion;
+> > > -	struct completion txn_done;
+> > > -	struct dma_async_tx_descriptor *last_data_desc;
+> > > -	struct dma_async_tx_descriptor *last_cmd_desc;
+> > >  };
+> > >  
+> > >  /*
+> > >   * This data type corresponds to the nand dma descriptor
+> > > + * @dma_desc - low level DMA engine descriptor
+> > >   * @list - list for desc_info
+> > > - * @dir - DMA transfer direction
+> > > + *
+> > >   * @adm_sgl - sgl which will be used for single sgl dma descriptor. Only used by
+> > >   *	      ADM
+> > >   * @bam_sgl - sgl which will be used for dma descriptor. Only used by BAM
+> > >   * @sgl_cnt - number of SGL in bam_sgl. Only used by BAM
+> > > - * @dma_desc - low level DMA engine descriptor
+> > > + * @dir - DMA transfer direction
+> > >   */
+> > >  struct desc_info {
+> > > +	struct dma_async_tx_descriptor *dma_desc;
+> > >  	struct list_head node;
+> > >  
+> > > -	enum dma_data_direction dir;
+> > >  	union {
+> > >  		struct scatterlist adm_sgl;
+> > >  		struct {
+> > > @@ -293,7 +294,7 @@ struct desc_info {
+> > >  			int sgl_cnt;
+> > >  		};
+> > >  	};
+> > > -	struct dma_async_tx_descriptor *dma_desc;
+> > > +	enum dma_data_direction dir;
+> > >  };
+> > >  
+> > >  /*
+> > > @@ -337,52 +338,64 @@ struct nandc_regs {
+> > >  /*
+> > >   * NAND controller data struct
+> > >   *
+> > > - * @controller:			base controller structure
+> > > - * @host_list:			list containing all the chips attached to the
+> > > - *				controller
+> > >   * @dev:			parent device
+> > > + *
+> > >   * @base:			MMIO base
+> > > - * @base_phys:			physical base address of controller registers
+> > > - * @base_dma:			dma base address of controller registers
+> > > + *
+> > >   * @core_clk:			controller clock
+> > >   * @aon_clk:			another controller clock
+> > >   *
+> > > + * @regs:			a contiguous chunk of memory for DMA register
+> > > + *				writes. contains the register values to be
+> > > + *				written to controller
+> > > + *
+> > > + * @props:			properties of current NAND controller,
+> > > + *				initialized via DT match data
+> > > + *
+> > > + * @controller:			base controller structure
+> > > + * @host_list:			list containing all the chips attached to the
+> > > + *				controller
+> > > + *
+> > >   * @chan:			dma channel
+> > >   * @cmd_crci:			ADM DMA CRCI for command flow control
+> > >   * @data_crci:			ADM DMA CRCI for data flow control
+> > > + *
+> > >   * @desc_list:			DMA descriptor list (list of desc_infos)
+> > >   *
+> > >   * @data_buffer:		our local DMA buffer for page read/writes,
+> > >   *				used when we can't use the buffer provided
+> > >   *				by upper layers directly
+> > > - * @buf_size/count/start:	markers for chip->legacy.read_buf/write_buf
+> > > - *				functions
+> > >   * @reg_read_buf:		local buffer for reading back registers via DMA
+> > > + *
+> > > + * @base_phys:			physical base address of controller registers
+> > > + * @base_dma:			dma base address of controller registers
+> > >   * @reg_read_dma:		contains dma address for register read buffer
+> > > - * @reg_read_pos:		marker for data read in reg_read_buf
+> > >   *
+> > > - * @regs:			a contiguous chunk of memory for DMA register
+> > > - *				writes. contains the register values to be
+> > > - *				written to controller
+> > > - * @cmd1/vld:			some fixed controller register values
+> > > - * @props:			properties of current NAND controller,
+> > > - *				initialized via DT match data
+> > > + * @buf_size/count/start:	markers for chip->legacy.read_buf/write_buf
+> > > + *				functions
+> > >   * @max_cwperpage:		maximum QPIC codewords required. calculated
+> > >   *				from all connected NAND devices pagesize
+> > > + *
+> > > + * @reg_read_pos:		marker for data read in reg_read_buf
+> > > + *
+> > > + * @cmd1/vld:			some fixed controller register values
+> > >   */
+> > >  struct qcom_nand_controller {
+> > > -	struct nand_controller controller;
+> > > -	struct list_head host_list;
+> > > -
+> > >  	struct device *dev;
+> > >  
+> > >  	void __iomem *base;
+> > > -	phys_addr_t base_phys;
+> > > -	dma_addr_t base_dma;
+> > >  
+> > >  	struct clk *core_clk;
+> > >  	struct clk *aon_clk;
+> > >  
+> > > +	struct nandc_regs *regs;
+> > > +	struct bam_transaction *bam_txn;
+> > > +
+> > > +	const struct qcom_nandc_props *props;
+> > > +
+> > > +	struct nand_controller controller;
+> > > +	struct list_head host_list;
+> > > +
+> > >  	union {
+> > >  		/* will be used only by QPIC for BAM DMA */
+> > >  		struct {
+> > > @@ -400,22 +413,22 @@ struct qcom_nand_controller {
+> > >  	};
+> > >  
+> > >  	struct list_head desc_list;
+> > > -	struct bam_transaction *bam_txn;
+> > >  
+> > >  	u8		*data_buffer;
+> > > +	__le32		*reg_read_buf;
+> > > +
+> > > +	phys_addr_t base_phys;
+> > > +	dma_addr_t base_dma;
+> > > +	dma_addr_t reg_read_dma;
+> > > +
+> > >  	int		buf_size;
+> > >  	int		buf_count;
+> > >  	int		buf_start;
+> > >  	unsigned int	max_cwperpage;
+> > >  
+> > > -	__le32 *reg_read_buf;
+> > > -	dma_addr_t reg_read_dma;
+> > >  	int reg_read_pos;
+> > >  
+> > > -	struct nandc_regs *regs;
+> > > -
+> > >  	u32 cmd1, vld;
+> > > -	const struct qcom_nandc_props *props;
+> > >  };
+> > >  
+> > >  /*
+> > > @@ -431,19 +444,21 @@ struct qcom_nand_controller {
+> > >   *				and reserved bytes
+> > >   * @cw_data:			the number of bytes within a codeword protected
+> > >   *				by ECC
+> > > - * @use_ecc:			request the controller to use ECC for the
+> > > - *				upcoming read/write
+> > > - * @bch_enabled:		flag to tell whether BCH ECC mode is used
+> > >   * @ecc_bytes_hw:		ECC bytes used by controller hardware for this
+> > >   *				chip
+> > > - * @status:			value to be returned if NAND_CMD_STATUS command
+> > > - *				is executed
+> > > + *
+> > >   * @last_command:		keeps track of last command on this chip. used
+> > >   *				for reading correct status
+> > >   *
+> > >   * @cfg0, cfg1, cfg0_raw..:	NANDc register configurations needed for
+> > >   *				ecc/non-ecc mode for the current nand flash
+> > >   *				device
+> > > + *
+> > > + * @status:			value to be returned if NAND_CMD_STATUS command
+> > > + *				is executed
+> > > + * @use_ecc:			request the controller to use ECC for the
+> > > + *				upcoming read/write
+> > > + * @bch_enabled:		flag to tell whether BCH ECC mode is used
+> > >   */
+> > >  struct qcom_nand_host {
+> > >  	struct nand_chip chip;
+> > > @@ -452,12 +467,10 @@ struct qcom_nand_host {
+> > >  	int cs;
+> > >  	int cw_size;
+> > >  	int cw_data;
+> > > -	bool use_ecc;
+> > > -	bool bch_enabled;
+> > >  	int ecc_bytes_hw;
+> > >  	int spare_bytes;
+> > >  	int bbm_size;
+> > > -	u8 status;
+> > > +
+> > >  	int last_command;
+> > >  
+> > >  	u32 cfg0, cfg1;
+> > > @@ -466,23 +479,27 @@ struct qcom_nand_host {
+> > >  	u32 ecc_bch_cfg;
+> > >  	u32 clrflashstatus;
+> > >  	u32 clrreadstatus;
+> > > +
+> > > +	u8 status;
+> > > +	bool use_ecc;
+> > > +	bool bch_enabled;
+> > >  };
+> > >  
+> > >  /*
+> > >   * This data type corresponds to the NAND controller properties which varies
+> > >   * among different NAND controllers.
+> > >   * @ecc_modes - ecc mode for NAND
+> > > + * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
+> > >   * @is_bam - whether NAND controller is using BAM
+> > >   * @is_qpic - whether NAND CTRL is part of qpic IP
+> > >   * @qpic_v2 - flag to indicate QPIC IP version 2
+> > > - * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
+> > >   */
+> > >  struct qcom_nandc_props {
+> > >  	u32 ecc_modes;
+> > > +	u32 dev_cmd_reg_start;
+> > >  	bool is_bam;
+> > >  	bool is_qpic;
+> > >  	bool qpic_v2;
+> > > -	u32 dev_cmd_reg_start;
+> > >  };
+> > >  
+> > >  /* Frees the BAM transaction memory */
+> > > -- 
+> > > 2.36.1
+> > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
+> 
+> -- 
+> 	Ansuel
 
-Changes in v2:
- * Improved error handling
-
----
- sound/soc/ti/omap-mcbsp-priv.h |  2 --
- sound/soc/ti/omap-mcbsp-st.c   | 21 ++++-----------------
- sound/soc/ti/omap-mcbsp.c      | 26 ++++----------------------
- 3 files changed, 8 insertions(+), 41 deletions(-)
-
-diff --git a/sound/soc/ti/omap-mcbsp-priv.h b/sound/soc/ti/omap-mcbsp-priv.h
-index 7865cda4bf0a..da519ea1f303 100644
---- a/sound/soc/ti/omap-mcbsp-priv.h
-+++ b/sound/soc/ti/omap-mcbsp-priv.h
-@@ -316,8 +316,6 @@ static inline int omap_mcbsp_read(struct omap_mcbsp *mcbsp, u16 reg,
- 
- /* Sidetone specific API */
- int omap_mcbsp_st_init(struct platform_device *pdev);
--void omap_mcbsp_st_cleanup(struct platform_device *pdev);
--
- int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp);
- int omap_mcbsp_st_stop(struct omap_mcbsp *mcbsp);
- 
-diff --git a/sound/soc/ti/omap-mcbsp-st.c b/sound/soc/ti/omap-mcbsp-st.c
-index 0bc7d26c660a..402a57a502e6 100644
---- a/sound/soc/ti/omap-mcbsp-st.c
-+++ b/sound/soc/ti/omap-mcbsp-st.c
-@@ -292,14 +292,11 @@ static ssize_t st_taps_store(struct device *dev,
- 
- static DEVICE_ATTR_RW(st_taps);
- 
--static const struct attribute *sidetone_attrs[] = {
-+static struct attribute *sidetone_attrs[] = {
- 	&dev_attr_st_taps.attr,
- 	NULL,
- };
--
--static const struct attribute_group sidetone_attr_group = {
--	.attrs = (struct attribute **)sidetone_attrs,
--};
-+ATTRIBUTE_GROUPS(sidetone);
- 
- int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp)
- {
-@@ -347,7 +344,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
- 	if (!st_data)
- 		return -ENOMEM;
- 
--	st_data->mcbsp_iclk = clk_get(mcbsp->dev, "ick");
-+	st_data->mcbsp_iclk = devm_clk_get(mcbsp->dev, "ick");
- 	if (IS_ERR(st_data->mcbsp_iclk)) {
- 		dev_warn(mcbsp->dev,
- 			 "Failed to get ick, sidetone might be broken\n");
-@@ -359,7 +356,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
- 	if (!st_data->io_base_st)
- 		return -ENOMEM;
- 
--	ret = sysfs_create_group(&mcbsp->dev->kobj, &sidetone_attr_group);
-+	ret = devm_device_add_group(mcbsp->dev, &sidetone_group);
- 	if (ret)
- 		return ret;
- 
-@@ -368,16 +365,6 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
- 	return 0;
- }
- 
--void omap_mcbsp_st_cleanup(struct platform_device *pdev)
--{
--	struct omap_mcbsp *mcbsp = platform_get_drvdata(pdev);
--
--	if (mcbsp->st_data) {
--		sysfs_remove_group(&mcbsp->dev->kobj, &sidetone_attr_group);
--		clk_put(mcbsp->st_data->mcbsp_iclk);
--	}
--}
--
- static int omap_mcbsp_st_info_volsw(struct snd_kcontrol *kcontrol,
- 				    struct snd_ctl_elem_info *uinfo)
- {
-diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
-index 4479d74f0a45..395493a2d965 100644
---- a/sound/soc/ti/omap-mcbsp.c
-+++ b/sound/soc/ti/omap-mcbsp.c
-@@ -595,16 +595,13 @@ static ssize_t dma_op_mode_store(struct device *dev,
- 
- static DEVICE_ATTR_RW(dma_op_mode);
- 
--static const struct attribute *additional_attrs[] = {
-+static struct attribute *additional_attrs[] = {
- 	&dev_attr_max_tx_thres.attr,
- 	&dev_attr_max_rx_thres.attr,
- 	&dev_attr_dma_op_mode.attr,
- 	NULL,
- };
--
--static const struct attribute_group additional_attr_group = {
--	.attrs = (struct attribute **)additional_attrs,
--};
-+ATTRIBUTE_GROUPS(additional);
- 
- /*
-  * McBSP1 and McBSP3 are directly mapped on 1610 and 1510.
-@@ -702,8 +699,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
- 		mcbsp->max_tx_thres = max_thres(mcbsp) - 0x10;
- 		mcbsp->max_rx_thres = max_thres(mcbsp) - 0x10;
- 
--		ret = sysfs_create_group(&mcbsp->dev->kobj,
--					 &additional_attr_group);
-+		ret = devm_device_add_group(mcbsp->dev, &additional_group);
- 		if (ret) {
- 			dev_err(mcbsp->dev,
- 				"Unable to create additional controls\n");
-@@ -711,16 +707,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = omap_mcbsp_st_init(pdev);
--	if (ret)
--		goto err_st;
--
--	return 0;
--
--err_st:
--	if (mcbsp->pdata->buffer_size)
--		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
--	return ret;
-+	return omap_mcbsp_st_init(pdev);
- }
- 
- /*
-@@ -1431,11 +1418,6 @@ static int asoc_mcbsp_remove(struct platform_device *pdev)
- 	if (cpu_latency_qos_request_active(&mcbsp->pm_qos_req))
- 		cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
- 
--	if (mcbsp->pdata->buffer_size)
--		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
--
--	omap_mcbsp_st_cleanup(pdev);
--
- 	return 0;
- }
- 
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்

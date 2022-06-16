@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52E354EC46
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A9D54EC4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378805AbiFPVM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S1379113AbiFPVNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiFPVMY (ORCPT
+        with ESMTP id S1379191AbiFPVNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:12:24 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF70A60BB4;
-        Thu, 16 Jun 2022 14:12:23 -0700 (PDT)
-Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N7Qt9-1neVfk3JaH-017mEH; Thu, 16 Jun 2022 23:12:22 +0200
-Received: by mail-ot1-f51.google.com with SMTP id a21-20020a9d4715000000b0060bfaac6899so1823021otf.12;
-        Thu, 16 Jun 2022 14:12:21 -0700 (PDT)
-X-Gm-Message-State: AJIora9TjP0a00PBsQURWsgXb12WAwMMa6UXwrIP5I9R8OXtoZqSBBre
-        ADDz3gCl6bvUvzLaH5L5C1dJ3NolVWe2KQxeYQY=
-X-Google-Smtp-Source: AGRyM1vsIgc89v9FEfZY2hXw+qDDKYDoyj4lZ95Az7j+neXL1rj/frpwyBwmT3KawTqhGlZqV+2aaoMOxNa7NrGaWtQ=
-X-Received: by 2002:a0d:d84d:0:b0:314:2bfd:ddf3 with SMTP id
- a74-20020a0dd84d000000b003142bfdddf3mr8091696ywe.347.1655413929938; Thu, 16
- Jun 2022 14:12:09 -0700 (PDT)
+        Thu, 16 Jun 2022 17:13:41 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6636760AB6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:13:39 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d5so2224393plo.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Kq/MImyJWDNQF4uVHL2hoQzE+MOoY9vKXhkH8pM9iWw=;
+        b=oDMV4rTsW6tuuydGHoAl95ll57TYHtuIcLgxX6P7/F+8fIbQhjShTYv2VvzpwP7I2f
+         ODHrtoYjkED2az8ySqcIMrm+pOu+7wc36Gixgd4SqjTTp2xGjJwjUIq7Ph9degSmWdKX
+         yj+zZbeGwC2SAvyU6KbLZ+Xaj2RwEPcHQKXAY2iJoap6UrcUJyAmwqtTzidiQL+PewJN
+         TXCl3YI8GHPSj+2facEjkfri+q2kbnFjLZgmiFiaUiSyp9HGqAx9gzJuFbGW9OmISdjg
+         cuyrA3nq+PB2AEHmSSIN5WKjGpYumFtoXZ9U4IEaUlHrLbpqtigpthN2+jEEbLDZnr8E
+         qDWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Kq/MImyJWDNQF4uVHL2hoQzE+MOoY9vKXhkH8pM9iWw=;
+        b=kCRIqseDBlKDnQyO2B64OGLB34bAwWlgaFzJGLtXdxa2BBDVcRosL/EqE1RFq/sv93
+         SEThuIafqprKDQFQ1dkX3hhp7G36gT5zYMwkoOPKMKsnsmOJBohumQ5dWjm4lNi0up7K
+         i9PQ/q84CtLvmM70M9ChkPsTDXh8bFnXWdjaki055ev0PxqhXSP8GN3XSCnd+965gmqP
+         HHT06FUpiIwQhhliadH//wMW+ThXwAKJkffPWS89vIl+uwzkZ3oVKRqVu3psnzhVAiUL
+         l5s2glgi5qp34rtUNQN4FwEPKD2fhV5cvd7Io7CVUfEW7z+RmoGiRNEGBy4Zs4OsCUeN
+         wSIw==
+X-Gm-Message-State: AJIora+ye+9I39h6pYSxQqUb84bBVL1SUDmXWfb6I09bxnBsO7ln+6Hm
+        p+U1mqkD0CZDmLfXg5DWbKUV5A==
+X-Google-Smtp-Source: AGRyM1sXBnnmN0CPt8Et0W6JQWWLYChMrg1Zy3h2FXLYYO9nrTkigRzDuYC+LUgyDJpx2ZUWmbfawg==
+X-Received: by 2002:a17:902:dccb:b0:168:f9f4:5773 with SMTP id t11-20020a170902dccb00b00168f9f45773mr6364361pll.124.1655414018850;
+        Thu, 16 Jun 2022 14:13:38 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id o18-20020a629a12000000b0051bf246ca2bsm2187451pfe.100.2022.06.16.14.13.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 14:13:38 -0700 (PDT)
+Message-ID: <9c38f708-1376-aa89-2c56-c08d320bcf2b@linaro.org>
+Date:   Thu, 16 Jun 2022 14:13:37 -0700
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-6-tmaimon77@gmail.com>
- <CAK8P3a2CNxijmy0AO6NEfg=hxQZn5WxgQij4JgkTjDTfZZSScA@mail.gmail.com> <CAP6Zq1h+PzkD1vjx787F_tbk30rAZHEkZp9uNUOmrFSd4gLO=g@mail.gmail.com>
-In-Reply-To: <CAP6Zq1h+PzkD1vjx787F_tbk30rAZHEkZp9uNUOmrFSd4gLO=g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 16 Jun 2022 23:11:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=n7QNaJRw6Wru13Lso6EApTqhsuGmgdkh2B3AdrE+_g@mail.gmail.com>
-Message-ID: <CAK8P3a1=n7QNaJRw6Wru13Lso6EApTqhsuGmgdkh2B3AdrE+_g@mail.gmail.com>
-Subject: Re: [PATCH v2 05/20] watchdog: npcm_wdt: Add NPCM845 watchdog support
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NIjOik/WJEzdDxdYA1cJmP0wxFsRS3ajAia3aOO7OgSIB0ygYQ0
- EKA0iUea43JU5UwzuViKob61gfqb+ZTia2qBLKj4a3ceIIy7HlTb7mqd2NRJhpCLFCLrS8r
- QDnI0+MG9S3sSQWTx580s8yOg2E91P7IN1wfOorAoDa3b7MHA+QIu1yqLxCRoMNx3JXIs8S
- fB2CyQgYL+qqLVtvI3OeA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FRVmnoww0WI=:JvhulhdaAtfqBK+kp3KQQy
- ZGBzlxBcvBUMmthv716CpSZFRt6fpexpKRNe5t4CRIppnp601zerXls+ubvRUjOdrgeRS4+81
- rYYa8kTJqo4DQEQvHIbqy3S1gCUH2uLupswIOG5lSt8YYcdGuIgwBwvHtctRu/h5UaCy9txlG
- 3h4An05j9vzHXBsRjDDnbeCG6zIr/W5FfJU7FgKe/OYPv+3+H5NKWmD8nW7zlWhlSOOiqTRBt
- E4yYAtgaFBh2bqbaKJfOy45x8TB6SHx5TyzyRFJYVtFoK2zN8AkS0kJA1Qbg07EwgVwI1pg5Q
- hd9LrlWPuIGEYJavC01DR5oRoG6pP4lnF0pwOiGfgJGK8LVkltWu7nXrmVJaAHhyC+D0ijaMY
- iiIT+O+VCmLYA7jqeVTuJcOFiWmJhChFf05j9tD4JISeQbdrjH3RYoi50uveWQvpwnZeTNE2y
- 9hBc+2HO6MW0dd0Dz/wScZOo+SuDUSFZVG5o47zFwoDrxruQQ2Np8Tjjl+QasAE33wNXTIKOk
- Pn8ISlIam8q9pfmD/yAuTReV884uektVjgBKLuJfRiDaV6eAOyR4mDwjKtMgDQNpKPliNRo4U
- mUgPUzp+4Q3mDC5mtSN6WPrCu1eEZVpCWFDkxvi+AYjkZ5+fBhzSXRpuAJj9EMsYf62L7/d/c
- mmbNB1U/Ruo/nSQVuNmuw3Z8o34L/+9o15mg3gcYZHEyr8i/+wUorRcFRPfpNiFvx4wrtXwiX
- iPuJ5/JviM73u00WCTbOW0b+euu3VfTWCu/zQekEiQ+wMcslis9ofdO8kM7GaKz5RJpsQZszJ
- 4vU+cvQehud+sMYA9IHJLkKuGmXJ/JWvAvDkbKaZdO6h+2AiX1TGkTXAP8olIUZ6acGDgoIwW
- wf3aWuSmAV03eWG8PHchQ1bf2nQbgl8tR6s/WGG61+iIKle4kKqLIHd5J5O23EL7aIrENRRiH
- waq7GV4w9bMRgSYxlteJU/ko25Tte7InBd/Pf4xYPqngL5zN+cnkb
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 05/15] dt-bindings: backlight: Add Mediatek MT6370
+ backlight
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, jic23@kernel.org,
+        lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-6-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613111146.25221-6-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,22 +83,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 11:06 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> On Wed, 8 Jun 2022 at 16:05, Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> > >
-> > > Add Nuvoton BMC NPCM845 watchdog support.
-> > > The NPCM845 uses the same watchdog as the NPCM750.
-> > >
-> > > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> >
-> > This one should no longer be needed if the timers are compatible with the
-> > old ones and correctly described in the DT.
-> by timers do you mean clocks?
+On 13/06/2022 04:11, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add mt6370 backlight binding documentation.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../backlight/mediatek,mt6370-backlight.yaml  | 107 ++++++++++++++++++
+>  1 file changed, 107 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
+> new file mode 100644
+> index 000000000000..25a05e607e83
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT6370 Backlight
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  The MT6370 Backlight WLED driver supports up to a 29V output voltage for
+> +  4 channels of 8 series WLEDs. Each channel supports up to 30mA of current
+> +  capability with 2048 current steps (11 bits) in exponential or linear
+> +  mapping curves.
+> +
+> +allOf:
+> +  - $ref: common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-backlight
+> +
+> +  default-brightness:
+> +    minimum: 0
+> +    maximum: 2048
+> +
+> +  max-brightness:
+> +    minimum: 0
+> +    maximum: 2048
+> +
+> +  enable-gpios:
+> +    description: External backlight 'enable' pin
+> +    maxItems: 1
+> +
+> +  mediatek,bled-pwm-enable:
+> +    description: |
+> +      Enable external PWM input for backlight dimming
+> +    type: boolean
+> +
+> +  mediatek,bled-pwm-hys-enable:
+> +    description: |
+> +      Enable the backlight input-hysteresis for PWM mode
+> +    type: boolean
+> +
+> +  mediatek,bled-pwm-hys-input-bit:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      The selection of the upper and lower bounds threshold of backlight
+> +      PWM resolution. If we choose selection 3 (6 bits), the variation of PWM
+> +      resolution needs over than 64 steps (2^6).
+> +      value mapping:
+> +        - 0: 1
+> +        - 1: 2
+> +        - 2: 4
+> +        - 3: 6
 
-Sorry, I mis-copied my comment. I meant the watchdog being compatible
-with the old
-version.
+Nope, I said last time:
+"In any case you cannot have values mapping"
 
-        Arnd
+Please use proper real world value, not some register bits. The property
+name also needs fixing.
+
+> +
+> +  mediatek,bled-ovp-shutdown:
+> +    description: |
+> +      Enable the backlight shutdown when OVP level triggered
+> +    type: boolean
+> +
+> +  mediatek,bled-ovp-microvolt:
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      Backlight OVP level selection.
+> +      value mapping:
+> +        - 0: 17000000
+> +        - 1: 21000000
+> +        - 2: 25000000
+> +        - 3: 29000000
+
+No. Please test your bindings.
+
+microvolt cannot be 1 mV. It's 21000000, not 1. No value mappings.
+
+> +
+> +  mediatek,bled-ocp-shutdown:
+> +    description: |
+> +      Enable the backlight shutdown when OCP level triggerred.
+> +    type: boolean
+> +
+> +  mediatek,bled-ocp-microamp:
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      Backlight OC level selection.
+> +      value mapping:
+> +        - 0: 900000
+> +        - 1: 1200000
+> +        - 2: 1500000
+> +        - 3: 1800000
+
+Nope.
+
+> +
+> +  mediatek,bled-channel-use:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    description: |
+> +      Backlight LED channel to be used.
+> +      Each bit mapping to:
+> +        - 0: CH4
+> +        - 1: CH3
+> +        - 2: CH2
+> +        - 3: CH1
+> +    minimum: 1
+> +    maximum: 15
+> +
+> +required:
+> +  - compatible
+> +  - mediatek,bled-channel-use
+> +
+> +additionalProperties: false
+
+
+Best regards,
+Krzysztof

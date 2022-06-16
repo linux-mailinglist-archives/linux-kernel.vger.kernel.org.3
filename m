@@ -2,65 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA82E54E252
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E87C54E257
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377230AbiFPNqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S1377236AbiFPNq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376858AbiFPNqa (ORCPT
+        with ESMTP id S1376829AbiFPNq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:46:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB19A37A8E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655387188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FmNUkOO/CPYlAiNCXkHb5y6oDWLQMyJAjm4NQJecMuc=;
-        b=EjR/AdweSXh0nvnGu39ntP++djSW+9fkXmHeRHKS6oLt5c5QM9N8LqPP8KATwyVNx6LTfJ
-        hU00OvO2OpjhSCfmXFMZeHBsQ45B4bskqwR5TARO649fbHfM1t+4o4MYN2Hk4vBgBeXKTu
-        d5Zuj7fOYyzjB8dRFc5M9dWS7lszsio=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-h1PLAn-NMViEKO72XyHw_w-1; Thu, 16 Jun 2022 09:46:23 -0400
-X-MC-Unique: h1PLAn-NMViEKO72XyHw_w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 728793C138A1;
-        Thu, 16 Jun 2022 13:46:22 +0000 (UTC)
-Received: from maya.cloud.tilaa.com (unknown [10.40.208.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27A712026D2D;
-        Thu, 16 Jun 2022 13:46:22 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 15:46:18 +0200
-From:   Stefano Brivio <sbrivio@redhat.com>
-To:     Jie2x Zhou <jie2x.zhou@intel.com>
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>, shuah@kernel.org,
-        liuhangbin@gmail.com, fw@strlen.de,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH] selftests: netfilter: correct PKTGEN_SCRIPT_PATHS in
- nft_concat_range.sh
-Message-ID: <20220616154618.0eb6b283@elisabeth>
-In-Reply-To: <Yqr9pQ9QsVaGjNW/@salvia>
-References: <20220616074046.49349-1-jie2x.zhou@intel.com>
-        <Yqr9pQ9QsVaGjNW/@salvia>
-Organization: Red Hat
+        Thu, 16 Jun 2022 09:46:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD4EE37A09
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:46:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84B2711FB;
+        Thu, 16 Jun 2022 06:46:55 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A08C63F7F5;
+        Thu, 16 Jun 2022 06:46:54 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     maz@kernel.org, tglx@linutronix.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matt Ranostay <mranostay@ti.com>
+Subject: [PATCH] irqchip/gicv3: Handle resource request failure consistently
+Date:   Thu, 16 Jun 2022 14:46:46 +0100
+Message-Id: <5f2b57a0131f3082fae9d3002d360bf784ccb092.1655387206.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,70 +40,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jie2x,
+Due to a silly oversight on my part, making the simple switch to
+of_io_request_and_map() in the DT path inadvertently introduced
+divergent behaviour, whereby failng to request an iomem region now
+becomes fatal for DT, vs. being silently ignored for ACPI.
 
-On Thu, 16 Jun 2022 11:53:41 +0200
-Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+Refactor a bit harder, so that request errors are non-fatal in both
+paths as intended, but also consistently reported as well.
 
-> Cc'ing netfilter-devel and Stefano Brivio.
-> 
-> On Thu, Jun 16, 2022 at 03:40:46PM +0800, Jie2x Zhou wrote:
-> > Before change:
-> > make -C netfilter
-> >  TEST: performance
-> >    net,port                                                      [SKIP]
-> >    perf not supported
-> >    port,net                                                      [SKIP]
-> >    perf not supported
-> >    net6,port                                                     [SKIP]
-> >    perf not supported
-> >    port,proto                                                    [SKIP]
-> >    perf not supported
-> >    net6,port,mac                                                 [SKIP]
-> >    perf not supported
-> >    net6,port,mac,proto                                           [SKIP]
-> >    perf not supported
-> >    net,mac                                                       [SKIP]
-> >    perf not supported
-> > 
-> > After change:
-> >    net,mac                                                       [ OK ]
-> >      baseline (drop from netdev hook):               2061098pps
-> >      baseline hash (non-ranged entries):             1606741pps
-> >      baseline rbtree (match on first field only):    1191607pps
-> >      set with  1000 full, ranged entries:            1639119pps
-> > ok 8 selftests: netfilter: nft_concat_range.sh
-> > 
-> > Fixes: 611973c1e06f ("selftests: netfilter: Introduce tests for sets with range concatenation")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
-> > ---
-> >  tools/testing/selftests/netfilter/nft_concat_range.sh | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/netfilter/nft_concat_range.sh b/tools/testing/selftests/netfilter/nft_concat_range.sh
-> > index b35010cc7f6a..a6991877e50c 100755
-> > --- a/tools/testing/selftests/netfilter/nft_concat_range.sh
-> > +++ b/tools/testing/selftests/netfilter/nft_concat_range.sh
-> > @@ -31,7 +31,7 @@ BUGS="flush_remove_add reload"
-> >  
-> >  # List of possible paths to pktgen script from kernel tree for performance tests
-> >  PKTGEN_SCRIPT_PATHS="
-> > -	../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
-> > +	../../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
+Reported-by: Matt Ranostay <mranostay@ti.com>
+Fixes: 2b2cd74a06c3 ("irqchip/gic-v3: Claim iomem resources")
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/irqchip/irq-gic-v3.c | 41 +++++++++++++++++++++++++++---------
+ 1 file changed, 31 insertions(+), 10 deletions(-)
 
-This came from the fact that I used, for testing, to copy the
-directories 'samples' and 'selftests' to the root of a filesystem
-on a virtual machine, instead of copying the full 'tools' directory.
-
-It was a very arbitrary usage though, also given that 'selftests' is
-typically biggest directory in 'tools', so there's no need to keep the
-previous path.
-
-Thanks for fixing this,
-
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 2be8dea6b6b0..8c51c559f095 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -2039,15 +2039,40 @@ static void __init gic_of_setup_kvm_info(struct device_node *node)
+ 	vgic_set_kvm_info(&gic_v3_kvm_info);
+ }
+ 
++static void gic_request_region(resource_size_t base, resource_size_t size,
++			       const char *name)
++{
++	if (!request_mem_region(base, size, name))
++		pr_warn_once(FW_BUG "%s region %pa has overlapping address\n",
++			     name, &base);
++}
++
++static void __iomem *gic_of_iomap(struct device_node *node, int idx,
++				  const char *name, struct resource *res)
++{
++	void __iomem *base;
++	int ret;
++
++	ret = of_address_to_resource(node, idx, res);
++	if (ret)
++		return IOMEM_ERR_PTR(ret);
++
++	gic_request_region(res->start, resource_size(res), name);
++	base = of_iomap(node, idx);
++
++	return base ?: IOMEM_ERR_PTR(-ENOMEM);
++}
++
+ static int __init gic_of_init(struct device_node *node, struct device_node *parent)
+ {
+ 	void __iomem *dist_base;
+ 	struct redist_region *rdist_regs;
++	struct resource res;
+ 	u64 redist_stride;
+ 	u32 nr_redist_regions;
+ 	int err, i;
+ 
+-	dist_base = of_io_request_and_map(node, 0, "GICD");
++	dist_base = gic_of_iomap(node, 0, "GICD", &res);
+ 	if (IS_ERR(dist_base)) {
+ 		pr_err("%pOF: unable to map gic dist registers\n", node);
+ 		return PTR_ERR(dist_base);
+@@ -2070,12 +2095,8 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 	}
+ 
+ 	for (i = 0; i < nr_redist_regions; i++) {
+-		struct resource res;
+-		int ret;
+-
+-		ret = of_address_to_resource(node, 1 + i, &res);
+-		rdist_regs[i].redist_base = of_io_request_and_map(node, 1 + i, "GICR");
+-		if (ret || IS_ERR(rdist_regs[i].redist_base)) {
++		rdist_regs[i].redist_base = gic_of_iomap(node, 1 + i, "GICR", &res);
++		if (IS_ERR(rdist_regs[i].redist_base)) {
+ 			pr_err("%pOF: couldn't map region %d\n", node, i);
+ 			err = -ENODEV;
+ 			goto out_unmap_rdist;
+@@ -2148,7 +2169,7 @@ gic_acpi_parse_madt_redist(union acpi_subtable_headers *header,
+ 		pr_err("Couldn't map GICR region @%llx\n", redist->base_address);
+ 		return -ENOMEM;
+ 	}
+-	request_mem_region(redist->base_address, redist->length, "GICR");
++	gic_request_region(redist->base_address, redist->length, "GICR");
+ 
+ 	gic_acpi_register_redist(redist->base_address, redist_base);
+ 	return 0;
+@@ -2171,7 +2192,7 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+ 	redist_base = ioremap(gicc->gicr_base_address, size);
+ 	if (!redist_base)
+ 		return -ENOMEM;
+-	request_mem_region(gicc->gicr_base_address, size, "GICR");
++	gic_request_region(gicc->gicr_base_address, size, "GICR");
+ 
+ 	gic_acpi_register_redist(gicc->gicr_base_address, redist_base);
+ 	return 0;
+@@ -2373,7 +2394,7 @@ gic_acpi_init(union acpi_subtable_headers *header, const unsigned long end)
+ 		pr_err("Unable to map GICD registers\n");
+ 		return -ENOMEM;
+ 	}
+-	request_mem_region(dist->base_address, ACPI_GICV3_DIST_MEM_SIZE, "GICD");
++	gic_request_region(dist->base_address, ACPI_GICV3_DIST_MEM_SIZE, "GICD");
+ 
+ 	err = gic_validate_dist_version(acpi_data.dist_base);
+ 	if (err) {
 -- 
-Stefano
+2.36.1.dirty
 

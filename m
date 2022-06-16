@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EDC54E566
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A564854E569
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377256AbiFPOxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S1377308AbiFPOyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbiFPOxj (ORCPT
+        with ESMTP id S233993AbiFPOyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:53:39 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C825220BF0;
-        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id p69so1759394iod.0;
-        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=noJzuG2EgYsSXIT61u1YIsPaCEjRt5ye3SQVTsSN4U8=;
-        b=CIZ8a77SDwweUBOGNgII2b8y5/WfszC4zHsGvXE+zftomD+nN0gq1qFR2HzWFRYN5K
-         hpEhbGBopNmx3GlEh+glZLRXJhwIx2SwESaYp/7c+H2+x3MzsIKty7bImMbRMF0YGCVU
-         1z2PqX5O9AXmPnmNjgtHV+aWq+wFLluDGmmhi1+Jz3ENEavDVQ0CtNTzm0FJHR4i4kmd
-         atBUlGU2CMspcvvacCVvdsGjTNV8klc5bzSEOKuZPXH65L3o11x3SvSYMjXpebTbL4fH
-         0CIFIjl4J8623xiCo87jPzcp2eMQvYi42rfVp3Iotoy4uj0kVgKAcnFkkVXFnFJdJUfM
-         TyYg==
-X-Gm-Message-State: AJIora+9uXk2JQmNy0lexMmXsK1v/xndKTvgaXHL0rYRA5gKZ9I8QfbP
-        OlBqmRynoRuRZ6sPt8yzckIoCfYc7g==
-X-Google-Smtp-Source: AGRyM1u4nGZS+8jkLQspL8OqMilFtD1URp8KZikaKmVKIUBkw4uX4MYV01kHev1qyBWkrdJm6b53vw==
-X-Received: by 2002:a05:6602:2f0d:b0:669:e058:9a18 with SMTP id q13-20020a0566022f0d00b00669e0589a18mr2721297iow.26.1655391216014;
-        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y8-20020a056e020f4800b002d658a34081sm1052037ilj.86.2022.06.16.07.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 07:53:35 -0700 (PDT)
-Received: (nullmailer pid 3459426 invoked by uid 1000);
-        Thu, 16 Jun 2022 14:53:34 -0000
-Date:   Thu, 16 Jun 2022 08:53:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: move ibm,p8-occ bindings to proper
- folder
-Message-ID: <20220616145334.GA3458950-robh@kernel.org>
-References: <20220615211619.6742-1-wsa@kernel.org>
+        Thu, 16 Jun 2022 10:54:18 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73B72871D;
+        Thu, 16 Jun 2022 07:54:17 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 25GErbDi018617
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jun 2022 10:53:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1655391219; bh=HmH8IW6dn33l6vgkuo6oly3cpMBiSZ/+CfDPyI0x6ws=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=IVV9MY4wQsuPv74KdJASggDXZ0V2e667MKTsIIJKBCi8PO68jXPIFUSZIpV6URaHo
+         VKDxusEjLFatWUJl5jd7KN3zKUfQ8ASmTmncALHprzBc/nXR1iIySVcFsT4PQg1mVm
+         zTUTTZhG6B2IgM6mhEAEp5CAOPAWfO8Ge4g6mm8TE6jK76vPIlPC9LHVKVu+raajQA
+         pzpWi20dpNouHJFM+2uXD9TBld4yNbFjL7H6v+apUHGoE/83PMheUFek+txIXLZB9b
+         lDLbDQmOfTOeZZiI/z56vwUUY4HWKp04F0r0CiMDwpSQO4p5bE8CnU8FWUGqVC3nPF
+         Yv/m9LB6zCOhw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 91AEA15C3F35; Thu, 16 Jun 2022 10:53:37 -0400 (EDT)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-ext4@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, jack@suse.com
+Subject: Re: [PATCH -next] fs: Fix jbd2_journal_try_to_free_buffers() kernel-doc comment
+Date:   Thu, 16 Jun 2022 10:53:36 -0400
+Message-Id: <165539120793.59826.15576791047345383049.b4-ty@mit.edu>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220512075432.31763-1-yang.lee@linux.alibaba.com>
+References: <20220512075432.31763-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615211619.6742-1-wsa@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 23:16:19 +0200, Wolfram Sang wrote:
-> It accidently ended up in i2c, but it should be in the hwmon folder.
+On Thu, 12 May 2022 15:54:32 +0800, Yang Li wrote:
+> Add the description of @folio and remove @page in function kernel-doc
+> comment to remove warnings found by running scripts/kernel-doc, which
+> is caused by using 'make W=1'.
 > 
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> ---
->  .../devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt       | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt (100%)
+> fs/jbd2/transaction.c:2149: warning: Function parameter or member
+> 'folio' not described in 'jbd2_journal_try_to_free_buffers'
+> fs/jbd2/transaction.c:2149: warning: Excess function parameter 'page'
+> description in 'jbd2_journal_try_to_free_buffers'
 > 
+> [...]
 
 Applied, thanks!
+
+[1/1] fs: Fix jbd2_journal_try_to_free_buffers() kernel-doc comment
+      commit: 4f5bf12732fd78e225fc62b7c5c84d9032f8048a
+
+Best regards,
+-- 
+Theodore Ts'o <tytso@mit.edu>

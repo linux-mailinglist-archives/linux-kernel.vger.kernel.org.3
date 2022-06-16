@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1D154E666
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFC754E669
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377580AbiFPPvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S1377695AbiFPPwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbiFPPvD (ORCPT
+        with ESMTP id S235942AbiFPPwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:51:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E0C427DE;
-        Thu, 16 Jun 2022 08:51:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 950D260BAD;
-        Thu, 16 Jun 2022 15:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4FFC34114;
-        Thu, 16 Jun 2022 15:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655394661;
-        bh=PaJOcCCOZMISwlBFFb5mPfz00LQCHmckbNW4/JT3HXk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AJwMwl3EcuRXCCpQxreHZ6QaquYE/XW383MEso/dl9qitr2DVDmVF6thuxBSgQ/pG
-         kSOWLWpUDJCutV6kF3GPsZAp56WVvvze0QpwMVBfO3uOQtoAmzikVSDv4l8QK6AUlz
-         89MAdBBNXGy3ib+sAKGjK5Ozjj6stT+yVu8a7qB5Ov4G0GXSd5Po0XO0YQmc6Vpq2v
-         3oE6ItDnKNuTH0O5fpnhi/77bCHAmZ7TQrOVoB+P2PJFABV9XcbRAkKfPudPBb4APH
-         jPIAtTE+8di9C+A0CkXE48GvMs+Cw8+G2EHH1oA9AYUtC9bRiQlj7I1MgPhvPL/iQE
-         eoJFHesoxzsSw==
-Date:   Thu, 16 Jun 2022 08:50:59 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?5qKB5paH6Z+s?= <wentao_liang_g@163.com>
-Cc:     jdmason@kudzu.us, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [PATCH net v2]vexy: Fix a use-after-free bug in
- vxge-main.c
-Message-ID: <20220616085059.680dc215@kernel.org>
-In-Reply-To: <1f10f9f8.6c02.1816cb0dc51.Coremail.wentao_liang_g@163.com>
-References: <20220615013816.6593-1-Wentao_Liang_g@163.com>
-        <20220615195050.6e4785ef@kernel.org>
-        <1f10f9f8.6c02.1816cb0dc51.Coremail.wentao_liang_g@163.com>
+        Thu, 16 Jun 2022 11:52:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5783F43486
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655394726; x=1686930726;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NpEvmHyeuNluAYqysIICIwtsPIGGLugLs7OjcXvDWpc=;
+  b=neos5QkVG7yENS6y0teXSMZshY7JpHomoLXJUslBnhiwjCrSeRcZKJ3e
+   xWo6uPA7ghBn9OkkdbA0Tbc4GpRtYbenQ7ii7tJCMIQzrOL7fWvuZikf4
+   6XJ4/V4fVPvDDRmMmKYtZ0qQm1DMCp+mpKkxIuwqEmRanJLtGfqkAF31B
+   wq6jcVO1UvDVYrdUQ/rFKZTDWAZl6/xFJeumKPFMU6m2JV6kgHZbYTHJj
+   hiCXESQj9iykdWwcAeXtQsCL2yculD/TBa1Lo8vNSYzZJhNFJet6iLIXt
+   Z0BE0w+jM6rbdXqWHAkuTrgcHkflulEnAFW6Ng4YKB6eUMnCS8OzTBIsc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="276854341"
+X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
+   d="scan'208";a="276854341"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 08:52:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
+   d="scan'208";a="589699889"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 08:52:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1rmu-000OW3-Jp;
+        Thu, 16 Jun 2022 15:52:04 +0000
+Date:   Thu, 16 Jun 2022 23:51:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: xtensa-linux-ld: section .Level2InterruptVector.text VMA
+ [0000000000000180,0000000000000193] overlaps section .data VMA
+ [0000000000000000,00000000001a3bf7]
+Message-ID: <202206162308.Ynhq4vSU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,90 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 21:25:39 +0800 (CST) =E6=A2=81=E6=96=87=E9=9F=AC wrote:
-> >The driver is not called "vexy" as far as I can tell.
-> > =20
-> >> The pointer vdev points to a memory region adjacent to a net_device
-> >> structure ndev, which is a field of hldev. At line 4740, the invocation
-> >> to vxge_device_unregister unregisters device hldev, and it also releas=
-es
-> >> the memory region pointed by vdev->bar0. At line 4743, the freed memory
-> >> region is referenced (i.e., iounmap(vdev->bar0)), resulting in a
-> >> use-after-free vulnerability. We can fix the bug by calling iounmap
-> >> before vxge_device_unregister. =20
-> >
-> >Are you sure the bar0 is not needed by the netdev? You're freeing =20
-> >memory that the netdev may need until it's unregistered. =20
+Hi Max,
 
-> We try unregister the device in a patched kernel. The device is successfu=
-lly
->  removed and there is not any warning or exception. See the following=20
-> snapshot. I use lspci to list pci devices, we can see that the device=20
-> (00:03.0 Unclassified ...Gigabit ethernet PCIe (rev 10)) is removed safel=
-y.=20
-> Thus, I believe that the bar0 is not needed when freeing the device.
+FYI, the error/warning still remains.
 
-You need to reply in plain text, no HTML, the mailing lit rejects
-emails with HTML in them.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   30306f6194cadcc29c77f6ddcd416a75bf5c0232
+commit: c20e1117d9aa22c558646a1060ddd1dd042fb107 xtensa: add kernel ABI selection to Kconfig
+date:   3 months ago
+config: xtensa-randconfig-c023-20220616 (https://download.01.org/0day-ci/archive/20220616/202206162308.Ynhq4vSU-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c20e1117d9aa22c558646a1060ddd1dd042fb107
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c20e1117d9aa22c558646a1060ddd1dd042fb107
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-No errors happening during a test is not a sufficient proof of
-correctness. You need to analyze the driver and figure out what bar0=20
-is used for.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Alternatively just save the address of bar0 to a local variable, let
-the netdev unregister happen, and then call *unmap() on the local
-variable. That won't move the unmap and avoid the UAF.
+All errors (new ones prefixed by >>):
 
-But please LMK how you use these cards first.
+>> xtensa-linux-ld: section .Level2InterruptVector.text VMA [0000000000000180,0000000000000193] overlaps section .data VMA [0000000000000000,00000000001a3bf7]
 
-> /************************************************************************=
-********/
-> root@kernel:~# lspci
-> 00:00.0 Host bridge: Intel Corporation 82G33/G31/P35/P31 Express DRAM=20
-> Controller
-> 00:01.0 VGA compatible controller: Device 1234:1111 (rev 02)
-> 00:02.0 Ethernet controller: Intel Corporation 82574L Gigabit Network=20
-> Connection
-> 00:03.0 Unclassified device [00ff]: Exar Corp. X3100 Series 10 Gigabit=20
-> Ethernet PCIe (rev 10)
-
-Is this a real NIC card, or just a emulated / virtualized one?=20
-Do you use it day to day?=20
-
-> 00:1d.0 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI=20
-> Controller #1 (rev 03)
-> 00:1d.1 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI=20
-> Controller #2 (rev 03)
-> 00:1d.2 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI=20
-> Controller #3 (rev 03)
-> 00:1d.7 USB controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI=
-=20
-> Controller #1 (rev 03)
-> 00:1f.0 ISA bridge: Intel Corporation 82801IB (ICH9) LPC Interface=20
-> Controller (rev 02)
-> 00:1f.2 SATA controller: Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6
->  port SATA Controller [AHCI mode] (rev 02)
-> 00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus Controller=20
-> (rev 02)
-> root@kernel:~# echo 1 > /sys/bus/pci/devices/0000:00:03.0/remove
-> root@kernel:~# lspci
-> 00:00.0 Host bridge: Intel Corporation 82G33/G31/P35/P31 Express DRAM
->  Controller
-> 00:01.0 VGA compatible controller: Device 1234:1111 (rev 02)
-> 00:02.0 Ethernet controller: Intel Corporation 82574L Gigabit Network
->  Connection
-> 00:1d.0 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
->  Controller #1 (rev 03)
-> 00:1d.1 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
->  Controller #2 (rev 03)
-> 00:1d.2 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
->  Controller #3 (rev 03)
-> 00:1d.7 USB controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI
->  Controller #1 (rev 03)
-> 00:1f.0 ISA bridge: Intel Corporation 82801IB (ICH9) LPC Interface=20
-> Controller (rev 02)
-> 00:1f.2 SATA controller: Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6=
-=20
-> port SATA Controller [AHCI mode] (rev 02)
-> 00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus=20
-> Controller (rev 02)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

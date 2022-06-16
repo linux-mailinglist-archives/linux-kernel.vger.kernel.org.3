@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1191854E89B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1AE54E864
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233441AbiFPR2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 13:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S234761AbiFPRJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 13:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiFPR2L (ORCPT
+        with ESMTP id S1376829AbiFPRJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 13:28:11 -0400
-X-Greylist: delayed 1387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Jun 2022 10:28:08 PDT
-Received: from 18.mo584.mail-out.ovh.net (18.mo584.mail-out.ovh.net [188.165.54.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DAA175AF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:28:03 -0700 (PDT)
-Received: from player779.ha.ovh.net (unknown [10.109.156.34])
-        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 955C32222D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:08:40 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player779.ha.ovh.net (Postfix) with ESMTPSA id 64B292B9393D5;
-        Thu, 16 Jun 2022 17:08:32 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-103G0059eda0aa4-c3b8-493b-af8c-1b5db0bc1ce2,
-                    EEA695ED62D0B30D35F9F30395731DD21189161B) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Stephen Kitt <steve@sk2.org>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm: shmobile: Use backlight helper
-Date:   Thu, 16 Jun 2022 19:08:21 +0200
-Message-Id: <20220616170821.1348169-1-steve@sk2.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 16 Jun 2022 13:09:36 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49BD14014;
+        Thu, 16 Jun 2022 10:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655399374; x=1686935374;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=9jD0oil9M4TViSsu8wOGc8TUvg7hRbYdmm3wS1R3F1E=;
+  b=yvQKplUaaTa+K6nGvZRd5WZ1vK+Thc/drVxLnvKwpEW8z03SQ3MN4p2L
+   1rdFSz3I5OCHbv3nQcwd5xzSb2hvBl4Asbxf014GrBSk69Sb8X2rfqgnw
+   oAu9uwlnfxast9hmePoxK7FCiuGQevWNoL4VtqX7ACoChXZCLTK6xrPzG
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Jun 2022 10:09:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 10:09:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 16 Jun 2022 10:09:32 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 16 Jun 2022 10:09:32 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/2] force link training for display resolution change
+Date:   Thu, 16 Jun 2022 10:09:19 -0700
+Message-ID: <1655399361-10842-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 7176486009031853787
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddvfedguddtfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjeelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekge
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This started with work on the removal of backlight_properties'
-deprecated fb_blank field, much of which can be taken care of by using
-helper functions provided by backlight.h instead of directly accessing
-fields in backlight_properties. This patch series doesn't involve
-fb_blank, but it still seems useful to use helper functions where
-appropriate.
+1) force link training for display resolution change
+2) remove pixel_rate from struct dp_ctrl
 
-Instead of retrieving the backlight brightness in struct
-backlight_properties manually, and then checking whether the backlight
-should be on at all, use backlight_get_brightness() which does all
-this and insulates this from future changes.
+Kuogee Hsieh (2):
+  drm/msm/dp: force link training for display resolution change
+  drm/msm/dp: clean up pixel_rate from dp_ctrl.c
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
----
-Changes since v1: clarified commit message, this doesn't touch fb_blank
----
- drivers/gpu/drm/shmobile/shmob_drm_backlight.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 147 ++++++++++++++++++++----------------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |   3 +-
+ drivers/gpu/drm/msm/dp/dp_display.c |  13 ++--
+ 3 files changed, 88 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
-index f6628a5ee95f..794573badfe8 100644
---- a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
-+++ b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
-@@ -18,11 +18,7 @@ static int shmob_drm_backlight_update(struct backlight_device *bdev)
- 	struct shmob_drm_connector *scon = bl_get_data(bdev);
- 	struct shmob_drm_device *sdev = scon->connector.dev->dev_private;
- 	const struct shmob_drm_backlight_data *bdata = &sdev->pdata->backlight;
--	int brightness = bdev->props.brightness;
--
--	if (bdev->props.power != FB_BLANK_UNBLANK ||
--	    bdev->props.state & BL_CORE_SUSPENDED)
--		brightness = 0;
-+	int brightness = backlight_get_brightness(bdev);
- 
- 	return bdata->set_brightness(brightness);
- }
-
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-2.30.2
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

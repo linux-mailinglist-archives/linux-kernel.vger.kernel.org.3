@@ -2,222 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A9854DF27
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300CC54DF32
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiFPKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S231486AbiFPKgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiFPKbs (ORCPT
+        with ESMTP id S230237AbiFPKf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:31:48 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB2E5DBDB;
-        Thu, 16 Jun 2022 03:31:40 -0700 (PDT)
-X-UUID: f86f6d208259408db24098e161addd45-20220616
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:a9c58cc1-131c-476c-921a-9e04cf1d6f19,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:7ec57bf6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: f86f6d208259408db24098e161addd45-20220616
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 473049511; Thu, 16 Jun 2022 18:31:35 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 16 Jun 2022 18:31:34 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 16 Jun 2022 18:31:34 +0800
-Message-ID: <941ba5399e3cc9b25474d76d15d2bb5bafaa14b1.camel@mediatek.com>
-Subject: Re: [PATCH v11 02/12] drm/mediatek: dpi: move dpi limits to SoC
- config
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 16 Jun 2022 18:31:34 +0800
-In-Reply-To: <5de2752a1d496290ea5c2c2d7840ba984b2e7e4d.camel@mediatek.com>
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
-         <20220613064841.10481-3-rex-bc.chen@mediatek.com>
-         <5de2752a1d496290ea5c2c2d7840ba984b2e7e4d.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 16 Jun 2022 06:35:59 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B75DBFB;
+        Thu, 16 Jun 2022 03:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655375735; x=1686911735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=bfn7Kr/6Mg81QIsDd2mRVCMs364rPZOp5AMz87j7Fog=;
+  b=C+HO0dlgTSRS5BfiNc1wvbzLqRPtBxh4lxKP++PeFC57ARyGINKRpntX
+   0zyMKWsvVTNVYHuC6ewnc1eT2T4K4Edtlllg948WtjDY9EIBPNC1wEAi/
+   7MfO3q6B4v1XjQ564zn8Ec5n0B0cSC96prihpGOri1RhurvnFojyhC6o0
+   /jnxvSYj/40fOFsU13bsfC0UY/6V2aLPs+4Dccvg5a2qUxrOAYdrBM4P8
+   VDXzqMJHj65sGGZQOgeMOONPgWe26/IQevpSVxwI4BHXe1cHfVlF1GsPE
+   StZzrOtvrn6Phr2ycnJFnCt+KR0bxXIWRt/thukjN0Cdtt3+qtzXu++Cv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="259681977"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="259681977"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:35:35 -0700
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="727840496"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:35:31 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 16 Jun 2022 13:35:28 +0300
+Date:   Thu, 16 Jun 2022 13:35:28 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
+        <oocheret@cisco.com>
+Cc:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
+Subject: Re: [PATCH v2] mtd: spi-nor: handle unsupported FSR opcodes properly
+Message-ID: <YqsHcL5NPcZ4De77@lahna>
+References: <6A852B9E-D84C-4F80-9C17-62BFBB98CC8A@walle.cc>
+ <20220615191153.3017939-1-oocheret@cisco.com>
+ <YqrAGKLUazeNH1XK@lahna>
+ <BYAPR11MB2757B1146457E3860389F4D1CDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BYAPR11MB2757B1146457E3860389F4D1CDAC9@BYAPR11MB2757.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 11:21 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
-> 
-> On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
-> > From: Guillaume Ranquet <granquet@baylibre.com>
-> > 
-> > Add flexibility by moving the dpi limits to the SoC specific
-> > config.
-> 
-> What does this 'limit' mean? Why it's different in DPI vs DP_INTF?
-> 
-> The hardware design is so weird. If the limit is fixed for DPI and
-> DP_INTF, why the hardware export register for software to assign any
-> value which may be wrong.
-> 
-> Regards,
-> CK
-> 
+Hi,
 
-Hello CK,
-
-For RGB colorimetry, CTA-861 support both limited and full range data
-when receiving video with RGB color space.
-
-I will use drm_default_rgb_quant_range() to determine this and drop
-const struct mtk_dpi_yc_limit *limit;
-
-BRs,
-Bo-Chen
-> > 
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 25 ++++++++++++++++---------
-> >  1 file changed, 16 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > index e61cd67b978f..ce8c5eefe5f1 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
-> >  	bool edge_sel_en;
-> >  	const u32 *output_fmts;
-> >  	u32 num_output_fmts;
-> > +	const struct mtk_dpi_yc_limit *limit;
-> >  };
-> >  
-> >  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
-> > u32 mask)
-> > @@ -235,9 +236,10 @@ static void mtk_dpi_config_fb_size(struct
-> > mtk_dpi *dpi, u32 width, u32 height)
-> >  	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
-> >  }
-> >  
-> > -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
-> > -					 struct mtk_dpi_yc_limit
-> > *limit)
-> > +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
-> >  {
-> > +	const struct mtk_dpi_yc_limit *limit = dpi->conf->limit;
-> > +
-> >  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
-> >  		     Y_LIMINT_BOT_MASK);
-> >  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
-> > @@ -449,7 +451,6 @@ static int mtk_dpi_power_on(struct mtk_dpi
-> > *dpi)
-> >  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
-> >  				    struct drm_display_mode *mode)
-> >  {
-> > -	struct mtk_dpi_yc_limit limit;
-> >  	struct mtk_dpi_polarities dpi_pol;
-> >  	struct mtk_dpi_sync_param hsync;
-> >  	struct mtk_dpi_sync_param vsync_lodd = { 0 };
-> > @@ -484,11 +485,6 @@ static int mtk_dpi_set_display_mode(struct
-> > mtk_dpi *dpi,
-> >  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
-> >  		pll_rate, vm.pixelclock);
-> >  
-> > -	limit.c_bottom = 0x0010;
-> > -	limit.c_top = 0x0FE0;
-> > -	limit.y_bottom = 0x0010;
-> > -	limit.y_top = 0x0FE0;
-> > -
-> >  	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
-> >  	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
-> >  	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
-> > @@ -536,7 +532,7 @@ static int mtk_dpi_set_display_mode(struct
-> > mtk_dpi *dpi,
-> >  	else
-> >  		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
-> >  
-> > -	mtk_dpi_config_channel_limit(dpi, &limit);
-> > +	mtk_dpi_config_channel_limit(dpi);
-> >  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
-> >  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
-> >  	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> > @@ -790,12 +786,20 @@ static const u32 mt8183_output_fmts[] = {
-> >  	MEDIA_BUS_FMT_RGB888_2X12_BE,
-> >  };
-> >  
-> > +static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
-> > +	.c_bottom = 0x0010,
-> > +	.c_top = 0x0FE0,
-> > +	.y_bottom = 0x0010,
-> > +	.y_top = 0x0FE0,
-> > +};
-> > +
-> >  static const struct mtk_dpi_conf mt8173_conf = {
-> >  	.cal_factor = mt8173_calculate_factor,
-> >  	.reg_h_fre_con = 0xe0,
-> >  	.max_clock_khz = 300000,
-> >  	.output_fmts = mt8173_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> > +	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> >  static const struct mtk_dpi_conf mt2701_conf = {
-> > @@ -805,6 +809,7 @@ static const struct mtk_dpi_conf mt2701_conf =
-> > {
-> >  	.max_clock_khz = 150000,
-> >  	.output_fmts = mt8173_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> > +	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> >  static const struct mtk_dpi_conf mt8183_conf = {
-> > @@ -813,6 +818,7 @@ static const struct mtk_dpi_conf mt8183_conf =
-> > {
-> >  	.max_clock_khz = 100000,
-> >  	.output_fmts = mt8183_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-> > +	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> >  static const struct mtk_dpi_conf mt8192_conf = {
-> > @@ -821,6 +827,7 @@ static const struct mtk_dpi_conf mt8192_conf =
-> > {
-> >  	.max_clock_khz = 150000,
-> >  	.output_fmts = mt8183_output_fmts,
-> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-> > +	.limit = &mtk_dpi_limit,
-> >  };
-> >  
-> >  static int mtk_dpi_probe(struct platform_device *pdev)
+On Thu, Jun 16, 2022 at 07:40:18AM +0000, Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco) wrote:
+>    Hi Mika,
 > 
+>      > Originally commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for
+>      n25q*
+>      > entries") and following one 8f93826 ("mtd: spi-nor: micron-st:
+>      convert
+>      > USE_FSR to a manufacturer flag") enabled SPINOR_OP_RDFSR opcode
+>      handling
+>      > ability, however some controller drivers still cannot handle it
+>      properly
+>      > in the micron_st_nor_ready() call what breaks some mtd callbacks
+>      with
+>      > next error logs:
+>      >
+>      > mtdblock: erase of region [address1, size1] on "BIOS" failed
+>      > mtdblock: erase of region [address2, size2] on "BIOS" failed
+>      >
+>      > The Intel SPI controller does not support low level operations,
+>      like
+>      > reading the flag status register (FSR). It only exposes a set of
+>      high
+>      > level operations for software to use. For this reason check the
+>      return
+>      > value of micron_st_nor_read_fsr() and if the operation was not
+>      > supported, use the status register value only. This allows the
+>      chip to
+>      > work even when attached to Intel SPI controller (there are such
+>      systems
+>      > out there).
+>      >
 > 
+>    > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> 
+>      I don't think I signed this off.
+> 
+>    I thought if I take your case (-EOPNOTSUPP) and update it with
+>    (-ENOTSUPP) I need to keep
+> 
+>    your Sighed-off-by: note as well.
 
+That's not how it typically works. People will give their tag explicitly
+and then you can add those.
+
+>    > Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
+>    > Link: [1]https://lore.kernel.org/lkml/YmZUCIE%2FND82BlNh@lahna/
+>    > ---
+> 
+>    What changed between v1 and v2?
+> 
+>    ​I updated v1 patch taking into account your changes
+>    [2]https://lore.kernel.org/linux-mtd/20220506105158.43613-1-mika.wester
+>    berg@linux.intel.com to check -EOPNOTSUPP case as well. After I
+>    combined both patches I've got v2.
+
+Please put that information after the '---' in the patch.
+
+>    And did you take into consideration the comments I gave?
+> 
+>    ​If you say about keeping -ENOTSUPP as intel driver errorcode - I took
+>    it however doubted to use it here because of note about nfs above.
+>    There is no problem to restore previous variant with -ENOTSUPP in intel
+>    driver errorcode.
+
+Well we would need to get some feedback from SPI-NOR maintainers. I
+would personally keep using ENOTSUPP to be consistent with the rest of
+the code in SPI-NOR code (or convert it to use EOPNOTSUPP everywhere)
+but it is not up to me ;-)
+
+For Intel driver it is fine to use either (whetever the decision of
+SPI-NOR maintainers' is).

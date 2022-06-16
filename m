@@ -2,87 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD70254DC7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE4754DC7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359621AbiFPIKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S1359623AbiFPIKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359243AbiFPIKR (ORCPT
+        with ESMTP id S1359243AbiFPIK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:10:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79975C74F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D9AB7CE1D0B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F2E1C341C4;
-        Thu, 16 Jun 2022 08:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655367013;
-        bh=4zJWCpL4TkpFCIThxAUHRIFItc9DcBKJyPDS2b3DJWA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=h02NyT0C09WkNFKQPYx4wa2NprYGxt9GJeH2wnfP2kkA/1SLQ+qrgwVgRJGZmD3Jc
-         XcR33qfH4uLzvWOMx6P8ISSrNq/keW1b3y++hw3sYGzLrEGUQmPI3E+Hq/zRKTqVKm
-         /tQ3Ynvw+duR/GWJH4XffCoZdb5f4IJ4APzKzYtlSOIwpaLaVE7H+mgDzFw6a7m7ri
-         46wAS8qVwAtFo6lIAL7+qagu5b7J2xYmPMHYCcAxunFSoRZtY1h2zsu0dMy9EysUHR
-         SwOSz5C8me5SpdyaoWSGd7+2RDsZFTYeeyJQ0G8de1irj2PU+4EXhR9IONUXlN4Bko
-         ZnTWKTyAfu9Ag==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13AB0FD99FB;
-        Thu, 16 Jun 2022 08:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Jun 2022 04:10:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B42135D663
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:10:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36FFC1474;
+        Thu, 16 Jun 2022 01:10:26 -0700 (PDT)
+Received: from [10.57.84.206] (unknown [10.57.84.206])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E16833F7F5;
+        Thu, 16 Jun 2022 01:10:24 -0700 (PDT)
+Message-ID: <26872911-d9d2-3764-a579-ad60f8c8bfa5@arm.com>
+Date:   Thu, 16 Jun 2022 09:10:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] platform/chrome: cros_ec: Always expose last resume result
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165536701307.22788.1595612355814981291.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Jun 2022 08:10:13 +0000
-References: <20220614075726.2729987-1-swboyd@chromium.org>
-In-Reply-To: <20220614075726.2729987-1-swboyd@chromium.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     bleung@chromium.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, rajatja@chromium.org,
-        mka@chromium.org, hsinyi@chromium.org, tzungbi@kernel.org,
-        evgreen@chromium.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH] init: Initialize noop_backing_dev_info early
+To:     Jan Kara <jack@suse.cz>, LKML <linux-kernel@vger.kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mm@kvack.org, Guenter Roeck <linux@roeck-us.net>,
+        Alexandru Elisei <alexandru.elisei@arm.com>
+References: <20220615214815.6901-1-jack@suse.cz>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220615214815.6901-1-jack@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
-
-On Tue, 14 Jun 2022 00:57:26 -0700 you wrote:
-> The last resume result exposing logic in cros_ec_sleep_event()
-> incorrectly requires S0ix support, which doesn't work on ARM based
-> systems where S0ix doesn't exist. That's because cros_ec_sleep_event()
-> only reports the last resume result when the EC indicates the last sleep
-> event was an S0ix resume. On ARM systems, the last sleep event is always
-> S3 resume, but the EC can still detect sleep hang events in case some
-> other part of the AP is blocking sleep.
+On 15/06/2022 22:48, Jan Kara wrote:
+> noop_backing_dev_info is used by superblocks of various
+> pseudofilesystems such as kdevtmpfs. After commit 10e14073107d
+> ("writeback: Fix inode->i_io_list not be protected by inode->i_lock
+> error") this broke because __mark_inode_dirty() started to access more
+> fields from noop_backing_dev_info and this led to crashes inside
+> locked_inode_to_wb_and_lock_list() called from __mark_inode_dirty().
+> Fix the problem by initializing noop_backing_dev_info before the
+> filesystems get mounted.
 > 
-> [...]
+> Fixes: 10e14073107d ("writeback: Fix inode->i_io_list not be protected by inode->i_lock error")
+> Reported-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Reported-and-tested-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> Reported-and-tested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Jan Kara <jack@suse.cz>
 
-Here is the summary with links:
-  - [v3] platform/chrome: cros_ec: Always expose last resume result
-    https://git.kernel.org/chrome-platform/c/74bb746407bf
+Works for me too. Thanks for the proper fix
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
+Tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+
+
+> ---
+>   drivers/base/init.c         |  2 ++
+>   include/linux/backing-dev.h |  2 ++
+>   mm/backing-dev.c            | 11 ++---------
+>   3 files changed, 6 insertions(+), 9 deletions(-)
+> 
+> Since this bug prevents some machines from booting, I plan to push this patch
+> to Linus unless someone objects soon... Review is welcome :).
+> 
+> diff --git a/drivers/base/init.c b/drivers/base/init.c
+> index d8d0fe687111..397eb9880cec 100644
+> --- a/drivers/base/init.c
+> +++ b/drivers/base/init.c
+> @@ -8,6 +8,7 @@
+>   #include <linux/init.h>
+>   #include <linux/memory.h>
+>   #include <linux/of.h>
+> +#include <linux/backing-dev.h>
+>   
+>   #include "base.h"
+>   
+> @@ -20,6 +21,7 @@
+>   void __init driver_init(void)
+>   {
+>   	/* These are the core pieces */
+> +	bdi_init(&noop_backing_dev_info);
+>   	devtmpfs_init();
+>   	devices_init();
+>   	buses_init();
+> diff --git a/include/linux/backing-dev.h b/include/linux/backing-dev.h
+> index 2bd073fa6bb5..f0baef68f90f 100644
+> --- a/include/linux/backing-dev.h
+> +++ b/include/linux/backing-dev.h
+> @@ -119,6 +119,8 @@ int bdi_set_max_ratio(struct backing_dev_info *bdi, unsigned int max_ratio);
+>   
+>   extern struct backing_dev_info noop_backing_dev_info;
+>   
+> +extern int bdi_init(struct backing_dev_info *bdi);
+> +
+>   /**
+>    * writeback_in_progress - determine whether there is writeback in progress
+>    * @wb: bdi_writeback of interest
+> diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+> index ff60bd7d74e0..95550b8fa7fe 100644
+> --- a/mm/backing-dev.c
+> +++ b/mm/backing-dev.c
+> @@ -231,20 +231,13 @@ static __init int bdi_class_init(void)
+>   }
+>   postcore_initcall(bdi_class_init);
+>   
+> -static int bdi_init(struct backing_dev_info *bdi);
+> -
+>   static int __init default_bdi_init(void)
+>   {
+> -	int err;
+> -
+>   	bdi_wq = alloc_workqueue("writeback", WQ_MEM_RECLAIM | WQ_UNBOUND |
+>   				 WQ_SYSFS, 0);
+>   	if (!bdi_wq)
+>   		return -ENOMEM;
+> -
+> -	err = bdi_init(&noop_backing_dev_info);
+> -
+> -	return err;
+> +	return 0;
+>   }
+>   subsys_initcall(default_bdi_init);
+>   
+> @@ -781,7 +774,7 @@ static void cgwb_remove_from_bdi_list(struct bdi_writeback *wb)
+>   
+>   #endif	/* CONFIG_CGROUP_WRITEBACK */
+>   
+> -static int bdi_init(struct backing_dev_info *bdi)
+> +int bdi_init(struct backing_dev_info *bdi)
+>   {
+>   	int ret;
+>   
 

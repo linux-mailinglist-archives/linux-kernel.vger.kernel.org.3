@@ -2,77 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0869054D797
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565FD54D7AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357246AbiFPB4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 21:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S1351133AbiFPB50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 21:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357584AbiFPB4H (ORCPT
+        with ESMTP id S236015AbiFPB5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 21:56:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E80590BD;
-        Wed, 15 Jun 2022 18:56:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CBF6B8216C;
-        Thu, 16 Jun 2022 01:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA74BC3411E;
-        Thu, 16 Jun 2022 01:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655344563;
-        bh=lXVq+gEWnI1UliJJ8cBU8oCRyLrcMuv/4bp+BYrgWDI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=hpe9fAsZEarEMYmYXhBOQTGz9DwY/naeoXAe90YGb799P6k+jVVEumWMtjh2BXBLG
-         nvoy4rVhcKPH87IRDuCeq9SZZZDorNFzP1PITHwRxdEcPS29UStnshtMMNi1k1QjAZ
-         PRNT1Kp4Ie2r4jzIjeyznQ4e6N4MIe0GQ3z63Ha8Z4Gehw08bKyWrhylP3j8H+RmfR
-         VY8P0MVP1n7zwvyM0pR7tmB6WLaBAE2EdqRTs5X3kUdzFMl9RA2qD1mPVN4Yl7KJEQ
-         REBfP/urP/rpqV7tWxH2fi6FA/I++w5r+LVoj1SyVG7whz3L6ADiBkjqUhj690tHIV
-         7m+HfBSUAPxCg==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 15 Jun 2022 21:57:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442C659092;
+        Wed, 15 Jun 2022 18:57:24 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LNlcW25ZlzgZQX;
+        Thu, 16 Jun 2022 09:55:23 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 09:56:56 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 09:56:55 +0800
+Subject: Re: [PATCH 5.10 00/11] 5.10.123-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220614183719.878453780@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <53a93564-7f2b-e439-db8a-a37396c73b55@huawei.com>
+Date:   Thu, 16 Jun 2022 09:56:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220523093346.28493-20-rex-bc.chen@mediatek.com>
-References: <20220523093346.28493-1-rex-bc.chen@mediatek.com> <20220523093346.28493-20-rex-bc.chen@mediatek.com>
-Subject: Re: [RESEND v8 19/19] clk: mediatek: reset: Add infra_ao reset support for MT8186
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
-        nfraprado@collabora.com, chun-jie.chen@mediatek.com,
-        wenst@chromium.org, runyang.chen@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        mturquette@baylibre.com, robh+dt@kernel.org
-Date:   Wed, 15 Jun 2022 18:55:59 -0700
-User-Agent: alot/0.10
-Message-Id: <20220616015602.EA74BC3411E@smtp.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614183719.878453780@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rex-BC Chen (2022-05-23 02:33:46)
-> The infra_ao reset is needed for MT8186.
-> - Add mtk_clk_rst_desc for MT8186.
-> - Add register reset controller function for MT8186 infra_ao.
-> - Add infra_ao_idx_map for MT8186.
->=20
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
-> ---
 
-Applied to clk-next
+
+On 2022/6/15 2:40, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.123 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.123-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+Tested on arm64 and x86 for 5.10.123-rc1,
+
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.123-rc1
+Commit: f67ea0f670870facb37c20f19e483ec74a2cba63
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9033
+passed: 9033
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9033
+passed: 9033
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

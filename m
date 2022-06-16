@@ -2,106 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4025754E76E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70CB54E775
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiFPQkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S233941AbiFPQlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiFPQkM (ORCPT
+        with ESMTP id S235107AbiFPQlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:40:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB4B2F656
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655397612; x=1686933612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zpf+cLESJs+0bL1uH7tlT88U+YZ+F1ZKAMxJkuxX+8I=;
-  b=XQHtEGbnwgYbWYLLz9SJqolzsweVZ5MJDSRo7i0e5gH+kJdjuCKRXgzJ
-   ef41CpFmJLlOyXp0+buz2KG36X9iNbIeonANXnio5JaM2HR14PcG1v2qm
-   4S+xpYhMhvsl76yQKlUSC9F4/4nJCWac0mvVvyYjJoU1Tj1YNHKfGKvH6
-   L1BKRQQytwmGPD41NPTNJkiqOrapDcSqbRIrr4XKKvdibR4v/oj9g2aXK
-   3x9x/LK+hdu6KRRVpEJHBTAC934zSygfCYgsOe0cS0mWGJJnfkOqUkpp7
-   cWHZomBdO1TilHSUa95SpbuvWPoivjiwJvrWYwQlMqDmleawD9LSaHioW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262311358"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="262311358"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 09:40:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="618944426"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2022 09:40:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 60B38109; Thu, 16 Jun 2022 19:40:12 +0300 (EEST)
-Date:   Thu, 16 Jun 2022 19:40:12 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
+        Thu, 16 Jun 2022 12:41:12 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59502F66C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:41:10 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so2321690pjm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MgmvFnUtjCO2ZoSD/nh5tvlUNfC+KyhUyQKzm2xuMbA=;
+        b=rlwAFQlOm9itrfoCxgGh2ywywZl2bMeNhE/UA1PRYZB7i/vvH7BJx3aAMyfon2pdrX
+         pGUCFTdy6Qt+qWQjwXYPfiIcqN2Zn1lVN7FZmUw4gBTqeBQzHay+jfk5j8v8udJ69z4c
+         Ovi2fhLTQyq92Fboa5CW44YjCxausTVRZBemYXcSZxLbvYlej4x2lNJtiFZH0EC43HNm
+         6zrK2x9JwIjc/UxsKb4jh0zY64YzOcypofW1QgsGJAYt8YH5SlvJ6ob0WVBnlosQCuB7
+         C80yyHM3T2egJ6kEAfcwVphKIOZ24uXk1bcvLPuwLcvQgo3vqgtnZ2759mIzyjU2ethL
+         94zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MgmvFnUtjCO2ZoSD/nh5tvlUNfC+KyhUyQKzm2xuMbA=;
+        b=UgSMoUPJM9DWrO4tTiFRKxMZBvFmtPluF9QBOsFcR+NZ1T8Dg+qhLahL+dbrjzy7Si
+         N1SzriiRq3KPFg4XTRj5WTGFLi8SMcNbOjjb2YRZlAY4rVmD4Erd9MARnfFpjgWycWiN
+         KJbkILuclT14aTHhPVBPkkVQPmWquAgnNpnSlTOP+1pDveP1EqTLjp4u8UHUtbTw0b+5
+         Xq2Vs+CGMOpaslkIKWmY9g/liifuuFhDuUAMKDOTx3oG/HdFyEWfYPWSOfb4K2GPOa6/
+         +d84+M43KQNqB6cs7qMu6H3uSaLxGCYRmPTQdiibtXcfjS3A9cGcNeC7/M1RXwNDb8W9
+         5tlg==
+X-Gm-Message-State: AJIora/k47py86fBiYpOPFj1SZUTN3HcYDLWA7IjrNqFKeX+Y6P1L3Y1
+        v3yVGA5YKQy5WNm1hgvw/LJ+viWhvff+9A==
+X-Google-Smtp-Source: AGRyM1vlSK6hxncAIYtMkN18fpKkq/QvaVi/pEh5N9nHCclY7o89DXDIz4RXJ2yZPL1ZZAT6zOGVRg==
+X-Received: by 2002:a17:903:41ca:b0:169:9b8:36bf with SMTP id u10-20020a17090341ca00b0016909b836bfmr2742734ple.161.1655397669715;
+        Thu, 16 Jun 2022 09:41:09 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id j5-20020a17090adc8500b001e34b5ed5a7sm4031001pjv.35.2022.06.16.09.41.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 09:41:09 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 16:41:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Michael Roth <michael.roth@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, namit@vmware.com
-Subject: Re: [PATCHv3 4/8] x86/mm: Handle LAM on context switch
-Message-ID: <20220616164012.uuok46yozncbwe7u@black.fi.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-5-kirill.shutemov@linux.intel.com>
- <Yqry9+efzp6lml89@hirez.programming.kicks-ass.net>
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
+ shared in RMP table
+Message-ID: <YqtdIf7OSivLxFL0@google.com>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-20-brijesh.singh@amd.com>
+ <YqfabnTRxFSM+LoX@google.com>
+ <YqistMvngNKEJu2o@google.com>
+ <daaf7a84-4204-48ca-e40c-7ba296b4789c@amd.com>
+ <YqizrTCk460kov/X@google.com>
+ <6db51d45-e17a-38dd-131d-e43132c55dfb@amd.com>
+ <Yqjm/b3deMlxxePh@google.com>
+ <9abe9a71-242d-91d5-444a-b56c8b9b6d90@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yqry9+efzp6lml89@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9abe9a71-242d-91d5-444a-b56c8b9b6d90@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 11:08:07AM +0200, Peter Zijlstra wrote:
-> Either use that one spare byte, or find room elsewhere I suppose.
+On Thu, Jun 16, 2022, Tom Lendacky wrote:
+> On 6/14/22 14:52, Sean Christopherson wrote:
+> > On Tue, Jun 14, 2022, Tom Lendacky wrote:
+> > > On 6/14/22 11:13, Sean Christopherson wrote:
+> > > > > > > This breaks SME on Rome and Milan when compiling with clang-13.  I haven't been
+> > > > > > > able to figure out exactly what goes wrong.  printk isn't functional at this point,
+> > > > > > > and interactive debug during boot on our test systems is beyond me.  I can't even
+> > > > > > > verify that the bug is specific to clang because the draconian build system for our
+> > > > > > > test systems apparently is stuck pointing at gcc-4.9.
+> > > > > > > 
+> > > > > > > I suspect the issue is related to relocation and/or encrypting memory, as skipping
+> > > > > > > the call to early_snp_set_memory_shared() if SNP isn't active masks the issue.
+> > > > > > > I've dug through the assembly and haven't spotted a smoking gun, e.g. no obvious
+> > > > > > > use of absolute addresses.
+> > > > > > > 
+> > > > > > > Forcing a VM through the same path doesn't fail.  I can't test an SEV guest at the
+> > > > > > > moment because INIT_EX is also broken.
+> > > > > > 
+> 
+> > 
+> > > I'm not sure if there's a way to remove the jump table optimization for
+> > > the arch/x86/coco/core.c file when retpolines aren't configured.
+> > 
+> > And for post-boot I don't think we'd want to disable any such optimizations.
+> > 
+> > A possibled "fix" would be to do what sme_encrypt_kernel() does and just query
+> > sev_status directly.  But even that works, the fragility of the boot code is
+> > terrifying :-(  I can't think of any clever solutions though.
+> 
+> I worry that another use of cc_platform_has() could creep in at some point
+> and cause the same issue. Not sure how bad it would be, performance-wise, to
+> remove the jump table optimization for arch/x86/coco/core.c.
 
-Okay, I will put into the byte after invalidate_other and modify
-tlbstate_lam_cr3_mask() and set_tlbstate_lam_cr3_mask() to shift it
-accordingly.
+One thought would be to initialize "vendor" to a bogus value, disallow calls to
+cc_set_vendor() until after the kernel as gotten to a safe point, and then WARN
+(or panic?) if cc_platform_has() is called before "vendor" is explicitly set.
+New calls can still get in, but they'll be much easier to detect and less likely
+to escape initial testing.
 
-It looks like this:
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index 49b44f881484..803220cd34a6 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -13,7 +13,11 @@
+ #include <asm/coco.h>
+ #include <asm/processor.h>
 
-struct tlb_state {
-	struct mm_struct *         loaded_mm;            /*     0     8 */
-	union {
-		struct mm_struct * last_user_mm;         /*     8     8 */
-		unsigned long      last_user_mm_spec;    /*     8     8 */
-	};                                               /*     8     8 */
-	union {
-		struct mm_struct *         last_user_mm;         /*     0     8 */
-		unsigned long              last_user_mm_spec;    /*     0     8 */
-	};
+-static enum cc_vendor vendor __ro_after_init;
++/*
++ * Initialize the vendor to garbage to detect usage of cc_platform_has() before
++ * the vendor has been set.
++ */
++static enum cc_vendor vendor = CC_NR_VENDORS __ro_after_init;
+ static u64 cc_mask __ro_after_init;
 
-	u16                        loaded_mm_asid;       /*    16     2 */
-	u16                        next_asid;            /*    18     2 */
-	bool                       invalidate_other;     /*    20     1 */
-	u8                         lam;                  /*    21     1 */
-	unsigned short             user_pcid_flush_mask; /*    22     2 */
-	unsigned long              cr4;                  /*    24     8 */
-	struct tlb_context         ctxs[6];              /*    32    96 */
+ static bool intel_cc_platform_has(enum cc_attr attr)
+@@ -90,7 +94,10 @@ bool cc_platform_has(enum cc_attr attr)
+                return intel_cc_platform_has(attr);
+        case CC_VENDOR_HYPERV:
+                return hyperv_cc_platform_has(attr);
++       case CC_VENDOR_NONE:
++               return false;
+        default:
++               WARN_ONCE(1, "blah blah blah");
+                return false;
+        }
+ }
+diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+index 3d98c3a60d34..adfd2fbce7ac 100644
+--- a/arch/x86/include/asm/coco.h
++++ b/arch/x86/include/asm/coco.h
+@@ -9,6 +9,7 @@ enum cc_vendor {
+        CC_VENDOR_AMD,
+        CC_VENDOR_HYPERV,
+        CC_VENDOR_INTEL,
++       CC_NR_VENDORS,
+ };
 
-	/* size: 128, cachelines: 2, members: 9 */
-};
+ void cc_set_vendor(enum cc_vendor v);
 
--- 
- Kirill A. Shutemov
+> I guess we can wait for Boris to get back and chime in.
+> 
+> > diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> > index bd4a34100ed0..5efab0d8e49d 100644
+> > --- a/arch/x86/kernel/head64.c
+> > +++ b/arch/x86/kernel/head64.c
+> > @@ -127,7 +127,9 @@ static bool __head check_la57_support(unsigned long physaddr)
+> >   }
+> >   #endif
+> > 
+> > -static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdval_t *pmd)
+> > +static unsigned long __head sme_postprocess_startup(struct boot_params *bp,
+> > +						    pmdval_t *pmd,
+> > +						    unsigned long physaddr)
+> 
+> I noticed that you added the physaddr parameter but never use it...
+
+Likely just garbage on my end, I was trying various ideas.

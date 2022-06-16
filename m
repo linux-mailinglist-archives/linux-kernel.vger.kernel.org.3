@@ -2,97 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6AC54ED2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF2754ED2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378813AbiFPWRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S1378841AbiFPWSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiFPWRW (ORCPT
+        with ESMTP id S229457AbiFPWSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:17:22 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F15640F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655417841; x=1686953841;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DG7ij0akZlfheq7gBv50KZjX2DwXbyq1iuxXFk3wasY=;
-  b=gQCDk5kRS/LfwLSUITeN+hzLI6XOPDl7KSxwbDli44ZBHosIjm1BaFtk
-   lYni3tSl5/ovIkJR9K7ge4IP10vh37QaqGopluPc0PiLmX5PH2zDU/P7G
-   y9roERv5MjBmCBgTnsO8yMRioTRrm4b/OHVA5TOcgUVut3Btbo7oqtiG1
-   xItQMWXQYUzwQKSW6V4Zp3Gk7FHgW973OVa2zcn30kVSkyROh8omVmnDW
-   mqoym04fmksODaZRmou7TgckhU30tAZEPTo9jXJYmiWVBsBKz+AhebnmR
-   287Av/Q69PviRa5kxjV4VthH7t8AbUFhnbOj2hxuGPH+XLADXPVQdNbhj
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341019168"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341019168"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:17:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="583806160"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2022 15:17:18 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1xng-000Oof-Dc;
-        Thu, 16 Jun 2022 22:17:16 +0000
-Date:   Fri, 17 Jun 2022 06:17:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [jkirsher-next-queue:master 1/5] kismet: WARNING: unmet direct
- dependencies detected for QCOM_SOCINFO when selected by DWMAC_IPQ806X
-Message-ID: <202206170615.6N5Xn5zs-lkp@intel.com>
+        Thu, 16 Jun 2022 18:18:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3E3E5FF2A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655417890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9DWpHhljjMLBCYm+B5HqD4SLrNJSN/X7QHRnWVk9iss=;
+        b=jBtsuN7P5lUHNavDpcsxWwI7H64eAjZ/wADo5YU0rW01AnQwD89ekcrOReg8rfyQvke6UM
+        7OeUsMGJ7dO7Nqx+CwWGw+rfe8shnXymhvTpHONwzoH7opt9D2nyCv7d4yrVw9vWocFvUE
+        iYWZMkucpmxAmqeFYm2PteTVw3dTOC0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-mg6GdRHUOj6LOrubnkpp8w-1; Thu, 16 Jun 2022 18:18:09 -0400
+X-MC-Unique: mg6GdRHUOj6LOrubnkpp8w-1
+Received: by mail-wm1-f71.google.com with SMTP id n15-20020a05600c4f8f00b0039c3e76d646so1405761wmq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:18:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9DWpHhljjMLBCYm+B5HqD4SLrNJSN/X7QHRnWVk9iss=;
+        b=MvFW/pf0sLKhOah66JDGrDPTJaocBhhfd23tlq1Tx5bj9hX9TTcvE5IRwbVWzn9iUh
+         9tvyE/BW0gFBXs6xyQvRwoFtgi+mbq6Qoe0ijAGDhGKnElh73wVUnrXn8RaxtL9bnVZ2
+         5CPZA6I14P7/aW30aCyUFoLrePz7qSJajPHxdht3I697/FvBMb6/0uiDX5hVPZixzQ0u
+         ZnrQzQAWul6vTb3ccqKgGcGJ9nNHlx5rDGbVJ6n6qzhsldLyJU1xRFi1vflAzRlC/Hob
+         auTqj+quEvUCjKRTmReAqbT3TxcN4zkYXLxszyduvMqmaTX0OlSjNTQljtfL9uYGAF9o
+         eQQA==
+X-Gm-Message-State: AJIora+FmPh6Iaad+8XD1mKOzMH6W+eBlDIF8JEv8iKIGXPhxDnyKKH9
+        4A48nI9WDwm9rPcJ7GSpBHc3AsPWwC7MXnZBGSdYND1asOoHljl8UsGrzNjS3p2WH29rfYRvmvR
+        7ynrKc5iyZpxY5Lf8h5tc1SJf
+X-Received: by 2002:adf:e181:0:b0:213:bbe1:ba66 with SMTP id az1-20020adfe181000000b00213bbe1ba66mr6215479wrb.325.1655417887947;
+        Thu, 16 Jun 2022 15:18:07 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uO1cJJMNUcHhX2JKlWJowzj7WQI64QGyPrnUyRc32kSMp0t+NjedvVfCVD7/vwLeNG3ZUpmw==
+X-Received: by 2002:adf:e181:0:b0:213:bbe1:ba66 with SMTP id az1-20020adfe181000000b00213bbe1ba66mr6215452wrb.325.1655417887629;
+        Thu, 16 Jun 2022 15:18:07 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c2ccf00b003974a00697esm7435615wmc.38.2022.06.16.15.18.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 15:18:07 -0700 (PDT)
+Message-ID: <a633d605-4cb3-2e04-1818-85892cf6f7b0@redhat.com>
+Date:   Fri, 17 Jun 2022 00:18:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 3/5] fbdev: Disable sysfb device registration when
+ removing conflicting FBs
+Content-Language: en-US
+To:     Zack Rusin <zackr@vmware.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "kraxel@redhat.com" <kraxel@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "lersek@redhat.com" <lersek@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "deller@gmx.de" <deller@gmx.de>,
+        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>
+References: <20220607182338.344270-1-javierm@redhat.com>
+ <20220607182338.344270-4-javierm@redhat.com>
+ <de83ae8cb6de7ee7c88aa2121513e91bb0a74608.camel@vmware.com>
+ <38473dcd-0666-67b9-28bd-afa2d0ce434a@redhat.com>
+ <603e3613b9b8ff7815b63f294510d417b5b12937.camel@vmware.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <603e3613b9b8ff7815b63f294510d417b5b12937.camel@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git master
-head:   5dcb50c009c9f8ec1cfca6a81a05c0060a5bbf68
-commit: 9ec092d2feb69045dd289845024301fb91c064ee [1/5] net: ethernet: stmmac: add missing sgmii configure for ipq806x
-config: (https://download.01.org/0day-ci/archive/20220617/202206170615.6N5Xn5zs-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git/commit/?id=9ec092d2feb69045dd289845024301fb91c064ee
-        git remote add jkirsher-next-queue https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/next-queue.git
-        git fetch --no-tags jkirsher-next-queue master
-        git checkout 9ec092d2feb69045dd289845024301fb91c064ee
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_QCOM_SOCINFO --selectors CONFIG_DWMAC_IPQ806X -a=arm64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=arm64 olddefconfig
+On 6/16/22 23:03, Zack Rusin wrote:
+> On Thu, 2022-06-16 at 21:55 +0200, Javier Martinez Canillas wrote:
+>> Hello Zack,
+>>
+>> On 6/16/22 21:29, Zack Rusin wrote:
+>>> On Tue, 2022-06-07 at 20:23 +0200, Javier Martinez Canillas wrote:
+>>>> The platform devices registered by sysfb match with firmware-based DRM or
+>>>> fbdev drivers, that are used to have early graphics using a framebuffer
+>>>> provided by the system firmware.
+>>>>
+>>
+>> [snip]
+>>
+>>>
+>>> Hi, Javier.
+>>>
+>>> This change broke arm64 with vmwgfx. We get a kernel oops at boot (let me know if
+>>> you'd like .config or just have us test something directly for you):
+>>>
+>>
+>> Yes please share your .config and I'll try to reproduce on an arm64 machine.
+> 
+> Attached. It might be a little hard to reproduce unless you have an arm64 machine
+> with a dedicated gpu. You'll need a system that actually transitions from a generic
+> fb driver (e.g. efifb) to the dedicated one.
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, all my testing for this was done with a rpi4 so I should be able to reproduce
+that case. I'm confused though because I tested efifb -> vc4, simplefb -> vc4 and
+simpledrm -> vc4.
+ 
+>>>
+>>>  Unable to handle kernel NULL pointer dereference at virtual address
+>>> 0000000000000008
+>>>  Mem abort info:
+>>>    ESR = 0x96000004
+>>>    EC = 0x25: DABT (current EL), IL = 32 bits
+>>>    SET = 0, FnV = 0
+>>>    EA = 0, S1PTW = 0
+>>>    FSC = 0x04: level 0 translation fault
+>>>  Data abort info:
+>>>    ISV = 0, ISS = 0x00000004
+>>>    CM = 0, WnR = 0
+>>>  user pgtable: 4k pages, 48-bit VAs, pgdp=00000001787ee000
+>>>  [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
+>>>  Internal error: Oops: 96000004 [#1] SMP
+>>>  Modules linked in: vmwgfx(+) e1000e(+) nvme ahci(+) xhci_pci drm_ttm_helper ttm
+>>> sha256_arm64 sha1_ce nvme_core xhci_pci_renesas aes_neon_bs aes_neon_blk aes>
+>>>  CPU: 3 PID: 215 Comm: systemd-udevd Tainted: G     U            5.18.0-rc5-vmwgfx
+>>> #12
+>>
+>> I'm confused, your kernel version seems to be 5.18.0-rc5 but this patch
+>> is only in drm-misc-next now and will land in 5.20...
+>>
+>> Did you backport it? Can you please try to reproduce with latest drm-tip ?
+> 
+> No, this is drm-misc-next as of yesterday. drm-misc-next was still on 5.18.0-rc5
+> yesterday.
+> 
 
+Right! I looked at the base for drm-tip but forgot that drm-misc was still on 5.18.
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for QCOM_SOCINFO when selected by DWMAC_IPQ806X
-   
-   WARNING: unmet direct dependencies detected for QCOM_SOCINFO
-     Depends on [n]: QCOM_SMEM [=n]
-     Selected by [y]:
-     - DWMAC_IPQ806X [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_STMICRO [=y] && STMMAC_ETH [=y] && STMMAC_PLATFORM [=y] && OF [=y] && (ARCH_QCOM [=y] || COMPILE_TEST [=n])
+I'll look at this tomorrow but in the meantime, could you please look if the following
+commits on top of drm-misc-next help ?
+
+d258d00fb9c7 fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove
+1b5853dfab7f fbdev: efifb: Fix a use-after-free due early fb_info cleanup
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

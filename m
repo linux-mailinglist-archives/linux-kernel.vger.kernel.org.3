@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC3654E635
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0F554E64A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377977AbiFPPlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S1377417AbiFPPn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbiFPPlI (ORCPT
+        with ESMTP id S235511AbiFPPn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:41:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF9637030
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655394066; x=1686930066;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PKdrXrAzjIvDU1Ic1yRpuUEl06zvIKU558SCZYtshoI=;
-  b=YeyRJMiHMMWJFKYS9T8hcPLDib4rAZeoxYsFHpvCXeIlTLgY1P5FwcaM
-   NGiE1yRIWUJSmms7HnUEKkJX1f1TTwlZpl6PK/EZyG5LVxHQiZ+5sQrjI
-   v77LUkGak63TUFq9JAlTD0cw9hLsafKB0C9FfaDeaKnT0AggGZA4uf4Rh
-   asJR7oq7oamxACr5mVBTpx62KhsSMvzEf4dkgVxK9qJFfe8AWXfwZoSv3
-   KBlxY8RhQCPrX3SFaYhMLlxNZ3VUYY3kvJedn3WqW0DummhF3L9R6WAoN
-   cjTXltWlAhha5gUpviE9tHYEIqLie1a90cmEW3k/xE1Jofv0TcWf9DJ+a
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="276852103"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="276852103"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 08:41:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="589696319"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 08:41:04 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1rcG-000OVN-7l;
-        Thu, 16 Jun 2022 15:41:04 +0000
-Date:   Thu, 16 Jun 2022 23:40:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steve Wahl <steve.wahl@hpe.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>, Kevin Tian <kevin.tian@intel.com>
-Subject: include/linux/dmar.h:21:33: error: 'CONFIG_DMAR_UNITS_SUPPORTED'
- undeclared here (not in a function); did you mean 'DMAR_UNITS_SUPPORTED'?
-Message-ID: <202206162309.0IdGIck1-lkp@intel.com>
+        Thu, 16 Jun 2022 11:43:57 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2074419C01
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=3SyGV
+        GPAl6RCeoR6/3GY66rPKd6XLustmDizqKaNl8Y=; b=RwOw51MgK71kHeJ0Qekqq
+        RN7adtZBwVvPmvKYxLmvLvrDIiYYpSjwiEboWze5XbCspqeQeiCIyHCGfGxkEDRt
+        Pdd20rs0iemeL6zUKqT3XjCjGfRrXLcVeOVuQUPY/TQ/nDNKzGhwkbR0u/J0NuN9
+        7P/adUvdXX+wiz2qSaKfBo=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp8 (Coremail) with SMTP id NORpCgA37ZEwT6titcAYFw--.50981S2;
+        Thu, 16 Jun 2022 23:41:37 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        clg@kaod.org, nick.child@ibm.com
+Cc:     windhl@126.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: sysdev: xive: Fix refcount leak in native.c
+Date:   Thu, 16 Jun 2022 23:41:35 +0800
+Message-Id: <20220616154135.3989769-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgA37ZEwT6titcAYFw--.50981S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFyfZFy5ur4xZw47GFW7urg_yoW8CFW5pF
+        Z7GFyjya1S9w18KrWSyF10vF4DCr1ktayrXa97GwnrAw4q9w4ktr45KryFqrW5GrWku3Wr
+        tF1fCr1UJFsrWaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziZa9DUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hEiF1uwMN39YwAAsm
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220616-024802/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
-head:   3e005e10e4d8627a55a987d047c19dba233ba66b
-commit: 3e005e10e4d8627a55a987d047c19dba233ba66b iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-date:   21 hours ago
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220616/202206162309.0IdGIck1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/3e005e10e4d8627a55a987d047c19dba233ba66b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220616-024802/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
-        git checkout 3e005e10e4d8627a55a987d047c19dba233ba66b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+In xive_native_init(), of_find_compatible_node() will return a
+node pointer with refcount incremented. We should use of_node_put()
+in each fail path or when it is not used anymore.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/powerpc/sysdev/xive/native.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/intel-iommu.h:21,
-                    from drivers/char/agp/intel-gtt.c:23:
->> include/linux/dmar.h:21:33: error: 'CONFIG_DMAR_UNITS_SUPPORTED' undeclared here (not in a function); did you mean 'DMAR_UNITS_SUPPORTED'?
-      21 | #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/intel-iommu.h:531:35: note: in expansion of macro 'DMAR_UNITS_SUPPORTED'
-     531 |         unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
-         |                                   ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +21 include/linux/dmar.h
-
-    20	
-  > 21	#define	DMAR_UNITS_SUPPORTED	CONFIG_DMAR_UNITS_SUPPORTED
-    22	
-
+diff --git a/arch/powerpc/sysdev/xive/native.c b/arch/powerpc/sysdev/xive/native.c
+index d25d8c692909..3925825954bc 100644
+--- a/arch/powerpc/sysdev/xive/native.c
++++ b/arch/powerpc/sysdev/xive/native.c
+@@ -579,12 +579,12 @@ bool __init xive_native_init(void)
+ 	/* Resource 1 is HV window */
+ 	if (of_address_to_resource(np, 1, &r)) {
+ 		pr_err("Failed to get thread mgmnt area resource\n");
+-		return false;
++		goto err_put;
+ 	}
+ 	tima = ioremap(r.start, resource_size(&r));
+ 	if (!tima) {
+ 		pr_err("Failed to map thread mgmnt area\n");
+-		return false;
++		goto err_put;
+ 	}
+ 
+ 	/* Read number of priorities */
+@@ -612,7 +612,7 @@ bool __init xive_native_init(void)
+ 	/* Resource 2 is OS window */
+ 	if (of_address_to_resource(np, 2, &r)) {
+ 		pr_err("Failed to get thread mgmnt area resource\n");
+-		return false;
++		goto err_put;
+ 	}
+ 
+ 	xive_tima_os = r.start;
+@@ -624,7 +624,7 @@ bool __init xive_native_init(void)
+ 	rc = opal_xive_reset(OPAL_XIVE_MODE_EXPL);
+ 	if (rc) {
+ 		pr_err("Switch to exploitation mode failed with error %lld\n", rc);
+-		return false;
++		goto err_put;
+ 	}
+ 
+ 	/* Setup some dummy HV pool VPs */
+@@ -634,10 +634,15 @@ bool __init xive_native_init(void)
+ 	if (!xive_core_init(np, &xive_native_ops, tima, TM_QW3_HV_PHYS,
+ 			    max_prio)) {
+ 		opal_xive_reset(OPAL_XIVE_MODE_EMU);
+-		return false;
++		goto err_put;
+ 	}
++	of_node_put(np);
+ 	pr_info("Using %dkB queues\n", 1 << (xive_queue_shift - 10));
+ 	return true;
++
++err_put:
++	of_node_put(np);
++	return false;
+ }
+ 
+ static bool xive_native_provision_pages(void)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

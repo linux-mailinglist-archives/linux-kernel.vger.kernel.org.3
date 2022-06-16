@@ -2,172 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8103054EB1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C1B54EB22
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378712AbiFPU0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S1378625AbiFPU1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378602AbiFPU0K (ORCPT
+        with ESMTP id S1378701AbiFPU1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:26:10 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA055C67B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:26:02 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id u37so2438476pfg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:26:02 -0700 (PDT)
+        Thu, 16 Jun 2022 16:27:03 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD895D190;
+        Thu, 16 Jun 2022 13:26:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AnWdYySv2ElBW0uBlpDoztzyY1ZcO3tTNMTwxgds8HI=;
-        b=GnUw6jIKy4VvUtAq6JRtA9tnJe2f9luRge04oe2c7BWHg2z+hxBLeGxTpo5UKooudC
-         Spt5ziAKqtAQRNkf8CC4TNxZKN+emqORto/IDLLduVzH6ifZH/nRCFDTtoBtA6tqhZ3n
-         OybU8GqnJ7ui2k2yjRWJGywen8bXJo99pybWGtUb33KuNybF1yr0CJCglkh+CU52NBAe
-         j97wMsRB2ASdyFtx5zVYVM6rS7jRLACT7iuCver9VZotiUr6d2wxYMCeUhwwo5yJEA9X
-         RzdjgHIqZNuws7JjYNBb+eheHkdw40mfMPLLY9B+EiQxx4CrPLOCsv26RtbO7/KCglhR
-         gBkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AnWdYySv2ElBW0uBlpDoztzyY1ZcO3tTNMTwxgds8HI=;
-        b=0l8Cl97z5dLEK8Gu9IBDATBs3cEx8MPjQvk/+kKKYp7UD3X7Cq9VPKD1if0q1j/cgf
-         Tau/o5vA3rnjtMpa/7RtRhfIHTAzwrt8B0GFmaGLHMXRKLAL4tDn5o/Mir9CaYe6rYms
-         iknTcfoQH5QPkjYYM3vNqmPGzkDuBdvUYi2RISjn4YadvpJIBAbMK076TeSiKraWBDqQ
-         Jq742VDZMSDUn3fsGSUuooF68z9cOvtd09pQbVOQsXsVMtZ0lt0vWNy6FewyNr1XmmD5
-         YH3AlJMRSzGEdJ8+anuDfsI5UbBqN16Q+tgX5uD/w11VnVT2nL1dVJNemEkmRU5EMEHT
-         k+/g==
-X-Gm-Message-State: AJIora8Zi52vN/b1yypGojm0IEp/c3cTZJLpZ2Qg2OQ0M6gW4htox5p6
-        1T+QTEXWVW1XJ3JyBZpJ+evfVg==
-X-Google-Smtp-Source: AGRyM1v6ATZDbmHo1v8ebjcpZanCb94Ax4IX7JfyHmqaHedp3fccRz2rZtv8sHSrbAmiYg4dYmQzPw==
-X-Received: by 2002:a63:8ac2:0:b0:408:a936:8cc8 with SMTP id y185-20020a638ac2000000b00408a9368cc8mr6020293pgd.343.1655411161592;
-        Thu, 16 Jun 2022 13:26:01 -0700 (PDT)
-Received: from mai.imgcgcw.net ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa79705000000b0051bb0be7109sm2182960pfg.78.2022.06.16.13.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 13:26:01 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 3/3] thermal/drivers/u8500: Remove the get_trend function
-Date:   Thu, 16 Jun 2022 22:25:37 +0200
-Message-Id: <20220616202537.303655-3-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220616202537.303655-1-daniel.lezcano@linaro.org>
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655411213; x=1686947213;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ls8lQOlmsBqBGQEX1/VCZmtXihXyvL46E8MuEcAIKHo=;
+  b=XUE4WXvZrhH9aiyRqzPmhSMGAR9ulTy+Bq68SR6kcSElF44QTmiiCIyV
+   b8hQycX+L6K7Ts8oMOgCf3qxYLxzeFMtyZ6BAB04a4efky+1zEvWEezpB
+   A8oIjfhhL2Ak3hlXwXXsSKJ7An2LqkGU7TvL1CfnzMiCIEn3Xquw6lEql
+   4=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Jun 2022 13:26:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:26:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 16 Jun 2022 13:26:52 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 16 Jun 2022 13:26:51 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9] drm/msm/dp: force link training for display resolution change
+Date:   Thu, 16 Jun 2022 13:26:40 -0700
+Message-ID: <1655411200-7255-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The get_trend function relies on the interrupt to set the raising or
-dropping trend. However the interpolated temperature is already giving
-the temperature information to the thermal framework which is able to
-deduce the trend.
+Display resolution change is implemented through drm modeset. Older
+modeset (resolution) has to be disabled first before newer modeset
+(resolution) can be enabled. Display disable will turn off both
+pixel clock and main link clock so that main link have to be
+re-trained during display enable to have new video stream flow
+again. At current implementation, display enable function manually
+kicks up irq_hpd_handle which will read panel link status and start
+link training if link status is not in sync state.
 
-Remove the trend code.
+However, there is rare case that a particular panel links status keep
+staying in sync for some period of time after main link had been shut
+down previously at display disabled. In this case, main link retraining
+will not be executed by irq_hdp_handle(). Hence video stream of newer
+display resolution will fail to be transmitted to panel due to main
+link is not in sync between host and panel.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+This patch will bypass irq_hpd_handle() in favor of directly call
+dp_ctrl_on_stream() to always perform link training in regardless of
+main link status. So that no unexpected exception resolution change
+failure cases will happen. Also this implementation are more efficient
+than manual kicking off irq_hpd_handle function.
+
+Changes in v2:
+-- set force_link_train flag on DP only (is_edp == false)
+
+Changes in v3:
+-- revise commit  text
+-- add Fixes tag
+
+Changes in v4:
+-- revise commit  text
+
+Changes in v5:
+-- fix spelling at commit text
+
+Changes in v6:
+-- split dp_ctrl_on_stream() for phy test case
+-- revise commit text for modeset
+
+Changes in v7:
+-- drop 0 assignment at local variable (ret = 0)
+
+Changes in v8:
+-- add patch to remove pixel_rate from dp_ctrl
+
+Changes in v9:
+-- forward declare dp_ctrl_on_stream_phy_test_report()
+
+Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 ---
- drivers/thermal/db8500_thermal.c | 26 ++++----------------------
- 1 file changed, 4 insertions(+), 22 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 33 +++++++++++++++++++++++++--------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
+ 3 files changed, 32 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
-index 21d4d6e6409a..ed40cfd9ab7d 100644
---- a/drivers/thermal/db8500_thermal.c
-+++ b/drivers/thermal/db8500_thermal.c
-@@ -53,7 +53,6 @@ static const unsigned long db8500_thermal_points[] = {
- 
- struct db8500_thermal_zone {
- 	struct thermal_zone_device *tz;
--	enum thermal_trend trend;
- 	unsigned long interpolated_temp;
- 	unsigned int cur_index;
- };
-@@ -73,24 +72,12 @@ static int db8500_thermal_get_temp(void *data, int *temp)
- 	return 0;
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index af7a80c..f090945 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1528,6 +1528,8 @@ static int dp_ctrl_link_maintenance(struct dp_ctrl_private *ctrl)
+ 	return ret;
  }
  
--/* Callback to get temperature changing trend */
--static int db8500_thermal_get_trend(void *data, int trip, enum thermal_trend *trend)
--{
--	struct db8500_thermal_zone *th = data;
++static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl);
++
+ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ {
+ 	int ret = 0;
+@@ -1551,7 +1553,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 
+ 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
+ 	if (!ret)
+-		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
++		ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
+ 	else
+ 		DRM_ERROR("failed to enable DP link controller\n");
+ 
+@@ -1807,7 +1809,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+ 	return dp_ctrl_setup_main_link(ctrl, &training_step);
+ }
+ 
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
++static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
++{
++	int ret;
++	struct dp_ctrl_private *ctrl;
++
++	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
++
++	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
++
++	ret = dp_ctrl_enable_stream_clocks(ctrl);
++	if (ret) {
++		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
++		return ret;
++	}
++
++	dp_ctrl_send_phy_test_pattern(ctrl);
++
++	return 0;
++}
++
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+ {
+ 	int ret = 0;
+ 	bool mainlink_ready = false;
+@@ -1843,12 +1865,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		goto end;
+ 	}
+ 
+-	if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
+-		dp_ctrl_send_phy_test_pattern(ctrl);
+-		return 0;
+-	}
 -
--	*trend = th->trend;
--
--	return 0;
--}
--
- static struct thermal_zone_of_device_ops thdev_ops = {
- 	.get_temp = db8500_thermal_get_temp,
--	.get_trend = db8500_thermal_get_trend,
+-	if (!dp_ctrl_channel_eq_ok(ctrl))
++	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
+ 		dp_ctrl_link_retrain(ctrl);
+ 
+ 	/* stop txing train pattern to end link training */
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+index 0745fde..b563e2e 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+@@ -21,7 +21,7 @@ struct dp_ctrl {
  };
  
- static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
- 					 unsigned int idx,
--					 enum thermal_trend trend,
- 					 unsigned long next_low,
- 					 unsigned long next_high)
- {
-@@ -98,7 +85,6 @@ static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
- 
- 	th->cur_index = idx;
- 	th->interpolated_temp = (next_low + next_high)/2;
--	th->trend = trend;
- 
- 	/*
- 	 * The PRCMU accept absolute temperatures in celsius so divide
-@@ -127,8 +113,7 @@ static irqreturn_t prcmu_low_irq_handler(int irq, void *irq_data)
+ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
+ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index c388323..b6d25ab 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+ 		return 0;
  	}
- 	idx -= 1;
  
--	db8500_thermal_update_config(th, idx, THERMAL_TREND_DROPPING,
--				     next_low, next_high);
-+	db8500_thermal_update_config(th, idx, next_low, next_high);
- 	dev_dbg(&th->tz->device,
- 		"PRCMU set max %ld, min %ld\n", next_high, next_low);
+-	rc = dp_ctrl_on_stream(dp->ctrl);
++	rc = dp_ctrl_on_stream(dp->ctrl, data);
+ 	if (!rc)
+ 		dp_display->power_on = true;
  
-@@ -149,8 +134,7 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
- 		next_low = db8500_thermal_points[idx];
- 		idx += 1;
+@@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 	int rc = 0;
+ 	struct dp_display_private *dp_display;
+ 	u32 state;
++	bool force_link_train = false;
  
--		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
--					     next_low, next_high);
-+		db8500_thermal_update_config(th, idx, next_low, next_high);
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 	if (!dp_display->dp_mode.drm_mode.clock) {
+@@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
  
- 		dev_dbg(&th->tz->device,
- 			"PRCMU set max %ld, min %ld\n", next_high, next_low);
-@@ -210,8 +194,7 @@ static int db8500_thermal_probe(struct platform_device *pdev)
- 	dev_info(dev, "thermal zone sensor registered\n");
+ 	state =  dp_display->hpd_state;
  
- 	/* Start measuring at the lowest point */
--	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
--				     PRCMU_DEFAULT_LOW_TEMP,
-+	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
- 				     db8500_thermal_points[0]);
+-	if (state == ST_DISPLAY_OFF)
++	if (state == ST_DISPLAY_OFF) {
+ 		dp_display_host_phy_init(dp_display);
++		force_link_train = true;
++	}
  
- 	platform_set_drvdata(pdev, th);
-@@ -232,8 +215,7 @@ static int db8500_thermal_resume(struct platform_device *pdev)
- 	struct db8500_thermal_zone *th = platform_get_drvdata(pdev);
+-	dp_display_enable(dp_display, 0);
++	dp_display_enable(dp_display, force_link_train);
  
- 	/* Resume and start measuring at the lowest point */
--	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
--				     PRCMU_DEFAULT_LOW_TEMP,
-+	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
- 				     db8500_thermal_points[0]);
+ 	rc = dp_display_post_enable(dp);
+ 	if (rc) {
+@@ -1700,10 +1703,6 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 		dp_display_unprepare(dp);
+ 	}
  
- 	return 0;
+-	/* manual kick off plug event to train link */
+-	if (state == ST_DISPLAY_OFF)
+-		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
+-
+ 	/* completed connection */
+ 	dp_display->hpd_state = ST_CONNECTED;
+ 
 -- 
-2.25.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

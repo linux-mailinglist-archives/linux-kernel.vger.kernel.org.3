@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D1054E127
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5664054E12B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233297AbiFPMy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 08:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S1376281AbiFPM4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 08:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiFPMyw (ORCPT
+        with ESMTP id S230386AbiFPM4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 08:54:52 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3883AA74
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:54:50 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1011df6971aso1787669fac.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+60kb7Jq0Ft63tpD8oZlYpWYfkxxSFBSQY8N/T0Hz5M=;
-        b=GGBRnc5NAsPV9pSvXj3TWryUafn6St16NwJv/QTfQ2m4job2hZvC0YdOBzpqyUUPnn
-         wt/abIcQpqvd/JPh8lHTmfrPYDF489B0C985ow1yl44G38bWUWaecJwhYFdVQUCm50WU
-         fVm86SzU00ET0NNx/+SMO8+4bKZwQNQsWmBV0=
+        Thu, 16 Jun 2022 08:56:10 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882713AA74
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:56:09 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id r76-20020a6b2b4f000000b00669b75529e5so836104ior.16
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:56:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=+60kb7Jq0Ft63tpD8oZlYpWYfkxxSFBSQY8N/T0Hz5M=;
-        b=fbPvunCECvLlaEQg9+i4+Tzdxgh6Ehixp08sRAKO5WXDsw/rp7zf1H0fvA5t2K87Co
-         IWW7cmAe+EM6HXiV3U84f9n1GjLyzKXF3jSEW9AGtGTiFs03Qze5auTn5gSekeYE+pZL
-         Gneh1fRRyn3TQb5W4gCO2jOmHlc1DTFs/F1lcR7TvPoods+Z1xB31ExNH8G0Wq2h7GTQ
-         cw29/0tYtSVJbfirsbM++hji9qR6jTuASmJpsvksuqphpYku//QOsFJWToT0WVU1bc2k
-         PGytVpE2ixrRLmUjvQeASmsbJ9x6vKjnrGRL3QOYwCBD2zkFPDPPvUn3w+99i8dbpxQA
-         1Luw==
-X-Gm-Message-State: AJIora+EiK0KrMW/iMQH048HJ7GpWGqTPMjKfT7k+O1gDKje5QjjJqYC
-        YQ5GLaIyMxt1xNz7RMftVFjWiA==
-X-Google-Smtp-Source: AGRyM1vfK2fVN9wsZ+r1rjRy8l70N3Ep7eu0AL5Bfe5UDTH73mGOvYUXdxUb1wRKj+TY91Aox+Hn4A==
-X-Received: by 2002:a05:6870:8311:b0:100:ef5f:77b6 with SMTP id p17-20020a056870831100b00100ef5f77b6mr8048060oae.157.1655384089622;
-        Thu, 16 Jun 2022 05:54:49 -0700 (PDT)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id r187-20020acaa8c4000000b0032ec0af21a7sm795995oie.10.2022.06.16.05.54.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 05:54:48 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Thu, 16 Jun 2022 07:54:47 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 00/11] 5.18.5-rc1 review
-Message-ID: <YqsoF2SHMmgW7wSq@fedora64.linuxtx.org>
-References: <20220614183720.861582392@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7dgrW0/sl3GQ3uXBraF50K7X7RRrejAyzeBz0ig+N+s=;
+        b=weFdrhgCgjYdUr5Rtj6otkDUOFegdqXAiGJPCSL8nVBoN2Nd/4tqZGf6A5m/Qmm8Ef
+         dz05YJpv5HlUR7J502hdd9OHEBQR9VXLyZwXBwLb+lbEOGEKYql1uaoS89CAw2n+C0aK
+         8PfBAwI2VOecul2vZNP3SAuX9TcEkt3C0nxxVXkkLbUNePqduLLKVDM5UEfB4Xf5jD5w
+         Vu6afyKvJyGjvlC3iuCx+/2/HQD7ymZqpd8hi38TasxKiGvTkosMWUGwB6JD9mZQ5pmv
+         VpBumXCyRN2erWgIu+LzsL3qfkCVAC3pn8UqXpmsKnBgl8dgMKXIS7Mu0Cj0Zjm/E7el
+         Ib5w==
+X-Gm-Message-State: AJIora/wlXmsSvnj7Z1oqrfwJyX9dozIKFb1n3bYZDMndSpUQAq37MPf
+        0JDJPFbEVGzfC08x2CyfhRtq+DPey3hHw7pgGxpN2FXxlQRN
+X-Google-Smtp-Source: AGRyM1tBqEDRakt56/+n2G6Ca2qbmxEqzONnDCAolQpXrx30minSxKuF54OnAn+bFI1rhGxyrsTF1sf45gtGP4uK3gN5UMsgplev
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614183720.861582392@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:f0d:b0:331:e337:f4e4 with SMTP id
+ h13-20020a0566380f0d00b00331e337f4e4mr2657302jas.249.1655384168913; Thu, 16
+ Jun 2022 05:56:08 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 05:56:08 -0700
+In-Reply-To: <20220616123726.2597-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005ae29605e1902945@google.com>
+Subject: Re: [syzbot] WARNING: ODEBUG bug in route4_destroy
+From:   syzbot <syzbot+2e3efb5eb71cb5075ba7@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 08:40:37PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.5 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.5-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hello,
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Reported-and-tested-by: syzbot+2e3efb5eb71cb5075ba7@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         018ab4fa netfs: fix up netfs_inode_init() docbook comm..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=167212c3f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f21890d74080ef72
+dashboard link: https://syzkaller.appspot.com/bug?extid=2e3efb5eb71cb5075ba7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15b2f608080000
+
+Note: testing is done by a robot and is best-effort only.

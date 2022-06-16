@@ -2,187 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A8654DC41
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C9254DC3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359074AbiFPHzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S230043AbiFPHzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiFPHz1 (ORCPT
+        with ESMTP id S1358520AbiFPHzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:55:27 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DCE5D5EE;
-        Thu, 16 Jun 2022 00:55:21 -0700 (PDT)
-X-UUID: e67a4176bfc347868cdedd6f42d8d9c5-20220616
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:6f1f3cac-79b5-4396-ab20-ffa9c79d57b5,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:b14ad71,CLOUDID:2ba2b848-4c92-421c-ad91-b806c0f58b2a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: e67a4176bfc347868cdedd6f42d8d9c5-20220616
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2139800384; Thu, 16 Jun 2022 15:55:14 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 16 Jun 2022 15:55:13 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 16 Jun 2022 15:55:13 +0800
-Message-ID: <90c2468228499acc88967aa48d9442abb63b5336.camel@mediatek.com>
-Subject: Re: [PATCH v11 01/12] dt-bindings: mediatek,dpi: Add DP_INTF
- compatible
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <daniel@ffwll.ch>, <krzysztof.kozlowski+dt@linaro.org>,
-        <matthias.bgg@gmail.com>, <airlied@linux.ie>, <msp@baylibre.com>,
-        <granquet@baylibre.com>, <jitao.shi@mediatek.com>,
-        <wenst@chromium.org>, <angelogioacchino.delregno@collabora.com>,
-        <ck.hu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 16 Jun 2022 15:55:13 +0800
-In-Reply-To: <20220614202455.GA2415891-robh@kernel.org>
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
-         <20220613064841.10481-2-rex-bc.chen@mediatek.com>
-         <20220614202455.GA2415891-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 16 Jun 2022 03:55:19 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B4B5D5CC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:55:18 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LNvbF1YJRzDrDc;
+        Thu, 16 Jun 2022 15:54:49 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 15:55:15 +0800
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>
+Subject: Re: [PATCH v4 1/2] sched: Add per_cpu cluster domain info and
+ cpus_share_resources API
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@hisilicon.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
+        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220609120622.47724-1-yangyicong@hisilicon.com>
+ <20220609120622.47724-2-yangyicong@hisilicon.com>
+ <e000b124-afd4-28e1-fde2-393b0e38ce19@amd.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <81fbcadb-a58d-2cef-9c05-154555ec1d68@huawei.com>
+Date:   Thu, 16 Jun 2022 15:55:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
+In-Reply-To: <e000b124-afd4-28e1-fde2-393b0e38ce19@amd.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 14:24 -0600, Rob Herring wrote:
-> On Mon, Jun 13, 2022 at 02:48:30PM +0800, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > DP_INTF is similar to DPI but does not have the exact same feature
-> > set
-> > or register layouts.
-> > 
-> > DP_INTF is the sink of the display pipeline that is connected to
-> > the
-> > DisplayPort controller and encoder unit. It takes the same clocks
-> > as
-> > DPI.
-> > 
-> > In this patch, we also do these string replacement:
-> > - s/mediatek/MediaTek/ in title.
-> > - s/Mediatek/MediaTek/ in description.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  .../bindings/display/mediatek/mediatek,dpi.yaml     | 13 ++++++++-
-> > ----
-> >  1 file changed, 8 insertions(+), 5 deletions(-)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > aml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > aml
-> > index 77ee1b923991..ca1b48e78581 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > aml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > aml
-> > @@ -4,16 +4,16 @@
-> >  $id: 
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml*__;Iw!!CTRNKA9wMg0ARbw!0wzvKisC8j2vSMbYtNhgV1niXflyQgVHmgSPCVo94UQV-GiFqhMtdoowjpgIYMXH8wDn$
-> >  
-> >  $schema: 
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!0wzvKisC8j2vSMbYtNhgV1niXflyQgVHmgSPCVo94UQV-GiFqhMtdoowjpgIYEfMUrSk$
-> >  
-> >  
-> > -title: mediatek DPI Controller Device Tree Bindings
-> > +title: MediaTek DPI and DP_INTF Controller
-> >  
-> >  maintainers:
-> >    - CK Hu <ck.hu@mediatek.com>
-> >    - Jitao shi <jitao.shi@mediatek.com>
-> >  
-> >  description: |
-> > -  The Mediatek DPI function block is a sink of the display
-> > subsystem and
-> > -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
-> > parallel
-> > -  output bus.
-> > +  The MediaTek DPI and DP_INTF function blocks are a sink of the
-> > display
-> > +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
-> > pixel data on a
-> > +  parallel output bus.
-> >  
-> >  properties:
-> >    compatible:
-> > @@ -24,6 +24,7 @@ properties:
-> >        - mediatek,mt8183-dpi
-> >        - mediatek,mt8186-dpi
-> >        - mediatek,mt8192-dpi
-> > +      - mediatek,mt8195-dp_intf
-> >  
-> >    reg:
-> >      maxItems: 1
-> > @@ -36,12 +37,14 @@ properties:
-> >        - description: Pixel Clock
-> >        - description: Engine Clock
-> >        - description: DPI PLL
-> > +      - description: Clock gate for PLL
-> >  
-> >    clock-names:
-> >      items:
-> >        - const: pixel
-> >        - const: engine
-> >        - const: pll
-> > +      - const: pll_gate
+Hi Prateek,
+
+Seems my previous reply is in the wrong format so the server rejected it..just repost..
+
+Thanks a lot for the test!
+
+On 2022/6/15 22:19, K Prateek Nayak wrote:
+> Hello Yicong,
 > 
-> You just added a new required clock for everyone.
+> I replied to the v3 of the series by mistake!
+> (https://lore.kernel.org/lkml/0b065646-5b05-cbdb-b20c-e1dfef3f4d79@amd.com/)
+> But rest assured all the analysis discussed there was done with
+> the v4 patch series. I'll add the same observations below so we
+> can continue discussion on v4.
 > 
+> We are observing some serious regression with tbench with this patch
+> series applied. The issue doesn't seem to be related to the actual 
+> functionality of the patch but how the patch changes the per CPU
+> variable layout.
+> 
+> Discussed below are the results from running tbench on a dual
+> socket Zen3 (2 x 64C/128T) configured in different NPS modes.
+> 
+> NPS Modes are used to logically divide single socket into
+> multiple NUMA region.
+> Following is the NUMA configuration for each NPS mode on the system:
+> 
+> NPS1: Each socket is a NUMA node.
+>     Total 2 NUMA nodes in the dual socket machine.
+> 
+>     Node 0: 0-63,   128-191
+>     Node 1: 64-127, 192-255
+> 
+> NPS2: Each socket is further logically divided into 2 NUMA regions.
+>     Total 4 NUMA nodes exist over 2 socket.
+>    
+>     Node 0: 0-31,   128-159
+>     Node 1: 32-63,  160-191
+>     Node 2: 64-95,  192-223
+>     Node 3: 96-127, 223-255
+> 
+> NPS4: Each socket is logically divided into 4 NUMA regions.
+>     Total 8 NUMA nodes exist over 2 socket.
+>    
+>     Node 0: 0-15,    128-143
+>     Node 1: 16-31,   144-159
+>     Node 2: 32-47,   160-175
+>     Node 3: 48-63,   176-191
+>     Node 4: 64-79,   192-207
+>     Node 5: 80-95,   208-223
+>     Node 6: 96-111,  223-231
+>     Node 7: 112-127, 232-255
+> 
+> Benchmark Results:
+> 
+> Kernel versions:
+> - tip:      5.19.0-rc2 tip sched/core
+> - cluster:  5.19.0-rc2 tip sched/core + both the patches of the series
+> 
+> When we started testing, the tip was at:
+> commit: f3dd3f674555 "sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is idle"
+> 
+> * - Data points of concern
+> 
+> ~~~~~~
+> tbench
+> ~~~~~~
+> 
+> NPS1
+> 
+> Clients:       tip                     cluster
+>     1    444.41 (0.00 pct)       439.27 (-1.15 pct)
+>     2    879.23 (0.00 pct)       831.49 (-5.42 pct)     *
+>     4    1648.83 (0.00 pct)      1608.07 (-2.47 pct)
+>     8    3263.81 (0.00 pct)      3086.81 (-5.42 pct)    *
+>    16    6011.19 (0.00 pct)      5360.28 (-10.82 pct)   *
+>    32    12058.31 (0.00 pct)     8769.08 (-27.27 pct)   *
+>    64    21258.21 (0.00 pct)     19021.09 (-10.52 pct)  *
+>   128    30795.27 (0.00 pct)     30861.34 (0.21 pct)
+>   256    25138.43 (0.00 pct)     24711.90 (-1.69 pct)
+>   512    51287.93 (0.00 pct)     51855.55 (1.10 pct)
+>  1024    53176.97 (0.00 pct)     52554.55 (-1.17 pct)
+> 
+> NPS2
+> 
+> Clients:       tip                     cluster
+>     1    445.45 (0.00 pct)       441.75 (-0.83 pct)
+>     2    869.24 (0.00 pct)       845.61 (-2.71 pct)
+>     4    1644.28 (0.00 pct)      1586.49 (-3.51 pct)
+>     8    3120.83 (0.00 pct)      2967.01 (-4.92 pct) 	*
+>    16    5972.29 (0.00 pct)      5208.58 (-12.78 pct)   *
+>    32    11776.38 (0.00 pct)     10229.53 (-13.13 pct)  *
+>    64    20933.15 (0.00 pct)     17033.45 (-18.62 pct)  *
+>   128    32195.00 (0.00 pct)     29507.85 (-8.34 pct)   *
+>   256    24641.52 (0.00 pct)     27225.00 (10.48 pct)
+>   512    50806.96 (0.00 pct)     51377.50 (1.12 pct)
+>  1024    51993.96 (0.00 pct)     50773.35 (-2.34 pct)
+> 
+> NPS4
+> 
+> Clients:      tip                   cluster
+>     1    442.10 (0.00 pct)       435.06 (-1.59 pct)
+>     2    870.94 (0.00 pct)       858.64 (-1.41 pct)
+>     4    1615.30 (0.00 pct)      1607.27 (-0.49 pct)
+>     8    3195.95 (0.00 pct)      3020.63 (-5.48 pct)    *
+>    16    5937.41 (0.00 pct)      5719.87 (-3.66 pct)
+>    32    11800.41 (0.00 pct)     11229.65 (-4.83 pct)	*
+>    64    20844.71 (0.00 pct)     20432.79 (-1.97 pct)
+>   128    31003.62 (0.00 pct)     29441.20 (-5.03 pct)   *
+>   256    27476.37 (0.00 pct)     25857.30 (-5.89 pct)   * [Know to have run to run variance]
+>   512    52276.72 (0.00 pct)     51659.16 (-1.18 pct)
+>  1024    51372.10 (0.00 pct)     51026.87 (-0.67 pct)
+> 
+> Note: tbench results for 256 workers are known to have
+> run to run variation on the test machine. Any regression
+> seen for the data point can be safely ignored.
+> 
+> The behavior is consistent for both tip and patched kernel
+> across multiple runs of tbench.
+> 
+> ~~~~~~~~~~~~~~~~~~~~
+> Analysis done so far
+> ~~~~~~~~~~~~~~~~~~~~
+> 
+> To root cause this issue quicker, we have focused on 8 to 64 clients
+> data points with the machine running in NPS1 mode.
+> 
+> - Even on disabling HW prefetcher, the behavior remains consistent
+>   signifying HW prefetcher is not the cause of the problem.
+> 
+> - Bisecting:
+> 
+> When we ran the tests with only Patch 1 of the series, the
+> regression was visible and the numbers were worse.
+> 
+> Clients:       tip                     cluster              Patch 1 Only
+>     8    3263.81 (0.00 pct)      3086.81 (-5.42 pct)     3018.63 (-7.51 pct)
+>    16    6011.19 (0.00 pct)      5360.28 (-10.82 pct)    4869.26 (-18.99 pct)
+>    32    12058.31 (0.00 pct)     8769.08 (-27.27 pct)    8159.60 (-32.33 pct)
+>    64    21258.21 (0.00 pct)     19021.09 (-10.52 pct)   13161.92 (-38.08 pct)
+> 
+> We further bisected the hunks to narrow down the cause to the per CPU
+> variable declarations. 
+> 
+> 
+> On 6/9/2022 5:36 PM, Yicong Yang wrote:
+>>
+>> [..snip..]
+>>
+>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+>> index 01259611beb9..b9bcfcf8d14d 100644
+>> --- a/kernel/sched/sched.h
+>> +++ b/kernel/sched/sched.h
+>> @@ -1753,7 +1753,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+>>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>>  DECLARE_PER_CPU(int, sd_llc_size);
+>>  DECLARE_PER_CPU(int, sd_llc_id);
+>> +DECLARE_PER_CPU(int, sd_share_id);
+>>  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+>> +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+> 
+> The main reason for the regression seems to be the above declarations.
+> The regression seem to go away if we do one of the following:
+> 
+> - Declare sd_share_id and sd_cluster using DECLARE_PER_CPU_READ_MOSTLY()
+>   instead of DECLARE_PER_CPU() and change the corresponding definition
+>   below to DEFINE_PER_CPU_READ_MOSTLY().
+> 
+>   Clients:       tip                     Patch 1           Patch 1 (READ_MOSTLY)
+>     8      3255.69 (0.00 pct)      3018.63 (-7.28 pct)     3237.33 (-0.56 pct)
+>    16      6092.67 (0.00 pct)      4869.26 (-20.08 pct)    5914.53 (-2.92 pct)
+>    32      11156.56 (0.00 pct)     8159.60 (-26.86 pct)    11536.05 (3.40 pct)
+>    64      21019.97 (0.00 pct)     13161.92 (-37.38 pct)   21162.33 (0.67 pct)
+> 
+> - Convert sd_share_id and sd_cluster to static arrays.
+>   
+>   Clients:       tip                    Patch 1            Patch 1 (Static Array)
+>     8      3255.69 (0.00 pct)      3018.63 (-7.28 pct)     3203.27 (-1.61 pct)
+>    16      6092.67 (0.00 pct)      4869.26 (-20.08 pct)    6198.35 (1.73 pct)
+>    32      11156.56 (0.00 pct)     8159.60 (-26.86 pct)    11385.76 (2.05 pct)
+>    64      21019.97 (0.00 pct)     13161.92 (-37.38 pct)   21919.80 (4.28 pct)
+> 
+> - Move the declarations of sd_share_id and sd_cluster to the top
+> 
+>   Clients:       tip                    Patch 1            Patch 1 (Declarion on Top)
+>     8      3255.69 (0.00 pct)      3018.63 (-7.28 pct)     3072.30 (-5.63 pct)
+>    16      6092.67 (0.00 pct)      4869.26 (-20.08 pct)    5586.59 (-8.30 pct)
+>    32      11156.56 (0.00 pct)     8159.60 (-26.86 pct)    11184.17 (0.24 pct)
+>    64      21019.97 (0.00 pct)     13161.92 (-37.38 pct)   20289.70 (-3.47 pct)
+> 
+> Unfortunately, none of these are complete solutions. For example, using
+> DECLARE_PER_CPU_READ_MOSTLY() with both patches applied reduces the regression
+> but doesn't eliminate it entirely:
+> 
+>    Clients:     tip                     cluster           cluster (READ_MOSTLY)  
+>     1      444.41 (0.00 pct)       439.27 (-1.15 pct)      435.95 (-1.90 pct)
+>     2      879.23 (0.00 pct)       831.49 (-5.42 pct)      842.09 (-4.22 pct)
+>     4      1648.83 (0.00 pct)      1608.07 (-2.47 pct)     1598.77 (-3.03 pct)
+>     8      3263.81 (0.00 pct)      3086.81 (-5.42 pct)     3090.86 (-5.29 pct)	*
+>    16      6011.19 (0.00 pct)      5360.28 (-10.82 pct)    5360.28 (-10.82 pct)	*
+>    32      12058.31 (0.00 pct)     8769.08 (-27.27 pct)    11083.66 (-8.08 pct)	*
+>    64      21258.21 (0.00 pct)     19021.09 (-10.52 pct)   20984.30 (-1.28 pct)
+>   128      30795.27 (0.00 pct)     30861.34 (0.21 pct)     30735.20 (-0.19 pct)
+>   256      25138.43 (0.00 pct)     24711.90 (-1.69 pct)    24021.21 (-4.44 pct)
+>   512      51287.93 (0.00 pct)     51855.55 (1.10 pct)     51672.73 (0.75 pct)
+>  1024      53176.97 (0.00 pct)     52554.55 (-1.17 pct)    52620.02 (-1.04 pct)
+> 
+> We are still trying to root cause the underlying issue that
+> brought about such drastic regression in tbench performance. 
+> 
+>>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+>> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+>> index 05b6c2ad90b9..0595827d481d 100644
+>> --- a/kernel/sched/topology.c
+>> +++ b/kernel/sched/topology.c
+>> @@ -664,6 +664,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
+>>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>>  DEFINE_PER_CPU(int, sd_llc_size);
+>>  DEFINE_PER_CPU(int, sd_llc_id);
+>> +DEFINE_PER_CPU(int, sd_share_id);
+>> +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>>  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+>>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>>
+>>  [..snip..]
+>>
+> 
+> We would like some time to investigate this issue and root cause
+> the reason for this regression.
 
-Hello Rob,
+One significant difference I can see for now is that Kunpeng 920 is a non-SMT machine while Zen3
+is a SMT machine. So in the select_idle_sibling() path we won't use sd_llc_shared. Since sd_share_id
+and sd_cluster are inserted between sd_llc_id and sd_llc_shared which are both used in the path on
+your test, I guess the change of the layout may affect something like the cache behaviour.
 
-We can remove this clock and using clock framework to enable this pll
-gate, so I will remove this in next version.
+Can you also test with SMT disabled? Or change the layout a bit to see if there's any difference,
+like:
 
-BRs,
-Bo-Chen
+ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+ DEFINE_PER_CPU(int, sd_llc_size);
+ DEFINE_PER_CPU(int, sd_llc_id);
+ DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
++DEFINE_PER_CPU(int, sd_share_id);
++DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
 
-> >  
-> >    pinctrl-0: true
-> >    pinctrl-1: true
-> > @@ -55,7 +58,7 @@ properties:
-> >      $ref: /schemas/graph.yaml#/properties/port
-> >      description:
-> >        Output port node. This port should be connected to the input
-> > port of an
-> > -      attached HDMI or LVDS encoder chip.
-> > +      attached HDMI, LVDS or DisplayPort encoder chip.
-> >  
-> >  required:
-> >    - compatible
-> > -- 
-> > 2.18.0
-> > 
-> > 
+I need to further look into it and have some tests on a SMT machine. Would you mind to share
+the kernel config as well? I'd like to compare the config as well.
 
+Thanks,
+Yicong

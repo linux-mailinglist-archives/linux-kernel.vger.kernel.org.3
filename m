@@ -2,165 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F17854E30A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84B854E30D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbiFPOJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
+        id S1377555AbiFPOKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377101AbiFPOJG (ORCPT
+        with ESMTP id S1377001AbiFPOKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:09:06 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39073BA66;
-        Thu, 16 Jun 2022 07:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655388544; x=1686924544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KbhRQpNJ/e3Byf+2uQ+3EqvHWdCIC7aeEObpWN1nN8g=;
-  b=MX3hk770tNSyar9AnHYGE2wT6CRzsayEbTO3Hs1k8ViqeJYpjN/zjfce
-   fZqY7xkW/hKayw+ff16goDiiHhI+fQDhq2i2TYLrBZ4IcUN/BlJVtWQ5Z
-   e748fSVi6ze4nikCJm+kRSrnkZh35B6vlN8hUg1PWsHYGagLqnd4Y1xgP
-   ctImGzkX3sh1MazwSu8y61PQFaIv3vNkaETxvfyGOi8pcTKTgbfZIf3AJ
-   rQOpnU3uhNWQKOt/6CNju3pwUOO4rYV6qrRftsT+kSamL2JXswv4aazFs
-   /9agZCdq9PWiR824B4ZAklHysB0oRHogwVENBo0/BqxjT19Dk2QS0sPIa
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="278051784"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="278051784"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 07:09:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="613172888"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2022 07:09:02 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1qBB-000ORq-MZ;
-        Thu, 16 Jun 2022 14:09:01 +0000
-Date:   Thu, 16 Jun 2022 22:08:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liang He <windhl@126.com>, linus.walleij@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: Re: [PATCH v2] drivers: clk: (clk-nomadik) Add missing of_node_put()
-Message-ID: <202206162212.4SKEX9z6-lkp@intel.com>
-References: <20220616032448.3974916-1-windhl@126.com>
+        Thu, 16 Jun 2022 10:10:31 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3182848E7A;
+        Thu, 16 Jun 2022 07:10:30 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id y17so982553ilj.11;
+        Thu, 16 Jun 2022 07:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Bdf9wkC1ypzciNLF7AiRIhEs9K16sQ5cIuAUnPzMikk=;
+        b=ZWodJQhmXLXE1RedHEMpYdSASnmddcGHxa5T59oKWc51cGr9E5AFR654iHtEegPMRR
+         t4L6ssnlsCkpQkPTBtWkQ6VKXX3uP86mvrZduYgi4VBb/UGzLpOlv+aTSwrE2gPKqhN0
+         IpLF0vDp4DOlCVhaeuCoyYzLboQOxh97nghIvoPWHAzhnKQ+bowapO2quJf5gUXKnTS+
+         rI2JDokfDD+LFD3qxlCK6XeITkOqqmhQ8I2UpDnGD8IH8yFBARrc5l9yWAMs2dRkKe3i
+         XiYebs2Gw+i2kzsVkjji+oTC2EjfkwrnmrIa6iojWe+364ugu13wK1R7ydQyiNKhcG6+
+         lRQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Bdf9wkC1ypzciNLF7AiRIhEs9K16sQ5cIuAUnPzMikk=;
+        b=VJvuSP1LoVqJAQp0E9RITTsWNwNb1IdIDKXPi4a7rq8aOPKxppwQLyL13a7ibMFl2d
+         qVP0LKapTqmegBfVguW5LS9iYvppBNmyYccVpTIJlLYxouJ0M5tCV+YzNt8mrbg7Frbd
+         c3wzbiEyKjLAUaA3QRj08x65u9wWmS4ywbq6aKlGWr9m5Y+T9nQOIgAOLCcgxwdW+sts
+         pi4EvAJ4v4Ggq/YqXiPg3JTaW7F40d8yw9sOsTE3i08/LvqcEXvCUAIXsuoeoAZMzlkT
+         lBW/NZDzscdFKojHV4wuYCInAhsZcnaaNWDSQVmgFMAmvDLUdis+JswNFHP0Y4kuqnGr
+         8mAg==
+X-Gm-Message-State: AJIora9Kc2wfRWuMiBj2zp9rcEAX67f066ZVVaWFZbsz0aIEejjTW5tV
+        bMOBlTU85YlKosoLViWZVGBChGwLdIyHAZzeSrY=
+X-Google-Smtp-Source: AGRyM1uF1dgR9LB8AcfmubAS/fV5ozPDW9988MJGQz4BmDtQ4Q5NIKIyFg1XE1Z997ESXU2WP3xdezmOfB0Liz4c4yk=
+X-Received: by 2002:a92:280a:0:b0:2d7:7cdc:8426 with SMTP id
+ l10-20020a92280a000000b002d77cdc8426mr2835712ilf.245.1655388629564; Thu, 16
+ Jun 2022 07:10:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616032448.3974916-1-windhl@126.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220616104541.16289-1-jslaby@suse.cz>
+In-Reply-To: <20220616104541.16289-1-jslaby@suse.cz>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 16 Jun 2022 16:09:53 +0200
+Message-ID: <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     masahiroy@kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>
+> Until the link-vmlinux.sh split (cf. the commit below), the linker was
+> run with jobserver set in MAKEFLAGS. After the split, the command in
+> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+> is lost.
+>
+> Restore it as linkers working in parallel (esp. the LTO ones) make a use
+> of it.
+>
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-Thank you for the patch! Yet something to improve:
+Nice catch.
+( I have seen some slowdown in my build-time. Will test and report. )
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on linus/master v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Liang-He/drivers-clk-clk-nomadik-Add-missing-of_node_put/20220616-112612
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: arm-nhk8815_defconfig (https://download.01.org/0day-ci/archive/20220616/202206162212.4SKEX9z6-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/12a305918ea40c01116a3cab94fe62a487eac499
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Liang-He/drivers-clk-clk-nomadik-Add-missing-of_node_put/20220616-112612
-        git checkout 12a305918ea40c01116a3cab94fe62a487eac499
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+-Sedat-
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/clk/clk-nomadik.c: In function 'nomadik_src_init':
-   drivers/clk/clk-nomadik.c:136:1: warning: label 'output' defined but not used [-Wunused-label]
-     136 | output:
-         | ^~~~~~
->> drivers/clk/clk-nomadik.c:102:17: error: label 'out_put' used but not defined
-     102 |                 goto out_put;
-         |                 ^~~~
-
-
-vim +/out_put +102 drivers/clk/clk-nomadik.c
-
-    87	
-    88	static void __init nomadik_src_init(void)
-    89	{
-    90		struct device_node *np;
-    91		u32 val;
-    92	
-    93		np = of_find_matching_node(NULL, nomadik_src_match);
-    94		if (!np) {
-    95			pr_crit("no matching node for SRC, aborting clock init\n");
-    96			return;
-    97		}
-    98		src_base = of_iomap(np, 0);
-    99		if (!src_base) {
-   100			pr_err("%s: must have src parent node with REGS (%pOFn)\n",
-   101			       __func__, np);
- > 102			goto out_put;
-   103		}
-   104	
-   105		/* Set all timers to use the 2.4 MHz TIMCLK */
-   106		val = readl(src_base + SRC_CR);
-   107		val |= SRC_CR_T0_ENSEL;
-   108		val |= SRC_CR_T1_ENSEL;
-   109		val |= SRC_CR_T2_ENSEL;
-   110		val |= SRC_CR_T3_ENSEL;
-   111		val |= SRC_CR_T4_ENSEL;
-   112		val |= SRC_CR_T5_ENSEL;
-   113		val |= SRC_CR_T6_ENSEL;
-   114		val |= SRC_CR_T7_ENSEL;
-   115		writel(val, src_base + SRC_CR);
-   116	
-   117		val = readl(src_base + SRC_XTALCR);
-   118		pr_info("SXTALO is %s\n",
-   119			(val & SRC_XTALCR_SXTALDIS) ? "disabled" : "enabled");
-   120		pr_info("MXTAL is %s\n",
-   121			(val & SRC_XTALCR_MXTALSTAT) ? "enabled" : "disabled");
-   122		if (of_property_read_bool(np, "disable-sxtalo")) {
-   123			/* The machine uses an external oscillator circuit */
-   124			val |= SRC_XTALCR_SXTALDIS;
-   125			pr_info("disabling SXTALO\n");
-   126		}
-   127		if (of_property_read_bool(np, "disable-mxtalo")) {
-   128			/* Disable this too: also run by external oscillator */
-   129			val |= SRC_XTALCR_MXTALOVER;
-   130			val &= ~SRC_XTALCR_MXTALEN;
-   131			pr_info("disabling MXTALO\n");
-   132		}
-   133		writel(val, src_base + SRC_XTALCR);
-   134		register_reboot_notifier(&nomadik_clk_reboot_notifier);
-   135		
- > 136	output:
-   137	    of_node_put(np);	
-   138	}
-   139	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  scripts/Makefile.vmlinux_o | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index 3c97a1564947..d032f625b576 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -65,7 +65,7 @@ define rule_ld_vmlinux.o
+>  endef
+>
+>  vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+> -       $(call if_changed_rule,ld_vmlinux.o)
+> +       +$(call if_changed_rule,ld_vmlinux.o)
+>
+>  targets += vmlinux.o
+>
+> --
+> 2.36.1
+>

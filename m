@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC94F54E5F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B189254E5FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377409AbiFPPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S1377888AbiFPP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbiFPPYh (ORCPT
+        with ESMTP id S1377466AbiFPP0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:24:37 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5DA338B6;
-        Thu, 16 Jun 2022 08:24:34 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id h23so2736478lfe.4;
-        Thu, 16 Jun 2022 08:24:34 -0700 (PDT)
+        Thu, 16 Jun 2022 11:26:01 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06752E09A;
+        Thu, 16 Jun 2022 08:25:59 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 20so2735020lfz.8;
+        Thu, 16 Jun 2022 08:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=wERZkRXyaF/yhUHrF2+CwLMtx6qioAnoch5k8zt02BE=;
-        b=qqev2nWuJtHKAy2NRmgs7KQtMEfFyXYr973lcTQ/3gb9Beq26TLw01HNBtP3bJBXJ/
-         9c714prPoCM6uBK+03SL5aSsfQhv3fAyuKSotWljo93Y6QQE/AilHY5SdoWot6/arMsu
-         bOtdzk50B5G0lHoJSg8h0jW8mAKDUdVRWwHYbjjwLET1EFVqYe1COubiG+Tmqe176asL
-         aGKeMdH/RTBGm4aZKhVmRIKSjDyvGz5NPoSxWwsePZ2PokI6ktESypzQ+0dgULgcIznz
-         GqkxLGEWSW5GDe0agVs4pdkAf4+3sf89wqlbygw3gA7rL+FicZ9uUI/cGvwREfbP/yXj
-         OQVQ==
+        bh=8ZuOwtq+9/VZTy3ADMx01Z5TJDecADF7IqscILS0mik=;
+        b=UpuPv1+qHiaeoBAs0xq2geW/piGdYhV79fhXrIXnZK6hzwORi8+yDhUNvIFCZbBAY7
+         W/d4GwXJAHWEdjxkQN8M6vw+9OGo1XHxXNP952NiyVyAFfAm/3pHSrpwxGBUuJupyEQy
+         U1ViGSyDAW56Au/YCMrcwo5cC8HGN+yKj49jC5wrBTOTX3iujMBifuFUI30tmH7AkGXb
+         tHIHW/+wUTbldWGvSZpO+iK0+JaIa0VsZleIGia4qruIM02pjSJGJo/oXbk0X6HYQWVV
+         r+umFUHOujGvtKTtDKuqiy2J6KeoYFIGRQK5dV5gfhmEPCY/2lcg9CZcoXzuR79KZ0hx
+         Mvug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=wERZkRXyaF/yhUHrF2+CwLMtx6qioAnoch5k8zt02BE=;
-        b=JjdA4JArbobMIghLQ6F9JEGIDr+4fccN1N9U/SkyTw/b+0UzfLHLlW+ThRgl5dSOtv
-         BljZWuWH0OxtSIDVfmu4FQqfVd9hzFD5BKm5Cw5qxWN9sAxWr/m85kVpmJoPkxLaqZNM
-         hMnKMr7fzIjCpFxPpauZ/Wbe68qwg5F80dOcjUlCcbjGnaS3+RO/CQhVy6jV8luwGxWC
-         0Tic4hYaopsSfsORB0xNhaAUdxHJkZ0xqwaiyXMdI4CawFQujLIaIzLL78mUkRxsiqCH
-         xJFsHgMtT+KmBvlMKBRsgyEA1Es2Te9MsEsn+YoRFSiTi7CmENJE9yWzcJZ08QBcWjFN
-         loYg==
-X-Gm-Message-State: AJIora84wTHXVThNh6hY79E0mejZx308Oag7SpXW8sC193kSvre7OAST
-        pEQAtSAVzb9SbKeLZYjbCGQ=
-X-Google-Smtp-Source: AGRyM1um5hqlsEfM5M/bxVqMCqjhSFQ0nHg9h/eo9duBqbu7PtPlevoJ43ArQk9DCohkn0hDcQVYqg==
-X-Received: by 2002:a05:6512:249:b0:479:a3c:de with SMTP id b9-20020a056512024900b004790a3c00demr3114355lfo.128.1655393073057;
-        Thu, 16 Jun 2022 08:24:33 -0700 (PDT)
+        bh=8ZuOwtq+9/VZTy3ADMx01Z5TJDecADF7IqscILS0mik=;
+        b=Dawb9dBILlXFn8ghAm2OzSh27b9FbKKw+0/z530DigtkCfceLPg/ZKbNlTvQLFOXgj
+         WBfl6F/29jfF+cToNm/VUCyTMzRVlbINKfO0qkjX/3+IVgZxQCbWnGJFj9nddVqzQ9f5
+         LbianYlnmiuK/Sf9moHyXs+aE8EE9UR8mAuT0/YpUvgEkBMMAPrQuETXFAV4xy91WorT
+         kqty4TEnKBCqwO9WG8qL+1qGdY/2SsUZcrR9PdLeU5w9m9sHXR7BRbluYstULyYkMpPy
+         2jTbi5Nc20HS4wzOI91EDxOQIqYHc0J7VHpoL9BeHobSsHebqfo4jdsHRm1/ePer1n8b
+         xwUA==
+X-Gm-Message-State: AJIora9rglcQHcO5VRjpB3yNSJ/5YXK8/EQEM9nAipGECnniqgs4di2L
+        /BVlmKiqjS9GmmcOKfwCi9w=
+X-Google-Smtp-Source: AGRyM1swYi8yLV5/KLt9zHbj7cSXbJfccEEblBu6x3wtEFG6lr+CfAaV+P0StJVkAcVnu2+Qtluupw==
+X-Received: by 2002:a05:6512:1050:b0:47d:c714:10ba with SMTP id c16-20020a056512105000b0047dc71410bamr2962362lfb.165.1655393158203;
+        Thu, 16 Jun 2022 08:25:58 -0700 (PDT)
 Received: from localhost.localdomain (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id t27-20020a192d5b000000b0047dab95a0d5sm273830lft.109.2022.06.16.08.24.32
+        by smtp.gmail.com with ESMTPSA id a10-20020a19660a000000b0047e789b9700sm272794lfc.118.2022.06.16.08.25.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 08:24:32 -0700 (PDT)
+        Thu, 16 Jun 2022 08:25:57 -0700 (PDT)
 From:   Peter Ujfalusi <peter.ujfalusi@gmail.com>
-To:     tony@atomide.com, lee.jones@linaro.org
-Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mfd: twl4030-audio: Drop legacy, non DT boot support
-Date:   Thu, 16 Jun 2022 18:31:58 +0300
-Message-Id: <20220616153158.29302-1-peter.ujfalusi@gmail.com>
+To:     dmitry.torokhov@gmail.com
+Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH] Input: twl4030-vibra - Drop legacy, non DT boot support
+Date:   Thu, 16 Jun 2022 18:33:23 +0300
+Message-Id: <20220616153323.29464-1-peter.ujfalusi@gmail.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,87 +75,54 @@ Drop the support for handling legacy pdata.
 
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 ---
- drivers/mfd/twl4030-audio.c | 29 ++++++-----------------------
- 1 file changed, 6 insertions(+), 23 deletions(-)
+ drivers/input/misc/twl4030-vibra.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mfd/twl4030-audio.c b/drivers/mfd/twl4030-audio.c
-index 4536d829b43e..c61da99e9681 100644
---- a/drivers/mfd/twl4030-audio.c
-+++ b/drivers/mfd/twl4030-audio.c
-@@ -144,14 +144,10 @@ unsigned int twl4030_audio_get_mclk(void)
- }
- EXPORT_SYMBOL_GPL(twl4030_audio_get_mclk);
+diff --git a/drivers/input/misc/twl4030-vibra.c b/drivers/input/misc/twl4030-vibra.c
+index e0ff616fb857..5619996da86f 100644
+--- a/drivers/input/misc/twl4030-vibra.c
++++ b/drivers/input/misc/twl4030-vibra.c
+@@ -163,14 +163,10 @@ static int __maybe_unused twl4030_vibra_resume(struct device *dev)
+ static SIMPLE_DEV_PM_OPS(twl4030_vibra_pm_ops,
+ 			 twl4030_vibra_suspend, twl4030_vibra_resume);
  
--static bool twl4030_audio_has_codec(struct twl4030_audio_data *pdata,
+-static bool twl4030_vibra_check_coexist(struct twl4030_vibra_data *pdata,
 -			      struct device_node *parent)
-+static bool twl4030_audio_has_codec(struct device_node *parent)
++static bool twl4030_vibra_check_coexist(struct device_node *parent)
  {
  	struct device_node *node;
  
--	if (pdata && pdata->codec)
+-	if (pdata && pdata->coexist)
 -		return true;
 -
  	node = of_get_child_by_name(parent, "codec");
  	if (node) {
  		of_node_put(node);
-@@ -161,14 +157,10 @@ static bool twl4030_audio_has_codec(struct twl4030_audio_data *pdata,
- 	return false;
- }
+@@ -182,13 +178,12 @@ static bool twl4030_vibra_check_coexist(struct twl4030_vibra_data *pdata,
  
--static bool twl4030_audio_has_vibra(struct twl4030_audio_data *pdata,
--			      struct device_node *node)
-+static bool twl4030_audio_has_vibra(struct device_node *node)
+ static int twl4030_vibra_probe(struct platform_device *pdev)
  {
- 	int vibra;
+-	struct twl4030_vibra_data *pdata = dev_get_platdata(&pdev->dev);
+ 	struct device_node *twl4030_core_node = pdev->dev.parent->of_node;
+ 	struct vibra_info *info;
+ 	int ret;
  
--	if (pdata && pdata->vibra)
--		return true;
--
- 	if (!of_property_read_u32(node, "ti,enable-vibra", &vibra) && vibra)
- 		return true;
- 
-@@ -178,14 +170,13 @@ static bool twl4030_audio_has_vibra(struct twl4030_audio_data *pdata,
- static int twl4030_audio_probe(struct platform_device *pdev)
- {
- 	struct twl4030_audio *audio;
--	struct twl4030_audio_data *pdata = dev_get_platdata(&pdev->dev);
- 	struct device_node *node = pdev->dev.of_node;
- 	struct mfd_cell *cell = NULL;
- 	int ret, childs = 0;
- 	u8 val;
- 
--	if (!pdata && !node) {
--		dev_err(&pdev->dev, "Platform data is missing\n");
-+	if (!node) {
-+		dev_err(&pdev->dev, "Only DT boot si supported\n");
+-	if (!pdata && !twl4030_core_node) {
+-		dev_dbg(&pdev->dev, "platform_data not available\n");
++	if (!twl4030_core_node) {
++		dev_dbg(&pdev->dev, "twl4030 OF node is missing\n");
  		return -EINVAL;
  	}
  
-@@ -222,22 +213,14 @@ static int twl4030_audio_probe(struct platform_device *pdev)
- 	audio->resource[TWL4030_AUDIO_RES_APLL].reg = TWL4030_REG_APLL_CTL;
- 	audio->resource[TWL4030_AUDIO_RES_APLL].mask = TWL4030_APLL_EN;
+@@ -197,7 +192,7 @@ static int twl4030_vibra_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
--	if (twl4030_audio_has_codec(pdata, node)) {
-+	if (twl4030_audio_has_codec(node)) {
- 		cell = &audio->cells[childs];
- 		cell->name = "twl4030-codec";
--		if (pdata) {
--			cell->platform_data = pdata->codec;
--			cell->pdata_size = sizeof(*pdata->codec);
--		}
- 		childs++;
- 	}
--	if (twl4030_audio_has_vibra(pdata, node)) {
-+	if (twl4030_audio_has_vibra(node)) {
- 		cell = &audio->cells[childs];
- 		cell->name = "twl4030-vibra";
--		if (pdata) {
--			cell->platform_data = pdata->vibra;
--			cell->pdata_size = sizeof(*pdata->vibra);
--		}
- 		childs++;
- 	}
+ 	info->dev = &pdev->dev;
+-	info->coexist = twl4030_vibra_check_coexist(pdata, twl4030_core_node);
++	info->coexist = twl4030_vibra_check_coexist(twl4030_core_node);
+ 	INIT_WORK(&info->play_work, vibra_play_work);
  
+ 	info->input_dev = devm_input_allocate_device(&pdev->dev);
 -- 
 2.36.1
 

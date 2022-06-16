@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36DD54DBDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C1554DBDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359303AbiFPHec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S1359480AbiFPHe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359478AbiFPHea (ORCPT
+        with ESMTP id S1359421AbiFPHex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:34:30 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F525F75;
-        Thu, 16 Jun 2022 00:34:24 -0700 (PDT)
-X-UUID: 8d913bc540484203ac33d2b2bc4efc2e-20220616
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:cc6d52a1-2bd3-443a-885a-1c3d93f54167,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:c56874f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 8d913bc540484203ac33d2b2bc4efc2e-20220616
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 495931524; Thu, 16 Jun 2022 15:34:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 16 Jun 2022 15:34:19 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 16 Jun 2022 15:34:19 +0800
-Message-ID: <29fd9902d02654fa5098000732f92d6dc89defc4.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/3] dt-bindings: dsp: mediatek: add mt8186 dsp
- document
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thu, 16 Jun 2022 03:34:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 796539FDD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655364888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hr4e1znqmVeiTafw89/474qbn3xK26P9gUPjx4RV8LA=;
+        b=Qx3TgaJmPicXHvPvF9nxN0jqeYZFfGVe1e/EqPUH3QseKZNxTaKY6AT5Cxs4F+858fHZA5
+        sa+NJVlhFpP3spKObk/9Z4f7or81TrBLSxHw3Y9bpntF+OrRQBxsmG5DOv0N576CJKYEtD
+        Z4SGO++yhOKZ/IVpZZ1IuCybjU/2pkM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-155-lXt_jxFDM26K1RTpsQqfvg-1; Thu, 16 Jun 2022 03:34:47 -0400
+X-MC-Unique: lXt_jxFDM26K1RTpsQqfvg-1
+Received: by mail-wm1-f72.google.com with SMTP id o3-20020a05600c510300b0039743540ac7so283172wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:34:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hr4e1znqmVeiTafw89/474qbn3xK26P9gUPjx4RV8LA=;
+        b=m03iXdc8DfoZhzPYqUnj1jGOgsiGxz5/5QIDApn0552kSQm6IQ7kgrl41lMWR7fFPA
+         SJHnP86yMf5JCqkdUSLvJTc2aAxYv8w9uWVJ0pLfBTZVWE/cXLNh+JrjQ+ALosrlFsVn
+         +vp1Bnv1pi/RSVqExvstvQttva0mT0qCBinclJWua26F0ED/caZZJH7e58vdfNgGXlLc
+         GESVGAqUhwvmiJefGKKvWccOTB0EMe6cOW1MZwEtgr7By7Cx8Z/KrezimDiygv4Y1RHi
+         mB/E//bk19vKc4qJROZxN4ZFC+EwaOsqcde/llIWQ+Ogw16VgYupgOMP0rqbGZpz6VZD
+         TgJA==
+X-Gm-Message-State: AOAM532WvnRF1wKLfmcQ6cYmnIBn58ngKKV9vI6r0xewi+lBArJHCebM
+        mvOo3Q75D/zZPPfs0abjBxK7rxKRZh6vyCHl1fkgBL8L4/2IXs3YueH5ngyWepyZxybpm/MjAeh
+        cQNynfhD1j+VpTGeefv8ttcF32N4oGDfRJUARxUMkOnMj8ypLa+djITy9jhIuU0xOJmPKwLlmEt
+        Y=
+X-Received: by 2002:a1c:f701:0:b0:39c:5539:cc4f with SMTP id v1-20020a1cf701000000b0039c5539cc4fmr14202516wmh.163.1655364885841;
+        Thu, 16 Jun 2022 00:34:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwZaYmtdTxixSdESWg4J3KGaahW/29PTeNO15EdWNRND7mtSBl9nc3Bi6nMIb0USzq23S41CA==
+X-Received: by 2002:a1c:f701:0:b0:39c:5539:cc4f with SMTP id v1-20020a1cf701000000b0039c5539cc4fmr14202484wmh.163.1655364885463;
+        Thu, 16 Jun 2022 00:34:45 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id e4-20020a5d5004000000b0020fdc90aeabsm1020123wrt.82.2022.06.16.00.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 00:34:44 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>,
-        YC Hung <yc.hung@mediatek.com>,
-        Curtis Malainey <cujomalainey@chromium.org>,
-        "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 16 Jun 2022 15:34:19 +0800
-In-Reply-To: <acac2ec1-759a-dee0-8f08-df83b63b96f5@linaro.org>
-References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
-         <20220609083101.24195-4-tinghan.shen@mediatek.com>
-         <acac2ec1-759a-dee0-8f08-df83b63b96f5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH 0/3] remap: Some fixes for bulk read/write callbacks in regmap_config support
+Date:   Thu, 16 Jun 2022 09:34:32 +0200
+Message-Id: <20220616073435.1988219-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,104 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hello,
 
-On Wed, 2022-06-15 at 10:32 -0700, Krzysztof Kozlowski wrote:
-> On 09/06/2022 01:31, Tinghan Shen wrote:
-> > This patch adds mt8186 dsp document. The dsp is used for Sound Open
-> > Firmware driver node. It includes registers, clocks, memory regions,
-> > and mailbox for dsp.
-> > 
-> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > ---
-> >  .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 91 +++++++++++++++++++
-> >  1 file changed, 91 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> > b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> > new file mode 100644
-> > index 000000000000..33c78f89d296
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> > @@ -0,0 +1,91 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: 
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/dsp/mediatek,mt8186-dsp.yaml*__;Iw!!CTRNKA9wMg0ARbw!0iJc3XTOVoKM_s-soALULRxog7f0GZLppKL0FCcIrYfh91fW2HmlpzSUZjVmoUR5PrasY2BmVGvmvv_IwZtlmOdXYw$
-> >  
-> > +$schema: 
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!0iJc3XTOVoKM_s-soALULRxog7f0GZLppKL0FCcIrYfh91fW2HmlpzSUZjVmoUR5PrasY2BmVGvmvv_IwZujnl7wMw$
-> >  
-> > +
-> > +title: MediaTek mt8186 DSP core
-> > +
-> > +maintainers:
-> > +  - Tinghan Shen <tinghan.shen@mediatek.com>
-> > +
-> > +description: |
-> > +  MediaTek mt8186 SoC contains a DSP core used for
-> > +  advanced pre- and post- audio processing.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: mediatek,mt8186-dsp
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Address and size of the DSP config registers
-> > +      - description: Address and size of the DSP SRAM
-> > +      - description: Address and size of the DSP secure registers
-> > +      - description: Address and size of the DSP bus registers
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: cfg
-> > +      - const: sram
-> > +      - const: sec
-> > +      - const: bus
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: mux for audio dsp clock
-> > +      - description: mux for audio dsp local bus
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: audiodsp
-> > +      - const: adsp_bus
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  mboxes:
-> > +    items:
-> > +      - description: ipc reply between host and audio DSP.
-> > +      - description: ipc request between host and audio DSP.
-> 
-> "IPC request between" does not specify who sends the request. Host or DSP?
-> 
-> See existing bindings for some better examples, e.g.:
-> Documentation/devicetree/bindings/serial/nvidia,tegra194-tcu.yaml
-> which clearly states who receives from who.
-> 
-> > +
-> > +  mbox-names:
-> > +    items:
-> > +      - const: rep
-> > +      - const: req
-> 
-> tx/rx
-> 
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
+This series contains fixes for a few issues found while testing the recent
+support for drivers to define bulk read/write callbacks in regmap_config.
 
-OK. I'll update in the next version.
+I tested this with drivers/gpu/drm/solomon/ssd130x-spi.c, by converting it
+to use this new API instead of defining its own regmap bus for bulk write.
 
-Thanks,
-TingHan
+Patch #1 and patch #2 are fixes for regresions introduced by that commit
+and patch #3 adds regmap_config provided bulk write support to functions
+regmap_noinc_write() and regmap_bulk_write(), that were missed.
+
+Best regards,
+Javier
+
+
+Javier Martinez Canillas (3):
+  regmap: Re-introduce bulk read support check in regmap_bulk_read()
+  regmap: Make regmap_noinc_read() return -ENOTSUPP if map->read isn't
+    set
+  regmap: Wire up regmap_config provided bulk write in missed functions
+
+ drivers/base/regmap/regmap.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+-- 
+2.36.1
 

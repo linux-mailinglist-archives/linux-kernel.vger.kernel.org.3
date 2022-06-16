@@ -2,1146 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E505C54E019
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E0854E01F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376862AbiFPLgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S1376877AbiFPLiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376789AbiFPLg2 (ORCPT
+        with ESMTP id S1359848AbiFPLiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:36:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D45EBE5;
-        Thu, 16 Jun 2022 04:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9764CB8239B;
-        Thu, 16 Jun 2022 11:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E9B3C34114;
-        Thu, 16 Jun 2022 11:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655379381;
-        bh=p0cDJOhpHgosd55fSKo3B11yLQlZKwH45J8fc3xQZeY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PSBzLOgp4XHy6OnJeSwtfd66vPvD6zdQJdws74WAa4zJ8eCUTBthbvxW6t9QTFwmy
-         h/zI5LKYWfWiCbM1gEUnkm2peYDpUmRm4LKMkh2gnmJnMQbVDBIkzuSWAtKWUqp820
-         zG1lu1gCGHfNYKuIE79yro3oIxxNyEQiq3WQOVFs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 4.19.248
-Date:   Thu, 16 Jun 2022 13:36:13 +0200
-Message-Id: <165537937249190@kroah.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <1655379372103189@kroah.com>
-References: <1655379372103189@kroah.com>
+        Thu, 16 Jun 2022 07:38:15 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2043.outbound.protection.outlook.com [40.107.93.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7FD39825;
+        Thu, 16 Jun 2022 04:38:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CiUVxVLHt7k2BcMfudiU1+eDznKjmzJiOxYOsRyyNiZA3BlcKNriCC95ApwlHaYwf4S2G22ylD3iUCl5HANq6FTfnIx85owLUO67wiFXAq6ta+BVJim3VqIncFVxSozKLoCnAKOKZ2O9y0Pq+bzbXTD1ruhH9whXmDFk2kXTF+IxhHF9fBITpPQefwagq254cdTHflTuimYYVJqlzqxOtakdTVNcmmhhJ1tihFXiZRfYXDKJxPBFE+I2JdVpv1NLpzgunzeKPtzjdcUfsvCLC3Ef5s+ugpmZ7643JhomZPNBTkuCNZgfM55twftytzWjGHfJgyIKSGMaKKJnrSkVyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jnb2X1gD07FwjsdgniYGzEIIHfqASMEzVSxzWqOfRFE=;
+ b=h4SsfPQQCHnWdKdXLt/zBQartPt/ce5OhiFBZzZbX2M0sr3jJ2pivMD6Pv/37LUrKnKiChBMhwTqFUQEtm0t0D8Xqd8O5iwRpv9rggMHcKuqA3WuZ73k86+Na5eOCrhC650v6wBbvIElehqfsbP0H4Rq5BzycVVXaDmDHMifzLmJeBWAgEZxccy3ACBCgt4YVFK2X8Zz2RF3e4+boy+Aeu75TN2iFA0LEOXzxSvVuflyoXN1f0o6kswXYU94gN0kUKMuVIglQG2Xwa6fY5AOGZdRLEjNYWvYjx52Ha8sW1k0aTCtcyRZADWuvxvAJVsQdTE1wRnW2zLKhNMyf7oPEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jnb2X1gD07FwjsdgniYGzEIIHfqASMEzVSxzWqOfRFE=;
+ b=OlTPwg1iO/p+Ybf1Nt0+E9uFsBH9zQ1qV+qle99PEz/RtVmvEj9cBmTWMFmV5/Km6xmx/GKVxbgTpzhlxWGJmNwPdAIA6GUb5a7DnNKz+sd2Qz7+FiFSvfVRAHX8/bJa7FT6TMCa4/SegbCVKlVLtz7H1NZF1Qu22tzWKcTyD1Y=
+Received: from MWHPR14CA0016.namprd14.prod.outlook.com (2603:10b6:300:ae::26)
+ by CH2PR12MB4955.namprd12.prod.outlook.com (2603:10b6:610:68::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14; Thu, 16 Jun
+ 2022 11:38:12 +0000
+Received: from CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:ae::4) by MWHPR14CA0016.outlook.office365.com
+ (2603:10b6:300:ae::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
+ Transport; Thu, 16 Jun 2022 11:38:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT059.mail.protection.outlook.com (10.13.174.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Thu, 16 Jun 2022 11:38:11 +0000
+Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 16 Jun
+ 2022 06:37:36 -0500
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <peterz@infradead.org>, <acme@kernel.org>
+CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <eranian@google.com>, <irogers@google.com>, <jmario@redhat.com>,
+        <leo.yan@linaro.org>, <alisaidi@amazon.com>, <ak@linux.intel.com>,
+        <kan.liang@linux.intel.com>, <dave.hansen@linux.intel.com>,
+        <hpa@zytor.com>, <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <x86@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
+        <kim.phillips@amd.com>, <santosh.shukla@amd.com>
+Subject: [PATCH v2 00/14] perf mem/c2c: Add support for AMD
+Date:   Thu, 16 Jun 2022 17:06:23 +0530
+Message-ID: <20220616113638.900-1-ravi.bangoria@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aed1a577-668f-44b3-92c6-08da4f8cb16d
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4955:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB4955C0F0EB0ACD1864244D2CE0AC9@CH2PR12MB4955.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +/Rc4egRDYXyIM99JrGaFKfoZ/2V9Rm7JaLqZl4SvkbwsMGfPU4BV5Zqfc6sjag2rA9IFwOhTH7Pqiro2nKycWXBG1ObfGMHbHNehbnmHB2967kYyJt4e6zp8i7LEbg5DgSr7WlshE0vkDfWgoJrsr4GgM6YvxPn79SudUg6d6mnNwlfQaojUMBRKUuNyc0j5nqTI1LS3FKf28DfKspDZJMUihMmo17mKhc4xwt/BQQJKhPsjnBX/hHvMTFNryiKNDroBjzWzzBW64VGAPZozIkYxC7k9gTQHL6qag2JTCrX5cA8wBt3947jab5RnO0+3QOP4LeWTbU6Lu4w40INp9tn/Tej1ugRdpT71qFHf/HEFX/ELO2oWpxdei6HUd/alMb93oUg4EH7r+6hr1tTTsmTzLbZqiMEJq1Zrk97NbZnomuDsh9q0k1iODAH0K3qux9vzsI3W9/gjjwRvd2IlkbOf2bs6gB+0/tbf6AJxr5W/AyFFu8yr2HwkFx0QT2Ev1tDZHDnH3rjYORaXTMLVubjnRto1qRS1PHmNzAdPp05huXv99HvfrcLJrx9HYiD54WaLLFrducsEwEyDbU6AZDUjMeFQjhOVQkNTxcP1GFeh/VPIUpLipyE8Dt6Cx2hqKPUEt0kxqk4W6/gEWfRUm2414s9sdGQqhJ9jvxM57iuOtWfWo6rffVjhqHG3P5t/vDRVAJGGDhhxqud1Beoj89rzHE/ZNT7ymXtHtKLBHulwR9Qm5o+6xsKazWYRhzEjI3guOcT/7JcxMcQ2OuzUNeprNVN+Hn96sLrYOeKgcb3lYPAoPn0l4zVpI/6Hw6gC4ogBnIGFJtg6XoTRDvkYA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(36840700001)(46966006)(47076005)(81166007)(40460700003)(36756003)(36860700001)(356005)(316002)(86362001)(26005)(336012)(16526019)(7696005)(2616005)(426003)(1076003)(508600001)(7416002)(186003)(83380400001)(44832011)(966005)(8936002)(54906003)(6666004)(110136005)(2906002)(70206006)(70586007)(82310400005)(4326008)(8676002)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 11:38:11.5235
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aed1a577-668f-44b3-92c6-08da4f8cb16d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4955
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index b9c14c11efc5..dee993602c31 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -481,6 +481,7 @@ What:		/sys/devices/system/cpu/vulnerabilities
- 		/sys/devices/system/cpu/vulnerabilities/srbds
- 		/sys/devices/system/cpu/vulnerabilities/tsx_async_abort
- 		/sys/devices/system/cpu/vulnerabilities/itlb_multihit
-+		/sys/devices/system/cpu/vulnerabilities/mmio_stale_data
- Date:		January 2018
- Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
- Description:	Information about CPU vulnerabilities
-diff --git a/Documentation/admin-guide/hw-vuln/index.rst b/Documentation/admin-guide/hw-vuln/index.rst
-index ca4dbdd9016d..2adec1e6520a 100644
---- a/Documentation/admin-guide/hw-vuln/index.rst
-+++ b/Documentation/admin-guide/hw-vuln/index.rst
-@@ -15,3 +15,4 @@ are configurable at compile, boot or run time.
-    tsx_async_abort
-    multihit.rst
-    special-register-buffer-data-sampling.rst
-+   processor_mmio_stale_data.rst
-diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-new file mode 100644
-index 000000000000..9393c50b5afc
---- /dev/null
-+++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-@@ -0,0 +1,246 @@
-+=========================================
-+Processor MMIO Stale Data Vulnerabilities
-+=========================================
-+
-+Processor MMIO Stale Data Vulnerabilities are a class of memory-mapped I/O
-+(MMIO) vulnerabilities that can expose data. The sequences of operations for
-+exposing data range from simple to very complex. Because most of the
-+vulnerabilities require the attacker to have access to MMIO, many environments
-+are not affected. System environments using virtualization where MMIO access is
-+provided to untrusted guests may need mitigation. These vulnerabilities are
-+not transient execution attacks. However, these vulnerabilities may propagate
-+stale data into core fill buffers where the data can subsequently be inferred
-+by an unmitigated transient execution attack. Mitigation for these
-+vulnerabilities includes a combination of microcode update and software
-+changes, depending on the platform and usage model. Some of these mitigations
-+are similar to those used to mitigate Microarchitectural Data Sampling (MDS) or
-+those used to mitigate Special Register Buffer Data Sampling (SRBDS).
-+
-+Data Propagators
-+================
-+Propagators are operations that result in stale data being copied or moved from
-+one microarchitectural buffer or register to another. Processor MMIO Stale Data
-+Vulnerabilities are operations that may result in stale data being directly
-+read into an architectural, software-visible state or sampled from a buffer or
-+register.
-+
-+Fill Buffer Stale Data Propagator (FBSDP)
-+-----------------------------------------
-+Stale data may propagate from fill buffers (FB) into the non-coherent portion
-+of the uncore on some non-coherent writes. Fill buffer propagation by itself
-+does not make stale data architecturally visible. Stale data must be propagated
-+to a location where it is subject to reading or sampling.
-+
-+Sideband Stale Data Propagator (SSDP)
-+-------------------------------------
-+The sideband stale data propagator (SSDP) is limited to the client (including
-+Intel Xeon server E3) uncore implementation. The sideband response buffer is
-+shared by all client cores. For non-coherent reads that go to sideband
-+destinations, the uncore logic returns 64 bytes of data to the core, including
-+both requested data and unrequested stale data, from a transaction buffer and
-+the sideband response buffer. As a result, stale data from the sideband
-+response and transaction buffers may now reside in a core fill buffer.
-+
-+Primary Stale Data Propagator (PSDP)
-+------------------------------------
-+The primary stale data propagator (PSDP) is limited to the client (including
-+Intel Xeon server E3) uncore implementation. Similar to the sideband response
-+buffer, the primary response buffer is shared by all client cores. For some
-+processors, MMIO primary reads will return 64 bytes of data to the core fill
-+buffer including both requested data and unrequested stale data. This is
-+similar to the sideband stale data propagator.
-+
-+Vulnerabilities
-+===============
-+Device Register Partial Write (DRPW) (CVE-2022-21166)
-+-----------------------------------------------------
-+Some endpoint MMIO registers incorrectly handle writes that are smaller than
-+the register size. Instead of aborting the write or only copying the correct
-+subset of bytes (for example, 2 bytes for a 2-byte write), more bytes than
-+specified by the write transaction may be written to the register. On
-+processors affected by FBSDP, this may expose stale data from the fill buffers
-+of the core that created the write transaction.
-+
-+Shared Buffers Data Sampling (SBDS) (CVE-2022-21125)
-+----------------------------------------------------
-+After propagators may have moved data around the uncore and copied stale data
-+into client core fill buffers, processors affected by MFBDS can leak data from
-+the fill buffer. It is limited to the client (including Intel Xeon server E3)
-+uncore implementation.
-+
-+Shared Buffers Data Read (SBDR) (CVE-2022-21123)
-+------------------------------------------------
-+It is similar to Shared Buffer Data Sampling (SBDS) except that the data is
-+directly read into the architectural software-visible state. It is limited to
-+the client (including Intel Xeon server E3) uncore implementation.
-+
-+Affected Processors
-+===================
-+Not all the CPUs are affected by all the variants. For instance, most
-+processors for the server market (excluding Intel Xeon E3 processors) are
-+impacted by only Device Register Partial Write (DRPW).
-+
-+Below is the list of affected Intel processors [#f1]_:
-+
-+   ===================  ============  =========
-+   Common name          Family_Model  Steppings
-+   ===================  ============  =========
-+   HASWELL_X            06_3FH        2,4
-+   SKYLAKE_L            06_4EH        3
-+   BROADWELL_X          06_4FH        All
-+   SKYLAKE_X            06_55H        3,4,6,7,11
-+   BROADWELL_D          06_56H        3,4,5
-+   SKYLAKE              06_5EH        3
-+   ICELAKE_X            06_6AH        4,5,6
-+   ICELAKE_D            06_6CH        1
-+   ICELAKE_L            06_7EH        5
-+   ATOM_TREMONT_D       06_86H        All
-+   LAKEFIELD            06_8AH        1
-+   KABYLAKE_L           06_8EH        9 to 12
-+   ATOM_TREMONT         06_96H        1
-+   ATOM_TREMONT_L       06_9CH        0
-+   KABYLAKE             06_9EH        9 to 13
-+   COMETLAKE            06_A5H        2,3,5
-+   COMETLAKE_L          06_A6H        0,1
-+   ROCKETLAKE           06_A7H        1
-+   ===================  ============  =========
-+
-+If a CPU is in the affected processor list, but not affected by a variant, it
-+is indicated by new bits in MSR IA32_ARCH_CAPABILITIES. As described in a later
-+section, mitigation largely remains the same for all the variants, i.e. to
-+clear the CPU fill buffers via VERW instruction.
-+
-+New bits in MSRs
-+================
-+Newer processors and microcode update on existing affected processors added new
-+bits to IA32_ARCH_CAPABILITIES MSR. These bits can be used to enumerate
-+specific variants of Processor MMIO Stale Data vulnerabilities and mitigation
-+capability.
-+
-+MSR IA32_ARCH_CAPABILITIES
-+--------------------------
-+Bit 13 - SBDR_SSDP_NO - When set, processor is not affected by either the
-+	 Shared Buffers Data Read (SBDR) vulnerability or the sideband stale
-+	 data propagator (SSDP).
-+Bit 14 - FBSDP_NO - When set, processor is not affected by the Fill Buffer
-+	 Stale Data Propagator (FBSDP).
-+Bit 15 - PSDP_NO - When set, processor is not affected by Primary Stale Data
-+	 Propagator (PSDP).
-+Bit 17 - FB_CLEAR - When set, VERW instruction will overwrite CPU fill buffer
-+	 values as part of MD_CLEAR operations. Processors that do not
-+	 enumerate MDS_NO (meaning they are affected by MDS) but that do
-+	 enumerate support for both L1D_FLUSH and MD_CLEAR implicitly enumerate
-+	 FB_CLEAR as part of their MD_CLEAR support.
-+Bit 18 - FB_CLEAR_CTRL - Processor supports read and write to MSR
-+	 IA32_MCU_OPT_CTRL[FB_CLEAR_DIS]. On such processors, the FB_CLEAR_DIS
-+	 bit can be set to cause the VERW instruction to not perform the
-+	 FB_CLEAR action. Not all processors that support FB_CLEAR will support
-+	 FB_CLEAR_CTRL.
-+
-+MSR IA32_MCU_OPT_CTRL
-+---------------------
-+Bit 3 - FB_CLEAR_DIS - When set, VERW instruction does not perform the FB_CLEAR
-+action. This may be useful to reduce the performance impact of FB_CLEAR in
-+cases where system software deems it warranted (for example, when performance
-+is more critical, or the untrusted software has no MMIO access). Note that
-+FB_CLEAR_DIS has no impact on enumeration (for example, it does not change
-+FB_CLEAR or MD_CLEAR enumeration) and it may not be supported on all processors
-+that enumerate FB_CLEAR.
-+
-+Mitigation
-+==========
-+Like MDS, all variants of Processor MMIO Stale Data vulnerabilities  have the
-+same mitigation strategy to force the CPU to clear the affected buffers before
-+an attacker can extract the secrets.
-+
-+This is achieved by using the otherwise unused and obsolete VERW instruction in
-+combination with a microcode update. The microcode clears the affected CPU
-+buffers when the VERW instruction is executed.
-+
-+Kernel reuses the MDS function to invoke the buffer clearing:
-+
-+	mds_clear_cpu_buffers()
-+
-+On MDS affected CPUs, the kernel already invokes CPU buffer clear on
-+kernel/userspace, hypervisor/guest and C-state (idle) transitions. No
-+additional mitigation is needed on such CPUs.
-+
-+For CPUs not affected by MDS or TAA, mitigation is needed only for the attacker
-+with MMIO capability. Therefore, VERW is not required for kernel/userspace. For
-+virtualization case, VERW is only needed at VMENTER for a guest with MMIO
-+capability.
-+
-+Mitigation points
-+-----------------
-+Return to user space
-+^^^^^^^^^^^^^^^^^^^^
-+Same mitigation as MDS when affected by MDS/TAA, otherwise no mitigation
-+needed.
-+
-+C-State transition
-+^^^^^^^^^^^^^^^^^^
-+Control register writes by CPU during C-state transition can propagate data
-+from fill buffer to uncore buffers. Execute VERW before C-state transition to
-+clear CPU fill buffers.
-+
-+Guest entry point
-+^^^^^^^^^^^^^^^^^
-+Same mitigation as MDS when processor is also affected by MDS/TAA, otherwise
-+execute VERW at VMENTER only for MMIO capable guests. On CPUs not affected by
-+MDS/TAA, guest without MMIO access cannot extract secrets using Processor MMIO
-+Stale Data vulnerabilities, so there is no need to execute VERW for such guests.
-+
-+Mitigation control on the kernel command line
-+---------------------------------------------
-+The kernel command line allows to control the Processor MMIO Stale Data
-+mitigations at boot time with the option "mmio_stale_data=". The valid
-+arguments for this option are:
-+
-+  ==========  =================================================================
-+  full        If the CPU is vulnerable, enable mitigation; CPU buffer clearing
-+              on exit to userspace and when entering a VM. Idle transitions are
-+              protected as well. It does not automatically disable SMT.
-+  full,nosmt  Same as full, with SMT disabled on vulnerable CPUs. This is the
-+              complete mitigation.
-+  off         Disables mitigation completely.
-+  ==========  =================================================================
-+
-+If the CPU is affected and mmio_stale_data=off is not supplied on the kernel
-+command line, then the kernel selects the appropriate mitigation.
-+
-+Mitigation status information
-+-----------------------------
-+The Linux kernel provides a sysfs interface to enumerate the current
-+vulnerability status of the system: whether the system is vulnerable, and
-+which mitigations are active. The relevant sysfs file is:
-+
-+	/sys/devices/system/cpu/vulnerabilities/mmio_stale_data
-+
-+The possible values in this file are:
-+
-+  .. list-table::
-+
-+     * - 'Not affected'
-+       - The processor is not vulnerable
-+     * - 'Vulnerable'
-+       - The processor is vulnerable, but no mitigation enabled
-+     * - 'Vulnerable: Clear CPU buffers attempted, no microcode'
-+       - The processor is vulnerable, but microcode is not updated. The
-+         mitigation is enabled on a best effort basis.
-+     * - 'Mitigation: Clear CPU buffers'
-+       - The processor is vulnerable and the CPU buffer clearing mitigation is
-+         enabled.
-+
-+If the processor is vulnerable then the following information is appended to
-+the above information:
-+
-+  ========================  ===========================================
-+  'SMT vulnerable'          SMT is enabled
-+  'SMT disabled'            SMT is disabled
-+  'SMT Host state unknown'  Kernel runs in a VM, Host SMT state unknown
-+  ========================  ===========================================
-+
-+References
-+----------
-+.. [#f1] Affected Processors
-+   https://www.intel.com/content/www/us/en/developer/topic-technology/software-security-guidance/processors-affected-consolidated-product-cpu-model.html
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 5754585d7265..1dea3d23fc4c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2574,6 +2574,7 @@
- 					       kvm.nx_huge_pages=off [X86]
- 					       no_entry_flush [PPC]
- 					       no_uaccess_flush [PPC]
-+					       mmio_stale_data=off [X86]
- 
- 				Exceptions:
- 					       This does not have any effect on
-@@ -2595,6 +2596,7 @@
- 				Equivalent to: l1tf=flush,nosmt [X86]
- 					       mds=full,nosmt [X86]
- 					       tsx_async_abort=full,nosmt [X86]
-+					       mmio_stale_data=full,nosmt [X86]
- 
- 	mminit_loglevel=
- 			[KNL] When CONFIG_DEBUG_MEMORY_INIT is set, this
-@@ -2604,6 +2606,40 @@
- 			log everything. Information is printed at KERN_DEBUG
- 			so loglevel=8 may also need to be specified.
- 
-+	mmio_stale_data=
-+			[X86,INTEL] Control mitigation for the Processor
-+			MMIO Stale Data vulnerabilities.
-+
-+			Processor MMIO Stale Data is a class of
-+			vulnerabilities that may expose data after an MMIO
-+			operation. Exposed data could originate or end in
-+			the same CPU buffers as affected by MDS and TAA.
-+			Therefore, similar to MDS and TAA, the mitigation
-+			is to clear the affected CPU buffers.
-+
-+			This parameter controls the mitigation. The
-+			options are:
-+
-+			full       - Enable mitigation on vulnerable CPUs
-+
-+			full,nosmt - Enable mitigation and disable SMT on
-+				     vulnerable CPUs.
-+
-+			off        - Unconditionally disable mitigation
-+
-+			On MDS or TAA affected machines,
-+			mmio_stale_data=off can be prevented by an active
-+			MDS or TAA mitigation as these vulnerabilities are
-+			mitigated with the same mechanism so in order to
-+			disable this mitigation, you need to specify
-+			mds=off and tsx_async_abort=off too.
-+
-+			Not specifying this option is equivalent to
-+			mmio_stale_data=full.
-+
-+			For details see:
-+			Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-+
- 	module.sig_enforce
- 			[KNL] When CONFIG_MODULE_SIG is set, this means that
- 			modules without (valid) signatures will fail to load.
-diff --git a/Makefile b/Makefile
-index 2e3b43ce8a94..afb8b46398da 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 4
- PATCHLEVEL = 19
--SUBLEVEL = 247
-+SUBLEVEL = 248
- EXTRAVERSION =
- NAME = "People's Front"
- 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 8910dde943d1..8025b7da0495 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -394,5 +394,6 @@
- #define X86_BUG_TAA			X86_BUG(22) /* CPU is affected by TSX Async Abort(TAA) */
- #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
- #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
-+#define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
- 
- #endif /* _ASM_X86_CPUFEATURES_H */
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 2a8e5f78e23c..db06f16627b0 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -64,6 +64,14 @@
- #define INTEL_FAM6_COMETLAKE		0xA5
- #define INTEL_FAM6_COMETLAKE_L		0xA6
- 
-+#define INTEL_FAM6_ROCKETLAKE		0xA7
-+
-+/* Hybrid Core/Atom Processors */
-+
-+#define	INTEL_FAM6_LAKEFIELD		0x8A
-+#define INTEL_FAM6_ALDERLAKE		0x97
-+#define INTEL_FAM6_ALDERLAKE_L		0x9A
-+
- /* "Small Core" Processors (Atom) */
- 
- #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
-@@ -83,7 +91,10 @@
- #define INTEL_FAM6_ATOM_GOLDMONT	0x5C /* Apollo Lake */
- #define INTEL_FAM6_ATOM_GOLDMONT_X	0x5F /* Denverton */
- #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
-+
- #define INTEL_FAM6_ATOM_TREMONT_X	0x86 /* Jacobsville */
-+#define INTEL_FAM6_ATOM_TREMONT		0x96 /* Elkhart Lake */
-+#define INTEL_FAM6_ATOM_TREMONT_L	0x9C /* Jasper Lake */
- 
- /* Xeon Phi */
- 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 892af8ab95d7..586be095ed08 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -96,6 +96,30 @@
- 						 * Not susceptible to
- 						 * TSX Async Abort (TAA) vulnerabilities.
- 						 */
-+#define ARCH_CAP_SBDR_SSDP_NO		BIT(13)	/*
-+						 * Not susceptible to SBDR and SSDP
-+						 * variants of Processor MMIO stale data
-+						 * vulnerabilities.
-+						 */
-+#define ARCH_CAP_FBSDP_NO		BIT(14)	/*
-+						 * Not susceptible to FBSDP variant of
-+						 * Processor MMIO stale data
-+						 * vulnerabilities.
-+						 */
-+#define ARCH_CAP_PSDP_NO		BIT(15)	/*
-+						 * Not susceptible to PSDP variant of
-+						 * Processor MMIO stale data
-+						 * vulnerabilities.
-+						 */
-+#define ARCH_CAP_FB_CLEAR		BIT(17)	/*
-+						 * VERW clears CPU fill buffer
-+						 * even on MDS_NO CPUs.
-+						 */
-+#define ARCH_CAP_FB_CLEAR_CTRL		BIT(18)	/*
-+						 * MSR_IA32_MCU_OPT_CTRL[FB_CLEAR_DIS]
-+						 * bit available to control VERW
-+						 * behavior.
-+						 */
- 
- #define MSR_IA32_FLUSH_CMD		0x0000010b
- #define L1D_FLUSH			BIT(0)	/*
-@@ -113,6 +137,7 @@
- /* SRBDS support */
- #define MSR_IA32_MCU_OPT_CTRL		0x00000123
- #define RNGDS_MITG_DIS			BIT(0)
-+#define FB_CLEAR_DIS			BIT(3)	/* CPU Fill buffer clear disable */
- 
- #define MSR_IA32_SYSENTER_CS		0x00000174
- #define MSR_IA32_SYSENTER_ESP		0x00000175
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 812976a6d864..d3d68b6763d4 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -323,6 +323,8 @@ DECLARE_STATIC_KEY_FALSE(switch_mm_always_ibpb);
- DECLARE_STATIC_KEY_FALSE(mds_user_clear);
- DECLARE_STATIC_KEY_FALSE(mds_idle_clear);
- 
-+DECLARE_STATIC_KEY_FALSE(mmio_stale_data_clear);
-+
- #include <asm/segment.h>
- 
- /**
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index f7b5f1645507..058e92b93262 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -40,8 +40,10 @@ static void __init spectre_v2_select_mitigation(void);
- static void __init ssb_select_mitigation(void);
- static void __init l1tf_select_mitigation(void);
- static void __init mds_select_mitigation(void);
--static void __init mds_print_mitigation(void);
-+static void __init md_clear_update_mitigation(void);
-+static void __init md_clear_select_mitigation(void);
- static void __init taa_select_mitigation(void);
-+static void __init mmio_select_mitigation(void);
- static void __init srbds_select_mitigation(void);
- 
- /* The base value of the SPEC_CTRL MSR that always has to be preserved. */
-@@ -76,6 +78,10 @@ EXPORT_SYMBOL_GPL(mds_user_clear);
- DEFINE_STATIC_KEY_FALSE(mds_idle_clear);
- EXPORT_SYMBOL_GPL(mds_idle_clear);
- 
-+/* Controls CPU Fill buffer clear before KVM guest MMIO accesses */
-+DEFINE_STATIC_KEY_FALSE(mmio_stale_data_clear);
-+EXPORT_SYMBOL_GPL(mmio_stale_data_clear);
-+
- void __init check_bugs(void)
- {
- 	identify_boot_cpu();
-@@ -108,16 +114,9 @@ void __init check_bugs(void)
- 	spectre_v2_select_mitigation();
- 	ssb_select_mitigation();
- 	l1tf_select_mitigation();
--	mds_select_mitigation();
--	taa_select_mitigation();
-+	md_clear_select_mitigation();
- 	srbds_select_mitigation();
- 
--	/*
--	 * As MDS and TAA mitigations are inter-related, print MDS
--	 * mitigation until after TAA mitigation selection is done.
--	 */
--	mds_print_mitigation();
--
- 	arch_smt_update();
- 
- #ifdef CONFIG_X86_32
-@@ -257,14 +256,6 @@ static void __init mds_select_mitigation(void)
- 	}
- }
- 
--static void __init mds_print_mitigation(void)
--{
--	if (!boot_cpu_has_bug(X86_BUG_MDS) || cpu_mitigations_off())
--		return;
--
--	pr_info("%s\n", mds_strings[mds_mitigation]);
--}
--
- static int __init mds_cmdline(char *str)
- {
- 	if (!boot_cpu_has_bug(X86_BUG_MDS))
-@@ -312,7 +303,7 @@ static void __init taa_select_mitigation(void)
- 	/* TSX previously disabled by tsx=off */
- 	if (!boot_cpu_has(X86_FEATURE_RTM)) {
- 		taa_mitigation = TAA_MITIGATION_TSX_DISABLED;
--		goto out;
-+		return;
- 	}
- 
- 	if (cpu_mitigations_off()) {
-@@ -326,7 +317,7 @@ static void __init taa_select_mitigation(void)
- 	 */
- 	if (taa_mitigation == TAA_MITIGATION_OFF &&
- 	    mds_mitigation == MDS_MITIGATION_OFF)
--		goto out;
-+		return;
- 
- 	if (boot_cpu_has(X86_FEATURE_MD_CLEAR))
- 		taa_mitigation = TAA_MITIGATION_VERW;
-@@ -358,18 +349,6 @@ static void __init taa_select_mitigation(void)
- 
- 	if (taa_nosmt || cpu_mitigations_auto_nosmt())
- 		cpu_smt_disable(false);
--
--	/*
--	 * Update MDS mitigation, if necessary, as the mds_user_clear is
--	 * now enabled for TAA mitigation.
--	 */
--	if (mds_mitigation == MDS_MITIGATION_OFF &&
--	    boot_cpu_has_bug(X86_BUG_MDS)) {
--		mds_mitigation = MDS_MITIGATION_FULL;
--		mds_select_mitigation();
--	}
--out:
--	pr_info("%s\n", taa_strings[taa_mitigation]);
- }
- 
- static int __init tsx_async_abort_parse_cmdline(char *str)
-@@ -393,6 +372,151 @@ static int __init tsx_async_abort_parse_cmdline(char *str)
- }
- early_param("tsx_async_abort", tsx_async_abort_parse_cmdline);
- 
-+#undef pr_fmt
-+#define pr_fmt(fmt)	"MMIO Stale Data: " fmt
-+
-+enum mmio_mitigations {
-+	MMIO_MITIGATION_OFF,
-+	MMIO_MITIGATION_UCODE_NEEDED,
-+	MMIO_MITIGATION_VERW,
-+};
-+
-+/* Default mitigation for Processor MMIO Stale Data vulnerabilities */
-+static enum mmio_mitigations mmio_mitigation __ro_after_init = MMIO_MITIGATION_VERW;
-+static bool mmio_nosmt __ro_after_init = false;
-+
-+static const char * const mmio_strings[] = {
-+	[MMIO_MITIGATION_OFF]		= "Vulnerable",
-+	[MMIO_MITIGATION_UCODE_NEEDED]	= "Vulnerable: Clear CPU buffers attempted, no microcode",
-+	[MMIO_MITIGATION_VERW]		= "Mitigation: Clear CPU buffers",
-+};
-+
-+static void __init mmio_select_mitigation(void)
-+{
-+	u64 ia32_cap;
-+
-+	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
-+	    cpu_mitigations_off()) {
-+		mmio_mitigation = MMIO_MITIGATION_OFF;
-+		return;
-+	}
-+
-+	if (mmio_mitigation == MMIO_MITIGATION_OFF)
-+		return;
-+
-+	ia32_cap = x86_read_arch_cap_msr();
-+
-+	/*
-+	 * Enable CPU buffer clear mitigation for host and VMM, if also affected
-+	 * by MDS or TAA. Otherwise, enable mitigation for VMM only.
-+	 */
-+	if (boot_cpu_has_bug(X86_BUG_MDS) || (boot_cpu_has_bug(X86_BUG_TAA) &&
-+					      boot_cpu_has(X86_FEATURE_RTM)))
-+		static_branch_enable(&mds_user_clear);
-+	else
-+		static_branch_enable(&mmio_stale_data_clear);
-+
-+	/*
-+	 * If Processor-MMIO-Stale-Data bug is present and Fill Buffer data can
-+	 * be propagated to uncore buffers, clearing the Fill buffers on idle
-+	 * is required irrespective of SMT state.
-+	 */
-+	if (!(ia32_cap & ARCH_CAP_FBSDP_NO))
-+		static_branch_enable(&mds_idle_clear);
-+
-+	/*
-+	 * Check if the system has the right microcode.
-+	 *
-+	 * CPU Fill buffer clear mitigation is enumerated by either an explicit
-+	 * FB_CLEAR or by the presence of both MD_CLEAR and L1D_FLUSH on MDS
-+	 * affected systems.
-+	 */
-+	if ((ia32_cap & ARCH_CAP_FB_CLEAR) ||
-+	    (boot_cpu_has(X86_FEATURE_MD_CLEAR) &&
-+	     boot_cpu_has(X86_FEATURE_FLUSH_L1D) &&
-+	     !(ia32_cap & ARCH_CAP_MDS_NO)))
-+		mmio_mitigation = MMIO_MITIGATION_VERW;
-+	else
-+		mmio_mitigation = MMIO_MITIGATION_UCODE_NEEDED;
-+
-+	if (mmio_nosmt || cpu_mitigations_auto_nosmt())
-+		cpu_smt_disable(false);
-+}
-+
-+static int __init mmio_stale_data_parse_cmdline(char *str)
-+{
-+	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
-+		return 0;
-+
-+	if (!str)
-+		return -EINVAL;
-+
-+	if (!strcmp(str, "off")) {
-+		mmio_mitigation = MMIO_MITIGATION_OFF;
-+	} else if (!strcmp(str, "full")) {
-+		mmio_mitigation = MMIO_MITIGATION_VERW;
-+	} else if (!strcmp(str, "full,nosmt")) {
-+		mmio_mitigation = MMIO_MITIGATION_VERW;
-+		mmio_nosmt = true;
-+	}
-+
-+	return 0;
-+}
-+early_param("mmio_stale_data", mmio_stale_data_parse_cmdline);
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt)     "" fmt
-+
-+static void __init md_clear_update_mitigation(void)
-+{
-+	if (cpu_mitigations_off())
-+		return;
-+
-+	if (!static_key_enabled(&mds_user_clear))
-+		goto out;
-+
-+	/*
-+	 * mds_user_clear is now enabled. Update MDS, TAA and MMIO Stale Data
-+	 * mitigation, if necessary.
-+	 */
-+	if (mds_mitigation == MDS_MITIGATION_OFF &&
-+	    boot_cpu_has_bug(X86_BUG_MDS)) {
-+		mds_mitigation = MDS_MITIGATION_FULL;
-+		mds_select_mitigation();
-+	}
-+	if (taa_mitigation == TAA_MITIGATION_OFF &&
-+	    boot_cpu_has_bug(X86_BUG_TAA)) {
-+		taa_mitigation = TAA_MITIGATION_VERW;
-+		taa_select_mitigation();
-+	}
-+	if (mmio_mitigation == MMIO_MITIGATION_OFF &&
-+	    boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA)) {
-+		mmio_mitigation = MMIO_MITIGATION_VERW;
-+		mmio_select_mitigation();
-+	}
-+out:
-+	if (boot_cpu_has_bug(X86_BUG_MDS))
-+		pr_info("MDS: %s\n", mds_strings[mds_mitigation]);
-+	if (boot_cpu_has_bug(X86_BUG_TAA))
-+		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
-+	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
-+		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
-+}
-+
-+static void __init md_clear_select_mitigation(void)
-+{
-+	mds_select_mitigation();
-+	taa_select_mitigation();
-+	mmio_select_mitigation();
-+
-+	/*
-+	 * As MDS, TAA and MMIO Stale Data mitigations are inter-related, update
-+	 * and print their mitigation after MDS, TAA and MMIO Stale Data
-+	 * mitigation selection is done.
-+	 */
-+	md_clear_update_mitigation();
-+}
-+
- #undef pr_fmt
- #define pr_fmt(fmt)	"SRBDS: " fmt
- 
-@@ -454,11 +578,13 @@ static void __init srbds_select_mitigation(void)
- 		return;
- 
- 	/*
--	 * Check to see if this is one of the MDS_NO systems supporting
--	 * TSX that are only exposed to SRBDS when TSX is enabled.
-+	 * Check to see if this is one of the MDS_NO systems supporting TSX that
-+	 * are only exposed to SRBDS when TSX is enabled or when CPU is affected
-+	 * by Processor MMIO Stale Data vulnerability.
- 	 */
- 	ia32_cap = x86_read_arch_cap_msr();
--	if ((ia32_cap & ARCH_CAP_MDS_NO) && !boot_cpu_has(X86_FEATURE_RTM))
-+	if ((ia32_cap & ARCH_CAP_MDS_NO) && !boot_cpu_has(X86_FEATURE_RTM) &&
-+	    !boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
- 		srbds_mitigation = SRBDS_MITIGATION_TSX_OFF;
- 	else if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
- 		srbds_mitigation = SRBDS_MITIGATION_HYPERVISOR;
-@@ -1066,6 +1192,8 @@ static void update_indir_branch_cond(void)
- /* Update the static key controlling the MDS CPU buffer clear in idle */
- static void update_mds_branch_idle(void)
- {
-+	u64 ia32_cap = x86_read_arch_cap_msr();
-+
- 	/*
- 	 * Enable the idle clearing if SMT is active on CPUs which are
- 	 * affected only by MSBDS and not any other MDS variant.
-@@ -1077,14 +1205,17 @@ static void update_mds_branch_idle(void)
- 	if (!boot_cpu_has_bug(X86_BUG_MSBDS_ONLY))
- 		return;
- 
--	if (sched_smt_active())
-+	if (sched_smt_active()) {
- 		static_branch_enable(&mds_idle_clear);
--	else
-+	} else if (mmio_mitigation == MMIO_MITIGATION_OFF ||
-+		   (ia32_cap & ARCH_CAP_FBSDP_NO)) {
- 		static_branch_disable(&mds_idle_clear);
-+	}
- }
- 
- #define MDS_MSG_SMT "MDS CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html for more details.\n"
- #define TAA_MSG_SMT "TAA CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/tsx_async_abort.html for more details.\n"
-+#define MMIO_MSG_SMT "MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.\n"
- 
- void arch_smt_update(void)
- {
-@@ -1129,6 +1260,16 @@ void arch_smt_update(void)
- 		break;
- 	}
- 
-+	switch (mmio_mitigation) {
-+	case MMIO_MITIGATION_VERW:
-+	case MMIO_MITIGATION_UCODE_NEEDED:
-+		if (sched_smt_active())
-+			pr_warn_once(MMIO_MSG_SMT);
-+		break;
-+	case MMIO_MITIGATION_OFF:
-+		break;
-+	}
-+
- 	mutex_unlock(&spec_ctrl_mutex);
- }
- 
-@@ -1680,6 +1821,20 @@ static ssize_t tsx_async_abort_show_state(char *buf)
- 		       sched_smt_active() ? "vulnerable" : "disabled");
- }
- 
-+static ssize_t mmio_stale_data_show_state(char *buf)
-+{
-+	if (mmio_mitigation == MMIO_MITIGATION_OFF)
-+		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
-+
-+	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
-+		return sysfs_emit(buf, "%s; SMT Host state unknown\n",
-+				  mmio_strings[mmio_mitigation]);
-+	}
-+
-+	return sysfs_emit(buf, "%s; SMT %s\n", mmio_strings[mmio_mitigation],
-+			  sched_smt_active() ? "vulnerable" : "disabled");
-+}
-+
- static char *stibp_state(void)
- {
- 	if (spectre_v2_in_eibrs_mode(spectre_v2_enabled))
-@@ -1780,6 +1935,9 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
- 	case X86_BUG_SRBDS:
- 		return srbds_show_state(buf);
- 
-+	case X86_BUG_MMIO_STALE_DATA:
-+		return mmio_stale_data_show_state(buf);
-+
- 	default:
- 		break;
- 	}
-@@ -1831,4 +1989,9 @@ ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *
- {
- 	return cpu_show_common(dev, attr, buf, X86_BUG_SRBDS);
- }
-+
-+ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
-+}
- #endif
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 7e7400af7797..389d11b2c70e 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1019,18 +1019,42 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 					    X86_FEATURE_ANY, issues)
- 
- #define SRBDS		BIT(0)
-+/* CPU is affected by X86_BUG_MMIO_STALE_DATA */
-+#define MMIO		BIT(1)
-+/* CPU is affected by Shared Buffers Data Sampling (SBDS), a variant of X86_BUG_MMIO_STALE_DATA */
-+#define MMIO_SBDS	BIT(2)
- 
- static const struct x86_cpu_id cpu_vuln_blacklist[] __initconst = {
- 	VULNBL_INTEL_STEPPINGS(IVYBRIDGE,	X86_STEPPING_ANY,		SRBDS),
- 	VULNBL_INTEL_STEPPINGS(HASWELL_CORE,	X86_STEPPING_ANY,		SRBDS),
- 	VULNBL_INTEL_STEPPINGS(HASWELL_ULT,	X86_STEPPING_ANY,		SRBDS),
- 	VULNBL_INTEL_STEPPINGS(HASWELL_GT3E,	X86_STEPPING_ANY,		SRBDS),
-+	VULNBL_INTEL_STEPPINGS(HASWELL_X,	BIT(2) | BIT(4),		MMIO),
-+	VULNBL_INTEL_STEPPINGS(BROADWELL_XEON_D,X86_STEPPINGS(0x3, 0x5),	MMIO),
- 	VULNBL_INTEL_STEPPINGS(BROADWELL_GT3E,	X86_STEPPING_ANY,		SRBDS),
-+	VULNBL_INTEL_STEPPINGS(BROADWELL_X,	X86_STEPPING_ANY,		MMIO),
- 	VULNBL_INTEL_STEPPINGS(BROADWELL_CORE,	X86_STEPPING_ANY,		SRBDS),
-+	VULNBL_INTEL_STEPPINGS(SKYLAKE_MOBILE,	X86_STEPPINGS(0x3, 0x3),	SRBDS | MMIO),
- 	VULNBL_INTEL_STEPPINGS(SKYLAKE_MOBILE,	X86_STEPPING_ANY,		SRBDS),
-+	VULNBL_INTEL_STEPPINGS(SKYLAKE_X,	BIT(3) | BIT(4) | BIT(6) |
-+						BIT(7) | BIT(0xB),              MMIO),
-+	VULNBL_INTEL_STEPPINGS(SKYLAKE_DESKTOP,	X86_STEPPINGS(0x3, 0x3),	SRBDS | MMIO),
- 	VULNBL_INTEL_STEPPINGS(SKYLAKE_DESKTOP,	X86_STEPPING_ANY,		SRBDS),
--	VULNBL_INTEL_STEPPINGS(KABYLAKE_MOBILE,	X86_STEPPINGS(0x0, 0xC),	SRBDS),
--	VULNBL_INTEL_STEPPINGS(KABYLAKE_DESKTOP,X86_STEPPINGS(0x0, 0xD),	SRBDS),
-+	VULNBL_INTEL_STEPPINGS(KABYLAKE_MOBILE,	X86_STEPPINGS(0x9, 0xC),	SRBDS | MMIO),
-+	VULNBL_INTEL_STEPPINGS(KABYLAKE_MOBILE,	X86_STEPPINGS(0x0, 0x8),	SRBDS),
-+	VULNBL_INTEL_STEPPINGS(KABYLAKE_DESKTOP,X86_STEPPINGS(0x9, 0xD),	SRBDS | MMIO),
-+	VULNBL_INTEL_STEPPINGS(KABYLAKE_DESKTOP,X86_STEPPINGS(0x0, 0x8),	SRBDS),
-+	VULNBL_INTEL_STEPPINGS(ICELAKE_MOBILE,	X86_STEPPINGS(0x5, 0x5),	MMIO | MMIO_SBDS),
-+	VULNBL_INTEL_STEPPINGS(ICELAKE_XEON_D,	X86_STEPPINGS(0x1, 0x1),	MMIO),
-+	VULNBL_INTEL_STEPPINGS(ICELAKE_X,	X86_STEPPINGS(0x4, 0x6),	MMIO),
-+	VULNBL_INTEL_STEPPINGS(COMETLAKE,	BIT(2) | BIT(3) | BIT(5),	MMIO | MMIO_SBDS),
-+	VULNBL_INTEL_STEPPINGS(COMETLAKE_L,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
-+	VULNBL_INTEL_STEPPINGS(COMETLAKE_L,	X86_STEPPINGS(0x0, 0x0),	MMIO),
-+	VULNBL_INTEL_STEPPINGS(LAKEFIELD,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
-+	VULNBL_INTEL_STEPPINGS(ROCKETLAKE,	X86_STEPPINGS(0x1, 0x1),	MMIO),
-+	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
-+	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_X,	X86_STEPPING_ANY,		MMIO),
-+	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_L,	X86_STEPPINGS(0x0, 0x0),	MMIO | MMIO_SBDS),
- 	{}
- };
- 
-@@ -1051,6 +1075,13 @@ u64 x86_read_arch_cap_msr(void)
- 	return ia32_cap;
- }
- 
-+static bool arch_cap_mmio_immune(u64 ia32_cap)
-+{
-+	return (ia32_cap & ARCH_CAP_FBSDP_NO &&
-+		ia32_cap & ARCH_CAP_PSDP_NO &&
-+		ia32_cap & ARCH_CAP_SBDR_SSDP_NO);
-+}
-+
- static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- {
- 	u64 ia32_cap = x86_read_arch_cap_msr();
-@@ -1102,12 +1133,27 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- 	/*
- 	 * SRBDS affects CPUs which support RDRAND or RDSEED and are listed
- 	 * in the vulnerability blacklist.
-+	 *
-+	 * Some of the implications and mitigation of Shared Buffers Data
-+	 * Sampling (SBDS) are similar to SRBDS. Give SBDS same treatment as
-+	 * SRBDS.
- 	 */
- 	if ((cpu_has(c, X86_FEATURE_RDRAND) ||
- 	     cpu_has(c, X86_FEATURE_RDSEED)) &&
--	    cpu_matches(cpu_vuln_blacklist, SRBDS))
-+	    cpu_matches(cpu_vuln_blacklist, SRBDS | MMIO_SBDS))
- 		    setup_force_cpu_bug(X86_BUG_SRBDS);
- 
-+	/*
-+	 * Processor MMIO Stale Data bug enumeration
-+	 *
-+	 * Affected CPU list is generally enough to enumerate the vulnerability,
-+	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
-+	 * not want the guest to enumerate the bug.
-+	 */
-+	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-+	    !arch_cap_mmio_immune(ia32_cap))
-+		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+
- 	if (cpu_matches(cpu_vuln_whitelist, NO_MELTDOWN))
- 		return;
- 
-diff --git a/arch/x86/kvm/vmx.c b/arch/x86/kvm/vmx.c
-index 77b9ed5223f3..44cce3e8eb18 100644
---- a/arch/x86/kvm/vmx.c
-+++ b/arch/x86/kvm/vmx.c
-@@ -212,6 +212,9 @@ static const struct {
- #define L1D_CACHE_ORDER 4
- static void *vmx_l1d_flush_pages;
- 
-+/* Control for disabling CPU Fill buffer clear */
-+static bool __read_mostly vmx_fb_clear_ctrl_available;
-+
- static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
- {
- 	struct page *page;
-@@ -1045,6 +1048,8 @@ struct vcpu_vmx {
- 	u64 msr_ia32_feature_control;
- 	u64 msr_ia32_feature_control_valid_bits;
- 	u64 ept_pointer;
-+	u64 msr_ia32_mcu_opt_ctrl;
-+	bool disable_fb_clear;
- };
- 
- enum segment_cache_field {
-@@ -2107,6 +2112,60 @@ static inline void __invept(unsigned long ext, u64 eptp, gpa_t gpa)
- 	BUG_ON(error);
- }
- 
-+static void vmx_setup_fb_clear_ctrl(void)
-+{
-+	u64 msr;
-+
-+	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES) &&
-+	    !boot_cpu_has_bug(X86_BUG_MDS) &&
-+	    !boot_cpu_has_bug(X86_BUG_TAA)) {
-+		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
-+		if (msr & ARCH_CAP_FB_CLEAR_CTRL)
-+			vmx_fb_clear_ctrl_available = true;
-+	}
-+}
-+
-+static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
-+{
-+	u64 msr;
-+
-+	if (!vmx->disable_fb_clear)
-+		return;
-+
-+	rdmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
-+	msr |= FB_CLEAR_DIS;
-+	wrmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
-+	/* Cache the MSR value to avoid reading it later */
-+	vmx->msr_ia32_mcu_opt_ctrl = msr;
-+}
-+
-+static __always_inline void vmx_enable_fb_clear(struct vcpu_vmx *vmx)
-+{
-+	if (!vmx->disable_fb_clear)
-+		return;
-+
-+	vmx->msr_ia32_mcu_opt_ctrl &= ~FB_CLEAR_DIS;
-+	wrmsrl(MSR_IA32_MCU_OPT_CTRL, vmx->msr_ia32_mcu_opt_ctrl);
-+}
-+
-+static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
-+{
-+	vmx->disable_fb_clear = vmx_fb_clear_ctrl_available;
-+
-+	/*
-+	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
-+	 * at VMEntry. Skip the MSR read/write when a guest has no use case to
-+	 * execute VERW.
-+	 */
-+	if ((vcpu->arch.arch_capabilities & ARCH_CAP_FB_CLEAR) ||
-+	   ((vcpu->arch.arch_capabilities & ARCH_CAP_MDS_NO) &&
-+	    (vcpu->arch.arch_capabilities & ARCH_CAP_TAA_NO) &&
-+	    (vcpu->arch.arch_capabilities & ARCH_CAP_PSDP_NO) &&
-+	    (vcpu->arch.arch_capabilities & ARCH_CAP_FBSDP_NO) &&
-+	    (vcpu->arch.arch_capabilities & ARCH_CAP_SBDR_SSDP_NO)))
-+		vmx->disable_fb_clear = false;
-+}
-+
- static struct shared_msr_entry *find_msr_entry(struct vcpu_vmx *vmx, u32 msr)
- {
- 	int i;
-@@ -4314,9 +4373,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			}
- 			break;
- 		}
--		ret = kvm_set_msr_common(vcpu, msr_info);
-+			ret = kvm_set_msr_common(vcpu, msr_info);
- 	}
- 
-+	/* FB_CLEAR may have changed, also update the FB_CLEAR_DIS behavior */
-+	if (msr_index == MSR_IA32_ARCH_CAPABILITIES)
-+		vmx_update_fb_clear_dis(vcpu, vmx);
-+
- 	return ret;
- }
- 
-@@ -6761,6 +6824,8 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 	vpid_sync_context(vmx->vpid);
- 	if (init_event)
- 		vmx_clear_hlt(vcpu);
-+
-+	vmx_update_fb_clear_dis(vcpu, vmx);
- }
- 
- /*
-@@ -10773,6 +10838,11 @@ static void __noclone vmx_vcpu_run(struct kvm_vcpu *vcpu)
- 		vmx_l1d_flush(vcpu);
- 	else if (static_branch_unlikely(&mds_user_clear))
- 		mds_clear_cpu_buffers();
-+	else if (static_branch_unlikely(&mmio_stale_data_clear) &&
-+		 kvm_arch_has_assigned_device(vcpu->kvm))
-+		mds_clear_cpu_buffers();
-+
-+	vmx_disable_fb_clear(vmx);
- 
- 	asm volatile (
- 		/* Store host registers */
-@@ -10918,6 +10988,8 @@ static void __noclone vmx_vcpu_run(struct kvm_vcpu *vcpu)
- #endif
- 	      );
- 
-+	vmx_enable_fb_clear(vmx);
-+
- 	/*
- 	 * We do not use IBRS in the kernel. If this vCPU has used the
- 	 * SPEC_CTRL MSR it may have left it on; save the value and
-@@ -14623,8 +14695,11 @@ static int __init vmx_init(void)
- 		}
- 	}
- 
-+	vmx_setup_fb_clear_ctrl();
-+
- 	for_each_possible_cpu(cpu) {
- 		INIT_LIST_HEAD(&per_cpu(loaded_vmcss_on_cpu, cpu));
-+
- 		INIT_LIST_HEAD(&per_cpu(blocked_vcpu_on_cpu, cpu));
- 		spin_lock_init(&per_cpu(blocked_vcpu_on_cpu_lock, cpu));
- 	}
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 417abc9ba1ad..be4697d91bb2 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1220,6 +1220,10 @@ u64 kvm_get_arch_capabilities(void)
- 
- 	/* KVM does not emulate MSR_IA32_TSX_CTRL.  */
- 	data &= ~ARCH_CAP_TSX_CTRL_MSR;
-+
-+	/* Guests don't need to know "Fill buffer clear control" exists */
-+	data &= ~ARCH_CAP_FB_CLEAR_CTRL;
-+
- 	return data;
- }
- 
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 1df057486176..cd204be1f4b7 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -571,6 +571,12 @@ ssize_t __weak cpu_show_srbds(struct device *dev,
- 	return sprintf(buf, "Not affected\n");
- }
- 
-+ssize_t __weak cpu_show_mmio_stale_data(struct device *dev,
-+					struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "Not affected\n");
-+}
-+
- static DEVICE_ATTR(meltdown, 0444, cpu_show_meltdown, NULL);
- static DEVICE_ATTR(spectre_v1, 0444, cpu_show_spectre_v1, NULL);
- static DEVICE_ATTR(spectre_v2, 0444, cpu_show_spectre_v2, NULL);
-@@ -580,6 +586,7 @@ static DEVICE_ATTR(mds, 0444, cpu_show_mds, NULL);
- static DEVICE_ATTR(tsx_async_abort, 0444, cpu_show_tsx_async_abort, NULL);
- static DEVICE_ATTR(itlb_multihit, 0444, cpu_show_itlb_multihit, NULL);
- static DEVICE_ATTR(srbds, 0444, cpu_show_srbds, NULL);
-+static DEVICE_ATTR(mmio_stale_data, 0444, cpu_show_mmio_stale_data, NULL);
- 
- static struct attribute *cpu_root_vulnerabilities_attrs[] = {
- 	&dev_attr_meltdown.attr,
-@@ -591,6 +598,7 @@ static struct attribute *cpu_root_vulnerabilities_attrs[] = {
- 	&dev_attr_tsx_async_abort.attr,
- 	&dev_attr_itlb_multihit.attr,
- 	&dev_attr_srbds.attr,
-+	&dev_attr_mmio_stale_data.attr,
- 	NULL
- };
- 
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index aab4273810e3..8cc06e1d4fc2 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -64,6 +64,10 @@ extern ssize_t cpu_show_tsx_async_abort(struct device *dev,
- 					char *buf);
- extern ssize_t cpu_show_itlb_multihit(struct device *dev,
- 				      struct device_attribute *attr, char *buf);
-+extern ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *buf);
-+extern ssize_t cpu_show_mmio_stale_data(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf);
- 
- extern __printf(4, 5)
- struct device *cpu_device_create(struct device *parent, void *drvdata,
+Perf mem and c2c tools are wrappers around perf record with mem load/
+store events. IBS tagged load/store sample provides most of the
+information needed for these tools. Enable support for these tools on
+AMD Zen processors based on IBS Op pmu.
+
+There are some limitations though: Only load/store instructions provide
+mem/c2c information. However, IBS does not provide a way to choose a
+particular type of instruction to tag. This results in many non-LS
+instructions being tagged which appear as N/A. IBS, being an uncore pmu
+from kernel point of view[1], does not support per process monitoring.
+Thus, perf mem/c2c on AMD are currently supported in per-cpu mode only.
+
+Example:
+  $ sudo ./perf mem record -- -c 10000
+  ^C[ perf record: Woken up 227 times to write data ]
+  [ perf record: Captured and wrote 58.760 MB perf.data (836978 samples) ]
+
+  $ sudo ./perf mem report -F mem,sample,snoop
+  Samples: 836K of event 'ibs_op//', Event count (approx.): 8418762
+  Memory access                  Samples  Snoop
+  N/A                             700620  N/A
+  L1 hit                          126675  N/A
+  L2 hit                             424  N/A
+  L3 hit                             664  HitM
+  L3 hit                              10  N/A
+  Local RAM hit                        2  N/A
+  Remote RAM (1 hop) hit            8558  N/A
+  Remote Cache (1 hop) hit             3  N/A
+  Remote Cache (1 hop) hit             2  HitM
+  Remote Cache (2 hops) hit            10  HitM
+  Remote Cache (2 hops) hit             6  N/A
+  Uncached hit                         4  N/A
+
+Prepared on amd/perf/core (9886142c7a22) + IBS Zen4 enhancement patches[2]
+
+[1]: https://lore.kernel.org/lkml/20220113134743.1292-1-ravi.bangoria@amd.com
+[2]: https://lore.kernel.org/lkml/20220604044519.594-1-ravi.bangoria@amd.com
+
+v1: https://lore.kernel.org/lkml/20220525093938.4101-1-ravi.bangoria@amd.com
+v1->v2:
+ - Instead of defining macros to extract IBS register bits, use existing
+   bitfield definitions. Zen4 has introduced additional set of bits in
+   IBS registers which this series also exploits and thus this series
+   now depends on IBS Zen4 enhancement patchset.
+ - Add support for PERF_SAMPLE_WEIGHT_STRUCT. While opening a new event,
+   perf tool starts with a set of attributes and goes on reverting some
+   attributes in a predefined order until it succeeds or run out or all
+   attempts. Here, 1st attempt includes WEIGHT_STRUCT and exclude_guest
+   which always fails because IBS does not support guest filtering. The
+   problem however is, perf reverts WEIGHT_STRUCT but keeps trying with
+   exclude_guest. Thus, although, this series enables WEIGHT_STRUCT
+   support from kernel, using it from the perf tool need more changes.
+   I'll try to address this bug later.
+ - Introduce __PERF_SAMPLE_CALLCHAIN_EARLY to hint generic perf driver
+   that physical address is set by arch pmu driver and should not be
+   overwritten.
+
+
+Ravi Bangoria (14):
+  perf/mem: Introduce PERF_MEM_LVLNUM_{EXTN_MEM|IO}
+  perf/x86/amd: Add IBS OP_DATA2 DataSrc bit definitions
+  perf/x86/amd: Support PERF_SAMPLE_DATA_SRC
+  perf/x86/amd: Support PERF_SAMPLE_{WEIGHT|WEIGHT_STRUCT}
+  perf/x86/amd: Support PERF_SAMPLE_ADDR
+  perf/x86/amd: Support PERF_SAMPLE_PHY_ADDR
+  perf tool: Sync include/uapi/linux/perf_event.h header
+  perf tool: Sync arch/x86/include/asm/amd-ibs.h header
+  perf mem: Add support for printing PERF_MEM_LVLNUM_{EXTN_MEM|IO}
+  perf mem/c2c: Set PERF_SAMPLE_WEIGHT for LOAD_STORE events
+  perf mem/c2c: Add load store event mappings for AMD
+  perf mem/c2c: Avoid printing empty lines for unsupported events
+  perf mem: Use more generic term for LFB
+  perf script: Add missing fields in usage hint
+
+ arch/x86/events/amd/ibs.c                | 372 ++++++++++++++++++++++-
+ arch/x86/include/asm/amd-ibs.h           |  16 +
+ include/uapi/linux/perf_event.h          |   5 +-
+ kernel/events/core.c                     |   4 +-
+ tools/arch/x86/include/asm/amd-ibs.h     |  16 +
+ tools/include/uapi/linux/perf_event.h    |   5 +-
+ tools/perf/Documentation/perf-c2c.txt    |  14 +-
+ tools/perf/Documentation/perf-mem.txt    |   3 +-
+ tools/perf/Documentation/perf-record.txt |   1 +
+ tools/perf/arch/x86/util/mem-events.c    |  31 +-
+ tools/perf/builtin-c2c.c                 |   1 +
+ tools/perf/builtin-mem.c                 |   1 +
+ tools/perf/builtin-script.c              |   7 +-
+ tools/perf/util/mem-events.c             |  17 +-
+ 14 files changed, 467 insertions(+), 26 deletions(-)
+
+-- 
+2.31.1
+

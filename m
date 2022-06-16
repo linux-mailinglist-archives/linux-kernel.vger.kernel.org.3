@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEB154D979
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BC054D97C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358694AbiFPEuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 00:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S1349333AbiFPEzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 00:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358740AbiFPEtt (ORCPT
+        with ESMTP id S229681AbiFPEzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 00:49:49 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 501F85A0A2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:49:39 -0700 (PDT)
+        Thu, 16 Jun 2022 00:55:18 -0400
+Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70C98427DE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1pCJ5
-        nuqf9rZ6vZLpt9IaeTJgUV4nj1fGxyJJfDr68s=; b=QzCApHmgqspl/NhthqSmc
-        xNtqRp6k0Mnw0o3UnafJxG4PEEEoeoCC04wbN5QhN2LdXgQLj3NiGudk89a0cm+P
-        mJ6j/3PrWm/k+1r2nvb+FqIp3VpTS9lpgn8nWkDeIr5yyq/lnFed4XdCnQ93O0QS
-        Pm8Qzo2m8YDhuIRmp0oyIE=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgBXWJVMtqpiiJrqFg--.28738S2;
-        Thu, 16 Jun 2022 12:49:18 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
-Cc:     windhl@126.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] soc: sifive: (sifive_l2_cache) Add missing of_node_put()
-Date:   Thu, 16 Jun 2022 12:49:15 +0800
-Message-Id: <20220616044915.3978097-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgBXWJVMtqpiiJrqFg--.28738S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ur4DAr47AryxJF1fCFW5Awb_yoW8ZFW3pr
-        WxXryavry8Gwn7Wr9xJ3Z8ZFyF9wn293y3KFyI9wn8ur17GrWqvr4SyFyUZF9xCrW09rsx
-        tr4jkF1DC3W8uFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_ucMdUUUUU=
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=dshfT
+        7W6MY5sBDSYiWA99vNTQfl5M8jX0dK3LxKchtg=; b=kGaypZpwiRhQsvtsbLNua
+        gqglHQHDFf3c2zv5nv2hPsuXQKIt0OMw9jbY+77QFvhBqhyOK/Xupjaa4uG+JUoE
+        9bhn7IWxO3tKBmbFLf7JCc/KWftTz2xb22hKWYgZuA1ZOtJ9BaNmbydDc1mWOZqx
+        Kj2QJXL1rvaIDZ2Oc9F4uk=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
+ (Coremail) ; Thu, 16 Jun 2022 12:54:50 +0800 (CST)
 X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgYiF1-HZTt0IAAAs7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 16 Jun 2022 12:54:50 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "kernel test robot" <lkp@intel.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, kbuild-all@lists.01.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] drivers: soc: sifive: Add missing of_node_put() in
+ sifive_l2_cache.c
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <202206160559.fVKJx0ST-lkp@intel.com>
+References: <20220615122315.3965435-1-windhl@126.com>
+ <202206160559.fVKJx0ST-lkp@intel.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
+MIME-Version: 1.0
+Message-ID: <3e6469ba.38b2.1816add33c5.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GMqowACXpiaat6piW_k2AA--.1844W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuA4iF2JVj44gFgACsB
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In sifive_l2_init(), of_find_matching_node() will return a node pointer
-with refcount incremented. We should use of_node_put() in each fail path
-or when it is not used anymore.
-
-Reported-by: kernel test robot <lkp@intel.com>
-
-Signed-off-by: Liang He <windhl@126.com>
----
- changelog: 
-
- v2: (1) fix bug, introduced by v1 patch, reporeted by kernel-test-robot
- v1: fix missing bug
-
- ps: Because of many local commit, when using --base for format-patch,
-     there are too many prerequest-patch-id. I wonder if it will lead to other 
-     problems. So now, I send this commit still without --base.
-
- drivers/soc/sifive/sifive_l2_cache.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/soc/sifive/sifive_l2_cache.c b/drivers/soc/sifive/sifive_l2_cache.c
-index 59640a1d0b28..e0e3d8b64c25 100644
---- a/drivers/soc/sifive/sifive_l2_cache.c
-+++ b/drivers/soc/sifive/sifive_l2_cache.c
-@@ -202,17 +202,22 @@ static int __init sifive_l2_init(void)
- 	if (!np)
- 		return -ENODEV;
- 
--	if (of_address_to_resource(np, 0, &res))
--		return -ENODEV;
-+	if (of_address_to_resource(np, 0, &res)) {
-+		ret = -ENODEV;
-+		goto out_put;
-+	}
- 
- 	l2_base = ioremap(res.start, resource_size(&res));
--	if (!l2_base)
--		return -ENOMEM;
-+	if (!l2_base) {
-+		ret = -ENOMEM;
-+		goto out_put;
-+	}
- 
- 	intr_num = of_property_count_u32_elems(np, "interrupts");
- 	if (!intr_num) {
- 		pr_err("L2CACHE: no interrupts property\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto out_put;
- 	}
- 
- 	for (i = 0; i < intr_num; i++) {
-@@ -220,7 +225,8 @@ static int __init sifive_l2_init(void)
- 		rc = request_irq(g_irq[i], l2_int_handler, 0, "l2_ecc", NULL);
- 		if (rc) {
- 			pr_err("L2CACHE: Could not request IRQ %d\n", g_irq[i]);
--			return rc;
-+			ret = rc;
-+			goto out_put;
- 		}
- 	}
- 
-@@ -232,6 +238,10 @@ static int __init sifive_l2_init(void)
- #ifdef CONFIG_DEBUG_FS
- 	setup_sifive_debug();
- #endif
--	return 0;
-+	ret = 0;
-+
-+out_put:
-+	of_node_put(np);
-+	return ret;
- }
- device_initcall(sifive_l2_init);
--- 
-2.25.1
-
+CgoKCkF0IDIwMjItMDYtMTYgMDU6NTg6MDUsICJrZXJuZWwgdGVzdCByb2JvdCIgPGxrcEBpbnRl
+bC5jb20+IHdyb3RlOgo+SGkgTGlhbmcsCj4KPlRoYW5rIHlvdSBmb3IgdGhlIHBhdGNoISBZZXQg
+c29tZXRoaW5nIHRvIGltcHJvdmU6Cj4KPlthdXRvIGJ1aWxkIHRlc3QgRVJST1Igb24gbGludXMv
+bWFzdGVyXQo+W2Fsc28gYnVpbGQgdGVzdCBFUlJPUiBvbiB2NS4xOS1yYzIgbmV4dC0yMDIyMDYx
+NV0KPltJZiB5b3VyIHBhdGNoIGlzIGFwcGxpZWQgdG8gdGhlIHdyb25nIGdpdCB0cmVlLCBraW5k
+bHkgZHJvcCB1cyBhIG5vdGUuCj5BbmQgd2hlbiBzdWJtaXR0aW5nIHBhdGNoLCB3ZSBzdWdnZXN0
+IHRvIHVzZSAnLS1iYXNlJyBhcyBkb2N1bWVudGVkIGluCj5odHRwczovL2dpdC1zY20uY29tL2Rv
+Y3MvZ2l0LWZvcm1hdC1wYXRjaF0KPgoKV2hlbiBJIHVzZSAtLWJhc2UsIHRoZXJlIGFyZSB0b28g
+bWFueSBwcmVyZXF1ZXN0cy1wYXRjaC1pZCBjYXVzZWQgYnkgbXkgbG9jYWwgY29tbWl0cy4gCkkg
+ZG9uJ3Qga25vdyBpZiBpdCB3aWxsIGNhdXNlIG90aGVyIHRyb3VibGVzLiBTbyBJIHJlc2VudCBh
+IG5ldyBwYXRjaCBzdGlsbCB3aXRob3V0IHRoaXMgJy0tYmFzZScuCklzIGl0IE9rPwoKU29ycnks
+IEkgZm9yZ2V0IHRvIHNheSBpbiBuZXcgcGF0Y2ggdGhhdCAgaXMgYmFzZWQgb24gdjUuMTktcmMy
+IG1haW5saW5lIGdpdCByZXBvLgoKPnVybDogICAgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsLWxh
+Yi1sa3AvbGludXgvY29tbWl0cy9MaWFuZy1IZS9kcml2ZXJzLXNvYy1zaWZpdmUtQWRkLW1pc3Np
+bmctb2Zfbm9kZV9wdXQtaW4tc2lmaXZlX2wyX2NhY2hlLWMvMjAyMjA2MTUtMjAyNTI4Cj5iYXNl
+OiAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZh
+bGRzL2xpbnV4LmdpdCAwMThhYjRmYWJkZGQ5NGYxYzk2ZjNiNTllMTgwNjkxYjllODhkNWQ4Cj5j
+b25maWc6IHJpc2N2LWFsbHllc2NvbmZpZyAoaHR0cHM6Ly9kb3dubG9hZC4wMS5vcmcvMGRheS1j
+aS9hcmNoaXZlLzIwMjIwNjE2LzIwMjIwNjE2MDU1OS5mVktKeDBTVC1sa3BAaW50ZWwuY29tL2Nv
+bmZpZykKPmNvbXBpbGVyOiByaXNjdjY0LWxpbnV4LWdjYyAoR0NDKSAxMS4zLjAKPnJlcHJvZHVj
+ZSAodGhpcyBpcyBhIFc9MSBidWlsZCk6Cj4gICAgICAgIHdnZXQgaHR0cHM6Ly9yYXcuZ2l0aHVi
+dXNlcmNvbnRlbnQuY29tL2ludGVsL2xrcC10ZXN0cy9tYXN0ZXIvc2Jpbi9tYWtlLmNyb3NzIC1P
+IH4vYmluL21ha2UuY3Jvc3MKPiAgICAgICAgY2htb2QgK3ggfi9iaW4vbWFrZS5jcm9zcwo+ICAg
+ICAgICAjIGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC1sYWItbGtwL2xpbnV4L2NvbW1pdC80OWM0
+MDg2NzY4YjVhZmY0MTBhNGExOWNhNzQwZjhhZThlMjExODQ0Cj4gICAgICAgIGdpdCByZW1vdGUg
+YWRkIGxpbnV4LXJldmlldyBodHRwczovL2dpdGh1Yi5jb20vaW50ZWwtbGFiLWxrcC9saW51eAo+
+ICAgICAgICBnaXQgZmV0Y2ggLS1uby10YWdzIGxpbnV4LXJldmlldyBMaWFuZy1IZS9kcml2ZXJz
+LXNvYy1zaWZpdmUtQWRkLW1pc3Npbmctb2Zfbm9kZV9wdXQtaW4tc2lmaXZlX2wyX2NhY2hlLWMv
+MjAyMjA2MTUtMjAyNTI4Cj4gICAgICAgIGdpdCBjaGVja291dCA0OWM0MDg2NzY4YjVhZmY0MTBh
+NGExOWNhNzQwZjhhZThlMjExODQ0Cj4gICAgICAgICMgc2F2ZSB0aGUgY29uZmlnIGZpbGUKPiAg
+ICAgICAgbWtkaXIgYnVpbGRfZGlyICYmIGNwIGNvbmZpZyBidWlsZF9kaXIvLmNvbmZpZwo+ICAg
+ICAgICBDT01QSUxFUl9JTlNUQUxMX1BBVEg9JEhPTUUvMGRheSBDT01QSUxFUj1nY2MtMTEuMy4w
+IG1ha2UuY3Jvc3MgVz0xIE89YnVpbGRfZGlyIEFSQ0g9cmlzY3YgU0hFTEw9L2Jpbi9iYXNoIGRy
+aXZlcnMvc29jLwo+Cj5JZiB5b3UgZml4IHRoZSBpc3N1ZSwga2luZGx5IGFkZCBmb2xsb3dpbmcg
+dGFnIHdoZXJlIGFwcGxpY2FibGUKPlJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtw
+QGludGVsLmNvbT4KPgoKVGhhbmtzIGZvciB0aGlzIHJlcG9ydCwgbm93IEkgbWFrZSBhIG5ldyBw
+YXRjaCBhbmQgYWRkICJSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5j
+b20+IgoKCj5BbGwgZXJyb3JzIChuZXcgb25lcyBwcmVmaXhlZCBieSA+Pik6Cj4KPiAgIGRyaXZl
+cnMvc29jL3NpZml2ZS9zaWZpdmVfbDJfY2FjaGUuYzogSW4gZnVuY3Rpb24gJ3NpZml2ZV9sMl9p
+bml0JzoKPj4+IGRyaXZlcnMvc29jL3NpZml2ZS9zaWZpdmVfbDJfY2FjaGUuYzoyMjQ6MTc6IGVy
+cm9yOiBleHBlY3RlZCAnOycgYmVmb3JlICdnb3RvJwo+ICAgICAyMjQgfCAgICAgICAgICAgICAg
+ICAgZ290byBvdXRfcHV0Owo+ICAgICAgICAgfCAgICAgICAgICAgICAgICAgXn5+fgo+Cj4KClRo
+YW5rcyBmb3IgYWxsIHlvdXIgZWZmb3J0IHRvIGltcHJvdmUgdGhlIHBhdGNoLgo=

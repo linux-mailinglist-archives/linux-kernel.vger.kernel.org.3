@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8332854D91C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF41054D91B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358583AbiFPEI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 00:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S1350843AbiFPEIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 00:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358594AbiFPEIi (ORCPT
+        with ESMTP id S1358588AbiFPEIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 00:08:38 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6B756F89
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:08:35 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id e4so187018ljl.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:08:34 -0700 (PDT)
+        Thu, 16 Jun 2022 00:08:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9470456F86;
+        Wed, 15 Jun 2022 21:08:34 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso402931pja.2;
+        Wed, 15 Jun 2022 21:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FBtM5WGvRPEJgUOnS34Z7iJV8/9Y1vR0E19ucVmPQ3M=;
-        b=UB5nurzzD04+1pIxtILOfGgDih/srzcyloZ3DgfyURK9qjOpEN4yB7ygzzJsCJIYz4
-         /9T8Dd7i6FhH0metYuL+PPPaLXSvH3uf3Lq4yg/bq8B48fbIGmKGY8FLHIcfetgwaUU3
-         maWdLV3k//aT8HQ1mibec9XRkbQ98lC1vGgtFWKd3QohAUKrAUE5CCUt/3/kGnqfWUER
-         Ls4wSnwxMpY4u8ATWlNXbjoE1kOBuIR9ec168TogcrHc8/dgRGoWL8AtV8fKDb96XKsn
-         PI1Am6C6fbvpOTzFisUwJdnoB5YUVT82M3dW3chW28hpG12Yv/TiGToCYPBxfw+LF1jt
-         aulQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vd0bN/XPx9OiHy3gzLV4Y4YAjktoSbcYs2uZYZ3e/rE=;
+        b=ibewHG8NBpBVeqDL2HqfKHkpvwh+DszHHVNyZXtLa3L1tM0mm0Gio1zpSmomvTLjb8
+         7Msk/fcArYrHM20BU112m31sFDNSJypd6MrOo2vPSPdy3csxD0vuUk9xgrZ/zkRtiOpB
+         EVjaiMpDJKUEbqV+uIzQld389AHFq8TEZ1CtmzfBOswLF6PMcgpH7uhN894Yve78gPS8
+         xggBKy+PDeUdYXseShdI9t1TxCAXgq4gv52eO2aui2wXZADd19PCnxcWaoAzO9yO30r8
+         OSCvfeEh8PgzkRFB1xmL1PARFsqLH6eA/JRskTTr1CrJr0EuBPAk+orAF+d38eA3cFB1
+         +jUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FBtM5WGvRPEJgUOnS34Z7iJV8/9Y1vR0E19ucVmPQ3M=;
-        b=1h+xHv0VY0OVaMkjw6bp+N4KUidxLoekio4OU/GhcEfGhHsuH4F/lxojaxwG2IJItt
-         8IT88GBtiz7avbgET5+AAg/5Ko/XDbfX51Md0swKgnjpn2ZvRdaM4aTZPSYG2fKC+Wcn
-         GozlWtM1ZzhxmEBtTvDnDBkOWOeWYouGODZD82zvtOCeqVCqeULA58uTgnImgX4/bRzR
-         UBw7X7yZt1cmzX/quwIDgn0MmojX7f0v1FN47XIcj4gxMhuqeT4Dolt9DxH2x7bwNBSG
-         lvR/I3BwfQndTlPNP2jMwFDlNeHatGpbOIpHmD+Ge5tyhMyczPHRvhWwXKm1LYYEUgrO
-         TyHg==
-X-Gm-Message-State: AJIora+cfQpmjDfb+YiNhbUOe65YNG4vOItCm0kl883AsWTHIorssDvm
-        kBBx2GV6wzAoMApOb+VNAaKeaZLmJ+EXFCUqzuk=
-X-Google-Smtp-Source: AGRyM1vS/6FI6l5qeqNasa6II+pXlJKkXHvfh+y66TNlxmt10he+2WKAzkzOy89IJmXIaMtfYPV0ih8No1pkyWiYfCc=
-X-Received: by 2002:a05:651c:506:b0:255:bc1f:80b5 with SMTP id
- o6-20020a05651c050600b00255bc1f80b5mr1530074ljp.391.1655352513179; Wed, 15
- Jun 2022 21:08:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vd0bN/XPx9OiHy3gzLV4Y4YAjktoSbcYs2uZYZ3e/rE=;
+        b=n2//GmKd+J5brIs9fLaiecffMW2ytoUZ5UlfDNNA5OUU9UqDGKXlfd8jXPTMqqKWyn
+         1pdSexw8KAKWb5hRjdztDSFELZWTQ+0C81+tgRy1qmmdf1OrnVcRLh0Lha5/0wcosUrk
+         Vem5VGHnf0KqihOy6SrgKlfllWNkdKcrUtm1HNHjhjtmIve9BiU5OvqALhFy9RDfvwoj
+         fk33j/emaV/4oyAN90D4qhnohScbvnp8lRAiEl9Pe7XPhT5FB95V68sNvyhJyQ00W4iV
+         R1Vl3DcmzUwJ3BJfFQTjRwLzV1MIMVIjITgsFTz/SHRwwilTo9BX2CJ1ojdBIwx8RqbK
+         jb4w==
+X-Gm-Message-State: AJIora8qqqmrymnHO1cyRkRKofaoGpGzshevfUR0a+cj3GFXTJSJC8Wr
+        iKu/PhmhTMtPjvHhADJF1jw=
+X-Google-Smtp-Source: AGRyM1vpVH9mYKbCmmwnS4lz+GWa53yJrZpou5g2IhEW3/j+pwcP71PaEzDsfNyilqvzTau4LnYyhw==
+X-Received: by 2002:a17:902:8a91:b0:167:621f:9749 with SMTP id p17-20020a1709028a9100b00167621f9749mr2871786plo.9.1655352513997;
+        Wed, 15 Jun 2022 21:08:33 -0700 (PDT)
+Received: from localhost ([2406:7400:63:5d34:e6c2:4c64:12ae:aa11])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902784800b00163d76696e1sm456561pln.102.2022.06.15.21.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 21:08:33 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:38:29 +0530
+From:   Ritesh Harjani <ritesh.list@gmail.com>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, lczerner@redhat.com,
+        enwlinux@gmail.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH v3 4/4] ext4: correct the misjudgment in
+ ext4_iget_extra_inode
+Message-ID: <20220616040829.kb66mg2dnitnlkau@riteshh-domain>
+References: <20220616021358.2504451-1-libaokun1@huawei.com>
+ <20220616021358.2504451-5-libaokun1@huawei.com>
 MIME-Version: 1.0
-References: <20220430085344.3127346-1-chenhuacai@loongson.cn>
- <87v8uk6kfa.wl-maz@kernel.org> <f9bafd6c-0819-9046-e0dd-11e2dd98da38@flygoat.com>
- <87a6am3v0y.wl-maz@kernel.org>
-In-Reply-To: <87a6am3v0y.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 16 Jun 2022 12:08:22 +0800
-Message-ID: <CAAhV-H7EtD2mVGCg3772M5S56Y-hB5gxtfosbp55kMAbB3vkcw@mail.gmail.com>
-Subject: Re: [PATCH V11 00/10] irqchip: Add LoongArch-related irqchip drivers
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616021358.2504451-5-libaokun1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,101 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Marc,
+On 22/06/16 10:13AM, Baokun Li wrote:
+> Use the EXT4_INODE_HAS_XATTR_SPACE macro to more accurately
+> determine whether the inode have xattr space.
 
-On Thu, Jun 9, 2022 at 8:01 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> + Jianmin Lv
->
-> On Fri, 20 May 2022 16:04:28 +0100,
-> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> >
-> >
-> >
-> > =E5=9C=A8 2022/5/5 16:58, Marc Zyngier =E5=86=99=E9=81=93:
-> > >> LoongArch use ACPI, but ACPI tables cannot describe the hierarchy of
-> > >> irqchips, so we initilize the irqchip subsystem in this way (from ar=
-ch
-> > >> code):
-> > >>
-> > >>    cpu_domain =3D loongarch_cpu_irq_init();
-> > >>    liointc_domain =3D liointc_acpi_init(cpu_domain, acpi_liointc);
-> > >>    eiointc_domain =3D eiointc_acpi_init(cpu_domain, acpi_eiointc);
-> > >>    pch_pic_domain =3D pch_pic_acpi_init(eiointc_domain, acpi_pchpic)=
-;
-> > >>    pch_msi_domain =3D pch_msi_acpi_init(eiointc_domain, acpi_pchmsi)=
-;
-> > > I said no to this in the past, and I'm going to reiterate: this is
-> > > *not* acceptable. This obviously doesn't scale and isn't manageable i=
-n
-> > > the long run. Hardcoding the topology and the probing order in the
-> > > kernel code has repeatedly proved to be a disaster, and yet you refus=
-e
-> > > to take any input from past experience. This is pretty worrying.
-> > Just my two cents here.
-> >
-> > Those drivers have such a topology just because this was my design to
-> > handle irqchip differences between RS780E and LS7A for MIPS-era Loongso=
-n.
-> >
-> > TBH, for LoongArch-era Loongson, they should be handled by the same dri=
-ver,
-> > cuz the topology behind them just looks like GIC PPI SPI and MSI for
-> > Arm GIC.
-> >
-> > PCH PIC and eiointc in combination relays interrupts from
-> > peripherals just like SPI.  liointc is doing the PPI job. They are
-> > not separated modules in hardware, they are interlocked.
->
-> That was my impression too, but I keep getting pushback on that. I
-> wouldn't mind leaving the existing drivers for MIPS only and get new
-> ones for Loongson if that made things clearer.
->
-> > The system should be treated as a whole, pretty much like how we see
-> > Arm's GIC. The topology will last forever for every ACPI enabled
-> > LoongArch PC.
-> >
-> > I see no reason they should be described separately. Adding complicitie=
-s to
-> > ACPI bindings brings no benefit. Changing ACPI binding which is already=
- in
-> > final draft stage can only leave us with chaos.
->
-> OK. So how do we move forward? You seem to have a good grasp on how
-> this should be structured, so can you work with Jianmin Lv to make
-> some progress on this?
-Thank you for helping us to move this forward, and I have some
-considerations below:
-1, Jianmin Lv and I have both made some effort on the irqchip driver
-design, but Jianmin more or less lacks some community experience, so
-he has made some mistakes as most new-comers. I think he will improve
-in the future.
-2, And then, maybe we can temporarily ignore those new-comers'
-mistakes and focus on the key problem. I think the key problem is that
-our irqchip topology is fixed in hardware (not re-organizable, which
-can nearly be treated as a whole, as Jiaxun described before), and the
-ACPI spec is frozen in late 2021.
-3, To solve the key problem, Jianmin and I propose two different
-designs. My solution is in V11 and previous versions: initialize the
-root irqchip in the arch code, and return the root domain, then the
-downstream irqchip takes the root domain as its parent to initialize
-itself, and so on. While Jianmin's design is in RFC versions: the arch
-code only calls irqchip_init() which causes it to initialize the root
-irqchip, and the root irqchip driver explicitly calls its downstream
-irqchips' initialization. I think this is the main difference between
-them.
-4, There is coupling between arch and driver in my solution, and there
-is coupling between one driver and some other drivers in Jianmin's
-solution. Both of the two solutions are not perfect (or we can even
-say they are ugly). Which one do you think is a little better?
+Right. I also noticed there are few places in fs/ext4/xattr.c
+and in fs/ext4/inline.c where sizeof(__u32) is being used which (I think)
+should be EXT4_XATTR_PAD. But that need not be part of this patch series.
 
-
-Huacai
+Looks good to me. Feel free to add -
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
 >
-> Thanks,
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>  fs/ext4/inode.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
->         M.
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index 53877ffe3c41..ae463cd9b405 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -4687,8 +4687,7 @@ static inline int ext4_iget_extra_inode(struct inode *inode,
+>  	__le32 *magic = (void *)raw_inode +
+>  			EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize;
 >
+> -	if (EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize + sizeof(__le32) <=
+> -	    EXT4_INODE_SIZE(inode->i_sb) &&
+> +	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
+>  	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
+>  		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
+>  		return ext4_find_inline_data_nolock(inode);
 > --
-> Without deviation from the norm, progress is not possible.
+> 2.31.1
+>

@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB9954DEB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE92354DEB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376360AbiFPKKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S1376361AbiFPKKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiFPKKB (ORCPT
+        with ESMTP id S1376384AbiFPKKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:10:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC05D5D8;
-        Thu, 16 Jun 2022 03:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655374200; x=1686910200;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0izFwO+9xB6GKaTHQ0MxXZ7mwTnqS7PFUmBq+gHPimI=;
-  b=diKav6NwsJYOZB0fTcxFBxRG2JDPPbAYpsmkNqmlDiCHvaXkC8+Gooo+
-   rrNYTQf7zYuPI4F7XD3rrB0JD8LBIyj4iR+516sJJVgeSMeT+4WRDc1SO
-   Azz/6DElkgVXk2WAGpTKYO2DbZe02h7GWX2zEpPCyQzPfKTijfJlArpKV
-   lf6lEgTbCZxcGtBzG/4pm+XdgoGv8UJl3jE5fbEVfRhxke59NPV7Bxr4h
-   FKB/RmLmG0VtrnjVK+teDsJVPn1uxf/6XMw9i074UiaIqN82LlkZbJHXZ
-   EbgHh+wUe4UJg91n5sVfCooogSSNhlvgmOczYCgsOxeiQZxrykOF64TXD
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="278011972"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="278011972"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:09:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="618828287"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2022 03:09:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1mRn-000OHB-2h;
-        Thu, 16 Jun 2022 10:09:55 +0000
-Date:   Thu, 16 Jun 2022 18:09:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kbuild-all@lists.01.org, festevam@gmail.com, linux-imx@nxp.com,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        marex@denx.de, aford173@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 4/8] soc: imx: add icc paths for i.MX8MP media blk ctrl
-Message-ID: <202206161757.tudlinMv-lkp@intel.com>
-References: <20220616073953.2204978-5-peng.fan@oss.nxp.com>
+        Thu, 16 Jun 2022 06:10:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCB35D64F;
+        Thu, 16 Jun 2022 03:10:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3D5F614E7;
+        Thu, 16 Jun 2022 10:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED15C34114;
+        Thu, 16 Jun 2022 10:10:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655374205;
+        bh=5Dv9JP3bXTE2uRf8zpfYaCIFCVrfFMzOlE7ggr6awAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IYDHKbGAj2H3C7abExcrGg3XeVyxWJFBwZbj+e7U25ljTeS1lgsku/UdBOrtJb0y4
+         el7qE6m5ZwuK/cF75cI2QylFcHrU1bkD32jUColuY5DHgWdKitem53ILh90Fd6FQrZ
+         u2XniIJ0R5Pa4N5Be3F3keALqflYTtaOh7lV9u+k=
+Date:   Thu, 16 Jun 2022 12:10:02 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sebastian Ene <sebastianene@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, vdonnefort@google.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <YqsBeme1Vnzj5k7+@kroah.com>
+References: <20220616092737.1713667-1-sebastianene@google.com>
+ <20220616092737.1713667-3-sebastianene@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616073953.2204978-5-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220616092737.1713667-3-sebastianene@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,196 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
+On Thu, Jun 16, 2022 at 09:27:39AM +0000, Sebastian Ene wrote:
+> This driver creates per-cpu hrtimers which are required to do the
+> periodic 'pet' operation. On a conventional watchdog-core driver, the
+> userspace is responsible for delivering the 'pet' events by writing to
+> the particular /dev/watchdogN node. In this case we require a strong
+> thread affinity to be able to account for lost time on a per vCPU.
+> 
+> This part of the driver is the 'frontend' which is reponsible for
+> delivering the periodic 'pet' events, configuring the virtual peripheral
+> and listening for cpu hotplug events. The other part of the driver
+> handles the peripheral emulation and this part accounts for lost time by
+> looking at the /proc/{}/task/{}/stat entries and is located here:
+> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> ---
+>  drivers/misc/Kconfig               |  12 ++
+>  drivers/misc/Makefile              |   1 +
+>  drivers/misc/vcpu_stall_detector.c | 222 +++++++++++++++++++++++++++++
+>  3 files changed, 235 insertions(+)
+>  create mode 100644 drivers/misc/vcpu_stall_detector.c
+> 
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index 41d2bb0ae23a..9b3cb5dfd5a7 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -483,6 +483,18 @@ config OPEN_DICE
+>  
+>  	  If unsure, say N.
+>  
+> +config VCPU_STALL_DETECTOR
+> +	tristate "VCPU stall detector"
+> +	select LOCKUP_DETECTOR
+> +	help
+> +	  Detect CPU locks on the virtual machine. This driver relies on the
+> +	  hrtimers which are CPU-binded to do the 'pet' operation. When a vCPU
+> +	  has to do a 'pet', it exits the guest through MMIO write and the
+> +	  backend driver takes into account the lost ticks for this particular
+> +	  CPU.
 
-Thank you for the patch! Yet something to improve:
+which virtual machine framework is this for?  kvm?  xen?  hyperv?
+vmware?  something else?
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on shawnguo/for-next linus/master v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Specifics please...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/Add-interconnect-for-i-MX8MP-blk-ctrl/20220616-153932
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arc-randconfig-r043-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161757.tudlinMv-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/118c632adf7409c5a51e85fa0c61286665116b10
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/Add-interconnect-for-i-MX8MP-blk-ctrl/20220616-153932
-        git checkout 118c632adf7409c5a51e85fa0c61286665116b10
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/soc/imx/
+thanks,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/soc/imx/imx8m-blk-ctrl.c: In function 'imx8m_blk_ctrl_probe':
->> drivers/soc/imx/imx8m-blk-ctrl.c:247:23: error: implicit declaration of function 'devm_of_icc_bulk_get'; did you mean 'of_icc_bulk_get'? [-Werror=implicit-function-declaration]
-     247 |                 ret = devm_of_icc_bulk_get(dev, data->num_paths, domain->paths);
-         |                       ^~~~~~~~~~~~~~~~~~~~
-         |                       of_icc_bulk_get
-   cc1: some warnings being treated as errors
-
-
-vim +247 drivers/soc/imx/imx8m-blk-ctrl.c
-
-   178	
-   179	static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
-   180	{
-   181		const struct imx8m_blk_ctrl_data *bc_data;
-   182		struct device *dev = &pdev->dev;
-   183		struct imx8m_blk_ctrl *bc;
-   184		void __iomem *base;
-   185		int i, ret;
-   186	
-   187		struct regmap_config regmap_config = {
-   188			.reg_bits	= 32,
-   189			.val_bits	= 32,
-   190			.reg_stride	= 4,
-   191		};
-   192	
-   193		bc = devm_kzalloc(dev, sizeof(*bc), GFP_KERNEL);
-   194		if (!bc)
-   195			return -ENOMEM;
-   196	
-   197		bc->dev = dev;
-   198	
-   199		bc_data = of_device_get_match_data(dev);
-   200	
-   201		base = devm_platform_ioremap_resource(pdev, 0);
-   202		if (IS_ERR(base))
-   203			return PTR_ERR(base);
-   204	
-   205		regmap_config.max_register = bc_data->max_reg;
-   206		bc->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
-   207		if (IS_ERR(bc->regmap))
-   208			return dev_err_probe(dev, PTR_ERR(bc->regmap),
-   209					     "failed to init regmap\n");
-   210	
-   211		bc->domains = devm_kcalloc(dev, bc_data->num_domains,
-   212					   sizeof(struct imx8m_blk_ctrl_domain),
-   213					   GFP_KERNEL);
-   214		if (!bc->domains)
-   215			return -ENOMEM;
-   216	
-   217		bc->onecell_data.num_domains = bc_data->num_domains;
-   218		bc->onecell_data.xlate = imx8m_blk_ctrl_xlate;
-   219		bc->onecell_data.domains =
-   220			devm_kcalloc(dev, bc_data->num_domains,
-   221				     sizeof(struct generic_pm_domain *), GFP_KERNEL);
-   222		if (!bc->onecell_data.domains)
-   223			return -ENOMEM;
-   224	
-   225		bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
-   226		if (IS_ERR(bc->bus_power_dev))
-   227			return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-   228					     "failed to attach power domain\n");
-   229	
-   230		for (i = 0; i < bc_data->num_domains; i++) {
-   231			const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
-   232			struct imx8m_blk_ctrl_domain *domain = &bc->domains[i];
-   233			int j;
-   234	
-   235			domain->data = data;
-   236	
-   237			for (j = 0; j < data->num_clks; j++)
-   238				domain->clks[j].id = data->clk_names[j];
-   239	
-   240			for (j = 0; j < data->num_paths; j++) {
-   241				domain->paths[j].name = data->path_names[j];
-   242				/* Fake value for now, just let ICC could configure NoC mode/priority */
-   243				domain->paths[j].avg_bw = 1;
-   244				domain->paths[j].peak_bw = 1;
-   245			}
-   246	
- > 247			ret = devm_of_icc_bulk_get(dev, data->num_paths, domain->paths);
-   248			if (ret) {
-   249				dev_err_probe(dev, ret, "failed to get noc entries\n");
-   250				goto cleanup_pds;
-   251			}
-   252	
-   253			ret = devm_clk_bulk_get(dev, data->num_clks, domain->clks);
-   254			if (ret) {
-   255				dev_err_probe(dev, ret, "failed to get clock\n");
-   256				goto cleanup_pds;
-   257			}
-   258	
-   259			domain->power_dev =
-   260				dev_pm_domain_attach_by_name(dev, data->gpc_name);
-   261			if (IS_ERR(domain->power_dev)) {
-   262				dev_err_probe(dev, PTR_ERR(domain->power_dev),
-   263					      "failed to attach power domain\n");
-   264				ret = PTR_ERR(domain->power_dev);
-   265				goto cleanup_pds;
-   266			}
-   267			dev_set_name(domain->power_dev, "%s", data->name);
-   268	
-   269			domain->genpd.name = data->name;
-   270			domain->genpd.power_on = imx8m_blk_ctrl_power_on;
-   271			domain->genpd.power_off = imx8m_blk_ctrl_power_off;
-   272			domain->bc = bc;
-   273	
-   274			ret = pm_genpd_init(&domain->genpd, NULL, true);
-   275			if (ret) {
-   276				dev_err_probe(dev, ret, "failed to init power domain\n");
-   277				dev_pm_domain_detach(domain->power_dev, true);
-   278				goto cleanup_pds;
-   279			}
-   280	
-   281			/*
-   282			 * We use runtime PM to trigger power on/off of the upstream GPC
-   283			 * domain, as a strict hierarchical parent/child power domain
-   284			 * setup doesn't allow us to meet the sequencing requirements.
-   285			 * This means we have nested locking of genpd locks, without the
-   286			 * nesting being visible at the genpd level, so we need a
-   287			 * separate lock class to make lockdep aware of the fact that
-   288			 * this are separate domain locks that can be nested without a
-   289			 * self-deadlock.
-   290			 */
-   291			lockdep_set_class(&domain->genpd.mlock,
-   292					  &blk_ctrl_genpd_lock_class);
-   293	
-   294			bc->onecell_data.domains[i] = &domain->genpd;
-   295		}
-   296	
-   297		ret = of_genpd_add_provider_onecell(dev->of_node, &bc->onecell_data);
-   298		if (ret) {
-   299			dev_err_probe(dev, ret, "failed to add power domain provider\n");
-   300			goto cleanup_pds;
-   301		}
-   302	
-   303		bc->power_nb.notifier_call = bc_data->power_notifier_fn;
-   304		ret = dev_pm_genpd_add_notifier(bc->bus_power_dev, &bc->power_nb);
-   305		if (ret) {
-   306			dev_err_probe(dev, ret, "failed to add power notifier\n");
-   307			goto cleanup_provider;
-   308		}
-   309	
-   310		dev_set_drvdata(dev, bc);
-   311	
-   312		return 0;
-   313	
-   314	cleanup_provider:
-   315		of_genpd_del_provider(dev->of_node);
-   316	cleanup_pds:
-   317		for (i--; i >= 0; i--) {
-   318			pm_genpd_remove(&bc->domains[i].genpd);
-   319			dev_pm_domain_detach(bc->domains[i].power_dev, true);
-   320		}
-   321	
-   322		dev_pm_domain_detach(bc->bus_power_dev, true);
-   323	
-   324		return ret;
-   325	}
-   326	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

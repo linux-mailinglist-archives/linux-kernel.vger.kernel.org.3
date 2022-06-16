@@ -2,182 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640B454EDBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8836454EDC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379294AbiFPW6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S1379321AbiFPXBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379286AbiFPW6m (ORCPT
+        with ESMTP id S1379308AbiFPXBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:58:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F1962A14;
-        Thu, 16 Jun 2022 15:58:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8217CB82677;
-        Thu, 16 Jun 2022 22:58:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A181BC3411C;
-        Thu, 16 Jun 2022 22:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655420318;
-        bh=BhBSw9D9ltx5eL2VOtxBAgMRkCtcfgjW4sB86qkvEWU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O5yP0MIVY9hQpBQur4ksZUlxWpn4EZ8BsqV1Q/gMV59ra7EMrb6I2j5b9IaetwL7G
-         b7UYX++AYKx91UASeN8k1yeeTwDAQIHg2E4mG4YiG/6W6xFS0UPFhxEe0Kecbw7pr8
-         BULCMbxdVK8LoKR3opAeSmWWoU7ZNoyzSJQb/SBTY4aNxXrtES5mmaxuhvJcH5CGwl
-         0halR+YTriqyvJnTnfjpecBFuxtVtHWpSktTqcu2RtiDZaCe7zEhOvRJ7UyZunRl3N
-         fOyIla2gMtTwRA+x3C8NIjsfbClotpvqPiUoYMpPVMTmTd0o31RJ3MlCV/xwgfdV9T
-         dhyhajVoW9Ryw==
-Message-ID: <4b4b08af-887b-89e9-b4a5-93e7d8a03222@kernel.org>
-Date:   Thu, 16 Jun 2022 15:58:37 -0700
+        Thu, 16 Jun 2022 19:01:51 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A03462A2A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:01:50 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id y17so1900883ilj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dxYlFYa08li+b2bH2lpzssUgCCuwu/1aYyeRjozsoxA=;
+        b=WI575e9Yb3UURQikbwMwnVlY7aFjJ5HZCCsnkaOWrdzEauSAVut+sqOcHZgLf0S7xa
+         zqp6pmpRe8FHVecMzWb/PTiZZfyk5w2koS6iDe4Vg1KswQd3pBxNC++CyRGIgIveOAOf
+         EDkFaZlrYPNMKdPMa8l9eLQGJYIp65QDsGwnE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dxYlFYa08li+b2bH2lpzssUgCCuwu/1aYyeRjozsoxA=;
+        b=cA0PZ/TF7c8FHuwJHiNIwjIc53D+fEgzY85Y9gvVzVSCbjnNoa3sg8f7WD4gC671W5
+         gpyUmPPh3RVHNYehaUaEs4kJl36pB/U7bStk7BceAADiCkMhq6P5si5pfU6EcLqw70UG
+         QYtD/GYPpNJJdFPsTqD/by4o3vx2E/SQtN30eqHjsRR0EMCJ/Tcw6s+Mk/oGl9ENwW8d
+         mfhADeaHvk6vCDbP0wqze4iAbEgsXst4d8eq/HbpPzf7AaQFkq6Mx1t0+cvT64XaUqG2
+         +yrlkvcX2kffiQ03QBz2Z6fACWxmogh6omAx7AcVHZ0RuVDidEP1TWBcEhKZa3MrRdXR
+         sd6Q==
+X-Gm-Message-State: AJIora867aeKXpss8pLvcOgCgxd8EDOogRjvvf47DOtDTc9/Yi9qkl/O
+        SKa+E/KBCn3tQukj5h4p3kjdfN1op7TFAw==
+X-Google-Smtp-Source: AGRyM1s7LIyJLY6T2Uw2EEkj6wJqA6dr2rUEctCYF7at0sSK8+Zh7zsCGDCfSXKU0oW2S2jL2LftaQ==
+X-Received: by 2002:a05:6e02:152f:b0:2d4:980:a529 with SMTP id i15-20020a056e02152f00b002d40980a529mr4197820ilu.72.1655420509530;
+        Thu, 16 Jun 2022 16:01:49 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id s71-20020a02514a000000b0033171dafaa0sm1414627jaa.178.2022.06.16.16.01.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 16:01:49 -0700 (PDT)
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Dylan Hatch <dylanbhatch@google.com>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+Date:   Thu, 16 Jun 2022 17:01:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: phy: Add ARTPEC-8 PCIe phy
+In-Reply-To: <20220616211016.4037482-1-dylanbhatch@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>
-Cc:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-References: <20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p7>
- <CGME20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p5>
- <20220614012916epcms2p5cf8d55e7420dea10bb4a05d91aaf99dd@epcms2p5>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220614012916epcms2p5cf8d55e7420dea10bb4a05d91aaf99dd@epcms2p5>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 18:29, Wangseok Lee wrote:
-> Add description to support Axis, ARTPEC-8 SoC.
-> ARTPEC-8 is the SoC platform of Axis Communications
-> and PCIe phy is designed based on SAMSUNG PHY.
-
-No improvements here. On v2 I gave you link pointing to specific
-paragraph of our documentation which you need to apply - wrong wrapping.
-Is there something unclear here?
-
-Please
-do
-not
-wrap
-in
-different
-style.
-
-
+On 6/16/22 3:10 PM, Dylan Hatch wrote:
+> This test would erroneously fail the /proc/$PID/maps case if
+> vsyscall=xonly since the existing probe of the vsyscall page only
+> succeeds if the process has read permissions. Fix this by checking for
+> either no vsyscall mapping OR an execute-only vsyscall mapping in the
+> case were probing the vsyscall page segfaults.
 > 
-> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+
+Does this fix include skipping the test with a clear message that
+says why test is skipped?
+
+> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
 > ---
-> v2->v3 :
-> -modify version history to fit the linux commit rule
-> -remove 'Device Tree Bindings' on title
-> -remove clock-names entries
-> -change node name to soc from artpec8 on excamples
+>   tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
+>   1 file changed, 15 insertions(+), 5 deletions(-)
 > 
-> v1->v2 :
-> -'make dt_binding_check' result improvement
-> -Add the missing property list
-> -Align the indentation of continued lines/entries
-> ---
->  .../bindings/phy/axis,artpec8-pcie-phy.yaml        | 73 ++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
+> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+> index 28604c9f805c..5ca85520131f 100644
+> --- a/tools/testing/selftests/proc/proc-pid-vm.c
+> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
+> @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
+>   
+>   static bool g_vsyscall = false;
+>   
+> -static const char str_vsyscall[] =
+> +static const char str_vsyscall_rx[] =
+>   "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
+>   
+> +static const char str_vsyscall_x[] =
+> +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
+> +
+>   #ifdef __x86_64__
+>   static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+>   {
+> @@ -261,6 +264,7 @@ int main(void)
+>   	int exec_fd;
+>   
+>   	vsyscall();
+> +	const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
+>   
+>   	atexit(ate);
+>   
+> @@ -314,7 +318,8 @@ int main(void)
+>   
+>   	/* Test /proc/$PID/maps */
+>   	{
+> -		const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
+> +		const size_t len_buf0 = strlen(buf0);
+> +		const size_t len_vsys = strlen(str_vsyscall);
+>   		char buf[256];
+>   		ssize_t rv;
+>   		int fd;
+> @@ -325,11 +330,16 @@ int main(void)
+>   			return 1;
+>   		}
+>   		rv = read(fd, buf, sizeof(buf));
+> -		assert(rv == len);
+> -		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
+>   		if (g_vsyscall) {
+> -			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
+> +			assert(rv == len_buf0 + len_vsys);
+> +		} else {
+> +			/* If vsyscall isn't readable, it's either x-only or not mapped at all */
+> +			assert(rv == len_buf0 + len_vsys || rv == len_buf0);
+>   		}
+> +		assert(memcmp(buf, buf0, len_buf0) == 0);
+> +		/* Check for vsyscall mapping if buf is long enough */
+> +		if (rv == len_buf0 + len_vsys)
+> +			assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
+>   	}
+>   
+>   	/* Test /proc/$PID/smaps */
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
-> new file mode 100644
-> index 0000000..316b774
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/axis,artpec8-pcie-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ARTPEC-8 SoC PCIe PHY
-> +
-> +maintainers:
-> +  - Jesper Nilsson <jesper.nilsson@axis.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: axis,artpec8-pcie-phy
-> +
-> +  reg:
-> +    items:
-> +      - description: PHY registers.
-> +      - description: PHY coding sublayer registers.
-> +
-> +  reg-names:
-> +    items:
-> +      - const: phy
-> +      - const: pcs
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  clocks:
-> +    items:
-> +      - description: PCIe PHY reference clock
-> +
-> +  num-lanes:
-> +    const: 2
-> +
-> +  lcpll-ref-clk:
-> +    const: 1
 
-Unknown field... custom properties need vendor (axis,), type (boolean)
-and description.
+The change looks good to me. Doesn't look like it skips the test though?
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - "#phy-cells"
-> +  - clocks
-> +  - clock-names
-> +  - samsung,fsys-sysreg
-
-Same problem as in patch #1.
-
-> +  - num-lanes
-> +  - lcpll-ref-clk
-> +
-> +additionalProperties: true
-
-No, this must be false.
-
-
-Best regards,
-Krzysztof
+thanks,
+-- Shuah

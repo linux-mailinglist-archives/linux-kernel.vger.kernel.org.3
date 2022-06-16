@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA54A54EA37
+	by mail.lfdr.de (Postfix) with ESMTP id 62AB154EA36
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378345AbiFPTfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S1378408AbiFPTfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377357AbiFPTfK (ORCPT
+        with ESMTP id S1377357AbiFPTfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:35:10 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E3A57B03
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:35:08 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 1vGioIvR7NUm11vGionD4h; Thu, 16 Jun 2022 21:35:06 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 16 Jun 2022 21:35:06 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <70ea2718-4979-5587-7f31-2361ae3ff8ad@wanadoo.fr>
-Date:   Thu, 16 Jun 2022 21:35:04 +0200
+        Thu, 16 Jun 2022 15:35:13 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9145C57B01;
+        Thu, 16 Jun 2022 12:35:12 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id z14so2154568pgh.0;
+        Thu, 16 Jun 2022 12:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a4KSlJmtWZkjiLfN9g3so1P7qbrnH5UxDi6TOibKZrg=;
+        b=pTI+QTB9FI8Yf2Lnf49gZQgDsuzRXp2tqdWSqdZaO3ef+cvD0oHeUJiaZ+6C2Pve3y
+         gEJ3Q3vGopGnx8wzqSe8eBoEej89TmAy4RS9Lir82ibduS4MvW6pMe0UjsHPebCh4Na9
+         6QvGYjrJ8B7zmkZap+DXhQF4/62bkYyQLchUis/jHLymP8zQtjbnluu5K+weZ0uoZNdm
+         dLo9r45NKoe4TD/1MECXonhVHlYDqLag4sD7UGLzttnJk+tTt7XO9nf8clTh0wCXbPIN
+         RjpZC1h8LlUbKx2i4Awvn1E1q+0F4+nRsrNuhYE6ylsPjIMnTJbgupQkSYuJTCKPdN9n
+         EtFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=a4KSlJmtWZkjiLfN9g3so1P7qbrnH5UxDi6TOibKZrg=;
+        b=UyD2ZfN17HCHVXM3mULyWdhuTl5ZEfFThp8iyA1fmh4APktk7USmuFnj2bK4T4LRQK
+         yQ3uVl2JhMJLvnNOo9TiQyoWEhyBuhp5zeqdicUFo4jkjVwjXUz3otAbVbfuXJQBq8YT
+         nx8rMg1NnhBhtyBRc1pB/73h6Rivsay+gbIfwh8e6ZAu5Pq7e7yvss+mPuDNWBL32zUC
+         AWYsOJLOu+CWn47sSJKlgK7S/SHOjmKluhzeSJsvP1+W1WFLIepHJZJvvK+3S3ke2U9j
+         3rrTUUpqTi7nNYtNB3uesutR/e7rOYa25MwcFG6ID9WaB8ST8xKNJftQkJ3c0Vf8k6H6
+         M3xA==
+X-Gm-Message-State: AJIora9290hgLWnLiKgo7T68qAmHX+IUNa06CN/fzsp0yEnr5g/cc+sI
+        lJdlNKS12Jm91r9QrLDl07Q=
+X-Google-Smtp-Source: AGRyM1sGCAwL+H4L4Br2Fey7tXGFqw+O7li6846XUkvrmrgcUemMR8GH8Q8jlAlv32fUzMcTYf7xQQ==
+X-Received: by 2002:a63:87c3:0:b0:401:eaf0:ff18 with SMTP id i186-20020a6387c3000000b00401eaf0ff18mr5866531pge.153.1655408111909;
+        Thu, 16 Jun 2022 12:35:11 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:330c])
+        by smtp.gmail.com with ESMTPSA id c9-20020a63a409000000b003faf4acac63sm2162064pgf.13.2022.06.16.12.35.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 12:35:11 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 16 Jun 2022 09:35:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Lin Feng <linf@wangsu.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup.c: add helper __cset_cgroup_from_root to cleanup
+ duplicated codes
+Message-ID: <YquF7TzuCjqP8aGZ@slm.duckdns.org>
+References: <20220616103830.197458-1-linf@wangsu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] p54: Fix an error handling path in p54spi_probe()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Christian Lamparter <chunkeey@gmail.com>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-References: <297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr>
- <CAAd0S9DgctqyRx+ppfT6dNntUR-cpySnsYaL=unboQ+qTK2wGQ@mail.gmail.com>
- <f13c3976-2ba0-e16d-0853-5b5b1be16d11@wanadoo.fr>
- <df6b487b-b8b7-44fc-7c2d-e6fd15072c14@gmail.com>
- <20220616103640.GB16517@kadam>
- <9fa854e1-ad88-9c18-ca68-5709dc1c7906@gmail.com>
- <20220616151948.GD16517@kadam>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220616151948.GD16517@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616103830.197458-1-linf@wangsu.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,73 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 16/06/2022 à 17:19, Dan Carpenter a écrit :
-> On Thu, Jun 16, 2022 at 03:13:26PM +0200, Christian Lamparter wrote:
->> On 16/06/2022 12:36, Dan Carpenter wrote:
->>>>> If it deserves a v3 to axe some lines of code, I can do it but, as said
->>>>> previously,
->>>>> v1 is for me the cleaner and more future proof.
->>>>
->>>> Gee, that last sentence about "future proof" is daring.
->>>
->>> The future is vast and unknowable but one thing which is pretty likely
->>> is that Christophe's patch will introduce a static checker warning.  We
->>> really would have expected a to find a release_firmware() in the place
->>> where it was in the original code.  There is a comment there now so no
->>> one is going to re-add the release_firmware() but that's been an issue
->>> in the past.
->>>
->>> I'm sort of surprised that it wasn't a static checker warning already.
->>> Anyway, I'll add this to Smatch check_unwind.c
->>>
->>> +         { "request_firmware", ALLOC, 0, "*$", &int_zero, &int_zero},
->>> +         { "release_firmware", RELEASE, 0, "$"},
->>
->> hmm? I don't follow you there. Why should there be a warning "now"?
->> (I assume you mean with v2 but not with v1?).
+On Thu, Jun 16, 2022 at 06:38:30PM +0800, Lin Feng wrote:
+> No funtionality change, but save us some lines.
 > 
-> Yep.  Generally, static checkers assume that functions clean up after
-> themselves on error paths so there would be a warning in
-> p54spi_request_firmware().  This is the easiest kind of static analysis
-> to implement and it's the way most kernel error handling is written.
-> 
->> If it's because the static
->> checker can't look beyond the function scope then this would be bad news
->> since on the "success" path the firmware will stick around until
->> p54spi_remove().
-> 
-> Presumably Christophe found this bug with static analysis already but
+> Signed-off-by: Lin Feng <linf@wangsu.com>
 
-True, I use a coccinelle script that looks at functions called in 
-.remove() functions that are not called in what looks like an error 
-handling path in the corresponding probe.
+Applied to cgroup/for-5.20.
 
-> my guess is that it has a lot of false positives?
+Thanks.
 
-This is SOOOO true !
-The output is 23k LoC, mostly false positive!
-
-In fact I only checks the diff between the outputs of my coccinelle 
-script from time to time.
-
-Looking at only the diff, most of the false positives get ignored and I 
-manage to spot ~5-10 issues of this kind in each dev cycle in new code.
-
-CJ
-
-> 
-> Eventually the leak in the probe function would be found with static
-> analysis as well.  The truth is that there are a lot of leaks so I'm
-> already a bit overwhelmed fixing the ones that I know about.
-> 
-> It would be fairly simple to make a high quality resource leak checker
-> which is specific to probe functions.  But the thing is that leaks in
-> probe functions are not really exploitable.  Also some devices are
-> needed for the system to boot so often the devs don't care about about
-> cleaning up...  My motivation is low.
-> 
-> regards,
-> dan carpenter
-> 
-> 
-
+-- 
+tejun

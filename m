@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2D454EA56
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D99A54EA62
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378273AbiFPTvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
+        id S1378291AbiFPTxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiFPTva (ORCPT
+        with ESMTP id S1378437AbiFPTx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:51:30 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882952B0B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:51:25 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-f2a4c51c45so3106532fac.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:51:25 -0700 (PDT)
+        Thu, 16 Jun 2022 15:53:28 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C046046C83
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:53:27 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id v143so3039917oie.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HTgpJSeP+XwifnYxDA/LJk/7XOzXmGLk6CrRWFbkrjY=;
-        b=XkFXXNErM+yRGdy+qDtbkmX+4VEZ5m9qHKugCJbfJNdgl3ve0jWy/+F4tTXu32KdUs
-         ZlmzzkfaIykxgSklCoJEWA4BXMJezfChe7fTAG3y+gNO0A3Prjdi7G7ftrJ1fMW4Chtu
-         Ur8b5KwGC2vFzJcnLOOxos3vYSElw5q+r2fhE=
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=EfwlzFckWlUMOMsTP0CL3PI+ky24pigsEudIsOwrRdI=;
+        b=XoPuikzI8T2Enhg9yfnoUEsHSfpocokh8nllyr1EvKnLHKHH4KdJvmE92GdcBXQTqL
+         SIqH+LyXNQuPeYMKv2+GgRBjzAY/Wo2nXdujrfOBqa18SykwVVb8o7J2SD1N1Zyulv6U
+         U7cG9kZdpphOzt4EmU15Cpd2aKe9vUoP7oJTw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=HTgpJSeP+XwifnYxDA/LJk/7XOzXmGLk6CrRWFbkrjY=;
-        b=sg2GXWWCR3zC5VLjIl1jDVKfwPagLketj4k+rBSpe94g5u4J4AyXhACH/2fA7CPWwT
-         Wg/55hzt65x7/ZLmIDb6J2SxaFgPao/14wgo8JOmFEHy8ARvFg5chpkg2ZWG32vbnHRA
-         I0JGHgnQYrpaESr7g11tp0cEpvGx2Rwq5FkED5+Nure0V7gOq8cwtWyIRork/oL890AU
-         iD0hM4tJsH0krmeql2EbhYs+652ZIYhkRXz7kT7Y7tuP+Hi2UlB2UKJgAhKWbpR3kRCH
-         GfChh0XMnVAGDzHRlOciJZBEhUWbj79vd/PN16Y8HsubcDanDxkEXjPwAPdx/efx4q73
-         OrnQ==
-X-Gm-Message-State: AJIora8o3sXpvaR4G33Bf0DnmdbrGtTVKR8MlviH5IXtDqVaP3nXFrcP
-        UWzxqDeb7x4srHrabY89FcyRMA==
-X-Google-Smtp-Source: AGRyM1s4uanJHUKKIod6+EwvsNt4/SWBuP00+8jsvXiuD/qtY/XgyCaOaCIlBPonxuNlTwaxAfu3OQ==
-X-Received: by 2002:a05:6870:2385:b0:f2:77a6:797 with SMTP id e5-20020a056870238500b000f277a60797mr3670372oap.257.1655409085231;
-        Thu, 16 Jun 2022 12:51:25 -0700 (PDT)
+        bh=EfwlzFckWlUMOMsTP0CL3PI+ky24pigsEudIsOwrRdI=;
+        b=KjLmmV3gCkcCuBfCrB8r0CBtSxG/DFQevRI3WCT6HCcdpdYzePhrpOoffmMrcFbyrF
+         NQFcx4OV2Pixz1i151vLngTboaNG/sHXaLaIjQ89vTyGbk7J61mEmDopvNT1gC2y/gtR
+         HNqvkRxaIHkC5GibnM2lBzsEa/1WWM2iN1tRd+xNckgnSSZt0VqzpYdrGgjBn0s1ta37
+         9hqVgalDMmJIba4sTk1ZdKJgovlItY+NDa1kxGwYtTuy+Mwp1fx14p382+l0yLJdiQZH
+         9qbrxeaNdGx4ie8M10+keramGxsI379KRD0MM0atCORJ/ewBfYCSNG7pv/iDJzdc8J9G
+         ff1g==
+X-Gm-Message-State: AOAM5322uIgf9TVa/7furMs8vIGgQqnkgmzN0lfLJoLmmhm1CZNmH1hw
+        OHts0rM9YI2SmoeswjxFNoEKaQ==
+X-Google-Smtp-Source: ABdhPJwweF1/2fqbcaZAz1sg2n/7BwBVsvtY3F6NXRJHPRCtaFg6+jab8NKhG/y5uP1KYQQ0ZVdO0w==
+X-Received: by 2002:a05:6808:2003:b0:32e:f319:456f with SMTP id q3-20020a056808200300b0032ef319456fmr8647466oiw.226.1655409207075;
+        Thu, 16 Jun 2022 12:53:27 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p15-20020a9d76cf000000b0060c0c358b8esm1268248otl.3.2022.06.16.12.51.24
+        by smtp.gmail.com with ESMTPSA id z4-20020a056870738400b000f317901b29sm1374116oam.4.2022.06.16.12.53.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 12:51:24 -0700 (PDT)
-Subject: Re: [PATCH] drivers/char/agp: Remove unnecessary variable assignment
- in agp_generic_create_gatt_table()
-To:     Gautam Menghani <gautammenghani201@gmail.com>, airlied@linux.ie
-Cc:     linux-kernel@vger.kernel.org,
+        Thu, 16 Jun 2022 12:53:26 -0700 (PDT)
+Subject: Re: [PATCH V2] selftests/vm: Add protection_keys tests to run_vmtests
+To:     "Shetty, Kalpana" <kalpana.shetty@amd.com>,
+        akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220616181939.225041-1-gautammenghani201@gmail.com>
+References: <20220610090704.296-1-kalpana.shetty@amd.com>
+ <8e7fca3a-096c-7d6c-e43b-9292995ab970@linuxfoundation.org>
+ <e1703fcf-c5e2-70b1-cae2-30330108ad26@amd.com>
+ <2f157493-02ed-4bc8-6624-b7d077c0d5af@linuxfoundation.org>
+ <442c7cb4-7ec5-bf34-b9d6-ce9480b4b491@amd.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <81aaa86d-f963-0265-6a4e-6a6110758b99@linuxfoundation.org>
-Date:   Thu, 16 Jun 2022 13:51:24 -0600
+Message-ID: <b63d3373-0a42-afdc-1f03-875301e9b6c8@linuxfoundation.org>
+Date:   Thu, 16 Jun 2022 13:53:24 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220616181939.225041-1-gautammenghani201@gmail.com>
+In-Reply-To: <442c7cb4-7ec5-bf34-b9d6-ce9480b4b491@amd.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,39 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/22 12:19 PM, Gautam Menghani wrote:
-> Remove unnecessary variable assignment in the function
-> agp_generic_create_gatt_table(). This fixes the clang scan warnings:
+On 6/15/22 6:04 AM, Shetty, Kalpana wrote:
 > 
-> warning: Value stored to 'page_order' is never read [deadcode.DeadStores]
->          page_order = num_entries = 0;
+> On 6/14/2022 10:50 PM, Shuah Khan wrote:
+>> On 6/14/22 6:15 AM, Shetty, Kalpana wrote:
+>>>
+>>> On 6/14/2022 3:14 AM, Shuah Khan wrote:
+>>>> On 6/10/22 3:07 AM, Kalpana Shetty wrote:
+>>>>> Adding "protected_keys" tests to "run_vmtests.sh" would help out to run all VM related tests
+>>>>> from a single shell script.
+>>>>>
+>>>>
+>>>> Makes sense - can you explain why you can't just run
+>>>> protection_keys_32 without checks? 
+>>>
+>>> Yes; we can run protection_keys_32 without check.
+>>>
+>>>
+>>>> Why are you checking for VADDR64? 
+>>>
+>>> The check is added to ensure if the system is in 64-bit mode before executing 64-bit binary.
+>>>
+>>>
+>>
+>> Okay. protection_keys_32 will only be built on 32-bit system and.
+>> protection_keys_64 on 64-bit system.
 > 
-> warning: Although the value stored to 'num_entries' is used in the
-> enclosing expression, the value is never actually read from 'num_entries'
-> [deadcode.DeadStores]
+> On 64-bit system, we get both 32-bit and 64-bit binary.
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-> ---
->   drivers/char/agp/generic.c | 1 -
->   1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/char/agp/generic.c b/drivers/char/agp/generic.c
-> index 3ffbb1c80c5c..046ef61132f6 100644
-> --- a/drivers/char/agp/generic.c
-> +++ b/drivers/char/agp/generic.c
-> @@ -864,7 +864,6 @@ int agp_generic_create_gatt_table(struct agp_bridge_data *bridge)
->   	table = NULL;
->   	i = bridge->aperture_size_idx;
->   	temp = bridge->current_size;
-> -	page_order = num_entries = 0;
+>>
+>> Won't it be better to check if binary exists and run either _32 or
+>> _64 instead of checking for VADDR64?
+> 
+> makes sense;
+> 
+> In this case on 64-bit platform we would run both _32 and _64 and this should be fine.
+> 
+> 
 
-It would be safe to initialize page_order and num_entries when
-they are declared a few lines above.
-
->   
->   	if (bridge->driver->size_type != FIXED_APER_SIZE) {
->   		do {
-> 
+Okay - send v3 with the change.
 
 thanks,
 -- Shuah

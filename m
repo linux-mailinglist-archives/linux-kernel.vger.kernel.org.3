@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F28C54E88D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFEC54E890
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378276AbiFPRTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 13:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S1378215AbiFPRTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 13:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378275AbiFPRSt (ORCPT
+        with ESMTP id S1378067AbiFPRTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 13:18:49 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901624AE0D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:18:47 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id r5so1831444pgr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tx3qhTHSwY8LHXDagQrNOOhwtj4vpldafKf967ywksA=;
-        b=BQgdl2AtVbmbqGhETU/fDbUSCB3QQqWvAxl5b7UCZYhymn8uaP2rVq7BiavS876oZ1
-         KVuTCgA6ZFDJeRqMwkFMUbptQ6NmaAPwPyFYB5Cl3Lev6gzVfEIZ15VX6VfC728395Yb
-         cqwPWlCwRdPhj1d5kHF6EfExZYkitf93iIENY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tx3qhTHSwY8LHXDagQrNOOhwtj4vpldafKf967ywksA=;
-        b=dywmcFdqq+2Lv7A1aYI6ix9Cz4eanlsJHxXB+mgEBelZC2V1xrXORWrPOtZn2dToEE
-         /eI+fdp4DPvbTmCzSztpiny4FcMfWsdz1ndrjgBBsMPbF7V7FYY3nqbEYZ/2exkkl8C9
-         RgPVFp6D1zsJSVts1DuP5ciNwNbH4eiWeUB9/4JCb9qa/Z+5ql++OSIzgehMZCGxMZW+
-         /YDeikVgN0gSMZbk6NNgg7oL2NWPlb9ABbyga8yTtd+bNTljPo1/AagJ8KgLBIXVGaTC
-         la6rO/6xXzM5fFRWBdGGxYZyyv30EE1lPHF26kZ/nTkqfHzbJSvrOIK8IDlajT5RY2fK
-         9h+w==
-X-Gm-Message-State: AJIora/OxORJ0O/DGQVyHpgz+CAbyCQ/+5gatKGZBsd5ZOajlDCqjeIh
-        nhWt3BdNrOF6Zm8zbrRaXYueKfvMhL38Ag==
-X-Google-Smtp-Source: AGRyM1vzJR68Jz346hm9ECnS+CsIJwfDvxNyYjLwwb8AFTyXPUw2rkQYlOFWN1yAlApJuXR9ToYqSQ==
-X-Received: by 2002:a65:6c08:0:b0:3f2:6a6a:98d with SMTP id y8-20020a656c08000000b003f26a6a098dmr5326283pgu.30.1655399927063;
-        Thu, 16 Jun 2022 10:18:47 -0700 (PDT)
-Received: from localhost ([2620:15c:202:200:46bc:126f:64c1:579a])
-        by smtp.gmail.com with UTF8SMTPSA id f5-20020aa79685000000b0050dc7628196sm2010927pfk.112.2022.06.16.10.18.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 10:18:46 -0700 (PDT)
-From:   Micah Morton <mortonm@chromium.org>
-To:     linux-security-module@vger.kernel.org
-Cc:     keescook@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        linux-kernel@vger.kernel.org, Micah Morton <mortonm@chromium.org>
-Subject: [PATCH 3/3] LSM: SafeSetID: add setgroups() testing to selftest
-Date:   Thu, 16 Jun 2022 10:18:43 -0700
-Message-Id: <20220616171843.783340-1-mortonm@chromium.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        Thu, 16 Jun 2022 13:19:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E130248E6E;
+        Thu, 16 Jun 2022 10:19:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00B4C61AA0;
+        Thu, 16 Jun 2022 17:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800D0C34114;
+        Thu, 16 Jun 2022 17:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655399971;
+        bh=dVuVhPmEkC9puN9Rze1DZ34ZIAYl9igVaP1wUSkTnZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UvRzKL82Afj1pQ+Lgxowkk0MRYXG+iBGz/N9ndvOmSmZRkK32/FmzJOgPfyetmDWq
+         o/xgytYUn/+3nkWCrb5RhgDP8qZr6a9USvDoD701VgSJtNg4ldTJR6vGCfyHa7+oFf
+         Dim3Ym/VX/LHRt7gZrV52SmaJ5ZmqLU4/vNyhqqypQDHL9bU9vTRygB5L/Pmm8MsN6
+         uemMupVS1yMnFkCyTNCucZt6RZawSdxdxfpF4pJGQr8kGiMcM8046i++o4LV7ohc7F
+         YDUXJhyEyTLAaNyN1GKBvNhg15bqcX4/P4heFUSSYHuiI4Ee4dFSYcfykA+r/5fTsd
+         zat27tGVbKOgQ==
+Date:   Thu, 16 Jun 2022 10:19:28 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] hinic: Replace memcpy() with direct assignment
+Message-ID: <YqtmIIAOH7uRNAZ5@dev-arch.thelio-3990X>
+References: <20220616052312.292861-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616052312.292861-1-keescook@chromium.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,100 +63,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Selftest already has support for testing UID and GID transitions.
+On Wed, Jun 15, 2022 at 10:23:12PM -0700, Kees Cook wrote:
+> Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
+> here for calculating the size of the destination buffer (0x10 instead of
+> 0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
+> the source and dest being struct fw_section_info_st, so the memcpy should
+> be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
+> responsibility to figure out.
+> 
+> Avoid the whole thing and just do a direct assignment. This results in
+> no change to the executable code.
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Jiri Pirko <jiri@nvidia.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Simon Horman <simon.horman@corigine.com>
+> Cc: netdev@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1592
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Signed-off-by: Micah Morton <mortonm@chromium.org>
----
- .../selftests/safesetid/safesetid-test.c      | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
-diff --git a/tools/testing/selftests/safesetid/safesetid-test.c b/tools/testing/selftests/safesetid/safesetid-test.c
-index a653c47a4ab5..eb9bf0aee951 100644
---- a/tools/testing/selftests/safesetid/safesetid-test.c
-+++ b/tools/testing/selftests/safesetid/safesetid-test.c
-@@ -375,6 +375,71 @@ static void test_setgid(gid_t child_gid, bool expect_success)
- 	die("should not reach here\n");
- }
- 
-+static void test_setgroups(gid_t* child_groups, size_t len, bool expect_success)
-+{
-+	pid_t cpid, w;
-+	int wstatus;
-+	gid_t groupset[len];
-+	int i, j;
-+
-+	cpid = fork();
-+	if (cpid == -1) {
-+		die("fork\n");
-+	}
-+
-+	if (cpid == 0) {	    /* Code executed by child */
-+		if (setgroups(len, child_groups) != 0)
-+			exit(EXIT_FAILURE);
-+		if (getgroups(len, groupset) != len)
-+			exit(EXIT_FAILURE);
-+		for (i = 0; i < len; i++) {
-+			for (j = 0; j < len; j++) {
-+				if (child_groups[i] == groupset[j])
-+					break;
-+				if (j == len - 1)
-+					exit(EXIT_FAILURE);
-+			}
-+		}
-+		exit(EXIT_SUCCESS);
-+	} else {		 /* Code executed by parent */
-+		do {
-+			w = waitpid(cpid, &wstatus, WUNTRACED | WCONTINUED);
-+			if (w == -1) {
-+				die("waitpid\n");
-+			}
-+
-+			if (WIFEXITED(wstatus)) {
-+				if (WEXITSTATUS(wstatus) == EXIT_SUCCESS) {
-+					if (expect_success) {
-+						return;
-+					} else {
-+						die("unexpected success\n");
-+					}
-+				} else {
-+					if (expect_success) {
-+						die("unexpected failure\n");
-+					} else {
-+						return;
-+					}
-+				}
-+			} else if (WIFSIGNALED(wstatus)) {
-+				if (WTERMSIG(wstatus) == 9) {
-+					if (expect_success)
-+						die("killed unexpectedly\n");
-+					else
-+						return;
-+				} else {
-+					die("unexpected signal: %d\n", wstatus);
-+				}
-+			} else {
-+				die("unexpected status: %d\n", wstatus);
-+			}
-+		} while (!WIFEXITED(wstatus) && !WIFSIGNALED(wstatus));
-+	}
-+
-+	die("should not reach here\n");
-+}
-+
- 
- static void ensure_users_exist(void)
- {
-@@ -452,6 +517,10 @@ int main(int argc, char **argv)
- 	test_setgid(ALLOWED_CHILD2_UGID, true);
- 	test_setgid(NO_POLICY_UGID, false);
- 
-+	gid_t allowed_supp_groups[2] = {ALLOWED_CHILD1_UGID, ALLOWED_CHILD2_UGID};
-+	gid_t disallowed_supp_groups[2] = {ROOT_UGID, NO_POLICY_UGID};
-+	test_setgroups(allowed_supp_groups, 2, true);
-+	test_setgroups(disallowed_supp_groups, 2, false);
- 
- 	if (!test_userns(false)) {
- 		die("test_userns worked when it should fail\n");
--- 
-2.36.1.476.g0c4daa206d-goog
-
+> ---
+>  drivers/net/ethernet/huawei/hinic/hinic_devlink.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> index 60ae8bfc5f69..1749d26f4bef 100644
+> --- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> +++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> @@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
+>  
+>  	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
+>  		len += fw_image->fw_section_info[i].fw_section_len;
+> -		memcpy(&host_image->image_section_info[i],
+> -		       &fw_image->fw_section_info[i],
+> -		       sizeof(struct fw_section_info_st));
+> +		host_image->image_section_info[i] = fw_image->fw_section_info[i];
+>  	}
+>  
+>  	if (len != fw_image->fw_len ||
+> -- 
+> 2.32.0
+> 

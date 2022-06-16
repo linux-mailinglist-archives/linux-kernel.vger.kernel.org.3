@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F33254E838
+	by mail.lfdr.de (Postfix) with ESMTP id B10C254E83A
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiFPQ7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S245031AbiFPQ7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238477AbiFPQ63 (ORCPT
+        with ESMTP id S238989AbiFPQ6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:58:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058363EA9B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:58:28 -0700 (PDT)
+        Thu, 16 Jun 2022 12:58:31 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995313B546
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655398708; x=1686934708;
+  t=1655398710; x=1686934710;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EjSoLutApiOR+f9e/jhmXXKKWXEemXiZeF3zc0lqGL0=;
-  b=bVj6teIAmVfE4AiaVXzJujNX2rWmXpIH6S6o0nFcAEocZCMSavpLvukW
-   6Hv4pyZEnEJc1Iplh4GqSvdlb7BgSXgcAAL3ZpYBJFvOh31Gv5uyKnpkt
-   qGoAdPMKqBW8+g1MllnwCW4UMK8EKGckgVhrDhTVbZBCIUKfmhLZe+pG+
-   UtjKXSbQLuT4IB4KTNxPEBcuQBMFEHjBWBJWJlbwZWJyaMEUAcwBNiNMD
-   THIeJlvSJMJ9hTsNMcavprTYErFSrlTL9Yrcs6RW1MJJnOmvzY6uEkOhO
-   LVvZcDRqVDj9uqHknV44ElX0V71O4ijAAFTRBbXMKuSYgQTLSDAOszbbd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279352784"
+  bh=cHdpBl+6Hl0GMaotNRwtTh0W0TP2VPq870wRr3FppS4=;
+  b=n70vu+50tG+7ZM2z2qESTeMAIhes/7z3QUVN044sWWLqWcslDSg4RFNg
+   qNjgIPLoiMOUo23lSwKDG3+ItmAcxBQkpPRJRr0TXxR06q51HJrrCRO2U
+   FTTzZKPMSKs7BNDxzUke5tL7/qqgjinInkeNdtJft87gYofeooP0XVhGE
+   +syalmrEAnWPCEtIh4xsVR4rCFa1gTXLvCM3qrusKJPwYhsd9+/qrsykO
+   xb73V2HQXYTZTbczDo/UE8uqO3fTqPJnu8hSREDukjUFlMw9ONpz9o95/
+   lN8i4jsHjBgPMHYLI78WW/YC/H7TYJHLVKuvW93rGcXPUP1iOV53aWW03
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259756090"
 X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="279352784"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 09:58:28 -0700
+   d="scan'208";a="259756090"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 09:58:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="583704657"
+   d="scan'208";a="589725023"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2022 09:58:27 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 09:58:29 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6DAD61D0; Thu, 16 Jun 2022 19:58:31 +0300 (EEST)
+        id 81D2C4BA; Thu, 16 Jun 2022 19:58:31 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andy@kernel.org>, Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH v1 05/11] mfd: intel_soc_pmic_bxtwc: Extend use of temporary variable for struct device
-Date:   Thu, 16 Jun 2022 19:58:17 +0300
-Message-Id: <20220616165823.4919-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 06/11] mfd: intel_soc_pmic_bxtwc: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr() etc
+Date:   Thu, 16 Jun 2022 19:58:18 +0300
+Message-Id: <20220616165823.4919-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
 References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,73 +62,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend use of temporary variable for struct device to make code neater.
+Letting the compiler remove these functions when the kernel is built
+without CONFIG_PM_SLEEP support is simpler and less error prone than the
+use of #ifdef based kernel configuration guards.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/mfd/intel_soc_pmic_bxtwc.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/mfd/intel_soc_pmic_bxtwc.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-index 576fe55bd4d4..a211c70d532b 100644
+index a211c70d532b..6e4c2ca47d82 100644
 --- a/drivers/mfd/intel_soc_pmic_bxtwc.c
 +++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-@@ -431,19 +431,17 @@ static int bxtwc_probe(struct platform_device *pdev)
+@@ -544,7 +544,6 @@ static void bxtwc_shutdown(struct platform_device *pdev)
+ 	disable_irq(pmic->irq);
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int bxtwc_suspend(struct device *dev)
  {
- 	struct device *dev = &pdev->dev;
- 	int ret;
--	acpi_handle handle;
- 	acpi_status status;
- 	unsigned long long hrv;
- 	struct intel_soc_pmic *pmic;
+ 	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+@@ -561,8 +560,8 @@ static int bxtwc_resume(struct device *dev)
+ 	enable_irq(pmic->irq);
+ 	return 0;
+ }
+-#endif
+-static SIMPLE_DEV_PM_OPS(bxtwc_pm_ops, bxtwc_suspend, bxtwc_resume);
++
++static DEFINE_SIMPLE_DEV_PM_OPS(bxtwc_pm_ops, bxtwc_suspend, bxtwc_resume);
  
--	handle = ACPI_HANDLE(&pdev->dev);
--	status = acpi_evaluate_integer(handle, "_HRV", NULL, &hrv);
-+	status = acpi_evaluate_integer(ACPI_HANDLE(dev), "_HRV", NULL, &hrv);
- 	if (ACPI_FAILURE(status))
- 		return dev_err_probe(dev, -ENODEV, "Failed to get PMIC hardware revision\n");
- 	if (hrv != BROXTON_PMIC_WC_HRV)
- 		return dev_err_probe(dev, -ENODEV, "Invalid PMIC hardware revision: %llu\n", hrv);
- 
--	pmic = devm_kzalloc(&pdev->dev, sizeof(*pmic), GFP_KERNEL);
-+	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
- 	if (!pmic)
- 		return -ENOMEM;
- 
-@@ -453,18 +451,17 @@ static int bxtwc_probe(struct platform_device *pdev)
- 	pmic->irq = ret;
- 
- 	platform_set_drvdata(pdev, pmic);
--	pmic->dev = &pdev->dev;
-+	pmic->dev = dev;
- 
--	pmic->scu = devm_intel_scu_ipc_dev_get(&pdev->dev);
-+	pmic->scu = devm_intel_scu_ipc_dev_get(dev);
- 	if (!pmic->scu)
- 		return -EPROBE_DEFER;
- 
--	pmic->regmap = devm_regmap_init(&pdev->dev, NULL, pmic,
--					&bxtwc_regmap_config);
-+	pmic->regmap = devm_regmap_init(dev, NULL, pmic, &bxtwc_regmap_config);
- 	if (IS_ERR(pmic->regmap))
- 		return dev_err_probe(dev, PTR_ERR(pmic->regmap), "Failed to initialise regmap\n");
- 
--	ret = devm_regmap_add_irq_chip(&pdev->dev, pmic->regmap, pmic->irq,
-+	ret = devm_regmap_add_irq_chip(dev, pmic->regmap, pmic->irq,
- 				       IRQF_ONESHOT | IRQF_SHARED,
- 				       0, &bxtwc_regmap_irq_chip,
- 				       &pmic->irq_chip_data);
-@@ -523,8 +520,8 @@ static int bxtwc_probe(struct platform_device *pdev)
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to add CRIT IRQ chip\n");
- 
--	ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE, bxt_wc_dev,
--				   ARRAY_SIZE(bxt_wc_dev), NULL, 0, NULL);
-+	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, bxt_wc_dev, ARRAY_SIZE(bxt_wc_dev),
-+				   NULL, 0, NULL);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to add devices\n");
- 
+ static const struct acpi_device_id bxtwc_acpi_ids[] = {
+ 	{ "INT34D3", },
+@@ -575,7 +574,7 @@ static struct platform_driver bxtwc_driver = {
+ 	.shutdown = bxtwc_shutdown,
+ 	.driver	= {
+ 		.name	= "BXTWC PMIC",
+-		.pm     = &bxtwc_pm_ops,
++		.pm     = pm_sleep_ptr(&bxtwc_pm_ops),
+ 		.acpi_match_table = ACPI_PTR(bxtwc_acpi_ids),
+ 		.dev_groups = bxtwc_groups,
+ 	},
 -- 
 2.35.1
 

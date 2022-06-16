@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA73A54EA7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3C354EA83
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378387AbiFPUFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        id S1377626AbiFPUFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbiFPUFS (ORCPT
+        with ESMTP id S233414AbiFPUFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:05:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250D74E3B9;
-        Thu, 16 Jun 2022 13:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655409918; x=1686945918;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v8nKn3u5HYJV1okOhvCdZ6oJQPkGSyi/IKm0G/s0MXY=;
-  b=n1MTvZ9oclK3QvhFS4daltr6uY7xtpB1Ps+yc0WSUMAWNbtsgFqCIKzV
-   eOuQ6a1MMJg70Cp0p0Sf4SafEFcSPJZy8s7tTGrdyTHjmo8z8KBjtuTv0
-   M4YBDnSL77sY+bcH5QVcpPEeM/fMRNLudveAfdKLpfhO5MBAMXJgXdQmS
-   lRElJNdS4YVEY2/4frzDg4Z6TlL1VHwzKlH8sRMHzDd0GD9fXz76dgmNB
-   S6lx9QE9FodGe5tY2aweoaADlDYE3rO06uDOOclij8uDMzirKadQyqgkw
-   5qTpXK5p3LDDBr7Sro+jBjutiIBko0+NzjqcFcqd+aUbtenuj2sCz9geU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278136270"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278136270"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:05:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="589791945"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 13:05:13 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1vjs-000Oj3-Vy;
-        Thu, 16 Jun 2022 20:05:12 +0000
-Date:   Fri, 17 Jun 2022 04:04:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v8 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
-Message-ID: <202206170337.0kCTfR63-lkp@intel.com>
-References: <20220615090259.1121405-2-quan@os.amperecomputing.com>
+        Thu, 16 Jun 2022 16:05:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E8D5A2D6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:05:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 277E561D82
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86742C34114;
+        Thu, 16 Jun 2022 20:05:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655409948;
+        bh=CIhv/QiVwibyHsK/zhUQ8FSNF/K+nRncJ5yBX5akIRU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XyI9B0xloEjiw8cfvPfIH0y4F6dKmXhvwLgTmWZNFsMTQ2fycP1ORfpJwiCPYavUJ
+         EprwSBq0RVQKkYn7hspobpnu/SVKA30ihY6gQ48ufxi2EMU+a/+ovcwMiiGxEV6MAL
+         GCBtmMrLZfGT5jpOMXrC8GgUS5EsrFAYZVYAS/J0yHboV/Qpty8kZTuG4xYhH5J0oY
+         F9T1BgdZdft5/GIJy8Ld7OV9CoB/uR4DmNAoTOutOUIdkDWeGdarkcGfxscF/b8L/Z
+         0/GBXVzdLT3W2uBW3gEc6oHPOoIWvnw4sCcpWzgaNPmnQuXJ+a4dhmJJCc1Sm7ee9T
+         T28tY+QmNHS7A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 23E685C0531; Thu, 16 Jun 2022 13:05:48 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 13:05:48 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:pmladek.2022.06.15a] BUILD SUCCESS WITH WARNING
+ 0ba7324b44282870af740a5a121add62c7f5f730
+Message-ID: <20220616200548.GT1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <62ab8587.j8Ju7IuzIFZk71FR%lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615090259.1121405-2-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <62ab8587.j8Ju7IuzIFZk71FR%lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quan,
+On Fri, Jun 17, 2022 at 03:33:27AM +0800, kernel test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git pmladek.2022.06.15a
+> branch HEAD: 0ba7324b44282870af740a5a121add62c7f5f730  printk: Wait for the global console lock when the system is going down
+> 
+> Warning reports:
+> 
+> https://lore.kernel.org/lkml/202206160411.v3iL3YC0-lkp@intel.com
+> https://lore.kernel.org/llvm/202206160421.Gnl3tpxc-lkp@intel.com
+> 
+> Warning: (recently discovered and may have been fixed)
+> 
+> vmlinux.o: warning: objtool: __ct_user_enter+0x7f: call to __kasan_check_read() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to __kasan_check_read() leaves .noinstr.text section
 
-I love your patch! Yet something to improve:
+Here is the alleged fix, and thank you for testing!
 
-[auto build test ERROR on cminyard-ipmi/for-next]
-[also build test ERROR on wsa/i2c/for-next v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+							Thanx, Paul
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Quan-Nguyen/Add-SSIF-BMC-driver/20220615-170539
-base:   https://github.com/cminyard/linux-ipmi for-next
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220617/202206170337.0kCTfR63-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0feb5f0351d090633e7522dbec22de419a04b85f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Quan-Nguyen/Add-SSIF-BMC-driver/20220615-170539
-        git checkout 0feb5f0351d090633e7522dbec22de419a04b85f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+------------------------------------------------------------------------
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+commit 571252796c089880b804835f6cfc9c3da3ae8c4f
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Thu Jun 16 09:30:37 2022 -0700
 
-All errors (new ones prefixed by >>):
+    context_tracking: Use arch_atomic_read() in __ct_state for KASAN
+    
+    Context tracking's __ct_state() function can be invoked from noinstr state
+    where RCU is not watching.  This means that its use of atomic_read()
+    causes KASAN to invoke the non-noinstr __kasan_check_read() function
+    from the noinstr function __ct_state().  This is problematic because
+    someone tracing the __kasan_check_read() function could get a nasty
+    surprise because of RCU not watching.
+    
+    This commit therefore replaces the __ct_state() function's use of
+    atomic_read() with arch_atomic_read(), which KASAN does not attempt to
+    add instrumention to.
+    
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Frederic Weisbecker <frederic@kernel.org>
+    Cc: Marco Elver <elver@google.com>
+    Reviewed-by: Marco Elver <elver@google.com>
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/ipmi_ssif_bmc.h:13:2: error: unknown type name '__u8'
-           __u8    payload[IPMI_SSIF_PAYLOAD_MAX];
-           ^
-   1 error generated.
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 0aecc07fb4f50..81c51e5f03143 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -49,7 +49,7 @@ DECLARE_PER_CPU(struct context_tracking, context_tracking);
+ 
+ static __always_inline int __ct_state(void)
+ {
+-	return atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
++	return arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
+ }
+ #endif
+ 

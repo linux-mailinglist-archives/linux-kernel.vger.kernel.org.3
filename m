@@ -2,110 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565FD54D7AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3626654D7A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351133AbiFPB50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 21:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S1357326AbiFPB52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 21:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbiFPB5Z (ORCPT
+        with ESMTP id S244252AbiFPB50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 21:57:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442C659092;
-        Wed, 15 Jun 2022 18:57:24 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LNlcW25ZlzgZQX;
-        Thu, 16 Jun 2022 09:55:23 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 16 Jun 2022 09:56:56 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 16 Jun 2022 09:56:55 +0800
-Subject: Re: [PATCH 5.10 00/11] 5.10.123-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220614183719.878453780@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <53a93564-7f2b-e439-db8a-a37396c73b55@huawei.com>
-Date:   Thu, 16 Jun 2022 09:56:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 15 Jun 2022 21:57:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E507590A0;
+        Wed, 15 Jun 2022 18:57:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34300B821FA;
+        Thu, 16 Jun 2022 01:57:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C18C3411A;
+        Thu, 16 Jun 2022 01:57:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655344642;
+        bh=cmn9Qs4S5xB8Dc9eJVr9KNNDJY4P8CuibZYJMPmTGnw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GmqIKHQcyD60oBmidK2q7gFaWhZIlHuvG1iwv3Hd8pbBitarzwuVmjkfnoW3L+rpw
+         7EQHlRE/MTVDnIYPZH0ddxN7uBCw/JeRZfp61hMgmGaYy4j/c88p21PTMU/H+RLA3+
+         74Ed0qtQc4TKGtlijb79rhMrPXLZXbVgvJ3O90OpQO40atbI9SysJyKtyeRBJkJlfq
+         R0/+n6e+/0Gql/L1SFJJuMau7niq2xFgmnnqg4zU4WCIoUEcYU6hO9XOelvVwdfwxU
+         l8ZQRW6yYqskuH2lICVR4VyPFlyUlYvQ6HQjVVjN55eAdYAYnhG6pfGzTK1/e1MzSP
+         MiBb4T659tlpg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220614183719.878453780@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5e557269561d62972f8e44490bf7a6f97088f56b.camel@mediatek.com>
+References: <20220523093346.28493-1-rex-bc.chen@mediatek.com> <5e557269561d62972f8e44490bf7a6f97088f56b.camel@mediatek.com>
+Subject: Re: [RESEND v8 00/19] Cleanup MediaTek clk reset drivers and support SoCs
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, chun-jie.chen@mediatek.com,
+        wenst@chromium.org, runyang.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, robh+dt@kernel.org
+Date:   Wed, 15 Jun 2022 18:57:19 -0700
+User-Agent: alot/0.10
+Message-Id: <20220616015722.C8C18C3411A@smtp.kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Rex-BC Chen (2022-06-12 22:26:52)
+> I also pushed another series to move these drivers to drivers/reset
+> folder[1], but I think we still can let this series merged.
 
+Sure. I merged everything except the DTS patches.
 
-On 2022/6/15 2:40, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.123 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.123-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+>=20
+> If you have any comments for [1], please let me know.
 
-Tested on arm64 and x86 for 5.10.123-rc1,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.10.y
-Version: 5.10.123-rc1
-Commit: f67ea0f670870facb37c20f19e483ec74a2cba63
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9033
-passed: 9033
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9033
-passed: 9033
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+I'll take a look. Thanks.

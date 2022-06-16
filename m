@@ -2,108 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6492154ECAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CB354ECA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378925AbiFPVdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
+        id S1379099AbiFPVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378817AbiFPVdL (ORCPT
+        with ESMTP id S1378601AbiFPVco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:33:11 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9736B3AA6A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:33:10 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id n28so3842237edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=laSJoDIgvQBCTId5pVKj53fMxGvIURwK5+ffKs0ASlY=;
-        b=UBd17f/1SnZchYlExkTEs7FEuYTDz5ujzCzXm/SGFxfc7vQJ4lD7bhjBqiIPj2yGEY
-         OwWwEycnPAU139vVsRVxUyNnf6H75fg5PESXPcSy4hSPmAVLjAgzMN7gutw+N7PP/V/n
-         4Xha3koafKzw6BNAP+dZFpiWU3OKxLzLTXz5t7r/ZXiv/OgndLmncmtxxVKo22qgcomS
-         nTxiiFAiPY6wxRbda4CwsKu1nSWydVfLTtRpNEv6aAzv+AsbfvhPMIOeOhCoOLZPP9Ws
-         w+cmzNI/W2M1sMrVY8ka2YLMDqLl5axbTOql/Vt16eIKZ39AGlUcV6dPfCwO1RUQQdn0
-         B45w==
+        Thu, 16 Jun 2022 17:32:44 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E626D1;
+        Thu, 16 Jun 2022 14:32:43 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id f7so1794925ilr.5;
+        Thu, 16 Jun 2022 14:32:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=laSJoDIgvQBCTId5pVKj53fMxGvIURwK5+ffKs0ASlY=;
-        b=Uld0Xke1rhFbAWyWF6Xr+YGtHfQJlikhN7U48CBpktd9RmJ1+Y4TaLN76hP4nuauOS
-         xujg4RVfYQBV39kamRq6LHoayB8ES2wWS6YIR2MSZm0JozNgIgdlwYI8SwsAPdnP9etc
-         2QD45Q0LyFot4XstXEqlN5Jz631UZrLQcqYyoti6PyFOFAKjeB9IHslS6zHVcpPVpojS
-         S9NqDL5drn8S6OlP5aJ0g/FCBBIsLwDN3ePVRsN1Wildop2Uxd1QF0CDxFpu153bhv6w
-         b1PtYpftxy7zIIA/1x1QiTp1F73TPJ5osBI+D8Kt38MmKDDhA6rlhLCsfS08zruxo4Qi
-         YohQ==
-X-Gm-Message-State: AJIora+Ya6lkQUTdI9RCWbg+TS/FZ7c40ta+art621l0MloP0iJCenLD
-        qn+XGwueUHydVpSthVNJD+0=
-X-Google-Smtp-Source: AGRyM1smWRQNfSGi+fNS3fxjPTkk1JtE/FL1CrltkwNtsatE8j54xbfVNS+Jv1BDstvw0sEj54qO3A==
-X-Received: by 2002:aa7:c857:0:b0:433:5c62:ddbc with SMTP id g23-20020aa7c857000000b004335c62ddbcmr8865690edt.218.1655415189047;
-        Thu, 16 Jun 2022 14:33:09 -0700 (PDT)
-Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170906304500b0070f7d1c5a18sm1241230ejd.55.2022.06.16.14.33.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xx/fWVM1inIlnwK4DsJOh2lpmiBQgnzytZ7NtywaYmo=;
+        b=PQSkPUx8pstCvE/JHMcpLlZvtX0T6P8kEeLKocSVem9/jjJFOiDmFvunHEpVpcu2b1
+         mHTvoGOvVuYUX0RPH9genbdT4Mt2QGQmBlVu7mx3/reOl4wVw4CnfuPErmqqGTtAa0L7
+         kzqaVHjpcePEBz7bWzzBkwxxHdAc0IC85tBSzB3+alnuFXAW0bGJdeilEm2kT1dutskI
+         s/6qp5pmuZfxiQPNWE6DY//9O+DlmB8zSMS2dpnYKovQ9wNOILgHE5MKwGDll4pSDEPK
+         ZRgehZtbonHrjoFhCxlpVWZ1pc1iVQG0VKY0JiHwOCjQwjFIXGIcJQgNmFzFdI0VwxN1
+         gYNA==
+X-Gm-Message-State: AJIora8fmZQcmUbnrKXna/X83NcuApwLYkVkm1Kd81bgxLMEIAElEVwd
+        gtYWlaUjM/NsjSlwOFLuZA==
+X-Google-Smtp-Source: AGRyM1vJkCys4NwRVB4CvBh3HsaiE3lPschhZcb/uTPpn6OqhSGR+2BK4ReX7KqBJO6IqkYGLLHQ+w==
+X-Received: by 2002:a05:6e02:1e08:b0:2d3:a866:2f0d with SMTP id g8-20020a056e021e0800b002d3a8662f0dmr3812661ila.277.1655415162666;
+        Thu, 16 Jun 2022 14:32:42 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n17-20020a027151000000b0032b3a7817e9sm1334411jaf.173.2022.06.16.14.32.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 14:33:08 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, wens@csie.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH] drm/sun4i: Add DMA mask and segment size
-Date:   Thu, 16 Jun 2022 23:32:40 +0200
-Message-Id: <20220616213240.392041-1-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 16 Jun 2022 14:32:42 -0700 (PDT)
+Received: (nullmailer pid 4030651 invoked by uid 1000);
+        Thu, 16 Jun 2022 21:32:41 -0000
+Date:   Thu, 16 Jun 2022 15:32:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: dma: add additional pbus reset to
+ qcom,adm
+Message-ID: <20220616213241.GD3991754-robh@kernel.org>
+References: <20220615235404.3457-1-ansuelsmth@gmail.com>
+ <20220615235404.3457-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615235404.3457-2-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel occasionally complains that there is mismatch in segment size
-when trying to render HW decoded videos and rendering them directly with
-sun4i DRM driver.
+On Thu, Jun 16, 2022 at 01:54:04AM +0200, Christian Marangi wrote:
+> qcom,adm require an additional reset for the pbus line. Add this missing
+> reset to match the current implementation on ipq806x.dtsi.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/dma/qcom,adm.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Fix that by setting DMA mask and segment size.
-
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/gpu/drm/sun4i/sun4i_drv.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-index 275f7e4a03ae..83f4e87f77f6 100644
---- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/component.h>
-+#include <linux/dma-mapping.h>
- #include <linux/kfifo.h>
- #include <linux/module.h>
- #include <linux/of_graph.h>
-@@ -367,6 +368,9 @@ static int sun4i_drv_probe(struct platform_device *pdev)
- 
- 	INIT_KFIFO(list.fifo);
- 
-+	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-+
- 	for (i = 0;; i++) {
- 		struct device_node *pipeline = of_parse_phandle(np,
- 								"allwinner,pipelines",
--- 
-2.36.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>

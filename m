@@ -2,79 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E83654EDDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4440854EDEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379378AbiFPXYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 19:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S1379287AbiFPXaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378900AbiFPXY0 (ORCPT
+        with ESMTP id S232177AbiFPX37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 19:24:26 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A66377D6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:24:22 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id h8so2983252iof.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:24:22 -0700 (PDT)
+        Thu, 16 Jun 2022 19:29:59 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EA55FF3E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:29:57 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id j39so2602756vsv.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:29:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=u96BVz1Qua6XT1OJDIQTuU1phclFGfQLvNlbRU9Ucew=;
-        b=KgLkLfGPPGdlMWK4pn22+nMzfZnwsIcLCRw+f/0sNBmk9QQL/Qxto9VWJqFVFY2yNH
-         KyNqWrBmZTHRP57w3AXgxoqwEFI7E+Ff7Gq9b2xHVbubjUXJroRkU/8WM6/TyAv8Ytcc
-         GYwPGtWZrDi/h0g5iqyLNExPedMZSicws7pO4=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jTQu5pe6Zf0+qj19U3vviuhopcu1lsdgelMDE7rhu0Q=;
+        b=tOonm2OIkZMBU/bLGDvI7kAER+D+N/KWwhs+Yk5bDeqcXoDUEirgvpt7Q9JysPsHYA
+         6LdxZobaPlu7v03YFmDCMAW3+t/XzxD6Xnuh1H32fIjUF1dv66ru8JuQDhuNJA85y/tj
+         jUSf0Exxifrnke77ACFpsYgc3m4l6e17IxPmoPpEu9D7icFToolqS1hjIg6MAgJCK8cp
+         jrsf932jCh/QooZfhdpc2EZ8SlIVNhVQSS5E/hWXAEzlhkomzv5h9DxTefjNLVA77OYa
+         eXlnuSbNI3ELZ1clQiuOgRYCOLMy/JcYAv+YY1F9ryL4RGz/7hVzY8LTHm4fjfAnF4iQ
+         ZXzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=u96BVz1Qua6XT1OJDIQTuU1phclFGfQLvNlbRU9Ucew=;
-        b=TwBf6F2AppB2Pqw6qzmfGUh7Pv3LsXtqGfFn4K0myztwXyghWPIQBx9aN0D+tLkUUU
-         DeO93iZgb/z5QbvfbaZ7wh1qu6LZs0Xa9FuvvaAlkvpilWMB+ULZpf5j3n/QjzEXcm7d
-         25SYfUuxOj8jn3B7Aue2W0EV3KGrTkZEqmp/PA5sFoS0sWOKvKgX8MN37h1VaVCw6xdM
-         bUJNu7A/ZHbHjRO59bqMAJ0rCIX11eA3S//NNRkLHF5tPCMZXYPugCLkzZeYJ4fUB4GQ
-         slHKC6IWy0vhMLe46BNbQOZvcVXCWTFfdvqAs5ge8NxQvTPZtP8MAnFXynmIYCPC6ICq
-         PPoA==
-X-Gm-Message-State: AJIora+kzkgbkEAyBDpYjFTL0OECwV114EiPZ5ulTBSd+g9GvqdyjJzl
-        KauWTb4bosOISQkerQrmf5U8gA==
-X-Google-Smtp-Source: AGRyM1tFB91CUBcsjgqyr8dekyVExoN4n981kEWAV3tDRiIo/RAsr5C9W3MMWueFXJY8ksWSfWDsqw==
-X-Received: by 2002:a02:a48b:0:b0:335:e30a:edb0 with SMTP id d11-20020a02a48b000000b00335e30aedb0mr1209237jam.190.1655421861833;
-        Thu, 16 Jun 2022 16:24:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x9-20020a056638010900b00330a4ed20d6sm1451180jao.115.2022.06.16.16.24.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 16:24:21 -0700 (PDT)
-Subject: Re: [PATCH v9 1/2] selftests/x86/xstate: Add xstate signal handling
- test for XSAVE feature
-To:     Pengfei Xu <pengfei.xu@intel.com>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Heng Su <heng.su@intel.com>, Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bae Chang Seok <chang.seok.bae@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1655218544.git.pengfei.xu@intel.com>
- <f750fb183cf13e83cb2a10befacd3707879851ec.1655218544.git.pengfei.xu@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <86f9d913-1041-b52d-0221-3585473239d2@linuxfoundation.org>
-Date:   Thu, 16 Jun 2022 17:24:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jTQu5pe6Zf0+qj19U3vviuhopcu1lsdgelMDE7rhu0Q=;
+        b=bIhlhCwBnfo3cxVcTJuPPkt+rA6MfpFg8uWhJLRLEkjrU3H6FamhDPy8HPa0+tqiOg
+         eBQ3wmbV5yuuj46cvtSVuZG0ubcN3bh6+G2lPynGWR9u9vied015eLHmYltgEMWbvC1S
+         K3JHWjnXDwM5RrdDguG8+v9yuatLPtvBMb7oRJ7M9AmpBi8GQNXX/Dvwncrmme+16QbE
+         sUX2Fs65LYnIwfCRTv5ZrAjdHHrloSoifu3RR9Mow0jY/Juk10x+foelK/5wGLJGxdEz
+         3DFRTccIoNUsgNHVKOq1NuCXP7RGjtMD4JSmR3vMfpGTVffudPAUPwgvfrZA6do8yzFj
+         tZdQ==
+X-Gm-Message-State: AJIora9rxQ7I02IwD2gwAsyu4Z8t85NFg+IbtvOjYqOd3AO5hO/hv/ed
+        bk7U8jesKCfRvW/w4uJseSwDY71tqivRphsb4NKflQ==
+X-Google-Smtp-Source: AGRyM1veGbPT7enA0m3I3+tAnsLBKXsnQLJV3rPbk+ikhnpYHTwYIIIakxBL5WDVTz+5J16Gvq8L0TSQpNlnXCwr6jI=
+X-Received: by 2002:a05:6102:3e23:b0:34b:b6b0:2ae7 with SMTP id
+ j35-20020a0561023e2300b0034bb6b02ae7mr3717280vsv.81.1655422195990; Thu, 16
+ Jun 2022 16:29:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f750fb183cf13e83cb2a10befacd3707879851ec.1655218544.git.pengfei.xu@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220518014632.922072-1-yuzhao@google.com> <20220518014632.922072-8-yuzhao@google.com>
+ <CAGsJ_4yboZEY9OfyujPxBa_AEuGM3OAq5y_L9gvzSMUv70BxeQ@mail.gmail.com>
+ <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
+ <20220607102135.GA32448@willie-the-truck> <CAGsJ_4zGEdHDv0ObZ-5y8sFKLO7Y6ZjTsZFs0KvdLwA_-iGJ5A@mail.gmail.com>
+ <20220607104358.GA32583@willie-the-truck> <CAOUHufZh46A2hh_fn-8vVBDi_621rgbZq64_afDt8VxrzqJz1g@mail.gmail.com>
+ <CAGsJ_4yvsXCj8snemAyX3jPJgWJR+tFCtUhV-3QJ75RNi=q_KA@mail.gmail.com>
+ <CAHk-=wirMfOpzNavjWao5GA65ve=9LQN-6=YCUtJGRpu=ujdoA@mail.gmail.com>
+ <CAGsJ_4yLCsJJvK5QkFOk_7UW72DRO7gWnd6wdn2TWzBrTmRjSg@mail.gmail.com>
+ <CAOUHufZn5L_R7b_S3P9O+VoJC=EnY10e+xyFF7UqiGbLzzzqKg@mail.gmail.com> <CAGsJ_4ws3uNWM1wpW603UPYrcXqMe3vmPzbLRkgj9SjSgurN3A@mail.gmail.com>
+In-Reply-To: <CAGsJ_4ws3uNWM1wpW603UPYrcXqMe3vmPzbLRkgj9SjSgurN3A@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 16 Jun 2022 17:29:19 -0600
+Message-ID: <CAOUHufbOwPSbBwd7TG0QFt4YJvBp93Q9nUJEDvMpUA6PqjYMUQ@mail.gmail.com>
+Subject: Re: [PATCH v11 07/14] mm: multi-gen LRU: exploit locality in rmap
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>, huzhanyuan@oppo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,209 +106,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 9:11 AM, Pengfei Xu wrote:
-> The XSAVE feature set supports the saving and restoring of xstate components.
-> 
-> In order to ensure that XSAVE works correctly, add XSAVE most basic signal
-> handling test for XSAVE architecture functionality, this patch tests "FP,
-> SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/AVX512_Hi16_ZMM and PKRU"
-> xstates with the following:
-> The contents of these xstates in the process should not change after the
-> signal handling.
-> 
->    [ Dave Hansen; Chang S. Bae: bunches of cleanups ]
-> 
-> Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
-> Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
-> ---
->   tools/testing/selftests/x86/.gitignore       |   1 +
->   tools/testing/selftests/x86/Makefile         |  11 +-
->   tools/testing/selftests/x86/xstate.c         | 215 +++++++++++++++
->   tools/testing/selftests/x86/xstate.h         | 266 +++++++++++++++++++
->   tools/testing/selftests/x86/xstate_helpers.c | 160 +++++++++++
->   tools/testing/selftests/x86/xstate_helpers.h |   8 +
->   6 files changed, 659 insertions(+), 2 deletions(-)
->   create mode 100644 tools/testing/selftests/x86/xstate.c
->   create mode 100644 tools/testing/selftests/x86/xstate.h
->   create mode 100644 tools/testing/selftests/x86/xstate_helpers.c
->   create mode 100644 tools/testing/selftests/x86/xstate_helpers.h
-> 
-> diff --git a/tools/testing/selftests/x86/.gitignore b/tools/testing/selftests/x86/.gitignore
-> index 1aaef5bf119a..68951ceefe30 100644
-> --- a/tools/testing/selftests/x86/.gitignore
-> +++ b/tools/testing/selftests/x86/.gitignore
-> @@ -1,6 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   *_32
->   *_64
-> +*.o
->   single_step_syscall
->   sysret_ss_attrs
->   syscall_nt
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index 0388c4d60af0..49a6d78e0831 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
->   			test_FCMOV test_FCOMI test_FISTTP \
->   			vdso_restorer
->   TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
-> -			corrupt_xstate_header amx
-> +			corrupt_xstate_header amx xstate
->   # Some selftests require 32bit support enabled also on 64bit systems
->   TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
->   
-> @@ -69,7 +69,7 @@ all_32: $(BINARIES_32)
->   
->   all_64: $(BINARIES_64)
->   
-> -EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
-> +EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64) *.o
->   
->   $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
->   	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
-> @@ -109,3 +109,10 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
->   # state.
->   $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
->   $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
-> +
-> +# xstate_64 is special: it needs xstate_helpers.o to prevent GCC from
-> +# generating any FP code by mistake and stdlib.h can't be used due to
-> +# "-mno-sse" parameter, so compile xstate_64 with the code file xstate.c
-> +# which can use stdlib.h and xstate_helpers.o which cannot use stdlib.h
-> +xstate_helpers.o: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
-> +$(OUTPUT)/xstate_64: xstate_helpers.o
-> diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-> new file mode 100644
-> index 000000000000..05dabb4733a0
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/xstate.c
-> @@ -0,0 +1,215 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * xstate.c - tests XSAVE feature with fork and signal handling.
-> + *
-> + * The XSAVE feature set supports the saving and restoring of state components.
-> + * It tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
-> + * AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
-> + * 1. The contents of these xstates in the process should not change after the
-> + *    signal handling.
-> + * 2. The contents of these xstates in the child process should be the same as
-> + *    the contents of the xstate in the parent process after the fork syscall.
-> + * 3. The contents of xstates in the parent process should not change after
-> + *    the context switch.
-> + *
-> + * The regions and reserved bytes of the components tested for XSAVE feature
-> + * are as follows:
-> + * x87(FP)/SSE    (0 - 159 bytes)
-> + * SSE(XMM part)  (160-415 bytes)
-> + * Reserved       (416-511 bytes)
-> + * Header_used    (512-527 bytes; XSTATE BV(bitmap vector) mask:512-519 bytes)
-> + * Header_reserved(528-575 bytes must be 00)
-> + * YMM            (Offset:CPUID.(EAX=0D,ECX=2).EBX Size:CPUID(EAX=0D,ECX=2).EAX)
-> + * AVX512_OPMASK  (Offset:CPUID.(EAX=0D,ECX=5).EBX Size:CPUID(EAX=0D,ECX=5).EAX)
-> + * ZMM_Hi256      (Offset:CPUID.(EAX=0D,ECX=6).EBX Size:CPUID(EAX=0D,ECX=6).EAX)
-> + * Hi16_ZMM       (Offset:CPUID.(EAX=0D,ECX=7).EBX Size:CPUID(EAX=0D,ECX=7).EAX)
-> + * PKRU           (Offset:CPUID.(EAX=0D,ECX=9).EBX Size:CPUID(EAX=0D,ECX=9).EAX)
-> + */
-> +
-> +#define _GNU_SOURCE
-> +#include <err.h>
-> +#include <stdio.h>
-> +#include <stdint.h>
-> +#include <string.h>
-> +#include <signal.h>
-> +#include <unistd.h>
-> +#include <sched.h>
-> +#include <stdbool.h>
-> +#include <sys/wait.h>
-> +#include <sys/syscall.h>
-> +#include <cpuid.h>
-> +#include <malloc.h>
-> +#include <stdlib.h>
-> +
-> +#include "xstate.h"
-> +#include "xstate_helpers.h"
-> +#include "../kselftest.h"
-> +
-> +#define NUM_TESTS 1
-> +#define xstate_test_array_init(idx, init_opt, fill_opt)	\
-> +	do {						\
-> +		xstate_tests[idx].init = init_opt;	\
-> +		xstate_tests[idx].fill_xbuf = fill_opt;	\
-> +	} while (0)
-> +
-> +static struct xsave_buffer *valid_xbuf, *compared_xbuf;
-> +static struct xstate_test xstate_tests[XFEATURE_MAX];
-> +static uint32_t xstate_size;
-> +
-> +static bool xstate_in_test(int xfeature_num)
-> +{
-> +	return !!(xstate_info.mask & (1 << xfeature_num));
+On Thu, Jun 16, 2022 at 4:33 PM Barry Song <21cnbao@gmail.com> wrote:
+>
+> On Fri, Jun 17, 2022 at 9:56 AM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > On Wed, Jun 8, 2022 at 4:46 PM Barry Song <21cnbao@gmail.com> wrote:
+> > >
+> > > On Thu, Jun 9, 2022 at 3:52 AM Linus Torvalds
+> > > <torvalds@linux-foundation.org> wrote:
+> > > >
+> > > > On Tue, Jun 7, 2022 at 5:43 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > > >
+> > > > > Given we used to have a flush for clear pte young in LRU, right now we are
+> > > > > moving to nop in almost all cases for the flush unless the address becomes
+> > > > > young exactly after look_around and before ptep_clear_flush_young_notify.
+> > > > > It means we are actually dropping flush. So the question is,  were we
+> > > > > overcautious? we actually don't need the flush at all even without mglru?
+> > > >
+> > > > We stopped flushing the TLB on A bit clears on x86 back in 2014.
+> > > >
+> > > > See commit b13b1d2d8692 ("x86/mm: In the PTE swapout page reclaim case
+> > > > clear the accessed bit instead of flushing the TLB").
+> > >
+> > > This is true for x86, RISC-V, powerpc and S390. but it is not true for
+> > > most platforms.
+> > >
+> > > There was an attempt to do the same thing in arm64:
+> > > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1793830.html
+> > > but arm64 still sent a nosync tlbi and depent on a deferred to dsb :
+> > > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1794484.html
+> >
+> > Barry, you've already answered your own question.
+> >
+> > Without commit 07509e10dcc7 arm64: pgtable: Fix pte_accessible():
+> >    #define pte_accessible(mm, pte)        \
+> >   -       (mm_tlb_flush_pending(mm) ? pte_present(pte) : pte_valid_young(pte))
+> >   +       (mm_tlb_flush_pending(mm) ? pte_present(pte) : pte_valid(pte))
+> >
+> > You missed all TLB flushes for PTEs that have gone through
+> > ptep_test_and_clear_young() on the reclaim path. But most of the time,
+> > you got away with it, only occasional app crashes:
+> > https://lore.kernel.org/r/CAGsJ_4w6JjuG4rn2P=d974wBOUtXUUnaZKnx+-G6a8_mSROa+Q@mail.gmail.com/
+> >
+> > Why?
+>
+> Yes. On the arm64 platform, ptep_test_and_clear_young() without flush
+> can cause random
+> App to crash.
+> ptep_test_and_clear_young() + flush won't have this kind of crashes though.
+> But after applying commit 07509e10dcc7 arm64: pgtable: Fix
+> pte_accessible(), on arm64,
+> ptep_test_and_clear_young() without flush won't cause App to crash.
+>
+> ptep_test_and_clear_young(), with flush, without commit 07509e10dcc7:   OK
+> ptep_test_and_clear_young(), without flush, with commit 07509e10dcc7:   OK
+> ptep_test_and_clear_young(), without flush, without commit 07509e10dcc7:   CRASH
 
-This is used just one. Why do you need a function for this?
-Also please don't use !! - it is just very hard to read.
+I agree -- my question was rhetorical :)
 
-> +}
-> +
-> +static struct xsave_buffer *alloc_xbuf(uint32_t buf_size)
-> +{
-> +	struct xsave_buffer *xbuf;
-> +
-> +	/* XSAVE buffer should be 64B-aligned. */
-> +	xbuf = aligned_alloc(64, buf_size);
-> +	if (!xbuf)
-> +		ksft_exit_fail_msg("aligned_alloc() failed.\n");
-> +
-> +	return xbuf;
-> +}
-> +
-> +static void free_xbuf(void)
-> +{
-> +	free(valid_xbuf);
-> +	free(compared_xbuf);
-> +}
-> +
+I was trying to imply this logic:
+1. We cleared the A-bit in PTEs with ptep_test_and_clear_young()
+2. We missed TLB flush for those PTEs on the reclaim path, i.e., case
+3 (case 1 & 2 guarantee flushes)
+3. We saw crashes, but only occasionally
 
-Again this is called just one. WHy do you need a speacial function
-for this. Please don't fragment code without a good reason.
+Assuming TLB cached those PTEs, we would have seen the crashes more
+often, which contradicts our observation. So the conclusion is TLB
+didn't cache them most of the time, meaning flushing TLB just for the
+sake of the A-bit isn't necessary.
 
-> +static void allocate_xbuf(void)
-> +{
-> +	valid_xbuf = alloc_xbuf(xstate_size);
-> +	compared_xbuf = alloc_xbuf(xstate_size);
-> +}
-> +
+> do you think it is safe to totally remove the flush code even for
+> the original
+> LRU?
 
-Probably another case of unnecessary function?
-
-> +static void show_test_xfeatures(void)
-> +{
-> +	uint32_t i;
-> +	const char *feature_name;
-> +
-> +	ksft_print_msg("[NOTE] Test following xstates with mask:%lx.\n",
-> +		       xstate_info.mask);
-> +	for (i = 0; i < XFEATURE_MAX; i++) {
-> +		if (!xstate_in_test(i))
-> +			continue;
-> +		feature_name = xfeature_names[i];
-> +		ksft_print_msg("[NOTE] XSAVE feature num %02d: '%s'.\n", i,
-> +			       feature_name);
-> +	}
-> +}
-> +
-> +static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
-> +{
-> +	/* XSTATE_BV is at the beginning of xstate header. */
-> +	*(uint64_t *)(&buffer->header) = bv;
-> +}
-> +
-
-Okay - if you have a function - I want to see it called at least 2 times.
-Having so many little function breaks up the code for no good reason.
-
-Let's fix these first and in both patches.
-
-thanks,
--- Shuah
+Affirmative, based on not only my words, but 3rd parties':
+1. Your (indirect) observation
+2. Alexander's benchmark:
+https://lore.kernel.org/r/BYAPR12MB271295B398729E07F31082A7CFAA0@BYAPR12MB2712.namprd12.prod.outlook.com/
+3. The fundamental hardware limitation in terms of the TLB scalability
+(Fig. 1): https://www.usenix.org/legacy/events/osdi02/tech/full_papers/navarro/navarro.pdf

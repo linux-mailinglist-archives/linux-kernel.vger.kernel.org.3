@@ -2,132 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F85154DD21
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F2154DD26
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359695AbiFPIn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S1359666AbiFPIpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiFPIn4 (ORCPT
+        with ESMTP id S231386AbiFPIpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:43:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8183F5D1B3;
-        Thu, 16 Jun 2022 01:43:55 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 16 Jun 2022 04:45:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CEF5D1B3;
+        Thu, 16 Jun 2022 01:45:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1F876601742;
-        Thu, 16 Jun 2022 09:43:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655369034;
-        bh=4jGClLDY5f6BG1FfD7RfaglDLpDrYdvh0EE5esCI3bo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SIjmBTDdK92BGB0lCzVdaetlRk6h4lsUfEldDJ4R3usWCUsEPDfHMC2RL1RdIj5RE
-         aKyw8+jRXdTpADJ9rMJsqz+kH3+P/sw+IT9vyrDlV5LDSL0qghyUq17Xvm4cSeGttM
-         R4vvDzvukC+AWxf8Lb0bhE1sVFvtx7StmobyFtAJGe6H7q3m8jJtK9zEaxo/mVq38C
-         bdEBRUYRh8lMDPMJqN2C7hl1616zAi9l3J7gnio2FKC2Q+okZMcmO4Db3DVqyUu2OF
-         YwzbfhBxYSWtIMLINL1LBbymVf7V/0oU7/3QsBhf9JQ81oE5NRlaI+g7WvWk21b7Ay
-         Mq1MhIwx9ar0Q==
-Message-ID: <c46dc265-115b-d27a-9e74-a7c48497cdfc@collabora.com>
-Date:   Thu, 16 Jun 2022 10:43:51 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8C13B8228D;
+        Thu, 16 Jun 2022 08:45:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D11A1C34114;
+        Thu, 16 Jun 2022 08:45:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655369114;
+        bh=LKVkEI79gQ3zEb+YWBO7UZ94NekxU8wC7UG+XnoHRRE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WM0aUNV5C2hiWXNEqJE92dzaboeUou4do1OhuxEEBmgWY+Gown/m86PSb6autlozT
+         sFjS5EMicwsdrH37OBJMxE9Wz3SEtFmY8q8n8X5G+nKJg1LjY3GyEHV/+EpoOzxe3z
+         i/d5mv13s57DCIpYlmbkvqiJKCC7x21M6W7fwxKHJxnYbkWN+76knyVV5GKt/zNmnY
+         z6w7k+lrfWI6foOo/fRDKk6pE/AYk2O2YlGl1hVcha0XhPFbFmBVd0cgiIeXFKNEkD
+         L/qf+z7b4vMR3btEyPNGWg2QtIYpihxsMfI1yNXY4MLQK9ZLmLRhgumLTNHi31wuOx
+         tsiJUfaa8wbQQ==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: [PATCH V4 00/20] The Runtime Verification (RV) interface
+Date:   Thu, 16 Jun 2022 10:44:42 +0200
+Message-Id: <cover.1655368610.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] mfd: mt6397: Add basic support for MT6331+MT6332 PMIC
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, johnson.wang@mediatek.com,
-        hsin-hsiung.wang@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220520124617.228808-1-angelogioacchino.delregno@collabora.com>
- <20220520124617.228808-3-angelogioacchino.delregno@collabora.com>
- <YqpUmE5+Kmq9rxwB@google.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <YqpUmE5+Kmq9rxwB@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/06/22 23:52, Lee Jones ha scritto:
-> On Fri, 20 May 2022, AngeloGioacchino Del Regno wrote:
-> 
->> Add support for the MT6331 PMIC with MT6332 Companion PMIC, found
->> in MT6795 Helio X10 smartphone platforms.
->>
->> This combo has support for multiple devices but, for a start,
->> only the following have been implemented:
->> - Regulators (two instances, one in MT6331, one in MT6332)
->> - RTC (MT6331)
->> - Keys (MT6331)
->> - Interrupts (MT6331 also dispatches MT6332's interrupts)
->>
->> There's more to be implemented, especially for MT6332, which
->> will come at a later stage.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/mfd/mt6397-core.c            |  47 ++
->>   drivers/mfd/mt6397-irq.c             |   9 +-
->>   include/linux/mfd/mt6331/core.h      |  53 +++
->>   include/linux/mfd/mt6331/registers.h | 584 ++++++++++++++++++++++++
->>   include/linux/mfd/mt6332/core.h      |  53 +++
->>   include/linux/mfd/mt6332/registers.h | 642 +++++++++++++++++++++++++++
->>   include/linux/mfd/mt6397/core.h      |   2 +
->>   7 files changed, 1389 insertions(+), 1 deletion(-)
->>   create mode 100644 include/linux/mfd/mt6331/core.h
->>   create mode 100644 include/linux/mfd/mt6331/registers.h
->>   create mode 100644 include/linux/mfd/mt6332/core.h
->>   create mode 100644 include/linux/mfd/mt6332/registers.h
-> 
-> [...]
-> 
->> +#endif /* __MFD_MT6332_REGISTERS_H__ */
->> diff --git a/include/linux/mfd/mt6397/core.h b/include/linux/mfd/mt6397/core.h
->> index 1cf78726503b..4d2b80319db3 100644
->> --- a/include/linux/mfd/mt6397/core.h
->> +++ b/include/linux/mfd/mt6397/core.h
->> @@ -12,6 +12,8 @@
->>   
->>   enum chip_id {
->>   	MT6323_CHIP_ID = 0x23,
-> 
->> +	MT6331_CHIP_ID = 0x20,
->> +	MT6332_CHIP_ID = 0x20,
-> 
-> Are these meant to be the same?
-> 
+Over the last years, I've been exploring the possibility of
+verifying the Linux kernel behavior using Runtime Verification.
 
-Yes, because this list is referring to the first 8 bits of the CID register,
-which is the same for both 6331 and 6332, this is because these two chips are
-meant to be used together (at least from my understanding), one as main PMIC
-and one as a companion PMIC.
+Runtime Verification (RV) is a lightweight (yet rigorous) method that
+complements classical exhaustive verification techniques (such as model
+checking and theorem proving) with a more practical approach for complex
+systems.
 
-The difference belongs in the higher 8 bits, but there's no support for this
-check in the mt6397 driver (yet), and I chose not to implement that to not
-complicate this work *at least for now*, as I have no idea about what the
-already implemented PMICs read in the high 8 bits (I can check only two of
-them, but not the others as I don't have the hardware).
+Instead of relying on a fine-grained model of a system (e.g., a
+re-implementation a instruction level), RV works by analyzing the trace of the
+system's actual execution, comparing it against a formal specification of
+the system behavior.
 
-Besides, checking the lower 8 bits is important only because we get knowledge
-of the chip *revision* and not the actual model (for which, we use devicetree
-anyway).
+The usage of deterministic automaton for RV is a well-established
+approach. In the specific case of the Linux kernel, you can check how
+to model complex behavior of the Linux kernel with this paper:
 
-Regards,
-Angelo
+  DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo Silva.
+  *Efficient formal verification for the Linux kernel.* In: International
+  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
+  p. 315-332.
 
+And how efficient is this approach here:
+
+  DE OLIVEIRA, Daniel B.; DE OLIVEIRA, Romulo S.; CUCINOTTA, Tommaso. *A thread
+  synchronization model for the PREEMPT_RT Linux kernel.* Journal of Systems
+  Architecture, 2020, 107: 101729.
+
+tlrd: it is possible to model complex behaviors in a modular way, with
+an acceptable overhead (even for production systems). See this
+presentation at 2019's ELCE: https://www.youtube.com/watch?v=BfTuEHafNgg
+
+Here I am proposing a more practical approach for the usage of deterministic
+automata for runtime verification, and it includes:
+
+	- An interface for controlling the verification;
+	- A tool and set of headers that enables the automatic code
+	  generation of the RV monitor (Monitor Synthesis);
+	- Sample monitors to evaluate the interface;
+	- A sample monitor developed in the context of the Elisa Project
+	  demonstrating how to use RV in the context of safety-critical
+	  systems.
+
+Given that RV is a tracing consumer, the code is being placed inside the
+tracing subsystem (Steven and I have been talking about it for a while).
+
+Changes from v3:
+	- Rebased on 5.19
+	(rostedt's request were made on 1x1 meetings)
+	- Moved monitors to monitors/$name/ (Rostedt)
+	- Consolidate the tracepoints into a single include file in the default
+	  directory (trave/events/rv.h) (Rostedt)
+	- The tracepoints now record the entire string to the buffer.
+	- Change the enable_monitors to disable monitors with ! (instead of -).
+	  (Rostedt)
+	- Add a suffix to the state/events enums, to avoid conflict in the
+	  vmlinux.h used by eBPF.
+	- The models are now placed in the $name.h (it used to store the
+	  tracepoints, but they are now consolidated in a single file)
+	- dot2c and dot2k updated to the changes
+	- models re-generated with these new standards.
+	- user-space tools moved to an directory outside of tools/tracing as
+	  other methods of verification/log sources are planned.
+Changes from v2:
+	- Tons of checkpatch and kernel test robot
+	- Moved files to better places
+	- Adjusted watchdog tracepoints patch (Guenter Roeck)
+	- Added pretimeout watchdog events (Peter Enderborg) 
+	- Used task struct to store per-task monitors (Peter Zijlstra)
+	- Changed the instrumentation to use internal definition of tracepoint
+	  and check the callback signature (Steven Rostedt)
+	- Used printk_deferred() and removed the comment about deadlocks
+	  (Shuah Khan/John Ogness)
+	- Some simplifications:
+		- Removed the safe watchdog nowayout for now (myself)
+		- Removed export symbols for now (myself)
+Changes from V1:
+	- rebased to the latest kernel;
+	- code cleanup;
+	- the watchdog dev monitor;
+	- safety app;
+
+Things kept for a second moment (after this patchset):
+	- Add a reactor tha enables the visualization of the visited
+	  states via KCOV (Marco Elver & Dmitry Vyukov)
+	- Add a CRC method to check from user-space if the values
+	  exported by the monitor were not corrupted by any other
+	  kernel task (Gabriele Paoloni)
+	- Export symbols for external modules
+	- dot2bpf
+
+Daniel Bristot de Oliveira (20):
+  rv: Add Runtime Verification (RV) interface
+  rv: Add runtime reactors interface
+  rv/include: Add helper functions for deterministic automata
+  rv/include: Add deterministic automata monitor definition via C macros
+  rv/include: Add instrumentation helper functions
+  tools/rv: Add dot2c
+  tools/rv: Add dot2k
+  rv/monitor: Add the wip monitor skeleton created by dot2k
+  rv/monitor: wip instrumentation and Makefile/Kconfig entries
+  rv/monitor: Add the wwnr monitor skeleton created by dot2k
+  rv/monitor: wwnr instrumentation and Makefile/Kconfig entries
+  rv/reactor: Add the printk reactor
+  rv/reactor: Add the panic reactor
+  Documentation/rv: Add a basic documentation
+  Documentation/rv: Add deterministic automata monitor synthesis
+    documentation
+  Documentation/rv: Add deterministic automata instrumentation
+    documentation
+  watchdog/dev: Add tracepoints
+  rv/monitor: Add safe watchdog monitor
+  rv/safety_app: Add a safety_app sample
+  Documentation/rv: Add watchdog-monitor documentation
+
+ Documentation/trace/index.rst                 |   1 +
+ .../trace/rv/da_monitor_instrumentation.rst   | 223 ++++++
+ .../trace/rv/da_monitor_synthesis.rst         | 284 +++++++
+ Documentation/trace/rv/index.rst              |   9 +
+ .../trace/rv/runtime-verification.rst         | 233 ++++++
+ Documentation/trace/rv/watchdog-monitor.rst   | 250 ++++++
+ drivers/watchdog/watchdog_dev.c               |  43 +-
+ drivers/watchdog/watchdog_pretimeout.c        |   2 +
+ include/linux/rv.h                            |  38 +
+ include/linux/sched.h                         |  11 +
+ include/linux/watchdog.h                      |   7 +-
+ include/rv/automata.h                         |  49 ++
+ include/rv/da_monitor.h                       | 419 ++++++++++
+ include/rv/instrumentation.h                  |  23 +
+ include/rv/rv.h                               |  32 +
+ include/trace/events/rv.h                     | 153 ++++
+ include/trace/events/watchdog.h               | 101 +++
+ kernel/fork.c                                 |  14 +
+ kernel/trace/Kconfig                          |   2 +
+ kernel/trace/Makefile                         |   2 +
+ kernel/trace/rv/Kconfig                       |  84 ++
+ kernel/trace/rv/Makefile                      |   9 +
+ kernel/trace/rv/monitors/safe_wtd/safe_wtd.c  | 300 +++++++
+ kernel/trace/rv/monitors/safe_wtd/safe_wtd.h  |  84 ++
+ kernel/trace/rv/monitors/wip/wip.c            | 110 +++
+ kernel/trace/rv/monitors/wip/wip.h            |  38 +
+ kernel/trace/rv/monitors/wwnr/wwnr.c          | 109 +++
+ kernel/trace/rv/monitors/wwnr/wwnr.h          |  38 +
+ kernel/trace/rv/reactor_panic.c               |  44 +
+ kernel/trace/rv/reactor_printk.c              |  43 +
+ kernel/trace/rv/rv.c                          | 757 ++++++++++++++++++
+ kernel/trace/rv/rv.h                          |  54 ++
+ kernel/trace/rv/rv_reactors.c                 | 476 +++++++++++
+ kernel/trace/trace.c                          |   4 +
+ kernel/trace/trace.h                          |   2 +
+ tools/verification/dot2/Makefile              |  26 +
+ tools/verification/dot2/automata.py           | 179 +++++
+ tools/verification/dot2/dot2c                 |  30 +
+ tools/verification/dot2/dot2c.py              | 244 ++++++
+ tools/verification/dot2/dot2k                 |  50 ++
+ tools/verification/dot2/dot2k.py              | 177 ++++
+ .../dot2/dot2k_templates/main_global.c        |  94 +++
+ .../dot2/dot2k_templates/main_per_cpu.c       |  94 +++
+ .../dot2/dot2k_templates/main_per_task.c      |  94 +++
+ tools/verification/safety_app/Makefile        |  51 ++
+ tools/verification/safety_app/safety_app.c    | 614 ++++++++++++++
+ 46 files changed, 5691 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
+ create mode 100644 Documentation/trace/rv/index.rst
+ create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ create mode 100644 Documentation/trace/rv/watchdog-monitor.rst
+ create mode 100644 include/linux/rv.h
+ create mode 100644 include/rv/automata.h
+ create mode 100644 include/rv/da_monitor.h
+ create mode 100644 include/rv/instrumentation.h
+ create mode 100644 include/rv/rv.h
+ create mode 100644 include/trace/events/rv.h
+ create mode 100644 include/trace/events/watchdog.h
+ create mode 100644 kernel/trace/rv/Kconfig
+ create mode 100644 kernel/trace/rv/Makefile
+ create mode 100644 kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
+ create mode 100644 kernel/trace/rv/monitors/safe_wtd/safe_wtd.h
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.c
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.h
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
+ create mode 100644 kernel/trace/rv/reactor_panic.c
+ create mode 100644 kernel/trace/rv/reactor_printk.c
+ create mode 100644 kernel/trace/rv/rv.c
+ create mode 100644 kernel/trace/rv/rv.h
+ create mode 100644 kernel/trace/rv/rv_reactors.c
+ create mode 100644 tools/verification/dot2/Makefile
+ create mode 100644 tools/verification/dot2/automata.py
+ create mode 100644 tools/verification/dot2/dot2c
+ create mode 100644 tools/verification/dot2/dot2c.py
+ create mode 100644 tools/verification/dot2/dot2k
+ create mode 100644 tools/verification/dot2/dot2k.py
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_global.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_cpu.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_task.c
+ create mode 100644 tools/verification/safety_app/Makefile
+ create mode 100644 tools/verification/safety_app/safety_app.c
+
+-- 
+2.35.1
 

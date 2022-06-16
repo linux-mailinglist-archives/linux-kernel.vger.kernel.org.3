@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9929454DA64
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAE954DA72
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359084AbiFPGRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S1359120AbiFPGTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358915AbiFPGR1 (ORCPT
+        with ESMTP id S1358728AbiFPGTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:17:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B7F37BDB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:17:25 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso4947497pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sRbNJbc+ahYktLmDyoH4yo1fpASvuRbFucDO6Muj9cg=;
-        b=frv+lCaLqDCtRc1lutAiLWWqQAjy20E2s0IY5gDRdHDdkGVOQG4qvWpbdZxvRyf9RA
-         FI0NCliBh8cSdpfwff8nuZwVTXhTof8MTp0dzDqIzTb7Zyo8YqxgZxBlW7OkCQ7uyvt3
-         TXgmPys4n/YExtF6bmTeTQGqvNmoDMQEn1v8FxSEEGq99TZ2t0R8lVCxdkw5LAy5JOkA
-         5oIzaFO33Z9f4iod6X2daM/+58jqEYZaFyQqC70ABUhVtPe12mpj7F+Y2KPPthzVrcxJ
-         jfh2OmpaHU4aKH+AH74ZZbgHt5DnE8eu8q7hp1kAv0iXjk2BTjKUK7O9PBld3TJqp244
-         N6zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sRbNJbc+ahYktLmDyoH4yo1fpASvuRbFucDO6Muj9cg=;
-        b=XDyFDZaEm0CI42br7gBMfSjIhOG5PRNkpRgUSx8cNxcMCYdU78zG+dMvq/w8yNLicz
-         5tuJFTCugoRHI3tpyRMpxaE776qVYz35uAfumPZVm5OgbCMHXL5cBGcKNypnlS762x2x
-         TIqQXYC81ZHxp9IEWV16/7qy3Y8kJHADIXgBuFNBt7xsQXETRYmpJdfIVEAu7QSmUloi
-         UGWGvc6DGFq72vk6lcMJU2NGefc+kYnWG81e49YAuD4OsOPDIh3U00UdvcUiwp6QkNdQ
-         r8kAuCWvCUkl04uuuBY2m7H4WbFFcu+eCLDfYGT0MQ45Oo6zxeO9NBb3IhIWbMTAZVsX
-         Hvkg==
-X-Gm-Message-State: AJIora/E3VKmDgaElIIbBjAxd+YPK205rEex2yDoN8Ni6g+fuiRQ2gT4
-        kG3IOqqTAWIfFSlLM/DISnRo1g==
-X-Google-Smtp-Source: AGRyM1scPuVidbbJvlKHJZg5ot8FJQuMvDvq36SYo9aLhk8nKm9ZY+MPCW2Rl+lSsHNv9txN09mksQ==
-X-Received: by 2002:a17:902:e951:b0:168:b530:135b with SMTP id b17-20020a170902e95100b00168b530135bmr2983153pll.93.1655360244841;
-        Wed, 15 Jun 2022 23:17:24 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa78a46000000b0051bd3d55773sm760331pfa.63.2022.06.15.23.17.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 23:17:24 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 11:47:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Lukasz.Luba@arm.com, Dietmar.Eggemann@arm.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 4/4] cpufreq: Change order of online() CB and
- policy->cpus modification
-Message-ID: <20220616061722.tfsr3svljcupkcvz@vireshk-i7>
-References: <20220615144321.262773-1-pierre.gondois@arm.com>
- <20220615144321.262773-5-pierre.gondois@arm.com>
+        Thu, 16 Jun 2022 02:19:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE8A527FE;
+        Wed, 15 Jun 2022 23:19:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32F29B82281;
+        Thu, 16 Jun 2022 06:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3A3C34114;
+        Thu, 16 Jun 2022 06:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655360374;
+        bh=9WtnFezIM4KX4P3ySZStpuq8OOCxc7UiGqUdRTu14IU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zbm83yfLXoLOCTJN/17SG94P7h8qzzoKuhRyDkoMLpxUMLdpOIYf9Ina/d/ccOi+m
+         2DfdrqmNMNxXflN8F0chJjQwfj+Ga32syiPjxwTrXN3T5X/44cLAgo//HC/ssjlKE0
+         L9c07K5/7Epq7PUTKf79rU3eaAUqTFt8pqu/vcQo5p9C2hxXO3nRszdTm2E/IU8Gpu
+         6wx/4Df69k+QH6WRs5N4xQ9J5HYk+hvYgT6yR8aDjXmIzK1GE9Hb/g9DjEJ0llglRV
+         fF+XpJQ0TxrQKHAApO9bvDo5m+XaZ0ehIal+LLBJ0N0D/tCgIAEW7A877NxmcVRVVn
+         N48OrEtqGZlqw==
+Date:   Wed, 15 Jun 2022 23:19:32 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
+Message-ID: <YqrLdORPM5qm9PC0@sol.localdomain>
+References: <20220518235011.153058-1-ebiggers@kernel.org>
+ <20220518235011.153058-2-ebiggers@kernel.org>
+ <YobNXbYnhBiqniTH@magnolia>
+ <20220520032739.GB1098723@dread.disaster.area>
+ <YqgbuDbdH2OLcbC7@sol.localdomain>
+ <YqnapOLvHDmX/3py@infradead.org>
+ <YqpzqZQgu0Zz+vW1@sol.localdomain>
+ <YqrIlVtI85zF9qyO@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615144321.262773-5-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <YqrIlVtI85zF9qyO@infradead.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,46 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15-06-22, 16:43, Pierre Gondois wrote:
-> >From a state where all policy->related_cpus are offline, putting one
-> of the policy's CPU back online re-activates the policy by:
->  1. Calling cpufreq_driver->online()
->  2. Setting the CPU in policy->cpus
+On Wed, Jun 15, 2022 at 11:07:17PM -0700, Christoph Hellwig wrote:
+> On Wed, Jun 15, 2022 at 05:04:57PM -0700, Eric Biggers wrote:
+> > One more thing.  I'm trying to add support for STATX_DIOALIGN on block devices.
+> > Unfortunately I don't think it is going to work, at all, since the inode is for
+> > the device node and not the block device itself.  This is true even after the
+> > file is opened (I previously thought that at least that case would work).
 > 
-> qcom_cpufreq_hw_cpu_online() makes use of policy->cpus. Thus 1. and 2.
-> should be inverted to avoid having a policy->cpus empty. The
-> qcom-cpufreq-hw is the only driver affected by this.
+> For an open file the block device inode is pointed to by
+> file->f_mapping->host.
 > 
-> Fixes: a1eb080a0447 ("cpufreq: qcom-hw: provide online/offline operations")
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> > Were you expecting that this would work on block devices?  It seems they will
+> > need a different API -- a new BLK* ioctl, or files in /sys/block/$dev/queue.
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 2cad42774164..36043be16d8e 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1350,15 +1350,15 @@ static int cpufreq_online(unsigned int cpu)
->  	}
->  
->  	if (!new_policy && cpufreq_driver->online) {
-> +		/* Recover policy->cpus using related_cpus */
-> +		cpumask_copy(policy->cpus, policy->related_cpus);
-> +
->  		ret = cpufreq_driver->online(policy);
->  		if (ret) {
->  			pr_debug("%s: %d: initialization failed\n", __func__,
->  				 __LINE__);
->  			goto out_exit_policy;
->  		}
-> -
-> -		/* Recover policy->cpus using related_cpus */
-> -		cpumask_copy(policy->cpus, policy->related_cpus);
->  	} else {
->  		cpumask_copy(policy->cpus, cpumask_of(cpu));
+> blkdev_get_no_open on inode->i_rdev gets you the block device, which
+> then has bdev->bd_inode point to the underlying block device, although
+> for a block device those limit probably would be retrieved not from
+> the inode but the gendisk / request_queue anyway.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Yes I know that.  The issue is that the inode that statx() is operating on is
+the device node, so *all* the other statx fields come from that inode.  Size,
+nlink, uid, gid, mode, timestamps (including btime if the filesystem supports
+it), inode number, device number of the containing filesystem, mount ID, etc.
+If we were to randomly grab one field from the underlying block device instead,
+that would be inconsistent with everything else.
 
--- 
-viresh
+- Eric

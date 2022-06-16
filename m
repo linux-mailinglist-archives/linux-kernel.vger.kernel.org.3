@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CED54E01E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3827854E024
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376869AbiFPLhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S1376891AbiFPLjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376789AbiFPLhe (ORCPT
+        with ESMTP id S233009AbiFPLjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:37:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A877A44C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:37:32 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o1noV-00066v-DL; Thu, 16 Jun 2022 13:37:27 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o1noS-000rJi-Pu; Thu, 16 Jun 2022 13:37:26 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o1noT-003jnN-Gi; Thu, 16 Jun 2022 13:37:25 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Chris Snook <chris.snook@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] net: ag71xx: fix discards 'const' qualifier warning
-Date:   Thu, 16 Jun 2022 13:37:24 +0200
-Message-Id: <20220616113724.890970-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 16 Jun 2022 07:39:51 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF22B56204;
+        Thu, 16 Jun 2022 04:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xGSrH
+        Mmj3aUpaCaNuRf66Blu8ZkJ+1iykrzuHPRNKl0=; b=JE/K6rLro+hJI7XJ4lxta
+        TKF+k6AgwYth0dBVSiwN1+Mqb2nbj8C1PnkKq1GeFMMgWLQhM0Jt/9kL7zEaHRGt
+        oglLiAgRBbP4MrnST9PSuM24dD6nAg6syylzE9r51gGv8B3DnkSIPrzdoh40jnM+
+        EFleRVBjJAjb53uLAr+R3s=
+Received: from carlis-virtual-machine (unknown [218.17.89.92])
+        by smtp9 (Coremail) with SMTP id DcCowADXhCFrFqtiB7ueJQ--.21682S2;
+        Thu, 16 Jun 2022 19:39:24 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     satishkh@cisco.com, sebaddel@cisco.com, kartilak@cisco.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Subject: [PATCH] scsi: fnic: convert sysfs snprintf to sysfs_emit
+Date:   Thu, 16 Jun 2022 19:39:22 +0800
+Message-Id: <20220616113922.8106-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DcCowADXhCFrFqtiB7ueJQ--.21682S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WF4fAw1xtFW5XF47GFWfXwb_yoW8Xw45pa
+        4fGa4UurWUGw18Zr1Yk3Wv93WSvF93urW7A397Ww1DZF45tFWDtFyDCFW29r1rJrWkGryS
+        yF1qkryUua1UAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jp89NUUUUU=
+X-Originating-IP: [218.17.89.92]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbBOQohhV-PN8x1rQABsl
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current kernel will compile this driver with warnings. This patch will
-fix it.
+Fix the following coccicheck warnings:
 
-drivers/net/ethernet/atheros/ag71xx.c: In function 'ag71xx_fast_reset':
-drivers/net/ethernet/atheros/ag71xx.c:996:31: warning: passing argument 2 of 'ag71xx_hw_set
-_macaddr' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-  996 |  ag71xx_hw_set_macaddr(ag, dev->dev_addr);
-      |                            ~~~^~~~~~~~~~
-drivers/net/ethernet/atheros/ag71xx.c:951:69: note: expected 'unsigned char *' but argument
- is of type 'const unsigned char *'
-  951 | static void ag71xx_hw_set_macaddr(struct ag71xx *ag, unsigned char *mac)
-      |                                                      ~~~~~~~~~~~~~~~^~~
-drivers/net/ethernet/atheros/ag71xx.c: In function 'ag71xx_open':
-drivers/net/ethernet/atheros/ag71xx.c:1441:32: warning: passing argument 2 of 'ag71xx_hw_se
-t_macaddr' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
- 1441 |  ag71xx_hw_set_macaddr(ag, ndev->dev_addr);
-      |                            ~~~~^~~~~~~~~~
-drivers/net/ethernet/atheros/ag71xx.c:951:69: note: expected 'unsigned char *' but argument
- is of type 'const unsigned char *'
-  951 | static void ag71xx_hw_set_macaddr(struct ag71xx *ag, unsigned char *mac)
-      |                                                      ~~~~~~~~~~~~~~~^~~
+drivers/scsi/fnic/fnic_attrs.c:35:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/fnic/fnic_attrs.c:43:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/fnic/fnic_attrs.c:29:8-16:
+WARNING: use scnprintf or sprintf
 
-Fixes: adeef3e32146 ("net: constify netdev->dev_addr")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 ---
- drivers/net/ethernet/atheros/ag71xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/fnic/fnic_attrs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/atheros/ag71xx.c b/drivers/net/ethernet/atheros/ag71xx.c
-index cac509708e9d..1c6ea6766aa1 100644
---- a/drivers/net/ethernet/atheros/ag71xx.c
-+++ b/drivers/net/ethernet/atheros/ag71xx.c
-@@ -946,7 +946,7 @@ static unsigned int ag71xx_max_frame_len(unsigned int mtu)
- 	return ETH_HLEN + VLAN_HLEN + mtu + ETH_FCS_LEN;
+diff --git a/drivers/scsi/fnic/fnic_attrs.c b/drivers/scsi/fnic/fnic_attrs.c
+index bbe2ca4971b2..d02555bf3df1 100644
+--- a/drivers/scsi/fnic/fnic_attrs.c
++++ b/drivers/scsi/fnic/fnic_attrs.c
+@@ -26,13 +26,13 @@ static ssize_t fnic_show_state(struct device *dev,
+ 	struct fc_lport *lp = shost_priv(class_to_shost(dev));
+ 	struct fnic *fnic = lport_priv(lp);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", fnic_state_str[fnic->state]);
++	return sysfs_emit(buf, "%s\n", fnic_state_str[fnic->state]);
  }
  
--static void ag71xx_hw_set_macaddr(struct ag71xx *ag, unsigned char *mac)
-+static void ag71xx_hw_set_macaddr(struct ag71xx *ag, const unsigned char *mac)
+ static ssize_t fnic_show_drv_version(struct device *dev,
+ 				     struct device_attribute *attr, char *buf)
  {
- 	u32 t;
+-	return snprintf(buf, PAGE_SIZE, "%s\n", DRV_VERSION);
++	return sysfs_emit(buf, "%s\n", DRV_VERSION);
+ }
+ 
+ static ssize_t fnic_show_link_state(struct device *dev,
+@@ -40,7 +40,7 @@ static ssize_t fnic_show_link_state(struct device *dev,
+ {
+ 	struct fc_lport *lp = shost_priv(class_to_shost(dev));
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", (lp->link_up)
++	return sysfs_emit(buf, "%s\n", (lp->link_up)
+ 			? "Link Up" : "Link Down");
+ }
  
 -- 
-2.30.2
+2.34.1
 

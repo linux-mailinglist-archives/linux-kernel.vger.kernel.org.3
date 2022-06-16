@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DA454DD38
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D7854DD3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359779AbiFPIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S1359788AbiFPIq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359766AbiFPIp6 (ORCPT
+        with ESMTP id S1359782AbiFPIp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Jun 2022 04:45:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7465DBF1;
-        Thu, 16 Jun 2022 01:45:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA0C5DBDD;
+        Thu, 16 Jun 2022 01:45:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 928A161D58;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A77661D78;
+        Thu, 16 Jun 2022 08:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EFEAC341C0;
         Thu, 16 Jun 2022 08:45:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C06F1C3411F;
-        Thu, 16 Jun 2022 08:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655369143;
-        bh=rP28sJePyrZSun7tv9P2hpI1QdYZIeV8UXSwoUZbzus=;
+        s=k20201202; t=1655369147;
+        bh=B88M7ZEwl68n7THj+esBYgDD9SubditJErT6VVWUfQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TQkTv6r0bfqIG2OiiPEqOaa8g/UEg6zAlnRmEJOIvJegqVE4UZgmmUN3rNb4WsrEO
-         pIbPu+M2YLTLFEuLcoeTX9hxgjgZ5LeMem6f17XUgLbkVQuiP8T8QWp2kFJjwLyIR4
-         0AUn2LF88tNo9bC5P2BYnEfDzTkBNj00M1oXAe9MEY5Reyba4a2X4cwQdOl0Yn+Ydr
-         uQVh4m5D1+iTudX2B0lc0ETSJvNHXRmsLQVPRSHiL+kR2YeVbJBjfgdm9RXDdEI2Pn
-         UHMHMSD7LP8z5DGyt20pjfp5q7HIuSqtlCwCeMX54uB/TUh/Xg9KFQb8d4Z/ZKn78e
-         3tRQd4Bf7yDzw==
+        b=VkX9227Bir4FoX04g6kzBhmp5jdkGgrgX6rjFTe8ZTYMldzqtQ68Eul3/syEMTteq
+         WEoy4bSXDAgGWNN/GZTb2IfzC3oByQnFKrSwNsaexdAxpdI328UgdPhl2QQASYkbb5
+         4Zm/9QE0oKJh83wEZa2aq5SNAy/hrSO91Jf3tHasOs8BLK+34fNbRKoEVGLnlxYrvE
+         ETpNxXow+6JLZjD67Cz9Wj7BKEixmaazQLej7lxQ32boNS7wgNFn/SifmuqOVRbNP2
+         OIIAOFpEzybFWY438p3fkzZ9I3eqpx2NP+HaAOBC3MbJlGqO7RAox/QWI1b1rDDM7e
+         Fsv9bFGNP1siw==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Clark Williams <williams@redhat.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-devel@vger.kernel.org
-Subject: [PATCH V4 06/20] tools/rv: Add dot2c
-Date:   Thu, 16 Jun 2022 10:44:48 +0200
-Message-Id: <5b1e664b0c33f4da0430922718adc71a5d58d86c.1655368610.git.bristot@kernel.org>
+Subject: [PATCH V4 07/20] tools/rv: Add dot2k
+Date:   Thu, 16 Jun 2022 10:44:49 +0200
+Message-Id: <ab7c58f8aa48f14db6f3352760808828ce3de96f.1655368610.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1655368610.git.bristot@kernel.org>
 References: <cover.1655368610.git.bristot@kernel.org>
@@ -70,18 +70,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dot2c is a tool that transforms an automata in the graphiviz .dot file
-into an C representation of the automata.
+transform .dot file into kernel rv monitor
 
-usage: dot2c [-h] dot_file
-
-dot2c: converts a .dot file into a C structure
-
-positional arguments:
-  dot_file    The dot file to be converted
+usage: dot2k [-h] -d DOT_FILE -t MONITOR_TYPE [-n MODEL_NAME] [-D DESCRIPTION]
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -d DOT_FILE, --dot DOT_FILE
+  -t MONITOR_TYPE, --monitor_type MONITOR_TYPE
+  -n MODEL_NAME, --model_name MODEL_NAME
+  -D DESCRIPTION, --description DESCRIPTION
 
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
@@ -104,245 +102,45 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- tools/verification/dot2/Makefile    |  21 +++
- tools/verification/dot2/automata.py | 179 ++++++++++++++++++++
- tools/verification/dot2/dot2c       |  30 ++++
- tools/verification/dot2/dot2c.py    | 244 ++++++++++++++++++++++++++++
- 4 files changed, 474 insertions(+)
- create mode 100644 tools/verification/dot2/Makefile
- create mode 100644 tools/verification/dot2/automata.py
- create mode 100644 tools/verification/dot2/dot2c
- create mode 100644 tools/verification/dot2/dot2c.py
+ tools/verification/dot2/Makefile              |   5 +
+ tools/verification/dot2/dot2k                 |  50 +++++
+ tools/verification/dot2/dot2k.py              | 177 ++++++++++++++++++
+ .../dot2/dot2k_templates/main_global.c        |  94 ++++++++++
+ .../dot2/dot2k_templates/main_per_cpu.c       |  94 ++++++++++
+ .../dot2/dot2k_templates/main_per_task.c      |  94 ++++++++++
+ 6 files changed, 514 insertions(+)
+ create mode 100644 tools/verification/dot2/dot2k
+ create mode 100644 tools/verification/dot2/dot2k.py
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_global.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_cpu.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_task.c
 
 diff --git a/tools/verification/dot2/Makefile b/tools/verification/dot2/Makefile
-new file mode 100644
-index 000000000000..235d182f6b2c
---- /dev/null
+index 235d182f6b2c..021beb07a521 100644
+--- a/tools/verification/dot2/Makefile
 +++ b/tools/verification/dot2/Makefile
-@@ -0,0 +1,21 @@
-+INSTALL=install
+@@ -19,3 +19,8 @@ install:
+ 	$(INSTALL) automata.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/automata.py
+ 	$(INSTALL) dot2c.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/dot2c.py
+ 	$(INSTALL) dot2c -D -m 755 $(DESTDIR)$(bindir)/
++	$(INSTALL) dot2k.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/dot2k.py
++	$(INSTALL) dot2k -D -m 755 $(DESTDIR)$(bindir)/
 +
-+prefix  ?= /usr
-+bindir  ?= $(prefix)/bin
-+mandir  ?= $(prefix)/share/man
-+miscdir ?= $(prefix)/share/dot2
-+srcdir  ?= $(prefix)/src
-+
-+PYLIB  ?= $(shell python3 -c 'import sysconfig;  print (sysconfig.get_path("purelib"))')
-+
-+.PHONY: all
-+all:
-+
-+.PHONY: clean
-+clean:
-+
-+.PHONY: install
-+install:
-+	$(INSTALL) automata.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/automata.py
-+	$(INSTALL) dot2c.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/dot2c.py
-+	$(INSTALL) dot2c -D -m 755 $(DESTDIR)$(bindir)/
-diff --git a/tools/verification/dot2/automata.py b/tools/verification/dot2/automata.py
++	mkdir -p ${miscdir}/
++	cp -rp dot2k_templates $(DESTDIR)$(miscdir)/
+diff --git a/tools/verification/dot2/dot2k b/tools/verification/dot2/dot2k
 new file mode 100644
-index 000000000000..171ad4497983
+index 000000000000..6a35297e812e
 --- /dev/null
-+++ b/tools/verification/dot2/automata.py
-@@ -0,0 +1,179 @@
++++ b/tools/verification/dot2/dot2k
+@@ -0,0 +1,50 @@
 +#!/usr/bin/env python3
 +# SPDX-License-Identifier: GPL-2.0-only
 +#
-+# automata object: parse a dot file into a python object
++# dot2k: transform dot files into a monitor for the Linux kernel.
++#
 +# For more information, see:
 +#   https://bristot.me/efficient-formal-verification-for-the-linux-kernel/
-+#
-+# This program was written in the development of this paper:
-+#  de Oliveira, D. B. and Cucinotta, T. and de Oliveira, R. S.
-+#  "Efficient Formal Verification for the Linux Kernel." International
-+#  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
-+#
-+# Copyright 2018-2020 Red Hat, Inc.
-+#
-+# Author:
-+#  Daniel Bristot de Oliveira <bristot@kernel.org>
-+
-+import ntpath
-+
-+class Automata:
-+    """Automata class: Reads a dot file and part it as an automata.
-+
-+    Attributes:
-+        dot_file: A dot file with an state_automaton definition.
-+    """
-+
-+    def __init__(self, file_path):
-+        self.__dot_path=file_path
-+        self.name=self.__get_model_name()
-+        self.__dot_lines = self.__open_dot()
-+        self.states, self.initial_state, self.final_states = self.__get_state_variables()
-+        self.events = self.__get_event_variables()
-+        self.function = self.__create_matrix()
-+
-+    def __get_model_name(self):
-+        basename=ntpath.basename(self.__dot_path)
-+        if basename.endswith(".dot") == False:
-+            print("not a dot file")
-+            raise Exception("not a dot file: %s" % self.__dot_path)
-+
-+        model_name=basename[0:-4]
-+        if model_name.__len__() == 0:
-+            raise Exception("not a dot file: %s" % self.__dot_path)
-+
-+        return model_name
-+
-+    def __open_dot(self):
-+        cursor = 0
-+        dot_lines = []
-+        try:
-+            dot_file = open(self.__dot_path)
-+        except:
-+            raise Exception("Cannot open the file: %s" % self.__dot_path)
-+
-+        dot_lines = dot_file.read().splitlines()
-+        dot_file.close()
-+
-+        # checking the first line:
-+        line = dot_lines[cursor].split()
-+
-+        if (line[0] != "digraph") and (line[1] != "state_automaton"):
-+            raise Exception("Not a valid .dot format: %s" % self.__dot_path)
-+        else:
-+            cursor = cursor + 1
-+        return dot_lines
-+
-+    def __get_cursor_begin_states(self):
-+        cursor = 0
-+        while self.__dot_lines[cursor].split()[0] != "{node":
-+            cursor += 1
-+        return cursor
-+
-+    def __get_cursor_begin_events(self):
-+        cursor = 0
-+        while self.__dot_lines[cursor].split()[0] != "{node":
-+           cursor += 1
-+        while self.__dot_lines[cursor].split()[0] == "{node":
-+            cursor += 1
-+        # skip initial state transition
-+        cursor += 1
-+        return cursor
-+
-+    def __get_state_variables(self):
-+        # wait for node declaration
-+        states = []
-+        final_states=[]
-+
-+        has_final_states = False
-+        cursor = self.__get_cursor_begin_states()
-+
-+        # process nodes
-+        while self.__dot_lines[cursor].split()[0] == "{node":
-+            line = self.__dot_lines[cursor].split()
-+            raw_state = line[-1]
-+
-+            #  "enabled_fired"}; -> enabled_fired
-+            state = raw_state.replace('"', '').replace('};', '').replace(',','_')
-+            if state[0:7] == "__init_":
-+                initial_state = state[7:]
-+            else:
-+                states.append(state)
-+                if self.__dot_lines[cursor].__contains__("doublecircle") == True:
-+                    final_states.append(state)
-+                    has_final_states = True
-+
-+                if self.__dot_lines[cursor].__contains__("ellipse") == True:
-+                    final_states.append(state)
-+                    has_final_states = True
-+
-+            cursor = cursor + 1
-+
-+        states = sorted(set(states))
-+        states.remove(initial_state)
-+
-+        # Insert the initial state at the bein og the states
-+        states.insert(0, initial_state)
-+
-+        if has_final_states == False:
-+            final_states.append(initial_state)
-+
-+        return states, initial_state, final_states
-+
-+    def __get_event_variables(self):
-+        # here we are at the begin of transitions, take a note, we will return later.
-+        cursor = self.__get_cursor_begin_events()
-+
-+        events = []
-+        while self.__dot_lines[cursor][1] == '"':
-+            # transitions have the format:
-+            # "all_fired" -> "both_fired" [ label = "disable_irq" ];
-+            #  ------------ event is here ------------^^^^^
-+            if self.__dot_lines[cursor].split()[1] == "->":
-+                line = self.__dot_lines[cursor].split()
-+                event = line[-2].replace('"','')
-+
-+                # when a transition has more than one lables, they are like this
-+                # "local_irq_enable\nhw_local_irq_enable_n"
-+                # so split them.
-+
-+                event = event.replace("\\n", " ")
-+                for i in event.split():
-+                    events.append(i)
-+            cursor = cursor + 1
-+
-+        return sorted(set(events))
-+
-+    def __create_matrix(self):
-+        # transform the array into a dictionary
-+        events = self.events
-+        states = self.states
-+        events_dict = {}
-+        states_dict = {}
-+        nr_event = 0
-+        for event in events:
-+            events_dict[event] = nr_event
-+            nr_event += 1
-+
-+        nr_state = 0
-+        for state in states:
-+            states_dict[state] = nr_state
-+            nr_state = nr_state + 1
-+
-+        # declare the matrix....
-+        matrix = [['-1' for x in range(nr_event)] for y in range(nr_state)]
-+
-+        # and we are back! Let's fill the matrix
-+        cursor = self.__get_cursor_begin_events()
-+
-+        while self.__dot_lines[cursor][1] == '"':
-+            if self.__dot_lines[cursor].split()[1] == "->":
-+                line = self.__dot_lines[cursor].split()
-+                origin_state = line[0].replace('"','').replace(',','_')
-+                dest_state = line[2].replace('"','').replace(',','_')
-+                possible_events = line[-2].replace('"','').replace("\\n", " ")
-+                for event in possible_events.split():
-+                    matrix[states_dict[origin_state]][events_dict[event]] = dest_state
-+            cursor = cursor + 1
-+
-+        return matrix
-diff --git a/tools/verification/dot2/dot2c b/tools/verification/dot2/dot2c
-new file mode 100644
-index 000000000000..0165f203dedc
---- /dev/null
-+++ b/tools/verification/dot2/dot2c
-@@ -0,0 +1,30 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# dot2m: transform dot files into C structures.
-+# For more information, see:
-+#   https://bristot.me/efficient-formal-verification-for-the-linux-kernel/
-+#
-+# This program was written in the development of this paper:
-+#  de Oliveira, D. B. and Cucinotta, T. and de Oliveira, R. S.
-+#  "Efficient Formal Verification for the Linux Kernel." International
-+#  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
 +#
 +# Copyright 2018-2020 Red Hat, Inc.
 +#
@@ -350,53 +148,112 @@ index 000000000000..0165f203dedc
 +#  Daniel Bristot de Oliveira <bristot@kernel.org>
 +
 +if __name__ == '__main__':
-+    from dot2 import dot2c
++    from dot2.dot2k import dot2k
 +    import argparse
 +    import ntpath
++    import os
++    import platform
 +    import sys
++    import sys
++    import argparse
 +
-+    parser = argparse.ArgumentParser(description='dot2c: converts a .dot file into a C structure')
-+    parser.add_argument('dot_file',  help='The dot file to be converted')
++    parser = argparse.ArgumentParser(description='transform .dot file into kernel rv monitor')
++    parser.add_argument('-d', "--dot", dest="dot_file", required=True)
++    parser.add_argument('-t', "--monitor_type", dest="monitor_type", required=True)
++    parser.add_argument('-n', "--model_name", dest="model_name", required=False)
++    parser.add_argument("-D", "--description", dest="description", required=False)
++    params = parser.parse_args()
 +
++    print("Opening and parsing the dot file %s" % params.dot_file)
++    try:
++        monitor=dot2k(params.dot_file, params.monitor_type)
++    except Exception as e:
++        print('Error: '+ str(e))
++        print("Sorry : :-(")
++        sys.exit(1)
 +
-+    args = parser.parse_args()
-+    d=dot2c.Dot2c(args.dot_file)
-+    d.print_model_classic()
-diff --git a/tools/verification/dot2/dot2c.py b/tools/verification/dot2/dot2c.py
++    # easier than using argparse action.
++    if params.model_name != None:
++        print(params.model_name)
++
++    print("Writing the monitor into the directory %s" % monitor.name)
++    monitor.print_files()
++    print("Almost done, checklist")
++    print("  - Edit the %s/%s.c to add the instrumentation" % (monitor.name, monitor.name))
++    print("  - Edit include/trace/events/rv.h to add the tracepoint entry")
++    print("  - Move it to the kernel's monitor directory")
++    print("  - Edit kernel/trace/rv/Makefile")
++    print("  - Edit kernel/trace/rv/Kconfig")
+diff --git a/tools/verification/dot2/dot2k.py b/tools/verification/dot2/dot2k.py
 new file mode 100644
-index 000000000000..07f040ebf882
+index 000000000000..230ad530b50c
 --- /dev/null
-+++ b/tools/verification/dot2/dot2c.py
-@@ -0,0 +1,244 @@
++++ b/tools/verification/dot2/dot2k.py
+@@ -0,0 +1,177 @@
 +#!/usr/bin/env python3
 +# SPDX-License-Identifier: GPL-2.0-only
 +#
-+# dot2c: transform dot files into C structures.
++# dot2k: transform dot files into a monitor for the Linux kernel.
++#
 +# For more information, see:
 +#   https://bristot.me/efficient-formal-verification-for-the-linux-kernel/
 +#
-+# This program was written in the development of this paper:
-+#  de Oliveira, D. B. and Cucinotta, T. and de Oliveira, R. S.
-+#  "Efficient Formal Verification for the Linux Kernel." International
-+#  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
-+#
-+# Copyright 2018-2022 Red Hat, Inc.
++# Copyright 2018-2020 Red Hat, Inc.
 +#
 +# Author:
 +#  Daniel Bristot de Oliveira <bristot@kernel.org>
 +
-+from dot2.automata import Automata
++from dot2.dot2c import Dot2c
++import platform
++import os
 +
-+class Dot2c(Automata):
-+    enum_suffix=""
-+    enum_states_def="states"
-+    enum_events_def="events"
-+    struct_automaton_def="automaton"
-+    var_automaton_def="aut"
++class dot2k(Dot2c):
++    monitor_types={ "global" : 1, "per_cpu" : 2, "per_task" : 3 }
++    monitor_templates_dir="dot2k/rv_templates/"
++    monitor_type="per_cpu"
 +
-+    def __init__(self, file_path):
++    def __init__(self, file_path, MonitorType):
 +        super().__init__(file_path)
-+        self.line_length=80
++
++        self.monitor_type=self.monitor_types.get(MonitorType)
++        if self.monitor_type == None:
++            raise Exception("Unknown monitor type: %s" % MonitorType)
++
++        self.monitor_type=MonitorType
++        self.__fill_rv_templates_dir()
++        self.main_c = self.__open_file(self.monitor_templates_dir + "main_" + MonitorType + ".c")
++        self.enum_suffix = "_%s" % self.name
++
++    def __fill_rv_templates_dir(self):
++
++        if os.path.exists(self.monitor_templates_dir) == True:
++            return
++
++        if platform.system() != "Linux":
++            raise Exception("I can only run on Linux.")
++
++        kernel_path="/lib/modules/%s/build/tools/rv/%s" % (platform.release(), self.monitor_templates_dir)
++
++        if os.path.exists(kernel_path) == True:
++            self.monitor_templates_dir=kernel_path
++            return
++
++        if os.path.exists("/usr/share/dot2/dot2k_templates/") == True:
++            self.monitor_templates_dir="/usr/share/dot2/dot2k_templates/"
++            return
++
++        raise Exception("Could not find the template directory, do you have the kernel source installed?")
++
++
++    def __open_file(self, path):
++        try:
++            fd = open(path)
++        except OSError:
++            raise Exception("Cannot open the file: %s" % path)
++
++        content = fd.read()
++
++        return content
 +
 +    def __buff_to_string(self, buff):
 +        string=""
@@ -407,211 +264,409 @@ index 000000000000..07f040ebf882
 +        # cut off the last \n
 +        return string[:-1]
 +
-+    def __get_enum_states_content(self):
++    def fill_monitor_h(self):
++        monitor_h = self.monitor_h
++
++        min_type=self.get_minimun_type()
++
++        monitor_h = monitor_h.replace("MIN_TYPE", min_type)
++
++        return monitor_h
++
++    def fill_tracepoint_handlers_skel(self):
 +        buff=[]
-+        buff.append("\t%s%s = 0," % (self.initial_state, self.enum_suffix))
-+        for state in self.states:
-+            if state != self.initial_state:
-+                buff.append("\t%s%s," % (state, self.enum_suffix))
-+        buff.append("\tstate_max%s" % (self.enum_suffix))
-+
-+        return buff
-+
-+    def get_enum_states_string(self):
-+        buff=self.__get_enum_states_content()
-+        return self.__buff_to_string(buff)
-+
-+    def format_states_enum(self):
-+        buff=[]
-+        buff.append("enum %s {" % self.enum_states_def)
-+        buff.append(self.get_enum_states_string())
-+        buff.append("};\n")
-+
-+        return buff
-+
-+    def __get_enum_events_content(self):
-+        buff=[]
-+        first=True
 +        for event in self.events:
-+            if first:
-+                buff.append("\t%s%s = 0," % (event, self.enum_suffix))
-+                first=False
++            buff.append("static void handle_%s(void *data, /* XXX: fill header */)" % event)
++            buff.append("{")
++            if self.monitor_type == "per_task":
++                buff.append("\tstruct task_struct *p = /* XXX: how do I get p? */;");
++                buff.append("\tda_handle_event_%s(p, %s%s);" % (self.name, event, self.enum_suffix));
 +            else:
-+                buff.append("\t%s%s," % (event, self.enum_suffix))
-+        buff.append("\tevent_max%s" % self.enum_suffix)
-+
-+        return buff
-+
-+    def get_enum_events_string(self):
-+        buff=self.__get_enum_events_content()
++                buff.append("\tda_handle_event_%s(%s%s);" % (self.name, event, self.enum_suffix));
++            buff.append("}")
++            buff.append("")
 +        return self.__buff_to_string(buff)
 +
-+    def format_events_enum(self):
++    def fill_tracepoint_attach_probe(self):
 +        buff=[]
-+        buff.append("enum %s {" % self.enum_events_def)
-+        buff.append(self.get_enum_events_string())
-+        buff.append("};\n")
++        for event in self.events:
++            buff.append("\trv_attach_trace_probe(\"%s\", /* XXX: tracepoint */, handle_%s);" % (self.name, event))
++        return self.__buff_to_string(buff)
 +
-+        return buff
-+
-+    def get_minimun_type(self):
-+        min_type="char"
-+
-+        if self.states.__len__() > 255:
-+            min_type="short"
-+
-+        if self.states.__len__() > 65535:
-+            min_type="int"
-+
-+        return min_type
-+
-+    def format_automaton_definition(self):
-+        min_type = self.get_minimun_type()
++    def fill_tracepoint_detach_helper(self):
 +        buff=[]
-+        buff.append("struct %s {" % self.struct_automaton_def)
-+        buff.append("\tchar *state_names[state_max%s];" % (self.enum_suffix))
-+        buff.append("\tchar *event_names[event_max%s];" % (self.enum_suffix))
-+        buff.append("\t%s function[state_max%s][event_max%s];" % (min_type, self.enum_suffix, self.enum_suffix))
-+        buff.append("\t%s initial_state;" % min_type)
-+        buff.append("\tchar final_states[state_max%s];" % (self.enum_suffix))
-+        buff.append("};\n")
-+        return buff
++        for event in self.events:
++            buff.append("\trv_detach_trace_probe(\"%s\", /* XXX: tracepoint */, handle_%s);" % (self.name, event))
++        return self.__buff_to_string(buff)
 +
-+    def format_aut_init_header(self):
-+        buff=[]
-+        buff.append("struct %s %s = {" % (self.struct_automaton_def, self.var_automaton_def))
-+        return buff
-+
-+    def __get_string_vector_per_line_content(self, buff):
-+        first=True
-+        string=""
-+        for entry in buff:
-+            if first:
-+                string = string + "\t\t\"" + entry
-+                first=False;
-+            else:
-+                string = string + "\",\n\t\t\"" + entry
-+        string = string + "\""
-+
-+        return string
-+
-+    def get_aut_init_events_string(self):
-+        return self.__get_string_vector_per_line_content(self.events)
-+
-+    def get_aut_init_states_string(self):
-+        return self.__get_string_vector_per_line_content(self.states)
-+
-+    def format_aut_init_events_string(self):
-+        buff=[]
-+        buff.append("\t.event_names = {")
-+        buff.append(self.get_aut_init_events_string())
-+        buff.append("\t},")
-+        return buff
-+
-+    def format_aut_init_states_string(self):
-+        buff=[]
-+        buff.append("\t.state_names = {")
-+        buff.append(self.get_aut_init_states_string())
-+        buff.append("\t},")
-+
-+        return buff
-+
-+    def __get_max_strlen_of_states(self):
-+        return max(self.states, key=len).__len__()
-+
-+    def __get_state_string_length(self):
-+        maxlen = self.__get_max_strlen_of_states() + self.enum_suffix.__len__()
-+        return "%" + str(maxlen) + "s"
-+
-+    def get_aut_init_function(self):
-+        nr_states=self.states.__len__()
++    def fill_main_c(self):
++        main_c = self.main_c
++        min_type=self.get_minimun_type()
 +        nr_events=self.events.__len__()
-+        buff=[]
++        tracepoint_handlers=self.fill_tracepoint_handlers_skel()
++        tracepoint_attach=self.fill_tracepoint_attach_probe()
++        tracepoint_detach=self.fill_tracepoint_detach_helper()
 +
-+        strformat = self.__get_state_string_length()
++        main_c = main_c.replace("MIN_TYPE", min_type)
++        main_c = main_c.replace("MODEL_NAME", self.name)
++        main_c = main_c.replace("NR_EVENTS", str(nr_events))
++        main_c = main_c.replace("TRACEPOINT_HANDLERS_SKEL", tracepoint_handlers)
++        main_c = main_c.replace("TRACEPOINT_ATTACH", tracepoint_attach)
++        main_c = main_c.replace("TRACEPOINT_DETACH", tracepoint_detach)
 +
-+        for x in range(nr_states):
-+            line="\t\t{ "
-+            for y in range(nr_events):
-+                next_state = self.function[x][y]
-+                if next_state != '-1':
-+                    next_state = self.function[x][y] + self.enum_suffix
++        return main_c
 +
-+                if y != nr_events-1:
-+                    line = line + strformat % next_state + ", "
-+                else:
-+                    line = line + strformat % next_state + " },"
-+            buff.append(line)
++    def fill_model_h(self):
++        #
++        # Adjust the definition names
++        #
++        self.enum_states_def="states_%s" % self.name
++        self.enum_events_def="events_%s" % self.name
++        self.struct_automaton_def="automaton_%s" % self.name
++        self.var_automaton_def="automaton_%s" % self.name
++
++        buff=self.format_model()
 +
 +        return self.__buff_to_string(buff)
 +
-+    def format_aut_init_function(self):
-+        buff=[]
-+        buff.append("\t.function = {")
-+        buff.append(self.get_aut_init_function())
-+        buff.append("\t},")
++    def __create_directory(self):
++        try:
++            os.mkdir(self.name)
++        except FileExistsError:
++            return
++        except:
++            print("Fail creating the output dir: %s" % self.name)
 +
-+        return buff
++    def __create_file(self, file_name, content):
++        path="%s/%s" % (self.name, file_name)
++        try:
++            file = open(path, 'w')
++        except FileExistsError:
++            return
++        except:
++            print("Fail creating file: %s" % path)
 +
-+    def get_aut_init_initial_state(self):
-+        return self.initial_state
++        file.write(content)
 +
-+    def format_aut_init_initial_state(self):
-+        buff=[]
-+        initial_state=self.get_aut_init_initial_state()
-+        buff.append("\t.initial_state = " + initial_state + self.enum_suffix + ",")
++        file.close()
 +
-+        return buff
++    def __get_main_name(self):
++        path="%s/%s" % (self.name, "main.c")
++        if os.path.exists(path) == False:
++           return "main.c"
++        return "__main.c"
 +
-+    def get_aut_init_final_states(self):
-+        line=""
-+        first=True
-+        for state in self.states:
-+            if first == False:
-+                line = line + ', '
-+            else:
-+                first = False
++    def print_files(self):
++        main_c=self.fill_main_c()
++        model_h=self.fill_model_h()
 +
-+            if self.final_states.__contains__(state):
-+                line = line + '1'
-+            else:
-+                line = line + '0'
-+        return line
++        self.__create_directory()
 +
-+    def format_aut_init_final_states(self):
-+       buff=[]
-+       buff.append("\t.final_states = { %s }," % self.get_aut_init_final_states())
++        path="%s.c" % self.name
++        self.__create_file(path, main_c)
 +
-+       return buff
++        path="%s.h" % self.name
++        self.__create_file(path, model_h)
+diff --git a/tools/verification/dot2/dot2k_templates/main_global.c b/tools/verification/dot2/dot2k_templates/main_global.c
+new file mode 100644
+index 000000000000..913dc68d782d
+--- /dev/null
++++ b/tools/verification/dot2/dot2k_templates/main_global.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/ftrace.h>
++#include <linux/tracepoint.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/rv.h>
++#include <rv/instrumentation.h>
++#include <rv/da_monitor.h>
 +
-+    def __get_automaton_initialization_footer_string(self):
-+        footer="};\n"
-+        return footer
++#define MODULE_NAME "MODEL_NAME"
 +
-+    def format_aut_init_footer(self):
-+        buff=[]
-+        buff.append(self.__get_automaton_initialization_footer_string())
++/*
++ * XXX: include required tracepoint headers, e.g.,
++ * #include <trace/events/sched.h>
++ */
++#include <trace/events/rv.h>
 +
-+        return buff
++/*
++ * This is the self-generated part of the monitor. Generally, there is no need
++ * to touch this section.
++ */
++#include "MODEL_NAME.h"
 +
-+    def format_model(self):
-+        buff=[]
-+        buff += self.format_states_enum()
-+        buff += self.format_events_enum()
-+        buff += self.format_automaton_definition()
-+        buff += self.format_aut_init_header()
-+        buff += self.format_aut_init_states_string()
-+        buff += self.format_aut_init_events_string()
-+        buff += self.format_aut_init_function()
-+        buff += self.format_aut_init_initial_state()
-+        buff += self.format_aut_init_final_states()
-+        buff += self.format_aut_init_footer()
++/*
++ * Declare the deterministic automata monitor.
++ *
++ * The rv monitor reference is needed for the monitor declaration.
++ */
++struct rv_monitor rv_MODEL_NAME;
++DECLARE_DA_MON_GLOBAL(MODEL_NAME, MIN_TYPE);
 +
-+        return buff
++/*
++ * This is the instrumentation part of the monitor.
++ *
++ * This is the section where manual work is required. Here the kernel events
++ * are translated into model's event.
++ *
++ */
++TRACEPOINT_HANDLERS_SKEL
++static int start_MODEL_NAME(void)
++{
++	int retval;
 +
-+    def print_model_classic(self):
-+        buff=self.format_model()
-+        print(self.__buff_to_string(buff))
++	retval = da_monitor_init_MODEL_NAME();
++	if (retval)
++		return retval;
++
++TRACEPOINT_ATTACH
++
++	return 0;
++}
++
++static void stop_MODEL_NAME(void)
++{
++	rv_MODEL_NAME.enabled = 0;
++
++TRACEPOINT_DETACH
++
++	da_monitor_destroy_MODEL_NAME();
++}
++
++/*
++ * This is the monitor register section.
++ */
++struct rv_monitor rv_MODEL_NAME = {
++	.name = "MODEL_NAME",
++	.description = "auto-generated MODEL_NAME",
++	.start = start_MODEL_NAME,
++	.stop = stop_MODEL_NAME,
++	.reset = da_monitor_reset_all_MODEL_NAME,
++	.enabled = 0,
++};
++
++int register_MODEL_NAME(void)
++{
++	rv_register_monitor(&rv_MODEL_NAME);
++	return 0;
++}
++
++void unregister_MODEL_NAME(void)
++{
++	if (rv_MODEL_NAME.enabled)
++		stop_MODEL_NAME();
++
++	rv_unregister_monitor(&rv_MODEL_NAME);
++}
++
++module_init(register_MODEL_NAME);
++module_exit(unregister_MODEL_NAME);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("dot2k: auto-generated");
++MODULE_DESCRIPTION("MODEL_NAME");
+diff --git a/tools/verification/dot2/dot2k_templates/main_per_cpu.c b/tools/verification/dot2/dot2k_templates/main_per_cpu.c
+new file mode 100644
+index 000000000000..95eac96d8951
+--- /dev/null
++++ b/tools/verification/dot2/dot2k_templates/main_per_cpu.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/ftrace.h>
++#include <linux/tracepoint.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/rv.h>
++#include <rv/instrumentation.h>
++#include <rv/da_monitor.h>
++
++#define MODULE_NAME "MODEL_NAME"
++
++/*
++ * XXX: include required tracepoint headers, e.g.,
++ * #include <linux/trace/events/sched.h>
++ */
++#include <trace/events/rv.h>
++
++/*
++ * This is the self-generated part of the monitor. Generally, there is no need
++ * to touch this section.
++ */
++#include "MODEL_NAME.h"
++
++/*
++ * Declare the deterministic automata monitor.
++ *
++ * The rv monitor reference is needed for the monitor declaration.
++ */
++struct rv_monitor rv_MODEL_NAME;
++DECLARE_DA_MON_PER_CPU(MODEL_NAME, MIN_TYPE);
++
++/*
++ * This is the instrumentation part of the monitor.
++ *
++ * This is the section where manual work is required. Here the kernel events
++ * are translated into model's event.
++ *
++ */
++TRACEPOINT_HANDLERS_SKEL
++static int start_MODEL_NAME(void)
++{
++	int retval;
++
++	retval = da_monitor_init_MODEL_NAME();
++	if (retval)
++		return retval;
++
++TRACEPOINT_ATTACH
++
++	return 0;
++}
++
++static void stop_MODEL_NAME(void)
++{
++	rv_MODEL_NAME.enabled = 0;
++
++TRACEPOINT_DETACH
++
++	da_monitor_destroy_MODEL_NAME();
++}
++
++/*
++ * This is the monitor register section.
++ */
++struct rv_monitor rv_MODEL_NAME = {
++	.name = "MODEL_NAME",
++	.description = "auto-generated MODEL_NAME",
++	.start = start_MODEL_NAME,
++	.stop = stop_MODEL_NAME,
++	.reset = da_monitor_reset_all_MODEL_NAME,
++	.enabled = 0,
++};
++
++int register_MODEL_NAME(void)
++{
++	rv_register_monitor(&rv_MODEL_NAME);
++	return 0;
++}
++
++void unregister_MODEL_NAME(void)
++{
++	if (rv_MODEL_NAME.enabled)
++		stop_MODEL_NAME();
++
++	rv_unregister_monitor(&rv_MODEL_NAME);
++}
++
++module_init(register_MODEL_NAME);
++module_exit(unregister_MODEL_NAME);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("dot2k: auto-generated");
++MODULE_DESCRIPTION("MODEL_NAME");
+diff --git a/tools/verification/dot2/dot2k_templates/main_per_task.c b/tools/verification/dot2/dot2k_templates/main_per_task.c
+new file mode 100644
+index 000000000000..8bafb8c8a0a4
+--- /dev/null
++++ b/tools/verification/dot2/dot2k_templates/main_per_task.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/ftrace.h>
++#include <linux/tracepoint.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/rv.h>
++#include <rv/instrumentation.h>
++#include <rv/da_monitor.h>
++
++#define MODULE_NAME "MODEL_NAME"
++
++/*
++ * XXX: include required tracepoint headers, e.g.,
++ * #include <linux/trace/events/sched.h>
++ */
++#include <trace/events/rv.h>
++
++/*
++ * This is the self-generated part of the monitor. Generally, there is no need
++ * to touch this section.
++ */
++#include "MODEL_NAME.h"
++
++/*
++ * Declare the deterministic automata monitor.
++ *
++ * The rv monitor reference is needed for the monitor declaration.
++ */
++struct rv_monitor rv_MODEL_NAME;
++DECLARE_DA_MON_PER_TASK(MODEL_NAME, MIN_TYPE);
++
++/*
++ * This is the instrumentation part of the monitor.
++ *
++ * This is the section where manual work is required. Here the kernel events
++ * are translated into model's event.
++ *
++ */
++TRACEPOINT_HANDLERS_SKEL
++static int start_MODEL_NAME(void)
++{
++	int retval;
++
++	retval = da_monitor_init_MODEL_NAME();
++	if (retval)
++		return retval;
++
++TRACEPOINT_ATTACH
++
++	return 0;
++}
++
++static void stop_MODEL_NAME(void)
++{
++	rv_MODEL_NAME.enabled = 0;
++
++TRACEPOINT_DETACH
++
++	da_monitor_destroy_MODEL_NAME();
++}
++
++/*
++ * This is the monitor register section.
++ */
++struct rv_monitor rv_MODEL_NAME = {
++	.name = "MODEL_NAME",
++	.description = "auto-generated MODEL_NAME",
++	.start = start_MODEL_NAME,
++	.stop = stop_MODEL_NAME,
++	.reset = da_monitor_reset_all_MODEL_NAME,
++	.enabled = 0,
++};
++
++int register_MODEL_NAME(void)
++{
++	rv_register_monitor(&rv_MODEL_NAME);
++	return 0;
++}
++
++void unregister_MODEL_NAME(void)
++{
++	if (rv_MODEL_NAME.enabled)
++		stop_MODEL_NAME();
++
++	rv_unregister_monitor(&rv_MODEL_NAME);
++}
++
++module_init(register_MODEL_NAME);
++module_exit(unregister_MODEL_NAME);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("dot2k: auto-generated");
++MODULE_DESCRIPTION("MODEL_NAME");
 -- 
 2.35.1
 

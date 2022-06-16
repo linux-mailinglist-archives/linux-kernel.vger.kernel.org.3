@@ -2,238 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A7454E660
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1D154E666
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377525AbiFPPsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S1377580AbiFPPvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376523AbiFPPsy (ORCPT
+        with ESMTP id S233010AbiFPPvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:48:54 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4044041333
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:48:53 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id r5so1611779pgr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8yMbeVFXqMfABZuD1QhZzDycY4ah96Hm1iyf1N+XaCc=;
-        b=NPaQ29iOsmaX0ern/t18JW3P7X5V0/IA95mA5CfnVJ5Wh/LAnHstJ107DuAHYvbQhx
-         smVduWzMoevMvm4UFhxeipo+Yp2l6d7HcPbKO2zjkQAoCGZFUB7xAUKTGWzNSaKEkwbP
-         rPDJwr3UB0UmELX5eSK/vvgZBBn5pZaA6elMumk16q86hYPgqGOKSM+fqV8EJoTa+0ao
-         m6l51mGIckC+s0kwxxKB1gJBz1e7VMGirG53O2FSVxILi6q0QoEmIYoXp1EiV1hPgAdU
-         s+/LLqIwEY0XATKNpWznzwir0So84J6OioTRQkqDXihwGotv1QKx7GJAiEAlZQ3PULvg
-         zJBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8yMbeVFXqMfABZuD1QhZzDycY4ah96Hm1iyf1N+XaCc=;
-        b=UMN4jy7ILbbZvsgZHcy0H4hl90UtyfQ9szfXfbAcgpwnCLra/sf/RIMHv+cCF7Sxnw
-         jn/Q+9ugnYFSECJ1Ah6GQqCJx/IbcX52n/u0+Bh9q0/0AVW1AZkzoyes201Nzvh+AhS6
-         JUE6riQ0sL0Kb+bldevs/IV0XtIaZxq6FQFEnvpm8z1JVtus0FMRNOK48f6ZSpV3RTsl
-         elWiUf9bhBmnt7LDeQgSlRH2elhHWDyoH/VhBYCmLhEKeCnsBAJE93ETWHPOAt6GinC/
-         +AxMImVO293Upk6wmlZJDh1DmL6LYSIUp2J+zhpUr/gYZsFICIszvrCkXaMzV4+PuXPM
-         NfyA==
-X-Gm-Message-State: AJIora+oREjNMfhwrGqeS24wtwXlX4uNl/nnWZe6+EcKZf9l9zIxcMN8
-        WT81jLfYyuIekLsn1BAKa3dDVrnXTPlEHGJnaUg=
-X-Google-Smtp-Source: AGRyM1tkRjEBrR2X7zt3PKGtFk1sPtW46TnhHBgTPgTZ7YEPeO0e3yTm3z7KMBE/1wVtNsV7yn5QW4qzKIy6yycnWNc=
-X-Received: by 2002:a63:3f42:0:b0:408:c84e:509c with SMTP id
- m63-20020a633f42000000b00408c84e509cmr4932844pga.75.1655394532784; Thu, 16
- Jun 2022 08:48:52 -0700 (PDT)
+        Thu, 16 Jun 2022 11:51:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E0C427DE;
+        Thu, 16 Jun 2022 08:51:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 950D260BAD;
+        Thu, 16 Jun 2022 15:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4FFC34114;
+        Thu, 16 Jun 2022 15:51:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655394661;
+        bh=PaJOcCCOZMISwlBFFb5mPfz00LQCHmckbNW4/JT3HXk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AJwMwl3EcuRXCCpQxreHZ6QaquYE/XW383MEso/dl9qitr2DVDmVF6thuxBSgQ/pG
+         kSOWLWpUDJCutV6kF3GPsZAp56WVvvze0QpwMVBfO3uOQtoAmzikVSDv4l8QK6AUlz
+         89MAdBBNXGy3ib+sAKGjK5Ozjj6stT+yVu8a7qB5Ov4G0GXSd5Po0XO0YQmc6Vpq2v
+         3oE6ItDnKNuTH0O5fpnhi/77bCHAmZ7TQrOVoB+P2PJFABV9XcbRAkKfPudPBb4APH
+         jPIAtTE+8di9C+A0CkXE48GvMs+Cw8+G2EHH1oA9AYUtC9bRiQlj7I1MgPhvPL/iQE
+         eoJFHesoxzsSw==
+Date:   Thu, 16 Jun 2022 08:50:59 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?5qKB5paH6Z+s?= <wentao_liang_g@163.com>
+Cc:     jdmason@kudzu.us, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [PATCH net v2]vexy: Fix a use-after-free bug in
+ vxge-main.c
+Message-ID: <20220616085059.680dc215@kernel.org>
+In-Reply-To: <1f10f9f8.6c02.1816cb0dc51.Coremail.wentao_liang_g@163.com>
+References: <20220615013816.6593-1-Wentao_Liang_g@163.com>
+        <20220615195050.6e4785ef@kernel.org>
+        <1f10f9f8.6c02.1816cb0dc51.Coremail.wentao_liang_g@163.com>
 MIME-Version: 1.0
-References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-6-linmiaohe@huawei.com>
- <CAHbLzkrxOJmgx3mhj-5nAVXPjED9=4Pe+nzcEsXgrbv2ksVvkw@mail.gmail.com> <c48b8562-4375-ab22-9dfa-224f3e27a079@huawei.com>
-In-Reply-To: <c48b8562-4375-ab22-9dfa-224f3e27a079@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 16 Jun 2022 08:48:40 -0700
-Message-ID: <CAHbLzkpkzgq+YK9s1fLW9L90oBo87eaZPp3GEPv=Ug1uV9mmcA@mail.gmail.com>
-Subject: Re: [PATCH 5/7] mm/khugepaged: use helper macro __ATTR_RW
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 12:07 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> On 2022/6/16 5:28, Yang Shi wrote:
-> > On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
-> >>
-> >> Use helper macro __ATTR_RW to define the khugepaged attributes. Minor
-> >> readability improvement.
-> >>
-> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> >> ---
-> >>  mm/khugepaged.c | 37 +++++++++++++++----------------------
-> >>  1 file changed, 15 insertions(+), 22 deletions(-)
-> >>
-> >> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> >> index 8e6fad7c7bd9..142e26e4bdbf 100644
-> >> --- a/mm/khugepaged.c
-> >> +++ b/mm/khugepaged.c
-> >> @@ -147,8 +147,7 @@ static ssize_t scan_sleep_millisecs_store(struct kobject *kobj,
-> >>         return count;
-> >>  }
-> >>  static struct kobj_attribute scan_sleep_millisecs_attr =
-> >> -       __ATTR(scan_sleep_millisecs, 0644, scan_sleep_millisecs_show,
-> >> -              scan_sleep_millisecs_store);
-> >> +       __ATTR_RW(scan_sleep_millisecs);
-> >>
-> >>  static ssize_t alloc_sleep_millisecs_show(struct kobject *kobj,
-> >>                                           struct kobj_attribute *attr,
-> >> @@ -175,8 +174,7 @@ static ssize_t alloc_sleep_millisecs_store(struct kobject *kobj,
-> >>         return count;
-> >>  }
-> >>  static struct kobj_attribute alloc_sleep_millisecs_attr =
-> >> -       __ATTR(alloc_sleep_millisecs, 0644, alloc_sleep_millisecs_show,
-> >> -              alloc_sleep_millisecs_store);
-> >> +       __ATTR_RW(alloc_sleep_millisecs);
-> >>
-> >>  static ssize_t pages_to_scan_show(struct kobject *kobj,
-> >>                                   struct kobj_attribute *attr,
-> >> @@ -200,8 +198,7 @@ static ssize_t pages_to_scan_store(struct kobject *kobj,
-> >>         return count;
-> >>  }
-> >>  static struct kobj_attribute pages_to_scan_attr =
-> >> -       __ATTR(pages_to_scan, 0644, pages_to_scan_show,
-> >> -              pages_to_scan_store);
-> >> +       __ATTR_RW(pages_to_scan);
-> >>
-> >>  static ssize_t pages_collapsed_show(struct kobject *kobj,
-> >>                                     struct kobj_attribute *attr,
-> >> @@ -221,13 +218,13 @@ static ssize_t full_scans_show(struct kobject *kobj,
-> >>  static struct kobj_attribute full_scans_attr =
-> >>         __ATTR_RO(full_scans);
-> >>
-> >> -static ssize_t khugepaged_defrag_show(struct kobject *kobj,
-> >> +static ssize_t defrag_show(struct kobject *kobj,
-> >>                                       struct kobj_attribute *attr, char *buf)
+On Thu, 16 Jun 2022 21:25:39 +0800 (CST) =E6=A2=81=E6=96=87=E9=9F=AC wrote:
+> >The driver is not called "vexy" as far as I can tell.
+> > =20
+> >> The pointer vdev points to a memory region adjacent to a net_device
+> >> structure ndev, which is a field of hldev. At line 4740, the invocation
+> >> to vxge_device_unregister unregisters device hldev, and it also releas=
+es
+> >> the memory region pointed by vdev->bar0. At line 4743, the freed memory
+> >> region is referenced (i.e., iounmap(vdev->bar0)), resulting in a
+> >> use-after-free vulnerability. We can fix the bug by calling iounmap
+> >> before vxge_device_unregister. =20
 > >
-> > Why do you rename all the functions? Seems unnecessary and less intriguing TBH.
->
-> It's because e.g. __ATTR_RW(defrag) expects the defrag_show and defrag_store instead
-> of khugepaged_defrag_show and khugepaged_defrag_store.
+> >Are you sure the bar0 is not needed by the netdev? You're freeing =20
+> >memory that the netdev may need until it's unregistered. =20
 
-Aha, I see. I missed this.
+> We try unregister the device in a patched kernel. The device is successfu=
+lly
+>  removed and there is not any warning or exception. See the following=20
+> snapshot. I use lspci to list pci devices, we can see that the device=20
+> (00:03.0 Unclassified ...Gigabit ethernet PCIe (rev 10)) is removed safel=
+y.=20
+> Thus, I believe that the bar0 is not needed when freeing the device.
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+You need to reply in plain text, no HTML, the mailing lit rejects
+emails with HTML in them.
 
->
-> Thanks.
->
-> >
-> >>  {
-> >>         return single_hugepage_flag_show(kobj, attr, buf,
-> >>                                          TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG);
-> >>  }
-> >> -static ssize_t khugepaged_defrag_store(struct kobject *kobj,
-> >> +static ssize_t defrag_store(struct kobject *kobj,
-> >>                                        struct kobj_attribute *attr,
-> >>                                        const char *buf, size_t count)
-> >>  {
-> >> @@ -235,8 +232,7 @@ static ssize_t khugepaged_defrag_store(struct kobject *kobj,
-> >>                                  TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG);
-> >>  }
-> >>  static struct kobj_attribute khugepaged_defrag_attr =
-> >> -       __ATTR(defrag, 0644, khugepaged_defrag_show,
-> >> -              khugepaged_defrag_store);
-> >> +       __ATTR_RW(defrag);
-> >>
-> >>  /*
-> >>   * max_ptes_none controls if khugepaged should collapse hugepages over
-> >> @@ -246,13 +242,13 @@ static struct kobj_attribute khugepaged_defrag_attr =
-> >>   * runs. Increasing max_ptes_none will instead potentially reduce the
-> >>   * free memory in the system during the khugepaged scan.
-> >>   */
-> >> -static ssize_t khugepaged_max_ptes_none_show(struct kobject *kobj,
-> >> +static ssize_t max_ptes_none_show(struct kobject *kobj,
-> >>                                              struct kobj_attribute *attr,
-> >>                                              char *buf)
-> >>  {
-> >>         return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_none);
-> >>  }
-> >> -static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
-> >> +static ssize_t max_ptes_none_store(struct kobject *kobj,
-> >>                                               struct kobj_attribute *attr,
-> >>                                               const char *buf, size_t count)
-> >>  {
-> >> @@ -268,17 +264,16 @@ static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
-> >>         return count;
-> >>  }
-> >>  static struct kobj_attribute khugepaged_max_ptes_none_attr =
-> >> -       __ATTR(max_ptes_none, 0644, khugepaged_max_ptes_none_show,
-> >> -              khugepaged_max_ptes_none_store);
-> >> +       __ATTR_RW(max_ptes_none);
-> >>
-> >> -static ssize_t khugepaged_max_ptes_swap_show(struct kobject *kobj,
-> >> +static ssize_t max_ptes_swap_show(struct kobject *kobj,
-> >>                                              struct kobj_attribute *attr,
-> >>                                              char *buf)
-> >>  {
-> >>         return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_swap);
-> >>  }
-> >>
-> >> -static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
-> >> +static ssize_t max_ptes_swap_store(struct kobject *kobj,
-> >>                                               struct kobj_attribute *attr,
-> >>                                               const char *buf, size_t count)
-> >>  {
-> >> @@ -295,17 +290,16 @@ static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
-> >>  }
-> >>
-> >>  static struct kobj_attribute khugepaged_max_ptes_swap_attr =
-> >> -       __ATTR(max_ptes_swap, 0644, khugepaged_max_ptes_swap_show,
-> >> -              khugepaged_max_ptes_swap_store);
-> >> +       __ATTR_RW(max_ptes_swap);
-> >>
-> >> -static ssize_t khugepaged_max_ptes_shared_show(struct kobject *kobj,
-> >> +static ssize_t max_ptes_shared_show(struct kobject *kobj,
-> >>                                                struct kobj_attribute *attr,
-> >>                                                char *buf)
-> >>  {
-> >>         return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_shared);
-> >>  }
-> >>
-> >> -static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
-> >> +static ssize_t max_ptes_shared_store(struct kobject *kobj,
-> >>                                               struct kobj_attribute *attr,
-> >>                                               const char *buf, size_t count)
-> >>  {
-> >> @@ -322,8 +316,7 @@ static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
-> >>  }
-> >>
-> >>  static struct kobj_attribute khugepaged_max_ptes_shared_attr =
-> >> -       __ATTR(max_ptes_shared, 0644, khugepaged_max_ptes_shared_show,
-> >> -              khugepaged_max_ptes_shared_store);
-> >> +       __ATTR_RW(max_ptes_shared);
-> >>
-> >>  static struct attribute *khugepaged_attr[] = {
-> >>         &khugepaged_defrag_attr.attr,
-> >> --
-> >> 2.23.0
-> >>
-> >>
-> > .
-> >
->
+No errors happening during a test is not a sufficient proof of
+correctness. You need to analyze the driver and figure out what bar0=20
+is used for.
+
+Alternatively just save the address of bar0 to a local variable, let
+the netdev unregister happen, and then call *unmap() on the local
+variable. That won't move the unmap and avoid the UAF.
+
+But please LMK how you use these cards first.
+
+> /************************************************************************=
+********/
+> root@kernel:~# lspci
+> 00:00.0 Host bridge: Intel Corporation 82G33/G31/P35/P31 Express DRAM=20
+> Controller
+> 00:01.0 VGA compatible controller: Device 1234:1111 (rev 02)
+> 00:02.0 Ethernet controller: Intel Corporation 82574L Gigabit Network=20
+> Connection
+> 00:03.0 Unclassified device [00ff]: Exar Corp. X3100 Series 10 Gigabit=20
+> Ethernet PCIe (rev 10)
+
+Is this a real NIC card, or just a emulated / virtualized one?=20
+Do you use it day to day?=20
+
+> 00:1d.0 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI=20
+> Controller #1 (rev 03)
+> 00:1d.1 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI=20
+> Controller #2 (rev 03)
+> 00:1d.2 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI=20
+> Controller #3 (rev 03)
+> 00:1d.7 USB controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI=
+=20
+> Controller #1 (rev 03)
+> 00:1f.0 ISA bridge: Intel Corporation 82801IB (ICH9) LPC Interface=20
+> Controller (rev 02)
+> 00:1f.2 SATA controller: Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6
+>  port SATA Controller [AHCI mode] (rev 02)
+> 00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus Controller=20
+> (rev 02)
+> root@kernel:~# echo 1 > /sys/bus/pci/devices/0000:00:03.0/remove
+> root@kernel:~# lspci
+> 00:00.0 Host bridge: Intel Corporation 82G33/G31/P35/P31 Express DRAM
+>  Controller
+> 00:01.0 VGA compatible controller: Device 1234:1111 (rev 02)
+> 00:02.0 Ethernet controller: Intel Corporation 82574L Gigabit Network
+>  Connection
+> 00:1d.0 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+>  Controller #1 (rev 03)
+> 00:1d.1 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+>  Controller #2 (rev 03)
+> 00:1d.2 USB controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+>  Controller #3 (rev 03)
+> 00:1d.7 USB controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI
+>  Controller #1 (rev 03)
+> 00:1f.0 ISA bridge: Intel Corporation 82801IB (ICH9) LPC Interface=20
+> Controller (rev 02)
+> 00:1f.2 SATA controller: Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6=
+=20
+> port SATA Controller [AHCI mode] (rev 02)
+> 00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus=20
+> Controller (rev 02)

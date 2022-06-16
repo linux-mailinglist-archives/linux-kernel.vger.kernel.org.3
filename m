@@ -2,92 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DF654E55F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EDC54E566
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377202AbiFPOvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S1377256AbiFPOxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiFPOvV (ORCPT
+        with ESMTP id S233993AbiFPOxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:51:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2493F43EF1;
-        Thu, 16 Jun 2022 07:51:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39CE5B823E0;
-        Thu, 16 Jun 2022 14:51:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2779DC341C5;
-        Thu, 16 Jun 2022 14:51:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PkGsblFi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655391073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Ps2YC2wCwycvBi10ctMxDm81xYyrKyFftv5PAXfyRM=;
-        b=PkGsblFifbNC4pQDmVpsVWLuHGpuZK31ARFnApYM49FnnXRVq9LhfwtjV2KELKgjZ0HAy3
-        M9mMzbYDNJJArBQb2UHqq4q6PIdPu0t+uiW0GfO5dHvZdp/bYb1iEoOh2+tK9dNrLrope/
-        YBW28VC6mFClNsSvLLZ6x/d/E6ZTDF4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c527be78 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 16 Jun 2022 14:51:12 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 16:51:08 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
-Message-ID: <YqtDXPWdFQ/fqgDo@zx2c4.com>
-References: <20220616143617.449094-1-Jason@zx2c4.com>
- <YqtAShjjo1zC6EgO@casper.infradead.org>
+        Thu, 16 Jun 2022 10:53:39 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C825220BF0;
+        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id p69so1759394iod.0;
+        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=noJzuG2EgYsSXIT61u1YIsPaCEjRt5ye3SQVTsSN4U8=;
+        b=CIZ8a77SDwweUBOGNgII2b8y5/WfszC4zHsGvXE+zftomD+nN0gq1qFR2HzWFRYN5K
+         hpEhbGBopNmx3GlEh+glZLRXJhwIx2SwESaYp/7c+H2+x3MzsIKty7bImMbRMF0YGCVU
+         1z2PqX5O9AXmPnmNjgtHV+aWq+wFLluDGmmhi1+Jz3ENEavDVQ0CtNTzm0FJHR4i4kmd
+         atBUlGU2CMspcvvacCVvdsGjTNV8klc5bzSEOKuZPXH65L3o11x3SvSYMjXpebTbL4fH
+         0CIFIjl4J8623xiCo87jPzcp2eMQvYi42rfVp3Iotoy4uj0kVgKAcnFkkVXFnFJdJUfM
+         TyYg==
+X-Gm-Message-State: AJIora+9uXk2JQmNy0lexMmXsK1v/xndKTvgaXHL0rYRA5gKZ9I8QfbP
+        OlBqmRynoRuRZ6sPt8yzckIoCfYc7g==
+X-Google-Smtp-Source: AGRyM1u4nGZS+8jkLQspL8OqMilFtD1URp8KZikaKmVKIUBkw4uX4MYV01kHev1qyBWkrdJm6b53vw==
+X-Received: by 2002:a05:6602:2f0d:b0:669:e058:9a18 with SMTP id q13-20020a0566022f0d00b00669e0589a18mr2721297iow.26.1655391216014;
+        Thu, 16 Jun 2022 07:53:36 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y8-20020a056e020f4800b002d658a34081sm1052037ilj.86.2022.06.16.07.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 07:53:35 -0700 (PDT)
+Received: (nullmailer pid 3459426 invoked by uid 1000);
+        Thu, 16 Jun 2022 14:53:34 -0000
+Date:   Thu, 16 Jun 2022 08:53:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: move ibm,p8-occ bindings to proper
+ folder
+Message-ID: <20220616145334.GA3458950-robh@kernel.org>
+References: <20220615211619.6742-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqtAShjjo1zC6EgO@casper.infradead.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615211619.6742-1-wsa@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
-
-On Thu, Jun 16, 2022 at 03:38:02PM +0100, Matthew Wilcox wrote:
-> On Thu, Jun 16, 2022 at 04:36:17PM +0200, Jason A. Donenfeld wrote:
-> > A recent commit factored out a series of annoying (unsigned long) casts
-> > into a single variable declaration, but made the pointer type a
-> > `uintptr_t` rather than the usual `unsigned long`. This patch changes it
-> > to be the integer type more typically used by the kernel to represent
-> > addresses.
+On Wed, 15 Jun 2022 23:16:19 +0200, Wolfram Sang wrote:
+> It accidently ended up in i2c, but it should be in the hwmon folder.
 > 
-> No.  I did this on purpose.  uintptr_t is the correct type to represent
-> a pointer that's being used as an integer.  This dinosaur approach of
-> using unsigned long has to stop.
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> ---
+>  .../devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt       | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt (100%)
+> 
 
-For better or for worse, I've always assumed that the kernel had its
-reasons -- legitimate reasons, even -- for preferring `unsigned long` to
-a userspace type like `uintptr_t`, so I've always tried to code that
-way.
-
-If that's a "dinosaur approach" that "has to stop", it'd certainly be
-news to me (and I'm guessing others on the list too). I've never really
-seen anybody question the kernel's `unsigned long` usage before.
-
-So hopefully some outcome of this discussion will make it clear, and
-then either this patch will go in, or I'll get to work on carefully
-adjusting my code that uses `unsigned long` at the moment.
-
-Jason
+Applied, thanks!

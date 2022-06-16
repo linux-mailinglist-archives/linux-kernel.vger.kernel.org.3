@@ -2,177 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8A754DC11
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7EB54DC21
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359219AbiFPHmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S1359185AbiFPHsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiFPHml (ORCPT
+        with ESMTP id S229751AbiFPHsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:42:41 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9092AD9F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:42:36 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNvGn6nw4z1KB5p;
-        Thu, 16 Jun 2022 15:40:33 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 16 Jun 2022 15:42:31 +0800
-Subject: Re: [PATCH 7/7] mm/khugepaged: try to free transhuge swapcache when
- possible
-To:     Yang Shi <shy828301@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220611084731.55155-1-linmiaohe@huawei.com>
- <20220611084731.55155-8-linmiaohe@huawei.com>
- <CAHbLzkoYkN+QzdfSUkHbLMUYX=zkrgGCrqM6xRaVssFSJh9KqA@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <87617483-7945-30e2-471e-578da4f4d9c7@huawei.com>
-Date:   Thu, 16 Jun 2022 15:42:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 16 Jun 2022 03:48:04 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AA65001A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:48:03 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4E0345C0770;
+        Thu, 16 Jun 2022 03:47:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 16 Jun 2022 03:47:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1655365679; x=
+        1655452079; bh=3O2r1YgyB2oeAhAg4TGS0qOoqO2cLHTA+vhcEDWUkhY=; b=D
+        OYN0KxlANO5WF2q6PDdwXYhWguzeIRiNAefeqiLtSEUjeb/lRGEu1w9o//5cK5X4
+        eeTc3XHK1E7ufGgn0l45rC8BmJnlfxf8xtXHCE5OoMXmYlc9S7Ds1qa1yh1N9b+u
+        nyvYA5sMQfZ+87shRDam2zlsjiU6Z99YEGkemxxxJuqxITKPD/GDsalzgefVLNjZ
+        RtK/cdfaivVig7OY/UsKzEeTGYepo3nxaVwA1qUHmClwE9yrXfhxWbiLTRNsDA82
+        aLFyQDQS2+UrV1hs9Lw0ZSa8Ci57NySe/uodzixQflSeljql2MdsZtI2vONLzjSu
+        mdieq4hzAWoC3u6DyheCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655365679; x=
+        1655452079; bh=3O2r1YgyB2oeAhAg4TGS0qOoqO2cLHTA+vhcEDWUkhY=; b=r
+        NCvz7NPU3pQSgVoxG67boXfuYScG3RgqY0zH58KUiyKRVXWy8XtN9rppXMdHIlTp
+        8E3B6fYAVeON9DVSlDrA6d2/+s5047ZVZw6dlvv7J8kDwJZyLox6yX9TWrnXY58a
+        nN5625afAC/drIyse8nHRetE/Q8ekF1EOfm3+KIWyMCz03VJtoGFMLA6yOanF9uL
+        SO+fUuli6MlhvTX/WlL0hi+kPDPr7wIIlmSRqoZoF2lY/ls0vNdzviE6ratTEvd6
+        Ho7i0vHZisByGbC2DyAOUIZqE+/xJbOQpvGhx7QElFOqT1X1hFA+7gIIHrV3pw32
+        zvz5akpjiT2Hc7rd7zaWg==
+X-ME-Sender: <xms:LuCqYjtXIOQ3KgXqHf_fYpYWpOezOxzgvY58XgQGYuGwCMyOU0iQmA>
+    <xme:LuCqYkdCfgxch285e4mOAJOEj3FBHhlZxWkVTaCMroNE7BEGQdZVcUxTpTpCVUkNh
+    _vcDjzY0YYY6EhKj-4>
+X-ME-Received: <xmr:LuCqYmxaImTfRl2SM0f3MLF4wVHGaa0JZDJ5de1Psp3F1kQtOqN-L0F6yWB343KYkMjo2gzrRnaTshqw-WDehMPr9r7a8fmKdt7ZAa0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvvddguddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgr
+    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
+    frrghtthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheek
+    ffevudefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:LuCqYiP0UMhOpqgfw7mMpv3B72CilrEWKThnpa47LctXUQxUxNgTug>
+    <xmx:LuCqYj8pV6zEQ0ZNkMWZFp8yIpuHiNV3egck2XwXvcvUsQDIeEIZHQ>
+    <xmx:LuCqYiXGJdkwGKjySYKJX7RAhZaiCNvQPUzfmHQfAnhCSXbOLSQPRA>
+    <xmx:L-CqYk2JZlFVs4e0G6MHk3usUXzH7sue3z5gSIguzTnv-y6k2KjXfA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Jun 2022 03:47:58 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, linux-sunxi@lists.linux.dev,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 0/6] drm/sun4i: HDMI PHY cleanup/refactoring
+Date:   Thu, 16 Jun 2022 09:47:56 +0200
+Message-Id: <165536567243.1272810.1608686605887335667.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220615045543.62813-1-samuel@sholland.org>
+References: <20220615045543.62813-1-samuel@sholland.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHbLzkoYkN+QzdfSUkHbLMUYX=zkrgGCrqM6xRaVssFSJh9KqA@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/16 7:58, Yang Shi wrote:
-> On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> Transhuge swapcaches won't be freed in __collapse_huge_page_copy().
->> It's because release_pte_page() is not called for these pages and
->> thus free_page_and_swap_cache can't grab the page lock. These pages
->> won't be freed from swap cache even if we are the only user until
->> next time reclaim. It shouldn't hurt indeed, but we could try to
->> free these pages to save more memory for system.
+On Tue, 14 Jun 2022 23:55:37 -0500, Samuel Holland wrote:
+> This series prepares the sun8i HDMI PHY driver for supporting the new
+> custom PHY in the Allwinner D1 SoC. No functional change intended here.
 > 
+> This series was tested on D1, H3, and H6.
 > 
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  include/linux/swap.h | 5 +++++
->>  mm/khugepaged.c      | 1 +
->>  mm/swap.h            | 5 -----
->>  3 files changed, 6 insertions(+), 5 deletions(-)
->>
->> diff --git a/include/linux/swap.h b/include/linux/swap.h
->> index 8672a7123ccd..ccb83b12b724 100644
->> --- a/include/linux/swap.h
->> +++ b/include/linux/swap.h
->> @@ -456,6 +456,7 @@ static inline unsigned long total_swapcache_pages(void)
->>         return global_node_page_state(NR_SWAPCACHE);
->>  }
->>
->> +extern void free_swap_cache(struct page *page);
->>  extern void free_page_and_swap_cache(struct page *);
->>  extern void free_pages_and_swap_cache(struct page **, int);
->>  /* linux/mm/swapfile.c */
->> @@ -540,6 +541,10 @@ static inline void put_swap_device(struct swap_info_struct *si)
->>  /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=0 */
->>  #define free_swap_and_cache(e) is_pfn_swap_entry(e)
->>
->> +static inline void free_swap_cache(struct page *page)
->> +{
->> +}
->> +
->>  static inline int add_swap_count_continuation(swp_entry_t swp, gfp_t gfp_mask)
->>  {
->>         return 0;
->> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->> index ee0a719c8be9..52109ad13f78 100644
->> --- a/mm/khugepaged.c
->> +++ b/mm/khugepaged.c
->> @@ -756,6 +756,7 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
->>         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
->>                 list_del(&src_page->lru);
->>                 release_pte_page(src_page);
->> +               free_swap_cache(src_page);
+> Changes in v2:
+>  - Move error handling inside variant checks in probe function
 > 
-> Will this really work? The free_swap_cache() will just dec refcounts
-> without putting the page back to buddy. So the hugepage is not
-> actually freed at all. Am I missing something?
+> [...]
 
-Thanks for catching this! If page is on percpu lru_pvecs cache, page will
-be released when lru_pvecs are drained. But if not, free_swap_cache() won't
-free the page as it assumes the caller has a reference on the page and thus
-only does page_ref_sub(). Does the below change looks sense for you?
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 52109ad13f78..b8c96e33591d 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -755,8 +755,12 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
-
-        list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
-                list_del(&src_page->lru);
--               release_pte_page(src_page);
-+               mod_node_page_state(page_pgdat(src_page),
-+                                   NR_ISOLATED_ANON + page_is_file_lru(src_page),
-+                                   -compound_nr(src_page));
-+               unlock_page(src_page);
-                free_swap_cache(src_page);
-+               putback_lru_page(src_page);
-        }
- }
+Applied to drm/drm-misc (drm-misc-next).
 
 Thanks!
-
-> 
->>         }
->>  }
->>
->> diff --git a/mm/swap.h b/mm/swap.h
->> index 0193797b0c92..863f6086c916 100644
->> --- a/mm/swap.h
->> +++ b/mm/swap.h
->> @@ -41,7 +41,6 @@ void __delete_from_swap_cache(struct page *page,
->>  void delete_from_swap_cache(struct page *page);
->>  void clear_shadow_from_swap_cache(int type, unsigned long begin,
->>                                   unsigned long end);
->> -void free_swap_cache(struct page *page);
->>  struct page *lookup_swap_cache(swp_entry_t entry,
->>                                struct vm_area_struct *vma,
->>                                unsigned long addr);
->> @@ -81,10 +80,6 @@ static inline struct address_space *swap_address_space(swp_entry_t entry)
->>         return NULL;
->>  }
->>
->> -static inline void free_swap_cache(struct page *page)
->> -{
->> -}
->> -
->>  static inline void show_swap_cache_info(void)
->>  {
->>  }
->> --
->> 2.23.0
->>
->>
-> .
-> 
-
+Maxime

@@ -2,146 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5688F54E7DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 097D854E7FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378162AbiFPQpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S1378256AbiFPQps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377280AbiFPQoU (ORCPT
+        with ESMTP id S1378230AbiFPQpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:44:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C743289A6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:44:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE656B82346
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:44:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1E6C34114;
-        Thu, 16 Jun 2022 16:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655397856;
-        bh=EolkjpCPZI2MjBzt62Su7lhjjW4xiamLc2eTna4D4RY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=t/4p6pGthRLYB+t18wzKMBvG8YhBSmOj9OtlHdRZkkzCg6TPbfVT8Ym9er2q+OG/T
-         eU5+83JXJEKYQUx/QfhsWf37Dp7FF1iKXdivRNJra/69Vw+popfCVdqFGw90ruWGPR
-         dZTvPbCQ7oUJXojmCDmvO1AOOW2IKp1m5X9pbW2IYE10EWjb7spFHlCFQI9H23suvy
-         9LNu+aVdWeUD7Mi9cjocgqhLlSEMBpqZoT6Qp0r6r7DaA+HCQbNR4s+qfLMezv5Tf5
-         oN/ocqb4jVxWj1pdBu8t2496S3rgRAm/yaldO+WHgA735SDWRM/MIkHZsEsv7UXoIa
-         uTsl0FD9FSzQw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1DDD05C0546; Thu, 16 Jun 2022 09:44:16 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 09:44:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, dvyukov@google.com
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/pmladek.2022.06.15a
- 133/140] vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to
- __kasan_check_read() leaves .noinstr.text section
-Message-ID: <20220616164416.GA2130702@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202206160411.v3iL3YC0-lkp@intel.com>
- <20220615204039.GI1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220615211717.GA972937@paulmck-ThinkPad-P17-Gen-1>
- <CANpmjNMswUJhqfttxZGbkfN7X5d5FLiS1yPXzzGDivLtWDB9=g@mail.gmail.com>
- <20220616134021.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 16 Jun 2022 12:45:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D8A403F8;
+        Thu, 16 Jun 2022 09:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rdCg6im4FTYRC+krLkTNcrz9yXNDSAEOLtpVfWokJzk=; b=lIYqkylRNsFWHYC10t48L3rTzz
+        yBq8yCuNVVYqjoqPFXIS46lBCHD2NlAezsgABwyHdfMw66+kZP182Ua/ep6vVGNTs4F4CopCrFbEw
+        BWwqJURZ+2cthMYSs2sTja5FH6wt9G7AD7XNbVJa6piDo9PI9RUuHDlswpJ0uDp36s2PxE+EBlFod
+        Ea/aw52v+C5EArkPseYDvvLUiGIaKYuhrvSLyidul12C5DII7ZZBPjIYY8bncKLacdtXhZJCZgYw4
+        YkddyDxUs+Bv8mvNdNch9eNcVV46iAs17/v9EfjT1Whiyq+JdK1E62ph6AEv4FwDeksedEJK6XfI+
+        e6jnqHCg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1sba-0025gl-SZ; Thu, 16 Jun 2022 16:44:26 +0000
+Date:   Thu, 16 Jun 2022 17:44:26 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
+Message-ID: <Yqtd6hTS52mbb9+q@casper.infradead.org>
+References: <20220616143617.449094-1-Jason@zx2c4.com>
+ <YqtAShjjo1zC6EgO@casper.infradead.org>
+ <YqtDXPWdFQ/fqgDo@zx2c4.com>
+ <YqtKjAZRPBVjlE8S@casper.infradead.org>
+ <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616134021.GP1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 06:40:21AM -0700, Paul E. McKenney wrote:
-> On Thu, Jun 16, 2022 at 10:19:18AM +0200, Marco Elver wrote:
-> > On Wed, 15 Jun 2022 at 23:17, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > >
-> > > On Wed, Jun 15, 2022 at 01:40:39PM -0700, Paul E. McKenney wrote:
-> > > > On Thu, Jun 16, 2022 at 04:26:16AM +0800, kernel test robot wrote:
-> > > > > tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/pmladek.2022.06.15a
-> > > > > head:   0ba7324b44282870af740a5a121add62c7f5f730
-> > > > > commit: db21b02f8044e812f8a5e3811f602409290e3ede [133/140] context_tracking: Convert state to atomic_t
-> > > > > config: x86_64-randconfig-r003-20220516 (https://download.01.org/0day-ci/archive/20220616/202206160411.v3iL3YC0-lkp@intel.com/config)
-> > > > > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-> > > > > reproduce (this is a W=1 build):
-> > > > >         # https://github.com/ammarfaizi2/linux-block/commit/db21b02f8044e812f8a5e3811f602409290e3ede
-> > > > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-> > > > >         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/pmladek.2022.06.15a
-> > > > >         git checkout db21b02f8044e812f8a5e3811f602409290e3ede
-> > > > >         # save the config file
-> > > > >         mkdir build_dir && cp config build_dir/.config
-> > > > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> > > > >
-> > > > > If you fix the issue, kindly add following tag where applicable
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > >
-> > > > > All warnings (new ones prefixed by >>):
-> > > > >
-> > > > > >> vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to __kasan_check_read() leaves .noinstr.text section
-> > > > > >> vmlinux.o: warning: objtool: __ct_user_enter+0x7f: call to __kasan_check_read() leaves .noinstr.text section
-> > > >
-> > > > Marco, Dmitry, my guess is that this is due to the ct->active check in
-> > > > both functions.  Are we supposed to do something to make this sort of
-> > > > thing safe for KASAN?
-> > >
-> > > This time actually CCing Marco and Dmitry...
-> > 
-> > It's due to the atomic_read()s within the noinstr function. Within
-> > noinstr you can use arch_atomic_read() to avoid the instrumentation.
+On Thu, Jun 16, 2022 at 08:59:51AM -0700, Linus Torvalds wrote:
+> On Thu, Jun 16, 2022 at 8:21 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > I don't know why people call uintptr_t a "userspace type".  It's a type
+> > invented by C99 that is an integer type large enough to hold a pointer.
+> > Which is exactly what we want here.
 > 
-> Thank you, will fix!
+> On the other hand, "unsigned long" has existed since the first version
+> of C, and is an integer type large enough to hold a pointer.
+> 
+> Which is exactly what we want here, and what we use everywhere else too.
+> 
+> The whole "uintptr_t handles the historical odd cases with pointers
+> that are smaller than a 'long'" is entirely irrelevant, since those
+> odd cases are just not a factor.
 
-And please see below for an alleged fix.
+I don't care about the odd historical cases either.
 
-							Thanx, Paul
+> And the "pointers are _larger_ than a 'long'" case is similarly
+> irrelevant, since we very much want to use arithmetic on these things,
+> and they are 'long' later. They aren't used as pointers, they are used
+> as integer indexes into the virtual address space that we do odd
+> operations on.
+> 
+> Honestly, even if you believe in the 128-bit pointer thing, changing
+> one cast in one random place to be different from everything else is
+> *not* productive. We're never going to do some "let's slowly migrate
+> from one to the other".
+> 
+> And honestly, we're never going to do that using "uintptr_t" anyway,
+> since it would be based on a kernel config variable and be a very
+> specific type, and would need to be type-safe for any sane conversion.
+> 
+> IOW, in a hypothetical word where the address size is larger than the
+> word-size, it would have to be something like out "pte_t", which is
+> basically wrapped in a struct so that C implicit type conversion
+> doesn't bite you in the arse.
 
-------------------------------------------------------------------------
+I don't want to support an address space larger than word size.  I can't
+imagine any CPU vendor saying "So we have these larger registers that
+you can only use for pointers and then these smaller registers that you
+can use for data".  We haven't had A/D register splits since the m68k.
+Perhaps I haven't talked to enough crazy CPU people.  But if anyone does
+propose something that bad, we should laugh at them.
 
-commit 81e24ca26ee9933bcacf67a61e3f6ae41a025442
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Thu Jun 16 09:30:37 2022 -0700
+So how do you think we should solve the 128-bit-word-size problem?
+Leave int at 32-bit, promote long to 128-bit and get the compiler to
+add __int64 to give us a 64-bit type?
 
-    context_tracking: Use arch_atomic_read() in __ct_state for KASAN
-    
-    Context tracking's __ct_state() function can be invoked from noinstr state
-    where RCU is not watching.  This means that its use of atomic_read()
-    causes KASAN to invoke the non-noinstr __kasan_check_read() function
-    from the noinstr function __ct_state().  This is problematic because
-    someone tracing the __kasan_check_read() function could get a nasty
-    surprise because of RCU not watching.
-    
-    This commit therefore replaces the __ct_state() function's use of
-    atomic_read() with arch_atomic_read(), which KASAN does not attempt to
-    add instrumention to.
-    
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-    Cc: Frederic Weisbecker <frederic@kernel.org>
-    Cc: Marco Elver <elver@google.com>
+> We use the user-space types in a few places, and they have caused
+> problems, but at least they are really traditional and the compiler
+> actually enforces them for some really standard functions. I'm looking
+> at 'size_t' in particular, which caused problems exactly because it's
+> a type that is strictly speaking not under our control.
+> 
+> 'size_t' is actually a great example of why 'uintptr_t' is a horrid
+> thing. It's effectively a integer type that is large enough to hold a
+> pointer difference. On unsegmented architectures, that ends up being a
+> type large enough to hold a pointer.
 
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 0aecc07fb4f50..81c51e5f03143 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -49,7 +49,7 @@ DECLARE_PER_CPU(struct context_tracking, context_tracking);
- 
- static __always_inline int __ct_state(void)
- {
--	return atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
-+	return arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
- }
- #endif
- 
+The only reason I like size_t is that it's good _documentation_.
+It says "This integer is a byte count of something that's in memory".
+As opposed to being a count of sectors, blocks, pages, pointers or
+turtles.
+
+As an example:
+extern int bio_add_pc_page(struct request_queue *, struct bio *, struct page *,
+                           unsigned int, unsigned int);
+
+What the hell are those two ints?  Based on experience, they're probably
+offset & length, but who even knows what order they're in.
+
+> And does it sound familiar how on some architectures it's "unsigned
+> int", and on others it is "unsigned long"? It's very annoying, and
+> it's been annoying over the years. The latest annoyance was literally
+> less than a week ago in 1c27f1fc1549 ("iov_iter: fix build issue due
+> to possible type mis-match").
+
+Yes, ARM is just crazy here.  We should get the compiler people to give
+us an option to make size_t unsigned long.  Like we have -mcmodel=kernel
+on x86.
+

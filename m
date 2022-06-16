@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8300D54E6A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C170954E6AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378031AbiFPQG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
+        id S1378039AbiFPQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiFPQG6 (ORCPT
+        with ESMTP id S232667AbiFPQJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:06:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917CB45ADB
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=5MkuctBul9IJAIVhV0CXjLIPtRaSpCdpARIBoblY/Jw=; b=rDJSc0v6Ad7ykTmboi4XAAGG6s
-        X9HDnVNLD4ahnoA5xIC1oj687UkhuISwDbKk6zpWBpiZxbfTj5VpCzEnEi8sM7fTDBJwEOABDBFK+
-        iCGhC+QTvW/OtvMJqQ5XE67gR5w6uKSfIBnvU7vQAaUMblnYdarjpFnffWa4pbuVTx+Vpsg3xrDBh
-        ZeesZ5jcACMCFBZZ6VM9kizF6ZOr42+REZOKmeCuA2fhvBo/ZurLDBWH+6hrqFk/ZgnHwPd/eqt64
-        PiXhArYcuMEtyj+cvO5ntwyjtX8Y5nMMi5cRTePR7Bq2/mR9XqPt8KDMcfwYRja2/t04VbYxQoE5a
-        wcbvSLaQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1s1A-008S5Z-Lh; Thu, 16 Jun 2022 16:06:49 +0000
-Message-ID: <fc19b80e-3492-4b1a-e7e8-20a6a8ee6cf5@infradead.org>
-Date:   Thu, 16 Jun 2022 09:06:45 -0700
+        Thu, 16 Jun 2022 12:09:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8F03BBE4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655395746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4UlfqnsKfoPacVcltxpTNbmIYI6wNPfePNniZn5M9NQ=;
+        b=en5sYo2GBRJcNZPF6kFCQ9oGAOFqtqnooqJKCiFLyjM81jHA4Y3nUJNKDBcKwlO6Rp/Xoy
+        /HjUHpg1hwhRJexUa7dJPNlnoV6rXZZFkVJlWSQ6BqME8OnuoHsr472cDBq1IZebsitgnp
+        g1WIHAMJMJTH3kl3mEVcyMHcXJzTUmc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-JJ4HsWfnMXa8ypiro3AvUw-1; Thu, 16 Jun 2022 12:09:02 -0400
+X-MC-Unique: JJ4HsWfnMXa8ypiro3AvUw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79022100BABC;
+        Thu, 16 Jun 2022 16:09:00 +0000 (UTC)
+Received: from p1.luc.cera.cz.com (unknown [10.40.193.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B76A61415106;
+        Thu, 16 Jun 2022 16:08:58 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Michal Kubecek <mkubecek@suse.cz>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladyslav Tarasiuk <vladyslavt@nvidia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] ethtool: Fix get module eeprom fallback
+Date:   Thu, 16 Jun 2022 18:08:55 +0200
+Message-Id: <20220616160856.3623273-1-ivecera@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 04/11] drm/r128: Fix undefined behavior due to shift
- overflowing the constant
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org
-References: <20220405151517.29753-1-bp@alien8.de>
- <20220405151517.29753-5-bp@alien8.de>
- <04ff7802-c87a-2ea2-156e-c437446bc072@infradead.org>
- <YoZAhPj0IJmE8ss8@phenom.ffwll.local>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YoZAhPj0IJmE8ss8@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,72 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Function fallback_set_params() checks if the module type returned
+by a driver is ETH_MODULE_SFF_8079 and in this case it assumes
+that buffer returns a concatenated content of page  A0h and A2h.
+The check is wrong because the correct type is ETH_MODULE_SFF_8472.
 
+Fixes: 96d971e307cc ("ethtool: Add fallback to get_module_eeprom from netlink command")
+Cc: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+---
+ net/ethtool/eeprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 5/19/22 06:05, Daniel Vetter wrote:
-> On Mon, Apr 25, 2022 at 11:46:53AM -0700, Randy Dunlap wrote:
->>
->>
->> On 4/5/22 08:15, Borislav Petkov wrote:
->>> From: Borislav Petkov <bp@suse.de>
->>>
->>> Fix:
->>>
->>>   drivers/gpu/drm/r128/r128_cce.c: In function ‘r128_do_init_cce’:
->>>   drivers/gpu/drm/r128/r128_cce.c:417:2: error: case label does not reduce to an integer constant
->>>     case R128_PM4_64BM_64VCBM_64INDBM:
->>>     ^~~~
->>>   drivers/gpu/drm/r128/r128_cce.c:418:2: error: case label does not reduce to an integer constant
->>>     case R128_PM4_64PIO_64VCPIO_64INDPIO:
->>>     ^~~~
->>>
->>> See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
->>> details as to why it triggers with older gccs only.
->>>
->>> Signed-off-by: Borislav Petkov <bp@suse.de>
->>> Cc: David Airlie <airlied@linux.ie>
->>> Cc: Daniel Vetter <daniel@ffwll.ch>
->>> Cc: Alex Deucher <alexander.deucher@amd.com>
->>> Cc: dri-devel@lists.freedesktop.org
->>
->> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Pushed to drm-misc-next, thanks for patch&review.
-> -Daniel
-> 
-
-Hi,
-
-Will this be merged to mainline any time soonish?
-
-thanks.
-
->>
->> Thanks.
->>
->>> ---
->>>  drivers/gpu/drm/r128/r128_drv.h | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/r128/r128_drv.h b/drivers/gpu/drm/r128/r128_drv.h
->>> index 2e1bc01aa5c9..970e192b0d51 100644
->>> --- a/drivers/gpu/drm/r128/r128_drv.h
->>> +++ b/drivers/gpu/drm/r128/r128_drv.h
->>> @@ -300,8 +300,8 @@ extern long r128_compat_ioctl(struct file *filp, unsigned int cmd,
->>>  #	define R128_PM4_64PIO_128INDBM		(5  << 28)
->>>  #	define R128_PM4_64BM_128INDBM		(6  << 28)
->>>  #	define R128_PM4_64PIO_64VCBM_64INDBM	(7  << 28)
->>> -#	define R128_PM4_64BM_64VCBM_64INDBM	(8  << 28)
->>> -#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15 << 28)
->>> +#	define R128_PM4_64BM_64VCBM_64INDBM	(8U  << 28)
->>> +#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15U << 28)
->>>  #	define R128_PM4_BUFFER_CNTL_NOUPDATE	(1  << 27)
->>>  
->>>  #define R128_PM4_BUFFER_WM_CNTL		0x0708
->>
->> -- 
->> ~Randy
-> 
-
+diff --git a/net/ethtool/eeprom.c b/net/ethtool/eeprom.c
+index 7e6b37a54add..1c94bb8ea03f 100644
+--- a/net/ethtool/eeprom.c
++++ b/net/ethtool/eeprom.c
+@@ -36,7 +36,7 @@ static int fallback_set_params(struct eeprom_req_info *request,
+ 	if (request->page)
+ 		offset = request->page * ETH_MODULE_EEPROM_PAGE_LEN + offset;
+ 
+-	if (modinfo->type == ETH_MODULE_SFF_8079 &&
++	if (modinfo->type == ETH_MODULE_SFF_8472 &&
+ 	    request->i2c_address == 0x51)
+ 		offset += ETH_MODULE_EEPROM_PAGE_LEN * 2;
+ 
 -- 
-~Randy
+2.35.1
+

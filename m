@@ -2,80 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAC154EC60
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A8454EC95
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379074AbiFPVRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S1379057AbiFPVbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378629AbiFPVR1 (ORCPT
+        with ESMTP id S231592AbiFPVbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:17:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B7260B80;
-        Thu, 16 Jun 2022 14:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qT5M40xVA9YnszhgxwSPNtZNbPHFTpABYZWNZDdTHlI=; b=BQnYHJKQUoFq1xNokbxBotCcO6
-        fyX8/6LmROrO9P++bZSv3kWeFXeZaugSW6NQmDIfxNF8lEhvvHaFfEJ412vfN2qShpy68qrAfbVWD
-        VYapUQ8KpjH42R+a1yT+iOjZlKpXZqk/a95v3lJsgBYV3qmSRN4/+vuACmsP9lSj2LdoqHRosNHWs
-        i4j/UveqfwOJk0K7CfX9G6VN5EcLjiJCu5JCbbT+xWw3liZRBsAy//H94/Ai0PouDtrSzAkj0yc+p
-        3SEVjc0nAAEAISk1FZUUGzM/iHhbnx8ZI37z40tU+VtHw+BeZWW38OUStHwWNKXlfResq3o6eUQaI
-        xOg3rZmg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1wrX-002H7V-F4; Thu, 16 Jun 2022 21:17:11 +0000
-Date:   Thu, 16 Jun 2022 22:17:11 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     David Sterba <dsterba@suse.com>, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-btrfs@vger.kernel.org,
-        lkp@lists.01.org
-Subject: Re: [btrfs]  66a7a2412f: xfstests.btrfs.131.fail
-Message-ID: <Yqud1/SooVDamiuP@casper.infradead.org>
-References: <20220607154229.9164-1-dsterba@suse.com>
- <20220616143710.GF25633@xsang-OptiPlex-9020>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616143710.GF25633@xsang-OptiPlex-9020>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 16 Jun 2022 17:31:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8CA61296;
+        Thu, 16 Jun 2022 14:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655415075; x=1686951075;
+  h=from:to:cc:subject:date:message-id;
+  bh=/+AYwiPu7I6p1wniSCqIx6zbG2kzik2LX3FT34lcIs8=;
+  b=QS/bIXdEgkB4ZzSzlcoRcgL4tkdsdNeDoA0KjwI20D32t1Oea+BQHqzy
+   oHdHXtiVMRwo2uzugnivMufyoLREu5dP9RGErtjTQKKlsYfnCMbHRGrDh
+   0INjtcXz+D9TYTvmy4iOGTkLBcqT78TAb+6jQNULlyd746fwVxgJFXhOd
+   kzOQyY6HKQxQV2TrmDFD/yYxSQcQ5Nt0gXHRfK4F145zYAnPXNh2zVnNu
+   P4VR2xQNcc+Rjh/6TufgMFdha+Vypz46vd0Q8H7GzxVB8XF5VTX1Jt1Ff
+   eAusCnCy4HVeP236keP75C6YObZn2q1AichCtMsjref1RRoHISYc7l1lk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280389919"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280389919"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 14:31:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="589824120"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2022 14:31:14 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com
+Cc:     corbet@lwn.net, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com
+Subject: [PATCH 0/2] Documentation/x86: Update the dynamic XSTATE doc
+Date:   Thu, 16 Jun 2022 14:22:08 -0700
+Message-Id: <20220616212210.3182-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 10:37:10PM +0800, kernel test robot wrote:
-> btrfs/131	- output mismatch (see /lkp/benchmarks/xfstests/results//btrfs/131.out.bad)
->     --- tests/btrfs/131.out	2022-06-13 17:10:24.000000000 +0000
->     +++ /lkp/benchmarks/xfstests/results//btrfs/131.out.bad	2022-06-15 18:54:06.505508542 +0000
->     @@ -2,9 +2,9 @@
->      Using free space cache
->      free space tree is disabled
->      Enabling free space tree
->     -free space tree is enabled
->     +free space tree is disabled
+Hi all,
 
-I think I know what's going on here:
+This series is intended to update the documentation only. It is not ready
+yet for x86 maintainers. So more acknowledgment from Intel reviewers is
+needed. Any preliminary review from the cc'ed folks will be much
+appreciated. But it is possibly a waste of maintainers' time to review this
+draft at this stage.
 
-        compat_ro="$($BTRFS_UTIL_PROG inspect-internal dump-super "$SCRATCH_DEV"
- | \
-                     sed -rn 's/^compat_ro_flags\s+(.*)$/\1/p')"
-        if ((compat_ro & 0x1)); then
-                echo "free space tree is enabled"
-        else
-                echo "free space tree is disabled"
-        fi
+=== Cover Letter ===
 
-dump-super is reading the super block out of the page cache, but this
-change makes the page cache incoherent with what's on disc.  We could
-fix that by invalidating the page out of the page cache, but it may be
-easier to just dump this patch and fix how we use the page cache to
-write back the superblocks?
+With the AMX support in the mainline, I realize a couple of new
+arch_prctl(2) options that were added for KVM have been missing in the doc.
+And recently I heard some folks had hard time to understand the AMX
+enabling process. A code example is expected to clarify the steps.
+
+Thus, this patch set includes the following two updates:
+(1) Patch 1 adds AMX enabling code example.
+(2) Patch 2 explains the arch_prctl(2) options for guest:
+    ARCH_{GET|REQ}_XCOMP_GUEST_PERM
+
+The arch_prctl(2) manual page [1] is also missing the above and even other
+options that are already included in the doc. Perhaps, the man-page update
+follows up after this.
+
+These changes can be found in the repo:
+  git://github.com/intel/amx-linux.git doc
+
+And the compiled preview is available here:
+  https://htmlpreview.github.io/?https://github.com/intel/amx-linux/blob/doc-web/x86/xstate.html
+
+Thanks,
+Chang
+
+[1] arch_prctl(2): https://man7.org/linux/man-pages/man2/arch_prctl.2.html
+
+Chang S. Bae (2):
+  Documentation/x86: Add the AMX enabling example
+  Documentation/x86: Explain guest XSTATE permission control
+
+ Documentation/x86/xstate.rst | 69 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+
+
+base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+-- 
+2.17.1
 

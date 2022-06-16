@@ -2,77 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A0454DEBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B4E54DEBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376417AbiFPKMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S1376434AbiFPKM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376388AbiFPKMQ (ORCPT
+        with ESMTP id S232402AbiFPKMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:12:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FAF5D5F0;
-        Thu, 16 Jun 2022 03:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r2UDlYq5t6O5tFjJgY4OT/pXRUI5OvQVarwp5eb1G9E=; b=WZHZ0tfWmtiq3U2bqK0Hcu7UbF
-        BZxQ9o1zxQYH9VsyHy7HWtrDu/07NB1LfbdWW5zHXi23rELYc/ihdRqz2LLyrU9N9XXwme3O+rpx9
-        gW/F+e+eJNeCWZ3+KkkHE1BaTXuY66cLFmdiVRSlyz+7df/xxe9EyauB5BrB1Ka/zO74ulVe5HHg9
-        Ph8GwTK9rwh9qOCLJCDF3D3hznAyEUedBOTpAYaVeSL/5jYSwD6koAby05D08XkazjDjYbbI3kI/f
-        cdk8hKClwnQeltpgzW6B/qN/bS/WGCu7iCfaldBO4O5USf5oZC2U2dwhd4GCiNC881JBhkCdXONkL
-        K9C0Jhaw==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1mTu-008O7N-NK; Thu, 16 Jun 2022 10:12:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3EEED301D92;
-        Thu, 16 Jun 2022 12:12:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2157F2020C0EB; Thu, 16 Jun 2022 12:12:06 +0200 (CEST)
-Date:   Thu, 16 Jun 2022 12:12:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, seanjc@google.com, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH 00/19] Refresh queued CET virtualization series
-Message-ID: <YqsB9upUystxvl+d@hirez.programming.kicks-ass.net>
-References: <20220616084643.19564-1-weijiang.yang@intel.com>
+        Thu, 16 Jun 2022 06:12:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D8E7C34;
+        Thu, 16 Jun 2022 03:12:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACCB012FC;
+        Thu, 16 Jun 2022 03:12:45 -0700 (PDT)
+Received: from [10.1.28.141] (e127744.cambridge.arm.com [10.1.28.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF76B3F792;
+        Thu, 16 Jun 2022 03:12:42 -0700 (PDT)
+Subject: Re: [PATCH] perf test: Add ARM SPE system wide test
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>
+References: <20220615190735.1298213-1-namhyung@kernel.org>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <9242ecfa-36ab-c425-999c-fad44056223b@arm.com>
+Date:   Thu, 16 Jun 2022 11:12:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616084643.19564-1-weijiang.yang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220615190735.1298213-1-namhyung@kernel.org>
+Content-Type: multipart/mixed;
+ boundary="------------BAAAD7BE465EE9EDF2F47BC3"
+Content-Language: en-US
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 04:46:24AM -0400, Yang Weijiang wrote:
+This is a multi-part message in MIME format.
+--------------BAAAD7BE465EE9EDF2F47BC3
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-> To minimize the impact to exiting kernel/KVM code, most of KVM patch
-> code can be bypassed during runtime.Uncheck "CONFIG_X86_KERNEL_IBT"
-> and "CONFIG_X86_SHADOW_STACK" in Kconfig before kernel build to get
-> rid of CET featrures in KVM. If both of them are not enabled, KVM
-> clears related feature bits as well as CET user bit in supported_xss,
-> this makes CET related checks stop at the first points. Since most of
-> the patch code runs on the none-hot path of KVM, it's expected to
-> introduce little impact to existing code.
+Thanks for the patch, Namhyung
 
-Do I understand this right in that a host without X86_KERNEL_IBT cannot
-run a guest with X86_KERNEL_IBT on? That seems unfortunate, since that
-was exactly what I did while developing the X86_KERNEL_IBT patches.
+On 15/06/2022 20:07, Namhyung Kim wrote:
+> In the past it had a problem not setting the pid/tid on the sample
+> correctly when system-wide mode is used.  Although it's fixed now it'd
+> be nice if we have a test case for it.
+>
+> Cc: German Gomez <german.gomez@arm.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/tests/shell/test_arm_spe.sh | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/tools/perf/tests/shell/test_arm_spe.sh b/tools/perf/tests/shell/test_arm_spe.sh
+> index e59044edc406..b9c588ae393b 100755
+> --- a/tools/perf/tests/shell/test_arm_spe.sh
+> +++ b/tools/perf/tests/shell/test_arm_spe.sh
+> @@ -23,6 +23,7 @@ glb_err=0
+>  cleanup_files()
+>  {
+>  	rm -f ${perfdata}
+> +	rm -f ${perfdata}.old
+>  	exit $glb_err
+>  }
+>  
+> @@ -85,5 +86,19 @@ arm_spe_snapshot_test() {
+>  	arm_spe_report "SPE snapshot testing" $err
+>  }
+>  
+> +arm_spe_system_wide_test() {
+> +	echo "Recording trace with system-wide mode $perfdata"
+> +	perf record -o ${perfdata} -e arm_spe// -a \
+> +		-- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
+> +
 
-I'm thinking that if the hardware supports it, KVM should expose it,
-irrespective of the host kernel using it.
+Should we skip if we don't have privileges for CPU tracing? (attached diff)
+
+German
+
+> +	perf_script_samples dd &&
+> +	perf_report_samples dd
+> +
+> +	err=$?
+> +	arm_spe_report "SPE system-wide testing" $err
+> +}
+> +
+>  arm_spe_snapshot_test
+> +arm_spe_system_wide_test
+> +
+>  exit $glb_err
+
+--------------BAAAD7BE465EE9EDF2F47BC3
+Content-Type: text/plain; charset=UTF-8;
+ name="diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="diff"
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3BlcmYvdGVzdHMvc2hlbGwvdGVzdF9hcm1fc3BlLnNoIGIv
+dG9vbHMvcGVyZi90ZXN0cy9zaGVsbC90ZXN0X2FybV9zcGUuc2gKaW5kZXggYjljNTg4YWUz
+Li45NjI4NDFhNTEgMTAwNzU1Ci0tLSBhL3Rvb2xzL3BlcmYvdGVzdHMvc2hlbGwvdGVzdF9h
+cm1fc3BlLnNoCisrKyBiL3Rvb2xzL3BlcmYvdGVzdHMvc2hlbGwvdGVzdF9hcm1fc3BlLnNo
+CkBAIC0zMCwxMSArMzAsMTMgQEAgY2xlYW51cF9maWxlcygpCiB0cmFwIGNsZWFudXBfZmls
+ZXMgZXhpdCB0ZXJtIGludAogCiBhcm1fc3BlX3JlcG9ydCgpIHsKLQlpZiBbICQyICE9IDAg
+XTsgdGhlbgorCWlmIFsgJDIgPSAwIF07IHRoZW4KKwkJZWNobyAiJDE6IFBBU1MiCisJZWxp
+ZiBbICQyID0gMiBdOyB0aGVuCisJCWVjaG8gIiQxOiBTS0lQUEVEIgorCWVsc2UKIAkJZWNo
+byAiJDE6IEZBSUwiCiAJCWdsYl9lcnI9JDIKLQllbHNlCi0JCWVjaG8gIiQxOiBQQVNTIgog
+CWZpCiB9CiAKQEAgLTkxLDYgKzkzLDExIEBAIGFybV9zcGVfc3lzdGVtX3dpZGVfdGVzdCgp
+IHsKIAlwZXJmIHJlY29yZCAtbyAke3BlcmZkYXRhfSAtZSBhcm1fc3BlLy8gLWEgXAogCQkt
+LSBkZCBpZj0vZGV2L3plcm8gb2Y9L2Rldi9udWxsIGNvdW50PTEwMDAwMCA+IC9kZXYvbnVs
+bCAyPiYxCiAKKwlpZiBbICQ/ICE9IDAgXTsgdGhlbgorCQlhcm1fc3BlX3JlcG9ydCAiU1BF
+IHN5c3RlbS13aWRlIHRlc3RpbmciIDIKKwkJcmV0dXJuCisJZmkKKwogCXBlcmZfc2NyaXB0
+X3NhbXBsZXMgZGQgJiYKIAlwZXJmX3JlcG9ydF9zYW1wbGVzIGRkCiAK
+--------------BAAAD7BE465EE9EDF2F47BC3--

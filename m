@@ -2,83 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B0454EBC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A58654EBCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378622AbiFPVAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S1378840AbiFPVBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233525AbiFPVA3 (ORCPT
+        with ESMTP id S1378825AbiFPVA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:00:29 -0400
-Received: from pokefinder.org (sauhun.de [88.99.104.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ADA960062;
-        Thu, 16 Jun 2022 14:00:26 -0700 (PDT)
-Received: from localhost (dynamic-089-015-239-099.89.15.239.pool.telefonica.de [89.15.239.99])
-        by pokefinder.org (Postfix) with ESMTPSA id 4AD7F2C009E;
-        Thu, 16 Jun 2022 23:00:24 +0200 (CEST)
-Date:   Thu, 16 Jun 2022 23:00:22 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Xu Wang <vulab@iscas.ac.cn>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: Fix a potential use after free
-Message-ID: <YquZ5iADDamgQ+9w@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Xu Wang <vulab@iscas.ac.cn>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
+        Thu, 16 Jun 2022 17:00:56 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6A96006D;
+        Thu, 16 Jun 2022 14:00:54 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so3399907wms.5;
+        Thu, 16 Jun 2022 14:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=raPY/hCjGIt20pynbedv9SDuvusSbEqlEbu0G5lGIn0=;
+        b=UL70T9SBdT4nNt5Jm2X76BLM/y8crPm9BBOvZV664PpOHbcjuAVurIxpyxdvVIXvXJ
+         A5/VoCI+R+IgSg5/3lVAPyB5k8b9rbKcoYsx3qTHq79lDzoIDiO80IQmmksdpbTa8BDC
+         SRNJnFQXpTEd2R4S6+DvX2j+azjSFrmerdP0Utz4IzmwLbJaRVOQS5lRST8EHP1JVeGx
+         WhqrFn8CFSyhAkCM2//yFXxJiOVwfa3gAb6YsuLTYmuSzfuwxup5ZTvArFsCZyvRrlXJ
+         3qi0PP7FVPi2pf/wlHErE0VdZWlgGb0xTliLhealscXBsq0gdOQShA1hu8DKNUrzJGaJ
+         Ks2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=raPY/hCjGIt20pynbedv9SDuvusSbEqlEbu0G5lGIn0=;
+        b=yvV/mxsXpUcssaPFRbkiNErNABHF4crXXyfHH3NiOCPHekB50SO8Er8T6R4F9isep1
+         hLUQ4/k3zbx27HvHxkFJpX1LG25Yn+wwvUriQ1U+0OFg8h0C37OzEXjDE7X/jatfuXQc
+         psfuwRWkHLLYK8jtIsRiflGCJHzNU5eQwUzAH4StNaNs9GMQU9mBOoam6woGmTYF9JgJ
+         +4L7u+WVsYl/HqIUFYp/3AOrblgc57VvqLAtI2/puioZw/ULX6YRq8SbuBvJhKBqxKs3
+         cpKLd94E5NbV+dDXWP1u2DBZrdGmDXS2oXr8yb/Ex58Zc5eKt6Ab94oD9rn4uUvuxy+Z
+         pv+Q==
+X-Gm-Message-State: AJIora/b+p/PihdIPPPrXzWIJKvG1Find7IrHnSPuUUtGt5GbEHMUw6/
+        g9bqeIAEzNS9JMjtFjjUJ/E=
+X-Google-Smtp-Source: AGRyM1sbuwm3ki89XTDlpELf5UO5x8ktqFA0y6YKQOdmG82oyMaOtgiF3NvWim6izHEnGX0jH2mTnA==
+X-Received: by 2002:a7b:c389:0:b0:39c:49fe:25df with SMTP id s9-20020a7bc389000000b0039c49fe25dfmr6744751wmj.164.1655413253290;
+        Thu, 16 Jun 2022 14:00:53 -0700 (PDT)
+Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id bt28-20020a056000081c00b0020fcc655e4asm2658043wrb.5.2022.06.16.14.00.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 14:00:51 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Sterba <dsterba@suse.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        linux-parisc@vger.kernel.org,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [RESEND PATCH v4 0/2] btrfs: Replace kmap() with kmap_local_page() in zstd.c 
+Date:   Thu, 16 Jun 2022 23:00:34 +0200
+Message-Id: <20220616210037.7060-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rYtBd5w2y9ac+Wjk"
-Content-Disposition: inline
-In-Reply-To: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a little series which serves the purpose to replace kmap() with
+kmap_local_page() in btrfs/zstd.c. Actually this task is only
+accomplished in patch 2/2.
 
---rYtBd5w2y9ac+Wjk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Instead patch 1/2 is a pre-requisite for the above-mentioned replacement,
+but, above all else, it has the purpose to conform the prototypes of
+__kunmap_{local,atomic}() to their own correct semantic. Since those
+functions don't make changes to the memory pointed by their arguments,
+change the type of those arguments to become pointers to const void.
 
-On Fri, Dec 27, 2019 at 09:34:32AM +0000, Xu Wang wrote:
-> Free the adap structure only after we are done using it.
-> This patch just moves the put_device() down a bit to avoid the
-> use after free.
->=20
-> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+This little series has version number 4, despite it's the first time the
+two component patches have been re-united in a series. This may be a
+questionable choice, however patch 1/2 should be at its v4 and patch 2/2
+should be at its v3. I've tried to preserve the logs of version changes.
 
-Added a comment why we reverse the order for putting our stuff and
-applied to for-next, thanks! This way, we get more testing until it hits
-upstream. Still, stable tag added because we want it to be backported if
-all is well.
+v4 is due to the fact that, when I sent v3, I forgot to Cc several people
+and mailing lists. Furthermore, Andrew M. made me notice that I've made
+confusion with the tree structure: this is why now I have to send this
+series again.
 
+I want to apologize for the noise to people who have received these two
+patches more times than it should have been.
 
---rYtBd5w2y9ac+Wjk
-Content-Type: application/pgp-signature; name="signature.asc"
+Fabio M. De Francesco (2):
+  highmem: Make __kunmap_{local,atomic}() take "const void *"
+  btrfs: Replace kmap() with kmap_local_page() in zstd.c
 
------BEGIN PGP SIGNATURE-----
+ arch/parisc/include/asm/cacheflush.h |  6 ++--
+ arch/parisc/kernel/cache.c           |  2 +-
+ fs/btrfs/zstd.c                      | 42 +++++++++++++++-------------
+ include/linux/highmem-internal.h     | 10 +++----
+ mm/highmem.c                         |  2 +-
+ 5 files changed, 33 insertions(+), 29 deletions(-)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKrmeIACgkQFA3kzBSg
-KbaRUA/8CQ5A2iiywZCEDARYlutF420XPsrdYgQmCh49Gy2UN8PpMOuIDoX10xa6
-sf+llbsSQvmPKkeRxnyH51Ctm9gPN8xtVlCFpcZ9+8g6WbhXz0j++i0PUP4YAsW8
-0n1MBzxHEuBVRsqJyhZ/JxyR1yjiR6N6RrywsgEty9AYfn9XbXuUz3xlIGd3G5Yj
-vQQeC+5a8znfHcfr8MOudpMBb3gaAHF/IvqOuiT6y5gSB6d6QqlC8OeQJ/tCkEgk
-FtdVYRPf43mdZBAH4Kl+uneULnBhIx4YVuUlt1doG+N8szUiSXcCuWfGNwXh9Ta8
-s1CaGzG4qXCBjCSl+e2bX1hFr787ZFiyyNRaC8iQ6Eauy6dA7ZWEzz9I2wQgHkhg
-ALqADG+YENA90QKsGLdDMzkZH3c6udQXt3qnn+TEuN89x8KTIJFuExZGM97EsHNW
-1SgFuV56iCYdgWocuD2cdD6Om6bR0q75LlcuWM76w5JBZ6JenPutQbCc6uJ9PZoN
-CvDfm043rzsbtCbX1E8OMFPeXmnrF7OSDYrJXWXHflBP34wTcz8dqdJY2gOp31mv
-WvPGa36x4swQdKJg2qdenJG5HljDQISVbI1K/OESYMQoOWOVTf8F4T58HsQGjQ/r
-1ssEIHcr/sGaiqL/v4nsatV4EQNwnJuIWDwXBXG+AX/3Yor60Rw=
-=t3S7
------END PGP SIGNATURE-----
+-- 
+2.36.1
 
---rYtBd5w2y9ac+Wjk--

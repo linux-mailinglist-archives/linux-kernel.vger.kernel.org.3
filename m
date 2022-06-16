@@ -2,90 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3B454E83F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2994F54E83B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347257AbiFPQ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S239067AbiFPQ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240141AbiFPQ6c (ORCPT
+        with ESMTP id S236201AbiFPQ6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:58:32 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B7F3B546
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:58:31 -0700 (PDT)
+        Thu, 16 Jun 2022 12:58:31 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC553BF84
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655398711; x=1686934711;
+  t=1655398710; x=1686934710;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=S5O1PtSeWWp85IzvqLzspKlCA3tRqJn7LtXeyvRwsbI=;
-  b=cMBhkc6IAJ8AxpW5r0zFXRL5XRn0wJCvd98bLwmdhcL9hKrTGc5HP5wn
-   mGo2j5q6B2i+OpnMn3gOxYqr2Ck27Xa3CJ5ESBzxsRAH8r6OUE+3h1nyj
-   DcXJrpUKgtR1Qefp/Mp3m2Al90NqxK4xUMwaCYdyd5uWQ1Xt1t3p8n296
-   kU1jV8rdkDmPBJYgQQvvikHzs7d5xVt8DfkbSMdOKhEZxz+pdiyLwAEF/
-   Z+gOYDYou8kcNlDld4zNQFBKVxT+/CgYBycbFUo5l9aI81/0l+L/mcI7s
-   z6MRT48W+blrvwSy1+TjgTMliHHdgt1hZ2DPdRIijXL/9wxHPSnNm7SyH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="304739433"
+  bh=wlgRJkfaNUJojj/xGs1IJBxduLtqn9lZftWj49JVVcA=;
+  b=WUlEEO+NES3dm7AbgdnsyRqful1qIEMsZaAK5MbXcPcL2ZhWt7ci96ll
+   hc1/cnN0BQpYRQuNAUxILUqKpMVHc8OvRF2IGFwuVYI4kYDuX936VtmjF
+   HFqjRcGkslB7mRiOOA41OeJl1UM5FFhT7PkLK3sM+NmI8lwtrt+NVv+C2
+   X7Q/82vhL+REqiqzh/k9sNKD6ufkfIAbevEO7GHFLBJM3Alrtu6FWwZUm
+   UWriTFCxDBWqlbz9kqy/d8oivrDKG1f3iNk1Kv5jag1zVLAwsQJWGNiyZ
+   Zcg+4NbqD8urlO6MOuDkvXV+n+QAfslkxDIORZDelIRxVa9PgXH2KL+gt
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="340950388"
 X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="304739433"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 09:58:30 -0700
+   d="scan'208";a="340950388"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 09:58:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="762925713"
+   d="scan'208";a="618950926"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 16 Jun 2022 09:58:29 -0700
+  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2022 09:58:29 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8BD1E3B9; Thu, 16 Jun 2022 19:58:31 +0300 (EEST)
+        id 9FF3D51E; Thu, 16 Jun 2022 19:58:31 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andy@kernel.org>, Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH v1 07/11] mfd: intel_soc_pmic_bxtwc: Drop redundant ACPI_PTR()
-Date:   Thu, 16 Jun 2022 19:58:19 +0300
-Message-Id: <20220616165823.4919-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 08/11] mfd: intel_soc_pmic_bxtwc: Use bits.h macros for all masks
+Date:   Thu, 16 Jun 2022 19:58:20 +0300
+Message-Id: <20220616165823.4919-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
 References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver depends on ACPI (via MFD_INTEL_PMC_BXT), ACPI_PTR() resolution
-is always the same. Otherwise a compiler may produce a warning.
-
-That said, the rule of thumb either ugly ifdeffery with ACPI_PTR or
-none should be used in a driver.
+Currently we are using BIT(), but GENMASK(). Make use of the latter one
+as well (far less error-prone, far more concise).
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/mfd/intel_soc_pmic_bxtwc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mfd/intel_soc_pmic_bxtwc.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-index 6e4c2ca47d82..b48e620de7a3 100644
+index b48e620de7a3..529aec38389c 100644
 --- a/drivers/mfd/intel_soc_pmic_bxtwc.c
 +++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-@@ -575,7 +575,7 @@ static struct platform_driver bxtwc_driver = {
- 	.driver	= {
- 		.name	= "BXTWC PMIC",
- 		.pm     = pm_sleep_ptr(&bxtwc_pm_ops),
--		.acpi_match_table = ACPI_PTR(bxtwc_acpi_ids),
-+		.acpi_match_table = bxtwc_acpi_ids,
- 		.dev_groups = bxtwc_groups,
- 	},
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <linux/acpi.h>
++#include <linux/bits.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+@@ -18,9 +19,9 @@
+ #include <asm/intel_scu_ipc.h>
+ 
+ /* PMIC device registers */
+-#define REG_ADDR_MASK		0xFF00
++#define REG_ADDR_MASK		GENMASK(15, 8)
+ #define REG_ADDR_SHIFT		8
+-#define REG_OFFSET_MASK		0xFF
++#define REG_OFFSET_MASK		GENMASK(7, 0)
+ 
+ /* Interrupt Status Registers */
+ #define BXTWC_IRQLVL1		0x4E02
+@@ -112,29 +113,29 @@ static const struct regmap_irq bxtwc_regmap_irqs[] = {
  };
+ 
+ static const struct regmap_irq bxtwc_regmap_irqs_pwrbtn[] = {
+-	REGMAP_IRQ_REG(BXTWC_PWRBTN_IRQ, 0, 0x01),
++	REGMAP_IRQ_REG(BXTWC_PWRBTN_IRQ, 0, BIT(0)),
+ };
+ 
+ static const struct regmap_irq bxtwc_regmap_irqs_bcu[] = {
+-	REGMAP_IRQ_REG(BXTWC_BCU_IRQ, 0, 0x1f),
++	REGMAP_IRQ_REG(BXTWC_BCU_IRQ, 0, GENMASK(4, 0)),
+ };
+ 
+ static const struct regmap_irq bxtwc_regmap_irqs_adc[] = {
+-	REGMAP_IRQ_REG(BXTWC_ADC_IRQ, 0, 0xff),
++	REGMAP_IRQ_REG(BXTWC_ADC_IRQ, 0, GENMASK(7, 0)),
+ };
+ 
+ static const struct regmap_irq bxtwc_regmap_irqs_chgr[] = {
+-	REGMAP_IRQ_REG(BXTWC_USBC_IRQ, 0, 0x20),
+-	REGMAP_IRQ_REG(BXTWC_CHGR0_IRQ, 0, 0x1f),
+-	REGMAP_IRQ_REG(BXTWC_CHGR1_IRQ, 1, 0x1f),
++	REGMAP_IRQ_REG(BXTWC_USBC_IRQ, 0, BIT(5)),
++	REGMAP_IRQ_REG(BXTWC_CHGR0_IRQ, 0, GENMASK(4, 0)),
++	REGMAP_IRQ_REG(BXTWC_CHGR1_IRQ, 1, GENMASK(4, 0)),
+ };
+ 
+ static const struct regmap_irq bxtwc_regmap_irqs_tmu[] = {
+-	REGMAP_IRQ_REG(BXTWC_TMU_IRQ, 0, 0x06),
++	REGMAP_IRQ_REG(BXTWC_TMU_IRQ, 0, GENMASK(2, 1)),
+ };
+ 
+ static const struct regmap_irq bxtwc_regmap_irqs_crit[] = {
+-	REGMAP_IRQ_REG(BXTWC_CRIT_IRQ, 0, 0x03),
++	REGMAP_IRQ_REG(BXTWC_CRIT_IRQ, 0, GENMASK(1, 0)),
+ };
+ 
+ static struct regmap_irq_chip bxtwc_regmap_irq_chip = {
 -- 
 2.35.1
 

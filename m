@@ -2,186 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0A054DB51
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D66854DB4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358968AbiFPHNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S1358908AbiFPHMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359041AbiFPHNY (ORCPT
+        with ESMTP id S1358853AbiFPHMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:13:24 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335B123143;
-        Thu, 16 Jun 2022 00:13:21 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BD72E240004;
-        Thu, 16 Jun 2022 07:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1655363600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/ylwRydwSJ1vl505rIcsqlZRV8qHAjzTkuzOn3IJaxY=;
-        b=LJPb2Nd1CvgSZLX2nP41tGlPv6KZN9tbzWLxHLWLbPbK9vWbVOfa2G9oJIScPODdB0HHDT
-        puwfaAEjZa/qWjni4mrATRg9Hz7OeZLFCOsfBJ5FR2sDgQ0iYz2EWLU+zzqnlR3ISNN+UK
-        kCJLFH1N7RiaMBpRqW0k5sHPRqdAanVW2V35vB4PwRIGqsSXtZhvyvpr08lMa/PYhf0rzh
-        j0L0DdnBx+4gdnxlLgaDcPB7nEqxhKeGBT5RpzJg64e9nAoYbPNGq1GX+GoOneNGxY4BsT
-        QDhKQKrPWQl1OIiQlFTNoZgWS+brgsq7PcScRJNlKSfPZw2mD7Kk/onqljfLqA==
-Date:   Thu, 16 Jun 2022 09:12:22 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH RESEND net-next v7 05/16] net: pcs: add Renesas MII
- converter driver
-Message-ID: <20220616091222.4dbf9de3@fixe.home>
-In-Reply-To: <20220614223109.603935fb@kernel.org>
-References: <20220610103712.550644-1-clement.leger@bootlin.com>
-        <20220610103712.550644-6-clement.leger@bootlin.com>
-        <20220614223109.603935fb@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Thu, 16 Jun 2022 03:12:37 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F5F51;
+        Thu, 16 Jun 2022 00:12:34 -0700 (PDT)
+X-UUID: 450dc388895640b8bb5be844d54c3dc1-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:e5f7ed83-ef2d-4e55-a1e2-0bd5cfe595ce,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:e5f7ed83-ef2d-4e55-a1e2-0bd5cfe595ce,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:765873f6-e099-41ba-a32c-13b8bfe63214,C
+        OID:91b86b891a75,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 450dc388895640b8bb5be844d54c3dc1-20220616
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 481259333; Thu, 16 Jun 2022 15:12:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Jun 2022 15:12:28 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jun 2022 15:12:28 +0800
+Message-ID: <3de597c1ab963cc8f6dd89da089c6f0660517f34.camel@mediatek.com>
+Subject: Re: [PATCH] clk: mediatek: clk-mt8195-vdo0: Set rate on
+ vdo0_dp_intf0_dp_intf's parent
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>
+CC:     "sboyd@kernel.org" <sboyd@kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "Miles Chen =?UTF-8?Q?=28=E9=99=B3=E6=B0=91=E6=A8=BA=29?=" 
+        <Miles.Chen@mediatek.com>,
+        "chun-jie.chen@mediatek.com" <chun-jie.chen@mediatek.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <jitao.shi@mediatek.com>, <mandyjh.liu@mediatek.com>
+Date:   Thu, 16 Jun 2022 15:12:28 +0800
+In-Reply-To: <20220614091020.21472-1-angelogioacchino.delregno@collabora.com>
+References: <20220614091020.21472-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 14 Jun 2022 22:31:09 -0700,
-Jakub Kicinski <kuba@kernel.org> a =C3=A9crit :
+On Tue, 2022-06-14 at 17:10 +0800, AngeloGioacchino Del Regno wrote:
+> Add the CLK_SET_RATE_PARENT flag to the CLK_VDO0_DP_INTF0_DP_INTF
+> clock: this is required to trigger clock source selection on
+> CLK_TOP_EDP, while avoiding to manage the enablement of the former
+> separately from the latter in the displayport driver.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/clk-mt8195-vdo0.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mt8195-vdo0.c
+> b/drivers/clk/mediatek/clk-mt8195-vdo0.c
+> index 261a7f76dd3c..07b46bfd5040 100644
+> --- a/drivers/clk/mediatek/clk-mt8195-vdo0.c
+> +++ b/drivers/clk/mediatek/clk-mt8195-vdo0.c
+> @@ -37,6 +37,10 @@ static const struct mtk_gate_regs vdo0_2_cg_regs =
+> {
+>  #define GATE_VDO0_2(_id, _name, _parent, _shift)			
+> \
+>  	GATE_MTK(_id, _name, _parent, &vdo0_2_cg_regs, _shift,
+> &mtk_clk_gate_ops_setclr)
+>  
+> +#define GATE_VDO0_2_FLAGS(_id, _name, _parent, _shift, _flags)	
+> 	\
+> +	GATE_MTK_FLAGS(_id, _name, _parent, &vdo0_2_cg_regs, _shift,	
+> \
+> +		       &mtk_clk_gate_ops_setclr, _flags)
+> +
+>  static const struct mtk_gate vdo0_clks[] = {
+>  	/* VDO0_0 */
+>  	GATE_VDO0_0(CLK_VDO0_DISP_OVL0, "vdo0_disp_ovl0", "top_vpp",
+> 0),
+> @@ -85,7 +89,8 @@ static const struct mtk_gate vdo0_clks[] = {
+>  	/* VDO0_2 */
+>  	GATE_VDO0_2(CLK_VDO0_DSI0_DSI, "vdo0_dsi0_dsi", "top_dsi_occ",
+> 0),
+>  	GATE_VDO0_2(CLK_VDO0_DSI1_DSI, "vdo0_dsi1_dsi", "top_dsi_occ",
+> 8),
+> -	GATE_VDO0_2(CLK_VDO0_DP_INTF0_DP_INTF, "vdo0_dp_intf0_dp_intf",
+> "top_edp", 16),
+> +	GATE_VDO0_2_FLAGS(CLK_VDO0_DP_INTF0_DP_INTF,
+> "vdo0_dp_intf0_dp_intf",
+> +			  "top_edp", 16, CLK_SET_RATE_PARENT),
+>  };
+>  
+>  static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
+> -- 
+> 2.35.1
+> 
 
-> On Fri, 10 Jun 2022 12:37:01 +0200 Cl=C3=A9ment L=C3=A9ger wrote:
-> > Subject: [PATCH RESEND net-next v7 05/16] net: pcs: add Renesas MII con=
-verter driver
-> >=20
-> > Add a PCS driver for the MII converter that is present on the Renesas
-> > RZ/N1 SoC. This MII converter is reponsible for converting MII to
-> > RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
-> > reuse it in both the switch driver and the stmmac driver. Currently,
-> > this driver only allows the PCS to be used by the dual Cortex-A7
-> > subsystem since the register locking system is not used. =20
->=20
-> Could someone with MII &| PCS knowledge cast an eye over this code?
-> All I can do is point out error path issues...
->=20
-> > +struct phylink_pcs *miic_create(struct device *dev, struct device_node=
- *np)
-> > +{
-> > +	struct platform_device *pdev;
-> > +	struct miic_port *miic_port;
-> > +	struct device_node *pcs_np;
-> > +	struct miic *miic;
-> > +	u32 port;
-> > +
-> > +	if (!of_device_is_available(np))
-> > +		return ERR_PTR(-ENODEV);
-> > +
-> > +	if (of_property_read_u32(np, "reg", &port))
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	if (port > MIIC_MAX_NR_PORTS || port < 1)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	/* The PCS pdev is attached to the parent node */
-> > +	pcs_np =3D of_get_parent(np); =20
->=20
-> of_get_parent()? ..
->=20
-> > +	if (!pcs_np)
-> > +		return ERR_PTR(-ENODEV);
-> > +
-> > +	if (!of_device_is_available(pcs_np))
-> > +		return ERR_PTR(-ENODEV); =20
->=20
-> .. more like of_leak_parent()
+Hello Angelo,
 
-Indeed, I'll fix that.
+Thanks for this patch.
+Another dp clock should also be fix.
+After confirming with Jitao who is our dp expert.
+The parent of CLK_VDO1_DPINTF should be top_dp instead of top_vpp.
 
->=20
-> > +	pdev =3D of_find_device_by_node(pcs_np);
-> > +	if (!pdev || !platform_get_drvdata(pdev))
-> > +		return ERR_PTR(-EPROBE_DEFER);
-> > +
-> > +	miic_port =3D kzalloc(sizeof(*miic_port), GFP_KERNEL);
-> > +	if (!miic_port)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	miic =3D platform_get_drvdata(pdev);
-> > +	device_link_add(dev, miic->dev, DL_FLAG_AUTOREMOVE_CONSUMER);
-> > +
-> > +	miic_port->miic =3D miic;
-> > +	miic_port->port =3D port - 1;
-> > +	miic_port->pcs.ops =3D &miic_phylink_ops;
-> > +
-> > +	return &miic_port->pcs;
-> > +}
-> > +EXPORT_SYMBOL(miic_create); =20
->=20
-> > +static int miic_parse_dt(struct device *dev, u32 *mode_cfg)
-> > +{
-> > +	s8 dt_val[MIIC_MODCTRL_CONF_CONV_NUM];
-> > +	struct device_node *np =3D dev->of_node;
-> > +	struct device_node *conv;
-> > +	u32 conf;
-> > +	int port;
-> > +
-> > +	memset(dt_val, MIIC_MODCTRL_CONF_NONE, sizeof(dt_val));
-> > +
-> > +	of_property_read_u32(np, "renesas,miic-switch-portin", &conf);
-> > +	dt_val[0] =3D conf;
-> > +
-> > +	for_each_child_of_node(np, conv) {
-> > +		if (of_property_read_u32(conv, "reg", &port))
-> > +			continue;
-> > +
-> > +		if (!of_device_is_available(conv))
-> > +			continue;
-> > +
-> > +		if (of_property_read_u32(conv, "renesas,miic-input", &conf) =3D=3D 0)
-> > +			dt_val[port] =3D conf;
-> > +
-> > +		of_node_put(conv); =20
->=20
-> Don't these iteration functions put() the current before taking the
-> next one all by themselves? Or is there supposed to be a "break" here?
+Thanks!
 
-Yes, of_node_put() should actually only be called in case of early exit.
-I'll fix that.
+--- a/drivers/clk/mediatek/clk-mt8195-vdo1.c
++++ b/drivers/clk/mediatek/clk-mt8195-vdo1.c
+@@ -43,6 +43,9 @@ static const struct mtk_gate_regs vdo1_3_cg_regs = {
+ #define GATE_VDO1_2(_id, _name, _parent,
+_shift)                       \
+        GATE_MTK(_id, _name, _parent, &vdo1_2_cg_regs, _shift,
+&mtk_clk_gate_ops_setclr)
 
++#define GATE_VDO1_2_FLAGS(_id, _name, _parent, _shift,
+_flags)                 \
++       GATE_MTK_FLAGS(_id, _name, _parent, &vdo1_2_cg_regs, _shift,
+&mtk_clk_gate_ops_setclr, _flags)
++
+ #define GATE_VDO1_3(_id, _name, _parent,
+_shift)                       \
+        GATE_MTK(_id, _name, _parent, &vdo1_3_cg_regs, _shift,
+&mtk_clk_gate_ops_setclr)
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+@@ -99,7 +102,7 @@ static const struct mtk_gate vdo1_clks[] = {
+        GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPI0,
+"vdo1_disp_monitor_dpi0", "top_vpp", 1),
+        GATE_VDO1_2(CLK_VDO1_DPI1, "vdo1_dpi1", "top_vpp", 8),
+        GATE_VDO1_2(CLK_VDO1_DISP_MONITOR_DPI1,
+"vdo1_disp_monitor_dpi1", "top_vpp", 9),
+-       GATE_VDO1_2(CLK_VDO1_DPINTF, "vdo1_dpintf", "top_vpp", 16),
++       GATE_VDO1_2_FLAGS(CLK_VDO1_DPINTF, "vdo1_dpintf", "top_dp", 16,
+CLK_SET_RATE_PARENT),
+
+BRs,
+Bo-Chen
+

@@ -2,125 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C45D54D9A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE05F54D9A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358349AbiFPFXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 01:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S1358411AbiFPFYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 01:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349270AbiFPFXT (ORCPT
+        with ESMTP id S1347238AbiFPFYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 01:23:19 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071765AECE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:23:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id cx11so513875pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:23:19 -0700 (PDT)
+        Thu, 16 Jun 2022 01:24:21 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ECD5AEE2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:24:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so4632132pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gLwzCgeGjXvkAY0tAtafYy0s/ZAsW8+7L0BV4I3ZRUg=;
-        b=i8Jw1IH6VUEi8KQMpX04rBSHs+I/nRw4wm3Y2NqpACnSuZNIikRM1Va65bIlL0dXu5
-         hPGvIKf2gWhtIzEglKPEDUPuCcORIewZlFTs62THn8BbuOVDWvIvOHzHL6UdnJpOpOhX
-         lFK8gemR1etOaZjQJqzbACo7h0BEZyxqhDlIg=
+        d=googlemail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Cgr0NudsllIuU4pYJfPAFPG4b+vxrvwuUcJfymOmGQ8=;
+        b=Pz2BlSOI5/961Qe0d6ewdPk8pc1RUtgsiybGmOKnoAw/g6nq0HbH1M3DiKyDIsGtjX
+         ahmjk0cFkiAFXz6rO6C3YC45KITyWpz5pO16d2aEeVPkoWMpia+tOq+wiZKQv1sCBMt1
+         dIwxbLHNpn7MXkoE0zk/lV5iu2TvRXARi4KWb0xLUZc8CUY5vqEg8m1ZEIEzqLu+jDuN
+         9EfZugpl/tebuMl9FlnQSWjlKSlBqWS2yxKCZjpoYmGMWaSTDz5SDceb53meF1DFH3+y
+         WDim1NKugD4JTVssBjKYKtUc18bhFZXfba1E1hOU+QudxbmbSUM8pV5eeijRqLYJ7OdJ
+         NpuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gLwzCgeGjXvkAY0tAtafYy0s/ZAsW8+7L0BV4I3ZRUg=;
-        b=jKcqh6H60miFRI3d6d/JSKgSml8d0YFioK4raEuFPrOsLaRwu5s2TKN324ds7GuNTm
-         /kgjMv1NUG1DrmH47WDmOQGG+VHR16tHof0wC/ytPBYsNyT7C0C0dVhR8teaJNf/Lxyv
-         5nELMLoh3Gpf6+YpH9bgXhQ2PvKcDDJ6UX9D03lCTZvBmcDnZV3gu4QNQJuxDM9zu45p
-         Vq1a3lAAs97o0KJ/3SA1tYkBh3kj2jbr18fL+w83LUudtpGfpwuBiqYNeSgRmKyMxKRr
-         vHK+JItp/bPOmRUK/TkWQLZpJHV8lWAragiALc3HnJ/ITSFccjoSww/kdz2615ImeQi/
-         77dw==
-X-Gm-Message-State: AJIora92oVrHKybzyQvH6NtDGdSiFeNfJqjNIZTy5nll4YIgCDs56JBg
-        aNSpFER9CvtDD856S036FJe0vw==
-X-Google-Smtp-Source: AGRyM1u00NqA+iuH3p4+18EEEFYx02PJPaeGYhvfU2E7xSaLD60jb9nETXZDYXN1yGmzsG5D6+UHag==
-X-Received: by 2002:a17:902:f54b:b0:163:e2fd:10a5 with SMTP id h11-20020a170902f54b00b00163e2fd10a5mr3317916plf.28.1655356998486;
-        Wed, 15 Jun 2022 22:23:18 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s14-20020a63770e000000b003fad46ceb85sm613610pgc.7.2022.06.15.22.23.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 22:23:18 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Leon Romanovsky <leon@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        netdev@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] hinic: Replace memcpy() with direct assignment
-Date:   Wed, 15 Jun 2022 22:23:12 -0700
-Message-Id: <20220616052312.292861-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Cgr0NudsllIuU4pYJfPAFPG4b+vxrvwuUcJfymOmGQ8=;
+        b=UZLAoYauuXl8guebEhhQiWU7ELrG7HOtNvGpSUW2P1kdX9HjclaUIxJ0JQHqLRVNjK
+         ZtUTt3JjVRj2bck1AgxHoQSnHWGgIF87s1b/2zsiBTxsf/2JMUFtnAw9V97XIQ9t2Uph
+         T/EprcRyqCKKmSzglDQPplIIM+HfejzvWhiutMCiqSe6t/joGrrMwofL0S7ioBPUWZrk
+         U2qhzPLcwZl9jbPcE6KsOye7NhJp+Cg3inU6lBX7pG0L5QkBnhYEXuJVU/tfnxpe+pK9
+         0MdNrIo7YLL/OM5Sgx2DsEH25h11XEen4khRPXuixKdQIyoazTkkRJz34Uw40xt+JLRD
+         0BIg==
+X-Gm-Message-State: AJIora+QOxKnXiaiC7Az2rFEb+o3ccbt3aEXN2mItMSKFqvQPxKL5OzH
+        N4SogHqBwK3DMVfpgWvGW+q/d+vOAzhsfpYTduA=
+X-Google-Smtp-Source: AGRyM1vkK43W+RqKSJoLv94c/X/RYQb3rffIODZiZJCj3N8RGs98kNRxhwaRu+ub2/hB9Iqm4f0n1KtunJ+xo0z5a/E=
+X-Received: by 2002:a17:90a:86c8:b0:1e6:7147:8b4d with SMTP id
+ y8-20020a17090a86c800b001e671478b4dmr3196272pjv.45.1655357059365; Wed, 15 Jun
+ 2022 22:24:19 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1983; h=from:subject; bh=SFrVIRGfudjdjGzJlB2y9b2KbLEnr4pxj5hyTzo45+4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiqr5Ay+2HIbpwfOaEAdDeSsHsSYKH5Yf2peVuxbq1 ongVj06JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYqq+QAAKCRCJcvTf3G3AJlYcEA CxKwinqR9MKXCNs89GwL0DczM0vxhxtlpxJ91FuWhUzXCCDngALRjsFZmNj4UsT8EVD9KeyU/PRuwW RRn2ZvPm89zA5CRFtMbUR1C6rNEPw/yG4Q7c4+l3CqyBWnIVJIrF1cz5rzSzCwY+skVXETXdMiO58C DPJ8XWhLMmkMQKppoF8Htq42LVOvMCBXfPsA7JhbN7RpvfCzA3ExqGn5ha0eVsSRQV7JXhD4Hq5stU 3lkF3vre65Zqjcr40cQPtnqfSMIequXKQf59NX6njrWQY8Kh0Qs7xHTS1zxgY/1dIjTw662hodqLws okaJq42NFPtYTIbMwtTsNNECZH+nusLJhekyUw2eyJOy3bDl2g3GF4FVABz/3ZuB/jdi+RydACGzk2 IKjVBH2yBqS57w4sSoQTHGsGnCpADXapnlEgzQJWcW67qNc1zQLHVjJxIUYyIwll5sRbBp1qPm6YFL WSVb9islI6pDx6gVRhxohuNuZ1OlEC5b77AYL4hvopvrRlhk/kRt51AXEPfCsBC9LxRL+S6GRs3fJ9 I6cJGAiHZss2fKNH2Imjv65YnVPQIP1wLOBoIW820V6YAyQ7Md+v76lblglrlrwHWfm8SMwrH3yTxe U2f/TK9NDBYAXO/MEXq1VUJF+cyTnD42t0ZE3KHoUwd3jxLCUKC4V/JtiNJQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:2d09:b0:65:e0f0:6a34 with HTTP; Wed, 15 Jun 2022
+ 22:24:18 -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <mr.philipmichael@googlemail.com>
+Date:   Thu, 16 Jun 2022 06:24:18 +0100
+Message-ID: <CAP_WLbuchP7v21v_h0BUnVmFPuDZU5iMivryo5YPfPrCnObEuw@mail.gmail.com>
+Subject: Get back to me... URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
-here for calculating the size of the destination buffer (0x10 instead of
-0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
-the source and dest being struct fw_section_info_st, so the memcpy should
-be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
-responsibility to figure out.
-
-Avoid the whole thing and just do a direct assignment. This results in
-no change to the executable code.
-
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: Jiri Pirko <jiri@nvidia.com>
-Cc: Vladimir Oltean <olteanv@gmail.com>
-Cc: Simon Horman <simon.horman@corigine.com>
-Cc: netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Link: https://github.com/ClangBuiltLinux/linux/issues/1592
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/huawei/hinic/hinic_devlink.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-index 60ae8bfc5f69..1749d26f4bef 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-@@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
- 
- 	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
- 		len += fw_image->fw_section_info[i].fw_section_len;
--		memcpy(&host_image->image_section_info[i],
--		       &fw_image->fw_section_info[i],
--		       sizeof(struct fw_section_info_st));
-+		host_image->image_section_info[i] = fw_image->fw_section_info[i];
- 	}
- 
- 	if (len != fw_image->fw_len ||
 -- 
-2.32.0
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
 
+Abd-Wabbo Maddah

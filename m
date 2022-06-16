@@ -2,400 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D8654D896
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A081754D89C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349354AbiFPCp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 22:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S1350484AbiFPCrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 22:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiFPCpX (ORCPT
+        with ESMTP id S229693AbiFPCrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 22:45:23 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531D647562
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:45:21 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d5so167138plo.12
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TlLQ7tosji2YkhAul6rILt0FgOyJFX5PDRocyDPTg+Y=;
-        b=RI32rOnGwOPA5gsdV4n1uZ8GnPXTgWdA+QXDkeyb0Mp+N7AxQJ5cANlDDv66PpbCNx
-         X53He4UMduIQt8iou2s/guBWDRDUHxKF8lNL9GcRrfi9bkRMf5I7tUyOYpW3hIBgkje8
-         TlpYwGFECnzsuSBSEWdQth1qLfn+WyYmrL9GdVqyE3Eis93x0tTHwPePBQCTn/VL/Gzb
-         z8c7ayKOD8mGj80driftnCEMDYQQNWgQUeCoIIC1ryRf2rOn5RjfQwM0pDycAg/Of8ng
-         B1N4qWXr8thkCmsl8KsocD9FKe56EVKbZFr5FcEgvbWWkbRRiRaXQV/VvSgcoBeltqjM
-         4WjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TlLQ7tosji2YkhAul6rILt0FgOyJFX5PDRocyDPTg+Y=;
-        b=GK+twUNGELyUhp4LW5uZvUJM7PWd7s6tVOEiEXWOJ8OTqC2xcXfhZIHaJTPM6gotx5
-         xiKurI5BXslORBNeTAudWcK0XSYY9N2MSyiDoY/EhYClxnl1ytIWrwT72/UY3pxkNjWY
-         s6dSwpambthj1qRisW16qXs7yLWy2mT5owSWO5JBnTXAaKUU8vTxecYgYjO9NLBAW557
-         vYah3XxKUZTuvQ0dVC9dOvpoMUf0BhMpq6JB8vvrfo0HN1iBhS1AJElxPfkxRk9jOEHD
-         i/dqX5dHGsjjvHZ0JlmzbJ8ninOZpoc0aCJmk6wlyhMR2FgM70e+Cf/A6aQNoc0TPNVK
-         LlZw==
-X-Gm-Message-State: AJIora/+1pOLDjFBnB7cuk7zdOoDhLOZtZCmDz1DXFPwdRGjCtkIGak0
-        yha7rKL7eNuhLv8msEqz5DJS9g==
-X-Google-Smtp-Source: AGRyM1sCcm3nUs0MXMRNeFgPdlkO8phixsKPfk6BM/du3+VL+6b8V8UFzHEPRaCM2/QPj94/XqqBdg==
-X-Received: by 2002:a17:90a:e7d2:b0:1e8:97ac:da0b with SMTP id kb18-20020a17090ae7d200b001e897acda0bmr13451995pjb.242.1655347520681;
-        Wed, 15 Jun 2022 19:45:20 -0700 (PDT)
-Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id k16-20020a17090aaa1000b001e3351cb7fbsm2514708pjq.28.2022.06.15.19.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 19:45:20 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 10:45:14 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, paulmck@kernel.org,
-        mike.kravetz@oracle.com, osalvador@suse.de,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v2 2/2] mm: memory_hotplug: introduce
- SECTION_CANNOT_OPTIMIZE_VMEMMAP
-Message-ID: <YqqZOj+zby1fLGv/@FVFYT0MHHV2J.usts.net>
-References: <20220520025538.21144-1-songmuchun@bytedance.com>
- <20220520025538.21144-3-songmuchun@bytedance.com>
- <53024884-0182-df5f-9ca2-00652c64ce36@redhat.com>
+        Wed, 15 Jun 2022 22:47:13 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF7046B17
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655347629; x=1686883629;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=V39QHtDc8ZGDX6evTrJaCU7/qqstpDRwkxEs8NSe5TQ=;
+  b=dPtMpuxJ7iBLGOphz+yJcFMzJQe0gJujwhx5GYC/QVRS9lvuarOIDO/p
+   Lccq3NHGYS6W+yUGHmpx+xzbMx9HYbn+MfA4l+gdLbh5znhf9pcVn0nfB
+   P5dfGFMfj4OrjVNSi8HxIlBNPd0sVYzsByYF+aRJae5AfGY8Ze+nQahPY
+   e0qpew1GnJoLT/n6oeArrIJ6irm81nsW/2CaV7MeS7X1CGUTosKjOpNbD
+   m+sZ8sTVrAtc1jT9M+BdOUh15gb8kssGQyPCCK5HiTb+ZAVKb3GcJsFzO
+   L9jakY4VbJm471z1jlkt6cOoajlR/BubdQbCBM3gMikLf2maTf6YIv2D4
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647273600"; 
+   d="scan'208";a="315364292"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Jun 2022 10:47:09 +0800
+IronPort-SDR: fJprAIa4DXztqPNQeZ/FKZeE3T8sWIVyeRtGQO0qMC8EbitSQ8HHQiuUkJnqn3BUe5X+oBEvOH
+ 0Jb1vFjMHgNbLJ27sbQF4BMewXiHF7+ZjpidtSogUyCw18+PxjEvNwGnvrfXGUgbrwwXysL1jl
+ 8rESV0xfI2QjnTYXFKnFSf7WKzO1/iN6AEpW9/j+mnxfLmoMWYJuyMsgef2ICvKtpJyh2IKlxm
+ mTnAGZEEr0iHgQMAY/3qUslJEwDUJn6mlWV12TmdFoXTBF/KmWRHQ8FZhEDKXHohXJuV2NN1FT
+ P8jgEf+ye9yzUlsIrWPJ8HuI
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 19:09:58 -0700
+IronPort-SDR: FB5AAJYNbAwl1yUWc2yDFJhEMI2P6aJRowZKEoi1qzgP/E+4w2atN/U1LMBWl+DnFe+RAQ6gHn
+ gWIRu88+VQCPDJ2MDG20VHwh5hs31dyPnBdOxzpApBtRp9AZyi3VvXj/sZpg7p/fhXc5GSGekk
+ v8EcJggQVqr3yjVgQpyvdO91XCodnDrbEvCiOF1Ozzr0OTkfZ2WUSNzX1Y/RLZBqFi9icK9SYZ
+ olzMRZmdccptJnSh/yb1ntjzHkNrIhRTT6mUa6lMhwYhrIGGmJaW9Z4P/nPeEieGVWLxQMWEKC
+ Yfc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 19:47:09 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNmmD2pNMz1SVp3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:47:08 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655347627; x=1657939628; bh=V39QHtDc8ZGDX6evTrJaCU7/qqstpDRwkxE
+        s8NSe5TQ=; b=qyf84KIgbeM9gHqxzGhqEchppSklzUAsS48UHw/vSFoMxpem7f1
+        MJkvZ2RLdbrLGAghTnzYpw0sghTNZp55aqKDASg8JQnA9SPzOfkPxjNGqPaoAU5z
+        YIj4WpTWCPshSrgGUudeUuyCpkjrvpjEp8QG6PW289e0GS461+krfSa8LtqYIR7l
+        TRZazRy8rV+VmYv7zpsUtV06fKTHu+dS1iFEngax+9nLg9Kr/Sb+62/QKqXzHDXi
+        VzjRjzzuDWcBWU7kfDlHKJl8yQ7UsjGRAwO2uvU2EAG0lWJzyFuryATBhuvGcDdv
+        JEG16aBJrtXTevSTn3F+9dY8/x/xaDTqeaQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0lngzF8sUG5t for <linux-kernel@vger.kernel.org>;
+        Wed, 15 Jun 2022 19:47:07 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNmm91mxvz1Rvlc;
+        Wed, 15 Jun 2022 19:47:05 -0700 (PDT)
+Message-ID: <c702f06e-b7da-92be-3c4f-5dd405600235@opensource.wdc.com>
+Date:   Thu, 16 Jun 2022 11:47:03 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <53024884-0182-df5f-9ca2-00652c64ce36@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
+        hare@suse.de, hch@lst.de
+Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        chenxiang66@hisilicon.com
+References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
+ <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+ <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
+ <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:51:49AM +0200, David Hildenbrand wrote:
-> On 20.05.22 04:55, Muchun Song wrote:
-> > For now, the feature of hugetlb_free_vmemmap is not compatible with the
-> > feature of memory_hotplug.memmap_on_memory, and hugetlb_free_vmemmap
-> > takes precedence over memory_hotplug.memmap_on_memory. However, someone
-> > wants to make memory_hotplug.memmap_on_memory takes precedence over
-> > hugetlb_free_vmemmap since memmap_on_memory makes it more likely to
-> > succeed memory hotplug in close-to-OOM situations.  So the decision
-> > of making hugetlb_free_vmemmap take precedence is not wise and elegant.
-> > The proper approach is to have hugetlb_vmemmap.c do the check whether
-> > the section which the HugeTLB pages belong to can be optimized.  If
-> > the section's vmemmap pages are allocated from the added memory block
-> > itself, hugetlb_free_vmemmap should refuse to optimize the vmemmap,
-> > otherwise, do the optimization.  Then both kernel parameters are
-> > compatible.  So this patch introduces SECTION_CANNOT_OPTIMIZE_VMEMMAP
-> > to indicate whether the section could be optimized.
-> > 
-> 
-> In theory, we have that information stored in the relevant memory block,
-> but I assume that lookup in the xarray + locking is impractical.
-> 
-> I wonder if we can derive that information simply from the vmemmap pages
-> themselves, because *drumroll*
-> 
-> For one vmemmap page (the first one), the vmemmap corresponds to itself
-> -- what?!
-> 
-> 
-> [	hotplugged memory	]
-> [ memmap ][      usable memory	]
->       |    |                    |
->   ^---     |                    |
->    ^-------                     |
->          ^----------------------
-> 
-> The memmap of the first page of hotplugged memory falls onto itself.
-> We'd have to derive from actual "usable memory" that condition.
->
-> 
-> We currently support memmap_on_memory memory only within fixed-size
-> memory blocks. So "hotplugged memory" is guaranteed to be aligned to
-> memory_block_size_bytes() and the size is memory_block_size_bytes().
-> 
-> If we'd have a page falling into usbale memory, we'd simply lookup the
-> first page and test if the vmemmap maps to itself.
->
+On 6/15/22 16:35, John Garry wrote:
+> On 15/06/2022 00:43, Damien Le Moal wrote:
+>> On 6/15/22 03:20, Bart Van Assche wrote:
+>>> On 6/13/22 00:01, Damien Le Moal wrote:
+>>>> On 6/9/22 19:29, John Garry wrote:
+>>>>> +=C2=A0=C2=A0=C2=A0 /*
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * This determines how many commands the H=
+BA will set aside
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * for internal commands. This number will=
+ be added to
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * @can_queue to calcumate the maximum num=
+ber of simultaneous
+>>>>
+>>>> s/calcumate/calculate
+>>>>
+>>>> But this is weird. For SATA, can_queue is 32. Having reserved comman=
+ds,
+>>>> that number needs to stay the same. We cannot have more than 32 tags=
+.
+>>>> I think keeping can_queue as the max queue depth with at most
+>>>> nr_reserved_cmds tags reserved is better.
+>>>>
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * commands sent to the host.
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
+>>>>> +=C2=A0=C2=A0=C2=A0 int nr_reserved_cmds;
+>>>
+>>> +1 for Damien's request. I also prefer to keep can_queue as the maxim=
+um
+>>> queue depth, whether or not nr_reserved_cmds has been set.
+>>
+>> For non SATA drives, I still think that is a good idea. However, for=20
+>> SATA,
+>> we always have the internal tag command that is special. With John's
+>> change, it would have to be reserved but that means we are down to 31 =
+max
+>> QD,
+>=20
+> My intention is to keep regular tag depth at 32 for SATA. We add an=20
+> extra tag as a reserved tag. Indeed, this is called a 'tag', but it's=20
+> just really the placeholder for what will be the ATA_TAG_INTERNAL reque=
+st.
+>=20
+> About how we set scsi_host.can_queue, in this series we set .can_queue=20
+> as max regular tags, and the handling is as follows:
+>=20
+> scsi_mq_setup_tags():
+> tag_set->queue_depth =3D shost->can_queue + shost->nr_reserved_cmds
+> tag_set->reserved_tags =3D shost->nr_reserved_cmds
+>=20
+> So we honour the rule that blk_mq_tag_set.queue_depth is the total tag=20
+> depth, including reserved.
+>=20
+> Incidentally I think Christoph prefers to keep .can_queue at total max=20
+> tags including reserved:
+> https://lore.kernel.org/linux-scsi/337339b7-6f4a-a25c-f11c-7f701b42d6a8=
+@suse.de/=20
+>=20
+>=20
+>> so going backward several years... That internal tag for ATA does not
+>> need to be reserved since this command is always used when the drive i=
+s
+>> idle and no other NCQ commands are on-going.
+>=20
+> So do you mean that ATA_TAG_INTERNAL qc is used for other commands apar=
+t=20
+> from internal commands?
 
-I think this can work. Should we use this approach in next version?
+No. It is used only for internal commands. What I meant to say is that=20
+currently, internal commands are issued only on device scan, device=20
+revalidate and error handling. All of these phases are done with the=20
+device under EH with the issuing path stopped and all commands=20
+completed, so no regular commands can be issued. Only internal ones, non=20
+NCQ, using the ATA_TAG_INTERNAL. So strictly speaking, we should not=20
+need to reserve that internal tag at all.
 
-> 
-> Of course, once we'd support variable-sized memory blocks, it would be
-> different.
-> 
-> 
-> An easier/future-proof approach might simply be flagging the vmemmap
-> pages as being special. We reuse page flags for that, which don't have
-> semantics yet (i.e., PG_reserved indicates a boot-time allocation via
-> memblock).
->
+>=20
+>>
+>> So the solution to all this is a likely a little more complicated if w=
+e
+>> want to keep ATA max QD to 32.
+>>
+>=20
+> thanks,
+> John
 
-I think you mean flag vmemmap pages' struct page as PG_reserved if it
-can be optimized, right? When the vmemmap pages are allocated in
-hugetlb_vmemmap_alloc(), is it valid to flag them as PG_reserved (they
-are allocated from buddy allocator not memblock)?
 
-Thanks.
-
-> You'd walk the applicable vmemmap pages you want to optimize and check
-> if they are marked as special. You don't have to walk all but can
-> optimize: memmap_on_memory uses a vmemmap size that's at least PMD_SIZE.
-> So it's sufficient to check a single vmemmap page inside a PMD_SIZE
-> vmemmap range.
-> 
-> 
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >  Documentation/admin-guide/kernel-parameters.txt | 22 +++++++++----------
-> >  Documentation/admin-guide/sysctl/vm.rst         |  5 ++---
-> >  include/linux/memory_hotplug.h                  |  9 --------
-> >  include/linux/mmzone.h                          | 17 +++++++++++++++
-> >  mm/hugetlb_vmemmap.c                            | 28 ++++++++++++++++++-------
-> >  mm/memory_hotplug.c                             | 22 +++++++------------
-> >  mm/sparse.c                                     |  8 +++++++
-> >  7 files changed, 66 insertions(+), 45 deletions(-)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index c087f578d9d8..5359ffb04a84 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -1730,9 +1730,11 @@
-> >  			Built with CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON=y,
-> >  			the default is on.
-> >  
-> > -			This is not compatible with memory_hotplug.memmap_on_memory.
-> > -			If both parameters are enabled, hugetlb_free_vmemmap takes
-> > -			precedence over memory_hotplug.memmap_on_memory.
-> > +			Note that the vmemmap pages may be allocated from the added
-> > +			memory block itself when memory_hotplug.memmap_on_memory is
-> > +			enabled, those vmemmap pages cannot be optimized even if this
-> > +			feature is enabled.  Other vmemmap pages not allocated from
-> > +			the added memory block itself do not be affected.
-> >  
-> >  	hung_task_panic=
-> >  			[KNL] Should the hung task detector generate panics.
-> > @@ -3077,10 +3079,12 @@
-> >  			[KNL,X86,ARM] Boolean flag to enable this feature.
-> >  			Format: {on | off (default)}
-> >  			When enabled, runtime hotplugged memory will
-> > -			allocate its internal metadata (struct pages)
-> > -			from the hotadded memory which will allow to
-> > -			hotadd a lot of memory without requiring
-> > -			additional memory to do so.
-> > +			allocate its internal metadata (struct pages,
-> > +			those vmemmap pages cannot be optimized even
-> > +			if hugetlb_free_vmemmap is enabled) from the
-> > +			hotadded memory which will allow to hotadd a
-> > +			lot of memory without requiring additional
-> > +			memory to do so.
-> >  			This feature is disabled by default because it
-> >  			has some implication on large (e.g. GB)
-> >  			allocations in some configurations (e.g. small
-> > @@ -3090,10 +3094,6 @@
-> >  			Note that even when enabled, there are a few cases where
-> >  			the feature is not effective.
-> >  
-> > -			This is not compatible with hugetlb_free_vmemmap. If
-> > -			both parameters are enabled, hugetlb_free_vmemmap takes
-> > -			precedence over memory_hotplug.memmap_on_memory.
-> > -
-> >  	memtest=	[KNL,X86,ARM,M68K,PPC,RISCV] Enable memtest
-> >  			Format: <integer>
-> >  			default : 0 <disable>
-> > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> > index 5c9aa171a0d3..d7374a1e8ac9 100644
-> > --- a/Documentation/admin-guide/sysctl/vm.rst
-> > +++ b/Documentation/admin-guide/sysctl/vm.rst
-> > @@ -565,9 +565,8 @@ See Documentation/admin-guide/mm/hugetlbpage.rst
-> >  hugetlb_optimize_vmemmap
-> >  ========================
-> >  
-> > -This knob is not available when memory_hotplug.memmap_on_memory (kernel parameter)
-> > -is configured or the size of 'struct page' (a structure defined in
-> > -include/linux/mm_types.h) is not power of two (an unusual system config could
-> > +This knob is not available when the size of 'struct page' (a structure defined
-> > +in include/linux/mm_types.h) is not power of two (an unusual system config could
-> >  result in this).
-> >  
-> >  Enable (set to 1) or disable (set to 0) the feature of optimizing vmemmap pages
-> > diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> > index 20d7edf62a6a..e0b2209ab71c 100644
-> > --- a/include/linux/memory_hotplug.h
-> > +++ b/include/linux/memory_hotplug.h
-> > @@ -351,13 +351,4 @@ void arch_remove_linear_mapping(u64 start, u64 size);
-> >  extern bool mhp_supports_memmap_on_memory(unsigned long size);
-> >  #endif /* CONFIG_MEMORY_HOTPLUG */
-> >  
-> > -#ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
-> > -bool mhp_memmap_on_memory(void);
-> > -#else
-> > -static inline bool mhp_memmap_on_memory(void)
-> > -{
-> > -	return false;
-> > -}
-> > -#endif
-> > -
-> >  #endif /* __LINUX_MEMORY_HOTPLUG_H */
-> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > index 2cf2a76535ab..607a4fcabbd4 100644
-> > --- a/include/linux/mmzone.h
-> > +++ b/include/linux/mmzone.h
-> > @@ -1434,6 +1434,7 @@ extern size_t mem_section_usage_size(void);
-> >  	MAPPER(IS_ONLINE)							\
-> >  	MAPPER(IS_EARLY)							\
-> >  	MAPPER(TAINT_ZONE_DEVICE, CONFIG_ZONE_DEVICE)				\
-> > +	MAPPER(CANNOT_OPTIMIZE_VMEMMAP, CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP)	\
-> >  	MAPPER(MAP_LAST_BIT)
-> >  
-> >  #define __SECTION_SHIFT_FLAG_MAPPER_0(x)
-> > @@ -1471,6 +1472,22 @@ static inline struct page *__section_mem_map_addr(struct mem_section *section)
-> >  	return (struct page *)map;
-> >  }
-> >  
-> > +#ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> > +static inline void section_mark_cannot_optimize_vmemmap(struct mem_section *ms)
-> > +{
-> > +	ms->section_mem_map |= SECTION_CANNOT_OPTIMIZE_VMEMMAP;
-> > +}
-> > +
-> > +static inline int section_cannot_optimize_vmemmap(struct mem_section *ms)
-> > +{
-> > +	return (ms && (ms->section_mem_map & SECTION_CANNOT_OPTIMIZE_VMEMMAP));
-> > +}
-> > +#else
-> > +static inline void section_mark_cannot_optimize_vmemmap(struct mem_section *ms)
-> > +{
-> > +}
-> > +#endif
-> > +
-> >  static inline int present_section(struct mem_section *section)
-> >  {
-> >  	return (section && (section->section_mem_map & SECTION_MARKED_PRESENT));
-> > diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-> > index fcd9f7872064..f12170520337 100644
-> > --- a/mm/hugetlb_vmemmap.c
-> > +++ b/mm/hugetlb_vmemmap.c
-> > @@ -97,18 +97,32 @@ int hugetlb_vmemmap_alloc(struct hstate *h, struct page *head)
-> >  	return ret;
-> >  }
-> >  
-> > +static unsigned int optimizable_vmemmap_pages(struct hstate *h,
-> > +					      struct page *head)
-> > +{
-> > +	unsigned long pfn = page_to_pfn(head);
-> > +	unsigned long end = pfn + pages_per_huge_page(h);
-> > +
-> > +	if (READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF)
-> > +		return 0;
-> > +
-> > +	for (; pfn < end; pfn += PAGES_PER_SECTION) {
-> > +		if (section_cannot_optimize_vmemmap(__pfn_to_section(pfn)))
-> > +			return 0;
-> > +	}
-> > +
-> > +	return hugetlb_optimize_vmemmap_pages(h);
-> > +}
-> > +
-> >  void hugetlb_vmemmap_free(struct hstate *h, struct page *head)
-> >  {
-> >  	unsigned long vmemmap_addr = (unsigned long)head;
-> >  	unsigned long vmemmap_end, vmemmap_reuse, vmemmap_pages;
-> >  
-> > -	vmemmap_pages = hugetlb_optimize_vmemmap_pages(h);
-> > +	vmemmap_pages = optimizable_vmemmap_pages(h, head);
-> >  	if (!vmemmap_pages)
-> >  		return;
-> >  
-> > -	if (READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF)
-> > -		return;
-> > -
-> >  	static_branch_inc(&hugetlb_optimize_vmemmap_key);
-> >  
-> >  	vmemmap_addr	+= RESERVE_VMEMMAP_SIZE;
-> > @@ -199,10 +213,10 @@ static struct ctl_table hugetlb_vmemmap_sysctls[] = {
-> >  static __init int hugetlb_vmemmap_sysctls_init(void)
-> >  {
-> >  	/*
-> > -	 * If "memory_hotplug.memmap_on_memory" is enabled or "struct page"
-> > -	 * crosses page boundaries, the vmemmap pages cannot be optimized.
-> > +	 * If "struct page" crosses page boundaries, the vmemmap pages cannot
-> > +	 * be optimized.
-> >  	 */
-> > -	if (!mhp_memmap_on_memory() && is_power_of_2(sizeof(struct page)))
-> > +	if (is_power_of_2(sizeof(struct page)))
-> >  		register_sysctl_init("vm", hugetlb_vmemmap_sysctls);
-> >  
-> >  	return 0;
-> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> > index 3b360eda933f..7309694c4dee 100644
-> > --- a/mm/memory_hotplug.c
-> > +++ b/mm/memory_hotplug.c
-> > @@ -43,30 +43,22 @@
-> >  #include "shuffle.h"
-> >  
-> >  #ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
-> > -static int memmap_on_memory_set(const char *val, const struct kernel_param *kp)
-> > -{
-> > -	if (hugetlb_optimize_vmemmap_enabled())
-> > -		return 0;
-> > -	return param_set_bool(val, kp);
-> > -}
-> > -
-> > -static const struct kernel_param_ops memmap_on_memory_ops = {
-> > -	.flags	= KERNEL_PARAM_OPS_FL_NOARG,
-> > -	.set	= memmap_on_memory_set,
-> > -	.get	= param_get_bool,
-> > -};
-> > -
-> >  /*
-> >   * memory_hotplug.memmap_on_memory parameter
-> >   */
-> >  static bool memmap_on_memory __ro_after_init;
-> > -module_param_cb(memmap_on_memory, &memmap_on_memory_ops, &memmap_on_memory, 0444);
-> > +module_param(memmap_on_memory, bool, 0444);
-> >  MODULE_PARM_DESC(memmap_on_memory, "Enable memmap on memory for memory hotplug");
-> >  
-> > -bool mhp_memmap_on_memory(void)
-> > +static inline bool mhp_memmap_on_memory(void)
-> >  {
-> >  	return memmap_on_memory;
-> >  }
-> > +#else
-> > +static inline bool mhp_memmap_on_memory(void)
-> > +{
-> > +	return false;
-> > +}
-> >  #endif
-> >  
-> >  enum {
-> > diff --git a/mm/sparse.c b/mm/sparse.c
-> > index cb3bfae64036..1f353bf9ea6b 100644
-> > --- a/mm/sparse.c
-> > +++ b/mm/sparse.c
-> > @@ -913,6 +913,14 @@ int __meminit sparse_add_section(int nid, unsigned long start_pfn,
-> >  	ms = __nr_to_section(section_nr);
-> >  	set_section_nid(section_nr, nid);
-> >  	__section_mark_present(ms, section_nr);
-> > +	/*
-> > +	 * Mark whole section as non-optimizable once there is a subsection
-> > +	 * whose vmemmap pages are allocated from alternative allocator. The
-> > +	 * early section is always optimizable since the early section's
-> > +	 * vmemmap pages do not consider partially being populated.
-> > +	 */
-> > +	if (!early_section(ms) && altmap)
-> > +		section_mark_cannot_optimize_vmemmap(ms);
-> >  
-> >  	/* Align memmap to section boundary in the subsection case */
-> >  	if (section_nr_to_pfn(section_nr) != start_pfn)
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
-> 
+--=20
+Damien Le Moal
+Western Digital Research

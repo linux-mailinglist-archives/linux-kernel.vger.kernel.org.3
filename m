@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906B854D8D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC8D54D8DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358040AbiFPDUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 23:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S1358151AbiFPDWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 23:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349947AbiFPDUN (ORCPT
+        with ESMTP id S1349947AbiFPDV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 23:20:13 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77D75AA56
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 20:20:11 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-316287dc2d2so1824777b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 20:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yZC94QyGrxl20UVmi6Bbzh0z18nlmSnWSZKrrHOOlIU=;
-        b=nHLVhA6zL+rr1952EK4dDV99gYj7eeUWk5vsiO5wZJUyS45PabFeca4mj5gjXNGyLc
-         1zJFAAjJvkbtkdYElrt6Zs8VWwCTee9GP375AJDVmzZHPV1WuASUTbZ2dcohWHoDlfdH
-         BrdsWLzS/BhNKK4O9esn7kFkseBYhREmF5IqhNjOeT1sTyL9Gdpf5AarECMER4NXc3h/
-         hbxuG7PBpvVWc19f3t5qU2lSnef2mJW2q3AB4dCEA1h3x9HBsnFobZyy0Hiqf7lx6zMc
-         KTWzzys98kURmMHk2EAoi64fjETZKhn53ZJsIRZhvPM1/zU8M/HboMjrXDMAlHNq+yhU
-         9i2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yZC94QyGrxl20UVmi6Bbzh0z18nlmSnWSZKrrHOOlIU=;
-        b=FcmYphVgA0jQ2o3iU1dvfcVSkIuhv96KpFyTgczfDeT1g8q5y04TaCuyTedT6Aoi90
-         +MiFY/+hPd4fH0ZTcGg078d6UCGPX9QIyL0nXkXSTfNtsamwD2yGsdootaczJP2GNR7j
-         6nkacKgyW24za2OQq3BHSLQJJynebL/Jtvr70ED3ZqDMCjy7OSdKFUVutWfKgBAZS8M0
-         q/fKNn012D8L/icvmwq77SSHM1CNNxkN9oAtsAEgjH0zCxrdeHITbS0Zk4b3sePPJw5g
-         20ZBHpiRhhZZnvBKAgmujtO7+nTvRGNAydET9mSJkeY7+VBv51qTi9yON3T/8bhbRX5q
-         nj3w==
-X-Gm-Message-State: AJIora9g5aoze9l6/+IJPLEoJtYMWG/Wr/HjNxZrbll6tYu0nUEZ414s
-        myKxWGiVrC0WaY4+vireXH0Bkas6USMfdEtba+vx+w==
-X-Google-Smtp-Source: AGRyM1tRDeWpcUh85R6nZJELiK50ZhN1KTNctwS1M4XiRR4sm0BrQ50F4dmy0+hMKWAlzdbrYVLXOGYB6+n3mVA+Xyw=
-X-Received: by 2002:a81:7557:0:b0:317:6536:d404 with SMTP id
- q84-20020a817557000000b003176536d404mr2710980ywc.459.1655349610880; Wed, 15
- Jun 2022 20:20:10 -0700 (PDT)
+        Wed, 15 Jun 2022 23:21:59 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655A85AA5C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 20:21:58 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNnV54cM1z1K9QT;
+        Thu, 16 Jun 2022 11:19:57 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 11:21:56 +0800
+Subject: Re: [PATCH] mm/page_alloc: make calling prep_compound_head more
+ reliable
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Joao Martins <joao.m.martins@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <20220607144157.36411-1-linmiaohe@huawei.com>
+ <20220607113257.84b1bdd993f19be26b8c4944@linux-foundation.org>
+ <65e5da9c-32d1-17d7-d8c6-96cbfac23fec@oracle.com>
+ <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
+ <YqiJaOiGnUzzB1+W@casper.infradead.org>
+ <40a07ce5-414a-a3b8-53ee-6c348635f03a@huawei.com>
+ <YqnTtGDt+NdQ3Jxf@casper.infradead.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <1483de08-321c-41da-e098-8defd6ae4f11@huawei.com>
+Date:   Thu, 16 Jun 2022 11:21:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220604010101.719508-1-saravanak@google.com>
-In-Reply-To: <20220604010101.719508-1-saravanak@google.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 15 Jun 2022 20:19:34 -0700
-Message-ID: <CAGETcx_9AxUzmSFou=PqLpAJ6P_k4mq5tjFpt0WOC348RRBF0g@mail.gmail.com>
-Subject: Re: [PATCH v2] module: Add support for default value for module async_probe
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <YqnTtGDt+NdQ3Jxf@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,102 +59,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 6:01 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> Add a module.async_probe kernel command line option that allows enabling
-> async probing for all modules. When this command line option is used,
-> there might still be some modules for which we want to explicitly force
-> synchronous probing, so extend <modulename>.async_probe to take an
-> optional bool input so that async probing can be disabled for a specific
-> module.
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
-> v1->v2:
-> - Updated the documentation to capture all the details/changes.
+On 2022/6/15 20:42, Matthew Wilcox wrote:
+> On Wed, Jun 15, 2022 at 03:44:06PM +0800, Miaohe Lin wrote:
+>>> We definitely don't need the unlikely here.
+>>
+>> Could you please give me a more detailed explanation? IIUC, the above if condition
+>> will only meet at a probability of 1/512. So unlikely tells the compiler to do some
+>> optimization around it. Or am I miss something?
+> 
+> Only add unlikely() when the compiler can't figure out for itself that
+> it's unlikely.  You should also check the generated code and/or
+> benchmark the results to be sure that it's actually an improvement.
+> Using unlikely() needs to be backed up with more than just a feeling.
 
-Luis,
+I see. Many thanks for clarifying. Will keep it in mind. :)
 
-Gentle reminder.
+> 
+> .
+> 
 
--Saravana
-
->
->  Documentation/admin-guide/kernel-parameters.txt | 17 +++++++++++++++--
->  kernel/module/main.c                            | 11 ++++++++++-
->  2 files changed, 25 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 710b52d87bdd..5174a08e20b0 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1147,8 +1147,12 @@
->         nopku           [X86] Disable Memory Protection Keys CPU feature found
->                         in some Intel CPUs.
->
-> -       <module>.async_probe [KNL]
-> -                       Enable asynchronous probe on this module.
-> +       <module>.async_probe[=<bool>] [KNL]
-> +                       If no <bool> value is specified or if the value
-> +                       specified is not a valid <bool>, enable asynchronous
-> +                       probe on this module.  Otherwise, enable/disable
-> +                       asynchronous probe on this module as indicated by the
-> +                       <bool> value. See also: module.async_probe
->
->         early_ioremap_debug [KNL]
->                         Enable debug messages in early_ioremap support. This
-> @@ -3201,6 +3205,15 @@
->                         log everything. Information is printed at KERN_DEBUG
->                         so loglevel=8 may also need to be specified.
->
-> +       module.async_probe=<bool>
-> +                       [KNL] When set to true, modules will use async probing
-> +                       by default. To enable/disable async probing for a
-> +                       specific module, use the module specific control that
-> +                       is documented under <module>.async_probe. When both
-> +                       module.async_probe and <module>.async_probe are
-> +                       specified, <module>.async_probe takes precedence for
-> +                       the specific module.
-> +
->         module.sig_enforce
->                         [KNL] When CONFIG_MODULE_SIG is set, this means that
->                         modules without (valid) signatures will fail to load.
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index fed58d30725d..47085795f037 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2410,6 +2410,12 @@ static void do_free_init(struct work_struct *w)
->         }
->  }
->
-> +#undef MODULE_PARAM_PREFIX
-> +#define MODULE_PARAM_PREFIX "module."
-> +/* Default value for module->async_probe_requested */
-> +static bool async_probe;
-> +module_param(async_probe, bool, 0644);
-> +
->  /*
->   * This is where the real work happens.
->   *
-> @@ -2630,7 +2636,8 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
->         int ret;
->
->         if (strcmp(param, "async_probe") == 0) {
-> -               mod->async_probe_requested = true;
-> +               if (strtobool(val, &mod->async_probe_requested))
-> +                       mod->async_probe_requested = true;
->                 return 0;
->         }
->
-> @@ -2797,6 +2804,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
->         if (err)
->                 goto bug_cleanup;
->
-> +       mod->async_probe_requested = async_probe;
-> +
->         /* Module is ready to execute: parsing args may do that. */
->         after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
->                                   -32768, 32767, mod,
-> --
-> 2.36.1.255.ge46751e96f-goog
->

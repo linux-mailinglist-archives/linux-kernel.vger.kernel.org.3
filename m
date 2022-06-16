@@ -2,150 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA7354D903
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFA454D904
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358439AbiFPDvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 23:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S1350750AbiFPDyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 23:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiFPDvB (ORCPT
+        with ESMTP id S229873AbiFPDyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 23:51:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD1E457B1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 20:51:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 596C81F966;
-        Thu, 16 Jun 2022 03:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655351459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kgekXoCDL26pheijKCAbO6D+nCr6WwwLdj7j0T3u+/A=;
-        b=OpJuqgXMMfz+tNzD3+xYrklWCIAxh1JDRO9FJpP3iKnVcWxAlBnd6D8Ty2Rexjg0LJV98G
-        EIVGPOoU7jHZ+ifRsOZ1W5rnevFqwh8U0UWqv61c5ljnc0NdCn16jNDf+XvPhB5oj/4/bN
-        +cJjR2DEHjyklwX8ycdVH+EVS6uN54w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655351459;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kgekXoCDL26pheijKCAbO6D+nCr6WwwLdj7j0T3u+/A=;
-        b=JaDcKUWz9UYhbnX49/Q7zIcvfL36cu57dKQVoTCr75wCFZh8fdFGnTl1MgVvhi1IPSe/WV
-        MPXEK9jD+DWflVCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 00DEF1344E;
-        Thu, 16 Jun 2022 03:50:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZyPSOKKoqmK8KwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Thu, 16 Jun 2022 03:50:58 +0000
-Date:   Thu, 16 Jun 2022 05:50:57 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: hugetlb: remove minimum_order variable
-Message-ID: <YqqooWsR36fnFSKA@localhost.localdomain>
-References: <20220616033846.96937-1-songmuchun@bytedance.com>
+        Wed, 15 Jun 2022 23:54:41 -0400
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FE70393DA
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 20:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ixkdq
+        GmI6wbNhP8pfR8cbyFTioiWkLwyfVCb3r7nF0E=; b=RIitEX3ejh5wtDnU/pdua
+        acjPPdeMrTlqTkYFL1zH9+TGCXuL3YA8XpLeIv1xn/OyokKKeBzY1Hdn+7xPUjvy
+        m5etUSecKR0LVr9db8Xr/iHLGfsWgTiJSpJMO1MUSFwv/FjjyJ6HG2lPTWVzZ+AI
+        usy5tlbX6yIxMxaXdhYuZ0=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp1 (Coremail) with SMTP id C8mowABXNd5VqapikZj7EQ--.25062S2;
+        Thu, 16 Jun 2022 11:53:58 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     linus.walleij@linaro.org, linux@armlinux.org.uk
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH v2] mach-versatile: (platsmp-realview) Add missing of_node_put()
+Date:   Thu, 16 Jun 2022 11:53:56 +0800
+Message-Id: <20220616035356.3976296-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616033846.96937-1-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8mowABXNd5VqapikZj7EQ--.25062S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruw4kWryDJF45ZryDJFyxXwb_yoWfGrbEqF
+        1xX3y7Gw1rJ392q395ZF45GrZrAw18CrnxJry8AFy3CF15JF9rArs2q3saq3yFvrW3KrW3
+        XrZrXrWYkr47ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_znQ7UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7RciF1pEANTsVAAAs9
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 11:38:46AM +0800, Muchun Song wrote:
-> The following commit:
-> 
->   commit 641844f5616d ("mm/hugetlb: introduce minimum hugepage order")
-> 
-> fixed a static checker warning and introduced a global variable minimum_order
-> to fix the warning.  However, the local variable in dissolve_free_huge_pages()
-> can be initialized to huge_page_order(&default_hstate) to fix the warning.
-> So remove minimum_order to simplify the code.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+In realview_smp_prepare_cpus(), the second of_find_matching_node()
+has no corresponding of_node_put() when the node pointer is not
+used anymore.
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ changelog:
 
-> ---
->  mm/hugetlb.c | 18 +++++++-----------
->  1 file changed, 7 insertions(+), 11 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 8ea4e51d8186..405d1c7441c9 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -66,12 +66,6 @@ static bool hugetlb_cma_page(struct page *page, unsigned int order)
->  #endif
->  static unsigned long hugetlb_cma_size __initdata;
->  
-> -/*
-> - * Minimum page order among possible hugepage sizes, set to a proper value
-> - * at boot time.
-> - */
-> -static unsigned int minimum_order __read_mostly = UINT_MAX;
-> -
->  __initdata LIST_HEAD(huge_boot_pages);
->  
->  /* for command line parsing */
-> @@ -2161,11 +2155,17 @@ int dissolve_free_huge_pages(unsigned long start_pfn, unsigned long end_pfn)
->  	unsigned long pfn;
->  	struct page *page;
->  	int rc = 0;
-> +	unsigned int order;
-> +	struct hstate *h;
->  
->  	if (!hugepages_supported())
->  		return rc;
->  
-> -	for (pfn = start_pfn; pfn < end_pfn; pfn += 1 << minimum_order) {
-> +	order = huge_page_order(&default_hstate);
-> +	for_each_hstate(h)
-> +		order = min(order, huge_page_order(h));
-> +
-> +	for (pfn = start_pfn; pfn < end_pfn; pfn += 1 << order) {
->  		page = pfn_to_page(pfn);
->  		rc = dissolve_free_huge_page(page);
->  		if (rc)
-> @@ -3157,9 +3157,6 @@ static void __init hugetlb_init_hstates(void)
->  	struct hstate *h, *h2;
->  
->  	for_each_hstate(h) {
-> -		if (minimum_order > huge_page_order(h))
-> -			minimum_order = huge_page_order(h);
-> -
->  		/* oversize hugepages were init'ed in early boot */
->  		if (!hstate_is_gigantic(h))
->  			hugetlb_hstate_alloc_pages(h);
-> @@ -3184,7 +3181,6 @@ static void __init hugetlb_init_hstates(void)
->  				h->demote_order = h2->order;
->  		}
->  	}
-> -	VM_BUG_ON(minimum_order == UINT_MAX);
->  }
->  
->  static void __init report_hugepages(void)
-> -- 
-> 2.11.0
-> 
-> 
+ v2: use real name for Sob
+ v1: fix missing bug
 
+ arch/arm/mach-versatile/platsmp-realview.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/mach-versatile/platsmp-realview.c b/arch/arm/mach-versatile/platsmp-realview.c
+index 5d363385c801..059d796b26bc 100644
+--- a/arch/arm/mach-versatile/platsmp-realview.c
++++ b/arch/arm/mach-versatile/platsmp-realview.c
+@@ -66,6 +66,7 @@ static void __init realview_smp_prepare_cpus(unsigned int max_cpus)
+ 		return;
+ 	}
+ 	map = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (IS_ERR(map)) {
+ 		pr_err("PLATSMP: No syscon regmap\n");
+ 		return;
 -- 
-Oscar Salvador
-SUSE Labs
+2.25.1
+

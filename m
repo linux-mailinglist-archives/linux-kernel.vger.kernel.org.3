@@ -2,241 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D4154DB6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9EC54DB6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358844AbiFPHV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S1359165AbiFPHVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiFPHV0 (ORCPT
+        with ESMTP id S1359141AbiFPHVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:21:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CB25BE7F;
-        Thu, 16 Jun 2022 00:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655364085; x=1686900085;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1mYg0twpCDJWukAX9HNrHpjTtlZ93/AhW3DWmO6Usa8=;
-  b=FD7AoT249NIYqmd0L4+QnLWEFg3CtEjcy6a42dVTkPRo3Z/sScM0w7BC
-   P3zuy2N3IyGidiJnQBfgyn9/2g1JwsOhK1Hg1lrktJtPPAinvc8n/WCM0
-   vTVJPRHW9B8nWUWvbJTj+RBHRt1So9hNUJixma35pSy/1FQs2tl4oz6KX
-   bl5vHUvMQHQPbhaxRrMTSRGwvdmv+mxSoIc/m3KkMKmoQlWqTeOGzQCps
-   6a+ItgX10kIxVaOBwb2eNv/xfUQb67Kxev2ORE6GR9Bd6puWdVTvveY3H
-   0XDaviTJD1vAj7nVD2BRkM6UH567qKF8+iYRyPg+94cUicbKXWyQ8unJJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262207320"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="262207320"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 00:21:24 -0700
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="912044783"
-Received: from mstokes1-mobl.ger.corp.intel.com (HELO [10.213.198.82]) ([10.213.198.82])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 00:21:19 -0700
-Message-ID: <51e82b3b-b023-75dd-a039-e2941b426f1f@linux.intel.com>
-Date:   Thu, 16 Jun 2022 08:21:17 +0100
+        Thu, 16 Jun 2022 03:21:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87A795C35C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655364099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BmKGnuktFvztcVSafDwftRNZMdy1HHQkqyAtAvqCv2M=;
+        b=ey4hXQOLOtvuKJwI420i3r3d8IGovESa+aitn74MkSxucY2gkiUMu0n5G5Hz3bFh2UzZZe
+        dsVNaArbbhuNEXkaiR8FeEWbvBs7rmDP0pAXRHli0EFob+0+MBH5gcAN/G5/3TNHuq9/n5
+        23HdyIcEz/s0s8+UZHngMYNB947NLIg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-LHCe_yu1OrCFdn8ZbM5jqw-1; Thu, 16 Jun 2022 03:21:38 -0400
+X-MC-Unique: LHCe_yu1OrCFdn8ZbM5jqw-1
+Received: by mail-wr1-f72.google.com with SMTP id h2-20020adfe982000000b002102da95c71so58382wrm.23
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:21:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=BmKGnuktFvztcVSafDwftRNZMdy1HHQkqyAtAvqCv2M=;
+        b=imp9z4I4+Yt4N6RfJh6sNZnCsKZIcdTiPHMUsP1mBq0KBQ6yr8+JjLwD0j5TMGbRA8
+         rV/nt8MqUd5vRMvQUOfFMmNhjfmCqkViNHGYUIK8eQRg7er01fQMeUYYqpl2cB2Wth9Z
+         dYYlyYyIeYcay5L3kzAbagaE94pmYlPwHVBAFzcuOyqWj2DtDnl2NM3t3rwQBDB5yoEL
+         h2Z5bHQijUSN1AMG+KLtuTwuCRVcz4gusT4EyzQEOHdIsG/UNxaQ+6XU8wnDLBB+KUF9
+         EMYl4bVem7kQHaEi/u0pnkcH4j8sw91e0oNNhtyWErBbpmDz+MTfHCMZ0Af30LoPTfIi
+         /mfw==
+X-Gm-Message-State: AJIora8fjw9YFBXBuJwNmhPbfOAH7Q8c7TGeutayPSGC16Iffv5jMVoG
+        WIvVfb1xo6PjA2eUz2xYkaUYg5kO+6QBMl7H8cGVu89YZzPFCYSBSeOm2XjFTgsdkbwsW08dGxr
+        VsQWlW2iw7djVlm+BYvl2WUZE
+X-Received: by 2002:a5d:584c:0:b0:218:4e98:770a with SMTP id i12-20020a5d584c000000b002184e98770amr3205381wrf.271.1655364096975;
+        Thu, 16 Jun 2022 00:21:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sCHqyHd8fBXb2/1perTt3JC0gqX+eoIPsBJarFVdNDwHFuc2T2urts+Aswd2WJYMkghrY7ow==
+X-Received: by 2002:a5d:584c:0:b0:218:4e98:770a with SMTP id i12-20020a5d584c000000b002184e98770amr3205359wrf.271.1655364096688;
+        Thu, 16 Jun 2022 00:21:36 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:2d00:73d7:5fab:cc8a:e48c? (p200300cbc70b2d0073d75fabcc8ae48c.dip0.t-ipconnect.de. [2003:cb:c70b:2d00:73d7:5fab:cc8a:e48c])
+        by smtp.gmail.com with ESMTPSA id t2-20020a1c4602000000b0039db60fa340sm4809654wma.33.2022.06.16.00.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 00:21:36 -0700 (PDT)
+Message-ID: <abf6bd60-b944-100e-b327-97365d366ed8@redhat.com>
+Date:   Thu, 16 Jun 2022 09:21:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/6] drm/i915/gt: Ignore TLB invalidations on idle engines
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 2/2] mm: memory_hotplug: introduce
+ SECTION_CANNOT_OPTIMIZE_VMEMMAP
 Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        Fei Yang <fei.yang@intel.com>,
-        =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, mauro.chehab@linux.intel.com,
-        stable@vger.kernel.org
-References: <cover.1655306128.git.mchehab@kernel.org>
- <ce7ddc900a5421e577ef446b6834ee69663c2d9a.1655306128.git.mchehab@kernel.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <ce7ddc900a5421e577ef446b6834ee69663c2d9a.1655306128.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, paulmck@kernel.org,
+        mike.kravetz@oracle.com, osalvador@suse.de,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
+References: <20220520025538.21144-1-songmuchun@bytedance.com>
+ <20220520025538.21144-3-songmuchun@bytedance.com>
+ <53024884-0182-df5f-9ca2-00652c64ce36@redhat.com>
+ <YqqZOj+zby1fLGv/@FVFYT0MHHV2J.usts.net>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YqqZOj+zby1fLGv/@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16.06.22 04:45, Muchun Song wrote:
+> On Wed, Jun 15, 2022 at 11:51:49AM +0200, David Hildenbrand wrote:
+>> On 20.05.22 04:55, Muchun Song wrote:
+>>> For now, the feature of hugetlb_free_vmemmap is not compatible with the
+>>> feature of memory_hotplug.memmap_on_memory, and hugetlb_free_vmemmap
+>>> takes precedence over memory_hotplug.memmap_on_memory. However, someone
+>>> wants to make memory_hotplug.memmap_on_memory takes precedence over
+>>> hugetlb_free_vmemmap since memmap_on_memory makes it more likely to
+>>> succeed memory hotplug in close-to-OOM situations.  So the decision
+>>> of making hugetlb_free_vmemmap take precedence is not wise and elegant.
+>>> The proper approach is to have hugetlb_vmemmap.c do the check whether
+>>> the section which the HugeTLB pages belong to can be optimized.  If
+>>> the section's vmemmap pages are allocated from the added memory block
+>>> itself, hugetlb_free_vmemmap should refuse to optimize the vmemmap,
+>>> otherwise, do the optimization.  Then both kernel parameters are
+>>> compatible.  So this patch introduces SECTION_CANNOT_OPTIMIZE_VMEMMAP
+>>> to indicate whether the section could be optimized.
+>>>
+>>
+>> In theory, we have that information stored in the relevant memory block,
+>> but I assume that lookup in the xarray + locking is impractical.
+>>
+>> I wonder if we can derive that information simply from the vmemmap pages
+>> themselves, because *drumroll*
+>>
+>> For one vmemmap page (the first one), the vmemmap corresponds to itself
+>> -- what?!
+>>
+>>
+>> [	hotplugged memory	]
+>> [ memmap ][      usable memory	]
+>>       |    |                    |
+>>   ^---     |                    |
+>>    ^-------                     |
+>>          ^----------------------
+>>
+>> The memmap of the first page of hotplugged memory falls onto itself.
+>> We'd have to derive from actual "usable memory" that condition.
+>>
+>>
+>> We currently support memmap_on_memory memory only within fixed-size
+>> memory blocks. So "hotplugged memory" is guaranteed to be aligned to
+>> memory_block_size_bytes() and the size is memory_block_size_bytes().
+>>
+>> If we'd have a page falling into usbale memory, we'd simply lookup the
+>> first page and test if the vmemmap maps to itself.
+>>
+> 
+> I think this can work. Should we use this approach in next version?
+> 
 
-On 15/06/2022 16:27, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
-> 
-> As an extension of the current skip TLB invalidations,
-> check if the device is powered down prior to any engine activity,
-> 
-> as, on such cases, all the TLBs were already invalidated, so an
-> explicit TLB invalidation is not needed.
-> 
-> This becomes more significant  with GuC, as it can only do so when
-> the connection to the GuC is awake.
-> 
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+Either that or more preferable, flagging the vmemmap pages eventually.
+That's might be future proof.
 
-Hmmm is this a fix or "an extension" as the commit text mentions both 
-options?! GuC angle does not appear relevant for upstream yet so is cc: 
-stable really required is the question.
+>>
+>> Of course, once we'd support variable-sized memory blocks, it would be
+>> different.
+>>
+>>
+>> An easier/future-proof approach might simply be flagging the vmemmap
+>> pages as being special. We reuse page flags for that, which don't have
+>> semantics yet (i.e., PG_reserved indicates a boot-time allocation via
+>> memblock).
+>>
+> 
+> I think you mean flag vmemmap pages' struct page as PG_reserved if it
+> can be optimized, right? When the vmemmap pages are allocated in
+> hugetlb_vmemmap_alloc(), is it valid to flag them as PG_reserved (they
+> are allocated from buddy allocator not memblock)?
+> 
 
-Regards,
+Sorry I wasn't clear. I'd flag them with some other
+not-yet-used-for-vmemmap-pages flag. Reusing PG_reserved could result in
+trouble.
 
-Tvrtko
 
-> 
-> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Fei Yang <fei.yang@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> See [PATCH 0/6] at: https://lore.kernel.org/all/cover.1655306128.git.mchehab@kernel.org/
-> 
->   drivers/gpu/drm/i915/gem/i915_gem_pages.c | 10 +++++----
->   drivers/gpu/drm/i915/gt/intel_gt.c        | 26 +++++++++++++++++------
->   drivers/gpu/drm/i915/gt/intel_gt_pm.h     |  3 +++
->   3 files changed, 28 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> index 97c820eee115..6835279943df 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> @@ -6,14 +6,15 @@
->   
->   #include <drm/drm_cache.h>
->   
-> +#include "gt/intel_gt.h"
-> +#include "gt/intel_gt_pm.h"
-> +
->   #include "i915_drv.h"
->   #include "i915_gem_object.h"
->   #include "i915_scatterlist.h"
->   #include "i915_gem_lmem.h"
->   #include "i915_gem_mman.h"
->   
-> -#include "gt/intel_gt.h"
-> -
->   void __i915_gem_object_set_pages(struct drm_i915_gem_object *obj,
->   				 struct sg_table *pages,
->   				 unsigned int sg_page_sizes)
-> @@ -217,10 +218,11 @@ __i915_gem_object_unset_pages(struct drm_i915_gem_object *obj)
->   
->   	if (test_and_clear_bit(I915_BO_WAS_BOUND_BIT, &obj->flags)) {
->   		struct drm_i915_private *i915 = to_i915(obj->base.dev);
-> +		struct intel_gt *gt = to_gt(i915);
->   		intel_wakeref_t wakeref;
->   
-> -		with_intel_runtime_pm_if_active(&i915->runtime_pm, wakeref)
-> -			intel_gt_invalidate_tlbs(to_gt(i915));
-> +		with_intel_gt_pm_if_awake(gt, wakeref)
-> +			intel_gt_invalidate_tlbs(gt);
->   	}
->   
->   	return pages;
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> index f33290358c51..d5ed6a6ac67c 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -11,6 +11,7 @@
->   
->   #include "i915_drv.h"
->   #include "intel_context.h"
-> +#include "intel_engine_pm.h"
->   #include "intel_engine_regs.h"
->   #include "intel_gt.h"
->   #include "intel_gt_buffer_pool.h"
-> @@ -1216,6 +1217,7 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   	struct drm_i915_private *i915 = gt->i915;
->   	struct intel_uncore *uncore = gt->uncore;
->   	struct intel_engine_cs *engine;
-> +	intel_engine_mask_t awake, tmp;
->   	enum intel_engine_id id;
->   	const i915_reg_t *regs;
->   	unsigned int num = 0;
-> @@ -1239,12 +1241,27 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   
->   	GEM_TRACE("\n");
->   
-> -	assert_rpm_wakelock_held(&i915->runtime_pm);
-> -
->   	mutex_lock(&gt->tlb_invalidate_lock);
->   	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
->   
-> +	awake = 0;
->   	for_each_engine(engine, gt, id) {
-> +		struct reg_and_bit rb;
-> +
-> +		if (!intel_engine_pm_is_awake(engine))
-> +			continue;
-> +
-> +		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
-> +		if (!i915_mmio_reg_offset(rb.reg))
-> +			continue;
-> +
-> +		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> +		awake |= engine->mask;
-> +	}
-> +
-> +	for_each_engine_masked(engine, gt, awake, tmp) {
-> +		struct reg_and_bit rb;
-> +
->   		/*
->   		 * HW architecture suggest typical invalidation time at 40us,
->   		 * with pessimistic cases up to 100us and a recommendation to
-> @@ -1252,13 +1269,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   		 */
->   		const unsigned int timeout_us = 100;
->   		const unsigned int timeout_ms = 4;
-> -		struct reg_and_bit rb;
->   
->   		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
-> -		if (!i915_mmio_reg_offset(rb.reg))
-> -			continue;
-> -
-> -		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
->   		if (__intel_wait_for_register_fw(uncore,
->   						 rb.reg, rb.bit, 0,
->   						 timeout_us, timeout_ms,
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.h b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
-> index bc898df7a48c..a334787a4939 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_pm.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
-> @@ -55,6 +55,9 @@ static inline void intel_gt_pm_might_put(struct intel_gt *gt)
->   	for (tmp = 1, intel_gt_pm_get(gt); tmp; \
->   	     intel_gt_pm_put(gt), tmp = 0)
->   
-> +#define with_intel_gt_pm_if_awake(gt, wf) \
-> +	for (wf = intel_gt_pm_get_if_awake(gt); wf; intel_gt_pm_put_async(gt), wf = 0)
-> +
->   static inline int intel_gt_pm_wait_for_idle(struct intel_gt *gt)
->   {
->   	return intel_wakeref_wait_for_idle(&gt->wakeref);
+-- 
+Thanks,
+
+David / dhildenb
+

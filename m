@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C831E54DE3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D35054DE40
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359724AbiFPJed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 05:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S1359742AbiFPJfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 05:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359615AbiFPJe3 (ORCPT
+        with ESMTP id S1359483AbiFPJfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 05:34:29 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3055A35867
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IdZ9P0l3nWpjnGWfPtV/wrhTZhkFfoKTiNu/6UnWni0=; b=fAcBemFJ7ryTficeed5VZ9Jies
-        0ciz1gmqVePqskvIT3SgaefkW/Tf3MIFMs5+fxas/pO/UXtRlVmhZ71/FH2IY3fVfhc8lV9wzfr+t
-        /LtmfqmTxv+nOFdrGlGxft9R5UlTDun/khkDqHUSSrDwGdUFf5/lXZptbpuYJlr2i7DzxAMHmeCXK
-        8/nANe3fC4f5dPpodu6ywHHI+6dEdtF+fmDfNhQapYVjwqDhZaYMoIktL7Egy9ZF/XDFcoORRnaYw
-        ZjTr211tJ5xEoX8oBMVZ0IqvydeMCRRjpccJ2B5Iq48UbkcMGUl9dz+cTEePasjpARYGgYne/P6Vs
-        ASrAgY8Q==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1ltH-008Nd0-Da; Thu, 16 Jun 2022 09:34:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0DA9E30008D;
-        Thu, 16 Jun 2022 11:34:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E6F3B2014ABD6; Thu, 16 Jun 2022 11:34:14 +0200 (CEST)
-Date:   Thu, 16 Jun 2022 11:34:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [PATCHv3 5/8] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Message-ID: <Yqr5FmoBB5LZRhU5@hirez.programming.kicks-ass.net>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-6-kirill.shutemov@linux.intel.com>
- <c7e2f8fb44da067e7565d091edeac300977b65ed.camel@intel.com>
+        Thu, 16 Jun 2022 05:35:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB15B35867
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:34:59 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o1ltt-00071U-Dp; Thu, 16 Jun 2022 11:34:53 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o1lts-00035k-0K; Thu, 16 Jun 2022 11:34:52 +0200
+Date:   Thu, 16 Jun 2022 11:34:51 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        kernel@pengutronix.de, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
+Message-ID: <20220616093451.GA28995@pengutronix.de>
+References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
+ <YqS+zYHf6eHMWJlD@lunn.ch>
+ <20220613125552.GA4536@pengutronix.de>
+ <YqdQJepq3Klvr5n5@lunn.ch>
+ <20220614185221.79983e9b@kernel.org>
+ <YqlUCtJhR1Iw3o3F@lunn.ch>
+ <20220614220948.5f0b4827@kernel.org>
+ <Yqo8BuxL+XKw8U+a@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c7e2f8fb44da067e7565d091edeac300977b65ed.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yqo8BuxL+XKw8U+a@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 05:36:43PM +0000, Edgecombe, Rick P wrote:
+On Wed, Jun 15, 2022 at 10:07:34PM +0200, Andrew Lunn wrote:
+> On Tue, Jun 14, 2022 at 10:09:48PM -0700, Jakub Kicinski wrote:
+> > On Wed, 15 Jun 2022 05:37:46 +0200 Andrew Lunn wrote:
+> > > > Does this dovetail well with ETHTOOL_A_LINKSTATE_EXT_STATE /
+> > > > ETHTOOL_A_LINKSTATE_EXT_SUBSTATE ?
+> > > > 
+> > > > That's where people who read extended link state out of FW put it
+> > > > (and therefore it's read only now).  
+> > > 
+> > > I did wonder about that. But this is to do with autoneg which is part
+> > > of ksetting. Firmware hindered MAC drivers also support ksetting
+> > > set/get.  This patchset is also opening the door to more information
+> > > which is passed via autoneg. It can also contain the ID the link peer
+> > > PHY, etc. This is all part of 802.3, where as
+> > > ETHTOOL_A_LINKSTATE_EXT_STATE tends to be whatever the firmware
+> > > offers, not something covered by a standard.
+> > 
+> > I see, yeah, I think you're right.
+> > 
+> > But I'm missing the bigger picture. I'm unclear on who is supposed 
+> > to be setting the fault user space or kernel / device?
+> 
+> It is also a bit unclear, but at the moment, i think user
+> space. However, i can see the kernel making use of maybe RF TEST to
+> ask the link peer to go quiet in order to perform a cable test.
+> 
+> Oleksij, what are your use cases?
 
-> Is this special kernel address handling only needed because
-> copy_to_kernel_nofault(), etc call the user helpers?
+Currently I was thinking only about diagnostic:
+- request transmit pause for cable testing
+- request remote loopback for selftest. In this case I will need to use
+  vendor specific NextPage to request something like this.
 
-It is to make absolutely sure we don't need to go audit everything, if
-code is correct without untag_pointer() it will still be correct with it
-on.
+> Maybe add something to patch 0/X indicating how you plan to make use of this?
 
-Also avoids future bugs due to being robust in general.
+I can move it from first patch if needed.
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

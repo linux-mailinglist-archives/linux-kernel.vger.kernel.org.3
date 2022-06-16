@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5258654ED09
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9D054ED0A
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378660AbiFPWEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S1378716AbiFPWE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbiFPWEo (ORCPT
+        with ESMTP id S1378486AbiFPWEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:04:44 -0400
+        Thu, 16 Jun 2022 18:04:46 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B0B60DA0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:04:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043B161295
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655417083; x=1686953083;
+  t=1655417084; x=1686953084;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=l2zzEpI/NGYD3sJTCPiXWhJ1G6S1YXmPElHQQZQzDlU=;
-  b=NuhqOtkO67V9p5Gd3eVopnOurCAVzdDE7ME3DUXMz+/7aqpteU0BYzTy
-   9BP8Rj/qyg8WOLk0CejkNptmixjhSjg0yDt4R+mjATClvEboHsk9h+VnN
-   8pKFpVG5vYm8mqVVsx2/Igi1AcajMp4rtNecNZ7SJ7yakfR9UqO2A7Dd6
-   XKinGqZ8w5G7vEA/FUorrb8+l8APvBUCy1KzqNeF0tpd1/5Dx0Pk6LO8E
-   0gJ4WzxygL/KCEoiZlO34HIrUohc3+ee7WO5S4R5VLSES0l7efscaumYd
-   37oRpM00Wiz/5srIxGdA9GWwu/ib6HHg1TIN0xf42IkdgrepthAgVyVtv
+  bh=HodmLaeije9RtxZHyILx5m7Ze8bov7hZMNKhqP0nbhw=;
+  b=nhkajPtdxSZlAFTOe2v0R3o/eLXxnV4jTcpdHfryOPUWFChUptD5F5Qn
+   dcJO+z0BReBKizqV7DE1dZveC3+4s3iJRdGfy1IKPivZ0/2mvyV4d9N1W
+   OdQ/7TDC0s30PTAawluGVQ4NYPgup1YlIjL7gelo+VNQTjHaH3MG6c3ZY
+   61FyDnEG6GFK7+Tx4D4fFMa9Q91gBDcF+kEROzQ16FBoInyNtsl3eWgf/
+   5NU/zVGnZlgWwcNSHeclLoUOah5AHzCbZ8Hw16q8RJF2M/Mzj75pSnE2c
+   UYVoVyKx7y7YweqGLoymHIoDhQR04FqVPUMgCJjxV/vzDDbBvcAgmYLUn
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="276936411"
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="276936416"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="276936411"
+   d="scan'208";a="276936416"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:04:43 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:04:44 -0700
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="728084991"
+   d="scan'208";a="728084999"
 Received: from buckkenx-mobl.amr.corp.intel.com (HELO pbossart-mobl3.intel.com) ([10.212.52.70])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:04:42 -0700
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:04:43 -0700
 From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 To:     alsa-devel@alsa-project.org
 Cc:     tiwai@suse.de, broonie@kernel.org,
@@ -47,16 +47,15 @@ Cc:     tiwai@suse.de, broonie@kernel.org,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
         Kai Vehmanen <kai.vehmanen@linux.intel.com>,
         Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 04/11] ASoC: wcd-mbhc-v2: use pm_runtime_resume_and_get()
-Date:   Thu, 16 Jun 2022 17:04:20 -0500
-Message-Id: <20220616220427.136036-5-pierre-louis.bossart@linux.intel.com>
+Subject: [PATCH 05/11] ASoC: wsa881x: use pm_runtime_resume_and_get()
+Date:   Thu, 16 Jun 2022 17:04:21 -0500
+Message-Id: <20220616220427.136036-6-pierre-louis.bossart@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220616220427.136036-1-pierre-louis.bossart@linux.intel.com>
 References: <20220616220427.136036-1-pierre-louis.bossart@linux.intel.com>
@@ -80,43 +79,27 @@ Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 ---
- sound/soc/codecs/wcd-mbhc-v2.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ sound/soc/codecs/wsa881x.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd-mbhc-v2.c b/sound/soc/codecs/wcd-mbhc-v2.c
-index 31009283e7d4a..98baef594bf31 100644
---- a/sound/soc/codecs/wcd-mbhc-v2.c
-+++ b/sound/soc/codecs/wcd-mbhc-v2.c
-@@ -714,12 +714,11 @@ static int wcd_mbhc_initialise(struct wcd_mbhc *mbhc)
- 	struct snd_soc_component *component = mbhc->component;
- 	int ret;
+diff --git a/sound/soc/codecs/wsa881x.c b/sound/soc/codecs/wsa881x.c
+index f3a56f3ce4871..dc954b85a9881 100644
+--- a/sound/soc/codecs/wsa881x.c
++++ b/sound/soc/codecs/wsa881x.c
+@@ -749,11 +749,9 @@ static int wsa881x_put_pa_gain(struct snd_kcontrol *kc,
+ 	unsigned int mask = (1 << fls(max)) - 1;
+ 	int val, ret, min_gain, max_gain;
  
--	ret = pm_runtime_get_sync(component->dev);
-+	ret = pm_runtime_resume_and_get(component->dev);
- 	if (ret < 0 && ret != -EACCES) {
- 		dev_err_ratelimited(component->dev,
--				    "pm_runtime_get_sync failed in %s, ret %d\n",
-+				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
- 				    __func__, ret);
--		pm_runtime_put_noidle(component->dev);
+-	ret = pm_runtime_get_sync(comp->dev);
+-	if (ret < 0 && ret != -EACCES) {
+-		pm_runtime_put_noidle(comp->dev);
++	ret = pm_runtime_resume_and_get(comp->dev);
++	if (ret < 0 && ret != -EACCES)
  		return ret;
- 	}
+-	}
  
-@@ -1097,12 +1096,11 @@ static void wcd_correct_swch_plug(struct work_struct *work)
- 	mbhc = container_of(work, struct wcd_mbhc, correct_plug_swch);
- 	component = mbhc->component;
- 
--	ret = pm_runtime_get_sync(component->dev);
-+	ret = pm_runtime_resume_and_get(component->dev);
- 	if (ret < 0 && ret != -EACCES) {
- 		dev_err_ratelimited(component->dev,
--				    "pm_runtime_get_sync failed in %s, ret %d\n",
-+				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
- 				    __func__, ret);
--		pm_runtime_put_noidle(component->dev);
- 		return;
- 	}
- 	micbias_mv = wcd_mbhc_get_micbias(mbhc);
+ 	max_gain = (max - ucontrol->value.integer.value[0]) & mask;
+ 	/*
 -- 
 2.34.1
 

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B9B54E9F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F7854E9F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378122AbiFPTT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S1378210AbiFPTUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiFPTTz (ORCPT
+        with ESMTP id S238330AbiFPTTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Jun 2022 15:19:55 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284EC562D2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E975622F;
         Thu, 16 Jun 2022 12:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=OV1YTRm+v7AUkPS1d6z+GKLa8H4BrPMSMgto9jS50pY=; b=lBv63xbGNVy2/GfvH8Ajklh1w9
-        hQewm7t/Z4fxTZIr6h06gKkCdcNrtyXfBPCK5Sr7Irj8yWZuGFHwbvhiPlbqCQ7Gm9QqyCePGgXBK
-        VBjRMeAQvCJ3QaCMFIjvIiR8Lf2issUZpUhyhfhwWfKhtzuZ+j1DtwkDKL+DBIWBjiCJ1nqCg8F4W
-        fjuuFVFnVmGANe/xSzLS5WDfAix4hlCcCnTnJ9BFuElINI/wTHKBs+b/ZRmyDf/M7U25wTNkp+GuU
-        Mpg8hXAcJsx5m4nQraxLJU+A5/QS7cWOhZqQlcnp1DBr+QNFxZKquPV1etYxngfOBJ0oFWKE0XCbL
-        KCkkSIZA==;
+        bh=1xNPrl/pbNOCuIDTZgLgk3AL8c256RaW8iEguFOOEkA=; b=rjky8FLUGVXDrB+1odXOkPieDR
+        uVKu/KJc7hov+xSoeDuE1fCld7Z7mF8QyYL18RUAWPcRQnPQQlgFumq2V2RdWNrvsLM8pCfFRxdyb
+        2sXOYZsP4CTD5Pf9pkJM2Xndw/ZUcwBEzZDeBlonNVMbJtaWlbh0ZhTOVZCCXT98eja/i6b1y+mco
+        p5MY/eS2hAb9o7sNgkbMyfXcua1mHAAMLEHG6gFYcDL+uGWiiktapdDHmYwlaW2Sk80CHutI2AJZZ
+        QAgnCAPA4poIgC5FEF7KDUX7IjBRYcG4wpVVB2xgy14KabxsOsAXOT/sxVMHA6KbU3ks2gffATQoZ
+        LDs1NbOQ==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1o1v1y-0092ij-51; Thu, 16 Jun 2022 13:19:50 -0600
+        id 1o1v1y-0092ik-Qt; Thu, 16 Jun 2022 13:19:51 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1o1v1u-0006F7-UR; Thu, 16 Jun 2022 13:19:46 -0600
+        id 1o1v1v-0006F9-1n; Thu, 16 Jun 2022 13:19:47 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -40,16 +40,17 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Stephen Bates <sbates@raithlin.com>,
         Martin Oliveira <Martin.Oliveira@eideticom.com>,
         David Sloan <David.Sloan@eideticom.com>,
-        Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 16 Jun 2022 13:19:31 -0600
-Message-Id: <20220616191945.23935-2-logang@deltatee.com>
+        Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>
+Date:   Thu, 16 Jun 2022 13:19:32 -0600
+Message-Id: <20220616191945.23935-3-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220616191945.23935-1-logang@deltatee.com>
 References: <20220616191945.23935-1-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com, hch@lst.de
 X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,46 +58,88 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v3 01/15] md/raid5: Make logic blocking check consistent with logic that blocks
+Subject: [PATCH v3 02/15] md/raid5: Factor out ahead_of_reshape() function
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check in raid5_make_request differs very slightly from the logic
-that causes it to block lower down. This likely does not cause a bug
-as the check is fuzzy anyway (as reshape may move on between the first
-check and the subsequent check). However, make it consistent so it can
-be cleaned up in a subsequent patch.
+There are a few uses of an ugly ternary operator in raid5_make_request()
+to check if a sector is a head of a reshape sector.
 
-The condition which causes the schedule is:
+Factor this out into a simple helper called ahead_of_reshape().
 
- !(mddev->reshape_backwards ? logical_sector < conf->reshape_progress :
-   logical_sector >= conf->reshape_progress) &&
-  (mddev->reshape_backwards ? logical_sector < conf->reshape_safe :
-   logical_sector >= conf->reshape_safe)
+No functional changes intended.
 
-The condition that causes the early bailout is made to match this.
-
+Suggested-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/md/raid5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/raid5.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 5d84bad8b854..b3d1f894f154 100644
+index b3d1f894f154..6e53b8490fff 100644
 --- a/drivers/md/raid5.c
 +++ b/drivers/md/raid5.c
-@@ -5841,7 +5841,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+@@ -5784,6 +5784,13 @@ static void make_discard_request(struct mddev *mddev, struct bio *bi)
+ 	bio_endio(bi);
+ }
+ 
++static bool ahead_of_reshape(struct mddev *mddev, sector_t sector,
++			     sector_t reshape_sector)
++{
++	return mddev->reshape_backwards ? sector < reshape_sector :
++					  sector >= reshape_sector;
++}
++
+ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ {
+ 	struct r5conf *conf = mddev->private;
+@@ -5840,9 +5847,8 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ 	/* Bail out if conflicts with reshape and REQ_NOWAIT is set */
  	if ((bi->bi_opf & REQ_NOWAIT) &&
  	    (conf->reshape_progress != MaxSector) &&
- 	    (mddev->reshape_backwards
--	    ? (logical_sector > conf->reshape_progress && logical_sector <= conf->reshape_safe)
-+	    ? (logical_sector >= conf->reshape_progress && logical_sector < conf->reshape_safe)
- 	    : (logical_sector >= conf->reshape_safe && logical_sector < conf->reshape_progress))) {
+-	    (mddev->reshape_backwards
+-	    ? (logical_sector >= conf->reshape_progress && logical_sector < conf->reshape_safe)
+-	    : (logical_sector >= conf->reshape_safe && logical_sector < conf->reshape_progress))) {
++	    !ahead_of_reshape(mddev, logical_sector, conf->reshape_progress) &&
++	    ahead_of_reshape(mddev, logical_sector, conf->reshape_safe)) {
  		bio_wouldblock_error(bi);
  		if (rw == WRITE)
+ 			md_write_end(mddev);
+@@ -5871,14 +5877,12 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ 			 * to check again.
+ 			 */
+ 			spin_lock_irq(&conf->device_lock);
+-			if (mddev->reshape_backwards
+-			    ? logical_sector < conf->reshape_progress
+-			    : logical_sector >= conf->reshape_progress) {
++			if (ahead_of_reshape(mddev, logical_sector,
++					     conf->reshape_progress)) {
+ 				previous = 1;
+ 			} else {
+-				if (mddev->reshape_backwards
+-				    ? logical_sector < conf->reshape_safe
+-				    : logical_sector >= conf->reshape_safe) {
++				if (ahead_of_reshape(mddev, logical_sector,
++						     conf->reshape_safe)) {
+ 					spin_unlock_irq(&conf->device_lock);
+ 					schedule();
+ 					do_prepare = true;
+@@ -5909,9 +5913,8 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ 				 */
+ 				int must_retry = 0;
+ 				spin_lock_irq(&conf->device_lock);
+-				if (mddev->reshape_backwards
+-				    ? logical_sector >= conf->reshape_progress
+-				    : logical_sector < conf->reshape_progress)
++				if (!ahead_of_reshape(mddev, logical_sector,
++						      conf->reshape_progress))
+ 					/* mismatch, need to try again */
+ 					must_retry = 1;
+ 				spin_unlock_irq(&conf->device_lock);
 -- 
 2.30.2
 

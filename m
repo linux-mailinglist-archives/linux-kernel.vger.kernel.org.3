@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBB354E583
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8956F54E590
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377501AbiFPO7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S1377741AbiFPPCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbiFPO7w (ORCPT
+        with ESMTP id S236304AbiFPPCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:59:52 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 350293CFE1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=ovjTU
-        O24ypn/3asmCSBp8kcH40860kjRDa2YdbnXg2A=; b=g4/QoVpG4t/oSYplaftP6
-        XN76yO+RkWFao9sZg2RH3tYLJZx+43ZKucab9EForRQ1UkuCN6Tc07MYFba0iDO2
-        fjv9+X+fENzRnay376cML00kT4RCv1kyzs0B7bLzlKblRww3+14NS0coSUo8jUyB
-        6cqqa36FZN1rmdSNGnHPyo=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Thu, 16 Jun 2022 22:56:21 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Thu, 16 Jun 2022 22:56:21 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
-Cc:     "oss@buserror.net" <oss@buserror.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re:Re: [PATCH] arch: powerpc: platforms: 85xx: Add missing
- of_node_put in sgy_cts1000.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <db681dac-5c42-d659-d0ed-31390b2feb3a@csgroup.eu>
-References: <20220615120717.3965164-1-windhl@126.com>
- <db681dac-5c42-d659-d0ed-31390b2feb3a@csgroup.eu>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 16 Jun 2022 11:02:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4F13DA5A;
+        Thu, 16 Jun 2022 08:02:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D04FA21D3C;
+        Thu, 16 Jun 2022 15:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655391721;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LG13+PzXyKkJJ354mhg9xbVpFu1cjtccEn2WqANniac=;
+        b=mbh8tz7rXmsWOg5e2UVivIlGK7FzI5U7F3c56jFPvl6mXdCGlc9iLdZtow9p9dRUmJ1KWr
+        m9y7qQ4aM9HJCLzPqk1BAjTCqynFZzLZUeUP0QUOkcWwlNQNMG7AHAtiGbmlbuRqQuTsYw
+        l2AIB/zgWvmncuK5HsM5Q3HBVdXzQK0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655391721;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LG13+PzXyKkJJ354mhg9xbVpFu1cjtccEn2WqANniac=;
+        b=/APgIUcaHjm7RI2mc8s+qU5gLnvZ/D0ZLdsUEFQN5wluO7t9WWzjyrkRxlomCfEGWu29YP
+        4X/Ufg+xwF6F9PCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 73BD41344E;
+        Thu, 16 Jun 2022 15:02:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id y8Y4G+lFq2IcOgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 16 Jun 2022 15:02:01 +0000
+Date:   Thu, 16 Jun 2022 16:57:27 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     dsterba@suse.cz,
+        syzbot <syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Subject: Re: [syzbot] KASAN: use-after-free Read in
+ copy_page_from_iter_atomic (2)
+Message-ID: <20220616145727.GB20633@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Christoph Hellwig <hch@lst.de>,
+        syzbot <syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+References: <0000000000003ce9d105e0db53c8@google.com>
+ <00000000000085068105e112a117@google.com>
+ <20220613193912.GI20633@twin.jikos.cz>
+ <20220614071757.GA1207@lst.de>
 MIME-Version: 1.0
-Message-ID: <8470436.7edc.1816d03e9c2.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowACn9fGXRKti6e43AA--.53681W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuA4iF2JVj5SI4QABsH
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614071757.GA1207@lst.de>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCkF0IDIwMjItMDYtMTYgMjI6NDk6MzYsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0b3Bo
-ZS5sZXJveUBjc2dyb3VwLmV1PiB3cm90ZToKPgo+Cj5MZSAxNS8wNi8yMDIyIMOgIDE0OjA3LCBM
-aWFuZyBIZSBhIMOpY3JpdMKgOgo+PiBbWW91IGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIHdp
-bmRobEAxMjYuY29tLiBMZWFybiB3aHkgdGhpcyBpcyBpbXBvcnRhbnQgYXQgaHR0cHM6Ly9ha2Eu
-bXMvTGVhcm5BYm91dFNlbmRlcklkZW50aWZpY2F0aW9uIF0KPj4gCj4+IFNpZ25lZC1vZmYtYnk6
-IExpYW5nIEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4gLS0tCj4+ICAgYXJjaC9wb3dlcnBjL3BsYXRm
-b3Jtcy84NXh4L3NneV9jdHMxMDAwLmMgfCAxMCArKysrKysrKysrCj4+ICAgMSBmaWxlIGNoYW5n
-ZWQsIDEwIGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxh
-dGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9z
-Z3lfY3RzMTAwMC5jCj4+IGluZGV4IDk4YWU2NDA3NTE5My4uMmE0NWIzMDg1MmIyIDEwMDY0NAo+
-PiAtLS0gYS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+PiArKysg
-Yi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+PiBAQCAtODUsMTcg
-Kzg1LDI0IEBAIHN0YXRpYyBpbnQgZ3Bpb19oYWx0X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
-Y2UgKnBkZXYpCj4+ICAgICAgICAgIC8qIFRlY2huaWNhbGx5IHdlIGNvdWxkIGp1c3QgcmVhZCB0
-aGUgZmlyc3Qgb25lLCBidXQgcHVuaXNoCj4+ICAgICAgICAgICAqIERUIHdyaXRlcnMgZm9yIGlu
-dmFsaWQgZm9ybS4gKi8KPj4gICAgICAgICAgaWYgKG9mX2dwaW9fY291bnQoaGFsdF9ub2RlKSAh
-PSAxKQo+PiArICAgICAgIHsKPj4gKyAgICAgICAgICAgICAgIG9mX25vZGVfcHV0KGhhbHRfbm9k
-ZSk7Cj4KPkR1cGxpY2F0aW5nIHRoZSBzYW1lIGNvZGUgYXQgbXVsdGlwbGUgZXhpdCBwb2ludHMg
-aXMgYmFkIHByYWN0aWNlLgo+Cj5JZiB5b3UgY2FuJ3QgZG8gYSBzaW1wbGUgJ3JldHVybicgZXhp
-dCwgeW91IHNob3VsZCB1c2UgJ2dvdG8nIHRvIGEgCj5jb21tb24gZXJyb3IgcGF0aCBleGl0LgoK
-VGhhbmtzIGZvciB5b3VyIHZhbHVhYmxlIGFkdmljZSwgSSB3aWxsIHJlc2VuZCBhIG5ldyBwYXRj
-aCBmb3IgdGhhdC4KCgo+Cj4+ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7Cj4+ICsg
-ICAgICAgfQo+PiAKPj4gICAgICAgICAgLyogR2V0IHRoZSBncGlvIG51bWJlciByZWxhdGl2ZSB0
-byB0aGUgZHluYW1pYyBiYXNlLiAqLwo+PiAgICAgICAgICBncGlvID0gb2ZfZ2V0X2dwaW9fZmxh
-Z3MoaGFsdF9ub2RlLCAwLCAmZmxhZ3MpOwo+PiAgICAgICAgICBpZiAoIWdwaW9faXNfdmFsaWQo
-Z3BpbykpCj4+ICsgICAgICAgewo+PiArICAgICAgICAgICAgICAgb2Zfbm9kZV9wdXQoaGFsdF9u
-b2RlKTsKPj4gICAgICAgICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsKPj4gKyAgICAgICB9Cj4+
-IAo+PiAgICAgICAgICBlcnIgPSBncGlvX3JlcXVlc3QoZ3BpbywgImdwaW8taGFsdCIpOwo+PiAg
-ICAgICAgICBpZiAoZXJyKSB7Cj4+ICAgICAgICAgICAgICAgICAgcHJpbnRrKEtFUk5fRVJSICJn
-cGlvLWhhbHQ6IGVycm9yIHJlcXVlc3RpbmcgR1BJTyAlZC5cbiIsCj4+ICAgICAgICAgICAgICAg
-ICAgICAgICAgIGdwaW8pOwo+PiArICAgICAgICAgICAgICAgb2Zfbm9kZV9wdXQoaGFsdF9ub2Rl
-KTsKPj4gICAgICAgICAgICAgICAgICBoYWx0X25vZGUgPSBOVUxMOwo+PiAgICAgICAgICAgICAg
-ICAgIHJldHVybiBlcnI7Cj4+ICAgICAgICAgIH0KPj4gQEAgLTExMiw2ICsxMTksNyBAQCBzdGF0
-aWMgaW50IGdwaW9faGFsdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAg
-ICAgICAgICAgICAgICAgIHByaW50ayhLRVJOX0VSUiAiZ3Bpby1oYWx0OiBlcnJvciByZXF1ZXN0
-aW5nIElSUSAlZCBmb3IgIgo+PiAgICAgICAgICAgICAgICAgICAgICAgICAiR1BJTyAlZC5cbiIs
-IGlycSwgZ3Bpbyk7Cj4+ICAgICAgICAgICAgICAgICAgZ3Bpb19mcmVlKGdwaW8pOwo+PiArICAg
-ICAgICAgICAgICAgb2Zfbm9kZV9wdXQoaGFsdF9ub2RlKTsKPj4gICAgICAgICAgICAgICAgICBo
-YWx0X25vZGUgPSBOVUxMOwo+PiAgICAgICAgICAgICAgICAgIHJldHVybiBlcnI7Cj4+ICAgICAg
-ICAgIH0KPj4gQEAgLTEyMyw2ICsxMzEsOCBAQCBzdGF0aWMgaW50IGdwaW9faGFsdF9wcm9iZShz
-dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAgICAgICAgICBwcmludGsoS0VSTl9JTkZP
-ICJncGlvLWhhbHQ6IHJlZ2lzdGVyZWQgR1BJTyAlZCAoJWQgdHJpZ2dlciwgJWQiCj4+ICAgICAg
-ICAgICAgICAgICAiIGlycSkuXG4iLCBncGlvLCB0cmlnZ2VyLCBpcnEpOwo+PiAKPj4gKyAgICAg
-ICBvZl9ub2RlX3B1dChoYWx0X25vZGUpOwo+PiArCj4+ICAgICAgICAgIHJldHVybiAwOwo+PiAg
-IH0KPj4gCj4+IC0tCj4+IDIuMjUuMQo+PiAK
+On Tue, Jun 14, 2022 at 09:17:57AM +0200, Christoph Hellwig wrote:
+> On Mon, Jun 13, 2022 at 09:39:12PM +0200, David Sterba wrote:
+> > On Fri, Jun 10, 2022 at 12:10:19AM -0700, syzbot wrote:
+> > > syzbot has bisected this issue to:
+> > > 
+> > > commit 4cd4aed63125ccd4efc35162627827491c2a7be7
+> > > Author: Christoph Hellwig <hch@lst.de>
+> > > Date:   Fri May 27 08:43:20 2022 +0000
+> > > 
+> > >     btrfs: fold repair_io_failure into btrfs_repair_eb_io_failure
+> > 
+> > Josef also reported a crash and found a bug in the patch, now added as
+> > fixup that'll be in for-next:
+> 
+> The patch looks correct to me.  Two things to note here:
+> 
+>  - I hadn't realized you had queued up the series.
+
+I did a review and as it looked ok I added it to the for-next for
+testing coverage, but I don't think I've sent any notice about that.
+
+>  I've actually
+>    started to merge some of my bio work with the bio split at
+>    submission time work from Qu and after a few iterations I think
+>    I would do the repair code a bit differently based on that.
+>    Can you just drop the series for now?
+
+Yeah, we consistently hit 2 crashes, one of them has a fix but the other
+not, so I removed the topic branch from for-next. I'll wait for the
+reworked version you mention.

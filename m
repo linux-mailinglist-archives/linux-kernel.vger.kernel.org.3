@@ -2,67 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BB054E20C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1082854E1CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377052AbiFPNfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S1376489AbiFPNWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376839AbiFPNe5 (ORCPT
+        with ESMTP id S230063AbiFPNWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:34:57 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A25205DC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:34:56 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id t32so2182255ybt.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E4oRD4fpeOcIe9J3CDXeLQW7t2RI1ucb4W5YyAxRXTc=;
-        b=i+aNtOa0+P+UbHlJ+UN0VZmv+j16VlraJF77uRCdHFS9DDTc2ta8XYvSfxc1rbXh52
-         C9Hwy4bHsghReeEsAOr5frAUR0h/6yvnL98uuM/BV5p6LF6ip1BxtdTvaIJRzEoCoJy7
-         HA80uJ9DSen54oYDsfLIsIyXI8ieNXW53l/JP7kirV0mPi57XiWfohaX1D1/TOvEvTg/
-         mTMITFgeJolEY5F43ftAl1AFapXqkYT57sFcHPxuWR/BDsZNk/fViXrCbaIOdIWGRapw
-         Ef4Vs2gqSuHK2KLCX2E/zi9ktMQtWwZS2eAYxgKkkO8lJ6Wtt4oRt1hPRH4iksDjaemh
-         +Gbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E4oRD4fpeOcIe9J3CDXeLQW7t2RI1ucb4W5YyAxRXTc=;
-        b=hYQ5fY9fnAxRRvm/n0ps9t46yb+BF6YOzpJqRQofr/eyV4i4RDUsHt5ahvwPREClN9
-         AH8W6jkv2gghc5vbppfH80e6T0xZIWioStSV6TfcOiV0v6d9U12WlEDckCSxL60nDeEi
-         +gJEvHKTSyam0w45fvRmlJpC7/uiv61j1mKXNEdVrQU/cqLJwfoSaUcl0F5u3hQkZ/67
-         0idxTZnBgplCiwVHlZOe1CLMUhZ7Uh5icBGo60NOe5P8RRrrqAaOW+ei8LUdKDBbghkf
-         fOkDN24ttMjABR86JUaoa/UUrAFfYLO/ylRkzdYeLosc62WNWaEIWQwlPkt5idNDpOvb
-         AAlw==
-X-Gm-Message-State: AJIora/5XVB2729SmOV+RIzb0xF8QgCNTKK0k9QVeBCyPjnkJY4PKo/n
-        qtBkxBLPY7zGIEvLz9qwUrWMe3oNjnAzjdDszjW+3g==
-X-Google-Smtp-Source: AGRyM1tOESzLLHsKWOfNIxiAJfDhdbEqfPn3s2ZPVjXgSzXCZ24IEI92hnqOwbzdBIKkU7b9sRdugwSZhPXLa08JRCI=
-X-Received: by 2002:a25:3417:0:b0:664:aab3:7c44 with SMTP id
- b23-20020a253417000000b00664aab37c44mr5233002yba.533.1655386495611; Thu, 16
- Jun 2022 06:34:55 -0700 (PDT)
+        Thu, 16 Jun 2022 09:22:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8EC43490;
+        Thu, 16 Jun 2022 06:22:07 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LP2pY36XlzhXZK;
+        Thu, 16 Jun 2022 21:20:05 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 16 Jun
+ 2022 21:22:04 +0800
+From:   Zheng Bin <zhengbin13@huawei.com>
+To:     <neal_liu@aspeedtech.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <zhengbin13@huawei.com>, <gaochao49@huawei.com>
+Subject: [PATCH -next] usb: gadget: aspeed_udc: fix missing spin_unlock_irqrestore in ast_udc_ep_queue
+Date:   Thu, 16 Jun 2022 21:35:08 +0800
+Message-ID: <20220616133508.3655864-1-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220610203746.2191518-1-robh@kernel.org>
-In-Reply-To: <20220610203746.2191518-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 16 Jun 2022 15:34:44 +0200
-Message-ID: <CACRpkdaayHZaeC4X1+d_jC0nCvAtw=w2t2m1txj4OtV_LqcnoA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mtd/partitions: Convert arm-firmware-suite
- to DT schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,16 +49,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:38 PM Rob Herring <robh@kernel.org> wrote:
+ast_udc_ep_queue misses spin_unlock_irqrestore in an error path,
+this patch fixes that.
 
-> Convert the arm,arm-firmware-suite partition binding to DT schema
-> format. Simple conversion as there's only a compatible property.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I see your own robot bit you about the unit name but with
-that fixed:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 1fc15228ff15..6c91f7f288a2 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -665,7 +665,8 @@ static int ast_udc_ep_queue(struct usb_ep *_ep, struct usb_request *_req,
+ 	if (ep->ep.desc == NULL) {
+ 		if ((req->req.dma % 4) != 0) {
+ 			dev_warn(dev, "EP0 req dma alignment error\n");
+-			return -ESHUTDOWN;
++			rc = -ESHUTDOWN;
++			goto end;
+ 		}
 
-Yours,
-Linus Walleij
+ 		ast_udc_ep0_queue(ep, req);
+--
+2.31.1
+

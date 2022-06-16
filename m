@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB10B54E8E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A208754E8E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiFPRuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 13:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S236657AbiFPRvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 13:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243248AbiFPRuF (ORCPT
+        with ESMTP id S233682AbiFPRvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 13:50:05 -0400
+        Thu, 16 Jun 2022 13:51:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC93C4CD54
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:49:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5EC4C787
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:51:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE507618E8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 497A1C34114;
-        Thu, 16 Jun 2022 17:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655401779;
-        bh=jp1i6DksrsdnGuY6hAh7dLb7WYttM9+yqrIKrAy/6uE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=pfDQHgzmtWaBJKpDvwlmP1yzyxM5SWS61HqtJm3N3UJpsz67Tj9NYlEsuiXWCAUY9
-         nAv9iSGsY3Duygyt2kbPm/womtj8NXdaeaepILarnRrSfKIC6RFUnP3XuGG9ZbS7u+
-         gWG1eb1TJ9v9jXCLLnCPeIz/HR+6CFbjiunK5rFraJcFqORYiwTlpumQDnttPM05ds
-         G3mX9xDcZA2UEoG80sC1FKyC9doKe/MkSNFi8T2V3wE8b3Q/KTeMDovBJoivL71LiD
-         XQN3f+LdlQnniIp3wmAEKu1hmHS8ysa3Fg0+ASs5LTKSBYE3A4tHDS8aq+FckhI63Z
-         yJm3Te9ouN4eg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AFB135C0531; Thu, 16 Jun 2022 10:49:38 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 10:49:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, dvyukov@google.com
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/pmladek.2022.06.15a
- 133/140] vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to
- __kasan_check_read() leaves .noinstr.text section
-Message-ID: <20220616174938.GR1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202206160411.v3iL3YC0-lkp@intel.com>
- <20220615204039.GI1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220615211717.GA972937@paulmck-ThinkPad-P17-Gen-1>
- <CANpmjNMswUJhqfttxZGbkfN7X5d5FLiS1yPXzzGDivLtWDB9=g@mail.gmail.com>
- <20220616134021.GP1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220616164416.GA2130702@paulmck-ThinkPad-P17-Gen-1>
- <CANpmjNPhfGnO8qebvPd2pEqO37qTAa8pUAOTy2MXqT4R+iZ8QA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA0FB61B60
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:51:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0684AC34114;
+        Thu, 16 Jun 2022 17:51:05 +0000 (UTC)
+Date:   Thu, 16 Jun 2022 18:51:02 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH] KVM: arm64: Prevent kmemleak from accessing pKVM memory
+Message-ID: <YqtthvVxgQ6K0nEt@arm.com>
+References: <20220616161135.3997786-1-qperret@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNPhfGnO8qebvPd2pEqO37qTAa8pUAOTy2MXqT4R+iZ8QA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220616161135.3997786-1-qperret@google.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 07:32:14PM +0200, Marco Elver wrote:
-> On Thu, 16 Jun 2022 at 18:44, Paul E. McKenney <paulmck@kernel.org> wrote:
-> [...]
-> > > > > > > >> vmlinux.o: warning: objtool: __ct_user_exit+0x41: call to __kasan_check_read() leaves .noinstr.text section
-> > > > > > > >> vmlinux.o: warning: objtool: __ct_user_enter+0x7f: call to __kasan_check_read() leaves .noinstr.text section
-> [...]
-> > > > It's due to the atomic_read()s within the noinstr function. Within
-> > > > noinstr you can use arch_atomic_read() to avoid the instrumentation.
-> > >
-> > > Thank you, will fix!
-> >
-> > And please see below for an alleged fix.
+On Thu, Jun 16, 2022 at 04:11:34PM +0000, Quentin Perret wrote:
+> Commit a7259df76702 ("memblock: make memblock_find_in_range method
+> private") changed the API using which memory is reserved for the pKVM
+> hypervisor. However, it seems that memblock_phys_alloc() differs
+> from the original API in terms of kmemleak semantics -- the old one
+> excluded the reserved regions from kmemleak scans when the new one
+> doesn't seem to. Unfortunately, when protected KVM is enabled, all
+> kernel accesses to pKVM-private memory result in a fatal exception,
+> which can now happen because of kmemleak scans:
 > 
-> Looks good, if this made the above warnings go away.
+> $ echo scan > /sys/kernel/debug/kmemleak
+> [   34.991354] kvm [304]: nVHE hyp BUG at: [<ffff800008fa3750>] __kvm_nvhe_handle_host_mem_abort+0x270/0x290!
+> [   34.991580] kvm [304]: Hyp Offset: 0xfffe8be807e00000
+> [   34.991813] Kernel panic - not syncing: HYP panic:
+> [   34.991813] PS:600003c9 PC:0000f418011a3750 ESR:00000000f2000800
+> [   34.991813] FAR:ffff000439200000 HPFAR:0000000004792000 PAR:0000000000000000
+> [   34.991813] VCPU:0000000000000000
+> [   34.993660] CPU: 0 PID: 304 Comm: bash Not tainted 5.19.0-rc2 #102
+> [   34.994059] Hardware name: linux,dummy-virt (DT)
+> [   34.994452] Call trace:
+> [   34.994641]  dump_backtrace.part.0+0xcc/0xe0
+> [   34.994932]  show_stack+0x18/0x6c
+> [   34.995094]  dump_stack_lvl+0x68/0x84
+> [   34.995276]  dump_stack+0x18/0x34
+> [   34.995484]  panic+0x16c/0x354
+> [   34.995673]  __hyp_pgtable_total_pages+0x0/0x60
+> [   34.995933]  scan_block+0x74/0x12c
+> [   34.996129]  scan_gray_list+0xd8/0x19c
+> [   34.996332]  kmemleak_scan+0x2c8/0x580
+> [   34.996535]  kmemleak_write+0x340/0x4a0
+> [   34.996744]  full_proxy_write+0x60/0xbc
+> [   34.996967]  vfs_write+0xc4/0x2b0
+> [   34.997136]  ksys_write+0x68/0xf4
+> [   34.997311]  __arm64_sys_write+0x20/0x2c
+> [   34.997532]  invoke_syscall+0x48/0x114
+> [   34.997779]  el0_svc_common.constprop.0+0x44/0xec
+> [   34.998029]  do_el0_svc+0x2c/0xc0
+> [   34.998205]  el0_svc+0x2c/0x84
+> [   34.998421]  el0t_64_sync_handler+0xf4/0x100
+> [   34.998653]  el0t_64_sync+0x18c/0x190
+> [   34.999252] SMP: stopping secondary CPUs
+> [   35.000034] Kernel Offset: disabled
+> [   35.000261] CPU features: 0x800,00007831,00001086
+> [   35.000642] Memory Limit: none
+> [   35.001329] ---[ end Kernel panic - not syncing: HYP panic:
+> [   35.001329] PS:600003c9 PC:0000f418011a3750 ESR:00000000f2000800
+> [   35.001329] FAR:ffff000439200000 HPFAR:0000000004792000 PAR:0000000000000000
+> [   35.001329] VCPU:0000000000000000 ]---
+> 
+> Fix this by explicitly excluding the hypervisor's memory pool from
+> kmemleak like we already do for the hyp BSS.
+> 
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Fixes: a7259df76702 ("memblock: make memblock_find_in_range method private")
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> ---
+> An alternative could be to actually exclude memory allocated using
+> memblock_phys_alloc_range() from kmemleak scans to revert back to the
+> old behaviour. But nobody else has complained about this AFAIK, so I'd
+> be inclined to keep this local to pKVM. No strong opinion.
 
-Here is hoping!  I will see if I can reproduce locally.  ;-)
+This works for me, I haven't heard anyone else complaining.
 
-> Btw, it's not just KASAN, but arch_atomic_read() also disables KCSAN
-> checking. A similar warning would have been generated in a KCSAN
-> config.
-
-Good to know, thank you!  Additional local-reproduce opportunities.
-
-> Reviewed-by: Marco Elver <elver@google.com>
-
-Applied, thank you!
-
-                                                         Thanx, Paul
-
-> > ------------------------------------------------------------------------
-> >
-> > commit 81e24ca26ee9933bcacf67a61e3f6ae41a025442
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Thu Jun 16 09:30:37 2022 -0700
-> >
-> >     context_tracking: Use arch_atomic_read() in __ct_state for KASAN
-> >
-> >     Context tracking's __ct_state() function can be invoked from noinstr state
-> >     where RCU is not watching.  This means that its use of atomic_read()
-> >     causes KASAN to invoke the non-noinstr __kasan_check_read() function
-> >     from the noinstr function __ct_state().  This is problematic because
-> >     someone tracing the __kasan_check_read() function could get a nasty
-> >     surprise because of RCU not watching.
-> >
-> >     This commit therefore replaces the __ct_state() function's use of
-> >     atomic_read() with arch_atomic_read(), which KASAN does not attempt to
-> >     add instrumention to.
-> >
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> >     Cc: Frederic Weisbecker <frederic@kernel.org>
-> >     Cc: Marco Elver <elver@google.com>
-> >
-> > diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-> > index 0aecc07fb4f50..81c51e5f03143 100644
-> > --- a/include/linux/context_tracking_state.h
-> > +++ b/include/linux/context_tracking_state.h
-> > @@ -49,7 +49,7 @@ DECLARE_PER_CPU(struct context_tracking, context_tracking);
-> >
-> >  static __always_inline int __ct_state(void)
-> >  {
-> > -       return atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
-> > +       return arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
-> >  }
-> >  #endif
-> >
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

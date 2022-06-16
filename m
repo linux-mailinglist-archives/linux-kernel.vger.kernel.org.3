@@ -2,71 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612CA54E5D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52FA54E5B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 17:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377551AbiFPPRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 11:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
+        id S1377779AbiFPPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 11:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbiFPPRp (ORCPT
+        with ESMTP id S1376878AbiFPPIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:17:45 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319E6DF29
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:17:42 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso3006010wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oI88Qu4qiMkSjs5momI9WAT894CnS3fhP5J1kHBA0Xw=;
-        b=dvH6AD5BOgP7SSTByX9sqdfXDqv0OAOSj6yDH69SlzCgeOMMJ5RggvfLElOU/1QXhq
-         jYCoS4+pJ+UoOD+Lc0st87cKPaVMPrifpGWvfdHMjDcxCTaXRalKzy9yr+iVAXSqiqr+
-         aG2A6PGYZKOu7X87JiidBlHZRmUpgKqBFxJiXbJ/4siOMyHpspZEp0ToVO0ncipcNHGc
-         aX3XRSi6kg50O2HCZvy6xYLEXZSAJpBf/v9MQchyhTE0sFvYza9elswswpa7Korf2ZXc
-         K/syg11U9WT7hJ+DHV++210vXWPLaVHF9xyMxRisHNcCdvj3PEJts3hJF3cnEmRdhejl
-         EvZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oI88Qu4qiMkSjs5momI9WAT894CnS3fhP5J1kHBA0Xw=;
-        b=uS7FVgVR3b2vhOSQHCRjIBZswq6cXQoaIG03njEolVV+mUMRmAOoGSZERqpmZvqspw
-         lQcgvaPPchAtutlodeMtmGHB01oOuE7FHFOa1/42uM+tYTZqfQYaYO04F6tfe99ASk+H
-         FoKUzv3fJVkuAUyrRpx4m7vS1lKlM17mrlcrjqdZie3YgVbi9/x//2hHc688A2k/j5M7
-         tkx5gg4W4MINEw/Bko0/AIGQKNWQ1S703wnsDlkNQ0Kky8BA889bg1eSAbLip7JCKPJM
-         hxdz0fhh/aAfk14jJFmWkNGPgSWXd9t+dfv1yxDMciNuIr416ANlIsc/BadRCvBvfmA7
-         Vnbg==
-X-Gm-Message-State: AJIora/hHfTDLfXoR7hvCjEtouvA2lNOkIVw7tWPP7bvMYkDwPVFtYFf
-        06XN0hwbK8+phPjEWojBPM/pw+tqJSmw0G1Ga1c=
-X-Google-Smtp-Source: AGRyM1t7s8sG7knah9RyDCtIy/zQzva/JpPwmUWGpQaRjdRRkx4tAVGSo4OZULRC2k5nQVmwxr3X/A==
-X-Received: by 2002:a05:600c:2244:b0:39c:4060:1ec9 with SMTP id a4-20020a05600c224400b0039c40601ec9mr5421401wmm.147.1655392660737;
-        Thu, 16 Jun 2022 08:17:40 -0700 (PDT)
-Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id j18-20020a5d6052000000b0021a35730281sm1929534wrt.91.2022.06.16.08.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 08:17:40 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     nagasuresh.relli@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, robh@kernel.org,
-        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu, daire.mcnamara@microchip.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] riscv: dts: microchip: remove spi-max-frequency property
-Date:   Thu, 16 Jun 2022 16:17:12 +0100
-Message-Id: <165539261570.229722.8766263484989186462.b4-ty@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220616064251.586263-1-nagasuresh.relli@microchip.com>
-References: <20220616064251.586263-1-nagasuresh.relli@microchip.com>
+        Thu, 16 Jun 2022 11:08:41 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA53D3E0F1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 08:08:39 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LP59T3nXnz1K9xN;
+        Thu, 16 Jun 2022 23:06:37 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 23:08:36 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 16 Jun 2022 23:08:36 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] arm64: defconfig: Enable memory hotplug and hotremove config
+Date:   Thu, 16 Jun 2022 23:17:45 +0800
+Message-ID: <20220616151745.63396-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,18 +52,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Let's eable memory hotplug and hotremove for more test coverage.
 
-On Thu, 16 Jun 2022 12:12:51 +0530, Nagasuresh Relli wrote:
-> Remove the spi-max-frequency property from the spi0 controller
-> node as it is supposed to be a per SPI peripheral device property.
-> 
-> 
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Applied to dt-for-next, thanks!
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7d1105343bc2..3091b74571d2 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -101,6 +101,7 @@ CONFIG_ARM_TEGRA186_CPUFREQ=y
+ CONFIG_ARM_MEDIATEK_CPUFREQ=y
+ CONFIG_QORIQ_CPUFREQ=y
+ CONFIG_ACPI=y
++CONFIG_ACPI_HOTPLUG_MEMORY=y
+ CONFIG_ACPI_APEI=y
+ CONFIG_ACPI_APEI_GHES=y
+ CONFIG_ACPI_APEI_PCIEAER=y
+@@ -125,6 +126,8 @@ CONFIG_SECCOMP=y
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
++CONFIG_MEMORY_HOTPLUG=y
++CONFIG_MEMORY_HOTREMOVE=y
+ CONFIG_KSM=y
+ CONFIG_MEMORY_FAILURE=y
+ CONFIG_TRANSPARENT_HUGEPAGE=y
+-- 
+2.35.3
 
-[1/1] riscv: dts: microchip: remove spi-max-frequency property
-      https://git.kernel.org/conor/c/3f8ccf5f1a8c
-
-Thanks,
-Conor.

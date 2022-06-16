@@ -2,106 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F237B54DCC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602EE54DCCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359620AbiFPIXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S1359678AbiFPIYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359738AbiFPIXf (ORCPT
+        with ESMTP id S1358831AbiFPIYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:23:35 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15CB224598;
-        Thu, 16 Jun 2022 01:23:34 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5E738812F;
-        Thu, 16 Jun 2022 08:18:46 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 11:23:32 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <YqrohD8FZJS5aBo+@atomide.com>
-References: <20220615062455.15490-1-tony@atomide.com>
- <YqmjnaawQ2gye/pe@smile.fi.intel.com>
+        Thu, 16 Jun 2022 04:24:16 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472AB24587;
+        Thu, 16 Jun 2022 01:24:15 -0700 (PDT)
+X-UUID: 0e4756970467401aad7610504b449a05-20220616
+X-UUID: 0e4756970467401aad7610504b449a05-20220616
+Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
+        (envelope-from <xiehongyu1@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1040902029; Thu, 16 Jun 2022 16:26:41 +0800
+X-ns-mid: postfix-62AAE8A9-3395959497
+Received: from [172.20.4.10] (unknown [172.20.4.10])
+        by cs2c.com.cn (NSMail) with ESMTPSA id 1B5013844001;
+        Thu, 16 Jun 2022 16:24:09 +0800 (CST)
+Message-ID: <ab92690c-c3ee-ab92-5763-376db208aebb@kylinos.cn>
+Date:   Thu, 16 Jun 2022 16:24:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqmjnaawQ2gye/pe@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 -next] usb: xhci: disable irq during initialization
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Hongyu Xie <xy521521@gmail.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 125707942@qq.com, wangqi@kylinos.cn,
+        xiongxin@kylinos.cn, kernel test robot <lkp@intel.com>
+References: <20220616080933.1238309-1-xiehongyu1@kylinos.cn>
+ <Yqrl3jGyUx7sZVdL@kroah.com>
+From:   =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
+In-Reply-To: <Yqrl3jGyUx7sZVdL@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andy Shevchenko <andriy.shevchenko@linux.intel.com> [220615 09:12]:
-> On Wed, Jun 15, 2022 at 09:24:55AM +0300, Tony Lindgren wrote:
-> > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> > --- a/drivers/tty/serial/serial_core.c
-> > +++ b/drivers/tty/serial/serial_core.c
-> > @@ -30,6 +32,25 @@
-> >  #include <linux/irq.h>
-> >  #include <linux/uaccess.h>
-> >  
-> > +/*
-> > + * Serial port device specific data for serial core.
-> > + *
-> > + * Each port device can have multiple ports with struct uart_state allocated
-> > + * for each port. The array of ports is kept in struct uart_driver.
-> > + */
-> > +struct serial_controller {
-> > +	struct device *dev;			/* Serial port device */
+Hi greg,
+
+On 2022/6/16 16:12, Greg KH wrote:
+> On Thu, Jun 16, 2022 at 04:09:33PM +0800, Hongyu Xie wrote:
+>> irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
+>> in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
+>> It's possible that you will receive thousands of interrupt requests
+>> after initialization for 2.0 roothub. And you will get a lot of
+>> warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
+>> disabled?". This amount of interrupt requests will cause the entire
+>> system to freeze.
+>> This problem was first found on a device with ASM2142 host controller
+>> on it.
+>>
+>> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+>> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Serial port device is a bit unclear for non-prepared reader. Perhaps add
-> the word "physical" or another to specify the nature of the device (because
-> to me "serial port device" sounds like a duplication of something in struct
-> uart_port, but I have doubts).
-
-Hmm so we could add a list of all the registered struct uart_port or
-uart_state to struct serial_controller. Then looking up struct device would
-be just looking at the first list entry. We need to take port_mutex, but
-that should be mostly when the device does runtime PM. We'll be needing that
-list anyways later on to flush pending TX on runtime PM resume for each
-port associated with the device.
-
-> > diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> > --- a/include/linux/serial_core.h
-> > +++ b/include/linux/serial_core.h
-> > @@ -250,6 +250,7 @@ struct uart_port {
-> >  	unsigned char		hub6;			/* this should be in the 8250 driver */
-> >  	unsigned char		suspended;
-> >  	unsigned char		console_reinit;
-> > +	unsigned char		supports_autosuspend;
-> >  	const char		*name;			/* port name */
-> >  	struct attribute_group	*attr_group;		/* port specific attributes */
-> >  	const struct attribute_group **tty_groups;	/* all attributes (serial core use only) */
-> > @@ -285,6 +286,8 @@ enum uart_pm_state {
-> >   * This is the state information which is persistent across opens.
-> >   */
-> >  struct uart_state {
-> > +	struct serial_controller *controller;
+> the test robot did not find this original problem, it only found
+> problems with your original submission, which is different.
 > 
-> While good looking here, I believe resource wise is better to leave @port to be
-> the first member. The rationale is to get rid of pointer arithmetics at compile
-> time (and I believe the port is used much more and in more critical places).
-> However, I dunno if it will get a lot of benefit, would be nice to see
-> bloat-o-meter output for your variant and my proposal.
+"Reported-by" shouldn't had been put here.
+Quote from the last email test robot sent to me，
+"If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>"
+Where should I put this? Or just ignore it?
 
-OK makes sense. And thanks for reviewing again :)
-
-Regards,
-
-Tony

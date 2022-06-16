@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D5F54E849
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0EB54E845
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 19:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356345AbiFPRCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 13:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S245417AbiFPRC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 13:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348065AbiFPRCe (ORCPT
+        with ESMTP id S1345057AbiFPRC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 13:02:34 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F218F4924C;
-        Thu, 16 Jun 2022 10:02:26 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id D1E4E5FD03;
-        Thu, 16 Jun 2022 20:02:23 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1655398943;
-        bh=c8nGHSoCYKivIqQ2DHZGOgnkq8MRyBYS9rcB3G6l1og=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=lraNj3hbANOZtyyp9vN1jcz9gbXumsTAbW7rdcBSZ0rU3BWwT6DZO+4StTQ6Xxyq4
-         sP19lwbFtAIblYisGpjBYYNFxNK9DTw31cKH+RlrWGQrNDuYCtuqw/45DN2bYRzPJ4
-         uScEJEZ2ICBPrPaoIsYAIjNZhyGXN7i0cXvqeFErDRSMjQq6wDisfrotcDEHOmcN3E
-         l9saVFO1jiXpzG27CcsMi4f88lHAL4bM5/awLnRe7pM145mZzOozjbG8elrHm/DmAc
-         Mg3z2/4j0Gdjl9TiAbJvgknDrqmxqOxMijOIxJ5jB+HDzV16+S+pXp+BcQbj8XcO4y
-         +8uXu9LBCjldw==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 16 Jun 2022 20:02:23 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Topic: [PATCH v3 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Index: AQHYgW2+up0uMWdZgUWEAW/5cCPkBq1RwVQAgABPMQA=
-Date:   Thu, 16 Jun 2022 17:02:08 +0000
-Message-ID: <20220616170218.dihjli46spimozeg@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220616104211.9257-1-ddrokosov@sberdevices.ru>
- <20220616104211.9257-3-ddrokosov@sberdevices.ru>
- <CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4koNShFRG3kP8b6w@mail.gmail.com>
-In-Reply-To: <CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4koNShFRG3kP8b6w@mail.gmail.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F15C7B2110EABF4AB31F523C4E5315CF@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Jun 2022 13:02:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F5F443C3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 10:02:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B39AC6194A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:02:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6488C34114;
+        Thu, 16 Jun 2022 17:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655398944;
+        bh=XnVv4J01sdGBe11MNJIXMTTsXg4laIcwwL1T++aKoAY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RcWyAlCr0j8hyWym7NRFXVgQcYDBVCnYdfXopAy+sBmRw59Ei3RFI86S6eWFdDkRw
+         yOT53lW3zswSA6EgeLsI+M9SgidiiobkmfeZOTGQykdcqq5AfotbvsMRhxJl0W2WAL
+         re7TJCh1n6zpyyoaDwTlno3Odx9bfybDVjTaBOnD79wgzONbGehld0Ekqp9uenrbot
+         uDqE/JODSJK3lW7gZgdqMqzZUBUxswtX1s+G4XE65kvJhxp24jLjOJ32WTUDyMb7fh
+         Gv/gFzgOEErxTi2NMfM6K8bao92r8awJaNRKVI5DfiUOA5/4OhD0S4SVvdTy9sAUws
+         Sir100L21DLqg==
+Date:   Thu, 16 Jun 2022 10:02:22 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>,
+        Tim Murray <timmurray@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
+Subject: Re: [GIT PULL] f2fs for 5.18
+Message-ID: <YqtiHmFTbWyrueq8@google.com>
+References: <YjjihIZuvZpUjaSs@google.com>
+ <CAHk-=wgsmvoJFKFWxQ2orEVUOWH1agk9iUNZ=-DFh5OXZL=Ldw@mail.gmail.com>
+ <51cded74-3135-eed8-06d3-0b2165e3b379@redhat.com>
+ <CAHk-=wi=Xsekgj7zfw_vpOM673CG24vznmz-yx9G05rWSAAYXg@mail.gmail.com>
+ <Yjo4fg4HRzEVDr7o@google.com>
+ <20220615201318.GA1194@bug>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/16 07:44:00 #19785775
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615201318.GA1194@bug>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,228 +63,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+On 06/15, Pavel Machek wrote:
+> Hi!
+> 
+> > > > AFAICS, the read-unfair rwsem code is created to resolve a potential
+> > > > lock starvation problem that they found on linux-5.10.y stable tree. I
+> > > > believe I have fixed that in the v5.11 kernel, see commit 2f06f702925
+> > > > ("locking/rwsem: Prevent potential lock starvation").
+> > > 
+> > > Ahh.
+> > > 
+> > > Adding Tim Murray to the cc, since he was the source of that odd
+> > > reader-unfair thing.
+> > > 
+> > > I really *really* dislike people thinking they can do locking
+> > > primitives, because history has taught us that they are wrong.
+> > > 
+> > > Even when people get the semantics and memory ordering right (which is
+> > > not always the case, but at least the f2fs code uses real lock
+> > > primitives - just oddly - and should thus be ok), it invariably tends
+> > > to be a sign of something else being very wrong.
+> > > 
+> > > And I can easily believe that in this case it's due to a rmsem issue
+> > > that was already fixed long long ago as per Waiman.
+> > > 
+> > > Can people please test with the actual modern rwsem code and with the
+> > > odd reader-unfair locks disabled?
+> > 
+> > The pain point is 1) we don't have a specific test to reproduce the issue,
+> > but got some foundings from field only, 2) in order to test the patches, we
+> > need to merge the patches into Android kernel [1] through LTS, 3) but, LTS
+> > wants to see any test results [2].
+> > 
+> > [1] https://android-review.googlesource.com/q/topic:rwsem_unfair
+> > [2] https://lore.kernel.org/stable/988fd9b5-8e89-03ae-3858-85320382792e@redhat.com/
+> 
+> Wait, what? Normally, patches are tested before going to mainline, and especially
+> before being backported to stable.
+> 
+> If you can't reproduce issue on mainline kernel, there's something very wrong
+> with trying to fix it on mainline kernel. You should not be merging untested fixes
+> so that they can make it into mainline and then into stable and then into android kernel
+> to be tested.
 
-Thank you for the quick review. Please find my comments below.
+What do you mean "untested fixes" here? As Tim mentioned [1], this F2FS patch
+resolved the issue in our Pixel devices.
 
-On Thu, Jun 16, 2022 at 02:18:52PM +0200, Andy Shevchenko wrote:
-> On Thu, Jun 16, 2022 at 12:42 PM Dmitry Rokosov
-> <DDRokosov@sberdevices.ru> wrote:
+[1] https://lore.kernel.org/lkml/CAEe=Sxmcn5+YUXBQhxDpzZVJu_T6S6+EURDqrP9uUS-PHGyuSg@mail.gmail.com/
 
-...
+> 
+> If there's no other way, you should be able to backport those patches to android kernel and
+> test them _before_ merging them. Android phones are rather cheap. Some should even run mainline
+> kernels -- see for example Oneplus 4T -- if you don't need all the features.
 
-> > +enum msa311_fields {
-> > +       F_SOFT_RESET_I2C, F_SOFT_RESET_SPI,
-> > +
-> > +       F_ORIENT_INT, F_S_TAP_INT, F_D_TAP_INT, F_ACTIVE_INT, F_FREEFAL=
-L_INT,
-> > +
-> > +       F_NEW_DATA_INT,
-> > +
-> > +       F_TAP_SIGN, F_TAP_FIRST_X, F_TAP_FIRST_Y, F_TAP_FIRST_Z, F_ACTV=
-_SIGN,
-> > +       F_ACTV_FIRST_X, F_ACTV_FIRST_Y, F_ACTV_FIRST_Z,
-> > +
-> > +       F_ORIENT_Z, F_ORIENT_X_Y,
-> > +
-> > +       F_FS,
-> > +
-> > +       F_X_AXIS_DIS, F_Y_AXIS_DIS, F_Z_AXIS_DIS, F_ODR,
-> > +
-> > +       F_PWR_MODE, F_LOW_POWER_BW,
-> > +
-> > +       F_X_POLARITY, F_Y_POLARITY, F_Z_POLARITY, F_X_Y_SWAP,
-> > +
-> > +       F_ORIENT_INT_EN, F_S_TAP_INT_EN, F_D_TAP_INT_EN, F_ACTIVE_INT_E=
-N_Z,
-> > +       F_ACTIVE_INT_EN_Y, F_ACTIVE_INT_EN_X,
-> > +
-> > +       F_NEW_DATA_INT_EN, F_FREEFALL_INT_EN,
-> > +
-> > +       F_INT1_ORIENT, F_INT1_S_TAP, F_INT1_D_TAP, F_INT1_ACTIVE,
-> > +       F_INT1_FREEFALL,
-> > +
-> > +       F_INT1_NEW_DATA,
-> > +
-> > +       F_INT1_OD, F_INT1_LVL,
-> > +
-> > +       F_RESET_INT, F_LATCH_INT,
-> > +
-> > +       F_FREEFALL_MODE, F_FREEFALL_HY,
-> > +
-> > +       F_ACTIVE_DUR,
-> > +
-> > +       F_TAP_QUIET, F_TAP_SHOCK, F_TAP_DUR,
-> > +
-> > +       F_TAP_TH,
-> > +
-> > +       F_ORIENT_HYST, F_ORIENT_BLOCKING, F_ORIENT_MODE,
-> > +
-> > +       F_Z_BLOCKING,
-> > +
-> > +       F_MAX_FIELDS,
->=20
-> Not sure why you put those blank lines herey, it makes code not compact.
->=20
+IIUC, the point here was whether we need another generic rwsem API to address
+the issue or not. [1] said some rwsem fixes couldn't resolve our issue,
+and Waiman wanted to test another patch [2]. In order to avoid endless
+tests, I decided to get some results from Pixel using v5.15 (at least) by
+turning CONFIG_F2FS_UNFAIR_RWSEM off as of now. If we can see v5.15
+works, I'm happy to revert the F2FS patch. Otherwise, we need it for
+our production.
 
-Here I use blank lines to split fields from different registers.
-In other words, in the msa311_fields enum one line contains fields from one
-register. But for some heavy registers (like TAP_ACTIVE_STS) we have so man=
-y
-fields and their declaration doesn't fit to 80 symbols.
-So I've made a decision to split registers using blank lines.
+[2] https://lore.kernel.org/lkml/5acaaf61-5419-178d-c805-62f979697653@redhat.com/#t
 
-...
-
-> > +struct msa311_priv {
->=20
-> > +       struct i2c_client *i2c;
->=20
-> Not sure you need this. Dropping i2c dependency from this structure
-> allows much easier to add, e.g. SPI support of the same hardware.
->=20
-
-Mainly I use i2c pointer in the probe() path, and you are right, we can
-change i2c pointer to dev and generalize msa311_priv struct from bus
-perspective.
-
-> > +       struct mutex lock; /* state guard */
-> > +
-> > +       struct iio_trigger *new_data_trig;
-> > +
-> > +       struct regmap *regs;
->=20
-> I believe this is used most, so making this a first member in the
-> structure saves  some instructions (check with bloat-o-meter).
->=20
-
-Are you talking about archs where offset calculation adds more bytes to
-instruction? And when offset equals to 0, we can save some space.
-
-...
-
-> > +       struct regmap_field *fields[F_MAX_FIELDS];
-> > +};
->=20
-> ...
->=20
-> > +       wait_ms =3D (USEC_PER_SEC * MSEC_PER_SEC) / freq_uhz;
->=20
-> This looks very odd from a physics perspective: sec * sec * sec =3D=3D se=
-c ?!
->=20
-> Perhaps you meant some HZ* macros from units.h?
->=20
-
-I suppose because of UHZ calculation I have to use NANO instead of
-USEC_PER_SEC in the following line:
-
-	freq_uhz =3D msa311_odr_table[odr].val * USEC_PER_SEC +
-		   msa311_odr_table[odr].val2;
-
-But below line is right from physics perspective. 1sec =3D 1/Hz, so
-msec =3D (USEC_PER_SEC / freq_uhz) * MSEC_PER_SEC:
-
-	wait_ms =3D (USEC_PER_SEC * MSEC_PER_SEC) / freq_uhz;
-
-Or do you mean that I should change MSEC_PER_SEC to just MILLI?
-
-> > +       err =3D -EINVAL;
-> > +       mutex_lock(&msa311->lock);
-> > +       for (odr =3D 0; odr < ARRAY_SIZE(msa311_odr_table); ++odr)
-> > +               if (val =3D=3D msa311_odr_table[odr].val &&
-> > +                   val2 =3D=3D msa311_odr_table[odr].val2) {
-> > +                       err =3D msa311_set_odr(msa311, odr);
->=20
-> > +                       if (err) {
-> > +                               dev_err(dev, "cannot update freq (%d)\n=
-", err);
-> > +                               goto failed;
-> > +                       }
->=20
-> Why is this inside the loop and more important under lock? Also you
-> may cover the initial error code by this message when moving it out of
-> the loop and lock.
->=20
-> Ditto for other code snippets in other function(s) where applicable.
->=20
-
-Yes, I can move dev_err() outside of loop. But all ODR search loop
-should be under lock fully, because other msa311 operations should not
-be executed when we search proper ODR place.
-
-...
-
-> > +       mutex_lock(&msa311->lock);
-> > +       err =3D regmap_field_write(msa311->fields[F_NEW_DATA_INT_EN], s=
-tate);
-> > +       mutex_unlock(&msa311->lock);
->=20
-> > +
->=20
-> No need.
->=20
-
-Sorry, I don't understand. We do not need to call it under lock, right?
-I think we have to wrap it by msa311 lock, because other msa311
-operations should not be executed when we enable or disable new data
-interrupt (for example ODR value changing or something else).
-
-> > +       if (err)
-> > +               dev_err(dev,
-> > +                       "cannot %s buffer due to new_data_int failure (=
-%d)\n",
-> > +                       state ? "enable" : "disable", err);
->=20
-> str_enable_disable()
->=20
-> ...
->=20
-
-Kernel has solutions on all occasions :-)
-
-...
-
-> > +       /* TODO: send motion events if needed */
->=20
-> Are you going to address all TODOs? If no, drop ones that you are not
-> going to address in the future, better to put into the top of the file
-> comment what is supported and what's not.
->=20
-> ...
->=20
-
-Yes, I plan to maintain this driver and implement all motion event,
-that's why I've placed TODO throughout the code.
-
-> > +       indio_dev->modes =3D INDIO_DIRECT_MODE; /* setup buffered mode =
-later */
->=20
-> Leaving it 0 is probably better, it's a pity that we don't have
-> INDIO_NO_MODE_SET 0 there. However, I haven't checked if it's possible
-> to leave it unset like this.
->=20
-> ...
->=20
-
-I set INDIO_DIRECT_MODE by default, because this driver support noirq
-mode, when device tree doesn't have irq setup.
-
-...
-
-> > +       mutex_lock(&msa311->lock);
-> > +       err =3D msa311_set_pwr_mode(msa311, MSA311_PWR_MODE_NORMAL);
-> > +       mutex_unlock(&msa311->lock);
->=20
-> > +
->=20
-> No need.
->=20
-
-Again I don't understand why, sorry. We do not want to get sporadic
-MSA311 attributes changing during power mode transition from another
-userspace process.
-
---=20
-Thank you,
-Dmitry=
+> 
+> It looks hch was right NAKing the patches.
+> 
+> Best regards,
+> 
+> 									Pavel
+> -- 
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html

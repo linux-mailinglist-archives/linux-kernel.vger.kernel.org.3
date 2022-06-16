@@ -2,120 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC0254ED7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6715054ED80
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiFPWpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S1379125AbiFPWpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379093AbiFPWpe (ORCPT
+        with ESMTP id S1378747AbiFPWpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:45:34 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E579862137
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:45:33 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h192so2502007pgc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3rIHyY5SxSb2FOEGYQX1ETJiFgmUNoHIHxQ/cELBswI=;
-        b=FlsouGWLGC3MFtPgQ0HWnEqv0JPLdUOiz5fv2YFFv7Dd5JozgHAlaIvj0r/RdbWZHU
-         2z2HH8WRKW8ADq1MLwklZ0u7dRhRGikiwvoPRfMbU2Jw9dMkcDj4s9KKWjLbr3aKIA1+
-         8k6GUwrH2U6gEnUs026eIfpWn/YkPMtYHjL1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3rIHyY5SxSb2FOEGYQX1ETJiFgmUNoHIHxQ/cELBswI=;
-        b=Pj/pm2xtlqS6KvexCSKfwXOPgHCPD+dHhJzPZ6ltfTfX1IbRw7CE4ep2rYw1up0wLA
-         E5+Qsj9SFzoL0OcMKx8ivzCjLkasikTD3g9U02pfxY7Dd6tfyNdVWsLdAqgfS+CFaSRu
-         CPn+D/8SwG3etJGVtlfOd5KqYyT+WDYNnR5EKK+VQH264e+qoPlvWTU10QG/lQNYP5jy
-         G2QLLhIhkJwwfrivxF6e7WynlLF2PjZNWOMHR1tsdKVHqHAylpedkT/fJHBzLa2JwwwY
-         syVOalQzbV/g7m2kSFmtlAMryx1M4ubWUKwzjD/zKqDhrGDxE5ox2cBbks1N9ZNoiPWn
-         jAig==
-X-Gm-Message-State: AJIora93G/n+CRoUw/it7zVok9mvrfAErhmUyomFv7piFKSLPyYfVFny
-        WMBdOje56hYXY1gU5ZpGBaPyEg==
-X-Google-Smtp-Source: AGRyM1uzMcJ25MOB23C3xewgZXgnnulxmYSgh+k9u1IoDbuKbXcPmwuRojXr67JGauBHsTkEvinyag==
-X-Received: by 2002:a63:114:0:b0:3fd:431a:dd77 with SMTP id 20-20020a630114000000b003fd431add77mr6461353pgb.619.1655419533368;
-        Thu, 16 Jun 2022 15:45:33 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:410d:c2b8:35ee:6d9c])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b00163f183ab76sm2111942pla.152.2022.06.16.15.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 15:45:33 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH] cpufreq: qcom-hw: Don't do lmh things without a throttle interrupt
-Date:   Thu, 16 Jun 2022 15:45:31 -0700
-Message-Id: <20220616224531.3139080-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        Thu, 16 Jun 2022 18:45:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E43562137;
+        Thu, 16 Jun 2022 15:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655419539; x=1686955539;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TpDQFTxIwPwLxghpQ8wY+d4ntEb8GhUV1bicV27LoHU=;
+  b=fdBCSvSFd9ia9jyuWDLDPjEveE/ixZK7Mfa7iljqn80NpO3uPzNlTesi
+   0vMkX1+KNowQnlqrOkkhKvayvZYEhYQwgpcWCtfGROz081PgNTr0/Wy3f
+   lGI63SxTeT+0Y1ZfyS8FSbiJjvBcGCk/k2t417tLnzBDnGTjkhh9Vx/V+
+   snTtPD1wSe4cA8Xjp0Ayg4n1Rb88upUomrPxg1MscWOGAy7xG76feSHQF
+   cQk8VKks1KiU8abFwz/380DBlk84/QmF9TU5jk/bzF2GK+X1Gq/0NCxl9
+   yR4+f0nMx5edH818iwYWvMnO1M2JDMjFLDpl+LakgnZOCxUXpAzxcJgZY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="304817803"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="304817803"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:45:37 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="536618116"
+Received: from krfox2-mobl.amr.corp.intel.com (HELO [10.209.46.80]) ([10.209.46.80])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:45:36 -0700
+Message-ID: <d8278c53-71fd-3400-9ba6-079c99d66645@intel.com>
+Date:   Thu, 16 Jun 2022 15:45:37 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] Documentation/x86: Add the AMX enabling example
+Content-Language: en-US
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com
+Cc:     corbet@lwn.net, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220616212210.3182-1-chang.seok.bae@intel.com>
+ <20220616212210.3182-2-chang.seok.bae@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220616212210.3182-2-chang.seok.bae@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Offlining cpu6 and cpu7 and then onlining cpu6 hangs on
-sc7180-trogdor-lazor because the throttle interrupt doesn't exist.
-Similarly, things go sideways when suspend/resume runs. That's because
-the qcom_cpufreq_hw_cpu_online() and qcom_cpufreq_hw_lmh_exit()
-functions are calling genirq APIs with an interrupt value of '-6', i.e.
--ENXIO, and that isn't good.
+> +  1. **Check the feature availability**. AMX_TILE is enumerated in CPUID
+> +     leaf 7, sub-leaf 0, bit 24 of EDX. If available, ``/proc/cpuinfo``
+> +     shows ``amx_tile`` in the flag entry of the CPUs.  Given that, the
+> +     kernel may have set XSTATE component 18 in the XCR0 register. But a
+> +     user needs to ensure the kernel support via the ARCH_GET_XCOMP_SUPP
+> +     option::
 
-Check the value of the throttle interrupt like we already do in other
-functions in this file and bail out early from lmh code to fix the hang.
+Why did you bother mentioning the XCR0 and CPUID specifics?  We don't
+want applications doing that, right?
 
-Reported-by: Rob Clark <robdclark@chromium.org>
-Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Fixes: a1eb080a0447 ("cpufreq: qcom-hw: provide online/offline operations")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> +        #include <asm/prctl.h>
+> +        #include <sys/syscall.h>
+> +	#include <stdio.h>
+> +        #include <unistd.h>
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 0253731d6d25..36c79580fba2 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -442,6 +442,9 @@ static int qcom_cpufreq_hw_cpu_online(struct cpufreq_policy *policy)
- 	struct platform_device *pdev = cpufreq_get_driver_data();
- 	int ret;
- 
-+	if (data->throttle_irq <= 0)
-+		return 0;
-+
- 	ret = irq_set_affinity_hint(data->throttle_irq, policy->cpus);
- 	if (ret)
- 		dev_err(&pdev->dev, "Failed to set CPU affinity of %s[%d]\n",
-@@ -469,6 +472,9 @@ static int qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
- 
- static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
- {
-+	if (data->throttle_irq <= 0)
-+		return;
-+
- 	free_irq(data->throttle_irq, data);
- }
- 
+^ Just from the appearance here there looks to be some spaces vs. tabs
+inconsistency.
 
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
--- 
-https://chromeos.dev
+> +        #define ARCH_GET_XCOMP_SUPP  0x1021
+> +
+> +        #define XFEATURE_XTILECFG    17
+> +        #define XFEATURE_XTILEDATA   18
+> +        #define XFEATURE_MASK_XTILE ((1 << XFEATURE_XTILECFG) | (1 << XFEATURE_XFILEDATA))
+> +
+> +        unsigned long features;
+> +        long rc;
+> +
+> +        ...
+> +
+> +        rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
+> +
+> +        if (!rc && features & XFEATURE_MASK_XTILE == XFEATURE_MASK_XTILE)
+> +            printf("AMX is available.\n");
+> +
+> +  2. **Request permission**. Now it is found that the kernel supports the
+> +     feature. But the permission is not automatically given. A user needs
+> +     to explicitly request it via the ARCH_REQ_XCOMP_PERM option::
+
+That phrasing is a bit awkward.  How about:
+
+	After determining support for AMX, an application must
+	explicitly ask permission to use it:
+	...
+
+> +        #define ARCH_REQ_XCOMP_PERM  0x1023
+> +
+> +        ...
+> +
+> +        rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
+> +
+> +        if (!rc)
+> +            printf("AMX is ready for use.\n");
+> +
+> +Note this example does not include the sigaltstack preparation.
+> +
+>  Dynamic features in signal frames
+>  ---------------------------------
+>  
 

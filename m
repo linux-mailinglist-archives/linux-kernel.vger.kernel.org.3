@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE5B54ED32
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1846E54ED61
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378779AbiFPWTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S229901AbiFPWfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiFPWTc (ORCPT
+        with ESMTP id S1378518AbiFPWfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:19:32 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5FE60A8C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:19:31 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id w21so2671698pfc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AIGAlLa0GZrWuPaGOfAE2iYeZ/CSSgE+k1ly/8lAR5I=;
-        b=bPKkpSfoBWhFxGFdhDlYot+bQ6vkY33VMoNVrR2OweaifIJ8KP0539zeFjwG5q9C0T
-         Un6fozRblQSR8YTdTYTiLlAQKrKtLfllrlEOYON4R4+I/6QG4RyUab/mjstz5NAPOa3n
-         nDLjndSYElEHR4yVwsuu/4a9HD+fz40FjAUZn2XqkydBCwC3Ppx66+oXjcoCY/I45yjO
-         j6u/DImWLAi7PjnU+Zta7DZZxyvA3iN30AvzyGU+EmgN13GLz7jWZkTgFzScNpZ+HRWu
-         yKh+paLtiUIB82fuWV8ZkBHb9VIKQplNYHxfVJBad+s0I8xAmkXBGC2bWuKKQ4twTTAE
-         Uk0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AIGAlLa0GZrWuPaGOfAE2iYeZ/CSSgE+k1ly/8lAR5I=;
-        b=tATX/q4ErNOJ5yc5d7AuP2CuRRBXjwvmKh5CzC9JC0y56msHuGwLAEhrC6LNyu6Z3q
-         neN8fSwMsv5RAYSMbiYhQt/0hQJO+3josWusO4jH9UqJvsDg/imrGUJNT/NSIpJxTViI
-         7fkoRdLjeoKSjEZig7Ws1Jd7Af3z23QCaN0GQJXbcdLAt6SRsIamdcFwGXNPeks68IKS
-         /isc9Ca+bp+r61tLwIlN98QJ1kIu4+pHPz7h36rTD0dcSKPSXBkqPTRjZ6YSnzkRqv4U
-         fh/L574VKXMpLk5Mz/NcD25dbxgjSMwBEitLyO9V8xyPXuQYFcB3cZCT286Qdn/KpDhZ
-         r0PQ==
-X-Gm-Message-State: AJIora9hwQPtUXMSyXgrQlqiBIx7SchyDJewxTE5oS9c47jhE5hJu7If
-        N8vL83wVaIzoMS7mTgc5cn9ReQ==
-X-Google-Smtp-Source: AGRyM1tXhEu1laURErxLCvURc3HZCP2ln6/Pb/GbB4SoXl6fqgq7CjquzaTwL7/e3PNkrbe98enAgw==
-X-Received: by 2002:aa7:8008:0:b0:51a:cae3:7563 with SMTP id j8-20020aa78008000000b0051acae37563mr6938572pfi.16.1655417971138;
-        Thu, 16 Jun 2022 15:19:31 -0700 (PDT)
-Received: from [192.168.1.189] (cpe-70-95-113-61.san.res.rr.com. [70.95.113.61])
-        by smtp.gmail.com with ESMTPSA id n12-20020a17090a928c00b001cd4989fee4sm4242592pjo.48.2022.06.16.15.19.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:19:30 -0700 (PDT)
-Message-ID: <936c9eea-d687-d4ce-b5a4-0e7f7ee3b714@google.com>
-Date:   Thu, 16 Jun 2022 15:19:28 -0700
+        Thu, 16 Jun 2022 18:35:15 -0400
+Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ACE6210E;
+        Thu, 16 Jun 2022 15:35:11 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 67CC8801DA3;
+        Thu, 16 Jun 2022 22:35:08 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id CE1CE801D9A;
+        Thu, 16 Jun 2022 22:35:07 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655418908; a=rsa-sha256;
+        cv=none;
+        b=FtzwEnKqs5aM6EyTKVd89leR3AA+ANLRdP2N04mlZFnFmUbsbymSL8xEhaMXHSL7yC8pNz
+        CnpsmKLJQp9BOHfiiiSmkvAVxRSHKrgWgqe1QdJ9aSZoNM5bOM9wVhQID3mb1/IStu1GBa
+        qaGI2iVYWUnxXmGmFK9OL2mBVkxSw47h+ZOBVIk2R2FUl5+oEmDhKZoOd3+4fKJFRAX0iO
+        dZeAZGHi8HEBrKofzGz2OHd1P2WnUgorSxlfRTF6o1uVvLz02Gw3iTWy81m6Kgfl5GX31W
+        dWHXRvyt1IdtTkKt7rvj3GzBHSdIUrz/Chkt24rKVKO6s3DHhdK9RXXHucONtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1655418908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=FQDo/MRb129ADZX+XkIZfbp3tPlh05DubOmMkb1Pe3Y=;
+        b=q89F+FzLyhvA3ax7ebTOXmPU+tbx09HfLoxl67KeVBUWnibEeC/f8xpSmDdGVi6JGzVa3g
+        4SlQtY1VZsJcxF6pbKzF/YdicuQv49mZcJXgJfZW6DGYkDagWkXNB9vUJGJ/ydjm1debBn
+        FwHsPT4RysYYJ9GGxnsmoIs7oxu0ueM+VEo7Lcn7lXc4W1GMumEDmoLoDiaHHBHJ03fOGr
+        j3MMEC2ITMjxUhPJhNTW8/QRNaeIp6BDjYjUm4ZZjljR66tlH9AKbyOtHTkxfF0zarvq40
+        P2ob2kbptVOivWtwsf5P9ICYT93M0sp+FxVjhZTW/i5lTuZDehNV7EctqhrQSQ==
+ARC-Authentication-Results: i=1;
+        rspamd-786f5898df-9jkmw;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Vacuous-Share: 6d388d5b6917c99f_1655418908268_1620883124
+X-MC-Loop-Signature: 1655418908268:4216171093
+X-MC-Ingress-Time: 1655418908268
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.124.238.94 (trex/6.7.1);
+        Thu, 16 Jun 2022 22:35:08 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LPH6y33nPz4f;
+        Thu, 16 Jun 2022 15:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1655418907;
+        bh=FQDo/MRb129ADZX+XkIZfbp3tPlh05DubOmMkb1Pe3Y=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=drMCdu2uIo/NNLTErfkizhZZLstIA+O+Y5JfDGcJDYvDfMTcH1K0ieN0Wewm8plcb
+         cZcczrcEum5qndRzVn25IN2H2f2CiDsX2pGxze7Mx81O5by8ggHGbur+jwjVJ6+82e
+         gfUErX5aU5ku5WBd6OE/UDbC5TkrF4/jKvR2yw3i1N/ylvQjn+3w+3/nVEgDlYzQBn
+         NsIugDSst4LPCwCGLz8O7Qyq8Jo1qeIeS4WjeoZEQQ1mAjzuwoQwFKyEEfygzW8XkX
+         rbJ/cHYIfe7FoejX1cHJUoC1DgGAqNKSpVCHoaro6B04bA8JnMYo6i1TlMFj9k0fOi
+         CByL14JY01lNw==
+Date:   Thu, 16 Jun 2022 15:20:51 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "a.manzanares@samsung.com" <a.manzanares@samsung.com>
+Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
+Message-ID: <20220616222051.wzf4iokvhxnro56v@offworld>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+ <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+ <20220616194334.pvorvoozt4rrzr66@offworld>
+ <20220616203400.GA1529208@alison-desk>
+ <20220616214740.7pyjagx3gosni7mw@offworld>
+ <20220616221041.GA1529592@alison-desk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] kbuild: Ignore __this_module in gen_autoksyms.sh
-Content-Language: en-US
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nicolas Schier <nicolas@fjasle.eu>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-References: <20220616195759.3214538-1-samitolvanen@google.com>
-From:   Steve Muckle <smuckle@google.com>
-In-Reply-To: <20220616195759.3214538-1-samitolvanen@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-20.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220616221041.GA1529592@alison-desk>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/22 12:57, Sami Tolvanen wrote:
-> Module object files can contain an undefined reference to __this_module,
-> which isn't resolved until we link the final .ko. The kernel doesn't
-> export this symbol, so ignore it in gen_autoksyms.sh. This avoids an
-> unnecessary vmlinux rebuild with UNUSED_KSYMS_WHITELIST when we have a
-> symbol list that already contains all the module dependencies.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->   scripts/gen_autoksyms.sh | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-> index faacf7062122..653fadbad302 100755
-> --- a/scripts/gen_autoksyms.sh
-> +++ b/scripts/gen_autoksyms.sh
-> @@ -56,4 +56,7 @@ EOT
->   # point addresses.
->   sed -e 's/^\.//' |
->   sort -u |
-> +# Ignore __this_module. It's not an exported symbol, and will be resolved
-> +# when the final .ko's are linked.
-> +grep -v '^__this_module$' |
->   sed -e 's/\(.*\)/#define __KSYM_\1 1/' >> "$output_file"
+On Thu, 16 Jun 2022, Alison Schofield wrote:
+>> I wonder if the latter may be the better option considering that always
+>> scanning the entire memdev would cause unnecessary media scan wait times,
+>> specially for large capacities.
+>
+>This is not a Media Scan. This is only reading the existing Poison List.
 
-Tested-by: Steve Muckle <smuckle@google.com>
+Right, but I was thinking we'd want a input similar interface passing the
+desidered range.
+
+Thanks,
+Davidlohr

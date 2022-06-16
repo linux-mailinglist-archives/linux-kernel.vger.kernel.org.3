@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891E454DD4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB9E54DD4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359819AbiFPIrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S1376267AbiFPIrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359828AbiFPIq0 (ORCPT
+        with ESMTP id S1359780AbiFPIqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:46:26 -0400
+        Thu, 16 Jun 2022 04:46:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DA45DBFB;
-        Thu, 16 Jun 2022 01:46:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8EC5DD22;
+        Thu, 16 Jun 2022 01:46:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FD6961D7D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2F061D7D;
+        Thu, 16 Jun 2022 08:46:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FFDC341C6;
         Thu, 16 Jun 2022 08:46:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E1FC3411F;
-        Thu, 16 Jun 2022 08:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655369180;
-        bh=AsbZF+dPE9MyAO08LOdMaZboB3eGu/DKKj0s/59Krgo=;
+        s=k20201202; t=1655369185;
+        bh=RSXtvmUy632JYyL5m1ybJouoonN6y/iJYBvbYk3+LnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hHiRWJN37UzYBjcNs6TwwYPT/qa5l40fPvCS/LdGYZO/lkTwMchctWTZ9zxnnWG2O
-         rGFz4BdT+dUqIXYYZcSRpnJUfqnd8Tx7OgGHzD8Z9QI7L2WOLQkyuh0LyiGvCD1Z37
-         OuBMrNiPcKQfHpumivsIsBuKH9XcmLg16WAGQ0m9TqF0Jy8oK6OVSdg0TuHLLd/Qq3
-         6apCEb/i6gODLkTobNqiRgU7+l0hMO7caoVgBkujwxW24Buk9scenf5NYS9isNkHmN
-         By4U7IJ7vM168PrImP1c/M8PIM1W15MhxWFzW3SHu5vW92NbDcxj7AlHpj04wTrGDa
-         1oau/oxhAz/PQ==
+        b=UEgxxw1azqcobv9yT9GCnL2tbEEwTQaKkbkQWrR/e1i8p07amaj1zwe55Qzp9zPD9
+         32c9sexgZwRiXGjsc0vTAsT9eyS8+ctjyUoD71JKHCJbFl81D1Zkv6M4tqStkZJRcN
+         eaqjfN3dH3MGL8PVHtMxn84t5qWPp3l6GAPrN4WhPIf2yxfIxepk2GmKM4WEm1av2/
+         vAsL3TVitGYnbbzcILJSW9utXZ8ItmwNXsp7sjJxY91BoTMlY0wU+7gA2MI/ZYzTN5
+         pTl5cZhnqXe7feMyxzrWV/nbwofAmU2tzFwdxpLDh9ZyMJ/OVQ0Vb0L4dvxuhefuRi
+         TyyJPxZi0ThCQ==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Clark Williams <williams@redhat.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-devel@vger.kernel.org
-Subject: [PATCH V4 14/20] Documentation/rv: Add a basic documentation
-Date:   Thu, 16 Jun 2022 10:44:56 +0200
-Message-Id: <575554f7bebc0278dd3dfad056d4438c2fbab7b3.1655368610.git.bristot@kernel.org>
+Subject: [PATCH V4 15/20] Documentation/rv: Add deterministic automata monitor synthesis documentation
+Date:   Thu, 16 Jun 2022 10:44:57 +0200
+Message-Id: <65c0f41a30850002cac84f143616f932d147251d.1655368610.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1655368610.git.bristot@kernel.org>
 References: <cover.1655368610.git.bristot@kernel.org>
@@ -70,8 +70,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the runtime-verification.rst document, explaining the basics of RV
-and how to use the interface.
+Add the da_monitor_synthesis.rst introduces some concepts behind the
+Deterministic Automata (DA) monitor synthesis and interface.
 
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
@@ -94,82 +94,190 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- Documentation/trace/index.rst                 |   1 +
- Documentation/trace/rv/index.rst              |   9 +
- .../trace/rv/runtime-verification.rst         | 233 ++++++++++++++++++
- kernel/trace/rv/Kconfig                       |   3 +
- 4 files changed, 246 insertions(+)
- create mode 100644 Documentation/trace/rv/index.rst
- create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ .../trace/rv/da_monitor_synthesis.rst         | 284 ++++++++++++++++++
+ 1 file changed, 284 insertions(+)
+ create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
 
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index f9b7bcb5a630..2d73e8697523 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -32,3 +32,4 @@ Linux Tracing Technologies
-    sys-t
-    coresight/index
-    user_events
-+   rv/index
-diff --git a/Documentation/trace/rv/index.rst b/Documentation/trace/rv/index.rst
+diff --git a/Documentation/trace/rv/da_monitor_synthesis.rst b/Documentation/trace/rv/da_monitor_synthesis.rst
 new file mode 100644
-index 000000000000..92338dceffab
+index 000000000000..1e1c857d7bbd
 --- /dev/null
-+++ b/Documentation/trace/rv/index.rst
-@@ -0,0 +1,9 @@
-+===================================
-+RV - Runtime Verification Interface
-+===================================
++++ b/Documentation/trace/rv/da_monitor_synthesis.rst
+@@ -0,0 +1,284 @@
++Deterministic Automata Monitor Synthesis
++========================================
 +
-+.. toctree::
-+   :maxdepth: 2
-+   :glob:
++The starting point for the application of runtime verification (RV) technics is
++the *specification* or *modeling* of the desired (or undesired) behavior of the
++system under scrutiny.
 +
-+   *
-diff --git a/Documentation/trace/rv/runtime-verification.rst b/Documentation/trace/rv/runtime-verification.rst
-new file mode 100644
-index 000000000000..f51cf69b10d3
---- /dev/null
-+++ b/Documentation/trace/rv/runtime-verification.rst
-@@ -0,0 +1,233 @@
-+====================
-+Runtime Verification
-+====================
++The formal representation needs to be then *synthesized* into a *monitor* that
++can then be used in the analysis of the trace of the system. The *monitor*
++conects to the system via an *instrumentation* layer, that converts the events
++from the *system* to the events of the *specification*.
 +
-+Runtime Verification (RV) is a lightweight (yet rigorous) method that
-+complements classical exhaustive verification techniques (such as *model
-+checking* and *theorem proving*) with a more practical approach for complex
-+systems.
++This document introduces some concepts behind the **Deterministic Automata
++(DA)** monitor synthesis.
++
++DA monitor synthesis in a nutshell
++------------------------------------------------------
++
++The synthesis of automata-based models into the Linux *RV monitor* abstraction
++is automated by a tool named "dot2k", and the "rv/da_monitor.h" provided
++by the RV interface.
++
++Given a file "wip.dot", representing a per-cpu monitor, with this content::
++
++  digraph state_automaton {
++	center = true;
++	size = "7,11";
++	rankdir = LR;
++	{node [shape = circle] "non_preemptive"};
++	{node [shape = plaintext, style=invis, label=""] "__init_preemptive"};
++	{node [shape = doublecircle] "preemptive"};
++	{node [shape = circle] "preemptive"};
++	"__init_preemptive" -> "preemptive";
++	"non_preemptive" [label = "non_preemptive"];
++	"non_preemptive" -> "non_preemptive" [ label = "sched_waking" ];
++	"non_preemptive" -> "preemptive" [ label = "preempt_enable" ];
++	"preemptive" [label = "preemptive"];
++	"preemptive" -> "non_preemptive" [ label = "preempt_disable" ];
++	{ rank = min ;
++		"__init_preemptive";
++		"preemptive";
++	}
++  }
++
++Run the dot2k tool with the model, specifying that it is a "per-cpu"
++model::
++
++  $ dot2k -d ~/wip.dot -t per_cpu
++
++This will create a directory named "wip/" with the following files:
++
++- wip.h: the wip in C
++- wip.c: the RV monitor
++
++The following line in the "wip.c" file is responsible for the monitor
++synthesis::
++
++  DECLARE_DA_MON_PER_CPU(wip, char);
++
++With that in place, the work left to be done is the *instrumentation* of
++the monitor, which is already initialized by dot2k.
++
++DA: Introduction and representation formats
++---------------------------------------------------------------
++
++Formally, a deterministic automaton, denoted by G, is defined as a quintuple:
++
++        *G* = { *X*, *E*, *f*, x\ :subscript:`0`, X\ :subscript:`m` }
++
++where:
++
++- *X* is the set of states;
++- *E* is the finite set of events;
++- x\ :subscript:`0` is the initial state;
++- X\ :subscript:`m` (subset of *X*) is the set of marked states.
++- *f* : *X* x *E* -> *X* $ is the transition function. It defines the state
++  transition in the occurrence of an event from *E* in the state *X*. In the
++  special case of deterministic automata, the occurrence of the event in *E*
++  in a state in *X* has a deterministic next state from *X*.
++
++One of the most evident benefits for the practical application of the automata
++formalism is its *graphic representation*, represented using vertices (nodes)
++and edges, which is very intuitive for *operating system* practitioners.
++
++For example, given an automata wip, with a regular representation of:
++
++- *X* = { ``preemptive``, ``non_preemptive``}
++- *E* = { ``preempt_enable``, ``preempt_disable``, ``sched_waking``}
++- x\ :subscript:`0` = ``preemptive``
++- X\ :subscript:`m` = {``preemptive``}
++- *f* =
++   - *f*\ (``preemptive``, ``preempt_disable``) = ``non_preemptive``
++   - *f*\ (``non_preemptive``, ``sched_waking``) = ``non_preemptive``
++   - *f*\ (``non_preemptive``, ``preempt_enable``) = ``preemptive``
 +
 +
-+Instead of relying on a fine-grained model of a system (e.g., a
-+re-implementation a instruction level), RV works by analyzing the trace of the
-+system's actual execution, comparing it against a formal specification of
-+the system behavior.
++It can also be represented in a graphic format, without any loss, using this
++format::
 +
-+The main advantage is that RV can give precise information on the runtime
-+behavior of the monitored system, without the pitfalls of developing models
-+that require a re-implementation of the entire system in a modeling language.
-+Moreover, given an efficient monitoring method, it is possible execute an
-+*online* verification of a system, enabling the *reaction* for unexpected
-+events, avoiding, for example, the propagation of a failure on safety-critical
-+systems.
++                       preempt_enable
++          +---------------------------------+
++          v                                 |
++        #============#  preempt_disable   +------------------+
++    --> H preemptive H -----------------> |  non_preemptive  |
++        #============#                    +------------------+
++                                            ^ sched_waking |
++                                            +--------------+
 +
-+Runtime Monitors and Reactors
-+=============================
++The Graphviz open-source tool can produce this graphic format using the
++(textual) DOT language as the source code. The DOT format is widely
++used and can be converted to many other formats, including the ASCII art above.
 +
-+A monitor is the central part of the runtime verification of a system. The
-+monitor stands in between the formal specification of the desired (or
-+undesired) behavior, and the trace of the actual system.
++The dot2c tool presented in:
 +
-+In Linux terms, the runtime verification monitors are encapsulated inside the
-+*RV monitor* abstraction. A *RV monitor* includes a reference model of the
-+system, a set of instances of the monitor (per-cpu monitor, per-task monitor,
-+and so on), and the helper functions that glue the monitor to the system via
-+trace, as depicted bellow::
++  DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo
++  Silva. Efficient formal verification for the Linux kernel. In:
++  International Conference on Software Engineering and Formal Methods.
++  Springer, Cham, 2019. p. 315-332.
 +
-+ Linux   +---- RV Monitor ----------------------------------+ Formal
-+  Realm  |                                                  |  Realm
++Translates a deterministic automaton in the DOT format into a C source
++code. For instance, using the wip model as input for dot2c results in
++the following C representation::
++
++  enum states_wip {
++	preemptive_wip = 0,
++	non_preemptive_wip,
++	state_max_wip
++  };
++
++  enum events_wip {
++	preempt_disable_wip = 0,
++	preempt_enable_wip,
++	sched_waking_wip,
++	event_max_wip
++  };
++
++  struct automaton_wip {
++	char *state_names[state_max_wip];
++	char *event_names[event_max_wip];
++	char function[state_max_wip][event_max_wip];
++	char initial_state;
++	char final_states[state_max_wip];
++  };
++
++  struct automaton_wip automaton_wip = {
++	.state_names = {
++		"preemptive",
++		"non_preemptive"
++	},
++	.event_names = {
++		"preempt_disable",
++		"preempt_enable",
++		"sched_waking"
++	},
++	.function = {
++		{ non_preemptive_wip,                 -1,                 -1 },
++		{                 -1,     preemptive_wip, non_preemptive_wip },
++	},
++	.initial_state = preemptive_wip,
++	.final_states = { 1, 0 },
++  };
++
++DA monitor synthesis for Linux
++------------------------------
++
++In Linux terms, the runtime verification monitors are encapsulated
++inside the "RV monitor" abstraction. The "RV monitor" includes a set
++of instances of the monitor (per-cpu monitor, per-task monitor, and
++so on), the helper functions that glue the monitor to the system
++reference model, and the trace output as a reaction for event parsing
++and exceptions, as depicted below::
++
++ Linux  +----- RV Monitor ----------------------------------+ Formal
++  Realm |                                                   |  Realm
 +  +-------------------+     +----------------+     +-----------------+
 +  |   Linux kernel    |     |     Monitor    |     |     Reference   |
 +  |     Tracing       |  -> |   Instance(s)  | <-  |       Model     |
@@ -186,199 +294,100 @@ index 000000000000..f51cf69b10d3
 +                                  |  +----> panic ?
 +                                  +-------> <user-specified>
 +
-+In addition to the verification and monitoring of the system, a monitor can
-+react to an unexpected event. The forms of reaction can vary from logging the
-+event occurrence to the enforcement of the correct behavior to the extreme
-+action of taking a system down to avoid the propagation of a failure.
 +
-+In Linux terms, a *reactor* is an reaction method available for *RV monitors*.
-+By default, all monitors should provide a trace output of their actions,
-+which is already a reaction. In addition, other reactions will be available
-+so the user can enable them as needed.
++The dot2c tool works connecting the *Reference Model* to the *RV Monitor*
++abstraction by translating the *formal notation* into *code*.
 +
-+For further information about the principles of runtime verification and
-+RV applied to Linux:
++The "rv/da_monitor.h" header goes beyond dot2c, extending the code
++generation to the verification stage, generating the code to the *Monitor
++Instance(s)* level using C macros. The trace event code inspires this
++approach.
 +
-+  BARTOCCI, Ezio, et al. *Introduction to runtime verification.* In: Lectures on
-+  Runtime Verification. Springer, Cham, 2018. p. 1-33.
++The benefits of the usage of macro for monitor synthesis is 3-fold:
 +
-+  FALCONE, Ylies, et al. *A taxonomy for classifying runtime verification tools.*
-+  In: International Conference on Runtime Verification. Springer, Cham, 2018. p.
-+  241-262.
++- Reduces the code duplication;
++- Facilitates the bug fix/improvement;
++- Avoids the case of developers changing the core of the monitor code
++  to manipulate the model in a (let's say) non-standard way.
 +
-+  DE OLIVEIRA, Daniel Bristot, et al. *Automata-based formal analysis and
-+  verification of the real-time Linux kernel.* Ph.D. Thesis, 2020.
++This initial implementation presents two different types of monitor instances:
 +
-+Online RV monitors
-+==================
++- ``#define DECLARE_DA_MON_PER_CPU(name, type)``
++- ``#define DECLARE_DA_MON_PER_TASK(name, type)``
 +
-+Monitors can be classified as *offline* and *online* monitors. *Offline*
-+monitor process the traces generated by a system after the events, generally by
-+reading the trace execution from a permanent storage system. *Online* monitors
-+process the trace during the execution of the system. Online monitors are said
-+to be *synchronous* if the processing of an event is attached to the system
-+execution, blocking the system during the event monitoring. On the other hand,
-+an *asynchronous* monitor has its execution detached from the system. Each type
-+of monitor has a set of advantages. For example, *offline* monitors can be
-+executed on different machines but require operations to save the log to a
-+file. In contrast, *synchronous online* method can react at the exact moment
-+a violation occurs.
++The first declares the functions for deterministic automata monitor with
++per-cpu instances, and the second with per-task instances.
 +
-+Another important aspect regarding monitors is the overhead associated with the
-+event analysis. If the system generates events at a frequency higher than the
-+monitor's ability to process them in the same system, only the *offline*
-+methods are viable. On the other hand, if the tracing of the events incurs
-+on higher overhead than the simple handling of an event by a monitor, then a
-+*synchronous online* monitors will incur on lower overhead.
++In both cases, the name is a string that identifies the monitor, and the type
++is the data type used by dot2c/k on the representation of the model.
 +
-+Indeed, the research presented in:
++For example, the "wip" model with two states and three events can be
++stored in a "char" type. Considering that the preemption control is a
++per-cpu behavior, the monitor declaration will be::
 +
-+  DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo Silva.
-+  *Efficient formal verification for the Linux kernel.* In: International
-+  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
-+  p. 315-332.
++  DECLARE_DA_MON_PER_CPU(wip, char);
 +
-+Shows that for Deterministic Automata models, the synchronous processing of
-+events in-kernel causes lower overhead than saving the same events to the trace
-+buffer, not even considering collecting the trace for user-space analysis.
-+This motivated the development of an in-kernel interface for online monitors.
++The monitor is executed by sending events to be processed via the functions
++presented below::
 +
-+For further information about modeling of Linux kernel behavior using automata,
-+please read:
++  da_handle_event_$(MONITOR_NAME)($(event from event enum));
++  da_handle_init_event_$(MONITOR_NAME)($(event from event enum));
 +
-+  DE OLIVEIRA, Daniel B.; DE OLIVEIRA, Romulo S.; CUCINOTTA, Tommaso. *A thread
-+  synchronization model for the PREEMPT_RT Linux kernel.* Journal of Systems
-+  Architecture, 2020, 107: 101729.
++The function ``da_handle_event_$(MONITOR_NAME)()`` is the regular case,
++while the function ``da_handle_init_event_$(MONITOR_NAME)()`` is a special
++case used to synchronize the system with the model.
 +
-+The user interface
-+==================
++When a monitor is enabled, it is placed in the initial state of the automata.
++However, the monitor does not know if the system is in the *initial state*.
++Hence, the monitor ignores events sent by sent by
++``da_handle_event_$(MONITOR_NAME)()`` until the function
++``da_handle_init_event_$(MONITOR_NAME)()`` is called.
 +
-+The user interface resembles the tracing interface (on purpose). It is
-+currently at "/sys/kernel/tracing/rv/".
++The function ``da_handle_init_event_$(MONITOR_NAME)()`` should be used for
++the case in which the system generates the event is the one that returns
++the automata to the initial state.
 +
-+The following files/folders are currently available:
++After receiving a ``da_handle_init_event_$(MONITOR_NAME)()`` event, the
++monitor will know that it is in sync with the system and hence will
++start processing the next events.
 +
-+**available_monitors**
++Using the wip model as example, the events "preempt_disable" and
++"sched_waking" should be sent to monitor, respectively, via::
 +
-+- Reading list the available monitors, one per line
++  da_handle_event_wip(preempt_disable);
++  da_handle_event_wip(sched_waking);
 +
-+For example::
++While the event "preempt_enabled" will use::
 +
-+   [root@f32 rv]# cat available_monitors
-+   wip
-+   wwnr
++  da_handle_init_event_wip(preempt_enable);
 +
-+**available_reactors**
++To notify the monitor that the system will be returning to the initial state,
++so the system and the monitor should be in sync.
 +
-+- Reading shows the available reactors, one per line.
++rv/da_monitor.h
++-------------------------------------------
 +
-+For example::
++The "rv/da_monitor.h" is, mostly, a set of C macros that create function
++definitions based on the paremeters passed via ``DECLARE_DA_MON_*``.
 +
-+   [root@f32 rv]# cat available_reactors
-+   nop
-+   panic
-+   printk
++In fewer words, the declaration of a monitor generates:
 +
-+**enabled_monitors**:
++- Helper functions for getting information from the automata model generated
++  by dot2k.
++- Helper functions for the analysis of a deterministic automata model
++- Functions for the initialization of the monitor instances
++- The definition of the structure to store the monitor instances' data
 +
-+- Reading lists the enabled monitors, one per line
-+- Writing to it enables a given monitor
-+- Writing a monitor name with a '-' prefix disables it
-+- Truncating the file disables all enabled monitors
++One important aspect is that the monitor does not call external functions
++for the handling of the events sent by the instrumentation, except for
++generating *tracing events* or *reactions*.
 +
-+For example::
++Final remarks
++-------------
 +
-+   [root@f32 rv]# cat enabled_monitors
-+   [root@f32 rv]# echo wip > enabled_monitors
-+   [root@f32 rv]# echo wwnr >> enabled_monitors
-+   [root@f32 rv]# cat enabled_monitors
-+   wip
-+   wwnr
-+   [root@f32 rv]# echo '!wip' >> enabled_monitors
-+   [root@f32 rv]# cat enabled_monitors
-+   wwnr
-+   [root@f32 rv]# echo > enabled_monitors
-+   [root@f32 rv]# cat enabled_monitors
-+   [root@f32 rv]#
-+
-+Note that it is possible to enable more than one monitor concurrently.
-+
-+
-+**monitoring_on**
-+
-+This is an on/off general switcher for monitoring. It resembles the
-+"tracing_on" switcher in the trace interface.
-+
-+- Writing "0" stops the monitoring
-+- Writing "1" continues the monitoring
-+- Reading returns the current status of the monitoring
-+
-+Note that it does not disable enabled monitors but stop the per-entity
-+monitors monitoring the events received from the system.
-+
-+**reacting_on**
-+
-+- Writing "0" prevents reactions for happening
-+- Writing "1" enable reactions
-+- Reading returns the current status of the monitoring
-+
-+**monitors/**
-+
-+Each monitor will have its own directory inside "monitors/". There the
-+monitor-specific files will be presented. The "monitors/" directory resembles
-+the "events" directory on tracefs.
-+
-+For example::
-+
-+   [root@f32 rv]# cd monitors/wip/
-+   [root@f32 wip]# ls
-+   desc  enable
-+   [root@f32 wip]# cat desc
-+   auto-generated wakeup in preemptive monitor.
-+   [root@f32 wip]# cat enable
-+   0
-+
-+**monitors/$MONITOR/desc**
-+
-+- Reading shows a description of the monitor *$MONITOR*
-+
-+**monitors/$MONITOR/enable**
-+
-+- Writing "0" disables the *$MONITOR*
-+- Writing "1" enables the *$MONITOR*
-+- Reading return the current status of the *$MONITOR*
-+
-+**monitors/$MONITOR/reactors**
-+
-+- List available reactors, with the select reaction for the given *MONITOR*
-+  inside "[]". The default one is the nop (no operation) reactor.
-+- Writing the name of a reactor enables it to the given MONITOR.
-+
-+For example::
-+
-+   [root@f32 rv]# cat monitors/wip/reactors
-+   [nop]
-+   panic
-+   printk
-+   [root@f32 rv]# echo panic > monitors/wip/reactors
-+   [root@f32 rv]# cat monitors/wip/reactors
-+   nop
-+   [panic]
-+   printk
-diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index 91a17b13a080..21f03fb3101a 100644
---- a/kernel/trace/rv/Kconfig
-+++ b/kernel/trace/rv/Kconfig
-@@ -25,6 +25,9 @@ menuconfig RV
- 	  actual execution, comparing it against a formal specification of
- 	  the system behavior.
- 
-+	  For further information, see:
-+	    Documentation/trace/rv/runtime-verification.rst
-+
- if RV
- config RV_MON_WIP
- 	depends on PREEMPTIRQ_TRACEPOINTS
++With the monitor synthesis in place using, the "rv/da_monitor.h" and
++dot2k, the developer's work should be limited to the instrumentation
++of the system, increasing the confidence in the overall approach.
 -- 
 2.35.1
 

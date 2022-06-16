@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086E954E507
+	by mail.lfdr.de (Postfix) with ESMTP id 9A70F54E509
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377701AbiFPOiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S1377862AbiFPOiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376918AbiFPOiA (ORCPT
+        with ESMTP id S1377637AbiFPOiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:38:00 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406120BFD;
-        Thu, 16 Jun 2022 07:37:58 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1BA05240007;
-        Thu, 16 Jun 2022 14:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1655390276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AffThJ0/PxGNjxerxTAn0ejOKaeR6A8gRvY3EvAGqMk=;
-        b=QXO2bGvu8Trep4mecw9AonLkzv9k4fOr6tBtBkomlPNpXhphHVgHbi7Hhj8hmxPcARoW/n
-        6lp9/a+RL+/O3SN8dJ8P2jd4lBFJwVfmxjK4r9ZkC4HfK0QBke6ZkAJOzVAFb6cR076aQ5
-        nTO/gG//tf3+mdtkQuebFCofIDBicPCR8IOKAeVEIsZB87/ZMLWAblNI+n02dd27VOC6nV
-        uJrDpHaaiBQVvgNwIh648zJcMef6aAPHJVyydWSAtt7SP3o9zQELt4isdUgjS/jbExUnTw
-        L+yLeRPq004Pna/T7Js29Yz2olNWugJQrjYe+ed3U4wC/EkvXw8juumsREhtrA==
-Date:   Thu, 16 Jun 2022 16:37:51 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/3] mtd: nand: raw: qcom_nandc: reorder
- qcom_nand_host struct
-Message-ID: <20220616163751.2b5962df@xps-13>
-In-Reply-To: <62aa76ad.1c69fb81.7e2d3.0c8e@mx.google.com>
-References: <20220615000612.3119-1-ansuelsmth@gmail.com>
-        <20220615000612.3119-2-ansuelsmth@gmail.com>
-        <20220615171132.GA3606@thinkpad>
-        <62aa76ad.1c69fb81.7e2d3.0c8e@mx.google.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 16 Jun 2022 10:38:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEDE44A03;
+        Thu, 16 Jun 2022 07:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WRQ7IP4husqBZexrV10wcSx741ile1sfqnxtlMk8LfI=; b=A87rmSe6QbsZno/A5ZYtyjjhnj
+        Ko8DHShg3DcPEPNdwiW0zc3tR8hJRcDLSHpYY+IgmZ4VibI+YoOYVUnjNxeLdwVvfcQa9KEUaK4Ti
+        XlmgxiyEsjcNcu+o7+alJ+j+qkwQ4RJhQqJ0aqE3248Kh9sDhbGB8OUNd5kWOkIVSQGlFUtl5Dp9S
+        wvcKS8ub7+BRs1hocxGghx1+FgCNHsPexKhyob+ioZm8fuJVd8nDMoFCesS2PvHuaeTcgZ0NstoGr
+        /AWiudfYtZu3/59CEMzYjxglzGNZde1mE05tF9SHEE7X/nWEWD4xySG7qjSbH65ZUjNE2ugrDKQA1
+        KMqtP93A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1qdG-00210p-DG; Thu, 16 Jun 2022 14:38:02 +0000
+Date:   Thu, 16 Jun 2022 15:38:02 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
+Message-ID: <YqtAShjjo1zC6EgO@casper.infradead.org>
+References: <20220616143617.449094-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616143617.449094-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +54,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ansuel/Christian,
+On Thu, Jun 16, 2022 at 04:36:17PM +0200, Jason A. Donenfeld wrote:
+> A recent commit factored out a series of annoying (unsigned long) casts
+> into a single variable declaration, but made the pointer type a
+> `uintptr_t` rather than the usual `unsigned long`. This patch changes it
+> to be the integer type more typically used by the kernel to represent
+> addresses.
 
-ansuelsmth@gmail.com wrote on Thu, 16 Jun 2022 02:18:08 +0200:
-
-> On Wed, Jun 15, 2022 at 10:41:32PM +0530, Manivannan Sadhasivam wrote:
-> > On Wed, Jun 15, 2022 at 02:06:10AM +0200, Ansuel Smith wrote: =20
-> > > Reorder structs in nandc driver to save holes.
-> > >=20
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com> =20
-> >=20
-> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> >=20
-> > Thanks,
-> > Mani
-> > =20
->=20
-> I'm sending v8 with a different Sob so I'm not adding the review tag (in
-> v8).
-> In short the new Sob is what I will use onwards, wanted to keep the
-> Ansuel reference but it was suggested to use Christian Marangi and
-> nothing more. It's just a name change and we are the same person and
-> nobody is stealing ownership of the patch.
-> Sorry for the mess.
-
-Mmmh strange, but okay. You are supposed to contribute with your real
-identity, not under pseudonym anyway.
-
-Also, you could have kept Mani's R-by in v8 but anyway. Mani, can
-you resend them?
-
-Thanks,
-Miqu=C3=A8l
+No.  I did this on purpose.  uintptr_t is the correct type to represent
+a pointer that's being used as an integer.  This dinosaur approach of
+using unsigned long has to stop.

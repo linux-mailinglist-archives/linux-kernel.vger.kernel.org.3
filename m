@@ -2,164 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C4754DF53
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1BB54DFAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376475AbiFPKmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S231517AbiFPLGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376301AbiFPKme (ORCPT
+        with ESMTP id S1376387AbiFPLGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:42:34 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F16E92;
-        Thu, 16 Jun 2022 03:42:31 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 243815FD0E;
-        Thu, 16 Jun 2022 13:42:30 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1655376150;
-        bh=acb8bFjvFs4vIpvT4bDEWmEuHbG15fD1/I93Ay4Q9/Q=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=PdWCaMBPluJVzi55wsUJU4A/DGCcB+UTIMLBgW5L8cTXPa4+Mu9ZUSZgY4I0HCatP
-         awGx8S+8XuwDyLbBA5bN+gHMQeBNMhSjyWNQRSpAdroIrVTqfZBOVARS4l6SZIRPBd
-         DNr4XNU3F/1tv3wRh6oi8h//ivBdtkjp6I/OP8VN71lgJR3uPSDXUARla1L+RTtgNx
-         V8ltCoW/IwEdtLUv4Lk7lbEoeAAbsGe7w2uv6K0P7Dsv2ABTGFVaShlFc6bzoTh6BX
-         fh+5x6i2wAej28cqEusj+ug1fe0nurXs5eGxQZO39DrJRqUOgWxpxt8z71cylIdKj+
-         L43HH/a7OHgPA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 16 Jun 2022 13:42:30 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "stephan@gerhold.net" <stephan@gerhold.net>
-CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v3 3/3] dt-bindings: iio: accel: add dt-binding schema for
- msa311 accel driver
-Thread-Topic: [PATCH v3 3/3] dt-bindings: iio: accel: add dt-binding schema
- for msa311 accel driver
-Thread-Index: AQHYgW2/WnQfCkQxXk6267GmpT0D/g==
-Date:   Thu, 16 Jun 2022 10:42:17 +0000
-Message-ID: <20220616104211.9257-4-ddrokosov@sberdevices.ru>
-References: <20220616104211.9257-1-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220616104211.9257-1-ddrokosov@sberdevices.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Jun 2022 07:06:19 -0400
+X-Greylist: delayed 1345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Jun 2022 04:06:18 PDT
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE935DE4D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:06:18 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 52F3F19CB68
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:43:53 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 1myfoTO9LdLf51myfoMArA; Thu, 16 Jun 2022 05:43:53 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IfNIAqzersyDV8nNIwaREImkJNE8UvYTeYLFrLHtknY=; b=kPRyWpB9ZJNGcPo10dGSmxUtl3
+        QtC/oUlh+uSnB6bKYV44YoyUUKu0+iyk6Sbc7mca4JPVPG4c8b328m/GdqFsGLoYSzYYOWy1iTQQg
+        ZlvgqLcohMKojwvaQh9L1bj4MzPSIS1h+FzenkWHLglyG+RF+SJ6kdPtMzJDTw+wbN4zdMHbHHSeU
+        9PVbuLdKTULCN5jPZBTCNDOopp5KGX5oVv0YnVaEYM//CEn0LCB/x5b+DTLbcc5KSy4ci1Dwgi27L
+        g8a20UIJaaGrRtrIQS8f+EB08/8HcED8iQ3MsW56XUoFFg3BqzB/cjOKj8NwCAuYS/2hQ6xKUdgqA
+        NCnR1nwQ==;
+Received: from 193.254.29.93.rev.sfr.net ([93.29.254.193]:43842 helo=[192.168.0.101])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1o1mye-003dLc-9k;
+        Thu, 16 Jun 2022 05:43:52 -0500
+Message-ID: <e077bafc-17bf-37de-868a-3ab32f91769d@embeddedor.com>
+Date:   Thu, 16 Jun 2022 12:43:40 +0200
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/16 07:44:00 #19785775
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] hinic: Replace memcpy() with direct assignment
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220616052312.292861-1-keescook@chromium.org>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20220616052312.292861-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 93.29.254.193
+X-Source-L: No
+X-Exim-ID: 1o1mye-003dLc-9k
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 193.254.29.93.rev.sfr.net ([192.168.0.101]) [93.29.254.193]:43842
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce devicetree binding json-schema for MSA311 tri-axial,
-low-g accelerometer driver.
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- .../bindings/iio/accel/memsensing,msa311.yaml | 52 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/accel/memsensing,=
-msa311.yaml
 
-diff --git a/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.=
-yaml b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-new file mode 100644
-index 000000000000..072632708d42
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: MEMSensing digital 3-Axis accelerometer
-+
-+maintainers:
-+  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
-+
-+description: |
-+  MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
-+  sensitivity consumer applications. It has dynamical user selectable full
-+  scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurement=
-s
-+  with output data rates from 1Hz to 1000Hz.
-+  Datasheet can be found at following URL
-+  https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
-+
-+properties:
-+  compatible:
-+    const: memsensing,msa311
-+
-+  reg:
-+    maxItems: 1
-+    description: I2C registers address
-+
-+  interrupts:
-+    maxItems: 1
-+    description: optional I2C int pin can be freely mapped to specific fun=
-c
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells =3D <1>;
-+        #size-cells =3D <0>;
-+
-+        accelerometer@62 {
-+            compatible =3D "memsensing,msa311";
-+            reg =3D <0x62>;
-+            interrupt-parent =3D <&gpio_intc>;
-+            interrupts =3D <29 IRQ_TYPE_EDGE_RISING>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 55aeb25c004c..be39e5c214fe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12482,6 +12482,7 @@ MEMSENSING MICROSYSTEMS MSA311 ACCELEROMETER DRIVER
- M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
- L:	linux-iio@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
- F:	drivers/iio/accel/msa311.c
-=20
- MEN A21 WATCHDOG DRIVER
---=20
-2.36.0
+On 6/16/22 07:23, Kees Cook wrote:
+> Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
+> here for calculating the size of the destination buffer (0x10 instead of
+> 0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
+> the source and dest being struct fw_section_info_st, so the memcpy should
+> be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
+> responsibility to figure out.
+
+Also, there is a sanity check just before the for() loop:
+
+  38         if (fw_image->fw_info.fw_section_cnt > MAX_FW_TYPE_NUM) {
+  39                 dev_err(&priv->hwdev->hwif->pdev->dev, "Wrong fw_type_num read from file, fw_type_num: 0x%x\n    ",
+  40                         fw_image->fw_info.fw_section_cnt);
+  41                 return false;
+  42         }
+
+so, this should be fine.
+
+> 
+> Avoid the whole thing and just do a direct assignment. This results in
+> no change to the executable code.
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Jiri Pirko <jiri@nvidia.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Simon Horman <simon.horman@corigine.com>
+> Cc: netdev@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1592
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
+--
+Gustavo
+
+> ---
+>   drivers/net/ethernet/huawei/hinic/hinic_devlink.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> index 60ae8bfc5f69..1749d26f4bef 100644
+> --- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> +++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> @@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
+>   
+>   	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
+>   		len += fw_image->fw_section_info[i].fw_section_len;
+> -		memcpy(&host_image->image_section_info[i],
+> -		       &fw_image->fw_section_info[i],
+> -		       sizeof(struct fw_section_info_st));
+> +		host_image->image_section_info[i] = fw_image->fw_section_info[i];
+>   	}
+>   
+>   	if (len != fw_image->fw_len ||

@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D980654E2A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38DD54E29B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377359AbiFPN51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S1377334AbiFPNz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377355AbiFPN4X (ORCPT
+        with ESMTP id S1377273AbiFPNzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:56:23 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411DD46B3B;
-        Thu, 16 Jun 2022 06:56:23 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id f16so490993pjj.1;
-        Thu, 16 Jun 2022 06:56:23 -0700 (PDT)
+        Thu, 16 Jun 2022 09:55:54 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8685B4664C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:55:53 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id s135so1297756pgs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=c2gM3wzeGG5xpS3I4Gd+kO+ny3mVcmHQeudfRtcSuyY=;
-        b=oqnQ1amYllYfMFhLL6UGLzNaDOjk0tNOtVEfL2PxqSzpHqdEC59/uDNDqNzMkQA3pg
-         hiUS9ASzkdqBYNglhisltpP0eE1cQD3a/xkmrQqzo8JxIsh7+4FbHjAGuB2Ef5bJDtzo
-         hiex/jO2Wx2e7VMbSnwfEatDvNK8M+l2m43PxB5qHr60UPwRiy5BN2KXaw3b5y2kYW5z
-         Rc+jeUGWyAP5Md4ZXMu7vG35ee6KJXtHoJr0GH+FLPwXWpXLYydlgFCBE8+Pi4Hr1xWS
-         1w2RfzQG73cX/sLbNoxz+IOTTnuVrA/hncQ1GrACZml3svh8+S4L3JWWRMkSP9/AxoKc
-         7ISQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=p++bIs2HneM4Mmo2YjeBS7JYAqLzkFDGH55M3o+NIxg=;
+        b=BehuJv74CLjkgQwQW2YTJI7GYHpWAyt46Adp9YWqP2Ino810KUqBU3m1LAkJP2RoeF
+         +eA+u8d7kVSzDosz5vq7VxcNcZTX5YfEAdbw3WwaqZk6zp6IGjSa69Y0nIzpcs7oQ7T1
+         5P9k5mgEtdwx7+92E2Hd+8E/s1CExYyHRLZ7rC2g7YdASXXLLCb/7P762HZgHrjLA75R
+         xG5TtUiW3VtMrQd6uFAmQG8Y4p1sUGlhBWUz7hIEqmjYZkezA6cSjVo4NTIG9NzxS6uo
+         9KvtSOoyXEs4n5UZOYuuYOrIE0Y0joFHJlTY2q8mQG0IgbCAF5+0MpkutS140mIBOqqJ
+         kXZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=c2gM3wzeGG5xpS3I4Gd+kO+ny3mVcmHQeudfRtcSuyY=;
-        b=6QQh/Fsg09Fds/B+joHw2ydMnhFmx44LlOCtelD59N3DoJIvG5oaMt4xRg6c6KCKQV
-         01NM2ka8oZPrmDfHtu5qSL1kPZIh5/0LAsGKG7nX4PNVdy+4aSmJoQSa3NflKEQ8y/Ls
-         /gx0JCErCoe8gxIFMcqD7AqJl5YYALRUvzIJtwqvqeVXq7A3mZrMUGC2gif9wF9MmrYb
-         pLnpTko5rNNpaWNJrdXFPk5Ed1xz2oaTD0YyxArI9IjhpT2edE7f9Ia+HD+iCtA9Vhmd
-         TZ+hXTh+0o2lZlSbavJHcTor18JTy3nLDB7zAu4ODZX0ZAvPvONH6PYn85CflP6yfk9p
-         rQzg==
-X-Gm-Message-State: AJIora/eIRxs5UnlXE2hpCZSONrtAy6wciqLDNSCI/sFDaS0xmaR2LjV
-        z7DL1HmGZDRF2hkrVCxMYpI=
-X-Google-Smtp-Source: AGRyM1sGhY2Fhf8p+iBBnlUJMnC30ww+CqWuVYAFjW8KGj/XYkqVsd5zWoLe9ckN+61VHkOeplwgeA==
-X-Received: by 2002:a17:902:aa43:b0:168:ef35:5bd9 with SMTP id c3-20020a170902aa4300b00168ef355bd9mr4491890plr.137.1655387782699;
-        Thu, 16 Jun 2022 06:56:22 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id k16-20020a17090aaa1000b001e3351cb7fbsm3814583pjq.28.2022.06.16.06.56.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 06:56:22 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, Baoquan He <bhe@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] x86/mm: Fix possible index overflow when creating page table mapping
-Date:   Thu, 16 Jun 2022 21:55:10 +0800
-Message-Id: <20220616135510.1784995-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        bh=p++bIs2HneM4Mmo2YjeBS7JYAqLzkFDGH55M3o+NIxg=;
+        b=QS1irzyeq4VXIP47yQonB+yG//tLdaM8WS9g5h+fqrXOOfFRw+J4a+VaOgJS6KY5Gv
+         UzZLVIibzK3D372abxJDvDxcgQuolliXL4ttfFlwT0Zz9PKHW4Omccz3N5b0D7VLDMbf
+         ZyPaX7HNPh4eQ1ueudKGFnv2BRtRdOC74OrTFNToxZcKuA8wBaQ6wl3L/Z6tsK8FiTzV
+         QAzTLQeIxxKRV4nzp3avpnlAvFFvpk5WR+pHa/QYVnGslxmR6UZf0OkGWv5nMoi/QuB1
+         pG1lisYK7jIluxsIYPstPMKgTJoZx6HizXBjj9YLl9cdPp1SLahL+kfWQmStCvADKMvT
+         DyIA==
+X-Gm-Message-State: AJIora/FUo6W0yDOZr3EavNJRKM8Qo0dzMO/qIhMfDqzEc2xqO3XZBwF
+        d1IZfIHvv9xcvfoETD75B9ezBg==
+X-Google-Smtp-Source: AGRyM1vXMhY+ZrUKaR7yePLi9tk4x6RLg+QaJ2jT5cqYNFanziG3iv5eJoN4umJFjqajEOEp+YtBpQ==
+X-Received: by 2002:a63:356:0:b0:3fd:7477:63f0 with SMTP id 83-20020a630356000000b003fd747763f0mr4613366pgd.601.1655387752971;
+        Thu, 16 Jun 2022 06:55:52 -0700 (PDT)
+Received: from [172.20.0.255] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id d2-20020a056a00198200b0051b9ecb53e6sm1773063pfl.105.2022.06.16.06.55.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 06:55:52 -0700 (PDT)
+Message-ID: <ea767ff8-9fa0-7a2f-af52-e0d05adafb03@linaro.org>
+Date:   Thu, 16 Jun 2022 06:55:51 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 3/4] dt-bindings: dsp: mediatek: Add mt8186 dsp
+ document
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, YC Hung <yc.hung@mediatek.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220616073042.13229-1-tinghan.shen@mediatek.com>
+ <20220616073042.13229-4-tinghan.shen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616073042.13229-4-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two issues in phys_p4d_init():
+On 16/06/2022 00:30, Tinghan Shen wrote:
+> This patch adds mt8186 dsp document. The dsp is used for Sound Open
+> Firmware driver node. It includes registers, clocks, memory regions,
+> and mailbox for dsp.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 
-- The __kernel_physical_mapping_init() does not do boundary-checking for
-  paddr_end and passes it directly to phys_p4d_init(), phys_p4d_init() does
-  not do bounds checking either, so if the physical memory to be mapped is
-  large enough, 'p4d_page + p4d_index(vaddr)' will wrap around to the
-  beginning entry of the P4D table and its data will be overwritten.
 
-- The for loop body will be executed only when 'vaddr < vaddr_end'
-  evaluates to true, but if that condition is true, 'paddr >= paddr_end'
-  will evaluate to false, thus the 'if (paddr >= paddr_end) {}' block will
-  never be executed and become dead code.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-To fix these issues, use 'i < PTRS_PER_P4D' instead of 'vaddr < vaddr_end'
-as the for loop condition, this also make it more consistent with the logic
-of the phys_{pud,pmt,pte}_init() functions.
 
-Fixes: 432c833218dd ("x86/mm: Handle physical-virtual alignment mismatch in phys_p4d_init()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- arch/x86/mm/init_64.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 8779d6be6a49..e718c9b3f539 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -674,18 +674,18 @@ static unsigned long __meminit
- phys_p4d_init(p4d_t *p4d_page, unsigned long paddr, unsigned long paddr_end,
- 	      unsigned long page_size_mask, pgprot_t prot, bool init)
- {
--	unsigned long vaddr, vaddr_end, vaddr_next, paddr_next, paddr_last;
--
--	paddr_last = paddr_end;
--	vaddr = (unsigned long)__va(paddr);
--	vaddr_end = (unsigned long)__va(paddr_end);
-+	unsigned long vaddr, vaddr_next, paddr_next, paddr_last;
-+	int i;
- 
- 	if (!pgtable_l5_enabled())
- 		return phys_pud_init((pud_t *) p4d_page, paddr, paddr_end,
- 				     page_size_mask, prot, init);
- 
--	for (; vaddr < vaddr_end; vaddr = vaddr_next) {
--		p4d_t *p4d = p4d_page + p4d_index(vaddr);
-+	paddr_last = paddr_end;
-+	vaddr = (unsigned long)__va(paddr);
-+
-+	for (i = p4d_index(vaddr); i < PTRS_PER_P4D; i++, vaddr = vaddr_next) {
-+		p4d_t *p4d = p4d_page + i;
- 		pud_t *pud;
- 
- 		vaddr_next = (vaddr & P4D_MASK) + P4D_SIZE;
-@@ -704,13 +704,13 @@ phys_p4d_init(p4d_t *p4d_page, unsigned long paddr, unsigned long paddr_end,
- 
- 		if (!p4d_none(*p4d)) {
- 			pud = pud_offset(p4d, 0);
--			paddr_last = phys_pud_init(pud, paddr, __pa(vaddr_end),
-+			paddr_last = phys_pud_init(pud, paddr, paddr_end,
- 					page_size_mask, prot, init);
- 			continue;
- 		}
- 
- 		pud = alloc_low_page();
--		paddr_last = phys_pud_init(pud, paddr, __pa(vaddr_end),
-+		paddr_last = phys_pud_init(pud, paddr, paddr_end,
- 					   page_size_mask, prot, init);
- 
- 		spin_lock(&init_mm.page_table_lock);
--- 
-2.36.0
-
+Best regards,
+Krzysztof

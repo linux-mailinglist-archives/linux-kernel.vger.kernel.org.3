@@ -2,47 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FC754DC65
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172C854DC6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359598AbiFPIBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S1359608AbiFPIFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359354AbiFPIBC (ORCPT
+        with ESMTP id S230045AbiFPIFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:01:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A285D65A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:01:01 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LNvfX64JYzSh08;
-        Thu, 16 Jun 2022 15:57:40 +0800 (CST)
-Received: from [10.174.176.103] (10.174.176.103) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 16 Jun 2022 16:00:59 +0800
-Message-ID: <4e5e9276-e32d-0903-1f4e-20880cc72d82@huawei.com>
-Date:   Thu, 16 Jun 2022 16:00:58 +0800
+        Thu, 16 Jun 2022 04:05:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8CE95D18F;
+        Thu, 16 Jun 2022 01:05:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6EC112FC;
+        Thu, 16 Jun 2022 01:05:02 -0700 (PDT)
+Received: from [10.57.84.206] (unknown [10.57.84.206])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D3173F7F5;
+        Thu, 16 Jun 2022 01:04:59 -0700 (PDT)
+Message-ID: <7c86f5fb-93fc-b765-8070-35ad21ab8820@arm.com>
+Date:   Thu, 16 Jun 2022 09:04:58 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH -next] driver core: fix deadlock in __driver_attach
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <rafael@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>
-References: <20220608094355.3298420-1-zhangwensheng5@huawei.com>
- <YqNL6NPgP+cLOy/I@kroah.com>
-From:   "zhangwensheng (E)" <zhangwensheng5@huawei.com>
-In-Reply-To: <YqNL6NPgP+cLOy/I@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.103]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
+To:     Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Backlund <tmb@tmb.nu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>
+References: <bd80cd0d-a364-4ebd-2a89-933f79eaf4c7@tmb.nu>
+ <CAHk-=wix7+mGzS-hANyk7DZsZ1NgGMHjPzSQKggEomYrRCrP_Q@mail.gmail.com>
+ <CAHk-=wgfFhwMP0=QQY_iZvf0kveR5=VGK919Ayn+ZSUADs9mag@mail.gmail.com>
+ <20220615110022.yifrsvzxjsz2wky5@quack3.lan>
+ <20220615133845.o2lzfe5s4dzdfvtg@quack3.lan>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220615133845.o2lzfe5s4dzdfvtg@quack3.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,99 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sorry that I didn't see your reply.
-it is real not potential, I have triggered this problem successfully and 
-proven that this change can fix it.
+On 15/06/2022 14:38, Jan Kara wrote:
+> On Wed 15-06-22 13:00:22, Jan Kara wrote:
+>> On Tue 14-06-22 12:00:22, Linus Torvalds wrote:
+>>> On Tue, Jun 14, 2022 at 11:51 AM Linus Torvalds
+>>> <torvalds@linux-foundation.org> wrote:
+>>>>
+>>>> Or just make sure that noop_backing_dev_info is fully initialized
+>>>> before it's used.
+>>>
+>>> I don't see any real reason why that
+>>>
+>>>      err = bdi_init(&noop_backing_dev_info);
+>>>
+>>> couldn't just be done very early. Maybe as the first call in
+>>> driver_init(), before the whole devtmpfs_init() etc.
+>>
+>> I've checked the dependencies and cgroups (which are the only non-trivial
+>> dependency besides per-CPU infrastructure) are initialized early enough so
+>> it should work fine. So let's try that.
+> 
+> Attached patch boots for me. Guys, who was able to reproduce the failure: Can
+> you please confirm this patch fixes your problem?
+> 
+> 								Honza
 
-stack like commit b232b02bf3c2 ("driver core: fix deadlock in 
-__device_attach").
-list below:
-     In __driver_attach function, The lock holding logic is as follows:
-     ...
-     __driver_attach
-     if (driver_allows_async_probing(drv))
-       device_lock(dev)      // get lock dev
-         async_schedule_dev(__driver_attach_async_helper, dev); // func
-           async_schedule_node
-             async_schedule_node_domain(func)
-               entry = kzalloc(sizeof(struct async_entry), GFP_ATOMIC);
-               /* when fail or work limit, sync to execute func, but
-                  __driver_attach_async_helper will get lock dev as
-                  will, which will lead to A-A deadlock.  */
-               if (!entry || atomic_read(&entry_count) > MAX_WORK) {
-                 func;
-               else
-                 queue_work_node(node, system_unbound_wq, &entry->work)
-       device_unlock(dev)
+Works for me too
 
-     As above show, when it is allowed to do async probes, because of
-     out of memory or work limit, async work is not be allowed, to do
-     sync execute instead. it will lead to A-A deadlock because of
-     __driver_attach_async_helper getting lock dev.
-
-     Because it's logic is same as commit b232b02bf3c2 ("driver core: 
-fix deadlock
-     in __device_attach"),  I simplify the description.
-
-
-Reproduce:
-and it can be reproduce by make the condition
-(if (!entry || atomic_read(&entry_count) > MAX_WORK)) untenable, like below:
-
-[  370.785650] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[  370.787154] task:swapper/0       state:D stack:    0 pid:    1 
-ppid:     0 flags:0x00004000
-[  370.788865] Call Trace:
-[  370.789374]  <TASK>
-[  370.789841]  __schedule+0x482/0x1050
-[  370.790613]  schedule+0x92/0x1a0
-[  370.791290]  schedule_preempt_disabled+0x2c/0x50
-[  370.792256]  __mutex_lock.isra.0+0x757/0xec0
-[  370.793158]  __mutex_lock_slowpath+0x1f/0x30
-[  370.794079]  mutex_lock+0x50/0x60
-[  370.794795]  __device_driver_lock+0x2f/0x70
-[  370.795677]  ? driver_probe_device+0xd0/0xd0
-[  370.796576]  __driver_attach_async_helper+0x1d/0xd0
-[  370.797318]  ? driver_probe_device+0xd0/0xd0
-[  370.797957]  async_schedule_node_domain+0xa5/0xc0
-[  370.798652]  async_schedule_node+0x19/0x30
-[  370.799243]  __driver_attach+0x246/0x290
-[  370.799828]  ? driver_allows_async_probing+0xa0/0xa0
-[  370.800548]  bus_for_each_dev+0x9d/0x130
-[  370.801132]  driver_attach+0x22/0x30
-[  370.801666]  bus_add_driver+0x290/0x340
-[  370.802246]  driver_register+0x88/0x140
-[  370.802817]  ? virtio_scsi_init+0x116/0x116
-[  370.803425]  scsi_register_driver+0x1a/0x30
-[  370.804057]  init_sd+0x184/0x226
-[  370.804533]  do_one_initcall+0x71/0x3a0
-[  370.805107]  kernel_init_freeable+0x39a/0x43a
-[  370.805759]  ? rest_init+0x150/0x150
-[  370.806283]  kernel_init+0x26/0x230
-[  370.806799]  ret_from_fork+0x1f/0x30
-
-And my change can fix it.
-
-thanks.
-
-Wensheng.
-
-在 2022/6/10 21:49, Greg KH 写道:
-> On Wed, Jun 08, 2022 at 05:43:55PM +0800, Zhang Wensheng wrote:
->> In __driver_attach function, There are also potential AA deadlock
->> problem, like the commit b232b02bf3c2 ("driver core: fix deadlock
->> in __device_attach").
-> Potential, but real?
->
-> And the codepaths for drivers being added is much different than
-> devices, please provide the full information like you did in the other
-> commit.
->
-> Also, have you triggered this problem successfully and proven that this
-> change fixes the issue?
->
-> thanks,
->
-> greg k-h
-> .
+Tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>

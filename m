@@ -2,57 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85D454DDEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF77B54DDF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376494AbiFPJKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 05:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S1376587AbiFPJLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 05:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359112AbiFPJKT (ORCPT
+        with ESMTP id S1376585AbiFPJLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 05:10:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA8E52E75;
-        Thu, 16 Jun 2022 02:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC2A9B82330;
-        Thu, 16 Jun 2022 09:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 646AEC3411C;
-        Thu, 16 Jun 2022 09:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655370614;
-        bh=v3LzgN/UAeNgTRLw78tfLU45yvH+bg2GM46GCAKKCOk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=aou3pE7C2Gn3QjhYNlzk6UvJxqzpRGAtvhjPipzb/UlW5J3OUHvYZfZSU8c1JtI2W
-         lqUw03b0WSx9VfM1R0DWUjA7NmJJIN2F5/qIVad6iesgoYEC2JhqQASJ2JGfl9HJ/1
-         OPCNOPJzKq0oYJPkRC7tXtCUqAP/r+maRUnN5q17NdgIRVYJ8LG274UkjG7muBuPNz
-         mx+XTAvhHqnUKOyu+Xh/P5243hXsxoV8YYSOegephqZ5lWsj630LHFYB9NDK/Dk5vT
-         //QzhIRA1qtiVq6CiS/zdO3+VM6PYBh0cOlpwazirnnoLY+UxO0qh/p/oRiMVnYd2b
-         LLeJYY/7+to7Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 446CDE7385C;
-        Thu, 16 Jun 2022 09:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Jun 2022 05:11:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202235536E;
+        Thu, 16 Jun 2022 02:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UrepXoaSTZrZ2O7eaVZk9L9kv3mDevlxVcY6WFIRsno=; b=l5odY+OYB0XJt2JD2mKq4mHQD+
+        ehSmuOU7iaVBGrx6vUV3IOa0wdlTvebqukU00q4GGoLNMlF+Y3rRetHIraWJo549tmza9Kc1sTVIt
+        g7DeNbI+XJs/C8ewt6PRWGpwerQk/hc+gOhSLvrYiCBfBNMMizpEakrHO0OodyajQ0m3u5YogP95v
+        FWDnKQL+wrgC6rxsc/ZuY2kgC+gMnDutglLMR2F3pP5JjZF1rZA7jiGn1J2zYHGhFZQZWNVL/WhTU
+        S24/7Lda/gU3iX+6ka66WjdaaXE1lQHvyhR85xi/TX+pv6XsXHrf51tw8FZirP2+p2glY7vUdMyDn
+        kyBPghAQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1lWc-001bUd-M5; Thu, 16 Jun 2022 09:10:50 +0000
+Date:   Thu, 16 Jun 2022 02:10:50 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, seanjc@google.com, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH 00/19] Refresh queued CET virtualization series
+Message-ID: <Yqrzmr27siGjPB88@infradead.org>
+References: <20220616084643.19564-1-weijiang.yang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,v2,0/2] net: mana: Add PF and XDP_REDIRECT support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165537061427.3948.3823927999620148456.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Jun 2022 09:10:14 +0000
-References: <1655238535-19257-1-git-send-email-haiyangz@microsoft.com>
-In-Reply-To: <1655238535-19257-1-git-send-email-haiyangz@microsoft.com>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, sthemmin@microsoft.com,
-        paulros@microsoft.com, shacharr@microsoft.com, olaf@aepfle.de,
-        vkuznets@redhat.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616084643.19564-1-weijiang.yang@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +51,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Jun 16, 2022 at 04:46:24AM -0400, Yang Weijiang wrote:
+> The purpose of this patch series is to refresh the queued CET KVM
+> patches[1] with the latest dependent CET native patches, pursuing
+> the result that whole series could be merged ahead of CET native
+> series[2] [3].
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 14 Jun 2022 13:28:53 -0700 you wrote:
-> The patch set adds PF and XDP_REDIRECT support.
-> 
-> Dexuan Cui (1):
->   net: mana: Add the Linux MANA PF driver
-> 
-> Haiyang Zhang (1):
->   net: mana: Add support of XDP_REDIRECT action
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v2,1/2] net: mana: Add the Linux MANA PF driver
-    https://git.kernel.org/netdev/net-next/c/1566e7d6206f
-  - [net-next,v2,2/2] net: mana: Add support of XDP_REDIRECT action
-    https://git.kernel.org/netdev/net-next/c/7a8938cd024d
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It might be helpful to explain what CET is here..

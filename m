@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D7754E259
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA82E54E252
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 15:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377239AbiFPNrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 09:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S1377230AbiFPNqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 09:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376688AbiFPNrE (ORCPT
+        with ESMTP id S1376858AbiFPNqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:47:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1916381B2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655387223; x=1686923223;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IXK0ykvIxP0+klEILUEvEVK/D68IabMlJhtsf1HZv44=;
-  b=MiEMFi+6H8iSAQoYtf3r974j0deWboMs89Yv2hh/b8HfhyN7tOWkPVgk
-   6Vuixg9I66sBqCzbeZ2kkg+Ow5U6A1967OY3bwZC47aexvPNjcHoCGpdx
-   KSRdlpUnwdvczdfT1RczHQFhO5yxrlu/GTcRD824ujcX5vMLMtgYUsAWA
-   R36m9eLQcNzMmkpAx9p+FQ0nUTaeBBdYCFD7/vZicMPaMqbtRgdZcZGur
-   p8CMuYgFI0K8UBn/gPsxP5284rw67/Sw+Fnn1hGYuFslEV24gBJZP9MoM
-   ZKqxkhRavDVGPQ8Y3qHXiGuH0TOwZDc462St//msG60/8ufQ3dDpLHnnh
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="365604038"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="365604038"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 06:47:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="653164897"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jun 2022 06:47:01 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1pps-000OQD-OM;
-        Thu, 16 Jun 2022 13:47:00 +0000
-Date:   Thu, 16 Jun 2022 21:46:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- e607cc3860162967a0c7391ad030bd6e7a8e270b
-Message-ID: <62ab3427.60OBb6l9BR+u1A3e%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 16 Jun 2022 09:46:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB19A37A8E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 06:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655387188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FmNUkOO/CPYlAiNCXkHb5y6oDWLQMyJAjm4NQJecMuc=;
+        b=EjR/AdweSXh0nvnGu39ntP++djSW+9fkXmHeRHKS6oLt5c5QM9N8LqPP8KATwyVNx6LTfJ
+        hU00OvO2OpjhSCfmXFMZeHBsQ45B4bskqwR5TARO649fbHfM1t+4o4MYN2Hk4vBgBeXKTu
+        d5Zuj7fOYyzjB8dRFc5M9dWS7lszsio=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-h1PLAn-NMViEKO72XyHw_w-1; Thu, 16 Jun 2022 09:46:23 -0400
+X-MC-Unique: h1PLAn-NMViEKO72XyHw_w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 728793C138A1;
+        Thu, 16 Jun 2022 13:46:22 +0000 (UTC)
+Received: from maya.cloud.tilaa.com (unknown [10.40.208.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27A712026D2D;
+        Thu, 16 Jun 2022 13:46:22 +0000 (UTC)
+Date:   Thu, 16 Jun 2022 15:46:18 +0200
+From:   Stefano Brivio <sbrivio@redhat.com>
+To:     Jie2x Zhou <jie2x.zhou@intel.com>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>, shuah@kernel.org,
+        liuhangbin@gmail.com, fw@strlen.de,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH] selftests: netfilter: correct PKTGEN_SCRIPT_PATHS in
+ nft_concat_range.sh
+Message-ID: <20220616154618.0eb6b283@elisabeth>
+In-Reply-To: <Yqr9pQ9QsVaGjNW/@salvia>
+References: <20220616074046.49349-1-jie2x.zhou@intel.com>
+        <Yqr9pQ9QsVaGjNW/@salvia>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,147 +68,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: e607cc3860162967a0c7391ad030bd6e7a8e270b  context_tracking: Interrupts always disabled for ct_idle_exit()
+Hi Jie2x,
 
-elapsed time: 1054m
+On Thu, 16 Jun 2022 11:53:41 +0200
+Pablo Neira Ayuso <pablo@netfilter.org> wrote:
 
-configs tested: 126
-configs skipped: 4
+> Cc'ing netfilter-devel and Stefano Brivio.
+> 
+> On Thu, Jun 16, 2022 at 03:40:46PM +0800, Jie2x Zhou wrote:
+> > Before change:
+> > make -C netfilter
+> >  TEST: performance
+> >    net,port                                                      [SKIP]
+> >    perf not supported
+> >    port,net                                                      [SKIP]
+> >    perf not supported
+> >    net6,port                                                     [SKIP]
+> >    perf not supported
+> >    port,proto                                                    [SKIP]
+> >    perf not supported
+> >    net6,port,mac                                                 [SKIP]
+> >    perf not supported
+> >    net6,port,mac,proto                                           [SKIP]
+> >    perf not supported
+> >    net,mac                                                       [SKIP]
+> >    perf not supported
+> > 
+> > After change:
+> >    net,mac                                                       [ OK ]
+> >      baseline (drop from netdev hook):               2061098pps
+> >      baseline hash (non-ranged entries):             1606741pps
+> >      baseline rbtree (match on first field only):    1191607pps
+> >      set with  1000 full, ranged entries:            1639119pps
+> > ok 8 selftests: netfilter: nft_concat_range.sh
+> > 
+> > Fixes: 611973c1e06f ("selftests: netfilter: Introduce tests for sets with range concatenation")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+> > ---
+> >  tools/testing/selftests/netfilter/nft_concat_range.sh | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/netfilter/nft_concat_range.sh b/tools/testing/selftests/netfilter/nft_concat_range.sh
+> > index b35010cc7f6a..a6991877e50c 100755
+> > --- a/tools/testing/selftests/netfilter/nft_concat_range.sh
+> > +++ b/tools/testing/selftests/netfilter/nft_concat_range.sh
+> > @@ -31,7 +31,7 @@ BUGS="flush_remove_add reload"
+> >  
+> >  # List of possible paths to pktgen script from kernel tree for performance tests
+> >  PKTGEN_SCRIPT_PATHS="
+> > -	../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
+> > +	../../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This came from the fact that I used, for testing, to copy the
+directories 'samples' and 'selftests' to the root of a filesystem
+on a virtual machine, instead of copying the full 'tools' directory.
 
-gcc tested configs:
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-mips                         bigsur_defconfig
-m68k                        mvme147_defconfig
-sh                         ap325rxa_defconfig
-sh                      rts7751r2d1_defconfig
-arm                        keystone_defconfig
-sh                                  defconfig
-m68k                       m5475evb_defconfig
-s390                          debug_defconfig
-arm                         at91_dt_defconfig
-sh                   secureedge5410_defconfig
-um                                  defconfig
-powerpc                 mpc837x_mds_defconfig
-powerpc                      cm5200_defconfig
-arm                          exynos_defconfig
-powerpc                 canyonlands_defconfig
-m68k                        m5307c3_defconfig
-arc                              allyesconfig
-sh                          landisk_defconfig
-sh                             shx3_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     tqm8548_defconfig
-m68k                       m5249evb_defconfig
-powerpc                      makalu_defconfig
-m68k                       m5275evb_defconfig
-arm                            xcep_defconfig
-arm                         nhk8815_defconfig
-xtensa                         virt_defconfig
-arm                        clps711x_defconfig
-arm                           sunxi_defconfig
-mips                       capcella_defconfig
-nios2                         10m50_defconfig
-microblaze                      mmu_defconfig
-arc                         haps_hs_defconfig
-arm                           tegra_defconfig
-arm                        shmobile_defconfig
-mips                 decstation_r4k_defconfig
-mips                             allmodconfig
-sparc                               defconfig
-m68k                          hp300_defconfig
-m68k                        stmark2_defconfig
-powerpc                         wii_defconfig
-arm                        trizeps4_defconfig
-xtensa                       common_defconfig
-sh                        sh7757lcr_defconfig
-arm                      integrator_defconfig
-s390                                defconfig
-powerpc                     pq2fads_defconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+It was a very arbitrary usage though, also given that 'selftests' is
+typically biggest directory in 'tools', so there's no need to keep the
+previous path.
 
-clang tested configs:
-mips                          ath25_defconfig
-mips                           mtx1_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                       ebony_defconfig
-powerpc                   microwatt_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                    socrates_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20220616
-hexagon              randconfig-r041-20220616
-hexagon              randconfig-r045-20220616
-s390                 randconfig-r044-20220616
+Thanks for fixing this,
+
+Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Stefano
+

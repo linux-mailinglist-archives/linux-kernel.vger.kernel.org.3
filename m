@@ -2,90 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F84754EB8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7449354EB75
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378883AbiFPUtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S1378655AbiFPUrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378736AbiFPUsG (ORCPT
+        with ESMTP id S229793AbiFPUrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:48:06 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CDD424B6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:48:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id i15so2200118plr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=6d9839Pby3luvocQiG1iEeRMxGaVYUiIzYIGZf66yZM=;
-        b=zighhZuKHzds+2VJEIzF5vuqJDL+HQRxdNX7V6DMo330mDSdpYm1eP7oYjZzFPRDw4
-         hNAzQyzVlZqzCTXUul28y3D8zk5QE3JbNCTY2EkqsUu8mgw4dcgdftlzRMZDhjIF0UVU
-         +mn6I2fXIsBpZ8kfhCynHAF8g3VKEU8aC9W3PWffb7W+6xxI6zEj6q1Vq4LiKlBMD7gw
-         i1akgEYJI89hkTDTtoMUTE1Qqb/RP/jTK5p/f9rhkQdnsMMZVke7iUxUpbR+8q8py8eC
-         x0jteKoLeVIpdjRA6XzyMNwSXoPOzW9cnH1jWuN9VHRZ2qy5mVzKyPumJITpda+RwufM
-         axAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6d9839Pby3luvocQiG1iEeRMxGaVYUiIzYIGZf66yZM=;
-        b=T7HkIrve+RqxW25ZcQPhxIOq5qu5pxkuNX+YNLkzym899FCUdM7ZroJWNEQKuS2K9P
-         BcoVmqRP7cw0V5yVNs/YFnPItK03/l8UECw7Bs6CWLPpewDhRofXst21zCljzrmGoKnD
-         Rw8r5Rjra4Ru/OV2Y/iTG81RmNwYeg78t2t/yN13B5VHJwzRfOlOrkxTQv2R5BtBCnqO
-         u2gWx/yalKFJs/yVWnzbG1UxzV+8uznAJvfE6HgE4iA/FL2Mf0LChChA3pNud3cb6n4S
-         grTXnobqqR+phScKPfd9rTNn9JuHCyMntuuiEKM+N5KFPBBZGhzp9E0zL1fHvOY4fDri
-         93Vg==
-X-Gm-Message-State: AJIora8Dsueh6mW3aGXcjmi73Ap90ysag0Fa/Y3dw1NByw7FE0MkRYOJ
-        tTdQ2Mh9ucOa5O0PB7rPkC7iCA==
-X-Google-Smtp-Source: AGRyM1v5zdohppxAKT9IHUnEhtKpMn5Ft060nX85SOz1DVcpU0ViuqtQYDayePUp6sjwwPIIvA+L7g==
-X-Received: by 2002:a17:90b:388f:b0:1e8:5df5:b2a3 with SMTP id mu15-20020a17090b388f00b001e85df5b2a3mr6988661pjb.70.1655412481628;
-        Thu, 16 Jun 2022 13:48:01 -0700 (PDT)
-Received: from krzk-bin.. ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id 203-20020a6218d4000000b0051ba0ee30cbsm2165453pfy.128.2022.06.16.13.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 13:48:01 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: ste: adjust whitespace around '='
-Date:   Thu, 16 Jun 2022 13:47:23 -0700
-Message-Id: <165541242280.9040.8439318762865273659.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526203656.831126-1-krzysztof.kozlowski@linaro.org>
-References: <20220526203656.831126-1-krzysztof.kozlowski@linaro.org>
+        Thu, 16 Jun 2022 16:47:48 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A935313EBA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 13:47:46 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 1wOxofIO0IaWO1wOxo5r6G; Thu, 16 Jun 2022 22:47:44 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 16 Jun 2022 22:47:44 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <7b9923c0-50f0-556a-657c-9cf0ef9af5aa@wanadoo.fr>
+Date:   Thu, 16 Jun 2022 22:47:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
+Content-Language: fr
+To:     quan@os.amperecomputing.com
+Cc:     andrew@aj.id.au, benh@kernel.crashing.org,
+        brendanhiggins@google.com, devicetree@vger.kernel.org,
+        joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, minyard@acm.org,
+        openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
+        patches@amperecomputing.com, phong@os.amperecomputing.com,
+        robh+dt@kernel.org, thang@os.amperecomputing.com, wsa@kernel.org
+References: <20220615090259.1121405-1-quan@os.amperecomputing.com>
+ <20220615090259.1121405-2-quan@os.amperecomputing.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220615090259.1121405-2-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 22:36:56 +0200, Krzysztof Kozlowski wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
+Le 15/06/2022 à 11:02, Quan Nguyen a écrit :
+> The SMBus system interface (SSIF) IPMI BMC driver can be used to perform
+> in-band IPMI communication with their host in management (BMC) side.
 > 
+> Thanks Dan for the copy_from_user() fix in the link below.
 > 
+> Link: https://lore.kernel.org/linux-arm-kernel/20220310114119.13736-4-quan-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org/
+> Signed-off-by: Quan Nguyen <quan-shex6MNQR2J/SfDzf78azzKzEDxYleXD@public.gmane.org>
+> ---
 
-Applied, thanks!
+Hi,
 
-[1/1] ARM: dts: ste: adjust whitespace around '='
-      https://git.kernel.org/krzk/linux/c/282a4b9ee9ec8cf8c5e516d127b065318a376289
+a few nitpick below
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[...]
+
+> diff --git a/drivers/char/ipmi/ssif_bmc.c b/drivers/char/ipmi/ssif_bmc.c
+> new file mode 100644
+> index 000000000000..0bfd4b9bbaf1
+> --- /dev/null
+> +++ b/drivers/char/ipmi/ssif_bmc.c
+> @@ -0,0 +1,880 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * The driver for BMC side of SSIF interface
+> + *
+> + * Copyright (c) 2022, Ampere Computing LLC
+> + *
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/poll.h>
+> +#include <linux/sched.h>
+> +#include <linux/mutex.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/timer.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/ipmi_ssif_bmc.h>
+> +
+> +#define DEVICE_NAME                             "ipmi-ssif-host"
+> +
+> +#define GET_8BIT_ADDR(addr_7bit)                (((addr_7bit) << 1) & 0xff)
+> +
+> +/* A standard SMBus Transaction is limited to 32 data bytes */
+> +#define MAX_PAYLOAD_PER_TRANSACTION             32
+> +/* Transaction includes the address, the command, the length and the PEC byte */
+> +#define MAX_TRANSACTION                         (MAX_PAYLOAD_PER_TRANSACTION + 4)
+> +
+> +#define MAX_IPMI_DATA_PER_START_TRANSACTION     30
+> +#define MAX_IPMI_DATA_PER_MIDDLE_TRANSACTION    31
+> +
+> +#define SSIF_IPMI_SINGLEPART_WRITE              0x2
+> +#define SSIF_IPMI_SINGLEPART_READ               0x3
+> +#define SSIF_IPMI_MULTIPART_WRITE_START         0x6
+> +#define SSIF_IPMI_MULTIPART_WRITE_MIDDLE        0x7
+> +#define SSIF_IPMI_MULTIPART_WRITE_END           0x8
+> +#define SSIF_IPMI_MULTIPART_READ_START          0x3
+> +#define SSIF_IPMI_MULTIPART_READ_MIDDLE         0x9
+> +
+> +/*
+> + * IPMI 2.0 Spec, section 12.7 SSIF Timing,
+> + * Request-to-Response Time is T6max(250ms) - T1max(20ms) - 3ms = 227ms
+> + * Recover ssif_bmc from busy state if it takes up to 500ms
+> + */
+> +#define RESPONSE_TIMEOUT                        500 /* ms */
+> +
+> +struct ssif_part_buffer {
+> +	u8 address;
+> +	u8 smbus_cmd;
+> +	u8 length;
+> +	u8 payload[MAX_PAYLOAD_PER_TRANSACTION];
+> +	u8 pec;
+> +	u8 index;
+> +};
+> +
+> +/*
+> + * SSIF internal states:
+> + *   SSIF_READY         0x00 : Ready state
+> + *   SSIF_START         0x01 : Start smbus transaction
+> + *   SSIF_SMBUS_CMD     0x02 : Received SMBus command
+> + *   SSIF_REQ_RECVING   0x03 : Receiving request
+> + *   SSIF_RES_SENDING   0x04 : Sending response
+> + *   SSIF_BAD_SMBUS     0x05 : Bad SMbus transaction
+
+If these states are related to the enum just below, 
+s/SSIF_BAD_SMBUS/SSIF_ABORTING/ + description update?
+
+> + */
+> +enum ssif_state {
+> +	SSIF_READY,
+> +	SSIF_START,
+> +	SSIF_SMBUS_CMD,
+> +	SSIF_REQ_RECVING,
+> +	SSIF_RES_SENDING,
+> +	SSIF_ABORTING,
+> +	SSIF_STATE_MAX
+> +};
+> +
+
+[...]
+
+> +static int ssif_bmc_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> +{
+> +	struct ssif_bmc_ctx *ssif_bmc;
+> +	int ret;
+> +
+> +	ssif_bmc = devm_kzalloc(&client->dev, sizeof(*ssif_bmc), GFP_KERNEL);
+> +	if (!ssif_bmc)
+> +		return -ENOMEM;
+> +
+> +	spin_lock_init(&ssif_bmc->lock);
+> +
+> +	init_waitqueue_head(&ssif_bmc->wait_queue);
+> +	ssif_bmc->request_available = false;
+> +	ssif_bmc->response_in_progress = false;
+> +	ssif_bmc->busy = false;
+> +	ssif_bmc->response_timer_inited = false;
+> +
+> +	/* Register misc device interface */
+> +	ssif_bmc->miscdev.minor = MISC_DYNAMIC_MINOR;
+> +	ssif_bmc->miscdev.name = DEVICE_NAME;
+> +	ssif_bmc->miscdev.fops = &ssif_bmc_fops;
+> +	ssif_bmc->miscdev.parent = &client->dev;
+> +	ret = misc_register(&ssif_bmc->miscdev);
+> +	if (ret)
+> +		goto out;
+
+Could be "return ret;"
+(see below)
+
+> +
+> +	ssif_bmc->client = client;
+> +	ssif_bmc->client->flags |= I2C_CLIENT_SLAVE;
+> +
+> +	/* Register I2C slave */
+> +	i2c_set_clientdata(client, ssif_bmc);
+> +	ret = i2c_slave_register(client, ssif_bmc_cb);
+> +	if (ret) {
+> +		misc_deregister(&ssif_bmc->miscdev);
+> +		goto out;
+> +	}
+> +
+> +	return 0;
+> +out:
+> +	devm_kfree(&client->dev, ssif_bmc);
+
+This looks useless to me. The whole error handling path could be 
+removed, or updated to only have the "misc_deregister()" above.
+
+CJ
+
+> +	return ret;
+> +}
+
+

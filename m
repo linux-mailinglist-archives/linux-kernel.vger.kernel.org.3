@@ -2,224 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFCB54E57B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBB354E583
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377460AbiFPO4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
+        id S1377501AbiFPO7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbiFPO4V (ORCPT
+        with ESMTP id S233481AbiFPO7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:56:21 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE76D2BB1E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:56:19 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id i17-20020a7bc951000000b0039c4760ec3fso3569800wml.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=Etn/dQhjuQJaHbnT3OVtyS239w7heYivZbd+vYx1CP0=;
-        b=bP7Ix5TGzwlg2jVGKyLnQt9uvuvmXeb5tcmtCnixtuB5rTsg3M2UFhePgzpE/lVVgl
-         kqJnNN/Y0PAl61/sWvGCNcskYpZsxsdVNVgk45GmZpXMpSIx3bA+vxxTUGrgxzE2Jrnt
-         wocX7UWj9XaC2H7q+P5OJJuAEcDSlhaZ6URgS8SPGVaVzY1hFyzWFfkDtBjvG0AAMcbJ
-         Z/x/Z45DUbuFD/rdiC3bcR4tamtHLICgxIyiKy7ZeTY3dyxdlcRJ0Cq4nzVLEiPCrRS8
-         WvbKFubGA83wF9kH9JfPLuHry3Y88Spkk2hB0AXvF6Dyxo31gVqfC6gzpOfJgI4i0IkM
-         comg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=Etn/dQhjuQJaHbnT3OVtyS239w7heYivZbd+vYx1CP0=;
-        b=lgAVcJRwcKA2PswIFVDHKUeBIfCbBOCRmrZVwLVBkE/L9QYCTBNHv+HtOW1Hp4i+MW
-         vluVkJ5f3InP2Ri1WNmEBqF9Y/HwWuDicHNr6NCXRpPAFk0rvz0L2pXjgPeCXXrYaxOd
-         KLktlvF/uAK/WfGOQ7AHgdqfXvfEDNzrinTo8x29IEMoNqQEcs7kDwBXcYxmetOVLhfc
-         wVgn1v0hDnIKuu6oNgwVdj0RenR7+luQxJffvGH5TbeUaFob+BcQWtK4UWJPedC5fLnU
-         ZCFmSTJy0of18nQwv8T2F+4KHpESZzxZm1NxmaHfyYUC/J6ShB9pmMFj4Z4kVRpq3mdE
-         5ymw==
-X-Gm-Message-State: AJIora+ZchYKQfeDNIwmS7dBoe4REhcOI8J7pEd3pahfmvknumLCLDIZ
-        s3AOxcC/uGQln2iC4hKf28+veg==
-X-Google-Smtp-Source: AGRyM1t8rK29d8qNmLcqjZf5xT0oVNKxL8Rp+fM0+1+6P/SnZTl1+7Br+8zrIoG5oHFAi75h1tgsLg==
-X-Received: by 2002:a05:600c:190d:b0:39c:8216:f53d with SMTP id j13-20020a05600c190d00b0039c8216f53dmr5591994wmq.108.1655391378431;
-        Thu, 16 Jun 2022 07:56:18 -0700 (PDT)
-Received: from localhost ([109.180.234.132])
-        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b0039c5224bfcbsm6853844wms.46.2022.06.16.07.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 07:56:17 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Riwen Lu <luriwen@hotmail.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, rui.zhang@intel.com,
-        robert.moore@intel.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>
-Subject: Re: [PATCH v2] ACPI: Split out processor thermal register from ACPI
- PSS
-References: <TYWP286MB2601DDBB0F472C876D36FBCCB1A69@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
-Date:   Thu, 16 Jun 2022 15:56:16 +0100
-In-Reply-To: <TYWP286MB2601DDBB0F472C876D36FBCCB1A69@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
-        (Riwen Lu's message of "Fri, 10 Jun 2022 17:22:05 +0800")
-Message-ID: <877d5gpshb.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 16 Jun 2022 10:59:52 -0400
+Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 350293CFE1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=ovjTU
+        O24ypn/3asmCSBp8kcH40860kjRDa2YdbnXg2A=; b=g4/QoVpG4t/oSYplaftP6
+        XN76yO+RkWFao9sZg2RH3tYLJZx+43ZKucab9EForRQ1UkuCN6Tc07MYFba0iDO2
+        fjv9+X+fENzRnay376cML00kT4RCv1kyzs0B7bLzlKblRww3+14NS0coSUo8jUyB
+        6cqqa36FZN1rmdSNGnHPyo=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
+ (Coremail) ; Thu, 16 Jun 2022 22:56:21 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Thu, 16 Jun 2022 22:56:21 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     "oss@buserror.net" <oss@buserror.net>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re:Re: [PATCH] arch: powerpc: platforms: 85xx: Add missing
+ of_node_put in sgy_cts1000.c
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <db681dac-5c42-d659-d0ed-31390b2feb3a@csgroup.eu>
+References: <20220615120717.3965164-1-windhl@126.com>
+ <db681dac-5c42-d659-d0ed-31390b2feb3a@csgroup.eu>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <8470436.7edc.1816d03e9c2.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: MsqowACn9fGXRKti6e43AA--.53681W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuA4iF2JVj5SI4QABsH
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Riwen,
-
-Usually it's a good practice to Cc anybody who has commented on previous
-versions. It makes it easier to follow your updates.
-
-A couple of comments below.
-
-Riwen Lu <luriwen@hotmail.com> writes:
-
-> From: Riwen Lu <luriwen@kylinos.cn>
->
-> Commit 239708a3af44 ("ACPI: Split out ACPI PSS from ACPI Processor
-> driver"), moves processor thermal registration to acpi_pss_perf_init(),
-> which doesn't get executed if ACPI_CPU_FREQ_PSS is not enabled.
->
-> As ARM64 supports P-states using CPPC, it should be possible to also
-> support processor passive cooling even if PSS is not enabled. Split
-> out the processor thermal cooling register from ACPI PSS to support
-> this, and move it into a separate function in processor_thermal.c.
->
-> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-> ---
->  drivers/acpi/Kconfig             |  2 +-
->  drivers/acpi/Makefile            |  5 +--
->  drivers/acpi/processor_driver.c  | 72 ++++----------------------------
->  drivers/acpi/processor_thermal.c | 69 ++++++++++++++++++++++++++++++
->  include/acpi/processor.h         |  6 ++-
->  5 files changed, 84 insertions(+), 70 deletions(-)
->
-
-[...]
-
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-
-[...]
-
-> @@ -239,7 +183,7 @@ static int __acpi_processor_start(struct acpi_device *device)
->  		return 0;
->  
->  	result = -ENODEV;
-> -	acpi_pss_perf_exit(pr, device);
-> +	acpi_processor_thermal_exit(pr);
->  
->  err_power_exit:
->  	acpi_processor_power_exit(pr);
-> @@ -277,10 +221,10 @@ static int acpi_processor_stop(struct device *dev)
->  		return 0;
->  	acpi_processor_power_exit(pr);
->  
-> -	acpi_pss_perf_exit(pr, device);
-> -
->  	acpi_cppc_processor_exit(pr);
->  
-> +	acpi_processor_thermal_exit(pr);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
-> index d8b2dfcd59b5..93928db2ae5f 100644
-> --- a/drivers/acpi/processor_thermal.c
-> +++ b/drivers/acpi/processor_thermal.c
-> @@ -266,3 +266,72 @@ const struct thermal_cooling_device_ops processor_cooling_ops = {
->  	.get_cur_state = processor_get_cur_state,
->  	.set_cur_state = processor_set_cur_state,
->  };
-> +
-> +int acpi_processor_thermal_init(struct acpi_processor *pr)
-> +{
-> +	struct acpi_device *device;
-> +	int result = 0;
-> +
-> +	if (!pr)
-> +		return -ENODEV;
-
-What's the reason for this check? When will "pr" be NULL in this code
-path?
-
-> +
-> +	device = acpi_fetch_acpi_dev(pr->handle);
-> +	if (!device)
-> +		return -ENODEV;
-
-Wouldn't it be better to pass the acpi_device into the function as well?
-The device is already available in the caller and it'll avoid having to
-convert it back.
-
-> +
-> +	pr->cdev = thermal_cooling_device_register("Processor", device,
-> +						   &processor_cooling_ops);
-> +	if (IS_ERR(pr->cdev)) {
-> +		result = PTR_ERR(pr->cdev);
-> +		return result;
-> +	}
-> +
-> +	dev_dbg(&device->dev, "registered as cooling_device%d\n",
-> +		pr->cdev->id);
-> +
-> +	result = sysfs_create_link(&device->dev.kobj,
-> +				   &pr->cdev->device.kobj,
-> +				   "thermal_cooling");
-> +	if (result) {
-> +		dev_err(&device->dev,
-> +			"Failed to create sysfs link 'thermal_cooling'\n");
-> +		goto err_thermal_unregister;
-> +	}
-> +
-> +	result = sysfs_create_link(&pr->cdev->device.kobj,
-> +				   &device->dev.kobj,
-> +				   "device");
-> +	if (result) {
-> +		dev_err(&pr->cdev->device,
-> +			"Failed to create sysfs link 'device'\n");
-> +		goto err_remove_sysfs_thermal;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_remove_sysfs_thermal:
-> +	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
-> +err_thermal_unregister:
-> +	thermal_cooling_device_unregister(pr->cdev);
-> +
-> +	return result;
-> +}
-> +
-> +void acpi_processor_thermal_exit(struct acpi_processor *pr)
-> +{
-> +	struct acpi_device *device;
-> +
-> +	if (!pr)
-> +		return;
-> +
-> +	device = acpi_fetch_acpi_dev(pr->handle);
-> +	if (!device)
-> +		return;
-
-The same comment about passing the acpi_device structure applies here as
-well.
-
-> +
-> +	if (pr->cdev) {
-> +		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
-> +		sysfs_remove_link(&pr->cdev->device.kobj, "device");
-> +		thermal_cooling_device_unregister(pr->cdev);
-> +		pr->cdev = NULL;
-> +	}
-> +}
-
-[...]
+CgoKCkF0IDIwMjItMDYtMTYgMjI6NDk6MzYsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0b3Bo
+ZS5sZXJveUBjc2dyb3VwLmV1PiB3cm90ZToKPgo+Cj5MZSAxNS8wNi8yMDIyIMOgIDE0OjA3LCBM
+aWFuZyBIZSBhIMOpY3JpdMKgOgo+PiBbWW91IGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIHdp
+bmRobEAxMjYuY29tLiBMZWFybiB3aHkgdGhpcyBpcyBpbXBvcnRhbnQgYXQgaHR0cHM6Ly9ha2Eu
+bXMvTGVhcm5BYm91dFNlbmRlcklkZW50aWZpY2F0aW9uIF0KPj4gCj4+IFNpZ25lZC1vZmYtYnk6
+IExpYW5nIEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4gLS0tCj4+ICAgYXJjaC9wb3dlcnBjL3BsYXRm
+b3Jtcy84NXh4L3NneV9jdHMxMDAwLmMgfCAxMCArKysrKysrKysrCj4+ICAgMSBmaWxlIGNoYW5n
+ZWQsIDEwIGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxh
+dGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9z
+Z3lfY3RzMTAwMC5jCj4+IGluZGV4IDk4YWU2NDA3NTE5My4uMmE0NWIzMDg1MmIyIDEwMDY0NAo+
+PiAtLS0gYS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+PiArKysg
+Yi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+PiBAQCAtODUsMTcg
+Kzg1LDI0IEBAIHN0YXRpYyBpbnQgZ3Bpb19oYWx0X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
+Y2UgKnBkZXYpCj4+ICAgICAgICAgIC8qIFRlY2huaWNhbGx5IHdlIGNvdWxkIGp1c3QgcmVhZCB0
+aGUgZmlyc3Qgb25lLCBidXQgcHVuaXNoCj4+ICAgICAgICAgICAqIERUIHdyaXRlcnMgZm9yIGlu
+dmFsaWQgZm9ybS4gKi8KPj4gICAgICAgICAgaWYgKG9mX2dwaW9fY291bnQoaGFsdF9ub2RlKSAh
+PSAxKQo+PiArICAgICAgIHsKPj4gKyAgICAgICAgICAgICAgIG9mX25vZGVfcHV0KGhhbHRfbm9k
+ZSk7Cj4KPkR1cGxpY2F0aW5nIHRoZSBzYW1lIGNvZGUgYXQgbXVsdGlwbGUgZXhpdCBwb2ludHMg
+aXMgYmFkIHByYWN0aWNlLgo+Cj5JZiB5b3UgY2FuJ3QgZG8gYSBzaW1wbGUgJ3JldHVybicgZXhp
+dCwgeW91IHNob3VsZCB1c2UgJ2dvdG8nIHRvIGEgCj5jb21tb24gZXJyb3IgcGF0aCBleGl0LgoK
+VGhhbmtzIGZvciB5b3VyIHZhbHVhYmxlIGFkdmljZSwgSSB3aWxsIHJlc2VuZCBhIG5ldyBwYXRj
+aCBmb3IgdGhhdC4KCgo+Cj4+ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7Cj4+ICsg
+ICAgICAgfQo+PiAKPj4gICAgICAgICAgLyogR2V0IHRoZSBncGlvIG51bWJlciByZWxhdGl2ZSB0
+byB0aGUgZHluYW1pYyBiYXNlLiAqLwo+PiAgICAgICAgICBncGlvID0gb2ZfZ2V0X2dwaW9fZmxh
+Z3MoaGFsdF9ub2RlLCAwLCAmZmxhZ3MpOwo+PiAgICAgICAgICBpZiAoIWdwaW9faXNfdmFsaWQo
+Z3BpbykpCj4+ICsgICAgICAgewo+PiArICAgICAgICAgICAgICAgb2Zfbm9kZV9wdXQoaGFsdF9u
+b2RlKTsKPj4gICAgICAgICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsKPj4gKyAgICAgICB9Cj4+
+IAo+PiAgICAgICAgICBlcnIgPSBncGlvX3JlcXVlc3QoZ3BpbywgImdwaW8taGFsdCIpOwo+PiAg
+ICAgICAgICBpZiAoZXJyKSB7Cj4+ICAgICAgICAgICAgICAgICAgcHJpbnRrKEtFUk5fRVJSICJn
+cGlvLWhhbHQ6IGVycm9yIHJlcXVlc3RpbmcgR1BJTyAlZC5cbiIsCj4+ICAgICAgICAgICAgICAg
+ICAgICAgICAgIGdwaW8pOwo+PiArICAgICAgICAgICAgICAgb2Zfbm9kZV9wdXQoaGFsdF9ub2Rl
+KTsKPj4gICAgICAgICAgICAgICAgICBoYWx0X25vZGUgPSBOVUxMOwo+PiAgICAgICAgICAgICAg
+ICAgIHJldHVybiBlcnI7Cj4+ICAgICAgICAgIH0KPj4gQEAgLTExMiw2ICsxMTksNyBAQCBzdGF0
+aWMgaW50IGdwaW9faGFsdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAg
+ICAgICAgICAgICAgICAgIHByaW50ayhLRVJOX0VSUiAiZ3Bpby1oYWx0OiBlcnJvciByZXF1ZXN0
+aW5nIElSUSAlZCBmb3IgIgo+PiAgICAgICAgICAgICAgICAgICAgICAgICAiR1BJTyAlZC5cbiIs
+IGlycSwgZ3Bpbyk7Cj4+ICAgICAgICAgICAgICAgICAgZ3Bpb19mcmVlKGdwaW8pOwo+PiArICAg
+ICAgICAgICAgICAgb2Zfbm9kZV9wdXQoaGFsdF9ub2RlKTsKPj4gICAgICAgICAgICAgICAgICBo
+YWx0X25vZGUgPSBOVUxMOwo+PiAgICAgICAgICAgICAgICAgIHJldHVybiBlcnI7Cj4+ICAgICAg
+ICAgIH0KPj4gQEAgLTEyMyw2ICsxMzEsOCBAQCBzdGF0aWMgaW50IGdwaW9faGFsdF9wcm9iZShz
+dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAgICAgICAgICBwcmludGsoS0VSTl9JTkZP
+ICJncGlvLWhhbHQ6IHJlZ2lzdGVyZWQgR1BJTyAlZCAoJWQgdHJpZ2dlciwgJWQiCj4+ICAgICAg
+ICAgICAgICAgICAiIGlycSkuXG4iLCBncGlvLCB0cmlnZ2VyLCBpcnEpOwo+PiAKPj4gKyAgICAg
+ICBvZl9ub2RlX3B1dChoYWx0X25vZGUpOwo+PiArCj4+ICAgICAgICAgIHJldHVybiAwOwo+PiAg
+IH0KPj4gCj4+IC0tCj4+IDIuMjUuMQo+PiAK

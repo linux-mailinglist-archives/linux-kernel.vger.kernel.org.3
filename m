@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719F554DEFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F0A54DF0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376580AbiFPKZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S1376605AbiFPKZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376480AbiFPKZf (ORCPT
+        with ESMTP id S1376565AbiFPKZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:25:35 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0175DA00
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:25:33 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id t25so1518903lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=IwQjdxaosN8FT+UNbNdVvC2dCU/e/AII3sZs3HkWtD46tVLef+26rYjvGQVOQatkDh
-         sayhBHZu7YtvR/3g7jpjxtuLJ5PCn+Boy5DPOZYZwo+LZHDU2IYC8ihKTJ+r19qh92Uk
-         ZEf1lvhgmiNCA/9pv/3dsWO5Xx051NPMoXNh0fZmi7ZH9cztMCAlRXAt7cH/O1kyyaqx
-         R8PyK5Zzkav+rtTReo+XRhjm6Foa0FPuvAVE2FEVIxwbxI/xgp2yAD/rXtBAsfg1HOr3
-         hj0Vq2Wx/KXdx6H3h7UJcKbPEw+NyUM3MZJAkfqe32ObnHOAw/6eTl8yJpkYfp7R42OZ
-         UnFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=n6wO9kcz763ns6ZWlOxn4Kf9leN6zIruLpBEBWrFrlnCqajcEs0PRI0I8eUps72/9u
-         Vkf8+K+jjRe2gVY3JuNVgELG0RLxrIiLRic0MLezpXlhLhUtlXGuw/ezDCANCQ9tm/he
-         kXKliZ/mO91s7wUleohUDy/CqdsBl8SuFxDNRiAsuf67dJrH3HwenmPUzBt7Ufjm+Cj5
-         rPdY7PecCwDZx1tmI5eupadj/5R7WmZJ9YU5ZvpyNSFtRsDUy4OgvoSThR+/um/878CE
-         P9pUVpYmlIGz68ww0XY54NU9pfIl8XKCJP6pga2ydlBJ5fSODStTYuC3i1NMI0wayVfm
-         YgeA==
-X-Gm-Message-State: AJIora9cFgbBvVUie5oWwkPJIVMYQomXHfqYmlM19ftELJKAR4o39ZAy
-        2ZQYnlwSHBqUf5KhVsBnE6v84UKguZjcPsB2Nv4=
-X-Google-Smtp-Source: AGRyM1tD/zRG3dXWQz87qWnr3BqZXXZfNnUll4esjhEBlBBP14tQnho+GeCsX1AytsBMjdK/MlaJk4cRM03i+MeC3g0=
-X-Received: by 2002:a05:6512:12cc:b0:479:5cb3:96ac with SMTP id
- p12-20020a05651212cc00b004795cb396acmr2387248lfg.112.1655375133218; Thu, 16
- Jun 2022 03:25:33 -0700 (PDT)
+        Thu, 16 Jun 2022 06:25:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CBB5D66B;
+        Thu, 16 Jun 2022 03:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qCNpGrURBOL5WaNoLGR+TiQCsTHpJ5I4gKVYyIhMhq4=; b=FsauEinDYWkzDJi5mojX/TZe65
+        lhNmxUtxP2pUmxCmju1Svy+Zmfw6k0+HME+T5kz5y4DaZqL05DXRBDPQ5ZBbCXAleYGmk9c+ISABJ
+        J5sEYMTRGp6rEB1nBt2TizrfHTYSaJWQtMsqtzTA6/8Zdk7rwXvjFW3Apao5lsWmfd3U4j1cpuMBU
+        hVSmagMn9QAetw44+3uC+xxcyxo63NcoZSgoSa2g+JaomriVlZo1++TmZMHPHk3n0pewhqHA6J2sE
+        c7/UdTd6L1wY9gS/UVnxWgIAO4/wJXsoSGAStjuG5QM6NFJ2amnzE4/iuapdRVSeUR68XHDt8Z/8s
+        tTaPelNg==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1mgz-008OHI-SP; Thu, 16 Jun 2022 10:25:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 84116302E4D;
+        Thu, 16 Jun 2022 12:25:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 75FC92019864B; Thu, 16 Jun 2022 12:25:37 +0200 (CEST)
+Date:   Thu, 16 Jun 2022 12:25:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, seanjc@google.com, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 03/19] x86/cpufeatures: Enable CET CR4 bit for shadow
+ stack
+Message-ID: <YqsFIRDPvaEKMqIh@hirez.programming.kicks-ass.net>
+References: <20220616084643.19564-1-weijiang.yang@intel.com>
+ <20220616084643.19564-4-weijiang.yang@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:28c2:b0:1f3:cf5:e20d with HTTP; Thu, 16 Jun 2022
- 03:25:32 -0700 (PDT)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <bashirusman02021@gmail.com>
-Date:   Thu, 16 Jun 2022 11:25:32 +0100
-Message-ID: <CAGOBX5ZVYyqSLyi9qdcfunqktufqbrJ-Vvo0kCysj+Z7TLzOow@mail.gmail.com>
-Subject: DARLEHENSANGEBOT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616084643.19564-4-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
-rt?
-Wenn ja, kontaktieren Sie uns
+On Thu, Jun 16, 2022 at 04:46:27AM -0400, Yang Weijiang wrote:
 
-*Vollst=C3=A4ndiger Name:
-* Ben=C3=B6tigte Menge:
-*Leihdauer:
-*Mobiltelefon:
-*Land:
+>  static __always_inline void setup_cet(struct cpuinfo_x86 *c)
+>  {
+> +	bool kernel_ibt = HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT);
+>  	u64 msr = CET_ENDBR_EN;
+>  
+> +	if (kernel_ibt)
+> +		wrmsrl(MSR_IA32_S_CET, msr);
+>  
+> +	if (kernel_ibt || cpu_feature_enabled(X86_FEATURE_SHSTK))
+> +		cr4_set_bits(X86_CR4_CET);
+
+Does flipping the CR4 and S_CET MSR write not result in simpler code?
+
+>  
+> +	if (kernel_ibt && !ibt_selftest()) {
+>  		pr_err("IBT selftest: Failed!\n");
+>  		setup_clear_cpu_cap(X86_FEATURE_IBT);
+
+Looking at this error path; I think I forgot to clear S_CET here.
+
+>  		return;
+>  	}
+>  }

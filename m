@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1A854DBFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11D954DC01
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359384AbiFPHkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S1359489AbiFPHkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 03:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359652AbiFPHjt (ORCPT
+        with ESMTP id S1358796AbiFPHk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:39:49 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930C65C370
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:39:39 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id 19so663684iou.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2NZfzUnIe15BwHtBAtHoh9uWwKk1w8MTJsEiQyPaxBs=;
-        b=tBAKsSvEfqgDarYzQTRCAEedLAuYfAyGBoL/2VuGwV+goK3InU2AUZfry4u1jZnVYL
-         mf73/4tPVcWPg+50mLipV2tcJ1wZgRy4xHvYA31y6EBXiPR1HJ1uxMb59jz01Q8lCKNC
-         yaXuxS4mcHaZLzpBw+7MmbeImPpclMeC/nuHa35wt9vsFIkrxQd2gdh51b2lH1P4M83i
-         qbeH3avti0j/Mg8Ul1oeNRfuT34NtcIDybyUoFYgtvJufX9WDiazzDG8k2NRPZqK4SDw
-         42mPng/84taeiUMKevGI/jK1VYV+okNaoUxwOG3w1Pb8o+eksr4wzEugc841pEF241Jz
-         Uf9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2NZfzUnIe15BwHtBAtHoh9uWwKk1w8MTJsEiQyPaxBs=;
-        b=qmxTUi6BTZ5w1zgVLSYcIpGlPLlomK/BpeTzBg30PWQLNBXgmRdUIDVT0sUwguqot3
-         LFENbsPPuXLWuy5eeesaFEfNSZ7+Gh4kqRPkxxBg0vOrTcR9vH5MPw+G4ltUrhuTKuvA
-         95iFk3IfM1sNziX2uJrVptHQqYiNcTmRnwwz7S3CvwH2PQ0eDGZjg40RAWbZ56pL1Zta
-         LDZUrZPf337+kRBZx/W8FHmgbe7EJp0jcpYmjhBK/DzgvOaObZeHeU79fhY6TloFOS+E
-         X3PuizqNxiMh5bGXqmKW5JAAZS+dCb1uR5bRXdhOFlUXFNqfIyZ14FeNFrqBERLxw9EP
-         eVDQ==
-X-Gm-Message-State: AJIora+tw2DUFFYXN2L8g/oTaaP2i/FKY6iYMvl08kQXACOKj8tCfn4Y
-        zhgLoVsMdxfqV6WmFMQc1nXAC801Fa1PWz8rpEOxWEuxX8IWcoGp
-X-Google-Smtp-Source: AGRyM1t951G+xl/vdyFM3ALX07JLGqjnGB4fK8qm11VpocSYE7w+3oPKk3sh+jFbe3BazyA9BnOF0ujccmvFJEDkQhg=
-X-Received: by 2002:a05:6638:1117:b0:331:4bc8:3856 with SMTP id
- n23-20020a056638111700b003314bc83856mr1834203jal.128.1655365178965; Thu, 16
- Jun 2022 00:39:38 -0700 (PDT)
+        Thu, 16 Jun 2022 03:40:27 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A019B56767
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:40:25 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25G4cRO8008239;
+        Thu, 16 Jun 2022 09:40:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=SipFXcGwtRjKmtMkah7OgGa+SDsq/sC6LlzRtxjzz1Q=;
+ b=Iu1xrDjMQnngH3NDjfLk7RYH1PcGlevXAJbB6+ZGPPGw/jcqkMTCxjXFDUHaz7kH4eqX
+ 0l787Yz7xLO+ayJ0xMFYxd6XSPiC3ktbb0Gz8J2276Ab4BHI4zP8V7xhapNSYMmEUf7A
+ S2hr9MBoSfHE6kl21tdKDeX9FtnlUOEFhjEv+f+bFGK5nhp761/ldV4XtkCDqaOV+K3T
+ xz1S9HOiR3mHHDH92IBXy+JAT2iZGjAVQKo5NlVFFDqKzwQNxlgY0/s++EvydvAvB0q4
+ UgHENjluQ/B4PyRyTD/vT7sDiPUpTHYwHbe9lNwh0Uwb8xW9Brhp0mt8SnuNcQoeizL6 QQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gqeb0wy48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jun 2022 09:40:04 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EE7EC10002A;
+        Thu, 16 Jun 2022 09:40:01 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DA24421160A;
+        Thu, 16 Jun 2022 09:40:01 +0200 (CEST)
+Received: from localhost (10.48.0.175) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 16 Jun
+ 2022 09:39:59 +0200
+From:   Christophe Kerello <christophe.kerello@foss.st.com>
+To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>
+Subject: [PATCH mtd-utils] nandflipbits: fix corrupted oob
+Date:   Thu, 16 Jun 2022 09:39:43 +0200
+Message-ID: <20220616073943.669332-1-christophe.kerello@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CACGkMEtz-1=3=+zUZvc+CX4LrufZZfZO=_zONo5GuAUX+BrpAQ@mail.gmail.com>
- <20220616051221.28506-1-huangjie.albert@bytedance.com> <20220616015331-mutt-send-email-mst@kernel.org>
- <20220616024148-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220616024148-mutt-send-email-mst@kernel.org>
-From:   =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Date:   Thu, 16 Jun 2022 15:39:27 +0800
-Message-ID: <CABKxMyM5+eWLUenLgR+PHYErXX_-h5MNSwxaZNeZVmDL4Hy0Wg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2] virtio_ring : keep used_wrap_counter in vq->last_used_idx
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     jasowang@redhat.com, yuanzhu@bytedance.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.175]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-16_03,2022-06-15_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,281 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michael S. Tsirkin <mst@redhat.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8816=E6=
-=97=A5=E5=91=A8=E5=9B=9B 14:42=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Jun 16, 2022 at 02:07:19AM -0400, Michael S. Tsirkin wrote:
-> > On Thu, Jun 16, 2022 at 01:12:21PM +0800, Albert Huang wrote:
-> > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> > >
-> > > the used_wrap_counter and the vq->last_used_idx may get
-> > > out of sync if they are separate assignment=EF=BC=8Cand interrupt
-> > > might use an incorrect value to check for the used index.
-> > >
-> > > for example:OOB access
-> > > ksoftirqd may consume the packet and it will call:
-> > > virtnet_poll
-> > >     -->virtnet_receive
-> > >             -->virtqueue_get_buf_ctx
-> > >                     -->virtqueue_get_buf_ctx_packed
-> > > and in virtqueue_get_buf_ctx_packed:
-> > >
-> > > vq->last_used_idx +=3D vq->packed.desc_state[id].num;
-> > > if (unlikely(vq->last_used_idx >=3D vq->packed.vring.num)) {
-> > >          vq->last_used_idx -=3D vq->packed.vring.num;
-> > >          vq->packed.used_wrap_counter ^=3D 1;
-> > > }
-> > >
-> > > if at the same time, there comes a vring interrupt=EF=BC=8Cin vring_i=
-nterrupt:
-> > > we will call:
-> > > vring_interrupt
-> > >     -->more_used
-> > >             -->more_used_packed
-> > >                     -->is_used_desc_packed
-> > > in is_used_desc_packed, the last_used_idx maybe >=3D vq->packed.vring=
-.num.
-> > > so this could case a memory out of bounds bug.
-> > >
-> > > this patch is to keep the used_wrap_counter in vq->last_used_idx
-> > > so we can get the correct value to check for used index in interrupt.
-> > >
-> > > v1->v2:
-> > > - reuse the VRING_PACKED_EVENT_F_WRAP_CTR
-> > > - Remove parameter judgment in is_used_desc_packed,
-> > > because it can't be illegal
-> > >
-> > > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> >
-> >
-> > This looks good, just a small suggestion below:
-> >
-> > > ---
-> > >  drivers/virtio/virtio_ring.c | 57 ++++++++++++++++++++--------------=
---
-> > >  1 file changed, 31 insertions(+), 26 deletions(-)
-> > >
-> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_rin=
-g.c
-> > > index 13a7348cedff..b22d97c9a755 100644
-> > > --- a/drivers/virtio/virtio_ring.c
-> > > +++ b/drivers/virtio/virtio_ring.c
-> > > @@ -111,7 +111,12 @@ struct vring_virtqueue {
-> > >     /* Number we've added since last sync. */
-> > >     unsigned int num_added;
-> > >
-> > > -   /* Last used index we've seen. */
-> > > +   /* Last used index  we've seen.
-> > > +    * for split ring, it just contains last used index
-> > > +    * for packed ring, it not only contains last used index, but als=
-o
-> > > +    * used_wrap_counter, the VRING_PACKED_EVENT_F_WRAP_CTR is
-> > > +    * the bit shift in last_used_idx
-> > > +    */
-> > >     u16 last_used_idx;
-> > >
-> > >     /* Hint for event idx: already triggered no need to disable. */
-> > > @@ -154,9 +159,6 @@ struct vring_virtqueue {
-> > >                     /* Driver ring wrap counter. */
-> > >                     bool avail_wrap_counter;
-> > >
-> > > -                   /* Device ring wrap counter. */
-> > > -                   bool used_wrap_counter;
-> > > -
-> > >                     /* Avail used flags. */
-> > >                     u16 avail_used_flags;
-> > >
-> > > @@ -1406,8 +1408,12 @@ static inline bool is_used_desc_packed(const s=
-truct vring_virtqueue *vq,
-> > >
-> > >  static inline bool more_used_packed(const struct vring_virtqueue *vq=
-)
-> > >  {
-> > > -   return is_used_desc_packed(vq, vq->last_used_idx,
-> > > -                   vq->packed.used_wrap_counter);
-> > > +   u16 last_used;
-> > > +   bool used_wrap_counter;
-> > > +
-> > > +   last_used =3D vq->last_used_idx & ~(1 << VRING_PACKED_EVENT_F_WRA=
-P_CTR);
-> >
-> > This only works if last_used_idx is 16 bit and
-> > VRING_PACKED_EVENT_F_WRAP_CTR is 15.
-> >
-> > I think you want
-> > /* all bits below VRING_PACKED_EVENT_F_WRAP_CTR */
-> > vq->last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR));
-> >
-> >
-> > > +   used_wrap_counter =3D !!((vq->last_used_idx) >> VRING_PACKED_EVEN=
-T_F_WRAP_CTR);
-> >
-> >
-> > A bit more efficient and clear:
-> >
-> > !!(q->last_used_idx & (1 << VRING_PACKED_EVENT_F_WRAP_CTR))
-> >
-> >
-> >
-> > Also this logic is repeated in multiple places. Let's add a couple of i=
-nline
-> > functions:
-> >
-> > static inline bool packed_used_wrap_counter(vq)
-> >
-> > static inline u16 packed_last_used(vq)
->
-> Or better:
->
-> packed_used_wrap_counter(u16 last_used_idx)
-> packed_last_used(u16 last_used_idx)
->
+If a bit is flipped in block 1 or higher, the OOB is corrupted with the
+OOB of block 0. Mtd_read_oob API has to take into account the block number
+to be able to calculate the right offset.
 
-This one does look better, Jason what is your take?
+Fixes: 9fc8db29cf62 ("mtd-utils: Add nandflipbits tool")
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+---
+ nand-utils/nandflipbits.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-thanks.
+diff --git a/nand-utils/nandflipbits.c b/nand-utils/nandflipbits.c
+index aa6850f..cd66d0b 100644
+--- a/nand-utils/nandflipbits.c
++++ b/nand-utils/nandflipbits.c
+@@ -249,7 +249,9 @@ int main(int argc, char **argv)
+ 
+ 			bufoffs += mtd.min_io_size;
+ 
+-			ret = mtd_read_oob(mtd_desc, &mtd, fd, blkoffs,
++			ret = mtd_read_oob(mtd_desc, &mtd, fd,
++					   bit_to_flip->block * mtd.eb_size +
++					   blkoffs,
+ 					   mtd.oob_size, buffer + bufoffs);
+ 			if (ret) {
+ 				fprintf(stderr, "MTD OOB read failure\n");
+-- 
+2.25.1
 
-> > then use these everywhere.
-> >
-> >
-> > > +   return is_used_desc_packed(vq, last_used, used_wrap_counter);
-> > >  }
-> > >
-> > >  static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > > @@ -1416,6 +1422,7 @@ static void *virtqueue_get_buf_ctx_packed(struc=
-t virtqueue *_vq,
-> > >  {
-> > >     struct vring_virtqueue *vq =3D to_vvq(_vq);
-> > >     u16 last_used, id;
-> > > +   bool used_wrap_counter;
-> > >     void *ret;
-> > >
-> > >     START_USE(vq);
-> > > @@ -1434,7 +1441,8 @@ static void *virtqueue_get_buf_ctx_packed(struc=
-t virtqueue *_vq,
-> > >     /* Only get used elements after they have been exposed by host. *=
-/
-> > >     virtio_rmb(vq->weak_barriers);
-> > >
-> > > -   last_used =3D vq->last_used_idx;
-> > > +   used_wrap_counter =3D !!((vq->last_used_idx >> VRING_PACKED_EVENT=
-_F_WRAP_CTR));
-> > > +   last_used =3D (vq->last_used_idx) & (~(1 << VRING_PACKED_EVENT_F_=
-WRAP_CTR));
-> > >     id =3D le16_to_cpu(vq->packed.vring.desc[last_used].id);
-> > >     *len =3D le32_to_cpu(vq->packed.vring.desc[last_used].len);
-> > >
-> > > @@ -1451,12 +1459,15 @@ static void *virtqueue_get_buf_ctx_packed(str=
-uct virtqueue *_vq,
-> > >     ret =3D vq->packed.desc_state[id].data;
-> > >     detach_buf_packed(vq, id, ctx);
-> > >
-> > > -   vq->last_used_idx +=3D vq->packed.desc_state[id].num;
-> > > -   if (unlikely(vq->last_used_idx >=3D vq->packed.vring.num)) {
-> > > -           vq->last_used_idx -=3D vq->packed.vring.num;
-> > > -           vq->packed.used_wrap_counter ^=3D 1;
-> > > +   last_used +=3D vq->packed.desc_state[id].num;
-> > > +   if (unlikely(last_used >=3D vq->packed.vring.num)) {
-> > > +           last_used -=3D vq->packed.vring.num;
-> > > +           used_wrap_counter ^=3D 1;
-> > >     }
-> > >
-> > > +   last_used =3D (last_used | (used_wrap_counter << VRING_PACKED_EVE=
-NT_F_WRAP_CTR));
-> > > +   vq->last_used_idx =3D last_used;
-> > > +
-> > >     /*
-> > >      * If we expect an interrupt for the next entry, tell host
-> > >      * by writing event index and flush out the write before
-> > > @@ -1465,9 +1476,7 @@ static void *virtqueue_get_buf_ctx_packed(struc=
-t virtqueue *_vq,
-> > >     if (vq->packed.event_flags_shadow =3D=3D VRING_PACKED_EVENT_FLAG_=
-DESC)
-> > >             virtio_store_mb(vq->weak_barriers,
-> > >                             &vq->packed.vring.driver->off_wrap,
-> > > -                           cpu_to_le16(vq->last_used_idx |
-> > > -                                   (vq->packed.used_wrap_counter <<
-> > > -                                    VRING_PACKED_EVENT_F_WRAP_CTR)))=
-;
-> > > +                           cpu_to_le16(vq->last_used_idx));
-> > >
-> > >     LAST_ADD_TIME_INVALID(vq);
-> > >
-> > > @@ -1499,9 +1508,7 @@ static unsigned int virtqueue_enable_cb_prepare=
-_packed(struct virtqueue *_vq)
-> > >
-> > >     if (vq->event) {
-> > >             vq->packed.vring.driver->off_wrap =3D
-> > > -                   cpu_to_le16(vq->last_used_idx |
-> > > -                           (vq->packed.used_wrap_counter <<
-> > > -                            VRING_PACKED_EVENT_F_WRAP_CTR));
-> > > +                   cpu_to_le16(vq->last_used_idx);
-> > >             /*
-> > >              * We need to update event offset and event wrap
-> > >              * counter first before updating event flags.
-> > > @@ -1518,8 +1525,7 @@ static unsigned int virtqueue_enable_cb_prepare=
-_packed(struct virtqueue *_vq)
-> > >     }
-> > >
-> > >     END_USE(vq);
-> > > -   return vq->last_used_idx | ((u16)vq->packed.used_wrap_counter <<
-> > > -                   VRING_PACKED_EVENT_F_WRAP_CTR);
-> > > +   return vq->last_used_idx;
-> > >  }
-> > >
-> > >  static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wra=
-p)
-> > > @@ -1550,9 +1556,9 @@ static bool virtqueue_enable_cb_delayed_packed(=
-struct virtqueue *_vq)
-> > >     if (vq->event) {
-> > >             /* TODO: tune this threshold */
-> > >             bufs =3D (vq->packed.vring.num - vq->vq.num_free) * 3 / 4=
-;
-> > > -           wrap_counter =3D vq->packed.used_wrap_counter;
-> > > +           wrap_counter =3D !!(vq->last_used_idx >> VRING_PACKED_EVE=
-NT_F_WRAP_CTR);
-> > >
-> > > -           used_idx =3D vq->last_used_idx + bufs;
-> > > +           used_idx =3D (vq->last_used_idx & ~(1 << VRING_PACKED_EVE=
-NT_F_WRAP_CTR)) + bufs;
-> > >             if (used_idx >=3D vq->packed.vring.num) {
-> > >                     used_idx -=3D vq->packed.vring.num;
-> > >                     wrap_counter ^=3D 1;
-> > > @@ -1582,9 +1588,9 @@ static bool virtqueue_enable_cb_delayed_packed(=
-struct virtqueue *_vq)
-> > >      */
-> > >     virtio_mb(vq->weak_barriers);
-> > >
-> > > -   if (is_used_desc_packed(vq,
-> > > -                           vq->last_used_idx,
-> > > -                           vq->packed.used_wrap_counter)) {
-> > > +   wrap_counter =3D !!(vq->last_used_idx >> VRING_PACKED_EVENT_F_WRA=
-P_CTR);
-> > > +   used_idx =3D (vq->last_used_idx & ~(1 << VRING_PACKED_EVENT_F_WRA=
-P_CTR));
-> > > +   if (is_used_desc_packed(vq, used_idx, wrap_counter)) {
-> > >             END_USE(vq);
-> > >             return false;
-> > >     }
-> > > @@ -1689,7 +1695,7 @@ static struct virtqueue *vring_create_virtqueue=
-_packed(
-> > >     vq->notify =3D notify;
-> > >     vq->weak_barriers =3D weak_barriers;
-> > >     vq->broken =3D true;
-> > > -   vq->last_used_idx =3D 0;
-> > > +   vq->last_used_idx =3D 0 | (1 << VRING_PACKED_EVENT_F_WRAP_CTR);
-> > >     vq->event_triggered =3D false;
-> > >     vq->num_added =3D 0;
-> > >     vq->packed_ring =3D true;
-> > > @@ -1720,7 +1726,6 @@ static struct virtqueue *vring_create_virtqueue=
-_packed(
-> > >
-> > >     vq->packed.next_avail_idx =3D 0;
-> > >     vq->packed.avail_wrap_counter =3D 1;
-> > > -   vq->packed.used_wrap_counter =3D 1;
-> > >     vq->packed.event_flags_shadow =3D 0;
-> > >     vq->packed.avail_used_flags =3D 1 << VRING_PACKED_DESC_F_AVAIL;
-> > >
-> > > --
-> > > 2.31.1
->

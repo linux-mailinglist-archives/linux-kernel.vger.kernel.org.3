@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621EA54E00E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B8B54E011
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376622AbiFPLbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S1376353AbiFPLgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiFPLbQ (ORCPT
+        with ESMTP id S229495AbiFPLgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:31:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29705E149
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:31:15 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o1niO-0005OA-D9; Thu, 16 Jun 2022 13:31:08 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o1niL-000rJC-SJ; Thu, 16 Jun 2022 13:31:07 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o1niM-003jdk-Md; Thu, 16 Jun 2022 13:31:06 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] net: phy: at803x: fix NULL pointer dereference on AR9331 PHY
-Date:   Thu, 16 Jun 2022 13:31:05 +0200
-Message-Id: <20220616113105.890373-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 16 Jun 2022 07:36:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35C95E75A;
+        Thu, 16 Jun 2022 04:36:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87E8A619D0;
+        Thu, 16 Jun 2022 11:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F1DAC34114;
+        Thu, 16 Jun 2022 11:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655379364;
+        bh=WTyrk1KBzECI1U851OAtJ6a7eMlqKBhrBy1AsQzgsMs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TUrhvb6xw27w/HGWA030YcDF3Xj8OXijbVb0CXSyxM5Q+DADQ2FqPOO1eMfTKFPRl
+         uEgKookUghgJ9BlZd6OD5usObt6r3HXAKNkPyEagBP6CheQOfmWo7sAkTf8gSr0xdO
+         cWmkzJy2NU0yvbcTDt1MUDGOXnHI4F894G/WjRgA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.319
+Date:   Thu, 16 Jun 2022 13:36:01 +0200
+Message-Id: <165537936119752@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,54 +50,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Latest kernel will explode on the PHY interrupt config, since it depends
-now on allocated priv. So, run probe to allocate priv to fix it.
+I'm announcing the release of the 4.9.319 kernel.
 
- ar9331_switch ethernet.1:10 lan0 (uninitialized): PHY [!ahb!ethernet@1a000000!mdio!switch@10:00] driver [Qualcomm Atheros AR9331 built-in PHY] (irq=13)
- CPU 0 Unable to handle kernel paging request at virtual address 0000000a, epc == 8050e8a8, ra == 80504b34
-         ...
- Call Trace:
- [<8050e8a8>] at803x_config_intr+0x5c/0xd0
- [<80504b34>] phy_request_interrupt+0xa8/0xd0
- [<8050289c>] phylink_bringup_phy+0x2d8/0x3ac
- [<80502b68>] phylink_fwnode_phy_connect+0x118/0x130
- [<8074d8ec>] dsa_slave_create+0x270/0x420
- [<80743b04>] dsa_port_setup+0x12c/0x148
- [<8074580c>] dsa_register_switch+0xaf0/0xcc0
- [<80511344>] ar9331_sw_probe+0x370/0x388
- [<8050cb78>] mdio_probe+0x44/0x70
- [<804df300>] really_probe+0x200/0x424
- [<804df7b4>] __driver_probe_device+0x290/0x298
- [<804df810>] driver_probe_device+0x54/0xe4
- [<804dfd50>] __device_attach_driver+0xe4/0x130
- [<804dcb00>] bus_for_each_drv+0xb4/0xd8
- [<804dfac4>] __device_attach+0x104/0x1a4
- [<804ddd24>] bus_probe_device+0x48/0xc4
- [<804deb44>] deferred_probe_work_func+0xf0/0x10c
- [<800a0ffc>] process_one_work+0x314/0x4d4
- [<800a17fc>] worker_thread+0x2a4/0x354
- [<800a9a54>] kthread+0x134/0x13c
- [<8006306c>] ret_from_kernel_thread+0x14/0x1c
+All users of the 4.9 kernel series must upgrade.
 
-Fixes: 3265f4218878 ("net: phy: at803x: add fiber support")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/at803x.c | 2 ++
- 1 file changed, 2 insertions(+)
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 6a467e7817a6..b72a807f2e03 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -2072,6 +2072,8 @@ static struct phy_driver at803x_driver[] = {
- 	/* ATHEROS AR9331 */
- 	PHY_ID_MATCH_EXACT(ATH9331_PHY_ID),
- 	.name			= "Qualcomm Atheros AR9331 built-in PHY",
-+	.probe			= at803x_probe,
-+	.remove			= at803x_remove,
- 	.suspend		= at803x_suspend,
- 	.resume			= at803x_resume,
- 	.flags			= PHY_POLL_CABLE_TEST,
--- 
-2.30.2
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/ABI/testing/sysfs-devices-system-cpu  |    1 
+ Documentation/hw-vuln/index.rst                     |    1 
+ Documentation/hw-vuln/processor_mmio_stale_data.rst |  246 ++++++++++++++++++++
+ Documentation/kernel-parameters.txt                 |   36 ++
+ Makefile                                            |    2 
+ arch/x86/include/asm/cpufeatures.h                  |    1 
+ arch/x86/include/asm/intel-family.h                 |   25 ++
+ arch/x86/include/asm/msr-index.h                    |   25 ++
+ arch/x86/include/asm/nospec-branch.h                |    2 
+ arch/x86/kernel/cpu/bugs.c                          |  235 ++++++++++++++++---
+ arch/x86/kernel/cpu/common.c                        |   52 +++-
+ arch/x86/kvm/vmx.c                                  |   77 ++++++
+ arch/x86/kvm/x86.c                                  |    4 
+ drivers/base/cpu.c                                  |    8 
+ include/linux/cpu.h                                 |    4 
+ 15 files changed, 678 insertions(+), 41 deletions(-)
+
+Gayatri Kammela (2):
+      x86/cpu: Add Elkhart Lake to Intel family
+      x86/cpu: Add another Alder Lake CPU to the Intel family
+
+Greg Kroah-Hartman (1):
+      Linux 4.9.319
+
+Guenter Roeck (1):
+      cpu/speculation: Add prototype for cpu_show_srbds()
+
+Josh Poimboeuf (1):
+      x86/speculation/mmio: Print SMT warning
+
+Kan Liang (2):
+      x86/CPU: Add more Icelake model numbers
+      x86/cpu: Add Comet Lake to the Intel CPU models header
+
+Pawan Gupta (10):
+      Documentation: Add documentation for Processor MMIO Stale Data
+      x86/speculation/mmio: Enumerate Processor MMIO Stale Data bug
+      x86/speculation: Add a common function for MD_CLEAR mitigation update
+      x86/speculation/mmio: Add mitigation for Processor MMIO Stale Data
+      x86/bugs: Group MDS, TAA & Processor MMIO Stale Data mitigations
+      x86/speculation/mmio: Enable CPU Fill buffer clearing on idle
+      x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Data
+      x86/speculation/srbds: Update SRBDS mitigation selection
+      x86/speculation/mmio: Reuse SRBDS mitigation for SBDS
+      KVM: x86/speculation: Disable Fill buffer clear within guests
+
+Rajneesh Bhardwaj (2):
+      x86/cpu: Add Cannonlake to Intel family
+      x86/CPU: Add Icelake model number
+
+Tony Luck (1):
+      x86/cpu: Add Lakefield, Alder Lake and Rocket Lake models to the to Intel CPU family
+
+Zhang Rui (1):
+      x86/cpu: Add Jasper Lake to Intel family
 

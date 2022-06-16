@@ -2,449 +2,606 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E954B54EE26
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3710854EE2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379367AbiFPXyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 19:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S1379590AbiFPXyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379523AbiFPXxh (ORCPT
+        with ESMTP id S1379601AbiFPXyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 19:53:37 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2077.outbound.protection.outlook.com [40.107.220.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0F962116;
-        Thu, 16 Jun 2022 16:53:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f63Hc8jfWwy8sHpiYALaMYbPc9McSlVDRL9tOueDHLE79CXkLu/h+OIbX/99lAjLVwPlP4SL4lbOz+4KafGxF4IZQt9MOTJ3v0Jt5ZRiofBURQTjb4XBy6mtcAB2i9ECAvMatlZ0mfbFDvE0/c8DnsSsH9bPHrQvLLTF4glaQsBPBUQuNfo2zsw0H6bmv0vdFo26PQdSEw+AfZB2Y+wjN/WvKCx6L9HWkAX2ThZRs8lqr+ou64pC7fwt/AyLqizuEuH4jUHIH+J/iAvZo9n93GSlO0eTdVI9eWse35/YjDyQYQbrRHrplpOnSvTU1oImuoj6CV8WJSKU6O4jRliEOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eNlV434ffnm9p6HOycKD2zrW5XaWt8DVttM8mV+9+e0=;
- b=IFfDR5JoqSNWmSD2LehCW5z/i51lbDSUdIQRwXkqGn7wJYK3UNeEMALXdwEeqJ53G47qoFqYVdmzKorelKsF2+w6O3bYXdXiB7kaNgYYAlioVc9+/T7+7LWhZSKBXXudFVYYuWxGmrcC/5sdc413XWS+Z2GQDgRY9axmmvW1qu//EKPQAQQVoJbFx9sL+aV4YFC+tb6zoL0CseVyRRcBLnSZOLgfypWHT1axvHbLaXolhwJVzMRz2zZswK+yPUtR9sJGyP2xBhEeFKblmOE5pz+VNqp59esyUGcJ/xD+56GMbztCe47+RimEsRgcSihtO5yPtvTrIXSxEzlyJenuOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eNlV434ffnm9p6HOycKD2zrW5XaWt8DVttM8mV+9+e0=;
- b=qUIcMAWGsqJG5nnjVorKUbCm3LKd0sKHz5tQ3UA886Su/GIZlOZFj1CsXXjxZy/ZWY/0liNbw0MzGwRlswroV2Y3YAQkKEtwzcu/tDzNwSaClv4JmF/rBK3jnamlriBLNfa8s9Q1nxlBz1UG2ENk1R6K3IUNAIhnOJaxVc1DXh9xfJakYgu3svvFO+L2XQxIUv6frPjD6yNy9kZfmnDZsHNI76a3+x+sycmlUwif7T0YaULmn26MD4S5GuFcTCJnTbglGOaWjUw98dgfhCvO/UOCuekQIio3UhD4dLcRIU07GDGGd7ut6pxF30ktCTvURJUfrCeTC7fPSNmA7ZWcTw==
-Received: from BN9PR03CA0108.namprd03.prod.outlook.com (2603:10b6:408:fd::23)
- by MN2PR12MB3037.namprd12.prod.outlook.com (2603:10b6:208:c2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.13; Thu, 16 Jun
- 2022 23:53:31 +0000
-Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fd:cafe::48) by BN9PR03CA0108.outlook.office365.com
- (2603:10b6:408:fd::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
- Transport; Thu, 16 Jun 2022 23:53:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5332.12 via Frontend Transport; Thu, 16 Jun 2022 23:53:31 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 16 Jun
- 2022 23:53:30 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 16 Jun
- 2022 16:53:29 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Thu, 16 Jun 2022 16:53:27 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <kwankhede@nvidia.com>, <corbet@lwn.net>, <hca@linux.ibm.com>,
-        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-        <zhenyuw@linux.intel.com>, <zhi.a.wang@intel.com>,
-        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
-        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <farman@linux.ibm.com>,
-        <mjrosato@linux.ibm.com>, <pasic@linux.ibm.com>,
-        <vneethv@linux.ibm.com>, <oberpar@linux.ibm.com>,
-        <freude@linux.ibm.com>, <akrowiak@linux.ibm.com>,
-        <jjherne@linux.ibm.com>, <alex.williamson@redhat.com>,
-        <cohuck@redhat.com>, <jgg@nvidia.com>, <kevin.tian@intel.com>
-CC:     <jchrist@linux.ibm.com>, <kvm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>
-Subject: [RFT][PATCH v1 6/6] vfio: Replace phys_pfn with phys_page for vfio_pin_pages()
-Date:   Thu, 16 Jun 2022 16:52:12 -0700
-Message-ID: <20220616235212.15185-7-nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220616235212.15185-1-nicolinc@nvidia.com>
-References: <20220616235212.15185-1-nicolinc@nvidia.com>
+        Thu, 16 Jun 2022 19:54:11 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9ACA62BE0;
+        Thu, 16 Jun 2022 16:53:58 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id q140so2612111pgq.6;
+        Thu, 16 Jun 2022 16:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=vOVvDVIkMtFSvKE+WBrOy5Mi7h7bWjJhd3uPliq1B+U=;
+        b=G19pA1oY7hoG9D6Bbb1OJ1U0JTxfrvfKgV/meyPwMfZvTOxLlIu8hbDKRADHtMTfQH
+         kFSi7EV8ex9e6OEdhDSuVKr3JE4B7DYnWcnW0PVrEkyciaVIVcc5GChomyDAMquxiLbA
+         TffhxvN6cuPDWKO9R8FAwJn1SPdXF7GWyymgkTgbzlV05aY+GMwTWD0vtdYzJN6J4th3
+         ZePA0ib4VfyOnSSbN5u0OU6b5I9DJQuwcNWCFEypTYt2iF8ep//Js/6bhMvLSPHbpwfe
+         LRlmn5nfP8WF5WgLAkMTYDzl+gUodSGxV4kfGLgeOO+cgqDj4vZi9eu2Oyqlb5W7omMy
+         sKQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=vOVvDVIkMtFSvKE+WBrOy5Mi7h7bWjJhd3uPliq1B+U=;
+        b=Xebe+4L3EVnJ5UEU3kyCd887G/6ZhCmdHIyxKpBVxUbJnyn7xOV5pDcTLPluVTw19B
+         cCURHHF/cck5sfB1GmGx0mhMHqeqjgiws8kSZcDR3N6e0WEAwozjEKzG0oKh54YFTP28
+         t8fsIs/lPTQmByLDKdeHZEj0f0BsFjXXuB5XS5H+h0jbdjr0PAIYGnTaUSqiGyscHf6a
+         OKcCV5bd68rGWfQjzmeMjpDRYRtiTH4b+yZCWxc7y94alUq+FHbV0OsjbIC8AQLCfOqX
+         CZO45ODeUxKoczK9+EhdCtKeZRpfGH+1ukuJzI1Kw/Ng6NcveWsW7pLFcUYFxT0rGN1Z
+         GsUg==
+X-Gm-Message-State: AJIora9qcxyX4C7fEGMDolH5H/BYKsmv6Opdyq+Sv4RYLlHWRNZDTMJJ
+        4TOi8VmY+Z8tJoSjUnvYg1E=
+X-Google-Smtp-Source: AGRyM1vHImOnh4obSVuu+LNUOWx+uxGdptT6jyOmvmKTeLxCn5y3y+2ItGSxYvryrv/YX8NeU3rDbg==
+X-Received: by 2002:a62:1687:0:b0:50d:3364:46d4 with SMTP id 129-20020a621687000000b0050d336446d4mr7284036pfw.74.1655423638166;
+        Thu, 16 Jun 2022 16:53:58 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170902e8c200b001675d843332sm2173370plg.63.2022.06.16.16.53.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 16:53:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <17ade9e2-8fbe-ea80-93c1-9f1e291805b6@roeck-us.net>
+Date:   Thu, 16 Jun 2022 16:53:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 40cfe9b5-8c6e-41fd-f994-08da4ff36abb
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3037:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB303726A93DF599C6213236D6ABAC9@MN2PR12MB3037.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e1PM9/XpuQz0VT9Zz8LtzMMr5inCFsipRkFkM0hQeAzqOVsvq6jYTandZ8Wbm8CSlMHJN+BtdVSkgxjGyLoJrtizA5TDLvHi/L4VC/m+GcuMqvmBjIhLyPOY+KHki8H+aOrF+mGD/9SU3ijwB0Bs1u5c4vBTS0epIx+5hxI9H8mLIW7Nemnk+e1xx7chexjuxt3LbxV5rupqHghvX7alc0UAPj23MseEBiYekpttBXP8EMzF6zAfeCIfXaiRB/LQI+WZr3L6eOBFYAB/bgcG2+afk0rKLESYrTSuJsfGjNfm3adRGTbQCxzImCrK4VUh/g+YKmILli16ru6C/uRiiIlfvBcoTBWipayUFAhaxnN9xt22Unt+9yToLxfZMcq/oWdYCkLhlLMAXABz7BNt1km5sQGM+Jdz1ynivHAWwf6EvwUng3Zf7CDI0tdUepptph9ZfLfIRzs/uXt6epyrnSDCzHuU5idmanNJRovJkOA0i5Otl9704TWMz7ev3U0J7Fhb9LzgS440BXzt2lDo3CZeAeXNuiYugv/gkLTPf2JBL92fEZZBiv7Std1r0XDmCkF3th4syfnyobdXSEyDfERQHwa0aw8cGxgI01YNI5qdZws4yZwPVtPqJqM9RiM+GH52gpBPUvXMzs6A1wP5TP6ZTEzVV0lkVLfweCBzIhoWk8atB1Ev+N3NQH1sn1aK/0DSKV1sE4fpRBSWrnlQB8qS4yvn6BHxOtHsHgS9kXXqr9IzroZljrRh1wek+Pu/rgKBjmEHwAg7shiEwlkF2Q==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(46966006)(36840700001)(7696005)(2616005)(40460700003)(26005)(2906002)(82310400005)(30864003)(8936002)(7416002)(7406005)(36756003)(110136005)(5660300002)(508600001)(4326008)(8676002)(81166007)(356005)(921005)(86362001)(186003)(36860700001)(1076003)(83380400001)(316002)(54906003)(70586007)(70206006)(47076005)(426003)(336012)(6666004)(36900700001)(2101003)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 23:53:31.0197
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40cfe9b5-8c6e-41fd-f994-08da4ff36abb
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3037
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Gabriele Paoloni <gpaoloni@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1655368610.git.bristot@kernel.org>
+ <6366fdc89d65b8d9b14ccd1e42fa0d793fbe9f73.1655368610.git.bristot@kernel.org>
+ <168af019-70d1-3237-dc9c-56a82beb5990@roeck-us.net>
+ <04ca385b-47dc-5535-419e-1b814a383d1a@kernel.org>
+ <CA+wEVJbvcMZbCroO2_rdVxLvYkUo-ePxCwsp5vbDpoqys4HGWQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH V4 18/20] rv/monitor: Add safe watchdog monitor
+In-Reply-To: <CA+wEVJbvcMZbCroO2_rdVxLvYkUo-ePxCwsp5vbDpoqys4HGWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the callers of vfio_pin_pages() want "struct page *" and the
-low-level mm code to pin pages returns a list of "struct page *" too.
-So there's no gain in converting "struct page *" to PFN in between.
+On 6/16/22 08:43, Gabriele Paoloni wrote:
+> 
+> 
+> On Thu, Jun 16, 2022 at 5:29 PM Daniel Bristot de Oliveira <bristot@kernel.org <mailto:bristot@kernel.org>> wrote:
+> 
+>     Hi Guenter,
+> 
+>     On 6/16/22 15:36, Guenter Roeck wrote:
+>      > On 6/16/22 01:45, Daniel Bristot de Oliveira wrote:
+>      >> The watchdog is an essential building block for the usage of Linux in
+>      >> safety-critical systems because it allows the system to be monitored from
+>      >> an external element - the watchdog hardware, acting as a safety-monitor.
+>      >>
+>      >> A user-space application controls the watchdog device via the watchdog
+>      >> interface. This application, hereafter safety_app, enables the watchdog
+>      >> and periodically pets the watchdog upon correct completion of the safety
+>      >> related processing.
+>      >>
+>      >> If the safety_app, for any reason, stops pinging the watchdog,
+>      >> the watchdog hardware can set the system in a fail-safe state. For
+>      >> example, shutting the system down.
+>      >>
+>      >> Given the importance of the safety_app / watchdog hardware couple,
+>      >> the interaction between these software pieces also needs some
+>      >> sort of monitoring. In other words, "who monitors the monitor?"
+>      >>
+>      >> The safe watchdog (safe_wtd) RV monitor monitors the interaction between
+>      >> the safety_app and the watchdog device, enforcing the correct sequence of
+>      >> events that leads the system to a safe state.
+>      >>
+>      >> Furthermore, the safety_app can monitor the RV monitor by collecting the
+>      >> events generated by the RV monitor itself via tracing interface. In this way,
+>      >> closing the monitoring loop with the safety_app.
+>      >>
+>      >> To reach a safe state, the safe_wtd RV monitor requires the
+>      >> safety_app to:
+>      >>
+>      >>     - Open the watchdog device
+>      >>     - Start the watchdog
+>      >>     - Set a timeout
+>      >>     - ping at least once
+>      >>
+>      >> The RV monitor also avoids some undesired actions. For example, to have
+>      >> other threads to touch the watchdog.
+>      >>
+>      >> The monitor also has a set of options, enabled via kernel command
+>      >> line/module options. They are:
+>      >>
+>      >>     - watchdog_id: the device id to monitor (default 0).
+>      >>     - dont_stop: once enabled, do not allow the RV monitor to be stopped
+>      >>         (default off);
+>      >>     - safe_timeout: define a maximum safe value that an user-space
+>      >>         application can set as the watchdog timeout
+>      >>         (default unlimited).
+>      >>     - check_timeout: After every ping, check if the time left in the
+>      >>         watchdog is less than or equal to the last timeout set
+>      >>         for the watchdog. It only works for watchdog devices that
+>      >>         provide the get_timeleft() function (default off).
+>      >>
+>      >> For further information, please refer to:
+>      >>     Documentation/trace/rv/watchdog-monitor.rst
+>      >>
+>      >> The monitor specification was developed together with Gabriele Paoloni,
+>      >> in the context of the Linux Foundation Elisa Project.
+>      >>
+>      >> Cc: Wim Van Sebroeck <wim@linux-watchdog.org <mailto:wim@linux-watchdog.org>>
+>      >> Cc: Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>>
+>      >> Cc: Jonathan Corbet <corbet@lwn.net <mailto:corbet@lwn.net>>
+>      >> Cc: Steven Rostedt <rostedt@goodmis.org <mailto:rostedt@goodmis.org>>
+>      >> Cc: Ingo Molnar <mingo@redhat.com <mailto:mingo@redhat.com>>
+>      >> Cc: Thomas Gleixner <tglx@linutronix.de <mailto:tglx@linutronix.de>>
+>      >> Cc: Peter Zijlstra <peterz@infradead.org <mailto:peterz@infradead.org>>
+>      >> Cc: Will Deacon <will@kernel.org <mailto:will@kernel.org>>
+>      >> Cc: Catalin Marinas <catalin.marinas@arm.com <mailto:catalin.marinas@arm.com>>
+>      >> Cc: Marco Elver <elver@google.com <mailto:elver@google.com>>
+>      >> Cc: Dmitry Vyukov <dvyukov@google.com <mailto:dvyukov@google.com>>
+>      >> Cc: "Paul E. McKenney" <paulmck@kernel.org <mailto:paulmck@kernel.org>>
+>      >> Cc: Shuah Khan <skhan@linuxfoundation.org <mailto:skhan@linuxfoundation.org>>
+>      >> Cc: Gabriele Paoloni <gpaoloni@redhat.com <mailto:gpaoloni@redhat.com>>
+>      >> Cc: Juri Lelli <juri.lelli@redhat.com <mailto:juri.lelli@redhat.com>>
+>      >> Cc: Clark Williams <williams@redhat.com <mailto:williams@redhat.com>>
+>      >> Cc: linux-doc@vger.kernel.org <mailto:linux-doc@vger.kernel.org>
+>      >> Cc: linux-kernel@vger.kernel.org <mailto:linux-kernel@vger.kernel.org>
+>      >> Cc: linux-trace-devel@vger.kernel.org <mailto:linux-trace-devel@vger.kernel.org>
+>      >> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org <mailto:bristot@kernel.org>>
+>      >> ---
+>      >>   include/trace/events/rv.h                    |  11 +
+>      >>   kernel/trace/rv/Kconfig                      |  10 +
+>      >>   kernel/trace/rv/Makefile                     |   1 +
+>      >>   kernel/trace/rv/monitors/safe_wtd/safe_wtd.c | 300 +++++++++++++++++++
+>      >>   kernel/trace/rv/monitors/safe_wtd/safe_wtd.h |  84 ++++++
+>      >>   5 files changed, 406 insertions(+)
+>      >>   create mode 100644 kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
+>      >>   create mode 100644 kernel/trace/rv/monitors/safe_wtd/safe_wtd.h
+>      >>
+>      >> diff --git a/include/trace/events/rv.h b/include/trace/events/rv.h
+>      >> index 00f11a8dac3b..895eb3435ed7 100644
+>      >> --- a/include/trace/events/rv.h
+>      >> +++ b/include/trace/events/rv.h
+>      >> @@ -66,6 +66,17 @@ DEFINE_EVENT(error_da_monitor, error_wip,
+>      >>            TP_PROTO(char *state, char *event),
+>      >>            TP_ARGS(state, event));
+>      >>   #endif /* CONFIG_RV_MON_WIP */
+>      >> +
+>      >> +#ifdef CONFIG_RV_MON_SAFE_WTD
+>      >> +DEFINE_EVENT(event_da_monitor, event_safe_wtd,
+>      >> +         TP_PROTO(char *state, char *event, char *next_state, bool safe),
+>      >> +         TP_ARGS(state, event, next_state, safe));
+>      >> +
+>      >> +DEFINE_EVENT(error_da_monitor, error_safe_wtd,
+>      >> +         TP_PROTO(char *state, char *event),
+>      >> +         TP_ARGS(state, event));
+>      >> +#endif /* CONFIG_RV_MON_SAFE_WTD */
+>      >> +
+>      >>   #endif /* CONFIG_DA_MON_EVENTS_IMPLICIT */
+>      >>     #ifdef CONFIG_DA_MON_EVENTS_ID
+>      >> diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
+>      >> index 21f03fb3101a..b14ae63e792b 100644
+>      >> --- a/kernel/trace/rv/Kconfig
+>      >> +++ b/kernel/trace/rv/Kconfig
+>      >> @@ -45,6 +45,16 @@ config RV_MON_WWNR
+>      >>         illustrates the usage of per-task monitor. The model is
+>      >>         broken on purpose: it serves to test reactors.
+>      >>   +config RV_MON_SAFE_WTD
+>      >> +    select DA_MON_EVENTS_IMPLICIT
+>      >> +    bool "Safety watchdog"
+>      >> +    help
+>      >> +      Enable safe_wtd, this monitor observes the interaction
+>      >> +      between a user-space safety monitor and a watchdog device.
+>      >> +
+>      >> +      For futher information see:
+>      >> +        Documentation/trace/rv/safety-monitor.rst
+>      >> +
+>      >>   config RV_REACTORS
+>      >>       bool "Runtime verification reactors"
+>      >>       default y if RV
+>      >> diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
+>      >> index 963d14875b45..904db96c7eae 100644
+>      >> --- a/kernel/trace/rv/Makefile
+>      >> +++ b/kernel/trace/rv/Makefile
+>      >> @@ -3,6 +3,7 @@
+>      >>   obj-$(CONFIG_RV) += rv.o
+>      >>   obj-$(CONFIG_RV_MON_WIP) += monitors/wip/wip.o
+>      >>   obj-$(CONFIG_RV_MON_WWNR) += monitors/wwnr/wwnr.o
+>      >> +obj-$(CONFIG_RV_MON_SAFE_WTD) += monitors/safe_wtd/safe_wtd.o
+>      >>   obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
+>      >>   obj-$(CONFIG_RV_REACT_PRINTK) += reactor_printk.o
+>      >>   obj-$(CONFIG_RV_REACT_PANIC) += reactor_panic.o
+>      >> diff --git a/kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
+>      >> b/kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
+>      >> new file mode 100644
+>      >> index 000000000000..9856e0770d0d
+>      >> --- /dev/null
+>      >> +++ b/kernel/trace/rv/monitors/safe_wtd/safe_wtd.c
+>      >> @@ -0,0 +1,300 @@
+>      >> +// SPDX-License-Identifier: GPL-2.0
+>      >> +#include <linux/ftrace.h>
+>      >> +#include <linux/tracepoint.h>
+>      >> +#include <linux/kernel.h>
+>      >> +#include <linux/module.h>
+>      >> +#include <linux/init.h>
+>      >> +#include <linux/rv.h>
+>      >> +#include <rv/instrumentation.h>
+>      >> +#include <rv/da_monitor.h>
+>      >> +
+>      >> +#include <linux/watchdog.h>
+>      >> +#include <linux/moduleparam.h>
+>      >> +
+>      >> +#include <trace/events/rv.h>
+>      >> +#include <trace/events/watchdog.h>
+>      >> +
+>      >> +#define MODULE_NAME "safe_wtd"
+>      >> +
+>      >> +/*
+>      >> + * This is the self-generated part of the monitor. Generally, there is no need
+>      >> + * to touch this section.
+>      >> + */
+>      >> +#include "safe_wtd.h"
+>      >> +
+>      >> +/*
+>      >> + * Declare the deterministic automata monitor.
+>      >> + *
+>      >> + * The rv monitor reference is needed for the monitor declaration.
+>      >> + */
+>      >> +struct rv_monitor rv_safe_wtd;
+>      >> +DECLARE_DA_MON_GLOBAL(safe_wtd, char);
+>      >> +
+>      >> +/*
+>      >> + * custom: safe_timeout is the maximum value a watchdog monitor
+>      >> + * can set. This value is registered here to duplicate the information.
+>      >> + * In this way, a miss-behaving monitor can be detected.
+>      >> + */
+>      >> +static int safe_timeout = ~0;
+>      >> +module_param(safe_timeout, int, 0444);
+>      >> +
+>      >> +/*
+>      >> + * custom: if check_timeout is set, the monitor will check if the time left
+>      >> + * in the watchdog is less than or equals to the last safe timeout set by
+>      >> + * user-space. This check is done after each ping. In this way, if any
+>      >> + * code by-passed the watchdog dev interface setting a higher (so unsafe)
+>      >> + * timeout, this monitor will catch the side effect and react.
+>      >> + */
+>      >> +static int last_timeout_set = 0;
+>      >> +static int check_timeout = 0;
+>      >> +module_param(check_timeout, int, 0444);
+>      >> +
+>      >> +/*
+>      >> + * custom: if dont_stop is set the monitor will react if stopped.
+>      >> + */
+>      >> +static int dont_stop = 0;
+>      >> +module_param(dont_stop, int, 0444);
+>      >> +
+>      >> +/*
+>      >> + * custom: there are some states that are kept after the watchdog is closed.
+>      >> + * For example, the nowayout state.
+>      >> + *
+>      >> + * Thus, the RV monitor needs to keep track of these states after a start/stop
+>      >> + * of the RV monitor itself, and should not reset after each restart -
+>      >> keeping the
+>      >> + * know state until the system shutdown.
+>      >> + *
+>      >> + * If for an unknown reason an RV monitor would like to reset the RV monitor
+>      >> at each
+>      >> + * RV monitor start, set it to one.
+>      >> + */
+>      >> +static int reset_on_restart = 0;
+>      >> +module_param(reset_on_restart, int, 0444);
+>      >> +
+>      >> +/*
+>      >> + * open_pid takes note of the first thread that opened the watchdog.
+>      >> + *
+>      >> + * Any other thread that generates an event will cause an "other_threads"
+>      >> + * event in the monitor.
+>      >> + */
+>      >> +static int open_pid = 0;
+>      >
+>      > Userspace could open a watchdog, create a child process, and handle it
+>      > from the child. That is perfectly valid.
+> 
+>     Right! It is a correct usage of the watchdog subsystem.
+> 
+>     However, the idea here is to allow a "restricted" set of operations based on the
+>     safety analysis made by people in the LF Elisa Workgroup (Gabriele Paoloni in Cc:).
+> 
+> 
+> Yes this is correct. This model represents the instance of a specific monitor
+> resulting from a specific use case that was analysed in ELISA. From my
+> understanding nothing prevents extending the monitor to a more complex
+> model in the future that may eventually result in a group of allowed
+> processes for the WTD manipulation...
+> 
+> Kind Regards
+> Gab
+> 
+> 
+>     One of the specifications says that: only one process should touch the watchdog.
+> 
+>     There are details about it in the "watchdog-monitor.rst," section "RV monitor
+>     specification."
+> 
+>     There could be another monitor, a less resticted one, in which the operation you
+>     mention would be allowed.
+> 
+>     I will complement this commit log in the next version of the patch set,
+>     clarifying that it is not a "full representation of the watchdog operations" but
+>     a restricted set of operations specified by...
+> 
+>      >> +
+>      >> +/*
+>      >> + * watchdog_id: the watchdog to monitor
+>      >> + */
+>      >> +static int watchdog_id = 0;
+>      >> +module_param(watchdog_id, int, 0444);
+>      >
+>      > Limiting the watcher to a single watchdog sounds less than perfect.
+>      > What if the system supports more than one, more than one is enabled,
+>      > and the non-monitored watchdog misbehaves ?
+> 
+>     I can add one monitor per watchdog dev. The easiest way would be adding a
+>     "struct da_monitor" variable in the watchdog_device structure, e.g.,
+> 
+>     struct watchdog_device {
+>     ...
+>              #ifdef CONFIG_RV_MON_SAFE_WTD
+>              struct da_monitor da_mon;
+>              #endif
+>     ...
+>     }
+> 
 
-Replace the output parameter phys_pfn list with a phys_page list, to
-simplify callers. This also allows us to replace the vfio_iommu_type1
-implementation with a more efficient one.
+In my opinion shis should be dynamically allocated and not waste space in driver
+code if unused.
 
-For now, also update vfio_iommu_type1 to fit this new parameter too.
+>     A simplified version of the the "per task" monitor, in the patch 01, changes in
+>     include/linux/sched.h.
+> 
+>      >> +
+>      >> +static void handle_nowayout(void *data, struct watchdog_device *wdd)
+>      >> +{
+>      >> +    if (wdd->id != watchdog_id)
+>      >> +        return;
+>      >> +
+>      >> +    da_handle_init_run_event_safe_wtd(nowayout_safe_wtd);
+>      >> +}
+>      >> +
+>      >> +static void handle_close(void *data, struct watchdog_device *wdd)
+>      >> +{
+>      >> +    if (wdd->id != watchdog_id)
+>      >> +        return;
+>      >> +
+>      >> +    if (open_pid && current->pid != open_pid) {
+>      >> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
+>      >> +    } else {
+>      >> +        da_handle_event_safe_wtd(close_safe_wtd);
+>      >> +        open_pid = 0;
+>      >> +    }
+>      >> +}
+>      >> +
+>      >> +static void handle_open(void *data, struct watchdog_device *wdd)
+>      >> +{
+>      >> +    if (wdd->id != watchdog_id)
+>      >> +        return;
+>      >> +
+>      >> +    if (open_pid && current->pid != open_pid) {
+>      >> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
+>      >> +    } else {
+>      >> +        da_handle_init_run_event_safe_wtd(open_safe_wtd);
+>      >> +        open_pid = current->pid;
+>      >> +    }
+>      >> +}
+>      >> +
+>      >> +static void blocked_events(void *data, struct watchdog_device *wdd)
+>      >> +{
+>      >> +    if (wdd->id != watchdog_id)
+>      >> +        return;
+>      >> +
+>      >> +    if (open_pid && current->pid != open_pid) {
+>      >> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
+>      >> +        return;
+>      >> +    }
+>      >> +    da_handle_event_safe_wtd(other_threads_safe_wtd);
+>      >> +}
+>      >> +
+>      >> +static void blocked_events_timeout(void *data, struct watchdog_device *wdd,
+>      >> u64 timeout)
+>      >> +{
+>      >> +    blocked_events(data, wdd);
+>      >> +}
+>      >> +
+>      >> +static void handle_ping(void *data, struct watchdog_device *wdd)
+>      >> +{
+>      >> +    char msg[128];
+>      >> +    unsigned int timeout;
+>      >> +
+>      >> +    if (wdd->id != watchdog_id)
+>      >> +        return;
+>      >> +
+>      >> +    if (open_pid && current->pid != open_pid) {
+>      >> +        da_handle_init_run_event_safe_wtd(other_threads_safe_wtd);
+>      >> +        return;
+>      >> +    }
+>      >> +
+>      >> +    da_handle_event_safe_wtd(ping_safe_wtd);
+>      >> +
+>      >> +    if (!check_timeout)
+>      >> +        return;
+>      >> +
+>      >> +    if (wdd->ops->get_timeleft) {
+>      >> +        timeout = wdd->ops->get_timeleft(wdd);
+>      >> +        if (timeout > last_timeout_set) {
+>      >> +            snprintf(msg, 128,
+>      >> +                 "watchdog timeout is %u > than previously set (%d)\n",
+>      >> +                 timeout, last_timeout_set);
+>      >> +            cond_react(msg);
+>      >> +        }
+>      >> +    } else {
+>      >> +        snprintf(msg, 128, "error getting timeout: option not supported\n");
+>      >
+>      > This is not an error. The get_timeleft callback is optional.
+> 
+>     Right... but this part of the code is only reachable if the user explicitly
+>     asked to check the timeout (if (!check_timeout)...return before this code).
+> 
+>     So, if the user only considers the system safe if the monitor also checks the
+>     written timeout, but the watchdog is one of those that do not have the callback
+>     implemented (which is ok for a Linux watchdog), the monitor captures this
+>     "undesired" behavior.
+> 
+>     This monitor is not checking if the watchdog subsystem is correct at its
+>     plenitude, it is checking if the watchdog usage is following a set of
+>     specifications (raised by people in the LF Elisa workgroup).
+> 
 
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- .../driver-api/vfio-mediated-device.rst       |  2 +-
- drivers/gpu/drm/i915/gvt/kvmgt.c              | 19 ++++++-------------
- drivers/s390/cio/vfio_ccw_cp.c                | 19 +++++++++----------
- drivers/s390/crypto/vfio_ap_ops.c             |  7 ++++---
- drivers/vfio/vfio.c                           |  8 ++++----
- drivers/vfio/vfio.h                           |  2 +-
- drivers/vfio/vfio_iommu_type1.c               | 19 +++++++++++--------
- include/linux/vfio.h                          |  2 +-
- 8 files changed, 37 insertions(+), 41 deletions(-)
+The kernel is not intended for special use cases. The callback is optional,
+period. The test for check_timeout is way too late. A check like this should
+be made when the check is requested, not when it is executed - in other words,
+when the user requests it. That request should fail.
 
-diff --git a/Documentation/driver-api/vfio-mediated-device.rst b/Documentation/driver-api/vfio-mediated-device.rst
-index d28f8bcbfbc6..070e51bb0bb6 100644
---- a/Documentation/driver-api/vfio-mediated-device.rst
-+++ b/Documentation/driver-api/vfio-mediated-device.rst
-@@ -263,7 +263,7 @@ The following APIs are provided for translating user pfn to host pfn in a VFIO
- driver::
- 
- 	int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
--				  int npage, int prot, unsigned long *phys_pfn);
-+				  int npage, int prot, struct page **phys_page);
- 
- 	int vfio_unpin_pages(struct vfio_device *device, dma_addr_t iova,
- 				    int npage);
-diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-index c9bdc3901f1e..669432999676 100644
---- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-+++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-@@ -243,7 +243,7 @@ static void gvt_unpin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
- static int gvt_pin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
- 		unsigned long size, struct page **page)
- {
--	unsigned long base_pfn = 0;
-+	struct page *base_page = NULL;
- 	int total_pages;
- 	int npage;
- 	int ret;
-@@ -255,26 +255,19 @@ static int gvt_pin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
- 	 */
- 	for (npage = 0; npage < total_pages; npage++) {
- 		unsigned long cur_iova = (gfn + npage) << PAGE_SHIFT;
--		unsigned long pfn;
-+		struct page *cur_page;
- 
- 		ret = vfio_pin_pages(&vgpu->vfio_device, cur_iova, 1,
--				     IOMMU_READ | IOMMU_WRITE, &pfn);
-+				     IOMMU_READ | IOMMU_WRITE, &cur_page);
- 		if (ret != 1) {
- 			gvt_vgpu_err("vfio_pin_pages failed for iova 0x%lx, ret %d\n",
- 				     cur_iova, ret);
- 			goto err;
- 		}
- 
--		if (!pfn_valid(pfn)) {
--			gvt_vgpu_err("pfn 0x%lx is not mem backed\n", pfn);
--			npage++;
--			ret = -EFAULT;
--			goto err;
--		}
--
- 		if (npage == 0)
--			base_pfn = pfn;
--		else if (base_pfn + npage != pfn) {
-+			base_page = cur_page;
-+		else if (base_page + npage != cur_page) {
- 			gvt_vgpu_err("The pages are not continuous\n");
- 			ret = -EINVAL;
- 			npage++;
-@@ -282,7 +275,7 @@ static int gvt_pin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
- 		}
- 	}
- 
--	*page = pfn_to_page(base_pfn);
-+	*page = base_page;
- 	return 0;
- err:
- 	gvt_unpin_guest_page(vgpu, gfn, npage * PAGE_SIZE);
-diff --git a/drivers/s390/cio/vfio_ccw_cp.c b/drivers/s390/cio/vfio_ccw_cp.c
-index 12cbe66721af..92be288dff74 100644
---- a/drivers/s390/cio/vfio_ccw_cp.c
-+++ b/drivers/s390/cio/vfio_ccw_cp.c
-@@ -24,8 +24,8 @@ struct pfn_array {
- 	unsigned long		pa_iova;
- 	/* Array that stores PFNs of the pages need to pin. */
- 	unsigned long		*pa_iova_pfn;
--	/* Array that receives PFNs of the pages pinned. */
--	unsigned long		*pa_pfn;
-+	/* Array that receives the pinned pages. */
-+	struct page		**pa_page;
- 	/* Number of pages pinned from @pa_iova. */
- 	int			pa_nr;
- };
-@@ -73,19 +73,19 @@ static int pfn_array_alloc(struct pfn_array *pa, u64 iova, unsigned int len)
- 
- 	pa->pa_iova_pfn = kcalloc(pa->pa_nr,
- 				  sizeof(*pa->pa_iova_pfn) +
--				  sizeof(*pa->pa_pfn),
-+				  sizeof(*pa->pa_page),
- 				  GFP_KERNEL);
- 	if (unlikely(!pa->pa_iova_pfn)) {
- 		pa->pa_nr = 0;
- 		return -ENOMEM;
- 	}
--	pa->pa_pfn = pa->pa_iova_pfn + pa->pa_nr;
-+	pa->pa_page = (struct page **)pa->pa_iova_pfn + pa->pa_nr;
- 
- 	pa->pa_iova_pfn[0] = pa->pa_iova >> PAGE_SHIFT;
--	pa->pa_pfn[0] = -1ULL;
-+	pa->pa_page[0] = NULL;
- 	for (i = 1; i < pa->pa_nr; i++) {
- 		pa->pa_iova_pfn[i] = pa->pa_iova_pfn[i - 1] + 1;
--		pa->pa_pfn[i] = -1ULL;
-+		pa->pa_page[i] = NULL;
- 	}
- 
- 	return 0;
-@@ -147,7 +147,7 @@ static int pfn_array_pin(struct pfn_array *pa, struct vfio_device *vdev)
- 
- 		ret = vfio_pin_pages(vdev, *first << PAGE_SHIFT, npage,
- 				     IOMMU_READ | IOMMU_WRITE,
--				     &pa->pa_pfn[pinned]);
-+				     &pa->pa_page[pinned]);
- 		if (ret < 0) {
- 			goto err_out;
- 		} else if (ret > 0 && ret != npage) {
-@@ -200,7 +200,7 @@ static inline void pfn_array_idal_create_words(
- 	 */
- 
- 	for (i = 0; i < pa->pa_nr; i++)
--		idaws[i] = pa->pa_pfn[i] << PAGE_SHIFT;
-+		idaws[i] = page_to_phys(pa->pa_page[i]);
- 
- 	/* Adjust the first IDAW, since it may not start on a page boundary */
- 	idaws[0] += pa->pa_iova & (PAGE_SIZE - 1);
-@@ -251,8 +251,7 @@ static long copy_from_iova(struct vfio_device *vdev, void *to, u64 iova,
- 
- 	l = n;
- 	for (i = 0; i < pa.pa_nr; i++) {
--		struct page *page = pfn_to_page(pa.pa_pfn[i]);
--		void *from = kmap_local_page(page);
-+		void *from = kmap_local_page(pa.pa_page[i]);
- 
- 		m = PAGE_SIZE;
- 		if (i == 0) {
-diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-index 8a2018ab3cf0..e73bdb57bc90 100644
---- a/drivers/s390/crypto/vfio_ap_ops.c
-+++ b/drivers/s390/crypto/vfio_ap_ops.c
-@@ -243,9 +243,10 @@ static struct ap_queue_status vfio_ap_irq_enable(struct vfio_ap_queue *q,
- 	struct ap_qirq_ctrl aqic_gisa = {};
- 	struct ap_queue_status status = {};
- 	struct kvm_s390_gisa *gisa;
-+	struct page *h_page;
- 	int nisc;
- 	struct kvm *kvm;
--	unsigned long g_pfn, h_pfn;
-+	unsigned long g_pfn;
- 	phys_addr_t h_nib;
- 	int ret;
- 
-@@ -259,7 +260,7 @@ static struct ap_queue_status vfio_ap_irq_enable(struct vfio_ap_queue *q,
- 	}
- 
- 	ret = vfio_pin_pages(&q->matrix_mdev->vdev, g_pfn << PAGE_SHIFT, 1,
--			     IOMMU_READ | IOMMU_WRITE, &h_pfn);
-+			     IOMMU_READ | IOMMU_WRITE, &h_page);
- 	switch (ret) {
- 	case 1:
- 		break;
-@@ -275,7 +276,7 @@ static struct ap_queue_status vfio_ap_irq_enable(struct vfio_ap_queue *q,
- 	kvm = q->matrix_mdev->kvm;
- 	gisa = kvm->arch.gisa_int.origin;
- 
--	h_nib = (h_pfn << PAGE_SHIFT) | (nib & ~PAGE_MASK);
-+	h_nib = page_to_phys(h_page) | (nib & ~PAGE_MASK);
- 	aqic_gisa.gisc = isc;
- 
- 	nisc = kvm_s390_gisc_register(kvm, isc);
-diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-index e8dbb0122e20..7eee8048e231 100644
---- a/drivers/vfio/vfio.c
-+++ b/drivers/vfio/vfio.c
-@@ -1917,18 +1917,18 @@ EXPORT_SYMBOL(vfio_set_irqs_validate_and_prepare);
-  * @npage [in]   : count of pages to be pinned.  This count should not
-  *		   be greater VFIO_PIN_PAGES_MAX_ENTRIES.
-  * @prot [in]    : protection flags
-- * @phys_pfn[out]: array of host PFNs
-+ * @phys_page[out]: array of host pages
-  * Return error or number of pages pinned.
-  */
- int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
--		   int npage, int prot, unsigned long *phys_pfn)
-+		   int npage, int prot, struct page **phys_page)
- {
- 	struct vfio_container *container;
- 	struct vfio_group *group = device->group;
- 	struct vfio_iommu_driver *driver;
- 	int ret;
- 
--	if (!phys_pfn || !npage || !vfio_assert_device_open(device))
-+	if (!phys_page || !npage || !vfio_assert_device_open(device))
- 		return -EINVAL;
- 
- 	if (npage > VFIO_PIN_PAGES_MAX_ENTRIES)
-@@ -1943,7 +1943,7 @@ int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
- 	if (likely(driver && driver->ops->pin_pages))
- 		ret = driver->ops->pin_pages(container->iommu_data,
- 					     group->iommu_group, iova,
--					     npage, prot, phys_pfn);
-+					     npage, prot, phys_page);
- 	else
- 		ret = -ENOTTY;
- 
-diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
-index 6bd5304ee0b7..758a0a91a066 100644
---- a/drivers/vfio/vfio.h
-+++ b/drivers/vfio/vfio.h
-@@ -52,7 +52,7 @@ struct vfio_iommu_driver_ops {
- 				     struct iommu_group *group,
- 				     dma_addr_t user_iova,
- 				     int npage, int prot,
--				     unsigned long *phys_pfn);
-+				     struct page **phys_page);
- 	int		(*unpin_pages)(void *iommu_data,
- 				       dma_addr_t user_iova, int npage);
- 	int		(*register_notifier)(void *iommu_data,
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index d027ed8441a9..841b1803e313 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -830,7 +830,7 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
- 				      struct iommu_group *iommu_group,
- 				      dma_addr_t user_iova,
- 				      int npage, int prot,
--				      unsigned long *phys_pfn)
-+				      struct page **phys_page)
- {
- 	struct vfio_iommu *iommu = iommu_data;
- 	struct vfio_iommu_group *group;
-@@ -840,7 +840,7 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
- 	bool do_accounting;
- 	dma_addr_t iova;
- 
--	if (!iommu || !phys_pfn)
-+	if (!iommu || !phys_page)
- 		return -EINVAL;
- 
- 	/* Supported for v2 version only */
-@@ -879,6 +879,7 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
- 	do_accounting = list_empty(&iommu->domain_list);
- 
- 	for (i = 0; i < npage; i++) {
-+		unsigned long phys_pfn;
- 		struct vfio_pfn *vpfn;
- 
- 		iova = user_iova + PAGE_SIZE * i;
-@@ -895,23 +896,25 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
- 
- 		vpfn = vfio_iova_get_vfio_pfn(dma, iova);
- 		if (vpfn) {
--			phys_pfn[i] = vpfn->pfn;
-+			phys_page[i] = pfn_to_page(vpfn->pfn);
- 			continue;
- 		}
- 
- 		remote_vaddr = dma->vaddr + (iova - dma->iova);
--		ret = vfio_pin_page_external(dma, remote_vaddr, &phys_pfn[i],
-+		ret = vfio_pin_page_external(dma, remote_vaddr, &phys_pfn,
- 					     do_accounting);
- 		if (ret)
- 			goto pin_unwind;
- 
--		ret = vfio_add_to_pfn_list(dma, iova, phys_pfn[i]);
-+		ret = vfio_add_to_pfn_list(dma, iova, phys_pfn);
- 		if (ret) {
--			if (put_pfn(phys_pfn[i], dma->prot) && do_accounting)
-+			if (put_pfn(phys_pfn, dma->prot) && do_accounting)
- 				vfio_lock_acct(dma, -1, true);
- 			goto pin_unwind;
- 		}
- 
-+		phys_page[i] = pfn_to_page(phys_pfn);
-+
- 		if (iommu->dirty_page_tracking) {
- 			unsigned long pgshift = __ffs(iommu->pgsize_bitmap);
- 
-@@ -934,14 +937,14 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
- 	goto pin_done;
- 
- pin_unwind:
--	phys_pfn[i] = 0;
-+	phys_page[i] = NULL;
- 	for (j = 0; j < i; j++) {
- 		dma_addr_t iova;
- 
- 		iova = user_iova + PAGE_SIZE * j;
- 		dma = vfio_find_dma(iommu, iova, PAGE_SIZE);
- 		vfio_unpin_page_external(dma, iova, do_accounting);
--		phys_pfn[j] = 0;
-+		phys_page[j] = NULL;
- 	}
- pin_done:
- 	mutex_unlock(&iommu->lock);
-diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-index 99c3bf52c4da..7bc18802bf39 100644
---- a/include/linux/vfio.h
-+++ b/include/linux/vfio.h
-@@ -148,7 +148,7 @@ extern bool vfio_file_has_dev(struct file *file, struct vfio_device *device);
- #define VFIO_PIN_PAGES_MAX_ENTRIES	(PAGE_SIZE/sizeof(unsigned long))
- 
- extern int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
--			  int npage, int prot, unsigned long *phys_pfn);
-+			  int npage, int prot, struct page **phys_page);
- extern int vfio_unpin_pages(struct vfio_device *device, dma_addr_t iova,
- 			    int npage);
- extern int vfio_dma_rw(struct vfio_device *device, dma_addr_t iova,
--- 
-2.17.1
+>      >> +        cond_react(msg);
+>      >> +    }
+>      >> +}
+>      >> +
+> 
+>     [...]
+> 
+>      >> +
+>      >> +struct automaton_safe_wtd automaton_safe_wtd = {
+>      >> +    .state_names = {
+>      >> +        "init",
+>      >> +        "closed_running",
+>      >> +        "closed_running_nwo",
+>      >> +        "nwo",
+>      >> +        "opened",
+>      >> +        "opened_nwo",
+>      >> +        "reopened",
+>      >> +        "safe",
+>      >> +        "safe_nwo",
+>      >> +        "set",
+>      >> +        "set_nwo",
+>      >> +        "started",
+>      >> +        "started_nwo",
+>      >> +        "stoped"
+>      >> +    },
+>      >> +    .event_names = {
+>      >> +        "close",
+>      >> +        "nowayout",
+>      >> +        "open",
+>      >> +        "other_threads",
+>      >> +        "ping",
+>      >> +        "set_safe_timeout",
+>      >> +        "start",
+>      >> +        "stop"
+>      >> +    },
+>      >> +    .function = {
+>      >> +        {                          -1,                nwo_safe_wtd,             opened_safe_wtd,               init_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
+>      >> +        {                          -1, closed_running_nwo_safe_wtd,           reopened_safe_wtd,     closed_running_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
+>      >> +        {                          -1, closed_running_nwo_safe_wtd,        started_nwo_safe_wtd, closed_running_nwo_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
+>      >> +        {                          -1,                nwo_safe_wtd,         opened_nwo_safe_wtd,                nwo_safe_wtd,                          -1,                          -1,                         -1,                          -1 },
+>      >> +        {               init_safe_wtd,                          -1,                          -1,                          -1,                          -1,                          -1,           started_safe_wtd,                          -1 },
+>      >> +        {                nwo_safe_wtd,                          -1,                          -1,                          -1,                          -1,                          -1,       started_nwo_safe_wtd,                          -1 },
+>      >> +        {     closed_running_safe_wtd,                          -1,                          -1,                          -1,                          -1,                set_safe_wtd,                          1,             opened_safe_wtd },
+>      >> +        {     closed_running_safe_wtd,                          -1,                          -1,                          -1,               safe_safe_wtd,                          -1,                          1,             stoped_safe_wtd },
+>      >> +        { closed_running_nwo_safe_wtd,                          -1,                          -1,                          -1,           safe_nwo_safe_wtd,                          -1,                         -1,                          -1 },
+>      >> +        {                          -1,                          -1,                          -1,                          -1,               safe_safe_wtd,                          -1,                         -1,                          -1 },
+>      >> +        {                          -1,                          -1,                          -1,                          -1,           safe_nwo_safe_wtd,                          -1,                         -1,                          -1 },
+>      >> +        {     closed_running_safe_wtd,                          -1,                          -1,                          -1,                          -1,                set_safe_wtd,                         -1,             stoped_safe_wtd },
+>      >> +        { closed_running_nwo_safe_wtd,                          -1,                          -1,                          -1,                          -1,            set_nwo_safe_wtd,                         -1,                          -1 },
+>      >> +        {               init_safe_wtd,                          -1,                          -1,                          -1,                          -1,                          -1,                         -1,                          -1 },
+>      >> +    },
+>      >> +    .initial_state = init_safe_wtd,
+>      >> +    .final_states = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+>      >
+>      > I find this event table all but impossible to verify.
+> 
+>     It is a matrix. Lines are states, and columns are events.
+> 
+>     On a given state/line, receiving a given event/column, the data is the next
+>     state/row.
+> 
 
+I am aware of that, and I did program state machines before.
+
+>     For instance, let's say "init" (row 0), event "nwo" (column 1), and the next
+>     state is the "nwo" (row 3).
+> 
+>     -1 means invalid/blocked state (yeah, maybe it is better to have an #define
+>     INVALID_STATE -1).
+> 
+>     This is the C representation of an automaton, following the formal definition of
+>     a deterministic automaton. I've added an explanation of this representation in
+>     the documentation (patch 15, file da_monitor_synthesis.rst).
+> 
+>     A deeper look into this subject is here (peer-reviewed conference paper at
+>     Software Engineer and Formal Methods 2019):
+>     https://bristot.me/wp-content/uploads/2019/09/paper.pdf <https://bristot.me/wp-content/uploads/2019/09/paper.pdf>
+> 
+>     One could translate it back to the automaton's graphical format... to a format
+>     of by a tool used to analyze automaton properties... that is the good point of
+>     using a well-established formalism. (The bad part is that they are often
+>     boring... c'est la vie :-)).
+> 
+
+If the above state machine fails, no one but the authors will be able to even
+remotely figure out what happened, and if the watchdog driver is at fault or
+its monitor. It is a state machine making assumptions about state transitions,
+sure, but who knows if those asssumptions are even remotely correct or match
+reality. For example, I have no idea if the lack of a 'ping' function is handled
+correctly,  if the lack of a 'stop' function is handled correctly, or what
+happens if any of the driver functions returns an error.
+
+I already found three assumptions which do not or not necessarily match
+reality:
+
+- The function to read the remaining timeout is optional and must not be
+   used unconditionally, and its lack is not an error.
+- The requested timeout (and pretimeout) do not have to match the actually
+   configured timeout, and userspace must not rely on the assumption that
+   the values match.
+- The code assumes that the process opening the watchdog and the process
+   accessing it are the same. While that is in general the case, it might
+   well be that some application opens the watchdog and then handles it
+   from a child process.
+
+And that is just after briefly browsing through the code.
+
+I am open to suggestions from others, but at this point I have serious doubts
+that this code is maintainable in the kernel.
+
+Guenter

@@ -2,259 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A41954E0F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716EE54E112
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiFPMoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 08:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S231777AbiFPMtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 08:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbiFPMoq (ORCPT
+        with ESMTP id S229666AbiFPMtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 08:44:46 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2065.outbound.protection.outlook.com [40.107.96.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82A73F8B1;
-        Thu, 16 Jun 2022 05:44:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NTf2CbMSRdm2/Kg+8bLLoiaqqyjQEV0wxwQzaTsBtNISSZdO4aVSyqOj+SW+ImDLr0AeTG41CWjA2Qm/P5VV1sBM+HIo0iJZwyZVT0sjDnd7w5UkMGa1MRWMjXZT9Dt4RdnUQy7UME8yk0NAqeMJLo2inlIMyJosyYJ0+UzSmP6kdBEYfkdEK3HBtQYq2KA/F24QdQuVyJuaSid8m2W2JBoDuRq5wKWxZeO3KI8zpQ3zb714MkM2cQd/sEtkE+PIqj2HVVK4KmSF4NCMWdTaiCJ8tP53eMbs+HbHBs6hTIR0lctyC7T19SLCklsDlRN7WW4C/M+Vwvvqv0ntfZWy4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lJ2RMDeBBUL290SYRRhu3qCiF5XEVuN/6QlCMSYkVA0=;
- b=Nhe1dl+Qf36DkwYUc1F6O6cEbnLcjbNqYKOZA+iGM/wIX9M9GI5iEgyzZx7rcACnMcxiZDHbokdPT3SC8A3jZDn6OxI/NdkviAwDmWoC2Ktu/XWvpwBDHD4pF7qiJayIuTg3CoMbCqqrdSRfNda0UfdGQUiEOJQnERKIc8K91OHWvO3ioos0dWf8ysETPLpD/LpGIXcgVPGtztcrxuFioCHHcopSM1rigg7uSqklaBv/L9RLxxgGj7XwATlMoHPvQ6brmlmBoVpbO91kMl2VV6ZjHQ6R7bMmdKqCRvyxtNVAMBvhg3T9f3k7OFIPu/gByIpePtpNO+kFQ6pbKvzktA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Thu, 16 Jun 2022 08:49:12 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86156EA6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:49:11 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id d19so1362654lji.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lJ2RMDeBBUL290SYRRhu3qCiF5XEVuN/6QlCMSYkVA0=;
- b=VHHMtn3YZY/lfVMKiAzDpfsvtKwKCLS8P9MH5hpR1uX0ZCxgkrNTdV0a1Jq6ZftbD2sZCaA5ti/8OFxwvWGnNzgCs2IOK6QjLz14jCZBcoi2wRzMRfth27V2sU/D8ao4eBKSGwhnqvaRUL8WvQof5hsjghfJ0LVCXTQUnHSuiqU=
-Received: from DS7PR05CA0089.namprd05.prod.outlook.com (2603:10b6:8:56::6) by
- CY4PR02MB2696.namprd02.prod.outlook.com (2603:10b6:903:11b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.17; Thu, 16 Jun
- 2022 12:44:42 +0000
-Received: from DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2603:10b6:8:56:cafe::4) by DS7PR05CA0089.outlook.office365.com
- (2603:10b6:8:56::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.9 via Frontend
- Transport; Thu, 16 Jun 2022 12:44:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT013.mail.protection.outlook.com (10.13.5.126) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5353.14 via Frontend Transport; Thu, 16 Jun 2022 12:44:42 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 16 Jun 2022 05:44:41 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 16 Jun 2022 05:44:41 -0700
-Envelope-to: linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- lorenzo.pieralisi@arm.com,
- bhelgaas@google.com,
- robh@kernel.org
-Received: from [10.140.9.2] (port=44392 helo=xhdbharatku40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <bharat.kumar.gogada@xilinx.com>)
-        id 1o1orZ-000Aiu-4P; Thu, 16 Jun 2022 05:44:41 -0700
-From:   Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
-        <michals@xilinx.com>, <robh@kernel.org>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Subject: [PATCH v5 2/2] PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
-Date:   Thu, 16 Jun 2022 18:14:29 +0530
-Message-ID: <20220616124429.12917-3-bharat.kumar.gogada@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220616124429.12917-1-bharat.kumar.gogada@xilinx.com>
-References: <20220616124429.12917-1-bharat.kumar.gogada@xilinx.com>
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hESFz66pGYPiw3LdS0z2t9AkdnHybf1jrKiYG9djd50=;
+        b=HsrfKgDGX5TxR8pSo4XltbKHokxukbGhJItfynC9jGiTojG7IEu3X7DmlesE9zIcDY
+         Vs9d2BDPVN4PZshDww7+8XwnJQTMK31HjIW31GtpwYmrQdEKnTqwiF8FNVMXqWONqmip
+         JfTqWXNNEKZXJz3MzgPe4JFwW/Vq/IKDnht8bLkXjNE5XvG4U/O1s0v1McOb4WC4/MvU
+         zxMD14c0HgWhbKgs9hOfrvwbbVCGlnxzE6SgTjBD8qTQTmDMyYwR1ezsxa3dEqa4oTi5
+         UuR3isq5MaMov5+4koDk6oTFEKkvhSei5cuyJuH0kyostJ8J5228wxNnzOSVUAAWq+O4
+         S2pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hESFz66pGYPiw3LdS0z2t9AkdnHybf1jrKiYG9djd50=;
+        b=nH6AWeHNoKaSE4yQ1vhekPU7HuCEG8bLz/WBra5rKLWHbgEyXQ2YEaICplmyn4bGlg
+         PeaDPcUniZO2yp6299KtNPPUckhCRGvUGnCgUpdeo1Stv6KdUs9FM4aJt4T+0tB/H6HY
+         Tj6y0JofPyyHjNBlUGmGlMUXNxqDhuORjiPw6XD/DcfrerG9Rz7KxaGlbyOVOUjBLJM3
+         9HcIbfomn56sGGzoSPlnhOOeBxrknN8WHAExZtQkYvwhVAa12gZohg00PdsofwPllohK
+         e5CPYFgntzSSQhpp0v7096MDGSHIajIkwZAnxU5gP/HOnSkF+1e6U8mj86yxvOP0mMTy
+         hBjg==
+X-Gm-Message-State: AJIora/limkHhgT+gk/L+HQxLtgNM3qgj6259C2ATJK/WfsZE6mpXuFq
+        qpsMV7dz+QpT4fu7/sqokWg=
+X-Google-Smtp-Source: AGRyM1tqk0FvUmgFrBjiTkmoBCqC2rb0nk3jQIdRCmFABWuipeaHtdMQkVk00ICE9DYQg7ZeZQLeYg==
+X-Received: by 2002:a05:651c:550:b0:255:5b77:b1a4 with SMTP id q16-20020a05651c055000b002555b77b1a4mr2506358ljp.181.1655383749649;
+        Thu, 16 Jun 2022 05:49:09 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru. [109.252.136.92])
+        by smtp.googlemail.com with ESMTPSA id a5-20020a2eb165000000b002553ab60e17sm238709ljm.122.2022.06.16.05.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 05:49:09 -0700 (PDT)
+Message-ID: <aa1f187c-786e-16ca-c156-448108f8fcc5@gmail.com>
+Date:   Thu, 16 Jun 2022 15:49:03 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3e62ebc9-6b86-4b0d-c678-08da4f95fc21
-X-MS-TrafficTypeDiagnostic: CY4PR02MB2696:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR02MB26967B368A218851588920CFA5AC9@CY4PR02MB2696.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SHT7cDTCZhT9mH6/OGIDZttPiEcosyxiwyc2qB4tWw7BDnGfXfMnVlL270Ziwa4E+ugCTEpSXbpRUR4L0SPHGKN1vrp28BCwt/NCYVv6J8YXjuYx1+0DkRb1nYWzBgJalqjptTJFxXHeZREwbSucH+H5UkLQ9FDlQjNhcySQDYhVH5eGc4eB8YBvnjCtmXm3M5fCLT4RDlMu/2vasiNGMkZM4IRtSao+iPswUj9GAgoLLY9xZUghMmVGNtiDMMQ6uzYvcjD2tfrSWSJTA/4Sdalx2UWkdWs7AbCAloFIeKfC6HPY+DnO0TtYmq2pSNVjXUJq8GGwscYnHy9i991yrwu6Ok2NZEG06/Nw1ebNRFxNVNIkeb3m7rIEgOi1rFfplztgujj+7HCekjJDEbrV0RPIlLSxF/7pYjalAMGGUkAvBE/xIFXqr4WqASSnhs7asGmLlCfCS0oDhPCNc1RsFFq+yPea1Jo5MoQlaoGpHl+fSRjhg5/MrSSahkjPjmpMj+aDtEFzlr2JHk+RonM16JOOTk5TMoBP5jmarZpKQ/ltwd7Q+8xEqvcn1ql7t/8IqbRERkUmu+h/oKQjrxbX9EJGxw3NykXL0yGMw5t90Io1UH5gS3in0mEFb88HJIYS+nsTPR5A9gdzVUP4RSUj4VW8CA6IlSTfP9zOGeQKJIiqwx17qiKwsCQxW6yeUS9v20iq6CwIYiyDhzCuTSZ1cQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(46966006)(36840700001)(40470700004)(107886003)(186003)(103116003)(2616005)(9786002)(508600001)(26005)(1076003)(5660300002)(7636003)(7696005)(2906002)(6666004)(8936002)(70206006)(40460700003)(70586007)(356005)(54906003)(83380400001)(110136005)(336012)(426003)(4326008)(36860700001)(8676002)(316002)(36756003)(47076005)(82310400005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 12:44:42.4202
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e62ebc9-6b86-4b0d-c678-08da4f95fc21
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2696
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] soc: mediatek: Introduce mediatek-regulator-coupler
+ driver
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org,
+        alyssa.rosenzweig@collabora.com, nfraprado@collabora.com
+References: <20220616094502.15318-1-angelogioacchino.delregno@collabora.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220616094502.15318-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xilinx Versal Premium series has CPM5 block which supports Root Port
-functioning at Gen5 speed.
+16.06.2022 12:45, AngeloGioacchino Del Regno пишет:
+> +static int mediatek_regulator_attach(struct regulator_coupler *coupler,
+> +				     struct regulator_dev *rdev)
+> +{
+> +	struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
+> +	const char *rdev_name = rdev_get_name(rdev);
+> +
+> +	if (strstr(rdev_name, "sram")) {
+> +		if (mrc->vsram_rdev)
+> +			return -EINVAL;
+> +		mrc->vsram_rdev = rdev;
+> +	}
 
-Xilinx Versal CPM5 has few changes with existing CPM block.
-- CPM5 has dedicated register space for control and status registers.
-- CPM5 legacy interrupt handling needs additional register bit
-  to enable and handle legacy interrupts.
+You should filter out regulators unrelated to SRAM and GPU, see
+regulator_find_coupler().
 
-Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
----
- drivers/pci/controller/pcie-xilinx-cpm.c | 62 ++++++++++++++++++++++--
- 1 file changed, 59 insertions(+), 3 deletions(-)
+> +	return 0;
+> +}
+> +
+> +static int mediatek_regulator_detach(struct regulator_coupler *coupler,
+> +				     struct regulator_dev *rdev)
+> +{
+> +	struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
+> +
+> +	if (rdev == mrc->vsram_rdev) {
+> +		mrc->vsram_rdev = NULL;
+> +		return 0;
+> +	}
 
-diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
-index c7cd44ed4dfc..0bcd11d27eeb 100644
---- a/drivers/pci/controller/pcie-xilinx-cpm.c
-+++ b/drivers/pci/controller/pcie-xilinx-cpm.c
-@@ -35,6 +35,10 @@
- #define XILINX_CPM_PCIE_MISC_IR_ENABLE	0x00000348
- #define XILINX_CPM_PCIE_MISC_IR_LOCAL	BIT(1)
- 
-+#define XILINX_CPM_PCIE_IR_STATUS       0x000002A0
-+#define XILINX_CPM_PCIE_IR_ENABLE       0x000002A8
-+#define XILINX_CPM_PCIE_IR_LOCAL        BIT(0)
-+
- /* Interrupt registers definitions */
- #define XILINX_CPM_PCIE_INTR_LINK_DOWN		0
- #define XILINX_CPM_PCIE_INTR_HOT_RESET		3
-@@ -98,6 +102,16 @@
- /* Phy Status/Control Register definitions */
- #define XILINX_CPM_PCIE_REG_PSCR_LNKUP		BIT(11)
- 
-+/**
-+ * struct xilinx_cpm_variant - CPM variant information
-+ * @cpm_version: CPM5 has few changes compared to CPM block.
-+ *      CPM5 has dedicated register space for control and status registers.
-+ *
-+ */
-+struct xilinx_cpm_variant {
-+	bool cpm_version;
-+};
-+
- /**
-  * struct xilinx_cpm_pcie - PCIe port information
-  * @dev: Device pointer
-@@ -109,6 +123,7 @@
-  * @intx_irq: legacy interrupt number
-  * @irq: Error interrupt number
-  * @lock: lock protecting shared register access
-+ * @is_cpm5: value to check cpm version
-  */
- struct xilinx_cpm_pcie {
- 	struct device			*dev;
-@@ -120,6 +135,7 @@ struct xilinx_cpm_pcie {
- 	int				intx_irq;
- 	int				irq;
- 	raw_spinlock_t			lock;
-+	bool                            is_cpm5;
- };
- 
- static u32 pcie_read(struct xilinx_cpm_pcie *port, u32 reg)
-@@ -285,6 +301,14 @@ static void xilinx_cpm_pcie_event_flow(struct irq_desc *desc)
- 		generic_handle_domain_irq(port->cpm_domain, i);
- 	pcie_write(port, val, XILINX_CPM_PCIE_REG_IDR);
- 
-+	if (port->is_cpm5) {
-+		val = readl_relaxed(port->cpm_base + XILINX_CPM_PCIE_IR_STATUS);
-+		if (val)
-+			writel_relaxed(val,
-+				       port->cpm_base +
-+				       XILINX_CPM_PCIE_IR_STATUS);
-+	}
-+
- 	/*
- 	 * XILINX_CPM_PCIE_MISC_IR_STATUS register is mapped to
- 	 * CPM SLCR block.
-@@ -484,6 +508,12 @@ static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie *port)
- 	 */
- 	writel(XILINX_CPM_PCIE_MISC_IR_LOCAL,
- 	       port->cpm_base + XILINX_CPM_PCIE_MISC_IR_ENABLE);
-+
-+	if (port->is_cpm5) {
-+		writel(XILINX_CPM_PCIE_IR_LOCAL,
-+		       port->cpm_base + XILINX_CPM_PCIE_IR_ENABLE);
-+	}
-+
- 	/* Enable the Bridge enable bit */
- 	pcie_write(port, pcie_read(port, XILINX_CPM_PCIE_REG_RPSC) |
- 		   XILINX_CPM_PCIE_REG_RPSC_BEN,
-@@ -503,6 +533,10 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
- 	struct device *dev = port->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct resource *res;
-+	const struct xilinx_cpm_variant *variant =
-+		of_device_get_match_data(dev);
-+
-+	port->is_cpm5 = variant->cpm_version;
- 
- 	port->cpm_base = devm_platform_ioremap_resource_byname(pdev,
- 							       "cpm_slcr");
-@@ -518,7 +552,14 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
- 	if (IS_ERR(port->cfg))
- 		return PTR_ERR(port->cfg);
- 
--	port->reg_base = port->cfg->win;
-+	if (port->is_cpm5) {
-+		port->reg_base = devm_platform_ioremap_resource_byname(pdev,
-+								       "cpm_csr");
-+		if (IS_ERR(port->reg_base))
-+			return PTR_ERR(port->reg_base);
-+	} else {
-+		port->reg_base = port->cfg->win;
-+	}
- 
- 	return 0;
- }
-@@ -591,9 +632,24 @@ static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
- 	return err;
- }
- 
-+static const struct xilinx_cpm_variant cpm_host = {
-+	.cpm_version = false,
-+};
-+
-+static const struct xilinx_cpm_variant cpm5_host = {
-+	.cpm_version = true,
-+};
-+
- static const struct of_device_id xilinx_cpm_pcie_of_match[] = {
--	{ .compatible = "xlnx,versal-cpm-host-1.00", },
--	{}
-+	{
-+		.compatible = "xlnx,versal-cpm-host-1.00",
-+		.data = &cpm_host,
-+	},
-+	{
-+		.compatible = "xlnx,versal-cpm5-host",
-+		.data = &cpm5_host,
-+	},
-+	{},
- };
- 
- static struct platform_driver xilinx_cpm_pcie_driver = {
--- 
-2.17.1
+The regulator core should emit error message about GPU regulator failed
+to detach because you're returning -EINVAL for it.
+
+> +	return -EINVAL;
+> +}
 

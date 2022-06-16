@@ -2,165 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D416954DD08
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C5854DD0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359572AbiFPIjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S1359705AbiFPIle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiFPIi6 (ORCPT
+        with ESMTP id S1359695AbiFPIla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:38:58 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05935D64F;
-        Thu, 16 Jun 2022 01:38:57 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id w29so631746pgl.8;
-        Thu, 16 Jun 2022 01:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X3rs3EZNUK5eXVTg1TQXkjmyGPn0t+3fhRIQGIQTt/M=;
-        b=FbvS3MCf0rAKnwl/9sCw7pwSbwYCdNVDEjfFetPrk9VhwkklDjNZJ0ir6f1wsVv2eW
-         GICSBSI34Ooo7/RNmxEqX1Fv+c/JqQunH7kZJ85le2iHjbmbQLKY41SXx/azHJebANQF
-         unrUHunbyw7Cgt4RW46OFZxjK66ENjsxzTf/AJTJ9MLB6OokjDWf5NnPxGLFXIziGU3+
-         XwyHKoqIvxgDHikLHBnIBLPY5wZmf2CfnWCcK5WkE7BbE/i0YeGHHQLgG6sBExcS21rZ
-         PwRZQeuWDnA8HK5enYY8lfZ64coV8HBrhwTqo0f15JwnSmzOHszp/3UccT3J5dLxfkwt
-         3iGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X3rs3EZNUK5eXVTg1TQXkjmyGPn0t+3fhRIQGIQTt/M=;
-        b=6RjC+WjUtEMdYcCYpuEzE0JT1saa10QElWfH/6Yn7Kx58XH1dL/5xKp2JAPcoEwgqu
-         SetN66Xs+JvrErpPxbJNO3B92pcvtpaLL98WkUPXaOEcE8HgdCW2JL2Ok/CwdN1vZEep
-         +9zLXTMudzR48fK+VRcmWVKCEJEe7Rl1i4XS1kBJGJnWxYzaGk9Uibhz4pe6/fVpurHT
-         V7Qj2KL83tFGLP6A31z0SjBlXjlO7FNiX0HgxGa8FBYDC2YTLJGVNiujjtSnN99si9Tz
-         YQRYHQI4y0zf9E7r7OT0jxTxxwpU46/F4EJD94LTRyC49i+dI9yuApfGtE9YfV3TVy30
-         aLvw==
-X-Gm-Message-State: AJIora+RwjQ8XQzi6bEj3QGv8WPNuesTMnq4EyzdUqbmNAKTYrhKR96W
-        JYOefpKEpQYIJMeUDByMFr+RSMK5G//0Q1TLOYw=
-X-Google-Smtp-Source: AGRyM1sBmk5Q28SwAF/4hpfVX9rC42L68jrBMrgK95HRcImHgqHz8VS5YJ3nIJHsW62Z/M5IeM+yHA==
-X-Received: by 2002:a05:6a00:4406:b0:51c:244f:85d8 with SMTP id br6-20020a056a00440600b0051c244f85d8mr3742673pfb.36.1655368737148;
-        Thu, 16 Jun 2022 01:38:57 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id e15-20020a63370f000000b003fdc16f5de2sm1067536pga.15.2022.06.16.01.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 01:38:56 -0700 (PDT)
-From:   Hongyu Xie <xy521521@gmail.com>
-X-Google-Original-From: Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        125707942@qq.com, wangqi@kylinos.cn, xiongxin@kylinos.cn,
-        Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH v5 -next] usb: xhci: disable irq during initialization
-Date:   Thu, 16 Jun 2022 16:38:52 +0800
-Message-Id: <20220616083852.1264261-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Jun 2022 04:41:30 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF0F5DA45
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655368889; x=1686904889;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=q0nV+Y6VnyjEkRNkFfq754W33G/B/8foeyIm/WzodEc=;
+  b=Yogodyi7KNgyIJjJrsyrhbQfEqcj+0c5I0AmlaLSapbr48V+2bqAsb/K
+   C0n87GIbZOGf1gLFRmhiNU/7qdLO5x5WmvVy2NMnWBmuuB/D2skUoWrO7
+   rlaSn4TKQwlKJtB45sPIP8FzCVIKfvDo715K+ZS7GSMJM2taMWCYNDLUy
+   IXxyQyO8UQXC749HDd5pPictAu+sCj3qCT9vz/9+0tayWqk5VzeO5VyOz
+   yfFHPsRAppNoBMNNBYSYugG43d/IxA3RWLvwEzOFCjNX7kRUwls1AVEgt
+   X9MfwZRgltwWVixjRoGSWxIYHARQKuk+p0JzClo+wLC77m2n4t/IV8tay
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,304,1647273600"; 
+   d="scan'208";a="307610373"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Jun 2022 16:41:27 +0800
+IronPort-SDR: KkE3X+wqxNPJJYIW+aOtvxwr5e9yUtTsPQ+6kb1CmmULLN/VNzTCY+8UJMfmo/De4HvJqSBGfm
+ GZG9aNYR5AVuDOHPAPZly5n3J6GJdmqntLjbO2agutUFkucfQx4dJeLtt3joWH/IBrRZf8pKhH
+ UlYKdRyQkQM5HOawB9n0SCKqLVDdZX4Oe0kQQaH6YffEJuEJxKILMMH6dKZR0VhOhZFe8nnNCC
+ 7aTg0zXaOWhBNBeB+BWHkQpLlUmDsYcinZunwzgtLiVioRXC6vVS/aoZrhZlgyjMiSKCBPn7pL
+ R8ZUCyo9EjSKPHYHxoiZXau2
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Jun 2022 01:04:03 -0700
+IronPort-SDR: UyddNqGWL7tyvheLYVlP0Gewmi/ERd3w+rdm9GNB7PZ3DUvB24V+H/wHkDTcwabFghve9ny9VH
+ FN2pdCCWuhizQw567b5HhjHYTWEJ8aY0yMx3S8A7wmExRNKJaDxWRUTir5y8RWd11oYOkRKOK5
+ TOQja7Xi3Pn95mFDGEJUXaPnAlBniJU+81KYbQ2wih/oif6hWpS646sGXNVKHqweLqmVYIE/7C
+ Aly67XGF3x8BtAZSMBPPEt3pSrW15fmqjEyx8fh/aOcmzAqshIYsb5b6+y0IokNiy4oTiStn4C
+ eQM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Jun 2022 01:41:27 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNwd23y1Nz1SHwl
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:41:26 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655368885; x=1657960886; bh=q0nV+Y6VnyjEkRNkFfq754W33G/B/8foeyI
+        m/WzodEc=; b=lY2eNfwJepGYRRIkNfUhDQNf2aTX2nUbwF6BrJipPQ9yPTzMexN
+        yJM+8bSHjUqGz9M6S9zi1R/EpGFwQ2oTpxi0zmUGxM/1OTCR0XDxJagn3rbAIQaK
+        H/OoEJT2aeE33MlJEu2ZOgNobrdvsL8rPqkXBnd9t4mCdpmAYbeMmSRd5asXRp5i
+        Ammxbmw055cUDp9a8K7e7esVWgx4k98tjKYBvFVbW/0BeXkao8AYTOHuV2AncjS6
+        jyKA/cOQah/OPBC3Xf0uCux4EG16CBabME9+5FRIHEVO2P5t+No3UQI0NOKOAX53
+        EdOHS5o/AloU8ZwV+w+HsqtEHWRzdz0USZA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id x1SKb50lHbee for <linux-kernel@vger.kernel.org>;
+        Thu, 16 Jun 2022 01:41:25 -0700 (PDT)
+Received: from [10.89.84.185] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.84.185])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNwcz1dffz1Rvlc;
+        Thu, 16 Jun 2022 01:41:23 -0700 (PDT)
+Message-ID: <98fa010d-3555-a82b-e960-f47aeeb38151@opensource.wdc.com>
+Date:   Thu, 16 Jun 2022 17:41:21 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
+        hare@suse.de, hch@lst.de
+Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        chenxiang66@hisilicon.com
+References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
+ <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+ <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
+ <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+ <c702f06e-b7da-92be-3c4f-5dd405600235@opensource.wdc.com>
+ <ecfb0694-21b8-55b4-c9b8-5e738f59ce8d@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <ecfb0694-21b8-55b4-c9b8-5e738f59ce8d@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
-in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
-It's possible that you will receive thousands of interrupt requests
-after initialization for 2.0 roothub. And you will get a lot of
-warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
-disabled?". This amount of interrupt requests will cause the entire
-system to freeze.
-This problem was first found on a device with ASM2142 host controller
-on it.
+On 2022/06/16 17:24, John Garry wrote:
+> On 16/06/2022 03:47, Damien Le Moal wrote:
+>>>> so going backward several years... That internal tag for ATA does not
+>>>> need to be reserved since this command is always used when the drive is
+>>>> idle and no other NCQ commands are on-going.
+>>>
+>>> So do you mean that ATA_TAG_INTERNAL qc is used for other commands 
+>>> apart from internal commands?
+>>
+>> No. It is used only for internal commands. What I meant to say is that 
+>> currently, internal commands are issued only on device scan, device 
+>> revalidate and error handling. All of these phases are done with the 
+>> device under EH with the issuing path stopped and all commands 
+>> completed, 
+> 
+> If I want to allocate a request for an ATA internal command then could I 
+> use 1x from the regular tags? I didn't think that this was possible as I 
+> thought that all tags may be outstanding when EH kicks in. I need to 
+> double check it.
 
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
+When EH kicks in, the drive is in error mode and all commands are back to the
+host. From there, you need to get the drive out of error mode with read log 10h
+and then internal commands can be issued if needed. Then the aborted commands
+that are not in error are restarted.
 
-v5: remove reported by test robot
-v4: fix compile err reported by test robot
-v3:
-- enabling interrupt right before setting Run/Stop bit
-- spin_lock_irqsave to prevent receiving irqs in the small window
-according to Mathias's suggestion
-v2: fix compile error
+For the non-error case (revalidate), ap->ops->qc_defer() will make sure that NCQ
+and non-NCQ commands are never mixed. Since all internal commands are non-ncq,
+when an internal command is issued, there are necessarily no other commands
+ongoing, but 32 NCQ commands may be waiting, without any free tag. The internal
+command being non-NCQ can still proceed since it does not need a real device tag.
 
- drivers/usb/host/xhci.c | 41 +++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+The joy of ATA...
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 9ac56e9ffc64..1344cc566338 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -611,15 +611,41 @@ static int xhci_init(struct usb_hcd *hcd)
- 
- static int xhci_run_finished(struct xhci_hcd *xhci)
- {
-+	unsigned long flags;
-+	u32 temp;
-+
-+	/* Prevent receiving irqs in the small window between enabling interrupt
-+	 * and setting Run/Stop bit
-+	 */
-+	spin_lock_irqsave(&xhci->lock, flags);
-+
-+	/* Enable interrupt right before setting Run/Stop bit according to spec
-+	 * 4.2
-+	 */
-+	/* Set the HCD state before we enable the irqs */
-+	temp = readl(&xhci->op_regs->command);
-+	temp |= (CMD_EIE);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// Enable interrupts, cmd = 0x%x.", temp);
-+	writel(temp, &xhci->op_regs->command);
-+
-+	temp = readl(&xhci->ir_set->irq_pending);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// %s %p by writing 0x%x %s",
-+			"Enabling event ring interrupter",
-+			"to irq_pending", xhci->ir_set,
-+			(unsigned int) ER_IRQ_ENABLE(temp));
-+	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
- 	if (xhci_start(xhci)) {
- 		xhci_halt(xhci);
-+		spin_unlock_irqrestore(&xhci->lock, flags);
- 		return -ENODEV;
- 	}
- 	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
- 
- 	if (xhci->quirks & XHCI_NEC_HOST)
- 		xhci_ring_cmd_db(xhci);
--
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 	return 0;
- }
- 
-@@ -668,19 +694,6 @@ int xhci_run(struct usb_hcd *hcd)
- 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
- 	writel(temp, &xhci->ir_set->irq_control);
- 
--	/* Set the HCD state before we enable the irqs */
--	temp = readl(&xhci->op_regs->command);
--	temp |= (CMD_EIE);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enable interrupts, cmd = 0x%x.", temp);
--	writel(temp, &xhci->op_regs->command);
--
--	temp = readl(&xhci->ir_set->irq_pending);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
--			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
--	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
--
- 	if (xhci->quirks & XHCI_NEC_HOST) {
- 		struct xhci_command *command;
- 
+> Even if it were true, not using a reserved tag for ATA internal command 
+> makes things more tricky as this command requires special handling for 
+> scsi blk_mq_ops and there is no easy way to identify the command as 
+> reserved (to know special handling is required).
+
+Yes. Having the ATA_TAG_INTERNAL tag as a reserved tag is fine. But from the
+above, you can see that this is not really needed at all to make things work.
+The management of ATA_TAG_INTERNAL as a reserve tag is really about getting your
+API to simplify the code.
+
+What I am thinking is that with your patches as is, it seems that we can never
+actually reserve a real tag for ATA to do internal NCQ commands... We do not
+really need that for now though, apart maybe for speeding up device revalidate.
+Everytime that one runs, one can see a big spike in read/write IO latencies
+because of the queue drain it causes.
+
+And for CDL 0xD policy error handling, I may need a reserved NCQ tag... Still
+trying to work out qc/tag reuse for now though.
+
+> 
+>> so no regular commands can be issued. Only internal ones, non 
+>> NCQ, using the ATA_TAG_INTERNAL. So strictly speaking, we should not 
+>> need to reserve that internal tag at all.
+>>
+> 
+> Thanks,
+> John
+> 
+
+
 -- 
-2.25.1
-
+Damien Le Moal
+Western Digital Research

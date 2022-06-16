@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D1B54D69C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E35C554D6BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356483AbiFPA5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 20:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S1344800AbiFPBD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 21:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357246AbiFPA4O (ORCPT
+        with ESMTP id S1356571AbiFPBDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 20:56:14 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D44590A7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:55:02 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so371394pjm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4Vomts4VmbqvFQPOL2ceI/hWwepbwm4BG8ZS+YMOGeM=;
-        b=RMYupGnPOpuGbxL+j/mOKPQxchJTm9gdAW8O3N7c5LD15PUMEfbScpik3d+ikdvZog
-         +T5xSYVsqKagsiKKzU5RiNpinzAbt/IPlHyAFRvibosYAWrR79/XjlsOJyPUGxkNWn66
-         39bgeZhuJ0Bt5zp8wfLEmnaRqpewfWpyc+MDggdLnM+8Qy73wABoJqsQ3dqU+oQwtjvb
-         +dL18n5Rnlxizrm1Q/JU+bKbdlA1FFDITp9Xh8bJtD/kbjCPAQUMU3irekgyBU0zMXs2
-         6nPpKrj6hO5CH613QCfgjUhPJsBSS35GucCsxiTzkO8ds35rPvwjVgl4DBbzDOnsHAGv
-         xoAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4Vomts4VmbqvFQPOL2ceI/hWwepbwm4BG8ZS+YMOGeM=;
-        b=dUnOwKMUl49T1EqOnz3ssMFHo8RT1Si+FpoIh0KzsbwQ05mIeRcVpWR2LFWVPqYv7d
-         HjQgL5fRt5TMDhFNrME9s6KjXpgEw+qoHBZvZDZzrZNDCDBwyZs8SmDbTLk3q4MHJqRo
-         254rM2uNju7RG0BQxWhUS/bavCzlz0Qg4IKrvRCDlAQoyFcjtj+Ui3jLAIueruzJMlbH
-         QPPQPwLBLat47dLfqJ3BazS8b9oioU4BWoLLKhQQHh5U49w05rdjFxqWMYJWyhEToaKO
-         DZW/fpjycXFkif19GAuk21B6jTxxOArZHDSuYXQKDs0eWxkxXBJv806MXEZS5sr/QhQ2
-         mz7g==
-X-Gm-Message-State: AJIora9q4KgQTpX6h247rlI63XJqiWJlPJ2cY9PSZzccdsnuiy5Tts52
-        KISZEHwUCz0axGV2V1FdjCDTcQ==
-X-Google-Smtp-Source: AGRyM1t+KymAIQRuqWy/mRILx38eaGMZzrgQK/Zp/YywmnGMoYPs/P8xrZj2uSJ7yaj7neJ4SWiSNg==
-X-Received: by 2002:a17:902:b68c:b0:167:95e2:f822 with SMTP id c12-20020a170902b68c00b0016795e2f822mr2108356pls.128.1655340893636;
-        Wed, 15 Jun 2022 17:54:53 -0700 (PDT)
-Received: from krzk-bin.. ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016760c06b76sm233660pll.194.2022.06.15.17.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 17:54:53 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 40/40] ARM: dts: at91: drop unneeded status from gpio-keys
-Date:   Wed, 15 Jun 2022 17:53:33 -0700
-Message-Id: <20220616005333.18491-40-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+        Wed, 15 Jun 2022 21:03:39 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C7A2FFDC;
+        Wed, 15 Jun 2022 18:03:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3989F1FAAF;
+        Thu, 16 Jun 2022 00:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655340970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ag5m5a+2z0K0KERFvs1DIq8kLpl4y1mEEs07NPdG8AI=;
+        b=duanDr83X78qaYiegZLK2uyIKAtOfoZvf962cfwyNMQSG1WInTAeJTJEJUJSOEea8Cp40k
+        vzPrzdVDu1U5ajpk5nWnKg7hBcKuo5iY2l14vj1kFEDSzJDVcLxvMnt6++QODAWlWlJ6RP
+        dyzCDTD3jh3m0NyQf5sWIvp+nGCYj7Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655340970;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ag5m5a+2z0K0KERFvs1DIq8kLpl4y1mEEs07NPdG8AI=;
+        b=4DfCkt3hNcuaspefPQPCA7LSYMFUj0dibas3CIAOQ42w97LFZ48tXs1aQlS/ghUttMXn1D
+        WnwxW4LfX80q/wCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48A7F13A35;
+        Thu, 16 Jun 2022 00:56:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HZ2XAaZ/qmJLfQAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 16 Jun 2022 00:56:06 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Daire Byrne" <daire@dneg.com>
+Cc:     "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>,
+        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC 00/12] Allow concurrent directory updates.
+In-reply-to: <CAPt2mGNjWXad6e7nSUTu=0ez1qU1wBNegrntgHKm5hOeBs5gQA@mail.gmail.com>
+References: <165516173293.21248.14587048046993234326.stgit@noble.brown>,
+ <CAPt2mGNjWXad6e7nSUTu=0ez1qU1wBNegrntgHKm5hOeBs5gQA@mail.gmail.com>
+Date:   Thu, 16 Jun 2022 10:55:46 +1000
+Message-id: <165534094600.26404.4349155093299535793@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nodes do not need explicit status=okay.
+On Wed, 15 Jun 2022, Daire Byrne wrote:
+...
+> With the patch, the aggregate increases to 15 creates/s for 10 clients
+> which again matches the results of a single patched client. Not quite
+> a x10 increase but a healthy improvement nonetheless.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- arch/arm/boot/dts/at91-sam9x60ek.dts          | 1 -
- arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts | 1 -
- arch/arm/boot/dts/at91-sama5d2_icp.dts        | 1 -
- 3 files changed, 3 deletions(-)
+Great!
 
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index 838353a42097..1432732e163b 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -80,7 +80,6 @@ gpio-keys {
- 		compatible = "gpio-keys";
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_key_gpio_default>;
--		status = "okay";
- 
- 		button-1 {
- 			label = "SW1";
-diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
-index b55e8fb113b1..e1158755008b 100644
---- a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
-+++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
-@@ -31,7 +31,6 @@ gpio-keys {
- 
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_key_gpio_default>;
--		status = "okay";
- 
- 		button-1 {
- 			label = "USER BUTTON";
-diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
-index 38f0e1ae6ae6..0ba73df5cda7 100644
---- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
-+++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
-@@ -47,7 +47,6 @@ gpio-keys {
- 
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_key_gpio_default>;
--		status = "okay";
- 
- 		button-1 {
- 			label = "USER_PB1";
--- 
-2.34.1
+>=20
+> However, it is at this point that I started to experience some
+> stability issues with the re-export server that are not present with
+> the vanilla unpatched v5.19-rc2 kernel. In particular the knfsd
+> threads start to lock up with stack traces like this:
+>=20
+> [ 1234.460696] INFO: task nfsd:5514 blocked for more than 123 seconds.
+> [ 1234.461481]       Tainted: G        W   E     5.19.0-1.dneg.x86_64 #1
+> [ 1234.462289] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+> disables this message.
+> [ 1234.463227] task:nfsd            state:D stack:    0 pid: 5514
+> ppid:     2 flags:0x00004000
+> [ 1234.464212] Call Trace:
+> [ 1234.464677]  <TASK>
+> [ 1234.465104]  __schedule+0x2a9/0x8a0
+> [ 1234.465663]  schedule+0x55/0xc0
+> [ 1234.466183]  ? nfs_lookup_revalidate_dentry+0x3a0/0x3a0 [nfs]
+> [ 1234.466995]  __nfs_lookup_revalidate+0xdf/0x120 [nfs]
 
+I can see the cause of this - I forget a wakeup.  This patch should fix
+it, though I hope to find a better solution.
+
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index 54c2c7adcd56..072130d000c4 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -2483,17 +2483,16 @@ int nfs_unlink(struct inode *dir, struct dentry *dent=
+ry)
+ 	if (!(dentry->d_flags & DCACHE_PAR_UPDATE)) {
+ 		/* Must have exclusive lock on parent */
+ 		did_set_par_update =3D true;
++		lock_acquire_exclusive(&dentry->d_update_map, 0,
++				       0, NULL, _THIS_IP_);
+ 		dentry->d_flags |=3D DCACHE_PAR_UPDATE;
+ 	}
+=20
+ 	spin_unlock(&dentry->d_lock);
+ 	error =3D nfs_safe_remove(dentry);
+ 	nfs_dentry_remove_handle_error(dir, dentry, error);
+-	if (did_set_par_update) {
+-		spin_lock(&dentry->d_lock);
+-		dentry->d_flags &=3D ~DCACHE_PAR_UPDATE;
+-		spin_unlock(&dentry->d_lock);
+-	}
++	if (did_set_par_update)
++		d_unlock_update(dentry);
+ out:
+ 	trace_nfs_unlink_exit(dir, dentry, error);
+ 	return error;
+
+>=20
+> So all in all, the performance improvements in the knfsd re-export
+> case is looking great and we have real world use cases that this helps
+> with (batch processing workloads with latencies >10ms). If we can
+> figure out the hanging knfsd threads, then I can test it more heavily.
+
+Hopefully the above patch will allow the more heavy testing to continue.
+In any case, thanks a lot for the testing so far,
+
+NeilBrown

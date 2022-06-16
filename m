@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1022254D9FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A1654DA06
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358652AbiFPFtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 01:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S1358794AbiFPFvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 01:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiFPFtD (ORCPT
+        with ESMTP id S229449AbiFPFvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 01:49:03 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B845D5B8A1;
-        Wed, 15 Jun 2022 22:49:02 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id o7so763669eja.1;
-        Wed, 15 Jun 2022 22:49:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2aLyJ9nuinCimwT80iv0uqjCDdiMiOsD8JMaFZPN2jc=;
-        b=CIPD1irzWymApegaoxjvjur2zymqxzi+2U9LT8OmeXGJ5W+NlMI0Kv/A9zx+AC3plA
-         /vn09chL3OAjfdeefRrTJvrgQzVRpEzNTrT8ownlfWMyEKbKPBInODVEWbtKZ+kDmnQK
-         XC0xDsH27sgdYT9rLZqncw7eGMmfAbrV4hgyjqiC4Y2tRQNT9AQfnWDfW6+g+M7aiFOc
-         YGvARglA+ntIlD0bFnrVgs3njRoVB38Q1Gg2hCZK+69PctfIkk0dmyCc53KN10GqGZMy
-         lKb6KopYrZuibrcrP7/V6vhqX788BFoLZgiaiiKOpfV6EgToaK4ztsp5qtkef+h9/nd6
-         rl7g==
-X-Gm-Message-State: AJIora92Oof4jrA3z1Ev+S9MkroX/j55QOsjTCTuD/e+kWVEKWIsSUit
-        Ck5M+ltALW/0CdJ+xLdHZMo=
-X-Google-Smtp-Source: AGRyM1vjlFZPdL9JPMwyXIXYk6FbCyEkJJLFrBU67z3e6uvGzso9Ey7SC1Ab+KqVljeIIbn1GiDVLA==
-X-Received: by 2002:a17:906:74d1:b0:712:2293:8f41 with SMTP id z17-20020a17090674d100b0071222938f41mr2896433ejl.495.1655358541178;
-        Wed, 15 Jun 2022 22:49:01 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id c26-20020a170906171a00b006fed9a0eb17sm305138eje.187.2022.06.15.22.48.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 22:49:00 -0700 (PDT)
-Message-ID: <c0996d75-070e-21e6-eb51-a10a358dbb46@kernel.org>
-Date:   Thu, 16 Jun 2022 07:48:58 +0200
+        Thu, 16 Jun 2022 01:51:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD6B5B8A9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655358710; x=1686894710;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=z6CPFqI+DZfksboiu6czsCYW6mduq7vXgJ23i+ORFdY=;
+  b=dqTYz7J+nbSJlXpp1aQcoNMlzTD3ZyWGgM+RE/DHOZxlyS2y1KnnbJXD
+   6uhPaOm0uGIZK2cbuW1Cjz0GifZlb4NYP53eL9K8fohVCP0MGhLvZ7s/Z
+   aU0UqRJEsxETmpVnDhkHdscCdX7ROKEpZQjFEqBXeOE6k97axJw19ENYP
+   D6+1rs6x1gQhU9C5qFK+edqzbbZj1chv9nfOKxEgH5ffMtl2gBtKer4hu
+   XGwYZ98BS4IxqLOQg+ZS2RaUhKV3GoR2XuWvnw2YKV705hJIaOoBIoT2K
+   EYYbwO2NJVEjVudSF7vsdhWbxL+X9QUzwqD99N2C7CO4Bjy+K0Ewfg/I7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="340827669"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="340827669"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 22:51:49 -0700
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="641377454"
+Received: from junyizh1-mobl.ccr.corp.intel.com ([10.254.214.95])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 22:51:45 -0700
+Message-ID: <04c89154526444781f025043de890bba55282781.camel@intel.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory
+ tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Wei Xu <weixugc@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Thu, 16 Jun 2022 13:51:42 +0800
+In-Reply-To: <cbfe5abe-155b-ac79-2daa-06d9dd60b55a@linux.ibm.com>
+References: <YqDncfLeEeBaosrY@cmpxchg.org>
+         <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
+         <YqH74WaUzJlb+smt@cmpxchg.org> <20220609152243.00000332@Huawei.com>
+         <YqJa4N/VlS4zN4vf@cmpxchg.org> <20220610105708.0000679b@Huawei.com>
+         <YqdEEhJFr3SlfvSJ@cmpxchg.org>
+         <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
+         <Yqdc4DE8gYJ3zesO@cmpxchg.org>
+         <42f536af-b17d-b001-7b6b-2c6b928f3ecf@linux.ibm.com>
+         <YqjZyP11O0yCMmiO@cmpxchg.org>
+         <2b261518bbb5b8466301f8ab978f408141fa6e68.camel@intel.com>
+         <CAAPL-u9hjR8sFeUYM46TXPg-Lho6hr0zaLvrGhg9=htRrPtjqw@mail.gmail.com>
+         <cbfe5abe-155b-ac79-2daa-06d9dd60b55a@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v7 5/6] serial: Support for RS-485 multipoint addresses
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        linux-api@vger.kernel.org
-References: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
- <20220615124829.34516-6-ilpo.jarvinen@linux.intel.com>
- <Yqno+b/+W2RP8rnh@smile.fi.intel.com>
- <ae5c2e50-1a19-7a8f-7dbf-d7ef84128be6@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <ae5c2e50-1a19-7a8f-7dbf-d7ef84128be6@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,64 +90,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16. 06. 22, 7:04, Ilpo Järvinen wrote:
-> On Wed, 15 Jun 2022, Andy Shevchenko wrote:
+On Thu, 2022-06-16 at 10:17 +0530, Aneesh Kumar K V wrote:
+> On 6/16/22 9:15 AM, Wei Xu wrote:
+> > On Wed, Jun 15, 2022 at 6:11 PM Ying Huang <ying.huang@intel.com> wrote:
+> > > 
+> > > On Tue, 2022-06-14 at 14:56 -0400, Johannes Weiner wrote:
+> > > > On Tue, Jun 14, 2022 at 01:31:37PM +0530, Aneesh Kumar K V wrote:
 > 
->> On Wed, Jun 15, 2022 at 03:48:28PM +0300, Ilpo Järvinen wrote:
->>> Add support for RS-485 multipoint addressing using 9th bit [*]. The
->>> addressing mode is configured through .rs485_config().
->>>
->>> ADDRB in termios indicates 9th bit addressing mode is enabled. In this
->>> mode, 9th bit is used to indicate an address (byte) within the
->>> communication line. ADDRB can only be enabled/disabled through
->>> .rs485_config() that is also responsible for setting the destination and
->>> receiver (filter) addresses.
->>>
->>> [*] Technically, RS485 is just an electronic spec and does not itself
->>> specify the 9th bit addressing mode but 9th bit seems at least
->>> "semi-standard" way to do addressing with RS485.
->>>
->>> Cc: Arnd Bergmann <arnd@arndb.de>
->>> Cc: Jonathan Corbet <corbet@lwn.net>
->>> Cc: linux-api@vger.kernel.org
->>> Cc: linux-doc@vger.kernel.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Cc: linux-arch@vger.kernel.org
->>
->> Hmm... In order to reduce commit messages you can move these Cc:s after the
->> cutter line ('---').
+> ....
 > 
-> Ok, although the toolchain I use didn't support preserving --- content
-> so I had to create hack to preserve them, hopefully nothing backfires due
-> to the hack. :-)
+> > > As Jonathan Cameron pointed, we may need the memory tier ID to be
+> > > stable if possible.  I know this isn't a easy task.  At least we can
+> > > make the default memory tier (CPU local DRAM) ID stable (for example
+> > > make it always 128)?  That provides an anchor for users to understand.
+> > 
+> > One of the motivations of introducing "rank" is to allow memory tier
+> > ID to be stable, at least for the well-defined tiers such as the
+> > default memory tier.  The default memory tier can be moved around in
+> > the tier hierarchy by adjusting its rank position relative to other
+> > tiers, but its device ID can remain the same, e.g. always 1.
+> > 
 > 
->>> -	__u32	padding[5];		/* Memory is cheap, new structs
->>> -					   are a royal PITA .. */
->>> +	__u8	addr_recv;
->>> +	__u8	addr_dest;
->>> +	__u8	padding[2 + 4 * sizeof(__u32)];		/* Memory is cheap, new structs
->>> +							 * are a royal PITA .. */
->>
->> I'm not sure it's an equivalent. I would leave u32 members  untouched, so
->> something like
->>
->> 	__u8	addr_recv;
->> 	__u8	addr_dest;
->> 	__u8	padding0[2];		/* Memory is cheap, new structs
->> 	__u32	padding1[4];		 * are a royal PITA .. */
->>
->> And repeating about `pahole` tool which may be useful here to check for ABI
->> potential changes.
+> With /sys/devices/system/memtier/default_tier userspace will be able query
+> the default tier details.
 > 
-> I cannot take __u32 padding[] away like that, this is an uapi header.
 
-Yeah, but it's padding after all. I would personally break it for 
-example as Andy suggests (if pahole shows no differences in size on both 
-32/64 bit) and wait if something breaks. To be honest, I'd not expect 
-anyone to touch it. And if someone does, we would fix it somehow and 
-they should too...
+Yes.  This is a way to address the memory tier ID stability issue too. 
+Anther choice is to make default_tier a symbolic link.
 
-thanks,
--- 
-js
-suse labs
+
+Best Regards,
+Huang, Ying
+

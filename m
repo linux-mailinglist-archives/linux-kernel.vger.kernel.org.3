@@ -2,165 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F19F54E0FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46F654E0F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 14:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiFPMpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 08:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S231580AbiFPMoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 08:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiFPMpI (ORCPT
+        with ESMTP id S229666AbiFPMom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 08:45:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01BF50B1F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 05:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655383502; x=1686919502;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2Z5Da896Eo94KjFbVdgpWXCi2n2dzVGb+t3oq6zgE4Q=;
-  b=lMt6+hBUGNS9EiP2QhXq4FzOCBOzOOqqWHm1edgA8QdgmqrUMuGf6D6p
-   x2fO6jRMhB3UQI7SfGBZc74XiBbreivzMTGymgSnZOA0X4xr+3EywbnP6
-   JAbuXzw/ut+CXvudOPhTzL29ZcWMKQsnhYWVPzv+kdeJnpxRgF9o5DCSf
-   Hm7Xn1GQ+I5vcDTA60LmQtokgPkDiqvA1dNJuQjSRpXMxUOzG7mVCwN1K
-   jBYi5Mcnti+zgjfVTrMLOKT5TNv0zM3j85t4gFQ6y/e+2+tEG/iw70Atk
-   ClmElO6wvmTlbMBPVtv4dzGHIO+wRKxXha2WxvNsboOR0Ux3zPOWZy/pE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280271870"
-X-IronPort-AV: E=Sophos;i="5.91,305,1647327600"; 
-   d="scan'208";a="280271870"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 05:45:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,305,1647327600"; 
-   d="scan'208";a="641522693"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Jun 2022 05:44:59 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1orr-000ONl-8r;
-        Thu, 16 Jun 2022 12:44:59 +0000
-Date:   Thu, 16 Jun 2022 20:44:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     kbuild-all@lists.01.org, hch@infradead.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH V3 1/2] mm/mmap: Restrict generic protection_map[] array
- visibility
-Message-ID: <202206162004.ak9KTfMD-lkp@intel.com>
-References: <20220616040924.1022607-2-anshuman.khandual@arm.com>
+        Thu, 16 Jun 2022 08:44:42 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4A6DFC4;
+        Thu, 16 Jun 2022 05:44:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K8GwtpKPpCUpBno9Cj1arWMVZCv143LC5VdKG18DKlMWL0Q3jLEsRpk/KBjKnymgosHRXib2O02PMAPYgIDfAwWuz3H6oXnqEeXNjdGXUT54G8aw0CMpYOiQZTFQRAmEDV5I3IKq0F/EnlGBRnnrEVGyi07zdjoqk4qluiin9XZcPQOtir9nx+O0T1Qra9oKuz4DQvUjKO6Kv9T5OLn1MJWirqHKOvZ6YXuf4dJXDxvD79a85NY5tSiFLDE+ni3GOopDxAHW8mrT+T0Ud8ftQb34z31SfVh7/Hy6JwNhmEoWkUAwfnFc96oI0viVruhSiwHwK2QaPZHKNSn7HnTC+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZNenaDrZYEkFAQHcjYIh7L2D9Wouh6uO2jzRMK+XK/A=;
+ b=dgSDGMfj3i0tbu5SLtWsI3iBVxaRazE87bsNtS+CJPZFtBTrftVKUqCHCqieQf9b3EGr5wtP83DDGpRxcjoit1Zxul0AMVUcdoDjJNxM0jgIuKQNesuDCaspggrbn0U+x/52Vho7OqvZ8v17nicY3r7wcbZynzTBD8uUnU7UT40PbwdQOfnwYv2pyGi55akNkjuQp8TCZxh/dINhN+vlcv03YQuhkFYtlCtM+qoLrgTjjLwoJ+PKDGbpJQEtnBwk/byLRsXY5OaiB0KJuY/n5nIjFvgAIZN9H6XdBbg/QICBD52+A6aNgEyo8USBBoUJhgMqjZzcKs0VLcDCvLEBhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZNenaDrZYEkFAQHcjYIh7L2D9Wouh6uO2jzRMK+XK/A=;
+ b=h6VHhzbfaigqNUiPGqaYbtulBIf+dEcpcoNKQrLXY5AisV21HuIzXcy8NpTkACtOesrCHT+BFNxERLAq1UfiSrNWtBJOhb7P5yB16hwZOEGFFAy74zC0BsUyl9XaveM3xNVfnWSr29HW8bMOy2uf5l73/r2FDnW8hXii3c3/r4w=
+Received: from DS7PR05CA0102.namprd05.prod.outlook.com (2603:10b6:8:56::22) by
+ SN1PR02MB3904.namprd02.prod.outlook.com (2603:10b6:802:27::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.13; Thu, 16 Jun 2022 12:44:35 +0000
+Received: from DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:8:56:cafe::65) by DS7PR05CA0102.outlook.office365.com
+ (2603:10b6:8:56::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.9 via Frontend
+ Transport; Thu, 16 Jun 2022 12:44:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT013.mail.protection.outlook.com (10.13.5.126) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Thu, 16 Jun 2022 12:44:35 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 16 Jun 2022 05:44:34 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 16 Jun 2022 05:44:34 -0700
+Envelope-to: linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ lorenzo.pieralisi@arm.com,
+ bhelgaas@google.com,
+ robh@kernel.org
+Received: from [10.140.9.2] (port=44392 helo=xhdbharatku40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <bharat.kumar.gogada@xilinx.com>)
+        id 1o1orS-000Aiu-1j; Thu, 16 Jun 2022 05:44:34 -0700
+From:   Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
+        <michals@xilinx.com>, <robh@kernel.org>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Subject: [PATCH v5 0/2] Add support for Xilinx Versal CPM5 Root Port
+Date:   Thu, 16 Jun 2022 18:14:27 +0530
+Message-ID: <20220616124429.12917-1-bharat.kumar.gogada@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616040924.1022607-2-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a2f98e52-57e9-4aad-2618-08da4f95f7ba
+X-MS-TrafficTypeDiagnostic: SN1PR02MB3904:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR02MB390402E3D96751A41788E884A5AC9@SN1PR02MB3904.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vQ2MI3qjSL7LBKZyUO5Cw2IloMq6WBOT6jvHRcDYoLMXPI+COx0Mttjpx7p/N9wqL3mIZ5rj98Zj4j2xwzO+NZ5BWOOIlt/DttBsRhMojuRdB8sUCoeUEYmFeP4mtFHmcuWeE14xtedOi3Cd4AwxaMnxDxb4WOoO+Jwi2/ow8xOhiQWWjL2LrAfXduJC4iE6O8VjZl36IXHpJ4JGZODjAyTDf5p74j04gStNcdeLPRca6nhCbVus1oer2o0MG0lXNDvtm6rRzlg+TQpIuzoc04Dk+rJV647P8ScusqexDe6PK1y+4kBOR8x1ddIvSZX/XN+ete7RjxjnOC8JMMvUGah3dnEiBTYPxJoMJg7vZYLdQZ3MvJ6KO+21LiEbsY1HA61yJ5vTiVHZ/EsbvNvfOB4hJubo7boQlHHUWSDwXAR/Njjt0VP5MPpZrLrLOGtXjPP3Cv799nDH4PMOnXaSQICeqDTwrnXu/Uu0fkm26BiKzExJ3Ts76PZeHIe70yhPrx+WD1ZWCf6CLHzk0GX3LGLtB1EIjOqep51VTi0b4CG6kvcDVtnBWdp8f9wFXUql91zlQ0HB7ynqMbiqCbwT0KoS1d7NvaC/GpAkwESF/+x6OB0VLAcEPgsSWoVKteqrHTHQx/wFsXU2ss14ScXZ12A2FBnIsOg9L+uqKM4JO6wRlpJGBqmPpPoNzXzWwOh7EDil6lOppbDLQZlQ6QclMw==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(36840700001)(46966006)(40470700004)(110136005)(2616005)(70206006)(83380400001)(7696005)(356005)(8676002)(4326008)(316002)(70586007)(82310400005)(107886003)(426003)(9786002)(1076003)(5660300002)(336012)(8936002)(26005)(186003)(47076005)(7636003)(508600001)(2906002)(6666004)(36756003)(36860700001)(103116003)(54906003)(4744005)(40460700003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 12:44:35.0302
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2f98e52-57e9-4aad-2618-08da4f95f7ba
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT013.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR02MB3904
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+Xilinx Versal Premium series has CPM5 block which supports Root Port
+functioning at Gen5 speed.
 
-Thank you for the patch! Yet something to improve:
+Xilinx Versal CPM5 has few changes with existing CPM block.
+- CPM5 has dedicated register space for control and status registers.
+- CPM5 legacy interrupt handling needs additonal register bit
+  to enable and handle legacy interrupts.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220616-121132
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206162004.ak9KTfMD-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/4eb89368b130fe235d5e587bcc2eec18bb688e2d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220616-121132
-        git checkout 4eb89368b130fe235d5e587bcc2eec18bb688e2d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/include/asm/percpu.h:27,
-                    from arch/x86/include/asm/preempt.h:6,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from arch/x86/mm/mem_encrypt_amd.c:14:
-   arch/x86/mm/mem_encrypt_amd.c: In function 'sme_early_init':
->> arch/x86/mm/mem_encrypt_amd.c:499:36: error: 'protection_map' undeclared (first use in this function)
-     499 |         for (i = 0; i < ARRAY_SIZE(protection_map); i++)
-         |                                    ^~~~~~~~~~~~~~
-   include/linux/kernel.h:55:33: note: in definition of macro 'ARRAY_SIZE'
-      55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                 ^~~
-   arch/x86/mm/mem_encrypt_amd.c:499:36: note: each undeclared identifier is reported only once for each function it appears in
-     499 |         for (i = 0; i < ARRAY_SIZE(protection_map); i++)
-         |                                    ^~~~~~~~~~~~~~
-   include/linux/kernel.h:55:33: note: in definition of macro 'ARRAY_SIZE'
-      55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                 ^~~
-   In file included from include/linux/bits.h:22,
-                    from include/linux/ratelimit_types.h:5,
-                    from include/linux/printk.h:9,
-                    from include/asm-generic/bug.h:22,
-                    from arch/x86/include/asm/bug.h:87,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:6,
-                    from arch/x86/mm/mem_encrypt_amd.c:14:
-   include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                   ^
-   include/linux/compiler.h:240:33: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
-     240 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-         |                                 ^~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:59: note: in expansion of macro '__must_be_array'
-      55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                                           ^~~~~~~~~~~~~~~
-   arch/x86/mm/mem_encrypt_amd.c:499:25: note: in expansion of macro 'ARRAY_SIZE'
-     499 |         for (i = 0; i < ARRAY_SIZE(protection_map); i++)
-         |                         ^~~~~~~~~~
+Changes in v5:
+- Added of_device_get_match_data to identify CPM version.
 
 
-vim +/protection_map +499 arch/x86/mm/mem_encrypt_amd.c
+Bharat Kumar Gogada (2):
+  dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
+  PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
 
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  486  
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  487  void __init sme_early_init(void)
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  488  {
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  489  	unsigned int i;
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  490  
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  491  	if (!sme_me_mask)
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  492  		return;
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  493  
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  494  	early_pmd_flags = __sme_set(early_pmd_flags);
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  495  
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  496  	__supported_pte_mask = __sme_set(__supported_pte_mask);
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  497  
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  498  	/* Update the protection map with memory encryption mask */
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22 @499  	for (i = 0; i < ARRAY_SIZE(protection_map); i++)
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  500  		protection_map[i] = pgprot_encrypted(protection_map[i]);
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  501  
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  502  	x86_platform.guest.enc_status_change_prepare = amd_enc_status_change_prepare;
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  503  	x86_platform.guest.enc_status_change_finish  = amd_enc_status_change_finish;
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  504  	x86_platform.guest.enc_tlb_flush_required    = amd_enc_tlb_flush_required;
-1e8c5971c24989 arch/x86/mm/mem_encrypt_amd.c Brijesh Singh 2022-02-22  505  	x86_platform.guest.enc_cache_flush_required  = amd_enc_cache_flush_required;
-f4495615d76cfe arch/x86/mm/mem_encrypt.c     Ashish Kalra  2021-08-24  506  }
-f4495615d76cfe arch/x86/mm/mem_encrypt.c     Ashish Kalra  2021-08-24  507  
+ .../bindings/pci/xilinx-versal-cpm.yaml       | 48 ++++++++++++--
+ drivers/pci/controller/pcie-xilinx-cpm.c      | 62 ++++++++++++++++++-
+ 2 files changed, 103 insertions(+), 7 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

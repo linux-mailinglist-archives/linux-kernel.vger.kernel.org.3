@@ -2,42 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF98054DB4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 09:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A47054DA1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358826AbiFPHMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 03:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S1358877AbiFPGCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiFPHMY (ORCPT
+        with ESMTP id S1358520AbiFPGC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 03:12:24 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415135BD34
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 00:12:19 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id KDC00116;
-        Thu, 16 Jun 2022 15:12:16 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201601.home.langchao.com (10.100.2.1) with Microsoft SMTP Server id
- 15.1.2308.27; Thu, 16 Jun 2022 15:12:16 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <sudeep.holla@arm.com>, <cristian.marussi@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API
-Date:   Thu, 16 Jun 2022 01:50:52 -0400
-Message-ID: <20220616055052.4559-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Thu, 16 Jun 2022 02:02:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0768522B18;
+        Wed, 15 Jun 2022 23:02:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0C1FB82187;
+        Thu, 16 Jun 2022 06:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3495EC34114;
+        Thu, 16 Jun 2022 06:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655359345;
+        bh=00EAwW//1VscB61KDtwzGbrMMRpyOV8rVPd5uHAJUSA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=tI85vWgmxeOMOoAPo5FAcGbqauBSBfgd14PfKH3PIR7TrCMBhslJaYLlxM11nbVrg
+         atFiqPwBpUrkz5PiOqYmk2ZF+Bs8l2q7UxeKXPgEc7Uy79jDFqlhyDMa06X0+fUdKX
+         a5xwnpEvTcAW950UHhjt5lkEhMFLsmAbwKYTZWQzWip0l4vK6ZTK7GAFLqCbQvfm6k
+         IY9nmh9YrZL/rS8F4xzRsR3qv+YE+0q7O1NGce93BEPD1jj9+r6vubJuVinmSzYe/p
+         V1nOjN126xvsY2wJB9wAqVGmyNsyC97jw09jgTrCu6VzdXEYox0+gBjcCKfhp/U57p
+         h+C5FPqXXYLwg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   202261615121680575a135cc1fb6a44243d32fd659860
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220616032448.3974916-1-windhl@126.com>
+References: <20220616032448.3974916-1-windhl@126.com>
+Subject: Re: [PATCH v2] drivers: clk: (clk-nomadik) Add missing of_node_put()
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, windhl@126.com
+To:     Liang He <windhl@126.com>, linus.walleij@linaro.org,
+        mturquette@baylibre.com
+Date:   Wed, 15 Jun 2022 23:02:23 -0700
+User-Agent: alot/0.10
+Message-Id: <20220616060225.3495EC34114@smtp.kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,46 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc_xxx()/ida_free() instead of
-ida_simple_get()/ida_simple_remove().
-The latter is deprecated and more verbose.
+Same subject line comment applies here. Look at previous patches to the
+file.
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/firmware/arm_scmi/bus.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Quoting Liang He (2022-06-15 20:24:48)
+> diff --git a/drivers/clk/clk-nomadik.c b/drivers/clk/clk-nomadik.c
+> index bad2677e11ae..48d5772b36a5 100644
+> --- a/drivers/clk/clk-nomadik.c
+> +++ b/drivers/clk/clk-nomadik.c
+> @@ -99,7 +99,7 @@ static void __init nomadik_src_init(void)
+>         if (!src_base) {
+>                 pr_err("%s: must have src parent node with REGS (%pOFn)\n=
+",
+>                        __func__, np);
+> -               return;
+> +               goto out_put;
+>         }
+> =20
+>         /* Set all timers to use the 2.4 MHz TIMCLK */
+> @@ -132,6 +132,9 @@ static void __init nomadik_src_init(void)
+>         }
+>         writel(val, src_base + SRC_XTALCR);
+>         register_reboot_notifier(&nomadik_clk_reboot_notifier);
+> +      =20
+> +output:
+> +    of_node_put(np);  =20
 
-diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-index f6fe723ab869..d4e23101448a 100644
---- a/drivers/firmware/arm_scmi/bus.c
-+++ b/drivers/firmware/arm_scmi/bus.c
-@@ -181,7 +181,7 @@ scmi_device_create(struct device_node *np, struct device *parent, int protocol,
- 		return NULL;
- 	}
- 
--	id = ida_simple_get(&scmi_bus_id, 1, 0, GFP_KERNEL);
-+	id = ida_alloc_min(&scmi_bus_id, 1, GFP_KERNEL);
- 	if (id < 0) {
- 		kfree_const(scmi_dev->name);
- 		kfree(scmi_dev);
-@@ -204,7 +204,7 @@ scmi_device_create(struct device_node *np, struct device *parent, int protocol,
- put_dev:
- 	kfree_const(scmi_dev->name);
- 	put_device(&scmi_dev->dev);
--	ida_simple_remove(&scmi_bus_id, id);
-+	ida_free(&scmi_bus_id, id);
- 	return NULL;
- }
- 
-@@ -212,7 +212,7 @@ void scmi_device_destroy(struct scmi_device *scmi_dev)
- {
- 	kfree_const(scmi_dev->name);
- 	scmi_handle_put(scmi_dev->handle);
--	ida_simple_remove(&scmi_bus_id, scmi_dev->id);
-+	ida_free(&scmi_bus_id, scmi_dev->id);
- 	device_unregister(&scmi_dev->dev);
- }
- 
--- 
-2.27.0
-
+tabbed incorrectly?

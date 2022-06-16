@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B6D54D5FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16BF54D605
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244148AbiFPARd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 20:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S1346285AbiFPARz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 20:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344660AbiFPAR2 (ORCPT
+        with ESMTP id S1345352AbiFPARw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 20:17:28 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029E43F32A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:17:24 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id z14so8709612pgh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:17:24 -0700 (PDT)
+        Wed, 15 Jun 2022 20:17:52 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5399D255AA;
+        Wed, 15 Jun 2022 17:17:51 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id q15so7116255wmj.2;
+        Wed, 15 Jun 2022 17:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wSmEvwjod79/RP9lUYdq87XgvxgWBT4rqBLlHoWJF/Y=;
-        b=m/b5PopkNA+RqYCzLTquiWNjQ+UynFOXWoj+jFYV4B2i12EKUfMLDJGZG36CsGxyCX
-         ceQnR/AXTTFx4oJ/NFfxsxJF1BwQheLDAfe9LI/TtYcN1YuovNx8HmCuLNeChs+qCBte
-         rFk3TddVHP0rrcqdrQjnMA8NW7eyuPSHz0hxN8U1gymgm/n+J+5NQHMcqSkVVkZM6jbi
-         SmnOJ9Fq+cOqlbOvfiUN0jge2+sAXEQI6T+31jBM6C1kOviI3K0z0JMnsqG4UV4lXpJM
-         C1mRgmhy5uBKDPQf1JU/p4fbCAChVq8Ve4eRobBr8I3bGySM67anHACo37auYev9fN7F
-         qWZQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=aDFzDq54JiCUJ9bH5+ojvGT3soC1A7JouZz/quQ+US0=;
+        b=IlogWXO1gcyue/Wz5QekpFNXjYHeEtu2RxP3cUoLgrnhX5BzWrnqfKLnJfu5N+rEKN
+         v9aB63DJRSRb0/hI1IUOo8cvqDAJMdG+HYei9Q2Iy4aE3WG9vjdp73DGrA1V1LvN+wUe
+         FreLyghOoRUSFSCsqPhA5vyFe7oLfSmehM+U65LwHJcN/roeO/HbX4yDId9vC6HyXuOl
+         UAmMyaY+Rh9tZ138OfBuog4BDrcqkbCR7vzUq4BxqX7QDHKfPOgwFt7h4cSOFrkIfwIU
+         Nv5wbiy4ND3QUY7bxLV3nmiN8oQryrTPziQTlKtGZuGoio+rceYZ2mKdcpIzgCLVgwsE
+         d4+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wSmEvwjod79/RP9lUYdq87XgvxgWBT4rqBLlHoWJF/Y=;
-        b=UCcZ95TLQHA0N8Irhc3N6az0HTpmPgtf9hHuKjIkFe2uSWww39agBoam59HB/3tU5V
-         osSnK7/oG+1WeEkpfRTM6cg9tzW5CFiqVqXv9Vdrti60K/ULkEhlOzXSPB6hVDwvUUjw
-         hemdRwJoalWssJYP2cyiu34lVklcaaWxWAwpsGrRiDsTz/QGyalb6orqnbfUd2dqXrpN
-         UJhXPmNmQVI7Jt+bf/F7F4wEWmolmmbMIXCEb6C18TLIXDOcKGGZg6DNNL1m+k8ftYbO
-         6q/GtRVV0DXf1sFgJQ0YHWxsMwGOfEZqKMAk9xILnE+/K+ezW4Jyx531nNHQO/j0dnhw
-         NsDA==
-X-Gm-Message-State: AJIora/RdYVVE5tApJsj+XO4wlOXm52hJiaRD4FKBzHOucJzsCcslEk3
-        Zuf7SCD4Zraeu6/vnOOx4N+CVQ==
-X-Google-Smtp-Source: AGRyM1uaCFBSiBDO5r8IywSJVa4aAd3+tDbvSM1PAErWYT15eLlmNZsb7OQrJrd4qR/Yh+FUV8AkcA==
-X-Received: by 2002:a65:6499:0:b0:3fc:dcaa:ad62 with SMTP id e25-20020a656499000000b003fcdcaaad62mr2075421pgv.63.1655338644016;
-        Wed, 15 Jun 2022 17:17:24 -0700 (PDT)
-Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
-        by smtp.gmail.com with ESMTPSA id c9-20020a63a409000000b003faf4acac63sm191097pgf.13.2022.06.15.17.17.22
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=aDFzDq54JiCUJ9bH5+ojvGT3soC1A7JouZz/quQ+US0=;
+        b=kuDKI+BaPd3Wa9RBi31g19PuHS8G/t1kgB+Tok++5880epDg45tRmCrmaFxUqQjfbJ
+         tC01vx7GnXm5m5+asQR4jCqyg7blfRl8H1TbvP+2LwwIS9np9pYx7aykHbojQ2eGc93i
+         PaKCEp+cxZ0WhcYP3aRpZIH2nJ1oqsv65RmDgJRzCNHzOv/m8W7Df9MmrxrUQIUVh8Cr
+         MC+Zb61WN5+TivHkLlmUDs72/bacsp2UNGghufi16gg158ts+UOcHq4ajLbcmH6N/4iT
+         tH2WUSOi6TCTyi61O7frhV6DVZ3QhttbAjgRqQhROWM8s9hKhOlmV59/Vpfyr+3y67qU
+         4TlA==
+X-Gm-Message-State: AJIora/4GY2B3ubOpYobV8REAJ9hWHOJUshJS7D6Np8x/Jb9GCFDstvQ
+        fjbHttcs+V4pWz0acKw+1cA=
+X-Google-Smtp-Source: AGRyM1vZD6jtH1N3IO87Vi0fAgsO8OlxJTZhgBV4cSpO2pfObOs6AIqeTcGZQ3vd6FP3/HVVPIHBOA==
+X-Received: by 2002:a05:600c:2143:b0:39c:5539:c64f with SMTP id v3-20020a05600c214300b0039c5539c64fmr2001521wml.194.1655338669512;
+        Wed, 15 Jun 2022 17:17:49 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc31a000000b00397623ff335sm449665wmj.10.2022.06.15.17.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 17:17:23 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 17:17:19 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v4 PATCH 4/7] mm: thp: kill transparent_hugepage_active()
-Message-ID: <Yqp2j6sf7m3wmwou@google.com>
-References: <20220615172926.546974-1-shy828301@gmail.com>
- <20220615172926.546974-5-shy828301@gmail.com>
+        Wed, 15 Jun 2022 17:17:49 -0700 (PDT)
+Message-ID: <62aa76ad.1c69fb81.7e2d3.0c8e@mx.google.com>
+X-Google-Original-Message-ID: <Yqp2wAyG/XdFxTNo@Ansuel-xps.>
+Date:   Thu, 16 Jun 2022 02:18:08 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] mtd: nand: raw: qcom_nandc: reorder
+ qcom_nand_host struct
+References: <20220615000612.3119-1-ansuelsmth@gmail.com>
+ <20220615000612.3119-2-ansuelsmth@gmail.com>
+ <20220615171132.GA3606@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220615172926.546974-5-shy828301@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220615171132.GA3606@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,243 +83,291 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15 Jun 10:29, Yang Shi wrote:
-> The transparent_hugepage_active() was introduced to show THP eligibility
-> bit in smaps in proc, smaps is the only user.  But it actually does the
-> similar check as hugepage_vma_check() which is used by khugepaged.  We
-> definitely don't have to maintain two similar checks, so kill
-> transparent_hugepage_active().
+On Wed, Jun 15, 2022 at 10:41:32PM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Jun 15, 2022 at 02:06:10AM +0200, Ansuel Smith wrote:
+> > Reorder structs in nandc driver to save holes.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > 
-> This patch also fixed the wrong behavior for VM_NO_KHUGEPAGED vmas.
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 > 
-> Also move hugepage_vma_check() to huge_memory.c and huge_mm.h since it
-> is not only for khugepaged anymore.
+> Thanks,
+> Mani
+>
+
+I'm sending v8 with a different Sob so I'm not adding the review tag (in
+v8).
+In short the new Sob is what I will use onwards, wanted to keep the
+Ansuel reference but it was suggested to use Christian Marangi and
+nothing more. It's just a name change and we are the same person and
+nobody is stealing ownership of the patch.
+Sorry for the mess.
+
+> > ---
+> >  drivers/mtd/nand/raw/qcom_nandc.c | 107 +++++++++++++++++-------------
+> >  1 file changed, 62 insertions(+), 45 deletions(-)
+> > 
+> > diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+> > index 1a77542c6d67..f2990d721733 100644
+> > --- a/drivers/mtd/nand/raw/qcom_nandc.c
+> > +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+> > @@ -238,6 +238,9 @@ nandc_set_reg(chip, reg,			\
+> >   * @bam_ce - the array of BAM command elements
+> >   * @cmd_sgl - sgl for NAND BAM command pipe
+> >   * @data_sgl - sgl for NAND BAM consumer/producer pipe
+> > + * @last_data_desc - last DMA desc in data channel (tx/rx).
+> > + * @last_cmd_desc - last DMA desc in command channel.
+> > + * @txn_done - completion for NAND transfer.
+> >   * @bam_ce_pos - the index in bam_ce which is available for next sgl
+> >   * @bam_ce_start - the index in bam_ce which marks the start position ce
+> >   *		   for current sgl. It will be used for size calculation
+> > @@ -250,14 +253,14 @@ nandc_set_reg(chip, reg,			\
+> >   * @rx_sgl_start - start index in data sgl for rx.
+> >   * @wait_second_completion - wait for second DMA desc completion before making
+> >   *			     the NAND transfer completion.
+> > - * @txn_done - completion for NAND transfer.
+> > - * @last_data_desc - last DMA desc in data channel (tx/rx).
+> > - * @last_cmd_desc - last DMA desc in command channel.
+> >   */
+> >  struct bam_transaction {
+> >  	struct bam_cmd_element *bam_ce;
+> >  	struct scatterlist *cmd_sgl;
+> >  	struct scatterlist *data_sgl;
+> > +	struct dma_async_tx_descriptor *last_data_desc;
+> > +	struct dma_async_tx_descriptor *last_cmd_desc;
+> > +	struct completion txn_done;
+> >  	u32 bam_ce_pos;
+> >  	u32 bam_ce_start;
+> >  	u32 cmd_sgl_pos;
+> > @@ -267,25 +270,23 @@ struct bam_transaction {
+> >  	u32 rx_sgl_pos;
+> >  	u32 rx_sgl_start;
+> >  	bool wait_second_completion;
+> > -	struct completion txn_done;
+> > -	struct dma_async_tx_descriptor *last_data_desc;
+> > -	struct dma_async_tx_descriptor *last_cmd_desc;
+> >  };
+> >  
+> >  /*
+> >   * This data type corresponds to the nand dma descriptor
+> > + * @dma_desc - low level DMA engine descriptor
+> >   * @list - list for desc_info
+> > - * @dir - DMA transfer direction
+> > + *
+> >   * @adm_sgl - sgl which will be used for single sgl dma descriptor. Only used by
+> >   *	      ADM
+> >   * @bam_sgl - sgl which will be used for dma descriptor. Only used by BAM
+> >   * @sgl_cnt - number of SGL in bam_sgl. Only used by BAM
+> > - * @dma_desc - low level DMA engine descriptor
+> > + * @dir - DMA transfer direction
+> >   */
+> >  struct desc_info {
+> > +	struct dma_async_tx_descriptor *dma_desc;
+> >  	struct list_head node;
+> >  
+> > -	enum dma_data_direction dir;
+> >  	union {
+> >  		struct scatterlist adm_sgl;
+> >  		struct {
+> > @@ -293,7 +294,7 @@ struct desc_info {
+> >  			int sgl_cnt;
+> >  		};
+> >  	};
+> > -	struct dma_async_tx_descriptor *dma_desc;
+> > +	enum dma_data_direction dir;
+> >  };
+> >  
+> >  /*
+> > @@ -337,52 +338,64 @@ struct nandc_regs {
+> >  /*
+> >   * NAND controller data struct
+> >   *
+> > - * @controller:			base controller structure
+> > - * @host_list:			list containing all the chips attached to the
+> > - *				controller
+> >   * @dev:			parent device
+> > + *
+> >   * @base:			MMIO base
+> > - * @base_phys:			physical base address of controller registers
+> > - * @base_dma:			dma base address of controller registers
+> > + *
+> >   * @core_clk:			controller clock
+> >   * @aon_clk:			another controller clock
+> >   *
+> > + * @regs:			a contiguous chunk of memory for DMA register
+> > + *				writes. contains the register values to be
+> > + *				written to controller
+> > + *
+> > + * @props:			properties of current NAND controller,
+> > + *				initialized via DT match data
+> > + *
+> > + * @controller:			base controller structure
+> > + * @host_list:			list containing all the chips attached to the
+> > + *				controller
+> > + *
+> >   * @chan:			dma channel
+> >   * @cmd_crci:			ADM DMA CRCI for command flow control
+> >   * @data_crci:			ADM DMA CRCI for data flow control
+> > + *
+> >   * @desc_list:			DMA descriptor list (list of desc_infos)
+> >   *
+> >   * @data_buffer:		our local DMA buffer for page read/writes,
+> >   *				used when we can't use the buffer provided
+> >   *				by upper layers directly
+> > - * @buf_size/count/start:	markers for chip->legacy.read_buf/write_buf
+> > - *				functions
+> >   * @reg_read_buf:		local buffer for reading back registers via DMA
+> > + *
+> > + * @base_phys:			physical base address of controller registers
+> > + * @base_dma:			dma base address of controller registers
+> >   * @reg_read_dma:		contains dma address for register read buffer
+> > - * @reg_read_pos:		marker for data read in reg_read_buf
+> >   *
+> > - * @regs:			a contiguous chunk of memory for DMA register
+> > - *				writes. contains the register values to be
+> > - *				written to controller
+> > - * @cmd1/vld:			some fixed controller register values
+> > - * @props:			properties of current NAND controller,
+> > - *				initialized via DT match data
+> > + * @buf_size/count/start:	markers for chip->legacy.read_buf/write_buf
+> > + *				functions
+> >   * @max_cwperpage:		maximum QPIC codewords required. calculated
+> >   *				from all connected NAND devices pagesize
+> > + *
+> > + * @reg_read_pos:		marker for data read in reg_read_buf
+> > + *
+> > + * @cmd1/vld:			some fixed controller register values
+> >   */
+> >  struct qcom_nand_controller {
+> > -	struct nand_controller controller;
+> > -	struct list_head host_list;
+> > -
+> >  	struct device *dev;
+> >  
+> >  	void __iomem *base;
+> > -	phys_addr_t base_phys;
+> > -	dma_addr_t base_dma;
+> >  
+> >  	struct clk *core_clk;
+> >  	struct clk *aon_clk;
+> >  
+> > +	struct nandc_regs *regs;
+> > +	struct bam_transaction *bam_txn;
+> > +
+> > +	const struct qcom_nandc_props *props;
+> > +
+> > +	struct nand_controller controller;
+> > +	struct list_head host_list;
+> > +
+> >  	union {
+> >  		/* will be used only by QPIC for BAM DMA */
+> >  		struct {
+> > @@ -400,22 +413,22 @@ struct qcom_nand_controller {
+> >  	};
+> >  
+> >  	struct list_head desc_list;
+> > -	struct bam_transaction *bam_txn;
+> >  
+> >  	u8		*data_buffer;
+> > +	__le32		*reg_read_buf;
+> > +
+> > +	phys_addr_t base_phys;
+> > +	dma_addr_t base_dma;
+> > +	dma_addr_t reg_read_dma;
+> > +
+> >  	int		buf_size;
+> >  	int		buf_count;
+> >  	int		buf_start;
+> >  	unsigned int	max_cwperpage;
+> >  
+> > -	__le32 *reg_read_buf;
+> > -	dma_addr_t reg_read_dma;
+> >  	int reg_read_pos;
+> >  
+> > -	struct nandc_regs *regs;
+> > -
+> >  	u32 cmd1, vld;
+> > -	const struct qcom_nandc_props *props;
+> >  };
+> >  
+> >  /*
+> > @@ -431,19 +444,21 @@ struct qcom_nand_controller {
+> >   *				and reserved bytes
+> >   * @cw_data:			the number of bytes within a codeword protected
+> >   *				by ECC
+> > - * @use_ecc:			request the controller to use ECC for the
+> > - *				upcoming read/write
+> > - * @bch_enabled:		flag to tell whether BCH ECC mode is used
+> >   * @ecc_bytes_hw:		ECC bytes used by controller hardware for this
+> >   *				chip
+> > - * @status:			value to be returned if NAND_CMD_STATUS command
+> > - *				is executed
+> > + *
+> >   * @last_command:		keeps track of last command on this chip. used
+> >   *				for reading correct status
+> >   *
+> >   * @cfg0, cfg1, cfg0_raw..:	NANDc register configurations needed for
+> >   *				ecc/non-ecc mode for the current nand flash
+> >   *				device
+> > + *
+> > + * @status:			value to be returned if NAND_CMD_STATUS command
+> > + *				is executed
+> > + * @use_ecc:			request the controller to use ECC for the
+> > + *				upcoming read/write
+> > + * @bch_enabled:		flag to tell whether BCH ECC mode is used
+> >   */
+> >  struct qcom_nand_host {
+> >  	struct nand_chip chip;
+> > @@ -452,12 +467,10 @@ struct qcom_nand_host {
+> >  	int cs;
+> >  	int cw_size;
+> >  	int cw_data;
+> > -	bool use_ecc;
+> > -	bool bch_enabled;
+> >  	int ecc_bytes_hw;
+> >  	int spare_bytes;
+> >  	int bbm_size;
+> > -	u8 status;
+> > +
+> >  	int last_command;
+> >  
+> >  	u32 cfg0, cfg1;
+> > @@ -466,23 +479,27 @@ struct qcom_nand_host {
+> >  	u32 ecc_bch_cfg;
+> >  	u32 clrflashstatus;
+> >  	u32 clrreadstatus;
+> > +
+> > +	u8 status;
+> > +	bool use_ecc;
+> > +	bool bch_enabled;
+> >  };
+> >  
+> >  /*
+> >   * This data type corresponds to the NAND controller properties which varies
+> >   * among different NAND controllers.
+> >   * @ecc_modes - ecc mode for NAND
+> > + * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
+> >   * @is_bam - whether NAND controller is using BAM
+> >   * @is_qpic - whether NAND CTRL is part of qpic IP
+> >   * @qpic_v2 - flag to indicate QPIC IP version 2
+> > - * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
+> >   */
+> >  struct qcom_nandc_props {
+> >  	u32 ecc_modes;
+> > +	u32 dev_cmd_reg_start;
+> >  	bool is_bam;
+> >  	bool is_qpic;
+> >  	bool qpic_v2;
+> > -	u32 dev_cmd_reg_start;
+> >  };
+> >  
+> >  /* Frees the BAM transaction memory */
+> > -- 
+> > 2.36.1
+> > 
 > 
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> ---
->  fs/proc/task_mmu.c         |  2 +-
->  include/linux/huge_mm.h    | 11 ++++++++-
->  include/linux/khugepaged.h |  2 --
->  mm/huge_memory.c           | 50 +++++++++++++++++++++++++++++++-------
->  mm/khugepaged.c            | 48 +++---------------------------------
->  5 files changed, 56 insertions(+), 57 deletions(-)
-> 
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 37ccb5c9f4f8..39a40ec181e7 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -863,7 +863,7 @@ static int show_smap(struct seq_file *m, void *v)
->  	__show_smap(m, &mss, false);
->  
->  	seq_printf(m, "THPeligible:    %d\n",
-> -		   transparent_hugepage_active(vma));
-> +		   hugepage_vma_check(vma, vma->vm_flags, true));
->  
->  	if (arch_pkeys_enabled())
->  		seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 8a5a8bfce0f5..aeb13119ee28 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -202,7 +202,9 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
->  	       !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
->  }
->  
-> -bool transparent_hugepage_active(struct vm_area_struct *vma);
-
-Like v3, I think this also needs to be deleted from !CONFIG_TRANSPARENT_HUGEPAGE
-
-Otherwise can add
-
-Reviewed-by: Zach O'Keefe <zokeefe@google.com>
-
-> +bool hugepage_vma_check(struct vm_area_struct *vma,
-> +			unsigned long vm_flags,
-> +			bool smaps);
->  
->  #define transparent_hugepage_use_zero_page()				\
->  	(transparent_hugepage_flags &					\
-> @@ -368,6 +370,13 @@ static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
->  	return false;
->  }
->  
-> +static inline bool hugepage_vma_check(struct vm_area_struct *vma,
-> +				       unsigned long vm_flags,
-> +				       bool smaps)
-> +{
-> +	return false;
-> +}
-> +
->  static inline void prep_transhuge_page(struct page *page) {}
->  
->  #define transparent_hugepage_flags 0UL
-> diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-> index 31ca8a7f78f4..ea5fd4c398f7 100644
-> --- a/include/linux/khugepaged.h
-> +++ b/include/linux/khugepaged.h
-> @@ -10,8 +10,6 @@ extern struct attribute_group khugepaged_attr_group;
->  extern int khugepaged_init(void);
->  extern void khugepaged_destroy(void);
->  extern int start_stop_khugepaged(void);
-> -extern bool hugepage_vma_check(struct vm_area_struct *vma,
-> -			       unsigned long vm_flags);
->  extern void __khugepaged_enter(struct mm_struct *mm);
->  extern void __khugepaged_exit(struct mm_struct *mm);
->  extern void khugepaged_enter_vma(struct vm_area_struct *vma,
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index b530462c4493..a28c6100b491 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -69,21 +69,53 @@ static atomic_t huge_zero_refcount;
->  struct page *huge_zero_page __read_mostly;
->  unsigned long huge_zero_pfn __read_mostly = ~0UL;
->  
-> -bool transparent_hugepage_active(struct vm_area_struct *vma)
-> +bool hugepage_vma_check(struct vm_area_struct *vma,
-> +			unsigned long vm_flags,
-> +			bool smaps)
->  {
-> -	/* The addr is used to check if the vma size fits */
-> -	unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
-> +	if (!transhuge_vma_enabled(vma, vm_flags))
-> +		return false;
-> +
-> +	if (vm_flags & VM_NO_KHUGEPAGED)
-> +		return false;
-> +
-> +	/* Don't run khugepaged against DAX vma */
-> +	if (vma_is_dax(vma))
-> +		return false;
->  
-> -	if (!transhuge_vma_suitable(vma, addr))
-> +	/* Check alignment for file vma and size for both file and anon vma */
-> +	if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
->  		return false;
-> -	if (vma_is_anonymous(vma))
-> -		return __transparent_hugepage_enabled(vma);
-> -	if (vma_is_shmem(vma))
-> +
-> +	/* Enabled via shmem mount options or sysfs settings. */
-> +	if (shmem_file(vma->vm_file))
->  		return shmem_huge_enabled(vma);
-> -	if (transhuge_vma_enabled(vma, vma->vm_flags) && file_thp_enabled(vma))
-> +
-> +	if (!khugepaged_enabled())
-> +		return false;
-> +
-> +	/* THP settings require madvise. */
-> +	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-> +		return false;
-> +
-> +	/* Only regular file is valid */
-> +	if (file_thp_enabled(vma))
->  		return true;
->  
-> -	return false;
-> +	if (!vma_is_anonymous(vma))
-> +		return false;
-> +
-> +	if (vma_is_temporary_stack(vma))
-> +		return false;
-> +
-> +	/*
-> +	 * THPeligible bit of smaps should show 1 for proper VMAs even
-> +	 * though anon_vma is not initialized yet.
-> +	 */
-> +	if (!vma->anon_vma)
-> +		return smaps;
-> +
-> +	return true;
->  }
->  
->  static bool get_huge_zero_page(void)
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 5baa394e34c8..3afd87f8c0b1 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -437,46 +437,6 @@ static inline int khugepaged_test_exit(struct mm_struct *mm)
->  	return atomic_read(&mm->mm_users) == 0;
->  }
->  
-> -bool hugepage_vma_check(struct vm_area_struct *vma,
-> -			unsigned long vm_flags)
-> -{
-> -	if (!transhuge_vma_enabled(vma, vm_flags))
-> -		return false;
-> -
-> -	if (vm_flags & VM_NO_KHUGEPAGED)
-> -		return false;
-> -
-> -	/* Don't run khugepaged against DAX vma */
-> -	if (vma_is_dax(vma))
-> -		return false;
-> -
-> -	/* Check alignment for file vma and size for both file and anon vma */
-> -	if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
-> -		return false;
-> -
-> -	/* Enabled via shmem mount options or sysfs settings. */
-> -	if (shmem_file(vma->vm_file))
-> -		return shmem_huge_enabled(vma);
-> -
-> -	if (!khugepaged_enabled())
-> -		return false;
-> -
-> -	/* THP settings require madvise. */
-> -	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-> -		return false;
-> -
-> -	/* Only regular file is valid */
-> -	if (file_thp_enabled(vma))
-> -		return true;
-> -
-> -	if (!vma->anon_vma || !vma_is_anonymous(vma))
-> -		return false;
-> -	if (vma_is_temporary_stack(vma))
-> -		return false;
-> -
-> -	return true;
-> -}
-> -
->  void __khugepaged_enter(struct mm_struct *mm)
->  {
->  	struct mm_slot *mm_slot;
-> @@ -513,7 +473,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
->  {
->  	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
->  	    khugepaged_enabled()) {
-> -		if (hugepage_vma_check(vma, vm_flags))
-> +		if (hugepage_vma_check(vma, vm_flags, false))
->  			__khugepaged_enter(vma->vm_mm);
->  	}
->  }
-> @@ -958,7 +918,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
->  
->  	if (!transhuge_vma_suitable(vma, address))
->  		return SCAN_ADDRESS_RANGE;
-> -	if (!hugepage_vma_check(vma, vma->vm_flags))
-> +	if (!hugepage_vma_check(vma, vma->vm_flags, false))
->  		return SCAN_VMA_CHECK;
->  	/*
->  	 * Anon VMA expected, the address may be unmapped then
-> @@ -1448,7 +1408,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
->  	 * the valid THP. Add extra VM_HUGEPAGE so hugepage_vma_check()
->  	 * will not fail the vma for missing VM_HUGEPAGE
->  	 */
-> -	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE))
-> +	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE, false))
->  		return;
->  
->  	/* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
-> @@ -2143,7 +2103,7 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
->  			progress++;
->  			break;
->  		}
-> -		if (!hugepage_vma_check(vma, vma->vm_flags)) {
-> +		if (!hugepage_vma_check(vma, vma->vm_flags, false)) {
->  skip:
->  			progress++;
->  			continue;
 > -- 
-> 2.26.3
-> 
+> மணிவண்ணன் சதாசிவம்
+
+-- 
+	Ansuel

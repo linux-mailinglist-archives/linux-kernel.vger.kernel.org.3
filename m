@@ -2,161 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0756E54EC5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAC154EC60
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378250AbiFPVPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
+        id S1379074AbiFPVRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378332AbiFPVPs (ORCPT
+        with ESMTP id S1378629AbiFPVR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:15:48 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E675560AB9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:15:46 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id u2so2534399pfc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 14:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tml1AzLWRr4YzF3sAdjGFBXOgQpNGM4CdcoqHXy6fq8=;
-        b=jqIsk7Q+m6EcCuXgHO5qdrSbk9XCkK4QrELg4P/y5TFyxvqpcMjqJNM+E8zK9d5Q7c
-         FcDjUcLBJ/8XBeegZ7WhoXEoQ9Rms8fcCrmoVVla5DeUWH6FcdNUr90bcpBiNfd+0yX0
-         QUgEc7zEmcPW4VNgURMMFv7Yf6dnaMW3BF2L0DpMkLVllk6pUf88SARfSTB/OlxSXWd/
-         S/ngORpZ2XySJVG+qWCpq4u1c45IieRfdipQCz36HZit/QPrMn0O9wYhQRmtnisyxeFf
-         qptBWeOlEWksEUDXOIzm9lezHFrXuazZFiYdP96fsDiKS/P1FjazmQAqxUHu6o5SMaQW
-         SbNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tml1AzLWRr4YzF3sAdjGFBXOgQpNGM4CdcoqHXy6fq8=;
-        b=tYzgA9PvEGQnmFSiwQAJSN9wC6f1bNyfELM6Yp+v0oHlOQYbtndqXzUsGJ0Oc2LDpa
-         IeFyHrCFd15PxAJXfy3wKRqMN+XyBIvJ2WZaBpQgq+VTIhbA7fky1sqLlHXbFYUVA4dO
-         0s2TeYn2yV8jitjb1ty4SN1uGnEWgB1ayB1YLs1mpfWGYQweG8l+ctI6URLngRer1yHl
-         UmEZCmsx3hJFtNIB6mrO5HJuDHdiVo+tG5mplJ91ISIH+h7iYsaAX4/IEdEA0Xu+0Jn8
-         jnbQcxyj1RdHnOlYmvn2clOIY68J3gR+LRVG+gJE5xat+2Z2t9/sEiyN2RrT3iOBZPCF
-         w9UA==
-X-Gm-Message-State: AJIora+L8xZLzvqapPxGd8kgwSLDlGOLA2bpIfgt1mrHSRmfE9/H8Wzn
-        Pffl9Mk/TwDY/ZtCImrv1mCokw==
-X-Google-Smtp-Source: AGRyM1sh6e+GuWnqSFtrhbHqrmFWx8Qa99sAGwZCXTtI91IuORU3SI44Gi/lqC6ObXbqOvNYusLNiw==
-X-Received: by 2002:a63:3ec7:0:b0:408:d3ac:9c0c with SMTP id l190-20020a633ec7000000b00408d3ac9c0cmr6200985pga.176.1655414146402;
-        Thu, 16 Jun 2022 14:15:46 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170902d88d00b0016196bcf743sm2052571plz.275.2022.06.16.14.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 14:15:46 -0700 (PDT)
-Message-ID: <28b73da7-d97c-5ea5-0b22-724fa971aeb0@linaro.org>
-Date:   Thu, 16 Jun 2022 14:15:44 -0700
+        Thu, 16 Jun 2022 17:17:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B7260B80;
+        Thu, 16 Jun 2022 14:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qT5M40xVA9YnszhgxwSPNtZNbPHFTpABYZWNZDdTHlI=; b=BQnYHJKQUoFq1xNokbxBotCcO6
+        fyX8/6LmROrO9P++bZSv3kWeFXeZaugSW6NQmDIfxNF8lEhvvHaFfEJ412vfN2qShpy68qrAfbVWD
+        VYapUQ8KpjH42R+a1yT+iOjZlKpXZqk/a95v3lJsgBYV3qmSRN4/+vuACmsP9lSj2LdoqHRosNHWs
+        i4j/UveqfwOJk0K7CfX9G6VN5EcLjiJCu5JCbbT+xWw3liZRBsAy//H94/Ai0PouDtrSzAkj0yc+p
+        3SEVjc0nAAEAISk1FZUUGzM/iHhbnx8ZI37z40tU+VtHw+BeZWW38OUStHwWNKXlfResq3o6eUQaI
+        xOg3rZmg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1wrX-002H7V-F4; Thu, 16 Jun 2022 21:17:11 +0000
+Date:   Thu, 16 Jun 2022 22:17:11 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     David Sterba <dsterba@suse.com>, 0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-btrfs@vger.kernel.org,
+        lkp@lists.01.org
+Subject: Re: [btrfs]  66a7a2412f: xfstests.btrfs.131.fail
+Message-ID: <Yqud1/SooVDamiuP@casper.infradead.org>
+References: <20220607154229.9164-1-dsterba@suse.com>
+ <20220616143710.GF25633@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, jic23@kernel.org,
-        lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-7-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220613111146.25221-7-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616143710.GF25633@xsang-OptiPlex-9020>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 04:11, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add Mediatek MT6370 binding documentation.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
->  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
->  2 files changed, 297 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
->  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> new file mode 100644
-> index 000000000000..6c2639e81e50
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> @@ -0,0 +1,279 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6370.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek MT6370 SubPMIC
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  MT6370 is a highly-integrated smart power management IC, which includes a
-> +  single cell Li-Ion/Li-Polymer switching battery charger, a USB Type-C &
-> +  Power Delivery (PD) controller, dual flash LED current sources, a RGB LED
-> +  driver, a backlight WLED driver, a display bias driver and a general LDO for
-> +  portable devices.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6370
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  wakeup-source: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +  adc:
-> +    type: object
-> +    description: |
-> +      Provides 9 channels for system monitoring, including vbusdiv5, vbusdiv2,
-> +      vbat, vsys, chg_vddp, ts_bat, ibus, ibat, and temp_jc.
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mt6370-adc
-> +
-> +      "#io-channel-cells":
-> +        const: 1
-> +
-> +    required:
-> +      - compatible
-> +      - '#io-channel-cells'
+On Thu, Jun 16, 2022 at 10:37:10PM +0800, kernel test robot wrote:
+> btrfs/131	- output mismatch (see /lkp/benchmarks/xfstests/results//btrfs/131.out.bad)
+>     --- tests/btrfs/131.out	2022-06-13 17:10:24.000000000 +0000
+>     +++ /lkp/benchmarks/xfstests/results//btrfs/131.out.bad	2022-06-15 18:54:06.505508542 +0000
+>     @@ -2,9 +2,9 @@
+>      Using free space cache
+>      free space tree is disabled
+>      Enabling free space tree
+>     -free space tree is enabled
+>     +free space tree is disabled
 
-Decide in your entire patchset whether you use ' or ". Don't mix.
+I think I know what's going on here:
 
-Since you did not test your bindings, I am not reviewing it. First, test
-them. No need for me to do the job of a automated tool, right?
+        compat_ro="$($BTRFS_UTIL_PROG inspect-internal dump-super "$SCRATCH_DEV"
+ | \
+                     sed -rn 's/^compat_ro_flags\s+(.*)$/\1/p')"
+        if ((compat_ro & 0x1)); then
+                echo "free space tree is enabled"
+        else
+                echo "free space tree is disabled"
+        fi
 
-Best regards,
-Krzysztof
+dump-super is reading the super block out of the page cache, but this
+change makes the page cache incoherent with what's on disc.  We could
+fix that by invalidating the page out of the page cache, but it may be
+easier to just dump this patch and fix how we use the page cache to
+write back the superblocks?
+

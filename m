@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B390654D8B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 04:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C91954D8BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355146AbiFPC7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 22:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S1356563AbiFPDA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 23:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350287AbiFPC7k (ORCPT
+        with ESMTP id S1355750AbiFPDAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 22:59:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EA1F5A151
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 19:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655348378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SyBYL1pY81YOYBd6hVWvRLbn1C7svVUvtneGDVFIWeM=;
-        b=IE3PZx/SIVepSm/nwDu3yOCCcOhajU5uYADJxPUH53yCqLfrDxPhVEP8+AvgZEOf44vTo1
-        a1pjlwcHKz5l21I9ORgbq4ehZnP6tuHbhGwrwxfbWgtTjYEvTZi/ueF2VkeZyTlVXyn0Vt
-        S5cu+Rb/6p1RlwUlrovG6d0g6FAhfws=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-e7JYHVoOPaK7Uddguyd0jw-1; Wed, 15 Jun 2022 22:59:33 -0400
-X-MC-Unique: e7JYHVoOPaK7Uddguyd0jw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5FE9802C17;
-        Thu, 16 Jun 2022 02:59:32 +0000 (UTC)
-Received: from localhost (ovpn-12-237.pek2.redhat.com [10.72.12.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B4881410DD8;
-        Thu, 16 Jun 2022 02:59:31 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 10:59:27 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jonathan McDowell <noodles@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Subject: Re: [PATCH v5] x86/kexec: Carry forward IMA measurement log on kexec
-Message-ID: <Yqqcj0/j+fC6/K5v@MiWiFi-R3L-srv>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
- <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
- <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
- <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
- <60813f86e960d12ed3738531a14382769a061a02.camel@linux.ibm.com>
+        Wed, 15 Jun 2022 23:00:21 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74A45A2C3;
+        Wed, 15 Jun 2022 20:00:20 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id s37so293663pfg.11;
+        Wed, 15 Jun 2022 20:00:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kLu0AyZbwG8o8hfD/fv5Wh7BJxHL6y7f8uHQKEJJV6U=;
+        b=k3iAfz3repC7wE79wV5V9jmg7OTywTvZQCS6xd/4rdeiVtRUs0zT9HlIgTw3IePSeR
+         RhNy43WOSAVQPzquN2IkpzIK3DaNPvyghrQKhV8EtL9nTDjnZy8dostvB+cHEdQec+fH
+         Tg1u+9a5gEZUfGxYUqUF6kAk5XJIloDHXEtwOmprLD96Cc4f1TaWyTuKpc7UPOlpIbTh
+         TUyqq8jlRcHsWcnv4FUU3SpHDTyMi7ZzI1cAKHqppeeoQ91cGVaHIuBafjPSSwXfdMDm
+         RrJVihVqm/2zPKAfCvC1Z3fboamcD/gW9o/naihh9dpTp6dWE8IuYZ86uc7S1O7XDPmP
+         XF/A==
+X-Gm-Message-State: AJIora/hGBWpHXq9W1K2Y/z6dQ+HtYNyZaHKLTZzo+xs0Hs3aFn0PFqO
+        4qPQQBd5g1Po6nc3QnU1++4=
+X-Google-Smtp-Source: AGRyM1uRqJci6ZIfCJSBxo3jFrvP6GWbLFgj40m+japCby9a0CiFohY8D+yndlsBrHLluXlD0d2bTA==
+X-Received: by 2002:a63:8a42:0:b0:3fc:f8b5:291f with SMTP id y63-20020a638a42000000b003fcf8b5291fmr2547392pgd.550.1655348420055;
+        Wed, 15 Jun 2022 20:00:20 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id fu13-20020a17090ad18d00b001cb6527ca39sm2582309pjb.0.2022.06.15.20.00.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 20:00:19 -0700 (PDT)
+Message-ID: <7fd6f544-0bd2-62fe-bddd-869364f351e8@acm.org>
+Date:   Wed, 15 Jun 2022 20:00:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60813f86e960d12ed3738531a14382769a061a02.camel@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 3/8] block: use new capable_any functionality
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        selinux@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, Serge Hallyn <serge@hallyn.com>,
+        Alistair Delva <adelva@google.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20220502160030.131168-8-cgzones@googlemail.com>
+ <20220615152623.311223-1-cgzones@googlemail.com>
+ <20220615152623.311223-2-cgzones@googlemail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220615152623.311223-2-cgzones@googlemail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,100 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/13/22 at 05:01pm, Mimi Zohar wrote:
-> On Mon, 2022-06-13 at 10:30 +0000, Jonathan McDowell wrote:
-> > On kexec file load Integrity Measurement Architecture (IMA) subsystem
-> > may verify the IMA signature of the kernel and initramfs, and measure
-> > it. The command line parameters passed to the kernel in the kexec call
-> > may also be measured by IMA. A remote attestation service can verify
-> > a TPM quote based on the TPM event log, the IMA measurement list, and
-> > the TPM PCR data. This can be achieved only if the IMA measurement log
-> > is carried over from the current kernel to the next kernel across
-> > the kexec call.
-> > 
-> > powerpc and ARM64 both achieve this using device tree with a
-> > "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
-> > device tree, so use the setup_data mechanism to pass the IMA buffer to
-> > the new kernel.
-> > 
-> > (Mimi, Baoquan, I haven't included your reviewed-bys because this has
-> >  changed the compile guards around the ima_(free|get)_kexec_buffer
-> >  functions in order to fix the warning the kernel test robot found. I
-> >  think this is the right thing to do and avoids us compiling them on
-> >  platforms where they won't be used. The alternative would be to drop
-> >  the guards in ima.h that Mimi requested for v4.)hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-> > 
-> > Signed-off-by: Jonathan McDowell <noodles@fb.com>
-> > ---
-> > v5:
-> >  - Guard ima_(free|get)_kexec_buffer functions with
-> >    CONFIG_HAVE_IMA_KEXEC (kernel test robot)
-> >  - Use setup_data_offset in setup_boot_parameters and update rather than
-> >    calculating in call to setup_ima_state.
-> > v4:
-> >  - Guard ima.h function prototypes with CONFIG_HAVE_IMA_KEXEC
+On 6/15/22 08:26, Christian Göttsche wrote:
+> Use the new added capable_any function in appropriate cases, where a
+> task is required to have any of two capabilities.
 > 
-> > diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-> > index 8d374cc552be..42a6c5721a43 100644
-> > --- a/drivers/of/kexec.c
-> > +++ b/drivers/of/kexec.c
-> > @@ -9,6 +9,7 @@
-> >   *  Copyright (C) 2016  IBM Corporation
-> >   */
-> >  
-> > +#include <linux/ima.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/kexec.h>
-> >  #include <linux/memblock.h>
-> > @@ -115,6 +116,7 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
-> >  	return 0;
-> >  }
-> >  
-> > +#ifdef CONFIG_HAVE_IMA_KEXEC
-> >  /**
-> >   * ima_get_kexec_buffer - get IMA buffer from the previous kernel
-> >   * @addr:	On successful return, set to point to the buffer contents.
-> > @@ -173,6 +175,7 @@ int ima_free_kexec_buffer(void)
-> >  
-> >  	return memblock_phys_free(addr, size);
-> >  }
-> > +#endif
+> Reorder CAP_SYS_ADMIN last.
 > 
-> Inside ima_{get,free}_kexec_buffer(), there's no need now to test
-> whether CONFIG_HAVE_IMA_KEXEC is enabled.
+> Fixes: 94c4b4fd25e6 ("block: Check ADMIN before NICE for IOPRIO_CLASS_RT")
 > 
->         if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
->                 return -ENOTSUPP;
-
-Indeed. The #ifdef added by Jonathan is redundant. Not sure if the
-original IS_ENABLED(CONFIG_HAVE_IMA_KEXEC) checking inside
-ima_{get,free}_kexec_buffer() is intended. I ever reviewed below patch,
-the IS_ENABLED(CONFIG_XX) inside static function will make the function
-compiled, and will be optimized out if the CONFIG_XX is not enabled.
-However, it only has effect on static function. Here,
-ima_{get,free}_kexec_buffer() is not static, likely we should remove the
-inside IS_ENABLED() checking.
-
-commit 4ece09be9913a87ff99ea347fd7e7adad5bdbc8f
-Author: Jisheng Zhang <jszhang@kernel.org>
-Date:   Wed Mar 23 16:06:39 2022 -0700
-
-    x86/setup: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
-    
-    Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE" by a
-    check for "IS_ENABLED(CONFIG_KEXEC_CORE)", to simplify the code and
-    increase compile coverage.
-
-Other than this one Mimi pointed out, this patch looks good to me, thx.
-
-Reviewed-by: Baoquan He <bhe@redhat.com>
-
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> ---
+> v3:
+>     rename to capable_any()
+> ---
+>   block/ioprio.c | 9 +--------
+>   1 file changed, 1 insertion(+), 8 deletions(-)
 > 
-> 
-> >  
-> >  /**
-> >   * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
-> > diff --git a/include/linux/ima.h b/include/linux/ima.h
-> 
-> 
+> diff --git a/block/ioprio.c b/block/ioprio.c
+> index 2fe068fcaad5..6441c052f837 100644
+> --- a/block/ioprio.c
+> +++ b/block/ioprio.c
+> @@ -37,14 +37,7 @@ int ioprio_check_cap(int ioprio)
+>   
+>   	switch (class) {
+>   		case IOPRIO_CLASS_RT:
+> -			/*
+> -			 * Originally this only checked for CAP_SYS_ADMIN,
+> -			 * which was implicitly allowed for pid 0 by security
+> -			 * modules such as SELinux. Make sure we check
+> -			 * CAP_SYS_ADMIN first to avoid a denial/avc for
+> -			 * possibly missing CAP_SYS_NICE permission.
+> -			 */
+> -			if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_NICE))
+> +			if (!capable_any(CAP_SYS_NICE, CAP_SYS_ADMIN))
+>   				return -EPERM;
+>   			fallthrough;
+>   			/* rt has prio field too */
 
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

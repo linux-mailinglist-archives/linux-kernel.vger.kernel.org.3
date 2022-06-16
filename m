@@ -2,89 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B9954E92D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 20:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C9A54E99B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 20:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377354AbiFPSJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 14:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S1377728AbiFPSnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 14:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbiFPSJk (ORCPT
+        with ESMTP id S229683AbiFPSnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 14:09:40 -0400
-X-Greylist: delayed 2527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Jun 2022 11:09:37 PDT
-Received: from lizzy.crudebyte.com (lizzy.crudebyte.com [91.194.90.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905574EDFE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 11:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=lizzy; h=Message-Id:Cc:To:Subject:Date:From:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Content-ID:
-        Content-Description; bh=xm94cFRpLBeZoS4MkJUmpD9ccv8vD46ilbV91YuAu+4=; b=gTOEs
-        aiOGh59u3PyvQFNqRbDXK5rbrTl2/02z3Yf6YAwDFqMRHfBdGjmFBUeekgmLJpcOMtVj+qA44ha/V
-        7PY/1Dz0A9TFKsFgk7h7k79/VnE4JUHQ3nk9olcwnmy6b+AJwBT83U7v9mUC79w4h3SakvKiFbQ3y
-        NfOKHHu55Clmzy9yEkoHJ/zRowQJLaeZcKRuJjQUxZfS15tI0w2bT6IqMtTpkuMg8H55//Gh8Mkdj
-        rjdwgolVWqIsDBpTQeSdUfloljJkEdjMTuTEAnrVdPLOCBmEuIwzQ+a4jCIjzHjpzC6yrxSDUiCyC
-        Zszg3Nxd9UpyhBTNY3dT1XFAn3dUA==;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-Date:   Thu, 16 Jun 2022 19:09:42 +0200
-Subject: [PATCH] net/9p: show warning on Tread/Twrite if wrong file mode
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        David Howells <dhowells@redhat.com>
-Message-Id: <E1o1tHC-00039k-04@lizzy.crudebyte.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Jun 2022 14:43:20 -0400
+Received: from 1.mo581.mail-out.ovh.net (1.mo581.mail-out.ovh.net [178.33.45.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9960F2AC6C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 11:43:17 -0700 (PDT)
+Received: from player715.ha.ovh.net (unknown [10.111.172.45])
+        by mo581.mail-out.ovh.net (Postfix) with ESMTP id 6DF5224DBA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:25:09 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player715.ha.ovh.net (Postfix) with ESMTPSA id 5AE862B80DA9F;
+        Thu, 16 Jun 2022 17:25:03 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R0033e926c55-2866-4034-a799-f193b4c44a42,
+                    EEA695ED62D0B30D35F9F30395731DD21189161B) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Sam Ravnborg <sam@ravnborg.org>, dri-devel@lists.freedesktop.org
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Stephen Kitt <steve@sk2.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] drm/panel: Use backlight helpers
+Date:   Thu, 16 Jun 2022 19:23:12 +0200
+Message-Id: <20220616172316.1355133-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 7454864759303931611
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddvfedguddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejudehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekud
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The netfs changes (eb497943fa21) introduced cases where 'Tread' was sent
-to 9p server on a fid that was opened in write-only file mode. It took
-some time to find the cause of the symptoms observed (EBADF errors in
-user space apps). Add warnings to detect such issues easier in future.
+backlight_properties.fb_blank is deprecated. The states it represents
+are handled by other properties; but instead of accessing those
+properties directly, drivers should use the helpers provided by
+backlight.h.
 
-Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-Link: https://lore.kernel.org/netdev/3645230.Tf70N6zClz@silver/
----
-As requested by Dominique, here a clean version of my previous
-EBADF trap code to be merged. Dominique, if you already have an
-equivalent patch queued, then just go ahead. I don't mind.
+This will ultimately allow fb_blank to be removed.
 
-I'm currently testing your EBADF fix patch and the discussed,
-slightly adjusted versions. Looking good so far, but I'll report
-back later on.
+Changes since v1:
+- remove the last remaining fb_blank reference in drm/panel in the
+  last patch
+- remove unnecessary parentheses
+
+Stephen Kitt (3):
+  drm/panel: Use backlight helper
+  drm/panel: panel-dsi-cm: Use backlight helpers
+  drm/panel: sony-acx565akm: Use backlight helpers
+
+ .../drm/panel/panel-asus-z00t-tm5p5-n35596.c  |  7 +----
+ drivers/gpu/drm/panel/panel-dsi-cm.c          | 29 ++++---------------
+ drivers/gpu/drm/panel/panel-sony-acx565akm.c  | 12 ++------
+ 3 files changed, 9 insertions(+), 39 deletions(-)
 
 
- net/9p/client.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/9p/client.c b/net/9p/client.c
-index 8bba0d9cf975..05dead12702d 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -1555,6 +1555,8 @@ p9_client_read(struct p9_fid *fid, u64 offset, struct iov_iter *to, int *err)
- 	int total = 0;
- 	*err = 0;
- 
-+	WARN_ON((fid->mode & O_ACCMODE) == O_WRONLY);
-+
- 	while (iov_iter_count(to)) {
- 		int count;
- 
-@@ -1648,6 +1650,8 @@ p9_client_write(struct p9_fid *fid, u64 offset, struct iov_iter *from, int *err)
- 	p9_debug(P9_DEBUG_9P, ">>> TWRITE fid %d offset %llu count %zd\n",
- 		 fid->fid, offset, iov_iter_count(from));
- 
-+	WARN_ON((fid->mode & O_ACCMODE) == O_RDONLY);
-+
- 	while (iov_iter_count(from)) {
- 		int count = iov_iter_count(from);
- 		int rsize = fid->iounit;
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
 2.30.2
 

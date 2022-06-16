@@ -2,125 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3EA54E781
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5655654E7B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbiFPQn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S238983AbiFPQoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbiFPQnw (ORCPT
+        with ESMTP id S231467AbiFPQn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:43:52 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF57C27FE4;
-        Thu, 16 Jun 2022 09:43:47 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-100eb6f7782so2563569fac.2;
-        Thu, 16 Jun 2022 09:43:47 -0700 (PDT)
+        Thu, 16 Jun 2022 12:43:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 219A9286CF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655397831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AjMtM8OGnDrbMwcn+8vKnlZdrkOGRhE/5nADc7InRc4=;
+        b=TSQFJkRBWy3mvIQerMvPzNPpML8zeT0oOJPe6Z6WXrAzfYtgo0XC38GHDJkICj+3i9k/ps
+        8EzERBrf4TEe/rq3FmxDsc86RgyXxqLg1QyMeKB+nFZe8gNAeVoHRcN1ka5A7y1DkBF6u7
+        xwdZ7fI3mYdQdGrwQICBt86RGeIjSW0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-rzlTIEnfORamicqTFLj-pw-1; Thu, 16 Jun 2022 12:43:49 -0400
+X-MC-Unique: rzlTIEnfORamicqTFLj-pw-1
+Received: by mail-wr1-f72.google.com with SMTP id i10-20020a5d55ca000000b002103d76ffcaso383212wrw.17
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:43:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sCKsj+St5eBkoPclTa2En9zfCgN8+cKxVUt9jp6Eju0=;
-        b=rSfU7+dQ9rIHicdVKszqZ7j6R+G26ovDu4S8kimJkxQ7hm6Ps8Fv41T8UMNkqyRFpl
-         hFUnbBrs95lolYV7X/d8jyyJC51X9eilAc28jCsZpcttsWni2BCZLqtOui/mw7i1A8t3
-         I0Kj0PP2k6CYkI4x5f8nhQOV1JetEUcRRw4dExD8UZ1szXwc8lkt8yrZMUPhjBRjfChv
-         nR6ND2lCh0F7FjVeiR9BX6MfELoHotlyAvBiEqkKTW+YH5DdiWVZacPJ9PVruLfGFVJv
-         z4ZAFdYCuxFVjQUlxxHGjJlDo5cdXWGA2t75SeeRD5uGutkEr0MWj9xQ+lxL7NChIK0B
-         EGzQ==
-X-Gm-Message-State: AJIora8pZpVjxw0lkKmDm1zI5LKXfZvGlo6PRarC9dBqeVGdAjC/ljTl
-        GClAgHNBSvg3pqKWzFQHpEalFFtaKTbaq+MtDIg=
-X-Google-Smtp-Source: AGRyM1uiNilmgCkMLL3RIor+VnxuOx5WmIHieZHnw8pepHrqFELZ71BJIxi2vOS4y2KJKXCtTI32mAsPpi55aT8WPvI=
-X-Received: by 2002:a05:6870:4585:b0:fb:5105:76b8 with SMTP id
- y5-20020a056870458500b000fb510576b8mr3109112oao.92.1655397827074; Thu, 16 Jun
- 2022 09:43:47 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AjMtM8OGnDrbMwcn+8vKnlZdrkOGRhE/5nADc7InRc4=;
+        b=JFWJNhssbwF4vHlRmq0WIXHh0J8No5SqdNOjHF8gX7/3EjTa5goqPzto0KSpJCfs7G
+         YK0hdl10qDqYKuGP4T/fNfmzHcNX2JTF7ai5gWOR3Mkzc6geyXtdeM7m5kXpUHn0bljN
+         zEalcX47ZFV8qagZU/pMN8cwiKOYR/wq/hL3cwOJjag58C1rtSRS+3v8jKRFRN+8K/0L
+         uzwCPaln+EmxRZekNQxEvDO7xRPeVDlgsCcUygF3lTj1PwRhncpUNbmtHUE8rxh76rRX
+         gC+tU9Z96AaE1k1bVJJ1NkFiprNDsRlJcSDnMyXqY4Jdi4m1FMnuYwEzDZB/aZPd/hBO
+         NQPQ==
+X-Gm-Message-State: AOAM533qf8LXMxnUGO+cDEg992337PgvJlDKL/fRQUb50D7MNY7oGxDo
+        dqgNzNE94Kp8Nzt3R95nXnUkIJEagvfpOMpFz82trErSmBZMyyna2gvlUfuxGywRCDxzWE7N7QY
+        1goc3gpfabJcFRNMuTILMntUY
+X-Received: by 2002:a05:600c:10cf:b0:39c:8270:7b86 with SMTP id l15-20020a05600c10cf00b0039c82707b86mr16724431wmd.180.1655397828436;
+        Thu, 16 Jun 2022 09:43:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz8+fKsEXIAvNyB94ZpK27ofIlM12w0GekOLSDeZEFo92yryX6GxBCFSwKJr3GgRIgUlCaqhQ==
+X-Received: by 2002:a05:600c:10cf:b0:39c:8270:7b86 with SMTP id l15-20020a05600c10cf00b0039c82707b86mr16724402wmd.180.1655397828203;
+        Thu, 16 Jun 2022 09:43:48 -0700 (PDT)
+Received: from [172.20.10.8] ([185.124.31.117])
+        by smtp.gmail.com with ESMTPSA id t15-20020adfeb8f000000b0020e63ab5d78sm2381222wrn.26.2022.06.16.09.43.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 09:43:47 -0700 (PDT)
+Message-ID: <d6c00532-5546-ea4a-1927-9d4ea5e83741@redhat.com>
+Date:   Thu, 16 Jun 2022 18:43:44 +0200
 MIME-Version: 1.0
-References: <20220615190735.1298213-1-namhyung@kernel.org> <9242ecfa-36ab-c425-999c-fad44056223b@arm.com>
-In-Reply-To: <9242ecfa-36ab-c425-999c-fad44056223b@arm.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 16 Jun 2022 09:43:36 -0700
-Message-ID: <CAM9d7cg6xE0YcTt3YGPsCkTzRXZZjDQm2We2v+O7tgj-E=djoQ@mail.gmail.com>
-Subject: Re: [PATCH] perf test: Add ARM SPE system wide test
-To:     German Gomez <german.gomez@arm.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 00/10] drm: selftest: Convert to KUnit
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        dri-devel@lists.freedesktop.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+References: <20220615135824.15522-1-maira.canal@usp.br>
+ <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Thu, Jun 16, 2022 at 3:12 AM German Gomez <german.gomez@arm.com> wrote:
+On 6/16/22 16:55, David Gow wrote:
+> On Wed, Jun 15, 2022 at 9:59 PM Maíra Canal <maira.canal@usp.br> wrote:
+>>
+>> KUnit unifies the test structure and provides helper tools that simplify
+>> the development of tests. The basic use case allows running tests as regular
+>> processes, which makes it easier to run unit tests on a development machine
+>> and to integrate the tests into a CI system.
+>>
+>> That said, the conversion of selftests for DRM to KUnit tests is beneficial
+>> as it unifies the testing API by using the KUnit API.
+>>
+>> KUnit is beneficial for developers as it eases the process to run unit tests.
+>> It is possible to run the tests by using the kunit-tool on userspace with the
+>> following command:
+>>
+>> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests --arch=x86_64
+>>
+>> For CI system, it is possible to execute during the build. But, we also think
+>> about IGT: we are developing a patch to introduce KUnit to IGT.
+>>
+>> These patches were developed during a KUnit hackathon [0] last October. Now,
+>> we believe that both the IGT side and the Kernel side are in good shape for
+>> submission.
+>>
+>> If you are willing to check the output, here is the Pastebin with the output
+>> and execution times [1].
+>>
+>> [0] https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
+>> [1] https://pastebin.com/FJjLPKsC
+>>
+>> - Arthur Grillo, Isabella Basso, and Maíra Canal
+> 
+> Great to see these going upstream!
 >
-> Thanks for the patch, Namhyung
->
-> On 15/06/2022 20:07, Namhyung Kim wrote:
-> > In the past it had a problem not setting the pid/tid on the sample
-> > correctly when system-wide mode is used.  Although it's fixed now it'd
-> > be nice if we have a test case for it.
-> >
-> > Cc: German Gomez <german.gomez@arm.com>
-> > Cc: Leo Yan <leo.yan@linaro.org>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/tests/shell/test_arm_spe.sh | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >
-> > diff --git a/tools/perf/tests/shell/test_arm_spe.sh b/tools/perf/tests/shell/test_arm_spe.sh
-> > index e59044edc406..b9c588ae393b 100755
-> > --- a/tools/perf/tests/shell/test_arm_spe.sh
-> > +++ b/tools/perf/tests/shell/test_arm_spe.sh
-> > @@ -23,6 +23,7 @@ glb_err=0
-> >  cleanup_files()
-> >  {
-> >       rm -f ${perfdata}
-> > +     rm -f ${perfdata}.old
-> >       exit $glb_err
-> >  }
-> >
-> > @@ -85,5 +86,19 @@ arm_spe_snapshot_test() {
-> >       arm_spe_report "SPE snapshot testing" $err
-> >  }
-> >
-> > +arm_spe_system_wide_test() {
-> > +     echo "Recording trace with system-wide mode $perfdata"
-> > +     perf record -o ${perfdata} -e arm_spe// -a \
-> > +             -- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
-> > +
->
-> Should we skip if we don't have privileges for CPU tracing? (attached diff)
 
-Oh, you're right.  I'll squash it to the patch.
+Indeed, this is pretty awesome!
+ 
+I haven't reviewed the patches yet but just have a meta comment. There's a TODO
+entry for this [0] in Documentation/gpu/todo.rst, so I think that you could add
+a patch removing that as a part of this series.
 
-Thanks,
-Namhyung
+[0]: https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#n620
 
+-- 
+Best regards,
 
->
-> > +     perf_script_samples dd &&
-> > +     perf_report_samples dd
-> > +
-> > +     err=$?
-> > +     arm_spe_report "SPE system-wide testing" $err
-> > +}
-> > +
-> >  arm_spe_snapshot_test
-> > +arm_spe_system_wide_test
-> > +
-> >  exit $glb_err
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

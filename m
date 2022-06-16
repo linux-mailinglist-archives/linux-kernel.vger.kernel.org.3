@@ -2,55 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C5554E6EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363AE54E6F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiFPQX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S232825AbiFPQ0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 12:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377211AbiFPQXE (ORCPT
+        with ESMTP id S230319AbiFPQ0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:23:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17C213F5C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:23:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47B5DB8246F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937C5C3411A;
-        Thu, 16 Jun 2022 16:22:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655396579;
-        bh=mguZBL6f1Fziq9Z7oqGYEunQDJVzg7RVCkmlYDJkdhI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MTC+BtpsoIs7NVyouu1btYFhz6bacAUmQl6UAVV4PHU0CwopRD/HtAqENjt4mVoz3
-         /ij2KkpteDMz7MGOd5Tu87Tpo994v5KRWfvEroei9E1oVbNqCS1tAk9Hp+csb9MHaG
-         uyUnZAO4BXfgTQZJSHnelFVLCMCE8WICf51TRCqUNbXLth83zFaH7hC42/xeuEWMUW
-         yJlYnWgQ9S4oUtqUzxZoB40LgAaKh0+KiA0l2LFghD0kkxfJl0o8BKlvNc9Aq33qel
-         mhdgvuWCbo59GPhS53iMU+weGcChc8W2JvQRQwUeED9htzdahTcDrB32YFzm/gNMV1
-         GyS3F0UX9qA9w==
-Date:   Thu, 16 Jun 2022 09:22:57 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix iostat related lock protection
-Message-ID: <YqtY4VVs9DrU3H5p@google.com>
-References: <20220610183240.2269085-1-daeho43@gmail.com>
- <1815f3c2-0802-5b3f-7e98-9f89c5b9e07d@kernel.org>
- <YqoOzdxeG78RniEK@google.com>
- <fbd81c67-42b6-1e96-32d6-391dcafe181c@kernel.org>
+        Thu, 16 Jun 2022 12:26:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 612DA2EA07
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655396763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cq3EZTL12suGQBdO/AxiYch3x1bNx+94IHDi7h+Rhok=;
+        b=d9gXLvdu00EYqZtFdIzNu/qXjl6xZT6JlP4rqiShGKxiddvtP/QVT0+v1T1q8Buvq9uK5G
+        sK4WgMTViLwlZQrDXxdNMDwDwVgYZikzxwsRbFof5fIBzf6nxdq8al+D7J9nj3xbpGLxDy
+        Qn80C5sX+zP2NipfP+HMcoIyv7UpURs=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-mpjk1zjaMseg1E8Y-7UilQ-1; Thu, 16 Jun 2022 12:26:02 -0400
+X-MC-Unique: mpjk1zjaMseg1E8Y-7UilQ-1
+Received: by mail-ej1-f69.google.com with SMTP id gh36-20020a1709073c2400b0070759e390fbso808869ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:26:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cq3EZTL12suGQBdO/AxiYch3x1bNx+94IHDi7h+Rhok=;
+        b=F+rrJ0hcR9xHPns6BAuqwdhDzQBQ4Yw+69xAj1v9CllBOCNYiZ1WOScNHk2hXDSb64
+         BYKXvaW1ng3FpTRJaQbVwMc1Up/mwaWXB9EDO1/sb12JHEeZTvnAEVPvmeDu5yg48I/E
+         UFsKYvgemgLYtT6zaywBj2ED4AZpfGIwgq+/CXCHiF9omAkUL4fmOKK3RRGmdSMZhOjV
+         1yquyiBDZu6bQhjwwtPyWcD+jGd0tPGV4rNFMJLlmZL6Pp2cVopPdVA7dfMaD/0qNVgB
+         P5xwCm1+PG/pQA1hlPdKIWy3IGH9Wwx8uaSC/XmwkKM1U8y7WEt4dWojktSmbDgoafcT
+         /Onw==
+X-Gm-Message-State: AJIora9VlSkE0rncsrLfgNs1qh60DluUuNKNjADjg3xhrnWVsr2BPp1a
+        4NRClJCJwXHX67jYdcDErT1xAT5OIAC45yxGuHrF6MEvOzXb4TamFGe8+cBzVNGVVrSBi/ZWAKv
+        KPCYIMBBGAv1ZUygL+kLug3/d
+X-Received: by 2002:a17:906:ff18:b0:711:d197:b942 with SMTP id zn24-20020a170906ff1800b00711d197b942mr5233777ejb.357.1655396760902;
+        Thu, 16 Jun 2022 09:26:00 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1snrckDTTS90UbXkNnXz7wC/j3NwBRdfiiLHQ55Yf08Jlwcihk2BkICbCcSqD0NukcTombHSw==
+X-Received: by 2002:a17:906:ff18:b0:711:d197:b942 with SMTP id zn24-20020a170906ff1800b00711d197b942mr5233761ejb.357.1655396760732;
+        Thu, 16 Jun 2022 09:26:00 -0700 (PDT)
+Received: from gator ([194.213.204.253])
+        by smtp.gmail.com with ESMTPSA id ep14-20020a1709069b4e00b006febc86b8besm936606ejc.117.2022.06.16.09.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 09:26:00 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 18:25:57 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Message-ID: <20220616162557.55bopzfa6glusuh5@gator>
+References: <20220615185706.1099208-1-rananta@google.com>
+ <20220616120232.ctkekviusrozqpru@gator>
+ <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fbd81c67-42b6-1e96-32d6-391dcafe181c@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,141 +95,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/16, Chao Yu wrote:
-> On 2022/6/16 0:54, Jaegeuk Kim wrote:
-> > On 06/15, Chao Yu wrote:
-> > > On 2022/6/11 2:32, Daeho Jeong wrote:
-> > > > From: Daeho Jeong <daehojeong@google.com>
-> > > > 
-> > > > Made iostat related locks safe to be called from irq context again.
-> > > > 
-> > > 
-> > > Will be better to add a 'Fixes' line?
+On Thu, Jun 16, 2022 at 03:58:52PM +0000, David Laight wrote:
+> From: Andrew Jones
+> > Sent: 16 June 2022 13:03
 > > 
-> > Added some tags. Thanks,
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=f8ed39ad779fbc5d37d08e83643384fc06e4bae4
+> > On Wed, Jun 15, 2022 at 06:57:06PM +0000, Raghavendra Rao Ananta wrote:
+> > > The selftests, when built with newer versions of clang, is found
+> > > to have over optimized guests' ucall() function, and eliminating
+> > > the stores for uc.cmd (perhaps due to no immediate readers). This
+> > > resulted in the userspace side always reading a value of '0', and
+> > > causing multiple test failures.
+> > >
+> > > As a result, prevent the compiler from optimizing the stores in
+> > > ucall() with WRITE_ONCE().
+> > >
+> > > Suggested-by: Ricardo Koller <ricarkol@google.com>
+> > > Suggested-by: Reiji Watanabe <reijiw@google.com>
+> > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > ---
+> > >  tools/testing/selftests/kvm/lib/aarch64/ucall.c | 9 ++++-----
+> > >  1 file changed, 4 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > index e0b0164e9af8..be1d9728c4ce 100644
+> > > --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > @@ -73,20 +73,19 @@ void ucall_uninit(struct kvm_vm *vm)
+> > >
+> > >  void ucall(uint64_t cmd, int nargs, ...)
+> > >  {
+> > > -	struct ucall uc = {
+> > > -		.cmd = cmd,
+> > > -	};
+> > > +	struct ucall uc = {};
+> > >  	va_list va;
+> > >  	int i;
+> > >
+> > > +	WRITE_ONCE(uc.cmd, cmd);
+> > >  	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
+> > >
+> > >  	va_start(va, nargs);
+> > >  	for (i = 0; i < nargs; ++i)
+> > > -		uc.args[i] = va_arg(va, uint64_t);
+> > > +		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
+> > >  	va_end(va);
+> > >
+> > > -	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
+> > > +	WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
+> > >  }
 > 
-> It looks there are several patches not in mailing list?
-> 
+> Am I misreading things again?
+> That function looks like it writes the address of an on-stack
+> item into global data.
 
-Which one doe you mean?
+The write to the address that the global points at causes a switch
+from guest to host context. The guest's stack remains intact while
+executing host code and the host can access the uc stack variable
+directly by its address. Take a look at lib/aarch64/ucall.c to see
+all the details.
 
-> Thanks,
-> 
-> > 
-> > 
-> > > 
-> > > Thanks,
-> > > 
-> > > > Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> > > > ---
-> > > >    fs/f2fs/iostat.c | 31 ++++++++++++++++++-------------
-> > > >    1 file changed, 18 insertions(+), 13 deletions(-)
-> > > > 
-> > > > diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-> > > > index be599f31d3c4..d84c5f6cc09d 100644
-> > > > --- a/fs/f2fs/iostat.c
-> > > > +++ b/fs/f2fs/iostat.c
-> > > > @@ -91,8 +91,9 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
-> > > >    	unsigned int cnt;
-> > > >    	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
-> > > >    	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> > > > +	unsigned long flags;
-> > > > -	spin_lock_bh(&sbi->iostat_lat_lock);
-> > > > +	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> > > >    	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
-> > > >    		for (io = 0; io < NR_PAGE_TYPE; io++) {
-> > > >    			cnt = io_lat->bio_cnt[idx][io];
-> > > > @@ -106,7 +107,7 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
-> > > >    			io_lat->bio_cnt[idx][io] = 0;
-> > > >    		}
-> > > >    	}
-> > > > -	spin_unlock_bh(&sbi->iostat_lat_lock);
-> > > > +	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
-> > > >    	trace_f2fs_iostat_latency(sbi, iostat_lat);
-> > > >    }
-> > > > @@ -115,14 +116,15 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
-> > > >    {
-> > > >    	unsigned long long iostat_diff[NR_IO_TYPE];
-> > > >    	int i;
-> > > > +	unsigned long flags;
-> > > >    	if (time_is_after_jiffies(sbi->iostat_next_period))
-> > > >    		return;
-> > > >    	/* Need double check under the lock */
-> > > > -	spin_lock_bh(&sbi->iostat_lock);
-> > > > +	spin_lock_irqsave(&sbi->iostat_lock, flags);
-> > > >    	if (time_is_after_jiffies(sbi->iostat_next_period)) {
-> > > > -		spin_unlock_bh(&sbi->iostat_lock);
-> > > > +		spin_unlock_irqrestore(&sbi->iostat_lock, flags);
-> > > >    		return;
-> > > >    	}
-> > > >    	sbi->iostat_next_period = jiffies +
-> > > > @@ -133,7 +135,7 @@ static inline void f2fs_record_iostat(struct f2fs_sb_info *sbi)
-> > > >    				sbi->prev_rw_iostat[i];
-> > > >    		sbi->prev_rw_iostat[i] = sbi->rw_iostat[i];
-> > > >    	}
-> > > > -	spin_unlock_bh(&sbi->iostat_lock);
-> > > > +	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
-> > > >    	trace_f2fs_iostat(sbi, iostat_diff);
-> > > > @@ -145,25 +147,27 @@ void f2fs_reset_iostat(struct f2fs_sb_info *sbi)
-> > > >    	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> > > >    	int i;
-> > > > -	spin_lock_bh(&sbi->iostat_lock);
-> > > > +	spin_lock_irq(&sbi->iostat_lock);
-> > > >    	for (i = 0; i < NR_IO_TYPE; i++) {
-> > > >    		sbi->rw_iostat[i] = 0;
-> > > >    		sbi->prev_rw_iostat[i] = 0;
-> > > >    	}
-> > > > -	spin_unlock_bh(&sbi->iostat_lock);
-> > > > +	spin_unlock_irq(&sbi->iostat_lock);
-> > > > -	spin_lock_bh(&sbi->iostat_lat_lock);
-> > > > +	spin_lock_irq(&sbi->iostat_lat_lock);
-> > > >    	memset(io_lat, 0, sizeof(struct iostat_lat_info));
-> > > > -	spin_unlock_bh(&sbi->iostat_lat_lock);
-> > > > +	spin_unlock_irq(&sbi->iostat_lat_lock);
-> > > >    }
-> > > >    void f2fs_update_iostat(struct f2fs_sb_info *sbi,
-> > > >    			enum iostat_type type, unsigned long long io_bytes)
-> > > >    {
-> > > > +	unsigned long flags;
-> > > > +
-> > > >    	if (!sbi->iostat_enable)
-> > > >    		return;
-> > > > -	spin_lock_bh(&sbi->iostat_lock);
-> > > > +	spin_lock_irqsave(&sbi->iostat_lock, flags);
-> > > >    	sbi->rw_iostat[type] += io_bytes;
-> > > >    	if (type == APP_BUFFERED_IO || type == APP_DIRECT_IO)
-> > > > @@ -172,7 +176,7 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi,
-> > > >    	if (type == APP_BUFFERED_READ_IO || type == APP_DIRECT_READ_IO)
-> > > >    		sbi->rw_iostat[APP_READ_IO] += io_bytes;
-> > > > -	spin_unlock_bh(&sbi->iostat_lock);
-> > > > +	spin_unlock_irqrestore(&sbi->iostat_lock, flags);
-> > > >    	f2fs_record_iostat(sbi);
-> > > >    }
-> > > > @@ -185,6 +189,7 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
-> > > >    	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
-> > > >    	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> > > >    	int idx;
-> > > > +	unsigned long flags;
-> > > >    	if (!sbi->iostat_enable)
-> > > >    		return;
-> > > > @@ -202,12 +207,12 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
-> > > >    			idx = WRITE_ASYNC_IO;
-> > > >    	}
-> > > > -	spin_lock_bh(&sbi->iostat_lat_lock);
-> > > > +	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> > > >    	io_lat->sum_lat[idx][iotype] += ts_diff;
-> > > >    	io_lat->bio_cnt[idx][iotype]++;
-> > > >    	if (ts_diff > io_lat->peak_lat[idx][iotype])
-> > > >    		io_lat->peak_lat[idx][iotype] = ts_diff;
-> > > > -	spin_unlock_bh(&sbi->iostat_lat_lock);
-> > > > +	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
-> > > >    }
-> > > >    void iostat_update_and_unbind_ctx(struct bio *bio, int rw)
-> > > 
-> > > 
-> > > _______________________________________________
-> > > Linux-f2fs-devel mailing list
-> > > Linux-f2fs-devel@lists.sourceforge.net
-> > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Thanks,
+drew
+

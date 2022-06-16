@@ -2,252 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C1B54EB22
+	by mail.lfdr.de (Postfix) with ESMTP id 27BD454EB21
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 22:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378625AbiFPU1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 16:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S1378388AbiFPU1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 16:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378701AbiFPU1D (ORCPT
+        with ESMTP id S1378486AbiFPU1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 16:27:03 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD895D190;
-        Thu, 16 Jun 2022 13:26:53 -0700 (PDT)
+        Thu, 16 Jun 2022 16:27:07 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1575B89B;
+        Thu, 16 Jun 2022 13:27:01 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id s1so1713733ilj.0;
+        Thu, 16 Jun 2022 13:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655411213; x=1686947213;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=ls8lQOlmsBqBGQEX1/VCZmtXihXyvL46E8MuEcAIKHo=;
-  b=XUE4WXvZrhH9aiyRqzPmhSMGAR9ulTy+Bq68SR6kcSElF44QTmiiCIyV
-   b8hQycX+L6K7Ts8oMOgCf3qxYLxzeFMtyZ6BAB04a4efky+1zEvWEezpB
-   A8oIjfhhL2Ak3hlXwXXsSKJ7An2LqkGU7TvL1CfnzMiCIEn3Xquw6lEql
-   4=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Jun 2022 13:26:53 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:26:52 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 16 Jun 2022 13:26:52 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 16 Jun 2022 13:26:51 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9] drm/msm/dp: force link training for display resolution change
-Date:   Thu, 16 Jun 2022 13:26:40 -0700
-Message-ID: <1655411200-7255-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SsJY7P3jisvIHHNgMnMfhfTU+j7BrzVjUHUb60jK/yY=;
+        b=gmVDginzPKhGopFMuxnIaJgoXctH5rT+joAZIaV5r2mT3QTDOWq8ECncyWDHnXL1dC
+         oHxC/EYQHWI5/hwcOTcP/96DoHeM83/PhmVTEc3RqdOcCujBPtAIWn+mMDheKN4Wak7m
+         qr4gToYI1blM9ThtKQWGJQJZAxjnySq/LdT57Bk1sQkQ6pTNXluZX2CqUKy4uN9f0ZRt
+         Pw7Gar5N3qd6NO4VSnFrQEPFZ8gA0YBwRtvfiFwfYwYlip/FhCTDI+uGDxyjYh31+ogs
+         DXd7wr2QhMIJ3H5eQD7wZmQRWsoOYGIZMlewoYqcL+MzKUm5F40rJbsbJLT3+arBVeJh
+         bAng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SsJY7P3jisvIHHNgMnMfhfTU+j7BrzVjUHUb60jK/yY=;
+        b=hbiWX+NcItIZTkDztNnkrTsfc+muHPw67JRooVO4ofcGe5ru+p1LpRD1nFn9iEZWm6
+         Q6GJPX3UEIo14vyGDDz7R74YZ0nxVz98FcjYnxFPSW7jrtuYZrE/XnyrNT+3tknPyoUc
+         cW2h3YNHOH1egpZENASDh4G33iFoqs3a3QhII3zYJBQ/A6/Va3CNTlIXAxyn1P+3ZXYL
+         VPS1O1VUniYf5lL0FuNgd2aa9REWTfh0Ke8LyfKiRX4ZacMQb7E/kiAwiJaIR5tjNk4B
+         iv6qH2+wSbphNY+rUFp9aR4rUfGIZN7ojckTFc02ie42npddFdGfbpBxAmU4qymeFnxk
+         /3FA==
+X-Gm-Message-State: AJIora+JwA8ugowvLpwmCPx3OvuwrxQ8pcqXO+IUIWJBclQ/KwiKZihi
+        NdVWmvgplOJ6zG2fXHvjbqBub0p4JUlXb8h/
+X-Google-Smtp-Source: AGRyM1vvlN1n/ci4DNl2/+810XdfpCysIlotnk/8vNyQ0FNGYJtIclLv00X8l27SSYgIDNEUdtOU/A==
+X-Received: by 2002:a05:6e02:1c44:b0:2d7:6bc3:9960 with SMTP id d4-20020a056e021c4400b002d76bc39960mr3935563ilg.194.1655411221180;
+        Thu, 16 Jun 2022 13:27:01 -0700 (PDT)
+Received: from tremont-lap.lan ([2604:2d80:d289:7400:7af5:ac5e:1454:9e62])
+        by smtp.gmail.com with ESMTPSA id n4-20020a02a904000000b0032e583132e4sm1283700jam.123.2022.06.16.13.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 13:27:00 -0700 (PDT)
+From:   David Owens <daowens01@gmail.com>
+X-Google-Original-From: David Owens <dowens@precisionplanting.com>
+To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@bitmer.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     David Owens <dowens@precisionplanting.com>,
+        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] ASoC: ti: omap-mcbsp: duplicate sysfs error
+Date:   Thu, 16 Jun 2022 15:26:45 -0500
+Message-Id: <20220616202645.1645972-1-dowens@precisionplanting.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Display resolution change is implemented through drm modeset. Older
-modeset (resolution) has to be disabled first before newer modeset
-(resolution) can be enabled. Display disable will turn off both
-pixel clock and main link clock so that main link have to be
-re-trained during display enable to have new video stream flow
-again. At current implementation, display enable function manually
-kicks up irq_hpd_handle which will read panel link status and start
-link training if link status is not in sync state.
+Convert to managed versions of sysfs and clk allocation to simplify
+unbinding and error handling in probe.  Managed sysfs node
+creation specifically addresses the following error seen the second time
+probe is attempted after sdma_pcm_platform_register() previously requested
+probe deferral:
 
-However, there is rare case that a particular panel links status keep
-staying in sync for some period of time after main link had been shut
-down previously at display disabled. In this case, main link retraining
-will not be executed by irq_hdp_handle(). Hence video stream of newer
-display resolution will fail to be transmitted to panel due to main
-link is not in sync between host and panel.
+sysfs: cannot create duplicate filename '/devices/platform/68000000.ocp/49022000.mcbsp/max_tx_thres'
 
-This patch will bypass irq_hpd_handle() in favor of directly call
-dp_ctrl_on_stream() to always perform link training in regardless of
-main link status. So that no unexpected exception resolution change
-failure cases will happen. Also this implementation are more efficient
-than manual kicking off irq_hpd_handle function.
-
-Changes in v2:
--- set force_link_train flag on DP only (is_edp == false)
+Signed-off-by: David Owens <dowens@precisionplanting.com>
+---
 
 Changes in v3:
--- revise commit  text
--- add Fixes tag
+ * Whitespace changes only to allow clean applly
 
-Changes in v4:
--- revise commit  text
+Changes in v2:
+ * Improved error handling
 
-Changes in v5:
--- fix spelling at commit text
-
-Changes in v6:
--- split dp_ctrl_on_stream() for phy test case
--- revise commit text for modeset
-
-Changes in v7:
--- drop 0 assignment at local variable (ret = 0)
-
-Changes in v8:
--- add patch to remove pixel_rate from dp_ctrl
-
-Changes in v9:
--- forward declare dp_ctrl_on_stream_phy_test_report()
-
-Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 ---
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 33 +++++++++++++++++++++++++--------
- drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
- drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
- 3 files changed, 32 insertions(+), 16 deletions(-)
+ sound/soc/ti/omap-mcbsp-priv.h |  2 --
+ sound/soc/ti/omap-mcbsp-st.c   | 21 ++++-----------------
+ sound/soc/ti/omap-mcbsp.c      | 26 ++++----------------------
+ 3 files changed, 8 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index af7a80c..f090945 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1528,6 +1528,8 @@ static int dp_ctrl_link_maintenance(struct dp_ctrl_private *ctrl)
- 	return ret;
- }
+diff --git a/sound/soc/ti/omap-mcbsp-priv.h b/sound/soc/ti/omap-mcbsp-priv.h
+index 7865cda4bf0a..da519ea1f303 100644
+--- a/sound/soc/ti/omap-mcbsp-priv.h
++++ b/sound/soc/ti/omap-mcbsp-priv.h
+@@ -316,8 +316,6 @@ static inline int omap_mcbsp_read(struct omap_mcbsp *mcbsp, u16 reg,
  
-+static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl);
-+
- static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
- {
- 	int ret = 0;
-@@ -1551,7 +1553,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
- 
- 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
- 	if (!ret)
--		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
-+		ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
- 	else
- 		DRM_ERROR("failed to enable DP link controller\n");
- 
-@@ -1807,7 +1809,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
- 	return dp_ctrl_setup_main_link(ctrl, &training_step);
- }
- 
--int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
-+static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-+{
-+	int ret;
-+	struct dp_ctrl_private *ctrl;
-+
-+	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-+
-+	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-+
-+	ret = dp_ctrl_enable_stream_clocks(ctrl);
-+	if (ret) {
-+		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	dp_ctrl_send_phy_test_pattern(ctrl);
-+
-+	return 0;
-+}
-+
-+int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
- {
- 	int ret = 0;
- 	bool mainlink_ready = false;
-@@ -1843,12 +1865,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
- 		goto end;
- 	}
- 
--	if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
--		dp_ctrl_send_phy_test_pattern(ctrl);
--		return 0;
--	}
+ /* Sidetone specific API */
+ int omap_mcbsp_st_init(struct platform_device *pdev);
+-void omap_mcbsp_st_cleanup(struct platform_device *pdev);
 -
--	if (!dp_ctrl_channel_eq_ok(ctrl))
-+	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
- 		dp_ctrl_link_retrain(ctrl);
+ int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp);
+ int omap_mcbsp_st_stop(struct omap_mcbsp *mcbsp);
  
- 	/* stop txing train pattern to end link training */
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-index 0745fde..b563e2e 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-@@ -21,7 +21,7 @@ struct dp_ctrl {
+diff --git a/sound/soc/ti/omap-mcbsp-st.c b/sound/soc/ti/omap-mcbsp-st.c
+index 0bc7d26c660a..402a57a502e6 100644
+--- a/sound/soc/ti/omap-mcbsp-st.c
++++ b/sound/soc/ti/omap-mcbsp-st.c
+@@ -292,14 +292,11 @@ static ssize_t st_taps_store(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(st_taps);
+ 
+-static const struct attribute *sidetone_attrs[] = {
++static struct attribute *sidetone_attrs[] = {
+ 	&dev_attr_st_taps.attr,
+ 	NULL,
  };
- 
- int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
--int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
-+int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
- int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index c388323..b6d25ab 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
- 		return 0;
- 	}
- 
--	rc = dp_ctrl_on_stream(dp->ctrl);
-+	rc = dp_ctrl_on_stream(dp->ctrl, data);
- 	if (!rc)
- 		dp_display->power_on = true;
- 
-@@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 	int rc = 0;
- 	struct dp_display_private *dp_display;
- 	u32 state;
-+	bool force_link_train = false;
- 
- 	dp_display = container_of(dp, struct dp_display_private, dp_display);
- 	if (!dp_display->dp_mode.drm_mode.clock) {
-@@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 
- 	state =  dp_display->hpd_state;
- 
--	if (state == ST_DISPLAY_OFF)
-+	if (state == ST_DISPLAY_OFF) {
- 		dp_display_host_phy_init(dp_display);
-+		force_link_train = true;
-+	}
- 
--	dp_display_enable(dp_display, 0);
-+	dp_display_enable(dp_display, force_link_train);
- 
- 	rc = dp_display_post_enable(dp);
- 	if (rc) {
-@@ -1700,10 +1703,6 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 		dp_display_unprepare(dp);
- 	}
- 
--	/* manual kick off plug event to train link */
--	if (state == ST_DISPLAY_OFF)
--		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
 -
- 	/* completed connection */
- 	dp_display->hpd_state = ST_CONNECTED;
+-static const struct attribute_group sidetone_attr_group = {
+-	.attrs = (struct attribute **)sidetone_attrs,
+-};
++ATTRIBUTE_GROUPS(sidetone);
+ 
+ int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp)
+ {
+@@ -347,7 +344,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+ 	if (!st_data)
+ 		return -ENOMEM;
+ 
+-	st_data->mcbsp_iclk = clk_get(mcbsp->dev, "ick");
++	st_data->mcbsp_iclk = devm_clk_get(mcbsp->dev, "ick");
+ 	if (IS_ERR(st_data->mcbsp_iclk)) {
+ 		dev_warn(mcbsp->dev,
+ 			 "Failed to get ick, sidetone might be broken\n");
+@@ -359,7 +356,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+ 	if (!st_data->io_base_st)
+ 		return -ENOMEM;
+ 
+-	ret = sysfs_create_group(&mcbsp->dev->kobj, &sidetone_attr_group);
++	ret = devm_device_add_group(mcbsp->dev, &sidetone_group);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -368,16 +365,6 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-void omap_mcbsp_st_cleanup(struct platform_device *pdev)
+-{
+-	struct omap_mcbsp *mcbsp = platform_get_drvdata(pdev);
+-
+-	if (mcbsp->st_data) {
+-		sysfs_remove_group(&mcbsp->dev->kobj, &sidetone_attr_group);
+-		clk_put(mcbsp->st_data->mcbsp_iclk);
+-	}
+-}
+-
+ static int omap_mcbsp_st_info_volsw(struct snd_kcontrol *kcontrol,
+ 				    struct snd_ctl_elem_info *uinfo)
+ {
+diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
+index 4479d74f0a45..395493a2d965 100644
+--- a/sound/soc/ti/omap-mcbsp.c
++++ b/sound/soc/ti/omap-mcbsp.c
+@@ -595,16 +595,13 @@ static ssize_t dma_op_mode_store(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(dma_op_mode);
+ 
+-static const struct attribute *additional_attrs[] = {
++static struct attribute *additional_attrs[] = {
+ 	&dev_attr_max_tx_thres.attr,
+ 	&dev_attr_max_rx_thres.attr,
+ 	&dev_attr_dma_op_mode.attr,
+ 	NULL,
+ };
+-
+-static const struct attribute_group additional_attr_group = {
+-	.attrs = (struct attribute **)additional_attrs,
+-};
++ATTRIBUTE_GROUPS(additional);
+ 
+ /*
+  * McBSP1 and McBSP3 are directly mapped on 1610 and 1510.
+@@ -702,8 +699,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
+ 		mcbsp->max_tx_thres = max_thres(mcbsp) - 0x10;
+ 		mcbsp->max_rx_thres = max_thres(mcbsp) - 0x10;
+ 
+-		ret = sysfs_create_group(&mcbsp->dev->kobj,
+-					 &additional_attr_group);
++		ret = devm_device_add_group(mcbsp->dev, &additional_group);
+ 		if (ret) {
+ 			dev_err(mcbsp->dev,
+ 				"Unable to create additional controls\n");
+@@ -711,16 +707,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	ret = omap_mcbsp_st_init(pdev);
+-	if (ret)
+-		goto err_st;
+-
+-	return 0;
+-
+-err_st:
+-	if (mcbsp->pdata->buffer_size)
+-		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
+-	return ret;
++	return omap_mcbsp_st_init(pdev);
+ }
+ 
+ /*
+@@ -1431,11 +1418,6 @@ static int asoc_mcbsp_remove(struct platform_device *pdev)
+ 	if (cpu_latency_qos_request_active(&mcbsp->pm_qos_req))
+ 		cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
+ 
+-	if (mcbsp->pdata->buffer_size)
+-		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
+-
+-	omap_mcbsp_st_cleanup(pdev);
+-
+ 	return 0;
+ }
  
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.34.1
 

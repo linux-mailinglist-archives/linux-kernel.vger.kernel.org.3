@@ -2,141 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0A754DF21
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A9854DF27
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiFPKbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
+        id S230097AbiFPKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 06:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiFPKbm (ORCPT
+        with ESMTP id S229479AbiFPKbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 06:31:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67B3B5DBDC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:31:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FAB912FC;
-        Thu, 16 Jun 2022 03:31:41 -0700 (PDT)
-Received: from [10.57.82.209] (unknown [10.57.82.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 053D13F792;
-        Thu, 16 Jun 2022 03:31:37 -0700 (PDT)
-Message-ID: <521ed82e-f213-f635-6f5e-3e35ff8cc020@arm.com>
-Date:   Thu, 16 Jun 2022 11:31:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/5] iommu/mediatek: Add error path for loop of
- mm_dts_parse
-Content-Language: en-GB
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
+        Thu, 16 Jun 2022 06:31:48 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB2E5DBDB;
+        Thu, 16 Jun 2022 03:31:40 -0700 (PDT)
+X-UUID: f86f6d208259408db24098e161addd45-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:a9c58cc1-131c-476c-921a-9e04cf1d6f19,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:7ec57bf6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: f86f6d208259408db24098e161addd45-20220616
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 473049511; Thu, 16 Jun 2022 18:31:35 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 16 Jun 2022 18:31:34 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 16 Jun 2022 18:31:34 +0800
+Message-ID: <941ba5399e3cc9b25474d76d15d2bb5bafaa14b1.camel@mediatek.com>
+Subject: Re: [PATCH v11 02/12] drm/mediatek: dpi: move dpi limits to SoC
+ config
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
         <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com,
-        youlin.pei@mediatek.com, anan.sun@mediatek.com,
-        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220616054203.11365-1-yong.wu@mediatek.com>
- <20220616054203.11365-3-yong.wu@mediatek.com>
- <e2091397-b6e2-7296-1378-dc10b24c6ef4@arm.com>
- <b2ea919315d0084adb465378e6970dbfa4f0829e.camel@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <b2ea919315d0084adb465378e6970dbfa4f0829e.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 16 Jun 2022 18:31:34 +0800
+In-Reply-To: <5de2752a1d496290ea5c2c2d7840ba984b2e7e4d.camel@mediatek.com>
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+         <20220613064841.10481-3-rex-bc.chen@mediatek.com>
+         <5de2752a1d496290ea5c2c2d7840ba984b2e7e4d.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-16 11:08, Yong Wu wrote:
-> On Thu, 2022-06-16 at 09:59 +0100, Robin Murphy wrote:
->> On 2022-06-16 06:42, Yong Wu wrote:
->>> The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the
->>> i+1
->>> larb is parsed fail(return -EINVAL), we should of_node_put for the
->>> 0..i
->>> larbs. In the fail path, one of_node_put matches with
->>> of_parse_phandle in
->>> it.
->>>
->>> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with
->>> the MM TYPE")
->>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>> ---
->>>    drivers/iommu/mtk_iommu.c | 21 ++++++++++++++++-----
->>>    1 file changed, 16 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
->>> index 3b2489e8a6dd..ab24078938bf 100644
->>> --- a/drivers/iommu/mtk_iommu.c
->>> +++ b/drivers/iommu/mtk_iommu.c
->>> @@ -1071,12 +1071,12 @@ static int mtk_iommu_mm_dts_parse(struct
->>> device *dev, struct component_match **m
->>>    
->>>    		plarbdev = of_find_device_by_node(larbnode);
->>>    		if (!plarbdev) {
->>> -			of_node_put(larbnode);
->>> -			return -ENODEV;
->>> +			ret = -ENODEV;
->>> +			goto err_larbnode_put;
->>>    		}
->>>    		if (!plarbdev->dev.driver) {
->>> -			of_node_put(larbnode);
->>> -			return -EPROBE_DEFER;
->>> +			ret = -EPROBE_DEFER;
->>> +			goto err_larbnode_put;
->>>    		}
->>>    		data->larb_imu[id].dev = &plarbdev->dev;
->>>    
->>> @@ -1107,9 +1107,20 @@ static int mtk_iommu_mm_dts_parse(struct
->>> device *dev, struct component_match **m
->>>    			       DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME);
->>>    	if (!link) {
->>>    		dev_err(dev, "Unable to link %s.\n", dev_name(data-
->>>> smicomm_dev));
->>> -		return -EINVAL;
->>> +		ret = -EINVAL;
->>> +		goto err_larbnode_put;
->>>    	}
->>>    	return 0;
->>> +
->>> +err_larbnode_put:
->>> +	while (i--) {
->>> +		larbnode = of_parse_phandle(dev->of_node,
->>> "mediatek,larbs", i);
->>> +		if (larbnode && of_device_is_available(larbnode)) {
->>> +			of_node_put(larbnode);
->>> +			of_node_put(larbnode);
->>> +		}
->>
->> This looks a bit awkward - could we not just iterate through
->> data->larb_imu and put dev->of_node for each valid dev?
+On Tue, 2022-06-14 at 11:21 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
 > 
-> It should work. Thanks very much.
+> On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
+> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > 
+> > Add flexibility by moving the dpi limits to the SoC specific
+> > config.
 > 
->>
->> Also, of_find_device_by_node() takes a reference on the struct
->> device
->> itself, so strictly we should be doing put_device() on those as well
->> if we're bailing out.
+> What does this 'limit' mean? Why it's different in DPI vs DP_INTF?
 > 
-> Thanks for this hint. A new reference for me. I will add it.
+> The hardware design is so weird. If the limit is fixed for DPI and
+> DP_INTF, why the hardware export register for software to assign any
+> value which may be wrong.
+> 
+> Regards,
+> CK
+> 
 
-In fact, thinking about it some more we may as well do the of_node_put() 
-unconditionally immediately after the of_find_device_by_node() call, so 
-then it's *only* the device references we'd need to worry about cleaning 
-up in the failure path.
+Hello CK,
 
-Robin.
+For RGB colorimetry, CTA-861 support both limited and full range data
+when receiving video with RGB color space.
+
+I will use drm_default_rgb_quant_range() to determine this and drop
+const struct mtk_dpi_yc_limit *limit;
+
+BRs,
+Bo-Chen
+> > 
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 25 ++++++++++++++++---------
+> >  1 file changed, 16 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index e61cd67b978f..ce8c5eefe5f1 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
+> >  	bool edge_sel_en;
+> >  	const u32 *output_fmts;
+> >  	u32 num_output_fmts;
+> > +	const struct mtk_dpi_yc_limit *limit;
+> >  };
+> >  
+> >  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
+> > u32 mask)
+> > @@ -235,9 +236,10 @@ static void mtk_dpi_config_fb_size(struct
+> > mtk_dpi *dpi, u32 width, u32 height)
+> >  	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
+> >  }
+> >  
+> > -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
+> > -					 struct mtk_dpi_yc_limit
+> > *limit)
+> > +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
+> >  {
+> > +	const struct mtk_dpi_yc_limit *limit = dpi->conf->limit;
+> > +
+> >  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
+> >  		     Y_LIMINT_BOT_MASK);
+> >  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
+> > @@ -449,7 +451,6 @@ static int mtk_dpi_power_on(struct mtk_dpi
+> > *dpi)
+> >  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+> >  				    struct drm_display_mode *mode)
+> >  {
+> > -	struct mtk_dpi_yc_limit limit;
+> >  	struct mtk_dpi_polarities dpi_pol;
+> >  	struct mtk_dpi_sync_param hsync;
+> >  	struct mtk_dpi_sync_param vsync_lodd = { 0 };
+> > @@ -484,11 +485,6 @@ static int mtk_dpi_set_display_mode(struct
+> > mtk_dpi *dpi,
+> >  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+> >  		pll_rate, vm.pixelclock);
+> >  
+> > -	limit.c_bottom = 0x0010;
+> > -	limit.c_top = 0x0FE0;
+> > -	limit.y_bottom = 0x0010;
+> > -	limit.y_top = 0x0FE0;
+> > -
+> >  	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
+> >  	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
+> >  	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
+> > @@ -536,7 +532,7 @@ static int mtk_dpi_set_display_mode(struct
+> > mtk_dpi *dpi,
+> >  	else
+> >  		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
+> >  
+> > -	mtk_dpi_config_channel_limit(dpi, &limit);
+> > +	mtk_dpi_config_channel_limit(dpi);
+> >  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+> >  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+> >  	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+> > @@ -790,12 +786,20 @@ static const u32 mt8183_output_fmts[] = {
+> >  	MEDIA_BUS_FMT_RGB888_2X12_BE,
+> >  };
+> >  
+> > +static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
+> > +	.c_bottom = 0x0010,
+> > +	.c_top = 0x0FE0,
+> > +	.y_bottom = 0x0010,
+> > +	.y_top = 0x0FE0,
+> > +};
+> > +
+> >  static const struct mtk_dpi_conf mt8173_conf = {
+> >  	.cal_factor = mt8173_calculate_factor,
+> >  	.reg_h_fre_con = 0xe0,
+> >  	.max_clock_khz = 300000,
+> >  	.output_fmts = mt8173_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> > +	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> >  static const struct mtk_dpi_conf mt2701_conf = {
+> > @@ -805,6 +809,7 @@ static const struct mtk_dpi_conf mt2701_conf =
+> > {
+> >  	.max_clock_khz = 150000,
+> >  	.output_fmts = mt8173_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> > +	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> >  static const struct mtk_dpi_conf mt8183_conf = {
+> > @@ -813,6 +818,7 @@ static const struct mtk_dpi_conf mt8183_conf =
+> > {
+> >  	.max_clock_khz = 100000,
+> >  	.output_fmts = mt8183_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> > +	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> >  static const struct mtk_dpi_conf mt8192_conf = {
+> > @@ -821,6 +827,7 @@ static const struct mtk_dpi_conf mt8192_conf =
+> > {
+> >  	.max_clock_khz = 150000,
+> >  	.output_fmts = mt8183_output_fmts,
+> >  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> > +	.limit = &mtk_dpi_limit,
+> >  };
+> >  
+> >  static int mtk_dpi_probe(struct platform_device *pdev)
+> 
+> 
+

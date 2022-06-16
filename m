@@ -2,185 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E514F54D72E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2313254D73C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350837AbiFPBik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 21:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S1347792AbiFPBiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 21:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344998AbiFPBiO (ORCPT
+        with ESMTP id S1350363AbiFPBif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 21:38:14 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22EC57B20;
-        Wed, 15 Jun 2022 18:38:11 -0700 (PDT)
-Received: (Authenticated sender: frank@zago.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8B365200003;
-        Thu, 16 Jun 2022 01:38:07 +0000 (UTC)
-From:   frank zago <frank@zago.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        frank zago <frank@zago.net>
-Subject: [PATCH v6 4/4] docs: misc: add documentation for ch341 driver
-Date:   Wed, 15 Jun 2022 20:37:47 -0500
-Message-Id: <20220616013747.126051-5-frank@zago.net>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220616013747.126051-1-frank@zago.net>
-References: <20220616013747.126051-1-frank@zago.net>
+        Wed, 15 Jun 2022 21:38:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF7C56C10;
+        Wed, 15 Jun 2022 18:38:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2DD4FCE229A;
+        Thu, 16 Jun 2022 01:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3514BC3411A;
+        Thu, 16 Jun 2022 01:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655343510;
+        bh=d2MR8JbAHuYboCeL5LA8OVqbDSui4vBHdBkzOiJFe0Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m6sK9YN9ILtIsQcvKAHlSE3QS3ouzgUtU/8JiVmCFWZDAYzQ55Czrg4PxHXWF9WB7
+         7yRPq98AHuZuwf2OBKZpVgx0R/ppyddT+LffzHvEYroAk0IZ2FoqE03QljNEiiwKvv
+         TS4boBJ2pkphKEpltduDS4IiaYwPSG6jqTw/85TxHKtzUbYa5lQyZmxMG4bB3bORjm
+         JdzaH12t5x1g+QKkpo7KQlqfPjJnC7Cy5X5ujUkxbsj08htOgZl17CY4g7g0UKhKcB
+         +mhd2r1UGBq+3DWji8NA/2y6jY+YBiGPDqPu/Vv8V5sK+Ocs5OmbVBKnVyHjOyl5Wx
+         mIahRrJ6A2roQ==
+Message-ID: <7a446f83-8a32-7131-adb4-4dfcbb79a8d9@kernel.org>
+Date:   Thu, 16 Jun 2022 09:38:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] scsi: support packing multi-segment in UNMAP command
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615153402.2233825-1-chao@kernel.org>
+ <1c422582-b074-c15e-a2d2-94bddf089974@acm.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <1c422582-b074-c15e-a2d2-94bddf089974@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the multifunction CH341 chip driver, in GPIO and I2C mode.
+On 2022/6/16 0:21, Bart Van Assche wrote:
+> On 6/15/22 08:34, Chao Yu wrote:
+>> As SCSI SBC4 specification section 5.30.2 describes that it can
+>> support unmapping one or more LBA range in single UNMAP command,
+>> however, previously we only pack one LBA range in UNMAP command
+>> by default no matter device gives the block limits that says it
+>> can support in-batch UNMAP.
+> 
+> The above sentence is too long. Please split it.
+> 
+>> This patch tries to set max_discard_segments config according to
+>               ^^^^^^^^^^^^
+> Consider changing "tries to set" into "sets".
+> 
+>> block limits of device, and supports in-batch UNMAP.
+> 
+> Consider changing "in-batch UNMAP" into "unmapping multiple LBA ranges with a single UNMAP command".
+> 
+>> +    blk_queue_max_discard_segments(q, sdkp->max_block_desc_count);
+> 
+> sdkp->max_block_desc_count is 32 bits wide while blk_queue_max_discard_segments() accepts an unsigned short as second argument. So the value 0x10002 will be converted into 2, which is not correct. Consider changing the second argument into min(U16_MAX, sdkp->max_block_desc_count).
+> 
+>>       sdkp->provisioning_mode = mode;
+>>       switch (mode) {
+>> @@ -836,9 +837,10 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
+>>       struct scsi_device *sdp = cmd->device;
+>>       struct request *rq = scsi_cmd_to_rq(cmd);
+>>       struct scsi_disk *sdkp = scsi_disk(rq->q->disk);
+>> -    u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
+>> -    u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
+>> -    unsigned int data_len = 24;
+>> +    unsigned short segments = blk_rq_nr_discard_segments(rq);
+>> +    unsigned int data_len = 8 + 16 * segments;
+>> +    unsigned int data_offset = 8;
+> 
+> Please rename 'data_offset' into 'descriptor_offset' to match the SBC-4 terminology.
+> 
+>> @@ -2870,9 +2879,9 @@ static void sd_read_block_limits(struct scsi_disk *sdkp)
+>>               goto out;
+>>           lba_count = get_unaligned_be32(&vpd->data[20]);
+>> -        desc_count = get_unaligned_be32(&vpd->data[24]);
+>> +        sdkp->max_block_desc_count = get_unaligned_be32(&vpd->data[24]);
+> 
+> Consider adding /* Extract the MAXIMUM UNMAP BLOCK DESCRIPTOR COUNT. */ above the above statement.
+> 
+>> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
+>> index 5eea762f84d1..bda9db5e2322 100644
+>> --- a/drivers/scsi/sd.h
+>> +++ b/drivers/scsi/sd.h
+>> @@ -119,6 +119,7 @@ struct scsi_disk {
+>>       u32        opt_xfer_blocks;
+>>       u32        max_ws_blocks;
+>>       u32        max_unmap_blocks;
+>> +    u32        max_block_desc_count;
+> 
+> I do not agree with the choice of the name of this member variable. The name used in SBC-4 is "MAXIMUM UNMAP BLOCK DESCRIPTOR COUNT". Leaving out "unmap" when abbreviating that description into a member name makes it impossible to guess what the purpose of that member variable is.
 
-Signed-off-by: frank zago <frank@zago.net>
----
- Documentation/misc-devices/ch341.rst | 109 +++++++++++++++++++++++++++
- Documentation/misc-devices/index.rst |   1 +
- 2 files changed, 110 insertions(+)
- create mode 100644 Documentation/misc-devices/ch341.rst
+Agreed, thanks for the review. I've updated the patch as you suggested.
 
-diff --git a/Documentation/misc-devices/ch341.rst b/Documentation/misc-devices/ch341.rst
-new file mode 100644
-index 000000000000..65ba293bdc2d
---- /dev/null
-+++ b/Documentation/misc-devices/ch341.rst
-@@ -0,0 +1,109 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+===========================================================
-+WinChipHead (沁恒) CH341 linux driver for I2C and GPIO mode
-+===========================================================
-+
-+The CH341 is declined in several flavors, and may support one or more
-+of UART, SPI, I2C and GPIO, but not always simultaneously:
-+
-+  - CH341 A/B/F: UART, Printer, SPI, I2C and GPIO
-+  - CH341 C/T: UART and I2C
-+  - CH341 H: SPI
-+
-+They work in 3 different modes, with only one being presented
-+depending on the USB PID:
-+
-+  - 0x5523: UART mode, covered by the USB `ch341` serial driver
-+  - 0x5512: SPI/I2C/GPIO mode, covered by the ch341 MFD drivers
-+  - 0x5584: Parallel printer mode, covered by the USB `usblp` driver
-+
-+Mode selection is done at the hardware level by tying some
-+pins. Breakout boards with one of the CH341 chip usually have one or
-+more jumpers to select which mode they work on. At least one model
-+(CJMCU-341) appears to need bridging some solder pads to select a
-+different default. Breakout boards also don't usually offer an option
-+to configure the chip into printer mode; for that case, connect the
-+SCL and SDA lines directly together.
-+
-+The various CH341 appear to be indistinguishable from the
-+software. For instance the ch341 MFD driver will present a GPIO
-+interface for the CH341T although physical pins are not present, and
-+the device will accept GPIO commands.
-+
-+The ch341 MFD driver has been tested with a CH341A, CH341B and
-+CH341T.
-+
-+Some breakout boards work in 3.3V and 5V depending on some jumpers.
-+
-+The black chip programmer with a ZIF socket will power the CH341 at
-+3.3V if a jumper is set, but will only output 5V to the chips to be
-+programmed, which is not always desirable. A hardware hack to use 3.3V
-+everywhere, involving some soldering, is available at
-+https://eevblog.com/forum/repair/ch341a-serial-memory-programmer-power-supply-fix/
-+
-+Some sample code for the CH341 is available at the manufacturer
-+website, at http://wch-ic.com/products/CH341.html
-+
-+The repository at https://github.com/boseji/CH341-Store contains a lot
-+of information on these chips, including datasheets.
-+
-+This driver is based on the pre-existing work at
-+https://github.com/gschorcht/i2c-ch341-usb
-+
-+
-+I2C Caveats
-+-----------
-+
-+The ch341 doesn't work with a Wii nunchuk, possibly because the
-+pull-up value is too low (1500 ohms).
-+
-+i2c AT24 eeproms can be read but not programmed properly because the
-+at24 linux driver tries to write a byte at a time, and doesn't wait at
-+all (or enough) between writes. Data corruption on writes does occur.
-+
-+
-+The GPIOs
-+---------
-+
-+16 GPIOs are available on the CH341 A/B/F. The first 6 are input/output,
-+and the last 10 are input only.
-+
-+Pinout and their names as they appear on some breakout boards::
-+
-+  CH341A/B/F     GPIO  Names                    Mode
-+    pin          line
-+
-+   15             0     D0, CS0                  input/output
-+   16             1     D1, CS1                  input/output
-+   17             2     D2, CS2                  input/output
-+   18             3     D3, SCK, DCK             input/output
-+   19             4     D4, DOUT2, CS3           input/output
-+   20             5     D5, MOSI, DOUT, SDO      input/output
-+   21             6     D6, DIN2                 input
-+   22             7     D7, MISO, DIN            input
-+    5             8     ERR                      input
-+    6             9     PEMP                     input
-+    7            10     INT                      input
-+    8            11     SLCT (SELECT)            input
-+   26            12     RST# (?)                 input
-+   27            13     WT (WAIT)                input
-+    4            14     DS (Data Select?)        input
-+    3            15     AS (Address Select?)     input
-+
-+
-+GPIO interrupt
-+~~~~~~~~~~~~~~
-+
-+The INT pin, corresponding to GPIO 10 is an input pin that can trigger
-+an interrupt on a rising edge. Only that pin is able to generate an
-+interrupt, and only on a rising edge. Trying to monitor events on
-+another GPIO, or that GPIO on something other than a rising edge, will
-+be rejected.
-+
-+
-+SPI
-+---
-+
-+This driver doesn't offer an SPI interface (yet) due to the
-+impossibility of declaring an SPI device like I2C does.
-diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 756be15a49a4..e85531a4f354 100644
---- a/Documentation/misc-devices/index.rst
-+++ b/Documentation/misc-devices/index.rst
-@@ -19,6 +19,7 @@ fit into other categories.
-    bh1770glc
-    eeprom
-    c2port
-+   ch341
-    dw-xdata-pcie
-    ibmvmc
-    ics932s401
--- 
-2.32.0
+Thanks,
 
+> 
+> Thanks,
+> 
+> Bart.

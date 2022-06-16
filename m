@@ -2,186 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D7F54DA8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E7C54DABC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 08:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358421AbiFPG04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 02:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S1358671AbiFPGdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 02:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358768AbiFPG0x (ORCPT
+        with ESMTP id S1359170AbiFPGdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 02:26:53 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B86554B7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655360812; x=1686896812;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WCkikrbTLmpAV/PA3+qRF7O1LzgC0iFg3llL8wElXgQ=;
-  b=Xz/v7VXHBCSsf+ctm2DYXDP9nhms+PIezZTScHBF+qj4E1sUh8BuPbWk
-   HQ9p1AxrFDiuxv2MIzggble4Q1vZ/hTXUDH79C+NNltMfDQIZ4coXI7aE
-   JUdypjlB0sLz9rWR6RFlrhjDXqZsN2g5AOwGmPrOAsRMvUotcRoQeW2Qp
-   hx+eYWI7rnxp3syVcqvw8CG8F3L+LWljarkKmAUz/caxt9rbXf7LGok1k
-   NhzFdCT6Qe85eGmw3rwNWYPrgtYNB77vF31P8kK82OiIKVJieBSV04DED
-   9wmP2LCrXRuO4svZWSXqp3dNj9JKh3bWFDyI+rfAs4le8jIbmDgZacfJq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279894279"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="279894279"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 23:26:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="641391673"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Jun 2022 23:26:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1ixt-000O8l-CB;
-        Thu, 16 Jun 2022 06:26:49 +0000
-Date:   Thu, 16 Jun 2022 14:26:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
-        linux-kernel@vger.kernel.org
-Subject: [atishp04:kvm_isa_ext_v1 1/1]
- arch/riscv/include/asm/kvm_host.h:173:29: error: 'RISCV_ISA_EXT_MAX'
- undeclared here (not in a function); did you mean 'KVM_RISCV_ISA_EXT_MAX'?
-Message-ID: <202206161421.E8pdfIAD-lkp@intel.com>
+        Thu, 16 Jun 2022 02:33:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5F25537E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:33:24 -0700 (PDT)
+X-UUID: 7608da4f38054f698be63d429a124dd1-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:17ee88ea-ae02-41b8-96b4-b4d9ff41cafd,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:b14ad71,CLOUDID:fa9671f6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 7608da4f38054f698be63d429a124dd1-20220616
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1452309844; Thu, 16 Jun 2022 14:33:19 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 16 Jun 2022 14:33:17 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jun 2022 14:33:16 +0800
+From:   <yf.wang@mediatek.com>
+To:     <robin.murphy@arm.com>
+CC:     <Libo.Kang@mediatek.com>, <Yong.Wu@mediatek.com>,
+        <iommu@lists.linux-foundation.org>, <isaacm@codeaurora.org>,
+        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <ning.li@mediatek.com>,
+        <quic_c_gdjako@quicinc.com>, <sven@svenpeter.dev>,
+        <will@kernel.org>, <wsd_upstream@mediatek.com>,
+        <yf.wang@mediatek.com>
+Subject: Re: [PATCH v9 1/3] iommu/io-pgtable-arm-v7s: Add a quirk to allow pgtable PA up to 35bit
+Date:   Thu, 16 Jun 2022 14:26:28 +0800
+Message-ID: <20220616062628.10101-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <5083aed9-fa31-b91c-6ca6-29dbc4d0807a@arm.com>
+References: <5083aed9-fa31-b91c-6ca6-29dbc4d0807a@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux kvm_isa_ext_v1
-head:   f581904c5e3c943b3ad5fbaf91606d5f5e12018a
-commit: f581904c5e3c943b3ad5fbaf91606d5f5e12018a [1/1] RISC-V: KVM: Improve ISA extension by using a bitmap
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220616/202206161421.E8pdfIAD-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/atishp04/linux/commit/f581904c5e3c943b3ad5fbaf91606d5f5e12018a
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 kvm_isa_ext_v1
-        git checkout f581904c5e3c943b3ad5fbaf91606d5f5e12018a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv prepare
+On Wed, 2022-06-15 at 18:03 +0100, Robin Murphy wrote:
+> On 2022-06-15 17:12, yf.wang@mediatek.com wrote:
+> > 
+> >   static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
+> >   				  struct io_pgtable_cfg *cfg)
+> >   {
+> > @@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl,
+> > gfp_t gfp,
+> >   	dma_addr_t dma;
+> >   	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
+> >   	void *table = NULL;
+> > +	gfp_t gfp_l1;
+> > +
+> > +	/*
+> > +	 * ARM_MTK_TTBR_EXT extend the translation table base support
+> > all
+> > +	 * memory address.
+> > +	 */
+> > +	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> > +		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
+> >   
+> >   	if (lvl == 1)
+> > -		table = (void *)__get_free_pages(
+> > -			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA,
+> > get_order(size));
+> > +		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO,
+> > get_order(size));
+> >   	else if (lvl == 2)
+> >   		table = kmem_cache_zalloc(data->l2_tables, gfp);
+> >   
+> > @@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl,
+> > gfp_t gfp,
+> >   		return NULL;
+> >   
+> >   	phys = virt_to_phys(table);
+> > -	if (phys != (arm_v7s_iopte)phys) {
+> > +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> > +	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
+> 
+> Given that the comment above says it supports all of memory, how
+> would 
+> phys >= (1ULL << cfg->oas) ever be true?
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Robin,
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/vdso/const.h:5,
-                    from include/linux/const.h:4,
-                    from arch/riscv/include/asm/bug.h:10,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:6,
-                    from arch/riscv/kernel/asm-offsets.c:10:
->> arch/riscv/include/asm/kvm_host.h:173:29: error: 'RISCV_ISA_EXT_MAX' undeclared here (not in a function); did you mean 'KVM_RISCV_ISA_EXT_MAX'?
-     173 |         DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
-         |                             ^~~~~~~~~~~~~~~~~
-   include/uapi/linux/const.h:34:40: note: in definition of macro '__KERNEL_DIV_ROUND_UP'
-      34 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
-         |                                        ^
-   include/linux/types.h:11:28: note: in expansion of macro 'BITS_TO_LONGS'
-      11 |         unsigned long name[BITS_TO_LONGS(bits)]
-         |                            ^~~~~~~~~~~~~
-   arch/riscv/include/asm/kvm_host.h:173:9: note: in expansion of macro 'DECLARE_BITMAP'
-     173 |         DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
-         |         ^~~~~~~~~~~~~~
-   make[2]: *** [scripts/Makefile.build:117: arch/riscv/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
+so add a quirk to allow the PA of pgtables support up to bit35,
+but need to check oas do error hanlde.
 
 
-vim +173 arch/riscv/include/asm/kvm_host.h
+> >   		/* Doesn't fit in PTE */
+> >   		dev_err(dev, "Page table does not fit in PTE: %pa",
+> > &phys);
+> >   		goto out_free;
+> > arm_v7s_install_table(arm_v7s_iopte *table,
+> >   					   arm_v7s_iopte curr,
+> >   					   struct io_pgtable_cfg *cfg)
 
-   164	
-   165	struct kvm_vcpu_arch {
-   166		/* VCPU ran at least once */
-   167		bool ran_atleast_once;
-   168	
-   169		/* Last Host CPU on which Guest VCPU exited */
-   170		int last_exit_cpu;
-   171	
-   172		/* ISA feature bits (similar to MISA) */
- > 173		DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
-   174	
-   175		/* SSCRATCH, STVEC, and SCOUNTEREN of Host */
-   176		unsigned long host_sscratch;
-   177		unsigned long host_stvec;
-   178		unsigned long host_scounteren;
-   179	
-   180		/* CPU context of Host */
-   181		struct kvm_cpu_context host_context;
-   182	
-   183		/* CPU context of Guest VCPU */
-   184		struct kvm_cpu_context guest_context;
-   185	
-   186		/* CPU CSR context of Guest VCPU */
-   187		struct kvm_vcpu_csr guest_csr;
-   188	
-   189		/* CPU context upon Guest VCPU reset */
-   190		struct kvm_cpu_context guest_reset_context;
-   191	
-   192		/* CPU CSR context upon Guest VCPU reset */
-   193		struct kvm_vcpu_csr guest_reset_csr;
-   194	
-   195		/*
-   196		 * VCPU interrupts
-   197		 *
-   198		 * We have a lockless approach for tracking pending VCPU interrupts
-   199		 * implemented using atomic bitops. The irqs_pending bitmap represent
-   200		 * pending interrupts whereas irqs_pending_mask represent bits changed
-   201		 * in irqs_pending. Our approach is modeled around multiple producer
-   202		 * and single consumer problem where the consumer is the VCPU itself.
-   203		 */
-   204		unsigned long irqs_pending;
-   205		unsigned long irqs_pending_mask;
-   206	
-   207		/* VCPU Timer */
-   208		struct kvm_vcpu_timer timer;
-   209	
-   210		/* HFENCE request queue */
-   211		spinlock_t hfence_lock;
-   212		unsigned long hfence_head;
-   213		unsigned long hfence_tail;
-   214		struct kvm_riscv_hfence hfence_queue[KVM_RISCV_VCPU_MAX_HFENCE];
-   215	
-   216		/* MMIO instruction details */
-   217		struct kvm_mmio_decode mmio_decode;
-   218	
-   219		/* SBI context */
-   220		struct kvm_sbi_context sbi_context;
-   221	
-   222		/* Cache pages needed to program page tables with spinlock held */
-   223		struct kvm_mmu_memory_cache mmu_page_cache;
-   224	
-   225		/* VCPU power-off state */
-   226		bool power_off;
-   227	
-   228		/* Don't run the VCPU (blocked) */
-   229		bool pause;
-   230	};
-   231	
+...
+ 
+> > diff --git a/include/linux/io-pgtable.h b/include/linux/io-
+> > pgtable.h
+> > index 86af6f0a00a2..c9189716f6bd 100644
+> > --- a/include/linux/io-pgtable.h
+> > +++ b/include/linux/io-pgtable.h
+> > @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
+> >   	 *	to support up to 35 bits PA where the bit32, bit33 and
+> > bit34 are
+> >   	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
+> >   	 *
+> > +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek
+> > IOMMUs
+> > +	 *	extend the translation table base support up to 35 bits PA,
+> > the
+> > +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
+> > +	 *
+> >   	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the
+> > table
+> >   	 *	for use in the upper half of a split address space.
+> >   	 *
+> >   	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-
+> > cacheability
+> >   	 *	attributes set in the TCR for a non-coherent page-table
+> > walker.
+> >   	 */
+> > -	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
+> > -	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
+> > -	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
+> > -	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
+> > -	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
+> > +	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
+> > +	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
+> > +	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
+> > +	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
+> > +	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
+> > +	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
+> >   	unsigned long			quirks;
+> >   	unsigned long			pgsize_bitmap;
+> >   	unsigned int			ias;
+> > @@ -122,7 +127,7 @@ struct io_pgtable_cfg {
+> >   		} arm_lpae_s2_cfg;
+> >   
+> >   		struct {
+> > -			u32	ttbr;
+> > +			u64	ttbr;
+> 
+> The point of this is to return an encoded TTBR register value, not a
+> raw 
+> base address. I see from the other patches that your register is
+> still 
+> 32 bits, so I'd prefer to follow the standard pattern and not need
+> this 
+> change.
+> 
+> Thanks,
+> Robin.
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hi Robin,
+Thanks for your suggestion, next version will recovery ttbr to 32 bits,
+will modify arm_v7s_alloc_pgtable to return an encoded TTBR, encoded
+PA bits[34:32] to to lower bits, as follows:
+
+/* TTBR */
+phys_addr_t paddr;
+paddr = virt_to_phys(data->pgd);
+cfg->arm_v7s_cfg.ttbr = virt_to_phys(data->pgd) | ARM_V7S_TTBR_S |
+			(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
+			 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
+			 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
+			(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
+			 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
+
+if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
+	cfg->arm_v7s_cfg.ttbr = (paddr & GENMASK(31, 7)) |
+				upper_32_bits(paddr);
+
+Thanks,
+Yunfei.
+
+> >   			u32	tcr;
+> >   			u32	nmrr;
+> >   			u32	prrr;

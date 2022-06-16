@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C91954D8BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD7054D8BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 05:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356563AbiFPDA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 23:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S1350668AbiFPDDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 23:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355750AbiFPDAV (ORCPT
+        with ESMTP id S1347286AbiFPDC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 23:00:21 -0400
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74A45A2C3;
-        Wed, 15 Jun 2022 20:00:20 -0700 (PDT)
-Received: by mail-pf1-f174.google.com with SMTP id s37so293663pfg.11;
-        Wed, 15 Jun 2022 20:00:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kLu0AyZbwG8o8hfD/fv5Wh7BJxHL6y7f8uHQKEJJV6U=;
-        b=k3iAfz3repC7wE79wV5V9jmg7OTywTvZQCS6xd/4rdeiVtRUs0zT9HlIgTw3IePSeR
-         RhNy43WOSAVQPzquN2IkpzIK3DaNPvyghrQKhV8EtL9nTDjnZy8dostvB+cHEdQec+fH
-         Tg1u+9a5gEZUfGxYUqUF6kAk5XJIloDHXEtwOmprLD96Cc4f1TaWyTuKpc7UPOlpIbTh
-         TUyqq8jlRcHsWcnv4FUU3SpHDTyMi7ZzI1cAKHqppeeoQ91cGVaHIuBafjPSSwXfdMDm
-         RrJVihVqm/2zPKAfCvC1Z3fboamcD/gW9o/naihh9dpTp6dWE8IuYZ86uc7S1O7XDPmP
-         XF/A==
-X-Gm-Message-State: AJIora/hGBWpHXq9W1K2Y/z6dQ+HtYNyZaHKLTZzo+xs0Hs3aFn0PFqO
-        4qPQQBd5g1Po6nc3QnU1++4=
-X-Google-Smtp-Source: AGRyM1uRqJci6ZIfCJSBxo3jFrvP6GWbLFgj40m+japCby9a0CiFohY8D+yndlsBrHLluXlD0d2bTA==
-X-Received: by 2002:a63:8a42:0:b0:3fc:f8b5:291f with SMTP id y63-20020a638a42000000b003fcf8b5291fmr2547392pgd.550.1655348420055;
-        Wed, 15 Jun 2022 20:00:20 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id fu13-20020a17090ad18d00b001cb6527ca39sm2582309pjb.0.2022.06.15.20.00.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 20:00:19 -0700 (PDT)
-Message-ID: <7fd6f544-0bd2-62fe-bddd-869364f351e8@acm.org>
-Date:   Wed, 15 Jun 2022 20:00:17 -0700
+        Wed, 15 Jun 2022 23:02:57 -0400
+Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31D6C17A9C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 20:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=mqJbs
+        XLKJyovyR04zCb3Sxx6qLVpngMFn949ve1ky9A=; b=MAAmG2z+cwKuF09xtsA5D
+        DdfnpFNILakoaoZ1MCwPLKxjRtASkX7CyUEkJxWA6M3LorKVWg6fpvOiQi6MDvmh
+        /Px5KDbY9YOllQPvmfOlu5HlQ6ahLhN946DYomBl/4611WDiLgqOPHDkWJQ9hvkV
+        fTIZsoslKn6gscmqcOU8ig=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp7 (Coremail) with SMTP id DsmowAA3dvVInapi_3aXDQ--.63644S2;
+        Thu, 16 Jun 2022 11:02:33 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     linux@armlinux.org.uk
+Cc:     windhl@126.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm: mm: (cache-feroceon-l2) Add missing of_node_put()
+Date:   Thu, 16 Jun 2022 11:02:32 +0800
+Message-Id: <20220616030232.3974254-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 3/8] block: use new capable_any functionality
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, Serge Hallyn <serge@hallyn.com>,
-        Alistair Delva <adelva@google.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20220502160030.131168-8-cgzones@googlemail.com>
- <20220615152623.311223-1-cgzones@googlemail.com>
- <20220615152623.311223-2-cgzones@googlemail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220615152623.311223-2-cgzones@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DsmowAA3dvVInapi_3aXDQ--.63644S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF45XFW5WFWDur45Jr45trb_yoW8XF15pF
+        yrC3y3Zr4rWrn7ur97tayxZFW7KF4ktFWj9ryUur1rAr45XFyYqrWrKw1Y9wsrtrWrAayF
+        vFWFgr18Za48ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pENtxnUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QoiF1pEANSNYAAAs1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 08:26, Christian Göttsche wrote:
-> Use the new added capable_any function in appropriate cases, where a
-> task is required to have any of two capabilities.
-> 
-> Reorder CAP_SYS_ADMIN last.
-> 
-> Fixes: 94c4b4fd25e6 ("block: Check ADMIN before NICE for IOPRIO_CLASS_RT")
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
-> v3:
->     rename to capable_any()
-> ---
->   block/ioprio.c | 9 +--------
->   1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/block/ioprio.c b/block/ioprio.c
-> index 2fe068fcaad5..6441c052f837 100644
-> --- a/block/ioprio.c
-> +++ b/block/ioprio.c
-> @@ -37,14 +37,7 @@ int ioprio_check_cap(int ioprio)
->   
->   	switch (class) {
->   		case IOPRIO_CLASS_RT:
-> -			/*
-> -			 * Originally this only checked for CAP_SYS_ADMIN,
-> -			 * which was implicitly allowed for pid 0 by security
-> -			 * modules such as SELinux. Make sure we check
-> -			 * CAP_SYS_ADMIN first to avoid a denial/avc for
-> -			 * possibly missing CAP_SYS_NICE permission.
-> -			 */
-> -			if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_NICE))
-> +			if (!capable_any(CAP_SYS_NICE, CAP_SYS_ADMIN))
->   				return -EPERM;
->   			fallthrough;
->   			/* rt has prio field too */
+In feroceon_of_init(), of_find_matching_node() will return a node
+pointer with refcount incremented. We should use of_node_put() in
+fail path or when it is not used anymore.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ changelog:
+ v2: (1) use real name (2) fix errors reported by with scritps/checkpatch.pl
+     (3) use goto-label patch style
+ v1: add of_node_put() in fail path 
+
+ arch/arm/mm/cache-feroceon-l2.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/mm/cache-feroceon-l2.c b/arch/arm/mm/cache-feroceon-l2.c
+index 5c1b7a7b9af6..ff17b7df4b09 100644
+--- a/arch/arm/mm/cache-feroceon-l2.c
++++ b/arch/arm/mm/cache-feroceon-l2.c
+@@ -368,6 +368,7 @@ int __init feroceon_of_init(void)
+ 	struct device_node *node;
+ 	void __iomem *base;
+ 	bool l2_wt_override = false;
++	int ret;
+ 
+ #if defined(CONFIG_CACHE_FEROCEON_L2_WRITETHROUGH)
+ 	l2_wt_override = true;
+@@ -376,8 +377,10 @@ int __init feroceon_of_init(void)
+ 	node = of_find_matching_node(NULL, feroceon_ids);
+ 	if (node && of_device_is_compatible(node, "marvell,kirkwood-cache")) {
+ 		base = of_iomap(node, 0);
+-		if (!base)
+-			return -ENOMEM;
++		if (!base) {
++			ret = -ENOMEM;
++			goto out_put;
++		}
+ 
+ 		if (l2_wt_override)
+ 			writel(readl(base) | L2_WRITETHROUGH_KIRKWOOD, base);
+@@ -386,7 +389,10 @@ int __init feroceon_of_init(void)
+ 	}
+ 
+ 	feroceon_l2_init(l2_wt_override);
++	ret = 0;
+ 
+-	return 0;
++output:
++	of_node_put(node);
++	return ret;
+ }
+ #endif
+-- 
+2.25.1
+

@@ -2,228 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5DA54ED6E
+	by mail.lfdr.de (Postfix) with ESMTP id A2C8754ED6F
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378918AbiFPWl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S231511AbiFPWlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiFPWlU (ORCPT
+        with ESMTP id S245332AbiFPWlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Jun 2022 18:41:20 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CA862115;
-        Thu, 16 Jun 2022 15:41:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bX5pcTEnZf7FpWsIzHhZ/wbpBi9Oqu65uibwOdkV/GnMCSGHQl5j71h/XppYyaatv07WFX0yG0PCTwnIMKjtBSX6vZgq75SGD2hY/ORxAbgNDPjAsMWXSoFBXWKr62dc4wm7kTqsDqOA5T6Kst+nXUnbA3N9qjqogO0q2KD4vZe2SapkkX9QhcXRwglQWa0UhD2H+acf6rxWXyT84TT++8t31kLQduqrGhoM9GY0z2faVkxqn8kdflWtiwBaKWCYqXOY3AYmEoqrxdxr5JVNuFPx3dpiRrEQWx46/FtmpUOgOwzprRjM9ljlp6pFNr0glZK/KJc4DE4I7BvFxMoGJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zgp5iE3AW7LRxZF1GBubRntHzqsJyyTgzfgQIAASVYE=;
- b=M+iS+omVOFrJUiesFR1Wj3sl4sRyVQsviqe+4qKmh8Bt8+RGAAl/GqFcp1NkmBdPSjxyfW2rLmKjxSMgSqv6XEwEWHBxJim0bbCDYEH8uH3n9DluthG2+4QawF2VoU7n4ZgaXlZMBq8471bVjjEhkDlqaDy0p1c+3NoReweVKLG2h91hwC6kLHlUntTPlrUHDFeDWn3bZNSNrKwBFJB2FfI1cm2xmTXsYpREq5u9gpuABBZUIRkVJsiFtpn0SXeMlfq6j93qxL9Yg45+S/eOdGGdybMqQREqBwI3oGw7ipxCfpSbVPD4Umx+mi/6zjC5rGCsnnPDMo7Ehq3+y1HlQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zgp5iE3AW7LRxZF1GBubRntHzqsJyyTgzfgQIAASVYE=;
- b=ZD6sY9Cl7bF1DpTysd0hQ5kJ/DR1ouZg1JkQXGyMy1beydmPCh4/IMysxTzzXCUX8/KIZn1ToZwcE7ULNKNuhslj1Gh5in1Zgq2Yma1NYD2QOSuDZ0F6aHegTTBsrBYtF5SZFWa2EuyE8tNijPQJ5aGB7dV4wpUtKImT6vwzwI9vsFZea14LQwM0I3nHYp4ReRnOIAOThJat/WtTEpxoX50zLFQ6Zki9DwhF1GY5pBffRhVUonEc04aIzM7mpivqrYAZ2XxTF7ziy3rvsMmMAwY2QBk/0drQ0vz1ukIIlSy0UxGoqNyQl35CmH0vP0huDpaZNUnK9iE+q5g18caYWQ==
-Received: from DM5PR1101CA0016.namprd11.prod.outlook.com (2603:10b6:4:4c::26)
- by BL1PR12MB5732.namprd12.prod.outlook.com (2603:10b6:208:387::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Thu, 16 Jun
- 2022 22:41:15 +0000
-Received: from DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:4c:cafe::58) by DM5PR1101CA0016.outlook.office365.com
- (2603:10b6:4:4c::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19 via Frontend
- Transport; Thu, 16 Jun 2022 22:41:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT012.mail.protection.outlook.com (10.13.173.109) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5353.14 via Frontend Transport; Thu, 16 Jun 2022 22:41:15 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 16 Jun
- 2022 22:40:53 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 16 Jun
- 2022 15:40:52 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Thu, 16 Jun 2022 15:40:50 -0700
-Date:   Thu, 16 Jun 2022 15:40:48 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "sven@svenpeter.dev" <sven@svenpeter.dev>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "saiprakash.ranjan@codeaurora.org" <saiprakash.ranjan@codeaurora.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "isaacm@codeaurora.org" <isaacm@codeaurora.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>
-Subject: Re: [PATCH v2 5/5] vfio/iommu_type1: Simplify group attachment
-Message-ID: <YquxcH2S1fM+llOf@Asurada-Nvidia>
-References: <20220616000304.23890-1-nicolinc@nvidia.com>
- <20220616000304.23890-6-nicolinc@nvidia.com>
- <BL1PR11MB52710E360B50DDA99C9A65D18CAC9@BL1PR11MB5271.namprd11.prod.outlook.com>
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B7162111
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:41:16 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id y16-20020a9d5190000000b0060c1292a5b9so1980995otg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AWCHew8dJ92FRAa86sjZqg/7uz35kqackjChUgkNjiw=;
+        b=Sbn07kQgTXlj8XatmfRNXAU72cQaXb8VxilvqYsKtyR3h6nwF007C4986DhNrSkO+s
+         x5OVfHmx3rGoV5XgKxT2TDvBiqTYywKNLRUPPHlr3amgPN+UCeO9vrHZmiMMRFRthmVI
+         JbtKX1fCXXSeRR/e1ecfNesPq3ruFPKsZKkL8V2LFSQWvkqSsveykkdd1YWSpsxd9sd8
+         nd9TeH5H8oVeM9sjgDlwHNcLy2C6Re7a1hmMUhFs/N8GGl3OeE1cWFJLZnTPlYJ/xHoP
+         9ICO8nPy8CaK+XwlEWGmW0qyAZFV/c9tu/yqBdpNFnSB9PJ+4HImJ7khcWbtRRIFOy0T
+         v3Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AWCHew8dJ92FRAa86sjZqg/7uz35kqackjChUgkNjiw=;
+        b=pPuYuaAYUPkTYmybBd4j3q5lvBTaxzRind2+w3JY6ru47L2aYhnlgu6DstgAO2uNvM
+         yGZO8iIa65P3BDJbyFOtmJZf1p6ur98JB9fJl8Nb9mEWg8t10zPY2Y8CgjzNEi+BA4nv
+         R1EiQMkp7C6K0Eziz6aGf6tXzK73PxIfqWWGco0hy+Bl+1O4t/FFcJ66G1bddYDBQGS2
+         322h6Ad2PFI4gAeYt4aAMcqpBGW0ur5YE/oURcB7lkRTCJZWqC+G5rpaNYJ42x2smMSj
+         cUO23kUj1FVVaG3Au/1EyRJTITxM0BkQYCDdfqIMHIysTrcYTW/ANkGLBN8mmbD2gS5E
+         CtHg==
+X-Gm-Message-State: AJIora+25e2JptcZiAuxfBZFJq3lWbZP0OWHzG4eYUsO99A8lKOESKON
+        9+FRhCmnNwVUYotWS2MEY2UBTQ==
+X-Google-Smtp-Source: AGRyM1vg4mrJ0bSA38QQ60GxwD9BVX0fzA6Z6x2kYxwAP5Zg8De9eraONxzGZct4/qBV37pr7IgO+Q==
+X-Received: by 2002:a05:6830:2695:b0:60c:6e16:460f with SMTP id l21-20020a056830269500b0060c6e16460fmr2899781otu.249.1655419275291;
+        Thu, 16 Jun 2022 15:41:15 -0700 (PDT)
+Received: from ?IPV6:2804:14d:8084:84c6:fe26:c42d:aab9:fa8a? ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
+        by smtp.gmail.com with ESMTPSA id ly14-20020a056870fc8e00b000e686d13889sm1532110oab.35.2022.06.16.15.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 15:41:14 -0700 (PDT)
+Message-ID: <8b040fb2-7edd-6fd1-864e-ee04115c5b1d@usp.br>
+Date:   Thu, 16 Jun 2022 19:41:05 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BL1PR11MB52710E360B50DDA99C9A65D18CAC9@BL1PR11MB5271.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b1201343-8352-4791-4bbd-08da4fe95278
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5732:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5732774011E1F4C5A01380C3ABAC9@BL1PR12MB5732.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nk74016v9mt1rCmjH5UOQIlrAhVCquvXKRo493JksbtTiOr1sWHplxlVewAZV0M9N5GQBDi9prjABasx04aHk5dOrYmqqHoT5kj5n/tpkScS2qGWb7FkB5iQvAPpXB6NC3Lvdxlbyhbaxi2svf5DmuUbvS9AsNAr62Kqzk+bUI6z3W2Uu097QeM4vgs9WiTDzbcxzPFmP9cWfr7xvMDgAAp9V2JKDTOYylCOCYj9OHHZ9f0ZC999Dwn1pvzbZcMMfsEJc8Bbd5ee/nJchRBrRb/pV2K//UpWsrUcIYcx+N0XCJeJq3ORiAyttTETfiPcjzerVTBMjsc9Hb/ZYGPzOHRT5PODKWxHSH3uUpCRLYjHtSzxxxSRLG8hyBTNrsu/sEo5lArGNgdQT/4papj310Hue7TaSfYb+/zQNNHgt1DcppeiOnBZ6tAVusW9GTadpVJXQ0B3KJpCccAomtiLX2vus7bSv8poPNbOke/OLv31/TXqRs5ZLcY2hWWf5ALuQlD8AvxlNT9UtsYADwABI+6yTeDHcT2lJu/V0maug5mIgvixXnyzOMzead8RLCfHaBRQAIwA4V+PPYD32dPx748g7JBXk3cGwSjmtGwDKZIfvrYiCV6C8DEZpmgI7mC8nqpv4uV5goLptF2OWNi+RxtonGswus7UKJvQnc2UZ2wa4OKpre8+5u0JzzQr/aoDC42g734N6roMb6U/vX1Br51W2MrvKaOP8sozLn+xfWw=
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(36840700001)(46966006)(8936002)(26005)(9686003)(7416002)(508600001)(7406005)(356005)(70586007)(70206006)(2906002)(5660300002)(55016003)(83380400001)(36860700001)(186003)(81166007)(47076005)(426003)(336012)(40460700003)(8676002)(86362001)(82310400005)(33716001)(4326008)(54906003)(6916009)(316002)(67856001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 22:41:15.4530
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1201343-8352-4791-4bbd-08da4fe95278
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5732
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC 0/3] drm/amd/display: Introduce KUnit to Display Mode
+ Library
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Jun Lei <jun.lei@amd.com>,
+        Nicholas Choi <Nicholas.Choi@amd.com>,
+        Harrison Chiu <harrison.chiu@amd.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+References: <20220608010709.272962-1-maira.canal@usp.br>
+ <CABVgOSmesj5MGfQrtdWCgXzm1VXRoG0fAMCbkBCAvtqediqAjQ@mail.gmail.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
+In-Reply-To: <CABVgOSmesj5MGfQrtdWCgXzm1VXRoG0fAMCbkBCAvtqediqAjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 07:08:10AM +0000, Tian, Kevin wrote:
-> ...
-> > +static struct vfio_domain *
-> > +vfio_iommu_alloc_attach_domain(struct bus_type *bus, struct vfio_iommu
-> > *iommu,
-> > +                            struct vfio_iommu_group *group)
-> > +{
-> > +     struct iommu_domain *new_domain;
-> > +     struct vfio_domain *domain;
-> > +     int ret = 0;
-> > +
-> > +     /* Try to match an existing compatible domain */
-> > +     list_for_each_entry (domain, &iommu->domain_list, next) {
-> > +             ret = iommu_attach_group(domain->domain, group-
-> > >iommu_group);
-> > +             if (ret == -EMEDIUMTYPE)
-> > +                     continue;
-> 
-> Probably good to add one line comment here for what EMEDIUMTYPE
-> represents. It's not a widely-used retry type like EAGAIN. A comment
-> can save the time of digging out the fact by jumping to iommu file.
+Hi David,
 
-Sure. I can add that.
+Thank you for your feedback!
 
-> ...
-> > -     if (resv_msi) {
-> > +     if (resv_msi && !domain->msi_cookie) {
-> >               ret = iommu_get_msi_cookie(domain->domain,
-> > resv_msi_base);
-> >               if (ret && ret != -ENODEV)
-> >                       goto out_detach;
-> > +             domain->msi_cookie = true;
-> >       }
-> 
-> why not moving to alloc_attach_domain() then no need for the new
-> domain field? It's required only when a new domain is allocated.
+On 6/16/22 11:39, David Gow wrote:
+> On Wed, Jun 8, 2022 at 9:08 AM Maíra Canal <maira.canal@usp.br> wrote:
 
-When reusing an existing domain that doesn't have an msi_cookie,
-we can do iommu_get_msi_cookie() if resv_msi is found. So it is
-not limited to a new domain.
+>>
+>> As kunit_test_suites() defines itself as an init_module(), it conflicts with
+>> the existing one at amdgpu_drv. So, if we use kunit_test_suites(), we won't
+>> be able to compile the tests as modules and, therefore, won't be able to use
+>> IGT to run the tests. This problem with kunit_test_suites() was already
+>> discussed in the KUnit mailing list, as can be seen in [7].
+> 
+> I'm not sure I fully understand why these tests need to be part of the
+> amdgpu module, though admittedly I've not played with IGT much. Would
+> it be possible to compile these tests as separate modules, which could
+> depend on amdgpu (or maybe include the DML stuff directly), and
+> therefore not have this conflict? I definitely was able to get these
+> tests working under kunit_tool (albeit as built-ins) by using
+> kunit_test_suites(). If each suite were built as a separate module (or
+> indeed, even if all the tests were in one module, with one list of
+> suites), then it should be possible to avoid the init_module()
+> conflict. That'd also make it possible to run these tests without
+> actually needing the driver to initialise, which seems like it might
+> require actual hardware(?)
 
-> ...
-> > -             if (list_empty(&domain->group_list)) {
-> > -                     if (list_is_singular(&iommu->domain_list)) {
-> > -                             if (list_empty(&iommu-
-> > >emulated_iommu_groups)) {
-> > -                                     WARN_ON(iommu->notifier.head);
-> > -
-> >       vfio_iommu_unmap_unpin_all(iommu);
-> > -                             } else {
-> > -
-> >       vfio_iommu_unmap_unpin_reaccount(iommu);
-> > -                             }
-> > -                     }
-> > -                     iommu_domain_free(domain->domain);
-> > -                     list_del(&domain->next);
-> > -                     kfree(domain);
-> > -                     vfio_iommu_aper_expand(iommu, &iova_copy);
-> 
-> Previously the aperture is adjusted when a domain is freed...
-> 
-> > -                     vfio_update_pgsize_bitmap(iommu);
-> > -             }
-> > -             /*
-> > -              * Removal of a group without dirty tracking may allow
-> > -              * the iommu scope to be promoted.
-> > -              */
-> > -             if (!group->pinned_page_dirty_scope) {
-> > -                     iommu->num_non_pinned_groups--;
-> > -                     if (iommu->dirty_page_tracking)
-> > -                             vfio_iommu_populate_bitmap_full(iommu);
-> > -             }
-> > +             vfio_iommu_detach_destroy_domain(domain, iommu,
-> > group);
-> >               kfree(group);
-> >               break;
-> >       }
-> >
-> > +     vfio_iommu_aper_expand(iommu, &iova_copy);
-> 
-> but now it's done for every group detach. The aperture is decided
-> by domain geometry which is not affected by attached groups.
+Initially, we tried the kunit_test_suites() approach. And it did work pretty well for the kunit_tool (although we didn't test any hardware-specific unit test). But when compiling the test as a module, we would get a linking error, pointing out multiple definitions of 'init_module'/'cleanup_module' at kunit_test_suites().
 
-Yea, I've noticed this part. Actually Jason did this change for
-simplicity, and I think it'd be safe to do so?
+At this point, we thought about a couple of options to resolve this problem:
+- Add EXPORT_SYMBOL to the functions we would test. But, this doesn't scale pretty well, because it would pollute AMDGPU code as the tests expand.
+- Take the Thunderbolt path and add the tests to the driver stack.
+
+We end up taking the Thunderbolt path as it would be more maintainable.
+
+Compiling the tests as a module is essential to make the tests run at IGT, as IGT essentially loads the module, runs it, and parses the output (a very very simplified explanation of what IGT does). IGT is a very known tool for DRI developers, so we believe that IGT support is crucial for this project.
+
+If you have any other options on how to make the module compilation viable without using the 'thunderbolt'-style, we would be glad to hear your suggestions.
+
+> 
+> There are two other reasons the 'thunderbolt'-style technique is one
+> we want to avoid:
+> 1. It makes it much more difficult to run tests using kunit_tool and
+> KUnit-based CI tools: these tests would not run automatically, and if
+> they were built-in as-is, they'd need to be
+> 2. We're planning to improve module support to replace the
+> init_module()-based implementation of kunit_test_suites() with one
+> which won't have these conflicts, so the need for this should be
+> short-lived.
+> 
+> If you're curious, an early version of the improved module support can
+> be found here, though it's out-of-date enough it won't apply or work
+> as-is:
+> https://lore.kernel.org/all/101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au/
+> 
+> Now, that's unlikely to be ready very soon, but I'd be hesitant to
+> implement too extensive a system for avoiding kunit_test_suites()
+> given at some point it should work and we'll need to migrate back to
+> it.
+
+We hope to see in the near future the improved module support from KUnit as it would make the addition of tests much more simple and clean.
+
+Could you explain more about what is missing to make this improved module support come upstream?
+
+> 
+> At the very least, having the dependency on KUNIT=m is a very bad
+> idea: it should be possible to have tests built as modules, even if
+> KUnit itself isn't, and ideally (even if this sort-of implementation
+> is required), it _should_ be possible to have these tests be built-in
+> if all their dependencies (KUnit, amdgpu) are, which would make it
+> possible to run the tests without a userland.
+> 
+
+Thank you for the suggestion! We will change the KUNIT dependency.
+
+- Maíra Canal

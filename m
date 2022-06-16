@@ -2,243 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC08A54D6C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE0554D6CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 03:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344075AbiFPBHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 21:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S1348604AbiFPBLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 21:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344002AbiFPBHP (ORCPT
+        with ESMTP id S245094AbiFPBLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 21:07:15 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5C637BCA;
-        Wed, 15 Jun 2022 18:07:14 -0700 (PDT)
+        Wed, 15 Jun 2022 21:11:35 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350243DA43
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 18:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655341634; x=1686877634;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=lmxdoKaO/0j/BFyGaSXW7oqNjlPRyBjuIC+8EEQba7M=;
-  b=OreF+on64514cpF6bYZew6M64YCHtTSOlaP/s+BSgjOG7T7YwRKZaolc
-   zPRn8gnU6N1wXhzWFKhOgmpd3W60mxllRzhvyJwb76C6iAUUYzJchsl87
-   KxyDeojMX9VrQZN9pZI1f8KZ0iNMiED8vs3mHsGYHcGVl4HVGWmR7k4ac
-   B8xkvnItZwjWiPVhjq4ZJN1Q7USxtuWT7MRMTHZ1u40hBLJaBMh8z+pXG
-   huIknnFKNqNjmnmEgOU3oNuSY1kh0Z+HoypvC9vIVD16BrClRDE5dGkzi
-   UZago/c+XFNac/ly9xfb7hT9riQwBo/0N9yqXe0+a+cqtRlclAZnFsH1m
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="340793160"
+  t=1655341891; x=1686877891;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+QIkip5gbWqgZibXqlEIGq7H8C0Cv7cvRNlpFbL7qJU=;
+  b=OeSIdTLAg2Zrx26AqzSQYnfT29y1JFl/kA/4dIkGnAGLYuXX8frDapvY
+   kIsUFLKXQSADeXTcgchBN2EDkvKwAQgjidBim/KlXCCrgQNV+NZhFqsoM
+   s9YM+PMc4aE1FNYYefRLkEKc6g74080MU/OgY76Hf7STyYajn0gyY0PP3
+   /ucUcmNPi33MyOzVeuhYviZyCUeuGcdQEPfX7MaUVjIKz39QRaVQ9IO4a
+   AyvIriJzpwYIqPsUzs6I1uDqPoGHRS+PRzkz6Dpxk0rJE901GT9/Gb2Sa
+   iRpAJA90w1AmHVGWFGmrkA72L4BYxYuuIcmmX7LDbrOxcMlKvHHAC9bL7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="276711936"
 X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="340793160"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 18:07:14 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="276711936"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 18:11:31 -0700
 X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="583445564"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2022 18:07:13 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 15 Jun 2022 18:07:13 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 15 Jun 2022 18:07:12 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 15 Jun 2022 18:07:12 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.176)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 15 Jun 2022 18:07:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H0a1vVAvgsczFSQiqUp355T/jS+ltn9ekqGjj5MduKOYc+UVGJLHkZdmQ1jB3XlYbwhD4VCQGkBb7bv1z0WH2juOTQcQq1hacOywGoDyrC42Csy2C1WIRsbnPdpEPmhklWWf+WbRjPGL4C6g8orDkZWM6YKFEo62/eC2sTfalsUEUOszZIVTX/YTNuatWNkqrCmxLNMGvG7Ekok3H9Ik0FXSm3gPGrfPl5XmdfT6TZmZp23u0bVW81hwId2WPsSjxxVpZEPi2fKnMCGDa7XN5Yg+FB7eCh8nJwVn1nhEDXkCDk8zfe4tlGIeQpmIAhnAr1OFpWTq4GViv0TWb9d/UQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HoWNdAE01qhx3qCirCe4hqfd89qyY1monwCw1n0bC70=;
- b=WXdATXOD4bkRO1/lNEWY47QrnOtihg53/x60PQHCznM9OedYjQ+CqrkLuij9J7Z6kRGq3vniGXoof/dT4DviN4UVGPBAbMlTvfufed/1wvQLBqTBI0FD6AVyqmsjPngV1jB0bdOcpVvFgOEo7z79llNuxsSgnDXToAcbQx6/81BhN02xKYpaPIPwsFPCQUXkc3CHXfD1BgbXBylzks/QeWwOp75pUviLLLwblsTQyUqgMO+JQqnCq0zeCygchzAYMsTfaooqNNE158oHaKGCJnq+qrGQT5vkbvNKRk4EC8Z9v7pRhzbWQj4dhN9uwzoUhFXqHa2FiL72qXbLlW7XFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
- by CY4PR1101MB2358.namprd11.prod.outlook.com (2603:10b6:903:ba::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14; Thu, 16 Jun
- 2022 01:07:11 +0000
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::39e0:6f4d:9c2a:85d9]) by CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::39e0:6f4d:9c2a:85d9%9]) with mapi id 15.20.5353.014; Thu, 16 Jun 2022
- 01:07:11 +0000
-Message-ID: <304d2dff-ef46-180e-0840-8c6480de1f06@intel.com>
-Date:   Thu, 16 Jun 2022 09:07:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [LKP] Re: [mm/readahead] 793917d997: fio.read_iops -18.8%
- regression
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     LKML <linux-kernel@vger.kernel.org>, <lkp@lists.01.org>,
-        <lkp@intel.com>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20220418144234.GD25584@xsang-OptiPlex-9020>
- <Yl2bKRcRqbcMmhji@casper.infradead.org>
- <1e8deaea-5a05-1846-d51c-b834beb9f23e@intel.com>
- <YqnSWMQN58xBUEt/@casper.infradead.org>
-From:   Yin Fengwei <fengwei.yin@intel.com>
-In-Reply-To: <YqnSWMQN58xBUEt/@casper.infradead.org>
+   d="scan'208";a="911937247"
+Received: from junyizh1-mobl.ccr.corp.intel.com ([10.254.214.95])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 18:11:26 -0700
+Message-ID: <2b261518bbb5b8466301f8ab978f408141fa6e68.camel@intel.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory
+ tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Thu, 16 Jun 2022 09:11:24 +0800
+In-Reply-To: <YqjZyP11O0yCMmiO@cmpxchg.org>
+References: <YqDncfLeEeBaosrY@cmpxchg.org>
+         <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
+         <YqH74WaUzJlb+smt@cmpxchg.org> <20220609152243.00000332@Huawei.com>
+         <YqJa4N/VlS4zN4vf@cmpxchg.org> <20220610105708.0000679b@Huawei.com>
+         <YqdEEhJFr3SlfvSJ@cmpxchg.org>
+         <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
+         <Yqdc4DE8gYJ3zesO@cmpxchg.org>
+         <42f536af-b17d-b001-7b6b-2c6b928f3ecf@linux.ibm.com>
+         <YqjZyP11O0yCMmiO@cmpxchg.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2P153CA0010.APCP153.PROD.OUTLOOK.COM (2603:1096::20) To
- CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3374133f-55e2-4ec9-5969-08da4f348ac3
-X-MS-TrafficTypeDiagnostic: CY4PR1101MB2358:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <CY4PR1101MB2358BC9B8601A8A6CDBEA881EEAC9@CY4PR1101MB2358.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cZP9932BnQBbOUX69QYuQpmM9/LvxzUqW3vri0n05J8ChtxyKxzEIyXPZKaew/QUCGrQ5B1KnKsdi8zvb075cXrqsqB78gWvuLNo3sbqHlVf+CmAuG9EaydtTMVxMxM6UcuOOG7EijT/72/zXopt3zJQXFBDU1mLXgVlMqTBwac+lgNJeSVh7rSknGf1ej31k35m77Fw7GmOMFpTBh3AYmI0e0sbGfkmHY6gMeZix/2Pu2XXMmHUIbfcCpI6hS1VgqWnFwrbKLjqqOIO8cZILtRJq3QfDPYZuCFVTt3Ek0TwtfaRv6C1R3S8VkLB67PR3ITjYE4dyqjZhDNkn+sFPsmzuPfdBD8a2V24VaWCQshJzHNshxLskbqQSTb/hH853Pgzm53cx9EHpvr28scy0rLzK5/ZzV4W4bv4eZoPQ5uNlu037FcvK32o5c8TJfUafMT43BHGyDqtxicmFWxHLB7f7uIK/ZTRjOfmGU+jElATYHCK+2nXrmihLmvJBuCq8gXnKkTqhkd0Lfar1lcVM+yruECQulEkPvGMCMrFx7gX9KS2iCKO4w9951yauVH38/luU31jz1tjtxFlHgy3QcU3d1eDXx74KWVKptfNVy7IubCyvVvZfOTrft1MeS5TOUzGTKX2Yv+fj+Q9cP3tlAJwHgIoVB0MAQuMzOnh2xSXaiB3jjJi/WuVNB2k6ZpVqVZcqyCfNnMgoLEkrqcn66ijK6y1u4X49ujSvIm/mtM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(6666004)(31696002)(38100700002)(86362001)(8936002)(5660300002)(2616005)(31686004)(6486002)(508600001)(82960400001)(4326008)(66946007)(66476007)(8676002)(316002)(66556008)(36756003)(6916009)(2906002)(26005)(6506007)(186003)(53546011)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ay9VMVkvV2tFdmphUHBaYXBVZUl6VGs2US9OYnVtZnVMOWVqbDNDcHlzRC9o?=
- =?utf-8?B?UEk4bFBwNFpMMk9wcFI1ZUxZMHp1V3FjSzBkazU5KzZLdEJBTGFSZHZSQUlw?=
- =?utf-8?B?bGxEemkzMSs2NUF6U1FFaEdkZHl5djBPZUdGbVY1OHAxZ3d0TFVmRGJUVmxH?=
- =?utf-8?B?MHdoajY3K2RIZWpiWUlqT0FpeWtkaFdYZkhQRjYweFZ0djNaRVBvRjFLajRz?=
- =?utf-8?B?cHVxMlNKbEx5Rlg5R0ZiS3g0MmV0SDJURXR1NW5LTmNxS0NRSUFuRzNudFRH?=
- =?utf-8?B?RnN4L3AvVHJiWTdLNkozVUY2QmFzWlNxanNOMFgzSnVVb2l0NTd6QWtDS2Qz?=
- =?utf-8?B?amVtN1p1VTB0S1p6K1lGZTdSZTFqZ1ZFK2pTSjNaTHRlcFJTQ0xyWUdwYkZM?=
- =?utf-8?B?UkF2YkphTnk2bkdVUE1VYUZhdFgyRDBPYzZWNTVHaWEvRjJ4TFdObitVc1lL?=
- =?utf-8?B?ZTFkOGpVMEdHOCtib0s2bkErSE9nVEhsdUgzSFl6R0lRVllmM210TUpQSlE0?=
- =?utf-8?B?M0ZJc3F0RW9vOEVkVGoySXdLSzZvRVR2cFVqUVBZT1NOMHJkcGtmVzIvM1ZB?=
- =?utf-8?B?UDVvMUw5RmFmQTIxYmhrNFAzOGg1WE5vZ3pXazJya3d2eFp0MXZZd0tTUmMz?=
- =?utf-8?B?UTBxbDFwSExLUHV0OXJpSlRtTVhPQjBNL2lBVktmOHJRV0dRRjAyVFhteFIw?=
- =?utf-8?B?WTZDdWNPNDhoYjJsUkphY3lMMkxnZjV2T3c0S3k3Z3hHUHkwcGt2SkxDSFI3?=
- =?utf-8?B?WmNhZTB4UTFrcFZVdDRpVTcxT3lqRjB4bGFnc2ZMY3lSaGtaMmlTSGN0V1c0?=
- =?utf-8?B?UFNEc0hDZ055VytmeWVsNk5sWGtZa0t2RjRZeVo1cWxCZ1B3YTg0QXJ0ZEt5?=
- =?utf-8?B?U3BmbjU2S2ZaMVZCQVZUOGNFanMzS0hVeERoQS9jaXVzNzZFVm5adFoxWHlB?=
- =?utf-8?B?ZExmZnhoVDdnUWhIS2o3V0dSM044MDNOTVAxQy9EUWNFYW1WSjBjUDBUL3Qx?=
- =?utf-8?B?V3dsZ0xWNzcyNTN0dWR5RmFjbmpSUGR1d1lGbUZKQXc1cUxnbng2NmhGYWo0?=
- =?utf-8?B?dVBXVzc2ZWlMWVRoVm9YTEtuUi9YMnlaait3OFdBZ2xTaThxZXZTb0t6QUFR?=
- =?utf-8?B?NXJDUkllRm83Sm1Sa3ZGeURlZnQzQzBhRnZkS0JqN0ExNEduVWlRZDNJbUVw?=
- =?utf-8?B?L2pwc09GVTRmQzF2ak1xS1BVOEpvQ2d0T0hkY3JKdWtlbFFLd3JGeGpYTTdT?=
- =?utf-8?B?ckJBa1JmVWhEVEl1K0p6ZlZLY1M0eGZ4YWpRc1Nwd2tiMGxZblJiVDJ3dmt6?=
- =?utf-8?B?T0NmUUJ1and1NEF6bGM4Q0Rucktsajh3blQ1RzM3YmtCeFFEU04rZkcyY0xm?=
- =?utf-8?B?YktMOVhtRjZOK0h2bTBoS0JLT01haUZHMTkxQUJ6OXZMdFFQNk92b1c3bVJK?=
- =?utf-8?B?ZzV4UGN2Sm5EaEZicWpPNnhBNnRxK3U4b25rWkN5VEpNdUdMcFBHcW14ZTdz?=
- =?utf-8?B?MHd4cGxGdDhvbzhGS3A3UVRONktHRWt3ODNQbFVuR3dWdlBjVVVMNDdNZWQv?=
- =?utf-8?B?WGFiRm52SFh4RXNUcG9yS3Arb25kME1oQWlQa0NaZW42Mm5KemdvNTV4SFJs?=
- =?utf-8?B?bVlLNCtuekFDczlENHlpV0tDczlCcFh3RHR2bktGQTRCWWVzTDd1cUR2cEdy?=
- =?utf-8?B?cnFYeXNVcmFvUjl0MHZRVm5rM1J5Wm91dlN1a2VnRjI4Z3VHRnU5aW1MeGFI?=
- =?utf-8?B?R0MyMnJXNm9vaGZGendSbU1OZmRwVHZHd1g3N3djKzlyUlZWcnlFeFc5RmVR?=
- =?utf-8?B?UThZaTh2K0RXWFNZUkF4K2FMeFJwZDR5ZDRoRWxkWjRJVzJqaGhONCtsbmk5?=
- =?utf-8?B?Q2VFRGZHR0ptNm9jZDE4dUlQVUNHRUJQUVdGeHBKSElKVERzQkovb1lpQzIv?=
- =?utf-8?B?Yk9BdWlYRU9MbGNET2NCZVltaGs2RlJvNEZHSDllU0xBYVlCK3N0KzI4cE1I?=
- =?utf-8?B?YmtOUEVER0JCQy82MXQ5R1h3aGozelh1cHpFV1J5VFRFTmlHV3J6VitxMnk0?=
- =?utf-8?B?bHpLMlZxRnc3NFFtUGRKVyt3dFFQWTdIL3g5OFVSeS96ZDBKNmEzMFZYb1F4?=
- =?utf-8?B?MGdQMVZ1anJHVHNKbkRUbG00UENyckFIQUhDdjFUV3Bycm15VHVGUWxUbndv?=
- =?utf-8?B?LzFjRG5xTncwdGlITkhOMXRsRXpweTNWb1pNczRqV0IrWjhOWnVZZDY0OXNa?=
- =?utf-8?B?VUZNa2IrNFl3Nmo2OHBvYXZXM2dRVXN4T2FzYWVsSGdjaDVwWmlJYlBDWmtI?=
- =?utf-8?B?aUtuWVlhMGs0MlBKQ2IzNjlZcHZFQlI4Nkx1QnFYK1IzdXZmWHpwdm5MMmNU?=
- =?utf-8?Q?pVWbo9e4EnQMbqKo=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3374133f-55e2-4ec9-5969-08da4f348ac3
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 01:07:11.4401
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BpWsLiuHWWVZx19gmD4EeFAglFwCrxP/VfoMNOztNIZNpsl7EePG8ez0HnWbbFNOau5/Fn9zeSZ6QjRHNH66Yw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2358
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/15/2022 8:36 PM, Matthew Wilcox wrote:
-> On Wed, Jun 15, 2022 at 02:38:24PM +0800, Yin Fengwei wrote:
->> On 4/19/2022 1:08 AM, Matthew Wilcox wrote:
->>>
->>> I'm on holiday today, but adding linux-fsdevel and linux-mm so relevant
->>> people know about this.
->>>
->>> Don't focus on the 18% regression, focus on the 240% improvement on the
->>> other benchmark ;-)
->>>
->>> Seriously, someone (probably me) needs to dig into what the benchmark
->>> is doing and understand whether there's a way to avoid (or decide this
->>> regression isn't relevant) while keeping the performance gains elsewhere.
->> With:
->> commit b9ff43dd27434dbd850b908e2e0e1f6e794efd9b
->> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
->> Date:   Wed Apr 27 17:01:28 2022 -0400
->>
->>     mm/readahead: Fix readahead with large folios
->>
->> the regression is almost gone:
+On Tue, 2022-06-14 at 14:56 -0400, Johannes Weiner wrote:
+> On Tue, Jun 14, 2022 at 01:31:37PM +0530, Aneesh Kumar K V wrote:
+> > On 6/13/22 9:20 PM, Johannes Weiner wrote:
+> > > On Mon, Jun 13, 2022 at 07:53:03PM +0530, Aneesh Kumar K V wrote:
+> > > > If the kernel still can't make the right decision, userspace could rearrange
+> > > > them in any order using rank values. Without something like rank, if
+> > > > userspace needs to fix things up,  it gets hard with device
+> > > > hotplugging. ie, the userspace policy could be that any new PMEM tier device
+> > > > that is hotplugged, park it with a very low-rank value and hence lowest in
+> > > > demotion order by default. (echo 10 >
+> > > > /sys/devices/system/memtier/memtier2/rank) . After that userspace could
+> > > > selectively move the new devices to the correct memory tier?
+> > > 
+> > > I had touched on this in the other email.
+> > > 
+> > > This doesn't work if two drivers that should have separate policies
+> > > collide into the same tier - which is very likely with just 3 tiers.
+> > > So it seems to me the main usecase for having a rank tunable falls
+> > > apart rather quickly until tiers are spaced out more widely. And it
+> > > does so at the cost of an, IMO, tricky to understand interface.
+> > > 
+> > 
+> > Considering the kernel has a static map for these tiers, how can two drivers
+> > end up using the same tier? If a new driver is going to manage a memory
+> > device that is of different characteristics than the one managed by dax/kmem,
+> > we will end up adding 
+> > 
+> > #define MEMORY_TIER_NEW_DEVICE 4
+> > 
+> > The new driver will never use MEMORY_TIER_PMEM
+> > 
+> > What can happen is two devices that are managed by DAX/kmem that
+> > should be in two memory tiers get assigned the same memory tier
+> > because the dax/kmem driver added both the device to the same memory tier.
+> > 
+> > In the future we would avoid that by using more device properties like HMAT
+> > to create additional memory tiers with different rank values. ie, we would
+> > do in the dax/kmem create_tier_from_rank() .
 > 
-> That makes sense.  I did think at the time that this was probably the
-> cause of the problem.
+> Yes, that's the type of collision I mean. Two GPUs, two CXL-attached
+> DRAMs of different speeds etc.
 > 
->> commit:
->>   18788cfa236967741b83db1035ab24539e2a21bb
->>   b9ff43dd27434dbd850b908e2e0e1f6e794efd9b
->>
->> 18788cfa23696774 b9ff43dd27434dbd850b908e2e0
->> ---------------- ---------------------------
->>        fail:runs  %reproduction    fail:runs
->>            |             |             |
->>        4698:9       -36360%        1426:3     dmesg.timestamp:last
->>        3027:9       -22105%        1037:3     kmsg.timestamp:last
->>          %stddev     %change         %stddev
->>              \          |                \
->>       0.39 ±253%      -0.3        0.09 ±104%  fio.latency_1000us%
->>       0.00 ±141%      +0.0        0.01        fio.latency_100ms%
->>      56.60 ±  5%     +10.3       66.92 ±  8%  fio.latency_10ms%
->>      15.65 ± 22%      -1.3       14.39 ± 17%  fio.latency_20ms%
->>       1.46 ±106%      -0.5        0.95 ± 72%  fio.latency_2ms%
->>      25.81 ± 25%      -9.2       16.59 ± 18%  fio.latency_4ms%
->>       0.09 ± 44%      +0.9        1.04 ± 22%  fio.latency_50ms%
->>       0.00 ±282%      +0.0        0.02 ±141%  fio.latency_750us%
->>      13422 ±  6%      -1.4%      13233        fio.read_bw_MBps   <-----
+> I also like Huang's idea of using latency characteristics instead of
+> abstract distances. Though I'm not quite sure how feasible this is in
+> the short term, and share some concerns that Jonathan raised. But I
+> think a wider possible range to begin with makes sense in any case.
 > 
-> A stddev of 6% and a decline of 1.4%?  How many tests did you run
-> to make sure that this is a real decline and not fluctuation of
-> one-quarter-of-one-standard-devisation?
-For this test case (fio-basic with the specific parameters), we ran it
-9 times with commit 18788cfa236967741b83db1035ab24539e2a21bb and 3 times
-with commit b9ff43dd27434dbd850b908e2e0e1f6e794efd9b.
+> > > In the other email I had suggested the ability to override not just
+> > > the per-device distance, but also the driver default for new devices
+> > > to handle the hotplug situation.
+> > > 
+> > 
+> > I understand that the driver override will be done via module parameters.
+> > How will we implement device override? For example in case of dax/kmem driver
+> > the device override will be per dax device? What interface will we use to set the override?
+> > 
+> > IIUC in the above proposal the dax/kmem will do
+> > 
+> > node_create_and_set_memory_tier(numa_node, get_device_tier_index(dev_dax));
+> > 
+> > get_device_tier_index(struct dev_dax *dev)
+> > {
+> >     return dax_kmem_tier_index; // module parameter
+> > }
+> > 
+> > Are you suggesting to add a dev_dax property to override the tier defaults?
+> 
+> I was thinking a new struct memdevice and struct memtype(?). Every
+> driver implementing memory devices like this sets those up and
+> registers them with generic code and preset parameters. The generic
+> code creates sysfs directories and allows overriding the parameters.
+> 
+> struct memdevice {
+> 	struct device dev;
+> 	unsigned long distance;
+> 	struct list_head siblings;
+> 	/* nid? ... */
+> };
+> 
+> struct memtype {
+> 	struct device_type type;
+> 	unsigned long default_distance;
+> 	struct list_head devices;
+> };
+> 
+> That forms the (tweakable) tree describing physical properties.
 
-The stddev for commit 18788cfa236967741b83db1035ab24539e2a21bb is 6%. The
-test result for commit b9ff43dd27434dbd850b908e2e0e1f6e794efd9b is quite
-stable. Its stddev is less than 1% so the value is not shown.
+In general, I think memtype is a good idea.  I have suggested
+something similar before.  It can describe the characters of a
+specific type of memory (same memory media with different interface
+(e.g., CXL, or DIMM) will be different memory types).  And they can
+be used to provide overriding information.
 
-Specific for -1.4%, we don't think it's real regression. As you said, it's 
-less than stddev and we don't know whether it's because of stddev or not.
+As for memdevice, I think that we already have "node" to represent
+them in sysfs.  Do we really need another one?  Is it sufficient to
+add some links to node in the appropriate directory?  For example,
+make memtype class device under the physical device (e.g. CXL device),
+and create links to node inside the memtype class device directory?
 
-The point here is the commit b9ff43dd27434dbd850b908e2e0e1f6e794efd9b could
-fix this regression. Thanks.
+> From that, the kernel then generates the ordered list of tiers.
+
+As Jonathan Cameron pointed, we may need the memory tier ID to be
+stable if possible.  I know this isn't a easy task.  At least we can
+make the default memory tier (CPU local DRAM) ID stable (for example
+make it always 128)?  That provides an anchor for users to understand.
+
+Best Regards,
+Huang, Ying
+
+> > > This should be less policy than before. Driver default and per-device
+> > > distances (both overridable) combined with one tunable to set the
+> > > range of distances that get grouped into tiers.
+> > > 
+> > 
+> > Can you elaborate more on how distance value will be used? The device/device NUMA node can have
+> > different distance value from other NUMA nodes. How do we group them?
+> > for ex: earlier discussion did outline three different topologies. Can you
+> > ellaborate how we would end up grouping them using distance?
+> > 
+> > For ex: in the topology below node 2 is at distance 30 from Node0 and 40 from Nodes
+> > so how will we classify node 2?
+> > 
+> > 
+> > Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
+> > 
+> > 		  20
+> >   Node 0 (DRAM)  ----  Node 1 (DRAM)
+> >        |        \   /       |
+> >        | 30    40 X 40      | 30
+> >        |        /   \       |
+> >   Node 2 (PMEM)  ----  Node 3 (PMEM)
+> > 		  40
+> > 
+> > node distances:
+> > node   0    1    2    3
+> >    0  10   20   30   40
+> >    1  20   10   40   30
+> >    2  30   40   10   40
+> >    3  40   30   40   10
+> 
+> I'm fairly confused by this example. Do all nodes have CPUs? Isn't
+> this just classic NUMA, where optimizing for locality makes the most
+> sense, rather than tiering?
+> 
+> Forget the interface for a second, I have no idea how tiering on such
+> a system would work. One CPU's lower tier can be another CPU's
+> toptier. There is no lowest rung from which to actually *reclaim*
+> pages. Would the CPUs just demote in circles?
+> 
+> And the coldest pages on one socket would get demoted into another
+> socket and displace what that socket considers hot local memory?
+> 
+> I feel like I missing something.
+> 
+> When we're talking about tiered memory, I'm thinking about CPUs
+> utilizing more than one memory node. If those other nodes have CPUs,
+> you can't reliably establish a singular tier order anymore and it
+> becomes classic NUMA, no?
 
 
-Regards
-Yin, Fengwei
-
-> _______________________________________________
-> LKP mailing list -- lkp@lists.01.org
-> To unsubscribe send an email to lkp-leave@lists.01.org

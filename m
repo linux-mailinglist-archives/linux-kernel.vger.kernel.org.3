@@ -2,205 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B33F54E992
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 20:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF97854E98D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 20:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378009AbiFPSjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 14:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S1377964AbiFPSjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 14:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378008AbiFPSj2 (ORCPT
+        with ESMTP id S230338AbiFPSjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 14:39:28 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE47754194;
-        Thu, 16 Jun 2022 11:39:24 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id hj18so3757055ejb.0;
-        Thu, 16 Jun 2022 11:39:24 -0700 (PDT)
+        Thu, 16 Jun 2022 14:39:08 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CBA3BF9A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 11:39:07 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id p18so3531092lfr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 11:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hTMAYNOtiXLbIpfBfX/ZjoF2j1Xgqm6lvqAWKAijSCw=;
-        b=nyIQTTIZFGabt6h84OUe/BFnlLSq7adaVeP4z1n5ObblUDxDNNljfgsiz3VCvV9ZkC
-         U7xuxJiYskOlhs1ud2X1DPGZvY0xjIFn0sVTd0BZq35jlitXDUvG6OIh7QdQxEUbgMl/
-         yF/djqpmpb4Y2V61qa4hNsSem8fawETTnv347nn+Xsl6BJEDc1HROOx7Zy0VgWMHlvPT
-         6MpuGT7JqBe8jYSmhMsdkF8QOAqzUVq4WuLg6Zd5thSLGxOZfw0eOlXaAt6tw/RCB0NT
-         aVuJY2k1FZN5T0U5k1LuvX8Vn3vXZLMKWU8pKp5GZ3Mie1f1VSRCyeRSRvnZMTM/NbRC
-         koMQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Vvtlw+iEsaS/na3D2WFoyiU6cxwYhF3nUwVfDlaBBY4=;
+        b=KWqtjeF0lt8BmXzIhDVi8wNK0hTc2uUic8LB1N7qa04xJfx0dow3FO5m1NutF5917G
+         fb4s84h1Sgt4mKBPJwcmbYbwdTmfQOqmQuFg5KGbRet4iuZmRvCFWDAflpEjyiWB4599
+         2Ayn0RycL/0iqsGAG2zWrnt7u684fSfWFpEYyMjS5CnsFd60o1zZrrYvJfajWMeLxIev
+         CMuQr3ggcIHxRjyKu/NwsgpY2yPxpZrxXMiRFQL65EGa2GdrAxuyeGHJtu2Fp2s3tAEm
+         O1M9qsb8eY0w1eTcO0OHirT4hMPunuAPVjEktbKyf6wd2oOnunAOOVWb0TymeyhLxAjQ
+         C20g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hTMAYNOtiXLbIpfBfX/ZjoF2j1Xgqm6lvqAWKAijSCw=;
-        b=UIDO3QUz9J1zukEaiBMJD+2wOskT4cOaxEhnbaIRN+g3aY3almRligZ+kQ4tj+Hgsf
-         CUqZV64nTy/qaSvlp4jGFCgNuIaW+l1K7+Jvd76ErC/16RHfugSe7PPKBTIRFiaW1UrI
-         +VSvm/Y4qRmHwCYeD6FE1pFCxT9SNCNxiMhSR0LHkRsI+GwhkM18y2hoGfA0T6eYUdh9
-         FkXaSVgxmtnvwAdXJoKmlLKTNYd+q9CT6UBOlu3wbbzg54smDglCRUzjOiej3i/yqnmj
-         FhOlcXzUWbTCeGa31AFg2MtQXaQDQcKC3LzrsojZXZSgDyxb8p65zPOYQX3+cIRX5iAh
-         neoA==
-X-Gm-Message-State: AJIora/T2j8qxKU9XywDDx7lw4E6WT0RF4TV5R18QpMigysBmjbYSkEQ
-        kTlnr5IGt3pftLVY5kBq2DGmEZOC1ASx1U0pwk8=
-X-Google-Smtp-Source: AGRyM1tVRlc/Efjknp2j0mwetaeHSRuuZt3+3lupYLxOIvdx4bOnZ8iDWPyj+gzzwfQlpMTvdeDuFyByDBNdSk7oxOI=
-X-Received: by 2002:a17:906:434f:b0:711:eb76:c320 with SMTP id
- z15-20020a170906434f00b00711eb76c320mr5744542ejm.636.1655404763382; Thu, 16
- Jun 2022 11:39:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Vvtlw+iEsaS/na3D2WFoyiU6cxwYhF3nUwVfDlaBBY4=;
+        b=Kahr9bsV3P7WnnVRV/PvFm+18K8uTgpQTRvIAiTQIdOAqZJVkQ/oYP9RiNqVjTVDZ7
+         DGjTqQlFuBVfLmDb+OfrFfu1yrNoK8dJ1Bm9ppDPVN0r1V2frb0h7fvhkPiFhv/XCDEN
+         EA70eMwej6FRGNZZJoMbTjMa4MD7PNqCKT1hD+43D3qMQMsgNH9FzLixJcqs7+Wgmg2t
+         Iz4YourXvJvxOZiq4fJi0PQUidJElg3IeTDDtyxK9N9yGE0eur7mms0gF8GhpqLQHuhd
+         AjyjQj60Wc8WkEOH8SMOJ7CxqQa8/jNGrxLqXDvqsxjnpKroP5Q8R5TyA7i5LBMVdZOq
+         oTig==
+X-Gm-Message-State: AJIora9eygvRGXxB4cB4dDzpGMLhVJRquYbROIs/uqZQ9ydXgNBBQ3+O
+        PemdJEsEDN4Ii8Fe9TQKpbwrquyaf9ytDw==
+X-Google-Smtp-Source: AGRyM1uTNc2ADuMhHieithn5hIvSIQUyuc8ucmAt29mfzYWtFQB6+pLmyfSp4MexbMuo0vMAa6k/0g==
+X-Received: by 2002:a05:6000:1c09:b0:20f:cd6f:f88b with SMTP id ba9-20020a0560001c0900b0020fcd6ff88bmr5877180wrb.571.1655404735346;
+        Thu, 16 Jun 2022 11:38:55 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id t22-20020a05600c41d600b0039db7f1a3f5sm2976079wmh.45.2022.06.16.11.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 11:38:54 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 20:38:52 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     David Gow <davidgow@google.com>
+Cc:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Latypov <dlatypov@google.com>, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel@lists.freedesktop.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/3] KUnit tests for drm_format_helper
+Message-ID: <20220616183852.GA12343@elementary>
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
+ <CABVgOSn3zAGsphdEpuevhTo1xoYqHWNF4qty=gR22LcRiUkz0A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220616104211.9257-1-ddrokosov@sberdevices.ru>
- <20220616104211.9257-3-ddrokosov@sberdevices.ru> <CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4koNShFRG3kP8b6w@mail.gmail.com>
- <20220616170218.dihjli46spimozeg@CAB-WSD-L081021.sigma.sbrf.ru>
-In-Reply-To: <20220616170218.dihjli46spimozeg@CAB-WSD-L081021.sigma.sbrf.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 16 Jun 2022 20:38:46 +0200
-Message-ID: <CAHp75VdEY9z_0=sAkKOico9JKYPOX6yqnoetiW49oFHm+SeUoQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] iio: add MEMSensing MSA311 3-axis accelerometer driver
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABVgOSn3zAGsphdEpuevhTo1xoYqHWNF4qty=gR22LcRiUkz0A@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 7:02 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-> On Thu, Jun 16, 2022 at 02:18:52PM +0200, Andy Shevchenko wrote:
-> > On Thu, Jun 16, 2022 at 12:42 PM Dmitry Rokosov
-> > <DDRokosov@sberdevices.ru> wrote:
+Hi!
 
-...
-
-> > Not sure why you put those blank lines herey, it makes code not compact.
+Javier Martinez Canillas wrote:
+> Before merging this, could you please reach the folks working on [0] ?
+> I think that would be good to have some consistency with regard to KUnit
+> tests from the start to avoid future refactorings. For instance, you are
+> adding the tests under a `kunit` sub-directory while they are doing it
+> in a `tests` sub-dir.
 >
-> Here I use blank lines to split fields from different registers.
-> In other words, in the msa311_fields enum one line contains fields from one
-> register. But for some heavy registers (like TAP_ACTIVE_STS) we have so many
-> fields and their declaration doesn't fit to 80 symbols.
-> So I've made a decision to split registers using blank lines.
-
-Better is to add a comment explaining what register is described
-below, and not just a blank line.
-
-...
-
-> > Not sure you need this. Dropping i2c dependency from this structure
-> > allows much easier to add, e.g. SPI support of the same hardware.
+> Also there may be other things that could be made more consistent, like
+> the naming conventions for the tests, suites, etc.
 >
-> Mainly I use i2c pointer in the probe() path, and you are right, we can
-> change i2c pointer to dev and generalize msa311_priv struct from bus
-> perspective.
+> [0]: https://lore.kernel.org/all/20220608010709.272962-4-maira.canal@usp.br/T/
 
-Yep, note that you may easily retrieve i2c_client from struct device
-pointer if you need to do that in some (I believe rare to none) cases.
+David Gow wrote:
+> [+Maíra, Isabella, Tales, Magali for other drm,amdgpu,KUnit work.]
+> 
+> These seem pretty good to me, but I'd echo Javier's comments about
+> consistency with other DRM tests.
 
-...
-
-> > > +       struct regmap *regs;
-> >
-> > I believe this is used most, so making this a first member in the
-> > structure saves  some instructions (check with bloat-o-meter).
-> >
+I agree, I'd need to look with more detail into the selftest conversion
+and the AMD series, but it'd be nice to avoid unnecessary refactors.
+ 
+> In particular, we now have three concurrently developed DRM-related
+> test suites, each doing things slightly differently:
+> - This series is putting tests in drm/kunit, and providing a
+> .kunitconfig in that directory,
 >
-> Are you talking about archs where offset calculation adds more bytes to
-> instruction? And when offset equals to 0, we can save some space.
+> - The selftest ports here[1] are putting tests in drm/tests, and
+> provide a separate Kconfig file, as well as a .kunitconfig
 
-It doesn't have anything to do with arches, simply compiler
-optimization, otherwise yes, that's what I meant.
+Now that "selftests/" is going to be removed, "tests/" is a good name
+for the folder, I'll rename it in v4.
 
-...
+> - And the AMDGPU tests[2] are doing something totally different, with
+> their own tests in drm/amd/display/amdgpu_dm/tests, which get compiled
+> directly into the amdgpu module (and, at present, can't be run at all
+> via kunit_tool)
+> 
+> Certainly the general DRM tests should be in the same place, and use
+> the same Kconfig entries, etc. A mix of the separate Kconfig file from
+> [1] (if there's enough benefit to having the ability to turn on and
+> off suites individually, which seems plausible) and the documentation
+> from this series seems good to me.
 
-> > > +       wait_ms = (USEC_PER_SEC * MSEC_PER_SEC) / freq_uhz;
-> >
-> > This looks very odd from a physics perspective: sec * sec * sec == sec ?!
-> >
-> > Perhaps you meant some HZ* macros from units.h?
-> >
->
-> I suppose because of UHZ calculation I have to use NANO instead of
-> USEC_PER_SEC in the following line:
->
->         freq_uhz = msa311_odr_table[odr].val * USEC_PER_SEC +
->                    msa311_odr_table[odr].val2;
->
-> But below line is right from physics perspective. 1sec = 1/Hz, so
-> msec = (USEC_PER_SEC / freq_uhz) * MSEC_PER_SEC:
->
->         wait_ms = (USEC_PER_SEC * MSEC_PER_SEC) / freq_uhz;
->
-> Or do you mean that I should change MSEC_PER_SEC to just MILLI?
+I agree about having the DRM-core tests in drm/tests/ and driver tests
+in drm/driver/tests/.
 
-1 / Hz = 1 sec. That's how physics defines it. Try to figure out what
-you meant by above multiplications / divisions and come up with the
-best that fits your purposes.
+About allowing turning on or off test suites, it was agreed to use a
+generic symbol to group them (DRM_KUNIT_TEST) [1].
+I won't have time merge all patches toghether and run them until next
+week, but if it takes too long to run them or you find it beneficial to
+split the symbols, I'll change my patch.
 
-...
+[1] https://lore.kernel.org/dri-devel/e26de140-afb7-7b1b-4826-6ac4f3a4fe02@redhat.com/
+ 
+> There's some basic guidelines around test nomenclature in
+> Documentation/dev-tools/kunit/style.rst[3], though all of these
+> patches seem pretty consistent with that. Either 'kunit' or 'tests'
+> would work as a directory name: given the AMDGPU patches are using
+> 'tests', maybe that's easier to stick with.
 
-> > > +                       if (err) {
-> > > +                               dev_err(dev, "cannot update freq (%d)\n", err);
-> > > +                               goto failed;
-> > > +                       }
-> >
-> > Why is this inside the loop and more important under lock? Also you
-> > may cover the initial error code by this message when moving it out of
-> > the loop and lock.
-> >
-> > Ditto for other code snippets in other function(s) where applicable.
->
-> Yes, I can move dev_err() outside of loop. But all ODR search loop
-> should be under lock fully, because other msa311 operations should not
-> be executed when we search proper ODR place.
+I'll have to rename my kunit_suite to use underscores, as well as the
+test cases, that at the moment are using English sentences.
 
-I didn't suggest getting rid of the lock.
+Maíra: We'd also need to agree on the file names used, the
+documentation [2] suggest to use *_test.c, it'd need to be changed in
+the selftest to KUnit series.
 
-...
+Best wishes,
+Jose
 
-> > > +       mutex_lock(&msa311->lock);
-> > > +       err = regmap_field_write(msa311->fields[F_NEW_DATA_INT_EN], state);
-> > > +       mutex_unlock(&msa311->lock);
-> >
-> > > +
-> >
-> > No need.
->
-> Sorry, I don't understand. We do not need to call it under lock, right?
-> I think we have to wrap it by msa311 lock, because other msa311
-> operations should not be executed when we enable or disable new data
-> interrupt (for example ODR value changing or something else).
-
-The blank line is not needed, I specifically commented on the
-emphasized paragraph (by delimiting it with blank lines and leaving
-the rest for the better context for you to understand, it seems it did
-the opposite...).
-
-...
-
-> > > +       mutex_lock(&msa311->lock);
-> > > +       err = msa311_set_pwr_mode(msa311, MSA311_PWR_MODE_NORMAL);
-> > > +       mutex_unlock(&msa311->lock);
-> >
-> > > +
-> >
-> > No need.
->
-> Again I don't understand why, sorry. We do not want to get sporadic
-> MSA311 attributes changing during power mode transition from another
-> userspace process.
-
-As per above.
-
--- 
-With Best Regards,
-Andy Shevchenko
+[2] https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html#test-file-and-module-names 
+> Cheers,
+> -- David
+> 
+> [1]: https://lore.kernel.org/linux-kselftest/20220615135824.15522-1-maira.canal@usp.br/
+> [2]: https://lore.kernel.org/dri-devel/20220608010709.272962-1-maira.canal@usp.br/
+> [3]: https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html

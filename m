@@ -2,90 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A0654DDB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6B554DDBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376268AbiFPI6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S231703AbiFPJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 05:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiFPI5y (ORCPT
+        with ESMTP id S230429AbiFPJAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:57:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE83AE0E0;
-        Thu, 16 Jun 2022 01:57:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5C1B822B1;
-        Thu, 16 Jun 2022 08:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D075C34114;
-        Thu, 16 Jun 2022 08:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655369870;
-        bh=BG70O5g6GPMqkDhXt6qLtoTqT4aP8gbFdNpo9dDiBRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xv/dG+6awDZDxO50LVU2PjPXiXPSHFP5Z38YlytK5g1LkiCKNTxjplasjDjSF0GyQ
-         okDUG/chPwLUflE7DRroHW0pwqUJTM0IzM0P4yAb5gFfV8n/LLnC3VwWEPbswmm07W
-         440BhuA7bJv3+EeLp78C65CEHu3QOTqfWcDQGAaBxPsS60l+CU283rx5Gejb+JNDv8
-         308AmGD+5wlnbM1Q9VIvuS3uxsPbSvnPBo6V4Yq6/mbIy88QDlqgBAcEkcwmRFAy8/
-         46VdlzkMPLM5GkjZcFtL+MFT56Q+fMtZ1hUzNn9VXDbqT9PgomEVVVXkDoXRfKtx6J
-         phgxX/XNpYP9w==
-Date:   Thu, 16 Jun 2022 11:57:45 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rxe: fix xa_alloc_cycle() error return value check again
-Message-ID: <YqrwibTkaDig+QfI@unreal>
-References: <20220609070656.1446121-1-dzm91@hust.edu.cn>
+        Thu, 16 Jun 2022 05:00:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78B872CCA1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:00:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 509B512FC;
+        Thu, 16 Jun 2022 02:00:02 -0700 (PDT)
+Received: from [10.57.82.209] (unknown [10.57.82.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E8203F7F5;
+        Thu, 16 Jun 2022 01:59:59 -0700 (PDT)
+Message-ID: <e2091397-b6e2-7296-1378-dc10b24c6ef4@arm.com>
+Date:   Thu, 16 Jun 2022 09:59:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609070656.1446121-1-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 2/5] iommu/mediatek: Add error path for loop of
+ mm_dts_parse
+Content-Language: en-GB
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, chengci.xu@mediatek.com,
+        youlin.pei@mediatek.com, anan.sun@mediatek.com,
+        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220616054203.11365-1-yong.wu@mediatek.com>
+ <20220616054203.11365-3-yong.wu@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220616054203.11365-3-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:06:56PM +0800, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
+On 2022-06-16 06:42, Yong Wu wrote:
+> The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the i+1
+> larb is parsed fail(return -EINVAL), we should of_node_put for the 0..i
+> larbs. In the fail path, one of_node_put matches with of_parse_phandle in
+> it.
 > 
-> Currently rxe_alloc checks ret to indicate error, but 1 is also a valid
-> return and just indicates that the allocation succeeded with a wrap.
-> 
-> Fix this by modifying the check to be < 0.
-> 
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 > ---
->  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-I applied same fix to rxe_alloc() and added Fixes line.
-
-Thanks, applied.
-
+>   drivers/iommu/mtk_iommu.c | 21 ++++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_pool.c b/drivers/infiniband/sw/rxe/rxe_pool.c
-> index 1cc8e847ccff..e9f3bbd8d605 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_pool.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_pool.c
-> @@ -167,7 +167,7 @@ int __rxe_add_to_pool(struct rxe_pool *pool, struct rxe_pool_elem *elem)
->  
->  	err = xa_alloc_cyclic(&pool->xa, &elem->index, elem, pool->limit,
->  			      &pool->next, GFP_KERNEL);
-> -	if (err)
-> +	if (err < 0)
->  		goto err_cnt;
->  
->  	return 0;
-> -- 
-> 2.25.1
-> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 3b2489e8a6dd..ab24078938bf 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -1071,12 +1071,12 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   
+>   		plarbdev = of_find_device_by_node(larbnode);
+>   		if (!plarbdev) {
+> -			of_node_put(larbnode);
+> -			return -ENODEV;
+> +			ret = -ENODEV;
+> +			goto err_larbnode_put;
+>   		}
+>   		if (!plarbdev->dev.driver) {
+> -			of_node_put(larbnode);
+> -			return -EPROBE_DEFER;
+> +			ret = -EPROBE_DEFER;
+> +			goto err_larbnode_put;
+>   		}
+>   		data->larb_imu[id].dev = &plarbdev->dev;
+>   
+> @@ -1107,9 +1107,20 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   			       DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME);
+>   	if (!link) {
+>   		dev_err(dev, "Unable to link %s.\n", dev_name(data->smicomm_dev));
+> -		return -EINVAL;
+> +		ret = -EINVAL;
+> +		goto err_larbnode_put;
+>   	}
+>   	return 0;
+> +
+> +err_larbnode_put:
+> +	while (i--) {
+> +		larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
+> +		if (larbnode && of_device_is_available(larbnode)) {
+> +			of_node_put(larbnode);
+> +			of_node_put(larbnode);
+> +		}
+
+This looks a bit awkward - could we not just iterate through 
+data->larb_imu and put dev->of_node for each valid dev?
+
+Also, of_find_device_by_node() takes a reference on the struct device 
+itself, so strictly we should be doing put_device() on those as well if 
+we're bailing out.
+
+Robin.
+
+> +	}
+> +	return ret;
+>   }
+>   
+>   static int mtk_iommu_probe(struct platform_device *pdev)

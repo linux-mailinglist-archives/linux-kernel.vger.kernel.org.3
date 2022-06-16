@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9DF54E53D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A58654E550
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 16:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376948AbiFPOov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 10:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S1377034AbiFPOsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 10:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiFPOou (ORCPT
+        with ESMTP id S1376708AbiFPOsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:44:50 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306ED3917A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:44:49 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v14so2179804wra.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 07:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aZrB3adH98zZgiXaq8Bh/9GJWNUDyfOL1k5/hjqAukY=;
-        b=i7KdIrhqZdq6ZlMvRRYL6JqbqJtW+/N/SZB9K4+/MYCGxrYWeIriIbE86kg1pl0rMN
-         RCUe624jCQwW36o/S+Ll1mlvj8GFzzMEExZX63UIsnVhROA8ZXzB/8+xDMt6QtiTtFMo
-         3xKcZyau7piOLyjudAGwavEhIIF+g+xffLhG7AtZEmvtESzMzlVBRSqxxG+MkR+ZbFjS
-         5BMl3ikDcuXVwDdmVkMLchBjQ8Oqr/GN+50rI8fYW+9f1uG63meRtT0CEKoFaqn4/0CQ
-         d0IoRvwkQaxt0vtddiGgXqSbmdIsSbwMaXpnE4AISLFxJd0ITZwZKleop3v+MXNi/OWN
-         fuJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aZrB3adH98zZgiXaq8Bh/9GJWNUDyfOL1k5/hjqAukY=;
-        b=lHf/5+q2R72htMW1sx/nh3XZnvIhtBDQTJNKryQZ8nlKLCzqL2RN86ChFwCTKJI4EA
-         iCmeVdACY56c9M2QbRQKoWkHA9YMZx/ueANoh4M18MfaKnT8JHF3N4UUPJueQ93rnq0t
-         70B/EwGEfyNnDgDzoxMiyCDo0MKrdGpejCKtTkNj6hHhel1ejs1F5aIstp04nEahRH2A
-         BeWRe7N469n4tYHS9iFxifS32RZh5s8YjIAeLsmGFHyP7ZR+EDKGQPVIof1flruGBL8o
-         qEuGMMFt9P6kh9/VTs6K9xQQFwz+LzcvOCcS0jz4GgHUzfruw+QO94xxG0e+cWhXLBH4
-         qG+g==
-X-Gm-Message-State: AJIora+Lt3U4ZPFblN81X+KHzYycpku4lQrsw/4oB7Vszt3UAoNZKNjg
-        MjMfo++G4tec931bc6/ujz0w88FPDMKfL6OldFTsQQ==
-X-Google-Smtp-Source: AGRyM1uNGC1zkDykBzIAEnHz1xG3XXKqONvzJxyE5WBpt+GrhUUUJ3azHm2m+15Ro8lnIo+h/CB5CZZaZaZHpWYltUA=
-X-Received: by 2002:a5d:648e:0:b0:217:d2cb:d6b2 with SMTP id
- o14-20020a5d648e000000b00217d2cbd6b2mr4912385wri.433.1655390687611; Thu, 16
- Jun 2022 07:44:47 -0700 (PDT)
+        Thu, 16 Jun 2022 10:48:11 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852342983E;
+        Thu, 16 Jun 2022 07:48:09 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id C22C9520290;
+        Thu, 16 Jun 2022 16:48:07 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.5) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 16 Jun
+ 2022 16:48:07 +0200
+Date:   Thu, 16 Jun 2022 16:47:59 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
+        <zohar@linux.vnet.ibm.com>, <silviu.vlasceanu@huawei.com>,
+        <dmitry.kasatkin@huawei.com>, <takondra@cisco.com>,
+        <kamensky@cisco.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>, Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4 3/3] gen_init_cpio: add support for file metadata
+Message-ID: <20220616144759.GA3967@lxhi-065>
+References: <20190523121803.21638-1-roberto.sassu@huawei.com>
+ <20190523121803.21638-4-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220613171738.111013-1-jose.exposito89@gmail.com>
-In-Reply-To: <20220613171738.111013-1-jose.exposito89@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 16 Jun 2022 22:44:36 +0800
-Message-ID: <CABVgOSn3zAGsphdEpuevhTo1xoYqHWNF4qty=gR22LcRiUkz0A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] KUnit tests for drm_format_helper
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel@lists.freedesktop.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190523121803.21638-4-roberto.sassu@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.5]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 1:17 AM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
-ail.com> wrote:
->
-> Hello everyone,
->
-> Here is the v3 of the series, including the documentation, previously
-> sent as a standalone patch [1], and changes suggested during review.
->
-> Thanks a lot,
-> Jos=C3=A9 Exp=C3=B3sito
->
+Hello Roberto,
 
-[+Ma=C3=ADra, Isabella, Tales, Magali for other drm,amdgpu,KUnit work.]
+On Do, Mai 23, 2019 at 02:18:03 +0200, Roberto Sassu wrote:
+> This patch adds support for file metadata (only TYPE_XATTR metadata type).
+> gen_init_cpio has been modified to read xattrs from files that will be
+> added to the image and to include file metadata as separate files with the
+> special name 'METADATA!!!'.
+> 
+> This behavior can be selected by setting the desired file metadata type as
+> value for CONFIG_INITRAMFS_FILE_METADATA.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  usr/Kconfig               |   8 +++
+>  usr/Makefile              |   4 +-
+>  usr/gen_init_cpio.c       | 137 ++++++++++++++++++++++++++++++++++++--
+>  usr/gen_initramfs_list.sh |  10 ++-
+>  4 files changed, 150 insertions(+), 9 deletions(-)
+> 
+> diff --git a/usr/gen_init_cpio.c b/usr/gen_init_cpio.c
+> index 03b21189d58b..e93cb1093e77 100644
+> --- a/usr/gen_init_cpio.c
+> +++ b/usr/gen_init_cpio.c
 
-These seem pretty good to me, but I'd echo Javier's comments about
-consistency with other DRM tests.
+[..]
 
-In particular, we now have three concurrently developed DRM-related
-test suites, each doing things slightly differently:
-- This series is putting tests in drm/kunit, and providing a
-.kunitconfig in that directory,
-- The selftest ports here[1] are putting tests in drm/tests, and
-provide a separate Kconfig file, as well as a .kunitconfig
-- And the AMDGPU tests[2] are doing something totally different, with
-their own tests in drm/amd/display/amdgpu_dm/tests, which get compiled
-directly into the amdgpu module (and, at present, can't be run at all
-via kunit_tool)
+> +static int write_xattrs(const char *path)
+> +{
 
-Certainly the general DRM tests should be in the same place, and use
-the same Kconfig entries, etc. A mix of the separate Kconfig file from
-[1] (if there's enough benefit to having the ability to turn on and
-off suites individually, which seems plausible) and the documentation
-from this series seems good to me.
+[..]
 
-There's some basic guidelines around test nomenclature in
-Documentation/dev-tools/kunit/style.rst[3], though all of these
-patches seem pretty consistent with that. Either 'kunit' or 'tests'
-would work as a directory name: given the AMDGPU patches are using
-'tests', maybe that's easier to stick with.
+> +
+> +		snprintf(str, sizeof(str), "%.8lx",
+> +			 sizeof(hdr) + name_len + 1 + value_len);
 
-Cheers,
--- David
+Cppcheck 2.7 reports at this line:
 
-[1]: https://lore.kernel.org/linux-kselftest/20220615135824.15522-1-maira.c=
-anal@usp.br/
-[2]: https://lore.kernel.org/dri-devel/20220608010709.272962-1-maira.canal@=
-usp.br/
-[3]: https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html
+usr/gen_init_cpio.c:107,portability,invalidPrintfArgType_uint,%lx in format string (no. 1) requires 'unsigned long' but the argument type is 'size_t {aka unsigned long}'.
+
+This can be addressed via 's/lx/zx/', according to https://www.kernel.org/doc/Documentation/printk-formats.txt .
+
+BR, Eugeniu

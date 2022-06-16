@@ -2,150 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FF454EDC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DE954EDC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379267AbiFPXFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 19:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S1379295AbiFPXHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379122AbiFPXFu (ORCPT
+        with ESMTP id S1378348AbiFPXHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 19:05:50 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782305F248;
-        Thu, 16 Jun 2022 16:05:49 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id i15so2443473plr.1;
-        Thu, 16 Jun 2022 16:05:49 -0700 (PDT)
+        Thu, 16 Jun 2022 19:07:46 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958F513D55
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:07:45 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id a15so1909481ilq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mHgod+Kwm8xVpSdotXQQvx7e6tmha0GKj/Bf2zOifHk=;
-        b=OXWRYmk3bowxbdyaVslq9VNcPeawn20YbaR1OPvyh0O7ygcQjUnHi5Qg61SiPX0GiD
-         00kM6ArXf8CqTpduim9SzIvSIBZca8RVcSQ4m7rFl9SEJL+3DW3oChYVuto32I+tfuFM
-         rPBpeQAXOPKzRk2RVhHs4VW2Ku4w8yfbvtIXnmHG+fak80AA9glfnvAnNGMa7BpQ7H8D
-         vwJnjbH0/tm/LaRdEIG+EE+7vrGCHG68A4gIXlRaINU8FaXyB/pCvIO4i2qK3csYJm/W
-         rLeXyiQVUJFDUHGh0WXdbXFyOFooWXsM3Wl3U+26BsH3+UBYtGIhgEMNISZerXdasd80
-         NaCg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=A/ErIrNj5gItrQCkLlcIujK6eoGjp3nC9yABjFCnK/8=;
+        b=dqGsgNArhDuF3C4hLhzp+lhKzSPCpnjS1CN0m8V2rVj3xLISsiNjMqpGoEp0xfWG/8
+         QadAGuhCBY7yWgoT3uNjJMIyx0CSG/wAyOPavmcGjx6Olz6I1vG3ePcCnNArbMg1OP9Z
+         xIDkKeBumj5d6hBpuSqw78YfEdqxBNSDGcSNU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=mHgod+Kwm8xVpSdotXQQvx7e6tmha0GKj/Bf2zOifHk=;
-        b=KlSbriLHBS0UY1b2A+vUlmXjiPPvEoUYsX0+hV8/w0y0I8estSsj38OgcF9M5LxMjb
-         mT+QXsIYX7lWEyT72nf6m/DquhJNe4l1caQ2SKrZeIG2AwqfcyA+bJxVF+aw0x3CyB7c
-         qmuqew33je78icN1T/TagtgS+XMwyxppcPA+f/M7D1fZl3SXFUEfbcGptP69ONPPfTaa
-         cuZpAARRL/dPPABMzCY22h3P//Y3hvCIJktS0AV/b48Rzk9h+OQBD52q0Yvn14HnjAFp
-         MUpPAyh90t1Y5szZPqH3Wy1OqiyscyyMCg8tHjG78XKubxQ5ElN7KBlW139bMRSBOvxX
-         oIsw==
-X-Gm-Message-State: AJIora+NBHE2ZXdouENWayCFgfUtwWiPinbeSKyiIwHZYbTaiX5Ce4/L
-        eQZ/tZoBj49VYBjyLsAo0TI=
-X-Google-Smtp-Source: AGRyM1uV6/odU4A50BOArugcTBNxGR1W4NDH3lx5sugfaP1Topmwxuko/J/qzy6expDqJmVv/wCQXw==
-X-Received: by 2002:a17:90b:1611:b0:1ec:6ce7:5e11 with SMTP id la17-20020a17090b161100b001ec6ce75e11mr2613639pjb.146.1655420748778;
-        Thu, 16 Jun 2022 16:05:48 -0700 (PDT)
-Received: from balhae.corp.google.com ([2620:15c:2c1:200:1253:816e:a3a1:fc8b])
-        by smtp.gmail.com with ESMTPSA id p48-20020a056a0026f000b0050dc7628184sm2321457pfw.94.2022.06.16.16.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 16:05:48 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2] perf test: Add ARM SPE system wide test
-Date:   Thu, 16 Jun 2022 16:05:46 -0700
-Message-Id: <20220616230546.1390813-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A/ErIrNj5gItrQCkLlcIujK6eoGjp3nC9yABjFCnK/8=;
+        b=ylKnd6OtLUFChdp6UZfFhQCBiszC3MjTiWu/pqABWx1pS61BPq4+/cka3LHk4lAyvg
+         9iugJclNmzNlwFPLbUZIirs9MaLuXrxRHglBq9lmp/RrDLtoTSp9QCznGiX4JLOiriJG
+         Q4Olb4gK6ILUUiJkHC4IeLovuY1YKPAtg/BANmg17TLW7xwzYobygjyuUmIn94gqCUxp
+         KJzEcXNOOnweNjLWjdgSq1XeU/hJiZIcdEoun9PZGwjYPbXuPaoJmwbzCKepbJl408hX
+         +gXCoHFWjQzleIaAZD9iH0yv7UdNGq1VO3LkGuqyAfl2HzM1uaohotr/PdFMQPN/J/vZ
+         c7vg==
+X-Gm-Message-State: AJIora+IAE7ABDyG+Ri0njMZ6Sz70W4oOB9alI9uCd2wApMZkqrUlN6I
+        SToC2VbwzJXsOy1jptJWEI5QYw==
+X-Google-Smtp-Source: AGRyM1vwvwGPuBp7z/XIoKlWkDKMY8JnO1t3HY94c0elZo3/2d39TUYxR+t5/rxgFh1iaB+puAZQAA==
+X-Received: by 2002:a05:6e02:1a43:b0:2d3:cded:23dc with SMTP id u3-20020a056e021a4300b002d3cded23dcmr3942385ilv.43.1655420865020;
+        Thu, 16 Jun 2022 16:07:45 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id z4-20020a029384000000b0032e91c1f73csm1439619jah.92.2022.06.16.16.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 16:07:44 -0700 (PDT)
+Subject: Re: [PATCH] selftests: make use of GUP_TEST_FILE macro
+To:     Nico Pache <npache@redhat.com>, Joel Savitz <jsavitz@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220609203217.3206247-1-jsavitz@redhat.com>
+ <CAA1CXcARipJgCW4PrxxUqf9fyCcD7+M1B0NRRZpdCfPXfrzrdQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <30ac57f2-c95b-27f3-888e-d89c125770b0@linuxfoundation.org>
+Date:   Thu, 16 Jun 2022 17:07:44 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAA1CXcARipJgCW4PrxxUqf9fyCcD7+M1B0NRRZpdCfPXfrzrdQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the past it had a problem not setting the pid/tid on the sample
-correctly when system-wide mode is used.  Although it's fixed now it'd
-be nice if we have a test case for it.
+On 6/9/22 3:50 PM, Nico Pache wrote:
+> LGTM! Good catch :)
+> 
+> Acked-by: Nico Pache <npache@redhat.com>
+> 
+> On Thu, Jun 9, 2022 at 4:37 PM Joel Savitz <jsavitz@redhat.com> wrote:
+>>
+>> Commit 17de1e559cf1 ("selftests: clarify common error when running
+>> gup_test") had most of its hunks dropped due to a conflict with another
+>> patch accepted into Linux around the same time that implemented the same
+>> behavior as a subset of other changes.
+>>
+>> However, the remaining hunk defines the GUP_TEST_FILE macro without
+>> making use of it. This patch makes use of the macro in the two relevant
+>> places.
+>>
+>> Furthermore, the above mentioned commit's log message erroneously describes
+>> the changes that were dropped from the patch.
+>>
+>> This patch corrects the record.
+>>
+>> Fixes: 17de1e559cf1 ("selftests: clarify common error when running gup_test")
+>>
+>> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+>> ---
 
-Cc: German Gomez <german.gomez@arm.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
-* skip if system-wide record was failed
+Applied to linux-kselftest fixes for next rc
 
- tools/perf/tests/shell/test_arm_spe.sh | 28 +++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/tests/shell/test_arm_spe.sh b/tools/perf/tests/shell/test_arm_spe.sh
-index e59044edc406..962841a51f27 100755
---- a/tools/perf/tests/shell/test_arm_spe.sh
-+++ b/tools/perf/tests/shell/test_arm_spe.sh
-@@ -23,17 +23,20 @@ glb_err=0
- cleanup_files()
- {
- 	rm -f ${perfdata}
-+	rm -f ${perfdata}.old
- 	exit $glb_err
- }
- 
- trap cleanup_files exit term int
- 
- arm_spe_report() {
--	if [ $2 != 0 ]; then
-+	if [ $2 = 0 ]; then
-+		echo "$1: PASS"
-+	elif [ $2 = 2 ]; then
-+		echo "$1: SKIPPED"
-+	else
- 		echo "$1: FAIL"
- 		glb_err=$2
--	else
--		echo "$1: PASS"
- 	fi
- }
- 
-@@ -85,5 +88,24 @@ arm_spe_snapshot_test() {
- 	arm_spe_report "SPE snapshot testing" $err
- }
- 
-+arm_spe_system_wide_test() {
-+	echo "Recording trace with system-wide mode $perfdata"
-+	perf record -o ${perfdata} -e arm_spe// -a \
-+		-- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
-+
-+	if [ $? != 0 ]; then
-+		arm_spe_report "SPE system-wide testing" 2
-+		return
-+	fi
-+
-+	perf_script_samples dd &&
-+	perf_report_samples dd
-+
-+	err=$?
-+	arm_spe_report "SPE system-wide testing" $err
-+}
-+
- arm_spe_snapshot_test
-+arm_spe_system_wide_test
-+
- exit $glb_err
--- 
-2.36.1.476.g0c4daa206d-goog
-
+thanks,
+-- Shuah

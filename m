@@ -2,135 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089CD54EA49
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875FE54EA4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378419AbiFPTo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
+        id S230190AbiFPTqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347111AbiFPTo0 (ORCPT
+        with ESMTP id S229793AbiFPTqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:44:26 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B4580C2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=gBBIiGrIzQFDdusUg+O8IwmvVD8wi/w7fagdVX80l70=; b=vZa9DhHtWjq1lMb3ZHtzkpRalg
-        gPOQOG9/87rrZsr2ifRQTfpoAahv7cEb8WzyEBDjcTBlP+WIoPTrQzehXaqLVycLVz3mmH4GOu7uZ
-        1UDfg0fVxWsLpN551c6bMEeOujXGmfbGcmsol/Spo+PuCW9nO1ukmOS+hxo+OkAUsC0u+Qco6mKOF
-        2Owc5fyoK4MP9M5jP2vGLGeu8J9Q+7MoiSUn8AzuMcIlppi0qrahk6/EO+7S973NieifmgCKxicY5
-        ABeeyVyqCdxVlteYYxjmK8MbJ/+ui42j6p5v9NDsjLBmjORXUQHRV/SX6NBaN02/QYL/v0Rrljt3a
-        y3r9jZiUpQ3PBRNcmCLB/6OYK5l/UphW/PjdXvV3M3IrjIWQSwrRakyC8Y6JSOu4NX4szA91WJKAu
-        bN/U1uVS2RNoV8Gj8oMM8pdD8S3U6UmUScDu9BF2nWDkSFgmIfSdF9PUWcyMv0TtGbu/FHi7ThN50
-        ek0GluXf2tsMkN/R3gSeVUwzlnJbiw9K2oiDZSaUNtUiLtibMD5EeVOrzu6/SV9H2Sd2+9IKAsNV9
-        0cpUIwc7/cF9yEkFVR5Fim8pSLSRe0hGcZ3CWXlgj0N1lz9X/G9/zlcbaPfXiQScKsvpvLXCeiHy7
-        e5rzIpu4QvGLVD4OFHcm1DOVmrduwZiMLwKTdL6U0=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH] net/9p: show warning on Tread/Twrite if wrong file mode
-Date:   Thu, 16 Jun 2022 21:44:16 +0200
-Message-ID: <1692377.rnsbsUYrV6@silver>
-In-Reply-To: <E1o1tHC-00039k-04@lizzy.crudebyte.com>
-References: <E1o1tHC-00039k-04@lizzy.crudebyte.com>
+        Thu, 16 Jun 2022 15:46:03 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998EF58E47;
+        Thu, 16 Jun 2022 12:46:01 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id BCDED6C1EAE;
+        Thu, 16 Jun 2022 19:46:00 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id AF7996C18FE;
+        Thu, 16 Jun 2022 19:45:59 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655408760; a=rsa-sha256;
+        cv=none;
+        b=LFI3oZzhp8nI4A9FAFyoAVY/uUhPvSCavYPFVjobzGzqLm68jeez/zMAGnfg53+3NWyXKd
+        l5CSBpeSb5V6Dl5pTZYi1dmC21CElt6JlT/eP8vYy8uVGFrV3Prs2iEl81e/cpKbJ/9xus
+        HvHBn2PoOmHLUQNt7Dba18HdIBywOZ88YTkC24vrEUcGHtdFBoQ4JZlIMGQvI29Uqo9e9G
+        HhewtdjHO6gtsG8tPFRT7fY4i3+x4HdnwuIYLa5LhnrlOmn8IA1CZx7KOzQnhRnxy5an2X
+        jy420Zya1i/Dr8D0SftYZyCwsfYUFOtc0jqpW3N2V0lxM4IhhN4BfSVhFSIZRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1655408760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=LtgRJbay2NJBh9NnnRVdPmX1G1OKRq+xJ0Jn94eAvOo=;
+        b=d6Fg37MmGo5c4qVumnPN+3sfwdD5cY7ofaAQBbT1IGr8l0j54Mc49SO2ct0g+1LP8uTbWF
+        +nEIYvGtjUWQjSasb3SgpDzyabdc6rIGLLrsOxNkjxVEtJHey0O5rpJ9nWP30B3Btfkqkf
+        E7ZYnYN8nFJwpTkdf2XbzRRyS+zyZvb5r8cmEI5DNGeWu3jZadaRIzpIC4FiFCGmi3FYrD
+        GilEy4cFqxjwKMosHrbFNi5M1WhZkwXYXhchM83/VNcVwYyg2hMW0z0tJXqFsYZdgyjgvt
+        EM6gpZ1ieDBFqvlaNGy1TipB912QsBY/nbTjxAN34FJmwXZCEpn/0JA/65Tuew==
+ARC-Authentication-Results: i=1;
+        rspamd-786f5898df-g7jcn;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Fumbling-Industry: 243f44d20affeaab_1655408760299_3844997658
+X-MC-Loop-Signature: 1655408760299:2357453851
+X-MC-Ingress-Time: 1655408760299
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.105.211.179 (trex/6.7.1);
+        Thu, 16 Jun 2022 19:46:00 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LPCMp3VjlzCd;
+        Thu, 16 Jun 2022 12:45:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1655408759;
+        bh=LtgRJbay2NJBh9NnnRVdPmX1G1OKRq+xJ0Jn94eAvOo=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=LAyVgVF+kNrFORxl+qJMPbk7y37I6M1Aay9bVKptc23dhb+aJLW4qRWnqWsGCIr/F
+         y5D1fON3vKZ0Ip/LDLaElrM3yKPJ4Ng5Ph6409mM+cxcmtf7YppNSURcVw7NnhiuJg
+         xhQmfA4EZNANXXlmBV0EMuOKDKESk+N89WheJE3rwV/Lun/lmlH5SZNEfYrjhfK4zf
+         6VRzeB9EPYHtEsYKWHJ4I+7CG/4to3vPSQzQ95v606VVhBaOy4yBjVo9QDfOVUpnXS
+         TphsXVBP3L9hPSFvWsZVHaGu+U85jfjxqybzVCrci5FnaHboE2iTFmIziddskfl77Y
+         v1wS2+k7oa9UQ==
+Date:   Thu, 16 Jun 2022 12:45:55 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     "alison.schofield@intel.com" <alison.schofield@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, a.manzanares@samsung.com
+Subject: Re: [PATCH 1/3] trace, cxl: Introduce a TRACE_EVENT for CXL Poison
+ Records
+Message-ID: <20220616194555.ps5ur2plizreqzwh@offworld>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+ <32a761fe7046680a4d50762fc43988def24a4bcd.1655250669.git.alison.schofield@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <32a761fe7046680a4d50762fc43988def24a4bcd.1655250669.git.alison.schofield@intel.com>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 16. Juni 2022 19:09:42 CEST Christian Schoenebeck wrote:
-> The netfs changes (eb497943fa21) introduced cases where 'Tread' was sent
-> to 9p server on a fid that was opened in write-only file mode. It took
-> some time to find the cause of the symptoms observed (EBADF errors in
-> user space apps). Add warnings to detect such issues easier in future.
-> 
-> Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-> Link: https://lore.kernel.org/netdev/3645230.Tf70N6zClz@silver/
-> ---
-> As requested by Dominique, here a clean version of my previous
-> EBADF trap code to be merged. Dominique, if you already have an
-> equivalent patch queued, then just go ahead. I don't mind.
-> 
-> I'm currently testing your EBADF fix patch and the discussed,
-> slightly adjusted versions. Looking good so far, but I'll report
-> back later on.
-> 
-> 
->  net/9p/client.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/net/9p/client.c b/net/9p/client.c
-> index 8bba0d9cf975..05dead12702d 100644
-> --- a/net/9p/client.c
-> +++ b/net/9p/client.c
-> @@ -1555,6 +1555,8 @@ p9_client_read(struct p9_fid *fid, u64 offset, struct
-> iov_iter *to, int *err) int total = 0;
->  	*err = 0;
-> 
-> +	WARN_ON((fid->mode & O_ACCMODE) == O_WRONLY);
-> +
->  	while (iov_iter_count(to)) {
->  		int count;
-> 
-> @@ -1648,6 +1650,8 @@ p9_client_write(struct p9_fid *fid, u64 offset, struct
-> iov_iter *from, int *err) p9_debug(P9_DEBUG_9P, ">>> TWRITE fid %d offset
-> %llu count %zd\n", fid->fid, offset, iov_iter_count(from));
-> 
-> +	WARN_ON((fid->mode & O_ACCMODE) == O_RDONLY);
-> +
->  	while (iov_iter_count(from)) {
->  		int count = iov_iter_count(from);
->  		int rsize = fid->iounit;
+On Tue, 14 Jun 2022, alison.schofield@intel.com wrote:
 
-Better postpone this patch for now: when I use cache=loose, everything looks
-fine. But when I use cache=mmap it starts with the following warnings on boot:
+>From: Alison Schofield <alison.schofield@intel.com>
+>
+>Add a trace event for CXL Poison List Media Error Records that
+>includes the starting DPA of the poison, the length, and the
+>the source of the poison.
+>
+>This trace event will be used by the CXL_MEM driver to log the
+>Media Errors returned by the GET_POISON_LIST Mailbox command.
+>
+>Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+>Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-[    7.164456] WARNING: CPU: 0 PID: 221 at net/9p/client.c:1653 p9_client_write+0x1b6/0x210 [9pnet]
-[    7.164528] ? aa_replace_profiles (security/apparmor/policy.c:1089) 
-[    7.164534] v9fs_file_write_iter (fs/9p/vfs_file.c:403) 9p
-[    7.164539] new_sync_write (fs/read_write.c:505 (discriminator 1)) 
-[    7.164551] vfs_write (fs/read_write.c:591) 
-[    7.164557] ksys_write (fs/read_write.c:644) 
-[    7.164559] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
-[    7.164571] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:115)
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
 
-[    9.698867] WARNING: CPU: 1 PID: 314 at net/9p/client.c:1653 p9_client_write+0x1b6/0x210 [9pnet]
-[    9.737339] ? folio_add_lru (./arch/x86/include/asm/preempt.h:103 mm/swap.c:468) 
-[    9.738599] ? _raw_spin_unlock (./arch/x86/include/asm/preempt.h:103 ./include/linux/spinlock_api_smp.h:143 kernel/locking/spinlock.c:186) 
-[    9.739940] v9fs_file_write_iter (fs/9p/vfs_file.c:403) 9p
-[    9.742655] new_sync_write (fs/read_write.c:505 (discriminator 1)) 
-[    9.744063] vfs_write (fs/read_write.c:591) 
-[    9.744858] ksys_write (fs/read_write.c:644) 
-[    9.745573] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
-[    9.746339] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:115)
-
-And then after booting, when I start to actually do something on guest, it
-spills the terminal with the following:
-
-[  876.260885] WARNING: CPU: 1 PID: 197 at net/9p/client.c:1653 p9_client_write+0x1b6/0x210 [9pnet]
-[  876.260955] ? preempt_count_add (./include/linux/ftrace.h:910 kernel/sched/core.c:5558 kernel/sched/core.c:5555 kernel/sched/core.c:5583) 
-[  876.260960] v9fs_file_write_iter (fs/9p/vfs_file.c:403) 9p
-[  876.260966] new_sync_write (fs/read_write.c:505 (discriminator 1)) 
-[  876.260972] vfs_write (fs/read_write.c:591) 
-[  876.260975] __x64_sys_pwrite64 (./include/linux/file.h:44 fs/read_write.c:707 fs/read_write.c:716 fs/read_write.c:713 fs/read_write.c:713) 
-[  876.260979] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
-[  876.260982] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:115)
-
-Best regards,
-Christian Schoenebeck
-
-
+>---
+> include/trace/events/cxl.h | 60 ++++++++++++++++++++++++++++++++++++++
+> 1 file changed, 60 insertions(+)
+> create mode 100644 include/trace/events/cxl.h
+>
+>diff --git a/include/trace/events/cxl.h b/include/trace/events/cxl.h
+>new file mode 100644
+>index 000000000000..17e707c3817e
+>--- /dev/null
+>+++ b/include/trace/events/cxl.h
+>@@ -0,0 +1,60 @@
+>+/* SPDX-License-Identifier: GPL-2.0 */
+>+#undef TRACE_SYSTEM
+>+#define TRACE_SYSTEM cxl
+>+
+>+#if !defined(_CXL_TRACE_H) ||  defined(TRACE_HEADER_MULTI_READ)
+>+#define _CXL_TRACE_H
+>+
+>+#include <linux/tracepoint.h>
+>+
+>+TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_UNKNOWN);
+>+TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_INTERNAL);
+>+TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_EXTERNAL);
+>+TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_INJECTED);
+>+TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_VENDOR);
+>+TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_INVALID);
+>+
+>+#define show_poison_source(source)					\
+>+	__print_symbolic(source,					\
+>+			{CXL_POISON_SOURCE_UNKNOWN,  "UNKNOWN"},	\
+>+			{CXL_POISON_SOURCE_EXTERNAL, "EXTERNAL"},	\
+>+			{CXL_POISON_SOURCE_INTERNAL, "INTERNAL"},	\
+>+			{CXL_POISON_SOURCE_INJECTED, "INJECTED"},	\
+>+			{CXL_POISON_SOURCE_VENDOR,   "VENDOR"},		\
+>+			{CXL_POISON_SOURCE_INVALID,  "INVALID"})
+>+
+>+TRACE_EVENT(cxl_poison_list,
+>+
+>+	    TP_PROTO(struct device *dev,
+>+		     int source,
+>+		     unsigned long start,
+>+		     unsigned int length),
+>+
+>+	    TP_ARGS(dev, source, start, length),
+>+
+>+	    TP_STRUCT__entry(
+>+		__string(name, dev_name(dev))
+>+		__field(int, source)
+>+		__field(u64, start)
+>+		__field(u32, length)
+>+	    ),
+>+
+>+	    TP_fast_assign(
+>+		__assign_str(name, dev_name(dev));
+>+		__entry->source = source;
+>+		__entry->start = start;
+>+		__entry->length = length;
+>+	    ),
+>+
+>+	    TP_printk("dev %s source %s start %llu length %u",
+>+		__get_str(name),
+>+		show_poison_source(__entry->source),
+>+		__entry->start,
+>+		__entry->length)
+>+);
+>+#endif /* _CXL_TRACE_H */
+>+
+>+/* This part must be outside protection */
+>+#undef TRACE_INCLUDE_FILE
+>+#define TRACE_INCLUDE_FILE cxl
+>+#include <trace/define_trace.h>
+>
+>--
+>2.31.1
+>

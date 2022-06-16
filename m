@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099CF54DFD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2887154DFE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 13:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiFPLPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 07:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S1376678AbiFPLSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 07:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiFPLPQ (ORCPT
+        with ESMTP id S1376623AbiFPLSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 07:15:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B318C5C872;
-        Thu, 16 Jun 2022 04:15:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Jun 2022 07:18:18 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95212AE3E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 04:18:17 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56C2461876;
-        Thu, 16 Jun 2022 11:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61BCC34114;
-        Thu, 16 Jun 2022 11:15:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655378113;
-        bh=tKlEDA1EasKYeVLhTpK38Q4V6iDP/hsRbWMhaW6i57c=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GiVwek66noUKCP/MpxO6ww/WST+HByktPkLVJ3P54zuvLopaypPwCcIRx6ezoLG6q
-         DaTjS/OJP3HgmoY3ECFRd3v5mqu2c8izuJGFmHBOq5sZee2Cmnswv4AO6UtmhB5/MB
-         lpBLKrBNQ6bBuUrJVioxOsPFAp6mkL5snuBCHfDDOS9LDTDc6LnEdEZp9aHLUeUhsl
-         zlKmjr+I+FbwBpd2/JB8khbW2xiM1KPpz3pE4W3+gUEs70G4yT/7r0RpHzMu5R50kJ
-         f4JVA8CLTwFTHArpp4C6Ms1vtz1nyC1LPxVwKD4YS1Ieuw/zKnzP1DA4mDw8wXfxd0
-         fnv/8qawZzlKg==
-From:   Mark Brown <broonie@kernel.org>
-To:     yung-chuan.liao@linux.intel.com,
-        Colin Ian King <colin.king@intel.com>,
-        ranjani.sridharan@linux.intel.com, perex@perex.cz,
-        alsa-devel@alsa-project.org, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, liam.r.girdwood@linux.intel.com,
-        kai.vehmanen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <20220614183809.163531-1-colin.i.king@gmail.com>
-References: <20220614183809.163531-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] ASoC: Intel: Skylake: remove redundant re-assignments to pointer array
-Message-Id: <165537811030.677284.4884559545577351783.b4-ty@kernel.org>
-Date:   Thu, 16 Jun 2022 12:15:10 +0100
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 3DD3A20223;
+        Thu, 16 Jun 2022 14:18:10 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1655378290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UUep/sgKumAUsqr6plkU9Uit353tpr6e7VY52A43bZ0=;
+        b=YiAxJPvvV+VFDy2XSr6BR5cdbKzD76jQII3SIj5C6MB9vm2znMEgKDIWYzacLLMmF22BCa
+        2P4Fj4GcyFRd30U/MQKTPEhLpkqnHCaHQNhkFkSDyk922sVXWm3s5eQ+0goo4GUSvksfwL
+        vEOXB5MlTAnJd6t5jVutTxtM1GHdNHg=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 9E3FB634C91;
+        Thu, 16 Jun 2022 14:18:09 +0300 (EEST)
+Date:   Thu, 16 Jun 2022 14:18:09 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, lee.jones@linaro.org,
+        mchehab@kernel.org, marcel.ziswiler@toradex.com
+Subject: Re: [PATCH v9 00/14] Add some DRM bridge drivers support for
+ i.MX8qm/qxp SoCs
+Message-ID: <YqsRcUsdZzcwqplJ@valkosipuli.retiisi.eu>
+References: <20220611141421.718743-1-victor.liu@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220611141421.718743-1-victor.liu@nxp.com>
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1655378290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UUep/sgKumAUsqr6plkU9Uit353tpr6e7VY52A43bZ0=;
+        b=e6Al/EFgjGfUA3ffYQXqQ+pB8jfciIVCkr/eD+HwQH6a28iLeoT9qnBnxvDrWlGDC1G4bC
+        TAL1Q6kVagX5RYOxNDpFWm5GRKyYpoyH/lbRI8lnU0IaxOt0UEHvsehRrdGh2jDjrCmlbF
+        dWaPE0w3Suw0AqxzNlPev6mdneTk4Fk=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1655378290; a=rsa-sha256; cv=none;
+        b=Ii1gQgxWnUvB0ovIO8owoWaYk7l8CClPi05NutKtp2BooN+OCcp1h+SO8xtvKtUi3AwY6S
+        JuYhzUIkO+r5g+PKmvZ96rYRNc2Rb5XPPu0FpKN5LohB6Xz3q40dZPfhsguz748iYkogqc
+        KmCsgUVajSzP3ZwLBJ46j70A4siyNrM=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 19:38:09 +0100, Colin Ian King wrote:
-> There are two occurrences where the pointer array is being assigned a value
-> that is never read, the pointer gets updated in the next iteration of a
-> loop. These assignments are redundant and can be removed.
-> 
-> Cleans up clang scan-build warnings:
-> sound/soc/intel/skylake/skl-topology.c:2953:3: warning: Value stored to
-> 'array' is never read [deadcode.DeadStores]
-> sound/soc/intel/skylake/skl-topology.c:3602:3: warning: Value stored to
-> 'array' is never read [deadcode.DeadStores]
-> 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+On Sat, Jun 11, 2022 at 10:14:07PM +0800, Liu Ying wrote:
+> Patch 1/14 and 2/14 add bus formats used by pixel combiner.
 
 Thanks!
 
-[1/1] ASoC: Intel: Skylake: remove redundant re-assignments to pointer array
-      commit: 1ec0c91f6d6b21703c17d5e89f32d52feac5887e
+For these:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Sakari Ailus

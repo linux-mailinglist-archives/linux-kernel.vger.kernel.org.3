@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC13754D603
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AE254D606
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 02:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348626AbiFPAS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 20:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S237382AbiFPATQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 20:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348242AbiFPASs (ORCPT
+        with ESMTP id S1348761AbiFPATH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 20:18:48 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46168289B8;
-        Wed, 15 Jun 2022 17:18:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id o7so26284217eja.1;
-        Wed, 15 Jun 2022 17:18:47 -0700 (PDT)
+        Wed, 15 Jun 2022 20:19:07 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1056767
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:18:57 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a10so49247pju.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 17:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uWi4nF3LCftLqINeiaIVVz1nfL07lMarTNt9vrQsNMw=;
-        b=PQ8nC5MVuAQT7r6QqDlFmyFHetwIZW8peR92ySiznfAD+szpx2xul39fjQAQ2Ed1m9
-         +vObU6FawxJDctyqr1bXpTNoFTG3avWjYpijMddHnWck1MpAkBxSCnXsKWeEytgw4i1H
-         E2WLbzluS/warij6VGMOWWl4T3JIhRoZUxNzYcpzZXB5V0JRy8Ui22PtXNG1VL8CR1bY
-         ZTDNbdM1BzsNAYXzkQXS6HdMEAwx99VXLRsc9lQVatqAQpWK9k8+sS1t6n4fb+Ztydmc
-         edVVwVDtjK8w8sJ90P7BesMfDBI9tOEEPhGz0bS+hMtzdNEcZ3ZZQFy4N5SK7kIMs5sI
-         jIig==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=BlXLrh+w6iAEnbbaKkgWXS6h862hDv6DtV9NSq4RxDQ=;
+        b=SSvaBcb2PDkzAHI5210PXM4EULUEyOnHgq3tomN4SbOSyNixZO61uekCz3S2o8vNL/
+         FaozSUF+SDRam8ROF4Drv9pi2fBnxWxmE4np+M2+5iUj5pdnY3AydnO67acIEbs3xj+T
+         Kvx5UusxuxtzJgUt+qpQztFqJjW8RLVAq98KjjheVGR3rOugRFqf6u+a5WkhQ8k1IL5L
+         Ek3Whq4Mu/8dufnrSjTymB4mij2dA8JrjKTy6pnpLP6a1eLsT+Do0WhiJSZ4LV40HVSM
+         sTfj0ubHUpELIZbyqCGsKGkP++mNRughAVzb7gn7EWlRaDBSCooB/njkmSr9jJpju1v8
+         Dwfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uWi4nF3LCftLqINeiaIVVz1nfL07lMarTNt9vrQsNMw=;
-        b=MwCthr8WYDot4jc2AG/DHiY7c9BiZObGjda9f7whkphyplU5e2UmUf44IS/GNvehiw
-         Mbkg2Bk+nkyM8tSs1iKDN0/hrJ9vByiZSIHRysjF7SiWeU7Vl3gtljsUQAPfDcksxsfJ
-         D5cMwO9Nl8Ce+2B//6QJ9ZCypSrwsbT+Yh0lPGKg0/4wUxqQv31qvuWo34iJOJ8eSbEl
-         vkmS1f5/1DAW6WZB3bKHz44OOHeV5dl9Ru1W6bcdCcvsJnUcTj2gDL77grbfmvzZFAay
-         KpRnM8mMXYZf7uxGg30Cbwi+hIz9DIufJSEB/YAZ640BiR6M1lkSSZl+AMGr65t5VdHV
-         OKMQ==
-X-Gm-Message-State: AJIora/ndeY3L3G+tKb7pCrStsXA7Aqomudaj/Y1yvqLXuudNHIDlmow
-        Hqt16mZ0jh2F10ByIaub6XE=
-X-Google-Smtp-Source: AGRyM1syMaFxhp8KJsk5hEzbDcVwz8aS0zK3BKaXWDAcVtdl18qMKw9nEQga6PpeIIGwYvmzKUqgOQ==
-X-Received: by 2002:a17:907:968b:b0:70f:30b7:9324 with SMTP id hd11-20020a170907968b00b0070f30b79324mr2189545ejc.19.1655338725705;
-        Wed, 15 Jun 2022 17:18:45 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id y11-20020a056402270b00b0042e1cbc4471sm542546edd.3.2022.06.15.17.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 17:18:45 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BlXLrh+w6iAEnbbaKkgWXS6h862hDv6DtV9NSq4RxDQ=;
+        b=693fme3bxUI8jBhWCKa7ZhnIcnS+q91Yp064AQoZxgMb/J3HovMi0DuxbbCeXJOk0+
+         dAOvKBXcUcofbHm2jTpAGcuc9mxoJzAFTraXP/UmVQlx6kXq0u/gPk0I5rTNquNYrYzQ
+         /bVDVroZjjvY/AfjF46YrnBJyYzWmY37Q5SckGGUgScJ5BOyLS0T3BXp4YB+tKsMr2KL
+         VdPFoNqS8IxVeOng97/GL80oOFUdM3u6kFe/ZH8+jl2LOdtc+UuLl6clR90mgqJq5fiF
+         9d083qc+sJrkCBDrmJVHEjD1ou32MJwNrESBL1jmbV3H90nw+oih3Jgz4zwCZbKbXbPw
+         O5iw==
+X-Gm-Message-State: AJIora+5feMh66d3IDVSNSMgwkwSeSl8IyokggeEqbutY2+BJ1/c76Mm
+        8ll0LUz5fJIWzfLwtlQCi2mekQ==
+X-Google-Smtp-Source: AGRyM1um7PLc5JE4aT0snHxaDPEkbGJanTCL04ITZiHCM879PLK2zUgx/8FxogW4/ZwbtacQiWzyrQ==
+X-Received: by 2002:a17:902:f64c:b0:156:4349:7e9b with SMTP id m12-20020a170902f64c00b0015643497e9bmr2251860plg.139.1655338737145;
+        Wed, 15 Jun 2022 17:18:57 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090a588a00b001e2f892b352sm2397897pji.45.2022.06.15.17.18.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 17:18:56 -0700 (PDT)
+Message-ID: <7f641ee5-ba10-53d0-5056-420b751e77c1@linaro.org>
+Date:   Wed, 15 Jun 2022 17:18:55 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] arm64: dts: marvell: adjust whitespace around '='
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v8 3/3] dt-bindings: mtd: qcom_nandc: document qcom,boot-partitions binding
-Date:   Thu, 16 Jun 2022 02:18:35 +0200
-Message-Id: <20220616001835.24393-4-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220616001835.24393-1-ansuelsmth@gmail.com>
-References: <20220616001835.24393-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220526204525.832847-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220526204525.832847-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document new qcom,boot-partition binding used to apply special
-read/write layout to boot partitions.
+On 26/05/2022 13:45, Krzysztof Kozlowski wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Output compared with dtx_diff and fdtdump.
+> ---
+>  arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts    | 4 ++--
+>  arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi      | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts | 4 ++--
+>  arch/arm64/boot/dts/marvell/cn9130-db.dtsi              | 2 +-
+>  4 files changed, 6 insertions(+), 6 deletions(-)
 
-QCOM apply a special layout where spare data is not protected
-by ECC for some special pages (used for boot partition). Add
-Documentation on how to declare these special pages.
+Any comments here? I can also take it to arm-soc, assuming there are no
+objections.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- .../devicetree/bindings/mtd/qcom,nandc.yaml   | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-index 84ad7ff30121..482a2c068740 100644
---- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-+++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-@@ -102,6 +102,31 @@ allOf:
-             - const: rx
-             - const: cmd
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,ipq806x-nand
-+
-+    then:
-+      properties:
-+        qcom,boot-partitions:
-+          $ref: /schemas/types.yaml#/definitions/uint32-matrix
-+          items:
-+            items:
-+              - description: offset
-+              - description: size
-+          description:
-+            Boot partition use a different layout where the 4 bytes of spare
-+            data are not protected by ECC. Use this to declare these special
-+            partitions by defining first the offset and then the size.
-+
-+            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
-+            and should be declared in ascending order.
-+
-+            Refer to the ipq8064 example on how to use this special binding.
-+
- required:
-   - compatible
-   - reg
-@@ -135,6 +160,8 @@ examples:
-         nand-ecc-strength = <4>;
-         nand-bus-width = <8>;
- 
-+        qcom,boot-partitions = <0x0 0x58a0000>;
-+
-         partitions {
-           compatible = "fixed-partitions";
-           #address-cells = <1>;
--- 
-2.36.1
-
+Best regards,
+Krzysztof

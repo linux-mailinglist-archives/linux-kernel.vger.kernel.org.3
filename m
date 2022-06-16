@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC9A54DF7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F233D54DF7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 12:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376514AbiFPKvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 06:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376370AbiFPKvA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1376332AbiFPKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 16 Jun 2022 06:51:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8E05DD00
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:50:59 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230410AbiFPKu7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Jun 2022 06:50:59 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0275DD00
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 03:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655376659; x=1686912659;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dea6+J/lzTy4mTQTAX5+OHD7W4Cv1JGiuyOOmO/Pki8=;
-  b=Vy0YkOKPH0+p1rcCrzuHN+5zvUyoqroOQjEfD8Mn/5eZbEzdZD8axza/
-   xuZN5v46SNoomDHyv7KUKTWM0lN2Say2XXGtfUOQNY5sNCrTCMdheDkYN
-   oaYReSJXiyFMBEeBeT1SIIVjPuJ201WAiBIY4QlLYQvUQovCQQN8FN9Mj
-   z16bHgNHTfzLHzNGviABUIP3eBuq1kJfNHC4BAmmKKdfaGfOEqfh3gIOZ
-   ew68ivinpLF79P4tDKMwRED89QbV5rpHdzUWTX9JM0AI0/tMPqo1nD/5i
-   gDB71/a/GJQklBlRSqM9KKJJD5maTXhr4savkhNsc2kJTZffkwT8wSBqe
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="276796187"
+  t=1655376658; x=1686912658;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t50xOY5g1xaxtZHzE7OAB+CqWcuyhSiUYsITH+LFj7U=;
+  b=Waje5z33w0qL/ZNmxQeIQc9ocJuCEf/vS43urFzkgJOc5cBLo5uyJ2iX
+   in4xcBMpXeTpiW5v6yNarGnDI0u6urJpbAfhSu44DDZuq8RM3kzaIbJin
+   jl24EanEuIJC+kt3BOMXr4gJCZzw4i/uj3neRQ04/pjShJvKk2AEUJbvm
+   OshQlzZVsH/VvmoS0HF6hn2FhUgjC+TEr2fs6ybl3+fIaSED4/b0lZyWh
+   aILM7+yzTwdKbNSzQKjGpbO2lsLWao/RmrOkfLpF65pghRDcjumWvWb/g
+   LzzGhW3BG7a2RyuREiQ2e86+CRpt/u+gE4MAa8mTr9A/JdklzmorWlYOb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279937045"
 X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="276796187"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:50:59 -0700
+   d="scan'208";a="279937045"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 03:50:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="687769188"
+   d="scan'208";a="674969936"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Jun 2022 03:50:56 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jun 2022 03:50:56 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o1n5U-000OJ0-73;
+        id 1o1n5U-000OIv-5c;
         Thu, 16 Jun 2022 10:50:56 +0000
-Date:   Thu, 16 Jun 2022 18:50:20 +0800
+Date:   Thu, 16 Jun 2022 18:50:21 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        mike.kravetz@oracle.com
-Cc:     kbuild-all@lists.01.org, songmuchun@bytedance.com,
-        akpm@linux-foundation.org, catalin.marinas@arm.com,
-        will@kernel.org, anshuman.khandual@arm.com,
-        baolin.wang@linux.alibaba.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] arm64/hugetlb: Implement arm64 specific
- hugetlb_mask_last_hp
-Message-ID: <202206161848.w1bWqr7O-lkp@intel.com>
-References: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ardb:jump-label-nop-patching-cleanup-v2 6/6]
+ kernel/jump_label.c:336:13: error: static declaration of
+ 'arch_jump_label_transform_static' follows non-static declaration
+Message-ID: <202206161816.11vbdgXt-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolin,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on linus/master v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/arm64-hugetlb-Implement-arm64-specific-hugetlb_mask_last_hp/20220616-113640
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-buildonly-randconfig-r001-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161848.w1bWqr7O-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git jump-label-nop-patching-cleanup-v2
+head:   744ed73c1f97ab081fa753030a27d7fe5865f8c4
+commit: 744ed73c1f97ab081fa753030a27d7fe5865f8c4 [6/6] jump_label: make initial NOP patching the special case
+config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220616/202206161816.11vbdgXt-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f1309dfbc2b70ec5dd72ac38e95a49b7be42b9b6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baolin-Wang/arm64-hugetlb-Implement-arm64-specific-hugetlb_mask_last_hp/20220616-113640
-        git checkout f1309dfbc2b70ec5dd72ac38e95a49b7be42b9b6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=744ed73c1f97ab081fa753030a27d7fe5865f8c4
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb jump-label-nop-patching-cleanup-v2
+        git checkout 744ed73c1f97ab081fa753030a27d7fe5865f8c4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   arch/arm64/mm/hugetlbpage.c:371:15: warning: no previous prototype for 'hugetlb_mask_last_hp' [-Wmissing-prototypes]
-     371 | unsigned long hugetlb_mask_last_hp(struct hstate *h)
-         |               ^~~~~~~~~~~~~~~~~~~~
-   arch/arm64/mm/hugetlbpage.c: In function 'hugetlb_mask_last_hp':
->> arch/arm64/mm/hugetlbpage.c:380:9: error: duplicate case value
-     380 |         case PMD_SIZE:
-         |         ^~~~
-   arch/arm64/mm/hugetlbpage.c:376:9: note: previously used here
-     376 |         case PUD_SIZE:
-         |         ^~~~
+>> kernel/jump_label.c:336:13: error: static declaration of 'arch_jump_label_transform_static' follows non-static declaration
+     336 | static void arch_jump_label_transform_static(struct jump_entry *entry,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/dynamic_debug.h:6,
+                    from include/linux/printk.h:584,
+                    from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/node.h:18,
+                    from include/linux/memory.h:19,
+                    from kernel/jump_label.c:9:
+   include/linux/jump_label.h:223:13: note: previous declaration of 'arch_jump_label_transform_static' with type 'void(struct jump_entry *, enum jump_label_type)'
+     223 | extern void arch_jump_label_transform_static(struct jump_entry *entry,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +380 arch/arm64/mm/hugetlbpage.c
+vim +/arch_jump_label_transform_static +336 kernel/jump_label.c
 
-   370	
-   371	unsigned long hugetlb_mask_last_hp(struct hstate *h)
-   372	{
-   373		unsigned long hp_size = huge_page_size(h);
-   374	
-   375		switch (hp_size) {
-   376		case PUD_SIZE:
-   377			return PGDIR_SIZE - PUD_SIZE;
-   378		case CONT_PMD_SIZE:
-   379			return PUD_SIZE - CONT_PMD_SIZE;
- > 380		case PMD_SIZE:
-   381			return PUD_SIZE - PMD_SIZE;
-   382		case CONT_PTE_SIZE:
-   383			return PMD_SIZE - CONT_PTE_SIZE;
-   384		default:
-   385			break;
-   386		}
-   387	
-   388		return ~0UL;
-   389	}
-   390	
+   334	
+   335	#ifndef arch_jump_label_transform_static
+ > 336	static void arch_jump_label_transform_static(struct jump_entry *entry,
+   337						     enum jump_label_type type)
+   338	{
+   339		/* nothing to do on most architectures */
+   340	}
+   341	#endif
+   342	
 
 -- 
 0-DAY CI Kernel Test Service

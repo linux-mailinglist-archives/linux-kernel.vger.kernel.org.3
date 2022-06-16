@@ -2,42 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9DD54E9CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B40354E9D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 21:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377912AbiFPTIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 15:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S1378132AbiFPTLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 15:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378036AbiFPTId (ORCPT
+        with ESMTP id S230230AbiFPTLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:08:33 -0400
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F3D36321
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 12:08:32 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 1uqzoyzz62ovC1uqzoKVy7; Thu, 16 Jun 2022 21:08:30 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 16 Jun 2022 21:08:30 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <d2637e89-db7e-e69a-f97b-ab87ed5af25a@wanadoo.fr>
-Date:   Thu, 16 Jun 2022 21:08:29 +0200
+        Thu, 16 Jun 2022 15:11:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3093A5DF;
+        Thu, 16 Jun 2022 12:11:42 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25GHvN52015313;
+        Thu, 16 Jun 2022 19:11:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Gi4D21+TGtq8NM9IhuW3KnTyLPDV0Qd0GHT/kz34hrY=;
+ b=kI1Fd0XS5NLrN1CuW6nXGnjcDceRRPBDil57+58wMPpANPS8yMDtVv8l/UPF+B7ksXDZ
+ e6ZuBcHRlXNHlLOGMTVY6NW+SW9jlOoisuCNyj/eKk+WtbjbUYmvyJ+TzmXDU0XkhsKY
+ qdmtVUbM6V0evzb1J/fgnxkYPolo/5IGDMy7p13IBU36VV7Q+I2FZ9YmNadYnb3picdQ
+ Rf8Y6vIhxnZHbLR/vu/+u6Qtnm8HAV8wAodq5iWuY6cgX+uvTvQ7OYBLYPRGmaMzSdxZ
+ bx2QrlJykBJ1wicgP25NoXuly/5PuJzb6sFt8Q8VJvIsGPUOobrTe/mbUG4hQ9nWoZzE +w== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqhbdqh8v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jun 2022 19:11:35 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25GJ5ijE014083;
+        Thu, 16 Jun 2022 19:11:35 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma02dal.us.ibm.com with ESMTP id 3gmjpamjug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jun 2022 19:11:34 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25GJBXhA27984154
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Jun 2022 19:11:33 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 78B59136055;
+        Thu, 16 Jun 2022 19:11:33 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C342136053;
+        Thu, 16 Jun 2022 19:11:32 +0000 (GMT)
+Received: from li-37e927cc-2b02-11b2-a85c-931637a79255.ibm.com.com (unknown [9.160.59.133])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Jun 2022 19:11:31 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     james.bottomley@hansenpartnership.com
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH] ibmvfc: multiqueue bug fixes
+Date:   Thu, 16 Jun 2022 12:11:24 -0700
+Message-Id: <20220616191126.1281259-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] bus: (mvebu-mbus) Add missing of_node_put()
-Content-Language: en-US
-To:     Liang He <windhl@126.com>, pali@kernel.org, lpieralisi@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220616020135.3973141-1-windhl@126.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220616020135.3973141-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OuC6Z17xocPFoGl6bUNTJgnPPSSq_d0k
+X-Proofpoint-GUID: OuC6Z17xocPFoGl6bUNTJgnPPSSq_d0k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-16_16,2022-06-16_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 mlxlogscore=480 spamscore=0 impostorscore=0 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206160077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,90 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 16/06/2022 à 04:01, Liang He a écrit :
-> In mvebu_mbus_dt_init(), of_find_matching_node_and_match() and
-> of_find_node_by_phandle() will both return node pointers with
-> refcount incremented. We should use of_node_put() in fail path
-> or when it is not used anymore.
-> 
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->   changelog:
-> 
->    v2: (1) use real name (2) add of_node_put when not used anymore
-> 
->    v1: add of_node_put in fail path
-> 
-> 
->   drivers/bus/mvebu-mbus.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-> index db612045616f..e168c8de2ae8 100644
-> --- a/drivers/bus/mvebu-mbus.c
-> +++ b/drivers/bus/mvebu-mbus.c
-> @@ -1327,22 +1327,28 @@ int __init mvebu_mbus_dt_init(bool is_coherent)
->   
->   	prop = of_get_property(np, "controller", NULL);
->   	if (!prop) {
-> +		of_node_put(np);
->   		pr_err("required 'controller' property missing\n");
->   		return -EINVAL;
->   	}
->   
->   	controller = of_find_node_by_phandle(be32_to_cpup(prop));
->   	if (!controller) {
-> +		of_node_put(np);
->   		pr_err("could not find an 'mbus-controller' node\n");
->   		return -ENODEV;
->   	}
->   
->   	if (of_address_to_resource(controller, 0, &mbuswins_res)) {
-> +		of_node_put(np);
-> +		of_node_put(controller);
->   		pr_err("cannot get MBUS register address\n");
->   		return -EINVAL;
->   	}
->   
->   	if (of_address_to_resource(controller, 1, &sdramwins_res)) {
-> +		of_node_put(np);
-> +		of_node_put(controller);
->   		pr_err("cannot get SDRAM register address\n");
->   		return -EINVAL;
->   	}
-> @@ -1360,6 +1366,8 @@ int __init mvebu_mbus_dt_init(bool is_coherent)
->   			pr_warn(FW_WARN "deprecated mbus-mvebu Device Tree, suspend/resume will not work\n");
->   	}
->   
-> +	of_node_put(controller);	
-> +
->   	mbus_state.hw_io_coherency = is_coherent;
->   
->   	/* Get optional pcie-{mem,io}-aperture properties */
-> @@ -1378,6 +1386,11 @@ int __init mvebu_mbus_dt_init(bool is_coherent)
->   		return ret;
+Fixes for a couple observed crashes of the ibmvfc driver when in MQ mode.
 
-I guess that a "of_node_put(np);" is missing before this return.
-This really looks like an error handling path and it has not been 
-updated as all the other path, including the normal one below.
+Tyrel Datwyler (2):
+  ibmvfc: store vhost pointer during subcrq allocation
+  ibmvfc: alloc/free queue resource only during probe/remove
 
-Moreover having an error handling path and some gotos is a more usual 
-solution. It avoids code duplication. (but it is also a matter of taste...)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 82 ++++++++++++++++++++++++++--------
+ drivers/scsi/ibmvscsi/ibmvfc.h |  2 +-
+ 2 files changed, 65 insertions(+), 19 deletions(-)
 
-CJ
-
->   
->   	/* Setup statically declared windows in the DT */
-> -	return mbus_dt_setup(&mbus_state, np);
-> +	ret = mbus_dt_setup(&mbus_state, np);
-> +
-> +	of_node_put(np);
-> +	
-> +	return ret;
-> +
-
-Nitpick : This extra new line is not needed.
-
->   }
->   #endif
+-- 
+2.35.3
 

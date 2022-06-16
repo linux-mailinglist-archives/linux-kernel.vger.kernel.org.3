@@ -2,133 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F51854ED91
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003A354ED93
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 00:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378950AbiFPWrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 18:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
+        id S1378708AbiFPWsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 18:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379091AbiFPWri (ORCPT
+        with ESMTP id S1379146AbiFPWsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:47:38 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0F012774
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:47:36 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id q11so3499291oih.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:47:36 -0700 (PDT)
+        Thu, 16 Jun 2022 18:48:05 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9854AE33
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso6338367pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GM+MxIdk9slM5wjdPHD9Zax+Dsa/pID19o6T4nwKFOY=;
-        b=AdJKbDYjyOsot33Mt5w2UgXp5E4FLRH4NkzxBwxPiPtcjG2oX+cnUys4Q6R518FkGs
-         jfrSh2msjbfDnnVQvq1MPQk3EcamkjY62ZNWlHlWXaJF5Sez/ZSk0AW3/ig1FajhibDb
-         rBr+oz6HJTMU27pUb0lEe61u6Fk7Maah4z/+4=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=D4wYNhCrugPOLx6NQzh5DQYpCR2JYLvdgRSxgN/KnFY=;
+        b=NAJ2unUhWosiXfMkbjIrpO0dDiluf91z8///fATeLpwgILwfiE+kM5YBdFpaUIGq17
+         5Um6HU+xdw4baxlCIWd0jms6yo85llzLBx9PA94P4f+5xbogFjqL+R9fGYtsmx9TavHG
+         4U6P+fkeo1BWzuHlFczZV7V9vLQXom6j4Dgm+ZcAssevg5Lvhzh1Jq3LzX84t3yl6lTX
+         fhSPUkSh9H+GQ3sCWePzR9BGpoUAiFh3rDz9jUbV49abC41Pf0U9T9eCCaS3QXXs+/iM
+         uRcaJnnBxkLPV6yOfXH1DDlEvA2wCJe5KDfvvp4hgl8Lumv5/dZCJKD28YBg1Ad9RtBr
+         sPpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=GM+MxIdk9slM5wjdPHD9Zax+Dsa/pID19o6T4nwKFOY=;
-        b=Z9zEThTN2essh7nYJMQwGoajQEk4i1vDnKqSw3H4O9H/flyuNgJKy372uguGp4zPJq
-         STq/V09wd8Y3detUzw8KXdSYjnoGXN6Vg5iTdrLyODxuNoxYGhh1DfsG9zZ//VQOffWc
-         govcY82+XX0FVYICrIXZkdijR52MnCS/usHReGIhrAKvO9NXmEltQjHZ0JMkochSOEi1
-         583Al5eIK/svzUAsxhtTVMebbQtyOrusdg4awgmkiAOOvXLqxbPAKoDoMLz+6TZNbazS
-         efm7g1C0uIUYE27AUJDwYkiM/us5FpLVfwJyYyeFARlpJzdGc3EeMue83Lj7hDQWOgza
-         uFFw==
-X-Gm-Message-State: AJIora9DjbKa25/3cS0eabOE+Yyms9qc0UL/1N59r1EJXGcSM9Npa3oa
-        8bcQ+UypIskyd/cak5WQ592rAw==
-X-Google-Smtp-Source: AGRyM1sB8bWR1e15e8NLmVfJh4/Uu6LO7hmk6kC9SvkATS7W4FbUb3nJs40uaE6qDhQHX7dHApDNcw==
-X-Received: by 2002:a05:6808:1b12:b0:32e:6c9f:fb13 with SMTP id bx18-20020a0568081b1200b0032e6c9ffb13mr3680171oib.172.1655419655747;
-        Thu, 16 Jun 2022 15:47:35 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id l3-20020a4aa783000000b0041bc35464e0sm1719359oom.0.2022.06.16.15.47.35
+        bh=D4wYNhCrugPOLx6NQzh5DQYpCR2JYLvdgRSxgN/KnFY=;
+        b=0QXUWEBrXwqZGbnUrlA66rFBz7dztijDDkFdTraKlguamxIa0O+xk0kiHbzlviS0L/
+         ec2Ssc7lBfflYZCWtfmiHTHBLjUXwMoN1VqhNsKUwTSkLI8rbiYlh5m9X/3DypXapLRs
+         zobmUs9vzIhht/aaIPDhiuFLd4DteclqRrZl8Oy8See3gGTzmjFwG91H909VxBuzzppH
+         BjJj0d2AP80NSwjUWtoNnVucKjGxVGP8ylyVyvNbSNQwOp3RCh6BMkkdC3qQimBwK4t5
+         rncKL2fSd3Vnz7VOIlZp9pWPg32KnR2Pk9rF2kBQJj7rQ3BhzvLmRJNPhzhHkq6xJ2qG
+         dJ9A==
+X-Gm-Message-State: AJIora9usjKDLnnU51RTqUxwM8YnfHlmlPFEOAk1tTaoHR5j0T1vNMmU
+        +ccnPY8Ko9sp83uWUAEiltSLHQ==
+X-Google-Smtp-Source: AGRyM1vc+vcRuQ2TZeqUJaBdLXB66+ueezXpaJBqAh1uNNDMle811gM+06V92iS2MmAk6l2OcEBXJQ==
+X-Received: by 2002:a17:902:8e86:b0:168:d6d6:660f with SMTP id bg6-20020a1709028e8600b00168d6d6660fmr6404813plb.35.1655419683436;
+        Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id c18-20020a170902b69200b0015ee24acf38sm2096401pls.212.2022.06.16.15.48.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:47:35 -0700 (PDT)
-Subject: Re: [PATCH 1/2] selftests/x86/signal: Adjust the test to the kernel's
- altstack check
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220401221014.13556-1-chang.seok.bae@intel.com>
- <20220401221014.13556-2-chang.seok.bae@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8b3eb12a-a962-a17e-04d4-7121d751504b@linuxfoundation.org>
-Date:   Thu, 16 Jun 2022 16:47:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 16 Jun 2022 15:48:03 -0700 (PDT)
+Message-ID: <ddbaa8fa-dff5-671d-c476-fe8fd616587f@linaro.org>
+Date:   Thu, 16 Jun 2022 15:48:02 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220401221014.13556-2-chang.seok.bae@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: mfd: atmel,flexcom: Add new
+ compatible string for lan966x
 Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, UNGLinuxDriver@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220612152604.24280-1-kavyasree.kotagiri@microchip.com>
+ <20220612152604.24280-3-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220612152604.24280-3-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 4:10 PM, Chang S. Bae wrote:
-> The test assumes an insufficient altstack is allowed. Then it raises a
-> signal to test the delivery failure due to an altstack overflow.
+On 12/06/2022 08:26, Kavyasree Kotagiri wrote:
+> LAN966x SoC flexcoms has two optional I/O lines. Namely, CS0 and CS1
+> in flexcom SPI mode. CTS and RTS in flexcom USART mode. These pins
+> can be mapped to lan966x FLEXCOM_SHARED[0-20] pins and usage depends on
+> functions being configured.
 > 
-> The kernel now provides an option to tweak sigaltstack()'s sanity check to
-> prevent an insufficient altstack. ENOMEM is returned on the check failure.
-> 
-> Adjust the code to skip the test when this option is on.
-
-Mention the option name here and in the Skip message.
-
-> 
-> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 > ---
->   tools/testing/selftests/x86/sigaltstack.c | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
+> v2 -> v3:
+>  - Add reg property of lan966x missed in v2.
 > 
-> diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
-> index f689af75e979..22a88b764a8e 100644
-> --- a/tools/testing/selftests/x86/sigaltstack.c
-> +++ b/tools/testing/selftests/x86/sigaltstack.c
-> @@ -88,8 +88,18 @@ static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
->   
->   static void test_sigaltstack(void *altstack, unsigned long size)
->   {
-> -	if (setup_altstack(altstack, size))
-> +	if (setup_altstack(altstack, size)) {
-> +		/*
-> +		 * The kernel may return ENOMEM when the altstack size
-> +		 * is insufficient. Skip the test in this case.
-> +		 */
-> +		if (errno == ENOMEM && size < at_minstack_size) {
-> +			printf("[SKIP]\tThe running kernel disallows an insufficient size.\n");
+> v1 -> v2:
+>  - Use allOf:if:then for lan966x dt properties
+> 
+>  .../bindings/mfd/atmel,flexcom.yaml           | 75 ++++++++++++++++++-
+>  1 file changed, 73 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> index cee9c93ce4b9..d9b0fe2b0211 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> @@ -16,10 +16,13 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    enum: atmel,sama5d2-flexcom
+> +    enum:
+> +      - atmel,sama5d2-flexcom
+> +      - microchip,lan966x-flexcom
 
-Please improve this message to clearly why it is okay to skip the test.
-Mention that the option to disallowing insufficient is enabled and that
-the test can't be run.
+And here you have correct syntax...
 
-
-> +			return;
-> +		}
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+>  
+>    clocks:
+>      maxItems: 1
+> @@ -46,6 +49,27 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [1, 2, 3]
+>  
+> +  microchip,flx-shrd-pins:
+> +    description: Specify the Flexcom shared pins to be used for flexcom
+> +      chip-selects.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      minimum: 0
+> +      maximum: 20
 > +
->   		err(1, "sigaltstack()");
-> +	}
->   
->   	sigalrm_expected = (size > at_minstack_size) ? true : false;
->   
-> 
+> +  microchip,flx-cs:
+> +    description: Flexcom chip selects. Here, value of '0' represents "cts" line
+> +      of flexcom USART or "cs0" line of flexcom SPI and value of '1' represents
+> +      "rts" line of flexcom USART or "cs1" line of flexcom SPI.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      minimum: 0
+> +      maximum: 1
+> +
+>  patternProperties:
+>    "^serial@[0-9a-f]+$":
+>      description: See atmel-usart.txt for details of USART bindings.
+> @@ -72,6 +96,25 @@ required:
+>    - ranges
+>    - atmel,flexcom-mode
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,lan966x-flexcom
+> +
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +          maxItems: 2
 
-With these changes:
+maxItems are not needed here.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> +          items:
+> +            - description: Flexcom base regsiters map
+> +            - description: Flexcom shared registers map
+> +      required:
+> +        - microchip,flx-shrd-pins
+> +        - microchip,flx-cs
 
-thanks,
--- Shuah
+You need "else:" setting reg to maxItems:1 and disallowing the
+properties (microchip,flx-cs:false). See for example:
+https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/media/renesas,vsp1.yaml#L53
+
+
+
+Best regards,
+Krzysztof

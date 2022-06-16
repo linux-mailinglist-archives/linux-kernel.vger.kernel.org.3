@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1898654EC44
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52E354EC46
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 23:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379112AbiFPVKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 17:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S1378805AbiFPVM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 17:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379098AbiFPVKr (ORCPT
+        with ESMTP id S229518AbiFPVMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:10:47 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EF060BB4;
-        Thu, 16 Jun 2022 14:10:46 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 16C50C009; Thu, 16 Jun 2022 23:10:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655413845; bh=VbuObtaq/Xj/9czX/5l9zKA6V33YfeHnptJycN7lX/0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w9YjB7axwSR9K81mBACZ3+xb0RqogmbKoz1Zarpo4jnfhdMd9+hknehWfSnusNzJs
-         hy23z8e0asKymmHwDcXWZSFGoGqtVHNpPQqM1G462vvXFuyl2OCVq0KqiiZoHQjA/H
-         b1gjHYR6xSSnv3dRAcjGV7L4QcsWzChrczmvihwcF/iobah9gVlkCZ7o7vzZu3RtT7
-         kET1Z/JzV/KtORxSl0Ht50JO+c6bIyTjP7nWZP7vfFxM2ZHqaHN+gcW+jijVkmUSrW
-         wsQI/iOdjpQon262la6/V3oZ+BXXFBNGIOaInOVbrqN8ijTRk+xOIv3Eewg5B/fvjj
-         4TbUUxjJUDAGA==
+        Thu, 16 Jun 2022 17:12:24 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF70A60BB4;
+        Thu, 16 Jun 2022 14:12:23 -0700 (PDT)
+Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N7Qt9-1neVfk3JaH-017mEH; Thu, 16 Jun 2022 23:12:22 +0200
+Received: by mail-ot1-f51.google.com with SMTP id a21-20020a9d4715000000b0060bfaac6899so1823021otf.12;
+        Thu, 16 Jun 2022 14:12:21 -0700 (PDT)
+X-Gm-Message-State: AJIora9TjP0a00PBsQURWsgXb12WAwMMa6UXwrIP5I9R8OXtoZqSBBre
+        ADDz3gCl6bvUvzLaH5L5C1dJ3NolVWe2KQxeYQY=
+X-Google-Smtp-Source: AGRyM1vsIgc89v9FEfZY2hXw+qDDKYDoyj4lZ95Az7j+neXL1rj/frpwyBwmT3KawTqhGlZqV+2aaoMOxNa7NrGaWtQ=
+X-Received: by 2002:a0d:d84d:0:b0:314:2bfd:ddf3 with SMTP id
+ a74-20020a0dd84d000000b003142bfdddf3mr8091696ywe.347.1655413929938; Thu, 16
+ Jun 2022 14:12:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-6-tmaimon77@gmail.com>
+ <CAK8P3a2CNxijmy0AO6NEfg=hxQZn5WxgQij4JgkTjDTfZZSScA@mail.gmail.com> <CAP6Zq1h+PzkD1vjx787F_tbk30rAZHEkZp9uNUOmrFSd4gLO=g@mail.gmail.com>
+In-Reply-To: <CAP6Zq1h+PzkD1vjx787F_tbk30rAZHEkZp9uNUOmrFSd4gLO=g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 16 Jun 2022 23:11:53 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1=n7QNaJRw6Wru13Lso6EApTqhsuGmgdkh2B3AdrE+_g@mail.gmail.com>
+Message-ID: <CAK8P3a1=n7QNaJRw6Wru13Lso6EApTqhsuGmgdkh2B3AdrE+_g@mail.gmail.com>
+Subject: Re: [PATCH v2 05/20] watchdog: npcm_wdt: Add NPCM845 watchdog support
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:NIjOik/WJEzdDxdYA1cJmP0wxFsRS3ajAia3aOO7OgSIB0ygYQ0
+ EKA0iUea43JU5UwzuViKob61gfqb+ZTia2qBLKj4a3ceIIy7HlTb7mqd2NRJhpCLFCLrS8r
+ QDnI0+MG9S3sSQWTx580s8yOg2E91P7IN1wfOorAoDa3b7MHA+QIu1yqLxCRoMNx3JXIs8S
+ fB2CyQgYL+qqLVtvI3OeA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FRVmnoww0WI=:JvhulhdaAtfqBK+kp3KQQy
+ ZGBzlxBcvBUMmthv716CpSZFRt6fpexpKRNe5t4CRIppnp601zerXls+ubvRUjOdrgeRS4+81
+ rYYa8kTJqo4DQEQvHIbqy3S1gCUH2uLupswIOG5lSt8YYcdGuIgwBwvHtctRu/h5UaCy9txlG
+ 3h4An05j9vzHXBsRjDDnbeCG6zIr/W5FfJU7FgKe/OYPv+3+H5NKWmD8nW7zlWhlSOOiqTRBt
+ E4yYAtgaFBh2bqbaKJfOy45x8TB6SHx5TyzyRFJYVtFoK2zN8AkS0kJA1Qbg07EwgVwI1pg5Q
+ hd9LrlWPuIGEYJavC01DR5oRoG6pP4lnF0pwOiGfgJGK8LVkltWu7nXrmVJaAHhyC+D0ijaMY
+ iiIT+O+VCmLYA7jqeVTuJcOFiWmJhChFf05j9tD4JISeQbdrjH3RYoi50uveWQvpwnZeTNE2y
+ 9hBc+2HO6MW0dd0Dz/wScZOo+SuDUSFZVG5o47zFwoDrxruQQ2Np8Tjjl+QasAE33wNXTIKOk
+ Pn8ISlIam8q9pfmD/yAuTReV884uektVjgBKLuJfRiDaV6eAOyR4mDwjKtMgDQNpKPliNRo4U
+ mUgPUzp+4Q3mDC5mtSN6WPrCu1eEZVpCWFDkxvi+AYjkZ5+fBhzSXRpuAJj9EMsYf62L7/d/c
+ mmbNB1U/Ruo/nSQVuNmuw3Z8o34L/+9o15mg3gcYZHEyr8i/+wUorRcFRPfpNiFvx4wrtXwiX
+ iPuJ5/JviM73u00WCTbOW0b+euu3VfTWCu/zQekEiQ+wMcslis9ofdO8kM7GaKz5RJpsQZszJ
+ 4vU+cvQehud+sMYA9IHJLkKuGmXJ/JWvAvDkbKaZdO6h+2AiX1TGkTXAP8olIUZ6acGDgoIwW
+ wf3aWuSmAV03eWG8PHchQ1bf2nQbgl8tR6s/WGG61+iIKle4kKqLIHd5J5O23EL7aIrENRRiH
+ waq7GV4w9bMRgSYxlteJU/ko25Tte7InBd/Pf4xYPqngL5zN+cnkb
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id CF64FC009;
-        Thu, 16 Jun 2022 23:10:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655413844; bh=VbuObtaq/Xj/9czX/5l9zKA6V33YfeHnptJycN7lX/0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t2KiccZzHDi58sq19Fwuhtd4F403cMuN761fHNRg6hXigyHJboAPQwI7O5x1Z57UD
-         D482Mur4sR6jjYakgtPMy9x0gOo5/0MQE4Xtyuy44OkR4yoCQtfiPEW6nsCmezVava
-         RSCnUln2Y3AWxesnZNdwZ9/nBXw6OSMaq3VD4SpeC1Xg4nhkvVAgYwM26ASA4QoeMD
-         K3OF0O/rH+ecN2JX8/Stp2tEOLkn5Fio0zhENLij0B2lmyDViQomBn/tjqLs4PDMiv
-         5zumaGfcJ94Ui6CUFXhzTlI0TjDNEEggruBpFXNlnWtx5GeqChYv/OtH4wT/jnka7o
-         /axCjbS7g3ivQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id ca77515f;
-        Thu, 16 Jun 2022 21:10:39 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     stable@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] 9p: fix EBADF errors in cached mode
-Date:   Fri, 17 Jun 2022 06:10:25 +0900
-Message-Id: <20220616211025.1790171-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <15767273.MGizftpLG7@silver>
-References: <15767273.MGizftpLG7@silver>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cached operations sometimes need to do invalid operations (e.g. read
-on a write only file)
-Historic fscache had added a "writeback fid", a special handle opened
-RW as root, for this. The conversion to new fscache missed that bit.
+On Thu, Jun 16, 2022 at 11:06 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> On Wed, 8 Jun 2022 at 16:05, Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> > >
+> > > Add Nuvoton BMC NPCM845 watchdog support.
+> > > The NPCM845 uses the same watchdog as the NPCM750.
+> > >
+> > > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> >
+> > This one should no longer be needed if the timers are compatible with the
+> > old ones and correctly described in the DT.
+> by timers do you mean clocks?
 
-This commit reinstates a slightly lesser variant of the original code
-that uses the writeback fid for partial pages backfills if the regular
-user fid had been open as WRONLY, and thus would lack read permissions.
+Sorry, I mis-copied my comment. I meant the watchdog being compatible
+with the old
+version.
 
-Link: https://lkml.kernel.org/r/20220614033802.1606738-1-asmadeus@codewreck.org
-Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do reads and caching")
-Cc: stable@vger.kernel.org
-Cc: David Howells <dhowells@redhat.com>
-Reported-By: Christian Schoenebeck <linux_oss@crudebyte.com>
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-Tested-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
----
-v3: use the least permissive version of the patch that only uses
-writeback fid when really required
-
-If no problem shows up by then I'll post this patch around Wed 23 (next
-week) with the other stable fixes.
-
- fs/9p/vfs_addr.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index a8f512b44a85..d0833fa69faf 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -58,8 +58,21 @@ static void v9fs_issue_read(struct netfs_io_subrequest *subreq)
-  */
- static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
- {
-+	struct inode *inode = file_inode(file);
-+	struct v9fs_inode *v9inode = V9FS_I(inode);
- 	struct p9_fid *fid = file->private_data;
- 
-+	BUG_ON(!fid);
-+
-+	/* we might need to read from a fid that was opened write-only
-+	 * for read-modify-write of page cache, use the writeback fid
-+	 * for that */
-+	if (rreq->origin == NETFS_READ_FOR_WRITE &&
-+			(fid->mode & O_ACCMODE) == O_WRONLY) {
-+		fid = v9inode->writeback_fid;
-+		BUG_ON(!fid);
-+	}
-+
- 	refcount_inc(&fid->count);
- 	rreq->netfs_priv = fid;
- 	return 0;
--- 
-2.35.1
-
+        Arnd

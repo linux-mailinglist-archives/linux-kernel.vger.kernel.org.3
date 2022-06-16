@@ -2,124 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7892554EDD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E83654EDDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 01:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379377AbiFPXV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 19:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S1379378AbiFPXYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 19:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379359AbiFPXVY (ORCPT
+        with ESMTP id S1378900AbiFPXY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 19:21:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD62262BCA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655421682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Sk05nK8yr31d0PfEhMiImAlc8BO2DlseMPnx7U4OyI=;
-        b=EvVNDX0+d/ibOTI3v/x09FUZYtvzU7jEKVBJov68pNKQDLrz9B33dM0cYskN7ZEsfYmA8t
-        T99scoEO9FHxpyYfV+BRMSqIkLsEsczQSP/hkIkxx+TzQqaAS9x27vUVBKiNNjUtk/UeNl
-        IYW6WptacsMSzolTVWsdPlw0WnNxIfA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-ZhG9Tlh4M-KVPxEBslO3-w-1; Thu, 16 Jun 2022 19:21:21 -0400
-X-MC-Unique: ZhG9Tlh4M-KVPxEBslO3-w-1
-Received: by mail-wm1-f69.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so1471513wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:21:21 -0700 (PDT)
+        Thu, 16 Jun 2022 19:24:26 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A66377D6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:24:22 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id h8so2983252iof.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 16:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=u96BVz1Qua6XT1OJDIQTuU1phclFGfQLvNlbRU9Ucew=;
+        b=KgLkLfGPPGdlMWK4pn22+nMzfZnwsIcLCRw+f/0sNBmk9QQL/Qxto9VWJqFVFY2yNH
+         KyNqWrBmZTHRP57w3AXgxoqwEFI7E+Ff7Gq9b2xHVbubjUXJroRkU/8WM6/TyAv8Ytcc
+         GYwPGtWZrDi/h0g5iqyLNExPedMZSicws7pO4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7Sk05nK8yr31d0PfEhMiImAlc8BO2DlseMPnx7U4OyI=;
-        b=RtDmjNQfIXZ4lDcyrYMSZLiLNc4f/2E21RB6qLd3OYHUFPBg18fafAXqTyyuoQrmNm
-         j7xg/YjUTwLC49OKiy2tlnT1jqFCSdlk2t0LN3Ptcq0mRex8GXQYD3x0LUwfQsLOsx5E
-         +m9OkkyQxVBtJHfM22j4Tb+Z/DhYHB0M4CxSehgmkSfPhnMQpb2SLdQViDrNyYWcGftO
-         fBK/HcCo1YV2H+fOLQlpsIu7LPIGdhKspC5eGnWRHegTYgB3IPXDcD6+uPfFBUfpGJXA
-         4mO0a0x30xBmfg5YVb4W39Msu3CsZaGCktHxvh6heYL7B8yPBp92IhvLk3JzJCd11OhR
-         NDGQ==
-X-Gm-Message-State: AJIora/+ePRM5Qwm7Xe/cHo3U7rOEXJMzkZa5Qfi84rAGrR9qUvtw5S/
-        +faNL/I9etEITUcCaHeUDNfEELVISno6K8X+m3L7A5sdXIcwBJEz5Pc2uolH3s1o2AyaJibN80q
-        aM5c9EvTtIcqzPBJAZ8NfLcL2
-X-Received: by 2002:adf:dd50:0:b0:21a:ba8:6c8d with SMTP id u16-20020adfdd50000000b0021a0ba86c8dmr6836471wrm.133.1655421680442;
-        Thu, 16 Jun 2022 16:21:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sb3IFUqs3ZqGZX9qvUxp1wuRL6DIG8sHZblCmseyvlgwUjG0m1h+TgWCsvv3Al2+33swPkSg==
-X-Received: by 2002:adf:dd50:0:b0:21a:ba8:6c8d with SMTP id u16-20020adfdd50000000b0021a0ba86c8dmr6836452wrm.133.1655421680150;
-        Thu, 16 Jun 2022 16:21:20 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c35cf00b0039c4ff5e0a7sm3658603wmq.38.2022.06.16.16.21.19
+        bh=u96BVz1Qua6XT1OJDIQTuU1phclFGfQLvNlbRU9Ucew=;
+        b=TwBf6F2AppB2Pqw6qzmfGUh7Pv3LsXtqGfFn4K0myztwXyghWPIQBx9aN0D+tLkUUU
+         DeO93iZgb/z5QbvfbaZ7wh1qu6LZs0Xa9FuvvaAlkvpilWMB+ULZpf5j3n/QjzEXcm7d
+         25SYfUuxOj8jn3B7Aue2W0EV3KGrTkZEqmp/PA5sFoS0sWOKvKgX8MN37h1VaVCw6xdM
+         bUJNu7A/ZHbHjRO59bqMAJ0rCIX11eA3S//NNRkLHF5tPCMZXYPugCLkzZeYJ4fUB4GQ
+         slHKC6IWy0vhMLe46BNbQOZvcVXCWTFfdvqAs5ge8NxQvTPZtP8MAnFXynmIYCPC6ICq
+         PPoA==
+X-Gm-Message-State: AJIora+kzkgbkEAyBDpYjFTL0OECwV114EiPZ5ulTBSd+g9GvqdyjJzl
+        KauWTb4bosOISQkerQrmf5U8gA==
+X-Google-Smtp-Source: AGRyM1tFB91CUBcsjgqyr8dekyVExoN4n981kEWAV3tDRiIo/RAsr5C9W3MMWueFXJY8ksWSfWDsqw==
+X-Received: by 2002:a02:a48b:0:b0:335:e30a:edb0 with SMTP id d11-20020a02a48b000000b00335e30aedb0mr1209237jam.190.1655421861833;
+        Thu, 16 Jun 2022 16:24:21 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x9-20020a056638010900b00330a4ed20d6sm1451180jao.115.2022.06.16.16.24.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 16:21:19 -0700 (PDT)
-Message-ID: <97565fb5-cf7f-5991-6fb3-db96fe239ee8@redhat.com>
-Date:   Fri, 17 Jun 2022 01:21:18 +0200
+        Thu, 16 Jun 2022 16:24:21 -0700 (PDT)
+Subject: Re: [PATCH v9 1/2] selftests/x86/xstate: Add xstate signal handling
+ test for XSAVE feature
+To:     Pengfei Xu <pengfei.xu@intel.com>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Heng Su <heng.su@intel.com>, Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bae Chang Seok <chang.seok.bae@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1655218544.git.pengfei.xu@intel.com>
+ <f750fb183cf13e83cb2a10befacd3707879851ec.1655218544.git.pengfei.xu@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <86f9d913-1041-b52d-0221-3585473239d2@linuxfoundation.org>
+Date:   Thu, 16 Jun 2022 17:24:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 3/5] fbdev: Disable sysfb device registration when
- removing conflicting FBs
+In-Reply-To: <f750fb183cf13e83cb2a10befacd3707879851ec.1655218544.git.pengfei.xu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Zack Rusin <zackr@vmware.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "lersek@redhat.com" <lersek@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "deller@gmx.de" <deller@gmx.de>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>
-References: <20220607182338.344270-1-javierm@redhat.com>
- <20220607182338.344270-4-javierm@redhat.com>
- <de83ae8cb6de7ee7c88aa2121513e91bb0a74608.camel@vmware.com>
- <38473dcd-0666-67b9-28bd-afa2d0ce434a@redhat.com>
- <603e3613b9b8ff7815b63f294510d417b5b12937.camel@vmware.com>
- <a633d605-4cb3-2e04-1818-85892cf6f7b0@redhat.com>
-In-Reply-To: <a633d605-4cb3-2e04-1818-85892cf6f7b0@redhat.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 00:18, Javier Martinez Canillas wrote:
-> On 6/16/22 23:03, Zack Rusin wrote:
-
-[snip]
-
+On 6/14/22 9:11 AM, Pengfei Xu wrote:
+> The XSAVE feature set supports the saving and restoring of xstate components.
 > 
-> I'll look at this tomorrow but in the meantime, could you please look if the following
-> commits on top of drm-misc-next help ?
+> In order to ensure that XSAVE works correctly, add XSAVE most basic signal
+> handling test for XSAVE architecture functionality, this patch tests "FP,
+> SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/AVX512_Hi16_ZMM and PKRU"
+> xstates with the following:
+> The contents of these xstates in the process should not change after the
+> signal handling.
 > 
-> d258d00fb9c7 fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove
-> 1b5853dfab7f fbdev: efifb: Fix a use-after-free due early fb_info cleanup
+>    [ Dave Hansen; Chang S. Bae: bunches of cleanups ]
 > 
+> Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+> ---
+>   tools/testing/selftests/x86/.gitignore       |   1 +
+>   tools/testing/selftests/x86/Makefile         |  11 +-
+>   tools/testing/selftests/x86/xstate.c         | 215 +++++++++++++++
+>   tools/testing/selftests/x86/xstate.h         | 266 +++++++++++++++++++
+>   tools/testing/selftests/x86/xstate_helpers.c | 160 +++++++++++
+>   tools/testing/selftests/x86/xstate_helpers.h |   8 +
+>   6 files changed, 659 insertions(+), 2 deletions(-)
+>   create mode 100644 tools/testing/selftests/x86/xstate.c
+>   create mode 100644 tools/testing/selftests/x86/xstate.h
+>   create mode 100644 tools/testing/selftests/x86/xstate_helpers.c
+>   create mode 100644 tools/testing/selftests/x86/xstate_helpers.h
+> 
+> diff --git a/tools/testing/selftests/x86/.gitignore b/tools/testing/selftests/x86/.gitignore
+> index 1aaef5bf119a..68951ceefe30 100644
+> --- a/tools/testing/selftests/x86/.gitignore
+> +++ b/tools/testing/selftests/x86/.gitignore
+> @@ -1,6 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   *_32
+>   *_64
+> +*.o
+>   single_step_syscall
+>   sysret_ss_attrs
+>   syscall_nt
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 0388c4d60af0..49a6d78e0831 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+>   			test_FCMOV test_FCOMI test_FISTTP \
+>   			vdso_restorer
+>   TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+> -			corrupt_xstate_header amx
+> +			corrupt_xstate_header amx xstate
+>   # Some selftests require 32bit support enabled also on 64bit systems
+>   TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+>   
+> @@ -69,7 +69,7 @@ all_32: $(BINARIES_32)
+>   
+>   all_64: $(BINARIES_64)
+>   
+> -EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
+> +EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64) *.o
+>   
+>   $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
+>   	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
+> @@ -109,3 +109,10 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
+>   # state.
+>   $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
+>   $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
+> +
+> +# xstate_64 is special: it needs xstate_helpers.o to prevent GCC from
+> +# generating any FP code by mistake and stdlib.h can't be used due to
+> +# "-mno-sse" parameter, so compile xstate_64 with the code file xstate.c
+> +# which can use stdlib.h and xstate_helpers.o which cannot use stdlib.h
+> +xstate_helpers.o: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
+> +$(OUTPUT)/xstate_64: xstate_helpers.o
+> diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
+> new file mode 100644
+> index 000000000000..05dabb4733a0
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/xstate.c
+> @@ -0,0 +1,215 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * xstate.c - tests XSAVE feature with fork and signal handling.
+> + *
+> + * The XSAVE feature set supports the saving and restoring of state components.
+> + * It tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
+> + * AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
+> + * 1. The contents of these xstates in the process should not change after the
+> + *    signal handling.
+> + * 2. The contents of these xstates in the child process should be the same as
+> + *    the contents of the xstate in the parent process after the fork syscall.
+> + * 3. The contents of xstates in the parent process should not change after
+> + *    the context switch.
+> + *
+> + * The regions and reserved bytes of the components tested for XSAVE feature
+> + * are as follows:
+> + * x87(FP)/SSE    (0 - 159 bytes)
+> + * SSE(XMM part)  (160-415 bytes)
+> + * Reserved       (416-511 bytes)
+> + * Header_used    (512-527 bytes; XSTATE BV(bitmap vector) mask:512-519 bytes)
+> + * Header_reserved(528-575 bytes must be 00)
+> + * YMM            (Offset:CPUID.(EAX=0D,ECX=2).EBX Size:CPUID(EAX=0D,ECX=2).EAX)
+> + * AVX512_OPMASK  (Offset:CPUID.(EAX=0D,ECX=5).EBX Size:CPUID(EAX=0D,ECX=5).EAX)
+> + * ZMM_Hi256      (Offset:CPUID.(EAX=0D,ECX=6).EBX Size:CPUID(EAX=0D,ECX=6).EAX)
+> + * Hi16_ZMM       (Offset:CPUID.(EAX=0D,ECX=7).EBX Size:CPUID(EAX=0D,ECX=7).EAX)
+> + * PKRU           (Offset:CPUID.(EAX=0D,ECX=9).EBX Size:CPUID(EAX=0D,ECX=9).EAX)
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <err.h>
+> +#include <stdio.h>
+> +#include <stdint.h>
+> +#include <string.h>
+> +#include <signal.h>
+> +#include <unistd.h>
+> +#include <sched.h>
+> +#include <stdbool.h>
+> +#include <sys/wait.h>
+> +#include <sys/syscall.h>
+> +#include <cpuid.h>
+> +#include <malloc.h>
+> +#include <stdlib.h>
+> +
+> +#include "xstate.h"
+> +#include "xstate_helpers.h"
+> +#include "../kselftest.h"
+> +
+> +#define NUM_TESTS 1
+> +#define xstate_test_array_init(idx, init_opt, fill_opt)	\
+> +	do {						\
+> +		xstate_tests[idx].init = init_opt;	\
+> +		xstate_tests[idx].fill_xbuf = fill_opt;	\
+> +	} while (0)
+> +
+> +static struct xsave_buffer *valid_xbuf, *compared_xbuf;
+> +static struct xstate_test xstate_tests[XFEATURE_MAX];
+> +static uint32_t xstate_size;
+> +
+> +static bool xstate_in_test(int xfeature_num)
+> +{
+> +	return !!(xstate_info.mask & (1 << xfeature_num));
 
-Scratch that. I see in your config now that you are not using efifb but instead
-simpledrm: CONFIG_DRM_SIMPLEDRM=y, CONFIG_SYSFB_SIMPLEFB=y and CONFIG_DRM_VMWGFX.
+This is used just one. Why do you need a function for this?
+Also please don't use !! - it is just very hard to read.
 
-Since you mentioned efifb I misunderstood that you are using it. Anyways, as
-said I'll investigate this tomorrow.
+> +}
+> +
+> +static struct xsave_buffer *alloc_xbuf(uint32_t buf_size)
+> +{
+> +	struct xsave_buffer *xbuf;
+> +
+> +	/* XSAVE buffer should be 64B-aligned. */
+> +	xbuf = aligned_alloc(64, buf_size);
+> +	if (!xbuf)
+> +		ksft_exit_fail_msg("aligned_alloc() failed.\n");
+> +
+> +	return xbuf;
+> +}
+> +
+> +static void free_xbuf(void)
+> +{
+> +	free(valid_xbuf);
+> +	free(compared_xbuf);
+> +}
+> +
 
--- 
-Best regards,
+Again this is called just one. WHy do you need a speacial function
+for this. Please don't fragment code without a good reason.
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+> +static void allocate_xbuf(void)
+> +{
+> +	valid_xbuf = alloc_xbuf(xstate_size);
+> +	compared_xbuf = alloc_xbuf(xstate_size);
+> +}
+> +
 
+Probably another case of unnecessary function?
+
+> +static void show_test_xfeatures(void)
+> +{
+> +	uint32_t i;
+> +	const char *feature_name;
+> +
+> +	ksft_print_msg("[NOTE] Test following xstates with mask:%lx.\n",
+> +		       xstate_info.mask);
+> +	for (i = 0; i < XFEATURE_MAX; i++) {
+> +		if (!xstate_in_test(i))
+> +			continue;
+> +		feature_name = xfeature_names[i];
+> +		ksft_print_msg("[NOTE] XSAVE feature num %02d: '%s'.\n", i,
+> +			       feature_name);
+> +	}
+> +}
+> +
+> +static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
+> +{
+> +	/* XSTATE_BV is at the beginning of xstate header. */
+> +	*(uint64_t *)(&buffer->header) = bv;
+> +}
+> +
+
+Okay - if you have a function - I want to see it called at least 2 times.
+Having so many little function breaks up the code for no good reason.
+
+Let's fix these first and in both patches.
+
+thanks,
+-- Shuah

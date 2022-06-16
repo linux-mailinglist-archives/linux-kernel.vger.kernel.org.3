@@ -2,135 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7830354D9A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E1654D9A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 07:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357345AbiFPF1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 01:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S1358435AbiFPF17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 01:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242913AbiFPF1T (ORCPT
+        with ESMTP id S242913AbiFPF15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 01:27:19 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90073.outbound.protection.outlook.com [40.107.9.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6D35AEED
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:27:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GoANzO67cZ93+m/7e5HD5dxDQ3gY9ZXiAaDlOk3XlOWN8YU602HLl6OsDhpUkfdgHJH9+yHJQpQLqkQXsaduxGH90ZHekSK0PkSRVTC7X3P0xokV3lXvxrDKPnI20yOePnQddNKtb3U8UXqp9zlsL7vWogT63BEF1JC+QtsVURmPIJXTg1xgpvk1sQ5GeZryuB7imT9sb5B6xWpvc/Crigl8AZqADNpkYQeKu9EYrUwQz7szwWIacby80Ifq2uIfUcECwHKylDOUR45SmTEdIWihcu2Ai9xQmUe/SOnu1sZpOaS9GZAXcf9pQrHM4K8oajB/VboTTet6DbVRXCtj/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mHucbkq8ZKs7qi9ii6ep4WKls2fpTci3b9BYrZTa+4g=;
- b=YiNet88dXgoPSZ9zUvNrqsvqKx4NuA/ChXYbnIKae3Icu3jP/xZ61It46hHvBGvERv3HHBLOhO49c2vC5n3Sk4nFNWwqOxJ5yW9bITyAxiswaEkrYa0h8gLBln9USjEVrakxCIrglj+9H2baAQlSkFbXq2JVgCU8b5ZZl1Hl3XjE/Q73y0e+lqDzrmfqnNlf91jTYL0Qmw72IuQg2w8asRMH+nBrk3jFhBFaJGtiXAD9dgRMy0bU1vDbdnSt+I3L+GHIcMhyjBGyMCqwbTKLyQOnljgAt4hx3qGe4Jm9/qkq+4GvR+wk28NAwdkKcE5cIoUcdYvibUWQafPtTtenWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mHucbkq8ZKs7qi9ii6ep4WKls2fpTci3b9BYrZTa+4g=;
- b=HgWdDvcFIpHW1337aC92FAQp8WYitrqhmS5hNmmnprtb8X8gRyWgtX+yPnwIHBeosrRYJhxrD7RCpCTPPcCfUO97YSn9NbZuK2TyR2Y9yQgL0i8cEvIwMbQsVGb6JoJqk07o6FaRm5zP7HV3K4YJzY734nJXqXY7caUNqJoouCBMOcoI9esXGrmM0JXtK3+yYL01YijR5EvME/6XqZodyswKMqTiKOS3FQ1HYl76E3SJnMNdNmn/wnFzJfQ1VcRfm8Cq0jsguKNAVTCXrfpS8CTgThRMp/C7g8oRADctQY0eUu9bWmGQAUUg34UsCcbzi79ze7GQniDQn0yj+xAn0Q==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB4077.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:18b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 16 Jun
- 2022 05:27:15 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.014; Thu, 16 Jun 2022
- 05:27:15 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-CC:     "hch@infradead.org" <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH V3 2/2] mm/mmap: Drop generic protection_map[] array
-Thread-Topic: [PATCH V3 2/2] mm/mmap: Drop generic protection_map[] array
-Thread-Index: AQHYgTbqSfMGmo1TpEeDUHkZHTGmdq1RgQmA
-Date:   Thu, 16 Jun 2022 05:27:15 +0000
-Message-ID: <8819cd0a-4120-9afe-e491-2843681a0e7e@csgroup.eu>
-References: <20220616040924.1022607-1-anshuman.khandual@arm.com>
- <20220616040924.1022607-3-anshuman.khandual@arm.com>
-In-Reply-To: <20220616040924.1022607-3-anshuman.khandual@arm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 946b5b6a-82dc-43e2-14fd-08da4f58df91
-x-ms-traffictypediagnostic: PAZP264MB4077:EE_
-x-microsoft-antispam-prvs: <PAZP264MB4077CEA64BC2A5173FCFC1D3EDAC9@PAZP264MB4077.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nkRoOGTT8pXP2FWynuKzxzH5YL2/yRtiQbzitUZcZWtt5c5vCWNVrkYV/ZtGpe8IkQThWtXQjN5qbsTM5BPsMu/rsjZOaMl3qjm5vZpX61CGYQLpYvWDQaVw/0IxcFfS881wKSZuiXIFtoecD+m/kcc4Wbu6nnEsiYamdlzNt16D5rWHYMRuuDcr8Cq58imRsl/cmfAIjTfNGh788UI6uo+Xy6FDTgp29+/njT+3nIKqMNd4WR/y6g13nz7OqICzgKZQmBSwEw6M8j0jbOi+0uvN6XajtFVYAEyGWsLoQ51jFCHLHCWISIbVYPsTR4LfWt3Jbwf8zkQZCsCT5sURMmXOUi2gKVeDyfd7bpHuGpSQyk1a0ev7gDRRW6KrFWPcxyXBDqXxB7x4DGNICb6hCwleqYkjgWwprFJ7yPLyfhNjqJiiZbHqAXYStVSEjHfqk2F9QHhFM/fTVm8aJf/opA3ufDD/0EWCGcvHYAVGElJ+YLQt2Suo7ssdt8NR2RsX2vOP5pg0Mk9yqGcVFXOwC1/4FU3Xxlg5eD64O63WLh7AddOUFmrN1d1kNQBrk+rx4c9IkUWz+jLnArjP933hxbcGuRYAtdafZUXmf0TpA7IMWI8nKpbZ1M/xQ1KsHaA7FAPxOS/kGNWPIg+DS9jpnUxbEpT4t3cJ0Fypilo6j7w7Iah6T85bqgZAT7Q5z1cuw9SFNrJL+ewFADCquKRGlkZ12NfpV28v1Vb8dsZPeImFK/OBleUqZVwo3Gb1m7NZHdUUZiYzHqnsJOuAADE7bLaunpJ88UZziDInmk9eaU0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(38100700002)(2616005)(186003)(38070700005)(122000001)(66946007)(8936002)(5660300002)(8676002)(64756008)(66446008)(66476007)(66556008)(6506007)(76116006)(4326008)(4744005)(2906002)(44832011)(91956017)(26005)(508600001)(6512007)(54906003)(6486002)(71200400001)(316002)(31696002)(86362001)(31686004)(110136005)(36756003)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZTFuakZQakQyQUR1TXAvL3FYV2szam5QeDlFNXZrTDJFRnBpM0toRlgxaEZK?=
- =?utf-8?B?QzcrV3A0cHJWSGgrSFdLUzFNRjVQZjg1UTFidDZOWTA2NTl2T3VkOERQV3hI?=
- =?utf-8?B?WnBva01ra25aL2RMaVhkaGRyRGtDczNndnorL2hEcXE1K0ZqZzA0MjFKRVdU?=
- =?utf-8?B?TEM3aStBcDlndXl6VTN5ZjFUVVJIZ1FWVDlCMlA4K1cvMVJuNFcxU2ZqUmxu?=
- =?utf-8?B?OUlyQkFtMG5KekpIVUZSbXNYRm1PL2VlYldMclNIZEVpMW5uRFQrdzc3VTFh?=
- =?utf-8?B?WDQrM1VsYW5FZWtqemtIMWpnN2JxWUlXbldNNkJkYTVBbmNzZU9qdWwyVi9j?=
- =?utf-8?B?QjVaWnZ0RFhKY3lZNWJqanpSazMvYTQvYnNzZ1B4RXhUWndZeFpXUGV3eHVT?=
- =?utf-8?B?Q0FIVFBzWmdwanhudXU2WklhR1VuMGJCTGY5dkVxdklLUFNrMzlsQi9rOFJI?=
- =?utf-8?B?VDNaaEhrdWQ2WFVpQzFCRHpVNVFUQkszY3EzUFQySnRad0dIWGd5YU15Z0Qv?=
- =?utf-8?B?T093QThsOEJkSzhXMUw1VUhDd2pUQWoxYThwUnduSzVuanl1cDhVWTVUcitn?=
- =?utf-8?B?bW56WWQ2K1VvS0xYQXVjMTVoaXA5eUlaNEV3c01hZFl3dGc5bWR3QU1YeDlG?=
- =?utf-8?B?eUJJWkp3T0F1VjR5cjVWYWpnelkrRGU4Wi9YMUM1RHJNZTQ4ZzFJTWw2aVcr?=
- =?utf-8?B?dURJSFJGbDZmbktWQmtqeUpoZUhUTlVkdkZCSXdBbi9NakgzZFlUT2V4ZVlN?=
- =?utf-8?B?K3hWZlpIZkYrL2lXK0FGb291dVV0V3I2eUswNTVLV0NJNDY2NTFYeE9XNnBD?=
- =?utf-8?B?eklLZnpJNGN0MnlkQW4xNjRFVjJlWWY0YWZCd09xay9tODdoakpkcmQyZi9W?=
- =?utf-8?B?Rlh4bEp6UTg2Sk9GVy9aSFR0OVZyVWRjcWFpb09DNHZVejBnRWVKUVA3MFBm?=
- =?utf-8?B?dExkemVLR2R0MXpNR1NHcFdUWG9waE9teUpwV0FTWm45RGNKVjR1cFk1ZXBH?=
- =?utf-8?B?VzFpV3FhaEZibHFOdjQyK2o5c2UyaTZlNHdXbGJodGptQXVQVFErcFhCK0Z1?=
- =?utf-8?B?bVo0dWpHUmo0bk5HWVVOeFF6Y2FIYUZ1dU82RG9peWx6Z3JINm96TGZDaTN5?=
- =?utf-8?B?WThXQ05iTENSNmU0a29qQXI4UnJ1dXVaWEozajZvejFTYWFMekVmSGl6Qncv?=
- =?utf-8?B?aEUrZU9BSzVvSEpqTHFMY3o2dXpudGRPcWVxemJhSS90eWVyVzRPYVNBMDNm?=
- =?utf-8?B?RWF6QkdrWGc1ZXBZNktJMEd3V2NMd0Vwc0JpOE1BdDFJQzRyN3ZaRUtndmpV?=
- =?utf-8?B?U214dnU4NHduVzR6WEpQaEN4REhGajJRcno0SWVwM2lCbXpqMkRacnpKTnpa?=
- =?utf-8?B?b3pEbXo1ak9LaGRpV0xmU0g3VGlNZXdnMHFUVXlqMWZsQWxKdkJDSVlHaFFJ?=
- =?utf-8?B?OEVLQkdLTXpXN1l5WTQ4WDhPS3JjbVFBSWIwQllJbkVqZHJRL2VsUnlSU2Za?=
- =?utf-8?B?YjV3U3VPSnh6eVhYUUFGVUljbjBYK1hIdi9oR2hneEpFcFhuRHJ1aHQ0YWVQ?=
- =?utf-8?B?QXZCV1dNckZiY3Z0SlY2YlIrSURjWUJnY3BjTHR4MzVLMU5wMzdwZWFjSC9x?=
- =?utf-8?B?d2g0dXFuRTV2dVdyTHk3aEgrYmU3WHlYUGdySU8ybFNpeVZubnlnVkdqSTdt?=
- =?utf-8?B?UFNjSDBmMGM4ZHJCM01BbGl6Y2dZZ3BqRGFaWC9qdFpRTXdwdlRsNnh0MmF2?=
- =?utf-8?B?NlMvZ0Y0SUZCRmRPaWFLZFdoUG1WWm1qVkhKck94T1J3YXFrU2NDMnJMWm9Y?=
- =?utf-8?B?ZWlsbldCWTB4djZ6cEZoTndybzk0cnFNOVpjNUExTFZabEtwL2t4bE9IQWFx?=
- =?utf-8?B?WHZxRzl5NlptVlpPNFBEdVR3VW1haVV3N3JWK0JmUjBLbFBVdEpXMHJlYm0z?=
- =?utf-8?B?Y3NReUg5TU9IWVJFWnNuL25FbmNGMVF1UEpjNlIxRkRVWUpOVWI3OHk5NEdB?=
- =?utf-8?B?Z1ZrT3pMVksrajNrWFM1Y05qTUNIYWtkOGoyZVdsTU55UnB1QUpxaS9seEg1?=
- =?utf-8?B?Z0hsYVJaeFp6blNPZXAxUTJTMUpjSmQ0VmQyVGRrb0x1ai9yZFovRU5qVUVp?=
- =?utf-8?B?UTJDQy90M1dEODhUbDI4dkV2NFRta1FCb3RCWVRCYWhBb0g1aVhyMG9xSHBP?=
- =?utf-8?B?cHlQMHNqMjJrd0JyeXNpakNNWHVuSDdGc2dsU1UwdTFwbllBOXpCTElvRExw?=
- =?utf-8?B?THYxa3VGck9XM2J2K0tEV0ZjdnZ2TG9BN2NmaDFyRnNTUG44bmZ2Z1JjQWMy?=
- =?utf-8?B?VmJ6WUU1R25LWThGN21OSG55dXh6MW0wdnl0d3RJaCtvV252LzJFdTVOSnlX?=
- =?utf-8?Q?WjICj/3ixLhFXAdilnbR2I1mUfUtBvx4QhCBV?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <59DAADFCBEA771459E245855E9CD14BD@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 16 Jun 2022 01:27:57 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6A71707C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:27:53 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so2209473wma.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 22:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references
+         :content-language:from:autocrypt:subject:in-reply-to;
+        bh=hTCJbK3AP3veAPqUtya3nfn5p9r9O0hHB9bgO/mKuVw=;
+        b=iKoxaFPYbN+el1uVlf2f5Dw+uyBhRQBfr4RNtvfYfs1q4Tdff0HS47GWmb9wLvetta
+         mT6mlFlKvwoHmxCvqSr8b+hrMqaQhIgLZyE//T7dH63Nz9huVRAToPclsZzaAPJbG1xC
+         ZnG7baYubEkh1oYlhWlEbUGxuZL5vVozR768klVWIrDt+1Zsx7iaXEgur540bcStz+U0
+         JLQMax6fxBY8eC5jgne6npIsNQWEUgHWy/eaGhEHw+TtrH1pGoBs8WuBJ8AoMD4GokYe
+         Sh/OmOJTXzNt6vaOq1q22rSqcX56lYUguMAd/zfGFPUUcrH28zLFamBTScM/a+EnDXN1
+         1fBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:content-language:from:autocrypt:subject:in-reply-to;
+        bh=hTCJbK3AP3veAPqUtya3nfn5p9r9O0hHB9bgO/mKuVw=;
+        b=eGhYcWjZalzOSdLX3FIwkVlMkBsGhhVRsMUMeBgP2S4uUGYJ+TsyL2Q6dyfqVSSBI3
+         F8EyVES7WNSu9JzfJ8Hht/BEJ6blH3uSvOBCwBsZu5B69zBCFS40stI36hkTzJ7+VxtJ
+         IQP0Fgf+OetgTC/1YW7RD5FbgIpRwdMmfYr8AG/hqgylKPNCTRBa4A0BWqJEW7cbaZRY
+         WEh03zEpQ8RwF62rE0/NUlXzHhDdFoDvEBXRAMOixhJUSX0ES2QP2wuvq3cNaOq/GqHa
+         Qao2/PYo5RInIj0kWfinrutOWhor9ozI7eTAhwhxOGKvQczB56gUmHZfAzR7cHqYjmwP
+         GhCQ==
+X-Gm-Message-State: AOAM5320LfBoyjDiSbY+2qha5zJjd8fwQpL9HxkJwRXX40Lvp69ZuBmb
+        gcXnYpn9GUNDMDlKAbEiDFHEmipwn1qA9cvP
+X-Google-Smtp-Source: ABdhPJy5UuPRJYxaF1cIgo+srGfVU6+3efvfloLhd19hVILD3fs1D5j3OXRhyOFepcKfqpKBKi/koA==
+X-Received: by 2002:a7b:c3cd:0:b0:39c:474b:2056 with SMTP id t13-20020a7bc3cd000000b0039c474b2056mr13679984wmj.30.1655357271486;
+        Wed, 15 Jun 2022 22:27:51 -0700 (PDT)
+Received: from [192.168.2.172] (dynamic-077-190-073-123.77.190.pool.telefonica.de. [77.190.73.123])
+        by smtp.gmail.com with ESMTPSA id j14-20020adfa54e000000b0020fd392df33sm778324wrb.29.2022.06.15.22.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 22:27:50 -0700 (PDT)
+Message-ID: <3f8d25aa-17a6-e6aa-4b6d-d3388ef35201@gmail.com>
+Date:   Thu, 16 Jun 2022 07:27:48 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 946b5b6a-82dc-43e2-14fd-08da4f58df91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2022 05:27:15.2577
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Wsx59JrzQ9yP2vOl0/hr0n4d1Bd0OEax7EgbJSY07QGqmcEvF/kruu65mUp0Wh2GLOFYNFvZQBl9mgG6U1DgPztVfXTi+nbtu6HsuINVYUI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB4077
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+To:     gregkh@linuxfoundation.org
+Cc:     arve@android.com, christian@brauner.io, hch@lst.de,
+        hridya@google.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, maco@android.com,
+        surenb@google.com, tkjos@android.com
+References: <YjCTL/2ZJW8EWLHL@kroah.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Hans_M=c3=bcller?= <schreibemirhalt@gmail.com>
+Autocrypt: addr=schreibemirhalt@gmail.com; keydata=
+ xsFNBGHKML4BEACaplmSVMtoFgU9QQTg/tEmwtO32+SVY7wSNbz1v4zREkK1T0scorkl2pds
+ zHM2lnuRnQUkOo4NKdKH4uGd9+nHa1aeT3VlP+osUuf99UcsMXONPyNLdYrG1wOSqzi6lLS0
+ 56kwnddPqJQZuNaB3BUCIajES829yWc2QpeW1Ssr3E3Osc6gZetKxqMfjwAff/XNXgCpSCBZ
+ Mq6I8dgKRWue3g6VbEtpmUwb2ppLoFHfyQazZTmOHdbqVSGSdwAIqY+t40OWHC1JqwR7UPsl
+ hA8JhJgiiMpfFqZ2bp+pwm9JvRXMfXTpQaSr07SlPgmN+ndQ3RQIKmzuqXWIgZ+7+5HS4o6U
+ LtYG8IlLfCKDmDRWh08u396qs33EiNLdGv/V1l/ZBIFHJQKwgaWLE7WXiOO6xZuEfiL0bJg4
+ 7Kpl0Ecex7KkSTaJSUhLuAWgZTcsAIWMPxjPvdFC79WQ5puiExsHvPcnMYmSndpCl+zY6zuH
+ nvBoxekkRQ2FW0zVHnlQbxgXe2nWWAH5azJanLsHvf1X5li/3arNykPqIj5MvNFNIgFZcRuw
+ Y565jO3q9ffw6Sy+gcroABveIPX5dZ/ZO+Adh2sfNiwNlgmSojZChrfOXEUqo3C0DqOdI7i6
+ 5bSXQ62j4Z2pKcZitJj1A1/yT8iwTXycAjMOUAmfKWl77MW6wQARAQABzShIYW5zIE3DvGxs
+ ZXIgPHNjaHJlaWJlbWlyaGFsdEBnbWFpbC5jb20+wsGJBBMBCAAzFiEE+zpgzvChJL/lYUSt
+ kklMuHDTkYsFAmHKML4CGwMFCwkIBwIGFQgJCgsCBRYCAwEAAAoJEJJJTLhw05GLBBgP/3xN
+ j3X/E9RrkLc0fsEJXpkDp5+znwFipyxhHh/068Z4TAeqmSEoUurUgBvaR+4aiMfCr0bo/Ikx
+ XEW/6Wk90d4JUr3vF9GHcKO5yjhLcQ7gwU4Rggkuun/2inOKeDgjax7iRkIRxFFtsbBU9tvt
+ NpaPbax8Sq2utYYp/n/vR25wd/COn5WKdegXu+ADfn5Q31AVNJTN+n/DaTKkD4lo+0AN1PQX
+ aGJaNrhLOoOYXvVbE8cPrQtfiu6Fw/DsNnv8vsVK+ibY7qsM1hUhGM8GkSeGavMciXD1JyYl
+ vkX/clyd0+DwdZPp4/al4tFUBc0FfCtKN1SPlHEJ4GSMAA55AtGCoVIuvSshd79RL6mEXS6i
+ 37JjG6MH/5OFmlOEThXtkLG4oWWzVf74yam8wPQDsZBh7CxS4hGhCTzA91EfQkjsAg/ZLpGf
+ dEh9m2vG0pX8ZOFQRAAsDIPuGIJ+0Mg4AM0ULMTW2oMgx/iNQDZha4oe1SYDpdMnEVFQtg44
+ T6cxQPh/eLXNViYu79rp5gFQJiruF2aGxsMTAEIzWq4Ko2H7LlLg7C5RPWRJIkHA3MDRf+Wc
+ BBE4BNXg5BLCIp7HT9yvV5e8yjbvPDvbTRP2zMraHg0PUAD/Lv/Wo4byPdZ5B+Dyyk/UVdS2
+ uSVNiODFNoEcG5nrGJhJiTtHDnkjAxcfzsFNBGHKML8BEACqQzGWj4CI+ReUdb91INHU9BkT
+ nREkS0AAqbvO5lRwJMcZuHpEmQ4vNRctDPmLUJMyTJgNBzd/8P9Iz59b3mSSGhDrDrs6sChh
+ uaKWivoXa+qVxs5sTDRsFgi6QcY0+qZtI+0kSVqe6yd68QVR/yXe3th9GRIy4NTxPoOrreTL
+ s9XcKTYYMivTv8VjpIm4nQ/KNsLn4CXRHAEr7BsiWoS4cFaDcKjHlfqnG77C8yShud4g//sp
+ F2/vZAU8tsU+j7TFCKt6k4BHZzc2ndtT4pD9CmeAVd2beS8RlxJP2kR1fl3U3tsGIlntNDET
+ YOEctpgSWYTfaNibHbxllzV/q0ZnjiW2gdpfb3C9qTpDFC+ZVt2pCBfYXwfd6XfNwcyflDtK
+ QPFO5optD6pxKuTbjowbkWACAvmYmeX9IJLBNoo7UbjUAkE/jneC7jR6sbD3aJ43bKNhokpH
+ cqO8IG4IbUiT/Z1luHZLiQlqus/1A9Vz6SBCcgi065BDM8Ftu8KATvVeqy17SsPggZdo6VvZ
+ SDJEZKk7nVzfR7Oow6vxjyPeHbh8hRuJp080c9a95ym3ErLC+PuSj+J5o2Vi3Pk3eLZbiPdX
+ ge3AuxiOwNoSPCPjHc+Ns40J3O5XbMds42R9YhFUwvbSI/6fvGsK5Bij3W9El23ArFRlau/x
+ xAq323iSqwARAQABwsF2BBgBCAAgFiEE+zpgzvChJL/lYUStkklMuHDTkYsFAmHKMMACGwwA
+ CgkQkklMuHDTkYuFsRAAijsThY5z/VfABE7gLRJ1m6m428oVtaK6XbTXXMdC44vm7Mupvh4P
+ 8ztrGBkjN5ILv56ndpju89cfVXqx3I6AK9pVZs8P/nsTDy1+L3mGeR0ELjjN301a2M8oE0AV
+ hGAsR9KNcYSAmKL84k4+IisZVi31nF5eQ/pL/JtcXXv1Mejq4366Xj3reeoymT/L7ANep0CC
+ 2oA/39TfxiDooBy5EWMSUArK9k7LM8/50g97dp64DO3a1GahBDWENwt/TXwI/uWepXHalOmn
+ Gmk8jSy6uNvqEhakubj8lqwym1weWqiD6uEaTOLSVWqSdDaH92qg+Q4Kn4bWDbyWJvYJzE/x
+ KR55I9l9Kuki1wOuMF9p2/SNciiMqX5kv7fpxImFBZGmZPCAd/Maktbhj1R8J+5ZiW5iYVI1
+ 4qLSb24yZamE5IyLEPG0IsqPbNzPh7vMx1BHB5tWQ/u00lyvy9xqyDTtq8+SAEko1QmHMIql
+ TrRp6s/yMPBtBNG/dSzszWnKB24h9WMV/5q81N8hG03LSqmtlFuxIe2XO3q+XNehTDtUHFd5
+ bQQwYrGY52FsggZzO4WMnpCQQPrWRM+qo0Bak881DGIMTzVZBR5ezBSoBwSdq3JUvFU6h2tf
+ R+WrRoHm7qOWyLcd3ejwg4qotKc1SZKDJE4pEdNPhEgPBeeI4kiSvT0=
+Subject: Re: [PATCH] staging: remove ashmem
+In-Reply-To: <YjCTL/2ZJW8EWLHL@kroah.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------rdffJepB2c23g2c09LE3DkCY"
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -138,11 +119,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE2LzA2LzIwMjIgw6AgMDY6MDksIEFuc2h1bWFuIEtoYW5kdWFsIGEgw6ljcml0wqA6
-DQo+IE1vdmUgdGhlIHByb3RlY3Rpb25fYXJyYXlbXSBhcnJheSBpbnNpZGUgdGhlIGFyY2ggZm9y
-IHRob3NlIHBsYXRmb3JtcyB3aGljaA0KDQpzL3Byb3RlY3Rpb25fYXJyYXkvcHJvdGVjdGlvbl9t
-YXANCg0KPiBkbyBub3QgZW5hYmxlIEFSQ0hfSEFTX1ZNX0dFVF9QQUdFX1BST1QuIEFmdGVyd2Fy
-ZHMgX19TWFhYL19fUFhYIG1hY3JvcyBjYW4NCj4gYmUgZHJvcHBlZCBjb21wbGV0ZWx5IHdoaWNo
-IGFyZSBub3cgcmVkdW5kYW50Lg0KDQpJIHNlZSBzb21lIHByb3RlY3Rpb25fbWFwW10gYXJlIF9f
-cm9fYWZ0ZXJfaW5pdCwgc29tZSBub3QuDQoNCkknbSBzdXJlIHNldmVyYWwgb2YgdGhlbSBjb3Vs
-ZCBiZSBjb25zdCBhcyB0aGV5IGFyZSBuZXZlciBtb2RpZmllZC4NCg0KDQpDaHJpc3RvcGhl
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------rdffJepB2c23g2c09LE3DkCY
+Content-Type: multipart/mixed; boundary="------------tz01mBP1x6oPmFzywWAkvx00";
+ protected-headers="v1"
+From: =?UTF-8?Q?Hans_M=c3=bcller?= <schreibemirhalt@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: arve@android.com, christian@brauner.io, hch@lst.de, hridya@google.com,
+ joel@joelfernandes.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ maco@android.com, surenb@google.com, tkjos@android.com
+Message-ID: <3f8d25aa-17a6-e6aa-4b6d-d3388ef35201@gmail.com>
+Subject: Re: [PATCH] staging: remove ashmem
+References: <YjCTL/2ZJW8EWLHL@kroah.com>
+In-Reply-To: <YjCTL/2ZJW8EWLHL@kroah.com>
+
+--------------tz01mBP1x6oPmFzywWAkvx00
+Content-Type: multipart/mixed; boundary="------------G6OBZFvi9rlv9Cn3tatVlMdv"
+
+--------------G6OBZFvi9rlv9Cn3tatVlMdv
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SXQgaXMgbm90IG9ubHkgQW5kcm9pZCBpdHNlbGYgdGhhdCBicm9rZSBidXQgYWxzbyBBbmJv
+eCANCihodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9BbmJveCk6IA0KaHR0cHM6Ly9n
+aXRodWIuY29tL2FuYm94L2FuYm94L2lzc3Vlcy8yMDQyDQoNCkkgdXNlIHRoYXQgcmVndWxh
+cmx5IG9uIG15IHN5c3RlbS4uLiBJIGtub3cgdGhlcmUgaXMgV2F5ZHJvaWQgYW5kIEkgZG8g
+DQp1c2UgaXQgc29tZXRpbWVzIGJ1dCBpdCBpcyBub3QgYSBmdWxsIHJlcGxhY2VtZW50IChl
+c3BlY2lhbGx5IHNpbmNlIGl0IA0KbWFrZXMgdGhlIHdob2xlIHN5c3RlbSBzbG93ZXIgb3Zl
+ciB0aW1lIGFuZCBzcGFtcyB0aGUgdHR5KS4NCg0KQ291bGQgeW91IGNvbnNpZGVyIHJldmVy
+dGluZyB0aGF0IGNoYW5nZSB1bnRpbCB0aGUgQW5ib3ggcGVvcGxlIGZvdW5kIGEgDQp3YXkg
+d2hpY2ggYWxsb3dzIEFuYm94IHRvIG5vdCBkZXBlbmQgb24gYXNobWVtIGFueW1vcmU/DQoN
+Cg==
+--------------G6OBZFvi9rlv9Cn3tatVlMdv
+Content-Type: application/pgp-keys; name="OpenPGP_0x92494CB870D3918B.asc"
+Content-Disposition: attachment; filename="OpenPGP_0x92494CB870D3918B.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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3D
+=3D9G6D
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------G6OBZFvi9rlv9Cn3tatVlMdv--
+
+--------------tz01mBP1x6oPmFzywWAkvx00--
+
+--------------rdffJepB2c23g2c09LE3DkCY
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEE+zpgzvChJL/lYUStkklMuHDTkYsFAmKqv1UFAwAAAAAACgkQkklMuHDTkYsI
+pxAAgBr9jrGWPIFJ6auyJLvI65FBHLksj0AqznfsSoEyfKM8ezee2G1Ld/0ndyoLjonGy0TZYeBs
+SPBUPZUnydt7CAqNfks4LRqigXjLKB21UzZ1EaPorXWlZGOPkKflWAQtNxUOiU4DwJbVVCMG+Btb
+Py2ai0OGQkG+xNWRaRoQUfCOwiR0twtVdwKBSYtZ2QapsLpL+kR9QDGOVFNg7hBs+kkCX4E1zRR0
+SYHzGzyyYaGPbfqki9cGTbF4u6i7uxbBzfTnExZ3x21OJ7N+shq1RfvsGLLMhRlddJtJuBjdLFpb
+tOrJWcWEvJT5r/L71Lx1ytguuJCKEhpuMvDrTnaTTo87cv+td3gJxArUWimk6HoZNN1LnzeboJQT
+h4bhGn18UVyc7lz9yH23g7aSLDCY/cKJM9RIQ99v97W/zWRz7awe8uRSB49Ztr/KsY3u6vPeGbvv
+1VZVUbUG5vfGH29HM4Ja0IuML2kqWgC51r9zueEE2err9j7cb2NihdIkeHfXfCs6FeBtv+1B88gu
+bRizvVhrRCNpYwkHxdGCv86y9rGBtHQjCLwaHdYAwGcDusToOn7RL5M4bTbnUo3pU3Islnaa4Bg1
+NxeIAWjrWiJHqXcePKZ/9Wxh7x4rg+ljw17fTeELHhQegvdu/ZJ/Nb6Ofs1mSpy1zAiIcrOra4Aq
+sAs=
+=7Rlk
+-----END PGP SIGNATURE-----
+
+--------------rdffJepB2c23g2c09LE3DkCY--

@@ -2,34 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F94154D91D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1315A54D91E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 06:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358588AbiFPEJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 00:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S1358595AbiFPEJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 00:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347756AbiFPEJg (ORCPT
+        with ESMTP id S1358571AbiFPEJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 00:09:36 -0400
+        Thu, 16 Jun 2022 00:09:39 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17BA856F94
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:09:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F031B56F89
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 21:09:37 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C88DD12FC;
-        Wed, 15 Jun 2022 21:09:34 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2B6813D5;
+        Wed, 15 Jun 2022 21:09:37 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.42.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 93C323F7F5;
-        Wed, 15 Jun 2022 21:09:32 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4DAF43F7F5;
+        Wed, 15 Jun 2022 21:09:35 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     hch@infradead.org, Anshuman Khandual <anshuman.khandual@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 0/2] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
-Date:   Thu, 16 Jun 2022 09:39:22 +0530
-Message-Id: <20220616040924.1022607-1-anshuman.khandual@arm.com>
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH V3 1/2] mm/mmap: Restrict generic protection_map[] array visibility
+Date:   Thu, 16 Jun 2022 09:39:23 +0530
+Message-Id: <20220616040924.1022607-2-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220616040924.1022607-1-anshuman.khandual@arm.com>
+References: <20220616040924.1022607-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -41,109 +43,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__SXXX/__PXXX macros is an unnecessary abstraction layer in creating the
-generic protection_map[] array which is used for vm_get_page_prot(). This
-abstraction layer can be avoided, if the platforms just define the array
-protection_map[] for all possible vm_flags access permission combinations.
+Restrict generic protection_map[] array visibility only for platforms which
+do not enable ARCH_HAS_VM_GET_PAGE_PROT. For other platforms that do define
+their own vm_get_page_prot() enabling ARCH_HAS_VM_GET_PAGE_PROT, could have
+their private static protection_map[] still implementing an array look up.
+These private protection_map[] array could do without __PXXX/__SXXX macros,
+making them redundant and dropping them off as well.
 
-This series drops __SXXX/__PXXX macros from across platforms in the tree.
-First it makes protection_map[] array private (static) on platforms which
-enable ARCH_HAS_VM_GET_PAGE_PROT, later moves protection_map[] array into
-arch for all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT), dropping
-the generic one. In the process __SXXX/__PXXX macros become redundant and
-thus get dropped off completely. I understand that the diff stat is large
-here, but please do suggest if there is a better way. This series applies
-on v5.19-rc1 and has been build tested for multiple platforms.
-
-The CC list for this series has been reduced to just minimum, until there
-is some initial agreement.
-
-- Anshuman
-
-Changes in V3:
-
-- Fix build issues on powerpc and riscv
-
-Changes in V2:
-
-https://lore.kernel.org/all/20220613053354.553579-1-anshuman.khandual@arm.com/
-
-- Add 'const' identifier to protection_map[] on powerpc
-- Dropped #ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT check from sparc 32
-- Dropped protection_map[] init from sparc 64
-- Dropped all new platform changes subscribing ARCH_HAS_VM_GET_PAGE_PROT
-- Added a second patch which moves generic protection_map[] array into
-  all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT)
-
-Changes in V1:
-
-https://lore.kernel.org/linux-mm/20220603101411.488970-1-anshuman.khandual@arm.com/
+But platforms which do not define their custom vm_get_page_prot() enabling
+ARCH_HAS_VM_GET_PAGE_PROT, will still have to provide __PXXX/__SXXX macros.
 
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org
+Acked-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ arch/arm64/include/asm/pgtable-prot.h | 18 ------------------
+ arch/arm64/mm/mmap.c                  | 21 +++++++++++++++++++++
+ arch/powerpc/include/asm/pgtable.h    |  2 ++
+ arch/powerpc/mm/book3s64/pgtable.c    | 20 ++++++++++++++++++++
+ arch/sparc/include/asm/pgtable_64.h   | 19 -------------------
+ arch/sparc/mm/init_64.c               |  3 +++
+ arch/x86/include/asm/pgtable_types.h  | 19 -------------------
+ arch/x86/mm/pgprot.c                  | 19 +++++++++++++++++++
+ include/linux/mm.h                    |  2 ++
+ mm/mmap.c                             |  2 +-
+ 10 files changed, 68 insertions(+), 57 deletions(-)
 
-Anshuman Khandual (2):
-  mm/mmap: Restrict generic protection_map[] array visibility
-  mm/mmap: Drop generic protection_map[] array
-
- arch/alpha/include/asm/pgtable.h          | 17 -------
- arch/alpha/mm/init.c                      | 21 +++++++++
- arch/arc/include/asm/pgtable-bits-arcv2.h | 18 --------
- arch/arc/mm/mmap.c                        | 19 ++++++++
- arch/arm/include/asm/pgtable.h            | 17 -------
- arch/arm/lib/uaccess_with_memcpy.c        |  2 +-
- arch/arm/mm/mmu.c                         | 19 ++++++++
- arch/arm64/include/asm/pgtable-prot.h     | 18 --------
- arch/arm64/mm/mmap.c                      | 21 +++++++++
- arch/csky/include/asm/pgtable.h           | 18 --------
- arch/csky/mm/init.c                       | 19 ++++++++
- arch/hexagon/include/asm/pgtable.h        | 27 ------------
- arch/hexagon/mm/init.c                    | 41 +++++++++++++++++
- arch/ia64/include/asm/pgtable.h           | 18 --------
- arch/ia64/mm/init.c                       | 27 +++++++++++-
- arch/loongarch/include/asm/pgtable-bits.h | 19 --------
- arch/loongarch/mm/cache.c                 | 45 +++++++++++++++++++
- arch/m68k/include/asm/mcf_pgtable.h       | 54 -----------------------
- arch/m68k/include/asm/motorola_pgtable.h  | 22 ---------
- arch/m68k/include/asm/sun3_pgtable.h      | 17 -------
- arch/m68k/mm/mcfmmu.c                     | 54 +++++++++++++++++++++++
- arch/m68k/mm/motorola.c                   | 19 ++++++++
- arch/m68k/mm/sun3mmu.c                    | 19 ++++++++
- arch/microblaze/include/asm/pgtable.h     | 17 -------
- arch/microblaze/mm/init.c                 | 19 ++++++++
- arch/mips/include/asm/pgtable.h           | 22 ---------
- arch/mips/mm/cache.c                      |  2 +
- arch/nios2/include/asm/pgtable.h          | 16 -------
- arch/nios2/mm/init.c                      | 19 ++++++++
- arch/openrisc/include/asm/pgtable.h       | 18 --------
- arch/openrisc/mm/init.c                   | 19 ++++++++
- arch/parisc/include/asm/pgtable.h         | 18 --------
- arch/parisc/mm/init.c                     | 19 ++++++++
- arch/powerpc/include/asm/pgtable.h        | 18 --------
- arch/powerpc/mm/book3s64/pgtable.c        |  6 +++
- arch/powerpc/mm/pgtable.c                 | 20 +++++++++
- arch/riscv/include/asm/pgtable.h          | 20 ---------
- arch/riscv/mm/init.c                      | 19 ++++++++
- arch/s390/include/asm/pgtable.h           | 17 -------
- arch/s390/mm/mmap.c                       | 19 ++++++++
- arch/sh/include/asm/pgtable.h             | 17 -------
- arch/sh/mm/mmap.c                         | 19 ++++++++
- arch/sparc/include/asm/pgtable_32.h       | 19 --------
- arch/sparc/include/asm/pgtable_64.h       | 19 --------
- arch/sparc/mm/init_32.c                   | 19 ++++++++
- arch/sparc/mm/init_64.c                   |  3 ++
- arch/um/include/asm/pgtable.h             | 17 -------
- arch/um/kernel/mem.c                      | 19 ++++++++
- arch/x86/include/asm/pgtable_types.h      | 19 --------
- arch/x86/mm/pgprot.c                      | 19 ++++++++
- arch/x86/um/mem_32.c                      |  2 +-
- arch/xtensa/include/asm/pgtable.h         | 18 --------
- arch/xtensa/mm/init.c                     | 19 ++++++++
- include/linux/mm.h                        |  2 +
- mm/mmap.c                                 | 19 --------
- 55 files changed, 547 insertions(+), 522 deletions(-)
-
+diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+index 62e0ebeed720..9b165117a454 100644
+--- a/arch/arm64/include/asm/pgtable-prot.h
++++ b/arch/arm64/include/asm/pgtable-prot.h
+@@ -89,24 +89,6 @@ extern bool arm64_use_ng_mappings;
+ #define PAGE_READONLY_EXEC	__pgprot(_PAGE_DEFAULT | PTE_USER | PTE_RDONLY | PTE_NG | PTE_PXN)
+ #define PAGE_EXECONLY		__pgprot(_PAGE_DEFAULT | PTE_RDONLY | PTE_NG | PTE_PXN)
+ 
+-#define __P000  PAGE_NONE
+-#define __P001  PAGE_READONLY
+-#define __P010  PAGE_READONLY
+-#define __P011  PAGE_READONLY
+-#define __P100  PAGE_READONLY_EXEC	/* PAGE_EXECONLY if Enhanced PAN */
+-#define __P101  PAGE_READONLY_EXEC
+-#define __P110  PAGE_READONLY_EXEC
+-#define __P111  PAGE_READONLY_EXEC
+-
+-#define __S000  PAGE_NONE
+-#define __S001  PAGE_READONLY
+-#define __S010  PAGE_SHARED
+-#define __S011  PAGE_SHARED
+-#define __S100  PAGE_READONLY_EXEC	/* PAGE_EXECONLY if Enhanced PAN */
+-#define __S101  PAGE_READONLY_EXEC
+-#define __S110  PAGE_SHARED_EXEC
+-#define __S111  PAGE_SHARED_EXEC
+-
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* __ASM_PGTABLE_PROT_H */
+diff --git a/arch/arm64/mm/mmap.c b/arch/arm64/mm/mmap.c
+index 78e9490f748d..8f5b7ce857ed 100644
+--- a/arch/arm64/mm/mmap.c
++++ b/arch/arm64/mm/mmap.c
+@@ -13,6 +13,27 @@
+ #include <asm/cpufeature.h>
+ #include <asm/page.h>
+ 
++static pgprot_t protection_map[16] __ro_after_init = {
++	[VM_NONE]					= PAGE_NONE,
++	[VM_READ]					= PAGE_READONLY,
++	[VM_WRITE]					= PAGE_READONLY,
++	[VM_WRITE | VM_READ]				= PAGE_READONLY,
++	/* PAGE_EXECONLY if Enhanced PAN */
++	[VM_EXEC]					= PAGE_READONLY_EXEC,
++	[VM_EXEC | VM_READ]				= PAGE_READONLY_EXEC,
++	[VM_EXEC | VM_WRITE]				= PAGE_READONLY_EXEC,
++	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_READONLY_EXEC,
++	[VM_SHARED]					= PAGE_NONE,
++	[VM_SHARED | VM_READ]				= PAGE_READONLY,
++	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
++	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
++	/* PAGE_EXECONLY if Enhanced PAN */
++	[VM_SHARED | VM_EXEC]				= PAGE_READONLY_EXEC,
++	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY_EXEC,
++	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_EXEC,
++	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_EXEC
++};
++
+ /*
+  * You really shouldn't be using read() or write() on /dev/mem.  This might go
+  * away in the future.
+diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
+index d564d0ecd4cd..8ed2a80c896e 100644
+--- a/arch/powerpc/include/asm/pgtable.h
++++ b/arch/powerpc/include/asm/pgtable.h
+@@ -21,6 +21,7 @@ struct mm_struct;
+ #endif /* !CONFIG_PPC_BOOK3S */
+ 
+ /* Note due to the way vm flags are laid out, the bits are XWR */
++#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+ #define __P000	PAGE_NONE
+ #define __P001	PAGE_READONLY
+ #define __P010	PAGE_COPY
+@@ -38,6 +39,7 @@ struct mm_struct;
+ #define __S101	PAGE_READONLY_X
+ #define __S110	PAGE_SHARED_X
+ #define __S111	PAGE_SHARED_X
++#endif
+ 
+ #ifndef __ASSEMBLY__
+ 
+diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
+index 7b9966402b25..d3b019b95c1d 100644
+--- a/arch/powerpc/mm/book3s64/pgtable.c
++++ b/arch/powerpc/mm/book3s64/pgtable.c
+@@ -551,6 +551,26 @@ unsigned long memremap_compat_align(void)
+ EXPORT_SYMBOL_GPL(memremap_compat_align);
+ #endif
+ 
++/* Note due to the way vm flags are laid out, the bits are XWR */
++static const pgprot_t protection_map[16] = {
++	[VM_NONE]					= PAGE_NONE,
++	[VM_READ]					= PAGE_READONLY,
++	[VM_WRITE]					= PAGE_COPY,
++	[VM_WRITE | VM_READ]				= PAGE_COPY,
++	[VM_EXEC]					= PAGE_READONLY_X,
++	[VM_EXEC | VM_READ]				= PAGE_READONLY_X,
++	[VM_EXEC | VM_WRITE]				= PAGE_COPY_X,
++	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_X,
++	[VM_SHARED]					= PAGE_NONE,
++	[VM_SHARED | VM_READ]				= PAGE_READONLY,
++	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
++	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
++	[VM_SHARED | VM_EXEC]				= PAGE_READONLY_X,
++	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY_X,
++	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_X,
++	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_X
++};
++
+ pgprot_t vm_get_page_prot(unsigned long vm_flags)
+ {
+ 	unsigned long prot = pgprot_val(protection_map[vm_flags &
+diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
+index 4679e45c8348..a779418ceba9 100644
+--- a/arch/sparc/include/asm/pgtable_64.h
++++ b/arch/sparc/include/asm/pgtable_64.h
+@@ -187,25 +187,6 @@ bool kern_addr_valid(unsigned long addr);
+ #define _PAGE_SZHUGE_4U	_PAGE_SZ4MB_4U
+ #define _PAGE_SZHUGE_4V	_PAGE_SZ4MB_4V
+ 
+-/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+-#define __P000	__pgprot(0)
+-#define __P001	__pgprot(0)
+-#define __P010	__pgprot(0)
+-#define __P011	__pgprot(0)
+-#define __P100	__pgprot(0)
+-#define __P101	__pgprot(0)
+-#define __P110	__pgprot(0)
+-#define __P111	__pgprot(0)
+-
+-#define __S000	__pgprot(0)
+-#define __S001	__pgprot(0)
+-#define __S010	__pgprot(0)
+-#define __S011	__pgprot(0)
+-#define __S100	__pgprot(0)
+-#define __S101	__pgprot(0)
+-#define __S110	__pgprot(0)
+-#define __S111	__pgprot(0)
+-
+ #ifndef __ASSEMBLY__
+ 
+ pte_t mk_pte_io(unsigned long, pgprot_t, int, unsigned long);
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index f6174df2d5af..d6faee23c77d 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -2634,6 +2634,9 @@ void vmemmap_free(unsigned long start, unsigned long end,
+ }
+ #endif /* CONFIG_SPARSEMEM_VMEMMAP */
+ 
++/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
++static pgprot_t protection_map[16] __ro_after_init;
++
+ static void prot_init_common(unsigned long page_none,
+ 			     unsigned long page_shared,
+ 			     unsigned long page_copy,
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index bdaf8391e2e0..aa174fed3a71 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -230,25 +230,6 @@ enum page_cache_mode {
+ 
+ #endif	/* __ASSEMBLY__ */
+ 
+-/*         xwr */
+-#define __P000	PAGE_NONE
+-#define __P001	PAGE_READONLY
+-#define __P010	PAGE_COPY
+-#define __P011	PAGE_COPY
+-#define __P100	PAGE_READONLY_EXEC
+-#define __P101	PAGE_READONLY_EXEC
+-#define __P110	PAGE_COPY_EXEC
+-#define __P111	PAGE_COPY_EXEC
+-
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READONLY
+-#define __S010	PAGE_SHARED
+-#define __S011	PAGE_SHARED
+-#define __S100	PAGE_READONLY_EXEC
+-#define __S101	PAGE_READONLY_EXEC
+-#define __S110	PAGE_SHARED_EXEC
+-#define __S111	PAGE_SHARED_EXEC
+-
+ /*
+  * early identity mapping  pte attrib macros.
+  */
+diff --git a/arch/x86/mm/pgprot.c b/arch/x86/mm/pgprot.c
+index 763742782286..7eca1b009af6 100644
+--- a/arch/x86/mm/pgprot.c
++++ b/arch/x86/mm/pgprot.c
+@@ -4,6 +4,25 @@
+ #include <linux/mm.h>
+ #include <asm/pgtable.h>
+ 
++static pgprot_t protection_map[16] __ro_after_init = {
++	[VM_NONE]					= PAGE_NONE,
++	[VM_READ]					= PAGE_READONLY,
++	[VM_WRITE]					= PAGE_COPY,
++	[VM_WRITE | VM_READ]				= PAGE_COPY,
++	[VM_EXEC]					= PAGE_READONLY_EXEC,
++	[VM_EXEC | VM_READ]				= PAGE_READONLY_EXEC,
++	[VM_EXEC | VM_WRITE]				= PAGE_COPY_EXEC,
++	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_EXEC,
++	[VM_SHARED]					= PAGE_NONE,
++	[VM_SHARED | VM_READ]				= PAGE_READONLY,
++	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
++	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
++	[VM_SHARED | VM_EXEC]				= PAGE_READONLY_EXEC,
++	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY_EXEC,
++	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_EXEC,
++	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_EXEC
++};
++
+ pgprot_t vm_get_page_prot(unsigned long vm_flags)
+ {
+ 	unsigned long val = pgprot_val(protection_map[vm_flags &
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index bc8f326be0ce..2254c1980c8e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -420,11 +420,13 @@ extern unsigned int kobjsize(const void *objp);
+ #endif
+ #define VM_FLAGS_CLEAR	(ARCH_VM_PKEY_FLAGS | VM_ARCH_CLEAR)
+ 
++#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+ /*
+  * mapping from the currently active vm_flags protection bits (the
+  * low four bits) to a page protection mask..
+  */
+ extern pgprot_t protection_map[16];
++#endif
+ 
+ /*
+  * The default fault flags that should be used by most of the
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 61e6135c54ef..e66920414945 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -101,6 +101,7 @@ static void unmap_region(struct mm_struct *mm,
+  *								w: (no) no
+  *								x: (yes) yes
+  */
++#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+ pgprot_t protection_map[16] __ro_after_init = {
+ 	[VM_NONE]					= __P000,
+ 	[VM_READ]					= __P001,
+@@ -120,7 +121,6 @@ pgprot_t protection_map[16] __ro_after_init = {
+ 	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __S111
+ };
+ 
+-#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+ pgprot_t vm_get_page_prot(unsigned long vm_flags)
+ {
+ 	return protection_map[vm_flags & (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)];
 -- 
 2.25.1
 

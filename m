@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6970854DDBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ABD54DDC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 11:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiFPJBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 05:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S1359624AbiFPJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 05:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiFPJA6 (ORCPT
+        with ESMTP id S231732AbiFPJCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 05:00:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46C6192B5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:00:57 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 72545210E4;
-        Thu, 16 Jun 2022 09:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655370056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w0BHHsJPE8qgzh048aqdSMb/zWa2mtlhdMk8ow+kQSw=;
-        b=JfzZQsy+X5n7J6iAAUyP6jooN90j7njJxN/Obtwg2jNsr3jNCpoRyOF93Z5Vsng4TJo5oB
-        Mh0HUkf2I6WqSPBAafwZVZE4YOMNN/3ttAFtqtc8Hr8TsYFJf6VJNtuedsyehfyLBXVNwN
-        emTTr4zg7Qd3nZuUmMCpQ8zWIWGcZGk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655370056;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w0BHHsJPE8qgzh048aqdSMb/zWa2mtlhdMk8ow+kQSw=;
-        b=aIvvRzucvxzVgOoa6kS+Z2qx0UD0mDzAlpLoRBod03NWoX7CHfBBPP3LV1Oc9IEY0CZuzI
-        CCub8yJBqTEte2Aw==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3E3622C141;
-        Thu, 16 Jun 2022 09:00:56 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C0CC9A062E; Thu, 16 Jun 2022 11:00:52 +0200 (CEST)
-Date:   Thu, 16 Jun 2022 11:00:52 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mm@kvack.org, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandru Elisei <alexandru.elisei@arm.com>
-Subject: Re: [PATCH] init: Initialize noop_backing_dev_info early
-Message-ID: <20220616090052.6xhfljxcis7ymqlb@quack3.lan>
-References: <20220615214815.6901-1-jack@suse.cz>
- <YqrI1kS/BxEQ+39V@infradead.org>
+        Thu, 16 Jun 2022 05:02:19 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2D92DD4A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:02:12 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id s12so1554460ejx.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 02:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pc5Amsn8TgDKhR/5plxMGf5bc0SbsnTaDD4PIb/Yu5w=;
+        b=UXL5I2ysh9P8L6Oo8E2wnIxMZ60LLgOVT2jV9ZytcZfsqDdOP5nX9tjZkutipW1NyM
+         Qttk6WOE1hInbn4Lm+SpGlypygKTWfQYsjM4t7T15ZzIPDaUD+/ZvG7C9UE9cAkyljXS
+         cEEY44p6T1VkjiNRqDpJG67fqs7FXJEqJSyuE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pc5Amsn8TgDKhR/5plxMGf5bc0SbsnTaDD4PIb/Yu5w=;
+        b=gQvSGqU5m5bqL7Ha9AKLum9kOBF6HV31F2H10HGdZckzuKY0RDha6hy16EJsBzShDp
+         Yu2WZ9KyfBZhbhLr8PHRJr9Q//YB3mNyC4JuWml2uEjcVkjWLIp7ivGBQhNYV95l6Hi1
+         v0DWw2p3mtc0kJDzk5DzzzxeIhJ5d8yCBHSA/mRmHb/svY7CFVyWz6pzrOGV4mWz2OYh
+         iCr3c44yoVgGkcl8iiWWwgmE8xN8gH2GIxJ/7DPnA9U58yNaDw+yafBUUzdV6XJMwJFE
+         iSMny3iwhCme8CStu+wwDcd2vBbtvdn5K/dd/Khy7BewYamc8Q5REHWvky4m8FXtUo92
+         m32Q==
+X-Gm-Message-State: AJIora/IFANrrVrQvKrjsR/ixoLv4iA6K8ERi8FBaaexvQ1OaAg4z8Me
+        MLMnVGHtdywX0qT+tS/pssgjtrjd8R+MJ3w9/EVMHqrBHPQswA==
+X-Google-Smtp-Source: AGRyM1u4KXzIo3qgzwa+diwcwq4iTbdaCf5r9GEZ/ERy8CWzUrD1uf6bG/vHa4WfMNeiKpRfcpdG+J6Dgg41ne51m/M=
+X-Received: by 2002:a17:907:3f92:b0:706:db40:a0ef with SMTP id
+ hr18-20020a1709073f9200b00706db40a0efmr3487509ejc.524.1655370130911; Thu, 16
+ Jun 2022 02:02:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqrI1kS/BxEQ+39V@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220605072201.9237-1-dharamhans87@gmail.com> <20220605072201.9237-2-dharamhans87@gmail.com>
+ <Yp/CYjONZHoekSVA@redhat.com> <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com>
+ <Yp/KnF0oSIsk0SYd@redhat.com> <3d189ccc-437e-d9c0-e9f1-b4e0d2012e3c@ddn.com> <YqH7PO7KtoiXkmVH@redhat.com>
+In-Reply-To: <YqH7PO7KtoiXkmVH@redhat.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 16 Jun 2022 11:01:59 +0200
+Message-ID: <CAJfpegsbNPuy3YmGZ1prUyir_h_5noGZLN8R__o0=iz8n4Y9og@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] Allow non-extending parallel direct writes on the
+ same file.
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Bernd Schubert <bschubert@ddn.com>,
+        Dharmendra Singh <dharamhans87@gmail.com>,
+        linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 15-06-22 23:08:22, Christoph Hellwig wrote:
-> On Wed, Jun 15, 2022 at 11:48:15PM +0200, Jan Kara wrote:
-> > +extern int bdi_init(struct backing_dev_info *bdi);
-> 
-> No need for the extern.
+On Thu, 9 Jun 2022 at 15:53, Vivek Goyal <vgoyal@redhat.com> wrote:
 
-Yes, fixed up.
+> Right. If user space is relying on kernel lock for thread synchronization,
+> it can not enable parallel writes.
+>
+> But if it is not relying on this, it should be able to enable parallel
+> writes. Just keep in mind that ->i_size check is not sufficient to
+> guarantee that you will not get "two extnding parallel writes". If
+> another client on a different machine truncated the file, it is
+> possible this client has old cached ->i_size and it will can
+> get multiple file extending parallel writes.
 
-> Otherwise looks good:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+There are two cases:
 
-Thanks for review!
+1. the filesystem can be changed only through a single fuse instance
 
-> And this remind me that I really want to kill noop_backing_dev_info
-> and just use a NULL bdi for this case eventually..
+2. the filesystem can be changed externally.
 
-Yes, I'm just not sure whether the checks for bdi / wb being NULL in lots
-of places will not be too annoying... But maybe you'll be able to come up
-with some wrappers that will make things bearable.
+In case 1 the fuse client must ensure that data is updated
+consistently (as defined by e.g. POSIX).  This is what I'm mostly
+worried about.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Case 2 is much more difficult in the general case, and network
+filesystems often have a relaxed consistency model.
+
+
+> So if fuse daemon enables parallel extending writes, it should be
+> prepared to deal with multiple extending parallel writes.
+>
+> And if this is correct assumption, I am wondering why to even try
+> to do ->i_size check and try to avoid parallel extending writes
+> in fuse kernel. May be there is something I am not aware of. And
+> that's why I am just raising questions.
+
+We can probably do that, but it needs careful review of where i_size
+is changed and where i_size is used so we can never get into an
+inconsistent state.
+
+Thanks,
+Miklos

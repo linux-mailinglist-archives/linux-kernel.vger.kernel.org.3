@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C2854DC95
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AEA54DCA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 10:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359644AbiFPILU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 04:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S1358692AbiFPIPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 04:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359374AbiFPILT (ORCPT
+        with ESMTP id S229718AbiFPIPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 04:11:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D3B5D5D7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:11:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655367079; x=1686903079;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jRcuF1uDD/XW4iPGapQV10Uvq9i/CiZCx2xNmbcpmls=;
-  b=Op9eT/Tol0mBjIS1lK/Ri5Imp7I4kte5Mqwrqr/G6xv5LbvrkBsZfFaD
-   3oSTJN8W3NXFnRtSwu6i8H+egvAfNdW+WDFXRL1u1sm3eK0CkK0DXypHU
-   fe6Yz7xA+rvKe8b8AKjgwbam989HaJ+p1u7UW4gyjFMTYsgtBn5mKzzVF
-   rMO9qZodmot5G2pxtCtRzFv0DX1oaer0CqwFQpniceWyUAWhEUTA+za4v
-   qieVyGxypqyu243C2eksvLuJRCTz5Hu+Et8aRtFSW25d8C8Vk69yMZeL4
-   4wGATW0cxv5V53m3Zdcn92kp00yT6q0oK2TsM59vBcsCoBq9MsbKxHycl
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="160592810"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2022 01:11:18 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 16 Jun 2022 01:11:17 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 16 Jun 2022 01:11:15 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <mihai.sain@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] ARM: at91: fix soc detection for SAM9X60 SiPs
-Date:   Thu, 16 Jun 2022 11:13:44 +0300
-Message-ID: <20220616081344.1978664-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 16 Jun 2022 04:15:10 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741A45D5D7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:15:09 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x5so1115728edi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 01:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=NTbh4MI+QCwbcpkgIpo7198UESJ/mO1+VW3Q06LAB7c=;
+        b=jaqw6FnWxB/5UThR+ZDWPxP3LWg0yS0YKOWgNceuoysE3QYfS+oCxZDmNCa3RDthiA
+         nkA25n9Yi8JFYV85REMoUBn+G4y6pDSV2DxU42hO4xQRb7+rgdKay4JL4s8VmPBn1nC2
+         yF85m7F7VZaH+V+s+cRL0dGTy2NlNoYtbSfZ1CPjfZrocAUyoNrf37+MCeIEcVKY9Mdz
+         1i9VibVT2e/BJ4fdVSxoKa4OFM3U6ip5yjEZWjhIfkQsGUiBh6VjTAV2L2vDPEt837o3
+         6rPCfBieZXhr+OtkAuMNYQbYzuIY8e5Vdeqa07pg+PV/0s2Uo8oR92+b05AsASWc2IXa
+         l2+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=NTbh4MI+QCwbcpkgIpo7198UESJ/mO1+VW3Q06LAB7c=;
+        b=x4A/SFHnDE9qbmTlkmKoOOOF0YRFW4dfZ6lZ9XtW5zBm6q5q4BGFzO9OrwU/DhkzId
+         UCKFD26w+1vDnkR8ud6NaYdSNgo+KzbtqAdBKf1ax3AmKZ6Hew1JcvzYhHJapKy1QD+A
+         ENAgxD2u3eHcZoVC9iqphEeeoWdjDGdSjjWOSs5+r9dK+c5HdmZwRUQ4xFsV49xyMRN2
+         +xkQh3CC3PLlnsJGSq7T33J+pNUg+XjmH34Qhzt1hxYXCzjVaumXwfEm4ifXJxVW0fty
+         8d8Pm49/Kq+EIurq2vXC6AoN9MST4zPzg0JyxkLdH7pAEQHmLsNR2fu6lU/qG7/AmoFf
+         z/DQ==
+X-Gm-Message-State: AJIora9Lcsr+jidEZIBLHINlITkJfyEmDitVaWDqTnrG8G83LUjPsvkN
+        iYQmSrbQkjlrYO+MdtVFc54zdXqA926QEg==
+X-Google-Smtp-Source: AGRyM1tAV7ubqxgWT2Y3vDm33RYC1UL1k8VL4cdyLifra2KOoXTU0YbVtJhJ79SiTn0ipQMr4EiJtw==
+X-Received: by 2002:a05:6402:100c:b0:42d:f407:b050 with SMTP id c12-20020a056402100c00b0042df407b050mr4735798edu.39.1655367307984;
+        Thu, 16 Jun 2022 01:15:07 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id s2-20020a1709060d6200b006f3ef214e2csm471585ejh.146.2022.06.16.01.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 01:15:07 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:14:44 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Yang Shen <shenyang39@huawei.com>
+Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
+Message-ID: <YqrmdKNrYTCiS/MC@myrica>
+References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+ <Yqn3spLZHpAkQ9Us@myrica>
+ <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,45 +80,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mihai Sain <mihai.sain@microchip.com>
+On Thu, Jun 16, 2022 at 12:10:18PM +0800, Zhangfei Gao wrote:
+> > > diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+> > > index 281c54003edc..b6219c6bfb48 100644
+> > > --- a/drivers/misc/uacce/uacce.c
+> > > +++ b/drivers/misc/uacce/uacce.c
+> > > @@ -136,9 +136,16 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
+> > >   	if (!q)
+> > >   		return -ENOMEM;
+> > > +	mutex_lock(&uacce->queues_lock);
+> > > +
+> > > +	if (!uacce->parent->driver) {
+> > I don't think this is useful, because the core clears parent->driver after
+> > having run uacce_remove():
+> > 
+> >    rmmod hisi_zip		open()
+> >     ...				 uacce_fops_open()
+> >     __device_release_driver()	  ...
+> >      pci_device_remove()
+> >       hisi_zip_remove()
+> >        hisi_qm_uninit()
+> >         uacce_remove()
+> >          ...			  ...
+> >     				  mutex_lock(uacce->queues_lock)
+> >      ...				  if (!uacce->parent->driver)
+> >      device_unbind_cleanup()	  /* driver still valid, proceed */
+> >       dev->driver = NULL
+> 
+> The check  if (!uacce->parent->driver) is required, otherwise NULL pointer
+> may happen.
 
-Fix SoC detection for SAM9X60 SiPs:
-SAM9X60D5M
-SAM9X60D1G
-SAM9X60D6K
+I agree we need something, what I mean is that this check is not
+sufficient.
 
-Fixes: af3a10513cd6 ("drivers: soc: atmel: add per soc id and version match masks")
-Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/soc/atmel/soc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> iommu_sva_bind_device
+> const struct iommu_ops *ops = dev_iommu_ops(dev);  ->
+> dev->iommu->iommu_dev->ops
+> 
+> rmmod has no issue, but remove parent pci device has the issue.
 
-diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
-index b2d365ae0282..dae8a2e0f745 100644
---- a/drivers/soc/atmel/soc.c
-+++ b/drivers/soc/atmel/soc.c
-@@ -91,14 +91,14 @@ static const struct at91_soc socs[] __initconst = {
- 	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
- 		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
- 		 "sam9x60", "sam9x60"),
--	AT91_SOC(SAM9X60_CIDR_MATCH, SAM9X60_D5M_EXID_MATCH,
--		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
-+	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAM9X60_D5M_EXID_MATCH,
- 		 "sam9x60 64MiB DDR2 SiP", "sam9x60"),
--	AT91_SOC(SAM9X60_CIDR_MATCH, SAM9X60_D1G_EXID_MATCH,
--		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
-+	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAM9X60_D1G_EXID_MATCH,
- 		 "sam9x60 128MiB DDR2 SiP", "sam9x60"),
--	AT91_SOC(SAM9X60_CIDR_MATCH, SAM9X60_D6K_EXID_MATCH,
--		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
-+	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAM9X60_D6K_EXID_MATCH,
- 		 "sam9x60 8MiB SDRAM SiP", "sam9x60"),
- #endif
- #ifdef CONFIG_SOC_SAMA5
--- 
-2.34.1
+Ah right, relying on the return value of bind() wouldn't be enough even if
+we mandated SVA.
 
+[...]
+> > 
+> > I think we need the global uacce_mutex to serialize uacce_remove() and
+> > uacce_fops_open(). uacce_remove() would do everything, including
+> > xa_erase(), while holding that mutex. And uacce_fops_open() would try to
+> > obtain the uacce object from the xarray while holding the mutex, which
+> > fails if the uacce object is being removed.
+> 
+> Since fops_open get char device refcount, uacce_release will not happen
+> until open returns.
+
+The refcount only ensures that the uacce_device object is not freed as
+long as there are open fds. But uacce_remove() can run while there are
+open fds, or fds in the process of being opened. And atfer uacce_remove()
+runs, the uacce_device object still exists but is mostly unusable. For
+example once the module is freed, uacce->ops is not valid anymore. But
+currently uacce_fops_open() may dereference the ops in this case:
+
+	uacce_fops_open()
+	 if (!uacce->parent->driver)
+	 /* Still valid, keep going */		
+	 ...					rmmod
+						 uacce_remove()
+	 ...					 free_module()
+	 uacce->ops->get_queue() /* BUG */
+
+Accessing uacce->ops after free_module() is a use-after-free. We need all
+the fops to synchronize with uacce_remove() to ensure they don't use any
+resource of the parent after it's been freed. 
+
+I see uacce_fops_poll() may have the same problem, and should be inside
+uacce_mutex.
+
+Thanks,
+Jean

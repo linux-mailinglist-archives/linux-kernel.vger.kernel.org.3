@@ -2,166 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B29754E7FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF2054E813
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 18:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378390AbiFPQqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 12:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S233305AbiFPQtB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Jun 2022 12:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiFPQqe (ORCPT
+        with ESMTP id S1378444AbiFPQs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:46:34 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3FF50E3B;
-        Thu, 16 Jun 2022 09:45:30 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id n11so2057488iod.4;
-        Thu, 16 Jun 2022 09:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2nZIbA02OXNIyOJXo7QF5v3mB7RiS92/ilxeBqv2VfA=;
-        b=AM9RhXBt+LsVNDi+BD7JqxRyoFeds10ltwQAurvIK++eeWSRboWL2CudUwDRxaQW5Z
-         RCG1QYnkiqHPVunNNiioVe9/MaAS5TyGvz/yNjFf201p/y1TBPUZVdAVBgm8zPQ5TtBS
-         iaUvX/3DpCIIDj4FDt8cB/gr0R5i/yfx309bLUl1BUcAf7DCqiSbfXVZB29oY68waMIz
-         waNbvxOTYszbjEwe6zUwGzPKgnkoLvRGG5y4DXbGokBWao2defVOX6ElDFHf0pmlBQWh
-         JfjaYWRkj4lfVm2cZrcKIi/YZ1MD/5L1Dbl+WrOtw8rD0VMuO3khgMd4K0yqcSopGyUg
-         GOaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2nZIbA02OXNIyOJXo7QF5v3mB7RiS92/ilxeBqv2VfA=;
-        b=pKOGhjMlo5bONcXDt1/9NFrJdV79iraY+oWZGdwVsueDpPkG836aPnkY9P4BX1rM4o
-         QeAAvHs4wAqCw/G5+FNVvJRkV0VHZoCIQzCmTgvG8Yju2EsizIHEJxKI9vJAyPrmQbtm
-         v1ZR8m+zuPct7MIDR/9jPmhTjbhSgu7wp4Xaaq2YvMuxUvEte35zOi3sEzhuBP7+S0qK
-         R2vxQQwgCNbdoXEh0s66mCwTXkov08iOXwmgs41OEO002NhGCnlCHhUQ1LatydoPUxS2
-         0t1l96SdxqLqhSSGVRQLLgP4rUUi+aiUv/JzW6L5mUl81QI22lChsilBbeCOhQgCzqWH
-         9F8Q==
-X-Gm-Message-State: AJIora+dqGsIGXQwwE8BQGwP1mvXXM2pz5IIZWaMfFSgazBhzAH/I9/I
-        /QkPS904qinZVY0PHGzfqiA=
-X-Google-Smtp-Source: AGRyM1tQ0Ty3qcwovZ4LFfcBf4Rj32abjfMSZ7jnhkPVz/YfOFNN3/WAGJtf7QB/DzEom5KAK2LLcg==
-X-Received: by 2002:a05:6638:3291:b0:331:7589:677 with SMTP id f17-20020a056638329100b0033175890677mr3194294jav.96.1655397920307;
-        Thu, 16 Jun 2022 09:45:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:7c5a:aa57:ff5:df70? ([2600:1700:2442:6db0:7c5a:aa57:ff5:df70])
-        by smtp.gmail.com with ESMTPSA id g2-20020a925202000000b002d5199dab1fsm1184668ilb.42.2022.06.16.09.45.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 09:45:19 -0700 (PDT)
-Message-ID: <afea990a-9378-e684-2129-e24393b60b4b@gmail.com>
-Date:   Thu, 16 Jun 2022 11:45:17 -0500
+        Thu, 16 Jun 2022 12:48:29 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49FB337020
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 09:48:08 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-90-KsoYMlcUM_yKluVn1AzPOw-1; Thu, 16 Jun 2022 17:48:06 +0100
+X-MC-Unique: KsoYMlcUM_yKluVn1AzPOw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 16 Jun 2022 17:48:04 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 16 Jun 2022 17:48:04 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andrew Jones' <drjones@redhat.com>
+CC:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        "Ricardo Koller" <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        "Reiji Watanabe" <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        "Colton Lewis" <coltonlewis@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Thread-Topic: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Thread-Index: AQHYgXkNkdHi2edO0UOJoWwOrv/ni61SMGPg///3a4CAABX/cA==
+Date:   Thu, 16 Jun 2022 16:48:04 +0000
+Message-ID: <3e73cb07968d4c92b797781b037c2d45@AcuMS.aculab.com>
+References: <20220615185706.1099208-1-rananta@google.com>
+ <20220616120232.ctkekviusrozqpru@gator>
+ <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
+ <20220616162557.55bopzfa6glusuh5@gator>
+In-Reply-To: <20220616162557.55bopzfa6glusuh5@gator>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Default async probing for DT based systems
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+From: Andrew Jones
+> Sent: 16 June 2022 17:26
+> 
+> On Thu, Jun 16, 2022 at 03:58:52PM +0000, David Laight wrote:
+> > From: Andrew Jones
+> > > Sent: 16 June 2022 13:03
+> > >
+> > > On Wed, Jun 15, 2022 at 06:57:06PM +0000, Raghavendra Rao Ananta wrote:
+> > > > The selftests, when built with newer versions of clang, is found
+> > > > to have over optimized guests' ucall() function, and eliminating
+> > > > the stores for uc.cmd (perhaps due to no immediate readers). This
+> > > > resulted in the userspace side always reading a value of '0', and
+> > > > causing multiple test failures.
+> > > >
+> > > > As a result, prevent the compiler from optimizing the stores in
+> > > > ucall() with WRITE_ONCE().
+> > > >
+> > > > Suggested-by: Ricardo Koller <ricarkol@google.com>
+> > > > Suggested-by: Reiji Watanabe <reijiw@google.com>
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  tools/testing/selftests/kvm/lib/aarch64/ucall.c | 9 ++++-----
+> > > >  1 file changed, 4 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > > index e0b0164e9af8..be1d9728c4ce 100644
+> > > > --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > > +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > > @@ -73,20 +73,19 @@ void ucall_uninit(struct kvm_vm *vm)
+> > > >
+> > > >  void ucall(uint64_t cmd, int nargs, ...)
+> > > >  {
+> > > > -	struct ucall uc = {
+> > > > -		.cmd = cmd,
+> > > > -	};
+> > > > +	struct ucall uc = {};
+> > > >  	va_list va;
+> > > >  	int i;
+> > > >
+> > > > +	WRITE_ONCE(uc.cmd, cmd);
+> > > >  	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
+> > > >
+> > > >  	va_start(va, nargs);
+> > > >  	for (i = 0; i < nargs; ++i)
+> > > > -		uc.args[i] = va_arg(va, uint64_t);
+> > > > +		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
+> > > >  	va_end(va);
+> > > >
+> > > > -	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
+> > > > +	WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
+> > > >  }
+> >
+> > Am I misreading things again?
+> > That function looks like it writes the address of an on-stack
+> > item into global data.
+> 
+> The write to the address that the global points at causes a switch
+> from guest to host context. The guest's stack remains intact while
+> executing host code and the host can access the uc stack variable
+> directly by its address. Take a look at lib/aarch64/ucall.c to see
+> all the details.
 
-You failed to include me in the distribution.  Adding myself now...
+No wonder I was confused.
+It's not surprising the compiler optimises it all away.
 
--Frank
+It doesn't seem right to be 'abusing' WRITE_ONCE() here.
+Just adding barrier() should be enough and much more descriptive.
 
-On 6/15/22 23:24, Saravana Kannan wrote:
-> Hi,
-> 
-> TL;DR: I want to improve boot times by enabling async probing by
-> default for DT based systems. Can you give it a shot please?
-> 
-> Why do you think it might work when async probing has been a pain before?
-> ==========================================================
-> Since fw_devlink=on is the default behavior and fw_devlink understands
-> approximately 24 DT bindings, it should capture most of the device
-> dependencies and ensure proper probe ordering. For example, on a Pixel
-> 6, fw_devlink figures out 325 dependencies that it uses to enforce
-> probe ordering.
-> 
-> You can find all the dependencies under /sys/class/devlink.
-> 
-> Fine! What do you want me to try?
-> ==========================
-> With the patches that have landed in 5.19-rc1, we can now enable
-> default async probing for all built-in drivers by adding the following
-> to the kernel command line:
-> 
-> driver_async_probe=*
-> 
-> I'd really appreciate it if folks can try adding driver_async_probe=*
-> to their kernel command line and report any boot time
-> improvements/regression or boot/probe failures it causes.
-> 
-> (* insert cat begging pic *)
-> Can I haz some reports pleez?!
-> 
-> Tips:
-> ====
-> One easy way to check for devices probe failures is to compare the
-> output of this command with/without the commandline changes:
-> 
-> # find /sys/devices -name driver
-> 
-> Btw, if you need to force sync probing for a few drivers so that your
-> rootfs mounts properly, you can set the flag in the driver, or you can
-> list them as exceptions following the * in the command line option.
-> For example:
-> driver_async_probe=*,my_flash_driver,my_sdio_driver
-> 
-> Report these too.
-> 
-> Known issues:
-> ===========
-> fw_devlink doesn't yet support phy-handle and mdio-parent DT bindings.
-> They have some tricky issues I need to resolve first and I need to add
-> both of them together -- I'm working on it. If there are other DT
-> bindings that are missing support, do let me know. Most of them are
-> easy to add.
-> 
-> The driver_async_probe=* won't have any useful impact for modules
-> without adding <module_name>.async_probe to the commandline or
-> async_probe as a module option when loading it. This is because
-> modules intentionally force sync before they exit. There's a patch for
-> a global flag for modules too [1], but it can never be set by default
-> for userspace reasons[2].
-> 
-> [1] - https://lore.kernel.org/lkml/20220604010101.719508-1-saravanak@google.com/
-> [2] - https://lore.kernel.org/lkml/CA+55aFxV40V2WvNtJY3EC0F-B9wPk8CV2o1TTTyoF4CoWH7rhQ@mail.gmail.com/
-> 
-> Thanks,
-> Saravana
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

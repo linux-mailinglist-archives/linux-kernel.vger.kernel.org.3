@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5615854FFAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC13954FFAC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245188AbiFQWDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S1350035AbiFQWD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbiFQWC6 (ORCPT
+        with ESMTP id S235469AbiFQWDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:02:58 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464DD6551;
-        Fri, 17 Jun 2022 15:02:57 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id i10so3510032wrc.0;
-        Fri, 17 Jun 2022 15:02:57 -0700 (PDT)
+        Fri, 17 Jun 2022 18:03:49 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E43C2AC47;
+        Fri, 17 Jun 2022 15:03:49 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d13so4912230plh.13;
+        Fri, 17 Jun 2022 15:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iACHHJOTxtILwtD0NFxtS+BXQ6VW7TBL7A+QIQz2pXY=;
-        b=HNj7zDr2dXc86u2dQaninkTvR1QJJpNTuGDBAGGV+uz23Q2V+KclgGsn/nTpSQ5Ut4
-         zGB9IBBVadWFDs08ibIkJ23RU9kf2rvZhDgC8nyQv3PIdHpglN16NWL2VEZDXjNP+yas
-         ppaH9OHrZoGRZ7qO0+GZQ+IGav2t4RveDvO07tK9KxvCrqXH26wfp9dDhIUPuiG0JJpg
-         A9espWCvJfe6XigBwejHCV3hc5dN8et8yV6oeiiB6uNC0eV8ZOS6rZKXN27ms+rPmnZK
-         Vv9qB+yvlYXwak8iR1sfHt2GfQMWRZ7YKerKzRmSHXoeGt8Xd8E+Vz/cCmyvctflAVRB
-         KaaA==
+        bh=feKpGkuywKAtf9xorq52WEpaYro1ySAtBsqG9zDe8uM=;
+        b=QeXajl5NvYHI3U7g071MCmzFwu/KGzTYNogwMcCRZed4XcN6UQOJR6rz1eXPIqvHxG
+         JPOqhmQx8Q4N2sRzfk2qqjHR81UabefWyfOcNNbubTfxJmwsN5M38eCfLu0kRUgGIKnj
+         QozJhsgwrnex9f9CKv/PEynGYiHkRedY9mEzjAif+dzslmXZrhR53PPzMJAf4G1mfHEC
+         ySbHrkTrr4gceW/+cHiesJSlqLZMvgmI81x4cDgu60Q7Bj95/Ig8M47cLfi7EX1x+140
+         g7Y2EFIo4/RxN7513Lun8a/3YVIUt9RJ0O8Drx6tCdiPaItj+y6ZhQ/7qzvdxf9oEjZG
+         Eufg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iACHHJOTxtILwtD0NFxtS+BXQ6VW7TBL7A+QIQz2pXY=;
-        b=5k2n1vaQvMm2iiuzSx0YfT7xryd/S7Cm474Rk15cPL78zJqlD3jcirpfu81GYNmvb2
-         eOWo9iVrKYvvr1KVzbzLjYcNP7e5/VPcCkJInnVyp2s2qBc/0woJeO64aFFymI92HjEa
-         DIMKG4Jo27DMcyTl2mjSdL0OqHqFbnoeYyRpcdtrP3v02mm1ZJrnTk3AZq+OdTMw955g
-         jJGAALF+QmGF2eB6QS8WJbWDeiGALdj4uSNVy7xJgYh3GVV0/Qb7sSCEdsKeTK8QAOD6
-         Ckhh59PW3CEe6A4g3ig9uPHQcx6UnsNyWN7sjT0B9OeUWnaupdOvo4NjN8pTkG84W39l
-         ZEKA==
-X-Gm-Message-State: AJIora+5kFXhZxHqmYwKxq7TCXWghNanXX4vbc6Frnbc3YXXASMm40e4
-        aZZhTp2UJjph9Akj14kp4obfl35L42A=
-X-Google-Smtp-Source: AGRyM1vKe47NBTiCIGTZ3A2mNS/C9PuKLNUynKpXlPkWjnRGvm1VIeGePR6zGx2kldrH4LxaKZr9uA==
-X-Received: by 2002:a5d:6192:0:b0:219:aa98:897b with SMTP id j18-20020a5d6192000000b00219aa98897bmr10855625wru.341.1655503375761;
-        Fri, 17 Jun 2022 15:02:55 -0700 (PDT)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id n68-20020a1c2747000000b0039c5a765388sm6638406wmn.28.2022.06.17.15.02.54
+        bh=feKpGkuywKAtf9xorq52WEpaYro1ySAtBsqG9zDe8uM=;
+        b=MWmwHwX68QlEb+0qEFiUl4YNlOaf+NVYlhoo5FMmIDZBiPMxVB/YugWzo6eZjYLxDC
+         aY7b5QjjQABu5EGkqIgJ3qzoR6tUvQziP/BnqwcGK2GxlSZ+sMhFS0jTtubWIS7sGugr
+         lR+0kceZeM2K5xaeKkF0iHVE+mDm7v/1owkAEudkEMRMqytOLBnofHNuzE0BWY6ol1gN
+         pTENwUrt8sRYTHWC4vyqZWiqE+pxui5izz63NzLqcBwSBJO4wQOBRHgtUovXG4THgFC7
+         s3yD08KuvJ5dJzXojnVMemQ01N8luujesL0YkiM63Vk8ujSmHoyz5iheev3acAFiSoIX
+         posw==
+X-Gm-Message-State: AJIora/EMx2//1FidlJcEaBvAIN5x7ttQV8mbdOb8zYaBVTVtfKR8toc
+        rr+AM9ISHKp1lI5Rt6tT4BU=
+X-Google-Smtp-Source: AGRyM1vDU/fcRlB/iTrABf0ot4xnmqyivS7UPXjxpBsWmky43N1sA4WQP5qvWwsVllfTwWDQo9fNQg==
+X-Received: by 2002:a17:90b:4d90:b0:1e8:951b:40c8 with SMTP id oj16-20020a17090b4d9000b001e8951b40c8mr13001544pjb.130.1655503428866;
+        Fri, 17 Jun 2022 15:03:48 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id gp5-20020a17090adf0500b001ec84b0f199sm339080pjb.1.2022.06.17.15.03.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 15:02:55 -0700 (PDT)
-Message-ID: <5bdf862c-8aed-5dd4-17c4-b2c7a2961e92@gmail.com>
-Date:   Fri, 17 Jun 2022 23:02:54 +0100
+        Fri, 17 Jun 2022 15:03:48 -0700 (PDT)
+Message-ID: <edbbc05f-6aa5-be29-6cc3-2895851db717@gmail.com>
+Date:   Fri, 17 Jun 2022 15:03:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] media: ov7251: add missing clk_disable_unprepare() on
- error in ov7251_set_power_on()
+Subject: Re: [Patch net-next 06/11] net: dsa: microchip: move the port mirror
+ to ksz_common
 Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, andriy.shevchenko@linux.intel.com,
-        sakari.ailus@linux.intel.com
-References: <20220617013943.851327-1-yangyingliang@huawei.com>
-From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <20220617013943.851327-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+References: <20220617084255.19376-1-arun.ramadoss@microchip.com>
+ <20220617084255.19376-7-arun.ramadoss@microchip.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220617084255.19376-7-arun.ramadoss@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
@@ -76,35 +84,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+On 6/17/22 01:42, Arun Ramadoss wrote:
+> This patch updates the common port mirror add/del dsa_switch_ops in
+> ksz_common.c. The individual switches implementation is executed based
+> on the ksz_dev_ops function pointers.
+> 
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-On 17/06/2022 02:39, Yang Yingliang wrote:
-> Add the missing clk_disable_unprepare() before return
-> from ov7251_set_power_on() in the error handling case.
->
-> Fixes: 9e1d3012cc10 ("media: i2c: Remove .s_power() from ov7251")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-
-
-Thanks for spotting this - with Andy's comment addressed:
-
-
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
-
-> ---
->  drivers/media/i2c/ov7251.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
-> index 0e7be15bc20a..40c207d1d7af 100644
-> --- a/drivers/media/i2c/ov7251.c
-> +++ b/drivers/media/i2c/ov7251.c
-> @@ -934,6 +934,7 @@ static int ov7251_set_power_on(struct device *dev)
->  					ARRAY_SIZE(ov7251_global_init_setting));
->  	if (ret < 0) {
->  		dev_err(ov7251->dev, "error during global init\n");
-> +		clk_disable_unprepare(ov7251->xclk);
->  		ov7251_regulators_disable(ov7251);
->  		return ret;
->  	}
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

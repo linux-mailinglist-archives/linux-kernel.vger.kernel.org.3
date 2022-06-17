@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D637B54F6C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E60154F6C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381791AbiFQLfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S1381729AbiFQLfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380246AbiFQLfb (ORCPT
+        with ESMTP id S241473AbiFQLfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 07:35:31 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BA3522CA
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8A265D03
         for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:35:26 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3177e60d980so17946687b3.12
+Received: by mail-wr1-x42c.google.com with SMTP id x17so5392161wrg.6
         for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x5bwvKPWoiAdNfsl0rpPiOJbLUCKa6eFsFkR7Dl/GBw=;
-        b=PENmBcxuKfoFRDHda84GkCq+WJODrnGWd1BRRAYSLp6UWmG1E5r4fVQr3JlCQYWR2z
-         Qergd8Q6YnMXN+pMYTsBxlrOigKyDtcdwAkd6Fu22A9ts3hO0XNAJA6xPzya4pYHDrUP
-         2j04UJ1lxfaS/nfX9aIIcWdVfQqb+t5HJ9a0tRlgtD7WGdewEjwEB/mxpuAP5Cz5Euh7
-         KwJ25dhBw8FvfWESdwfhtqZWRSvXLdaCek5fo8yrPOBi+uuAD+JUiTov9IONiWiwMl5j
-         sBZgKiR/22QfjoIbF0VcBhHwo21dUvctTQ9K/3xAPyBfKfNXqf0FMg2lK4whTouF4FEB
-         qBHw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=QiECGMyoabW1BzY8/U8FfTuZG7oydQSw4kJVVQOhsls=;
+        b=FiC9YX/nAbiWwFkYmKpOz54nJ50Ftf90z4aTtvlcGqj+/6QntRRyuxKPuhsoglcm9p
+         q5YZ3TzJf98VWsI/C1H0fFKox9rIp0Hu1WhWRaBet+pf2EVFOfqVWfAsebl5qazljZY6
+         fIhRnva8H04pMSBkSnflkePOcEQPlPUJIxm9ctbeGfTZbLm8glEVUDyIerWmpCArGuWq
+         +CDARcAtAfeOxpF5xqajIeHt2Hc1iK6Bd4Q9U0NPiTtBelVIMUWVqFKtFJZe9zHjJGgY
+         1u68pvzAlCzlNNRjwV+7TdQW58jLy3rg8z4Bqulf5CjyvEnRT0mJmVckNGZV1lTqw1+O
+         Zy0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x5bwvKPWoiAdNfsl0rpPiOJbLUCKa6eFsFkR7Dl/GBw=;
-        b=Tlg3U/iozPTXrlEHIuAyzRcVVmZ/oAkWMzFMhBrars5jH/PVKZn2p+PZj6XmURZmWx
-         P0pFJEOaf6+8u08QR1o69glRHk35zNrsMxf8S+EB99N1RDLlUMf8mxLthhs5eg97G/98
-         hfyN0lZ5E+Ee0I61i9XX3D+hb7FVrPcY2FfEase9AJddHwDgHtW/DJ13yjKx2g+R4aXi
-         EnnHbkDv76dgJWK1EvgBYaI5vBDN0Y77+ltjopmjmj1raKwJJrtIi0zGTPwN7kRlFY3r
-         ubOE7X2E0abwc4y4t9LHiBkVD+/48IAm8eJNEmnpIDuMh2q79heCqVDudky3TD95MBUK
-         O6vQ==
-X-Gm-Message-State: AJIora9ZUnRh+qjrpbgdaG+8LSRhOO2mKbjOlOJwNUhbmHR2TaAtgtsz
-        xSmwHuVn6ufV+JWuVsb4kRd0Ajub1u34WwwI+pDRkA==
-X-Google-Smtp-Source: AGRyM1sPWp60NI6GDHzc4UkssfaxItU18eWBZCQxcAan3JOuUbMEgrM9UAlZ3+93QWh1rqFj6ljJADuu4vENZMP6q78=
-X-Received: by 2002:a81:18c1:0:b0:317:648e:eec8 with SMTP id
- 184-20020a8118c1000000b00317648eeec8mr10552299ywy.327.1655465725193; Fri, 17
- Jun 2022 04:35:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=QiECGMyoabW1BzY8/U8FfTuZG7oydQSw4kJVVQOhsls=;
+        b=g0MbSiiyyHKI91pXlgIY8cLO3EX0MGwsU3gQnuk0bCZvJvqDdXGcNBqIAdFeOPANOS
+         H1Ipo7wZrdc4DWOT89TnrsmzFXGKF32TE8f1mYTk7lAne4n9D8ZQO3Nb0vUXliFujkeC
+         Bl1tzbXD8wozKFFRy740NuugaWfKTWlZmdEWdVD3ShLB2nc0JVe1FMucGdn7r359Gjq5
+         VQWJhjpDIlcvg1ZreXDwjaItK6LSx/S1yChbsdYlR2Zs3Hdv5O9oCtOAS0/qt94T3CL3
+         Taue6vnzByc68s3KtNwC+owa+8NP/5Kv2WxQKZ/0F+VOlGQgvEAH+rmrmfvsQ46H65RF
+         b+8w==
+X-Gm-Message-State: AJIora9hpg7EUWcoBhvQIT3VL7cbWUs/QWb1Y177FTDCrpnyqKLfr1wd
+        +Malh6VmGVAAq2RcWmNOmnIYNXLp7iI=
+X-Google-Smtp-Source: AGRyM1tM0+j8W13INQN3awI3s1/cI40DzRuDDIr8237DyTNdEskxBbWFDWtDO84wedjS48vwBijZvA==
+X-Received: by 2002:adf:e186:0:b0:213:3b79:370d with SMTP id az6-20020adfe186000000b002133b79370dmr8983011wrb.151.1655465724721;
+        Fri, 17 Jun 2022 04:35:24 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id g16-20020a05600c4ed000b0039c5497deccsm17995819wmq.1.2022.06.17.04.35.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 04:35:23 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 13:35:20 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     heiko@sntech.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: rk3399-roc-pc does not boot
+Message-ID: <Yqxm+IR9wApJCFMN@Red>
+References: <YqxEL/pgv3zuH6aS@Red>
+ <c12cc4bd-f7b8-5e52-14a2-41a0da83bb0c@arm.com>
 MIME-Version: 1.0
-References: <cover.1655150842.git.andreyknvl@google.com> <11a7bfb5ed5de141b50db8c08e9c6ad37ef3febc.1655150842.git.andreyknvl@google.com>
-In-Reply-To: <11a7bfb5ed5de141b50db8c08e9c6ad37ef3febc.1655150842.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 17 Jun 2022 13:34:49 +0200
-Message-ID: <CANpmjNMTb4cxizfb5Xzy979jCA2_BMio6W4k1wZivKnu77RKVw@mail.gmail.com>
-Subject: Re: [PATCH 06/32] kasan: introduce kasan_print_aux_stacks
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c12cc4bd-f7b8-5e52-14a2-41a0da83bb0c@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 22:16, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Add a kasan_print_aux_stacks() helper that prints the auxiliary stack
-> traces for the Generic mode.
->
-> This change hides references to alloc_meta from the common reporting code.
-> This is desired as only the Generic mode will be using per-object metadata
-> after this series.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  mm/kasan/kasan.h          |  6 ++++++
->  mm/kasan/report.c         | 15 +--------------
->  mm/kasan/report_generic.c | 20 ++++++++++++++++++++
->  3 files changed, 27 insertions(+), 14 deletions(-)
->
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index aa6b43936f8d..bcea5ed15631 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -265,6 +265,12 @@ void kasan_print_address_stack_frame(const void *addr);
->  static inline void kasan_print_address_stack_frame(const void *addr) { }
->  #endif
->
-> +#ifdef CONFIG_KASAN_GENERIC
-> +void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object);
-> +#else
-> +static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object) { }
-> +#endif
+Le Fri, Jun 17, 2022 at 10:58:03AM +0100, Robin Murphy a écrit :
+> On 2022-06-17 10:06, Corentin Labbe wrote:
+> > Hello
+> > 
+> > I try to add rk3399-roc-pc to kernelCI but this board fail to ends its boot with any kernel I try.
+> > It boot normally up to starting init but it stucks shorty after.
+> > It fail on 5.10, 5.15, 5.17, 5.18 and linux-next.
+> > When disabling CONFIG_USB, the board boots successfully.
+> > 
+> > In dmesg I see OF: graph: no port node found in /i2c@ff160000/usb-typec@22
+> > According to Documentation/devicetree/bindings/usb/fcs,fusb302.txt, the port is mandatory.
+> > Can it be possible that the problem was that the power port being disabled ?
+> 
+> Indeed, I believe the OF graph error is just a meaningless annoyance, 
+> but the general problem sounds like it's probably the same thing that's 
+> come up before:
+> 
+> https://lore.kernel.org/all/0ac6bbe7-6395-526d-213c-ac58a19d8673@fivetechno.de/
+> 
+> Disabling CONFIG_TYPEC_FUSB302 or blacklisting the fusb302 module should 
+> help confirm that. I have no idea if it's still an open problem, or if 
+> it's been fixed and you might just need to define the proper power role 
+> in the DT; this just triggered a memory of that older thread :)
+> 
 
-Why not put this into one of the existing "#ifdef
-CONFIG_KASAN_GENERIC" blocks? There are several; probably the one 10
-lines down might be ok?
+If I comment fusb0 node in arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi, the board boot well.
+
+With the following patch, the boards boot well also:
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+index 0e45cc2d195b..60c400ca4034 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+@@ -552,6 +552,22 @@ fusb0: usb-typec@22 {
+                pinctrl-0 = <&fusb0_int>;
+                vbus-supply = <&vcc_vbus_typec0>;
+                status = "okay";
++
++               connector {
++                       compatible = "usb-c-connector";
++                       data-role = "host";
++                       label = "USB-C";
++                       power-role = "dual";
++
++                       ports {
++                               #address-cells = <1>;
++                               #size-cells = <0>;
++
++                               port@0 {
++                                       reg = <0>;
++                               };
++                       };
++               };
+        };
+ 
+        mp8859: regulator@66 {
+
+I think this patch is the proper way to fix, I will send it soon.

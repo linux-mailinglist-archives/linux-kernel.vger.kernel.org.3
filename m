@@ -2,79 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A81754F0E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15ABA54F0E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380241AbiFQGFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        id S1380244AbiFQGId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379625AbiFQGFa (ORCPT
+        with ESMTP id S233127AbiFQGIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:05:30 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99484B48C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:05:29 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id o6so3062715plg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=hr1DvHgRKVwFFs3GnYKSdW/r6E3KQ20avG9OQnOIekI=;
-        b=C9coYDLUoKd71hlkBvzPkdaOsLrcAmU67cb+Wb/aq4db4IWuJ45WMqWpHTInqbaWeA
-         geGjYU+Hjl6jShCVqNrAP2QBlICq6ApiSLWYvnLLRWR3m1RZtQEnG12AX88R16PR/Z0C
-         JxBYVrAUJ5RPXMQnjh0fEUv+dDd/VZvhpWn196R8kWafbO+7PV0mFAqkptyqRCFqMzvE
-         PUBYUCbD8YjvsaBjTuwfAaZx/z6Y9hHM3BgVq+tBCBG9MlGhVrsx4XTLsuy0KCgWByhr
-         PRzC+tYKAYkObRlTmpSG6YF/Gmbh7xOIzOt7nJOceLLje2Wl6ZvEmRGtBHcMJzAX2arB
-         JkPQ==
+        Fri, 17 Jun 2022 02:08:23 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAD7BF5E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:08:22 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id p12-20020a056e02144c00b002d196a4d73eso2103147ilo.18
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:08:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=hr1DvHgRKVwFFs3GnYKSdW/r6E3KQ20avG9OQnOIekI=;
-        b=A/RehAN2OKIknNkaFqrCcacmCOMnVqybgISUg01E64Amk0opXdL1Vyh6k1nsZCabG5
-         ep0ID7EVU0ucVW2/sYb6WbDpD4GuMpOqxEHyOssDCEccmsXpftkqahF5ZC0ydXnz7vmZ
-         DRkoZGBCne6URguNdCOCqnbEmShlQpfRm91Ge6q/Xo1jJciUFkjXr4cDK7O/sWT7U61V
-         oUVQ9QYbzAli2OIzyXiAqN0hMtkqC33Ow4htKnc2BugOcTWTGxHeoVg4LS8/6kmxTD2m
-         JPrxgHVBrmYhKj8YdcpcvuWt4HeS6GxNPzJMATxgDiCyrYBOb1hoJGF287i+vK2NKnFL
-         oMVw==
-X-Gm-Message-State: AJIora8kdjHUetJMdKFwejr0cwlj9CGXJcDUGK9pJapKiJ2PY6WQh3qH
-        43OJro2oc5YwGe8m1OXgyrC18A==
-X-Google-Smtp-Source: AGRyM1uiaMIGymdgFePwN95624WGlKC3MieAgDLn29xOGvCxCRUevfFmDABWgQ4fRn7G9pR0FV2CFw==
-X-Received: by 2002:a17:90b:1986:b0:1ec:71f6:5fd9 with SMTP id mv6-20020a17090b198600b001ec71f65fd9mr2954395pjb.188.1655445928835;
-        Thu, 16 Jun 2022 23:05:28 -0700 (PDT)
-Received: from [10.83.0.6] ([199.101.192.187])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902d64b00b00161955fe0d5sm2606256plh.274.2022.06.16.23.05.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 23:05:28 -0700 (PDT)
-Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Wangzhou <wangzhou1@hisilicon.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        Yang Shen <shenyang39@huawei.com>
-References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
- <Yqn3spLZHpAkQ9Us@myrica> <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
- <YqrmdKNrYTCiS/MC@myrica>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Message-ID: <d90e8ea5-2f18-2eda-b4b2-711083aa7ecd@linaro.org>
-Date:   Fri, 17 Jun 2022 14:05:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Vq64f5Yo+ZtrtgGuEyyE62AarYLrNtpZHBOYMYaaxMA=;
+        b=KuT3hGUxpBqXVMvAfcbJ9yU3z1Tzjzyni4sEextHkyMnG7UlHxBXiTbvAcGpg0cbhL
+         uqrPhGCJ4D28bNNtXBiBllbq6lDlIlo66MPpa8BH3lau9t8pV63MZdcOSM8S7J5oOpEY
+         AivMX8L188sPwaIqBZZkE/zoheuBMOyLXjO5/mx6o+33ef9JKK46nRtM1rGRadEXa8FB
+         xcRVXf/kn4EfG65Lt0Z6xL/KMnr8K9YN4WFYFM3b2D3ScN5A+H8Pncpnea5RSiwW77oD
+         5yZOoLXB6ydHjri3ZvoaqjtkGaEqSZ7v3fmofKTn3FGlSoGDF1tBr0eRpG7kOUe+wWk/
+         TbNg==
+X-Gm-Message-State: AJIora+EU4y929JdLgO2t7sTFzdxzcJaWSdFcv/RVPsquKFj07LwS16r
+        8OtkFtUOPlEjp/dOymXSihDBOR3zXg8j0NWowL9wx+ASxiUw
+X-Google-Smtp-Source: AGRyM1uIshwWCyv7TkGRHyahmmRuS34MIaMCsxXFhmcyVSjmXS7wBjO3gpKmH/gG/4El87wExy+vL9asjrU8IT3zlKTmnoMkpGin
 MIME-Version: 1.0
-In-Reply-To: <YqrmdKNrYTCiS/MC@myrica>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:511:0:b0:2d7:9136:4d0b with SMTP id
+ q17-20020a920511000000b002d791364d0bmr4703340ile.266.1655446101950; Thu, 16
+ Jun 2022 23:08:21 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 23:08:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000da07e205e19e94cf@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in __purge_vmap_area_lazy
+From:   syzbot <syzbot+0bce0ec817c084f98c56@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,104 +53,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    6012273897fe Add linux-next specific files for 20220615
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16d2f608080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b4154677977b1776
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bce0ec817c084f98c56
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0bce0ec817c084f98c56@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at mm/vmalloc.c:1759
+BUG: sleeping function called from invalid context at mm/vmalloc.c:1759
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1795, name: kworker/1:2
+preempt_count: 2, expected: 1
+RCU nest depth: 0, expected: 0
+4 locks held by kworker/1:2/1795:
+ #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc90006c07da8 (drain_vmap_work){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffffffff8bebb028 (vmap_purge_lock){+.+.}-{3:3}, at: drain_vmap_area_work+0x44/0xe0 mm/vmalloc.c:1781
+ #3: ffffffff8bebb2f8 (free_vmap_area_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
+ #3: ffffffff8bebb2f8 (free_vmap_area_lock){+.+.}-{2:2}, at: __cond_resched_lock+0xa6/0xe0 kernel/sched/core.c:8306
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 PID: 1795 Comm: kworker/1:2 Not tainted 5.19.0-rc2-next-20220615-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events drain_vmap_area_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+ __purge_vmap_area_lazy+0x95c/0x1c50 mm/vmalloc.c:1759
+ drain_vmap_area_work+0x52/0xe0 mm/vmalloc.c:1782
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+BUG: workqueue leaked lock or atomic: kworker/1:2/0x00000001/1795
+     last function: drain_vmap_area_work
+no locks held by kworker/1:2/1795.
+CPU: 1 PID: 1795 Comm: kworker/1:2 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events drain_vmap_area_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ process_one_work.cold+0x96/0xb8 kernel/workqueue.c:2304
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+BUG: scheduling while atomic: kworker/1:2/1795/0x00000002
+no locks held by kworker/1:2/1795.
+Modules linked in:
+Preemption disabled at:
+[<0000000000000000>] 0x0
 
 
-On 2022/6/16 下午4:14, Jean-Philippe Brucker wrote:
-> On Thu, Jun 16, 2022 at 12:10:18PM +0800, Zhangfei Gao wrote:
->>>> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
->>>> index 281c54003edc..b6219c6bfb48 100644
->>>> --- a/drivers/misc/uacce/uacce.c
->>>> +++ b/drivers/misc/uacce/uacce.c
->>>> @@ -136,9 +136,16 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
->>>>    	if (!q)
->>>>    		return -ENOMEM;
->>>> +	mutex_lock(&uacce->queues_lock);
->>>> +
->>>> +	if (!uacce->parent->driver) {
->>> I don't think this is useful, because the core clears parent->driver after
->>> having run uacce_remove():
->>>
->>>     rmmod hisi_zip		open()
->>>      ...				 uacce_fops_open()
->>>      __device_release_driver()	  ...
->>>       pci_device_remove()
->>>        hisi_zip_remove()
->>>         hisi_qm_uninit()
->>>          uacce_remove()
->>>           ...			  ...
->>>      				  mutex_lock(uacce->queues_lock)
->>>       ...				  if (!uacce->parent->driver)
->>>       device_unbind_cleanup()	  /* driver still valid, proceed */
->>>        dev->driver = NULL
->> The check  if (!uacce->parent->driver) is required, otherwise NULL pointer
->> may happen.
-> I agree we need something, what I mean is that this check is not
-> sufficient.
->
->> iommu_sva_bind_device
->> const struct iommu_ops *ops = dev_iommu_ops(dev);  ->
->> dev->iommu->iommu_dev->ops
->>
->> rmmod has no issue, but remove parent pci device has the issue.
-> Ah right, relying on the return value of bind() wouldn't be enough even if
-> we mandated SVA.
->
-> [...]
->>> I think we need the global uacce_mutex to serialize uacce_remove() and
->>> uacce_fops_open(). uacce_remove() would do everything, including
->>> xa_erase(), while holding that mutex. And uacce_fops_open() would try to
->>> obtain the uacce object from the xarray while holding the mutex, which
->>> fails if the uacce object is being removed.
->> Since fops_open get char device refcount, uacce_release will not happen
->> until open returns.
-> The refcount only ensures that the uacce_device object is not freed as
-> long as there are open fds. But uacce_remove() can run while there are
-> open fds, or fds in the process of being opened. And atfer uacce_remove()
-> runs, the uacce_device object still exists but is mostly unusable. For
-> example once the module is freed, uacce->ops is not valid anymore. But
-> currently uacce_fops_open() may dereference the ops in this case:
->
-> 	uacce_fops_open()
-> 	 if (!uacce->parent->driver)
-> 	 /* Still valid, keep going */		
-> 	 ...					rmmod
-> 						 uacce_remove()
-> 	 ...					 free_module()
-> 	 uacce->ops->get_queue() /* BUG */
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-uacce_remove should wait for uacce->queues_lock, until fops_open release 
-the lock.
-If open happen just after the uacce_remove: unlock, uacce_bind_queue in 
-open should fail.
-
-> Accessing uacce->ops after free_module() is a use-after-free. We need all
-you men parent release the resources.
-> the fops to synchronize with uacce_remove() to ensure they don't use any
-> resource of the parent after it's been freed.
-After fops_open, currently we are counting on parent driver stop all dma 
-first, then call uacce_remove, which is assumption.
-Like drivers/crypto/hisilicon/zip/zip_main.c: hisi_qm_wait_task_finish, 
-which will wait uacce_release.
-If comments this , there may other issue,
-Unable to handle kernel paging request at virtual address ffff80000b700204
-pc : hisi_qm_cache_wb.part.0+0x2c/0xa0
-
-> I see uacce_fops_poll() may have the same problem, and should be inside
-> uacce_mutex.
-Do we need consider this, uacce_remove can happen anytime but not 
-waiting dma stop?
-
-Not sure uacce_mutex can do this.
-Currently the sequence is
-mutex_lock(&uacce->queues_lock);
-mutex_lock(&uacce_mutex);
-
-Or we set all the callbacks of uacce_ops to NULL?
-Module_get/put only works for module, but not for removing device.
-
-Thanks
-
->
-> Thanks,
-> Jean
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

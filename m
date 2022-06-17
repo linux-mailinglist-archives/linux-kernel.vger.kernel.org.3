@@ -2,93 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0A554FF8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D33B54FF89
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiFQVyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 17:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S237094AbiFQVxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 17:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236762AbiFQVx7 (ORCPT
+        with ESMTP id S236705AbiFQVxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 17:53:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF70590AF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655502839; x=1687038839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OEVj7qRYcWdYOKZdoaxbP+KqpdA0+bCSlrK2QBOmGcI=;
-  b=LDYllqFiOyvO5BndqI5uUC/5iJOa2v+n6F0Xzo4CNovNHjfEgCk9nWVn
-   /mZPRpU8TCegJeW8N6TN9lluWthS0LOA8nHpM66T5trj0nVUQJ0crxvN9
-   hvRNJfPwo0C+0WNot496wUwywfFJQNogOkGdC7edSYmjJVv9m7EypowF7
-   FN8hgKRRzUyaxg6dS6ObDGk9JNieh+fJ9UghvHNsBQw+sFGFgQX4H3im6
-   gZ54gKKioiO73u6YDeAMSXd+3kTRfOudXAwqtOCSo6HHBO/jbiN3OL7mQ
-   bsi57BJ/A6KxwYm9JEx/PI/8ocyY2sMo95hDDJcrdVRqmbGp+cR1mlw0b
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268309289"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="268309289"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 14:53:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="675647089"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2022 14:53:57 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2Jue-000PnL-Ff;
-        Fri, 17 Jun 2022 21:53:56 +0000
-Date:   Sat, 18 Jun 2022 05:53:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:locking/core 2/4] ld.lld: error: undefined symbol:
- jump_label_apply_nops
-Message-ID: <202206180532.mOqwM8Wu-lkp@intel.com>
+        Fri, 17 Jun 2022 17:53:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235A1CFF4;
+        Fri, 17 Jun 2022 14:53:20 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 21:53:17 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1655502798;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MgffGjAc660sovoxoYtXo1wJYW80PC1FvjOccFvYXIY=;
+        b=2neNO+KF6WpySf3frU7LSO26R/KNZejELy25MCCRWFuaOe+7hmTEeKm65+SvD3txD2NCBM
+        mOrUj8PqZcoZ7YIRNRwTZ//ggQKv0xFgo7MBXemFMzl0C1ZjXC983p0VOXNVOofzofGy6V
+        Bg6fYlxYeeOrprq+elwKJXCdoZBqHE9VWg0YLE3eOnqBqAMuZrIrP9xSp/xwfuq/wjOa6L
+        ZD/4EtkuLhHc3Pkn0LZPERNxtSNEXozTLggjd3lZ71P8lEwUeTRvlmuL8F9tM9Slt4hom5
+        NTABB1AZ0K2Y/yu/SAD+jo98wZdDIf+VHNJhmQM/Qb81SYB7VSTnkarliC6VgQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1655502798;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MgffGjAc660sovoxoYtXo1wJYW80PC1FvjOccFvYXIY=;
+        b=VvOUhSMsH5tK2anel+BGuiMYH/3MpALihYccsPrnERBx2GiyiDffE6swiLxYRBQbQ3JxsF
+        9XnJWyN0KsugL7Dg==
+From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/tdx: Handle load_unaligned_zeropad() page-cross
+ to a shared page
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
+References: <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165550279724.4207.6620223841764940040.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-head:   c4e2db802ebbc639960404b97c9b8a6284634428
-commit: 74c632a2a5738bd18864610e34f6b6d2db664bb7 [2/4] jump_label: mips: move module NOP patching into arch code
-config: mips-randconfig-r026-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180532.mOqwM8Wu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=74c632a2a5738bd18864610e34f6b6d2db664bb7
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue locking/core
-        git checkout 74c632a2a5738bd18864610e34f6b6d2db664bb7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+The following commit has been merged into the x86/urgent branch of tip:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Commit-ID:     ceba767b943de2128eaef95e19880809274ac35d
+Gitweb:        https://git.kernel.org/tip/ceba767b943de2128eaef95e19880809274ac35d
+Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+AuthorDate:    Tue, 14 Jun 2022 15:01:35 +03:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Fri, 17 Jun 2022 14:30:20 -07:00
 
-All errors (new ones prefixed by >>):
+x86/tdx: Handle load_unaligned_zeropad() page-cross to a shared page
 
->> ld.lld: error: undefined symbol: jump_label_apply_nops
-   >>> referenced by module.c
-   >>>               kernel/module.o:(module_finalize) in archive arch/mips/built-in.a
+load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
+The unwanted loads are typically harmless. But, they might be made to
+totally unrelated or even unmapped memory. load_unaligned_zeropad()
+relies on exception fixup (#PF, #GP and now #VE) to recover from these
+unwanted loads.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In TDX guests, the second page can be shared page and a VMM may configure
+it to trigger #VE.
+
+The kernel assumes that #VE on a shared page is an MMIO access and tries to
+decode instruction to handle it. In case of load_unaligned_zeropad() it
+may result in confusion as it is not MMIO access.
+
+Fix it by detecting split page MMIO accesses and failing them.
+load_unaligned_zeropad() will recover using exception fixups.
+
+The issue was discovered by analysis and reproduced artificially. It was
+not triggered during testing.
+
+[ dhansen: fix up changelogs and comments for grammar and clarity,
+	   plus incorporate Kirill's off-by-one fix]
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lkml.kernel.org/r/20220614120135.14812-4-kirill.shutemov@linux.intel.com
+---
+ arch/x86/coco/tdx/tdx.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index c8d44f4..d5c51c9 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -333,8 +333,8 @@ static bool mmio_write(int size, unsigned long addr, unsigned long val)
+ 
+ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ {
++	unsigned long *reg, val, vaddr;
+ 	char buffer[MAX_INSN_SIZE];
+-	unsigned long *reg, val;
+ 	struct insn insn = {};
+ 	enum mmio_type mmio;
+ 	int size, extend_size;
+@@ -360,6 +360,19 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 			return -EINVAL;
+ 	}
+ 
++	/*
++	 * Reject EPT violation #VEs that split pages.
++	 *
++	 * MMIO accesses are supposed to be naturally aligned and therefore
++	 * never cross page boundaries. Seeing split page accesses indicates
++	 * a bug or a load_unaligned_zeropad() that stepped into an MMIO page.
++	 *
++	 * load_unaligned_zeropad() will recover using exception fixups.
++	 */
++	vaddr = (unsigned long)insn_get_addr_ref(&insn, regs);
++	if (vaddr / PAGE_SIZE != (vaddr + size) / PAGE_SIZE)
++		return -EFAULT;
++
+ 	/* Handle writes first */
+ 	switch (mmio) {
+ 	case MMIO_WRITE:

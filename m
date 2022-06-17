@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF9B54F069
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC7254F065
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380052AbiFQFGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 01:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S1380022AbiFQFBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 01:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237181AbiFQFGA (ORCPT
+        with ESMTP id S234216AbiFQFBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 01:06:00 -0400
-X-Greylist: delayed 1016 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Jun 2022 22:05:59 PDT
-Received: from mx0b-00256a01.pphosted.com (mx0b-00256a01.pphosted.com [67.231.153.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975E66AC1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 22:05:59 -0700 (PDT)
-Received: from pps.filterd (m0119692.ppops.net [127.0.0.1])
-        by mx0b-00256a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H4VHeF017372
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:05:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyu.edu; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding;
- s=20180315; bh=3kogNl48Igq0sjUSHZ2cHxkX5GFxsC19iw2HB9fEgUg=;
- b=OY/juXmnpHNv/r4NdIN0U6Grcc/7h/Qcne4sUSimbvAbcsruYLErq9FUEdyAP6xlzouK
- QO23OZ2l7daDTbZupxoQctZ8f81pLXGCGAeCSGU/QebV72S/WLAs5+CYUbIaG4atng1W
- YGdLQ1KgTrpnePJHrscHrUOqBMzH9PSWpl8S8PxeYN9dkCjjX0yUgUZ2n4mPr60v+i6+
- 7GUnoKDypBEbR720z1cvgikW03dIx0M1fhXObryfN/YCTGDYuhb4/NcsSvSyXJJjFScF
- Rfe5YSgjMHwPAIrBjoqMdAeOE8wuoi9ZbWPd9kOFyznEi0DN6eh6cq6TIw/Y+0Kv3kL6 1A== 
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-        by mx0b-00256a01.pphosted.com (PPS) with ESMTPS id 3grjnm88mn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:05:58 -0400
-Received: by mail-qk1-f197.google.com with SMTP id i10-20020a05620a404a00b006a7609f54c6so3931124qko.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 22:05:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3kogNl48Igq0sjUSHZ2cHxkX5GFxsC19iw2HB9fEgUg=;
-        b=EG3TaQiPmCZSHlh8/QZoCt5bNMCDU2jNK9vOpnPu27yoescqKuBRH+vTEOPIbPwpDO
-         qAvJLvr+WT7cgRiySWH+acaKHlytcsGmgKumjPJk4bav1mwWonBjG6iRQYOvS8j9xsoC
-         5NiMyE0byNzuP6u0v8cJtoJxfZ8p8+/rzWSoUYmvic5i1T+DV9cWBRTGnwmtlMtdqFtm
-         ZiG2dogAplc1xKrrCQ5n+EpdJXTW6hOv1mqlsLD2KfwCRy48qMafDyEgxOUFZN48FjAB
-         5MU5xzc1ESQ/35JrfLTsD4wZD+nfZEs0i1B2vERdWjvQ9APdn8PPU7PuumI1tpWBs7Ry
-         KEAQ==
-X-Gm-Message-State: AJIora+YyJw9ajhKnvFAEedGwMNFZB/gYyKRQCnL/hLuwFdVlhYXJfTj
-        O2ENvxucxGfuCHnpPMpyN4yjMnouPrKITZWFmBNDggeFmjP4yRUCGFNqBIm6UaH+KEE+t8xCW9r
-        5bsl83AWWqijgHYNI2p2aZH0=
-X-Received: by 2002:a05:6214:d0f:b0:46b:af12:e20b with SMTP id 15-20020a0562140d0f00b0046baf12e20bmr7039993qvh.104.1655442358174;
-        Thu, 16 Jun 2022 22:05:58 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sg8jFqi+Qebx+it8uDmKa1ceXVEsfXzuiBZhdtgpT5p68GMEjUwmDg3+v/NFZJQvLREOm+ZA==
-X-Received: by 2002:a05:6214:d0f:b0:46b:af12:e20b with SMTP id 15-20020a0562140d0f00b0046baf12e20bmr7039985qvh.104.1655442357941;
-        Thu, 16 Jun 2022 22:05:57 -0700 (PDT)
-Received: from localhost.localdomain (cpe-66-65-49-54.nyc.res.rr.com. [66.65.49.54])
-        by smtp.gmail.com with ESMTPSA id h22-20020ac85856000000b00304e95ec0fbsm3556530qth.89.2022.06.16.22.05.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 22:05:57 -0700 (PDT)
-From:   HighW4y2H3ll <huzh@nyu.edu>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     HighW4y2H3ll <huzh@nyu.edu>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] Fix buffer overflow in hinic_devlink.c:hinic_flash_fw
-Date:   Fri, 17 Jun 2022 01:01:02 -0400
-Message-Id: <20220617050101.37620-1-huzh@nyu.edu>
-X-Mailer: git-send-email 2.35.1
+        Fri, 17 Jun 2022 01:01:34 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F27663CF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 22:01:32 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 246poVa8MZfs8246poo0ha; Fri, 17 Jun 2022 07:01:30 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 17 Jun 2022 07:01:30 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <0ca5ee14-a382-0935-66be-820975501f45@wanadoo.fr>
+Date:   Fri, 17 Jun 2022 07:01:27 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] powerpc: powernv: Fix refcount leak bug in opal-powercap
+Content-Language: en-GB
+To:     Liang He <windhl@126.com>, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org
+Cc:     nick.child@ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20220617042038.4003704-1-windhl@126.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220617042038.4003704-1-windhl@126.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: H2F68lZii1It7rK680HeFkfyb68Ztqe6
-X-Proofpoint-ORIG-GUID: H2F68lZii1It7rK680HeFkfyb68Ztqe6
-X-Orig-IP: 209.85.222.197
-X-Proofpoint-Spam-Details: rule=outbound_bp_notspam policy=outbound_bp score=0 phishscore=0
- adultscore=0 clxscore=1015 suspectscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 mlxlogscore=917 mlxscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206170023
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: zhenghao hu <huzh@nyu.edu>
----
- drivers/net/ethernet/huawei/hinic/hinic_port.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Le 17/06/2022 à 06:20, Liang He a écrit :
+> In opal_powercap_init(), of_find_compatible_node() will return
+> a node pointer with refcount incremented. We should use of_node_put()
+> in fail path or when it is not used anymore.
+> 
+> Besides, for_each_child_of_node() will automatically *inc* and *dec*
+> refcount during iteration. However, we should add the of_node_put()
+> if there is a break.
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.h b/drivers/net/ethernet/huawei/hinic/hinic_port.h
-index c9ae3d4dc547..4a50e75a2424 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_port.h
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_port.h
-@@ -13,6 +13,7 @@
- #include <linux/bitops.h>
- 
- #include "hinic_dev.h"
-+#include "hinic_devlink.h"
- 
- #define HINIC_RSS_KEY_SIZE	40
- #define HINIC_RSS_INDIR_SIZE	256
-@@ -751,7 +752,7 @@ struct hinic_cmd_update_fw {
- 	u32 setion_total_len;
- 	u32 fw_section_version;
- 	u32 section_offset;
--	u32 data[384];
-+	u32 data[MAX_FW_FRAGMENT_LEN];
- };
- 
- int hinic_port_add_mac(struct hinic_dev *nic_dev, const u8 *addr,
--- 
-2.35.1
+Hi,
+
+I'm not sure that your patch is right here. Because of this *inc* and 
+*dec* things, do we still need to of_node_put(powercap) once we have 
+entered for_each_child_of_node?
+
+I think that this reference will be released on the first iteration of 
+the loop.
+
+
+Maybe of_node_put(powercap) should be duplicated everywhere it is 
+relevant and removed from the error handling path?
+Or an additional reference should be taken before the loop?
+Or adding a new label with "powercap = NULL" and branching there when 
+needed?
+
+CJ
+
+> 
+> Signed-off-by: Liang He <windhl@126.com>
+> ---
+>   arch/powerpc/platforms/powernv/opal-powercap.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/platforms/powernv/opal-powercap.c b/arch/powerpc/platforms/powernv/opal-powercap.c
+> index 64506b46e77b..b102477d3f95 100644
+> --- a/arch/powerpc/platforms/powernv/opal-powercap.c
+> +++ b/arch/powerpc/platforms/powernv/opal-powercap.c
+> @@ -153,7 +153,7 @@ void __init opal_powercap_init(void)
+>   	pcaps = kcalloc(of_get_child_count(powercap), sizeof(*pcaps),
+>   			GFP_KERNEL);
+>   	if (!pcaps)
+> -		return;
+> +		goto out_powercap;
+>   
+>   	powercap_kobj = kobject_create_and_add("powercap", opal_kobj);
+>   	if (!powercap_kobj) {
+> @@ -236,6 +236,9 @@ void __init opal_powercap_init(void)
+>   		kfree(pcaps[i].pg.name);
+>   	}
+>   	kobject_put(powercap_kobj);
+> +	of_node_put(node);
+>   out_pcaps:
+>   	kfree(pcaps);
+> +out_powercap:
+> +	of_node_put(powercap);
+>   }
 

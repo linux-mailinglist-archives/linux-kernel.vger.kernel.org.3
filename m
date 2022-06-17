@@ -2,132 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F28354EF8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE2E54EF9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379706AbiFQDD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 23:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S1379921AbiFQDER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379532AbiFQDDT (ORCPT
+        with ESMTP id S1379748AbiFQDEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:03:19 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264342A73D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:03:16 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id BE8415C0172;
-        Thu, 16 Jun 2022 23:03:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 16 Jun 2022 23:03:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1655434993; x=
-        1655521393; bh=jEzCc3JeLlFHDgfBc5h9JcPzQeM03k0MCLfDjduKd98=; b=s
-        7O+jdOSp5HZdN/Gfr43zbiLuNmzjh53xJZ6o7vavlksDRFj135MmToZ5sIfMoYR8
-        RHbzXs6O49GNhjGLjYc9FPlcDG08L51NMs5hCDt7ZegJEBMqaqZmx99mqzs6FqVL
-        R8Z6jFr08sMoZZMkSJN27Y8EO2oHu5qG6cV523LIsokgAWLZQOxITIS0NuCrYoUM
-        vP2FV3g8c6zvD+VBpm8XVcGmRrmQde0RffVo9jQkMNFLoSUDLq0ijfd5og2bd1bB
-        n2kPuAsamHibqWwbBg+Xv7rX83XSRIOYNrYb9aVLPwZr2zE6I8bztJ06dmmNsR3x
-        5tm7h8OdcsDYqC+dVXq/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655434993; x=
-        1655521393; bh=jEzCc3JeLlFHDgfBc5h9JcPzQeM03k0MCLfDjduKd98=; b=m
-        x6coN2S29eeKnGin+7uziw3IkxvCwzwfE9qNCB20bhN1KdrYNXI2kG5FvxM1m/6e
-        XV/VehkYqAlndUfKztK1fKF/YJIEg4Xbvl2PmDwYG0Wi/JKxxkmJEY2vrZ3oBui1
-        SvBk1hpsw3tTGM+OyezRzyP/K3Juji8SpWjMeHF6G8XBc164mmpoktCCNtgvX6c0
-        IuN9z2GFFeLyoSkXfVClkwrguMH1VWtqgEwRYDU+Saz2K3uPVrNllAtqOF/cNJBq
-        XYtMLwcakKQp+NYC18LQHw+HDo3fJgEwRbCksfmpkbiiL3fXxQZheztIHZG9fLOk
-        /e8I6gCm9TVY6PokcDBtw==
-X-ME-Sender: <xms:8e6rYtL64OQpoPBLC-BLYsw9Clcriwst7y7Ps7xPcPh03P6KzVa_dw>
-    <xme:8e6rYpKTsTJX0pknfRXaGRRR7shaiLwcaupu3GFLr7JKeXw9zHVhO-LIFBC03Uh6g
-    N3QqWDCU7p1QX0fnA>
-X-ME-Received: <xmr:8e6rYltZKb45MelRcq5dHpS7TfDwlpqYnxKf3CsraAELRzsCOFxN0yRVEHtyqbjhYovI6--F4JlqVpoGJpvjMNirH0n3Hb0rSN9AKFq7qhVbgYuYe4Sfh8GJYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvgedgieehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:8e6rYuY5qqwNlaYswIuBtDYjC0oA6sHQdfHRgGlcX9fSWRdnB7wRGg>
-    <xmx:8e6rYkYPy4QT3vpmriOsOHBTJ8-sELwIyJsQF_7TvB6WenJ-RhNlcg>
-    <xmx:8e6rYiABnUOfWM50Z_cuxeAOmRxL9w6jfDXIIn82Qf_wQV5XLxDcXA>
-    <xmx:8e6rYk4mz9LqVHcYyvLFOKjwvsHOnuce1jpnRE0OhpWTtMVpJn7Cbg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Jun 2022 23:03:12 -0400 (EDT)
-Subject: Re: [PATCH] drm/sun4i: Add DMA mask and segment size
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mripard@kernel.org,
-        wens@csie.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220616213240.392041-1-jernej.skrabec@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <e4a73a0f-c725-fad2-021b-5b5ee5ead1b3@sholland.org>
-Date:   Thu, 16 Jun 2022 22:03:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Thu, 16 Jun 2022 23:04:11 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35F366226
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:04:08 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id n4so2927720vsm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R6Hc91+se229HD5l7HXDZ+HfW8CTebpMh8HfmhUTOpA=;
+        b=rioKHEIXDdxpnd/mle8IERdGydANcz3zdHn0l4i2x1RpmqCSnw9KTj9jkZZMwplNDn
+         hMqUfoVr2OqKjQuUuidCzs3LijuS6mdh05jK0teI86Oia85a5Sm19d0LyGe7L/vKbbXk
+         9BIRpRnklRBsVO3ko6z9LDwebm/KS9e4ArmqWzS9uo1ruIW5wN79d12SSrm0X6BSpVQd
+         cDC9czJBLgFS/tpSc73Nko1xNA6EXFpqDISPLKvovY/Hf0q3HnQ4dfYLpG/KalzrW98H
+         V4MBOZR99I/7fsZSRQnjknyRpAP9Th9JlHfIGgOoT7RhuLx9p5zXIPCaKH6EpGUV9LEM
+         jIVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R6Hc91+se229HD5l7HXDZ+HfW8CTebpMh8HfmhUTOpA=;
+        b=s5F+qUQ3FcZ1PrC3t8vOzdMNx1C+Xlh9hw68kqELu4Yft6CwZKU5iQXFifCW6FtWdK
+         Xus5jWlKoy9ybXzH7IbPrB1rR8nWLMVGVCo4aOt4g5sZF6o9QYqeIyNbYqgbJP6NCkEM
+         8TjRfKX+d49L32Xi1y/TeR3ShVBbrVqC9T2X3cmbU53uXGmF9yqanjEIzji+VGxRs7rN
+         kFpZml4C/sczgqCuRjFd6bUkx8Q28/UefY7CcG6mfuzsLl5v+hTCiOP8jS+DdCCj0Cm/
+         bdgnpb5P6efTHp+Sba7mg8y38ymg7HzQFN0zDYZhrNRAOrBNkI1Mebvs/JzpDrQy0Egy
+         fo7Q==
+X-Gm-Message-State: AJIora/mfmL782yZWKm8iLuw1NafLaZBc8CdAduaSftAvB1NU+rIAocl
+        QmF67+NKUHqxHP7ZFpeVo5CuG+tETkHGfmGWP6HksA==
+X-Google-Smtp-Source: AGRyM1vCXNHebt05ptZ7JoVLnKs4Sdwk6Yu91UiZuW/GkTbEnghrDi/daLOPKyzPqqN/SgRdWsZdqe2KQZdg2rJ5GkQ=
+X-Received: by 2002:a05:6102:214c:b0:34b:b31d:1a50 with SMTP id
+ h12-20020a056102214c00b0034bb31d1a50mr3610381vsg.41.1655435047846; Thu, 16
+ Jun 2022 20:04:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220616213240.392041-1-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220518014632.922072-1-yuzhao@google.com> <20220518014632.922072-8-yuzhao@google.com>
+ <CAGsJ_4yboZEY9OfyujPxBa_AEuGM3OAq5y_L9gvzSMUv70BxeQ@mail.gmail.com>
+ <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
+ <20220607102135.GA32448@willie-the-truck> <CAGsJ_4zGEdHDv0ObZ-5y8sFKLO7Y6ZjTsZFs0KvdLwA_-iGJ5A@mail.gmail.com>
+ <20220607104358.GA32583@willie-the-truck> <CAOUHufZh46A2hh_fn-8vVBDi_621rgbZq64_afDt8VxrzqJz1g@mail.gmail.com>
+ <CAGsJ_4yvsXCj8snemAyX3jPJgWJR+tFCtUhV-3QJ75RNi=q_KA@mail.gmail.com>
+ <CAHk-=wirMfOpzNavjWao5GA65ve=9LQN-6=YCUtJGRpu=ujdoA@mail.gmail.com>
+ <CAGsJ_4yLCsJJvK5QkFOk_7UW72DRO7gWnd6wdn2TWzBrTmRjSg@mail.gmail.com>
+ <CAOUHufZn5L_R7b_S3P9O+VoJC=EnY10e+xyFF7UqiGbLzzzqKg@mail.gmail.com>
+ <CAGsJ_4ws3uNWM1wpW603UPYrcXqMe3vmPzbLRkgj9SjSgurN3A@mail.gmail.com>
+ <CAOUHufbOwPSbBwd7TG0QFt4YJvBp93Q9nUJEDvMpUA6PqjYMUQ@mail.gmail.com>
+ <CAOUHufYvH2LaGyAJZFQNOsGDBKD2++aFnTV6=qaVtcNrKjS_bA@mail.gmail.com> <CAGsJ_4ypWMoxUJPjYiFdwQpLOXj8STDN8dSDEQbCpuNonBBkcA@mail.gmail.com>
+In-Reply-To: <CAGsJ_4ypWMoxUJPjYiFdwQpLOXj8STDN8dSDEQbCpuNonBBkcA@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 16 Jun 2022 21:03:31 -0600
+Message-ID: <CAOUHufYq81_1HAnTU84md5xr8a8msjxK3tDWmmRfLSUnY-+u+g@mail.gmail.com>
+Subject: Re: [PATCH v11 07/14] mm: multi-gen LRU: exploit locality in rmap
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>, huzhanyuan@oppo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
+On Thu, Jun 16, 2022 at 8:01 PM Barry Song <21cnbao@gmail.com> wrote:
+>
+> On Fri, Jun 17, 2022 at 1:43 PM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > On Thu, Jun 16, 2022 at 5:29 PM Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > On Thu, Jun 16, 2022 at 4:33 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > >
+> > > > On Fri, Jun 17, 2022 at 9:56 AM Yu Zhao <yuzhao@google.com> wrote:
+> > > > >
+> > > > > On Wed, Jun 8, 2022 at 4:46 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > > > >
+> > > > > > On Thu, Jun 9, 2022 at 3:52 AM Linus Torvalds
+> > > > > > <torvalds@linux-foundation.org> wrote:
+> > > > > > >
+> > > > > > > On Tue, Jun 7, 2022 at 5:43 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > Given we used to have a flush for clear pte young in LRU, right now we are
+> > > > > > > > moving to nop in almost all cases for the flush unless the address becomes
+> > > > > > > > young exactly after look_around and before ptep_clear_flush_young_notify.
+> > > > > > > > It means we are actually dropping flush. So the question is,  were we
+> > > > > > > > overcautious? we actually don't need the flush at all even without mglru?
+> > > > > > >
+> > > > > > > We stopped flushing the TLB on A bit clears on x86 back in 2014.
+> > > > > > >
+> > > > > > > See commit b13b1d2d8692 ("x86/mm: In the PTE swapout page reclaim case
+> > > > > > > clear the accessed bit instead of flushing the TLB").
+> > > > > >
+> > > > > > This is true for x86, RISC-V, powerpc and S390. but it is not true for
+> > > > > > most platforms.
+> > > > > >
+> > > > > > There was an attempt to do the same thing in arm64:
+> > > > > > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1793830.html
+> > > > > > but arm64 still sent a nosync tlbi and depent on a deferred to dsb :
+> > > > > > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1794484.html
+> > > > >
+> > > > > Barry, you've already answered your own question.
+> > > > >
+> > > > > Without commit 07509e10dcc7 arm64: pgtable: Fix pte_accessible():
+> > > > >    #define pte_accessible(mm, pte)        \
+> > > > >   -       (mm_tlb_flush_pending(mm) ? pte_present(pte) : pte_valid_young(pte))
+> > > > >   +       (mm_tlb_flush_pending(mm) ? pte_present(pte) : pte_valid(pte))
+> > > > >
+> > > > > You missed all TLB flushes for PTEs that have gone through
+> > > > > ptep_test_and_clear_young() on the reclaim path. But most of the time,
+> > > > > you got away with it, only occasional app crashes:
+> > > > > https://lore.kernel.org/r/CAGsJ_4w6JjuG4rn2P=d974wBOUtXUUnaZKnx+-G6a8_mSROa+Q@mail.gmail.com/
+> > > > >
+> > > > > Why?
+> > > >
+> > > > Yes. On the arm64 platform, ptep_test_and_clear_young() without flush
+> > > > can cause random
+> > > > App to crash.
+> > > > ptep_test_and_clear_young() + flush won't have this kind of crashes though.
+> > > > But after applying commit 07509e10dcc7 arm64: pgtable: Fix
+> > > > pte_accessible(), on arm64,
+> > > > ptep_test_and_clear_young() without flush won't cause App to crash.
+> > > >
+> > > > ptep_test_and_clear_young(), with flush, without commit 07509e10dcc7:   OK
+> > > > ptep_test_and_clear_young(), without flush, with commit 07509e10dcc7:   OK
+> > > > ptep_test_and_clear_young(), without flush, without commit 07509e10dcc7:   CRASH
+> > >
+> > > I agree -- my question was rhetorical :)
+> > >
+> > > I was trying to imply this logic:
+> > > 1. We cleared the A-bit in PTEs with ptep_test_and_clear_young()
+> > > 2. We missed TLB flush for those PTEs on the reclaim path, i.e., case
+> > > 3 (case 1 & 2 guarantee flushes)
+> > > 3. We saw crashes, but only occasionally
+> > >
+> > > Assuming TLB cached those PTEs, we would have seen the crashes more
+> > > often, which contradicts our observation. So the conclusion is TLB
+> > > didn't cache them most of the time, meaning flushing TLB just for the
+> > > sake of the A-bit isn't necessary.
+> > >
+> > > > do you think it is safe to totally remove the flush code even for
+> > > > the original
+> > > > LRU?
+> > >
+> > > Affirmative, based on not only my words, but 3rd parties':
+> > > 1. Your (indirect) observation
+> > > 2. Alexander's benchmark:
+> > > https://lore.kernel.org/r/BYAPR12MB271295B398729E07F31082A7CFAA0@BYAPR12MB2712.namprd12.prod.outlook.com/
+> > > 3. The fundamental hardware limitation in terms of the TLB scalability
+> > > (Fig. 1): https://www.usenix.org/legacy/events/osdi02/tech/full_papers/navarro/navarro.pdf
+> >
+> > 4. Intel's commit b13b1d2d8692 ("x86/mm: In the PTE swapout page
+> > reclaim case clear the accessed bit instead of flushing the TLB")
+>
+> Hi Yu,
+> I am going to send a RFC based on the above discussion.
+>
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 5bcb334cd6f2..7ce6f0b6c330 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -830,7 +830,7 @@ static bool folio_referenced_one(struct folio *folio,
+>                 }
+>
+>                 if (pvmw.pte) {
+> -                       if (ptep_clear_flush_young_notify(vma, address,
+> +                       if (ptep_clear_young_notify(vma, address,
+>                                                 pvmw.pte)) {
+>                                 /*
+>                                  * Don't treat a reference through
 
-On 6/16/22 4:32 PM, Jernej Skrabec wrote:
-> Kernel occasionally complains that there is mismatch in segment size
-> when trying to render HW decoded videos and rendering them directly with
-> sun4i DRM driver.
-> 
-> Fix that by setting DMA mask and segment size.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  drivers/gpu/drm/sun4i/sun4i_drv.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-> index 275f7e4a03ae..83f4e87f77f6 100644
-> --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-> +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-> @@ -7,6 +7,7 @@
->   */
->  
->  #include <linux/component.h>
-> +#include <linux/dma-mapping.h>
->  #include <linux/kfifo.h>
->  #include <linux/module.h>
->  #include <linux/of_graph.h>
-> @@ -367,6 +368,9 @@ static int sun4i_drv_probe(struct platform_device *pdev)
->  
->  	INIT_KFIFO(list.fifo);
->  
-> +	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+Thanks!
 
-Isn't this already the default, from of_dma_configure_id or setup_pdev_dma_masks?
-
-> +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-
-This looks like a good change. In fact, I think we need a similar change in some
-other drivers.
-
-Regards,
-Samuel
+This might make a difference on my 64 core Altra -- I'll test after
+you post the RFC.

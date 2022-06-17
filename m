@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CF654F952
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCB754F95C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382788AbiFQOkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S236747AbiFQOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiFQOks (ORCPT
+        with ESMTP id S1382803AbiFQOk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:40:48 -0400
+        Fri, 17 Jun 2022 10:40:59 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FEE39684;
-        Fri, 17 Jun 2022 07:40:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E454F460;
+        Fri, 17 Jun 2022 07:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655476847; x=1687012847;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nUf3VSmAhMT7KhA0SZgvMeAAppiMPu6TfIssmeBBkZ0=;
-  b=Iu3o569Zq7X/KFY3ys6MNnLHLpzc43WCvCoXjM/MTeGREhs7gOA174ob
-   KDPIe+QVFKcoVut3CyIRjkJDbJUoVbqhBkfT73wxDpupUtOKZhYaYqIZU
-   0jD6NdgGjGnEMLcmwKFibowiD9qMjZUM6UPwFrSvfqIJyptPrffZYbnIM
-   IPp6E8grhv2V4maIQVenz3ZvaRRWpElzY3oUR8Bgalc73z4zbsmCkexoO
-   LCsl6XLlb0EMw7GG1vfALSrTdAKeT0C/L3PWTiA4sCgt1LLSAWyTFs5gV
-   XjjvN1/Buh7p12rKXvgMwm583NZ9D4mkt04OnDhRo2P7EnDNUw2oCEToE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341193588"
+  t=1655476854; x=1687012854;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cKDaIk+tyuEQhyGKnxAqlVtiqCqt8rLzZ/7eP9mJcAA=;
+  b=LBxnQ+AASnMGic5zS3LVDe5hl7z66d31vJTr6PQqVGN54XgfKGg68x9L
+   jJoBdLNIaTOHTtTEdQ7iLG5bH2GOXLA07CM8apQGw8yBvcvy7tonP10kB
+   66/FB/o5ducfK9zGQoR3nxczbkOBLDlRkOoHt46IFwjUNO2IDy8xFU6Hm
+   XwrUDTLB5kD4MxFjD00+qklK+l6FWPtrpqLCfDzopPIH6Ru3TD/AjrbUT
+   ii56pX3+0i8LmIBeD7NA9+Sy3Gq1Qun2EERwlYt6K5Zj0tZV5/MS6er/D
+   eMC0H45EVSQWVd9e7rdUGJEfLWweHZwpfxnRHVBqX4a7CCszJu2RBCE6H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341193598"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341193588"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:40:46 -0700
+   d="scan'208";a="341193598"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:40:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="713789777"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jun 2022 07:40:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2D9P-000PVx-Mp;
-        Fri, 17 Jun 2022 14:40:43 +0000
-Date:   Fri, 17 Jun 2022 22:40:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, tfiga@chromium.org,
-        senozhatsky@chromium.org, yunkec@google.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-media@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: [PATCH v7 2/8] media: uvcvideo: Add support for per-device
- control mapping overrides
-Message-ID: <202206172239.M4dQBUhz-lkp@intel.com>
-References: <20220617103645.71560-3-ribalda@chromium.org>
+   d="scan'208";a="590137376"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Jun 2022 07:40:47 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25HEeXl8024161;
+        Fri, 17 Jun 2022 15:40:45 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 6/7] bitops: let optimize out non-atomic bitops on compile-time constants
+Date:   Fri, 17 Jun 2022 16:40:30 +0200
+Message-Id: <20220617144031.2549432-7-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617103645.71560-3-ribalda@chromium.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,141 +81,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Currently, many architecture-specific non-atomic bitop
+implementations use inline asm or other hacks which are faster or
+more robust when working with "real" variables (i.e. fields from
+the structures etc.), but the compilers have no clue how to optimize
+them out when called on compile-time constants. That said, the
+following code:
 
-I love your patch! Perhaps something to improve:
+	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
+	unsigned long bar = BIT(BAR_BIT);
+	unsigned long baz = 0;
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v5.19-rc2 next-20220617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+	__set_bit(FOO_BIT, foo);
+	baz |= BIT(BAZ_BIT);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Ribalda/uvcvideo-Fix-handling-of-power_line_frequency/20220617-185644
-base:   git://linuxtv.org/media_tree.git master
-config: hexagon-randconfig-r045-20220617 (https://download.01.org/0day-ci/archive/20220617/202206172239.M4dQBUhz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/10bdca4191d7a8be97c77dbe4ba89c05713ee0e2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ricardo-Ribalda/uvcvideo-Fix-handling-of-power_line_frequency/20220617-185644
-        git checkout 10bdca4191d7a8be97c77dbe4ba89c05713ee0e2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/usb/uvc/
+	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
+	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
+	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+triggers the first assertion on x86_64, which means that the
+compiler is unable to evaluate it to a compile-time initializer
+when the architecture-specific bitop is used even if it's obvious.
+In order to let the compiler optimize out such cases, expand the
+bitop() macro to use the "constant" C non-atomic bitop
+implementations when all of the arguments passed are compile-time
+constants, which means that the result will be a compile-time
+constant as well, so that it produces more efficient and simple
+code in 100% cases, comparing to the architecture-specific
+counterparts.
 
-All warnings (new ones prefixed by >>):
+The savings are architecture, compiler and compiler flags dependent,
+for example, on x86_64 -O2:
 
->> drivers/media/usb/uvc/uvc_ctrl.c:2442:6: warning: variable 'mapping' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (chain->dev->info->mappings) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/usb/uvc/uvc_ctrl.c:2459:9: note: uninitialized use occurs here
-           mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-                  ^~~~~~~
-   drivers/media/usb/uvc/uvc_ctrl.c:2442:2: note: remove the 'if' if its condition is always true
-           if (chain->dev->info->mappings) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/usb/uvc/uvc_ctrl.c:2406:43: note: initialize the variable 'mapping' to silence this warning
-           const struct uvc_control_mapping *mapping;
-                                                    ^
-                                                     = NULL
-   1 warning generated.
+GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
 
+and ARM64 (courtesy of Mark):
 
-vim +2442 drivers/media/usb/uvc/uvc_ctrl.c
+GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
 
-  2396	
-  2397	/*
-  2398	 * Add control information and hardcoded stock control mappings to the given
-  2399	 * device.
-  2400	 */
-  2401	static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
-  2402				       struct uvc_control *ctrl)
-  2403	{
-  2404		const struct uvc_control_info *info = uvc_ctrls;
-  2405		const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
-  2406		const struct uvc_control_mapping *mapping;
-  2407		const struct uvc_control_mapping *mend;
-  2408	
-  2409		/* XU controls initialization requires querying the device for control
-  2410		 * information. As some buggy UVC devices will crash when queried
-  2411		 * repeatedly in a tight loop, delay XU controls initialization until
-  2412		 * first use.
-  2413		 */
-  2414		if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT)
-  2415			return;
-  2416	
-  2417		for (; info < iend; ++info) {
-  2418			if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
-  2419			    ctrl->index == info->index) {
-  2420				uvc_ctrl_add_info(chain->dev, ctrl, info);
-  2421				/*
-  2422				 * Retrieve control flags from the device. Ignore errors
-  2423				 * and work with default flag values from the uvc_ctrl
-  2424				 * array when the device doesn't properly implement
-  2425				 * GET_INFO on standard controls.
-  2426				 */
-  2427				uvc_ctrl_get_flags(chain->dev, ctrl, &ctrl->info);
-  2428				break;
-  2429			 }
-  2430		}
-  2431	
-  2432		if (!ctrl->initialized)
-  2433			return;
-  2434	
-  2435		/*
-  2436		 * First check if the device provides a custom mapping for this control,
-  2437		 * used to override standard mappings for non-conformant devices. Don't
-  2438		 * process standard mappings if a custom mapping is found. This
-  2439		 * mechanism doesn't support combining standard and custom mappings for
-  2440		 * a single control.
-  2441		 */
-> 2442		if (chain->dev->info->mappings) {
-  2443			bool custom = false;
-  2444			unsigned int i;
-  2445	
-  2446			for (i = 0; (mapping = chain->dev->info->mappings[i]); ++i) {
-  2447				if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-  2448				    ctrl->info.selector == mapping->selector) {
-  2449					__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-  2450					custom = true;
-  2451				}
-  2452			}
-  2453	
-  2454			if (custom)
-  2455				return;
-  2456		}
-  2457	
-  2458		/* Process common mappings next. */
-  2459		mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-  2460		for (mapping = uvc_ctrl_mappings; mapping < mend; ++mapping) {
-  2461			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-  2462			    ctrl->info.selector == mapping->selector)
-  2463				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-  2464		}
-  2465	
-  2466		/* Finally process version-specific mappings. */
-  2467		if (chain->dev->uvc_version < 0x0150) {
-  2468			mapping = uvc_ctrl_mappings_uvc11;
-  2469			mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc11);
-  2470		} else {
-  2471			mapping = uvc_ctrl_mappings_uvc15;
-  2472			mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc15);
-  2473		}
-  2474	
-  2475		for (; mapping < mend; ++mapping) {
-  2476			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-  2477			    ctrl->info.selector == mapping->selector)
-  2478				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-  2479		}
-  2480	}
-  2481	
+Cc: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+---
+ include/linux/bitops.h | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+index 3c3afbae1533..26a43360c4ae 100644
+--- a/include/linux/bitops.h
++++ b/include/linux/bitops.h
+@@ -33,8 +33,24 @@ extern unsigned long __sw_hweight64(__u64 w);
+ 
+ #include <asm-generic/bitops/generic-non-atomic.h>
+ 
++/*
++ * Many architecture-specific non-atomic bitops contain inline asm code and due
++ * to that the compiler can't optimize them to compile-time expressions or
++ * constants. In contrary, gen_*() helpers are defined in pure C and compilers
++ * optimize them just well.
++ * Therefore, to make `unsigned long foo = 0; __set_bit(BAR, &foo)` effectively
++ * equal to `unsigned long foo = BIT(BAR)`, pick the generic C alternative when
++ * the arguments can be resolved at compile time. That expression itself is a
++ * constant and doesn't bring any functional changes to the rest of cases.
++ * The casts to `uintptr_t` are needed to mitigate `-Waddress` warnings when
++ * passing a bitmap from .bss or .data (-> `!!addr` is always true).
++ */
+ #define bitop(op, nr, addr)						\
+-	op(nr, addr)
++	((__builtin_constant_p(nr) &&					\
++	  __builtin_constant_p((uintptr_t)(addr) != (uintptr_t)NULL) &&	\
++	  (uintptr_t)(addr) != (uintptr_t)NULL &&			\
++	  __builtin_constant_p(*(const unsigned long *)(addr))) ?	\
++	 const##op(nr, addr) : op(nr, addr))
+ 
+ #define __set_bit(nr, addr)		bitop(___set_bit, nr, addr)
+ #define __clear_bit(nr, addr)		bitop(___clear_bit, nr, addr)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

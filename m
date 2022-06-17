@@ -2,120 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276C254FADE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160F354FADB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383148AbiFQQJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56008 "EHLO
+        id S1383199AbiFQQKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383188AbiFQQJf (ORCPT
+        with ESMTP id S1383145AbiFQQKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:09:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAFC234664
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655482168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IBPwk9nDoQIaL1wwpLaX0H/tPNhFrVWuXXlSyUu7t6s=;
-        b=Q5FxoFQun0YZUNMt5jCDxzgtXQ1VDf9QKUc71SDvClKuNhrQsXIY/Fb/3oiMsqS5fApA29
-        +i0YWmlg1+M5CholWPEVz5rDs8yfxCjOqiCL+OC24VDkplAkoRJUEwa09BEXaECJRqsJwF
-        iQwIZ14bRptg9raYZ+VaIrqcLygzEVg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-26rf84i-PxKOX3ozoJ6eKw-1; Fri, 17 Jun 2022 12:09:27 -0400
-X-MC-Unique: 26rf84i-PxKOX3ozoJ6eKw-1
-Received: by mail-wm1-f70.google.com with SMTP id c185-20020a1c35c2000000b0039db3e56c39so2893570wma.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:09:27 -0700 (PDT)
+        Fri, 17 Jun 2022 12:10:05 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7899236156;
+        Fri, 17 Jun 2022 09:10:04 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id o7so9678514eja.1;
+        Fri, 17 Jun 2022 09:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2dFjnX3mVMF7xL9NmgRQYKF7e0pvRvIc8LSD1srOJHY=;
+        b=PwqIy/KzvDlBICWRZtbd3mTtnJRtiZvU8g7ENRe2/TFZyNMuDzoxk30fsp8TvpB6NW
+         fKpjQ9U6KEW4Z3QVDAhbkUSt+DU1o1wkuFzfv5M7Id8UCdUOsLfr07Cf6XYlSNqy/c1j
+         iLz6kqCIDwb4LVc7h4gRTFTKTUOxyYbk6uBJnTBXQwgqH7FkwGHm7RJIGyuUZByDL7Eq
+         pQxchUHRvV1rsBa0N8gIBU9qR2crDHa7/xz1r5qPOHDF/iDJJgJJDP8wDXjalEImyshw
+         aoobTO9jvWuy8+tCKqJKsQLm0cCh9uMcq53T47uhAf3PXmuUoft7TBK29Li/3Hhb/CVo
+         dnBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=IBPwk9nDoQIaL1wwpLaX0H/tPNhFrVWuXXlSyUu7t6s=;
-        b=C3K+0Y3GS8rS3pAaM+zgWnZgyjBHMIDb6YyBZ+18uyW4xVVIf4jpAzlIl7k/FKFH1T
-         /Nv8KCiqHNoaJkXBnJvbPiNrceH3gGKMMeMFUgAiDRjTU5tO2i0+5tt2Ihz6EgnamxRa
-         R3VDc0D/yE7rolk8ASyYsSq7oJS+nugxcv8Z7mQSG1UDdpaATJzU5VJ4kUf/23CmENgK
-         OafaIgoJ0vJxQeSTM/DHDI0wpVZcnFCfaC1ON/rdIurf5TzgCIz1ceOK8er75stsrk11
-         U/CkvpDQNxbr5Z8AwYj4Oq2rJdXRWiDN1m27QokNazDIKF4YhzEnojIXOrQtomxlxQJ/
-         ss3g==
-X-Gm-Message-State: AJIora+0e3YWykHgUHBYT6pE9fAgh5ervGVTa5HH6LoptMhoqvsbYOfh
-        WMOxv3x/JFEPSAT3RB98CtZYDfCMOByzwJ3H1a8gLl4kA9qLoweO/MhZy8GgWCw/paJ4LNCIwG+
-        c6absLiHLIHkLpb6gbJtw+/1E
-X-Received: by 2002:a05:600c:2e14:b0:39c:58c4:c6ed with SMTP id o20-20020a05600c2e1400b0039c58c4c6edmr10889834wmf.156.1655482166304;
-        Fri, 17 Jun 2022 09:09:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u4uhRwDqd/FDNa9ffN3RJce9NoqdX8q9rlMvOtfDNVZYT0LfHesVUll3eMnh2rdM9bZbYJIA==
-X-Received: by 2002:a05:600c:2e14:b0:39c:58c4:c6ed with SMTP id o20-20020a05600c2e1400b0039c58c4c6edmr10889813wmf.156.1655482166046;
-        Fri, 17 Jun 2022 09:09:26 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id k6-20020a05600c1c8600b0039c84c05d88sm11256071wms.23.2022.06.17.09.09.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 09:09:25 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-rt-users@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <jlelli@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Subject: Re: [PATCH] panic, kexec: Don't mutex_trylock() in __crash_kexec()
-In-Reply-To: <YqyZ/Uf14qkYtMDX@linutronix.de>
-References: <20220616123709.347053-1-vschneid@redhat.com>
- <YqyZ/Uf14qkYtMDX@linutronix.de>
-Date:   Fri, 17 Jun 2022 17:09:24 +0100
-Message-ID: <xhsmha6ab6zm3.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2dFjnX3mVMF7xL9NmgRQYKF7e0pvRvIc8LSD1srOJHY=;
+        b=7D3MRQKp57MjsxUZaTruRrEIU5O8mTArpgiZ73Px+yFoL7+sNHDG220oXesNf9wC0u
+         BukdN2b3WP/GBgm4vS3u6aOh2/OX/Nuqkx8+gNHLhZS7Q/TMBOLLh5qU98MVagoI3amG
+         bXoM9WidqjdNS+8yUrSRAL5cyRsuJQuamPL5re6LcV1K5+sTpTMiZDeGTTAfMjA4y0u6
+         vAKGcJDPnxMoT+nBjSw4uve8FWopFCWVZzH/GbBJxrfQ0TGy21Rrh2ExWN35TaIECUcG
+         8WXRfBDubCXUHlTRtuPQQ+8ji5fzk56VTY/0pAMeUTKAkXdXMfCZXV9vxBvbW/h9dM6d
+         JRcQ==
+X-Gm-Message-State: AJIora83/bJ3gw/4hwhzgybOpGrvNC38GZSluIPxN45Ft4OqOEoPu6nL
+        oyTnSQveqR9jOUC1fe0mmUFi3XWxyvQVWCoOHBE=
+X-Google-Smtp-Source: AGRyM1vxFS3gGLoZx15i7W1dVsgyO/gYWKvfpvn09x+q2qxkH0jSJjyUOERWSIlx6JuwS5rJDsFA39oGWrcfC5GonAA=
+X-Received: by 2002:a17:906:c7c1:b0:711:d2e9:99d0 with SMTP id
+ dc1-20020a170906c7c100b00711d2e999d0mr9974582ejb.639.1655482202936; Fri, 17
+ Jun 2022 09:10:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220617122855.739190-1-aidanmacdonald.0x0@gmail.com> <20220617122855.739190-2-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220617122855.739190-2-aidanmacdonald.0x0@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 17 Jun 2022 18:09:26 +0200
+Message-ID: <CAHp75VdwYgx1H5+Ak4xXuzrBQ8AoM0=FPKtHdoyF2jHbY3QbgQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] pinctrl: ingenic: Use irqd_to_hwirq()
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Marc Zyngier <maz@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/22 17:13, Sebastian Andrzej Siewior wrote:
-> On 2022-06-16 13:37:09 [+0100], Valentin Schneider wrote:
->> Regarding the original explanation for the WARN & return:
->> 
->> I don't get why 2) is a problem - if the lock is acquired by the trylock
->> then the critical section will be run without interruption since it
->> cannot sleep, the interrupted task may get boosted but that will not
->> have any actual impact AFAICT.
+On Fri, Jun 17, 2022 at 2:27 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
 >
-> boosting an unrelated task is considered wrong. I don't know how bad
-> it gets in terms of lock chains since a task is set as owner which did
-> not actually ask for the lock.
+> Instead of accessing ->hwirq directly, use irqd_to_hwirq().
+
+LGTM,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/pinctrl/pinctrl-ingenic.c | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
 >
->> Regardless, even if this doesn't sleep, the ->wait_lock in the slowpath
->> isn't NMI safe so this needs changing.
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+> index 1ca11616db74..69e0d88665d3 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -3393,7 +3393,7 @@ static void ingenic_gpio_irq_mask(struct irq_data *irqd)
+>  {
+>         struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
+>         struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
+> -       int irq = irqd->hwirq;
+> +       irq_hw_number_t irq = irqd_to_hwirq(irqd);
 >
-> This includes the unlock path which may wake a waiter and deboost.
+>         if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
+>                 ingenic_gpio_set_bit(jzgc, GPIO_MSK, irq, true);
+> @@ -3405,7 +3405,7 @@ static void ingenic_gpio_irq_unmask(struct irq_data *irqd)
+>  {
+>         struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
+>         struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
+> -       int irq = irqd->hwirq;
+> +       irq_hw_number_t irq = irqd_to_hwirq(irqd);
+>
+>         if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
+>                 ingenic_gpio_set_bit(jzgc, GPIO_MSK, irq, false);
+> @@ -3417,7 +3417,7 @@ static void ingenic_gpio_irq_enable(struct irq_data *irqd)
+>  {
+>         struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
+>         struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
+> -       int irq = irqd->hwirq;
+> +       irq_hw_number_t irq = irqd_to_hwirq(irqd);
+>
+>         if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
+>                 ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
+> @@ -3433,7 +3433,7 @@ static void ingenic_gpio_irq_disable(struct irq_data *irqd)
+>  {
+>         struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
+>         struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
+> -       int irq = irqd->hwirq;
+> +       irq_hw_number_t irq = irqd_to_hwirq(irqd);
+>
+>         ingenic_gpio_irq_mask(irqd);
+>
+> @@ -3449,7 +3449,7 @@ static void ingenic_gpio_irq_ack(struct irq_data *irqd)
+>  {
+>         struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
+>         struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
+> -       int irq = irqd->hwirq;
+> +       irq_hw_number_t irq = irqd_to_hwirq(irqd);
+>         bool high;
+>
+>         if ((irqd_get_trigger_type(irqd) == IRQ_TYPE_EDGE_BOTH) &&
+> @@ -3477,6 +3477,7 @@ static int ingenic_gpio_irq_set_type(struct irq_data *irqd, unsigned int type)
+>  {
+>         struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
+>         struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
+> +       irq_hw_number_t irq = irqd_to_hwirq(irqd);
+>
+>         switch (type) {
+>         case IRQ_TYPE_EDGE_BOTH:
+> @@ -3498,12 +3499,12 @@ static int ingenic_gpio_irq_set_type(struct irq_data *irqd, unsigned int type)
+>                  * best we can do is to set up a single-edge interrupt and then
+>                  * switch to the opposing edge when ACKing the interrupt.
+>                  */
+> -               bool high = ingenic_gpio_get_value(jzgc, irqd->hwirq);
+> +               bool high = ingenic_gpio_get_value(jzgc, irq);
+>
+>                 type = high ? IRQ_TYPE_LEVEL_LOW : IRQ_TYPE_LEVEL_HIGH;
+>         }
+>
+> -       irq_set_type(jzgc, irqd->hwirq, type);
+> +       irq_set_type(jzgc, irq, type);
+>         return 0;
+>  }
+>
+> @@ -3668,20 +3669,22 @@ static const struct pinctrl_ops ingenic_pctlops = {
+>  static int ingenic_gpio_irq_request(struct irq_data *data)
+>  {
+>         struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
+> +       irq_hw_number_t irq = irqd_to_hwirq(data);
+>         int ret;
+>
+> -       ret = ingenic_gpio_direction_input(gpio_chip, data->hwirq);
+> +       ret = ingenic_gpio_direction_input(gpio_chip, irq);
+>         if (ret)
+>                 return ret;
+>
+> -       return gpiochip_reqres_irq(gpio_chip, data->hwirq);
+> +       return gpiochip_reqres_irq(gpio_chip, irq);
+>  }
+>
+>  static void ingenic_gpio_irq_release(struct irq_data *data)
+>  {
+>         struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
+> +       irq_hw_number_t irq = irqd_to_hwirq(data);
+>
+> -       return gpiochip_relres_irq(gpio_chip, data->hwirq);
+> +       return gpiochip_relres_irq(gpio_chip, irq);
+>  }
+>
+>  static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
+> --
+> 2.35.1
 >
 
-Both are good points, thank you for lighting my lantern :)
 
->> I've thought about trying to defer the kexec out of an NMI (or IRQ)
->> context, but that pretty much means deferring the panic() which I'm
->> not sure is such a great idea.
->
-> If we could defer it out of NMI on RT then it would work non-RT, too. If
-> the system is "stuck" and the NMI is the only to respond then I guess
-> that it is not a great idea.
->
-
-Those were pretty much my thoughts. I *think* panic() can be re-entrant on
-the same CPU if the first entry was from NMI, but that still requires being
-able to schedule a thread that panics which isn't a given after getting
-that panic NMI. So for now actually doing the kexec in NMI (or IRQ) context
-seems to be the less hazardous route. 
-
-> Sebastian
-
+-- 
+With Best Regards,
+Andy Shevchenko

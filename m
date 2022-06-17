@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF0F54EFB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA99754EF83
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379871AbiFQC4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 22:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S1379938AbiFQDEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379728AbiFQC4X (ORCPT
+        with ESMTP id S1379503AbiFQDES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 22:56:23 -0400
-Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EDF6E0BC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:56:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aTdIn
-        RxfYkL/Bf5dwKSX31T/KQuPHI8eY4IcEkq32c0=; b=VpXeBlUCkhJHeIM2UKbYy
-        wTyuLZ1ioa2FRgveEu1GuCa1oUxfjpfHuiawM7hrZHyAkEg80OwvEzVPqVTV6cUl
-        wXKasa4D01DiBBEvVsNZZIx7RPq5UGDetKhh2BFePb07iQYE+RPg7s0wW92Bl/pL
-        F/2gvA7trHZvyhCswqdDHY=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp1 (Coremail) with SMTP id C8mowAB3U9wL7atieDncEg--.18233S2;
-        Fri, 17 Jun 2022 10:55:13 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     lpieralisi@kernel.org, pali@kernel.org,
-        christophe.jaillet@wanadoo.fr
-Cc:     linux-kernel@vger.kernel.org, windhl@126.com
-Subject: [PATCH v3] bus: mvebu-mbus: Add missing of_node_put()
-Date:   Fri, 17 Jun 2022 10:55:07 +0800
-Message-Id: <20220617025507.4002557-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Jun 2022 23:04:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2B466226;
+        Thu, 16 Jun 2022 20:04:18 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LPP1h3ztSzSgxV;
+        Fri, 17 Jun 2022 11:00:56 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 11:04:09 +0800
+Received: from huawei.com (10.175.112.208) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
+ 2022 11:04:08 +0800
+From:   Guo Mengqi <guomengqi3@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <f.fainelli@gmail.com>, <rjui@broadcom.com>,
+        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <nsaenz@kernel.org>, <athierry@redhat.com>,
+        <linux-serial@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <xuqiang36@huawei.com>
+Subject: [PATCH -next] drivers/tty/serial: Add missing clk_disable_unprepare()
+Date:   Fri, 17 Jun 2022 10:58:27 +0800
+Message-ID: <20220617025827.130497-1-guomengqi3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8mowAB3U9wL7atieDncEg--.18233S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr18Cw47AFyDtr4kWFW7Jwb_yoW8ZFy7pF
-        W7Wr43try0qrWfJFZaka4xua4YkFn7WFWUXa9rCwn3AF13AayYvrWFyFyrZFZ8AFW09w1Y
-        yw1jy3WxuasrAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pENtxnUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3BIjF1pEDvLfOgAAs9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mvebu_mbus_dt_init(), of_find_matching_node_and_match() and
-of_find_node_by_phandle() will both return node pointers with
-refcount incremented. We should use of_node_put() in fail path
-or when it is not used anymore.
+Add missing clk_disable_unprepare() when get clk rate fails.
 
-Signed-off-by: Liang He <windhl@126.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Guo Mengqi <guomengqi3@huawei.com>
 ---
- changelog:
- v3: (1) use goto-label patch style (2) fix v2 error reported by CJ 
- v2: (1) use real name (2) add of_node_put when not used anymore
- v1: add of_node_put in fail path
+ drivers/tty/serial/8250/8250_bcm2835aux.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- drivers/bus/mvebu-mbus.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-index db612045616f..739f850cfcf1 100644
---- a/drivers/bus/mvebu-mbus.c
-+++ b/drivers/bus/mvebu-mbus.c
-@@ -1328,23 +1328,27 @@ int __init mvebu_mbus_dt_init(bool is_coherent)
- 	prop = of_get_property(np, "controller", NULL);
- 	if (!prop) {
- 		pr_err("required 'controller' property missing\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_np_put;
+diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
+index 2a1226a78a0c..21939bb44613 100644
+--- a/drivers/tty/serial/8250/8250_bcm2835aux.c
++++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+@@ -166,8 +166,10 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+ 	uartclk = clk_get_rate(data->clk);
+ 	if (!uartclk) {
+ 		ret = device_property_read_u32(&pdev->dev, "clock-frequency", &uartclk);
+-		if (ret)
+-			return dev_err_probe(&pdev->dev, ret, "could not get clk rate\n");
++		if (ret) {
++			dev_err_probe(&pdev->dev, ret, "could not get clk rate\n");
++			goto dis_clk;
++		}
  	}
  
- 	controller = of_find_node_by_phandle(be32_to_cpup(prop));
- 	if (!controller) {
- 		pr_err("could not find an 'mbus-controller' node\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err_np_put;
- 	}
- 
- 	if (of_address_to_resource(controller, 0, &mbuswins_res)) {
- 		pr_err("cannot get MBUS register address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_controller_put;
- 	}
- 
- 	if (of_address_to_resource(controller, 1, &sdramwins_res)) {
- 		pr_err("cannot get SDRAM register address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_controller_put;
- 	}
- 
- 	/*
-@@ -1375,9 +1379,16 @@ int __init mvebu_mbus_dt_init(bool is_coherent)
- 				     resource_size(&mbusbridge_res),
- 				     is_coherent);
- 	if (ret)
--		return ret;
-+		goto err_controller_put;
- 
- 	/* Setup statically declared windows in the DT */
--	return mbus_dt_setup(&mbus_state, np);
-+	ret = mbus_dt_setup(&mbus_state, np);
-+
-+err_controller_put:
-+	of_node_put(controller);
-+err_np_put:
-+	of_node_put(np);
-+
-+	return ret;
- }
- #endif
+ 	/* the HW-clock divider for bcm2835aux is 8,
 -- 
-2.25.1
+2.17.1
 

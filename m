@@ -2,168 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1FB54F5F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75C254F5F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382223AbiFQKsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S1382244AbiFQKsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382151AbiFQKsL (ORCPT
+        with ESMTP id S1382236AbiFQKsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:48:11 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4CCA6832C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=SolyN
-        v96M4vIIPzd3NHPQjhr5VsZjM5jEwHxfRVf6zU=; b=fSnH9xiDnCCH2c5YNvLtQ
-        /PAeEkipaZVyUsAnFDdmMdylvkv1XKS1WopUm9LYDbDkcgcEGp0iFF2gJi5b+WRz
-        92X7UYg3m6I32dTAoZpu8dFu1iieGTBHRudePBjIh7tCedytxS/gPl/fW4slfDhX
-        kqL3ygs1sWuCd4TSvtR/2M=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Fri, 17 Jun 2022 18:47:01 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Fri, 17 Jun 2022 18:47:01 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     Conor.Dooley@microchip.com
-Cc:     christophe.leroy@csgroup.eu, oss@buserror.net, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
- sgy_cst1000
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
-References: <20220617060827.4004795-1-windhl@126.com>
- <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
- <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
- <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
- <64ac3dc9.5bd1.18170bcb6a6.Coremail.windhl@126.com>
- <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 17 Jun 2022 06:48:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CFF6BFE4;
+        Fri, 17 Jun 2022 03:48:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED2B5660179A;
+        Fri, 17 Jun 2022 11:48:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655462919;
+        bh=iolRVPHpQh6u3gC87otykET26yu59XGpf0xquwJFbtc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XRs4/BwLMzqZniW2WQLPzcxJs6DepjVBYQa2NqHJpTL1av7Khq/gdaL+nLrDEyn07
+         /gHguPuCdGwlXhpoxmLoKUeoxg3Xk2yk9vJ6qwvinAbc/Wbob/QdYw8TOcIWeL7AUC
+         yXyuajtPBLCLGs/orx4F4ZHVuZwavLZNZ7yHZI7VumHdqNqB7BHdL/OlZiXRrWUv7N
+         dspWvd1xqc9JENEkB4sW/inqQPJbmRrF3ZLRurk40raNh9icJDGstAyH2iGL/5/0zZ
+         C0MKJ7N3lZXU5ysNCR5BNdL78R93hH5yJaXAKvPZHa4fPb/dKk6yjPQ4ll04rXwKqS
+         0aufFhxGXKFIw==
+Message-ID: <7da07c36-e449-dcfc-b1d3-897bead0f23f@collabora.com>
+Date:   Fri, 17 Jun 2022 12:48:36 +0200
 MIME-Version: 1.0
-Message-ID: <71b517f4.7854.1817145ff77.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowABHnfGmW6xiIKs4AA--.57876W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AUjF1pEDvT03AADsi
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>, rafael@kernel.org
+Cc:     viresh.kumar@linaro.org, rex-bc.chen@mediatek.com,
+        jia-wei.chang@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220617090652.56247-1-angelogioacchino.delregno@collabora.com>
+ <71bf73f9-fa60-e4ba-a339-64d876514af2@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <71bf73f9-fa60-e4ba-a339-64d876514af2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKQXQgMjAyMi0wNi0xNyAxNjoyNzowMywgQ29ub3IuRG9vbGV5QG1pY3JvY2hpcC5jb20gd3Jv
-dGU6Cj5PbiAxNy8wNi8yMDIyIDA5OjE3LCBMaWFuZyBIZSB3cm90ZToKPj4gCj4+IAo+PiAKPj4g
-QXQgMjAyMi0wNi0xNyAxNDo1MzoxMywgIkNocmlzdG9waGUgTGVyb3kiIDxjaHJpc3RvcGhlLmxl
-cm95QGNzZ3JvdXAuZXU+IHdyb3RlOgo+Pj4KPj4+Cj4+PiBMZSAxNy8wNi8yMDIyIMOgIDA4OjQ1
-LCBMaWFuZyBIZSBhIMOpY3JpdMKgOgo+Pj4+Cj4+Pj4KPj4+Pgo+Pj4+IEF0IDIwMjItMDYtMTcg
-MTQ6Mjg6NTYsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1
-PiB3cm90ZToKPj4+Pj4KPj4+Pj4KPj4+Pj4gTGUgMTcvMDYvMjAyMiDDoCAwODowOCwgTGlhbmcg
-SGUgYSDDqWNyaXTCoDoKPj4+Pj4+IEluIGdwaW9faGFsdF9wcm9iZSgpLCBvZl9maW5kX21hdGNo
-aW5nX25vZGUoKSB3aWxsIHJldHVybiBhIG5vZGUKPj4+Pj4+IHBvaW50ZXIgd2l0aCByZWZjb3Vu
-dCBpbmNyZW1lbnRlZC4gV2Ugc2hvdWxkIHVzZSBvZl9ub2RlX3B1dCgpIGluCj4+Pj4+PiBmYWls
-IHBhdGggb3Igd2hlbiBpdCBpcyBub3QgdXNlZCBhbnltb3JlLgo+Pj4+Pj4KPj4+Pj4+IFNpZ25l
-ZC1vZmYtYnk6IExpYW5nIEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4+Pj4+IC0tLQo+Pj4+Pj4gICAg
-IGNoYW5nZWxvZzoKPj4+Pj4+ICAgICB2NDogcmV1c2UgZXhpc3QgJ2VycicgYW5kIHVzZSBhIHNp
-bXBsZSBjb2RlIHN0eWxlLCBhZHZpc2VkIGJ5IENKCj4+Pj4+PiAgICAgdjM6IHVzZSBsb2NhbCAn
-Y2hpbGRfbm9kZScgYWR2aXNlZCBieSBNaWNoYWVsLgo+Pj4+Pj4gICAgIHYyOiB1c2UgZ290by1s
-YWJlbCBwYXRjaCBzdHlsZSBhZHZpc2VkIGJ5IENocmlzdG9waGUgTGVyb3kuCj4+Pj4+PiAgICAg
-djE6IGFkZCBvZl9ub2RlX3B1dCgpIGJlZm9yZSBlYWNoIGV4aXQuCj4+Pj4+Pgo+Pj4+Pj4gICAg
-IGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5jIHwgMzUgKysrKysrKysr
-KysrKystLS0tLS0tLS0KPj4+Pj4+ICAgICAxIGZpbGUgY2hhbmdlZCwgMjIgaW5zZXJ0aW9ucygr
-KSwgMTMgZGVsZXRpb25zKC0pCj4+Pj4+Pgo+Pj4+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJw
-Yy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5jIGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84
-NXh4L3NneV9jdHMxMDAwLmMKPj4+Pj4+IGluZGV4IDk4YWU2NDA3NTE5My4uZTQ1ODg5NDNmZTdl
-IDEwMDY0NAo+Pj4+Pj4gLS0tIGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMx
-MDAwLmMKPj4+Pj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAw
-MC5jCj4+Pj4+PiBAQCAtNzEsNiArNzEsNyBAQCBzdGF0aWMgaW50IGdwaW9faGFsdF9wcm9iZShz
-dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+Pj4+Pj4gICAgIHsKPj4+Pj4+ICAgICAJZW51
-bSBvZl9ncGlvX2ZsYWdzIGZsYWdzOwo+Pj4+Pj4gICAgIAlzdHJ1Y3QgZGV2aWNlX25vZGUgKm5v
-ZGUgPSBwZGV2LT5kZXYub2Zfbm9kZTsKPj4+Pj4+ICsJc3RydWN0IGRldmljZV9ub2RlICpjaGls
-ZF9ub2RlOwo+Pj4+Pj4gICAgIAlpbnQgZ3BpbywgZXJyLCBpcnE7Cj4+Pj4+PiAgICAgCWludCB0
-cmlnZ2VyOwo+Pj4+Pj4gICAgIAo+Pj4+Pj4gQEAgLTc4LDI2ICs3OSwyOSBAQCBzdGF0aWMgaW50
-IGdwaW9faGFsdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+Pj4+Pj4gICAg
-IAkJcmV0dXJuIC1FTk9ERVY7Cj4+Pj4+PiAgICAgCj4+Pj4+PiAgICAgCS8qIElmIHRoZXJlJ3Mg
-bm8gbWF0Y2hpbmcgY2hpbGQsIHRoaXMgaXNuJ3QgcmVhbGx5IGFuIGVycm9yICovCj4+Pj4+PiAt
-CWhhbHRfbm9kZSA9IG9mX2ZpbmRfbWF0Y2hpbmdfbm9kZShub2RlLCBjaGlsZF9tYXRjaCk7Cj4+
-Pj4+PiAtCWlmICghaGFsdF9ub2RlKQo+Pj4+Pj4gKwljaGlsZF9ub2RlID0gb2ZfZmluZF9tYXRj
-aGluZ19ub2RlKG5vZGUsIGNoaWxkX21hdGNoKTsKPj4+Pj4+ICsJaWYgKCFjaGlsZF9ub2RlKQo+
-Pj4+Pj4gICAgIAkJcmV0dXJuIDA7Cj4+Pj4+PiAgICAgCj4+Pj4+PiAgICAgCS8qIFRlY2huaWNh
-bGx5IHdlIGNvdWxkIGp1c3QgcmVhZCB0aGUgZmlyc3Qgb25lLCBidXQgcHVuaXNoCj4+Pj4+PiAg
-ICAgCSAqIERUIHdyaXRlcnMgZm9yIGludmFsaWQgZm9ybS4gKi8KPj4+Pj4+IC0JaWYgKG9mX2dw
-aW9fY291bnQoaGFsdF9ub2RlKSAhPSAxKQo+Pj4+Pj4gLQkJcmV0dXJuIC1FSU5WQUw7Cj4+Pj4+
-PiArCWlmIChvZl9ncGlvX2NvdW50KGNoaWxkX25vZGUpICE9IDEpIHsKPj4+Pj4+ICsJCWVyciA9
-IC1FSU5WQUw7Cj4+Pj4+PiArCQlnb3RvIGVycl9wdXQ7Cj4+Pj4+PiArCX0KPj4+Pj4+ICAgICAK
-Pj4+Pj4+ICAgICAJLyogR2V0IHRoZSBncGlvIG51bWJlciByZWxhdGl2ZSB0byB0aGUgZHluYW1p
-YyBiYXNlLiAqLwo+Pj4+Pj4gLQlncGlvID0gb2ZfZ2V0X2dwaW9fZmxhZ3MoaGFsdF9ub2RlLCAw
-LCAmZmxhZ3MpOwo+Pj4+Pj4gLQlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpCj4+Pj4+PiAtCQly
-ZXR1cm4gLUVJTlZBTDsKPj4+Pj4+ICsJZ3BpbyA9IG9mX2dldF9ncGlvX2ZsYWdzKGNoaWxkX25v
-ZGUsIDAsICZmbGFncyk7Cj4+Pj4+PiArCWlmICghZ3Bpb19pc192YWxpZChncGlvKSkgewo+Pj4+
-Pj4gKwkJZXJyID0gLUVJTlZBTDsKPj4+Pj4+ICsJCWdvdG90IGVycl9wdXQ7Cj4+Pj4+Cj4+Pj4+
-IERpZCB5b3UgdGVzdCB0aGUgYnVpbGQgPwo+Pj4+Cj4+Pj4gU29ycnkgZm9yIHRoaXMgZmF1bHQu
-Cj4+Pj4KPj4+PiBJbiBmYWN0LCBJIGFtIHN0aWxsIGZpbmRpbmcgYW4gZWZmaWNpZW50IHdheSB0
-byBidWlsZGluZyBkaWZmZXJlbnQgYXJjaCBzb3VyY2UgY29kZSBhcyBJIG9ubHkgaGF2ZSB4ODYt
-NjQuCj4+Pj4KPj4+PiBOb3cgSSBhbSB0cnkgdXNpbmcgUUVNVS4KPj4+Pgo+Pj4+IEFueXdheSwg
-c29ycnkgZm9yIHRoaXMgZmF1bHQuCj4+Pgo+Pj4gWW91IGNhbiBmaW5kIGNyb3NzIGNvbXBpbGVy
-cyBmb3IgbW9zdCBhcmNoaXRlY3R1cmVzIGZvciB4ODYtNjQgaGVyZSA6Cj4+PiBodHRwczovL21p
-cnJvcnMuZWRnZS5rZXJuZWwub3JnL3B1Yi90b29scy9jcm9zc3Rvb2wvCj4+Pgo+Pj4gQ2hyaXN0
-b3BoZQo+PiAKPj4gSGksIENocmlzdG9waGUgYW5kIENvbm9yLgo+PiAKPj4gU29ycnkgdG8gdHJv
-dWJsZSB5b3UgYWdhaW4uCj4+IAo+PiBOb3cgSSBvbmx5IGtub3cgaG93IHRvIHF1aWNrbHkgaWRl
-bnRpZnkgdGhlIHJlZmNvdW50aW5nIGJ1Z3MsIGJ1dCBJIGNhbm5vdCBlZmZpY2llbnRseSBnaXZl
-IGEgYnVpbGQgdGVzdC4KPj4gCj4+IEZvciBleGFtcGxlLCBJIHVzZSB0aGUgY3Jvc3MgY29tcGls
-ZXJzICdwb3dlcnBjLWxpbnV4LWdudS1nY2MnIHRvIGNvbXBpbGUgJ2FyY2gvcG93ZXJwYy9wbGF0
-Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5jJyB3aXRoIC1mc3ludGF4LW9ubHkgZmxhZy4KPj4gQnV0
-IEkgbWVldCB0b28gbWFueSBoZWFkZXIgZmlsZSBtaXNzaW5nIGVycm9ycy4gRXZlbiBpZiBJIGFk
-ZCBzb21lICdpbmNsdWRlJyBwYXRoZXMsIGUuZy4sIC4vYXJjaC9wb3dlcnBjL2luY2x1ZGUsIC4v
-aW5jbHVkZSwKPj4gdGhlcmUgYXJlIHN0aWxsIHRvbyBtYW55IG90aGVyIGVycm9ycy4KPj4gCj4+
-IFNvIGlmIHRoZXJlIGlzIGFueSBlZmZpY2llbnQgd2F5IHRvIGNoZWNrIG15IHBhdGNoIGNvZGUg
-dG8gYXZvaWQgJ2dvdG90JyBlcnJvciBhZ2Fpbi4KPgo+aWRrIGFueXRoaW5nIGFib3V0IHBvd2Vy
-cGMsIGJ1dCB3aGF0IEkgZmluZCBpcyBhIG5pY2Ugd2F5IHRvIGdldCBhIGNvbXBpbGVyCj5mb3Ig
-YW4gYXJjaCBJIGRvbid0IHVzZSBpcyB0byBzZWFyY2ggb24gbG9yZS5rZXJuZWwub3JnIGZvciBh
-IDBkYXkgcm9ib3QKPmJ1aWxkIGVycm9yIHNpbmNlIGl0IGdpdmVzIGluc3RydWN0aW9ucyBmb3Ig
-YnVpbGRpbmcgb24gdGhhdCBhcmNoLgo+Rm9yIGV4YW1wbGU6Cj5odHRwczovL2xvcmUua2VybmVs
-Lm9yZy9saW51eHBwYy1kZXYvMjAyMjA2MDYwOTEwLnJZTlRGcWRJLWxrcEBpbnRlbC5jb20vCj4K
-Pgo+SW4gdGhpcyBjYXNlLCB5b3VyIGJ1ZyBzZWVtcyBvYnZpb3VzPyBZb3UgdHlwZWQgImdvdG90
-IiBpbnN0ZWFkIG9mICJnb3RvIi4KPgo+SG9wZSB0aGF0IGhlbHBzLAo+Q29ub3IuCj4KPj4gCj4+
-IFRoYW5rcyBhZ2FpbiwgQ2hyaXN0b3BoZSBhbmQgQ29ub3IuCj4+IAo+PiBMaWFuZwoKVGhhbmtz
-LCBDb25vciBhbmQgQ2hyaXN0b3BoZS4KCkkgZmluYWxseSBmaWd1cmUgb3V0IGFuIGVmZmljaWVu
-dCB3YXkgaW4gd2hpY2ggSSBjYW4gdXNlIGNyb3NzLWNvbXBpbGVyIHRvIGNoZWNrIG15IHNpbmds
-ZSBwYXRjaGVkIGZpbGUgYXMgZm9sbG93OgoKcG93ZXJwYzY0bGUtbGludXgtZ251LWdjYyAtV3As
-LU1NRCxhcmNoL3Bvd2VycGMva2VybmVsLy5pby5vLmQgIC1ub3N0ZGluYyAtSS4vYXJjaC9wb3dl
-cnBjL2luY2x1ZGUgLUkuL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2dlbmVyYXRlZCAgLUkuL2luY2x1
-ZGUgLUkuL2FyY2gvcG93ZXJwYy9pbmNsdWRlL3VhcGkgLUkuL2FyY2gvcG93ZXJwYy9pbmNsdWRl
-L2dlbmVyYXRlZC91YXBpIC1JLi9pbmNsdWRlL3VhcGkgLUkuL2luY2x1ZGUvZ2VuZXJhdGVkL3Vh
-cGkgLWluY2x1ZGUgLi9pbmNsdWRlL2xpbnV4L2NvbXBpbGVyLXZlcnNpb24uaCAtaW5jbHVkZSAu
-L2luY2x1ZGUvbGludXgva2NvbmZpZy5oIC1pbmNsdWRlIC4vaW5jbHVkZS9saW51eC9jb21waWxl
-cl90eXBlcy5oIC1EX19LRVJORUxfXyAtSSAuL2FyY2gvcG93ZXJwYyAtZm1hY3JvLXByZWZpeC1t
-YXA9Li89IC1XYWxsIC1XdW5kZWYgLVdlcnJvcj1zdHJpY3QtcHJvdG90eXBlcyAtV25vLXRyaWdy
-YXBocyAtZm5vLXN0cmljdC1hbGlhc2luZyAtZm5vLWNvbW1vbiAtZnNob3J0LXdjaGFyIC1mbm8t
-UElFIC1XZXJyb3I9aW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb24gLVdlcnJvcj1pbXBsaWNp
-dC1pbnQgLVdlcnJvcj1yZXR1cm4tdHlwZSAtV25vLWZvcm1hdC1zZWN1cml0eSAtc3RkPWdudTEx
-IC1tY3B1PXBvd2VycGMgLW1jcHU9cG93ZXJwYyAtbTMyIC1tc29mdC1mbG9hdCAtcGlwZSAtZmZp
-eGVkLXIyIC1tbm8tcmVhZG9ubHktaW4tc2RhdGEgLW1uby1hbHRpdmVjIC1tbm8tdnN4IC1mbm8t
-YXN5bmNocm9ub3VzLXVud2luZC10YWJsZXMgLW1uby1zdHJpbmcgLW1iaWctZW5kaWFuIC1tc3Rh
-Y2stcHJvdGVjdG9yLWd1YXJkPXRscyAtbXN0YWNrLXByb3RlY3Rvci1ndWFyZC1yZWc9cjIgLWZu
-by1kZWxldGUtbnVsbC1wb2ludGVyLWNoZWNrcyAtV25vLWZyYW1lLWFkZHJlc3MgLVduby1mb3Jt
-YXQtdHJ1bmNhdGlvbiAtV25vLWZvcm1hdC1vdmVyZmxvdyAtV25vLWFkZHJlc3Mtb2YtcGFja2Vk
-LW1lbWJlciAtTzIgLS1wYXJhbT1hbGxvdy1zdG9yZS1kYXRhLXJhY2VzPTAgLVdmcmFtZS1sYXJn
-ZXItdGhhbj0xMDI0IC1mc3RhY2stcHJvdGVjdG9yLXN0cm9uZyAtV2ltcGxpY2l0LWZhbGx0aHJv
-dWdoPTUgLVduby1tYWluIC1Xbm8tdW51c2VkLWJ1dC1zZXQtdmFyaWFibGUgLVduby11bnVzZWQt
-Y29uc3QtdmFyaWFibGUgLWZvbWl0LWZyYW1lLXBvaW50ZXIgLWZuby1zdGFjay1jbGFzaC1wcm90
-ZWN0aW9uIC1XZGVjbGFyYXRpb24tYWZ0ZXItc3RhdGVtZW50IC1XdmxhIC1Xbm8tcG9pbnRlci1z
-aWduIC1XY2FzdC1mdW5jdGlvbi10eXBlIC1Xbm8tc3RyaW5nb3AtdHJ1bmNhdGlvbiAtV25vLXN0
-cmluZ29wLW92ZXJmbG93IC1Xbm8tcmVzdHJpY3QgLVduby1tYXliZS11bmluaXRpYWxpemVkIC1X
-bm8tYWxsb2Mtc2l6ZS1sYXJnZXItdGhhbiAtZm5vLXN0cmljdC1vdmVyZmxvdyAtZm5vLXN0YWNr
-LWNoZWNrIC1mY29uc2VydmUtc3RhY2sgLVdlcnJvcj1kYXRlLXRpbWUgLVdlcnJvcj1pbmNvbXBh
-dGlibGUtcG9pbnRlci10eXBlcyAtV2Vycm9yPWRlc2lnbmF0ZWQtaW5pdCAtV25vLXBhY2tlZC1u
-b3QtYWxpZ25lZCAtbXN0YWNrLXByb3RlY3Rvci1ndWFyZC1vZmZzZXQ9NTc2IC1XZXJyb3IgLURL
-QlVJTERfTU9ETkFNRT0nIjg1eHgiJyAtREtCVUlMRF9NT0RGSUxFPSciYXJjaC9wb3dlcnBjL3Bs
-YXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMiJyAtZnN5bnRheC1vbmx5IC4vYXJjaC9wb3dlcnBj
-L3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMKClRoYW5rcyBhZ2Fpbi4KCkxpYW5nCgo=
+Il 17/06/22 12:16, Matthias Brugger ha scritto:
+> 
+> 
+> On 17/06/2022 11:06, AngeloGioacchino Del Regno wrote:
+>> This SoC shall use the mediatek-cpufreq driver, or the system will
+>> crash upon any clock scaling request: add it to the cpufreq-dt-platdev
+>> blocklist.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Fixes: 39b360102f3a ("cpufreq: mediatek: Add support for MT8186")
+> 
+> Fixes tag should be before any Rb, SoB etc tags.
+
+Oh wow, I really did that.
+
+Sorry, I'll send a v2 in a minute or two.
+
+> 
+> With that:
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+>> ---
+>>   drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c 
+>> b/drivers/cpufreq/cpufreq-dt-platdev.c
+>> index 96de1536e1cb..2c96de3f2d83 100644
+>> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+>> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+>> @@ -127,6 +127,7 @@ static const struct of_device_id blocklist[] __initconst = {
+>>       { .compatible = "mediatek,mt8173", },
+>>       { .compatible = "mediatek,mt8176", },
+>>       { .compatible = "mediatek,mt8183", },
+>> +    { .compatible = "mediatek,mt8186", },
+>>       { .compatible = "mediatek,mt8365", },
+>>       { .compatible = "mediatek,mt8516", },
+
+

@@ -2,315 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D4054F5AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DEC54F5B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381922AbiFQKlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S1381847AbiFQKmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381609AbiFQKlL (ORCPT
+        with ESMTP id S1381712AbiFQKmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:41:11 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0BE62CD8;
-        Fri, 17 Jun 2022 03:41:08 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 18:42:07 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1655462466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ns96x6P4spEdZ9ZJ9BZJaUO6E6PokuaO9NVdJMSa6Ec=;
-        b=GFyEMYZhbYALTIWmsIwkHhMnzW3dorFKvHWdQ6MRXkk+pOT+kC3Rv3iEryQFgrg3VVBFu/
-        pQHQaYvzPk7ffmvp+ltYOTjopnG9aUJXuWR/AFOe3HrLRG32x8pEqGsiv52zMVy4XPS7R8
-        Pmja/UKbQ2oN+pIHAPyVOq/rZ3/EVOw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-rt-users@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <jlelli@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [PATCH] panic, kexec: Don't mutex_trylock() in __crash_kexec()
-Message-ID: <Yqxaf6V+hvCSXQSM@geo.homenetwork>
-References: <20220616123709.347053-1-vschneid@redhat.com>
+        Fri, 17 Jun 2022 06:42:50 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F55013D27;
+        Fri, 17 Jun 2022 03:42:49 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id m25so4285867lji.11;
+        Fri, 17 Jun 2022 03:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2oQIzR0PfOu4ep9bDei7u/w4ujjg4kwcIzD1w/IxZyk=;
+        b=Na93uyvlClyUGGJ5SV7k7+5MIv6NGrHqncgTV7osGwtKPZEsbpyqHFa8LJtmE/WD6d
+         w0u6ZfSo0Q8DrL2zjBxlpBRPCrFCRc1GjPGQsvkErIFJhRL+pqHBobN2vrw82DdXga69
+         WLcZdicd81W7utUIMaQ8DrWmqj/2uaTBdNrMpg896jRldYgX2S7/rFuks1EfstVc0Rsr
+         dxC8iEWeb8AkWUleBdUHgsiPjhpZ+MFyBut4rw/7YZvrqz0G+1j3vmdkLR1++mMowaI6
+         7AYWa+IDVIEZfqcP5E3DGVXHaFLKAe+P2u4JZCJgY5bIzSw4z9qNhrtmAM+8/nQeaFXi
+         uTEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2oQIzR0PfOu4ep9bDei7u/w4ujjg4kwcIzD1w/IxZyk=;
+        b=3cXtyk6Yu48C2dDMXefMLDWlm0tyl/SdOU/3e8qKVrrvLrguJ0vK9c6Mf8rJS3xl05
+         VFpbmiZ0KUpeWozwV5T9kNzpYRKjeJknCC41G6zCCnOld9EvkbkfTjv9BeYv7ZkQYvJB
+         laVXl7vR1LCVTSBuwpDDVA8fO821nD6kyWu2Gy1Emrzp5YCUtS4Ozs5nA7/YjFvyrHgH
+         w8aHFZDCpT2XMvQSfXddh2PcfoFNAA9la0v3CgF3r1K+WKwLPR+WPMNMMa1fe+7Gn6VL
+         EezxVgyaIdkgk9Y7E0SGBNDcSQro3E2emdLnmLRwgGdeI+JZ3rJzkIztVC2wo3EZxdxz
+         40lA==
+X-Gm-Message-State: AJIora9eq9Yuago4UZi9EGgPY0XENNHir6q65Dy1ZxblVI3Ymg7VvlS8
+        +OVsWy2jvdAwgIEvicr1XMw=
+X-Google-Smtp-Source: AGRyM1vpxStGCJ4RFrP7LqFHTH35+PFukjx/RcVMtryVmSozxdQP1xBMFNBxR1wI/WbHrrID7NPVew==
+X-Received: by 2002:a2e:9252:0:b0:258:fc8b:490e with SMTP id v18-20020a2e9252000000b00258fc8b490emr4736792ljg.309.1655462567666;
+        Fri, 17 Jun 2022 03:42:47 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id d14-20020a2eb04e000000b0024f3d1dae7csm497886ljl.4.2022.06.17.03.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 03:42:47 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 13:42:45 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/18] PCI: dwc: Various fixes and cleanups
+Message-ID: <20220617104245.urmnm4ndpqgxswu6@mobilestation>
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610082919.4wetzo7wj4bnjp45@mobilestation>
+ <20220616210456.GH2889@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220616123709.347053-1-vschneid@redhat.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220616210456.GH2889@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Valentin,
+On Fri, Jun 17, 2022 at 02:34:56AM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Jun 10, 2022 at 11:29:19AM +0300, Serge Semin wrote:
+> > On Fri, Jun 10, 2022 at 11:25:16AM +0300, Serge Semin wrote:
+> > > This patchset is a first one in the series created in the framework of
+> > > my Baikal-T1 PCIe/eDMA-related work:
+> > > 
+> > > [1: In-progress v4] PCI: dwc: Various fixes and cleanups
+> > > Link: ---you are looking at it---
+> > > [2: In-progress v2] PCI: dwc: Add hw version and dma-ranges support
+> > > Link: https://lore.kernel.org/linux-pci/20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru/
+> > > [3: In-progress v2] PCI: dwc: Add extended YAML-schema and Baikal-T1 support
+> > > Link: https://lore.kernel.org/linux-pci/20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru/
+> > > [4: In-progress v2] dmaengine: dw-edma: Add RP/EP local DMA support
+> > > Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
+> > > 
+> > > Note it is very recommended to merge the patchsets in the same order as
+> > > they are placed in the list above in order to prevent possible merge
+> > > conflicts. Nothing prevents them from being reviewed synchronously though.
+> > > Any tests are very welcome!
+> > > 
+> > > As it can be easily inferred from the patchset title, this series is about
+> > > the DW PCIe Root Port/Endpoint driver fixes and the code cleanups, where
+> > > fixes come before the cleanup patches. The patchset starts with adding the
+> > > stop_link() platform-specific method invocation in case of the PCIe host
+> > > probe procedure errors. It has been missing in the cleanup-on-error path
+> > > of the DW PCIe Host initialization method. After that the unrolled CSRs
+> > > layout is added to the iATU disable procedure. In third the disable iATU
+> > > procedure is fixed to be called only for the internal ATU as being
+> > > specific for the internal ATU implementation. Then the outbound iATU
+> > > extended region setup procedure is fixed to have the INCREASE_REGION_SIZE
+> > > flag set based on the limit-address - not the region size one. The last
+> > > but not least the CDM-check enabling procedure is fixed to be independent
+> > > from the non-related num_lanes field state.
+> > > 
+> > > Afterwards there is a series of cleanups. It concerns the changes like
+> > > adding braces to the multi-line if-else constructions, trailing new-lines
+> > > to the print format-string, dropping unnecessary version checking, and
+> > > various code simplifications and optimizations.
+> > > 
+> > > New features like adding two-level DT bindings abstraction, adding better
+> > > structured IP-core version interface, adding iATU regions size detection
+> > > and the PCIe regions verification procedure, adding dma-ranges support,
+> > > introducing a set of generic platform clocks and resets and finally adding
+> > > Baikal-T1 PCIe interface support will be submitted in the next part of the
+> > > series.
+> > > 
+> > > Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> > > Changelog v2:
+> > > - Fix the end address of the example in the patch log with
+> > >   the INCREASE_REGION_SIZE flag usage fixup. It should be
+> > >   0x1000FFFF and not 0x0000FFFF (@Manivannan).
+> > > - Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+> > >   (@Manivannan)
+> > > 
+> > > Link: https://lore.kernel.org/linux-pci/20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru/
+> > > Changelog v3:
+> > > - Convert region variable type to u32 in order to fix the implicit type
+> > >   conversion peculiarity. (@kbot)
+> > > - Rebase onto v5.18-rc6.
+> > > 
+> > > Link: https://lore.kernel.org/linux-pci/20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru/
+> > > Changelog v4:
+> > > - Move the patch "PCI: dwc: Deallocate EPC memory on EP init error" to
+> > >   being applied before the cleanup patches.
+> > 
+> > > - Add a new fixes patch: "PCI: dwc: Enable CDM-check independently from
+> > >   the num_lanes value".
+> > > - Add a new cleanup patch: "PCI: dwc: Organize local variables usage".
+> > > - Add a new cleanup patch: "PCI: dwc: Re-use local pointer to the
+> > >   resource data".
+> > > - Add a new cleanup patch: "PCI: dwc: Add start_link/stop_link inliners".
+> > > - Add a new cleanup patch: "PCI: dwc: Move io_cfg_atu_shared to the Root
+> > >   Port descriptor".
+> > > - Add a new cleanup patch: "PCI: dwc: Add dw_ prefix to the pcie_port
+> > >   structure name".
+> > > - Drop the patch "PCI: dwc: Don't use generic IO-ops for DBI-space
+> > >   access". (@Rob)
+> > > - Drop Manivannan tested tag from the changed patches.
+> > 
+> > @Mani, there are several brand new patches in this series and a few
+> > ones updated (@Rob requests). Could you please have a look at the
+> > patchset one more time?
+> > 
+> 
 
-On Thu, Jun 16, 2022 at 01:37:09PM +0100, Valentin Schneider wrote:
-> Attempting to get a crash dump out of a debug PREEMPT_RT kernel via an NMI
-> panic() doesn't work. The cause of that lies in the PREEMPT_RT definition
-> of mutex_trylock():
+> Yep, this is on my todo list. But I'm in a company wide meetup currently.
+> Will take a look once I'm back this weekend.
 > 
-> 	if (IS_ENABLED(CONFIG_DEBUG_RT_MUTEXES) && WARN_ON_ONCE(!in_task()))
-> 		return 0;
-> 
-> This prevents an NMI panic() from executing the main body of
-> __crash_kexec() which does the actual kexec into the kdump kernel.
-> The warning and return are explained by:
-> 
->   6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
->   [...]
->   The reasons for this are:
-> 
->       1) There is a potential deadlock in the slowpath
-> 
->       2) Another cpu which blocks on the rtmutex will boost the task
-> 	 which allegedly locked the rtmutex, but that cannot work
-> 	 because the hard/softirq context borrows the task context.
-> 
-> Use a pair of barrier-ordered variables to serialize loading vs executing a
-> crash kernel.
-> 
-> Tested by triggering NMI panics via:
-> 
->   $ echo 1 > /proc/sys/kernel/panic_on_unrecovered_nmi
->   $ echo 1 > /proc/sys/kernel/unknown_nmi_panic
->   $ echo 1 > /proc/sys/kernel/panic
-> 
->   $ ipmitool power diag
-> 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
-> Regarding the original explanation for the WARN & return:
-> 
-> I don't get why 2) is a problem - if the lock is acquired by the trylock
-> then the critical section will be run without interruption since it
-> cannot sleep, the interrupted task may get boosted but that will not
-> have any actual impact AFAICT.
-> Regardless, even if this doesn't sleep, the ->wait_lock in the slowpath
-> isn't NMI safe so this needs changing.
-> 
-> I've thought about trying to defer the kexec out of an NMI (or IRQ)
-> context, but that pretty much means deferring the panic() which I'm
-> not sure is such a great idea.
-> ---
->  include/linux/kexec.h |  2 ++
->  kernel/kexec.c        | 18 ++++++++++++++----
->  kernel/kexec_core.c   | 41 +++++++++++++++++++++++++----------------
->  kernel/kexec_file.c   | 14 ++++++++++++++
->  4 files changed, 55 insertions(+), 20 deletions(-)
-> 
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index ce6536f1d269..89bbe150752e 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -369,6 +369,8 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
->  
->  extern struct kimage *kexec_image;
->  extern struct kimage *kexec_crash_image;
-> +extern bool panic_wants_kexec;
-> +extern bool kexec_loading;
->  extern int kexec_load_disabled;
->  
->  #ifndef kexec_flush_icache_page
-> diff --git a/kernel/kexec.c b/kernel/kexec.c
-> index b5e40f069768..1253f4bb3079 100644
-> --- a/kernel/kexec.c
-> +++ b/kernel/kexec.c
-> @@ -94,14 +94,23 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
->  	/*
->  	 * Because we write directly to the reserved memory region when loading
->  	 * crash kernels we need a mutex here to prevent multiple crash kernels
-> -	 * from attempting to load simultaneously, and to prevent a crash kernel
-> -	 * from loading over the top of a in use crash kernel.
-> -	 *
-> -	 * KISS: always take the mutex.
-> +	 * from attempting to load simultaneously.
->  	 */
->  	if (!mutex_trylock(&kexec_mutex))
->  		return -EBUSY;
->  
-> +	/*
-> +	 * Prevent loading a new crash kernel while one is in use.
-> +	 *
-> +	 * Pairs with smp_mb() in __crash_kexec().
-> +	 */
-> +	WRITE_ONCE(kexec_loading, true);
-> +	smp_mb();
-> +	if (READ_ONCE(panic_wants_kexec)) {
-> +		ret = -EBUSY;
-> +		goto out_unlock;
-> +	}
-> +
->  	if (flags & KEXEC_ON_CRASH) {
->  		dest_image = &kexec_crash_image;
->  		if (kexec_crash_image)
-> @@ -165,6 +174,7 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
->  
->  	kimage_free(image);
->  out_unlock:
-> +	WRITE_ONCE(kexec_loading, false);
->  	mutex_unlock(&kexec_mutex);
->  	return ret;
->  }
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 4d34c78334ce..932cc0d4daa3 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -933,6 +933,8 @@ int kimage_load_segment(struct kimage *image,
->  
->  struct kimage *kexec_image;
->  struct kimage *kexec_crash_image;
-> +bool panic_wants_kexec;
-> +bool kexec_loading;
->  int kexec_load_disabled;
->  #ifdef CONFIG_SYSCTL
->  static struct ctl_table kexec_core_sysctls[] = {
-> @@ -964,24 +966,31 @@ late_initcall(kexec_core_sysctl_init);
->   */
->  void __noclone __crash_kexec(struct pt_regs *regs)
->  {
-> -	/* Take the kexec_mutex here to prevent sys_kexec_load
-> -	 * running on one cpu from replacing the crash kernel
-> -	 * we are using after a panic on a different cpu.
-> +	/*
-> +	 * This should be taking kexec_mutex before doing anything with the
-> +	 * kexec_crash_image, but this code can be run in NMI context which
-> +	 * means we can't even trylock.
->  	 *
-> -	 * If the crash kernel was not located in a fixed area
-> -	 * of memory the xchg(&kexec_crash_image) would be
-> -	 * sufficient.  But since I reuse the memory...
-> +	 * Pairs with smp_mb() in do_kexec_load() and sys_kexec_file_load()
->  	 */
-> -	if (mutex_trylock(&kexec_mutex)) {
-> -		if (kexec_crash_image) {
-> -			struct pt_regs fixed_regs;
-> -
-> -			crash_setup_regs(&fixed_regs, regs);
-> -			crash_save_vmcoreinfo();
-> -			machine_crash_shutdown(&fixed_regs);
-> -			machine_kexec(kexec_crash_image);
-> -		}
-> -		mutex_unlock(&kexec_mutex);
-> +	WRITE_ONCE(panic_wants_kexec, true);
-> +	smp_mb();
-> +	/*
-> +	 * If we're panic'ing while someone else is messing with the crash
-> +	 * kernel, this isn't going to end well.
-> +	 */
-> +	if (READ_ONCE(kexec_loading)) {
-> +		WRITE_ONCE(panic_wants_kexec, false);
-> +		return;
-> +	}
+> I'll also give this series (and other ones) a go on my hardware.
 
-So this is from NMI. The mutex guarantee that kexec_file_load() or 
-do_kexec_load() just one of them beat on cpu. NMI can happen on more
-than one cpu. That means that here be cumulativity here IMHO.
+Great! I'm looking forward to the result. Thanks.
 
-kexec_file_load()/                 NMI0                     NMI1..
-do_kexec_load()
+-Sergey
 
-set kexec_loading=true     
-smp_mb()                set panic_wants_kexec=ture
-                        smp_mb()
-                        see kexec_loading=ture and
-                          conditionally set
-                          panic_wants_kexec=false;
-                                                 set panic_wants_kexec=ture
-                                                 smp_mb()
-see panic_wants_kexec=ture
-  conditionally set
-  kexec_loading=false
-                                                 see kexec_loading=false
-                                                 do kexec nmi things.
-
-You see conditionlly set kexec_loading or panic_wants_kexec there no barrier
-there and if the cumulativity to have the effect there should be a acquire-release,
-if I am not wrong.
-
-__crash_kexec():
-
-WRITE_ONCE(panic_wants_kexec, true);
-smp_mb();
-/*
- * If we're panic'ing while someone else is messing with the crash
- * kernel, this isn't going to end well.
- */
-if (READ_ONCE(kexec_loading)) {
-	smp_store_release(panic_wants_kexec, false);
-	return;
-}
-
-kexec_file_load()/do_kexec_load():
-
-WRITE_ONCE(kexec_loading, true);
-smp_mb();
-if (smp_load_acquire(panic_wants_kexec)) {
-    WRITE_ONCE(kexec_loading, false);
-    ...
-}
-
-For those input, I'm sure I lost and feel hot..
-I thought that change the patten to load-store and set initial
-value but failed.
-
-Thanks,
-Tao
-> +	if (kexec_crash_image) {
-> +		struct pt_regs fixed_regs;
-> +
-> +		crash_setup_regs(&fixed_regs, regs);
-> +		crash_save_vmcoreinfo();
-> +		machine_crash_shutdown(&fixed_regs);
-> +		machine_kexec(kexec_crash_image);
->  	}
->  }
->  STACK_FRAME_NON_STANDARD(__crash_kexec);
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 145321a5e798..4bb399e6623e 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -337,6 +337,18 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
->  	if (!mutex_trylock(&kexec_mutex))
->  		return -EBUSY;
->  
-> +	/*
-> +	 * Prevent loading a new crash kernel while one is in use.
-> +	 *
-> +	 * Pairs with smp_mb() in __crash_kexec().
-> +	 */
-> +	WRITE_ONCE(kexec_loading, true);
-> +	smp_mb();
-> +	if (READ_ONCE(panic_wants_kexec)) {
-> +		ret = -EBUSY;
-> +		goto out_unlock;
-> +	}
-> +
->  	dest_image = &kexec_image;
->  	if (flags & KEXEC_FILE_ON_CRASH) {
->  		dest_image = &kexec_crash_image;
-> @@ -406,6 +418,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
->  	if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
->  		arch_kexec_protect_crashkres();
->  
-> +out_unlock:
-> +	WRITE_ONCE(kexec_loading, false);
->  	mutex_unlock(&kexec_mutex);
->  	kimage_free(image);
->  	return ret;
+> 
+> Thanks,
+> Mani
+> 
+> > -Sergey
+> > 
+> > > - Rebase onto v5.18.
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > > Cc: Jingoo Han <jingoohan1@gmail.com>
+> > > Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+> > > Cc: "Krzysztof Wilczyński" <kw@linux.com>
+> > > Cc: Frank Li <Frank.Li@nxp.com>
+> > > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > Cc: linux-pci@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > 
+> > > Serge Semin (18):
+> > >   PCI: dwc: Stop link in the host init error and de-initialization
+> > >   PCI: dwc: Add unroll iATU space support to the regions disable method
+> > >   PCI: dwc: Disable outbound windows for controllers with iATU
+> > >   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+> > >   PCI: dwc: Deallocate EPC memory on EP init error
+> > >   PCI: dwc: Enable CDM-check independently from the num_lanes value
+> > >   PCI: dwc: Add braces to the multi-line if-else statements
+> > >   PCI: dwc: Add trailing new-line literals to the log messages
+> > >   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+> > >   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+> > >   PCI: dwc: Organize local variables usage
+> > >   PCI: dwc: Re-use local pointer to the resource data
+> > >   PCI: dwc: Add start_link/stop_link inliners
+> > >   PCI: dwc: Move io_cfg_atu_shared to the Root Port descriptor
+> > >   PCI: dwc: Add dw_ prefix to the pcie_port structure name
+> > >   PCI: dwc-plat: Simplify the probe method return value handling
+> > >   PCI: dwc-plat: Discard unused regmap pointer
+> > >   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
+> > > 
+> > >  drivers/pci/controller/dwc/pci-dra7xx.c       |  12 +-
+> > >  drivers/pci/controller/dwc/pci-exynos.c       |   6 +-
+> > >  drivers/pci/controller/dwc/pci-imx6.c         |   6 +-
+> > >  drivers/pci/controller/dwc/pci-keystone.c     |  20 ++--
+> > >  .../pci/controller/dwc/pci-layerscape-ep.c    |  12 --
+> > >  drivers/pci/controller/dwc/pci-layerscape.c   |   2 +-
+> > >  drivers/pci/controller/dwc/pci-meson.c        |   2 +-
+> > >  drivers/pci/controller/dwc/pcie-al.c          |   6 +-
+> > >  drivers/pci/controller/dwc/pcie-armada8k.c    |   4 +-
+> > >  drivers/pci/controller/dwc/pcie-artpec6.c     |   4 +-
+> > >  .../pci/controller/dwc/pcie-designware-ep.c   |  30 +++--
+> > >  .../pci/controller/dwc/pcie-designware-host.c | 104 ++++++++++--------
+> > >  .../pci/controller/dwc/pcie-designware-plat.c |  25 +----
+> > >  drivers/pci/controller/dwc/pcie-designware.c  |  72 +++++++-----
+> > >  drivers/pci/controller/dwc/pcie-designware.h  |  46 +++++---
+> > >  drivers/pci/controller/dwc/pcie-dw-rockchip.c |   4 +-
+> > >  drivers/pci/controller/dwc/pcie-fu740.c       |   2 +-
+> > >  drivers/pci/controller/dwc/pcie-histb.c       |  10 +-
+> > >  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
+> > >  drivers/pci/controller/dwc/pcie-keembay.c     |   4 +-
+> > >  drivers/pci/controller/dwc/pcie-kirin.c       |   2 +-
+> > >  drivers/pci/controller/dwc/pcie-qcom.c        |   4 +-
+> > >  drivers/pci/controller/dwc/pcie-spear13xx.c   |   6 +-
+> > >  drivers/pci/controller/dwc/pcie-tegra194.c    |  22 ++--
+> > >  drivers/pci/controller/dwc/pcie-uniphier.c    |  10 +-
+> > >  drivers/pci/controller/dwc/pcie-visconti.c    |   6 +-
+> > >  26 files changed, 225 insertions(+), 202 deletions(-)
+> > > 
+> > > -- 
+> > > 2.35.1
+> > > 
+> 
 > -- 
-> 2.27.0
-> 
+> மணிவண்ணன் சதாசிவம்

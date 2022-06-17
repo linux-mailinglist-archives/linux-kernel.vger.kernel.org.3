@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE9954EFD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D6254EFE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379850AbiFQDvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 23:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S1379820AbiFQD4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379833AbiFQDu5 (ORCPT
+        with ESMTP id S231650AbiFQD4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:50:57 -0400
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E4663FF;
-        Thu, 16 Jun 2022 20:50:56 -0700 (PDT)
-Received: by mail-pf1-f173.google.com with SMTP id u2so3146609pfc.2;
-        Thu, 16 Jun 2022 20:50:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Q1Tw5gtlbm60jQgJOmSoiCUD1TeB/fsK0N0NTHe/6HI=;
-        b=hMiFIuYhYV5Q4OkfRPt36XS+aI4r9sVrFzQwi/ueqcxuS46zD1TqtNy3WoGA9jjqPT
-         /YEeRmDffJZlQ3XDwpdTAsI2LEFXI13tvqVcE4DqWyLRZobhC0bOPk7bRvP7EYJrX1no
-         AyThKFD3LKezL7vpIZFuQ69qJIjrSI7nO2ov9GSO+ccethw9t9QwyQiC4Mk8TxdeTs4m
-         V0TEeRMqPxWyCdRUCLpMTqECBnS/MxyzJHb70YVPQ1wuKSWVuFHuUko0Abr1yTwANoHq
-         UFGB5svqWZyLv8M6VhLFiWdMlNJdfxV/Sx3JBIG8CYbXyFVBMoEqmnGzf6+azkt3M0tg
-         osIw==
-X-Gm-Message-State: AJIora+25ELLLQhO/OKagYeS4TIjXDf2owEiY+6/0DWrJQyIpwwr1BoS
-        Z0097UcDIf2mAV1wBsrgBS8THN5HHRI=
-X-Google-Smtp-Source: AGRyM1s9OsXBGRQWFItQf69mSxYRhA6/ZQgWKvQqGrgAgMRlNCuNPlWjLWaSNAVKQnerbzJoMZ5UAA==
-X-Received: by 2002:a63:5205:0:b0:401:7586:74f6 with SMTP id g5-20020a635205000000b00401758674f6mr7228645pgb.591.1655437855982;
-        Thu, 16 Jun 2022 20:50:55 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id a14-20020a63704e000000b00408c592db61sm2588606pgn.71.2022.06.16.20.50.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 20:50:55 -0700 (PDT)
-Message-ID: <2205b7c0-53d5-a485-72e3-12810d8c0a42@acm.org>
-Date:   Thu, 16 Jun 2022 20:50:53 -0700
+        Thu, 16 Jun 2022 23:56:22 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7B5565408
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FK3+6
+        hlQB3HGXoQhyC6dprNvmAP51TusZx/O2PywBRE=; b=UWafGE1UiUdqxOtFRJ1tx
+        PJYNaoA6tu9+k2wp6y2wvijB1R4W67Xni+Miw+8cbNisIho0StWZxTqdfiNQKrho
+        0iI56/xxFwV3vjZ57TA7mvHiCGwwkLNAVEDTptvfHbjxiEDanJdZ+ADl0quZVKex
+        arCWJuFt98w3/H3Z1YikgQ=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp8 (Coremail) with SMTP id NORpCgAHu49F+6tiYaBRFw--.26457S2;
+        Fri, 17 Jun 2022 11:55:57 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     tony@atomide.com, linux@armlinux.org.uk
+Cc:     windhl@126.com, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm: mach-omap2: omap4-common: Fix refcount leak bug
+Date:   Fri, 17 Jun 2022 11:55:48 +0800
+Message-Id: <20220617035548.4003393-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4] scsi: support packing multi-segment in UNMAP command
-Content-Language: en-US
-To:     Chao Yu <chao@kernel.org>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@infradead.org
-References: <20220616013617.2284341-1-chao@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220616013617.2284341-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgAHu49F+6tiYaBRFw--.26457S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruFyfGr18WFyxAryfuF4DJwb_yoWfJFgEqw
+        n2g395Jrsag3Z3Ka47Ca15Gr4jgw1rWrs7W3s7ZF15Ka1UJr43ArZ2vas2yryDX3yrKrW3
+        ZFZFyw4Fkw1avjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUVWlJUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7Q0jF1pEANzlIQAAsS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 18:36, Chao Yu wrote:
-> As SCSI SBC4 specification section 5.30.2 describes that it can
-> support unmapping one or more LBA range in single UNMAP command.
-> 
-> However, previously we only pack one LBA range in UNMAP command
-> by default no matter device gives the block limits that says it
-> can support unmapping multiple LBA ranges with a single UNMAP
-> command.
-> 
-> This patch sets max_discard_segments config according to block
-> limits of device, and supports unmapping multiple LBA ranges with
-> a single UNMAP command.
+In omap4_sram_init(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/arm/mach-omap2/omap4-common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/mach-omap2/omap4-common.c b/arch/arm/mach-omap2/omap4-common.c
+index 6d1eb4eefefe..e981bf57e64f 100644
+--- a/arch/arm/mach-omap2/omap4-common.c
++++ b/arch/arm/mach-omap2/omap4-common.c
+@@ -135,6 +135,7 @@ static int __init omap4_sram_init(void)
+ 		pr_warn("%s:Unable to allocate sram needed to handle errata I688\n",
+ 			__func__);
+ 	sram_pool = of_gen_pool_get(np, "sram", 0);
++	of_node_put(np);
+ 	if (!sram_pool)
+ 		pr_warn("%s:Unable to get sram pool needed to handle errata I688\n",
+ 			__func__);
+-- 
+2.25.1
+

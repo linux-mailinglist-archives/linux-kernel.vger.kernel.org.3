@@ -2,155 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8114254FD0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 20:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69B454FD0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 20:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiFQSp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 14:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S232976AbiFQSuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 14:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiFQSp5 (ORCPT
+        with ESMTP id S229693AbiFQSui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 14:45:57 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3D835A85
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 11:45:55 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id x38so8643945ybd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 11:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t69yZaPZyOhoI5m6h+4mPKQ2+aXLu7liL3vlg7ZXpvc=;
-        b=il8crSULlGQz05QE0HJEASQXvn2qoQaLFQqAZUe7KNy6sLCxE8wtDxs+T6w2gbX6is
-         xu4hhOXS31wdIAe9JqlRtHPQEpAEpBMND7jnjl3F6RxZgU1tni39UrjlYB+9+OZshOxV
-         gn5FRvwxzv2L7JtZU8K4T/Rq/ANecNK7c6E8M51aYccHSCxybwT7GnTTc4PtagYeFIMz
-         ofPkhAAg7Jequ1qj2VsN9cL32C786s0dZzkJjsYRpxaNKvFVQlFIiibMWdOkSO2+SjK4
-         Wnjs/DB5a7STrpHaH/QviUh02rHBTybRFMBjm5LBZG12neLP6iIXzkrHFpN5KN8H0y1A
-         dTcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t69yZaPZyOhoI5m6h+4mPKQ2+aXLu7liL3vlg7ZXpvc=;
-        b=hgMTmeiwsrkTpooKola2Fu/Ude5DUlQVX4auct9buI4QczFGzkFpgBYTI4UdtMpjHr
-         WXZILSjauoq9zPWpTaqOtdjthHVm4NBQmSMOBBinBDbOhLKrbcxFBKa0F5NG47+bs7/4
-         T+h/oZPCuquiVXouERJtPf7jwi8/6LtOECfEbbJkbrgDWeA5L1tXGTtVw65swoFre3Op
-         V80ckL7TGgg5X72Jock7Gs/34dWooyROn58CuKwl0AUl1mDIn/M8i3xmHDyHusaHIMpv
-         R6kF4CXmnZ1fbTvu3r9WNimX9sRb2RdtHl7kIdmwY9keM18bx+SCZYac/ARKS/03EbkG
-         XJSQ==
-X-Gm-Message-State: AJIora+ScNBGmGSTHzav8Qsav8KcGb4wXUZsMuN0GIscoo/aZcHlGSz8
-        GUGHSjrVwj9pwFxdVzmcNA59BU4SPxkKuoVwCGZ4NQ==
-X-Google-Smtp-Source: AGRyM1vLqXiU6LvN9FeRt4QHUJN+8f1GRm6wQZeNYfa8yd42zjW3EX03bOZwFIL3249pJprqq7jSL3T03lYmRq54NE4=
-X-Received: by 2002:a25:207:0:b0:668:6a4a:609 with SMTP id 7-20020a250207000000b006686a4a0609mr10829294ybc.326.1655491554504;
- Fri, 17 Jun 2022 11:45:54 -0700 (PDT)
+        Fri, 17 Jun 2022 14:50:38 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D453DA48;
+        Fri, 17 Jun 2022 11:50:37 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 14AC5380;
+        Fri, 17 Jun 2022 18:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 14AC5380
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1655491837; bh=nT1sOdmA4MiER3LLOjlrCtvG369t7lBTLCtmTFLx+XA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=KkaVX+S+jDu6bQaR165EdvytYJFtnVRFfXHErphyg733QE1Oow5zJVQyZSCg1mJ1B
+         ukNLXEfUKOB/6UV7yN9ap+oCHQln8/sBMs1B0D6biOvi1627EcYN9YdSpO8CLaXy1h
+         onWthu64/1ipiocJfh6vJ0ejK6/fnZ+DlIvQlyjath1MH06rKgsIrD6tQMOLLoujwO
+         J0N2Cwj6mzVq76VpL+mE+HH8OPcNxdcRav/nIYwzjukHKnWsOVw92QwBe4I1+9dUOy
+         +ymDLe2WpK416SiVWZXwcrhqO/OMb+9GuaVc9v4QeZdoNY5P7M4vernE/SaXIeN7uy
+         3MBnHAVk91JNw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        mario.limonciello@amd.com, linux-kernel@vger.kernel.org
+Cc:     Joe Perches <joe@perches.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/2] Documentation: Add a blurb about using
+ scripts/git-send-email.sh
+In-Reply-To: <20220617183215.25917-2-mario.limonciello@amd.com>
+References: <20220617183215.25917-1-mario.limonciello@amd.com>
+ <20220617183215.25917-2-mario.limonciello@amd.com>
+Date:   Fri, 17 Jun 2022 12:50:36 -0600
+Message-ID: <87ilozp1j7.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220616211016.4037482-1-dylanbhatch@google.com> <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
-In-Reply-To: <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
-From:   Dylan Hatch <dylanbhatch@google.com>
-Date:   Fri, 17 Jun 2022 11:45:43 -0700
-Message-ID: <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 6/16/22 3:10 PM, Dylan Hatch wrote:
-> > This test would erroneously fail the /proc/$PID/maps case if
-> > vsyscall=xonly since the existing probe of the vsyscall page only
-> > succeeds if the process has read permissions. Fix this by checking for
-> > either no vsyscall mapping OR an execute-only vsyscall mapping in the
-> > case were probing the vsyscall page segfaults.
-> >
->
-> Does this fix include skipping the test with a clear message that
-> says why test is skipped?
->
-> > Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
-> > ---
-> >   tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
-> >   1 file changed, 15 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-> > index 28604c9f805c..5ca85520131f 100644
-> > --- a/tools/testing/selftests/proc/proc-pid-vm.c
-> > +++ b/tools/testing/selftests/proc/proc-pid-vm.c
-> > @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
-> >
-> >   static bool g_vsyscall = false;
-> >
-> > -static const char str_vsyscall[] =
-> > +static const char str_vsyscall_rx[] =
-> >   "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
-> >
-> > +static const char str_vsyscall_x[] =
-> > +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
-> > +
-> >   #ifdef __x86_64__
-> >   static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
-> >   {
-> > @@ -261,6 +264,7 @@ int main(void)
-> >       int exec_fd;
-> >
-> >       vsyscall();
-> > +     const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
-> >
-> >       atexit(ate);
-> >
-> > @@ -314,7 +318,8 @@ int main(void)
-> >
-> >       /* Test /proc/$PID/maps */
-> >       {
-> > -             const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
-> > +             const size_t len_buf0 = strlen(buf0);
-> > +             const size_t len_vsys = strlen(str_vsyscall);
-> >               char buf[256];
-> >               ssize_t rv;
-> >               int fd;
-> > @@ -325,11 +330,16 @@ int main(void)
-> >                       return 1;
-> >               }
-> >               rv = read(fd, buf, sizeof(buf));
-> > -             assert(rv == len);
-> > -             assert(memcmp(buf, buf0, strlen(buf0)) == 0);
-> >               if (g_vsyscall) {
-> > -                     assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
-> > +                     assert(rv == len_buf0 + len_vsys);
-> > +             } else {
-> > +                     /* If vsyscall isn't readable, it's either x-only or not mapped at all */
-> > +                     assert(rv == len_buf0 + len_vsys || rv == len_buf0);
-> >               }
-> > +             assert(memcmp(buf, buf0, len_buf0) == 0);
-> > +             /* Check for vsyscall mapping if buf is long enough */
-> > +             if (rv == len_buf0 + len_vsys)
-> > +                     assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
-> >       }
-> >
-> >       /* Test /proc/$PID/smaps */
-> >
->
-> The change looks good to me. Doesn't look like it skips the test though?
+Mario Limonciello <mario.limonciello@amd.com> writes:
 
-Instead of skipping the test, it changes the passing condition to
-accept both cases of an unmapped vsyscall page and an x-only vsyscall
-page. Differentiating between these two cases without relying on
-/proc/$PID/maps would involve both checking the kernel command line
-for vsyscall=xonly and having a special ifdef block for
-CONFIG_VSYSCALL_XONLY, so accepting both as passing conditions seems
-like a simpler solution.
+> In the part of the documentation explaining about identifying maintainers
+> mention the `scripts/git-send-email.sh` helper script.
+>
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  Documentation/process/submitting-patches.rst | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+
+So if you used this script to send this series, I can already see a
+problem; I have a 2/2 patch without having seen the script that you are
+talking about.  Bringing in maintainers partway through a patch series
+like this is not the best way to go.
+
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index a1cb6280fbcf..039deed14c49 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -225,7 +225,10 @@ Select the recipients for your patch
+>  ------------------------------------
+>  
+>  You should always copy the appropriate subsystem maintainer(s) on any patch
+> -to code that they maintain; look through the MAINTAINERS file and the
+> +to code that they maintain. A helper script is available in
+> +./scripts/git-send-email.sh that can be used with git-send-email to automatically
+> +findd the appropriate recipients for a patch.
+
+Please run a spelling checker on your documentation changes.
+
+> +Alternatively you may look through the MAINTAINERS file manually and the
+>  source code revision history to see who those maintainers are.  The
+>  script scripts/get_maintainer.pl can be very useful at this step (pass paths to
+>  your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
+> -- 
+> 2.25.1
 
 Thanks,
-Dylan
+
+jon

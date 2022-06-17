@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD74354F508
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A818554F50F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381620AbiFQKNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S1381736AbiFQKNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378259AbiFQKNG (ORCPT
+        with ESMTP id S1381655AbiFQKNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:13:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 095F912AEC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655460784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Egh8+Gz6P7sJjajReRg4TwcxQZ6PNsT6qhTrjGb38E=;
-        b=dv2w+Fa+bcNMpJd3iTDJANgqRwLh9Cezh2AV95qadoD7CDAv6yG2X03mq2M4UuWe1Phv/Q
-        /uK8N+Ypr+xdfVXvPSHHzCRqtw57zMJ5RPdxxR3E2X0vbqd0PNPT6Id0n6wXGLFR/E2Q6y
-        Vmh5BPloWHaQWIAY7FhPaBW9tGtasb0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-QFtBbfUOMPumlWQVcjTWmQ-1; Fri, 17 Jun 2022 06:13:03 -0400
-X-MC-Unique: QFtBbfUOMPumlWQVcjTWmQ-1
-Received: by mail-wr1-f71.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so850597wra.15
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:13:02 -0700 (PDT)
+        Fri, 17 Jun 2022 06:13:37 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB98D20BEE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:13:35 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id g25so7839014ejh.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=KhgoAFL4YE8/w5osrKBBcrivW48W7YCjIa5U+90LszM=;
+        b=IozZi4thPYspyRFGAM0wEZ8bu1mpvv+hdz/lhFfVezJ+JiVd8vVSydQ75GmcJxGW7O
+         trKDElyiWZRBVGEGKzDNTRc0RrILQgBWDxz255YZotxdkw0Sw30TbjmXImnKIq8FhZKl
+         SI7YoyzSDqsrqiQsydG/znxopzzJoiM8DHYNBj5bbrHFnH6OQEM11nFKUF7nx6e+ekpk
+         OHK8BuBhP/lQQKpP9i2uqUsLivnjcoH3+tMQK4fVFCXdW8dS5aJ3yVEGxkdwimSh7K4P
+         gpIhHNmiVTmhSE17Yy6J3BvkSBx+K+KiPVuC4lYQQHHEtbI0RqcZI/Vdv9EVs9AS0GTh
+         Ti5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/Egh8+Gz6P7sJjajReRg4TwcxQZ6PNsT6qhTrjGb38E=;
-        b=HpS3SvE8lHDAbTQG8v/sQdfFI38ZvawnBQV1jTF+EGLqpp2uvXlpwuoBMVU55DohcC
-         EMhot3COXhAlx2wujKDoj/GhZ2w3H2zQIg/Am7so591700gc88IsF3d+UMwLLxnqXv3T
-         Zv0pDDWhvab8HhAY0i18w5EUeQQbpCon82eFKcUN5bOzKZFDcGsUINDl8Ueag62RGChV
-         LFl3mTi7xyNjrIIjhZagrW6hfYRirNgMQPiZwWQswsbdkzmlBNeIFDXwdALMtYsdwR3A
-         Kn1g6kLIk72FYDzV1kCxCnMk94hLPhfihIoflMy4xKF7+H2ANWukjgu5KlUTl2XnWYDq
-         f6vA==
-X-Gm-Message-State: AJIora9926FEQn07lw7+isTMKn+zAH16oGkB1sKI4Y/BYpn/lfL/+6lF
-        mxRwfUT+/Q+ZLw8UHCRTH/dhysGvbJFoHgBzEnJuGPm1DFo8Ok+nHFlHz55yTNnlac6YXuMbKmx
-        I+9LCS6AIMlxPMaG4ItGqM3ag
-X-Received: by 2002:a5d:6d8b:0:b0:218:4dc8:293e with SMTP id l11-20020a5d6d8b000000b002184dc8293emr8684810wrs.612.1655460781817;
-        Fri, 17 Jun 2022 03:13:01 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uCeVJ3V3dWfzRxiKB7fJuvCI0FPi1R5vsbVVS3gLAKJyU7vKwteL3gJz5FSVTdXRodiZ6DGg==
-X-Received: by 2002:a5d:6d8b:0:b0:218:4dc8:293e with SMTP id l11-20020a5d6d8b000000b002184dc8293emr8684788wrs.612.1655460781577;
-        Fri, 17 Jun 2022 03:13:01 -0700 (PDT)
-Received: from redhat.com ([2.54.189.19])
-        by smtp.gmail.com with ESMTPSA id i188-20020a1c3bc5000000b0039ee52c1345sm2137495wma.4.2022.06.17.03.12.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 03:13:01 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 06:12:57 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio-net: fix race between ndo_open() and
- virtio_device_ready()
-Message-ID: <20220617060632-mutt-send-email-mst@kernel.org>
-References: <20220617072949.30734-1-jasowang@redhat.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=KhgoAFL4YE8/w5osrKBBcrivW48W7YCjIa5U+90LszM=;
+        b=Ji1Im9ZrED4N57Y6Z0Yb06pi88MWWkhUS8U0nQML+J7WvXmuPDUIfwsuW24Q7bLM3X
+         JurDDjEgT1hvscBBG2Niy9WlFCjGny2CK2R5HmBsyFt86MprIA8xHkq1fgj3atSVxFih
+         7G08SfauQeGh72HOtKfeo87vpJvgTPoiISOcVJQ2Do9QPW673Rd0ZqJ7MjNmj9gpJc5L
+         S6nWAVMKiI8kx/LoTXsYK8uyze/s3IdDn8yzEyBigH8BaPn12C2zIZTVKT6AFBb/6JvE
+         kVE1XqVEEeX8HVnU11+s9C/DeMfdZSl+vfZFOJJjTYWHlaEqX5nNAU1wZDKqMTZ5rTV3
+         ZPhA==
+X-Gm-Message-State: AJIora++CFggE/vWjwvUQRzozJRxugav4NFOBxvtbkMJJfyHoIvtgtqw
+        Rloai53yUbk9HhfmlRVPmvIYDU7NfNKFMYs8CO8=
+X-Google-Smtp-Source: AGRyM1tcq0FpysLJ+7FKgbQo7IbAmjHKoQctDpgHQUviNlD4fPIEREcNkQGw6xGLFjqiI+gXutuCeBAL9j5COp50Q4M=
+X-Received: by 2002:a17:907:868f:b0:702:f865:55de with SMTP id
+ qa15-20020a170907868f00b00702f86555demr8718964ejc.24.1655460814192; Fri, 17
+ Jun 2022 03:13:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617072949.30734-1-jasowang@redhat.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: barpeterkobby4@gmail.com
+Received: by 2002:a17:906:cc46:0:0:0:0 with HTTP; Fri, 17 Jun 2022 03:13:33
+ -0700 (PDT)
+From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
+Date:   Fri, 17 Jun 2022 13:13:33 +0300
+X-Google-Sender-Auth: -nl26qL9x8My2eNuDwwHowqP2js
+Message-ID: <CAKSfp-zyRRn4QHrw=wPEm3xogrcjwNOeNe3DnVEXCdjSw1fY0A@mail.gmail.com>
+Subject: UNITED NATIONS COVID-19 COMPENSATION FUNDS.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,LOTTO_DEPT,MILLION_USD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:632 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5110]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jimmymoore265[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [barpeterkobby4[at]gmail.com]
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  2.0 LOTTO_DEPT Claims Department
+        *  0.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 03:29:49PM +0800, Jason Wang wrote:
-> We used to call virtio_device_ready() after netdev registration. This
-> cause a race between ndo_open() and virtio_device_ready(): if
-> ndo_open() is called before virtio_device_ready(), the driver may
-> start to use the device before DRIVER_OK which violates the spec.
-> 
-> Fixing this by switching to use register_netdevice() and protect the
-> virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
-> only be called after virtio_device_ready().
-> 
-> Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  drivers/net/virtio_net.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index db05b5e930be..8a5810bcb839 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
->  	if (vi->has_rss || vi->has_rss_hash_report)
->  		virtnet_init_default_rss(vi);
->  
-> -	err = register_netdev(dev);
-> +	/* serialize netdev register + virtio_device_ready() with ndo_open() */
-> +	rtnl_lock();
-> +
-> +	err = register_netdevice(dev);
->  	if (err) {
->  		pr_debug("virtio_net: registering device failed\n");
-> +		rtnl_unlock();
->  		goto free_failover;
->  	}
->  
->  	virtio_device_ready(vdev);
->  
-> +	rtnl_unlock();
-> +
->  	err = virtnet_cpu_notif_add(vi);
->  	if (err) {
->  		pr_debug("virtio_net: registering cpu notifier failed\n");
+UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
+REFERENCE PAYMENT CODE: 8525595
+BAILOUT AMOUNT:$3.5 MILLION USD
+ADDRESS: NEW YORK, NY 10017, UNITED STATES
 
+Dear award recipient, Covid-19 Compensation funds.
 
-Looks good but then don't we have the same issue when removing the
-device?
+You are receiving this correspondence because we have finally reached
+a consensus with the UN, IRS, and IMF that your total fund worth $3.5
+Million Dollars of Covid-19 Compensation payment shall be delivered to
+your nominated mode of receipt, and you are expected to pay the sum of
+$12,000 for levies owed to authorities after receiving your funds.
 
-Actually I looked at  virtnet_remove and I see
-        unregister_netdev(vi->dev);
+You have a grace period of 2 weeks to pay the $12,000 levy after you
+have received your Covid-19 Compensation total sum of $3.5 Million. We
+shall proceed with the payment of your bailout grant only if you agree
+to the terms and conditions stated.
 
-        net_failover_destroy(vi->failover);
+Contact Dr. Mustafa Ali for more information by email at:(
+mustafaliali180@gmail.com ) Your consent in this regard would be
+highly appreciated.
 
-        remove_vq_common(vi); <- this will reset the device
-
-a window here?
-
-
-Really, I think what we had originally was a better idea -
-instead of dropping interrupts they were delayed and
-when driver is ready to accept them it just enables them.
-We just need to make sure driver does not wait for
-interrupts before enabling them.
-
-And I suspect we need to make this opt-in on a per driver
-basis.
-
-
-
-> -- 
-> 2.25.1
-
+Regards,
+Mr. Jimmy Moore.
+Undersecretary-General United Nations
+Office of Internal Oversight-UNIOS

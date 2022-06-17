@@ -2,223 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5F054EF1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5B954EF13
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379704AbiFQCIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 22:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
+        id S1379256AbiFQCE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 22:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379689AbiFQCIM (ORCPT
+        with ESMTP id S232401AbiFQCEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 22:08:12 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EB727CD7;
-        Thu, 16 Jun 2022 19:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655431682; x=1686967682;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3/pGXYtwBNUoL/U8pvjgYsSt+Nl1CqQfA5RoTzhAlOw=;
-  b=fB2wUv3zx0zWXP2w82PO4C3kWx14XXQPya/OT5MTJpsqaD0flznl6+GV
-   TX0cl/skMQEAXVZhYrJXh8ATyjbDO7RpcGtBDAf2RMLCXFeuHrPSgtez+
-   yCX79fOZb7tAqLqW3KBWdHX3AjRwIxkJ0nLkb9T0iWS27IrdEJVunJlmp
-   dtOzXSBmVVwr6G5bUqqCJoKW4P/7MqXS/BAQYFvIbJSSagepARCKlZ4Ps
-   CmROKHs5dS4l+MSyGpNuTUuODaBeJFVL1Ymm4NIv6QniYJi4vosbkfrV+
-   rxfPlL2+3uW8A6tlfOAMOGYT1tyH9lASDsVUyryBvOKcASzPKkreh43oM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365750337"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="365750337"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 19:07:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="831831735"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jun 2022 19:07:49 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     yilun.xu@intel.com, lee.jones@linaro.org
-Cc:     hao.wu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v2 4/4] mfd: intel-m10-bmc: support multiple register layouts
-Date:   Thu, 16 Jun 2022 22:04:05 -0400
-Message-Id: <20220617020405.128352-5-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220617020405.128352-1-tianfei.zhang@intel.com>
-References: <20220617020405.128352-1-tianfei.zhang@intel.com>
+        Thu, 16 Jun 2022 22:04:23 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DCA61602
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:04:21 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d13so2681612plh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cSMpGids9UDkbuNot6QlyA8Acj1imseCpqUM2yQS8Hw=;
+        b=Trj/2Ke47Mh4YYG3nOrj/qAt3qMeVPnXr4Fj5l+jj+XxVab0xSvsudBvvXzkvQt6/z
+         vOYNcpl2emKUNjH2UASVNWWFnXxkVp2DXknC0yZNdSeo3qdQnVLaUzpppwmsI3z2oL3k
+         8iwY5JhB7MEafnWjDyOqXHz2H3/ralcRtj0GqkaCi6UNe6FopPTrvt/fALeN6K2nlDw4
+         juwr3EIaWQC3/VQm/xF9nhdEaMydjaCF5xRTaqIPHTDEqNrpNSL4NhzoL0uvmii2WML+
+         WLNW24x66OGaiHRi7KJSzNgnAusVQVwHzECeLek4O4fSuiKRfQjfP57rdMKhOiGRIrv7
+         WeQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cSMpGids9UDkbuNot6QlyA8Acj1imseCpqUM2yQS8Hw=;
+        b=eJN82wuV/U7L+f4gsDoRmCovvfNPmsqW9kTd5DIGEKfolqHO7wWmP+XnVGdkZ5OX9z
+         2j90ZxWHsb2J0fE1uTWD70kV8S3A2zD7rgn+Wkp+/PBUrj52lh73soWL6BG7IK5IPFnJ
+         0kwe/5OdgvPTlU1Xj5qbgvrcIBhnyzgfwRMIgdxhdcfP4qTVRmtkE3pZSJbWwj0sRuPC
+         UyDv83pC8AbeQMq4oLVhyYRrWDwx7Zlq8iJ1O+OMqMpZsLZkg8PgdNPOFCB6WKyTChGW
+         AHZISn1CHgAfL1eBcw2FmtS5eExm0lsPWi/bDKtvBAptuNvo+EshfCrwTtbiVJUDcjHO
+         G2TQ==
+X-Gm-Message-State: AJIora8iY9xGPtZzyzIXO0Zsqj7lN3Da+IpzFR5dEViGRyij/cwcl303
+        IzvsiE+Cdwnb/N1p9YzSnuT4KJUUR0IdGlE/leg=
+X-Google-Smtp-Source: AGRyM1t2Lpmw9ybw1/rldNysMUsspyJJkhGp6x2hi1Op7v6KC10fe5Y6Vbo0R6qLtchL2myKjhRvCA==
+X-Received: by 2002:a17:90b:3142:b0:1e3:1253:be27 with SMTP id ip2-20020a17090b314200b001e31253be27mr8147267pjb.44.1655431460609;
+        Thu, 16 Jun 2022 19:04:20 -0700 (PDT)
+Received: from C02FG34NMD6R.bytedance.net ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902e74e00b00163bfaf0b17sm2280007plf.233.2022.06.16.19.04.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Jun 2022 19:04:19 -0700 (PDT)
+From:   Albert Huang <huangjie.albert@bytedance.com>
+To:     mst@redhat.com
+Cc:     yuanzhu@bytedance.com,
+        "huangjie.albert" <huangjie.albert@bytedance.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] virtio_ring : keep used_wrap_counter in vq->last_used_idx
+Date:   Fri, 17 Jun 2022 10:04:11 +0800
+Message-Id: <20220617020411.80367-1-huangjie.albert@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20220616101823-mutt-send-email-mst@kernel.org>
+References: <20220616101823-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are different base addresses for the MAX10 CSR register.
-Introducing a new data structure m10bmc_csr for the register
-definition of MAX10 CSR. Embedded m10bmc_csr into struct
-intel_m10bmc to support multiple register layouts.
+From: "huangjie.albert" <huangjie.albert@bytedance.com>
 
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+the used_wrap_counter and the vq->last_used_idx may get
+out of sync if they are separate assignment，and interrupt
+might use an incorrect value to check for the used index.
+
+for example:OOB access
+ksoftirqd may consume the packet and it will call:
+virtnet_poll
+	-->virtnet_receive
+		-->virtqueue_get_buf_ctx
+			-->virtqueue_get_buf_ctx_packed
+and in virtqueue_get_buf_ctx_packed:
+
+vq->last_used_idx += vq->packed.desc_state[id].num;
+if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
+         vq->last_used_idx -= vq->packed.vring.num;
+         vq->packed.used_wrap_counter ^= 1;
+}
+
+if at the same time, there comes a vring interrupt，in vring_interrupt:
+we will call:
+vring_interrupt
+	-->more_used
+		-->more_used_packed
+			-->is_used_desc_packed
+in is_used_desc_packed, the last_used_idx maybe >= vq->packed.vring.num.
+so this could case a memory out of bounds bug.
+
+this patch is to keep the used_wrap_counter in vq->last_used_idx
+so we can get the correct value to check for used index in interrupt.
+
+v3->v4:
+- use READ_ONCE/WRITE_ONCE to get/set vq->last_used_idx
+
+v2->v3:
+- add inline function to get used_wrap_counter and last_used
+- when use vq->last_used_idx, only read once
+  if vq->last_used_idx is read twice, the values can be inconsistent.
+- use last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR))
+  to get the all bits below VRING_PACKED_EVENT_F_WRAP_CTR
+
+v1->v2:
+- reuse the VRING_PACKED_EVENT_F_WRAP_CTR
+- Remove parameter judgment in is_used_desc_packed,
+because it can't be illegal
+
+Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
 ---
- drivers/mfd/intel-m10-bmc-core.c  | 30 +++++++++++++++++++++++++-----
- include/linux/mfd/intel-m10-bmc.h | 20 +++++++++++++++++++-
- 2 files changed, 44 insertions(+), 6 deletions(-)
+ drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++--------------
+ 1 file changed, 47 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-index c6a1a4c28357..f85f8e2aa9a1 100644
---- a/drivers/mfd/intel-m10-bmc-core.c
-+++ b/drivers/mfd/intel-m10-bmc-core.c
-@@ -10,6 +10,22 @@
- #include <linux/mfd/intel-m10-bmc.h>
- #include <linux/module.h>
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 13a7348cedff..719fbbe716d6 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -111,7 +111,12 @@ struct vring_virtqueue {
+ 	/* Number we've added since last sync. */
+ 	unsigned int num_added;
  
-+static const struct m10bmc_csr m10bmc_pmci_csr = {
-+	.base = M10BMC_PMCI_SYS_BASE,
-+	.build_version = M10BMC_PMCI_BUILD_VER,
-+	.fw_version = NIOS2_PMCI_FW_VERSION,
-+	.mac_low = M10BMC_PMCI_MAC_LOW,
-+	.mac_high = M10BMC_PMCI_MAC_HIGH,
-+};
-+
-+static const struct m10bmc_csr m10bmc_spi_csr = {
-+	.base = M10BMC_SYS_BASE,
-+	.build_version = M10BMC_BUILD_VER,
-+	.fw_version = NIOS2_FW_VERSION,
-+	.mac_low = M10BMC_MAC_LOW,
-+	.mac_high = M10BMC_MAC_HIGH,
-+};
-+
- static struct mfd_cell m10bmc_n6000_bmc_subdevs[] = {
- 	{ .name = "n6000bmc-hwmon" },
- 	{ .name = "n6000bmc-sec-update" }
-@@ -36,7 +52,7 @@ static ssize_t bmc_version_show(struct device *dev,
- 	unsigned int val;
- 	int ret;
+-	/* Last used index we've seen. */
++	/* Last used index  we've seen.
++	 * for split ring, it just contains last used index
++	 * for packed ring:
++	 * bits up to VRING_PACKED_EVENT_F_WRAP_CTR include the last used index.
++	 * bits from VRING_PACKED_EVENT_F_WRAP_CTR include the used wrap counter.
++	 */
+ 	u16 last_used_idx;
  
--	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
-+	ret = m10bmc_sys_read(ddata, ddata->csr->build_version, &val);
- 	if (ret)
- 		return ret;
+ 	/* Hint for event idx: already triggered no need to disable. */
+@@ -154,9 +159,6 @@ struct vring_virtqueue {
+ 			/* Driver ring wrap counter. */
+ 			bool avail_wrap_counter;
  
-@@ -51,7 +67,7 @@ static ssize_t bmcfw_version_show(struct device *dev,
- 	unsigned int val;
- 	int ret;
+-			/* Device ring wrap counter. */
+-			bool used_wrap_counter;
+-
+ 			/* Avail used flags. */
+ 			u16 avail_used_flags;
  
--	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
-+	ret = m10bmc_sys_read(ddata, ddata->csr->fw_version, &val);
- 	if (ret)
- 		return ret;
- 
-@@ -66,11 +82,11 @@ static ssize_t mac_address_show(struct device *dev,
- 	unsigned int macaddr_low, macaddr_high;
- 	int ret;
- 
--	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
-+	ret = m10bmc_sys_read(ddata, ddata->csr->mac_low, &macaddr_low);
- 	if (ret)
- 		return ret;
- 
--	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
-+	ret = m10bmc_sys_read(ddata, ddata->csr->mac_high, &macaddr_high);
- 	if (ret)
- 		return ret;
- 
-@@ -91,7 +107,7 @@ static ssize_t mac_count_show(struct device *dev,
- 	unsigned int macaddr_high;
- 	int ret;
- 
--	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
-+	ret = m10bmc_sys_read(ddata, ddata->csr->mac_high, &macaddr_high);
- 	if (ret)
- 		return ret;
- 
-@@ -163,18 +179,22 @@ int m10bmc_dev_init(struct intel_m10bmc *m10bmc)
- 	case M10_N3000:
- 		cells = m10bmc_pacn3000_subdevs;
- 		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
-+		m10bmc->csr = &m10bmc_spi_csr;
- 		break;
- 	case M10_D5005:
- 		cells = m10bmc_d5005_subdevs;
- 		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-+		m10bmc->csr = &m10bmc_spi_csr;
- 		break;
- 	case M10_N5010:
- 		cells = m10bmc_n5010_subdevs;
- 		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
-+		m10bmc->csr = &m10bmc_spi_csr;
- 		break;
- 	case M10_N6000:
- 		cells = m10bmc_n6000_bmc_subdevs;
- 		n_cell = ARRAY_SIZE(m10bmc_n6000_bmc_subdevs);
-+		m10bmc->csr = &m10bmc_pmci_csr;
- 		break;
- 	default:
- 		return -ENODEV;
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index 83c4d3993dcb..3a4fdab2acbd 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -125,6 +125,11 @@
- #define M10BMC_PMCI_TELEM_START		0x400
- #define M10BMC_PMCI_TELEM_END		0x78c
- 
-+#define M10BMC_PMCI_BUILD_VER   0x0
-+#define NIOS2_PMCI_FW_VERSION   0x4
-+#define M10BMC_PMCI_MAC_LOW    0x20
-+#define M10BMC_PMCI_MAC_HIGH    0x24
-+
- /* Supported MAX10 BMC types */
- enum m10bmc_type {
- 	M10_N3000,
-@@ -133,16 +138,29 @@ enum m10bmc_type {
- 	M10_N6000
- };
- 
-+/**
-+ * struct m10bmc_csr - Intel MAX 10 BMC CSR register
-+ */
-+struct m10bmc_csr {
-+	unsigned int base;
-+	unsigned int build_version;
-+	unsigned int fw_version;
-+	unsigned int mac_low;
-+	unsigned int mac_high;
-+};
-+
- /**
-  * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
-  * @dev: this device
-  * @regmap: the regmap used to access registers by m10bmc itself
-  * @type: the type of MAX10 BMC
-+ * @csr: the register definition of MAX10 BMC
-  */
- struct intel_m10bmc {
- 	struct device *dev;
- 	struct regmap *regmap;
- 	enum m10bmc_type type;
-+	const struct m10bmc_csr *csr;
- };
- 
+@@ -973,6 +975,15 @@ static struct virtqueue *vring_create_virtqueue_split(
  /*
-@@ -174,7 +192,7 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
-  * M10BMC_SYS_BASE accordingly.
+  * Packed ring specific functions - *_packed().
   */
- #define m10bmc_sys_read(m10bmc, offset, val) \
--	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
-+	m10bmc_raw_read(m10bmc, m10bmc->csr->base + (offset), val)
++static inline bool packed_used_wrap_counter(u16 last_used_idx)
++{
++	return !!(last_used_idx & (1 << VRING_PACKED_EVENT_F_WRAP_CTR));
++}
++
++static inline u16 packed_last_used(u16 last_used_idx)
++{
++	return last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR));
++}
  
- /*
-  * MAX10 BMC Core support
+ static void vring_unmap_extra_packed(const struct vring_virtqueue *vq,
+ 				     struct vring_desc_extra *extra)
+@@ -1406,8 +1417,14 @@ static inline bool is_used_desc_packed(const struct vring_virtqueue *vq,
+ 
+ static inline bool more_used_packed(const struct vring_virtqueue *vq)
+ {
+-	return is_used_desc_packed(vq, vq->last_used_idx,
+-			vq->packed.used_wrap_counter);
++	u16 last_used;
++	u16 last_used_idx;
++	bool used_wrap_counter;
++
++	last_used_idx = READ_ONCE(vq->last_used_idx);
++	last_used = packed_last_used(last_used_idx);
++	used_wrap_counter = packed_used_wrap_counter(last_used_idx);
++	return is_used_desc_packed(vq, last_used, used_wrap_counter);
+ }
+ 
+ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+@@ -1415,7 +1432,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+ 					  void **ctx)
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+-	u16 last_used, id;
++	u16 last_used, id, last_used_idx;
++	bool used_wrap_counter;
+ 	void *ret;
+ 
+ 	START_USE(vq);
+@@ -1434,7 +1452,9 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+ 	/* Only get used elements after they have been exposed by host. */
+ 	virtio_rmb(vq->weak_barriers);
+ 
+-	last_used = vq->last_used_idx;
++	last_used_idx = READ_ONCE(vq->last_used_idx);
++	used_wrap_counter = packed_used_wrap_counter(last_used_idx);
++	last_used = packed_last_used(last_used_idx);
+ 	id = le16_to_cpu(vq->packed.vring.desc[last_used].id);
+ 	*len = le32_to_cpu(vq->packed.vring.desc[last_used].len);
+ 
+@@ -1451,12 +1471,15 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+ 	ret = vq->packed.desc_state[id].data;
+ 	detach_buf_packed(vq, id, ctx);
+ 
+-	vq->last_used_idx += vq->packed.desc_state[id].num;
+-	if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
+-		vq->last_used_idx -= vq->packed.vring.num;
+-		vq->packed.used_wrap_counter ^= 1;
++	last_used += vq->packed.desc_state[id].num;
++	if (unlikely(last_used >= vq->packed.vring.num)) {
++		last_used -= vq->packed.vring.num;
++		used_wrap_counter ^= 1;
+ 	}
+ 
++	last_used = (last_used | (used_wrap_counter << VRING_PACKED_EVENT_F_WRAP_CTR));
++	WRITE_ONCE(vq->last_used_idx, last_used);
++
+ 	/*
+ 	 * If we expect an interrupt for the next entry, tell host
+ 	 * by writing event index and flush out the write before
+@@ -1465,9 +1488,7 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+ 	if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
+ 		virtio_store_mb(vq->weak_barriers,
+ 				&vq->packed.vring.driver->off_wrap,
+-				cpu_to_le16(vq->last_used_idx |
+-					(vq->packed.used_wrap_counter <<
+-					 VRING_PACKED_EVENT_F_WRAP_CTR)));
++				cpu_to_le16(vq->last_used_idx));
+ 
+ 	LAST_ADD_TIME_INVALID(vq);
+ 
+@@ -1499,9 +1520,7 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
+ 
+ 	if (vq->event) {
+ 		vq->packed.vring.driver->off_wrap =
+-			cpu_to_le16(vq->last_used_idx |
+-				(vq->packed.used_wrap_counter <<
+-				 VRING_PACKED_EVENT_F_WRAP_CTR));
++			cpu_to_le16(vq->last_used_idx);
+ 		/*
+ 		 * We need to update event offset and event wrap
+ 		 * counter first before updating event flags.
+@@ -1518,8 +1537,7 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
+ 	}
+ 
+ 	END_USE(vq);
+-	return vq->last_used_idx | ((u16)vq->packed.used_wrap_counter <<
+-			VRING_PACKED_EVENT_F_WRAP_CTR);
++	return vq->last_used_idx;
+ }
+ 
+ static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
+@@ -1537,7 +1555,7 @@ static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
+ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+-	u16 used_idx, wrap_counter;
++	u16 used_idx, wrap_counter, last_used_idx;
+ 	u16 bufs;
+ 
+ 	START_USE(vq);
+@@ -1550,9 +1568,10 @@ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
+ 	if (vq->event) {
+ 		/* TODO: tune this threshold */
+ 		bufs = (vq->packed.vring.num - vq->vq.num_free) * 3 / 4;
+-		wrap_counter = vq->packed.used_wrap_counter;
++		last_used_idx = READ_ONCE(vq->last_used_idx);
++		wrap_counter = packed_used_wrap_counter(last_used_idx);
+ 
+-		used_idx = vq->last_used_idx + bufs;
++		used_idx = packed_last_used(last_used_idx) + bufs;
+ 		if (used_idx >= vq->packed.vring.num) {
+ 			used_idx -= vq->packed.vring.num;
+ 			wrap_counter ^= 1;
+@@ -1582,9 +1601,10 @@ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
+ 	 */
+ 	virtio_mb(vq->weak_barriers);
+ 
+-	if (is_used_desc_packed(vq,
+-				vq->last_used_idx,
+-				vq->packed.used_wrap_counter)) {
++	last_used_idx = READ_ONCE(vq->last_used_idx);
++	wrap_counter = packed_used_wrap_counter(last_used_idx);
++	used_idx = packed_last_used(last_used_idx);
++	if (is_used_desc_packed(vq, used_idx, wrap_counter)) {
+ 		END_USE(vq);
+ 		return false;
+ 	}
+@@ -1689,7 +1709,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+ 	vq->notify = notify;
+ 	vq->weak_barriers = weak_barriers;
+ 	vq->broken = true;
+-	vq->last_used_idx = 0;
++	vq->last_used_idx = 0 | (1 << VRING_PACKED_EVENT_F_WRAP_CTR);
+ 	vq->event_triggered = false;
+ 	vq->num_added = 0;
+ 	vq->packed_ring = true;
+@@ -1720,7 +1740,6 @@ static struct virtqueue *vring_create_virtqueue_packed(
+ 
+ 	vq->packed.next_avail_idx = 0;
+ 	vq->packed.avail_wrap_counter = 1;
+-	vq->packed.used_wrap_counter = 1;
+ 	vq->packed.event_flags_shadow = 0;
+ 	vq->packed.avail_used_flags = 1 << VRING_PACKED_DESC_F_AVAIL;
+ 
 -- 
-2.26.2
+2.31.1
 

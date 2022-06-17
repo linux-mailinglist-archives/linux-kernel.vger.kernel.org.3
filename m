@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D29154FB75
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA83454FB13
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiFQQuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S1383314AbiFQQaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382886AbiFQQuZ (ORCPT
+        with ESMTP id S1383300AbiFQQ36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:50:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A8C55498;
-        Fri, 17 Jun 2022 09:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655484579; x=1687020579;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qyf3AMLlerC57Tqjq0VUahZAf2HuNr4dMDrL7K8rrsQ=;
-  b=T0NEfuoyfmPrtAratv8l0ZHYy0AUCut+GAqSHHlofTBtrI4/lCfZW/uw
-   GDEO3l6zn6tVjDeEJqcLHEnT25/pqiFzTBk2XYScwFkKc3SBi3ytJ+QFO
-   l55SfNAd3MNvlbiYlvyR1nd/YF03Khn6Mfxw3m4SAXzl2qZd4xUH5i+hz
-   EEOY74fZ9BsKRUYKcwSwunfXyUbr3q3AXO8LYWGUWeER281wNxwEELkGz
-   z3QBM6x9MG5NM0J3qtNYYyCfUpcw0PP9Xl/7fmz6LyZLbJYrH8lq0K2L4
-   C/b/btRvyHSdOHa5qvCEKgDLeBE4ZAIiGFGA83vYDzPheJPDlTo/NkLnF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277062179"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="277062179"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:29:58 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="728388803"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:29:57 -0700
-Date:   Fri, 17 Jun 2022 09:29:35 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
-Message-ID: <20220617162935.GA1532720@alison-desk>
-References: <cover.1655250669.git.alison.schofield@intel.com>
- <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
- <20220617150508.0000266a@Huawei.com>
+        Fri, 17 Jun 2022 12:29:58 -0400
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1B942A0C;
+        Fri, 17 Jun 2022 09:29:58 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso4586976pjh.4;
+        Fri, 17 Jun 2022 09:29:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1CdPsYcJMiRyRao0OFv69oSt2+3EiKlT7x2/BM9HIJY=;
+        b=wLXdHre4Ceoa7M466IhIXfn5jrZ4LP/it/CFC1T/kC158ldBbMa0XHUPU1Ui3nx30q
+         zIbMsqXjn7q65AmCHto7DfvTWi6rrZlM1JOFSjP1q6D7+vxho2NVX1Nsv46q3uE1P/jm
+         KjG6IlvmLh9b+WHwWElL7zqM7Pmi3IYJWtG7yVGDw49en2/HxC9tN9uBGJ1w3zG1Mp5e
+         rWv/q7dj3KoMG9OZf8D6326gscoaYpjYbBgbb9DY/v+ql59tOSeoXCzmxpiJP6X2fQtL
+         ONL5ic9UHCCdrKFexP2scZizqZEqhzXPGbLWC7xpFf1uudP2Wc8DeqboWVHJKGqJB/jc
+         BjIQ==
+X-Gm-Message-State: AJIora+g7fiM2nLNBMpQErm8+tyxYrxCfS79iIJdhVqyYA/m9sEA4e1O
+        ioOkuHU0qRyN/trW5E69t4M=
+X-Google-Smtp-Source: AGRyM1t/wDXMzo+bOEkKIQH/k9xjz21/990h5UWigbcfj8KAhJoJx1iRoTgXlJGSllOagISeEk0Fkg==
+X-Received: by 2002:a17:90a:6444:b0:1ea:b662:c12e with SMTP id y4-20020a17090a644400b001eab662c12emr11580102pjm.199.1655483397636;
+        Fri, 17 Jun 2022 09:29:57 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:5d24:3188:b21f:5671? ([2620:15c:211:201:5d24:3188:b21f:5671])
+        by smtp.gmail.com with ESMTPSA id jb11-20020a170903258b00b0015e8d4eb25bsm3756460plb.165.2022.06.17.09.29.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 09:29:56 -0700 (PDT)
+Message-ID: <336492df-d74d-9eb9-4b51-d6d1f915493a@acm.org>
+Date:   Fri, 17 Jun 2022 09:29:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617150508.0000266a@Huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 4/5] scsi: fnic: Drop reserved request handling
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        damien.lemoal@opensource.wdc.com, hch@lst.de, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, satishkh@cisco.com,
+        sebaddel@cisco.com, kartilak@cisco.com
+Cc:     linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nbd@other.debian.org
+References: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
+ <1655463320-241202-5-git-send-email-john.garry@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1655463320-241202-5-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,105 +71,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 07:05:08AM -0700, Jonathan Cameron wrote:
-> On Tue, 14 Jun 2022 17:10:27 -0700
-> alison.schofield@intel.com wrote:
-> 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > CXL devices that support persistent memory maintain a list of locations
-> > that are poisoned or result in poison if the addresses are accessed by
-> > the host.
-> > 
-> > Per the spec (CXL 2.0 8.2.8.5.4.1), the device returns this Poison
-> > list as a set of  Media Error Records that include the source of the
-> > error, the starting device physical address and length. The length is
-> > the number of adjacent DPAs in the record and is in units of 64 bytes.
-> > 
-> > Retrieve the list and log each Media Error Record as a trace event of
-> > type cxl_poison_list.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> 
-> A few more things inline.
-> 
-> Otherwise, can confirm it works with some hack QEMU code.
-> I'll tidy that up and post soon.
-> 
-> > +int cxl_mem_get_poison_list(struct device *dev)
-> > +{
-snip
-> > +
-> > +			trace_cxl_poison_list(dev, source, addr, len);
-> 
-> Need to mask off the lower 6 bits of addr as they contain the source
-> + a few reserved bits.
-> 
-> I was confused how you were geting better than 64 byte precision in your
-> example.
->
-Ah...got it. Thanks!
+On 6/17/22 03:55, John Garry wrote:
+> The SCSI core code does not support reserved requests, so drop the
+> handling in fnic_pending_aborts_iter().
 
-> > +		}
-> > +
-> > +		/* Protect against an uncleared _FLAG_MORE */
-> > +		nr_records = nr_records + le16_to_cpu(po->count);
-> > +		if (nr_records >= cxlds->poison_max)
-> > +			goto out;
-> > +
-> > +	} while (po->flags & CXL_POISON_FLAG_MORE);
-> So.. A conundrum here.  What happens if:
-> 
-> 1. We get an error mid way through a set of multiple reads
->    (something intermittent - maybe a software issue)
-> 2. We will drop out of here fine and report the error.
-> 3. We run this function again.
-> 
-> It will (I think) currently pick up where we left off, but we have
-> no way of knowing that as there isn't a 'total records' count or
-> any other form of index in the output payload.
-
-Yes. That is sad. I'm assume it's by design and CXL devices never
-intended to keep any totals.
-
-> 
-> So, software solutions I think should work (though may warrant a note
-> to be added to the spec).
-> 
-> 1. Read whole thing twice. First time is just to ensure we get
->    to the end and flush out any prior half done reads.
-> 2. Issue a read for a different region (perhaps length 0) first
->    and assume everything starts from scratch when we go back to
->    this region.
-
-Can you tell me more about 2 ?
-
-Also, Since posting this I have added protection to this path to ensure
-only one reader of the poison list for this device. Like this:
-
-if (!completion_done(&cxlds->read_poison_complete);
-              return -EBUSY;
-wait_for_completion_interruptible(&cxlds->read_poison_complete);
-	...GET ALL THE POISON...
-complete(&cxlds->read_poison_complete);
-
-And will add the error message on that unexpected _FLAG_MORE too.
-
-Alison
-> 
-> Jonathan
-> 
-
-
-
-> > +
-> > +out:
-> > +	kvfree(po);
-> > +	return rc;
-> > +}
-> > +EXPORT_SYMBOL_NS_GPL(cxl_mem_get_poison_list, CXL);
-> > +
-> >  struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
-> >  {
-> >  	struct cxl_dev_state *cxlds;
-> 
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06FA55007B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C724755008D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243982AbiFQXQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
+        id S1382099AbiFQXSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbiFQXPc (ORCPT
+        with ESMTP id S1358481AbiFQXSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:15:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9892265418;
-        Fri, 17 Jun 2022 16:15:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51A0DB82BFD;
-        Fri, 17 Jun 2022 23:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E501C3411D;
-        Fri, 17 Jun 2022 23:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655507729;
-        bh=Zr7o5Ip/n+Z6hADKBqwvFtgoYqGmemiH5sEu5Gmn6Uo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NvVeNGxSrEC2+wGfvxgrs2TZcmVlqb9wr0ncY/ByguBP1mXwzGWAVvdmf0LsH45HE
-         +DVp7mKlZSLTYhJNRz702Z034GHzBrZSGhEi7q4FIV2U3kshY8BMvSYmdb+5xtENhU
-         aOhuH0AzI7OYW9MXFHzcNhQl5SWvGC2m7YN5Hcv5/jzNLjMJ0DDRUzeXuagimtgw27
-         awG2KiyAITkD+LLOhe4OSfaeOtFcNHjs0QgJLRrHV8Q8HLHsmCNrnwD1JswlENPK18
-         gCyduAV/sX5u5WEf5PpkQChZr7H4NGUzwZ5qJlJOUrySZ3ZrXvj2TgS8eEPgjgWe94
-         V6Yc55jAL7BpQ==
-Date:   Sat, 18 Jun 2022 00:15:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sameer Pujar <spujar@nvidia.com>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: ops: Fix multiple value control type
-Message-ID: <Yq0LDPDQitt22GDk@sirena.org.uk>
-References: <1655492828-5471-1-git-send-email-spujar@nvidia.com>
+        Fri, 17 Jun 2022 19:18:51 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290CA64BCE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:18:48 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso4508075pjd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L5VJMQFQuBE4SqSUMrFo93pnwhbO/r/KnkFGijwP654=;
+        b=D9q5XhwKGuBXqDdFf4ZKxhqj4jBTqavmRDHyVTtRdFWOhsLsspGOmpTOlKlqOzDs6D
+         IQOQ1RLxN8PQOhd4BlDfXvdzqEJUuYesp7Edis7uc/i8I7CYL9Yg9e/xFz57lmGgHl2V
+         Z2yxAlWYAey7MW2Hy3EnIjBHPQhrMUjJkAf2A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L5VJMQFQuBE4SqSUMrFo93pnwhbO/r/KnkFGijwP654=;
+        b=aSHyXMAGT0POhE5Xd61e3YRHLOqzvPLKBsOQWgYlsvmTbRKacCZiCOR0rzJmcfbfAc
+         ZqZ3nC+/TKDYMAq5HX87EiB6FaYkqIL4HS4qz7ew9ycmFyEk5fSIDZT1AbM387MeLH57
+         /vucveb0BYoNRiIj/LQAdo9X+Gy2N/KNyjuqjIXtb7D2S3eN2U6hzZZ+p4VOktaNsF2t
+         yqBJqmneaMWkPKoLfU1jVMEIac7uG3RhzJUsYyCpWTKCP+h2FDZ47B0tdJa5q09zJqu9
+         pOmcnqokDoTgbijmzgsNVIAW+IrdR5xVMNob8Yx3eb/C0TlJKdgS8SnULsDCH7D/1brJ
+         gvSA==
+X-Gm-Message-State: AJIora+hb+vu4rudNvBRhIstPG/2FA3SlF+MBqP9G/prgHHdfuUNLYKI
+        n/5BRBZKney4kCYfWPsdFJffP09fUOMh/A==
+X-Google-Smtp-Source: AGRyM1tstSkK9CnQf36BBjmq5jsms4lDlAdI0SFFDUaoecgEE/QEyvASJqJ6KqLiZQESKnT20Zz5zw==
+X-Received: by 2002:a17:902:d2c9:b0:163:bdee:b2df with SMTP id n9-20020a170902d2c900b00163bdeeb2dfmr12210994plc.98.1655507927420;
+        Fri, 17 Jun 2022 16:18:47 -0700 (PDT)
+Received: from joebar-glaptop.roam.corp.google.com (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170903244800b001689e31ff9dsm2276749pls.9.2022.06.17.16.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 16:18:46 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v6 1/6] Simple version of Stephen's patch.
+Date:   Fri, 17 Jun 2022 16:16:40 -0700
+Message-Id: <20220617161622.v6.1.I4deaec603e855815b517a68f8dbc77b150886c42@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pPAHYp+62yWsAIkg"
-Content-Disposition: inline
-In-Reply-To: <1655492828-5471-1-git-send-email-spujar@nvidia.com>
-X-Cookie: 98% lean.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,32 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+---
 
---pPAHYp+62yWsAIkg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+(no changes since v1)
 
-On Sat, Jun 18, 2022 at 12:37:08AM +0530, Sameer Pujar wrote:
-> The commit aa2a4b897132("ASoC: ops: Fix boolean/integer detection for
-> simple controls") fixes false positives with controls not ending in
-> " Volume" string. But it now forces boolean type for the multi value
-> controls. Fix this by adding a max check before assigning types.
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks but someone already sent a fix for this.
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+index 9b3e3d13c165..d1e2df5164ea 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+@@ -5,7 +5,7 @@
+  * Copyright 2021 Google LLC.
+  */
+ 
+-#include "sc7180-trogdor.dtsi"
++/* This file must be included after sc7180-trogdor.dtsi */
+ 
+ / {
+ 	/* BOARD-SPECIFIC TOP LEVEL NODES */
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
+index fe2369c29aad..88f6a7d4d020 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
+@@ -5,7 +5,7 @@
+  * Copyright 2020 Google LLC.
+  */
+ 
+-#include "sc7180-trogdor.dtsi"
++/* This file must be included after sc7180-trogdor.dtsi */
+ 
+ &ap_sar_sensor {
+ 	semtech,cs0-ground;
+-- 
+2.31.0
 
---pPAHYp+62yWsAIkg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKtCwsACgkQJNaLcl1U
-h9AzxAf/SF+Y2CEG3+wWqNxOf7VedEGHhfsNyQFyPMLv59ISuaZSpNk3P2M7VdqQ
-5bXsu6P51V8UqWIk6beNVh/GBfTbOtzyWGbzNhDXD/1TUzNUgJfhOXrrNZTX9BpN
-DzMsk/R1wkvbW23S27uAbgJ8FiLuo4vm7WLWNTucX5qbuG38Zpubo4yQPvTsvohz
-jgegrI/x1W5kzYPxIOiKkFzewnpsFcmjepQMSrJq0bVzpSRzI3moUPgrg/tN8lli
-wS41tgbu4I7kDVubBqg0oTYceaic03bTQrsnG8Ayof0SvFpStpCTHdwGh45QQWYg
-pqVKaC5OXvQzKnp2QBa8Jgv15AI4BQ==
-=pb6W
------END PGP SIGNATURE-----
-
---pPAHYp+62yWsAIkg--

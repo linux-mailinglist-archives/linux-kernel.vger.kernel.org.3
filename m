@@ -2,163 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4848354F957
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE8054F94C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382353AbiFQOlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S1382798AbiFQOkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382355AbiFQOk7 (ORCPT
+        with ESMTP id S1382591AbiFQOks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:40:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AEB52503;
-        Fri, 17 Jun 2022 07:40:55 -0700 (PDT)
+        Fri, 17 Jun 2022 10:40:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C7F3983E;
+        Fri, 17 Jun 2022 07:40:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655476855; x=1687012855;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=THeq/t7OeFGS7kF1qxlxBPZVHuRcSkjtN1FGjFL0hbM=;
-  b=WiB2oJ65/7rC7dKmiifE/o5i4GQSJvwbBbKJWyw63DekzX0cSPtYA1um
-   BtS5NwkP0JEnPh+MqOH4qyq3/K6RPkWQYwodgPATdRdTl/0QrEeEMnDNv
-   6c0wKm8f1rixz6eqLujFLBoXEPmMyh/+gQqbP44aNbBgbT50nXVQzgAmT
-   P3gj514DMqVc6wDvQyTkkjiQfLpi8vLY+yvoRndyzxIthb3IphXlqeNqq
-   AbqlfsQdbspNcn41oPrV+AK8WlvlSxnC0ZwMmIo4guHXfxHEKh6qBwVtN
-   SzzqJWLx1Iile7Lttt85XIWlI+/ydRNBp0ATJ45Z26kB4F/fCQ/5BikUK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280246910"
+  t=1655476847; x=1687012847;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ta2YQsulj3jZHsDIUgd4bbq30vgKTah6y6arAvOavz4=;
+  b=Wc4MgatVSs6c8pbM7yzqIoAkfiwf7TPv6nN4/YpQjO6+dCnhBAWU5UFJ
+   koTkDZn3l43wKWx5Kukv21t/8HoStbeylItOWbliBLEpSzngmG0/x25FI
+   cqQQofDk+X3JNrgct3xsUGWgUxaYKCkxo8LOvu7dFF0Ngw32SCzGcr/yX
+   Zpxu9o7ORW2pbDXuMHJDK+pe1PvNb8sChRuCWnpzx7vjn6/peJ6IhIvoV
+   ruq8Y/JI5wBI0ejtgqPDaRBRaaG3sQb0Fi+dGOAZmBA0ZbSbmNbS1Tay1
+   jrT98P9Evrjvs14lDnTZKTUfSC7ixPjoXR5GP1m0a0OAKezjXCUdc6wTt
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280570680"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280246910"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:40:54 -0700
+   d="scan'208";a="280570680"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:40:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="763274890"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jun 2022 07:40:49 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25HEeXl9024161;
-        Fri, 17 Jun 2022 15:40:47 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/7] lib: test_bitmap: add compile-time optimization/evaluations assertions
-Date:   Fri, 17 Jun 2022 16:40:31 +0200
-Message-Id: <20220617144031.2549432-8-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
-References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+   d="scan'208";a="590137364"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Jun 2022 07:40:44 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2D9P-000PW1-O6;
+        Fri, 17 Jun 2022 14:40:43 +0000
+Date:   Fri, 17 Jun 2022 22:40:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lei He <helei.sig11@bytedance.com>, herbert@gondor.apana.org.au,
+        davem@davemloft.net, dhowells@redhat.com, mst@redhat.com
+Cc:     kbuild-all@lists.01.org, arei.gonglei@huawei.com,
+        jasowang@redhat.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pizhenwei@bytedance.com,
+        helei.sig11@bytedance.com, f4bug@amsat.org, berrange@redhat.com
+Subject: Re: [PATCH 4/4] virtio-crypto: support ECDSA algorithm
+Message-ID: <202206172202.d2j2nFUX-lkp@intel.com>
+References: <20220617070754.73667-6-helei.sig11@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617070754.73667-6-helei.sig11@bytedance.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to the bitmap test suite, which will ensure that
-compilers are able to evaluate operations performed by the
-bitops/bitmap helpers to compile-time constants when all of the
-arguments are compile-time constants as well, or trigger a build
-bug otherwise. This should work on all architectures and all the
-optimization levels supported by Kbuild.
-The function doesn't perform any runtime tests and gets optimized
-out to nothing after passing the build assertions.
+Hi Lei,
 
-Suggested-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- lib/test_bitmap.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Thank you for the patch! Yet something to improve:
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index d5923a640457..3a7b09b82794 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -869,6 +869,50 @@ static void __init test_bitmap_print_buf(void)
- 	}
- }
- 
-+static void __init test_bitmap_const_eval(void)
-+{
-+	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-+	unsigned long initvar = BIT(2);
-+	unsigned long bitopvar = 0;
-+	unsigned long var = 0;
-+	int res;
-+
-+	/*
-+	 * Compilers must be able to optimize all of those to compile-time
-+	 * constants on any supported optimization level (-O2, -Os) and any
-+	 * architecture. Otherwise, trigger a build bug.
-+	 * The whole function gets optimized out then, there's nothing to do
-+	 * in runtime.
-+	 */
-+
-+	/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
-+	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-+	if (!test_bit(7, bitmap))
-+		bitmap_set(bitmap, 5, 1);
-+
-+	/* Equals to `unsigned long bitopvar = BIT(20)` */
-+	__change_bit(31, &bitopvar);
-+	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-+
-+	/* Equals to `unsigned long var = BIT(25)` */
-+	var |= BIT(25);
-+	if (var & BIT(0))
-+		var ^= GENMASK(9, 6);
-+
-+	/* __const_hweight<32|64>(BIT(5)) == 1 */
-+	res = bitmap_weight(bitmap, 20);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+
-+	/* !(BIT(31) & BIT(18)) == 1 */
-+	res = !test_bit(18, &bitopvar);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+
-+	/* BIT(2) & GENMASK(14, 8) == 0 */
-+	BUILD_BUG_ON(!__builtin_constant_p(initvar & GENMASK(14, 8)));
-+	/* ~BIT(25) */
-+	BUILD_BUG_ON(!__builtin_constant_p(~var));
-+}
-+
- static void __init selftest(void)
- {
- 	test_zero_clear();
-@@ -884,6 +928,7 @@ static void __init selftest(void)
- 	test_for_each_set_clump8();
- 	test_bitmap_cut();
- 	test_bitmap_print_buf();
-+	test_bitmap_const_eval();
- }
- 
- KSTM_MODULE_LOADERS(test_bitmap);
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linus/master v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lei-He/virtio-crypto-support-ECDSA-algorithm/20220617-151113
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220617/202206172202.d2j2nFUX-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/d335068e54f1217848445185702d75739116b1fe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lei-He/virtio-crypto-support-ECDSA-algorithm/20220617-151113
+        git checkout d335068e54f1217848445185702d75739116b1fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/crypto/virtio/virtio_crypto_akcipher_algs.o: in function `virtio_crypto_ecdsa_max_size':
+>> drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:602: undefined reference to `ecdsa_max_signature_size'
+
+
+vim +602 drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+
+   596	
+   597	static unsigned int virtio_crypto_ecdsa_max_size(struct crypto_akcipher *tfm)
+   598	{
+   599		struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
+   600		struct virtio_crypto_ecdsa_ctx *ecdsa_ctx = &ctx->ecdsa_ctx;
+   601	
+ > 602		return ecdsa_max_signature_size(ecdsa_ctx->curve);
+   603	}
+   604	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,164 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411E154F0C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3A554F0C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380178AbiFQFt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 01:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S1380184AbiFQFua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 01:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiFQFt6 (ORCPT
+        with ESMTP id S229696AbiFQFu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 01:49:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738D75AA76;
-        Thu, 16 Jun 2022 22:49:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 32E4621A71;
-        Fri, 17 Jun 2022 05:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655444996; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kPlL6nx2bMMLaADut5/dPNviruCWqU5rHCkm1UD7Vl0=;
-        b=GkL/kdXdhTXMECEDQfMjojeiBcYmpN+gQZGGaJues+qf5KsJTTLbOcjg/2FNVLWh7FEB2n
-        Gj6ItDbt+Ra5QF75KqX9Xq6pS9KLQ//Coztnm1R8Xg3KPRC6XLE45nJJGDDinuRt3q8M/K
-        AuoC5UuQnwwJl0oB4Oq4tyrHBNAL/DI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655444996;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kPlL6nx2bMMLaADut5/dPNviruCWqU5rHCkm1UD7Vl0=;
-        b=cL5YbDoWKM+4SaaiNstdB2MvcaaM3C+IVrH2c2ZUW6oID+W1FZcOtxKnu6vuJPSGoX6lqj
-        7QO2fpjZhwaIz0Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D480F1330D;
-        Fri, 17 Jun 2022 05:49:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fLptJAEWrGImVQAAMHmgww
-        (envelope-from <neilb@suse.de>); Fri, 17 Jun 2022 05:49:53 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Jun 2022 01:50:28 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2790E66CB8;
+        Thu, 16 Jun 2022 22:50:27 -0700 (PDT)
+X-UUID: 7d774f686991482688dd3dc9786fd842-20220617
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:79d21f78-a276-43bf-b661-574f2a7dca2e,OB:10,L
+        OB:10,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,
+        ACTION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:79d21f78-a276-43bf-b661-574f2a7dca2e,OB:10,LOB
+        :10,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:137698f6-e099-41ba-a32c-13b8bfe63214,C
+        OID:aedf4f47e0bb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7d774f686991482688dd3dc9786fd842-20220617
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1461728668; Fri, 17 Jun 2022 13:50:20 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 17 Jun 2022 13:50:19 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 17 Jun 2022 13:50:19 +0800
+Message-ID: <e63682c60d3f3c29c941c1ff5db10903466d3d34.camel@mediatek.com>
+Subject: Re: [PATCH 4/7] soc: mediatek: mutex: add MT8365 support
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Fabien Parent <fparent@baylibre.com>, <matthias.bgg@gmail.com>,
+        <jitao.shi@mediatek.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>
+CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 17 Jun 2022 13:50:18 +0800
+In-Reply-To: <20220530201436.902505-4-fparent@baylibre.com>
+References: <20220530201436.902505-1-fparent@baylibre.com>
+         <20220530201436.902505-4-fparent@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Daire Byrne" <daire@dneg.com>,
-        Anna Schumaker <schumaker.anna@gmail.com>
-Cc:     "Al Viro" <viro@zeniv.linux.org.uk>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 00/12] Allow concurrent directory updates.
-In-reply-to: <CAPt2mGOw_PS-5KY-9WFzGOT=ax6PFhVYSTQG-dpXzV5MeGieYg@mail.gmail.com>
-References: <165516173293.21248.14587048046993234326.stgit@noble.brown>,
- <CAPt2mGNjWXad6e7nSUTu=0ez1qU1wBNegrntgHKm5hOeBs5gQA@mail.gmail.com>,
- <165534094600.26404.4349155093299535793@noble.neil.brown.name>,
- <CAPt2mGOw_PS-5KY-9WFzGOT=ax6PFhVYSTQG-dpXzV5MeGieYg@mail.gmail.com>
-Date:   Fri, 17 Jun 2022 15:49:41 +1000
-Message-id: <165544498126.26404.7712330810213588882@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Daire Byrne wrote:
->=20
-> I double checked that the patch had been applied and I hadn't made a
-> mistake with installation.
+Hi, Fabien:
 
-:-) always worth double checking...
+On Mon, 2022-05-30 at 22:14 +0200, Fabien Parent wrote:
+> Add mutex support for MT8365 SoC.
 
->=20
-> I could perhaps try running with just the VFS patches to see if I can
-> still reproduce the "local" VFS hang without the nfsd patches? Your
-> previous VFS only patchset was stable for me.
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-I've made quite a few changes since that VFS-only patches.  Almost
-certainly the problem is not in the nfsd code.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+>  drivers/soc/mediatek/mtk-mutex.c | 40
+> ++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-mutex.c
+> b/drivers/soc/mediatek/mtk-mutex.c
+> index 981d56967e7a..b8d5c4a62542 100644
+> --- a/drivers/soc/mediatek/mtk-mutex.c
+> +++ b/drivers/soc/mediatek/mtk-mutex.c
+> @@ -110,6 +110,20 @@
+>  #define MT8195_MUTEX_MOD_DISP_DP_INTF0		21
+>  #define MT8195_MUTEX_MOD_DISP_PWM0		27
+>  
+> +#define MT8365_MUTEX_MOD_DISP_OVL0		7
+> +#define MT8365_MUTEX_MOD_DISP_OVL0_2L		8
+> +#define MT8365_MUTEX_MOD_DISP_RDMA0		9
+> +#define MT8365_MUTEX_MOD_DISP_RDMA1		10
+> +#define MT8365_MUTEX_MOD_DISP_WDMA0		11
+> +#define MT8365_MUTEX_MOD_DISP_COLOR0		12
+> +#define MT8365_MUTEX_MOD_DISP_CCORR		13
+> +#define MT8365_MUTEX_MOD_DISP_AAL		14
+> +#define MT8365_MUTEX_MOD_DISP_GAMMA		15
+> +#define MT8365_MUTEX_MOD_DISP_DITHER		16
+> +#define MT8365_MUTEX_MOD_DISP_DSI0		17
+> +#define MT8365_MUTEX_MOD_DISP_PWM0		20
+> +#define MT8365_MUTEX_MOD_DISP_DPI0		22
+> +
+>  #define MT2712_MUTEX_MOD_DISP_PWM2		10
+>  #define MT2712_MUTEX_MOD_DISP_OVL0		11
+>  #define MT2712_MUTEX_MOD_DISP_OVL1		12
+> @@ -315,6 +329,22 @@ static const unsigned int
+> mt8195_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+>  	[DDP_COMPONENT_DP_INTF0] = MT8195_MUTEX_MOD_DISP_DP_INTF0,
+>  };
+>  
+> +static const unsigned int mt8365_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+> +	[DDP_COMPONENT_AAL0] = MT8365_MUTEX_MOD_DISP_AAL,
+> +	[DDP_COMPONENT_CCORR] = MT8365_MUTEX_MOD_DISP_CCORR,
+> +	[DDP_COMPONENT_COLOR0] = MT8365_MUTEX_MOD_DISP_COLOR0,
+> +	[DDP_COMPONENT_DITHER] = MT8365_MUTEX_MOD_DISP_DITHER,
+> +	[DDP_COMPONENT_DPI0] = MT8365_MUTEX_MOD_DISP_DPI0,
+> +	[DDP_COMPONENT_DSI0] = MT8365_MUTEX_MOD_DISP_DSI0,
+> +	[DDP_COMPONENT_GAMMA] = MT8365_MUTEX_MOD_DISP_GAMMA,
+> +	[DDP_COMPONENT_OVL0] = MT8365_MUTEX_MOD_DISP_OVL0,
+> +	[DDP_COMPONENT_OVL_2L0] = MT8365_MUTEX_MOD_DISP_OVL0_2L,
+> +	[DDP_COMPONENT_PWM0] = MT8365_MUTEX_MOD_DISP_PWM0,
+> +	[DDP_COMPONENT_RDMA0] = MT8365_MUTEX_MOD_DISP_RDMA0,
+> +	[DDP_COMPONENT_RDMA1] = MT8365_MUTEX_MOD_DISP_RDMA1,
+> +	[DDP_COMPONENT_WDMA0] = MT8365_MUTEX_MOD_DISP_WDMA0,
+> +};
+> +
+>  static const unsigned int mt2712_mutex_sof[DDP_MUTEX_SOF_MAX] = {
+>  	[MUTEX_SOF_SINGLE_MODE] = MUTEX_SOF_SINGLE_MODE,
+>  	[MUTEX_SOF_DSI0] = MUTEX_SOF_DSI0,
+> @@ -423,6 +453,14 @@ static const struct mtk_mutex_data
+> mt8195_mutex_driver_data = {
+>  	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
+>  };
+>  
+> +static const struct mtk_mutex_data mt8365_mutex_driver_data = {
+> +	.mutex_mod = mt8365_mutex_mod,
+> +	.mutex_sof = mt8183_mutex_sof,
+> +	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
+> +	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
+> +	.no_clk = true,
+> +};
+> +
+>  struct mtk_mutex *mtk_mutex_get(struct device *dev)
+>  {
+>  	struct mtk_mutex_ctx *mtx = dev_get_drvdata(dev);
+> @@ -665,6 +703,8 @@ static const struct of_device_id
+> mutex_driver_dt_match[] = {
+>  	  .data = &mt8192_mutex_driver_data},
+>  	{ .compatible = "mediatek,mt8195-disp-mutex",
+>  	  .data = &mt8195_mutex_driver_data},
+> +	{ .compatible = "mediatek,mt8365-disp-mutex",
+> +	  .data = &mt8365_mutex_driver_data},
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, mutex_driver_dt_match);
 
-I think that following has a reasonable chance of making things better,
-both for the problem you hit and the problem Anna hit.  I haven't tested
-it at all yet so no promises - up to you if you try it.
-
-Thanks to both of you for the help with testing.
-
-NeilBrown
-=20
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 31ba4dbedfcf..6d0c955d407a 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -1609,7 +1609,7 @@ static struct dentry *__lookup_hash(const struct qstr *=
-name,
- 	if (IS_ERR(dentry))
- 		return dentry;
-=20
--	if (wq && d_in_lookup(dentry))
-+	if (wq && !d_in_lookup(dentry))
- 		/* Must have raced with another thread doing the lookup */
- 		return dentry;
-=20
-@@ -1664,6 +1664,7 @@ static struct dentry *lookup_hash_update(const struct q=
-str *name,
- 	}
- 	if (flags & LOOKUP_EXCL) {
- 		if (d_is_positive(dentry)) {
-+			d_lookup_done(dentry);
- 			dput(dentry);
- 			err =3D -EEXIST;
- 			goto out_err;
-@@ -1671,6 +1672,7 @@ static struct dentry *lookup_hash_update(const struct q=
-str *name,
- 	}
- 	if (!(flags & LOOKUP_CREATE)) {
- 		if (!dentry->d_inode) {
-+			d_lookup_done(dentry);
- 			dput(dentry);
- 			err =3D -ENOENT;
- 			goto out_err;
-@@ -1687,6 +1689,8 @@ static struct dentry *lookup_hash_update(const struct q=
-str *name,
- 	}
- 	if (err2) {
- 		err =3D err2;
-+		d_lookup_done(dentry);
-+		d_unlock_update(dentry);
- 		dput(dentry);
- 		goto out_err;
- 	}
-@@ -3273,6 +3277,7 @@ static struct dentry *lock_rename_lookup(struct dentry =
-*p1, struct dentry *p2,
- 		}
- 		return NULL;
- 	out_unlock_2:
-+		d_lookup_done(d1);
- 		dput(d1);
- 		d1 =3D d2;
- 	out_unlock_1:
-@@ -3315,6 +3320,7 @@ static struct dentry *lock_rename_lookup(struct dentry =
-*p1, struct dentry *p2,
- 	*d2p =3D d2;
- 	return p;
- unlock_out_4:
-+	d_lookup_done(d1);
- 	dput(d1);
- 	d1 =3D d2;
- unlock_out_3:

@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA85754F854
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A0C54F858
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380904AbiFQNbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S1382038AbiFQNdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbiFQNbm (ORCPT
+        with ESMTP id S236792AbiFQNdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:31:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945E514D32
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kSD0Hz53mJC34EP3TCGfokG3QT5E0kZOaBd3T7HkYc4=; b=YYcsqLU8LbStVS+t+V5ekzL4aD
-        Em8jzEN++MuegQwCGXjquu92aMXAigIVZrCJs3+akeIkc+poGRMGr4l8KrMoLZzGsj8GZ3PE+rzne
-        CLydDEQtH+xq8fWsAyqhWzSaTyLqZl91KkZEGcTBmoi/PMEJ3ZOl7woBcc3eZyqjbEZstDT5JFkEy
-        Q9e+vTDOG4Yr9Ex29os6rvIVCv5vHTxNNo32z1JtrEX0sJNPjX/HwaRep9cVypGfg0dnZYU79HC5o
-        Qi7f2XDanr1YBM0l9Mpqd+NVOQ5uAdX8MNHxOvXDNEpbIB2Q2+YzTuC6gAFMXycI6niIsIBwMxoT7
-        lt2zdsdg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o2C4K-008hRe-CR; Fri, 17 Jun 2022 13:31:24 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EAA8A9816B5; Fri, 17 Jun 2022 15:31:23 +0200 (CEST)
-Date:   Fri, 17 Jun 2022 15:31:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Brian Norris <briannorris@chromium.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ben Segall <bsegall@google.com>, linux-kernel@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] sched: Drop outdated compile-optimization comment
-Message-ID: <YqyCK+31YgOlBY9U@worktop.programming.kicks-ass.net>
-References: <20220615222745.3371892-1-briannorris@chromium.org>
- <xhsmhk09f7dgy.mognet@vschneid.remote.csb>
+        Fri, 17 Jun 2022 09:33:33 -0400
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01F7EB483
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=7u6qK
+        ltsp5jSRpjg0OvbbT6LXIqaBGbVUZXXet7le4E=; b=i2NSrUiWLcHvbVI1dRkFw
+        oy11kkjprzeWXsw5lr7qxd9AnvzIt8NIY1Yo8JwqkvpYN++yVqhgQ5rJdKcz/V+e
+        W7owMLW5Y1ERhKylMHygsC8cFkO30pcJ3yYlm9ZW/b90kUu2Ebnxjf97eDeBIRtN
+        6nyU54yjzmrowf2drNtN64=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp2 (Coremail) with SMTP id DMmowACnrgJZgqxim2kiDg--.21116S2;
+        Fri, 17 Jun 2022 21:32:10 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH] clocksource: Fix refcount leak bug in time-ti-dm-systimer
+Date:   Fri, 17 Jun 2022 21:32:09 +0800
+Message-Id: <20220617133209.4049325-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhk09f7dgy.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMmowACnrgJZgqxim2kiDg--.21116S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFyxAF1xZw17GFyrKF4fuFg_yoWkWwc_Ww
+        s7XF9rJrW3urn7G39rCw13Z39xKrnavr48Z3WIqr9xJ3WxZw15ArnrZrn7ua48uay3tFyD
+        C3y7JrW7Zr17GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRtgAwDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hAjF1uwMOVH-gABs4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 12:10:05PM +0100, Valentin Schneider wrote:
-> On 15/06/22 15:27, Brian Norris wrote:
-> > Looks like this exists from way back in 2011 (commit 095c0aa83e52
-> > ("sched: adjust scheduler cpu power for stolen time")), when there was a
-> > little more aggressive use of #if around these variables. That #if is
-> > gone, and the comment just confuses the reader now. (For one, we don't
-> > call sched_rt_avg_update() directly any more either.)
-> >
-> 
-> So that sched_rt_avg_update() became update_irq_load_avg() with
-> 
->   91c27493e78d ("sched/irq: Add IRQ utilization tracking")
-> 
-> and then the #ifdef configs were reorganized in
-> 
->   11d4afd4ff66 ("sched/pelt: Fix warning and clean up IRQ PELT config")
-> 
-> I'd argue that comment is still somewhat relevant but it applies to that
-> block:
-> 
-> #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
-> 	if ((irq_delta + steal) && sched_feat(NONTASK_CAPACITY))
-> 		update_irq_load_avg(rq, irq_delta + steal);
-> #endif
-> 
-> if !CONFIG_HAVE_SCHED_AVG_IRQ then yes you'd expect the compiler to not
-> even add a call to update_irq_load_avg() in there, but compilers aren't the
-> most trustworthy things :-) If you feel like it, you could play with
-> GCC/clang and see what they emit if you remove those #ifdefs.
+In dmtimer_percpu_quirk_init(), of_find_compatible_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
+in fail path or when it is not used anymore.
 
-Mostly I think it was the jump_label stuff getting them confused. I
-suspect that's fixed in todays compilers tho, so yeah, it might be good
-to get rid of it.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/clocksource/timer-ti-dm-systimer.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
+index 2737407ff069..f414cb553649 100644
+--- a/drivers/clocksource/timer-ti-dm-systimer.c
++++ b/drivers/clocksource/timer-ti-dm-systimer.c
+@@ -690,10 +690,11 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
+ 
+ 	arm_timer = of_find_compatible_node(NULL, NULL, "arm,armv7-timer");
+ 	if (of_device_is_available(arm_timer)) {
++		of_node_put(arm_timer);
+ 		pr_warn_once("ARM architected timer wrap issue i940 detected\n");
+ 		return 0;
+ 	}
+-
++	of_node_put(arm_timer);
+ 	if (pa == 0x4882c000)           /* dra7 dmtimer15 */
+ 		return dmtimer_percpu_timer_init(np, 0);
+ 	else if (pa == 0x4882e000)      /* dra7 dmtimer16 */
+-- 
+2.25.1
+

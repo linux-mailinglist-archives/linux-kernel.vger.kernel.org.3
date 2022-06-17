@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF66454F9C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39D454F9D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382950AbiFQPBm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Jun 2022 11:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S1382965AbiFQPC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 11:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382627AbiFQPBk (ORCPT
+        with ESMTP id S1382684AbiFQPCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 11:01:40 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A64A3E0E4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:01:39 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-56-yIBenb7EPhWdGuPCD_Wigg-1; Fri, 17 Jun 2022 16:01:36 +0100
-X-MC-Unique: yIBenb7EPhWdGuPCD_Wigg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Fri, 17 Jun 2022 16:01:34 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Fri, 17 Jun 2022 16:01:34 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Petr Mladek' <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     John Ogness <john.ogness@linutronix.de>,
-        Marco Elver <elver@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: 5.19 printk breaks message ordering
-Thread-Topic: 5.19 printk breaks message ordering
-Thread-Index: AQHYglWHYY5jQBSQoEy5fw0dudLMr61Tr9rQ
-Date:   Fri, 17 Jun 2022 15:01:33 +0000
-Message-ID: <a35dc47eb9924d56bb6dca7868c34c94@AcuMS.aculab.com>
-References: <YqyANveL50uxupfQ@zx2c4.com> <YqyN20jpRw1SaaTw@alley>
-In-Reply-To: <YqyN20jpRw1SaaTw@alley>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 17 Jun 2022 11:02:51 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93FF6348;
+        Fri, 17 Jun 2022 08:02:49 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25HF2Z2X078958;
+        Fri, 17 Jun 2022 10:02:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1655478155;
+        bh=XbiXWl1XRYyu2fHf9HKjD4wzu1Kv0x9mmlHZ/T7l6iI=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Th7PMKT2h4eyCqkpTMmRj5r+8rCqkw3mdlBHTQSqpqCJwvr0rVVTDTGilCmM6QfnQ
+         XIHRD/xDgLXhQajOxZZ+hVDxafPYBjEmbKgtXLUGRSTrJb0pMvkngWLZRkEEnEJ9IU
+         ZqaocicGgs6fySeBtLQ0LT+OV2pySqj69EDvkjxQ=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25HF2ZLk105696
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Jun 2022 10:02:35 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
+ Jun 2022 10:02:35 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 17 Jun 2022 10:02:35 -0500
+Received: from ubuntu (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with SMTP id 25HF2SBF124766;
+        Fri, 17 Jun 2022 10:02:30 -0500
+Date:   Fri, 17 Jun 2022 08:02:27 -0700
+From:   Matt Ranostay <mranostay@ti.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, Nishanth Menon <nm@ti.com>
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2: fix overlapping GICD
+ memory region
+Message-ID: <YqyXg2//cglzV7eF@ubuntu>
+References: <20220617140207.444298-1-mranostay@ti.com>
+ <87tu8j2x9u.wl-maz@kernel.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <87tu8j2x9u.wl-maz@kernel.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,32 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Mladek
-> Sent: 17 June 2022 15:21
-...
-> > I assume this is mostly caused by your threaded printk patchset
+On Fri, Jun 17, 2022 at 03:13:33PM +0100, Marc Zyngier wrote:
+> On Fri, 17 Jun 2022 15:02:07 +0100,
+> Matt Ranostay <mranostay@ti.com> wrote:
+> > 
+> > GICD region was overlapping with GICR causing the latter to not map
+> > successfully, and in turn the gic-v3 driver would fail to initialize.
+> > 
+> > This issue was hidden till commit 2b2cd74a06c3 ("irqchip/gic-v3: Claim iomem resources")
+> > replaced of_iomap() calls with of_io_request_and_map() that internally
+> > called request_mem_region().
 > 
-> Console has never been fully synchronous. printk() did console_trylock()
-> and flushed the message to the console only the lock was available.
-> The console kthreads made it asynchronous always when the kthreads
-> are available and system is in normal state.
+> Please correctly wrap long lines in the commit message.
+> 
+> > 
+> > Respective console output before this patchset:
+> > 
+> > [    0.000000] GICv3: /bus@100000/interrupt-controller@1800000: couldn't map region 0
+> > 
+> > Fixes: 2b2cd74a06c3 ("irqchip/gic-v3: Claim iomem resources")
+> 
+> No, that's the wrong target for this. Your patch fixes the *original*
+> submission of the DT, and this should carry a:
+> 
+> Fixes: b8545f9d3a54 ("arm64: dts: ti: Add initial support for J721S2 SoC")
+>
 
-What priority do these kthreads run at?
+Ah right. Not sure I was thinking there.. will fix in v3.
 
-I'd have thought they ought to run at a high priority?
-That should tend to give kernel messages priority over user ones.
+- Matt
 
-Quite how high is another matter.
-Probably a bit below the RT/FIFO:50 of threaded ISR.
 
-Although if an x86 one ends up doing software scrolling of
-the vga text buffer using the ISA speed accesses that usually
-requires maybe not!
-Maybe that is faster on modern systems - but I doubt it.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> Please also consider adding a
+> 
+> Cc: stable@vger.kernel.org
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.

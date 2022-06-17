@@ -2,75 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0AC54F99F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9477E54F9A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382964AbiFQOr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
+        id S1383002AbiFQOsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382955AbiFQOrz (ORCPT
+        with ESMTP id S1382969AbiFQOsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:47:55 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340FEF09;
-        Fri, 17 Jun 2022 07:47:45 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id d129so4230320pgc.9;
-        Fri, 17 Jun 2022 07:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aYggxfQlLk9rSqqnnIEveh86WVqtON4KSNoZvLjIn7A=;
-        b=NxuScNfBGvTg+lbMohkL4tCVe41sewxyeGYiO1SLy8ZVIMMG1JwShUmyTIwv6/QK3q
-         jhunaTof31i/D6DGUeujdm4UWqg0+ptlvUYdMyiZv8M0hVYx/7r7cHg4TIraK6XUUKqr
-         pK9I5dQ9CcpUHRu/Lw6+cYCWYok4NdjwHeCE5tFVzUHZQ4xebpwZaN9cIVXMCm55glQT
-         2LDLsObDbImKFzsV5yiVKirjlhXnLAq1BOdv0SIk4z39sYvwV1Mh0fS1QPElvFLjYDXO
-         3JI/qyntOQb3s9trgVabk7aSmTPnyQjULtuTd4lmmL6cJiq8sOKPH+mNO7v80WLIIiDw
-         QTKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aYggxfQlLk9rSqqnnIEveh86WVqtON4KSNoZvLjIn7A=;
-        b=EdIevp5qJHCcU1Wcjcy3ToPWXDCNA5bABOuTnurPtjcs1lpkvyGhl6T8OxsINhf7g2
-         aZl0yVePIz83cYiIuQ/0bCUmdRR7NbI1spo6rLTujHBV5aljF6kOnmRPrBNQDsMuL/cL
-         jxnzfheKxjX/6iatO0BNQ5Es3NBngXG0wNHUItnexGb8NLVNGAPihKaSUj+T39IBq19h
-         r3vTGU8SNBke2L+OjHJuRlJ2kyY5tTqcJ1xhDVC1IIM1K6sAr6sxHFtwzr8Q/M0Q+Rb2
-         37KEBePOjE8D2Dh6BDv6Y8qsn6DBRuj0VNPRQeTv9pv9+q5tX62I9PnCWuh+SC8ZqqMv
-         5y9w==
-X-Gm-Message-State: AJIora/ujN+5crK+doi+mjEY8P9GAYE8xpr/ArsONyC4CZ6P6SiW0uwX
-        O/chVMsOO1HLij9w0i965bU=
-X-Google-Smtp-Source: AGRyM1vUDwKnN2/vtwst+vijRt7I4OiJ06m9CbM5WIpmqX/qaYYdY5/TX8mqyBZqjedVNDzo66jhfQ==
-X-Received: by 2002:a63:4446:0:b0:405:2d62:95e6 with SMTP id t6-20020a634446000000b004052d6295e6mr9149043pgk.328.1655477264537;
-        Fri, 17 Jun 2022 07:47:44 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:9:1860:74f:998a:2ed0])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa79f8c000000b0052089e1b88esm3798048pfr.192.2022.06.17.07.47.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 07:47:43 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     corbet@lwn.net, hch@infradead.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, paulmck@kernel.org,
-        akpm@linux-foundation.org, bp@suse.de, tglx@linutronix.de,
-        songmuchun@bytedance.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
-        kys@microsoft.com
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
-        kirill.shutemov@intel.com, andi.kleen@intel.com,
-        Andi Kleen <ak@linux.intel.com>
-Subject: [RFC PATCH V4 1/1] swiotlb: Split up single swiotlb lock
-Date:   Fri, 17 Jun 2022 10:47:41 -0400
-Message-Id: <20220617144741.921308-1-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Fri, 17 Jun 2022 10:48:43 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2071.outbound.protection.outlook.com [40.107.92.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CA1186DD;
+        Fri, 17 Jun 2022 07:48:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e8ezECQesM/drHrMsR/wAdaDMbrRlTxfg49oTIhdmdRxzkAeEpA1EuWBjpHkh1MTTSswB9RfE/EJDW32BFRVc2pWGqQLSk0tFa7abuAKjfJWqTU6x4/LW47oxqDGgEbUYfstEG639m4lvVbW+yQzNUPgHAqKnyreq4HQ3xlezBI6VgKPnIJxOorg/c4ETqsELtDOVHPub/3oMknKV1XoKynzL1aj/REeUPuIhG7O4RRtGfgDvZq5hkzMThoTU8kA9580mdQ78VVVPDXxF8Jzt4l5WStFykQIY46XBTCU0wG7fAi3sF2oKmJSZmJunMXcYqjELIkSmcMAAS5y7PE4CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hff/11NKQZI7kIfvdw5OrwNQVotovQZBD5vquLwkayE=;
+ b=GivNh2dxtEj6kznsHhYxUc/xZdMILWs+mUBVGztdov9Tq5Rj7ICv7J8JVSLr0xg6zdSLcNYNtmi1sPRnQtYchlvSHltp6SgQIzCeSRWifjsEDgh2jn03gdP9ocdeAVniW5Ete9nUHfP3DKSvum9KlCYP3OLmAR1PEw5YcKgTZ+oVf0LDY7pY3dx1P7AC2lrsvF4zejnb0diJIuKph4nbHvx+Xwuu7nkO8Kq5tnMLlC8GVZID0hca+HhLWBQ3Cx97zyXTWlI8Xs1TNM00aILTGE5FbPlp+QatJDWmN6NEoWa2fvu+7c8KQV6dHHG8+SCGWxAcPeh7MuFChQma48FwdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hff/11NKQZI7kIfvdw5OrwNQVotovQZBD5vquLwkayE=;
+ b=WWibCoIKWVH1/2rxmQKPWoJ7gS0W6VycdsQq471oALJBto6wz917xCrmipTnuE8Wzp71ZLTr5X9i9dqN8dQ3MDGoeq2l3K0HnkSLCVVpvXEGZj4Taq2OeUH7FjNGzvGLRrVXB+HsXg73wJXH1fxyvHms2bcsC+O4e05CQw7CC2w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com (2603:10b6:930:20::11)
+ by CY4PR12MB1879.namprd12.prod.outlook.com (2603:10b6:903:125::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Fri, 17 Jun
+ 2022 14:48:39 +0000
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::29ce:b5ab:bd97:8a89]) by CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::29ce:b5ab:bd97:8a89%7]) with mapi id 15.20.5353.015; Fri, 17 Jun 2022
+ 14:48:39 +0000
+Message-ID: <fcf79616-ccbe-1137-6080-57d00773ff83@amd.com>
+Date:   Fri, 17 Jun 2022 20:18:27 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/7] KVM: SVM: Add VNMI support in get/set_nmi_mask
+Content-Language: en-US
+From:   "Shukla, Santosh" <santosh.shukla@amd.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220602142620.3196-1-santosh.shukla@amd.com>
+ <20220602142620.3196-4-santosh.shukla@amd.com>
+ <d3f2da59b5afd300531ae428174c1f91d731e655.camel@redhat.com>
+ <91c551a2-11fc-202f-2a8f-75b6374286b6@amd.com>
+In-Reply-To: <91c551a2-11fc-202f-2a8f-75b6374286b6@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-ClientProxiedBy: PN3PR01CA0183.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:be::8) To CY5PR12MB6323.namprd12.prod.outlook.com
+ (2603:10b6:930:20::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 362d61d5-afdc-4cdb-c7bd-08da5070772c
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1879:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1879D94EE2E097A00E255A4387AF9@CY4PR12MB1879.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WDfZx0zlRaQjIZbRNDI2RqlNVVlnsGOR6wGp7jpRY9V9cO88v5gQ/8tfA3jmgr17Z95zyK14aBi16rIIpctBgtcWQefSA7vITCgMbvgrCUDJGo+W4Us8gQ2xlCaW0slajgq032nr1Hh3f9QDaS0mz9lfswD6rtKcezFsB4Mbgbk/kl+DqU2gv+XETh11iYkcwD1n/AxZ/aExVaiujjDCOD03vqCZtRptXgMw6vIjZFNEv8DelQE+GA/kqZtsgdI/d9EYBL/7x2RrJ2Zsc7qhv9CJ9GLWoLeIy/5FXncFonyl3bwUp1cXc6No6Pimaqv5XBiPgPWiHSFUMuvcBLvOJXIwM+FiN4nkA4HpYcr5pQFVYufXV4XG1/uAbLXwpMdAng19mjATMEGdK3+mgahbYYCC0PrVZrQDbvckYAf3BfqiR2ubh5Hbwdece1mp0hNF4TTo9QvwI0VLqyyG5egamb5Pi1pZvBBeLZWT5xp/khSTrDQN+KrEwYJNSOQecLL5IVcJW9TUBs4K7kodTNI2dVlrwRaw1vy/FV9Zh92K8IIAzZvIMRWMisYrhBHOK9AuXxRyIU0et+rZHmiGSvXSm6eE8Z2dpOG9iaShPJBmBwDs8CGECubC37tMHP2wf7g12L5/8CCUlpqyOegg/h6foeoJYYLdxFvcxVnLQPs+GJeSuhLzWYYu622GrCYwz5ktlcUROAip6rUGXD4qvruslXA2mo0LhZFvNO4S6h4XwIACv1v/9asCnVcY4aszkZRC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6323.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(54906003)(316002)(8936002)(2616005)(36756003)(498600001)(31696002)(5660300002)(66476007)(66556008)(6486002)(4326008)(66946007)(8676002)(83380400001)(6506007)(6666004)(110136005)(31686004)(186003)(53546011)(86362001)(2906002)(38100700002)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWtPUGtNTVZKeGdsN25FRkZkN0tINjlSdGorRlZJVEFTN09jbjh0d0JUeGZC?=
+ =?utf-8?B?M2JVT21CWTdOdzBFNmw0alNOOVpZR3JMTTNoSFpycVFUSExWMmNob1dEK3p1?=
+ =?utf-8?B?YjN3eEJmdlJiSGc2VnJBcmVNNTB4bGxUamJaSXlhNmpMUHR0OUZhLzBOMldt?=
+ =?utf-8?B?UGwyZ0xIdnJHLzA0WU0zTXg5RitjZXlUcDN5Z0oxTi9DbEV2QzA1bnlvL1ov?=
+ =?utf-8?B?ZUlFYWYrNHphOVpkaDlBUFh0OFg3Z3ljUHRvcTBJWmxEMDBJUzdtQmgxbm14?=
+ =?utf-8?B?ZWdOd3EvWGphb040a21pQlVlOVdGWG5MOVJEdEtPN2duZXdyeVd0a2IxVzBI?=
+ =?utf-8?B?TU5iVXBPUTJqWXB3WFlFdzNRSEQ5MFNJaGJmdlFXV2xEd1JGZWRoRC82YzEz?=
+ =?utf-8?B?NlBZSWg3cEkwWno1UjVTUVVaTmQ5UHFZY2cwUm1GYlFrZmRjeW83aWgvYWpW?=
+ =?utf-8?B?VFExSTZUMkFhTXRnZTBKUEI0S1NkY2Z2aHB0TXJFMVJ4VzZ2V05GVTBRSS9k?=
+ =?utf-8?B?aWk1a1A5VTRQRnFKRmhjcVZDdEMyR0JNZk9GUUdBeDlsb2lqWk82ejdhdEZE?=
+ =?utf-8?B?WGFXamE2M3c5WUxIMUo4Q1B4T1pwVWNLL0JkOUd3ZEdTM2ZFVHh5QUI5em5n?=
+ =?utf-8?B?S1NNWEZtaStiTC9ETGNORlJFdWl3VXIzdDRQREJwRkN0bTlOclBZVXBsSTRK?=
+ =?utf-8?B?dFd2cG5HRGovNTRLNVY5UFgxclYyMjhpeGFkcGJRSW5GTThqemNTQmtTN0Ri?=
+ =?utf-8?B?dDJNNTV4Yzl5NWVVYldCbkQ1c043QU5ZcXJBeUlUVjd0V1QxVjZvSEFQWXdo?=
+ =?utf-8?B?eGFnSnZMc3MxL0ZEdjdmcDNscmo2NUZnQ1VtU0tLTHM3SWJORW5MNko2bmtF?=
+ =?utf-8?B?SGVKcmxjZXpkVHRsQ3JLWXg3cGgyQVhhMThBdkhzTDNnWkQ5UWVmYkl2L0ZD?=
+ =?utf-8?B?SE5DOEgxcHdHMmduWTFTT1M1TTZDRFlwaTNMY3FNbDQzTCtrVmVmMEh4SDVK?=
+ =?utf-8?B?dzBiTkFVVHg5cHA3bTF0TDl5TTlmb0pmUWQ1ajV4K1orNlpuY0I0ZnQrbEs3?=
+ =?utf-8?B?WWNMR2VHWDhDeUNrRUtWN2Q1NWZkVkNRUmw3NWJ2TFhycGRqS3NDa2V6bFRx?=
+ =?utf-8?B?UXdKanJHa3REM0cyMzNMNXozVjFPQjRQOXYxbjVKZGZTSWJtVTRRVmh0VkZ2?=
+ =?utf-8?B?bWkzK1dWQXhYRnoybVA4c09hUFkxRnUrbEV1bSszeVpuTzhCUkRacDR4b05N?=
+ =?utf-8?B?M1J2cit4VXpBQWd5a0RkWnNFdG9PelphSmkyTU9hYWJnWFBQL2hsTXIzZU4r?=
+ =?utf-8?B?K3BvRTZ2NFJCMHY2QnRYU2g1Y2tFVHdXOEFWNTdZSVg4ak0zbm5qdDZBNmpx?=
+ =?utf-8?B?bGdYbXh1dWVEZ25QVUUyVTZvSWRmZUVQWWJqOU5hU05zK21yMGJ3Rks3cDZx?=
+ =?utf-8?B?a3JBK2lYVHdCeFpXY1ZkdEh1L2xVc1hYY2lKeVEvRkE2ZHdzOGZRbjAzRDJt?=
+ =?utf-8?B?WWgyY1pwWmE0WFFMVkxsL2laM2JGUEJhZFJTNUdFT1MrZm96MGpxUUZFYVdN?=
+ =?utf-8?B?Rkw3SWg4UjB3N01iTGhjc0hnUVlFaS9pT3Nqa2hZZHhObldMTGpWY2V1bDZp?=
+ =?utf-8?B?cExqeDJad0x4bWlDcGJtU0NsLzFGZDdOdUdmeUhsUDVRdXREVHJGR2tHcXhi?=
+ =?utf-8?B?cUNXSFY3Qnk4R3pOOW9yR01SVjlrNGhZcml1d25kRmNZVDAzTnJUUnhmKzRX?=
+ =?utf-8?B?WElCdkVIdGJQenRtRm5Xc3lhMThlV0dUQVYxVGJQYUpqN0d3akpDWDhZMXZC?=
+ =?utf-8?B?V2pGdmxsL0xEZ2Q0aWhtNDZpM3hrTDQ1RUZTYzM3T3FkZHkrUjEzMXF4ODNy?=
+ =?utf-8?B?M2pSSndtWWZrR0hFZk96Yks4K0VlZE5vL0RiRWh6SHhGZWJUL2E1UXp5Y0l5?=
+ =?utf-8?B?VWxSaWZJYmgraFQ3bTVpUytlc3h0VFJ5bzJwZVpEMGlsZHhvcjVQR21hbU9N?=
+ =?utf-8?B?THdXRExuNS9LeW00V09xK3VFdmVPTWhzdmV0d3I4MG9PM0NoNnNtUE53Z0Zz?=
+ =?utf-8?B?L3RERllDQWtZbEloQ1BtVnYva0pCV005Q0xzaDJkc0lwTFZnSUdmYzdwTXA5?=
+ =?utf-8?B?T2cxZ09hV21PVTluUTV5dDZsZEtzZzRWRzNwQVlVeWdBbU9WOGRLdWU4ZXk0?=
+ =?utf-8?B?UjVpb0VuN1F0eFNNTVNvYlVWeWpQTVNoZ3FLZHpKdDJmTFlFWUtqdFEzVFhq?=
+ =?utf-8?B?S3licHBVN2RENUwrV0RRcCtmSzhta05GdE53c0J0OHZrd3ZaNXNidUtyRG5L?=
+ =?utf-8?B?M0ZiWWlNNHNIZnRTK1pURm1LYlk4ZlQxWC9sRzVkaG5yM0dxeU15QT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 362d61d5-afdc-4cdb-c7bd-08da5070772c
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6323.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 14:48:39.6246
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dsp92lo8xCwdZKlVKTNxx0ACOZxbKU3Zn+OqspznppM9OX7X5OO6RGOZbAnT9A3cFSrLNV3qp9VH99YiqusWAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1879
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,545 +136,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-Traditionally swiotlb was not performance critical because it was only
-used for slow devices. But in some setups, like TDX/SEV confidential
-guests, all IO has to go through swiotlb. Currently swiotlb only has a
-single lock. Under high IO load with multiple CPUs this can lead to
-significat lock contention on the swiotlb lock.
 
-This patch splits the swiotlb bounce buffer pool into individual areas
-which have their own lock. Each CPU tries to allocate in its own area
-first. Only if that fails does it search other areas. On freeing the
-allocation is freed into the area where the memory was originally
-allocated from.
+On 6/17/2022 8:15 PM, Shukla, Santosh wrote:
+> 
+> 
+> On 6/7/2022 6:37 PM, Maxim Levitsky wrote:
+>> On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
+>>> VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+>>> NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK as
+>>> read-only in the hypervisor and do not populate set accessors.
+>>>
+>>> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+>>> ---
+>>>  arch/x86/kvm/svm/svm.c | 20 +++++++++++++++++++-
+>>>  1 file changed, 19 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+>>> index 860f28c668bd..d67a54517d95 100644
+>>> --- a/arch/x86/kvm/svm/svm.c
+>>> +++ b/arch/x86/kvm/svm/svm.c
+>>> @@ -323,6 +323,16 @@ static int is_external_interrupt(u32 info)
+>>>         return info == (SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_INTR);
+>>>  }
+>>>  
+>>> +static bool is_vnmi_enabled(struct vmcb *vmcb)
+>>> +{
+>>> +       return vnmi && (vmcb->control.int_ctl & V_NMI_ENABLE);
+>>> +}
+>>
+>> Following Paolo's suggestion I recently removed vgif_enabled(),
+>> based on the logic that vgif_enabled == vgif, because
+>> we always enable vGIF for L1 as long as 'vgif' module param is set,
+>> which is set unless either hardware or user cleared it.
+>>
+> Yes. In v2, Thanks!.
+> 
+>> Note that here vmcb is the current vmcb, which can be vmcb02,
+>> and it might be wrong
+>>
+>>> +
+>>> +static bool is_vnmi_mask_set(struct vmcb *vmcb)
+>>> +{
+>>> +       return !!(vmcb->control.int_ctl & V_NMI_MASK);
+>>> +}
+>>> +
+>>>  static u32 svm_get_interrupt_shadow(struct kvm_vcpu *vcpu)
+>>>  {
+>>>         struct vcpu_svm *svm = to_svm(vcpu);
+>>> @@ -3502,13 +3512,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>>>  
+>>>  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+>>>  {
+>>> -       return !!(vcpu->arch.hflags & HF_NMI_MASK);
+>>> +       struct vcpu_svm *svm = to_svm(vcpu);
+>>> +
+>>> +       if (is_vnmi_enabled(svm->vmcb))
+>>> +               return is_vnmi_mask_set(svm->vmcb);
+>>> +       else
+>>> +               return !!(vcpu->arch.hflags & HF_NMI_MASK);
+>>>  }
+>>>  
+>>>  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+>>>  {
+>>>         struct vcpu_svm *svm = to_svm(vcpu);
+>>>  
+>>> +       if (is_vnmi_enabled(svm->vmcb))
+>>> +               return;
+>>
+>> What if the KVM wants to mask NMI, shoudn't we update the 
+>> V_NMI_MASK value in int_ctl instead of doing nothing?
+>>
 
-Area number can be set via swiotlb_adjust_nareas() and swiotlb kernel
-parameter.
+V_NMI_MASK is cpu controlled meaning HW sets the mask while processing
+event and clears right after processing, so in away its Read-only for hypervisor.
 
-This idea from Andi Kleen patch(https://github.com/intel/tdx/commit/4529b578
-4c141782c72ec9bd9a92df2b68cb7d45).
-
-Based-on-idea-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
----
- .../admin-guide/kernel-parameters.txt         |   4 +-
- include/linux/swiotlb.h                       |  27 +++
- kernel/dma/swiotlb.c                          | 202 ++++++++++++++----
- 3 files changed, 194 insertions(+), 39 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 8090130b544b..5d46271982d5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5869,8 +5869,10 @@
- 			it if 0 is given (See Documentation/admin-guide/cgroup-v1/memory.rst)
- 
- 	swiotlb=	[ARM,IA-64,PPC,MIPS,X86]
--			Format: { <int> | force | noforce }
-+			Format: { <int> [,<int>] | force | noforce }
- 			<int> -- Number of I/O TLB slabs
-+			<int> -- Second integer after comma. Number of swiotlb
-+				 areas with their own lock. Must be power of 2.
- 			force -- force using of bounce buffers even if they
- 			         wouldn't be automatically used by the kernel
- 			noforce -- Never use bounce buffers (for debugging)
-diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-index 7ed35dd3de6e..7157428cf3ac 100644
---- a/include/linux/swiotlb.h
-+++ b/include/linux/swiotlb.h
-@@ -62,6 +62,22 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t phys,
- #ifdef CONFIG_SWIOTLB
- extern enum swiotlb_force swiotlb_force;
- 
-+/**
-+ * struct io_tlb_area - IO TLB memory area descriptor
-+ *
-+ * This is a single area with a single lock.
-+ *
-+ * @used:	The number of used IO TLB block.
-+ * @index:	The slot index to start searching in this area for next round.
-+ * @lock:	The lock to protect the above data structures in the map and
-+ *		unmap calls.
-+ */
-+struct io_tlb_area {
-+	unsigned long used;
-+	unsigned int index;
-+	spinlock_t lock;
-+};
-+
- /**
-  * struct io_tlb_mem - IO TLB Memory Pool Descriptor
-  *
-@@ -89,6 +105,8 @@ extern enum swiotlb_force swiotlb_force;
-  * @late_alloc:	%true if allocated using the page allocator
-  * @force_bounce: %true if swiotlb bouncing is forced
-  * @for_alloc:  %true if the pool is used for memory allocation
-+ * @nareas:  The area number in the pool.
-+ * @area_nslabs: The slot number in the area.
-  */
- struct io_tlb_mem {
- 	phys_addr_t start;
-@@ -102,6 +120,9 @@ struct io_tlb_mem {
- 	bool late_alloc;
- 	bool force_bounce;
- 	bool for_alloc;
-+	unsigned int nareas;
-+	unsigned int area_nslabs;
-+	struct io_tlb_area *areas;
- 	struct io_tlb_slot {
- 		phys_addr_t orig_addr;
- 		size_t alloc_size;
-@@ -130,6 +151,7 @@ unsigned int swiotlb_max_segment(void);
- size_t swiotlb_max_mapping_size(struct device *dev);
- bool is_swiotlb_active(struct device *dev);
- void __init swiotlb_adjust_size(unsigned long size);
-+void __init swiotlb_adjust_nareas(unsigned int nareas);
- #else
- static inline void swiotlb_init(bool addressing_limited, unsigned int flags)
- {
-@@ -162,6 +184,11 @@ static inline bool is_swiotlb_active(struct device *dev)
- static inline void swiotlb_adjust_size(unsigned long size)
- {
- }
-+
-+static inline void swiotlb_adjust_nareas(unsigned int nareas)
-+{
-+}
-+
- #endif /* CONFIG_SWIOTLB */
- 
- extern void swiotlb_print_info(void);
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index cb50f8d38360..139d08068912 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -62,6 +62,8 @@
- 
- #define INVALID_PHYS_ADDR (~(phys_addr_t)0)
- 
-+#define DEFAULT_NUM_AREAS 1
-+
- static bool swiotlb_force_bounce;
- static bool swiotlb_force_disable;
- 
-@@ -70,6 +72,7 @@ struct io_tlb_mem io_tlb_default_mem;
- phys_addr_t swiotlb_unencrypted_base;
- 
- static unsigned long default_nslabs = IO_TLB_DEFAULT_SIZE >> IO_TLB_SHIFT;
-+static unsigned long default_nareas = DEFAULT_NUM_AREAS;
- 
- static int __init
- setup_io_tlb_npages(char *str)
-@@ -79,6 +82,10 @@ setup_io_tlb_npages(char *str)
- 		default_nslabs =
- 			ALIGN(simple_strtoul(str, &str, 0), IO_TLB_SEGSIZE);
- 	}
-+	if (*str == ',')
-+		++str;
-+	if (isdigit(*str))
-+		swiotlb_adjust_nareas(simple_strtoul(str, &str, 0));
- 	if (*str == ',')
- 		++str;
- 	if (!strcmp(str, "force"))
-@@ -103,6 +110,27 @@ unsigned long swiotlb_size_or_default(void)
- 	return default_nslabs << IO_TLB_SHIFT;
- }
- 
-+void __init swiotlb_adjust_nareas(unsigned int nareas)
-+{
-+	if (!is_power_of_2(nareas)) {
-+		pr_err("swiotlb: Invalid areas parameter %d.\n", nareas);
-+		return;
-+	}
-+
-+	default_nareas = nareas;
-+
-+	pr_info("area num %d.\n", nareas);
-+	/* Round up number of slabs to the next power of 2.
-+	 * The last area is going be smaller than the rest if
-+	 * default_nslabs is not power of two.
-+	 */
-+	if (nareas > DEFAULT_NUM_AREAS) {
-+		default_nslabs = roundup_pow_of_two(default_nslabs);
-+		pr_info("SWIOTLB bounce buffer size roundup to %luMB",
-+			(default_nslabs << IO_TLB_SHIFT) >> 20);
-+	}
-+}
-+
- void __init swiotlb_adjust_size(unsigned long size)
- {
- 	/*
-@@ -112,8 +140,18 @@ void __init swiotlb_adjust_size(unsigned long size)
- 	 */
- 	if (default_nslabs != IO_TLB_DEFAULT_SIZE >> IO_TLB_SHIFT)
- 		return;
-+
-+	/* Round up number of slabs to the next power of 2.
-+	 * The last area is going be smaller than the rest if default_nslabs is
-+	 * not power of two.
-+	 */
- 	size = ALIGN(size, IO_TLB_SIZE);
- 	default_nslabs = ALIGN(size >> IO_TLB_SHIFT, IO_TLB_SEGSIZE);
-+	if (default_nareas != DEFAULT_NUM_AREAS) {
-+		default_nslabs = roundup_pow_of_two(default_nslabs);
-+		size = default_nslabs << IO_TLB_SHIFT;
-+	}
-+
- 	pr_info("SWIOTLB bounce buffer size adjusted to %luMB", size >> 20);
- }
- 
-@@ -192,7 +230,8 @@ void __init swiotlb_update_mem_attributes(void)
- }
- 
- static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
--		unsigned long nslabs, unsigned int flags, bool late_alloc)
-+				    unsigned long nslabs, unsigned int flags,
-+				    bool late_alloc, unsigned int nareas)
- {
- 	void *vaddr = phys_to_virt(start);
- 	unsigned long bytes = nslabs << IO_TLB_SHIFT, i;
-@@ -202,10 +241,17 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
- 	mem->end = mem->start + bytes;
- 	mem->index = 0;
- 	mem->late_alloc = late_alloc;
-+	mem->nareas = nareas;
-+	mem->area_nslabs = nslabs / mem->nareas;
- 
- 	mem->force_bounce = swiotlb_force_bounce || (flags & SWIOTLB_FORCE);
- 
- 	spin_lock_init(&mem->lock);
-+	for (i = 0; i < mem->nareas; i++) {
-+		spin_lock_init(&mem->areas[i].lock);
-+		mem->areas[i].index = 0;
-+	}
-+
- 	for (i = 0; i < mem->nslabs; i++) {
- 		mem->slots[i].list = IO_TLB_SEGSIZE - io_tlb_offset(i);
- 		mem->slots[i].orig_addr = INVALID_PHYS_ADDR;
-@@ -274,7 +320,13 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 		panic("%s: Failed to allocate %zu bytes align=0x%lx\n",
- 		      __func__, alloc_size, PAGE_SIZE);
- 
--	swiotlb_init_io_tlb_mem(mem, __pa(tlb), nslabs, flags, false);
-+	mem->areas = memblock_alloc(sizeof(struct io_tlb_area) *
-+			    default_nareas, SMP_CACHE_BYTES);
-+	if (!mem->areas)
-+		panic("%s: Failed to allocate mem->areas.\n", __func__);
-+
-+	swiotlb_init_io_tlb_mem(mem, __pa(tlb), nslabs, flags,
-+				false, default_nareas);
- 
- 	if (flags & SWIOTLB_VERBOSE)
- 		swiotlb_print_info();
-@@ -296,7 +348,7 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask,
- 	struct io_tlb_mem *mem = &io_tlb_default_mem;
- 	unsigned long nslabs = ALIGN(size >> IO_TLB_SHIFT, IO_TLB_SEGSIZE);
- 	unsigned char *vstart = NULL;
--	unsigned int order;
-+	unsigned int order, area_order;
- 	bool retried = false;
- 	int rc = 0;
- 
-@@ -337,19 +389,31 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask,
- 			(PAGE_SIZE << order) >> 20);
- 	}
- 
-+	area_order = get_order(array_size(sizeof(*mem->areas),
-+		default_nareas));
-+	mem->areas = (struct io_tlb_area *)
-+		__get_free_pages(GFP_KERNEL | __GFP_ZERO, area_order);
-+	if (!mem->areas)
-+		goto error_area;
-+
- 	mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
- 		get_order(array_size(sizeof(*mem->slots), nslabs)));
--	if (!mem->slots) {
--		free_pages((unsigned long)vstart, order);
--		return -ENOMEM;
--	}
-+	if (!mem->slots)
-+		goto error_slots;
- 
- 	set_memory_decrypted((unsigned long)vstart,
- 			     (nslabs << IO_TLB_SHIFT) >> PAGE_SHIFT);
--	swiotlb_init_io_tlb_mem(mem, virt_to_phys(vstart), nslabs, 0, true);
-+	swiotlb_init_io_tlb_mem(mem, virt_to_phys(vstart), nslabs, 0, true,
-+				default_nareas);
- 
- 	swiotlb_print_info();
- 	return 0;
-+
-+error_slots:
-+	free_pages((unsigned long)mem->areas, area_order);
-+error_area:
-+	free_pages((unsigned long)vstart, order);
-+	return -ENOMEM;
- }
- 
- void __init swiotlb_exit(void)
-@@ -357,6 +421,7 @@ void __init swiotlb_exit(void)
- 	struct io_tlb_mem *mem = &io_tlb_default_mem;
- 	unsigned long tbl_vaddr;
- 	size_t tbl_size, slots_size;
-+	unsigned int area_order;
- 
- 	if (swiotlb_force_bounce)
- 		return;
-@@ -371,9 +436,14 @@ void __init swiotlb_exit(void)
- 
- 	set_memory_encrypted(tbl_vaddr, tbl_size >> PAGE_SHIFT);
- 	if (mem->late_alloc) {
-+		area_order = get_order(array_size(sizeof(*mem->areas),
-+			mem->nareas));
-+		free_pages((unsigned long)mem->areas, area_order);
- 		free_pages(tbl_vaddr, get_order(tbl_size));
- 		free_pages((unsigned long)mem->slots, get_order(slots_size));
- 	} else {
-+		memblock_free_late(__pa(mem->areas),
-+				   mem->nareas * sizeof(struct io_tlb_area));
- 		memblock_free_late(mem->start, tbl_size);
- 		memblock_free_late(__pa(mem->slots), slots_size);
- 	}
-@@ -476,9 +546,9 @@ static inline unsigned long get_max_slots(unsigned long boundary_mask)
- 	return nr_slots(boundary_mask + 1);
- }
- 
--static unsigned int wrap_index(struct io_tlb_mem *mem, unsigned int index)
-+static unsigned int wrap_area_index(struct io_tlb_mem *mem, unsigned int index)
- {
--	if (index >= mem->nslabs)
-+	if (index >= mem->area_nslabs)
- 		return 0;
- 	return index;
- }
-@@ -487,10 +557,13 @@ static unsigned int wrap_index(struct io_tlb_mem *mem, unsigned int index)
-  * Find a suitable number of IO TLB entries size that will fit this request and
-  * allocate a buffer from that IO TLB pool.
-  */
--static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
--			      size_t alloc_size, unsigned int alloc_align_mask)
-+static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
-+				 struct io_tlb_area *area,
-+				 int area_index,
-+				 struct device *dev, phys_addr_t orig_addr,
-+				 size_t alloc_size,
-+				 unsigned int alloc_align_mask)
- {
--	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
- 	unsigned long boundary_mask = dma_get_seg_boundary(dev);
- 	dma_addr_t tbl_dma_addr =
- 		phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
-@@ -501,8 +574,11 @@ static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
- 	unsigned int index, wrap, count = 0, i;
- 	unsigned int offset = swiotlb_align_offset(dev, orig_addr);
- 	unsigned long flags;
-+	unsigned int slot_base;
-+	unsigned int slot_index;
- 
- 	BUG_ON(!nslots);
-+	BUG_ON(area_index >= mem->nareas);
- 
- 	/*
- 	 * For mappings with an alignment requirement don't bother looping to
-@@ -514,16 +590,20 @@ static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
- 		stride = max(stride, stride << (PAGE_SHIFT - IO_TLB_SHIFT));
- 	stride = max(stride, (alloc_align_mask >> IO_TLB_SHIFT) + 1);
- 
--	spin_lock_irqsave(&mem->lock, flags);
--	if (unlikely(nslots > mem->nslabs - mem->used))
-+	spin_lock_irqsave(&area->lock, flags);
-+	if (unlikely(nslots > mem->area_nslabs - area->used))
- 		goto not_found;
- 
--	index = wrap = wrap_index(mem, ALIGN(mem->index, stride));
-+	slot_base = area_index * mem->area_nslabs;
-+	index = wrap = wrap_area_index(mem, ALIGN(area->index, stride));
-+
- 	do {
-+		slot_index = slot_base + index;
-+
- 		if (orig_addr &&
--		    (slot_addr(tbl_dma_addr, index) & iotlb_align_mask) !=
--			    (orig_addr & iotlb_align_mask)) {
--			index = wrap_index(mem, index + 1);
-+		    (slot_addr(tbl_dma_addr, slot_index) &
-+		     iotlb_align_mask) != (orig_addr & iotlb_align_mask)) {
-+			index = wrap_area_index(mem, index + 1);
- 			continue;
- 		}
- 
-@@ -532,26 +612,26 @@ static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
- 		 * contiguous buffers, we allocate the buffers from that slot
- 		 * and mark the entries as '0' indicating unavailable.
- 		 */
--		if (!iommu_is_span_boundary(index, nslots,
-+		if (!iommu_is_span_boundary(slot_index, nslots,
- 					    nr_slots(tbl_dma_addr),
- 					    max_slots)) {
--			if (mem->slots[index].list >= nslots)
-+			if (mem->slots[slot_index].list >= nslots)
- 				goto found;
- 		}
--		index = wrap_index(mem, index + stride);
-+		index = wrap_area_index(mem, index + stride);
- 	} while (index != wrap);
- 
- not_found:
--	spin_unlock_irqrestore(&mem->lock, flags);
-+	spin_unlock_irqrestore(&area->lock, flags);
- 	return -1;
- 
- found:
--	for (i = index; i < index + nslots; i++) {
-+	for (i = slot_index; i < slot_index + nslots; i++) {
- 		mem->slots[i].list = 0;
- 		mem->slots[i].alloc_size =
--			alloc_size - (offset + ((i - index) << IO_TLB_SHIFT));
-+			alloc_size - (offset + ((i - slot_index) << IO_TLB_SHIFT));
- 	}
--	for (i = index - 1;
-+	for (i = slot_index - 1;
- 	     io_tlb_offset(i) != IO_TLB_SEGSIZE - 1 &&
- 	     mem->slots[i].list; i--)
- 		mem->slots[i].list = ++count;
-@@ -559,14 +639,43 @@ static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
- 	/*
- 	 * Update the indices to avoid searching in the next round.
- 	 */
--	if (index + nslots < mem->nslabs)
--		mem->index = index + nslots;
-+	if (index + nslots < mem->area_nslabs)
-+		area->index = index + nslots;
- 	else
--		mem->index = 0;
--	mem->used += nslots;
-+		area->index = 0;
-+	area->used += nslots;
-+	spin_unlock_irqrestore(&area->lock, flags);
-+	return slot_index;
-+}
- 
--	spin_unlock_irqrestore(&mem->lock, flags);
--	return index;
-+static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
-+			      size_t alloc_size, unsigned int alloc_align_mask)
-+{
-+	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
-+	int start = raw_smp_processor_id() & ((1U << __fls(mem->nareas)) - 1);
-+	int i = start, index;
-+
-+	do {
-+		index = swiotlb_do_find_slots(mem, mem->areas + i, i,
-+					      dev, orig_addr, alloc_size,
-+					      alloc_align_mask);
-+		if (index >= 0)
-+			return index;
-+		if (++i >= mem->nareas)
-+			i = 0;
-+	} while (i != start);
-+
-+	return -1;
-+}
-+
-+static unsigned long mem_used(struct io_tlb_mem *mem)
-+{
-+	int i;
-+	unsigned long used = 0;
-+
-+	for (i = 0; i < mem->nareas; i++)
-+		used += mem->areas[i].used;
-+	return used;
- }
- 
- phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
-@@ -598,7 +707,7 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
- 		if (!(attrs & DMA_ATTR_NO_WARN))
- 			dev_warn_ratelimited(dev,
- 	"swiotlb buffer is full (sz: %zd bytes), total %lu (slots), used %lu (slots)\n",
--				 alloc_size, mem->nslabs, mem->used);
-+				 alloc_size, mem->nslabs, mem_used(mem));
- 		return (phys_addr_t)DMA_MAPPING_ERROR;
- 	}
- 
-@@ -628,6 +737,8 @@ static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
- 	unsigned int offset = swiotlb_align_offset(dev, tlb_addr);
- 	int index = (tlb_addr - offset - mem->start) >> IO_TLB_SHIFT;
- 	int nslots = nr_slots(mem->slots[index].alloc_size + offset);
-+	int aindex = index / mem->area_nslabs;
-+	struct io_tlb_area *area = &mem->areas[aindex];
- 	int count, i;
- 
- 	/*
-@@ -636,7 +747,9 @@ static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
- 	 * While returning the entries to the free list, we merge the entries
- 	 * with slots below and above the pool being returned.
- 	 */
--	spin_lock_irqsave(&mem->lock, flags);
-+	BUG_ON(aindex >= mem->nareas);
-+
-+	spin_lock_irqsave(&area->lock, flags);
- 	if (index + nslots < ALIGN(index + 1, IO_TLB_SEGSIZE))
- 		count = mem->slots[index + nslots].list;
- 	else
-@@ -660,8 +773,8 @@ static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
- 	     io_tlb_offset(i) != IO_TLB_SEGSIZE - 1 && mem->slots[i].list;
- 	     i--)
- 		mem->slots[i].list = ++count;
--	mem->used -= nslots;
--	spin_unlock_irqrestore(&mem->lock, flags);
-+	area->used -= nslots;
-+	spin_unlock_irqrestore(&area->lock, flags);
- }
- 
- /*
-@@ -759,12 +872,14 @@ EXPORT_SYMBOL_GPL(is_swiotlb_active);
- static void swiotlb_create_debugfs_files(struct io_tlb_mem *mem,
- 					 const char *dirname)
- {
-+	unsigned long used = mem_used(mem);
-+
- 	mem->debugfs = debugfs_create_dir(dirname, io_tlb_default_mem.debugfs);
- 	if (!mem->nslabs)
- 		return;
- 
- 	debugfs_create_ulong("io_tlb_nslabs", 0400, mem->debugfs, &mem->nslabs);
--	debugfs_create_ulong("io_tlb_used", 0400, mem->debugfs, &mem->used);
-+	debugfs_create_ulong("io_tlb_used", 0400, mem->debugfs, &used);
- }
- 
- static int __init __maybe_unused swiotlb_create_default_debugfs(void)
-@@ -815,6 +930,9 @@ static int rmem_swiotlb_device_init(struct reserved_mem *rmem,
- 	struct io_tlb_mem *mem = rmem->priv;
- 	unsigned long nslabs = rmem->size >> IO_TLB_SHIFT;
- 
-+	/* Set Per-device io tlb area to one */
-+	unsigned int nareas = 1;
-+
- 	/*
- 	 * Since multiple devices can share the same pool, the private data,
- 	 * io_tlb_mem struct, will be initialized by the first device attached
-@@ -831,10 +949,18 @@ static int rmem_swiotlb_device_init(struct reserved_mem *rmem,
- 			return -ENOMEM;
- 		}
- 
-+		mem->areas = kcalloc(nareas, sizeof(*mem->areas),
-+				     GFP_KERNEL);
-+		if (!mem->areas) {
-+			kfree(mem);
-+			kfree(mem->slots);
-+			return -ENOMEM;
-+		}
-+
- 		set_memory_decrypted((unsigned long)phys_to_virt(rmem->base),
- 				     rmem->size >> PAGE_SHIFT);
- 		swiotlb_init_io_tlb_mem(mem, rmem->base, nslabs, SWIOTLB_FORCE,
--				false);
-+					false, nareas);
- 		mem->for_alloc = true;
- 
- 		rmem->priv = mem;
--- 
-2.25.1
-
+>> Best regards,
+>> 	Maxim Levitsky
+>>
+>>
+>>> +
+>>>         if (masked) {
+>>>                 vcpu->arch.hflags |= HF_NMI_MASK;
+>>>                 if (!sev_es_guest(vcpu->kvm))
+>>
+>>

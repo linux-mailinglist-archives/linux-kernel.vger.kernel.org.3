@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B096654F55D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF8C54F562
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235976AbiFQKcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S1380815AbiFQKck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbiFQKcW (ORCPT
+        with ESMTP id S1381095AbiFQKch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:32:22 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0556AA57
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:32:18 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id hj18so7331475ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7uycaSN9iJurwFdQhz5RtglUFVEwCOI11ppJxZo3608=;
-        b=lp5VBBWkFeiyeLHXbFMLHxIgQPWdyvIbt3dQIwUt9c8uFPwz+IrfcGPmVoYjN+nhL2
-         IXPghsmlO7r72mhRBC5ktRalebTwS9luCPCtI/slO6vetYi4k1699uOx13DUTc3I6tvw
-         Fw5zgCep/l0wo0FRNJ/JNClsoRWUoygeY1hZQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7uycaSN9iJurwFdQhz5RtglUFVEwCOI11ppJxZo3608=;
-        b=EnAHtIdq+vs2zAsWZrW/Shs3kbrcXSRNwzuBqAxdqVAdhfS/h8tMfYNtNiLr8yKVnY
-         v13JOGY+9O1lpikmrxPIly7wxiSQfM47O19YhKm0a+ZxTbkKTTrC83H2moUdLzz7fnJw
-         wNtdNvDZySFQFiNOXuiurlIe08YFWf9uiXApbydumr/uUvEpOoSEeUXtOBWb2vSxtd5R
-         FS26/LPcOji8nEFtZ9+eYk5hdkPhOvSwlYap3alKLuQ/mh1Eg45cljxhk8ZfkyhVhciw
-         0u115JbFltZqRqfcPusceCzT+Kl87qw4f4QbO+X5SD4B7+dIBGTsCv6w7qrifSliX6LS
-         tVyA==
-X-Gm-Message-State: AJIora/E7Q2xJqrQBk2t6SgKlFUMUEkf7d/rn7kdN9P80fEFflReQoxY
-        /0rXcP28mvLxwVy/ztdgMKnTnDJxMK06+JRNCrgHR+maloI=
-X-Google-Smtp-Source: AGRyM1vJezawLBpRfzaRxzuh1/FQUhahxawJvf0BNgHsS01ToALH1YZ+PHNDuR5+UilQehEhOeyv7ZocgsRIldm4/oY=
-X-Received: by 2002:a17:907:96a8:b0:711:56b8:f72b with SMTP id
- hd40-20020a17090796a800b0071156b8f72bmr8887942ejc.152.1655461936837; Fri, 17
- Jun 2022 03:32:16 -0700 (PDT)
+        Fri, 17 Jun 2022 06:32:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992A2F0A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:32:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D2A581FDB4;
+        Fri, 17 Jun 2022 10:32:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655461951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vfGVG7l4qDZVfaHii8+lmDAoiErziAk9Hp+LpSYiOKQ=;
+        b=m1mPYTztGK2yaKiFHrZlS2F9egHmTMmXingjMgcKW/mD5XN4rrspB+fzObw3suKioAUR4/
+        YbhWVotHwIIw+04620dLcE8tB6YsNNNBOngCTW5L1+EU4JcNpVQluB16LIzg9WRQh8BpJs
+        p2/q54VKDzu2nFBVCT7jwgN/1gg1XC0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BB881348E;
+        Fri, 17 Jun 2022 10:32:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z1I9JD9YrGKsSwAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 17 Jun 2022 10:32:31 +0000
+Message-ID: <c82cd25e-8039-9f12-eb83-b40ddbea78a7@suse.com>
+Date:   Fri, 17 Jun 2022 12:32:31 +0200
 MIME-Version: 1.0
-References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-4-xji@analogixsemi.com>
- <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com>
- <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
- <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
- <20220425091419.GA967110@anxtwsw-Precision-3640-Tower> <CAG3jFyvTim7P_y2G1Br5j3Pwz4KzvRjWgci_qQ3m_YW=3Bog8A@mail.gmail.com>
- <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
- <CAKMK7uHFGsPMZf2SUF4HDXo3XuOLjP3-DLfyp=gB2qpKR964Eg@mail.gmail.com>
- <20220523031324.GA3738288@anxtwsw-Precision-3640-Tower> <CAGXv+5EHghwSV+9Www9RvG74PkC7=AQuwn6sVG=cvCni-iwCyQ@mail.gmail.com>
- <CAG3jFysJLoQ2DMYw0oOfbQM3ifBmAhNLMxjPDEt12jq8sKCcSg@mail.gmail.com>
-In-Reply-To: <CAG3jFysJLoQ2DMYw0oOfbQM3ifBmAhNLMxjPDEt12jq8sKCcSg@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 17 Jun 2022 18:32:05 +0800
-Message-ID: <CAGXv+5EEB1-jUgUo3HGTu9JgeD46Nuu1PuwO9PYfOKeR3csBbw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Xin Ji <xji@analogixsemi.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        bliang@analogixsemi.com,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] x86/xen: Remove undefined behavior in setup_features()
+Content-Language: en-US
+To:     Julien Grall <julien@xen.org>, xen-devel@lists.xenproject.org
+Cc:     sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
+        linux-kernel@vger.kernel.org, Julien Grall <jgrall@amazon.com>
+References: <20220617103037.57828-1-julien@xen.org>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220617103037.57828-1-julien@xen.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------KRKdfK0u9bxFqfjsHauZWlBV"
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,126 +65,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------KRKdfK0u9bxFqfjsHauZWlBV
+Content-Type: multipart/mixed; boundary="------------MwfX8tx192BFjafLict0kdja";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Julien Grall <julien@xen.org>, xen-devel@lists.xenproject.org
+Cc: sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
+ linux-kernel@vger.kernel.org, Julien Grall <jgrall@amazon.com>
+Message-ID: <c82cd25e-8039-9f12-eb83-b40ddbea78a7@suse.com>
+Subject: Re: [PATCH] x86/xen: Remove undefined behavior in setup_features()
+References: <20220617103037.57828-1-julien@xen.org>
+In-Reply-To: <20220617103037.57828-1-julien@xen.org>
 
-On Mon, May 23, 2022 at 4:37 PM Robert Foss <robert.foss@linaro.org> wrote:
->
-> On Mon, 23 May 2022 at 09:18, Chen-Yu Tsai <wenst@chromium.org> wrote:
-> >
-> > On Mon, May 23, 2022 at 11:13 AM Xin Ji <xji@analogixsemi.com> wrote:
-> > >
-> > > On Sat, May 21, 2022 at 06:28:42PM +0200, Daniel Vetter wrote:
-> > > > On Sat, 21 May 2022 at 18:07, Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > > >
-> > > > > On Tue, 17 May 2022 at 18:09, Robert Foss <robert.foss@linaro.org> wrote:
-> > > > > >
-> > > > > > On Mon, 25 Apr 2022 at 11:14, Xin Ji <xji@analogixsemi.com> wrote:
-> > > > > > >
-> > > > > > > On Mon, Apr 25, 2022 at 04:24:50PM +0800, Chen-Yu Tsai wrote:
-> > > > > > > > On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
-> > > > > > > > > > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
-> > > > > > > > > > >
-> > > > > > > > > > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
-> > > > > > > > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > > > > > > > > > ---
-> > > > > > > > > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
-> > > > > > > > > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > > > > > > > > >
-> > > > > > > > > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > > > > > > > index 376da01243a3..71df977e8f53 100644
-> > > > > > > > > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > > > > > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > > > > > > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
-> > > > > > > > > > >
-> > > > > > > > > > >         anx7625_get_swing_setting(dev, pdata);
-> > > > > > > > > > >
-> > > > > > > > > > > -       pdata->is_dpi = 1; /* default dpi mode */
-> > > > > > > > > > > +       pdata->is_dpi = 0; /* default dsi mode */
-> > > > > > > > > > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-> > > > > > > > > > >         if (!pdata->mipi_host_node) {
-> > > > > > > > > > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-> > > > > > > > > > >                 return -ENODEV;
-> > > > > > > > > > >         }
-> > > > > > > > > > >
-> > > > > > > > > > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> > > > > > > > > > > +       bus_type = 0;
-> > > > > > > > > > >         mipi_lanes = MAX_LANES_SUPPORT;
-> > > > > > > > > > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> > > > > > > > > > >         if (ep0) {
-> > > > > > > > > > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
-> > > > > > > > > > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> > > > > > > > > > >         }
-> > > > > > > > > > >
-> > > > > > > > > > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
-> > > > > > > > > > > -               pdata->is_dpi = 0;
-> > > > > > > > > > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-> > > > > > > > > > > +               pdata->is_dpi = 1;
-> > > > > > > > > > >
-> > > > > > > > > > >         pdata->mipi_lanes = mipi_lanes;
-> > > > > > > > > > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-> > > > > > > > > >
-> > > > > > > > > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> > > > > > > > >
-> > > > > > > > > Acked-by: Robert Foss <robert.foss@linaro.org>
-> > > > > > > >
-> > > > > > > > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > > > > > >
-> > > > > > > > Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
-> > > > > > > > mainline (next-20220422).
-> > > > > > > >
-> > > > > > > > Xin, in the future, please send the whole series to all recipients of
-> > > > > > > > all patches listed by get_maintainers.pl, not just the recipients of
-> > > > > > > > each patch. In the case of this series, they should have been sent
-> > > > > > > > to all of the mailing lists (media, devicetree, dri-devel) so that
-> > > > > > > > everyone has the same, full view of the patches.
-> > > > > > > Hi ChenYu, OK, I'll send to all media, devicetree, dri-devel next time.
-> > > > > > > Thanks,
-> > > > > > > Xin
-> > > > > > > >
-> > > > > > > > ChenYu
-> > > > > >
-> > > > > > Applied 3/4 + 4/4 to drm-misc-next.
-> > > > >
-> > > > > This patch doesn't even compile. Can you pls fix this up asap? Also
-> > > > > pls compile-test before pushing ...
-> > > >
-> > > > Marek says the prerequisite landed through linux-media, and that's why
-> > > > it compilers on linux-next but not in drm-misc-next.
-> > > >
-> > > > Don't do that.
-> > > >
-> > > > Instead:
-> > > > - merge all patches through one branch, with the foreign patches acked
-> > > > for that merge patch
-> > > > - wait until you can backmerge all the dependencies
-> > > > - do a topic branch
-> > > >
-> > > > This probably needs to be reverted here and instead merged through
-> > > > linux-media. Or you wait until -rc1 and then apply it to
-> > > > drm-misc-next.
-> > > > -Daniel
-> > > Hi Daniel, I use git send-email to upstream patch and automatically
-> > > generated reviewer list, so patch 1/4 and 2/4 send to linux-media, and
-> > > these 2 patches already merged in linux-media.
-> >
-> > This is one of the reasons why you should always send the "full" series
-> > to all recipients. That way people, especially maintainers, are more
-> > likely to notice build time cross tree dependencies like this one, and
-> > work towards a common resolution.
->
-> This mistake is mine, and I think the best solution is to revert 3+4 until rc1.
+--------------MwfX8tx192BFjafLict0kdja
+Content-Type: multipart/mixed; boundary="------------0T3UG1Mu2FVW8xe7wk45JqFe"
 
-I think we can reland the patches now?
+--------------0T3UG1Mu2FVW8xe7wk45JqFe
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-ChenYu
+T24gMTcuMDYuMjIgMTI6MzAsIEp1bGllbiBHcmFsbCB3cm90ZToNCj4gRnJvbTogSnVsaWVu
+IEdyYWxsIDxqZ3JhbGxAYW1hem9uLmNvbT4NCj4gDQo+IDEgPDwgMzEgaXMgdW5kZWZpbmVk
+LiBTbyBzd2l0Y2ggdG8gMVUgPDwgMzEuDQo+IA0KPiBGaXhlczogNWVhZDk3Yzg0ZmE3ICgi
+eGVuOiBDb3JlIFhlbiBpbXBsZW1lbnRhdGlvbiIpDQo+IFNpZ25lZC1vZmYtYnk6IEp1bGll
+biBHcmFsbCA8amdyYWxsQGFtYXpvbi5jb20+DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdy
+b3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
+--------------0T3UG1Mu2FVW8xe7wk45JqFe
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> I'll send out the revert patches to the ML right away.
->
->
-> Rob.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
+oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
+kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
+1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
+BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
+N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
+PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
+UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
+vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
++6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
+qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
+tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
+Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
+CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
+RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
+8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
+BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
+SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
+7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
+nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
+AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
+Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
+hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
+w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
+VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
+OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
+/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
+c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
+F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
+k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
+wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
+5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
+TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
+N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
+AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
+0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
+Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
+LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
+we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
+v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
+Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
+534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
+b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
+yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
+suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------0T3UG1Mu2FVW8xe7wk45JqFe--
+
+--------------MwfX8tx192BFjafLict0kdja--
+
+--------------KRKdfK0u9bxFqfjsHauZWlBV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKsWD8FAwAAAAAACgkQsN6d1ii/Ey/0
+HAgAnvuJNuW6p8gwbdOzIOvj6MKEcB+w59Xe+bDbKcv0x6NBNZD9TwtgF+NOPPq2vLPhOn5YQzBN
+JR27N4qKRhxdP5N9nsrSoNnbeHXJKLDzfHHk0emSItvBxmOqyw0e+4E8eAPEFjINQtZt9uHUasrD
+dTTkLN5iGHjrZDvnrtRtd5j/nWzdhM/DuvJutCaD+J4Cg4G4Tt7qUOM0NuISaf1ZT1YbZrYvL2It
+fEAuVZ2t1gO8WBH8gXhUQd8JSLfHb7id8VbVuzRS1jj/+4LgUz0LEzkgPtouYrkk3t/RiVocYyg5
+5H3MQ+JJcjITdbfbwDmHTYQkDq3m0/3hYlWnIVBibQ==
+=6UhH
+-----END PGP SIGNATURE-----
+
+--------------KRKdfK0u9bxFqfjsHauZWlBV--

@@ -2,90 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905BF54F8FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C553F54F904
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382654AbiFQOPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S1382574AbiFQOQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382326AbiFQOPl (ORCPT
+        with ESMTP id S1381599AbiFQOQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:15:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F24151E73
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655475340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=45WsYeBZBgVP+tO+Yp5wRnejBKTYaIp3okpekaDuC30=;
-        b=Yx70f3IZl3hchqt9SNW5eda6c6igfIqTwXKF1IQX8MZJeWwbTSbufptwtKQNY/xL/jb+Co
-        F1U4ccllBU/kTN5QyJwv79G0KH6FVQgesX1pCP+cs0+vMrZGVsEWhV/R8B/0iuTduuJSuU
-        ViyIcMWbjiOfDPM0LQ7kcuh3SNVwYO4=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-223-NV2UimHgORWbuEIH8iWVDQ-1; Fri, 17 Jun 2022 10:15:38 -0400
-X-MC-Unique: NV2UimHgORWbuEIH8iWVDQ-1
-Received: by mail-io1-f72.google.com with SMTP id e195-20020a6bb5cc000000b0066cc9ece80fso2593266iof.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:15:38 -0700 (PDT)
+        Fri, 17 Jun 2022 10:16:07 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053EE427F5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:16:03 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id l24-20020a0568301d7800b0060c1ebc6438so3197401oti.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A4LYt6kN9SB/9kBxCNUpMPu2fI4vD/suYfh2TVYyskI=;
+        b=cOJ/J/xt3xT5Nm6zugfLaV8uiuwc34n1s20n+kUDtU+w3RRB4TXnZJVtuSWHAq+akG
+         U/8wufHV+Cph3ouPDgeVM6W+iYq4WwFTW8ynlUS8wujYfnYhIIzuSwZOl0693+olIcKu
+         rDJ80nzguFhLGxbe6rkBjhRiif4ADz241ZMd4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=45WsYeBZBgVP+tO+Yp5wRnejBKTYaIp3okpekaDuC30=;
-        b=thpcAzz+PFkRydgqjqfttmlELRKMIgZyxMcPHdqCBH5Yp6ncrLRJ6X7smcC/ezTlds
-         yU9Cg+YTsIieZe9Z4PTc0GR64M35l5d9UZeTnEaXMCOb5fdHcxVH1qoOm1LntJ0TeoZk
-         JmVRPLAI6k+99AK2Bxgma6V4UjA22iLVFG0Y+OaH1YbXc+PEE4bUV7QcCokHuwxmN8Pz
-         2vXVrSPlwekjG5oU8AmgZMsr0tKouzLb6ZXa3Xt6A43ERMU3Xml+t5m3yIzSlvabbbmY
-         5p+/VBT8OXX0+VPxFXshbWgUNo59O2qoArSv8nBayA+ujbmGY0pAGOSpypN8u0SLVmzc
-         679g==
-X-Gm-Message-State: AJIora/7kJ65UH0fOV9ap0xX8EVlq5AUZuvJbcq+5rSKDS1FhWZEDORH
-        tXzNQs/0Z091w0Mfqjyo/W4ukJjflNDPOwzp61FADJKt9du8C3/sU6NjjEw/hadH65zpcGSrZv5
-        1ks80tkfdexARtiY7VEqNGM3I
-X-Received: by 2002:a92:da4c:0:b0:2d5:4942:151c with SMTP id p12-20020a92da4c000000b002d54942151cmr5595274ilq.54.1655475337977;
-        Fri, 17 Jun 2022 07:15:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t5+pBPw8qcp/W9vVk3R5y0UpR770R+5zi051+5lmo73AcdTcYx/JcpFCItROcYKy2t53b2mA==
-X-Received: by 2002:a92:da4c:0:b0:2d5:4942:151c with SMTP id p12-20020a92da4c000000b002d54942151cmr5595259ilq.54.1655475337682;
-        Fri, 17 Jun 2022 07:15:37 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id h22-20020a02c736000000b0033792143bf5sm649986jao.67.2022.06.17.07.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 07:15:36 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 10:15:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        catalin.marinas@arm.com, will@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not
- present
-Message-ID: <YqyMhmAjrQ4C+EyA@xz-m1.local>
-References: <20220616210518.125287-1-mike.kravetz@oracle.com>
- <20220616210518.125287-2-mike.kravetz@oracle.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A4LYt6kN9SB/9kBxCNUpMPu2fI4vD/suYfh2TVYyskI=;
+        b=MTUvahwUyIbYU9s3R9jbVktvzpb0+YfNvxovl3cQ09JE7fGwQBiBPCpkZBv9gWu/zF
+         8xcc/Fi/uWyageuJcFQpKwSnaE/wq/kD2uCQUIsA1Sj34U34swWxeEmys9KofANf6q5O
+         ejrpHF8J0TCYjvQ4Z5hQl/Y5VeeNh82vpBaQxNc2f1OiICj2ZNnIFAls/HibdxkhPlk/
+         /fCBj1uzBdEtrceji7fO4eztPlFLsmajW6r4aFYI4HAZWSzJK+fm+K3Q3H05CPiARDax
+         ILdmG23xt+7EMuc2Mbq7hml2yZZB5yrl0e08fupZDvs8VG9dMxF4d3z63AjU8/48Rj9D
+         4GRw==
+X-Gm-Message-State: AJIora8bDefLom7WIqbijNtwZj+ULEnyYOKLW/fPKv6FkbJMhFD1HRXz
+        T4/nFMtHSrBBMmSQRi5IpPgdQkBLxeIKvBk/
+X-Google-Smtp-Source: AGRyM1sECwiUWC/4H/Zknz+p4eM397O0KiWbriZCrE4TLCoyXP49CMXCeiyf544+ZaMJkKHh7oNLlA==
+X-Received: by 2002:a05:6830:2785:b0:60c:2d35:edd with SMTP id x5-20020a056830278500b0060c2d350eddmr3957773otu.280.1655475362050;
+        Fri, 17 Jun 2022 07:16:02 -0700 (PDT)
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com. [209.85.167.179])
+        by smtp.gmail.com with ESMTPSA id i7-20020a056870890700b000f32fb9d2bfsm2658326oao.5.2022.06.17.07.16.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 07:16:01 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id w16so5557766oie.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:16:01 -0700 (PDT)
+X-Received: by 2002:a05:6808:1896:b0:32f:6cec:af9f with SMTP id
+ bi22-20020a056808189600b0032f6cecaf9fmr5132064oib.223.1655475360951; Fri, 17
+ Jun 2022 07:16:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220616210518.125287-2-mike.kravetz@oracle.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220617103645.71560-1-ribalda@chromium.org> <20220617103645.71560-4-ribalda@chromium.org>
+ <YqyGfFK3UXhrBLwK@pendragon.ideasonboard.com> <CANiDSCvOD08QD-2DKmrr2nNF+uC685tcnjBbMg0gGQc5ktR7qg@mail.gmail.com>
+ <YqyLfw5Pa5ZMdYX0@pendragon.ideasonboard.com>
+In-Reply-To: <YqyLfw5Pa5ZMdYX0@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 17 Jun 2022 16:15:49 +0200
+X-Gmail-Original-Message-ID: <CANiDSCuh4TmD_MVvTyoadi40jhdvsMKNLpdaPmGarfS=PK4xkw@mail.gmail.com>
+Message-ID: <CANiDSCuh4TmD_MVvTyoadi40jhdvsMKNLpdaPmGarfS=PK4xkw@mail.gmail.com>
+Subject: Re: [PATCH v7 3/8] media: uvcvideo: Support minimum for V4L2_CTRL_TYPE_MENU
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,54 +76,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mike,
+Hi Laurent
 
-On Thu, Jun 16, 2022 at 02:05:15PM -0700, Mike Kravetz wrote:
-> @@ -6877,6 +6896,39 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
->  	return (pte_t *)pmd;
->  }
->  
-> +/*
-> + * Return a mask that can be used to update an address to the last huge
-> + * page in a page table page mapping size.  Used to skip non-present
-> + * page table entries when linearly scanning address ranges.  Architectures
-> + * with unique huge page to page table relationships can define their own
-> + * version of this routine.
-> + */
-> +unsigned long hugetlb_mask_last_page(struct hstate *h)
-> +{
-> +	unsigned long hp_size = huge_page_size(h);
-> +
-> +	switch (hp_size) {
-> +	case P4D_SIZE:
-> +		return PGDIR_SIZE - P4D_SIZE;
-> +	case PUD_SIZE:
-> +		return P4D_SIZE - PUD_SIZE;
-> +	case PMD_SIZE:
-> +		return PUD_SIZE - PMD_SIZE;
-> +	default:
+On Fri, 17 Jun 2022 at 16:11, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo,
+>
+> On Fri, Jun 17, 2022 at 03:55:52PM +0200, Ricardo Ribalda wrote:
+> > On Fri, 17 Jun 2022 at 15:50, Laurent Pinchart wrote:
+> > > On Fri, Jun 17, 2022 at 12:36:40PM +0200, Ricardo Ribalda wrote:
+> > > > Currently all mappings of type V4L2_CTRL_TYPE_MENU, have a minimum of 0,
+> > > > but there are some controls (limited powerline), that start with a value
+> > > > different than 0.
+> > > >
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > ---
+> > > >  drivers/media/usb/uvc/uvc_ctrl.c | 5 +++--
+> > > >  drivers/media/usb/uvc/uvcvideo.h | 1 +
+> > > >  2 files changed, 4 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > index 092decfdaa62..3b20b23abd1e 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > @@ -1144,7 +1144,7 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+> > > >
+> > > >       switch (mapping->v4l2_type) {
+> > > >       case V4L2_CTRL_TYPE_MENU:
+> > > > -             v4l2_ctrl->minimum = 0;
+> > > > +             v4l2_ctrl->minimum = mapping->menu_min;
+> > > >               v4l2_ctrl->maximum = mapping->menu_count - 1;
+> > > >               v4l2_ctrl->step = 1;
+> > > >
+> > > > @@ -1264,7 +1264,8 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+> > > >               goto done;
+> > > >       }
+> > > >
+> > > > -     if (query_menu->index >= mapping->menu_count) {
+> > > > +     if (query_menu->index < mapping->menu_min ||
+> > > > +         query_menu->index >= mapping->menu_count) {
+> > > >               ret = -EINVAL;
+> > > >               goto done;
+> > > >       }
+> > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > > > index fff5c5c99a3d..6ceb7f7b964d 100644
+> > > > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > > > @@ -254,6 +254,7 @@ struct uvc_control_mapping {
+> > > >       u32 data_type;
+> > > >
+> > > >       const struct uvc_menu_info *menu_info;
+> > > > +     u32 menu_min;
+> > > >       u32 menu_count;
+> > >
+> > > That's a bit of a stop-gap measure, could we turn it into a bitmask
+> > > instead ?
+> >
+> > Unfortunately that is uAPI :(
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/v4l2-controls.h#n101
+> >
+> > We have to keep the control type and its values.
+>
+> Sure, I didn't mean changing that, but replacing menu_min and menu_count
+> in uvc_control_mapping with a menu_mask that stores a bitmask of all
+> supported values. This will allow skipping the first value in the power
+> line frequency control case, but will also support skipping other menu
+> entries for other controls in the future.
 
-Should we add a WARN_ON_ONCE() if it should never trigger?
+Ahh gotcha. Will implement that in the next version.
 
-> +		break; /* Should never happen */
-> +	}
-> +
-> +	return ~(0UL);
-> +}
-> +
-> +#else
-> +
-> +/* See description above.  Architectures can provide their own version. */
-> +__weak unsigned long hugetlb_mask_last_page(struct hstate *h)
-> +{
-> +	return ~(0UL);
+Thanks!
 
-I'm wondering whether it's better to return 0 rather than ~0 by default.
-Could an arch with !CONFIG_ARCH_WANT_GENERAL_HUGETLB wrongly skip some
-valid address ranges with ~0, or perhaps I misread?
+>
+> > > >
+> > > >       u32 master_id;
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
-Thanks,
+
 
 -- 
-Peter Xu
-
+Ricardo Ribalda

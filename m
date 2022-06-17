@@ -2,87 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78F754F2E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D4354F2EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380999AbiFQI1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S1381004AbiFQI1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381000AbiFQI1E (ORCPT
+        with ESMTP id S1380997AbiFQI1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:27:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921BA68991;
-        Fri, 17 Jun 2022 01:27:02 -0700 (PDT)
-X-UUID: 7ba1a5c9b1114ed5baac875b53b3956a-20220617
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:515ee71a-d3e2-4642-9db6-0cba937dff52,OB:20,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:515ee71a-d3e2-4642-9db6-0cba937dff52,OB:20,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:dfc29ff6-e099-41ba-a32c-13b8bfe63214,C
-        OID:d65a67a1ec62,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7ba1a5c9b1114ed5baac875b53b3956a-20220617
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1664422747; Fri, 17 Jun 2022 16:26:58 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 17 Jun 2022 16:26:56 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Jun 2022 16:26:56 +0800
-Message-ID: <9d924423c2b7ded984e2daf42a3667332dabbee2.camel@mediatek.com>
-Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "airlied@linux.ie" <airlied@linux.ie>
-CC:     "msp@baylibre.com" <msp@baylibre.com>,
-        "granquet@baylibre.com" <granquet@baylibre.com>,
-        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
-        <jitao.shi@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 17 Jun 2022 16:26:55 +0800
-In-Reply-To: <d5416a2f2a655f6574b17597fdc22615fe2fc22a.camel@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
-         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-         <d5416a2f2a655f6574b17597fdc22615fe2fc22a.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 17 Jun 2022 04:27:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF2C6898D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655454430; x=1686990430;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=PKJdeGf0KubUtvcKKxxNNvdxS3ItedrQLEGko5ScSjc=;
+  b=Pjm2VvRdX/UhF9n+IY9bM4AOzMdivQejoc7gSJyPM+LYyLlNZqRXIFIi
+   ryLfsmOI4UtbrKRlkfOdE2LIzIpTFC4tiZ+OwDPU6Dp1VFyMVqnH4Zg+H
+   oKN00TaZH1Vo0bwbKXirAWAdjTC1xP3PcgCP3FNL9oGhDcFWFGthzopbG
+   cuuLvnb/TaVA1NYkz6TrpKXkbwjoS666fF68pF6X2ioGLnIyQfnCa2cW4
+   rlBHUN2f12tVFSc4t7ch7L9SG7Et7X/J3X3ju3DZ9oMtHsuqOyDKtD6Cx
+   i6NEzBpd4B3s6R84afukDkPdb1nA8MdBEiz4zg9Rd83GY8+VM8IlbNu/5
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="100481744"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jun 2022 01:27:09 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Jun 2022 01:27:09 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Jun 2022 01:27:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DVtuMy/zIWTHCtd77pIpc8L5eqOMG6ePRHDOuF2uh/X0GALtqwAIL1rbXby737bj1P8FLm+b1szFEfGZzafXMC0+6tMy0384hmV6PVNF3vkgr7FbmiCMAxNAg0cWLI8ESqfiS1OAZrHaupJMe+ABaz9Ox9Lj/45dliUfczushPBVhz1DxTSLC9C5nHh1OV9YR6hNrdK1iHeeogW1V0RjaSnfIMdKCLG2mB5eebzf1FfB6DMxsioT665ZC2L4aC64KyEprc4LSJzuQ59nsNm9Sal3FgDs3/uB42AX4AU0Kc2YIUg30+dTwLgOkhOegXsbaBu80ZxaceH0Aj1qThdneg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PKJdeGf0KubUtvcKKxxNNvdxS3ItedrQLEGko5ScSjc=;
+ b=JdFDH7Nr5osULmE7+rekHoZ9JTgxtc20nzvYRQN3MofXEWZXeEJe8zQjlFJzyHV0UieVsE9fAcvm7j+DtZsM3/y2tpqgYvzf1DZujOYImKxPg5iKy0G/yKsWROzY97Mtqt6+qXbn1R8rv+XAiCkgLOaOm4AXfYzZ2vDj3lSNvS31+e2d3ezUrg1FJ2L3uCin6gxsy5COQxO5T4wBJ2z+yTtTELGV6mp/FronMFZoM2OE+yLNZBdlHy2DPuvNhLM7K0dB28Rjh7QJcC5UygRU+ELeobpErgnB1Pyg/FW/NLL1vwbCpYWB+0DA69auXkIsl26afEwonB2bAdEi51BS+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PKJdeGf0KubUtvcKKxxNNvdxS3ItedrQLEGko5ScSjc=;
+ b=tCWLjTm2YkT4F7/MeexKuV8UKx3hsAGui0rCXlXnDhDuczXvGJRNGywPrSarA7sBqIpAGiy4HISsmeo6xCueOzTqLvUXlMhWQDgIVxb1gATxFE4w6XX3NKEWZ850jwDXw8TxzEtlzemAtNDcqHy7T+ra3B+lcM7xXQSj7OzALpw=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by BYAPR11MB3798.namprd11.prod.outlook.com (2603:10b6:a03:b3::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Fri, 17 Jun
+ 2022 08:27:03 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5332.022; Fri, 17 Jun 2022
+ 08:27:03 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <windhl@126.com>, <christophe.leroy@csgroup.eu>,
+        <Conor.Dooley@microchip.com>
+CC:     <oss@buserror.net>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in sgy_cst1000
+Thread-Topic: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
+ sgy_cst1000
+Thread-Index: AQHYgiQFJo0WRKhuOk+qhad+8D5f0Q==
+Date:   Fri, 17 Jun 2022 08:27:03 +0000
+Message-ID: <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
+References: <20220617060827.4004795-1-windhl@126.com>
+ <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
+ <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
+ <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
+ <64ac3dc9.5bd1.18170bcb6a6.Coremail.windhl@126.com>
+In-Reply-To: <64ac3dc9.5bd1.18170bcb6a6.Coremail.windhl@126.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0e51b52b-f256-4783-7640-08da503b2856
+x-ms-traffictypediagnostic: BYAPR11MB3798:EE_
+x-microsoft-antispam-prvs: <BYAPR11MB37987B546087EE87C485BB1C98AF9@BYAPR11MB3798.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: b4S3wziIEA1EyFNezMDThvV63qxl6lvP68vsC02OXUlPC7yvCIu77P88/qiXUPxoj7jmHSsAzAdjPg2kCtL/M5mkq+1J6j/VGj9TYmcykbePzvkXrpZCPSC9uVJFRr4dnU6MQOle1W5/Vdg6pY6AA5iMJ1auUrtoD6QNy4ColwLCQ1EUVetFf5WbqqY6JZQhUSk7fYT3Y2etsDuTURnhJeNOGM96uFOy7HwAmxqCOdHJ6xCNpNPrE/wfPcPKA51RKVB+QEA32gERFLaF7m2CEYgFfSfeD3S0tKhki44dYjbIPQ3iB5cTLmoPGycdsNPj2AMeuGwoNOYS+ri2/0VdV2DpRE11hrWJAUbWxffmzEdUMEFmXoZvRv6lm/oJH+9nC1xXaFEpW34aQXgeFYGGr/fxzMsI4udsNFYKK37fOtvJyruzCPlTasgHEnuAYRFA/zxCiomhQ+G/GX/Ag5L4/T4xniU0EeKWSEkWPp9lJPwSJem59yLUNBXPuHYKEj88gw/tUM8kjCqc71qMzlDMTuWFQFBCgNiLPuwwG8wNh++g4WXCpLipnWQgUj9zYMqW1bTueuYcDiNBuse6L0DudyFosWV1SLVLZsPp47lusYrthH9+G29H/ceLbtQRE/TpGM6Nm4s3GHGjX4Nrcx6jXHeT5hoiT8XFwYyTcqgGVPPzVKDDcOjA2bnlQHZY2jT381Jx6gh9btD864YnA2SreL5xmtTIbuoh/22IfIS5ny7wlria86fSPVCBuCpx9DcxSPanvZ0V+bn2n62aWkA+vSbn3Q4QFWLKKf0snBECVDz1VU6Vt5MeAsxOX944WEzeTtWZ/Z8SN169jsPmWiaBayCVzc+BmMeNN+8h7rXrh6c=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(26005)(2616005)(186003)(83380400001)(6512007)(31696002)(86362001)(53546011)(6506007)(2906002)(38100700002)(71200400001)(110136005)(316002)(122000001)(36756003)(66556008)(38070700005)(54906003)(8676002)(76116006)(5660300002)(6486002)(66446008)(91956017)(31686004)(64756008)(66476007)(4326008)(8936002)(66946007)(966005)(498600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Wlk0dEM1Q3NXUHpiZmFVc2ZMQkw0Y1lHdE5oQkdoell5WEVvakpOS0daV0w2?=
+ =?utf-8?B?L1VGbzIwL24vV0JzdDRZeGFmeHZCSm9lQ1pFUDhVRUFKc3BURGJGenF1S0xN?=
+ =?utf-8?B?R2FEM0VuMm5WbzVLcDBRdTRlOE5qa2E5cTBhL2R3NU50MVUrWVhMRXQ3RkxX?=
+ =?utf-8?B?dEE2OW5pRGRETE1CenBzR3dKSHZDamdVWTBaZnMydlY1Q3lZbEtNTmRES291?=
+ =?utf-8?B?T2J0R2lVM3hnRXE2Rk5PVkNlcFRhU1lUalVrR0F4K0ErSjk1U2JhcVh1enlV?=
+ =?utf-8?B?ampUbWNYb0ZFUWxiMnppVkxiZTBXU01zL3hFWlNWK2FZbmtpREpvWllHM2o0?=
+ =?utf-8?B?Q3dWUHgvNE41WGZWTG1ta01rQW4yYm1BTW9RRVp3NXFOS202WG4vbW04RUlB?=
+ =?utf-8?B?d2RsSHVDRDJWb3kxVjE3dUt0OWVuM0VWNFhiRXdqOFlMUUYwbWE0Wkd3WFgx?=
+ =?utf-8?B?YzBMdUtvRXJzOHl0NmxlYXN6UkJXM0ZLNjB1SmUyTTU0bExrdHJzNEI4V3Fq?=
+ =?utf-8?B?QWFRZHJVQ294N1B4MEJuWFprWEtma25GQkxWQ3BVcEV3Zm1OV2QvbVFqcis3?=
+ =?utf-8?B?MGVHWGw2RittZkJNd1NaelgwdTI3UzBpMG1FSWNRbVdJNGFUdUIxQUhQYU1z?=
+ =?utf-8?B?NVcrcHZQTFZ0cEFjYjE2MmRoemNSbFNmQkt3eTNHQ1ovbkhNUGYrOStzcVk0?=
+ =?utf-8?B?aXRYbDgrOVdYNFFKYm9ndUtGdWVjekhiQU9SbElYUzVZR0hsTldUZWxYYjBs?=
+ =?utf-8?B?dmQwbVFuQ1ZjcGdMdDl2S0xwcytuTGhSSEFhSkJZSUE5SkRlY3VlbE5BbmJL?=
+ =?utf-8?B?cGpIWjhkbHpYRVFUaW5yRXJPQllvakUzdEZBYUFxRjlmRFlkWlB3cFYxVUh2?=
+ =?utf-8?B?NC9qNnNFNk52WXkxcDdZZHg3dXBSdFQ2WktRN3p4WCtTeVdaWm11d3c5SzhE?=
+ =?utf-8?B?YU5BWmNsTk9GeEM4VHdicjJjSlg0WnVLaWhZRzZBZm0zSG1uTS92UzZFaTE3?=
+ =?utf-8?B?MUVLbXNrWHlOd0xZc0dzYUE4dWw1UXNtOHdpSDN2QmJ5amo0VVJKVVZJWXVD?=
+ =?utf-8?B?cHIzUlAyQnpxTm1Fb2c2Q0t6dUNYQWV1aVdHMFFrK2VhWXhZb3ZDWThnRUFp?=
+ =?utf-8?B?b3B4MEZmcmVEM29jYnRVSkc0NWFwUUJEejdFdEt3MmVjR3k3czZVaXgxdlo3?=
+ =?utf-8?B?MlpIakRyRyttNnBiSXFDSHhoWWNlU0M2cG04a0I3WVRZbnF1UUN4dWxoMWt0?=
+ =?utf-8?B?aWlRVGFEMkhQZ3lZZ0JQMEFQZzA1T2lpSm9MbERyaFBPYlpWT2ZiRUl5c3ZK?=
+ =?utf-8?B?ZWxxaThFenNmL3ZMSmgwNXRteEc1YXBTMGltc1FBUzcrSy82dWdLZG8wK05G?=
+ =?utf-8?B?ZGRFQVVhcGNlYnhJOEdBbEFJMk5aK2g3OVRRWmRtV3FidzRZUC9xRmtwSlBX?=
+ =?utf-8?B?dnFoRkx5U3RhVHRPRE5KR2czM3Zvb3N4Qml3RVpSSjh6a0ZJNVJNZ1dMSHBN?=
+ =?utf-8?B?V0c5SVJTY0w4U3RHeUpTY2kySi84RWFxQjYrbitQUGp5cjZQRzN0ZisySWFI?=
+ =?utf-8?B?WTY4MGt1amRpV1FGbDgzK1VZaXF4a2lGeEdDd0g5MVg1blRrMUsrSCtoTmZI?=
+ =?utf-8?B?cUlLOEw4SC95TUYvYUJuVmRWRmE0ZHd1a1lINDUzRUQ0dk1wQTc2TTRGbyt1?=
+ =?utf-8?B?eGxtVllxR1lUTlcxajBPSkdRdExCS2NUN1FyckJmQ3RBdk4vK0hGV0hMQVcy?=
+ =?utf-8?B?VktYbHR3akUwQmlXWXNQSXZESHJ2VWZYMFVoMWV4WE1oSXA1L1BTWC8rdzc2?=
+ =?utf-8?B?NWZQQWpsWGdvRlR5Yng5MnBhY1VWSkY5YWJHSVlvOWN4L0NRWkw4d2FzWkl2?=
+ =?utf-8?B?cWxDa3VENFZGSFRrODBKYmEwYXhqN3JYT1hicWZaL25jWEVvQ1VReUl5UzJr?=
+ =?utf-8?B?N1piK0twbGlsdWdTS28vMDBtMGwwUmExRG4xMGc1dVJQblFTMzRHWG0yUnVx?=
+ =?utf-8?B?YXd3N0ZVYWU3bE5ReDRWZHZqUC9zYU1XU0JMZ0JvRzBDYnZod3grcm9JczlD?=
+ =?utf-8?B?Q0VLRStxa1hPSG54dHRxVUk5ZmMwb0N3ZFJPcEQ0ZlZxMVAvTHVHbjY1TCts?=
+ =?utf-8?B?UUhQRW9rYk4rNHpmUEtDM1hEejJUOGd4VS9WOW9ZdlpNWnpkOW5VV1BGaEZV?=
+ =?utf-8?B?bTdGMTdmOU9oYnAzZmUwRUU1UWV0U0psdE5Cc2RLcDJIVnpqaFB6L2pZNXhK?=
+ =?utf-8?B?QVRCc0JvUG5BU3lzUzVPY2swZUlRSmdhZDduVDlxR1lqTVBuMnlCNVdWdUNJ?=
+ =?utf-8?B?bUNnTWxJVG12MDRBNEtoeExWQnBZNzZHSXZqRmozS3UzRUlRckRabEJ4cW1D?=
+ =?utf-8?Q?0d2DHqpSA1W3KlMo=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7D7577FC5A43614BAA8321E09AEB62A0@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e51b52b-f256-4783-7640-08da503b2856
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 08:27:03.6237
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nEn23KLoFbv0fO9cXFKov4F0wA161yMogMNw5r7InMW1otvKNWnZiLEf/HmGcboN0Lvn/BLrdnZ0ylZ4xhMB9kkybJigkv7kt1v9j/5hwGk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3798
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,322 +166,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-15 at 10:58 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
-> 
-> On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a embedded displayport driver for the MediaTek
-> > mt8195
-> > SoC.
-> > 
-> > It supports the MT8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jitao shi <jitao.shi@mediatek.com>
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> 
-> [snip]
-> 
-> > +
-> > +static int mtk_dp_train_flow(struct mtk_dp *mtk_dp, u8
-> > target_link_rate,
-> > +			     u8 target_lane_count)
-> > +{
-> > +	u8 lane_adjust[2] = {};
-> > +	bool pass_tps1 = false;
-> > +	bool pass_tps2_3 = false;
-> > +	int train_retries;
-> > +	int status_control;
-> > +	int iteration_count;
-> > +	int ret;
-> > +	u8 prev_lane_adjust;
-> > +
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LINK_BW_SET,
-> > target_link_rate);
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
-> > +			   target_lane_count |
-> > DP_LANE_COUNT_ENHANCED_FRAME_EN);
-> > +
-> > +	if (mtk_dp->train_info.sink_ssc)
-> > +		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_DOWNSPREAD_CTRL,
-> > +				   DP_SPREAD_AMP_0_5);
-> > +
-> > +	train_retries = 0;
-> > +	status_control = 0;
-> > +	iteration_count = 1;
-> > +	prev_lane_adjust = 0xFF;
-> > +
-> > +	mtk_dp_set_lanes(mtk_dp, target_lane_count / 2);
-> > +	ret = mtk_dp_phy_configure(mtk_dp, target_link_rate,
-> > target_lane_count);
-> > +	if (ret)
-> > +		return -EINVAL;
-> > +
-> > +	dev_dbg(mtk_dp->dev,
-> > +		"Link train target_link_rate = 0x%x, target_lane_count
-> > = 0x%x\n",
-> > +		target_link_rate, target_lane_count);
-> > +
-> > +	do {
-> > +		train_retries++;
-> > +		if (!mtk_dp->train_info.cable_plugged_in ||
-> > +		    mtk_dp->train_info.irq_sta.hpd_disconnect) {
-> 
-> In mtk_dp_hpd_isr_handler(), train_info.irq_sta.hpd_disconnect would
-> finally be set to false, so you need not to check it here. So remove
-> it
-> here.
-> 
-
-Hello CK,
-
-ok, I will drop this.
-
-> > +			return -ENODEV;
-> > +		}
-> > +
-> > +		if (mtk_dp->train_state < MTK_DP_TRAIN_STATE_TRAINING)
-> > +			return -EAGAIN;
-> > +
-> > +		if (!pass_tps1) {
-> > +			ret = mtk_dp_train_tps_1(mtk_dp,
-> > target_lane_count,
-> > +						 &iteration_count,
-> > lane_adjust,
-> > +						 &status_control,
-> > +						 &prev_lane_adjust);
-> > +			if (!ret) {
-> > +				pass_tps1 = true;
-> > +				train_retries = 0;
-> > +			} else if (ret == -EINVAL) {
-> > +				break;
-> > +			}
-> > +		} else {
-> > +			ret = mtk_dp_train_tps_2_3(mtk_dp,
-> > target_link_rate,
-> > +						   target_lane_count,
-> > +						   &iteration_count,
-> > +						   lane_adjust,
-> > &status_control,
-> > +						   &prev_lane_adjust);
-> > +			if (!ret) {
-> > +				pass_tps2_3 = true;
-> > +				break;
-> > +			} else if (ret == -EINVAL) {
-> > +				break;
-> > +			}
-> > +		}
-> > +
-> > +		drm_dp_dpcd_read(&mtk_dp->aux,
-> > DP_ADJUST_REQUEST_LANE0_1,
-> > +				 lane_adjust, sizeof(lane_adjust));
-> > +		mtk_dp_train_update_swing_pre(mtk_dp,
-> > target_lane_count,
-> > +					      lane_adjust);
-> > +	} while (train_retries < MTK_DP_TRAIN_RETRY_LIMIT &&
-> > +		 iteration_count < MTK_DP_TRAIN_MAX_ITERATIONS);
-> > +
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_TRAINING_PATTERN_SET,
-> > +			   DP_TRAINING_PATTERN_DISABLE);
-> > +	ret = mtk_dp_train_set_pattern(mtk_dp, 0);
-> > +	if (ret)
-> > +		return -EINVAL;
-> > +
-> > +	if (!pass_tps2_3)
-> > +		return -ETIMEDOUT;
-> > +
-> > +	mtk_dp->train_info.link_rate = target_link_rate;
-> > +	mtk_dp->train_info.lane_count = target_lane_count;
-> > +
-> > +	mtk_dp_training_set_scramble(mtk_dp, true);
-> > +
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
-> > +			   target_lane_count |
-> > +				   DP_LANE_COUNT_ENHANCED_FRAME_EN);
-> > +	mtk_dp_set_enhanced_frame_mode(mtk_dp, true);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> 
-> [snip]
-> 
-> > +
-> > +/*
-> > + * We need to handle HPD signal in eDP even though eDP is a always
-> > connected
-> > + * device. Besides connected status, there is another feature for
-> > HPD signal -
-> > + * HPD pulse: it presents an IRQ from sink devices to source
-> > devices
-> > (Refer to
-> > + * 5.1.4 of DP1.4 spec).
-> > + */
-> > +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
-> > +{
-> > +	bool connected;
-> > +	u32 irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
-> > +			 mtk_dp_hwirq_get_clear(mtk_dp);
-> > +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> > +
-> > +	if (irq_status & MTK_DP_HPD_INTERRUPT)
-> > +		train_info->irq_sta.hpd_inerrupt = true;
-> > +	if (irq_status & MTK_DP_HPD_CONNECT)
-> > +		train_info->irq_sta.hpd_connect = true;
-> > +	if (irq_status & MTK_DP_HPD_DISCONNECT)
-> > +		train_info->irq_sta.hpd_disconnect = true;
-> > +
-> 
-> train_info->irq_sta.hpd_connect is used only in this function, so let
-> hpd_connect to be local variable.
-> 
-
-ok
-
-> > +	if (!irq_status)
-> > +		return IRQ_HANDLED;
-> > +
-> > +	connected = mtk_dp_plug_state(mtk_dp);
-> > +	if (connected || !train_info->cable_plugged_in)
-> > +		train_info->irq_sta.hpd_disconnect  = false;
-> > +	else if (!connected || train_info->cable_plugged_in)
-> > +		train_info->irq_sta.hpd_connect = false;
-> > +
-> > +	if (!(train_info->irq_sta.hpd_connect ||
-> > +	      train_info->irq_sta.hpd_disconnect))
-> > +		return IRQ_WAKE_THREAD;
-> > +
-> > +	if (train_info->irq_sta.hpd_connect) {
-> > +		train_info->irq_sta.hpd_connect = false;
-> > +		train_info->cable_plugged_in = true;
-> > +	} else {
-> > +		train_info->irq_sta.hpd_disconnect = false;
-> > +		train_info->cable_plugged_in = false;
-> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
-> > +	}
-> > +	train_info->cable_state_change = true;
-> > +
-> > +	return IRQ_WAKE_THREAD;
-> > +}
-> > +
-> 
-> [snip]
-> 
-> > +
-> > +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
-> > +				   struct drm_dp_aux_msg *msg)
-> > +{
-> > +	struct mtk_dp *mtk_dp;
-> > +	bool is_read;
-> > +	u8 request;
-> > +	size_t accessed_bytes = 0;
-> > +	int ret = 0;
-> > +
-> > +	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-> > +
-> > +	if (!mtk_dp->train_info.cable_plugged_in ||
-> > +	    mtk_dp->train_info.irq_sta.hpd_disconnect) {
-> 
-> In mtk_dp_hpd_isr_handler(), train_info.irq_sta.hpd_disconnect would
-> finally be set to false, so you need not to check it here. So remove
-> it
-> here.
-> 
-
-ok, I will drop this
-
-BRs,
-Bo-Chen
-
-> Regards,
-> CK
-> 
-> > +		ret = -EAGAIN;
-> > +		goto err;
-> > +	}
-> > +
-> > +	switch (msg->request) {
-> > +	case DP_AUX_I2C_MOT:
-> > +	case DP_AUX_I2C_WRITE:
-> > +	case DP_AUX_NATIVE_WRITE:
-> > +	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
-> > +	case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
-> > +		request = msg->request &
-> > ~DP_AUX_I2C_WRITE_STATUS_UPDATE;
-> > +		is_read = false;
-> > +		break;
-> > +	case DP_AUX_I2C_READ:
-> > +	case DP_AUX_NATIVE_READ:
-> > +	case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
-> > +		request = msg->request;
-> > +		is_read = true;
-> > +		break;
-> > +	default:
-> > +		drm_err(mtk_aux->drm_dev, "invalid aux cmd = %d\n",
-> > +			msg->request);
-> > +		ret = -EINVAL;
-> > +		goto err;
-> > +	}
-> > +
-> > +	if (msg->size == 0) {
-> > +		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
-> > +					     msg->address +
-> > accessed_bytes,
-> > +					     msg->buffer +
-> > accessed_bytes, 0);
-> > +	} else {
-> > +		while (accessed_bytes < msg->size) {
-> > +			size_t to_access =
-> > +				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
-> > +				      msg->size - accessed_bytes);
-> > +
-> > +			ret = mtk_dp_aux_do_transfer(mtk_dp, is_read,
-> > request,
-> > +						     msg->address +
-> > accessed_bytes,
-> > +						     msg->buffer +
-> > accessed_bytes,
-> > +						     to_access);
-> > +
-> > +			if (ret) {
-> > +				drm_info(mtk_dp->drm_dev,
-> > +					 "Failed to do AUX transfer:
-> > %d\n", ret);
-> > +				break;
-> > +			}
-> > +			accessed_bytes += to_access;
-> > +		}
-> > +	}
-> > +err:
-> > +	if (ret) {
-> > +		msg->reply = DP_AUX_NATIVE_REPLY_NACK |
-> > DP_AUX_I2C_REPLY_NACK;
-> > +		return ret;
-> > +	}
-> > +
-> > +	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
-> > +	return msg->size;
-> > +}
-> > +
-> 
-> 
-
+T24gMTcvMDYvMjAyMiAwOToxNywgTGlhbmcgSGUgd3JvdGU6DQo+IA0KPiANCj4gDQo+IEF0IDIw
+MjItMDYtMTcgMTQ6NTM6MTMsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0b3BoZS5sZXJveUBj
+c2dyb3VwLmV1PiB3cm90ZToNCj4+DQo+Pg0KPj4gTGUgMTcvMDYvMjAyMiDDoCAwODo0NSwgTGlh
+bmcgSGUgYSDDqWNyaXTCoDoNCj4+Pg0KPj4+DQo+Pj4NCj4+PiBBdCAyMDIyLTA2LTE3IDE0OjI4
+OjU2LCAiQ2hyaXN0b3BoZSBMZXJveSIgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4gd3Jv
+dGU6DQo+Pj4+DQo+Pj4+DQo+Pj4+IExlIDE3LzA2LzIwMjIgw6AgMDg6MDgsIExpYW5nIEhlIGEg
+w6ljcml0wqA6DQo+Pj4+PiBJbiBncGlvX2hhbHRfcHJvYmUoKSwgb2ZfZmluZF9tYXRjaGluZ19u
+b2RlKCkgd2lsbCByZXR1cm4gYSBub2RlDQo+Pj4+PiBwb2ludGVyIHdpdGggcmVmY291bnQgaW5j
+cmVtZW50ZWQuIFdlIHNob3VsZCB1c2Ugb2Zfbm9kZV9wdXQoKSBpbg0KPj4+Pj4gZmFpbCBwYXRo
+IG9yIHdoZW4gaXQgaXMgbm90IHVzZWQgYW55bW9yZS4NCj4+Pj4+DQo+Pj4+PiBTaWduZWQtb2Zm
+LWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+DQo+Pj4+PiAtLS0NCj4+Pj4+ICAgICBjaGFu
+Z2Vsb2c6DQo+Pj4+PiAgICAgdjQ6IHJldXNlIGV4aXN0ICdlcnInIGFuZCB1c2UgYSBzaW1wbGUg
+Y29kZSBzdHlsZSwgYWR2aXNlZCBieSBDSg0KPj4+Pj4gICAgIHYzOiB1c2UgbG9jYWwgJ2NoaWxk
+X25vZGUnIGFkdmlzZWQgYnkgTWljaGFlbC4NCj4+Pj4+ICAgICB2MjogdXNlIGdvdG8tbGFiZWwg
+cGF0Y2ggc3R5bGUgYWR2aXNlZCBieSBDaHJpc3RvcGhlIExlcm95Lg0KPj4+Pj4gICAgIHYxOiBh
+ZGQgb2Zfbm9kZV9wdXQoKSBiZWZvcmUgZWFjaCBleGl0Lg0KPj4+Pj4NCj4+Pj4+ICAgICBhcmNo
+L3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDM1ICsrKysrKysrKysrKysr
+LS0tLS0tLS0tDQo+Pj4+PiAgICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyksIDEz
+IGRlbGV0aW9ucygtKQ0KPj4+Pj4NCj4+Pj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxh
+dGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9z
+Z3lfY3RzMTAwMC5jDQo+Pj4+PiBpbmRleCA5OGFlNjQwNzUxOTMuLmU0NTg4OTQzZmU3ZSAxMDA2
+NDQNCj4+Pj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5j
+DQo+Pj4+PiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYw0K
+Pj4+Pj4gQEAgLTcxLDYgKzcxLDcgQEAgc3RhdGljIGludCBncGlvX2hhbHRfcHJvYmUoc3RydWN0
+IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+Pj4+ICAgICB7DQo+Pj4+PiAgICAgCWVudW0gb2Zf
+Z3Bpb19mbGFncyBmbGFnczsNCj4+Pj4+ICAgICAJc3RydWN0IGRldmljZV9ub2RlICpub2RlID0g
+cGRldi0+ZGV2Lm9mX25vZGU7DQo+Pj4+PiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAqY2hpbGRfbm9k
+ZTsNCj4+Pj4+ICAgICAJaW50IGdwaW8sIGVyciwgaXJxOw0KPj4+Pj4gICAgIAlpbnQgdHJpZ2dl
+cjsNCj4+Pj4+ICAgICANCj4+Pj4+IEBAIC03OCwyNiArNzksMjkgQEAgc3RhdGljIGludCBncGlv
+X2hhbHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+Pj4+ICAgICAJCXJl
+dHVybiAtRU5PREVWOw0KPj4+Pj4gICAgIA0KPj4+Pj4gICAgIAkvKiBJZiB0aGVyZSdzIG5vIG1h
+dGNoaW5nIGNoaWxkLCB0aGlzIGlzbid0IHJlYWxseSBhbiBlcnJvciAqLw0KPj4+Pj4gLQloYWx0
+X25vZGUgPSBvZl9maW5kX21hdGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOw0KPj4+Pj4g
+LQlpZiAoIWhhbHRfbm9kZSkNCj4+Pj4+ICsJY2hpbGRfbm9kZSA9IG9mX2ZpbmRfbWF0Y2hpbmdf
+bm9kZShub2RlLCBjaGlsZF9tYXRjaCk7DQo+Pj4+PiArCWlmICghY2hpbGRfbm9kZSkNCj4+Pj4+
+ICAgICAJCXJldHVybiAwOw0KPj4+Pj4gICAgIA0KPj4+Pj4gICAgIAkvKiBUZWNobmljYWxseSB3
+ZSBjb3VsZCBqdXN0IHJlYWQgdGhlIGZpcnN0IG9uZSwgYnV0IHB1bmlzaA0KPj4+Pj4gICAgIAkg
+KiBEVCB3cml0ZXJzIGZvciBpbnZhbGlkIGZvcm0uICovDQo+Pj4+PiAtCWlmIChvZl9ncGlvX2Nv
+dW50KGhhbHRfbm9kZSkgIT0gMSkNCj4+Pj4+IC0JCXJldHVybiAtRUlOVkFMOw0KPj4+Pj4gKwlp
+ZiAob2ZfZ3Bpb19jb3VudChjaGlsZF9ub2RlKSAhPSAxKSB7DQo+Pj4+PiArCQllcnIgPSAtRUlO
+VkFMOw0KPj4+Pj4gKwkJZ290byBlcnJfcHV0Ow0KPj4+Pj4gKwl9DQo+Pj4+PiAgICAgDQo+Pj4+
+PiAgICAgCS8qIEdldCB0aGUgZ3BpbyBudW1iZXIgcmVsYXRpdmUgdG8gdGhlIGR5bmFtaWMgYmFz
+ZS4gKi8NCj4+Pj4+IC0JZ3BpbyA9IG9mX2dldF9ncGlvX2ZsYWdzKGhhbHRfbm9kZSwgMCwgJmZs
+YWdzKTsNCj4+Pj4+IC0JaWYgKCFncGlvX2lzX3ZhbGlkKGdwaW8pKQ0KPj4+Pj4gLQkJcmV0dXJu
+IC1FSU5WQUw7DQo+Pj4+PiArCWdwaW8gPSBvZl9nZXRfZ3Bpb19mbGFncyhjaGlsZF9ub2RlLCAw
+LCAmZmxhZ3MpOw0KPj4+Pj4gKwlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpIHsNCj4+Pj4+ICsJ
+CWVyciA9IC1FSU5WQUw7DQo+Pj4+PiArCQlnb3RvdCBlcnJfcHV0Ow0KPj4+Pg0KPj4+PiBEaWQg
+eW91IHRlc3QgdGhlIGJ1aWxkID8NCj4+Pg0KPj4+IFNvcnJ5IGZvciB0aGlzIGZhdWx0Lg0KPj4+
+DQo+Pj4gSW4gZmFjdCwgSSBhbSBzdGlsbCBmaW5kaW5nIGFuIGVmZmljaWVudCB3YXkgdG8gYnVp
+bGRpbmcgZGlmZmVyZW50IGFyY2ggc291cmNlIGNvZGUgYXMgSSBvbmx5IGhhdmUgeDg2LTY0Lg0K
+Pj4+DQo+Pj4gTm93IEkgYW0gdHJ5IHVzaW5nIFFFTVUuDQo+Pj4NCj4+PiBBbnl3YXksIHNvcnJ5
+IGZvciB0aGlzIGZhdWx0Lg0KPj4NCj4+IFlvdSBjYW4gZmluZCBjcm9zcyBjb21waWxlcnMgZm9y
+IG1vc3QgYXJjaGl0ZWN0dXJlcyBmb3IgeDg2LTY0IGhlcmUgOg0KPj4gaHR0cHM6Ly9taXJyb3Jz
+LmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9vbHMvY3Jvc3N0b29sLw0KPj4NCj4+IENocmlzdG9waGUN
+Cj4gDQo+IEhpLCBDaHJpc3RvcGhlIGFuZCBDb25vci4NCj4gDQo+IFNvcnJ5IHRvIHRyb3VibGUg
+eW91IGFnYWluLg0KPiANCj4gTm93IEkgb25seSBrbm93IGhvdyB0byBxdWlja2x5IGlkZW50aWZ5
+IHRoZSByZWZjb3VudGluZyBidWdzLCBidXQgSSBjYW5ub3QgZWZmaWNpZW50bHkgZ2l2ZSBhIGJ1
+aWxkIHRlc3QuDQo+IA0KPiBGb3IgZXhhbXBsZSwgSSB1c2UgdGhlIGNyb3NzIGNvbXBpbGVycyAn
+cG93ZXJwYy1saW51eC1nbnUtZ2NjJyB0byBjb21waWxlICdhcmNoL3Bvd2VycGMvcGxhdGZvcm1z
+Lzg1eHgvc2d5X2N0czEwMDAuYycgd2l0aCAtZnN5bnRheC1vbmx5IGZsYWcuDQo+IEJ1dCBJIG1l
+ZXQgdG9vIG1hbnkgaGVhZGVyIGZpbGUgbWlzc2luZyBlcnJvcnMuIEV2ZW4gaWYgSSBhZGQgc29t
+ZSAnaW5jbHVkZScgcGF0aGVzLCBlLmcuLCAuL2FyY2gvcG93ZXJwYy9pbmNsdWRlLCAuL2luY2x1
+ZGUsDQo+IHRoZXJlIGFyZSBzdGlsbCB0b28gbWFueSBvdGhlciBlcnJvcnMuDQo+IA0KPiBTbyBp
+ZiB0aGVyZSBpcyBhbnkgZWZmaWNpZW50IHdheSB0byBjaGVjayBteSBwYXRjaCBjb2RlIHRvIGF2
+b2lkICdnb3RvdCcgZXJyb3IgYWdhaW4uDQoNCmlkayBhbnl0aGluZyBhYm91dCBwb3dlcnBjLCBi
+dXQgd2hhdCBJIGZpbmQgaXMgYSBuaWNlIHdheSB0byBnZXQgYSBjb21waWxlcg0KZm9yIGFuIGFy
+Y2ggSSBkb24ndCB1c2UgaXMgdG8gc2VhcmNoIG9uIGxvcmUua2VybmVsLm9yZyBmb3IgYSAwZGF5
+IHJvYm90DQpidWlsZCBlcnJvciBzaW5jZSBpdCBnaXZlcyBpbnN0cnVjdGlvbnMgZm9yIGJ1aWxk
+aW5nIG9uIHRoYXQgYXJjaC4NCkZvciBleGFtcGxlOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+bGludXhwcGMtZGV2LzIwMjIwNjA2MDkxMC5yWU5URnFkSS1sa3BAaW50ZWwuY29tLw0KDQoNCklu
+IHRoaXMgY2FzZSwgeW91ciBidWcgc2VlbXMgb2J2aW91cz8gWW91IHR5cGVkICJnb3RvdCIgaW5z
+dGVhZCBvZiAiZ290byIuDQoNCkhvcGUgdGhhdCBoZWxwcywNCkNvbm9yLg0KDQo+IA0KPiBUaGFu
+a3MgYWdhaW4sIENocmlzdG9waGUgYW5kIENvbm9yLg0KPiANCj4gTGlhbmcNCg==

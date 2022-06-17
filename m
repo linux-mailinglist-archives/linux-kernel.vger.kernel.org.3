@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD5754F92C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009CD54F92D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382751AbiFQO3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S1382589AbiFQO3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382595AbiFQO3q (ORCPT
+        with ESMTP id S234468AbiFQO31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:29:46 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFCBF54F99
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=SC/nP
-        K4iH9WBD2tA7Pn4U3gtjCZsgXNfpKEqFy5vRXg=; b=qQfoEhcSJwmZ36hVTsR2p
-        h+QJKZ5Wya1JL5DIN0f+1pez+BapxHuAaSv1e3IADzeilsuvNdKdQRVeCRVI/VJD
-        YY6U8rfp+scg7ZiFWRVgN8M1kbaqO/GTO+OYQA3nwrTM6U/Wo0c3GPmbZbHYwOMq
-        Cia1HnYGIDRBnXVh6tPsNg=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Fri, 17 Jun 2022 22:29:01 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Fri, 17 Jun 2022 22:29:01 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        nick.child@ibm.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] powerpc: powernv: Fix refcount leak bug in
- opal-powercap
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <0ca5ee14-a382-0935-66be-820975501f45@wanadoo.fr>
-References: <20220617042038.4003704-1-windhl@126.com>
- <0ca5ee14-a382-0935-66be-820975501f45@wanadoo.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 17 Jun 2022 10:29:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00EEF4B1FF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655476164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gAYVwqMN/CZe6fC+f9RsMLvHlUb8Q6jQz2uIGknDWoM=;
+        b=SEwtLNpdrXbYew4TN+GBpOmDx75UUbxosmWArGQWfYZ3mipQdaxQP05cqihZ9bPXTiwRKC
+        pJ/OzLo3iU1GJnzEWHNBHRwl30nAkDZdEx3JWIGuUkKMoAlNMHMkGAgbLF5pFfT9edVNUv
+        MgVe1aaBP5/XbOF4cgMYSxi2iq8eEAI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-660-wjrKsoReO4ibwa5joUp36A-1; Fri, 17 Jun 2022 10:29:21 -0400
+X-MC-Unique: wjrKsoReO4ibwa5joUp36A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 124AB2932481;
+        Fri, 17 Jun 2022 14:29:21 +0000 (UTC)
+Received: from [10.22.18.98] (unknown [10.22.18.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E8762026609;
+        Fri, 17 Jun 2022 14:29:20 +0000 (UTC)
+Message-ID: <b92bdb56-bfed-9cd2-5eb2-0b96a68b21d8@redhat.com>
+Date:   Fri, 17 Jun 2022 10:29:20 -0400
 MIME-Version: 1.0
-Message-ID: <69e7e81b.8204.18172113f39.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowAA3jPCuj6xi57k4AA--.61809W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuA0jF2JVj6h7ygAAsg
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Lockups due to "locking/rwsem: Make handoff bit handling more
+ consistent"
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Zhenhua Ma <mazhenhua@xiaomi.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.com>
+References: <20220617134325.GC30825@techsingularity.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220617134325.GC30825@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKQXQgMjAyMi0wNi0xNyAxMzowMToyNywgIkNocmlzdG9waGUgSkFJTExFVCIgPGNocmlzdG9w
-aGUuamFpbGxldEB3YW5hZG9vLmZyPiB3cm90ZToKPkxlIDE3LzA2LzIwMjIgw6AgMDY6MjAsIExp
-YW5nIEhlIGEgw6ljcml0wqA6Cj4+IEluIG9wYWxfcG93ZXJjYXBfaW5pdCgpLCBvZl9maW5kX2Nv
-bXBhdGlibGVfbm9kZSgpIHdpbGwgcmV0dXJuCj4+IGEgbm9kZSBwb2ludGVyIHdpdGggcmVmY291
-bnQgaW5jcmVtZW50ZWQuIFdlIHNob3VsZCB1c2Ugb2Zfbm9kZV9wdXQoKQo+PiBpbiBmYWlsIHBh
-dGggb3Igd2hlbiBpdCBpcyBub3QgdXNlZCBhbnltb3JlLgo+PiAKPj4gQmVzaWRlcywgZm9yX2Vh
-Y2hfY2hpbGRfb2Zfbm9kZSgpIHdpbGwgYXV0b21hdGljYWxseSAqaW5jKiBhbmQgKmRlYyoKPj4g
-cmVmY291bnQgZHVyaW5nIGl0ZXJhdGlvbi4gSG93ZXZlciwgd2Ugc2hvdWxkIGFkZCB0aGUgb2Zf
-bm9kZV9wdXQoKQo+PiBpZiB0aGVyZSBpcyBhIGJyZWFrLgo+Cj5IaSwKPgo+SSdtIG5vdCBzdXJl
-IHRoYXQgeW91ciBwYXRjaCBpcyByaWdodCBoZXJlLiBCZWNhdXNlIG9mIHRoaXMgKmluYyogYW5k
-IAo+KmRlYyogdGhpbmdzLCBkbyB3ZSBzdGlsbCBuZWVkIHRvIG9mX25vZGVfcHV0KHBvd2VyY2Fw
-KSBvbmNlIHdlIGhhdmUgCj5lbnRlcmVkIGZvcl9lYWNoX2NoaWxkX29mX25vZGU/Cj4KPkkgdGhp
-bmsgdGhhdCB0aGlzIHJlZmVyZW5jZSB3aWxsIGJlIHJlbGVhc2VkIG9uIHRoZSBmaXJzdCBpdGVy
-YXRpb24gb2YgCj50aGUgbG9vcC4KPgo+Cj5NYXliZSBvZl9ub2RlX3B1dChwb3dlcmNhcCkgc2hv
-dWxkIGJlIGR1cGxpY2F0ZWQgZXZlcnl3aGVyZSBpdCBpcyAKPnJlbGV2YW50IGFuZCByZW1vdmVk
-IGZyb20gdGhlIGVycm9yIGhhbmRsaW5nIHBhdGg/Cj5PciBhbiBhZGRpdGlvbmFsIHJlZmVyZW5j
-ZSBzaG91bGQgYmUgdGFrZW4gYmVmb3JlIHRoZSBsb29wPwo+T3IgYWRkaW5nIGEgbmV3IGxhYmVs
-IHdpdGggInBvd2VyY2FwID0gTlVMTCIgYW5kIGJyYW5jaGluZyB0aGVyZSB3aGVuIAo+bmVlZGVk
-Pwo+Cj5DSgo+Cj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+
-Cj4+IC0tLQo+PiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJudi9vcGFsLXBvd2VyY2Fw
-LmMgfCA1ICsrKystCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
-dGlvbigtKQo+PiAKPj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJu
-di9vcGFsLXBvd2VyY2FwLmMgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybnYvb3BhbC1w
-b3dlcmNhcC5jCj4+IGluZGV4IDY0NTA2YjQ2ZTc3Yi4uYjEwMjQ3N2QzZjk1IDEwMDY0NAo+PiAt
-LS0gYS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybnYvb3BhbC1wb3dlcmNhcC5jCj4+ICsr
-KyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJudi9vcGFsLXBvd2VyY2FwLmMKPj4gQEAg
-LTE1Myw3ICsxNTMsNyBAQCB2b2lkIF9faW5pdCBvcGFsX3Bvd2VyY2FwX2luaXQodm9pZCkKPj4g
-ICAJcGNhcHMgPSBrY2FsbG9jKG9mX2dldF9jaGlsZF9jb3VudChwb3dlcmNhcCksIHNpemVvZigq
-cGNhcHMpLAo+PiAgIAkJCUdGUF9LRVJORUwpOwo+PiAgIAlpZiAoIXBjYXBzKQo+PiAtCQlyZXR1
-cm47Cj4+ICsJCWdvdG8gb3V0X3Bvd2VyY2FwOwo+PiAgIAo+PiAgIAlwb3dlcmNhcF9rb2JqID0g
-a29iamVjdF9jcmVhdGVfYW5kX2FkZCgicG93ZXJjYXAiLCBvcGFsX2tvYmopOwo+PiAgIAlpZiAo
-IXBvd2VyY2FwX2tvYmopIHsKPj4gQEAgLTIzNiw2ICsyMzYsOSBAQCB2b2lkIF9faW5pdCBvcGFs
-X3Bvd2VyY2FwX2luaXQodm9pZCkKPj4gICAJCWtmcmVlKHBjYXBzW2ldLnBnLm5hbWUpOwo+PiAg
-IAl9Cj4+ICAgCWtvYmplY3RfcHV0KHBvd2VyY2FwX2tvYmopOwo+PiArCW9mX25vZGVfcHV0KG5v
-ZGUpOwo+PiAgIG91dF9wY2FwczoKPj4gICAJa2ZyZWUocGNhcHMpOwo+PiArb3V0X3Bvd2VyY2Fw
-Ogo+PiArCW9mX25vZGVfcHV0KHBvd2VyY2FwKTsKPj4gICB9CgpIaSwgQ0ouCgpJIHRoaW5rIG15
-IHBhdGNoIGlzIGNvcnJlY3QgYmFzZWQgb24gdGhlIG9sZCBjb21taXQ6IApodHRwczovL2dpdC5r
-ZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQvY29t
-bWl0Lz9oPXY1LjE5LXJjMiZpZD0wOTcwMGM1MDRkOGU2M2ZhZmZkMmEyMjM1MDc0ZThjNWQxMzBj
-YjhmCgpCdWdzIGFuZCBmaXggc29sdXRpb25zIGluIHRoaXMgMDk3MDBjNTA0ZDhlNjMtY29tbWl0
-IGFyZSB2ZXJ5IHNpbWlsYXIgd2l0aCBtaW5lLgoKQmVzaWRlcywgSSBhbHNvIGZpbmQgc2ltaWxh
-ciBuZXcgYnVncyBpbiBvdGhlciB0d28gZmlsZXMgaW4gdGhlIHNhbWUgZGlyZWN0b3J5ICdwb3dl
-cm52JywgCnNvIEkgaGF2ZSBtZXJnZWQgYWxsIHRocmVlIGZpbGVzJyBwYXRjaGVzIGludG8gb25l
-IGNvbW1pdC4gICdbUEFUQ0ggdjJdIHBvd2VycGM6IHBvd2VybnY6IEZpeCByZWZjb3VudCBsZWFr
-IGJ1ZycuCgpUaGFua3MuCgpMaWFuZw==
+On 6/17/22 09:43, Mel Gorman wrote:
+> Hi Waiman,
+>
+> I've received reports of lockups happening in kernels including
+> commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
+> consistent"). The exact symptoms vary but usually it's either a soft lockup
+> (older kernel with a backport), the task hanging and never exiting or the
+> machine becomes generally unresponsive and ssh is broken.  The problem
+> started in 5.16 and reliably bisected to commit d257cc8cb8d5. Reverting
+> the patch in 5.16, 5.17 and 5.18 finish the test successfully but I didn't
+> test a revert on 5.19-rc2 because of other changes layered on top.
+>
+> The reproducer is simple -- start pairs of CPU hogs pinned to a CPU with
+> different SCHED_RR priorities that run for a few seconds. It does not
+> hit every time but usually happens within 10 attempts. On 5.16 at least,
+> the tasks failed to exit and kept retrying to exit using the following path
+>
+> [<0>] rwsem_down_write_slowpath+0x2ad/0x580
+> [<0>] unlink_file_vma+0x2c/0x50
+> [<0>] free_pgtables+0xbe/0x110
+> [<0>] exit_mmap+0xc1/0x220
+> [<0>] mmput+0x52/0x110
+> [<0>] do_exit+0x2ec/0xb00
+> [<0>] do_group_exit+0x2d/0x90
+> [<0>] get_signal+0xb6/0x920
+> [<0>] arch_do_signal_or_restart+0xba/0x700
+> [<0>] exit_to_user_mode_prepare+0xb7/0x230
+> [<0>] irqentry_exit_to_user_mode+0x5/0x20
+> [<0>] asm_sysvec_apic_timer_interrupt+0x12/0x20
+> [<0>] preempt_schedule_thunk+0x16/0x18
+> [<0>] rwsem_down_write_slowpath+0x2ad/0x580
+> [<0>] unlink_file_vma+0x2c/0x50
+> [<0>] free_pgtables+0xbe/0x110
+> [<0>] exit_mmap+0xc1/0x220
+> [<0>] mmput+0x52/0x110
+> [<0>] do_exit+0x2ec/0xb00
+> [<0>] do_group_exit+0x2d/0x90
+> [<0>] get_signal+0xb6/0x920
+> [<0>] arch_do_signal_or_restart+0xba/0x700
+> [<0>] exit_to_user_mode_prepare+0xb7/0x230
+> [<0>] irqentry_exit_to_user_mode+0x5/0x20
+> [<0>] asm_sysvec_apic_timer_interrupt+0x12/0x20
+>
+> The C file and shell script to run it are attached.
+>
+Thanks for the reproducer and I will try to reproduce it locally.
+
+It is a known issue that I have receive similar report from an Oracle 
+engineer. That is the reason I posted commit 1ee326196c66 
+("locking/rwsem: Always try to wake waiters in out_nolock path") that 
+was merged in v5.19. I believe it helps but it may not be able to 
+eliminate all possible race conditions. To make rwsem behave more like 
+before commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling 
+more consistent"), I posted a follow-up patch
+
+https://lore.kernel.org/lkml/20220427173124.1428050-1-longman@redhat.com/
+
+But it hasn't gotten review yet.
+
+I will try your reproducer to see if these patches are able to address 
+the lockup problem.
+
+Thanks,
+Longman
+
+commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
+consistent").
+

@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45D855005B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCCD55005F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382328AbiFQXIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S1383266AbiFQXIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235735AbiFQXIG (ORCPT
+        with ESMTP id S1377857AbiFQXIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:08:06 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E8F1F62E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:08:02 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id g12so89298ljk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6ZYaMoRyFzzdVkOyMeMhxNNQQcfk+a73MTAQKe18VZo=;
-        b=RXh3EgnMC/4kWNHclXpiSul9Dc/Ob4bXsZK6inOyualZGJ4iznqD1kHoc0adcTZZnD
-         L+L6W8ndCsJGT1OORGpESaqm5/p/30VgrLRgo8zT75zpmLE5F7XhS6J6Vnid+cHtpWZG
-         Hb1oX53AxFwTOw+3PJdhs+aDez8q9p095mpVq6gMzrh54J1a3hXPRx/865gRmszCMxTR
-         bugoa6F+cw0baRkUNVYLM675cgALD2YVe3LgDH3tWPKytzq7YDGep3PDBcAymNicXVKZ
-         Dw7aIHO+SP3NEs5GBdh3pDWDxKCxruFMN1UEEyVRn3SR4BE+CF9Y4Ednvamdvd26XIqN
-         HklA==
+        Fri, 17 Jun 2022 19:08:13 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2350322518;
+        Fri, 17 Jun 2022 16:08:11 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id c4so403106ilj.7;
+        Fri, 17 Jun 2022 16:08:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6ZYaMoRyFzzdVkOyMeMhxNNQQcfk+a73MTAQKe18VZo=;
-        b=3lB91tlI8MFLsnLVwois5GD6sWeZXhlgHh+ljn5hmaUE/7fSAQvaXxtU5ereYSyxDh
-         y0moSifCHv1w70Qo3+j4pMeUYE3KBLQpAsb6paUHpDCsg4V+aVCnPUpqyq+tkgvxxAzp
-         D0he4PWpkm5HY7fJlyzPhzUr2D9T6XUOomWlCY5JiUWVNQh3elBdsE50YfcjhXxVrXuL
-         PdCxITvllBbXicElJGPBC3fDvMzbg2s8fxuIc9OOJBD8QlU8KOoPjhoGs+6BrdqTxukr
-         gWB1XpLxof7nx6M/qbrA5lnoscmVESkyhjEv8FfXf86xktVKnVuko9Qt9L/vQZl0wzmO
-         UiFQ==
-X-Gm-Message-State: AJIora/nZ7h48TIK5ovr13zl1f3iauWsg7ZLnOuNp+CqCera0AhdrH2/
-        l2JOIDIu/XC2rXkt0SkuN20r9g==
-X-Google-Smtp-Source: AGRyM1u4px/R5mYa/q2Ih7N60pbaP0+87kXGXeIvKyOLQnhWdyhLroYYlme5OHm8OUgyfr0MVJVTgA==
-X-Received: by 2002:a2e:80d3:0:b0:255:5c62:7614 with SMTP id r19-20020a2e80d3000000b002555c627614mr6140247ljg.389.1655507280420;
-        Fri, 17 Jun 2022 16:08:00 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u8-20020a2e9f08000000b00255446b1726sm680292ljk.121.2022.06.17.16.07.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 16:08:00 -0700 (PDT)
-Message-ID: <bb98ca29-8752-6864-ddbd-19547fb6f73b@linaro.org>
-Date:   Sat, 18 Jun 2022 02:07:58 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=boBsEYeSmkjb+BOCaUDQtsmmY5mPhlPnMP5EgdS/R1I=;
+        b=XCboexXKqf0oZfGfLRH13Iaz4TxS8T8ZL5VnJr8yF1Nv/g9Pg3B5Cb7Gb2dZE9KbhB
+         Q3E26ozz4BuPBfOuz1+0lnSMb/HD420AZCtHNcFClZezQdKecrVonj7AZbVnVLjuDNLi
+         vm8uWQ4svZwKJrIbouvZXz2KrqD+/EvFVI+GKS0bh10xCFq6rKvxoLjt7fqfb9P0q7Ld
+         qzK6q8S3h4G+Tc+xPnzVpL4KP9iT7lPSqWXsH12Q680WlRw2wtH9rHKlCd025XN2uwu7
+         X9Qb4pkgZO5WAeOHtgsTMZ9rBserrxStrgCmSX7MfpmegPQ/ZaYQ/k/+I4cml3H6oCqM
+         wXgg==
+X-Gm-Message-State: AJIora/TRVVj7M5KZ7UiFa6gyzoM+Skp+hO6b9IrnnO+W+Q+wuW05O6+
+        RIJVgdRrNM/R+W0gyTy0qA==
+X-Google-Smtp-Source: AGRyM1uXiG8Xggf+u/lRmTS4EnGutEnUuUzhwGjsExceUCQKBvQOrA5/yQzEqlo4Qn7q5VQa0INI7Q==
+X-Received: by 2002:a92:dc91:0:b0:2d8:ecc3:ffb5 with SMTP id c17-20020a92dc91000000b002d8ecc3ffb5mr1765920iln.170.1655507290320;
+        Fri, 17 Jun 2022 16:08:10 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id h18-20020a02c732000000b0032e3b0933c6sm2730805jao.162.2022.06.17.16.08.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 16:08:09 -0700 (PDT)
+Received: (nullmailer pid 2608063 invoked by uid 1000);
+        Fri, 17 Jun 2022 23:08:08 -0000
+Date:   Fri, 17 Jun 2022 17:08:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Irui Wang <irui.wang@mediatek.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, wenst@chromium.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
+        srv_heupstream@mediatek.com
+Subject: Re: [RESEND V3,1/8] dt-bindings: mediatek: Add
+ mediatek,mt8195-jpgdec compatible
+Message-ID: <20220617230808.GA2594727-robh@kernel.org>
+References: <20220614121004.31616-1-irui.wang@mediatek.com>
+ <20220614121004.31616-2-irui.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
-Content-Language: en-GB
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-References: <20220617204750.2347797-1-swboyd@chromium.org>
- <20220617204750.2347797-3-swboyd@chromium.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220617204750.2347797-3-swboyd@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614121004.31616-2-irui.wang@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,222 +75,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2022 23:47, Stephen Boyd wrote:
-> This struct member is stored to in the function that calls the function
-> which uses it. That's possible with a function argument instead of
-> storing to a struct member. Pass the pixel_rate as an argument instead
-> to simplify the code. Note that dp_ctrl_link_maintenance() was storing
-> the pixel_rate but never using it so we just remove the assignment from
-> there.
+On Tue, Jun 14, 2022 at 08:09:57PM +0800, Irui Wang wrote:
+> From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Add mediatek,mt8195-jpgdec compatible to binding document.
+> 
+> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_ctrl.c | 57 ++++++++++++++++----------------
->   drivers/gpu/drm/msm/dp/dp_ctrl.h |  1 -
->   2 files changed, 28 insertions(+), 30 deletions(-)
+>  .../media/mediatek,mt8195-jpegdec.yaml        | 175 ++++++++++++++++++
+>  1 file changed, 175 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index bd445e683cfc..e114521af2e9 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -1336,7 +1336,7 @@ static void dp_ctrl_set_clock_rate(struct dp_ctrl_private *ctrl,
->   				name, rate);
->   }
->   
-> -static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl)
-> +static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl, unsigned long pixel_rate)
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> new file mode 100644
+> index 000000000000..7b3df7c714aa
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> @@ -0,0 +1,175 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek JPEG Encoder Device Tree Bindings
+> +
+> +maintainers:
+> +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+> +
+> +description: |-
+> +  MediaTek JPEG Decoder is the JPEG decode hardware present in MediaTek SoCs
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: mediatek,mt8195-jpgdec
+> +
+> +  mediatek,jpegdec-multi-core:
+> +    type: boolean
+> +    description: |
+> +      Indicates whether the jpeg encoder has multiple cores or not.
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    maxItems: 6
+> +    description: |
+> +      Points to the respective IOMMU block with master port as argument, see
+> +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
+> +      Ports are according to the HW.
+> +
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +  ranges: true
+> +
+> +# Required child node:
+> +patternProperties:
+> +  "^jpgdec@[0-9a-f]+$":
+> +    type: object
+> +    description: |
+> +      The jpeg decoder hardware device node which should be added as subnodes to
+> +      the main jpeg node.
+> +
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt8195-jpgdec-hw
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      hw_id:
+> +        description: |
+> +          Current jpegdec hw id.
 
+What's this for and how is it used? We generally don't do indexes in DT.
 
-I think we can read pixel_rate here rather than getting it as an 
-argument. We'd need to move handling (DP_TEST_LINK_PHY_TEST_PATTERN && 
-!ctrl->panel->dp_mode.drm_mode.clock) case here from dp_ctrl_on_link().
-
->   {
->   	int ret = 0;
->   	struct dp_io *dp_io = &ctrl->parser->io;
-> @@ -1357,25 +1357,25 @@ static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl)
->   	if (ret)
->   		DRM_ERROR("Unable to start link clocks. ret=%d\n", ret);
->   
-> -	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%d\n",
-> -		ctrl->link->link_params.rate, ctrl->dp_ctrl.pixel_rate);
-> +	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%lu\n",
-> +		ctrl->link->link_params.rate, pixel_rate);
->   
->   	return ret;
->   }
->   
-> -static int dp_ctrl_enable_stream_clocks(struct dp_ctrl_private *ctrl)
-> +static int dp_ctrl_enable_stream_clocks(struct dp_ctrl_private *ctrl,
-> +					unsigned long pixel_rate)
->   {
-> -	int ret = 0;
-> +	int ret;
->   
-> -	dp_ctrl_set_clock_rate(ctrl, DP_STREAM_PM, "stream_pixel",
-> -					ctrl->dp_ctrl.pixel_rate * 1000);
-> +	dp_ctrl_set_clock_rate(ctrl, DP_STREAM_PM, "stream_pixel", pixel_rate * 1000);
-
-Note to myself (or to anybody doing further cleanup): store stream_pixel 
-clock into dp_ctrl_private and set it directly here. Then 
-dp_ctrl_set_clock_rate() can be removed.
-
->   
->   	ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, true);
->   	if (ret)
->   		DRM_ERROR("Unabled to start pixel clocks. ret=%d\n", ret);
->   
-> -	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%d\n",
-> -			ctrl->link->link_params.rate, ctrl->dp_ctrl.pixel_rate);
-> +	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%lu\n",
-> +			ctrl->link->link_params.rate, pixel_rate);
->   
->   	return ret;
->   }
-> @@ -1445,7 +1445,7 @@ static bool dp_ctrl_use_fixed_nvid(struct dp_ctrl_private *ctrl)
->   	return false;
->   }
->   
-> -static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private *ctrl)
-> +static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private *ctrl, unsigned long pixel_rate)
->   {
->   	int ret = 0;
->   	struct dp_io *dp_io = &ctrl->parser->io;
-> @@ -1469,7 +1469,7 @@ static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private *ctrl)
->   	/* hw recommended delay before re-enabling clocks */
->   	msleep(20);
->   
-> -	ret = dp_ctrl_enable_mainlink_clocks(ctrl);
-> +	ret = dp_ctrl_enable_mainlink_clocks(ctrl, pixel_rate);
->   	if (ret) {
->   		DRM_ERROR("Failed to enable mainlink clks. ret=%d\n", ret);
->   		return ret;
-> @@ -1517,8 +1517,6 @@ static int dp_ctrl_link_maintenance(struct dp_ctrl_private *ctrl)
->   	ctrl->link->phy_params.p_level = 0;
->   	ctrl->link->phy_params.v_level = 0;
->   
-> -	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> -
->   	ret = dp_ctrl_setup_main_link(ctrl, &training_step);
->   	if (ret)
->   		goto end;
-> @@ -1588,12 +1586,12 @@ static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
->   {
->   	int ret;
->   	struct dp_ctrl_private *ctrl;
-> +	unsigned long pixel_rate;
->   
->   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
->   
-> -	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> -
-> -	ret = dp_ctrl_enable_stream_clocks(ctrl);
-> +	pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> +	ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
-
-I think we can take another step forward here. Read the 
-ctrl->panel->dp_mode.drm_mode.clock from within the 
-dp_ctrl_enable_stream_clocks() function. This removes the need to pass 
-pixel_rate as an argument here.
-
->   	if (ret) {
->   		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
->   		return ret;
-> @@ -1709,6 +1707,7 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
->   	u32 const phy_cts_pixel_clk_khz = 148500;
->   	u8 link_status[DP_LINK_STATUS_SIZE];
->   	unsigned int training_step;
-> +	unsigned long pixel_rate;
->   
->   	if (!dp_ctrl)
->   		return -EINVAL;
-> @@ -1723,25 +1722,25 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
->   		drm_dbg_dp(ctrl->drm_dev,
->   				"using phy test link parameters\n");
->   		if (!ctrl->panel->dp_mode.drm_mode.clock)
-> -			ctrl->dp_ctrl.pixel_rate = phy_cts_pixel_clk_khz;
-> +			pixel_rate = phy_cts_pixel_clk_khz;
->   	} else {
->   		ctrl->link->link_params.rate = rate;
->   		ctrl->link->link_params.num_lanes =
->   			ctrl->panel->link_info.num_lanes;
-> -		ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> +		pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
->   	}
->   
-> -	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%d\n",
-> +	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%lu\n",
->   		ctrl->link->link_params.rate, ctrl->link->link_params.num_lanes,
-> -		ctrl->dp_ctrl.pixel_rate);
-> +		pixel_rate);
->   
->   
-> -	rc = dp_ctrl_enable_mainlink_clocks(ctrl);
-> +	rc = dp_ctrl_enable_mainlink_clocks(ctrl, pixel_rate);
->   	if (rc)
->   		return rc;
->   
->   	while (--link_train_max_retries) {
-> -		rc = dp_ctrl_reinitialize_mainlink(ctrl);
-> +		rc = dp_ctrl_reinitialize_mainlink(ctrl, pixel_rate);
->   		if (rc) {
->   			DRM_ERROR("Failed to reinitialize mainlink. rc=%d\n",
->   					rc);
-> @@ -1836,6 +1835,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
->   	int ret = 0;
->   	bool mainlink_ready = false;
->   	struct dp_ctrl_private *ctrl;
-> +	unsigned long pixel_rate;
->   	unsigned long pixel_rate_orig;
->   
->   	if (!dp_ctrl)
-> @@ -1843,25 +1843,24 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
->   
->   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
->   
-> -	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> +	pixel_rate = pixel_rate_orig = ctrl->panel->dp_mode.drm_mode.clock;
->   
-> -	pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
->   	if (dp_ctrl->wide_bus_en)
-> -		ctrl->dp_ctrl.pixel_rate >>= 1;
-> +		pixel_rate >>= 1;
->   
-> -	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%d\n",
-> +	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%lu\n",
->   		ctrl->link->link_params.rate,
-> -		ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
-> +		ctrl->link->link_params.num_lanes, pixel_rate);
->   
->   	if (!dp_power_clk_status(ctrl->power, DP_CTRL_PM)) { /* link clk is off */
-> -		ret = dp_ctrl_enable_mainlink_clocks(ctrl);
-> +		ret = dp_ctrl_enable_mainlink_clocks(ctrl, pixel_rate);
->   		if (ret) {
->   			DRM_ERROR("Failed to start link clocks. ret=%d\n", ret);
->   			goto end;
->   		}
->   	}
->   
-> -	ret = dp_ctrl_enable_stream_clocks(ctrl);
-> +	ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
->   	if (ret) {
->   		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
->   		goto end;
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-> index b563e2e3bfe5..9f29734af81c 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-> @@ -16,7 +16,6 @@
->   struct dp_ctrl {
->   	bool orientation;
->   	atomic_t aborted;
-> -	u32 pixel_rate;
->   	bool wide_bus_en;
->   };
->   
-
-
--- 
-With best wishes
-Dmitry
+> +
+> +      iommus:
+> +        minItems: 1
+> +        maxItems: 32
+> +        description: |
+> +          List of the hardware port in respective IOMMU block for current Socs.
+> +          Refer to bindings/iommu/mediatek,iommu.yaml.
+> +
+> +      interrupts:
+> +        maxItems: 1
+> +
+> +      clocks:
+> +        maxItems: 1
+> +
+> +      clock-names:
+> +        items:
+> +          - const: jpgdec
+> +
+> +      power-domains:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - hw_id
+> +      - iommus
+> +      - interrupts
+> +      - clocks
+> +      - clock-names
+> +      - power-domains
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - power-domains
+> +  - iommus
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        jpgdec_master {
+> +                compatible = "mediatek,mt8195-jpgdec";
+> +                mediatek,jpegdec-multi-core;
+> +                power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
+> +                iommus = <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                #address-cells = <2>;
+> +                #size-cells = <2>;
+> +                ranges;
+> +
+> +                jpgdec@1a040000 {
+> +                    compatible = "mediatek,mt8195-jpgdec-hw";
+> +                    reg = <0 0x1a040000 0 0x10000>;/* JPGDEC_C0 */
+> +                    hw_id = <0>;
+> +                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                    interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                    clocks = <&vencsys CLK_VENC_JPGDEC>;
+> +                    clock-names = "jpgdec";
+> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
+> +                };
+> +
+> +                jpgdec@1a050000 {
+> +                    compatible = "mediatek,mt8195-jpgdec-hw";
+> +                    reg = <0 0x1a050000 0 0x10000>;/* JPGDEC_C1 */
+> +                    hw_id = <1>;
+> +                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                    interrupts = <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                    clocks = <&vencsys CLK_VENC_JPGDEC_C1>;
+> +                    clock-names = "jpgdec";
+> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
+> +                };
+> +
+> +                jpgdec@1b040000 {
+> +                    compatible = "mediatek,mt8195-jpgdec-hw";
+> +                    reg = <0 0x1b040000 0 0x10000>;/* JPGDEC_C2 */
+> +                    hw_id = <2>;
+> +                    iommus = <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA0>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA0>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA1>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA1>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET1>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET0>;
+> +                    interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                    clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGDEC>;
+> +                    clock-names = "jpgdec";
+> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC2>;
+> +                };
+> +        };
+> +    };
+> -- 
+> 2.18.0
+> 
+> 

@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2178A54FB0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250A154FB16
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383274AbiFQQ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S1383292AbiFQQ3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiFQQ2q (ORCPT
+        with ESMTP id S230144AbiFQQ3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:28:46 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBE441F9F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:28:44 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id y6so4328475plg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ikdZWQajtcXHyKH9cwfe1WfBf7z5hZlJ5ctRUGfamlg=;
-        b=bKOqTm4VHtoh+tNs1+zszHl4qT0YMrNAovePO+NULfamQiOqwVXuW1ln4Bh/4sKdg0
-         cXGRAf02ro+LfrtUjyEvIJ8kgm0ihYvyksME03mbgpmFBvPrCeOwvSFy27O14i6EDfBb
-         qmJmtctX4Dp/Djfs7qZDcEaw85XVtdDf1wPxsF8ddJ1UXcuevlDnld5OMTw6qOhWdEXe
-         wB+0CoejzSloI3rmuMW/4ZmyOhQWfWc05l9xlSBjQXdGTHA7scPn/f8qaaIzkclLsSaT
-         xhZjNKq1t7QNzRvCIgNsNn55ViSkKG+k50D+hlZrYOUIdBeds9EMX0EceU6RLhnp6FmE
-         842A==
+        Fri, 17 Jun 2022 12:29:33 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F141FAB;
+        Fri, 17 Jun 2022 09:29:32 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id e11so4599320pfj.5;
+        Fri, 17 Jun 2022 09:29:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ikdZWQajtcXHyKH9cwfe1WfBf7z5hZlJ5ctRUGfamlg=;
-        b=TVuw4bDib4Ln5oBnb1zEJpKe/6B/Xvpo86/lmwVSSmjBycZ0NZamrzw1/xNH0Zms/2
-         SZkbRaLkprfy20gs2/cn3KvgyhkAyXj3b4mV6nw8US7PzmWnm/+Y/mYA2X4pn4exckkM
-         P+gtRcWUySLYTQjuOAdYMcovw5He9ODUl+n5zq+NDManEcWH5uXOxADEl/HSW+CsaZFA
-         cn3WXBu1oT47Vvq4EKe4LXzA+SSVbCGFYVRi8RYIBQsuVVh2lWO20VjOHEoR2vWPp9vG
-         gZYpzvOBUkF0a4fSWX/wKPhEvO7n06+Uh2rhogesfH39lkirI8qAtxpHZQ9PzZ9azHXo
-         +I+g==
-X-Gm-Message-State: AJIora9kRrXxmlpHuKcHk91yK8+0EjWE0x/tgjYuu5SZF6BwA+KdP2WS
-        OiMHORhnGaZZwqdIzxns/I0OrQ==
-X-Google-Smtp-Source: AGRyM1uxx3rxCTzmjYp2x2InU4H6kqXPbe9/j3UBIM4H5kEze44ULSzDQhVLhvnKHdaDYluwfj0+MQ==
-X-Received: by 2002:a17:902:efc6:b0:167:8177:60a7 with SMTP id ja6-20020a170902efc600b00167817760a7mr10319625plb.110.1655483323741;
-        Fri, 17 Jun 2022 09:28:43 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056a001d0b00b00518895f0dabsm3877205pfx.59.2022.06.17.09.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 09:28:43 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 16:28:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Red Hat Product Security <secalert@redhat.com>
-Cc:     mingo@redhat.com, bp@alien8.de, pgn@zju.edu.cn,
-        pbonzini@redhat.com, wanpengli@tencent.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        kangel@zju.edu.cn, syzkaller@googlegroups.com, jmattson@google.com,
-        vkuznets@redhat.com, dave.hansen@linux.intel.com,
-        linux-sgx@vger.kernel.org, jarkko@kernel.org, joro@8bytes.org,
-        hpa@zytor.com
-Subject: Re: 'WARNING in vcpu_enter_guest' bug in arch/x86/kvm/x86.c:9877
-Message-ID: <Yqyrt71TG1v0gPSf@google.com>
-References: <25270242.531.1655475119097@app133160.ycg3.service-now.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x3T4D+yOaq9lo8BU1AjLyhVwMBWPQQL/H4Z2pOmaK6c=;
+        b=4Khl2gGRyf7L+43yiabdDjXBA8VqhRIIDFlcT73gSUHUOiyPnHRkzw2Gq3DeSzAf0K
+         CNguU7xpfX8rFyeAbRIVKcHjXRq8qL6dbJsYuKFHETjV9Q+CS8i421WFFC2tWQsVqF5E
+         oaI6nJnLaMr3Jm4KBZdqy1oZNFuFmtwGs0Iu8+vTCVEwElXcHU9Qxnc050ubSVxjV3cE
+         l3RRKikInhH5jyKZF/55fzJLHPXKj5uN9VprHGQ6gza+FDQUobtFM65IqMPEHjGwfs9Y
+         ZoGf5vAK2izkpL0zZ7unc6INr25JosfXDxx0nuGClwsaPXwEs9C0NL8SgZGFe7aI/v9+
+         /qyQ==
+X-Gm-Message-State: AJIora++7bu4wBhKDS8uS1k2t7k8ZP7/iBuNmwJTEhQsUhjZSyKi3EPs
+        /ZQX7nLN2AmUh1nE/dhpHPY=
+X-Google-Smtp-Source: AGRyM1stNp1gT9uJQRkH23ZVZcEfOLXxdhPmA8X/nMhdFsuF8GV3jpeyCFDLLrooGlCGjlATeQWtWg==
+X-Received: by 2002:a05:6a02:201:b0:3fc:6071:a272 with SMTP id bh1-20020a056a02020100b003fc6071a272mr9888178pgb.518.1655483372280;
+        Fri, 17 Jun 2022 09:29:32 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:5d24:3188:b21f:5671? ([2620:15c:211:201:5d24:3188:b21f:5671])
+        by smtp.gmail.com with ESMTPSA id o2-20020a17090a168200b001e31c510f10sm5637387pja.54.2022.06.17.09.29.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 09:29:31 -0700 (PDT)
+Message-ID: <6d84b3cb-a362-05ae-c7c3-62d3eddf9f02@acm.org>
+Date:   Fri, 17 Jun 2022 09:29:28 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <25270242.531.1655475119097@app133160.ycg3.service-now.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 3/5] blk-mq: Drop blk_mq_ops.timeout 'reserved' arg
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        damien.lemoal@opensource.wdc.com, hch@lst.de, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, satishkh@cisco.com,
+        sebaddel@cisco.com, kartilak@cisco.com
+Cc:     linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nbd@other.debian.org
+References: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
+ <1655463320-241202-4-git-send-email-john.garry@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1655463320-241202-4-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022, Red Hat Product Security wrote:
-> Hello!
+On 6/17/22 03:55, John Garry wrote:
+> With new API blk_mq_is_reserved_rq() we can tell if a request is from
+> the reserved pool, so stop passing 'reserved' arg. There is actually
+> only a single user of that arg for all the callback implementations, which
+> can use blk_mq_is_reserved_rq() instead.
 > 
-> INC2131147 ('WARNING in vcpu_enter_guest' bug in arch/x86/kvm/x86.c:9877) is pending your review.
-> 
-> Opened for: pgn@zju.edu.cn
-> Followers: Paolo Bonzini, seanjc@google.com, Vitaly Kuznetsov, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, tglx@linutronix.de, Ingo Molnar, bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com, jarkko@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org, kangel@zju.edu.cn, syzkaller@googlegroups.com
-> 
-> Mauro Matteo Cascella updated your request with the following comments:
-> 
-> Hi Sean,
->  Thanks for the fix: https://github.com/torvalds/linux/commit/423ecfea77dda83823c71b0fad1c2ddb2af1e5fc [https://github.com/torvalds/linux/commit/423ecfea77dda83823c71b0fad1c2ddb2af1e5fc].
-> Is this CVE worthy? As /dev/kvm is world accessible and unprivileged users could trigger the bug IIUC. We (Red Hat) can assign one if needed.
+> This will also allow us to stop passing the same 'reserved' around the
+> blk-mq iter functions next.
 
-IMO, it's not CVE worthy.  Unprivileged users can trigger the bug, but the bug
-itself is not harmful to the system at large, only to that user's VM/workload.
-The splat is a WARN_ON_ONCE() so it won't spam the kernel log.  panic_on_warn
-would be problematic, but assigning a CVE for every WARN seems excessive.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

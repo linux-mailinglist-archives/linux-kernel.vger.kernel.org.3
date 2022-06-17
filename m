@@ -2,190 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27AB54F13C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6BF54F140
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380226AbiFQGxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S1380350AbiFQG4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380098AbiFQGxR (ORCPT
+        with ESMTP id S1380062AbiFQG4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:53:17 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C0414D2D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:53:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IHxuQsl3zvkegBUE/ZYzeaQ174tYWEe6ZF5g79KzMc6Et7HQczgaliVEluKHqt9RnbyAruY0SvXy1TwtZsUUuDSG9M5jlhfOUO/Klj0C0pPKeOIYR8OsrHVyTW4uexR5QlOnhunJj25nTzxjJl7mpwL7+4I5v1rd8TeChJUf4P4yffH0Q25Hy2yABw3dyBb0ra7rpmMWA2+r9bWxmewoLIDrqe8wAVUhNMbFIFrrPErf/pyHKxX1DLpGpOfI9wFcjaWDt/HveC2Xk6s9nJ3GXN31mlbZRrXjMyDtThbiIxON54mjrofIOzd6hsFVxF57qqfM3jqPtqQw2vExRA5Rig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8xkNGV+DWHHxsohWyffVVQZ1Bg2tTaSMtbrvdlR8xIA=;
- b=N4EqmhVNPO9Xwk4OlSmnlq43736RMqLvznvGVBTTBeznMt/nuFetjIh1OcxcfxhjgwKBvwic3/cNmoq0cAvSPksPPs6Qabfczwgu/Jycu+8vMj2ietg3Fi1RAIUkd8SjhxydMgMhV4Cc5PElWVWk8DL5pM0eBQ+WYV033Lsq/ZuTaK8eClh4kOnWt1fGuqRvtlnREjXrhMeceDdavWpGKdc8emkaWpawr9vtcpgFcL2jmB4jjgQ78tdl6BIzn9gX117HHQL2UzEkxHWdrASVDuPeJKAML+JyQckZtjZL1v5SfhTMFdFBRVGLI1eNmZuQHb9SoVE9eFxY5woUuSAyXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8xkNGV+DWHHxsohWyffVVQZ1Bg2tTaSMtbrvdlR8xIA=;
- b=L3U8c7fJRdJPm3Zo0+U+44y2fF0WVBVMQfOhjbqECy0wHA/yao+jPKRp1RoS7LeTLXqHXq1SLP14nCOJJ/HuTmrkfpkW7W6w2LgBaqOp0qQFqVsIGpPkMLyRGWrNKA99lx7JRbbMOpW1hJcPR7/UjrClEujBvAv6CfH97hz81cMWWjcW4MTbPkMf6EGOda5m8l3XoNBcBcCJoNPgT8MNgn3ZFzsGAmY8A0vxEz76MQBeKp/TELFm7uO2PCL8Z9HV7gcy1JvNxZzxgj8XsUTXnOgmDwgs3kWXVCyOE3CxL1IFtOTehXJhOHn60OAnL1UVn3+Z/MJx01LvG+uTI6HEOA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2311.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Fri, 17 Jun
- 2022 06:53:13 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
- 06:53:13 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Liang He <windhl@126.com>
-CC:     "oss@buserror.net" <oss@buserror.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in sgy_cst1000
-Thread-Topic: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
- sgy_cst1000
-Thread-Index: AQHYghbqBxHmWj5zmk2B/xk+JkyGug==
-Date:   Fri, 17 Jun 2022 06:53:13 +0000
-Message-ID: <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
-References: <20220617060827.4004795-1-windhl@126.com>
- <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
- <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
-In-Reply-To: <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f31c159b-9d35-4415-a5ec-08da502e0cba
-x-ms-traffictypediagnostic: PR0P264MB2311:EE_
-x-microsoft-antispam-prvs: <PR0P264MB2311EA6F30751278906D3E85EDAF9@PR0P264MB2311.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: feSG/DEKTzEVP5nXDvwI/JNnaP9zizR1R9P52cUFZD1l7cOBy2FQ413UUXtyHS5ZTLQQQ3xIl2BgeDaJ8Cr76+EP/VN8cpjhxtjwByTn/qDMPfTCQ6pYYh4AbX4Fe02vUO4wXuAT1uLg+UAFStRZqeOqZPtVlcytsgP36M/sJNdFMpkBc8tKREV8jbBabdgY0r5TZvTHIxTsuxMcEVbmTy4ja/37nfvYjf2ljtWlSLv7G/R2Qe37xfmfelVsUD8l8Zs8Ur0lTjCrUVEU2CYeUgMGwNxlJFU4B4Z5DAwSaZLg3Ifa/TGuxLZuwAQLauoPidP9pwNnRmfS2SiRrv72dqp5aADfQvEPVzkKCHotbaUDxIoR8uhg3peYfg5M2WEzh9/VK7A694e2x9Jdy7BKDHtDD2xxk8CTh4vMPkICdxzPugd1iMPzmqdNd86QRCXjIu5D6TptDIE6yf8ZfCWDqpXdutX0/CiHA9G/eG/GOGw5vR6OH6737MaFoQ/OMsuf4o7GyHNpEI/cQnUkCZz4g8ODrHYmj9I0Fl2NMY2YkhtqAS8XpdnrLUSf9HMkAfSfksDZEvYdOXSMoDEBOG8CT0b+OTuJWDSOtanVFrWrGuoX+Crn1zxr+ilTnsuf36lYNj2HBfvKc0WjKYoM6m2jQbsHQHp1tnuIyQS4ldaNaQhZVupZZZxkNgwMKKmz61QSC2kX3g0EllvueYIVemQkAMiPcTaXbxFthnD2FToQgapXopfnrxoyI+c5YCrGcHGeEl5WXpKKpOu557auFViai/4IZzkKXMi+7ABlWLk4xhNz9TX3j35imcWMAS4ew7+KTl/PGHolpVM+EqcOlLMBp+Ik7qXgpLy1X+k351YPTps=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(36756003)(8936002)(316002)(498600001)(8676002)(31686004)(64756008)(4326008)(66446008)(44832011)(71200400001)(76116006)(2906002)(83380400001)(6512007)(66476007)(66556008)(66946007)(2616005)(86362001)(54906003)(122000001)(6506007)(31696002)(26005)(966005)(5660300002)(38100700002)(6486002)(186003)(38070700005)(6916009)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UEZQL0diRWJOWUw2M0R4U083YVVqUnVtOFNUVjNlQ3VIdTVGOUMzaktqQWVl?=
- =?utf-8?B?RFFuY0dIalIyTTRZeDA0anpwMm1kTDRmWGZrYmpWb3ZtOXowK3ZjMHJPVTdY?=
- =?utf-8?B?NEw1S3czVkdEdHpkZDJTaGgzWEQ0UmhSU2owbGtBdWxuT1czeEtKcnFQaGdI?=
- =?utf-8?B?V0NOUnQvMW5vSzJqODdKVnZ2M3dpYlQ2WVBKNHBGWlp3UGZzNityU1VweWp4?=
- =?utf-8?B?Uys2eTN1T3R2bjVWMTJBNElQVkppdWhNNWtTb2pGZ3Rmb3k2VFFZNTFMYjVS?=
- =?utf-8?B?c1J0Q05VdE5wSDBpais0T3U5eU5FRk5XTTI1NDQ1T0lnMFZvemc4bDlHcWJD?=
- =?utf-8?B?RzdqV25pUkdHVVUrbjlXQ1c3eFJRV0toblllWkh6OHZTMEh3eElXZXdFNFFE?=
- =?utf-8?B?OWM5VENUN1ZHU2VZL2dzS044djFqNXhSL3lpaXFkbG9jcDNLRUpRdU5oZ2Ix?=
- =?utf-8?B?VGorMUVSdWIyY0ozaDVkMnk1dEdLb3hldzJpUmpqVXNHcHlUY3JYWk5BUGc1?=
- =?utf-8?B?MVBuTlIxNHVnRU9tak1iSERBc3FGUnJMUDFyRGgxMXVPNFgveDZaeGNQaDhH?=
- =?utf-8?B?NW5aQmxLZFZ0UC80NUZ3KzJNclpsYW5WM3ZRM2VycWlJcU1WOW9XbUZEczRr?=
- =?utf-8?B?K2NubzdZaFRlOUxScWREeHo1cnN1VlZXa2lhNlhod3JJZWd2YklSKzdIUWk1?=
- =?utf-8?B?SHJKaEN4em8yL3l5Z0NkUC9UYU04ZVpBcDQyYTBVa1BrSFp2Q0R6Zm96ZjFl?=
- =?utf-8?B?ZCtlOWdhUVE0WTNKUzhXMWoyT1VyZUR1OFg1NDljV0ZMN296d3BhUTJDMkNz?=
- =?utf-8?B?YUZDenk2Ym9teGlha3BGU2dhVXFqUmtwTVJINGhDcGZPWFRIT1lnZnhLMzcr?=
- =?utf-8?B?cnpQcDVLMmt1c3hkYTJxaVdQUDBmamhOM1kyWncwMzJ5K09ObXlsTzBmRnRv?=
- =?utf-8?B?TFoyWkxnMElzTXVEb095MFp1cVNxTTBTL3BjZDU0Y3R3RzNNUitUeWtVYlkv?=
- =?utf-8?B?UUtCZjRuZHczYmNyc1h1WWN3STNWczZHWFQ2VTIyTi9kSzAxNGRvU2RnVEFo?=
- =?utf-8?B?a2FDVUhEYkVmVEFuN3hibzdBaUh0R0MzeHRuUlpXSHRyem53VXBkcXVsVzhF?=
- =?utf-8?B?Nk5zZXBRWGpVN0ZaVStuSExEWUZOT0lYbjlyeEROdGZjaE9FUzE3UHcvNXor?=
- =?utf-8?B?b3BlYzhsWDB2L0V0dU43b3ArUjBEUzF0dXRQOEQyNldMSGRHaklxZDF2NzYz?=
- =?utf-8?B?dWp3ZHgrTEwreUhFaW5lWlNjYjkxcmNNcE9KeHNpcXNUcW5nZ21DN01iZnNY?=
- =?utf-8?B?aEZycTJQbXlYT1FQc1B1Ynl0cUkvNDJFdUFmRW1kK1N4K1lhUk0zNFlzcTFK?=
- =?utf-8?B?WXZ5V1l5dlU1aFlZWEw4NzZUUnN4NXVmUEN5cGVmZnpTcnZvak5zOE5FM25X?=
- =?utf-8?B?UTg1dEt3eUVUc01mMnVLblRQemh1M1g0UkJsc2gwSXA1bE11OW0zZEsySUNu?=
- =?utf-8?B?TGN5alJBU0Y2UnVZZTF3Z3h3Q2RmaTFsMitrMFN6SlJWYlRIcHJta3JwTlY0?=
- =?utf-8?B?ajB5TFNDL0RBWnhidzdPaytGS1F3VW9TeGlPOCttaXJCKzZhWjhaMFpteGtJ?=
- =?utf-8?B?bG5IUnZ5bW10QldPMjI5MjJDdnFiaVlWa2RaVlpxeWU4TDJjcHVHTkYwZStO?=
- =?utf-8?B?eEZmMzArNEh6aGdod2xYTWNKMkRxcUJlOUt3R1oyNjVhWXMzVExpdFJUZUdv?=
- =?utf-8?B?M1AzNHlnT0Z2MnN4YkV0bzNweDNUMUlTZ3JBQmpNeWtKZ1AvSDhuYXdUaWNq?=
- =?utf-8?B?WXNGQ2RtWkxnOXZYWDhPeTRzRlBsSTJDZm5HQVJvYmlNSStiNEtHUEdkSGpM?=
- =?utf-8?B?MEpHcXQzZzBMeVVjV3JEbVR3VjkreDdjN1BYTGFGMEM4anBPRHE2ZGFXbWwx?=
- =?utf-8?B?aXd4QkhobzVua1F1L1FjQjN2cVBRcVY4cWJSVmx4ZHBjZjF6UDhMeVdhQnY4?=
- =?utf-8?B?OUpERVJGK3pzVTBuazNJZnp5UDZtY2dLN0U4VWRGTVpnL3pEL3Z3eGNVRThT?=
- =?utf-8?B?QytUYkljcUFtdkc1SlFQZUxDWjRPeldVUUpVcFR6N2lkQmM3Z2tKUnlpdno5?=
- =?utf-8?B?OEEzZzQreVcvVno3b1Exa21EUTR4eU9TY0c4T2hvTms1V2Nobmk1K0o3TFB5?=
- =?utf-8?B?dE1CRWdmUmYzUkF6VmFVNDZZOWY3TkRQT0hyZTg2amsrMjhrMEY2YXRzaEJM?=
- =?utf-8?B?N1M2Q1JiaWxEbGlSVzVsOG1Pb0dNaTcwYUVsTFk1elhJUGFCZEN2WHdZSWlO?=
- =?utf-8?B?U2F4YW9ieTByd3JYVXYranNhV01HTTVpdUcwT3ZFM2dVbGpzUEloNWZuZisr?=
- =?utf-8?Q?CkfOFAcLM9nx80amkYhJe5GDqwAxnCHGdyUIv?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4281C3A67FC4E247AECEBB153BA1B8F1@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 17 Jun 2022 02:56:11 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36104D61C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655448970; x=1686984970;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1h2b47a7yQ4psgtiKa1vXTHgS2gxDIb5ubjtosDpiqE=;
+  b=oXI0IjO7e9N0QTI+LyI9xNJ1X4HnLi1s0n5l/siowSPt4Xy29wOeMA+D
+   HLrGeF12fQ0E1KJXZcfgujdlHmRwg7I9xmXJCZ6ZIIMZgscc67PHvv7Ch
+   XJytmyqV7Qr0MaaMy1GpNCg0n+jnxWdh0rSOXqoBClWJbFqgbhrKr0Z4Z
+   cMsM/XcmXt4ACsiSL3ci5dflRjm4zlA+UWyS5CZH6/bOcqR8sz7ZjjIdG
+   h2ZX1gmqh1ijCDhK1YYNCJGPf6s2qAmfb/hyIe093NQoxZYqEtauPizRE
+   lBZWz5wPl2ZtSgmk6/KoYLfjWZFPgDUXWLLx/mDlwAYZIIaSBH5Y+/LZE
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
+   d="scan'208";a="204164972"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 17 Jun 2022 14:56:10 +0800
+IronPort-SDR: DnRa8m8Rnk9hFFQKfy8ZPcYeLAXXfXBcqfcryu/GZ9C8r4D9sB+olvbvclSCfWRa52Cp9zMia7
+ qFpfMWw+zuSlyF2QhOYAtBs3/8qcQkvvagTyxzIo2wI2cHyKVTSvrOBW7XS0S22o52zo6fbjDS
+ gBoxTD7RqKYnFxRUHmDVFzX7JfM7GjCJkGoNlskyCWuycEqeytZp6YRdTNCDzp3b7ZSw+vKECJ
+ AO8tz5lXGjOaiK9jUg6gB721IU8fnlfYPI43T6yjCWsYC5/hB6a5JUBlsCtHL2lpaooMENJCdn
+ 20khcBtdhKEsYFpRSVxsGswR
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Jun 2022 23:14:21 -0700
+IronPort-SDR: JQhzyK9PfCu7LhYoHhcqXD0l2S04Pf/rBokLv7t4sSDS8VoE9myec2Ed/v0s5Q2Pvbet+pncrc
+ 3SXOgfuEF6kz6gYQmfLoddbyMxlChEF3jTISpMYTyml6+UTt2Nr99FCzKiM9/Iulem3zT9GVab
+ EBQsAorng50IZQNt7tEFEBEUhnBPvnlyELfV8hMUzqj403rKnqgD30lMifJisdjCl8eKvN9oeV
+ Xa68A+R856m5HQK/VUVGDWnSlmUVo8TDGJeNoVVBRU0rEurFbzHph/H/nAKdQ58wigkK/mpcG1
+ 4UQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Jun 2022 23:56:10 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LPVF43gCxz1Rwrw
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:56:08 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655448967; x=1658040968; bh=1h2b47a7yQ4psgtiKa1vXTHgS2gxDIb5ubj
+        tosDpiqE=; b=j1atsB5LvKvor6LNUEAg43gvXa37A3NJUa7sAfj9QCf/EYpfJHa
+        J5oymJfQjtZy6XwtfcpxshMlV7cCp+t59qFyugVB4FLYtsbzJazW3KR/JD5OhMQk
+        bHFAe3xxclVqFRUazTnSh9uZfU6EFYa2jUtNdDt9dJ4vgMNb91VutEARBWy4oTPS
+        PA8Nl5n148hrOnVoOq8B8mwacDcbEAYTZOEcHsLNKeMwkjTajn5r26ZX5ihuMMf8
+        Ve8K1OpbbfXvQFFpDQmvgOfBnPIgDmnK3iemnUw6x1c/vbdXs4tQk6986dYAorr0
+        J8GoU5q8Q1JfRaj0M6RcV4IsmyO2rY03CqA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1a0-eLDW0ZH4 for <linux-kernel@vger.kernel.org>;
+        Thu, 16 Jun 2022 23:56:07 -0700 (PDT)
+Received: from [10.225.163.84] (unknown [10.225.163.84])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LPVF05H8mz1Rvlc;
+        Thu, 16 Jun 2022 23:56:04 -0700 (PDT)
+Message-ID: <f4cf6348-dd94-aa82-7519-318248c51151@opensource.wdc.com>
+Date:   Fri, 17 Jun 2022 15:56:03 +0900
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: f31c159b-9d35-4415-a5ec-08da502e0cba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 06:53:13.8310
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LE7+2vIFLiAq+qTGhGCq/TCCeH5PUz4nQbvX5rzCeM9fgiNRFRl/f9NFf8R6jpzodKBGlX8xPXqryPTGjB4ZOTRrcPdUe/rZe0hbYaQe9+c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2311
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 13/13] dm: add non power of 2 zoned target
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        snitzer@redhat.com, axboe@kernel.dk
+Cc:     bvanassche@acm.org, linux-kernel@vger.kernel.org,
+        jiangbo.365@bytedance.com, hare@suse.de, pankydev8@gmail.com,
+        dm-devel@redhat.com, jonathan.derrick@linux.dev,
+        gost.dev@samsung.com, dsterba@suse.com, jaegeuk@kernel.org,
+        linux-nvme@lists.infradead.org, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org
+References: <20220615101920.329421-1-p.raghav@samsung.com>
+ <CGME20220615102011eucas1p220368db4a186181b1927dea50a79e5d4@eucas1p2.samsung.com>
+ <20220615101920.329421-14-p.raghav@samsung.com>
+ <63b0cfb6-eb24-f058-e502-2637039c5a98@opensource.wdc.com>
+ <0b819562-8b16-37b6-9220-28bf1960bccb@samsung.com>
+ <0c4f30f2-c206-0201-31e3-fbb9edbdf666@opensource.wdc.com>
+ <4746a000-2220-211e-1bd6-79c15c18a85c@samsung.com>
+ <e0dc08fd-cd00-240d-edc4-5799d51aa5a8@opensource.wdc.com>
+ <a945def3-ba5a-7539-e96a-43ade0ae674a@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <a945def3-ba5a-7539-e96a-43ade0ae674a@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE3LzA2LzIwMjIgw6AgMDg6NDUsIExpYW5nIEhlIGEgw6ljcml0wqA6DQo+IA0KPiAN
-Cj4gDQo+IEF0IDIwMjItMDYtMTcgMTQ6Mjg6NTYsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0
-b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cm90ZToNCj4+DQo+Pg0KPj4gTGUgMTcvMDYvMjAyMiDD
-oCAwODowOCwgTGlhbmcgSGUgYSDDqWNyaXTCoDoNCj4+PiBJbiBncGlvX2hhbHRfcHJvYmUoKSwg
-b2ZfZmluZF9tYXRjaGluZ19ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlDQo+Pj4gcG9pbnRlciB3
-aXRoIHJlZmNvdW50IGluY3JlbWVudGVkLiBXZSBzaG91bGQgdXNlIG9mX25vZGVfcHV0KCkgaW4N
-Cj4+PiBmYWlsIHBhdGggb3Igd2hlbiBpdCBpcyBub3QgdXNlZCBhbnltb3JlLg0KPj4+DQo+Pj4g
-U2lnbmVkLW9mZi1ieTogTGlhbmcgSGUgPHdpbmRobEAxMjYuY29tPg0KPj4+IC0tLQ0KPj4+ICAg
-IGNoYW5nZWxvZzoNCj4+PiAgICB2NDogcmV1c2UgZXhpc3QgJ2VycicgYW5kIHVzZSBhIHNpbXBs
-ZSBjb2RlIHN0eWxlLCBhZHZpc2VkIGJ5IENKDQo+Pj4gICAgdjM6IHVzZSBsb2NhbCAnY2hpbGRf
-bm9kZScgYWR2aXNlZCBieSBNaWNoYWVsLg0KPj4+ICAgIHYyOiB1c2UgZ290by1sYWJlbCBwYXRj
-aCBzdHlsZSBhZHZpc2VkIGJ5IENocmlzdG9waGUgTGVyb3kuDQo+Pj4gICAgdjE6IGFkZCBvZl9u
-b2RlX3B1dCgpIGJlZm9yZSBlYWNoIGV4aXQuDQo+Pj4NCj4+PiAgICBhcmNoL3Bvd2VycGMvcGxh
-dGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDM1ICsrKysrKysrKysrKysrLS0tLS0tLS0tDQo+
-Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQ0K
-Pj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3Rz
-MTAwMC5jIGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMNCj4+PiBp
-bmRleCA5OGFlNjQwNzUxOTMuLmU0NTg4OTQzZmU3ZSAxMDA2NDQNCj4+PiAtLS0gYS9hcmNoL3Bv
-d2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYw0KPj4+ICsrKyBiL2FyY2gvcG93ZXJw
-Yy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5jDQo+Pj4gQEAgLTcxLDYgKzcxLDcgQEAgc3Rh
-dGljIGludCBncGlvX2hhbHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+
-PiAgICB7DQo+Pj4gICAgCWVudW0gb2ZfZ3Bpb19mbGFncyBmbGFnczsNCj4+PiAgICAJc3RydWN0
-IGRldmljZV9ub2RlICpub2RlID0gcGRldi0+ZGV2Lm9mX25vZGU7DQo+Pj4gKwlzdHJ1Y3QgZGV2
-aWNlX25vZGUgKmNoaWxkX25vZGU7DQo+Pj4gICAgCWludCBncGlvLCBlcnIsIGlycTsNCj4+PiAg
-ICAJaW50IHRyaWdnZXI7DQo+Pj4gICAgDQo+Pj4gQEAgLTc4LDI2ICs3OSwyOSBAQCBzdGF0aWMg
-aW50IGdwaW9faGFsdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4+ICAg
-IAkJcmV0dXJuIC1FTk9ERVY7DQo+Pj4gICAgDQo+Pj4gICAgCS8qIElmIHRoZXJlJ3Mgbm8gbWF0
-Y2hpbmcgY2hpbGQsIHRoaXMgaXNuJ3QgcmVhbGx5IGFuIGVycm9yICovDQo+Pj4gLQloYWx0X25v
-ZGUgPSBvZl9maW5kX21hdGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOw0KPj4+IC0JaWYg
-KCFoYWx0X25vZGUpDQo+Pj4gKwljaGlsZF9ub2RlID0gb2ZfZmluZF9tYXRjaGluZ19ub2RlKG5v
-ZGUsIGNoaWxkX21hdGNoKTsNCj4+PiArCWlmICghY2hpbGRfbm9kZSkNCj4+PiAgICAJCXJldHVy
-biAwOw0KPj4+ICAgIA0KPj4+ICAgIAkvKiBUZWNobmljYWxseSB3ZSBjb3VsZCBqdXN0IHJlYWQg
-dGhlIGZpcnN0IG9uZSwgYnV0IHB1bmlzaA0KPj4+ICAgIAkgKiBEVCB3cml0ZXJzIGZvciBpbnZh
-bGlkIGZvcm0uICovDQo+Pj4gLQlpZiAob2ZfZ3Bpb19jb3VudChoYWx0X25vZGUpICE9IDEpDQo+
-Pj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4gKwlpZiAob2ZfZ3Bpb19jb3VudChjaGlsZF9ub2Rl
-KSAhPSAxKSB7DQo+Pj4gKwkJZXJyID0gLUVJTlZBTDsNCj4+PiArCQlnb3RvIGVycl9wdXQ7DQo+
-Pj4gKwl9DQo+Pj4gICAgDQo+Pj4gICAgCS8qIEdldCB0aGUgZ3BpbyBudW1iZXIgcmVsYXRpdmUg
-dG8gdGhlIGR5bmFtaWMgYmFzZS4gKi8NCj4+PiAtCWdwaW8gPSBvZl9nZXRfZ3Bpb19mbGFncyho
-YWx0X25vZGUsIDAsICZmbGFncyk7DQo+Pj4gLQlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpDQo+
-Pj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4gKwlncGlvID0gb2ZfZ2V0X2dwaW9fZmxhZ3MoY2hp
-bGRfbm9kZSwgMCwgJmZsYWdzKTsNCj4+PiArCWlmICghZ3Bpb19pc192YWxpZChncGlvKSkgew0K
-Pj4+ICsJCWVyciA9IC1FSU5WQUw7DQo+Pj4gKwkJZ290b3QgZXJyX3B1dDsNCj4+DQo+PiBEaWQg
-eW91IHRlc3QgdGhlIGJ1aWxkID8NCj4gDQo+IFNvcnJ5IGZvciB0aGlzIGZhdWx0Lg0KPiANCj4g
-SW4gZmFjdCwgSSBhbSBzdGlsbCBmaW5kaW5nIGFuIGVmZmljaWVudCB3YXkgdG8gYnVpbGRpbmcg
-ZGlmZmVyZW50IGFyY2ggc291cmNlIGNvZGUgYXMgSSBvbmx5IGhhdmUgeDg2LTY0Lg0KPiANCj4g
-Tm93IEkgYW0gdHJ5IHVzaW5nIFFFTVUuDQo+IA0KPiBBbnl3YXksIHNvcnJ5IGZvciB0aGlzIGZh
-dWx0Lg0KDQpZb3UgY2FuIGZpbmQgY3Jvc3MgY29tcGlsZXJzIGZvciBtb3N0IGFyY2hpdGVjdHVy
-ZXMgZm9yIHg4Ni02NCBoZXJlIDogDQpodHRwczovL21pcnJvcnMuZWRnZS5rZXJuZWwub3JnL3B1
-Yi90b29scy9jcm9zc3Rvb2wvDQoNCkNocmlzdG9waGU=
+On 6/17/22 15:40, Pankaj Raghav wrote:
+> On 2022-06-17 08:12, Damien Le Moal wrote:
+>>> I think this is a cleaner approach using features flag and io_hints
+>>> instead of messing with the revalidate zone function:
+>>>
+>>> diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+>>> index 135c0cc190fb..c97a71e0473f 100644
+>>> --- a/drivers/md/dm-table.c
+>>> +++ b/drivers/md/dm-table.c
+>>> @@ -1618,6 +1618,9 @@ static int device_not_matches_zone_sectors(struct
+>>> dm_target *ti, struct dm_dev *
+>>>  	if (!blk_queue_is_zoned(q))
+>>>  		return 0;
+>>>
+>>> +	if(dm_target_supports_emulated_zone_size(ti->type))
+>>> +		return 0;
+>>> +
+>>
+>> This should be in validate_hardware_zoned_model(), not here.
+>>
+> I am not sure about this comment. We need to peek into the individual
+> target from the table to check for this feature right?
+> 
+> if (dm_table_any_dev_attr(table, device_not_matches_zone_sectors,
+> &zone_sectors)) {
+> 	DMERR("%s: zone sectors is not consistent across all zoned devices",
+>         dm_device_name(table->md));
+> 	return -EINVAL;
+> 	}
+> 
+> So we call this function device_not_matches_zone_sectors() from
+> validate_hardware_zoned_model() for each target and we let the validate
+> succeed even if the target's zone size is different from the underlying
+> device zone size if this feature flag is set. Let me know if I am
+> missing something and how this can be moved to
+> validate_hardware_zoned_model().
+
+Your change does not match the function name
+device_not_matches_zone_sectors(), at all. So I think this is wrong.
+
+The fact is that zone support in DM has been built under the following
+assumptions:
+1) A zoned device can be used to create a *zoned* target (e.g. dm-linear,
+dm-flakey, dm-crypt). For this case, the target *must* use the same zone
+size as the underlying devices and all devices used for the target must
+have the same zone size.
+2) A zoned device can be used to create a *regular* device target (e.g.
+dm-zoned). All zoned devices used for the target must have the same zone size.
+
+This new target driver completely breaks (1) and does not fit with (2). I
+suspect this is why you are seeing problems with dm_revalidate_zones() as
+that one uses the underlying device instead of the target report zones.
+
+Based on this analysis, validate_hardware_zoned_model() definitely needs
+to be changed. But device_not_matches_zone_sectors() is to check the
+assumptions (1) and (2) so changing it for your new case is wrong in my
+opinion. You need another set of assumptions (3) (define that well please)
+and modify validate_hardware_zoned_model() so that the defined constraints
+are checked. Using a target flag to indicate the type of zoned target is
+fine by me.
+
+-- 
+Damien Le Moal
+Western Digital Research

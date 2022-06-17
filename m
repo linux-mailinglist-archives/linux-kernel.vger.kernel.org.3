@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BBE54F88B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A785554F88E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382452AbiFQNuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        id S1382501AbiFQNuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiFQNty (ORCPT
+        with ESMTP id S1382472AbiFQNuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:49:54 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728AF434B5;
-        Fri, 17 Jun 2022 06:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=XNWqwDT8OLiBMyF06PjFh1gIXEFKaOZYcVPPTh5+6oY=;
-        b=amMOAijmuV3vUb7WW+/yDAKneF7zCeZDNCZfDm1S8CnZvHtO3XVa97WJJx05ShcQRifgv+8tpKn8L
-         kcOQMW0yML4TQmOi7Ep+QSnb44x7+Dq/FNTxnsakdDYnmkrz0X2oRdUVtNnteHoHPb7JRhT4NfLho4
-         1TBdAE2iaYckVhZCHNfBOsLAomq+79idFkCV1mz0UjcPd8azYRdwVfgKgOsypWPfxokvp2lo1OWj9H
-         ZnRB1BSeoDL/RzJgyCTwu5iPCMfrMXLMByYihOiNfL3OVN1+CvolUuo7vcsEKuHowVsSMu0IoJw+Tk
-         pc60j3Hiu3+x/eau5sa8hO8rK0/OF2A==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008312)], BW: [Enabled, t: (0.000019,0.000001)], RTDA: [Enabled, t: (0.072850), Hit: No, Details: v2.40.0; Id: 15.52k8oj.1g5ouq11u.27vg; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Fri, 17 Jun 2022 16:49:24 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, corbet@lwn.net
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v20 4/4] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Fri, 17 Jun 2022 16:48:46 +0300
-Message-Id: <20220617134846.19859-5-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220617134846.19859-1-i.bornyakov@metrotek.ru>
-References: <20220617134846.19859-1-i.bornyakov@metrotek.ru>
+        Fri, 17 Jun 2022 09:50:02 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32696433B8;
+        Fri, 17 Jun 2022 06:50:01 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 597E2741;
+        Fri, 17 Jun 2022 15:49:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1655473799;
+        bh=6HFQwJyFFUCTIY6mEX4k39R6zc6S/ycXDDjbNPTIYnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NQ0rR9GtDF27bT0g2FgKq9eR4R/zQnX9P2Xc05t4PZrfhfDGIsJaw1ejLMBYBtFtr
+         vU2ccDUuePOGWOyGY96kEzR3vzB43eBBdeKZQpvnT2E4x08/rXQCwbEOG1n96cvLCZ
+         O/erPvCxk00tRatUnZtrxjBupyJecf0gGpw8i08s=
+Date:   Fri, 17 Jun 2022 16:49:48 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
+Subject: Re: [PATCH v7 3/8] media: uvcvideo: Support minimum for
+ V4L2_CTRL_TYPE_MENU
+Message-ID: <YqyGfFK3UXhrBLwK@pendragon.ideasonboard.com>
+References: <20220617103645.71560-1-ribalda@chromium.org>
+ <20220617103645.71560-4-ribalda@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220617103645.71560-4-ribalda@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+Hi Ricardo,
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
----
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+Thank you for the patch.
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..aee45cb15592
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description:
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    description: SPI chip select
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
+On Fri, Jun 17, 2022 at 12:36:40PM +0200, Ricardo Ribalda wrote:
+> Currently all mappings of type V4L2_CTRL_TYPE_MENU, have a minimum of 0,
+> but there are some controls (limited powerline), that start with a value
+> different than 0.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 5 +++--
+>  drivers/media/usb/uvc/uvcvideo.h | 1 +
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 092decfdaa62..3b20b23abd1e 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1144,7 +1144,7 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+>  
+>  	switch (mapping->v4l2_type) {
+>  	case V4L2_CTRL_TYPE_MENU:
+> -		v4l2_ctrl->minimum = 0;
+> +		v4l2_ctrl->minimum = mapping->menu_min;
+>  		v4l2_ctrl->maximum = mapping->menu_count - 1;
+>  		v4l2_ctrl->step = 1;
+>  
+> @@ -1264,7 +1264,8 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+>  		goto done;
+>  	}
+>  
+> -	if (query_menu->index >= mapping->menu_count) {
+> +	if (query_menu->index < mapping->menu_min ||
+> +	    query_menu->index >= mapping->menu_count) {
+>  		ret = -EINVAL;
+>  		goto done;
+>  	}
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index fff5c5c99a3d..6ceb7f7b964d 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -254,6 +254,7 @@ struct uvc_control_mapping {
+>  	u32 data_type;
+>  
+>  	const struct uvc_menu_info *menu_info;
+> +	u32 menu_min;
+>  	u32 menu_count;
+
+That's a bit of a stop-gap measure, could we turn it into a bitmask
+instead ?
+
+>  
+>  	u32 master_id;
+
 -- 
-2.25.1
+Regards,
 
-
+Laurent Pinchart

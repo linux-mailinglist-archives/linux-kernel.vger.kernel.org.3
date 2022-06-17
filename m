@@ -2,120 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B976D54F748
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B938554F74C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381134AbiFQMNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 08:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S1380929AbiFQMO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 08:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239096AbiFQMNQ (ORCPT
+        with ESMTP id S234826AbiFQMO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 08:13:16 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F85E3D;
-        Fri, 17 Jun 2022 05:13:15 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so4269153wma.1;
-        Fri, 17 Jun 2022 05:13:15 -0700 (PDT)
+        Fri, 17 Jun 2022 08:14:26 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ABA28E23;
+        Fri, 17 Jun 2022 05:14:24 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b8so5913082edj.11;
+        Fri, 17 Jun 2022 05:14:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hnlyRioGpxx+rbPm2S0jS6ADUAhgKmqzSuVKtSCygKE=;
-        b=DtNHpfpHlFlaeqXduwx0230ymigZwE3YzhrDwapDz6K7xjYWim1sOMYwnNqiFUtIdO
-         LtRUjjUdSifY8JlG/rs5SUmn3NvK1rDYkFwODdcErzXrabvUSYS6mj4qWre9UNA3jsQK
-         xmj00Gg7lW4qkYffU+wUvpcHXY0opEJwW1UU+pRlFBzqK6r7gXx+2mrjZ7dHbiln8iau
-         aA4Zxc0DzqPAg1WlyEPnvDkBb3KXdViTCXE2bjYWMqb00WQlM4W9FibqQv4HJ8ttXTET
-         MHmzHNaZFdWHVCRulhu6KHWpPB1ewT73HoTPmPZwu6AvVbcPeALy6jsLwbHzpT6at+0U
-         YiDQ==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=ydFyEbnVaWWSrDTVNo9E/s79ZYsYTDWr/e2n3lOC/CQ=;
+        b=CBAzuT/3SNdBEYzyFXSlQr27NNAViGTYuipk4+FS3fWsXgGbatvUpbQWI7B2uU/FZ3
+         z0Lj7w2RWnZGD1Wk3jWo2ct6G5Tx9Bz+0m8Z5F17USH43jBuNCZQAxYRQE/t3FDlsRhp
+         6F7vYabAdTYAoSF2CT2UvOYPovWeuzoml9lTYyHUGIB9iQfDrxJp8yYGHg7UxyjVq0AQ
+         yzBcUJjFnNe+10OKXj8S8hB72RJkxLzLhrU27t9Uc+S2a3pgxQXjiMF0sU0vcoLiq+VN
+         sNe4Mvif8FR4ZLHw1q+kF8wCLbCQlBA4sVI0PCWHuFWZ1+SObFtK87fv0S4su0kDCgoT
+         d3eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hnlyRioGpxx+rbPm2S0jS6ADUAhgKmqzSuVKtSCygKE=;
-        b=enFkf3sOmvcejbNwl+4Q8xiXB1ldCQkAac1KzcBnEdGlPl+Lal5XkZVkBK4EJiDxmj
-         D7jBfOEsYXY27NrHfPd2NUjkBNxpqLWIWZrkItL/+miB00swyvcBEME0O/N1eeLf4tzK
-         ri0P4GSKiPq/wUUyzR7NzFmjuQgtH/og2gNGYloPDGawFg0qjs5nZctIuXgMjk0jyPKg
-         kHBtBaHv9YoZn2gTF7zRROiylSNdnexwoE/PEzbztyAHEtg8ekfSk1LfP1FNhQkhei9+
-         1T9K9dnBObisreVt/PMsUuouCpFR+BU0hu8PylvXNjYYF9fStVvYf8gJ2DnUNmvbfGuZ
-         76Kg==
-X-Gm-Message-State: AJIora8ChZXnxCAmKtu1f0u5N6Oa94zwDuOJj05D0i755pH3pLWdaBh/
-        CBw0o2ndZAMvTqVRTNr82NXfJ54RhRs=
-X-Google-Smtp-Source: AGRyM1tQeLWeg+xDGUA28c6lmAfKslWy7OeQwCiqFA+VwETfyXI6hxyyCo/pbQbUgFGCRx13Tp54qw==
-X-Received: by 2002:a05:600c:190b:b0:39c:7704:74a4 with SMTP id j11-20020a05600c190b00b0039c770474a4mr9806897wmq.92.1655467994150;
-        Fri, 17 Jun 2022 05:13:14 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id d8-20020adfc088000000b00213ba0cab3asm4526185wrf.44.2022.06.17.05.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 05:13:13 -0700 (PDT)
-Message-ID: <fe7c52f9-5ff3-95a5-2692-20f81d6decf7@gmail.com>
-Date:   Fri, 17 Jun 2022 14:13:12 +0200
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=ydFyEbnVaWWSrDTVNo9E/s79ZYsYTDWr/e2n3lOC/CQ=;
+        b=RStAg3zkBP/kgSxWgtIAfk0/HKhJJDvSd+BAA1bWPsfWcc+cSX9p2ol9a/sN9EBf5/
+         pSFiGuuTv2P4Co/L6yVFnOWhH+aofsbKA8V48NKPCT/jbQ/pCIIMV13vgB5OZQcogeqs
+         pm3efMX3GI1oGvSp8FBcB01yx1BZkS/c5W59xkAQ1nUholxtnHx2jhrOlp6SnRvO1s/n
+         FFOklnpq3A04LUX9QZN+AdGUUEdKrK04krjjvgXyvBbTH3Pxq7I3If+3lb5Yx4rPLXdB
+         WutSHeOcVeeOEg7Jp0Pq5biEHgxrTWKzxKo21HiIwRe31iHOTZMSgPI8nCd5u9hdYHUJ
+         JJAA==
+X-Gm-Message-State: AJIora+D7pcbWgpLLXtbq7VD9YHLxHRgg8AN5s49UhSUptrPugXrxT4X
+        prDuldoSzKMnh+1Wp5RdJtw=
+X-Google-Smtp-Source: AGRyM1s4OQqcTAHNZzk78E61Oh2A73AGQnN8S5QSHmcK82apV7c2oIsmFff70+2MNyJGzq/V6gYeeQ==
+X-Received: by 2002:a05:6402:5114:b0:42f:b5f3:1f96 with SMTP id m20-20020a056402511400b0042fb5f31f96mr12217153edd.260.1655468063324;
+        Fri, 17 Jun 2022 05:14:23 -0700 (PDT)
+Received: from localhost (92.40.168.190.threembb.co.uk. [92.40.168.190])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170906318200b006fe98fb9523sm2132015ejy.129.2022.06.17.05.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 05:14:22 -0700 (PDT)
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-11-aidanmacdonald.0x0@gmail.com>
+ <CAHp75VevetU0p+BTcQ6HcAn=2xgVGAL34ZuAi53rK3SDt=O-cw@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/10] pinctrl: Add AXP192 pin control driver
+In-reply-to: <CAHp75VevetU0p+BTcQ6HcAn=2xgVGAL34ZuAi53rK3SDt=O-cw@mail.gmail.com>
+Date:   Fri, 17 Jun 2022 13:15:27 +0100
+Message-ID: <VGkmH1cTj8QZxZXUjbuky58yY3X5QWSY@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Ping: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Language: en-US
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        libc-alpha@sourceware.org,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Zack Weinberg <zack@owlfolio.org>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        David Howells <dhowells@redhat.com>
-References: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
- <YZvIlz7J6vOEY+Xu@yuki> <1618289.1637686052@warthog.procyon.org.uk>
- <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki>
- <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
- <913509.1638457313@warthog.procyon.org.uk> <YbDQW6uakG3XD8jV@yuki>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <YbDQW6uakG3XD8jV@yuki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cyril,
 
-On 12/8/21 16:33, Cyril Hrubis wrote:
-> Hi!
->>> I could be persuaded otherwise with an example of a program for which
->>> changing __s64 from 'long long' to 'long' would break *binary* backward
->>> compatibility, or similarly for __u64.
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+
+> On Fri, Jun 3, 2022 at 6:29 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
 >>
->> C++ could break.
-> 
-> Thinking of this again we can detect C++ as well so it can be safely
-> enabled just for C with:
-> 
-> #if !defined(__KERNEL__) && !defined(__cplusplus) && __BITSPERLONG == 64
-> # include <asm-generic/int-l64.h>
-> #else
-> # include <asm-generic/int-ll64.h>
-> #endif
-> 
+>> The AXP192 PMIC's GPIO registers are much different from the GPIO
+>> registers of the AXP20x and AXP813 PMICs supported by the existing
+>> pinctrl-axp209 driver. It makes more sense to add a new driver for
+>> the AXP192, rather than add support in the existing axp20x driver.
+>>
+>> The pinctrl-axp192 driver is considerably more flexible in terms of
+>> register layout and should be able to support other X-Powers PMICs.
+>> Interrupts and pull down resistor configuration are supported too.
+>
+> Thank you for contribution, overall looks good, below some not very
+> critical comments.
+>
+> ...
+>
 
-I'm very interested in seeing this merged, as that would allow 
-simplifying the man-pages by removing unnecessary kernel details such as 
-u64[1].  How is the state of this patch?
+Thanks very much for the review. I'll fix up the issues you spotted
+in v3. (v2 doesn't make any changes to the pinctrl driver.)
 
-Cheers,
+>> +static const struct axp192_pctl_reg_info axp192_pin_ctrl_regs[] = {
+>> +       { .reg = AXP192_GPIO0_CTRL,   .mask = 0x07 },
+>> +       { .reg = AXP192_GPIO1_CTRL,   .mask = 0x07 },
+>> +       { .reg = AXP192_GPIO2_CTRL,   .mask = 0x07 },
+>> +       { .reg = AXP192_GPIO4_3_CTRL, .mask = 0x03 },
+>> +       { .reg = AXP192_GPIO4_3_CTRL, .mask = 0x0c },
+>> +       { .reg = AXP192_N_RSTO_CTRL,  .mask = 0xc0 },
+>> +};
+>
+> GENMASK()
+>
+> ...
+>
+>> +       if ((val & reginfo->mask) == (input_muxvals[offset] << (ffs(reginfo->mask) - 1)))
+>> +               return GPIO_LINE_DIRECTION_IN;
+>
+>> +       else
+>
+> Redundant.
+> Also applies for the other similar cases in your code. Note, this is
+> also redundant for 'continue' and 'break' in case of loops.
+>
 
-Alex
+Sorry, I'm not sure what you're referring to here. The "else"?
+I'm missing the generalization.
 
+>> +               return GPIO_LINE_DIRECTION_OUT;
+>
+> ...
+>
+>> +       if (!reginfo->mask)
+>> +               return -EOPNOTSUPP;
+>
+> Please, double check that this is used by the pin control subsystem
+> and not ENOTSUP in your case here.
 
-[1]: 
-<https://lore.kernel.org/linux-man/20210423230609.13519-1-alx.manpages@gmail.com/T/#u>
+Whoops. You're right, it should be ENOTSUPP.
 
--- 
-Alejandro Colomar
-<http://www.alejandro-colomar.es/>
+>
+> ...
+>
+>> +       default:
+>> +               return -EOPNOTSUPP;
+>
+> Ditto.
+>
+> ...
+>
+>> +               default:
+>> +                       return -EOPNOTSUPP;
+>
+> Ditto.
+>
+> ...
+>
+>> +               default:
+>> +                       /* unreachable */
+>> +                       break;
+>
+> return 0?! Perhaps you need to return an error?
+>
+
+Yeah, that sounds like a good idea for maintainability. I think
+there's no need to check that the requested configs are supported
+beforehand since the caller must deal with errors in the middle of
+the sequence anyway, so I'll drop that check and add ENOTSUPP here.
+
+>> +               }
+>> +       }
+>> +
+>> +       return 0;
+>
+> ...
+>
+>> +       if (muxvals[group] == (u8)-1)
+>
+> limits.h and U8_MAX? Or GENMASK()? Choose one which suits you.
+>
+>> +               return -EINVAL;
+>
+> ...
+>
+>> +       if (!of_device_is_available(pdev->dev.of_node))
+>> +               return -ENODEV;
+>
+> Dead code.
+>
+
+OK. Did some digging, and this is useless because the parent mfd
+device is checking availability.
+
+>> +       if (!axp20x) {
+>> +               dev_err(&pdev->dev, "Parent drvdata not set\n");
+>> +               return -EINVAL;
+>> +       }
+>
+> Another useless piece of code.
+>
+> ...
+>
+>> +       pctl->desc = of_device_get_match_data(&pdev->dev);
+>
+> device_get_match_data()
+>
+> ...
+>
+>> +       pctl->chip.to_irq               = axp192_gpio_to_irq;
+>
+> Why a custom method?
+>
+> ...
+>
+
+The irq chip is part of the mfd device, not the gpio chip. There does
+not seem to be any default implementation for this case so I have to
+provide one. A similar example is gpio-wm8994.
+
+I did notice I'm doing something wrong by calling regmap_irq_get_virq()
+in the probe function, which creates an irq mapping; I think I should be
+doing that in the to_irq() callback like the other drivers do.
+
+>> +       pctl->pctl_dev = devm_pinctrl_register(&pdev->dev, pctrl_desc, pctl);
+>> +       if (IS_ERR(pctl->pctl_dev)) {
+>> +               dev_err(&pdev->dev, "couldn't register pinctrl driver\n");
+>> +               return PTR_ERR(pctl->pctl_dev);
+>
+> Here and everywhere else in ->probe() and Co, use
+>
+>   return dev_err_probe(...);
+>
+> pattern.
+>
+>> +       }
+>
+> ...
+>
+>> +       ret = gpiochip_add_pin_range(&pctl->chip, dev_name(&pdev->dev),
+>> +                                    pctl->desc->pins->number,
+>> +                                    pctl->desc->pins->number,
+>> +                                    pctl->desc->npins);
+>> +       if (ret) {
+>> +               dev_err(&pdev->dev, "failed to add pin range\n");
+>> +               return ret;
+>> +       }
+>
+> We have a specific callback where you may put this, otherwise on some
+> systems it may not work as expected.
+>
+> ...
+>
+
+Ah, sorry, I see that function is deprecated. The documentation points
+to doing this in the device tree instead. So if I understand correctly
+I should follow the example of pinctrl-thunderbay and add gpio-ranges:
+
+    pinctrl0: gpio@0 {
+        compatible = "x-powers,axp192-gpio";
+        gpio-controller;
+        #gpio-cells = <2>;
+        gpio-ranges = <&pinctrl0 0 0 6>;
+    };
+
+which means I'll have to update the gpio DT bindings. I'm guessing the
+callback you mentioned is add_pin_ranges() or of_gpio_ranges_fallback()
+but neither of those seem appropriate in this case. The DT node should
+be good enough.
+
+>> +       dev_info(&pdev->dev, "AXP192 pinctrl and GPIO driver loaded\n");
+>
+> Useless.
+>
+> ...
+>
+>> +static struct platform_driver axp192_pctl_driver = {
+>> +       .probe          = axp192_pctl_probe,
+>> +       .driver = {
+>> +               .name           = "axp192-gpio",
+>> +               .of_match_table = axp192_pctl_match,
+>> +       },
+>> +};
+>
+>> +
+>
+> Redundant blank line.
+>
+>> +module_platform_driver(axp192_pctl_driver);
+>
+> ...
+>
+> Globally two comments:
+> 1) I also believe that you may utilize gpio-regmap API;
+> 2) try to get rid of OFisms, make it property provider agnostic.
+
+I wasn't aware of gpio-regmap, will check it out.
+
+Regards,
+Aidan

@@ -2,126 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1285500B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9BB5500BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383674AbiFQXZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S1383686AbiFQX0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383500AbiFQXZb (ORCPT
+        with ESMTP id S1383500AbiFQX0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:25:31 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523AC6622C;
-        Fri, 17 Jun 2022 16:25:30 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id d123so5950230iof.10;
-        Fri, 17 Jun 2022 16:25:30 -0700 (PDT)
+        Fri, 17 Jun 2022 19:26:17 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3427C663F4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:26:16 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id i29so9011514lfp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EXgpKpIVzT6qnZVCgCn3/+ZdUQI+LHK0/bEVe7Lb4mY=;
+        b=hldD5704PosVIx7pUYS/I5Fkd39xNzHxffHQ4mZN1Dqeeuu2C4pwCxAQJNgtGLYwk9
+         w7FJIcrUIRSS7x7h7nxefPG9ErzMKZMCYjFXnwB6jDP9vW9l7w3v44r21dvY+UO/roaH
+         DuoO8nTSDMIPRijv/rUkB+5O/ifpxQW5EsEk/kcxRq9igUh8BEY3NEIxapGHRXPEivrV
+         mEubtXEvlefXACss71A3Yow9/ml9N4sTH4bxhcrDrh4VpAU+l17QlhYYZuNW98vzP9tg
+         nWdM5nclxBc/2bwkBpTMkpG+KU30Q0CgYJD/wbMLZRWwW2OIMr9AzbNDc9dxSlEJaxPO
+         Zx/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9t+RTHlMGnTIMzkuniBS/cRBo0RFDQfHVRvCE6rQ+lk=;
-        b=X6LTPLMQXynsJcmZMfGkHSUrCM3jSqb1WWTT4wXY8cOBmG2A7S5sqYNuwJOilMIfbO
-         9lV4FDOQnxQVDfIH5NpcLALZWfngVsdfsKOyS6MqUYjaT1NUw+eNNWx8EbQdepnuoiCy
-         C18KZjfkRzpd/5umWw1xqSdWcvvKQDGpVXn1tZbToHPnp3s0ClVeThMq88TUVcMLlxra
-         ziTA/BcNQth5QG3Qq1/eXrLoXoId4mTNWgzhE6fq3q0M5wEqrDxrRWVz3sHOdniZdxw/
-         ZlktRSW/QBZsi2UUscRlrCIJrWlmWFCUoCc+hGDfhlIEwotIqwIUxtr2avoWx/OLXkAQ
-         eLuQ==
-X-Gm-Message-State: AJIora/a4uBAxVrnpxLFcsGW++XGGOril9RxGYZ48xxB9M/yECfNL83N
-        UnVegHUYsC1zwYH7w1+vcg==
-X-Google-Smtp-Source: AGRyM1vv8dGfZ8d6eH4xBrD0ZZY9f3vkhZfNHWKMYkfzEMy6bJj+y3ZJxm4fbfo0jwgLRRJDIs3GWg==
-X-Received: by 2002:a05:6638:481c:b0:336:2f15:70fc with SMTP id cp28-20020a056638481c00b003362f1570fcmr3976515jab.163.1655508329524;
-        Fri, 17 Jun 2022 16:25:29 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id o2-20020a6bbe02000000b00669de60a268sm3128595iof.21.2022.06.17.16.25.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 16:25:29 -0700 (PDT)
-Received: (nullmailer pid 2632617 invoked by uid 1000);
-        Fri, 17 Jun 2022 23:25:28 -0000
-Date:   Fri, 17 Jun 2022 17:25:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH] dt-bindings: display: delete ilitek,ili9341.txt
-Message-ID: <20220617232528.GA2628998-robh@kernel.org>
-References: <20220617213706.376730-1-mail@conchuod.ie>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EXgpKpIVzT6qnZVCgCn3/+ZdUQI+LHK0/bEVe7Lb4mY=;
+        b=UaDvSB5kCCV49FSs6LZLz8cDlG4cpYTKFFr8G1zVRlMRjTb4Il5Bcl/HDpWXlE7miu
+         +MV6Eca/9lG3pTmA6lDqrLuhPvlzhtVZWQGNJOql3We0b/DRztAOhWSBR88kPt87w6Rm
+         tR3ZFGXOw5F6pXEnFFjz983m8bsIR1zXQydMYJCCYZvvWgyHq+S6hT4jdbBmjUoJp9nE
+         Xgn/0I8h+LYNocZxtY4/czT4WQHfkYC2c0xZSfoGwFNh9Cgn0Q+dBqeldoboVRJmBtve
+         M6zR2YMOdSGhHKm4ozQXIaBZV50Vj6xM0G4z9njRDuQxCnxpFOaAvaFmQ3OiJbgz8lR5
+         kiog==
+X-Gm-Message-State: AJIora8hnM/k562TKiGtdYwkuX1rygsc5Vp9UmVHSM+E1+GEGUebTgGd
+        gu1EnKPhuwvWMK91TLNdOCGAxDrGVjHkfHrgB/H5vA==
+X-Google-Smtp-Source: AGRyM1vuSCrUYcJ+fn+AGYw7Otfa1ERbN93s/Se2G5Qnqe8WDMwXm36GodOORpoZgx9wT9vyGeqywndfeQfffGCwypI=
+X-Received: by 2002:a05:6512:3f9f:b0:47d:c87e:f8f3 with SMTP id
+ x31-20020a0565123f9f00b0047dc87ef8f3mr7012832lfa.401.1655508374233; Fri, 17
+ Jun 2022 16:26:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617213706.376730-1-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220617203948.3714905-1-ndesaulniers@google.com> <Yq0MV2Z/hqSuSYbt@dev-arch.thelio-3990X>
+In-Reply-To: <Yq0MV2Z/hqSuSYbt@dev-arch.thelio-3990X>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 17 Jun 2022 16:26:02 -0700
+Message-ID: <CAKwvOdmUMhEe=nqyF-L08c7FL-NWus63JEe=G1MkboB47xjfsA@mail.gmail.com>
+Subject: Re: [PATCH] scripts/Makefile.clang: set --target for host based on
+ make -v
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 10:37:07PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> ilitek,ili9341.txt was replaced by ilitek,ili9341.yaml but the txt
+On Fri, Jun 17, 2022 at 4:21 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Fri, Jun 17, 2022 at 01:39:48PM -0700, Nick Desaulniers wrote:
+> > We're working on providing statically linked images of clang to host on
+> > kernel.org. We're building them in Alpine Linux based Docker containers,
+> > which are MUSL based systems.
+> >
+> > In order to keep bootstrapping simpler, I'd like for them to have an
+> > implicit default --target of x86_64-alpine-linux-musl (set via LLVM's
+> > cmake variable LLVM_DEFAULT_TARGET_TRIPLE).
+> >
+> > Similarly, if one were to use a different build of clang meant for a
+> > glibc or bionic based system on a MUSL based host, we'd prefer to use
+> > the correct MUSL based triple for target hosts.
+> >
+> > Borrowed from the Zen of Python: Explicit is better than implicit. Let's
+> > be explicit about the target triple for HOSTCC when building with
+> > HOSTCC=clang or LLVM=1.
+> >
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> I have tested this with a few different distributions on both aarch64
+> and x86_64:
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+>
+> One small comment below.
+>
+> > ---
+> >  Makefile               |  3 +--
+> >  scripts/Makefile.clang | 10 ++++++++++
+> >  2 files changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 1a6678d817bd..87712d9b043c 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -600,10 +600,9 @@ endif
+> >  # CC_VERSION_TEXT is referenced from Kconfig (so it needs export),
+> >  # and from include/config/auto.conf.cmd to detect the compiler upgrade.
+> >  CC_VERSION_TEXT = $(subst $(pound),,$(shell LC_ALL=C $(CC) --version 2>/dev/null | head -n 1))
+> > +HOSTCC_VERSION_TEXT = $(subst $(pound),,$(shell LC_ALL=C $(HOSTCC) --version 2>/dev/null | head -n 1))
+> >
+> > -ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
+> >  include $(srctree)/scripts/Makefile.clang
+> > -endif
+> >
+> >  # Include this also for config targets because some architectures need
+> >  # cc-cross-prefix to determine CROSS_COMPILE.
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 87285b76adb2..a4505cd62d7b 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -1,3 +1,4 @@
+> > +ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
+> >  # Individual arch/{arch}/Makefiles should use -EL/-EB to set intended
+> >  # endianness and -m32/-m64 to set word size based on Kconfigs instead of
+> >  # relying on the target triple.
+> > @@ -39,3 +40,12 @@ CLANG_FLAGS        += -Werror=ignored-optimization-argument
+> >  KBUILD_CFLAGS        += $(CLANG_FLAGS)
+> >  KBUILD_AFLAGS        += $(CLANG_FLAGS)
+> >  export CLANG_FLAGS
+> > +endif
+> > +
+> > +# If HOSTCC is clang, set the host target triple explicitly; do not rely on
+> > +# implicit defaults.
+> > +ifneq ($(findstring clang,$(HOSTCC_VERSION_TEXT)),)
+> > +HOST_TRIPLE          := --target=$(shell make --version | head -n2 | tail -n1 | cut -d ' ' -f 3)
+>
+> Should we use $(MAKE) instead of make here? I guess the only case where
 
-panel/ilitek,ili9341.yaml
+oh! yeah, good call. I think so.  Will wait until next Tuesday
+(Juneteenth holiday in the US on Monday) to send a v2. Thanks for
+taking a look!
+
+> it would matter is if someone was calling make via an explicit path and
+> did not have it available in their PATH so maybe it is not worth
+> worrying about.
+>
+> > +KBUILD_HOSTCFLAGS    += $(HOST_TRIPLE)
+> > +KBUILD_HOSTLDFLAGS   += $(HOST_TRIPLE)
+> > +endif
+> >
+> > base-commit: 79fe0f863f920c5fcf9dea61676742f813f0b7a6
+> > --
+> > 2.36.1.476.g0c4daa206d-goog
+> >
+> >
 
 
-> binding was not deleted. Do so.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/display/ilitek,ili9341.txt       | 27 -------------------
->  1 file changed, 27 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/display/ilitek,ili9341.txt b/Documentation/devicetree/bindings/display/ilitek,ili9341.txt
-> deleted file mode 100644
-> index 169b32e4ee4e..000000000000
-> --- a/Documentation/devicetree/bindings/display/ilitek,ili9341.txt
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -Ilitek ILI9341 display panels
-> -
-> -This binding is for display panels using an Ilitek ILI9341 controller in SPI
-> -mode.
-> -
-> -Required properties:
-> -- compatible:	"adafruit,yx240qv29", "ilitek,ili9341"
 
-"adafruit,yx240qv29" is not in the schema.
-
-> -- dc-gpios:	D/C pin
-> -- reset-gpios:	Reset pin
-
-Neither is this. It is in panel-common.yaml, but 'unevaluatedProperties' 
-needs to be used instead to allow it. Or add 'reset-gpios: true'.
-
-> -
-> -The node for this driver must be a child node of a SPI controller, hence
-> -all mandatory properties described in ../spi/spi-bus.txt must be specified.
-> -
-> -Optional properties:
-> -- rotation:	panel rotation in degrees counter clockwise (0,90,180,270)
-> -- backlight:	phandle of the backlight device attached to the panel
-> -
-> -Example:
-> -	display@0{
-> -		compatible = "adafruit,yx240qv29", "ilitek,ili9341";
-> -		reg = <0>;
-> -		spi-max-frequency = <32000000>;
-> -		dc-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
-> -		reset-gpios = <&gpio0 8 GPIO_ACTIVE_HIGH>;
-> -		rotation = <270>;
-> -		backlight = <&backlight>;
-> -	};
-> -- 
-> 2.36.1
-> 
-> 
+-- 
+Thanks,
+~Nick Desaulniers

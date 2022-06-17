@@ -2,75 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F1F54F474
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09D554F47B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380786AbiFQJgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S1381066AbiFQJjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbiFQJgs (ORCPT
+        with ESMTP id S235673AbiFQJjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:36:48 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B5567D15;
-        Fri, 17 Jun 2022 02:36:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DW;RN=12;SR=0;TI=W4_0.1.30_DEFAULT_211267C8_1655458496779_o7001c314n;
-Received: from WS-web (tianjia.zhang@linux.alibaba.com[W4_0.1.30_DEFAULT_211267C8_1655458496779_o7001c314n]) at Fri, 17 Jun 2022 17:36:43 +0800
-Date:   Fri, 17 Jun 2022 17:36:43 +0800
-From:   "Tianjia Zhang" <tianjia.zhang@linux.alibaba.com>
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc:     "David Howells" <dhowells@redhat.com>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Biggers" <ebiggers@google.com>,
-        "Eric Biggers" <ebiggers@kernel.org>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Vitaly Chikunov" <vt@altlinux.org>,
-        "Gilad Ben-Yossef" <gilad@benyossef.com>,
-        "keyrings" <keyrings@vger.kernel.org>,
-        "linux-crypto" <linux-crypto@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Reply-To: "Tianjia Zhang" <tianjia.zhang@linux.alibaba.com>
-Message-ID: <d76d7de3-59c2-4d83-9f53-b44ada7621d4.tianjia.zhang@linux.alibaba.com>
-Subject: =?UTF-8?B?5Zue5aSN77yaW1BBVENIXSBYLjUwOTogU3VwcG9ydCBwYXJzaW5nIGNlcnRpZmljYXRlIHVz?=
-  =?UTF-8?B?aW5nIFNNMiBhbGdvcml0aG0=?=
-X-Mailer: [Alimail-Mailagent][W4_0.1.30][DEFAULT][Safari]
-MIME-Version: 1.0
-References: <20210712081352.23692-1-tianjia.zhang@linux.alibaba.com>     <99a79ccb-8dd9-ac37-2a1d-ec390bcb0c8a@linux.alibaba.com>,<1ea7a9bd9f6d74e1b9a002a19c0923f184c17c88.camel@kernel.org>
-x-aliyun-mail-creator: W4_0.1.30_DEFAULT_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNjA1LjEuMTUgKEtIVE1MLCBsaWtlIEdlY2tvKSBWZXJzaW9uLzE1LjUgU2FmYXJpLzYwNS4xLjE1La
-In-Reply-To: <1ea7a9bd9f6d74e1b9a002a19c0923f184c17c88.camel@kernel.org>
+        Fri, 17 Jun 2022 05:39:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A1696899F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655458750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1GFgSble/mgs+0F6X8rsxYiNnD2yRs1iX9KEcjvB8Rs=;
+        b=D4y/PXm3+MqZBFqBjePtuser+cCw6+9rWDbdsHmX7oj4+KI31ARLwi44ytNnk/2Rj65bJC
+        0s6cKqpdLF0nkQWImG4DhampiBbMAfPWfAIVvkJmP3XkNaxy5lsNmrxmC/X5OnnpOWP4/q
+        jZaTfKsel+0ySPdTyfLWLn9052bYrBk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-GfqkU5bbPPW2qsB5WXOelg-1; Fri, 17 Jun 2022 05:39:07 -0400
+X-MC-Unique: GfqkU5bbPPW2qsB5WXOelg-1
+Received: by mail-wr1-f72.google.com with SMTP id u18-20020adfb212000000b0021855847651so834578wra.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:39:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=1GFgSble/mgs+0F6X8rsxYiNnD2yRs1iX9KEcjvB8Rs=;
+        b=K74aMcAt/swwTHg27sHQK//7u4cCN9/AmPhZhOkpT/opdRhxNSWG/tpy+ju/qLQ1d9
+         /GKZr3V/gcVdXasLpwGJW5tbVhuvnbiPkSiTnGk+5fRw1SOcBg10NimWzHCiL1ze0//U
+         J76kGES9wt8lBENySXs0soXbKf/D7Xf1chrGnA/OGyuklUA97ND1iytrYWhCDg1rfOTN
+         Q9ux79voIDm7MBxnC6i0FscXQYivTgiQF2h3Z52hDjO2olI0yGDuyLHlCwZiitLpKimJ
+         DFdqGxBIf85m5CUcG2YtmsV8RwXmKuKUhmsejg36SznuWZ8xUIJ2LAutB6KWf69EbhFz
+         Z6bg==
+X-Gm-Message-State: AJIora/dgyLXlqPMqjFrFsUKIi28WhPE4H92M6jkqfe2PMd4QKUBeuSi
+        NIqWiXqvoetY38UwRvISVV55BILZ83I3zPjmpnpPsRBbURq8dV8nyCiKwZqzhMwcy4Vao7nL6AJ
+        VQ6VE9jjFXRDgJS18J07J0y4F
+X-Received: by 2002:a05:600c:3790:b0:39c:62b9:b164 with SMTP id o16-20020a05600c379000b0039c62b9b164mr9277707wmr.0.1655458746275;
+        Fri, 17 Jun 2022 02:39:06 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ssOzlsz8rX7DUYTbgbx9m7NXAW6WexEIBYo3eYb/SuXC8Znoxg8CzlQ8ZdEsAjE32MMerotg==
+X-Received: by 2002:a05:600c:3790:b0:39c:62b9:b164 with SMTP id o16-20020a05600c379000b0039c62b9b164mr9277690wmr.0.1655458746059;
+        Fri, 17 Jun 2022 02:39:06 -0700 (PDT)
+Received: from ?IPv6:2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac? ([2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac])
+        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b0039c5224bfcbsm9337826wms.46.2022.06.17.02.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 02:39:05 -0700 (PDT)
+Message-ID: <04709b2d0dc702c9bf50f57cde125b07cdf54363.camel@redhat.com>
+Subject: Re: [PATCH 7/7] mm/page_alloc: Replace local_lock with normal
+ spinlock
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Date:   Fri, 17 Jun 2022 11:39:03 +0200
+In-Reply-To: <20220613125622.18628-8-mgorman@techsingularity.net>
+References: <20220613125622.18628-1-mgorman@techsingularity.net>
+         <20220613125622.18628-8-mgorman@techsingularity.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmFya2tvLAoKPiBPbiA3LzEyLzIxIDQ6MTMgUE0sIFRpYW5qaWEgWmhhbmcgd3JvdGU6Cj4g
-PiBUaGUgU00yLXdpdGgtU00zIGNlcnRpZmljYXRlIGdlbmVyYXRlZCBieSBsYXRlc3Qgb3BlbnNz
-bCBubyBsb25nZXIKPiA+IHJldXNlcyB0aGUgT0lEX2lkX2VjUHVibGljS2V5LCBidXQgZGlyZWN0
-bHkgdXNlcyBPSURfc20yLiBUaGlzIHBhdGNoCj4gPiBzdXBwb3J0cyB0aGlzIHR5cGUgb2YgeDUw
-OSBjZXJ0aWZpY2F0ZSBwYXJzaW5nLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBUaWFuamlhIFpo
-YW5nIDx0aWFuamlhLnpoYW5nQGxpbnV4LmFsaWJhYmEuY29tPgo+ID4gLS0tCj4gPiAgIGNyeXB0
-by9hc3ltbWV0cmljX2tleXMveDUwOV9jZXJ0X3BhcnNlci5jIHwgMyArKysKPiA+ICAgMSBmaWxl
-IGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvY3J5cHRvL2Fz
-eW1tZXRyaWNfa2V5cy94NTA5X2NlcnRfcGFyc2VyLmMgYi9jcnlwdG8vYXN5bW1ldHJpY19rZXlz
-L3g1MDlfY2VydF9wYXJzZXIuYwo+ID4gaW5kZXggNmQwMDMwOTZiNWJjLi42YTk0NWE2Y2U3ODcg
-MTAwNjQ0Cj4gPiAtLS0gYS9jcnlwdG8vYXN5bW1ldHJpY19rZXlzL3g1MDlfY2VydF9wYXJzZXIu
-Ywo+ID4gKysrIGIvY3J5cHRvL2FzeW1tZXRyaWNfa2V5cy94NTA5X2NlcnRfcGFyc2VyLmMKPiA+
-IEBAIC00OTYsNiArNDk2LDkgQEAgaW50IHg1MDlfZXh0cmFjdF9rZXlfZGF0YSh2b2lkICpjb250
-ZXh0LCBzaXplX3QgaGRybGVuLAo+ID4gICAgY2FzZSBPSURfZ29zdDIwMTJQS2V5NTEyOgo+ID4g
-ICAgIGN0eC0+Y2VydC0+cHViLT5wa2V5X2FsZ28gPSAiZWNyZHNhIjsKPiA+ICAgICBicmVhazsK
-PiA+ICsgY2FzZSBPSURfc20yOgo+ID4gKyAgY3R4LT5jZXJ0LT5wdWItPnBrZXlfYWxnbyA9ICJz
-bTIiOwo+ID4gKyAgYnJlYWs7Cj4gPiAgICBjYXNlIE9JRF9pZF9lY1B1YmxpY0tleToKPiA+ICAg
-ICBpZiAocGFyc2VfT0lEKGN0eC0+cGFyYW1zLCBjdHgtPnBhcmFtc19zaXplLCAmb2lkKSAhPSAw
-KQo+ID4gICAgICByZXR1cm4gLUVCQURNU0c7Cj4gPiAKPgo+IEFja2VkLWJ5OiBKYXJra28gU2Fr
-a2luZW4gPGphcmtrb0BrZXJuZWwub3JnPgo+Cj4gL0phcmtrbwoKTGlrZXdpc2UsIE5vIHJlc3Bv
-bnNlIGZyb20gRGF2aWQsIGNhbiB5b3UgcGljayB0aGlzPyB0aGFua3MuCgpCZXN0IHJlZ2FyZHMs
-ClRpYW5qaWE=
+Hi Mel,
+
+On Mon, 2022-06-13 at 13:56 +0100, Mel Gorman wrote:
+> @@ -3446,12 +3490,16 @@ void free_unref_page(struct page *page, unsigned =
+int order)
+>  		migratetype =3D MIGRATE_MOVABLE;
+>  	}
+> =20
+> -	local_lock_irqsave(&pagesets.lock, flags);
+> -	freed_pcp =3D free_unref_page_commit(page, migratetype, order, false);
+> -	local_unlock_irqrestore(&pagesets.lock, flags);
+> -
+> -	if (unlikely(!freed_pcp))
+> +	zone =3D page_zone(page);
+> +	pcp_trylock_prepare(UP_flags);
+
+Now that you're calling the *_irqsave() family of function you can drop
+pcp_trylock_prepare/finish()
+
+For the record in UP:
+
+#define spin_trylock_irqsave(lock, flags) \
+({ \
+	local_irq_save(flags); \
+	1;
+})
+
+> +	pcp =3D pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, zone->per=
+_cpu_pageset, flags);
+> +	if (pcp) {
+> +		free_unref_page_commit(pcp, zone, page, migratetype, order);
+> +		pcp_spin_unlock_irqrestore(pcp, flags);
+> +	} else {
+>  		free_one_page(page_zone(page), page, pfn, order, migratetype, FPI_NONE=
+);
+> +	}
+> +	pcp_trylock_finish(UP_flags);
+>  }
+> =20
+>  /*
+
+As Vlastimil mentioned elsewhere, I also wonder if it makes sense to just
+bypass patch #5. Especially as its intent isn't true anymore:
+
+"As preparation for dealing with both of those problems, protect the lists
+with a spinlock.  The IRQ-unsafe version of the lock is used because IRQs
+are already disabled by local_lock_irqsave.  spin_trylock is used in
+preparation for a time when local_lock could be used instead of
+lock_lock_irqsave."
+
+--=20
+Nicol=C3=A1s S=C3=A1enz
+

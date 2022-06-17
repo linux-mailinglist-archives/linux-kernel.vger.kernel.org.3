@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E210A54FFF7
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F94554FFFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236497AbiFQWb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S237626AbiFQWbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbiFQWbY (ORCPT
+        with ESMTP id S236719AbiFQWba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:31:24 -0400
+        Fri, 17 Jun 2022 18:31:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3352C62125;
-        Fri, 17 Jun 2022 15:31:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B145A62128
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:31:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3374B82B1E;
-        Fri, 17 Jun 2022 22:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB69C3411B;
-        Fri, 17 Jun 2022 22:31:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70051B82B1E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 22:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A54C3411B;
+        Fri, 17 Jun 2022 22:31:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655505080;
-        bh=Jp4eIONtSs6CWILka62alidYJLIpx9VDEl4Ouzu1iBE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cfe2aC3SsNv0taX/O9yxiekxXZfxv7Xte5M7lNEsPf9x0mhp1IskXj9gxyIHxJQeM
-         SMXqmYDl6hCotPpO7UIzpuF5kXqA/b561wOipbmHC6YV1wYklHKqHaZmmi1HGGnajd
-         Mxhthm91pBBjLjNK2knc9Royz6jSdAjxwpTtwQFWE8UYt9hnGD5e6IcSn6qIx+aRyi
-         qMvIReINpOQ++H5QLWm4pDap7NU8sZiiBCagoXMnDWeFOrH1lg5c0lkj1pIlEnWWm+
-         OaYHWWY6rsZRtmxOZLoDYNkTvhR10qy1yj/rBNEsN+Rn248lpISKV7bKA6ND7yPRla
-         3uIeLQYhieXBg==
+        s=k20201202; t=1655505087;
+        bh=lPh3hZRcFpvlW3S4ihSANExlRpTo4MEmTcXEXEF5gwg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P9SQK8kXbd1PD4oOEk/AkRKMAfUWzR9HGV3sD3jPI1GK4omVa/RgZ3pEsHAD1g0T+
+         c3157Dyg/rcK7+WYL4gqwsRTD3wRUVfkyBCclstkE6OjElKS6Y9y2au9auZ0F7kWyU
+         RXUWvazndA/MhcXPFIZYZPbKXt1DRpPw9nQOLCkqzmlLfZFjjNxFv7Q1RA2AKz/jCa
+         CllrJeFWYF29JdvU4HU/Wt4WF+cr6hg6OX+0OXdtDPQj/S7NyaleO/AKg7D2MO1fpF
+         QsBTxgmh2r3JsPd5ZKE/bPnU2EGC/bme3m+/6XqnOrrPdYW2P8tQaFYP0mW6twoKT2
+         pyy9xT4okgeNg==
 From:   Jaegeuk Kim <jaegeuk@kernel.org>
 To:     linux-kernel@vger.kernel.org,
         linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 1/3] f2fs: attach inline_data after setting compression
-Date:   Fri, 17 Jun 2022 15:31:04 -0700
-Message-Id: <20220617223106.3517374-1-jaegeuk@kernel.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 2/3] f2fs: run GCs synchronously given user requests
+Date:   Fri, 17 Jun 2022 15:31:05 -0700
+Message-Id: <20220617223106.3517374-2-jaegeuk@kernel.org>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+In-Reply-To: <20220617223106.3517374-1-jaegeuk@kernel.org>
+References: <20220617223106.3517374-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,65 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the below corruption.
+When users set GC_URGENT or GC_MID, they expected to do GCs right away.
+But, there's a condition to bypass it. Let's indicate we need to do now
+in the thread.
 
-[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
-
-Cc: <stable@vger.kernel.org>
-Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
 Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- fs/f2fs/namei.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ fs/f2fs/gc.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index c549acb52ac4..a841abe6a071 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 	if (test_opt(sbi, INLINE_XATTR))
- 		set_inode_flag(inode, FI_INLINE_XATTR);
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index d5fb426e0747..f4aa3c88118b 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -37,7 +37,6 @@ static int gc_thread_func(void *data)
+ 	unsigned int wait_ms;
+ 	struct f2fs_gc_control gc_control = {
+ 		.victim_segno = NULL_SEGNO,
+-		.should_migrate_blocks = false,
+ 		.err_gc_skipped = false };
  
--	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
--		set_inode_flag(inode, FI_INLINE_DATA);
- 	if (f2fs_may_inline_dentry(inode))
- 		set_inode_flag(inode, FI_INLINE_DENTRY);
+ 	wait_ms = gc_th->min_sleep_time;
+@@ -113,7 +112,10 @@ static int gc_thread_func(void *data)
+ 				sbi->gc_mode == GC_URGENT_MID) {
+ 			wait_ms = gc_th->urgent_sleep_time;
+ 			f2fs_down_write(&sbi->gc_lock);
++			gc_control.should_migrate_blocks = true;
+ 			goto do_gc;
++		} else {
++			gc_control.should_migrate_blocks = false;
+ 		}
  
-@@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 		if (foreground) {
+@@ -139,7 +141,9 @@ static int gc_thread_func(void *data)
+ 		if (!foreground)
+ 			stat_inc_bggc_count(sbi->stat_info);
  
- 	f2fs_init_extent_tree(inode, NULL);
+-		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC;
++		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC ||
++				sbi->gc_mode == GC_URGENT_HIGH ||
++				sbi->gc_mode == GC_URGENT_MID;
  
--	stat_inc_inline_xattr(inode);
--	stat_inc_inline_inode(inode);
--	stat_inc_inline_dir(inode);
--
- 	F2FS_I(inode)->i_flags =
- 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
- 
-@@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 			set_compress_context(inode);
- 	}
- 
-+	/* Should enable inline_data after compression set */
-+	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
-+		set_inode_flag(inode, FI_INLINE_DATA);
-+
-+	stat_inc_inline_xattr(inode);
-+	stat_inc_inline_inode(inode);
-+	stat_inc_inline_dir(inode);
-+
- 	f2fs_set_inode_flags(inode);
- 
- 	trace_f2fs_new_inode(inode, 0);
-@@ -325,6 +327,8 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
- 		if (!is_extension_exist(name, ext[i], false))
- 			continue;
- 
-+		/* Do not use inline_data with compression */
-+		clear_inode_flag(inode, FI_INLINE_DATA);
- 		set_compress_context(inode);
- 		return;
- 	}
+ 		/* foreground GC was been triggered via f2fs_balance_fs() */
+ 		if (foreground)
 -- 
 2.36.1.476.g0c4daa206d-goog
 

@@ -2,130 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D4E54F53E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F39D54F542
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381332AbiFQKVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        id S1381811AbiFQKVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbiFQKVs (ORCPT
+        with ESMTP id S235077AbiFQKVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:21:48 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CD76A058;
-        Fri, 17 Jun 2022 03:21:47 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id b8so5560602edj.11;
-        Fri, 17 Jun 2022 03:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1gyXVsIhrLNPJrdyWtNBJe4UGWrCbFBxMLTRYov+4hk=;
-        b=MrrsjJZ7Xg+X8ZgiineV5L4+flDD7zT5NAfgJ1is3b4d7vTHeMmECYAgYe5Q9Nfu4A
-         rUyV0NoU7PNBWZUZlWPkJGUWU7SoOfRH2Q8EHh3TW8N9Dg7NEomE6ukzoNqazYcbGaEs
-         K47TZsdkEo2cOS4b+JC087cuwjSKRf9f6PkwWLHXJv90ay1VlVJB9ousn+HSY73XHA6n
-         hCLTt/imY0qwIOsvYBueJGwbxV7ncyrhAq093etIofXohWs7zDu5671z92WiTce73un3
-         7OCVbYNCSAq8Uqd8F6DmZ0t+hGwTe/Di057OSZxO/ERV0+3isZIq+ckcnksviY68Ets5
-         gVAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1gyXVsIhrLNPJrdyWtNBJe4UGWrCbFBxMLTRYov+4hk=;
-        b=puinX2EI6OHoTQboILGCEOcJAjcDmcd3XuHj58+hlTejMQqKlg17cjC+CcJ2Ft9BS+
-         ScFG+UvB9FUNnUkjlS6zuKyK8EMAJQOCwxUuC+VMrIt3qE1jB1VDZgyeM7dDKyO0Mpzn
-         Gif9eJAg8ITX/7075YyjQ+7NNXf+mZN8pOnzesCBeV1vqEnA6NkU1b8yzwz0dY4lwb02
-         20HJgJ+dTMAvilvK5iaGpEl7IvonqUIFAQJmQQfFgbX3KQPYm9HEVaiTbQIlzztZbGgg
-         cM2rmJeAgtOETLzz55PAufyeOJWz4H0+K7tWnSfEoGTGuoN1rjkGhNUh4cQSdgwVFYYw
-         nltQ==
-X-Gm-Message-State: AJIora+KmEjgLilcOxrDp2Xv+79tRYvvPF6F/XCv+qkUxhdRO0cIoout
-        92+qDVcW3DeJzSlisLmTuAw=
-X-Google-Smtp-Source: AGRyM1srWN7X/BOxcDMj7JdYRHWaINLoUpIb354qnBf8uviawJkdpr6+taDx4Q2BZCqDJOLnYr9zGg==
-X-Received: by 2002:a05:6402:3808:b0:435:5a6c:9dd9 with SMTP id es8-20020a056402380800b004355a6c9dd9mr4874558edb.368.1655461305760;
-        Fri, 17 Jun 2022 03:21:45 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id r1-20020a170906280100b006fefd1d5c2bsm1987782ejc.148.2022.06.17.03.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 03:21:45 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 17 Jun 2022 12:21:43 +0200
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] tracing/kprobes: Check whether get_kretprobe() returns
- NULL in kretprobe_dispatcher()
-Message-ID: <YqxVt4KoSIMHUH+/@krava>
-References: <165366693881.797669.16926184644089588731.stgit@devnote2>
+        Fri, 17 Jun 2022 06:21:50 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E5B6A405;
+        Fri, 17 Jun 2022 03:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655461310; x=1686997310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9630itfmTE2oQKIg/VF8dscV4gSxkZdc73h/4g/mwqg=;
+  b=CJYkm2NlIq4d9ZUDORk7b0AmyodHYf0XTMh7er83spYeVOqO9Gmqr+9j
+   2EsC4Lrn64bc70QgHPJJZgms6QEq43KENowIL6vsf1NnHJCO8aPN7eJUK
+   eUEZPTQw1/71IOV+IHJ8cwDjGe/a9ERXEJbhjHJ9G5D3ASZNQduKlvr14
+   pAnnn2ffIpEPoG/cz2TgJr7tNAldd1iRIc4ZkMiUVd5OS+HdWiObcICHK
+   xY8GOxN04z9FA61n04y7I9hi7RxohpOpbO78yyVH+f06lz/VSodl1cOZX
+   Vyq1qoAfJV+kuDr98nmSGjs4cDSM3JeL7Pua23fHzP36w25gUe0sxbQAF
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280186031"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280186031"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 03:21:49 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="831984894"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 03:21:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o296n-000eyc-GZ;
+        Fri, 17 Jun 2022 13:21:45 +0300
+Date:   Fri, 17 Jun 2022 13:21:45 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Update DW 8250 UART maintainership
+Message-ID: <YqxVuaCeT+TH7co0@smile.fi.intel.com>
+References: <be58b398-71ff-7c12-1bf1-a09181d9c80@linux.intel.com>
+ <YqxNHJ5mGA1tJamh@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <165366693881.797669.16926184644089588731.stgit@devnote2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YqxNHJ5mGA1tJamh@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 12:55:39AM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Fri, Jun 17, 2022 at 11:45:00AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jun 17, 2022 at 12:39:29PM +0300, Ilpo Järvinen wrote:
+> > Add myself as maintainer for DW 8250 UART and up it to Supported.
+> > 
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > 
-> There is a small chance that get_kretprobe(ri) returns NULL in
-> kretprobe_dispatcher() when another CPU unregisters the kretprobe
-> right after __kretprobe_trampoline_handler().
-> 
-> To avoid this issue, kretprobe_dispatcher() checks the get_kretprobe()
-> return value again. And if it is NULL, it returns soon because that
-> kretprobe is under unregistering process.
-> 
-> This issue has been introduced when the kretprobe is decoupled
-> from the struct kretprobe_instance by commit d741bf41d7c7
-> ("kprobes: Remove kretprobe hash"). Before that commit, the
-> struct kretprob_instance::rp directly points the kretprobe
-> and it is never be NULL.
-> 
-> Reported-by: Yonghong Song <yhs@fb.com>
-> Fixes: d741bf41d7c7 ("kprobes: Remove kretprobe hash")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Obviously I need an ack from Andy too.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+I just gave my Rb, but just in case
+Acked-by: From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-jirka
+> And thanks for doing this and
+> all the work you have already done so far, it's appreciated.
 
-> ---
->  kernel/trace/trace_kprobe.c |   11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index 93507330462c..a245ea673715 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1718,8 +1718,17 @@ static int
->  kretprobe_dispatcher(struct kretprobe_instance *ri, struct pt_regs *regs)
->  {
->  	struct kretprobe *rp = get_kretprobe(ri);
-> -	struct trace_kprobe *tk = container_of(rp, struct trace_kprobe, rp);
-> +	struct trace_kprobe *tk;
-> +
-> +	/*
-> +	 * There is a small chance that get_kretprobe(ri) returns NULL when
-> +	 * the kretprobe is unregister on another CPU between kretprobe's
-> +	 * trampoline_handler and this function.
-> +	 */
-> +	if (unlikely(!rp))
-> +		return 0;
->  
-> +	tk = container_of(rp, struct trace_kprobe, rp);
->  	raw_cpu_inc(*tk->nhit);
->  
->  	if (trace_probe_test_flag(&tk->tp, TP_FLAG_TRACE))
-> 
++1 and many, thanks, Ilpo!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

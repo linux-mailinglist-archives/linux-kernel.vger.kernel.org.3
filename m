@@ -2,76 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9270F54F878
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA2754F895
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382307AbiFQNqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S1382405AbiFQNxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382020AbiFQNqM (ORCPT
+        with ESMTP id S1381052AbiFQNw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:46:12 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 326762D1EA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=uRczj
-        i7vVBr5C6IMWKTGdkS+1yFJHw9SsMBe6bOGpPU=; b=Q7Uyb7FK/90S3vHWiumFt
-        308Ya7vwn7r4iFPnnLvlCS1tRoIHBQfUOil7ngS/6OlO8FleoJ+rYpf57GkFISuR
-        493X0o258qgfXfcaHXTHlkbxH1tymqbOhaeGk5/o/CV73OxE27uhbJmc/YA4ru9g
-        QZyDWF7ebglhF2+xqDLWb4=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgBX4X2Shaxi6fxyFw--.39736S2;
-        Fri, 17 Jun 2022 21:45:54 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     linus.walleij@linaro.org, linux@armlinux.org.uk
-Cc:     windhl@126.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm: mach-versatile: Fix refcount leak bug in versatile
-Date:   Fri, 17 Jun 2022 21:45:52 +0800
-Message-Id: <20220617134552.4050008-1-windhl@126.com>
+        Fri, 17 Jun 2022 09:52:59 -0400
+X-Greylist: delayed 393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jun 2022 06:52:54 PDT
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABC62703;
+        Fri, 17 Jun 2022 06:52:52 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id A4BE79C035C;
+        Fri, 17 Jun 2022 09:46:19 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id RxSxonNRBtIm; Fri, 17 Jun 2022 09:46:19 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id 1D95C9C035E;
+        Fri, 17 Jun 2022 09:46:19 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 1D95C9C035E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+        t=1655473579; bh=6FyXPE9HabKRcoxbNWsYdPeExADy1asgHfS0MpAMcCo=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=dAW53u5txvU6CYNBr0Hue4BIbjb7YFmVNt0s+111UGLqXYZF192BtJC2bSDB4DI9F
+         zw/y0j5vAqmS9KhZV+GvaX+M5FuKNYoHbH7dcI02nK4Uo1coBIOhhsaMnDSrMe6uT2
+         V2xZ5Rh8AwFNoikmoKeae+9ANcFDDs+6K+Zej0NBCyMjWyNAOO4Tyo65fWluzwLeFU
+         CZgOru1q3+1YxjeQEKiy+YWHFDBVBU3Ztxsu/u1p/vYHrAVuxrbyx1BgYQkzaitQ8U
+         QPBD+JeyYElNVGqh6opkB2rDadHSFcl7VObwCn70e/v0Ly5QyBEeJkqLuFeOgEe124
+         vWvgPKFx4QREQ==
+X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gBJqZQIRYTyR; Fri, 17 Jun 2022 09:46:19 -0400 (EDT)
+Received: from sfl-deribaucourt.rennes.sfl (lfbn-ren-1-676-174.w81-53.abo.wanadoo.fr [81.53.245.174])
+        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 18E839C035C;
+        Fri, 17 Jun 2022 09:46:18 -0400 (EDT)
+From:   Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>
+To:     andrew@lunn.ch, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, hkallweit1@gmail.com,
+        Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>
+Subject: [PATCH] net: dp83822: disable false carrier interrupt
+Date:   Fri, 17 Jun 2022 15:46:11 +0200
+Message-Id: <20220617134611.695690-1-enguerrand.de-ribaucourt@savoirfairelinux.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgBX4X2Shaxi6fxyFw--.39736S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFyxAF1xZw1fZF1xKr1DAwb_yoW3trX_Jr
-        1xX34xAF1rJ3WYqr4DCr45Cry7uw17Wr15J348Ar12y3ySqrZrAr4vqryIkw1v9rsxKrZx
-        uws7Xr15Ka17KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUID7DUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3BIjF1pEDvasLAAAsc
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In versatile_dt_init(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put() when
-it is not used anymore.
+When unplugging an Ethernet cable, false carrier events were produced by
+the PHY at a very high rate. Once the false carrier counter full, an
+interrupt was triggered every few clock cycles until the cable was
+replugged. This resulted in approximately 10k/s interrupts.
 
-Signed-off-by: Liang He <windhl@126.com>
+Since the false carrier counter (FCSCR) is never used, we can safely
+disable this interrupt.
+
+In addition to improving performance, this also solved MDIO read
+timeouts I was randomly encountering with an i.MX8 fec MAC because of
+the interrupt flood. The interrupt count and MDIO timeout fix were
+tested on a v5.4.110 kernel.
+
+Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirf=
+airelinux.com>
 ---
- arch/arm/mach-versatile/versatile.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/phy/dp83822.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/mach-versatile/versatile.c b/arch/arm/mach-versatile/versatile.c
-index 02ba68abe533..97da874b5d4b 100644
---- a/arch/arm/mach-versatile/versatile.c
-+++ b/arch/arm/mach-versatile/versatile.c
-@@ -164,6 +164,7 @@ static void __init versatile_dt_init(void)
- 	np = of_find_compatible_node(NULL, NULL, "arm,core-module-versatile");
- 	if (np)
- 		versatile_sys_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	WARN_ON(!versatile_sys_base);
- 
- 	versatile_dt_pci_init();
--- 
+diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
+index e6ad3a494d32..95ef507053a6 100644
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -230,7 +230,6 @@ static int dp83822_config_intr(struct phy_device *phy=
+dev)
+ 			return misr_status;
+=20
+ 		misr_status |=3D (DP83822_RX_ERR_HF_INT_EN |
+-				DP83822_FALSE_CARRIER_HF_INT_EN |
+ 				DP83822_LINK_STAT_INT_EN |
+ 				DP83822_ENERGY_DET_INT_EN |
+ 				DP83822_LINK_QUAL_INT_EN);
+--=20
 2.25.1
 

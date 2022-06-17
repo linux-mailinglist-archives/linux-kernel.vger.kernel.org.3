@@ -2,77 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA83454FB13
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611C354FB1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383314AbiFQQaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S1383261AbiFQQc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383300AbiFQQ36 (ORCPT
+        with ESMTP id S229602AbiFQQcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:29:58 -0400
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1B942A0C;
-        Fri, 17 Jun 2022 09:29:58 -0700 (PDT)
-Received: by mail-pj1-f47.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso4586976pjh.4;
-        Fri, 17 Jun 2022 09:29:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1CdPsYcJMiRyRao0OFv69oSt2+3EiKlT7x2/BM9HIJY=;
-        b=wLXdHre4Ceoa7M466IhIXfn5jrZ4LP/it/CFC1T/kC158ldBbMa0XHUPU1Ui3nx30q
-         zIbMsqXjn7q65AmCHto7DfvTWi6rrZlM1JOFSjP1q6D7+vxho2NVX1Nsv46q3uE1P/jm
-         KjG6IlvmLh9b+WHwWElL7zqM7Pmi3IYJWtG7yVGDw49en2/HxC9tN9uBGJ1w3zG1Mp5e
-         rWv/q7dj3KoMG9OZf8D6326gscoaYpjYbBgbb9DY/v+ql59tOSeoXCzmxpiJP6X2fQtL
-         ONL5ic9UHCCdrKFexP2scZizqZEqhzXPGbLWC7xpFf1uudP2Wc8DeqboWVHJKGqJB/jc
-         BjIQ==
-X-Gm-Message-State: AJIora+g7fiM2nLNBMpQErm8+tyxYrxCfS79iIJdhVqyYA/m9sEA4e1O
-        ioOkuHU0qRyN/trW5E69t4M=
-X-Google-Smtp-Source: AGRyM1t/wDXMzo+bOEkKIQH/k9xjz21/990h5UWigbcfj8KAhJoJx1iRoTgXlJGSllOagISeEk0Fkg==
-X-Received: by 2002:a17:90a:6444:b0:1ea:b662:c12e with SMTP id y4-20020a17090a644400b001eab662c12emr11580102pjm.199.1655483397636;
-        Fri, 17 Jun 2022 09:29:57 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:5d24:3188:b21f:5671? ([2620:15c:211:201:5d24:3188:b21f:5671])
-        by smtp.gmail.com with ESMTPSA id jb11-20020a170903258b00b0015e8d4eb25bsm3756460plb.165.2022.06.17.09.29.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 09:29:56 -0700 (PDT)
-Message-ID: <336492df-d74d-9eb9-4b51-d6d1f915493a@acm.org>
-Date:   Fri, 17 Jun 2022 09:29:54 -0700
+        Fri, 17 Jun 2022 12:32:21 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C6B443CA;
+        Fri, 17 Jun 2022 09:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1655483539; i=@motorola.com;
+        bh=4qhNSaWDIEzNmKnIquOhI5GtN3EyttOwc2Krhh8v2vo=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
+         Content-Transfer-Encoding;
+        b=lN+WWqcbFNChEvGubcO1wl9kVXZyvG+K4LzbODYd+FSOA8JawsqkpD9ufKIToyu0g
+         B+Venf+Po+DA7WaSms6kb0OMmuPP6jWEykwgxS3TDXSgL+fMBRlFeypTfUYoKHaYIa
+         N/zAQQ9ImkXMWoYDbmFrAOiZZIOPSqHlF8MHCP4qFqm29fyPAzZDKP0WBoBrCHD1es
+         e6N6SspHgRBfrcVXvaw/dirvQ4XxcBQaINL406ylPg10yPL+zdNPeSlZVd0R2lvbft
+         Yu5fBpsHqynnti8V2+eFjB8Sqb23kVDxddEsktT/LSasL6/RjyTiIlFqFMjq/BtKIf
+         qyHUC97VGf21g==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRWlGSWpSXmKPExsUyYU+Di+6kNWu
+  SDP6elbc41vaE3aJ58Xo2i86JS9gtLu+aw2axaFkrs8WWtitMFj/+9DFbLNj4iNGBw2N2x0xW
+  j02rOtk89s9dw+7R/9fA4/MmuQDWKNbMvKT8igTWjKub37EWbOOt6Phq3MC4n7uLkYtDSGAyk
+  8Sr7h9MEM5iJonLdxezdTFycrAJqEkseL2KGcQWEZCVOHzlNzNIEbPAYSaJd5/Ps4MkhAV8JP
+  Zu7WQCsVkEVCU2XepnBbF5BSwkds3aBmZLCMhL7D94lhkiLihxcuYTFhCbGSjevHU28wRG7ll
+  IUrOQpBYwMq1itE4qykzPKMlNzMzRNTQw0DU0NNE1M9U1MrHUS6zSTdQrLdZNTSwu0TXSSywv
+  1kstLtYrrsxNzknRy0st2cQIDNCUIsefOxh7Vv3UO8QoycGkJMpbtnRNkhBfUn5KZUZicUZ8U
+  WlOavEhRhkODiUJ3turgXKCRanpqRVpmTnAaIFJS3DwKInwyi4HSvMWFyTmFmemQ6ROMepydO
+  7vOsAsxJKXn5cqJc67DGSGAEhRRmke3AhY5F5ilJUS5mVkYGAQ4ilILcrNLEGVf8UozsGoJMy
+  bAjKFJzOvBG7TK6AjmICOaNy3AuSIkkSElFQDU4WD58PMQ/nHOgwm+/2riNh5UuP+8tfb1af2
+  7qkvDl0my+U6SeDq6udfniazr919YKXc3AXt8kJLxKryrlhfFXjw4rvc8vjLRbw311xYzNmQJ
+  thRrZqur+upsb9n5gR7rcpuVo1Zf3Nmngg/3HtiY2OQvtTnp+/4PV9XOd60Wm5m3rtF+ZKfXJ
+  RBc6iK0LHCG8dsuLcn5119d3/tyye+C/4eCNeu5DvAGFtqnbdka8tLBpO5DamLMz4Wtws7NFp
+  b27X9cXHb1VW+/ewplw7RrZdXSWaHS/RxbCxlWX/SWv39mvvxm8pOqX8+Fd/2ffLfUvW6qM0L
+  1zn/2fVlW6vtSrljiy09p3LZRGcX1uyYoMRSnJFoqMVcVJwIAImL4sFXAwAA
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-3.tower-715.messagelabs.com!1655483538!7014!1
+X-Originating-IP: [144.188.128.68]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.7; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 2923 invoked from network); 17 Jun 2022 16:32:18 -0000
+Received: from unknown (HELO ilclpfpp02.lenovo.com) (144.188.128.68)
+  by server-3.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jun 2022 16:32:18 -0000
+Received: from ilclmmrp02.lenovo.com (ilclmmrp02.mot.com [100.65.83.26])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by ilclpfpp02.lenovo.com (Postfix) with ESMTPS id 4LPl1t0S4hzbrVK;
+        Fri, 17 Jun 2022 16:32:18 +0000 (UTC)
+Received: from p1g3.. (unknown [10.45.6.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by ilclmmrp02.lenovo.com (Postfix) with ESMTPSA id 4LPl1s5yXSzbrlQ;
+        Fri, 17 Jun 2022 16:32:17 +0000 (UTC)
+From:   Dan Vacura <w36195@motorola.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Dan Vacura <w36195@motorola.com>, stable@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: uvc: fix list double add in uvcg_video_pump
+Date:   Fri, 17 Jun 2022 11:31:53 -0500
+Message-Id: <20220617163154.16621-1-w36195@motorola.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 4/5] scsi: fnic: Drop reserved request handling
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com
-Cc:     linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nbd@other.debian.org
-References: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
- <1655463320-241202-5-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1655463320-241202-5-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 03:55, John Garry wrote:
-> The SCSI core code does not support reserved requests, so drop the
-> handling in fnic_pending_aborts_iter().
+A panic can occur if the endpoint becomes disabled and the
+uvcg_video_pump adds the request back to the req_free list after it has
+already been queued to the endpoint. The endpoint complete will add the
+request back to the req_free list. Invalidate the local request handle
+once it's been queued.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+<6>[  246.796704][T13726] configfs-gadget gadget: uvc: uvc_function_set_alt(1, 0)
+<3>[  246.797078][   T26] list_add double add: new=ffffff878bee5c40, prev=ffffff878bee5c40, next=ffffff878b0f0a90.
+<6>[  246.797213][   T26] ------------[ cut here ]------------
+<2>[  246.797224][   T26] kernel BUG at lib/list_debug.c:31!
+<6>[  246.807073][   T26] Call trace:
+<6>[  246.807180][   T26]  uvcg_video_pump+0x364/0x38c
+<6>[  246.807366][   T26]  process_one_work+0x2a4/0x544
+<6>[  246.807394][   T26]  worker_thread+0x350/0x784
+<6>[  246.807442][   T26]  kthread+0x2ac/0x320
+
+Fixes: f9897ec0f6d3 ("usb: gadget: uvc: only pump video data if necessary")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dan Vacura <w36195@motorola.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+V1 -> V2:
+- update logic flow per review recommendation
+- add review by for Laurent Pinchart
+
+ drivers/usb/gadget/function/uvc_video.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 93f42c7f800d..c00ce0e91f5d 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -428,6 +428,9 @@ static void uvcg_video_pump(struct work_struct *work)
+ 			uvcg_queue_cancel(queue, 0);
+ 			break;
+ 		}
++
++		/* Endpoint now owns the request */
++		req = NULL;
+ 		video->req_int_count++;
+ 	}
+ 
+-- 
+2.34.1
+

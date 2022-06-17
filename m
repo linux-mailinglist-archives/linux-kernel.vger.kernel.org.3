@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D010654F4BC
+	by mail.lfdr.de (Postfix) with ESMTP id 8621454F4BB
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381493AbiFQJ77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S1381436AbiFQJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380804AbiFQJ7v (ORCPT
+        with ESMTP id S1380929AbiFQJ7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 05:59:51 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 010D4522FE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2211566F85;
         Fri, 17 Jun 2022 02:59:51 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1A111474;
-        Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 032CF1570;
+        Fri, 17 Jun 2022 02:59:51 -0700 (PDT)
 Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 93B5E3F73B;
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9EB83F800;
         Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
 From:   Yoan Picchi <yoan.picchi@arm.com>
 To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
@@ -28,9 +28,9 @@ To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Andre Przywara <andre.przywara@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v3 1/2] crypto: qat - replace get_current_node() with numa_node_id()
-Date:   Fri, 17 Jun 2022 09:59:44 +0000
-Message-Id: <20220617095945.437601-2-yoan.picchi@arm.com>
+Subject: [PATCH v3 2/2] crypto: qat - Removes the x86 dependency on the QAT drivers
+Date:   Fri, 17 Jun 2022 09:59:45 +0000
+Message-Id: <20220617095945.437601-3-yoan.picchi@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220617095945.437601-1-yoan.picchi@arm.com>
 References: <20220617095945.437601-1-yoan.picchi@arm.com>
@@ -45,89 +45,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+This dependency looks outdated. After the previous patch, we have been able
+to use this driver to encrypt some data and to create working VF on arm64.
+We have not tested it yet on any big endian machine, hence the new dependency
 
-Currently the QAT driver code uses a self-defined wrapper function
-called get_current_node() when it wants to learn the current NUMA node.
-This implementation references the topology_physical_package_id[] array,
-which more or less coincidentally contains the NUMA node id, at least
-on x86.
-
-Because this is not universal, and Linux offers a direct function to
-learn the NUMA node ID, replace that function with a call to
-numa_node_id(), which would work everywhere.
-
-This fixes the QAT driver operation on arm64 machines.
-
-Reported-by: Yoan Picchi <Yoan.Picchi@arm.com>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
 ---
- drivers/crypto/qat/qat_common/adf_common_drv.h | 5 -----
- drivers/crypto/qat/qat_common/qat_algs.c       | 4 ++--
- drivers/crypto/qat/qat_common/qat_asym_algs.c  | 4 ++--
- 3 files changed, 4 insertions(+), 9 deletions(-)
+ drivers/crypto/qat/Kconfig | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/crypto/qat/qat_common/adf_common_drv.h b/drivers/crypto/qat/qat_common/adf_common_drv.h
-index e8c9b77c0d66..b582107db67b 100644
---- a/drivers/crypto/qat/qat_common/adf_common_drv.h
-+++ b/drivers/crypto/qat/qat_common/adf_common_drv.h
-@@ -49,11 +49,6 @@ struct service_hndl {
- 	struct list_head list;
- };
+diff --git a/drivers/crypto/qat/Kconfig b/drivers/crypto/qat/Kconfig
+index 4b90c0f22b03..1220cc86f910 100644
+--- a/drivers/crypto/qat/Kconfig
++++ b/drivers/crypto/qat/Kconfig
+@@ -17,7 +17,7 @@ config CRYPTO_DEV_QAT
  
--static inline int get_current_node(void)
--{
--	return topology_physical_package_id(raw_smp_processor_id());
--}
--
- int adf_service_register(struct service_hndl *service);
- int adf_service_unregister(struct service_hndl *service);
+ config CRYPTO_DEV_QAT_DH895xCC
+ 	tristate "Support for Intel(R) DH895xCC"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) DH895xcc with Intel(R) QuickAssist Technology
+@@ -28,7 +28,7 @@ config CRYPTO_DEV_QAT_DH895xCC
  
-diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
-index f998ed58457c..c0ffaebcc8b8 100644
---- a/drivers/crypto/qat/qat_common/qat_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_algs.c
-@@ -618,7 +618,7 @@ static int qat_alg_aead_newkey(struct crypto_aead *tfm, const u8 *key,
- {
- 	struct qat_alg_aead_ctx *ctx = crypto_aead_ctx(tfm);
- 	struct qat_crypto_instance *inst = NULL;
--	int node = get_current_node();
-+	int node = numa_node_id();
- 	struct device *dev;
- 	int ret;
+ config CRYPTO_DEV_QAT_C3XXX
+ 	tristate "Support for Intel(R) C3XXX"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) C3xxx with Intel(R) QuickAssist Technology
+@@ -39,7 +39,7 @@ config CRYPTO_DEV_QAT_C3XXX
  
-@@ -1042,7 +1042,7 @@ static int qat_alg_skcipher_newkey(struct qat_alg_skcipher_ctx *ctx,
- {
- 	struct qat_crypto_instance *inst = NULL;
- 	struct device *dev;
--	int node = get_current_node();
-+	int node = numa_node_id();
- 	int ret;
+ config CRYPTO_DEV_QAT_C62X
+ 	tristate "Support for Intel(R) C62X"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) C62x with Intel(R) QuickAssist Technology
+@@ -50,7 +50,7 @@ config CRYPTO_DEV_QAT_C62X
  
- 	inst = qat_crypto_get_instance_node(node);
-diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
-index b0b78445418b..3701eac10bce 100644
---- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
-@@ -480,7 +480,7 @@ static int qat_dh_init_tfm(struct crypto_kpp *tfm)
- {
- 	struct qat_dh_ctx *ctx = kpp_tfm_ctx(tfm);
- 	struct qat_crypto_instance *inst =
--			qat_crypto_get_instance_node(get_current_node());
-+			qat_crypto_get_instance_node(numa_node_id());
+ config CRYPTO_DEV_QAT_4XXX
+ 	tristate "Support for Intel(R) QAT_4XXX"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select CRYPTO_DEV_QAT
+ 	help
+ 	  Support for Intel(R) QuickAssist Technology QAT_4xxx
+@@ -61,7 +61,7 @@ config CRYPTO_DEV_QAT_4XXX
  
- 	if (!inst)
- 		return -EINVAL;
-@@ -1218,7 +1218,7 @@ static int qat_rsa_init_tfm(struct crypto_akcipher *tfm)
- {
- 	struct qat_rsa_ctx *ctx = akcipher_tfm_ctx(tfm);
- 	struct qat_crypto_instance *inst =
--			qat_crypto_get_instance_node(get_current_node());
-+			qat_crypto_get_instance_node(numa_node_id());
+ config CRYPTO_DEV_QAT_DH895xCCVF
+ 	tristate "Support for Intel(R) DH895xCC Virtual Function"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select PCI_IOV
+ 	select CRYPTO_DEV_QAT
  
- 	if (!inst)
- 		return -EINVAL;
+@@ -74,7 +74,7 @@ config CRYPTO_DEV_QAT_DH895xCCVF
+ 
+ config CRYPTO_DEV_QAT_C3XXXVF
+ 	tristate "Support for Intel(R) C3XXX Virtual Function"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select PCI_IOV
+ 	select CRYPTO_DEV_QAT
+ 	help
+@@ -86,7 +86,7 @@ config CRYPTO_DEV_QAT_C3XXXVF
+ 
+ config CRYPTO_DEV_QAT_C62XVF
+ 	tristate "Support for Intel(R) C62X Virtual Function"
+-	depends on X86 && PCI
++	depends on PCI && (!CPU_BIG_ENDIAN || COMPILE_TEST)
+ 	select PCI_IOV
+ 	select CRYPTO_DEV_QAT
+ 	help
 -- 
 2.25.1
 

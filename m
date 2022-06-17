@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD64C54F5A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAE454F5A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380944AbiFQKil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S1381916AbiFQKkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380514AbiFQKig (ORCPT
+        with ESMTP id S1381741AbiFQKkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:38:36 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A889656B23
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:38:35 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 85BF7E0003;
-        Fri, 17 Jun 2022 10:38:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1655462314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mpdxVeMQmq6NbsmT6VbTrJcO0H4eYfAO0o9n2OBIBmg=;
-        b=omxlk4Ni6JnP1XlKjlRilks5/FDMs6/PaQrD/Ep9SC2NECbuog37ZexMvUeqYaIJcIvDSx
-        QVT+k/6VHpfSsXqJpfECUrQb7TXGZPkgVxs3kO3rulRFlZ02sJgVnY8jb9MUNwrvrRcbwY
-        /CJgOZ89VtnUNB4/JaS7+hbP2qXElpK+Shk7vlKJeDyxV9pPgEIAqsbGIgBXAm96FDqXHs
-        0bFvKc47S3QJYrQ9VS4kYhhk+GeChwn9Vjyk+/2nvSzqk/xdHpOQMbMLjfc1efeX5JDRyG
-        ONf4v/b24io3DM9lq8LfPhNveDMn+SQAWKn1ZEPmnEtxh9kL0V20KCGbB8+rmQ==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Subject: [PATCH] reset: microchip-sparx5: allow building as a module
-Date:   Fri, 17 Jun 2022 12:37:30 +0200
-Message-Id: <20220617103730.490588-1-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 17 Jun 2022 06:40:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DCD6AA7D;
+        Fri, 17 Jun 2022 03:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CF25B8299D;
+        Fri, 17 Jun 2022 10:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A10B9C341CB;
+        Fri, 17 Jun 2022 10:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655462414;
+        bh=FfnaDyOU4tBYtXRnV8yExF0syv6ks0IlfB02Ng05kwI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=JDP5Lyz4LmVub2ntySZweDlwak7EoUJ5kzGJ8p5L4tKwEg2n+mMnWeiUdaXVexZ4L
+         lDpJcVvNJ+rgqdaavVaO8BkuRfDoxX6dFh09VJX8dTeNJHg++zv1ndyTWRm5ZOsAEs
+         7lAGH/5RTIkXpSN5V9pvinY4Rt2OK5eUDB/IxqAGoXjWJgZAkykCHaLkOivRPg4y4e
+         xC6SYexLldfnoppE8cffdchK+HIVqppA5C2iKozZAOLzsJ8VZbNiQu2dziLPNOnaUm
+         u+qmkXwHvAvtLGnr1R9ECndkBdez5XCEY1bvkvKAL5cw+bj2vYqnGfX61WasgD9a/n
+         5FXAAVyGXBo4Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D432E6D466;
+        Fri, 17 Jun 2022 10:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] hinic: Replace memcpy() with direct assignment
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165546241457.18293.10133826510983697335.git-patchwork-notify@kernel.org>
+Date:   Fri, 17 Jun 2022 10:40:14 +0000
+References: <20220616052312.292861-1-keescook@chromium.org>
+In-Reply-To: <20220616052312.292861-1-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, leon@kernel.org, jiri@nvidia.com,
+        olteanv@gmail.com, simon.horman@corigine.com,
+        netdev@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set RESET_MCHP_SPARX5 as a tristate and add MODULE_DEVICE_TABLE() to
-allow building this driver as a module.
+Hello:
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- drivers/reset/Kconfig                  | 2 +-
- drivers/reset/reset-microchip-sparx5.c | 8 ++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index 93c8d07ee328..5afbe2daecb1 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -115,7 +115,7 @@ config RESET_LPC18XX
- 	  This enables the reset controller driver for NXP LPC18xx/43xx SoCs.
- 
- config RESET_MCHP_SPARX5
--	bool "Microchip Sparx5 reset driver"
-+	tristate "Microchip Sparx5 reset driver"
- 	depends on ARCH_SPARX5 || SOC_LAN966 || COMPILE_TEST
- 	default y if SPARX5_SWITCH
- 	select MFD_SYSCON
-diff --git a/drivers/reset/reset-microchip-sparx5.c b/drivers/reset/reset-microchip-sparx5.c
-index 00b612a0effa..3d54dda3593e 100644
---- a/drivers/reset/reset-microchip-sparx5.c
-+++ b/drivers/reset/reset-microchip-sparx5.c
-@@ -149,6 +149,7 @@ static const struct of_device_id mchp_sparx5_reset_of_match[] = {
- 	},
- 	{ }
- };
-+MODULE_DEVICE_TABLE(of, mchp_sparx5_reset_of_match);
- 
- static struct platform_driver mchp_sparx5_reset_driver = {
- 	.probe = mchp_sparx5_reset_probe,
-@@ -158,12 +159,7 @@ static struct platform_driver mchp_sparx5_reset_driver = {
- 	},
- };
- 
--static int __init mchp_sparx5_reset_init(void)
--{
--	return platform_driver_register(&mchp_sparx5_reset_driver);
--}
--
--postcore_initcall(mchp_sparx5_reset_init);
-+module_platform_driver(mchp_sparx5_reset_driver);
- 
- MODULE_DESCRIPTION("Microchip Sparx5 switch reset driver");
- MODULE_AUTHOR("Steen Hegelund <steen.hegelund@microchip.com>");
+On Wed, 15 Jun 2022 22:23:12 -0700 you wrote:
+> Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
+> here for calculating the size of the destination buffer (0x10 instead of
+> 0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
+> the source and dest being struct fw_section_info_st, so the memcpy should
+> be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
+> responsibility to figure out.
+> 
+> [...]
+
+Here is the summary with links:
+  - hinic: Replace memcpy() with direct assignment
+    https://git.kernel.org/netdev/net-next/c/2c0ab32b73cf
+
+You are awesome, thank you!
 -- 
-2.36.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

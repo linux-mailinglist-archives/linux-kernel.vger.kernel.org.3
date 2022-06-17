@@ -2,46 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA6154EFBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F01454EFBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379980AbiFQDSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 23:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S1379730AbiFQD1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiFQDRz (ORCPT
+        with ESMTP id S233449AbiFQD06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:17:55 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6597520F7C;
-        Thu, 16 Jun 2022 20:17:53 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1CC271A7D32;
-        Fri, 17 Jun 2022 05:17:52 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8AA8F1A5000;
-        Fri, 17 Jun 2022 05:17:51 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 00AD21820F56;
-        Fri, 17 Jun 2022 11:17:48 +0800 (+08)
-From:   Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-To:     davem@davemloft.net, netdev@vger.kernel.org,
+        Thu, 16 Jun 2022 23:26:58 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513BF64BEF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655436416; x=1686972416;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=8ctfFtmaA8Kx+E6xmFh3lcOlj9ZvelqXJoJObAR3Zwo=;
+  b=g6bm7QtqNaFY6vY1F+fBjLIckiisdzYO59MLjvMXjhw8RLYKMqEEr0yM
+   J4vdu2zTdXbKqnGjcyCiTGo22G8kR/hvb26c2IdVWVJ8HcIYHXqPIgKNe
+   IE4/PJRPX5cdmlJxZ7kioa4eZ+Z7GCu+NpXYrMYRIr2dOFB+4tuBkIS09
+   WApUPvhFLGSu9hVuI+QJ8pFMHZYUepJcy4Ry0HjG78Gb4r+iZ2WtQmwei
+   KOpCgvxcRIPgSrkam0iQNSuOqJ5/bq57UUDegyBqgNeoPC2/DHY0EB8U4
+   0nMVDznKwhcugMLaYVq5miOxK6lZJ9i95VIS/gLqdAiQ3u5zMc6z09kl0
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
+   d="scan'208";a="203390665"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 17 Jun 2022 11:26:55 +0800
+IronPort-SDR: CYBs5PL+gfaEsKX9rGrmPXv1LPSPxsZTnWs4aBxmSOL5LIGBZzldxEOK7NcfUn+BFz4LGkeVQy
+ 6PkN5P1oxEmV+AsqZK2xFyxyuJ/qMrQgQL3POmzAz2oCJSt+UZIhrn2Yx5Yc29fNWHOPZLgIUD
+ v3ugtPHM4W9x+OakTmSYftJKehQwZTs3VkyvJp/l3kekbOo1dEqKA3++TDmaDivEiKlrOv0/w9
+ 67IZXFaQdwI5hCwTDnMpOCZ5Jt3lYMmZG5NHRXgHRrKqCGXsUjl8Pa0ky3eNwlPAIMiIXfnQSF
+ EElYJNUXzQ7q2xggdBCZ59kB
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Jun 2022 19:49:31 -0700
+IronPort-SDR: dz3OUvdvSMsfoLqzt2BKYRGTztvBAt8BH41MaELUDsZQK2mAJgr5ZC59dtJmZT6qsxigtza2Sx
+ YpmCmF7RI0BGwDdS9PYEpTiE8cFK3UmrunVxu/OqHbAj9td/p2yzqmCE8163UD5+uhdApyBSA6
+ Dgxn55Oo7OyEBGNHnfKLFupsR8PzOtanacWOw75a1JqszO+e3HQAp64FnumqlVe2H2JGOyCAul
+ GNHd6JhiDuI86hZroE8DfGRxMj/z4mbZYqS6W0GD8aYc80RpLTb7QaSwSP+Dk/Ui/KZaJUI9t5
+ mbg=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Jun 2022 20:26:56 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LPPbg3fffz1SVp1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:26:55 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655436414; x=1658028415; bh=8ctfFtmaA8Kx+E6xmFh3lcOlj9ZvelqXJoJ
+        ObAR3Zwo=; b=bbMPlCSkRVeacmi4OmtRlBGuMg9vRsr+r4F+7IyBAxbgdz5RUkR
+        Pn9wYdApiMrYiLVtVj0qU8BUjR8n5gFmOWWCPvtrUq+iNAuSNx06e1fQe9F58gbb
+        fxNazQK79sUy803nkPZ5eqqmmEPqbvdtXUgla/mLJ0ch10sppsLPV7qXHf8j20Gb
+        fts5LCzx8oY0zPpbrjNjluX8iTMu911kccDU1j5suYJZ8YRPjZbAJIFTe5stcnmO
+        y9uI1WBWS+YaDRJ8NhNNzIZVCpi4CfXAgIYzbHj7piFC8JHU1WFdPiATkzvelZ5/
+        sWyimKJVNDLTVtJtdhoiME5T4Bi0WYRYD9A==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id el3CKFMN-KGZ for <linux-kernel@vger.kernel.org>;
+        Thu, 16 Jun 2022 20:26:54 -0700 (PDT)
+Received: from [10.225.163.84] (unknown [10.225.163.84])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LPPbd2snYz1Rvlc;
+        Thu, 16 Jun 2022 20:26:53 -0700 (PDT)
+Message-ID: <e8fe553b-53cb-1dee-36c7-f4f737c81e30@opensource.wdc.com>
+Date:   Fri, 17 Jun 2022 12:26:51 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] ata: libata: add qc->flags in ata_qc_complete_template
+ tracepoint
+Content-Language: en-US
+To:     Edward Wu <edwardwu@realtek.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        Tejun Heo <tj@kernel.org>, linux-ide@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     allan.nielsen@microchip.com, joergen.andreasen@microchip.com,
-        horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, fido_max@inbox.ru,
-        f.fainelli@gmail.com, vivien.didelot@gmail.com, pabeni@redhat.com,
-        kuba@kernel.org, edumazet@google.com, andrew@lunn.ch,
-        alexandru.marginean@nxp.com, claudiu.manoil@nxp.com,
-        vladimir.oltean@nxp.com, leoyang.li@nxp.com,
-        xiaoliang.yang_1@nxp.com, yangbo.lu@nxp.com
-Subject: [PATCH v2 net-next] net: dsa: felix: update base time of time-aware shaper when adjusting PTP time
-Date:   Fri, 17 Jun 2022 11:24:23 +0800
-Message-Id: <20220617032423.13852-1-xiaoliang.yang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220616001615.11636-1-edwardwu@realtek.com>
+ <20220617030007.21768-1-edwardwu@realtek.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220617030007.21768-1-edwardwu@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,255 +102,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When adjusting the PTP clock, the base time of the TAS configuration
-will become unreliable. We need reset the TAS configuration by using a
-new base time.
+On 6/17/22 12:00, Edward Wu wrote:
+> Add flags value to check the result of ata completion
+> 
+> Fixes: 255c03d15a29 ("libata: Add tracepoints")
+> Cc: stable@vger.kernel.org
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-For example, if the driver gets a base time 0 of Qbv configuration from
-user, and current time is 20000. The driver will set the TAS base time
-to be 20000. After the PTP clock adjustment, the current time becomes
-10000. If the TAS base time is still 20000, it will be a future time,
-and TAS entry list will stop running. Another example, if the current
-time becomes to be 10000000 after PTP clock adjust, a large time offset
-can cause the hardware to hang.
+Looks good. But please do not randomly add tags like the above ack. I
+never sent that ! And since I will be applying this patch, I will add my
+signed-of-by tag, not a acked-by tag.
 
-This patch introduces a tas_clock_adjust() function to reset the TAS
-module by using a new base time after the PTP clock adjustment. This can
-avoid issues above.
+> Signed-off-by: Edward Wu <edwardwu@realtek.com>
+> ---
+> Thanks for your kindly guiding.
+> 
+>  include/trace/events/libata.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/trace/events/libata.h b/include/trace/events/libata.h
+> index d4e631aa976f..6025dd8ba4aa 100644
+> --- a/include/trace/events/libata.h
+> +++ b/include/trace/events/libata.h
+> @@ -288,6 +288,7 @@ DECLARE_EVENT_CLASS(ata_qc_complete_template,
+>  		__entry->hob_feature	= qc->result_tf.hob_feature;
+>  		__entry->nsect		= qc->result_tf.nsect;
+>  		__entry->hob_nsect	= qc->result_tf.hob_nsect;
+> +		__entry->flags		= qc->flags;
+>  	),
+>  
+>  	TP_printk("ata_port=%u ata_dev=%u tag=%d flags=%s status=%s " \
 
-Due to PTP clock adjustment can occur at any time, it may conflict with
-the TAS configuration. We introduce a new TAS lock to serialize the
-access to the TAS registers.
 
-Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
----
-v2: Update ocelot_ptp_adjtime() function to avoid tas_clock_adjust() be
-called twice.
----
- drivers/net/dsa/ocelot/felix_vsc9959.c | 83 ++++++++++++++++++++++++--
- drivers/net/ethernet/mscc/ocelot.c     |  1 +
- drivers/net/ethernet/mscc/ocelot_ptp.c |  8 +++
- include/soc/mscc/ocelot.h              |  7 +++
- 4 files changed, 93 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
-index 570d0204b7be..dd9085ae0922 100644
---- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-+++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
-@@ -1196,10 +1196,13 @@ static void vsc9959_tas_gcl_set(struct ocelot *ocelot, const u32 gcl_ix,
- static int vsc9959_qos_port_tas_set(struct ocelot *ocelot, int port,
- 				    struct tc_taprio_qopt_offload *taprio)
- {
-+	struct ocelot_port *ocelot_port = ocelot->ports[port];
- 	struct timespec64 base_ts;
- 	int ret, i;
- 	u32 val;
- 
-+	mutex_lock(&ocelot->tas_lock);
-+
- 	if (!taprio->enable) {
- 		ocelot_rmw_rix(ocelot,
- 			       QSYS_TAG_CONFIG_INIT_GATE_STATE(0xFF),
-@@ -1207,15 +1210,20 @@ static int vsc9959_qos_port_tas_set(struct ocelot *ocelot, int port,
- 			       QSYS_TAG_CONFIG_INIT_GATE_STATE_M,
- 			       QSYS_TAG_CONFIG, port);
- 
-+		mutex_unlock(&ocelot->tas_lock);
- 		return 0;
- 	}
- 
- 	if (taprio->cycle_time > NSEC_PER_SEC ||
--	    taprio->cycle_time_extension >= NSEC_PER_SEC)
--		return -EINVAL;
-+	    taprio->cycle_time_extension >= NSEC_PER_SEC) {
-+		ret = -EINVAL;
-+		goto err;
-+	}
- 
--	if (taprio->num_entries > VSC9959_TAS_GCL_ENTRY_MAX)
--		return -ERANGE;
-+	if (taprio->num_entries > VSC9959_TAS_GCL_ENTRY_MAX) {
-+		ret = -ERANGE;
-+		goto err;
-+	}
- 
- 	/* Enable guard band. The switch will schedule frames without taking
- 	 * their length into account. Thus we'll always need to enable the
-@@ -1236,8 +1244,10 @@ static int vsc9959_qos_port_tas_set(struct ocelot *ocelot, int port,
- 	 * config is pending, need reset the TAS module
- 	 */
- 	val = ocelot_read(ocelot, QSYS_PARAM_STATUS_REG_8);
--	if (val & QSYS_PARAM_STATUS_REG_8_CONFIG_PENDING)
--		return  -EBUSY;
-+	if (val & QSYS_PARAM_STATUS_REG_8_CONFIG_PENDING) {
-+		ret = -EBUSY;
-+		goto err;
-+	}
- 
- 	ocelot_rmw_rix(ocelot,
- 		       QSYS_TAG_CONFIG_ENABLE |
-@@ -1248,6 +1258,8 @@ static int vsc9959_qos_port_tas_set(struct ocelot *ocelot, int port,
- 		       QSYS_TAG_CONFIG_SCH_TRAFFIC_QUEUES_M,
- 		       QSYS_TAG_CONFIG, port);
- 
-+	ocelot_port->base_time = taprio->base_time;
-+
- 	vsc9959_new_base_time(ocelot, taprio->base_time,
- 			      taprio->cycle_time, &base_ts);
- 	ocelot_write(ocelot, base_ts.tv_nsec, QSYS_PARAM_CFG_REG_1);
-@@ -1271,9 +1283,67 @@ static int vsc9959_qos_port_tas_set(struct ocelot *ocelot, int port,
- 				 !(val & QSYS_TAS_PARAM_CFG_CTRL_CONFIG_CHANGE),
- 				 10, 100000);
- 
-+err:
-+	mutex_unlock(&ocelot->tas_lock);
-+
- 	return ret;
- }
- 
-+static void vsc9959_tas_clock_adjust(struct ocelot *ocelot)
-+{
-+	struct ocelot_port *ocelot_port;
-+	struct timespec64 base_ts;
-+	u64 cycletime;
-+	int port;
-+	u32 val;
-+
-+	mutex_lock(&ocelot->tas_lock);
-+
-+	for (port = 0; port < ocelot->num_phys_ports; port++) {
-+		val = ocelot_read_rix(ocelot, QSYS_TAG_CONFIG, port);
-+		if (!(val & QSYS_TAG_CONFIG_ENABLE))
-+			continue;
-+
-+		ocelot_rmw(ocelot,
-+			   QSYS_TAS_PARAM_CFG_CTRL_PORT_NUM(port),
-+			   QSYS_TAS_PARAM_CFG_CTRL_PORT_NUM_M,
-+			   QSYS_TAS_PARAM_CFG_CTRL);
-+
-+		ocelot_rmw_rix(ocelot,
-+			       QSYS_TAG_CONFIG_INIT_GATE_STATE(0xFF),
-+			       QSYS_TAG_CONFIG_ENABLE |
-+			       QSYS_TAG_CONFIG_INIT_GATE_STATE_M,
-+			       QSYS_TAG_CONFIG, port);
-+
-+		cycletime = ocelot_read(ocelot, QSYS_PARAM_CFG_REG_4);
-+		ocelot_port = ocelot->ports[port];
-+
-+		vsc9959_new_base_time(ocelot, ocelot_port->base_time,
-+				      cycletime, &base_ts);
-+
-+		ocelot_write(ocelot, base_ts.tv_nsec, QSYS_PARAM_CFG_REG_1);
-+		ocelot_write(ocelot, lower_32_bits(base_ts.tv_sec),
-+			     QSYS_PARAM_CFG_REG_2);
-+		val = upper_32_bits(base_ts.tv_sec);
-+		ocelot_rmw(ocelot,
-+			   QSYS_PARAM_CFG_REG_3_BASE_TIME_SEC_MSB(val),
-+			   QSYS_PARAM_CFG_REG_3_BASE_TIME_SEC_MSB_M,
-+			   QSYS_PARAM_CFG_REG_3);
-+
-+		ocelot_rmw(ocelot, QSYS_TAS_PARAM_CFG_CTRL_CONFIG_CHANGE,
-+			   QSYS_TAS_PARAM_CFG_CTRL_CONFIG_CHANGE,
-+			   QSYS_TAS_PARAM_CFG_CTRL);
-+
-+		ocelot_rmw_rix(ocelot,
-+			       QSYS_TAG_CONFIG_INIT_GATE_STATE(0xFF) |
-+			       QSYS_TAG_CONFIG_ENABLE,
-+			       QSYS_TAG_CONFIG_ENABLE |
-+			       QSYS_TAG_CONFIG_INIT_GATE_STATE_M,
-+			       QSYS_TAG_CONFIG, port);
-+	}
-+	mutex_unlock(&ocelot->tas_lock);
-+}
-+
- static int vsc9959_qos_port_cbs_set(struct dsa_switch *ds, int port,
- 				    struct tc_cbs_qopt_offload *cbs_qopt)
- {
-@@ -2210,6 +2280,7 @@ static const struct ocelot_ops vsc9959_ops = {
- 	.psfp_filter_del	= vsc9959_psfp_filter_del,
- 	.psfp_stats_get		= vsc9959_psfp_stats_get,
- 	.cut_through_fwd	= vsc9959_cut_through_fwd,
-+	.tas_clock_adjust	= vsc9959_tas_clock_adjust,
- };
- 
- static const struct felix_info felix_info_vsc9959 = {
-diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
-index 8da7e25a47c9..d4649e4ee0e7 100644
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -3367,6 +3367,7 @@ int ocelot_init(struct ocelot *ocelot)
- 	mutex_init(&ocelot->ptp_lock);
- 	mutex_init(&ocelot->mact_lock);
- 	mutex_init(&ocelot->fwd_domain_lock);
-+	mutex_init(&ocelot->tas_lock);
- 	spin_lock_init(&ocelot->ptp_clock_lock);
- 	spin_lock_init(&ocelot->ts_id_lock);
- 	snprintf(queue_name, sizeof(queue_name), "%s-stats",
-diff --git a/drivers/net/ethernet/mscc/ocelot_ptp.c b/drivers/net/ethernet/mscc/ocelot_ptp.c
-index 87ad2137ba06..09c703efe946 100644
---- a/drivers/net/ethernet/mscc/ocelot_ptp.c
-+++ b/drivers/net/ethernet/mscc/ocelot_ptp.c
-@@ -72,6 +72,10 @@ int ocelot_ptp_settime64(struct ptp_clock_info *ptp,
- 	ocelot_write_rix(ocelot, val, PTP_PIN_CFG, TOD_ACC_PIN);
- 
- 	spin_unlock_irqrestore(&ocelot->ptp_clock_lock, flags);
-+
-+	if (ocelot->ops->tas_clock_adjust)
-+		ocelot->ops->tas_clock_adjust(ocelot);
-+
- 	return 0;
- }
- EXPORT_SYMBOL(ocelot_ptp_settime64);
-@@ -105,6 +109,9 @@ int ocelot_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
- 		ocelot_write_rix(ocelot, val, PTP_PIN_CFG, TOD_ACC_PIN);
- 
- 		spin_unlock_irqrestore(&ocelot->ptp_clock_lock, flags);
-+
-+		if (ocelot->ops->tas_clock_adjust)
-+			ocelot->ops->tas_clock_adjust(ocelot);
- 	} else {
- 		/* Fall back using ocelot_ptp_settime64 which is not exact. */
- 		struct timespec64 ts;
-@@ -117,6 +124,7 @@ int ocelot_ptp_adjtime(struct ptp_clock_info *ptp, s64 delta)
- 
- 		ocelot_ptp_settime64(ptp, &ts);
- 	}
-+
- 	return 0;
- }
- EXPORT_SYMBOL(ocelot_ptp_adjtime);
-diff --git a/include/soc/mscc/ocelot.h b/include/soc/mscc/ocelot.h
-index 5f88385a7748..3737570116c3 100644
---- a/include/soc/mscc/ocelot.h
-+++ b/include/soc/mscc/ocelot.h
-@@ -575,6 +575,7 @@ struct ocelot_ops {
- 	int (*psfp_stats_get)(struct ocelot *ocelot, struct flow_cls_offload *f,
- 			      struct flow_stats *stats);
- 	void (*cut_through_fwd)(struct ocelot *ocelot);
-+	void (*tas_clock_adjust)(struct ocelot *ocelot);
- };
- 
- struct ocelot_vcap_policer {
-@@ -691,6 +692,9 @@ struct ocelot_port {
- 	int				bridge_num;
- 
- 	int				speed;
-+
-+	/* Store the AdminBaseTime of EST fetched from userspace. */
-+	s64				base_time;
- };
- 
- struct ocelot {
-@@ -757,6 +761,9 @@ struct ocelot {
- 	/* Lock for serializing forwarding domain changes */
- 	struct mutex			fwd_domain_lock;
- 
-+	/* Lock for serializing Time-Aware Shaper changes */
-+	struct mutex			tas_lock;
-+
- 	struct workqueue_struct		*owq;
- 
- 	u8				ptp:1;
 -- 
-2.17.1
-
+Damien Le Moal
+Western Digital Research

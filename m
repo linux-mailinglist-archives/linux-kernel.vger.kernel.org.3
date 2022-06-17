@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970FB5500CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A005500DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383707AbiFQXcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
+        id S1383700AbiFQXhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237732AbiFQXcC (ORCPT
+        with ESMTP id S237496AbiFQXhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:32:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D00766F9F;
-        Fri, 17 Jun 2022 16:32:01 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 17 Jun 2022 19:37:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480E7101C;
+        Fri, 17 Jun 2022 16:37:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9E2CD66017DD;
-        Sat, 18 Jun 2022 00:31:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655508720;
-        bh=nIpAmQ9qPs2TwbqhrUmn9gsTTFLPJRRk9xBahMemHjw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oozUUfD3UffUQZwHuB2+M1iZ+3Ch+qEgieLytLLvI9yMSJJpEBBZCT1b3tzK7mC8A
-         QKQ9WRQbhIPXXcfo+mHW0g1FryTBU6JulOWp3dKVlEx5cMaveNlywPh+oqWXH8NkJ+
-         MXFHNSVoOkt7iDczhlz5GlUbovLN9rf8IDWuszQChIdM77kM/G8tfivQsl8Je/uOZA
-         XQYUM9a2y60siCyWOMA7QNIzS+CXADx9lTeRjMWgwFoC6a40BFzJuE/XnSIJDwiasN
-         VCUb8QpvMO5gptarMIkgFD0cnaVsQ+vfmnqpWECza9c6hUlQNKkrZ+u5tUY0HOPcD6
-         9DFfd17exuMxw==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, James Liao <jamesjj.liao@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/2] arm64: dts: mt8192: Fix idle-states entry-method
-Date:   Fri, 17 Jun 2022 19:31:50 -0400
-Message-Id: <20220617233150.2466344-3-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220617233150.2466344-1-nfraprado@collabora.com>
-References: <20220617233150.2466344-1-nfraprado@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFAE361D55;
+        Fri, 17 Jun 2022 23:37:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD64C3411B;
+        Fri, 17 Jun 2022 23:37:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mH1mOeyV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1655509051;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HcY8feozlb/iCMaAqa0x3x7SwlLLCwcos88Sao/FquI=;
+        b=mH1mOeyVMPct2R8r2l783spD8uc0JkMPncFYg+38d2wfNoup/6Zkfu9HU49vv9zaSekhnk
+        dyy7cnoRngHab8ToVlPHHsshTFIXk4xJwyooWBPYZI/02w5YgDL6oNBlvdVyG0hyqXKOlg
+        52NtrcZ6z7msBzLFdXM7K4qdGoA2bNc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1c615cb4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 17 Jun 2022 23:37:31 +0000 (UTC)
+Date:   Sat, 18 Jun 2022 01:37:30 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sandy Harris <sandyinchina@gmail.com>
+Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Ted Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random Remove setting of chacha state to constant values.
+Message-ID: <Yq0QOmahm8m018NK@zx2c4.com>
+References: <CACXcFmmw8bzSr-pmTauMS7a=036eW0=1KLdwAD1MOB_fY-7VRg@mail.gmail.com>
+ <Yqr+rFeixFuHzyHD@zx2c4.com>
+ <CACXcFmmdrELd8CkwmBQf5-W7PkR=McjcUz9kPDzaCh=NrODKUA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CACXcFmmdrELd8CkwmBQf5-W7PkR=McjcUz9kPDzaCh=NrODKUA@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The entry-method property of the idle-states node should be "psci" as
-described in the idle-states binding, since this is already the value of
-enable-method in the CPU nodes. Fix it to get rid of a dtbs_check
-warning.
+On Sat, Jun 18, 2022 at 07:17:00AM +0800, Sandy Harris wrote:
+> Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> 
+> > ChaCha is a permutation that requires those constants.
+> 
+> No. The actual permutation does not use the constants.
+> They are used in setting up the state & directly affect
+> only the first round. The other 19 rounds do not use
+> the constants; they operate on the more-or-less random
+> state left by the previous round.
 
-Fixes: 9260918d3a4f ("arm64: dts: mt8192: Add cpu-idle-states")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+I guess. But that just seems like all the more reason to stick with the
+constants in that first round, as chacha lacks round constants like
+"hermetic" permutations. Better to give less control over that initial
+state. Anyway, we're not going to veer off into lala land and redesign
+chacha on lkml.
 
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> There is no such argument for
+> memset(&chacha_state[12], 0, sizeof(u32) * 4);
+> ChaCha has a counter and a nonce in those
+> bits, so setting them to zero is a deviation.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index c739e910883a..d5cae38c842a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -172,7 +172,7 @@ l3_0: l3-cache {
- 		};
- 
- 		idle-states {
--			entry-method = "arm,psci";
-+			entry-method = "psci";
- 			cpu_sleep_l: cpu-sleep-l {
- 				compatible = "arm,idle-state";
- 				arm,psci-suspend-param = <0x00010001>;
--- 
-2.36.1
+No. There's a new key each time. So the nonce begins at zero. And the
+counter begins at zero as well at the beginning like usual. So it's
+actually a rather boring by-the-books usage of chacha.
 
+> Dropping the memset() and using whatever
+> the existing state has there may not be ideal,
+> but it is certainly better than the zeroes.
+
+I'm not so sure about that. For starters, it means that we'll never
+actually exceed the first 32 bits, and so the branch for the increment
+of the next word is never true, which has some tiny value. And as for
+the nonce, I'd like to reserve that for whatever interesting use comes
+up in the future (like using the cpu number or something in an
+interesting parallel design).
+
+But the larger reason for rejecting your idea wholesale is that I'm
+trying to enforce the property that input data goes through our hash
+function (via mix_pool_bytes). Full stop! It's time that this
+willy-nilly stuff ends where we're feeding in things right and left with
+no actual design on which is ingesting what input and how it interacts.
+So if you do think that a particular block of memory somewhere at some
+point has some entropic value, then by all means call mix_pool_bytes or
+add_device_randomness on it. But don't try to stuff it in where it
+doesn't belong.
+
+The type of valuable patch I'd like to encourage is this recent one from
+LinusW: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ac9d25557dcc9fe90ed12bfbb6db401e892ca004
+This seems like the kind of thing that might really help the situation
+on certain devices in a real way. More of that! Less of fake crypto.
+
+Jason

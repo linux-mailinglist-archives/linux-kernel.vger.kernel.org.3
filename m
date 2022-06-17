@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E62654EF0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF8754EF1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379517AbiFQCCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 22:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S1379612AbiFQCHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 22:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379270AbiFQCCT (ORCPT
+        with ESMTP id S1379573AbiFQCHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 22:02:19 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B8B61602
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:02:18 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id b1-20020a631b41000000b003fd9e4765f4so1541080pgm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=H3ch/skPh6OWdU3ZVapoiPf5KZK/QNqeESV3G0ohIf4=;
-        b=TM8dvv8PAusNRsHX7JT7RoJzYQTc2K2Fj42aMjHDjEQDjZS+8V9H/udQmC0QADcPZU
-         xOVk2MucjbnCuP/EavRFEyW8mTSlskH0SxvWksL6W6g6s6rJEz8Q9JdDqyy6/Eb72kfd
-         K78HNsE2n6nSFlW7bYKMhGJ/OlS4X1gWifLR9bUGWr2jkqOx5dG1OOVmdbHngLWBnfKY
-         DLTukrwmhcxvgImBimTtgy9By9TKTrgdoTUYTkjVGBvR/2ynkQ+QOkgVTqAwoGOuM5H3
-         FZw5OXnp/gIkwnEPE21DNoP5CZX+NgqlJ9Z3+mrNTf3dPzhdMv/z/WaFRu6OXMmJNYlZ
-         3vKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=H3ch/skPh6OWdU3ZVapoiPf5KZK/QNqeESV3G0ohIf4=;
-        b=QmNC6bC4o1w3RRaxkd63IDj8Ws874ndBRUywO2lzwFNWaObHEFPTbh7qCKNsLgg2UN
-         APHn94OcbdVH0CUnP6jTEMXI3JoCGNB0o4eB+BGG319PuMPImYTaL0Bt4av9FW3kv+gw
-         0UwRQLTm7ZERlNBi1XrWGx2MuMRkNLo8rBuG0MPh738baw1e7Pki7vq7gdhed5CpSUNr
-         jOKBh1w9y/7FIJx436dZcO3yuBJ8N2kKarpi6JZhMTuKHXfknotfnf4GfjQJfafuyqBL
-         DF8t8iRVCATIKl6LqRN4+IbA9nv3w7fF3yhFyx1pxI+iLK7JwdlEnRoZbQs+NBCsXt7P
-         ayLg==
-X-Gm-Message-State: AJIora+fSLgHtGlSxB7i+87CqfNDoQWLEbN88oXO3o7r6lP5UlwEvlYv
-        Dn9Hd8TRmUw2ZkaoQFL16bfxHwDiXuCsHw==
-X-Google-Smtp-Source: AGRyM1shuBG8YdgFYn+WRFakGWM0o05iu9Qupw/A5WgGLHcuw/AKAOQjLpdfXOnUOblsTmkp0Vnq0wxr1DuxVA==
-X-Received: from zllamas.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:4c])
- (user=cmllamas job=sendgmr) by 2002:a17:90b:4a0a:b0:1e8:5078:b573 with SMTP
- id kk10-20020a17090b4a0a00b001e85078b573mr7994165pjb.213.1655431338029; Thu,
- 16 Jun 2022 19:02:18 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 02:02:13 +0000
-Message-Id: <20220617020213.1881452-1-cmllamas@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH net] ipv4: ping: fix bind address validity check
-From:   Carlos Llamas <cmllamas@google.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Riccardo Paolo Bestetti <pbl@bestov.io>
-Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Jun 2022 22:07:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212A61F61F;
+        Thu, 16 Jun 2022 19:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655431663; x=1686967663;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ApzyEuuaqntfaLHpghKAi3bl7usIGTVwvAQnSAu3KBs=;
+  b=m6Ku36IZzVK9vnOWv+wj7HzAC0SKCDDl9InscPmAlFZ+89TjPuxnHFoE
+   SCVOd7xaVUeg0OQGA89rjcwGTUFZpFnBf5bmCuMWq5QuwRsJ6ymseoSMj
+   1AEp8Ljo906wlRPhV1GM6Z06fNVsN/MRSLsnN/k2vbQ883frZqc4jThO8
+   ZDDDirHGnKSs6YVe4PvqbcDBwxQGKHcWBWv4p6tapy4t2x2H3uxs1mbHe
+   +PXr3l6CDt0CbTvCOBPDlVaTFL1ajG1ZGkDWS+4wnmHHEJmp8fmQpo0nP
+   Xtq+anJy3hNFzdwHq8asIyWFBzozWJzy5Xkfxf4LEBjb9OihwVjWL0b8m
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365750316"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="365750316"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 19:07:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="831831701"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jun 2022 19:07:39 -0700
+From:   Tianfei Zhang <tianfei.zhang@intel.com>
+To:     yilun.xu@intel.com, lee.jones@linaro.org
+Cc:     hao.wu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
+        matthew.gerlach@linux.intel.com,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v2 0/4] add PMCI driver support
+Date:   Thu, 16 Jun 2022 22:04:01 -0400
+Message-Id: <20220617020405.128352-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-introduced a helper function to fold duplicated validity checks of bind
-addresses into inet_addr_valid_or_nonlocal(). However, this caused an
-unintended regression in ping_check_bind_addr(), which previously would
-reject binding to multicast and broadcast addresses, but now these are
-both incorrectly allowed as reported in [1].
+PMCI(Platform Management Control Interface) is a software-visible
+interface, connected to card BMC which provided telemetry and mailbox
+functionalities for Intel PAC FPGA card.
 
-This patch restores the original check. A simple reordering is done to
-improve readability and make it evident that multicast and broadcast
-addresses should not be allowed. Also, add an early exit for INADDR_ANY
-which replaces lost behavior added by commit 0ce779a9f501 ("net: Avoid
-unnecessary inet_addr_type() call when addr is INADDR_ANY").
+Currently, intel-m10-bmc driver support Intel MAX10 BMC functions via
+SPI interface. To support multiple bus interfaces, splits the common
+code from intel-m10-bmc driver into intel-m10-bmc-core. On the other
+hand, it leverages the regmap APIs to support Intel specific Indirect
+Register Interface for register read/write on PMCI driver. 
 
-[1] https://lore.kernel.org/netdev/CANP3RGdkAcDyAZoT1h8Gtuu0saq+eOrrTiWbxnO=
-s+5zn+cpyKg@mail.gmail.com/
+This patchset adding a driver for the PMCI-base interface of Intel MAX10
+BMC controller.
 
-Fixes: 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-Cc: Miaohe Lin <linmiaohe@huawei.com>
-Cc: Riccardo Paolo Bestetti <pbl@bestov.io>
-Reported-by: Maciej =C5=BBenczykowski <maze@google.com>
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
- net/ipv4/ping.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+patch 1: use ddata for local variables which directly interacts with
+dev_get_drvdata()/dev_set_drvdata().
+patch 2: split the common code from intel-m10-bmc driver into
+intel-m10-bmc-core.
+patch 3: add a driver for PMCI.
+patch 4: introduce a new data structure m10bmc_csr for the different
+register definition of MAX10 CSRs.
 
-diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-index 1a43ca73f94d..3c6101def7d6 100644
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -319,12 +319,16 @@ static int ping_check_bind_addr(struct sock *sk, stru=
-ct inet_sock *isk,
- 		pr_debug("ping_check_bind_addr(sk=3D%p,addr=3D%pI4,port=3D%d)\n",
- 			 sk, &addr->sin_addr.s_addr, ntohs(addr->sin_port));
-=20
-+		if (addr->sin_addr.s_addr =3D=3D htonl(INADDR_ANY))
-+			return 0;
-+
- 		tb_id =3D l3mdev_fib_table_by_index(net, sk->sk_bound_dev_if) ? : tb_id;
- 		chk_addr_ret =3D inet_addr_type_table(net, addr->sin_addr.s_addr, tb_id)=
-;
-=20
--		if (!inet_addr_valid_or_nonlocal(net, inet_sk(sk),
--					         addr->sin_addr.s_addr,
--	                                         chk_addr_ret))
-+		if (chk_addr_ret =3D=3D RTN_MULTICAST ||
-+		    chk_addr_ret =3D=3D RTN_BROADCAST ||
-+		    (chk_addr_ret !=3D RTN_LOCAL &&
-+		     !inet_can_nonlocal_bind(net, isk)))
- 			return -EADDRNOTAVAIL;
-=20
- #if IS_ENABLED(CONFIG_IPV6)
---=20
-2.36.1.476.g0c4daa206d-goog
+v2:
+  - use regmap APIs to support Intel specific Indirect Register Interface
+    on PMCI driver.
+  - fix compile warning reported by lkp.
+  - rebased on 5.19-rc2
+
+Tianfei Zhang (4):
+  mfd: intel-m10-bmc: rename the local variables
+  mfd: intel-m10-bmc: split into core and spi
+  mfd: intel-m10-bmc: add PMCI driver
+  mfd: intel-m10-bmc: support multiple register layouts
+
+ .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
+ drivers/mfd/Kconfig                           |  34 +++-
+ drivers/mfd/Makefile                          |   6 +-
+ .../{intel-m10-bmc.c => intel-m10-bmc-core.c} | 148 ++++++--------
+ drivers/mfd/intel-m10-bmc-pmci.c              | 190 ++++++++++++++++++
+ drivers/mfd/intel-m10-bmc-spi.c               |  83 ++++++++
+ include/linux/mfd/intel-m10-bmc.h             |  43 +++-
+ 7 files changed, 413 insertions(+), 99 deletions(-)
+ rename drivers/mfd/{intel-m10-bmc.c => intel-m10-bmc-core.c} (56%)
+ create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
+
+-- 
+2.26.2
 

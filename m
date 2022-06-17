@@ -2,152 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB08D54F8E3
+	by mail.lfdr.de (Postfix) with ESMTP id 7207854F8E2
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382605AbiFQOFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S1382616AbiFQOFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbiFQOFd (ORCPT
+        with ESMTP id S233854AbiFQOFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:05:33 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243E24C7B7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:05:24 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25HDuhhw013449;
-        Fri, 17 Jun 2022 14:04:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=cQ/SwfImF0iKXyQ+vRdYEwPl1VNj0ID776cob3LAmOE=;
- b=aretrqeSZKp7wgWEOxg50nRj4FBz3vcj4gT3dTNu/bTdtDt/5hMETEBTP7QbfQ3ePjz4
- 8tWTS9QCOeEz6SVkqGaN/+sPybp4WOxcvf4hvIOfEUgA3gHhkM253pMFZ8iU48Cz4MaD
- N/ng8smAimVmFYhdmqelNxSfvBlsKDcJH4j3mrlEiee0nLEkygx3EFGAivB5s+K/SX1m
- u6R1PqxNmwbNAF+PB3VRAdeb/EQTI6DSQX3GoT18q62kkck7yL8UqyMKodGZuWnMzt/P
- /yJNwALFezrgSpPRqYuEkgrGl3FBgZ4DrZ84fnrHL3hocVovJUycZSzmNGWd2wtffcUM cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3grtxnr61r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 14:04:55 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25HDvHiV018747;
-        Fri, 17 Jun 2022 14:04:55 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3grtxnr614-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 14:04:55 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25HDov0X007041;
-        Fri, 17 Jun 2022 14:04:53 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3gmjp8xxrs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 14:04:53 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25HE4o4E19071304
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jun 2022 14:04:50 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9A48B4C046;
-        Fri, 17 Jun 2022 14:04:50 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 327204C040;
-        Fri, 17 Jun 2022 14:04:50 +0000 (GMT)
-Received: from localhost (unknown [9.43.107.233])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Jun 2022 14:04:50 +0000 (GMT)
-Date:   Fri, 17 Jun 2022 19:34:48 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific
- implementation
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-References: <20220523175548.922671-1-sv@linux.ibm.com>
-        <20220523175548.922671-5-sv@linux.ibm.com>
-        <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
-        <59170f18-1356-1140-70e3-30cb627f00bc@linux.vnet.ibm.com>
-        <578ec055-0d63-e579-0caa-ad57846b8995@csgroup.eu>
-        <f1decbb7-b441-a241-469a-4ba118e08212@csgroup.eu>
-        <c1e2cf35-2a8d-87e6-3a7e-7f144392db23@csgroup.eu>
-        <1655386289.uh0k7sgl1r.naveen@linux.ibm.com>
-        <30f3791c-0fdd-e635-4a85-ec457f990fae@csgroup.eu>
-        <Yqs235037JrOOhBA@hirez.programming.kicks-ass.net>
-        <d095fe9d-e713-def1-6096-540c0d0da298@csgroup.eu>
-In-Reply-To: <d095fe9d-e713-def1-6096-540c0d0da298@csgroup.eu>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1655474054.lvnbqfz64f.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _eAZPF0wTyF7jvfU_B1dMSxze1-sffUC
-X-Proofpoint-ORIG-GUID: MZdaLXiAsAdUOPu_g21V41VhfRtfUdST
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 17 Jun 2022 10:05:17 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7A413FAD;
+        Fri, 17 Jun 2022 07:05:16 -0700 (PDT)
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPgly0bmjz67yhs;
+        Fri, 17 Jun 2022 22:05:02 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 16:05:13 +0200
+Received: from localhost (10.81.209.131) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Fri, 17 Jun
+ 2022 15:05:12 +0100
+Date:   Fri, 17 Jun 2022 15:05:08 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command
+ support
+Message-ID: <20220617150508.0000266a@Huawei.com>
+In-Reply-To: <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+        <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-17_08,2022-06-17_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
- clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206170060
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.209.131]
+X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
->=20
->=20
-> Le 16/06/2022 =C3=A0 15:57, Peter Zijlstra a =C3=A9crit=C2=A0:
->> On Thu, Jun 16, 2022 at 01:40:34PM +0000, Christophe Leroy wrote:
->>> sizeof(u64) is always 8 by definition.
->>>
->>> So if size is 8 we are working on a binary file for a 64 bits target, if
->>> not it means we are working for a 32 bits target.
->>=20
->> Cross-builds invalidate this I think. Best to look at something like:
->>=20
->>    elf->ehdr.e_ident[EI_CLASS] =3D=3D ELFCLASS32
->>=20
->>=20
->=20
-> Yes that's what it does indirectly:
->=20
-> 	int size =3D elf_class_size(elf);
->=20
->=20
-> With
->=20
-> static inline int elf_class_size(struct elf *elf)
-> {
-> 	if (elf->ehdr.e_ident[EI_CLASS] =3D=3D ELFCLASS32)
-> 		return sizeof(u32);
-> 	else
-> 		return sizeof(u64);
-> }
+On Tue, 14 Jun 2022 17:10:27 -0700
+alison.schofield@intel.com wrote:
 
-Ok, those come from the below patch:
-https://lore.kernel.org/all/c4b06b5b314183d85615765a5ce421a057674bd8.165339=
-8233.git.christophe.leroy@csgroup.eu/T/#u
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> CXL devices that support persistent memory maintain a list of locations
+> that are poisoned or result in poison if the addresses are accessed by
+> the host.
+> 
+> Per the spec (CXL 2.0 8.2.8.5.4.1), the device returns this Poison
+> list as a set of  Media Error Records that include the source of the
+> error, the starting device physical address and length. The length is
+> the number of adjacent DPAs in the record and is in units of 64 bytes.
+> 
+> Retrieve the list and log each Media Error Record as a trace event of
+> type cxl_poison_list.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 
-I guess it would have been clearer if 'size' was named differently:=20
-'addr_size' perhaps?
+A few more things inline.
+
+Otherwise, can confirm it works with some hack QEMU code.
+I'll tidy that up and post soon.
+
+> +int cxl_mem_get_poison_list(struct device *dev)
+> +{
+> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	struct cxl_mbox_poison_payload_out *po;
+> +	struct cxl_mbox_poison_payload_in pi;
+> +	int nr_records = 0;
+> +	int rc, i;
+> +
+> +	if (range_len(&cxlds->pmem_range)) {
+> +		pi.offset = cpu_to_le64(cxlds->pmem_range.start);
+> +		pi.length = cpu_to_le64(range_len(&cxlds->pmem_range));
+> +	} else {
+> +		return -ENXIO;
+> +	}
+> +
+> +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
+> +	if (!po)
+> +		return -ENOMEM;
+> +
+> +	do {
+> +		rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_POISON, &pi,
+> +				       sizeof(pi), po, cxlds->payload_size);
+> +		if (rc)
+> +			goto out;
+> +
+> +		if (po->flags & CXL_POISON_FLAG_OVERFLOW) {
+> +			time64_t o_time = le64_to_cpu(po->overflow_timestamp);
+> +
+> +			dev_err(dev, "Poison list overflow at %ptTs UTC\n",
+> +				&o_time);
+> +			rc = -ENXIO;
+> +			goto out;
+> +		}
+> +
+> +		if (po->flags & CXL_POISON_FLAG_SCANNING) {
+> +			dev_err(dev, "Scan Media in Progress\n");
+> +			rc = -EBUSY;
+> +			goto out;
+> +		}
+> +
+> +		for (i = 0; i < le16_to_cpu(po->count); i++) {
+> +			u64 addr = le64_to_cpu(po->record[i].address);
+
+> +			u32 len = le32_to_cpu(po->record[i].length);
 
 
-- Naveen
+> +			int source = FIELD_GET(CXL_POISON_SOURCE_MASK, addr);
+> +
+> +			if (!CXL_POISON_SOURCE_VALID(source)) {
+> +				dev_dbg(dev, "Invalid poison source %d",
+> +					source);
+> +				source = CXL_POISON_SOURCE_INVALID;
+> +			}
+> +
+> +			trace_cxl_poison_list(dev, source, addr, len);
+
+Need to mask off the lower 6 bits of addr as they contain the source
++ a few reserved bits.
+
+I was confused how you were geting better than 64 byte precision in your
+example.
+
+> +		}
+> +
+> +		/* Protect against an uncleared _FLAG_MORE */
+> +		nr_records = nr_records + le16_to_cpu(po->count);
+> +		if (nr_records >= cxlds->poison_max)
+> +			goto out;
+> +
+> +	} while (po->flags & CXL_POISON_FLAG_MORE);
+So.. A conundrum here.  What happens if:
+
+1. We get an error mid way through a set of multiple reads
+   (something intermittent - maybe a software issue)
+2. We will drop out of here fine and report the error.
+3. We run this function again.
+
+It will (I think) currently pick up where we left off, but we have
+no way of knowing that as there isn't a 'total records' count or
+any other form of index in the output payload.
+
+So, software solutions I think should work (though may warrant a note
+to be added to the spec).
+
+1. Read whole thing twice. First time is just to ensure we get
+   to the end and flush out any prior half done reads.
+2. Issue a read for a different region (perhaps length 0) first
+   and assume everything starts from scratch when we go back to
+   this region.
+
+Jonathan
+
+
+
+> +
+> +out:
+> +	kvfree(po);
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_mem_get_poison_list, CXL);
+> +
+>  struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
+>  {
+>  	struct cxl_dev_state *cxlds;
+

@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAA254FFF1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F63354FFEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378997AbiFQW3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S1378596AbiFQW3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349268AbiFQW3c (ORCPT
+        with ESMTP id S1348242AbiFQW3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 18:29:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4145662101;
-        Fri, 17 Jun 2022 15:29:31 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19FB966017D5;
-        Fri, 17 Jun 2022 23:29:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655504969;
-        bh=LiuIt0O1st4pigoWLWLdzdDQsMQyWjLJmbkbK2WQ2JQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B0qW1zKQn7s7lkcwKhRcS7dJcW/uaGGSGTqmn2M3zYGnho0ENhwBUOMxi/EgdpwNs
-         WkutZM4ZhmAeCcSlxmOJJZEpmsZk1QcxOhMdiD95PQSar8nhW/gNMHVk1pSR7BCCtV
-         yfZ+Lpb3S0JcuI0/w530vjQcDMRIdm9NT3OMSen1OoiyhYS2gK8/j0EmZKqtnnjc8q
-         UVJny3NnxHeHBrZDbCzC5CJ4ORVYEvfpqWM19uKwl1xcqgAJ7gj4F5HS4JH0FXbll9
-         C7ppEBde34noGxQ5v5sNLw2BNIt0PYWAYmIL7JpKMm/AR//aXnW0YJiheLWyrltRVO
-         5mkAVMTkZwQrA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 3/3] arm64: dts: mt8192: Follow clock order for XHCI
-Date:   Fri, 17 Jun 2022 18:29:16 -0400
-Message-Id: <20220617222916.2435618-4-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220617222916.2435618-1-nfraprado@collabora.com>
-References: <20220617222916.2435618-1-nfraprado@collabora.com>
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3FE62107
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:29:31 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-101bc0d279cso2116718fac.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S9l9aGJ8OWlkPL90OX67eL3mtz7dIUCfETgWKj+djr0=;
+        b=dTe/NxZQBPQAy1F7WnL23okeDwPy38Noiw8RFQrcizVeGg3jD9pD69ShC7xavkNH4l
+         Hj9JhgoSpeDHNfyt6SFU6z4BMaCPgD8wfiDIficii6RRXnUdpr4X8TMkBCcZOCGOomdv
+         l5kkHr4OAgQLl8oP+tZ19yjKHd4uHxaKJjVLU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S9l9aGJ8OWlkPL90OX67eL3mtz7dIUCfETgWKj+djr0=;
+        b=HryHfZBkmgWMvzUd89jF0bm4dP5tQU3/vxtTMbFgNRM8iNpPcOzfPKfOGdeBlSA+mO
+         26Yaz2W6jVm5mXqnzjlBN4iJGcFM8JXaF7FHUIdOvO5hqaMhST0nUT6FGQ2FwJLyi1dp
+         g6wDpDCQMWkB1mLve5KwZHnq4E6l818ykn2dOUNGVv/yi+/uLTSiOHdAHvtrJTFXR1eQ
+         Dtc72qr4LvV15vMxSSFhJRxtTwxV8d3nrMM5Yd+sUHVdw7yd/aucFSEze5o3c4MV7exk
+         SiQLOniSd7oqKYwOR5DJiTCreDI4zjxGgyX1/dG7M8gu6dAFLWON+KrBAJ8lJFrjV4ju
+         7hmw==
+X-Gm-Message-State: AJIora/7AQmFPefFq5cjLTvj8G3QlAHAYKfhcmAUJ0OWIG2dY6k8Zl94
+        8BZa0Pqc3q+yJz3p9ppRlOOsWg==
+X-Google-Smtp-Source: AGRyM1scSMtgPqx2X4Uo4L2udxcp1XJ6fjTLMu6AaI0BKuQTxtkoRuARdlmR4tjh2Rm+0QhKu/60Sg==
+X-Received: by 2002:a05:6870:434d:b0:e5:9115:cb15 with SMTP id x13-20020a056870434d00b000e59115cb15mr12253484oah.53.1655504970747;
+        Fri, 17 Jun 2022 15:29:30 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id 125-20020a4a1183000000b0035f6cf71391sm3339452ooc.43.2022.06.17.15.29.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 15:29:30 -0700 (PDT)
+Subject: Re: [PATCH 2/2] selftests/x86/amx: Fix the test to avoid failure when
+ AMX is unavailable
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220401221014.13556-1-chang.seok.bae@intel.com>
+ <20220401221014.13556-3-chang.seok.bae@intel.com>
+ <aaab50d2-592c-69e4-58a6-0a0926669de3@linuxfoundation.org>
+ <327cde12-daea-84ba-4b24-64fe12e89dea@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <de61ffdb-638a-ca84-31b5-55f6a8616597@linuxfoundation.org>
+Date:   Fri, 17 Jun 2022 16:29:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <327cde12-daea-84ba-4b24-64fe12e89dea@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even though "ref_ck" and "xhci_ck" are optional clocks for XHCI, the
-binding expects them to follow a specific order. Fix the order to get
-rid of a dtbs_check warning.
+On 6/17/22 4:21 PM, Chang S. Bae wrote:
+> On 6/16/2022 3:54 PM, Shuah Khan wrote:
+>> On 4/1/22 4:10 PM, Chang S. Bae wrote:
+>>>
 
-Fixes: e5aac2258e66 ("arm64: dts: mt8192: Add xhci node")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+>>
+>> This should KSFT_SKIP for this to be reported as a skip. Returning 0
+>> will be reported as a Pass.
+> 
+> I think that's a good point, thanks.
+> 
+> Now, along with the on-going documentation [1], this test code can be simplified like the below changes, instead of having those cpuid functions:
+> 
 
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Simplifying is always good. Send me v2 and I will review it.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 733aec2e7f77..c8158b573bf8 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -723,9 +723,9 @@ xhci: usb@11200000 {
- 			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
- 						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
- 			clocks = <&infracfg CLK_INFRA_SSUSB>,
--				 <&infracfg CLK_INFRA_SSUSB_XHCI>,
--				 <&apmixedsys CLK_APMIXED_USBPLL>;
--			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-+				 <&apmixedsys CLK_APMIXED_USBPLL>,
-+				 <&infracfg CLK_INFRA_SSUSB_XHCI>;
-+			clock-names = "sys_ck", "ref_ck", "xhci_ck";
- 			wakeup-source;
- 			mediatek,syscon-wakeup = <&pericfg 0x420 102>;
- 			status = "disabled";
--- 
-2.36.1
-
+thanks,
+-- Shuah

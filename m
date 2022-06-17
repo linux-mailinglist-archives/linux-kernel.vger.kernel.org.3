@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C4654F59E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD64C54F5A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381666AbiFQKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
+        id S1380944AbiFQKil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381869AbiFQKhM (ORCPT
+        with ESMTP id S1380514AbiFQKig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:37:12 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E9C6B00B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:37:00 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id o7so7991235eja.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7CbeHNxpi9+s0qv2gIQi33L5PMDbofgWDLYkT2RlfqU=;
-        b=H47yQCGCYQVV1o+mKCF4P4ZJ82sQp7QqRAXTucT/Cgnl/74uZxFHs1vnX1pjZQjjBe
-         SFJJyJhRmmdwwkMuVcpw2DI1ym6bIg3kBry27+owFAYz5OOOMcSsd9Y6IFpleOseSLyW
-         /uR5aY8aivbhLPENJl/3EVol5NHkBRxUtRgPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7CbeHNxpi9+s0qv2gIQi33L5PMDbofgWDLYkT2RlfqU=;
-        b=ZSM1vpOdnZUH2IvaHZN8m1LkLcZ3DMC1XXXAdn9q4Ls8IalEt56v7T99w9OdXyZrGH
-         r9x4ehu57KyfWNw9RswvA0oGDOHw/7OE2KWbNVDIkBYJbv9+4DReTkAOq8VPd2hP3i1B
-         UDRY93TaLKQwwta1JSCqEN17qhK+I7u2ofzJ3o1Klpx9iB6zgKHqjsqAygYEFH3aheeE
-         xxib+HLm2SG6oB6g+m44AmqK3OCLr3kmmLzutxLAYO2PPZ0tUhWxs/NVhWvAOnDvyRDr
-         h3MeH+k6mnvIZpZIwa5ARS3HMav8xbJ61slfyrfG92Hbq/0mw3S7W4O+FnTiVvPpOgPS
-         Q+Kg==
-X-Gm-Message-State: AJIora+QYXUMFNw/M0tN3+EBzhmLHyGmwJ8AIQ3pwCRiRCTArei5unGV
-        MZo+hgC1QIlayXCIA9in4TkSNg==
-X-Google-Smtp-Source: AGRyM1vlbTH8+RBIK41fs93b7FZ1GsvD9UQCsPhpxe0YKUM6xZJ59ddoAWvGmBxVLczfKisqHPP1QA==
-X-Received: by 2002:a17:906:209:b0:712:12d8:b52b with SMTP id 9-20020a170906020900b0071212d8b52bmr8586607ejd.394.1655462219092;
-        Fri, 17 Jun 2022 03:36:59 -0700 (PDT)
-Received: from alco.corp.google.com ([2620:0:1059:10:a86e:90:fb4:466e])
-        by smtp.gmail.com with ESMTPSA id z19-20020a056402275300b004319b12371asm3704340edd.47.2022.06.17.03.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 03:36:58 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v7 8/8] media: uvcvideo: Limit power line control for Acer EasyCamera
-Date:   Fri, 17 Jun 2022 12:36:45 +0200
-Message-Id: <20220617103645.71560-9-ribalda@chromium.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-In-Reply-To: <20220617103645.71560-1-ribalda@chromium.org>
-References: <20220617103645.71560-1-ribalda@chromium.org>
+        Fri, 17 Jun 2022 06:38:36 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A889656B23
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:38:35 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 85BF7E0003;
+        Fri, 17 Jun 2022 10:38:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1655462314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mpdxVeMQmq6NbsmT6VbTrJcO0H4eYfAO0o9n2OBIBmg=;
+        b=omxlk4Ni6JnP1XlKjlRilks5/FDMs6/PaQrD/Ep9SC2NECbuog37ZexMvUeqYaIJcIvDSx
+        QVT+k/6VHpfSsXqJpfECUrQb7TXGZPkgVxs3kO3rulRFlZ02sJgVnY8jb9MUNwrvrRcbwY
+        /CJgOZ89VtnUNB4/JaS7+hbP2qXElpK+Shk7vlKJeDyxV9pPgEIAqsbGIgBXAm96FDqXHs
+        0bFvKc47S3QJYrQ9VS4kYhhk+GeChwn9Vjyk+/2nvSzqk/xdHpOQMbMLjfc1efeX5JDRyG
+        ONf4v/b24io3DM9lq8LfPhNveDMn+SQAWKn1ZEPmnEtxh9kL0V20KCGbB8+rmQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH] reset: microchip-sparx5: allow building as a module
+Date:   Fri, 17 Jun 2022 12:37:30 +0200
+Message-Id: <20220617103730.490588-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device does not implement the power line control correctly. Add a
-corresponding control mapping override.
+Set RESET_MCHP_SPARX5 as a tristate and add MODULE_DEVICE_TABLE() to
+allow building this driver as a module.
 
-Bus 001 Device 003: ID 5986:1172 Acer, Inc EasyCamera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x5986 Acer, Inc
-  idProduct          0x1172
-  bcdDevice           56.04
-  iManufacturer           3 Bison
-  iProduct                1 EasyCamera
-  iSerial                 2
-  bNumConfigurations      1
-
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/reset/Kconfig                  | 2 +-
+ drivers/reset/reset-microchip-sparx5.c | 8 ++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index a862a9d6a2fd..6d34992032e6 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -3248,6 +3248,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
-+	/* Acer EasyCamera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x5986,
-+	  .idProduct		= 0x1172,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
- 	/* Intel RealSense D4M */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 93c8d07ee328..5afbe2daecb1 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -115,7 +115,7 @@ config RESET_LPC18XX
+ 	  This enables the reset controller driver for NXP LPC18xx/43xx SoCs.
+ 
+ config RESET_MCHP_SPARX5
+-	bool "Microchip Sparx5 reset driver"
++	tristate "Microchip Sparx5 reset driver"
+ 	depends on ARCH_SPARX5 || SOC_LAN966 || COMPILE_TEST
+ 	default y if SPARX5_SWITCH
+ 	select MFD_SYSCON
+diff --git a/drivers/reset/reset-microchip-sparx5.c b/drivers/reset/reset-microchip-sparx5.c
+index 00b612a0effa..3d54dda3593e 100644
+--- a/drivers/reset/reset-microchip-sparx5.c
++++ b/drivers/reset/reset-microchip-sparx5.c
+@@ -149,6 +149,7 @@ static const struct of_device_id mchp_sparx5_reset_of_match[] = {
+ 	},
+ 	{ }
+ };
++MODULE_DEVICE_TABLE(of, mchp_sparx5_reset_of_match);
+ 
+ static struct platform_driver mchp_sparx5_reset_driver = {
+ 	.probe = mchp_sparx5_reset_probe,
+@@ -158,12 +159,7 @@ static struct platform_driver mchp_sparx5_reset_driver = {
+ 	},
+ };
+ 
+-static int __init mchp_sparx5_reset_init(void)
+-{
+-	return platform_driver_register(&mchp_sparx5_reset_driver);
+-}
+-
+-postcore_initcall(mchp_sparx5_reset_init);
++module_platform_driver(mchp_sparx5_reset_driver);
+ 
+ MODULE_DESCRIPTION("Microchip Sparx5 switch reset driver");
+ MODULE_AUTHOR("Steen Hegelund <steen.hegelund@microchip.com>");
 -- 
-2.36.1.476.g0c4daa206d-goog
+2.36.1
 

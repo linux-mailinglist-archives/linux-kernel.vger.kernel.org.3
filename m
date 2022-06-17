@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF00B54EE69
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 02:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCD354EE6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 02:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379359AbiFQAV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 20:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S1379386AbiFQAWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 20:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379274AbiFQAVy (ORCPT
+        with ESMTP id S1379274AbiFQAWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 20:21:54 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E97B6339C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:21:53 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id d18so3133890ljc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:21:53 -0700 (PDT)
+        Thu, 16 Jun 2022 20:22:09 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB2B63397
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:22:07 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso1620133wml.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 17:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zELuLJDtp+1xwhB/xB/ct9I01uRFw28EJaVsfAJ8WPo=;
-        b=w3npb2ddMCloZzfe9sbgDyA/TDkG1rxKALOo84wqy8EiYmc4xxsYxWi7HsB4s1iqQO
-         SyXXO27gO0kOqMXkXFYf/i98b0mMoQh9ke3JdGUuK9Rt8oHWfmW5DJpLyePmUGZMzcjG
-         8IxqXXkqEirYVX82Lqte5nnieFudBD7+WxL6F9ZgSBJN1nme7n3MdrTEmdI/Os/pUFf0
-         EHJF94Q7khggNh59tYRPb3kBdsf9ltL57f32QKTMSuofMAwDBTi5APHIk0strKGdXcaY
-         cQCB01ybj+/uxFJ7TOP4dYRirH2QYKXoyM353xeFZ1vC9hHbcj2GAzW4X1SFjzMexUvE
-         y+Fg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=io8CZjDNsxDNt2a2JckWTmJznoi+vPqiO8J1er/GsfA=;
+        b=dRFeizHBQdzMUQAVLvSN7yWFOENeCVNr+n1Gu2uySpzuJNTL1YzNNM8sP6Fm6Wr4iy
+         zKXSdfyeo/0VUUdCx2g/2OKB39F/sl5+l/YaadCnmMb9gIhS8zJgalu3Yu4Xm5ZlvEJS
+         csb6cuG4F+MKQosWjbmXViwmbBL/CdEOETkkIyI8zGlNSP7ixq14qLenivvvXnnsslMS
+         AGtM4UbVbR1o6ZxOxZWYhh+ReXbFVP8EHITFqwImWVF7ZYdRa7qUs6CBhI0EZ81jP7aZ
+         4IFSFwWni/+lgjBhbyJdfHYfZWiH6ZNVY7vrr+FeZI1bWc+zsLSfI1tcWLCr1IbmXrea
+         By1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zELuLJDtp+1xwhB/xB/ct9I01uRFw28EJaVsfAJ8WPo=;
-        b=nFN3okrn0zHNEEM0KmXDcxDAESNInsZPJXysI2C+ISK9vKR8v4BEZAtZaM596Dxxvj
-         RuqItoeoea7wHmSZgAZtSwOgLZmBrSqlbALbXAAvRM9dSsgUFEY8SWNjES3BaQn3vPbY
-         56+TBIrnZn0YAXWasX9GTCWI+63nDDopgDPfdAdg4y2M5whgLH15+7G0iGf/1I3wNjmv
-         XyAw60JLMN4K7JOur4HmrnFSFFqsEUjq8x0/zie1ZZ0X7RvuP/SdgPRlSnmkLZGaLAIq
-         y4HTWM8/K3CaVfnFWzEQnYg3C6OBeK84q+xuGFDOr+Iu4fwQGYt8zS70nOj0+zvwB/73
-         Yw0A==
-X-Gm-Message-State: AJIora/8k02sXZ1hlE6KtSEXwc46FjW3uJJ2IhhAGTwUTE8mHIPqfsqQ
-        xNN1Utv7/MhMPBaYTO8BWsJvCA==
-X-Google-Smtp-Source: AGRyM1to/gZ2Nf9OeKNJvqpJN5WGk4UVL31SFCT/xQZrevC+O/VwFUffzbhsFUTqvT9KDZYImYY5dw==
-X-Received: by 2002:a2e:3315:0:b0:258:dfff:e252 with SMTP id d21-20020a2e3315000000b00258dfffe252mr3823905ljc.141.1655425311542;
-        Thu, 16 Jun 2022 17:21:51 -0700 (PDT)
-Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id r12-20020a2e80cc000000b0024f3d1dae84sm380589ljg.12.2022.06.16.17.21.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 17:21:51 -0700 (PDT)
-Message-ID: <ce6106e5-3dfd-c2e7-07b9-91be9aef2cf4@linaro.org>
-Date:   Fri, 17 Jun 2022 03:21:38 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=io8CZjDNsxDNt2a2JckWTmJznoi+vPqiO8J1er/GsfA=;
+        b=IaLXMd6Hq77cAWgfbARqeznMuYBfhmdl1/IbO+KuDBbTVC5/C/POG7FCVNmbeedRoV
+         uLjZLOrOlqo3hYQlDVacK0GZ5Gw5Z9tozsfHXUx4a/2jJbykUWa8Vn8jhH32DClgB8Es
+         ZYdruTr0mVfuENSKUNbVS33ntoW5qlpnNbxPAfvT5SdXAFEOqqgi8npHjVZG1rKwaEGo
+         i0GvtxUVcRjifU1a18FLw64LKCB0sXu4TP90eYJdm91naoN4e3OMwiEx8+i7pD8FTckn
+         gblPn0850SIJboMm3sWs6o0kiy6nGPxJLl1tO5N/S3piu9o6taEJmTDDJR569Mv0ms4V
+         5eUA==
+X-Gm-Message-State: AJIora/lof7qNjewKFkLdlyv1IoLd4Ftjf7HlemYsZrYsLeAcIGxwpaS
+        CRywZ4uVPSBqVLC/qt2ekc1AbPQ8n+vYWqgqhyuaq64E
+X-Google-Smtp-Source: AGRyM1tgplI94kpYCet8r4I5qz8Cd4bJETUZFDZcXmUdb1SvEpUJgdYJIGo2yrQBJXI+yVpUSGpog9AiKvHAOxs5wYg=
+X-Received: by 2002:a1c:25c4:0:b0:39c:9a08:452f with SMTP id
+ l187-20020a1c25c4000000b0039c9a08452fmr7349817wml.199.1655425326210; Thu, 16
+ Jun 2022 17:22:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] cpufreq: qcom-hw: Don't do lmh things without a throttle
- interrupt
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20220616224531.3139080-1-swboyd@chromium.org>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20220616224531.3139080-1-swboyd@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220606144509.617611-1-jiangshanlai@gmail.com>
+In-Reply-To: <20220606144509.617611-1-jiangshanlai@gmail.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Fri, 17 Jun 2022 08:21:54 +0800
+Message-ID: <CAJhGHyD73xjSTY6QL--S25Dj898vV=OC_0nijY8zbxzC03Ur9w@mail.gmail.com>
+Subject: Re: [PATCH V3 0/7] x86/entry: Convert error_entry() to C code
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 01:45, Stephen Boyd wrote:
-> Offlining cpu6 and cpu7 and then onlining cpu6 hangs on
-> sc7180-trogdor-lazor because the throttle interrupt doesn't exist.
-> Similarly, things go sideways when suspend/resume runs. That's because
-> the qcom_cpufreq_hw_cpu_online() and qcom_cpufreq_hw_lmh_exit()
-> functions are calling genirq APIs with an interrupt value of '-6', i.e.
-> -ENXIO, and that isn't good.
-> 
-> Check the value of the throttle interrupt like we already do in other
-> functions in this file and bail out early from lmh code to fix the hang.
-> 
-> Reported-by: Rob Clark <robdclark@chromium.org>
-> Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Fixes: a1eb080a0447 ("cpufreq: qcom-hw: provide online/offline operations")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->   drivers/cpufreq/qcom-cpufreq-hw.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 0253731d6d25..36c79580fba2 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -442,6 +442,9 @@ static int qcom_cpufreq_hw_cpu_online(struct cpufreq_policy *policy)
->   	struct platform_device *pdev = cpufreq_get_driver_data();
->   	int ret;
->   
-> +	if (data->throttle_irq <= 0)
-> +		return 0;
-> +
->   	ret = irq_set_affinity_hint(data->throttle_irq, policy->cpus);
->   	if (ret)
->   		dev_err(&pdev->dev, "Failed to set CPU affinity of %s[%d]\n",
-> @@ -469,6 +472,9 @@ static int qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
->   
->   static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
->   {
-> +	if (data->throttle_irq <= 0)
-> +		return;
-> +
->   	free_irq(data->throttle_irq, data);
->   }
->   
-> 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+On Mon, Jun 6, 2022 at 10:44 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+>
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+>
+> Add some C equivalent functions of the ASM macros and implement the whole
+> error_entry() as C code.
+>
+> The patches are picked and re-made from the huge patchset
+> https://lore.kernel.org/lkml/20211126101209.8613-1-jiangshanlai@gmail.com/
+> which converts a large chunk of ASM code to C code.
+>
+> The C version generally has better readability and easier to be
+> updated/improved.
+>
+> This smaller patchset converts error_entry() only.
+> The equivalent ASM macros are not removed because they are still used by
+> the IST exceptions.
+>
+> No functional change intended and comments are also copied.
+>
+> The complier generates very similar code for the C code and the original
+> ASM code except minor differences.
+>
+> The complier uses tail-call-optimization for calling sync_regs().  It
+> uses "JMP sync_regs" while the ASM code uses "CALL+RET".
+>
+> The compiler generates "AND $0xe7,%ah" (3 bytes) for the code
+> "cr3 = user_cr3 & ~PTI_USER_PGTABLE_AND_PCID_MASK" while the ASM code in
+> SWITCH_TO_KERNEL_CR3() results "AND $0xffffffffffffe7ff,%rax" (6 bytes).
+>
+> The compiler generates lengthier code for "cr3 |= X86_CR3_PCID_NOFLUSH"
+> because it uses "MOVABS+OR" (13 bytes)  rather than a single
+> "BTS" (5 bytes).
+>
+> ALTERNATIVE and static_cpu_has() are also different which depends on
+> what alternative instructions for ALTERNATIVE are.
+>
+> [V2]: https://lore.kernel.org/lkml/20220516131739.521817-1-jiangshanlai@gmail.com/
+> [V1]: https://lore.kernel.org/lkml/20220511072747.3960-1-jiangshanlai@gmail.com/
+>
+> Changed from V2:
+>         Fix conflict in arch/x86/include/asm/proto.h in patch7
+>
+> Changed from V1:
+>         remove unneeded cleanup in patch2
+>
+> Changed from the old huge patchset:
+>         squash some patches
+>
 
---
-Best wishes,
-Vladimir
+Hello, ALL,
+
+Ping
+
+Thanks,
+Lai

@@ -2,130 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ADA54F134
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5E554F131
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380346AbiFQGqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S1380311AbiFQGqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379857AbiFQGqp (ORCPT
+        with ESMTP id S1380312AbiFQGq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:46:45 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E737E26AF8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=H+PIK
-        gm+7cua7FtOe0VnZWnrrT7/N8p7fWrn1ErcRJY=; b=UYdKUjjwbyttw5xEBp4iS
-        Th8JnGbh8AgbprVit/Noy03ggVeAqO86j9S06ouBX3ETuzBmZK3FsTNOvcem/BhH
-        abead07jrA/dYMKg267zQhNEgOY2Yms94FZQO9209QCoBmoZP51veSn6fRUl3f9y
-        xEBkRfWsZwMS1hVbbWoYHw=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Fri, 17 Jun 2022 14:45:33 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Fri, 17 Jun 2022 14:45:33 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
-Cc:     "oss@buserror.net" <oss@buserror.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re:Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
- sgy_cst1000
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
-References: <20220617060827.4004795-1-windhl@126.com>
- <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 17 Jun 2022 02:46:27 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D305055377
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:46:24 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id g186so3309096pgc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fQNGQ/zJse2gbHWfa6pF660SRacSRW0Fy9uu/huJD4Y=;
+        b=JPLW1+w8/z8WGKViSxKlFYB1DJFO5f4d4rwynmLj7wx/0qK2bG0tNVGdJOrTjCJVPW
+         d0ZiMJQDidl1w4ljJIZMpCkOlhOZkW6+5BzSe4i3dZhcyh+oDngZ/gJaVlL8+QGNmUTL
+         nqKpdtg55DdMsoRsLoHIj2LgXDVZ6dwdIBG8U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fQNGQ/zJse2gbHWfa6pF660SRacSRW0Fy9uu/huJD4Y=;
+        b=ToITpjdybdEa2Oi364/QrvbFt0gXUfZ4RZRVjiizV/2+ydESegS16MZarCzzJ4mlTN
+         7z4w73WTbN0sQVi1+A7M6MbviMZpVjRh8XQamOWY6oYhRoMfphL3HAmbUQIRUCxEUlyV
+         uDnCitPff/YkFDqSSEpy/LCte8RxEpVSUFl7oqXuH/KdMwUhQaZsXLHShJKljNXsa4Wr
+         XYuBYOWoxgA1ANLLian3oajPkHmrU3Dvf+ZTQLpz3NeqV7xEKXpZjc92FoAhZvvsfohd
+         nN035wpBErJvJ2FRCWHPWp/UYzy/bb3jG/L92DuqckFmX/z/RORYJaN9VqcvEj/5+F+N
+         wXnA==
+X-Gm-Message-State: AJIora/KUgRhKlqc6gB1vm8qHkQiCkZVHWc+1oSp48ivhsLt+xi5SrJf
+        jv25XP5eFk8e6Bw/3RR346SrnQ==
+X-Google-Smtp-Source: AGRyM1uENT2OwXii6KksNBQ4MXQhZdrl+ulN/85OXID2dCsUxVB+lOZD0za0PfnLmxj1+jHPwjAROA==
+X-Received: by 2002:a63:80c8:0:b0:405:186f:fa39 with SMTP id j191-20020a6380c8000000b00405186ffa39mr7960592pgd.84.1655448384322;
+        Thu, 16 Jun 2022 23:46:24 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:e12:c024:d152:7ca])
+        by smtp.gmail.com with ESMTPSA id fs20-20020a17090af29400b001ea75a02805sm4833237pjb.52.2022.06.16.23.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 23:46:23 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 14:46:18 +0800
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v7, 04/15] media: mtk-vcodec: Read max resolution from
+ dec_capability
+Message-ID: <YqwjOurt2DCV6snP@google.com>
+References: <20220223034008.15781-1-yunfei.dong@mediatek.com>
+ <20220223034008.15781-5-yunfei.dong@mediatek.com>
+ <cb7cf296bc7df7334f55cc51ef11b671572559ac.camel@ndufresne.ca>
 MIME-Version: 1.0
-Message-ID: <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowAAnffEPI6xi0V44AA--.56078W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgojF1-HZUQUuAACsz
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb7cf296bc7df7334f55cc51ef11b671572559ac.camel@ndufresne.ca>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKQXQgMjAyMi0wNi0xNyAxNDoyODo1NiwgIkNocmlzdG9waGUgTGVyb3kiIDxjaHJpc3RvcGhl
-Lmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOgo+Cj4KPkxlIDE3LzA2LzIwMjIgw6AgMDg6MDgsIExp
-YW5nIEhlIGEgw6ljcml0wqA6Cj4+IEluIGdwaW9faGFsdF9wcm9iZSgpLCBvZl9maW5kX21hdGNo
-aW5nX25vZGUoKSB3aWxsIHJldHVybiBhIG5vZGUKPj4gcG9pbnRlciB3aXRoIHJlZmNvdW50IGlu
-Y3JlbWVudGVkLiBXZSBzaG91bGQgdXNlIG9mX25vZGVfcHV0KCkgaW4KPj4gZmFpbCBwYXRoIG9y
-IHdoZW4gaXQgaXMgbm90IHVzZWQgYW55bW9yZS4KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IExpYW5n
-IEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4gLS0tCj4+ICAgY2hhbmdlbG9nOgo+PiAgIHY0OiByZXVz
-ZSBleGlzdCAnZXJyJyBhbmQgdXNlIGEgc2ltcGxlIGNvZGUgc3R5bGUsIGFkdmlzZWQgYnkgQ0oK
-Pj4gICB2MzogdXNlIGxvY2FsICdjaGlsZF9ub2RlJyBhZHZpc2VkIGJ5IE1pY2hhZWwuCj4+ICAg
-djI6IHVzZSBnb3RvLWxhYmVsIHBhdGNoIHN0eWxlIGFkdmlzZWQgYnkgQ2hyaXN0b3BoZSBMZXJv
-eS4KPj4gICB2MTogYWRkIG9mX25vZGVfcHV0KCkgYmVmb3JlIGVhY2ggZXhpdC4KPj4gCj4+ICAg
-YXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMgfCAzNSArKysrKysrKysr
-KysrKy0tLS0tLS0tLQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyMiBpbnNlcnRpb25zKCspLCAxMyBk
-ZWxldGlvbnMoLSkKPj4gCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1
-eHgvc2d5X2N0czEwMDAuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAw
-MC5jCj4+IGluZGV4IDk4YWU2NDA3NTE5My4uZTQ1ODg5NDNmZTdlIDEwMDY0NAo+PiAtLS0gYS9h
-cmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+PiArKysgYi9hcmNoL3Bv
-d2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+PiBAQCAtNzEsNiArNzEsNyBAQCBz
-dGF0aWMgaW50IGdwaW9faGFsdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+
-PiAgIHsKPj4gICAJZW51bSBvZl9ncGlvX2ZsYWdzIGZsYWdzOwo+PiAgIAlzdHJ1Y3QgZGV2aWNl
-X25vZGUgKm5vZGUgPSBwZGV2LT5kZXYub2Zfbm9kZTsKPj4gKwlzdHJ1Y3QgZGV2aWNlX25vZGUg
-KmNoaWxkX25vZGU7Cj4+ICAgCWludCBncGlvLCBlcnIsIGlycTsKPj4gICAJaW50IHRyaWdnZXI7
-Cj4+ICAgCj4+IEBAIC03OCwyNiArNzksMjkgQEAgc3RhdGljIGludCBncGlvX2hhbHRfcHJvYmUo
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4gICAJCXJldHVybiAtRU5PREVWOwo+PiAg
-IAo+PiAgIAkvKiBJZiB0aGVyZSdzIG5vIG1hdGNoaW5nIGNoaWxkLCB0aGlzIGlzbid0IHJlYWxs
-eSBhbiBlcnJvciAqLwo+PiAtCWhhbHRfbm9kZSA9IG9mX2ZpbmRfbWF0Y2hpbmdfbm9kZShub2Rl
-LCBjaGlsZF9tYXRjaCk7Cj4+IC0JaWYgKCFoYWx0X25vZGUpCj4+ICsJY2hpbGRfbm9kZSA9IG9m
-X2ZpbmRfbWF0Y2hpbmdfbm9kZShub2RlLCBjaGlsZF9tYXRjaCk7Cj4+ICsJaWYgKCFjaGlsZF9u
-b2RlKQo+PiAgIAkJcmV0dXJuIDA7Cj4+ICAgCj4+ICAgCS8qIFRlY2huaWNhbGx5IHdlIGNvdWxk
-IGp1c3QgcmVhZCB0aGUgZmlyc3Qgb25lLCBidXQgcHVuaXNoCj4+ICAgCSAqIERUIHdyaXRlcnMg
-Zm9yIGludmFsaWQgZm9ybS4gKi8KPj4gLQlpZiAob2ZfZ3Bpb19jb3VudChoYWx0X25vZGUpICE9
-IDEpCj4+IC0JCXJldHVybiAtRUlOVkFMOwo+PiArCWlmIChvZl9ncGlvX2NvdW50KGNoaWxkX25v
-ZGUpICE9IDEpIHsKPj4gKwkJZXJyID0gLUVJTlZBTDsKPj4gKwkJZ290byBlcnJfcHV0Owo+PiAr
-CX0KPj4gICAKPj4gICAJLyogR2V0IHRoZSBncGlvIG51bWJlciByZWxhdGl2ZSB0byB0aGUgZHlu
-YW1pYyBiYXNlLiAqLwo+PiAtCWdwaW8gPSBvZl9nZXRfZ3Bpb19mbGFncyhoYWx0X25vZGUsIDAs
-ICZmbGFncyk7Cj4+IC0JaWYgKCFncGlvX2lzX3ZhbGlkKGdwaW8pKQo+PiAtCQlyZXR1cm4gLUVJ
-TlZBTDsKPj4gKwlncGlvID0gb2ZfZ2V0X2dwaW9fZmxhZ3MoY2hpbGRfbm9kZSwgMCwgJmZsYWdz
-KTsKPj4gKwlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpIHsKPj4gKwkJZXJyID0gLUVJTlZBTDsK
-Pj4gKwkJZ290b3QgZXJyX3B1dDsKPgo+RGlkIHlvdSB0ZXN0IHRoZSBidWlsZCA/CgpTb3JyeSBm
-b3IgdGhpcyBmYXVsdC4gCgpJbiBmYWN0LCBJIGFtIHN0aWxsIGZpbmRpbmcgYW4gZWZmaWNpZW50
-IHdheSB0byBidWlsZGluZyBkaWZmZXJlbnQgYXJjaCBzb3VyY2UgY29kZSBhcyBJIG9ubHkgaGF2
-ZSB4ODYtNjQuCgpOb3cgSSBhbSB0cnkgdXNpbmcgUUVNVS4KCkFueXdheSwgc29ycnkgZm9yIHRo
-aXMgZmF1bHQuCgoKPgo+PiArCX0KPj4gICAKPj4gICAJZXJyID0gZ3Bpb19yZXF1ZXN0KGdwaW8s
-ICJncGlvLWhhbHQiKTsKPj4gICAJaWYgKGVycikgewo+PiAgIAkJcHJpbnRrKEtFUk5fRVJSICJn
-cGlvLWhhbHQ6IGVycm9yIHJlcXVlc3RpbmcgR1BJTyAlZC5cbiIsCj4+ICAgCQkgICAgICAgZ3Bp
-byk7Cj4+IC0JCWhhbHRfbm9kZSA9IE5VTEw7Cj4+IC0JCXJldHVybiBlcnI7Cj4+ICsJCWdvdG8g
-ZXJyX3B1dDsKPj4gICAJfQo+PiAgIAo+PiAgIAl0cmlnZ2VyID0gKGZsYWdzID09IE9GX0dQSU9f
-QUNUSVZFX0xPVyk7Cj4+IEBAIC0xMDUsMTUgKzEwOSwxNCBAQCBzdGF0aWMgaW50IGdwaW9faGFs
-dF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAgIAlncGlvX2RpcmVjdGlv
-bl9vdXRwdXQoZ3BpbywgIXRyaWdnZXIpOwo+PiAgIAo+PiAgIAkvKiBOb3cgZ2V0IHRoZSBJUlEg
-d2hpY2ggdGVsbHMgdXMgd2hlbiB0aGUgcG93ZXIgYnV0dG9uIGlzIGhpdCAqLwo+PiAtCWlycSA9
-IGlycV9vZl9wYXJzZV9hbmRfbWFwKGhhbHRfbm9kZSwgMCk7Cj4+ICsJaXJxID0gaXJxX29mX3Bh
-cnNlX2FuZF9tYXAoY2hpbGRfbm9kZSwgMCk7Cj4+ICAgCWVyciA9IHJlcXVlc3RfaXJxKGlycSwg
-Z3Bpb19oYWx0X2lycSwgSVJRRl9UUklHR0VSX1JJU0lORyB8Cj4+IC0JCQkgIElSUUZfVFJJR0dF
-Ul9GQUxMSU5HLCAiZ3Bpby1oYWx0IiwgaGFsdF9ub2RlKTsKPj4gKwkJCSAgSVJRRl9UUklHR0VS
-X0ZBTExJTkcsICJncGlvLWhhbHQiLCBjaGlsZF9ub2RlKTsKPj4gICAJaWYgKGVycikgewo+PiAg
-IAkJcHJpbnRrKEtFUk5fRVJSICJncGlvLWhhbHQ6IGVycm9yIHJlcXVlc3RpbmcgSVJRICVkIGZv
-ciAiCj4+ICAgCQkgICAgICAgIkdQSU8gJWQuXG4iLCBpcnEsIGdwaW8pOwo+PiAgIAkJZ3Bpb19m
-cmVlKGdwaW8pOwo+PiAtCQloYWx0X25vZGUgPSBOVUxMOwo+PiAtCQlyZXR1cm4gZXJyOwo+PiAr
-CQlnb3RvIGVycl9wdXQ7Cj4+ICAgCX0KPj4gICAKPj4gICAJLyogUmVnaXN0ZXIgb3VyIGhhbHQg
-ZnVuY3Rpb24gKi8KPj4gQEAgLTEyMyw3ICsxMjYsMTIgQEAgc3RhdGljIGludCBncGlvX2hhbHRf
-cHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4gICAJcHJpbnRrKEtFUk5fSU5G
-TyAiZ3Bpby1oYWx0OiByZWdpc3RlcmVkIEdQSU8gJWQgKCVkIHRyaWdnZXIsICVkIgo+PiAgIAkg
-ICAgICAgIiBpcnEpLlxuIiwgZ3BpbywgdHJpZ2dlciwgaXJxKTsKPj4gICAKPj4gKwloYWx0X25v
-ZGUgPSBjaGlsZF9ub2RlOwo+PiAgIAlyZXR1cm4gMDsKPj4gKwo+PiArZXJyX3B1dDoKPj4gKwlv
-Zl9ub2RlX3B1dChjaGlsZF9ub2RlKTsKPj4gKwlyZXR1cm4gZXJyOwo+PiAgIH0KPj4gICAKPj4g
-ICBzdGF0aWMgaW50IGdwaW9faGFsdF9yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRl
-dikKPj4gQEAgLTEzOSw2ICsxNDcsNyBAQCBzdGF0aWMgaW50IGdwaW9faGFsdF9yZW1vdmUoc3Ry
-dWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4gICAKPj4gICAJCWdwaW9fZnJlZShncGlvKTsK
-Pj4gICAKPj4gKwkJb2Zfbm9kZV9wdXQoaGFsdF9ub2RlKTsKPj4gICAJCWhhbHRfbm9kZSA9IE5V
-TEw7Cj4+ICAgCX0KPj4gICAK
+Hi,
+
+On Mon, Feb 28, 2022 at 04:29:15PM -0500, Nicolas Dufresne wrote:
+> Hi Yunfei,
+> 
+> this patch does not work unless userland calls enum_framesizes, which is
+> completely optional. See comment and suggestion below.
+> 
+> Le mercredi 23 février 2022 à 11:39 +0800, Yunfei Dong a écrit :
+> > Supported max resolution for different platforms are not the same: 2K
+> > or 4K, getting it according to dec_capability.
+> > 
+> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> > Reviewed-by: Tzung-Bi Shih<tzungbi@google.com>
+> > ---
+> >  .../platform/mtk-vcodec/mtk_vcodec_dec.c      | 29 +++++++++++--------
+> >  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  4 +++
+> >  2 files changed, 21 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > index 130ecef2e766..304f5afbd419 100644
+> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > @@ -445,7 +447,7 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+> >  		return -EINVAL;
+> >  
+> >  	q_data->fmt = fmt;
+> > -	vidioc_try_fmt(f, q_data->fmt);
+> > +	vidioc_try_fmt(ctx, f, q_data->fmt);
+> >  	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+> >  		q_data->sizeimage[0] = pix_mp->plane_fmt[0].sizeimage;
+> >  		q_data->coded_width = pix_mp->width;
+> > @@ -545,6 +547,9 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
+> >  				fsize->stepwise.min_height,
+> >  				fsize->stepwise.max_height,
+> >  				fsize->stepwise.step_height);
+> > +
+> > +		ctx->max_width = fsize->stepwise.max_width;
+> > +		ctx->max_height = fsize->stepwise.max_height;
+> 
+> The spec does not require calling enum_fmt, so changing the maximum here is
+> incorrect (and fail with GStreamer). If userland never enum the framesizes, the
+> resolution get limited to 1080p.
+> 
+> As this only depends and the OUTPUT format and the device being open()
+> (condition being dev_capability being set and OUTPUT format being known / not
+> VP8), you could initialize the cxt max inside s_fmt(OUTPUT) instead, which is a
+> mandatory call. I have tested this change to verify this:
+> 
+> 
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> index 044e3dfbdd8c..3e7c571526a4 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> @@ -484,6 +484,14 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+>  	if (fmt == NULL)
+>  		return -EINVAL;
+>  
+> +	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE &&
+> +	    !(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_DISABLED) &&
+> +	    fmt->fourcc != V4L2_PIX_FMT_VP8_FRAME) {
+> +		mtk_v4l2_debug(3, "4K is enabled");
+> +		ctx->max_width = VCODEC_DEC_4K_CODED_WIDTH;
+> +		ctx->max_height = VCODEC_DEC_4K_CODED_HEIGHT;
+> +	}
+> +
+>  	q_data->fmt = fmt;
+>  	vidioc_try_fmt(ctx, f, q_data->fmt);
+>  	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+> @@ -574,15 +582,9 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
+>  
+>  		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
+>  		fsize->stepwise = dec_pdata->vdec_framesizes[i].stepwise;
+> -		if (!(ctx->dev->dec_capability &
+> -				VCODEC_CAPABILITY_4K_DISABLED) &&
+> -				fsize->pixel_format != V4L2_PIX_FMT_VP8_FRAME) {
+> -			mtk_v4l2_debug(3, "4K is enabled");
+> -			fsize->stepwise.max_width =
+> -					VCODEC_DEC_4K_CODED_WIDTH;
+> -			fsize->stepwise.max_height =
+> -					VCODEC_DEC_4K_CODED_HEIGHT;
+> -		}
+> +		fsize->stepwise.max_width = ctx->max_width;
+> +		fsize->stepwise.max_height = ctx->max_height;
+> +
+
+Recent testing on ChromeOS suggests this doesn't work. The spec implies
+that querying capabilities could happen before the output format is set.
+And also, supported frame sizes are detected for each given format,
+which may not be the one current set.
+
+So the if block above has to be reintroduced in some form. I'll take a
+look at this.
+
+
+Regards
+ChenYu
+
+>  		mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
+>  				ctx->dev->dec_capability,
+>  				fsize->stepwise.min_width,
+> @@ -592,8 +594,6 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
+>  				fsize->stepwise.max_height,
+>  				fsize->stepwise.step_height);
+>  
+> -		ctx->max_width = fsize->stepwise.max_width;
+> -		ctx->max_height = fsize->stepwise.max_height;
+>  		return 0;
+>  	}
+>  
+> 
+> 
+> >  		return 0;
+> >  	}
+> >  
+
+[...]
+

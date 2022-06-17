@@ -2,63 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CBD54F4B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2353854F4BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380993AbiFQJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S1381416AbiFQJ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbiFQJ6s (ORCPT
+        with ESMTP id S234702AbiFQJ7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:58:48 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F3A50079
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:58:47 -0700 (PDT)
-X-UUID: a1ad5ed77d8040bfaa762aa3eddcf463-20220617
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:a2f1b200-2eff-430b-b07c-32addeee4a54,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:09c1a3f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: a1ad5ed77d8040bfaa762aa3eddcf463-20220617
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2143402202; Fri, 17 Jun 2022 17:58:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 17 Jun 2022 17:58:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Jun 2022 17:58:42 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Min Guo <min.guo@mediatek.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v4] soc: mediatek: Add support always on flag
-Date:   Fri, 17 Jun 2022 17:58:41 +0800
-Message-ID: <20220617095841.23031-1-chunfeng.yun@mediatek.com>
+        Fri, 17 Jun 2022 05:59:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2606517DE;
+        Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC2D812FC;
+        Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
+Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D4353F73B;
+        Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
+From:   Yoan Picchi <yoan.picchi@arm.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH v3 0/2] crypto: qat - Remove x86 dependency on QAT drivers
+Date:   Fri, 17 Jun 2022 09:59:43 +0000
+Message-Id: <20220617095945.437601-1-yoan.picchi@arm.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,69 +43,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a t-phy shared by PCIe and USB3 on mt8195, if the t-phy is
-used by PCIe, when power off its mtcmos, need software reset it
-(workaround way, usually hardware do it, but has an issue on mt8195),
-but it has side effect to USB2 phy(works with USB3 phy to support
-USB3.2 Gen1), so add support GENPD_FLAG_ALWAYS_ON flag, and make its
-power always on;
-Another reason is that USB3.2 Gen1/2 need keep power always on when
-support runtime-pm due to hardware limitation until now;
+The QAT acceleration card can be very helpfull for some tasks like dealing
+with IPSEC but it is currently restricted to be used only on x86 machine.
+Looking at the code we didn't see any reasons why those drivers might not
+work on other architectures. We've successfully built all of them on x86,
+arm64, arm32, mips64, powerpc64, riscv64 and sparc64.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v4: add reviewed-by AngeloGioacchino
+We also have tested the driver with an Intel Corporation C62x Chipset
+QuickAssist Technology (rev 04) PCIe card on an arm64 server. After the numa
+patch, it works with the AF_ALG crypto userland interface, allowing us to
+encrypt some data with cbc for instance. We've also successfully created some
+VF, bound them to DPDK, and used the card this way, thus showing some real
+life usecases of x86 do work on arm64 too.
 
-v3: make always-on flag exclusive with defualt-off flag
+Changelog v1 ... v2:
+- Add COMPILE_TEST to Kconfig
 
-v2: keep active_wakeup flag for mt8195
----
- drivers/soc/mediatek/mt8195-pm-domains.h | 2 +-
- drivers/soc/mediatek/mtk-pm-domains.c    | 3 +++
- drivers/soc/mediatek/mtk-pm-domains.h    | 2 ++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+Changelog v2 ... v3:
+- Add the Crypto tag to the commit header
 
-diff --git a/drivers/soc/mediatek/mt8195-pm-domains.h b/drivers/soc/mediatek/mt8195-pm-domains.h
-index 938f4d51f5ae..0529d130b675 100644
---- a/drivers/soc/mediatek/mt8195-pm-domains.h
-+++ b/drivers/soc/mediatek/mt8195-pm-domains.h
-@@ -67,7 +67,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8195[] = {
- 		.ctl_offs = 0x334,
- 		.pwr_sta_offs = 0x174,
- 		.pwr_sta2nd_offs = 0x178,
--		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-+		.caps = MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_ALWAYS_ON,
- 	},
- 	[MT8195_POWER_DOMAIN_CSI_RX_TOP] = {
- 		.name = "csi_rx_top",
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-index 5ced254b082b..a3dae391a38a 100644
---- a/drivers/soc/mediatek/mtk-pm-domains.c
-+++ b/drivers/soc/mediatek/mtk-pm-domains.c
-@@ -428,6 +428,9 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
- 			dev_err(scpsys->dev, "%pOF: failed to power on domain: %d\n", node, ret);
- 			goto err_put_subsys_clocks;
- 		}
-+
-+		if (MTK_SCPD_CAPS(pd, MTK_SCPD_ALWAYS_ON))
-+			pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
- 	}
- 
- 	if (scpsys->domains[id]) {
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-index daa24e890dd4..7d3c0c36316c 100644
---- a/drivers/soc/mediatek/mtk-pm-domains.h
-+++ b/drivers/soc/mediatek/mtk-pm-domains.h
-@@ -8,6 +8,8 @@
- #define MTK_SCPD_SRAM_ISO		BIT(2)
- #define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(3)
- #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
-+/* can't set MTK_SCPD_KEEP_DEFAULT_OFF at the same time */
-+#define MTK_SCPD_ALWAYS_ON		BIT(5)
- #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
- 
- #define SPM_VDE_PWR_CON			0x0210
+Andre Przywara (1):
+  crypto: qat - replace get_current_node() with numa_node_id()
+
+Yoan Picchi (1):
+  crypto: qat - Removes the x86 dependency on the QAT drivers
+
+ drivers/crypto/qat/Kconfig                     | 14 +++++++-------
+ drivers/crypto/qat/qat_common/adf_common_drv.h |  5 -----
+ drivers/crypto/qat/qat_common/qat_algs.c       |  4 ++--
+ drivers/crypto/qat/qat_common/qat_asym_algs.c  |  4 ++--
+ 4 files changed, 11 insertions(+), 16 deletions(-)
+
 -- 
-2.18.0
+2.25.1
 

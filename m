@@ -2,157 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE89554FCB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 20:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0752354FCBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 20:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383534AbiFQSJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 14:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1383478AbiFQSMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 14:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbiFQSJi (ORCPT
+        with ESMTP id S1383210AbiFQSMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 14:09:38 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283592FFD1;
-        Fri, 17 Jun 2022 11:09:36 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso4848706pjk.0;
-        Fri, 17 Jun 2022 11:09:36 -0700 (PDT)
+        Fri, 17 Jun 2022 14:12:05 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467B031DD5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 11:12:03 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id m14so4520531plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 11:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Tgmfly3b8RsCM+09sHMOvRi51TPleNfDLVBP+IR80o4=;
-        b=ay9bFsglRqYNVZWR/xgf0ZBxNW/e1KnJBCt8vGvD6MmkKwJO4iWnRKl1WWciouT5l4
-         Z5EOeER6Cgh90Zk3h/WHpJoxtZXt03kH953xhS3ncguQCdDlV9LQdxvXBOLoia6J7FQ+
-         4oZHqLhVFOeXz7hXdLqIXRYPs2LKRpYCdVxM3jFDoK7BY3K2FjPE0SllWIB2iPf7Q3s8
-         2bigRP21/WdP2HqQvzccjB3Jm+GGizRzgrZDtvTCKnZ5CqXalIT3HDey91Zhe5btaX4a
-         USQF/xiAa0OnObxKJvvNAgVXxC+GQSvn+S5YU2UxJrOs1ViFnmfGP1fZrjyCpZa/wzRc
-         z2vg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fai5+SrDv8K91PMU2NEm06Sjrm/fhwQHbj0YNEiaVYQ=;
+        b=hCna7bgzcv4fbNXHMcqfQrvXCWIhrqAOgcDq+K+UUKNxK4iLl8JzZfTfV6qTOMU4Cb
+         BxvJAcofOG5MaQwMTgSpbhAtSyncLVo6UGsy+2EOAuP3SeYxOHA0Whg6Ir1XEq5ymSaZ
+         WDfUmmLJ/MzucgIfa8dzg6se0SVLy9lU551Xw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Tgmfly3b8RsCM+09sHMOvRi51TPleNfDLVBP+IR80o4=;
-        b=TJhEFCsjWh4bsv3ZWbJcP1bxTiVo33cOAPkX/nyPT6XkSeTaCYW0LMCHhajcvx8Yki
-         zdWH2VvVKC6yep1zelKDf7XzhaCwejGQVB6f5QX1raLu5cLPEhF+Dy9Sg7fv1HiC5p3N
-         M906WlR/o6aOKp5Itwn1UqtMi/ttc5j5pMAHaUtVDO4iwtdT5k6ERdPyaBFhx0R7RN+K
-         us7QDF3tGh03qfc8blefuMJmUI0YPev9MS/U9m6rPITCJKUK4fD0oQzBGeKT6QqF3BRc
-         JTMtXClzwyR0fT6OzxR2S8DIwdpBlAgyeub9uqRxjh0tiRR03q5Xd/vF3WdNe0C6hSp0
-         5/SQ==
-X-Gm-Message-State: AJIora+NB/zLAbC2xQ4XSdNIY0wirR5VpPXjtUPgPxpiX2lO7SMIArLo
-        iim1ooeX9Y/+wKDjkH/n6Z6iQb2THks=
-X-Google-Smtp-Source: AGRyM1ti+P9qKyoJ/UjpRGaDFwg2zp0yd+FhWAHT0qYHKiPkJoKTJ3qm71MW43CZ5nj5i22LZBVOSg==
-X-Received: by 2002:a17:902:dac7:b0:166:3dfe:f4b8 with SMTP id q7-20020a170902dac700b001663dfef4b8mr10772642plx.55.1655489375482;
-        Fri, 17 Jun 2022 11:09:35 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id u123-20020a626081000000b00522d329e36esm4131212pfb.140.2022.06.17.11.09.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 11:09:33 -0700 (PDT)
-Message-ID: <fa35e955-41be-bb4b-d1f0-85acec03e0a0@gmail.com>
-Date:   Sat, 18 Jun 2022 03:09:30 +0900
+        bh=fai5+SrDv8K91PMU2NEm06Sjrm/fhwQHbj0YNEiaVYQ=;
+        b=wZuEL3yhN7D3PqtJcVeTvY3GDYKXBzxrJJ0V8Nosfh2/m42WwJmMhJ4KP0hRo7IODF
+         ybyJ3Bu0EE+ZLETjqMN90/fezKB+mFifjoUtZVYdAVnvq0VsgSjH3QBAhklfP5AK7020
+         acL2K665eI9QnLa5Jft3uzBrZm4831BcWRxlLVOKR5g3PqH//k37EmtunTqQSlUueQVn
+         bQKuj8cuEVDDjlayA/mPNcPGBrcUu43rDn2EZ3nhgt3QM/rlddwkheEvVINNURy9eXL8
+         kk4EH2/6JF6qiVFRU6aM/nOrmJ48ajFSgRIzqGeIptd2A5OvcUi78Rhy3fUXYC5TtbVt
+         eCXQ==
+X-Gm-Message-State: AJIora9lHg0yYW+0vP60QHgZzMk/l8CRfRFVl53eACj2DBwrrpuMGV0T
+        57dcN7u4HCUAsrk84QT5rmrcWhDsTU1VxA==
+X-Google-Smtp-Source: AGRyM1s0q12/vUtyutTPiMf/K6XDCQF+wn5/uhEPgl9PGs2o9xobRY8V1AOXdG/DaG73S2WsmnjFAA==
+X-Received: by 2002:a17:90b:4d11:b0:1e8:436b:a9cc with SMTP id mw17-20020a17090b4d1100b001e8436ba9ccmr23042365pjb.40.1655489522568;
+        Fri, 17 Jun 2022 11:12:02 -0700 (PDT)
+Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
+        by smtp.gmail.com with ESMTPSA id o1-20020a62f901000000b0052285857864sm4121930pfh.97.2022.06.17.11.12.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 11:12:02 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v6 1/6] FROMLIST: arm64: dts: qcom: sc7180-trogdor: Split out keyboard node and describe detachables
+Date:   Fri, 17 Jun 2022 11:10:36 -0700
+Message-Id: <20220617111021.v6.1.I9e299d3fa6fbf50df6fc7207050bf5c3a7bf4c61@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 4/4] PM / devfreq: Mute warning on governor PROBE_DEFER
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <skannan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220614230950.426-1-ansuelsmth@gmail.com>
- <20220614230950.426-5-ansuelsmth@gmail.com>
- <8dd8bfa2-0843-269b-2d55-e3cbdbf6a5e1@gmail.com>
- <62a9b027.1c69fb81.5ae2b.4f85@mx.google.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <62a9b027.1c69fb81.5ae2b.4f85@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 6. 15. 18:22, Ansuel Smith wrote:
-> On Wed, Jun 15, 2022 at 03:56:31PM +0900, Chanwoo Choi wrote:
->> On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
->>> Don't print warning when a governor PROBE_DEFER as it's not a real
->>> GOV_START fail.
->>>
->>> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
->>> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
->>> ---
->>>  drivers/devfreq/devfreq.c | 5 +++--
->>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>> index 2e2b3b414d67..6a39638ed064 100644
->>> --- a/drivers/devfreq/devfreq.c
->>> +++ b/drivers/devfreq/devfreq.c
->>> @@ -931,8 +931,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
->>>  	err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
->>>  						NULL);
->>>  	if (err) {
->>> -		dev_err(dev, "%s: Unable to start governor for the device\n",
->>> -			__func__);
->>> +		dev_err_probe(dev, err,
->>> +			      "%s: Unable to start governor for the device\n",
->>> +			      __func__);
->>>  		goto err_init;
->>>  	}
->>>  	create_sysfs_files(devfreq, devfreq->governor);
->>
->>
->> In order to keep the left-align with above error log
->> when try_then_request_governor() is failed,
->> I recommend to use the tab without space indentation as following:
->>
->> If you have no objection, I'll merge this change.
->>
-> 
-> Sure, good for me. Anyway I wonder if we can relax the hard limit for 80
-> for error print since we now can use 100, but your choice.
+From: Stephen Boyd <swboyd@chromium.org>
 
-My suggestion is not over 80 line. Applied it. 
+Trogdor devices that have a detachable keyboard still have a
+non-detachable keyboard input device present because we include the
+cros-ec-keyboard.dtsi snippet in the top-level sc7180-trogdor.dtsi file
+that every variant board includes. We do this because the
+keyboard-controller node also provides some buttons like the power
+button and volume buttons. Unfortunately, this means we register a
+keyboard input device that doesn't do anything on boards with a
+detachable keyboard.
 
-> 
->> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->> index 01474daf4548..80a1235ef8fb 100644
->> --- a/drivers/devfreq/devfreq.c
->> +++ b/drivers/devfreq/devfreq.c
->> @@ -932,8 +932,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
->>         err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
->>                                                 NULL);
->>         if (err) {
->> -               dev_err(dev, "%s: Unable to start governor for the device\n",
->> -                       __func__);
->> +               dev_err_probe(dev, err,
->> +                       "%s: Unable to start governor for the device\n",
->> +                        __func__);
->>                 goto err_init;
->>         }
->>         create_sysfs_files(devfreq, devfreq->governor);
->>
->>
->>
->>
->>
->> -- 
->> Best Regards,
->> Samsung Electronics
->> Chanwoo Choi
-> 
+Change the node's compatible on detachables to the newly introduced
+"google,cros-ec-keyb-switches" compatible to indicate that there are
+only switches and no keyboard to register. Similarly, move the keyboard
+include that defines the keyboard-controller node out of
+sc7180-trogdor.dtsi to boards that actually have a keyboard so that the
+matrix properties are not defined on boards with the switches
+compatible. Future boards can either use the include approach or the
+node definition approach to describe a keyboard with possible switches
+or just some switches.
 
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+(am from https://lore.kernel.org/r/20220518172525.3319993-1-swboyd@chromium.org)
 
+     evtest shows no more cros_ec device
+
+Cq-Depend: chromium:3609017
+Tested-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+---
+
+Changes in v6:
+ - First inclusion of this patch.
+
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 4 ++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi    | 2 ++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi   | 2 ++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts        | 2 ++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi          | 1 -
+ 6 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+index 8ac1f1e61006..7ee407f7b6bb 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+@@ -81,6 +81,10 @@ &camcc {
+ };
+ 
+ &cros_ec {
++	keyboard-controller {
++		compatible = "google,cros-ec-keyb-switches";
++	};
++
+ 	cros_ec_proximity: proximity {
+ 		compatible = "google,cros-ec-mkbp-proximity";
+ 		label = "proximity-wifi";
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+index 9b3e3d13c165..5074014d5269 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+@@ -114,6 +114,12 @@ &camcc {
+ 	status = "okay";
+ };
+ 
++&cros_ec {
++	keyboard-controller {
++		compatible = "google,cros-ec-keyb-switches";
++	};
++};
++
+ &panel {
+ 	compatible = "samsung,atna33xc20";
+ 	enable-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
+index fe2369c29aad..d8839ccdcf09 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
+@@ -6,6 +6,8 @@
+  */
+ 
+ #include "sc7180-trogdor.dtsi"
++/* Must come after sc7180-trogdor.dtsi to modify cros_ec */
++#include <arm/cros-ec-keyboard.dtsi>
+ 
+ &ap_sar_sensor {
+ 	semtech,cs0-ground;
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
+index 3df4920295ad..a7582fb547ee 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
+@@ -6,6 +6,8 @@
+  */
+ 
+ #include "sc7180-trogdor.dtsi"
++/* Must come after sc7180-trogdor.dtsi to modify cros_ec */
++#include <arm/cros-ec-keyboard.dtsi>
+ #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
+ 
+ / {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
+index 352827e5740a..59a23d0e9651 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
+@@ -8,6 +8,8 @@
+ /dts-v1/;
+ 
+ #include "sc7180-trogdor.dtsi"
++/* Must come after sc7180-trogdor.dtsi to modify cros_ec */
++#include <arm/cros-ec-keyboard.dtsi>
+ #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
+ 
+ / {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index e55dbaa6dc12..1a4f2e8cc3dc 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -903,7 +903,6 @@ cros_ec_fp: ec@0 {
+ 	};
+ };
+ 
+-#include <arm/cros-ec-keyboard.dtsi>
+ #include <arm/cros-ec-sbs.dtsi>
+ 
+ &uart3 {
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.31.0
+

@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3829855001B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC39550021
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353068AbiFQWni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S1345137AbiFQWpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiFQWng (ORCPT
+        with ESMTP id S244720AbiFQWpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:43:36 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08943BBC8;
-        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id q11so5890961iod.8;
-        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Zh/0Zx5VR9OkdNl9GEaMHnSoW3UuL0RxbuRlgNOyx3U=;
-        b=Hgil84+ELMVRzRXMKAfqAuU6mR3YljnBX0unOibFt6Act3TAaf96ovJZ4VvLIODbE9
-         Bh7/iPioI2soLxUkXk2ZAnggIYwROfH/3dMFghApTa6WIgwgHuYcJmpYKHBzjng4ma9H
-         TyrlMz51vOj6g4mJq5hg5OWaAGxtmwCrQu4wzx7BnlMEngd2KjP9VQIlCsfEJqguKwRg
-         opmiDyVWeKpcZGtkq1OIk7pSuYaQKqM86ugnGmwFzYvXS/7TucCu9ciQMWtqI8Pjgk8q
-         o8fcmTfShYHQQxL3O+ewacUihemAiO63qGoq5OgKeRUOxp8pH6rvYYBeX8A+ZG+jX0xe
-         nvjg==
-X-Gm-Message-State: AJIora/9GAMo/VuBIxH/7sS2TIqk2FheBgDP1NG9tMLMYVXT87ULcP+n
-        SJRHBXgrkfRjAcHolat9Pq8hi4s15w==
-X-Google-Smtp-Source: AGRyM1tvyT1XZEsULmIOGU/hr9lRpu/t3yqYEU1/GhEsnQese2mFTYGyCi7NOLnTQaaRUC8jarJyVw==
-X-Received: by 2002:a05:6638:d8c:b0:332:15ef:657f with SMTP id l12-20020a0566380d8c00b0033215ef657fmr6523987jaj.146.1655505814198;
-        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id i26-20020a023b5a000000b0032b3a781781sm2734205jaf.69.2022.06.17.15.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 15:43:33 -0700 (PDT)
-Received: (nullmailer pid 2574515 invoked by uid 1000);
-        Fri, 17 Jun 2022 22:43:32 -0000
-Date:   Fri, 17 Jun 2022 16:43:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, szunichen@gmail.com,
-        lars@metafoo.de, matthias.bgg@gmail.com,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        lee.jones@linaro.org, ChiYuan Huang <cy_huang@richtek.com>,
-        linux-leds@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        jingoohan1@gmail.com, devicetree@vger.kernel.org, jic23@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
-Message-ID: <20220617224332.GA2570673-robh@kernel.org>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-7-peterwu.pub@gmail.com>
- <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
- <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
+        Fri, 17 Jun 2022 18:45:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509EC3E0C7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655505900; x=1687041900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1vOU98FLPlxlzKwHsfc9G3VPTFrl2r6C+kRfGvJaz3U=;
+  b=KUutp8x+w7yRZOMcCO+slsFeFc+Y8TcCBQ6YsAXM/yONh/cMHkHEGcoJ
+   IqqdTATZ8M09FGS77F4bnyWGbK/iMmtkDDdDZ++UF5crBdZ7LqK6vy1gW
+   qx+AT8ZusBfFUtfyQRFHUGQd+ndPpULZxJFiHykFL2/tojP0BX0yBOK3k
+   GU3BRcVpyLEAmrSmsdhcdnO9AeHLlBb9yCEUPq0KncCvPskUh16qRAX1g
+   yET7AffT6vSdrA81l13rUIFgG8kUP1P/QHSkTji5er4pOU9jmIxy4Bd/Z
+   5cG/F98/WmfcMYOJrSIxUmbfUeAWZnmIiZv9HxPJQQBOCkS2pNU5oC3AU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341284944"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="341284944"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 15:44:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="590295209"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Jun 2022 15:44:58 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Ki1-000PpB-GW;
+        Fri, 17 Jun 2022 22:44:57 +0000
+Date:   Sat, 18 Jun 2022 06:44:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org
+Subject: [cilium:pr/meta4 2/2] arch/arm64/include/asm/barrier.h:130:41:
+ error: invalid type argument of unary '*' (have 'int')
+Message-ID: <202206180602.gtyL07Si-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,62 +62,558 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 07:15:49PM +0800, ChiaEn Wu wrote:
-> Hi Rob,
-> 
-> Rob Herring <robh@kernel.org> 於 2022年6月13日 週一 晚上9:33寫道：
-> >
-> > On Mon, 13 Jun 2022 19:11:37 +0800, ChiaEn Wu wrote:
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > Add Mediatek MT6370 binding documentation.
-> > >
-> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > ---
-> > >  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
-> > >  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
-> > >  2 files changed, 297 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> > >
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > ./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: backlight: False schema does not allow {'compatible': ['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: charger: False schema does not allow {'compatible': ['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]], 'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels': [[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name': ['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]], 'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp': [[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: tcpc: False schema does not allow {'compatible': ['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]], 'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'], 'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'], 'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos': [[570527944]], 'op-sink-microwatt': [[10000000]], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1': {'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint': [[4294967295]]}}}}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator: False schema does not allow {'compatible': ['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells': [[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'], 'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]}, 'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]], 'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'], 'color': [[0]], 'led-max-microamp': [[6000]]}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: flashlight: False schema does not allow {'compatible': ['mediatek,mt6370-flashlight'], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]], 'led-sources': [[1]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[2]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object', 'array', 'boolean', 'null'
-> >         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/backlight: failed to match any schema with compatible: ['mediatek,mt6370-backlight']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/charger: failed to match any schema with compatible: ['mediatek,mt6370-charger']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/indicator: failed to match any schema with compatible: ['mediatek,mt6370-indicator']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/flashlight: failed to match any schema with compatible: ['mediatek,mt6370-flashlight']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/tcpc: failed to match any schema with compatible: ['mediatek,mt6370-tcpc']
-> >
-> 
-> Before we submitted these patches, we had already checked by running
-> this command below,
-> "make DT_CHECKER_FLAGS=-m dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml".
-> But we could not find any errors like your error msg after the checking process.
-> 
-> Our mfd dt-binding patch is dependent on "backlight dt-binding",
-> "charger dt-binding", "tcpc dt-binding", "indicator dt-binding" and
-> "flashlight dt-binding" patches.
-> Would you please apply them before you check mfd dt-binding patch?
+tree:   https://github.com/cilium/linux.git pr/meta4
+head:   dcea837b60f0d9f8f3cdae284680659042f560d1
+commit: dcea837b60f0d9f8f3cdae284680659042f560d1 [2/2] bpf: Add fd-based API to attach tc BPF programs
+config: arm64-randconfig-r016-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180602.gtyL07Si-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/cilium/linux/commit/dcea837b60f0d9f8f3cdae284680659042f560d1
+        git remote add cilium https://github.com/cilium/linux.git
+        git fetch --no-tags cilium pr/meta4
+        git checkout dcea837b60f0d9f8f3cdae284680659042f560d1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/
 
-That is what is done. Not sure what happened here though.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Rob
+All error/warnings (new ones prefixed by >>):
+
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:39: error: 'struct net_device' has no member named 'sch_ingress'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:9: note: in expansion of macro 'compiletime_assert'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:28: note: in expansion of macro '__native_word'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |                            ^~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:125:9: note: in expansion of macro 'compiletime_assert_atomic_type'
+     125 |         compiletime_assert_atomic_type(*p);                             \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:39: error: 'struct net_device' has no member named 'sch_ingress'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:9: note: in expansion of macro 'compiletime_assert'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:28: note: in expansion of macro '__native_word'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |                            ^~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:125:9: note: in expansion of macro 'compiletime_assert_atomic_type'
+     125 |         compiletime_assert_atomic_type(*p);                             \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:39: error: 'struct net_device' has no member named 'sch_ingress'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:9: note: in expansion of macro 'compiletime_assert'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:28: note: in expansion of macro '__native_word'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |                            ^~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:125:9: note: in expansion of macro 'compiletime_assert_atomic_type'
+     125 |         compiletime_assert_atomic_type(*p);                             \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   In file included from include/linux/list.h:11,
+                    from include/linux/module.h:12,
+                    from kernel/sysctl.c:22:
+   include/net/sch_generic.h:1361:39: error: 'struct net_device' has no member named 'sch_ingress'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                                       ^~
+   arch/arm64/include/asm/barrier.h:126:40: note: in definition of macro '__smp_store_release'
+     126 |         kasan_check_write(__p, sizeof(*p));                             \
+         |                                        ^
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+>> arch/arm64/include/asm/barrier.h:126:27: warning: passing argument 1 of 'kasan_check_write' makes pointer from integer without a cast [-Wint-conversion]
+     126 |         kasan_check_write(__p, sizeof(*p));                             \
+         |                           ^~~
+         |                           |
+         |                           int
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   In file included from include/asm-generic/rwonce.h:26,
+                    from arch/arm64/include/asm/rwonce.h:71,
+                    from include/linux/compiler.h:248,
+                    from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/module.h:12,
+                    from kernel/sysctl.c:22:
+   include/linux/kasan-checks.h:44:59: note: expected 'const volatile void *' but argument is of type 'int'
+      44 | static inline bool kasan_check_write(const volatile void *p, unsigned int size)
+         |                                      ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from include/linux/list.h:11,
+                    from include/linux/module.h:12,
+                    from kernel/sysctl.c:22:
+   include/net/sch_generic.h:1361:39: error: 'struct net_device' has no member named 'sch_ingress'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                                       ^~
+   arch/arm64/include/asm/barrier.h:127:25: note: in definition of macro '__smp_store_release'
+     127 |         switch (sizeof(*p)) {                                           \
+         |                         ^
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+>> arch/arm64/include/asm/barrier.h:130:41: error: invalid type argument of unary '*' (have 'int')
+     130 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:136:41: error: invalid type argument of unary '*' (have 'int')
+     136 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:142:41: error: invalid type argument of unary '*' (have 'int')
+     142 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:148:41: error: invalid type argument of unary '*' (have 'int')
+     148 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1361:17: note: in expansion of macro 'rcu_assign_pointer'
+    1361 |                 rcu_assign_pointer(dev->sch_ingress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                            ^~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:60:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:454:17: note: in expansion of macro 'WRITE_ONCE'
+     454 |                 WRITE_ONCE((p), (typeof(p))(_r_a_p__v));                      \
+         |                 ^~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                            ^~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:60:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
+      60 |         compiletime_assert_rwonce_type(x);                              \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:454:17: note: in expansion of macro 'WRITE_ONCE'
+     454 |                 WRITE_ONCE((p), (typeof(p))(_r_a_p__v));                      \
+         |                 ^~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+--
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:9: note: in expansion of macro 'compiletime_assert'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:28: note: in expansion of macro '__native_word'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |                            ^~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:125:9: note: in expansion of macro 'compiletime_assert_atomic_type'
+     125 |         compiletime_assert_atomic_type(*p);                             \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:9: note: in expansion of macro 'compiletime_assert'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:28: note: in expansion of macro '__native_word'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |                            ^~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:125:9: note: in expansion of macro 'compiletime_assert_atomic_type'
+     125 |         compiletime_assert_atomic_type(*p);                             \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:9: note: in expansion of macro 'compiletime_assert'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:355:28: note: in expansion of macro '__native_word'
+     355 |         compiletime_assert(__native_word(t),                            \
+         |                            ^~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:125:9: note: in expansion of macro 'compiletime_assert_atomic_type'
+     125 |         compiletime_assert_atomic_type(*p);                             \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   In file included from include/linux/list.h:11,
+                    from include/linux/module.h:12,
+                    from kernel/sysctl.c:22:
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   arch/arm64/include/asm/barrier.h:126:40: note: in definition of macro '__smp_store_release'
+     126 |         kasan_check_write(__p, sizeof(*p));                             \
+         |                                        ^
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+>> arch/arm64/include/asm/barrier.h:126:27: warning: passing argument 1 of 'kasan_check_write' makes pointer from integer without a cast [-Wint-conversion]
+     126 |         kasan_check_write(__p, sizeof(*p));                             \
+         |                           ^~~
+         |                           |
+         |                           int
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   In file included from include/asm-generic/rwonce.h:26,
+                    from arch/arm64/include/asm/rwonce.h:71,
+                    from include/linux/compiler.h:248,
+                    from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/module.h:12,
+                    from kernel/sysctl.c:22:
+   include/linux/kasan-checks.h:44:59: note: expected 'const volatile void *' but argument is of type 'int'
+      44 | static inline bool kasan_check_write(const volatile void *p, unsigned int size)
+         |                                      ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from include/linux/list.h:11,
+                    from include/linux/module.h:12,
+                    from kernel/sysctl.c:22:
+   include/net/sch_generic.h:1363:39: error: 'struct net_device' has no member named 'sch_egress'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                                       ^~
+   arch/arm64/include/asm/barrier.h:127:25: note: in definition of macro '__smp_store_release'
+     127 |         switch (sizeof(*p)) {                                           \
+         |                         ^
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+>> arch/arm64/include/asm/barrier.h:130:41: error: invalid type argument of unary '*' (have 'int')
+     130 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:136:41: error: invalid type argument of unary '*' (have 'int')
+     136 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:142:41: error: invalid type argument of unary '*' (have 'int')
+     142 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/barrier.h:148:41: error: invalid type argument of unary '*' (have 'int')
+     148 |                                 : "=Q" (*__p)                           \
+         |                                         ^~~~
+   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+         |                                                       ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:456:17: note: in expansion of macro 'smp_store_release'
+     456 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+         |                 ^~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1363:17: note: in expansion of macro 'rcu_assign_pointer'
+    1363 |                 rcu_assign_pointer(dev->sch_egress, entry);
+         |                 ^~~~~~~~~~~~~~~~~~
+   In file included from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from arch/arm64/include/asm/compat.h:28,
+                    from arch/arm64/include/asm/stat.h:13,
+                    from include/linux/stat.h:6,
+                    from include/linux/module.h:13,
+                    from kernel/sysctl.c:22:
+   include/net/sch_generic.h: In function 'dev_sch_entry_fetch':
+   include/net/sch_generic.h:1399:36: error: 'struct net_device' has no member named 'sch_ingress'
+    1399 |                 rcu_dereference(dev->sch_ingress) :
+         |                                    ^~
+   include/linux/rcupdate.h:392:17: note: in definition of macro '__rcu_dereference_check'
+     392 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                 ^
+   include/linux/rcupdate.h:604:28: note: in expansion of macro 'rcu_dereference_check'
+     604 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                            ^~~~~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1399:17: note: in expansion of macro 'rcu_dereference'
+    1399 |                 rcu_dereference(dev->sch_ingress) :
+         |                 ^~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1399:36: error: 'struct net_device' has no member named 'sch_ingress'
+    1399 |                 rcu_dereference(dev->sch_ingress) :
+         |                                    ^~
+   include/linux/rcupdate.h:392:38: note: in definition of macro '__rcu_dereference_check'
+     392 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                      ^
+   include/linux/rcupdate.h:604:28: note: in expansion of macro 'rcu_dereference_check'
+     604 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                            ^~~~~~~~~~~~~~~~~~~~~
+   include/net/sch_generic.h:1399:17: note: in expansion of macro 'rcu_dereference'
+    1399 |                 rcu_dereference(dev->sch_ingress) :
+         |                 ^~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   include/net/sch_generic.h:1399:36: error: 'struct net_device' has no member named 'sch_ingress'
+    1399 |                 rcu_dereference(dev->sch_ingress) :
+         |                                    ^~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                            ^~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:392:50: note: in expansion of macro 'READ_ONCE'
+..
+
+
+vim +130 arch/arm64/include/asm/barrier.h
+
+47933ad41a86a4 Peter Zijlstra     2013-11-06  119  
+fd072df850e536 Michael S. Tsirkin 2015-12-27  120  #define __smp_store_release(p, v)					\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  121  do {									\
+131e135f7fd14b Mark Rutland       2019-04-09  122  	typeof(p) __p = (p);						\
+10223c5286f738 Will Deacon        2019-12-19  123  	union { __unqual_scalar_typeof(*p) __val; char __c[1]; } __u =	\
+10223c5286f738 Will Deacon        2019-12-19  124  		{ .__val = (__force __unqual_scalar_typeof(*p)) (v) };	\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  125  	compiletime_assert_atomic_type(*p);				\
+131e135f7fd14b Mark Rutland       2019-04-09 @126  	kasan_check_write(__p, sizeof(*p));				\
+47933ad41a86a4 Peter Zijlstra     2013-11-06 @127  	switch (sizeof(*p)) {						\
+878a84d5a8a18a Andre Przywara     2015-04-20  128  	case 1:								\
+878a84d5a8a18a Andre Przywara     2015-04-20  129  		asm volatile ("stlrb %w1, %0"				\
+131e135f7fd14b Mark Rutland       2019-04-09 @130  				: "=Q" (*__p)				\
+994870bead4ab1 Mark Rutland       2017-05-03  131  				: "r" (*(__u8 *)__u.__c)		\
+994870bead4ab1 Mark Rutland       2017-05-03  132  				: "memory");				\
+878a84d5a8a18a Andre Przywara     2015-04-20  133  		break;							\
+878a84d5a8a18a Andre Przywara     2015-04-20  134  	case 2:								\
+878a84d5a8a18a Andre Przywara     2015-04-20  135  		asm volatile ("stlrh %w1, %0"				\
+131e135f7fd14b Mark Rutland       2019-04-09  136  				: "=Q" (*__p)				\
+994870bead4ab1 Mark Rutland       2017-05-03  137  				: "r" (*(__u16 *)__u.__c)		\
+994870bead4ab1 Mark Rutland       2017-05-03  138  				: "memory");				\
+878a84d5a8a18a Andre Przywara     2015-04-20  139  		break;							\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  140  	case 4:								\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  141  		asm volatile ("stlr %w1, %0"				\
+131e135f7fd14b Mark Rutland       2019-04-09  142  				: "=Q" (*__p)				\
+994870bead4ab1 Mark Rutland       2017-05-03  143  				: "r" (*(__u32 *)__u.__c)		\
+994870bead4ab1 Mark Rutland       2017-05-03  144  				: "memory");				\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  145  		break;							\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  146  	case 8:								\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  147  		asm volatile ("stlr %1, %0"				\
+131e135f7fd14b Mark Rutland       2019-04-09  148  				: "=Q" (*__p)				\
+994870bead4ab1 Mark Rutland       2017-05-03  149  				: "r" (*(__u64 *)__u.__c)		\
+994870bead4ab1 Mark Rutland       2017-05-03  150  				: "memory");				\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  151  		break;							\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  152  	}								\
+47933ad41a86a4 Peter Zijlstra     2013-11-06  153  } while (0)
+47933ad41a86a4 Peter Zijlstra     2013-11-06  154  
+
+:::::: The code at line 130 was first introduced by commit
+:::::: 131e135f7fd14b1de7a5eb26631076705c18073f arm64: instrument smp_{load_acquire,store_release}
+
+:::::: TO: Mark Rutland <mark.rutland@arm.com>
+:::::: CC: Will Deacon <will.deacon@arm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

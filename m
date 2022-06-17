@@ -2,150 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA61354F6D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB30054F6D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381804AbiFQLhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S1381834AbiFQLjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380908AbiFQLhp (ORCPT
+        with ESMTP id S1380126AbiFQLjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:37:45 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723EBE0F7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655465862; x=1687001862;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Zulo6yS+yManqrgp8P27sEz2+gG7alfNtP7H2VV0GpI=;
-  b=SGSs5v5f1bvJ2R6Lxtxj+TXvwpyg+2EICX0KVXYmMRqBR8SXbIOSZV+X
-   ZEefWBFDH4/Zolrv8WrXgjC9jvEiMVvmPcz/HurvlObF+/EX6DQ/ZeOAo
-   +YW2ED/nhPlR83PRQNyLr0VQuyfajrBiQr8l2iI6UKqzeiiiXbLTJ4l5M
-   izXYGrWn7jHaTIRgp9CsTGTwrv0yyMNpZLyx8IxRFVFhgoO47hBCSAlb3
-   8gUNv0uzs0BtHtqxJ3Tlu31V04k3uX00IUPbo5LICfcFjVwRtmdCnrrAm
-   ePb6lrJPXiBW9IuK+KAj+5N2b593q3FJzIgQAKglmmB1OGlMc1jgpb+U5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341146160"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341146160"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 04:37:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="713746988"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jun 2022 04:37:40 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2AIG-000PPd-Ac;
-        Fri, 17 Jun 2022 11:37:40 +0000
-Date:   Fri, 17 Jun 2022 19:36:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/xtensa/lib/kcsan-stubs.c:6:6: sparse: sparse: symbol
- '__atomic_store_8' was not declared. Should it be static?
-Message-ID: <202206171905.uDkZBJUr-lkp@intel.com>
+        Fri, 17 Jun 2022 07:39:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDDF5A0A9;
+        Fri, 17 Jun 2022 04:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KiwPkQU7A4VOjqjjcy7oDsNGb93k5UOyD9PqekH8rm0=; b=oDvQbGklpawwNO9iOP5fXHlrm3
+        34uucaw/4esCO4fl21ya2Dq9mNmiC4V3UKcuoXql1MONITTIeTX+wRB2iKgFIXxpwclOMfn/pMbJY
+        eCvQ6UyEpARjvl4srHQ08QJCHJpgmwJaPfVULStZ8TD/83nttAf47cJiq6vQhBQrc7yVEfEprcYl4
+        TgnLldr/DvuZphqprj7rydmoqJ+olXTKW7z/Y9SYXl6OjMpVymOIksPkL/23NaF8f8jb1Cldbdj0r
+        pelIpgv7Rpn2uZlNrjJP1EfXuIq9yu0W6DB1z1ZJaz8CeA7VA64cHng1mg4MlOVkx5jo2nPMPNP8k
+        CVlN2ygw==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2AJG-002nYp-SK; Fri, 17 Jun 2022 11:38:43 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2F7599816B5; Fri, 17 Jun 2022 13:38:41 +0200 (CEST)
+Date:   Fri, 17 Jun 2022 13:38:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 03/19] x86/cpufeatures: Enable CET CR4 bit for shadow
+ stack
+Message-ID: <YqxnwRn+/c+i1vL6@worktop.programming.kicks-ass.net>
+References: <20220616084643.19564-1-weijiang.yang@intel.com>
+ <20220616084643.19564-4-weijiang.yang@intel.com>
+ <YqsEyoaxPFpZcolP@hirez.programming.kicks-ass.net>
+ <ca4e04f2dcc33849ebb9bf128f6ff632b5ffe747.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ca4e04f2dcc33849ebb9bf128f6ff632b5ffe747.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   47700948a4abb4a5ae13ef943ff682a7f327547a
-commit: 725aea873261e8d986e527838fde2a721f0962d8 xtensa: enable KCSAN
-date:   7 weeks ago
-config: xtensa-randconfig-s031-20220617 (https://download.01.org/0day-ci/archive/20220617/202206171905.uDkZBJUr-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=725aea873261e8d986e527838fde2a721f0962d8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 725aea873261e8d986e527838fde2a721f0962d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=xtensa SHELL=/bin/bash
+On Thu, Jun 16, 2022 at 05:12:47PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2022-06-16 at 12:24 +0200, Peter Zijlstra wrote:
+> > On Thu, Jun 16, 2022 at 04:46:27AM -0400, Yang Weijiang wrote:
+> > > --- a/arch/x86/include/asm/cpu.h
+> > > +++ b/arch/x86/include/asm/cpu.h
+> > > @@ -74,7 +74,7 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+> > >   static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
+> > >   #endif
+> > >   
+> > > -extern __noendbr void cet_disable(void);
+> > > +extern __noendbr void ibt_disable(void);
+> > >   
+> > >   struct ucode_cpu_info;
+> > >   
+> > > diff --git a/arch/x86/kernel/cpu/common.c
+> > > b/arch/x86/kernel/cpu/common.c
+> > > index c296cb1c0113..86102a8d451e 100644
+> > > --- a/arch/x86/kernel/cpu/common.c
+> > > +++ b/arch/x86/kernel/cpu/common.c
+> > > @@ -598,23 +598,23 @@ __noendbr void ibt_restore(u64 save)
+> > >   
+> > > -__noendbr void cet_disable(void)
+> > > +__noendbr void ibt_disable(void)
+> > >   {
+> > >        if (cpu_feature_enabled(X86_FEATURE_IBT))
+> > >                wrmsrl(MSR_IA32_S_CET, 0);
+> > 
+> > Not sure about this rename; it really disables all of (S) CET.
+> > 
+> > Specifically, once we do S-SHSTK (after FRED) we might also very much
+> > need to kill that for kexec.
+> 
+> Sure, what about something like sup_cet_disable()?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> arch/xtensa/lib/kcsan-stubs.c:6:6: sparse: sparse: symbol '__atomic_store_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:11:5: sparse: sparse: symbol '__atomic_load_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:16:5: sparse: sparse: symbol '__atomic_exchange_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:21:6: sparse: sparse: symbol '__atomic_compare_exchange_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:26:5: sparse: sparse: symbol '__atomic_fetch_add_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:31:5: sparse: sparse: symbol '__atomic_fetch_sub_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:36:5: sparse: sparse: symbol '__atomic_fetch_and_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:41:5: sparse: sparse: symbol '__atomic_fetch_or_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:46:5: sparse: sparse: symbol '__atomic_fetch_xor_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:51:5: sparse: sparse: symbol '__atomic_fetch_nand_8' was not declared. Should it be static?
-
-vim +/__atomic_store_8 +6 arch/xtensa/lib/kcsan-stubs.c
-
-     5	
-   > 6	void __atomic_store_8(volatile void *p, u64 v, int i)
-     7	{
-     8		BUG();
-     9	}
-    10	
-  > 11	u64 __atomic_load_8(const volatile void *p, int i)
-    12	{
-    13		BUG();
-    14	}
-    15	
-  > 16	u64 __atomic_exchange_8(volatile void *p, u64 v, int i)
-    17	{
-    18		BUG();
-    19	}
-    20	
-  > 21	bool __atomic_compare_exchange_8(volatile void *p1, void *p2, u64 v, bool b, int i1, int i2)
-    22	{
-    23		BUG();
-    24	}
-    25	
-  > 26	u64 __atomic_fetch_add_8(volatile void *p, u64 v, int i)
-    27	{
-    28		BUG();
-    29	}
-    30	
-  > 31	u64 __atomic_fetch_sub_8(volatile void *p, u64 v, int i)
-    32	{
-    33		BUG();
-    34	}
-    35	
-  > 36	u64 __atomic_fetch_and_8(volatile void *p, u64 v, int i)
-    37	{
-    38		BUG();
-    39	}
-    40	
-  > 41	u64 __atomic_fetch_or_8(volatile void *p, u64 v, int i)
-    42	{
-    43		BUG();
-    44	}
-    45	
-  > 46	u64 __atomic_fetch_xor_8(volatile void *p, u64 v, int i)
-    47	{
-    48		BUG();
-    49	}
-    50	
-  > 51	u64 __atomic_fetch_nand_8(volatile void *p, u64 v, int i)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Why bother? Arguably kexec should clear U_CET too.

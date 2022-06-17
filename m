@@ -2,42 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CB654F260
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6E254F227
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380799AbiFQH7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        id S1380676AbiFQHp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380756AbiFQH71 (ORCPT
+        with ESMTP id S231145AbiFQHpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:59:27 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C4967D08;
-        Fri, 17 Jun 2022 00:59:25 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 59A38201FB5;
-        Fri, 17 Jun 2022 09:59:24 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C69AC201FA1;
-        Fri, 17 Jun 2022 09:59:23 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id E34651820F45;
-        Fri, 17 Jun 2022 15:59:21 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] ASoC: fsl_sai: Configure dataline/FIFO information from dts property
-Date:   Fri, 17 Jun 2022 15:44:37 +0800
-Message-Id: <1655451877-16382-8-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655451877-16382-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1655451877-16382-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Fri, 17 Jun 2022 03:45:24 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B05C674F5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:45:23 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id q140so3399347pgq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=UN5wKNbB+gVz0MX2GTcg6Rw1lsEc1tgfAUNNFpXQz3Y=;
+        b=Mswm1WvMrZVDLXyE4nWVJOH7IqmhFUOXGqh300G317e18kZuX1t4wJKQ2gBsonvfRB
+         YwdilqV6fdJSxYgeH95yKrzKmZ+p8GxvKPDteJH6dT01eS4vNcYW5SAvLZo7qyUzCRFQ
+         rZd2R40wgGsWGAcL5uCDewtjtGs5nwyODjBC138U6EF1DHtXb/Wq0m4XsdRV8LZ1QiP8
+         s8r3oXWvMtj2bQmNu8OmrvHIIf2XrLv8ImrkQTtPArxqHg+iRSoIFlQZFbP2CJKEovR3
+         cvzVH57cSbZinlmY8RX79059QZAiM7gflroH52frgUDpVctvoseuMzXnvuEEPNUY/5Ng
+         IPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=UN5wKNbB+gVz0MX2GTcg6Rw1lsEc1tgfAUNNFpXQz3Y=;
+        b=zxoY7b2T2F0BwVgMV6CU2yNJ7IV5lLHHoL3q5hJRul+oYmA/tRdjAMqcC8k6K0z7UJ
+         Z3bV4z3cMGJMujrp8iv8ZW2rOvJfBQsHcbBTylShFy7lxJBCnSa34ZhW0ZMwb1VOZhJc
+         3+7FYlrImFQmmGTxl6wp033bRGyt9ObakcqaAw24odprCJwBAfdUo/ZTmgq2XZGQQrCT
+         fNX9X48HUIx30gSgwJZDrXWYqWAOdasaUyjJ35o0EnYQYCRsZD0oosP2GmwU+cBwbWCe
+         gXy9WfXN9x/42nPXLcVpMI6z1Hq0Vrs3nNAigLf3aoRqlmEo9cbNCpqoavTikW3QV5Q+
+         7/cg==
+X-Gm-Message-State: AJIora/XxswRCy1caZenM4A6mvstNKWwOQdnFNnO4UkrGEhGm+D7foNQ
+        LR/CjBZ6xBo9AEZCkaj8QPcLbvf09Va4Gdm0
+X-Google-Smtp-Source: AGRyM1s01D2BJk6yQTd7SaCXZiVMvkVhiFRGRZTdE1735521WxT0x7F3MhFT2n0cfBSNbLgJDSS4zQ==
+X-Received: by 2002:a05:6a00:218c:b0:51c:c64:3f6a with SMTP id h12-20020a056a00218c00b0051c0c643f6amr8524810pfi.50.1655451922717;
+        Fri, 17 Jun 2022 00:45:22 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152077154.netvigator.com. [58.152.77.154])
+        by smtp.gmail.com with ESMTPSA id c5-20020a17090ab28500b001e88c4bb3dcsm4945443pjr.25.2022.06.17.00.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 00:45:22 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 15:45:17 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        German Gomez <german.gomez@arm.com>
+Subject: Re: [PATCH v2] perf test: Add ARM SPE system wide test
+Message-ID: <20220617074517.GB45710@leoy-ThinkPad-X240s>
+References: <20220616230546.1390813-1-namhyung@kernel.org>
+ <20220617073840.GA45710@leoy-ThinkPad-X240s>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220617073840.GA45710@leoy-ThinkPad-X240s>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,278 +82,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SAI has multiple successive FIFO registers, but in some use
-case the required dataline/FIFOs are not successive, so need
-get such information from dts property "fsl,dataline"
+On Fri, Jun 17, 2022 at 03:38:40PM +0800, Leo Yan wrote:
+> Hi Namhyung,
+> 
+> On Thu, Jun 16, 2022 at 04:05:46PM -0700, Namhyung Kim wrote:
+> 
+> [...]
+> 
+> > +arm_spe_system_wide_test() {
+> > +	echo "Recording trace with system-wide mode $perfdata"
+> > +	perf record -o ${perfdata} -e arm_spe// -a \
+> > +		-- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
+> > +
+> > +	if [ $? != 0 ]; then
+> > +		arm_spe_report "SPE system-wide testing" 2
+> > +		return
+> > +	fi
+> 
+> I am awared the root permission issue after I saw German's suggestion.
+> 
+> If the snapshot test is passed, no matter the system wide test is passed
+> or not, we will always return 0 for 'passed' result.  But we might miss
+> to capture the system-wide testing failure.
+> 
+> How about use 'dummy' event to verіfy the root permission?
+> (actually I referred to intel-pt test):
+> 
+>         perf record -o ${tmpfile} -B -N --no-bpf-event -e dummy:u -a true 2>&1 >/dev/null
 
-fsl,dataline has 3 values for each configuration:
-first one means the type: I2S(1) or DSD(2),
-second one is dataline mask for 'rx',
-third one is dataline mask for 'tx'.
+Sorry for typo, s/tmpfile/perfdata/
 
-Also set dma peripheral address and TRCE bits according to data lane.
-
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
----
- sound/soc/fsl/fsl_sai.c | 161 +++++++++++++++++++++++++++++++++++++++-
- sound/soc/fsl/fsl_sai.h |  17 +++++
- 2 files changed, 174 insertions(+), 4 deletions(-)
-
-diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-index 86aa0baba848..f5eabb0b10e8 100644
---- a/sound/soc/fsl/fsl_sai.c
-+++ b/sound/soc/fsl/fsl_sai.c
-@@ -487,13 +487,18 @@ static int fsl_sai_hw_params(struct snd_pcm_substream *substream,
- 	unsigned int ofs = sai->soc_data->reg_offset;
- 	bool tx = substream->stream == SNDRV_PCM_STREAM_PLAYBACK;
- 	unsigned int channels = params_channels(params);
-+	struct snd_dmaengine_dai_dma_data *dma_params;
-+	struct fsl_sai_dl_cfg *dl_cfg = sai->dl_cfg;
- 	u32 word_width = params_width(params);
-+	int trce_mask = 0, dl_cfg_idx = 0;
-+	int dl_cfg_cnt = sai->dl_cfg_cnt;
-+	u32 dl_type = FSL_SAI_DL_I2S;
- 	u32 val_cr4 = 0, val_cr5 = 0;
- 	u32 slots = (channels == 1) ? 2 : channels;
- 	u32 slot_width = word_width;
- 	int adir = tx ? RX : TX;
- 	u32 pins, bclk;
--	int ret;
-+	int ret, i;
- 
- 	if (sai->slots)
- 		slots = sai->slots;
-@@ -507,8 +512,22 @@ static int fsl_sai_hw_params(struct snd_pcm_substream *substream,
- 	 * PDM mode, channels are independent
- 	 * each channels are on one dataline/FIFO.
- 	 */
--	if (sai->is_pdm_mode)
-+	if (sai->is_pdm_mode) {
- 		pins = channels;
-+		dl_type = FSL_SAI_DL_PDM;
-+	}
-+
-+	for (i = 0; i < dl_cfg_cnt; i++) {
-+		if (dl_cfg[i].type == dl_type && dl_cfg[i].pins[tx] == pins) {
-+			dl_cfg_idx = i;
-+			break;
-+		}
-+	}
-+
-+	if (hweight8(dl_cfg[dl_cfg_idx].mask[tx]) < pins) {
-+		dev_err(cpu_dai->dev, "channel not supported\n");
-+		return -EINVAL;
-+	}
- 
- 	bclk = params_rate(params) * (sai->bclk_ratio ? sai->bclk_ratio : slots * slot_width);
- 
-@@ -571,13 +590,28 @@ static int fsl_sai_hw_params(struct snd_pcm_substream *substream,
- 				   FSL_SAI_CR5_FBT_MASK, val_cr5);
- 	}
- 
--	if (sai->soc_data->pins > 1)
-+	if (hweight8(dl_cfg[dl_cfg_idx].mask[tx]) <= 1)
-+		regmap_update_bits(sai->regmap, FSL_SAI_xCR4(tx, ofs),
-+				   FSL_SAI_CR4_FCOMB_MASK, 0);
-+	else
- 		regmap_update_bits(sai->regmap, FSL_SAI_xCR4(tx, ofs),
- 				   FSL_SAI_CR4_FCOMB_MASK, FSL_SAI_CR4_FCOMB_SOFT);
- 
-+	dma_params = tx ? &sai->dma_params_tx : &sai->dma_params_rx;
-+	dma_params->addr = sai->res->start + FSL_SAI_xDR0(tx) +
-+			   dl_cfg[dl_cfg_idx].start_off[tx] * 0x4;
-+
-+	/* Find a proper tcre setting */
-+	for (i = 0; i < sai->soc_data->pins; i++) {
-+		trce_mask = (1 << (i + 1)) - 1;
-+		if (hweight8(dl_cfg[dl_cfg_idx].mask[tx] & trce_mask) == pins)
-+			break;
-+	}
-+
- 	regmap_update_bits(sai->regmap, FSL_SAI_xCR3(tx, ofs),
- 			   FSL_SAI_CR3_TRCE_MASK,
--			   FSL_SAI_CR3_TRCE((1 << pins) - 1));
-+			   FSL_SAI_CR3_TRCE((dl_cfg[dl_cfg_idx].mask[tx] & trce_mask)));
-+
- 	regmap_update_bits(sai->regmap, FSL_SAI_xCR4(tx, ofs),
- 			   FSL_SAI_CR4_SYWD_MASK | FSL_SAI_CR4_FRSZ_MASK |
- 			   FSL_SAI_CR4_CHMOD_MASK,
-@@ -1068,6 +1102,118 @@ static int fsl_sai_check_version(struct device *dev)
- 	return 0;
- }
- 
-+/*
-+ * Calculate the offset between first two datalines, don't
-+ * different offset in one case.
-+ */
-+static unsigned int fsl_sai_calc_dl_off(unsigned long dl_mask)
-+{
-+	int fbidx, nbidx, offset;
-+
-+	fbidx = find_first_bit(&dl_mask, FSL_SAI_DL_NUM);
-+	nbidx = find_next_bit(&dl_mask, FSL_SAI_DL_NUM, fbidx + 1);
-+	offset = nbidx - fbidx - 1;
-+
-+	return (offset < 0 || offset >= (FSL_SAI_DL_NUM - 1) ? 0 : offset);
-+}
-+
-+/*
-+ * read the fsl,dataline property from dts file.
-+ * It has 3 value for each configuration, first one means the type:
-+ * I2S(1) or PDM(2), second one is dataline mask for 'rx', third one is
-+ * dataline mask for 'tx'. for example
-+ *
-+ * fsl,dataline = <1 0xff 0xff 2 0xff 0x11>,
-+ *
-+ * It means I2S type rx mask is 0xff, tx mask is 0xff, PDM type
-+ * rx mask is 0xff, tx mask is 0x11 (dataline 1 and 4 enabled).
-+ *
-+ */
-+static int fsl_sai_read_dlcfg(struct fsl_sai *sai)
-+{
-+	struct platform_device *pdev = sai->pdev;
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	int ret, elems, i, index, num_cfg;
-+	char *propname = "fsl,dataline";
-+	struct fsl_sai_dl_cfg *cfg;
-+	unsigned long dl_mask;
-+	unsigned int soc_dl;
-+	u32 rx, tx, type;
-+
-+	elems = of_property_count_u32_elems(np, propname);
-+
-+	if (elems <= 0) {
-+		elems = 0;
-+	} else if (elems % 3) {
-+		dev_err(dev, "Number of elements must be divisible to 3.\n");
-+		return -EINVAL;
-+	}
-+
-+	num_cfg = elems / 3;
-+	/*  Add one more for default value */
-+	cfg = devm_kzalloc(&pdev->dev, (num_cfg + 1) * sizeof(*cfg), GFP_KERNEL);
-+	if (!cfg)
-+		return -ENOMEM;
-+
-+	/* Consider default value "0 0xFF 0xFF" if property is missing */
-+	soc_dl = BIT(sai->soc_data->pins) - 1;
-+	cfg[0].type = FSL_SAI_DL_DEFAULT;
-+	cfg[0].pins[0] = sai->soc_data->pins;
-+	cfg[0].mask[0] = soc_dl;
-+	cfg[0].start_off[0] = 0;
-+	cfg[0].next_off[0] = 0;
-+
-+	cfg[0].pins[1] = sai->soc_data->pins;
-+	cfg[0].mask[1] = soc_dl;
-+	cfg[0].start_off[1] = 0;
-+	cfg[0].next_off[1] = 0;
-+	for (i = 1, index = 0; i < num_cfg + 1; i++) {
-+		/*
-+		 * type of dataline
-+		 * 0 means default mode
-+		 * 1 means I2S mode
-+		 * 2 means PDM mode
-+		 */
-+		ret = of_property_read_u32_index(np, propname, index++, &type);
-+		if (ret)
-+			return -EINVAL;
-+
-+		ret = of_property_read_u32_index(np, propname, index++, &rx);
-+		if (ret)
-+			return -EINVAL;
-+
-+		ret = of_property_read_u32_index(np, propname, index++, &tx);
-+		if (ret)
-+			return -EINVAL;
-+
-+		if ((rx & ~soc_dl) || (tx & ~soc_dl)) {
-+			dev_err(dev, "dataline cfg[%d] setting error, mask is 0x%x\n", i, soc_dl);
-+			return -EINVAL;
-+		}
-+
-+		rx = rx & soc_dl;
-+		tx = tx & soc_dl;
-+
-+		cfg[i].type = type;
-+		cfg[i].pins[0] = hweight8(rx);
-+		cfg[i].mask[0] = rx;
-+		dl_mask = rx;
-+		cfg[i].start_off[0] = find_first_bit(&dl_mask, FSL_SAI_DL_NUM);
-+		cfg[i].next_off[0] = fsl_sai_calc_dl_off(rx);
-+
-+		cfg[i].pins[1] = hweight8(tx);
-+		cfg[i].mask[1] = tx;
-+		dl_mask = tx;
-+		cfg[i].start_off[1] = find_first_bit(&dl_mask, FSL_SAI_DL_NUM);
-+		cfg[i].next_off[1] = fsl_sai_calc_dl_off(tx);
-+	}
-+
-+	sai->dl_cfg = cfg;
-+	sai->dl_cfg_cnt = num_cfg + 1;
-+	return 0;
-+}
-+
- static int fsl_sai_runtime_suspend(struct device *dev);
- static int fsl_sai_runtime_resume(struct device *dev);
- 
-@@ -1134,6 +1280,13 @@ static int fsl_sai_probe(struct platform_device *pdev)
- 	else
- 		sai->mclk_clk[0] = sai->bus_clk;
- 
-+	/* read dataline mask for rx and tx*/
-+	ret = fsl_sai_read_dlcfg(sai);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to read dlcfg %d\n", ret);
-+		return ret;
-+	}
-+
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return irq;
-diff --git a/sound/soc/fsl/fsl_sai.h b/sound/soc/fsl/fsl_sai.h
-index 4d657edc9c9f..9bb8ced520c8 100644
---- a/sound/soc/fsl/fsl_sai.h
-+++ b/sound/soc/fsl/fsl_sai.h
-@@ -218,6 +218,13 @@
- 
- #define PMQOS_CPU_LATENCY   BIT(0)
- 
-+/* Max number of dataline */
-+#define FSL_SAI_DL_NUM		(8)
-+/* default dataline type is zero */
-+#define FSL_SAI_DL_DEFAULT	(0)
-+#define FSL_SAI_DL_I2S		BIT(0)
-+#define FSL_SAI_DL_PDM		BIT(1)
-+
- struct fsl_sai_soc_data {
- 	bool use_imx_pcm;
- 	bool use_edma;
-@@ -253,6 +260,14 @@ struct fsl_sai_param {
- 	u32 dataline;
- };
- 
-+struct fsl_sai_dl_cfg {
-+	unsigned int type;
-+	unsigned int pins[2];
-+	unsigned int mask[2];
-+	unsigned int start_off[2];
-+	unsigned int next_off[2];
-+};
-+
- struct fsl_sai {
- 	struct platform_device *pdev;
- 	struct regmap *regmap;
-@@ -265,6 +280,8 @@ struct fsl_sai {
- 	bool is_dsp_mode;
- 	bool is_pdm_mode;
- 	bool synchronous[2];
-+	struct fsl_sai_dl_cfg *dl_cfg;
-+	unsigned int dl_cfg_cnt;
- 
- 	unsigned int mclk_id[2];
- 	unsigned int mclk_streams;
--- 
-2.17.1
-
+>         if [ $? != 0 ]; then
+>         	arm_spe_report "SPE system-wide testing" 2
+>         	return
+>         fi
+> 
+>         perf record -o ${perfdata} -e arm_spe// -a \
+>                   -- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1

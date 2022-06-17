@@ -2,202 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F19454F865
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4496B54F86A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382184AbiFQNjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S1382222AbiFQNjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381935AbiFQNjB (ORCPT
+        with ESMTP id S1381935AbiFQNjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:39:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3740B480
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:39:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6546FB829AC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86858C3411B;
-        Fri, 17 Jun 2022 13:38:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mJCSzTS8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655473135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=the0bHwmSoyiH9hzlVaC5HDxQSTmKiYgUbnNqfXQJ74=;
-        b=mJCSzTS8VnEhrIOGqy50ZTbQKlkAVYjcKIagLTlBxn8X5c/0rz24UufNxFEBDpI3QfEJoq
-        cFD2gHZEN3DY1Kk4A+NLsDjM3QuD4WdS3ChU0bMqcz5T+OsDf9XVysCq6TieptNnlZYkQH
-        wVYNFsBiCzJFwQ60YEuWeQJGCnDDm0k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0fc50dcf (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 17 Jun 2022 13:38:54 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>, Marco Elver <elver@google.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] printk: allow direct console printing to be enabled always
-Date:   Fri, 17 Jun 2022 15:38:47 +0200
-Message-Id: <20220617133847.27517-1-Jason@zx2c4.com>
-In-Reply-To: <YqyDqMAPHIxjA/xZ@zx2c4.com>
-References: <YqyDqMAPHIxjA/xZ@zx2c4.com>
+        Fri, 17 Jun 2022 09:39:33 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE42035ABE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=UxXwnBTVP+hXIdrxywvN/ZF4FUN+kuwYD7W1LwoNzUE=; b=VEqcQ2t043UltzkOLxCjThX5NC
+        4HtFZnxQs60JKp8jg5YP/6eLMz0gVkW2XHCl7F/2jiqeBHEtRKnBJFq+BcgjOcy+L2nEs8Bhtzpg0
+        LuqwhHrQlqJzMAM3ZaUQWhbt19eGZCy65/EHLewTypq+LCSnqjOVO8zWDcbR6kahgW+B7eo4sTs1l
+        ZcXwQBLcXtcY/PlFdf8zxChI4bhFeCWIzP8si6AsuOTUNUO3QF9neDCGLOaRexgjM2fMldn3XmPoo
+        Cvd2eFZdsNosupWkoYgdD1UDN2TH7GBYlv9Kvh4t0I/A1HQBZbOBw6XERRGZPlZ1vwfil7khCouuR
+        V086A++A==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2CC6-008hZD-NF; Fri, 17 Jun 2022 13:39:27 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 52EB69816B5; Fri, 17 Jun 2022 15:39:26 +0200 (CEST)
+Date:   Fri, 17 Jun 2022 15:39:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [PATCH] locking/lockdep: Fix lockdep_init_map_*() confusion
+Message-ID: <YqyEDtoan20K0CVD@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 5.19, there are some changes in printk message ordering /
-interleaving which leads to confusion. The most obvious (and benign)
-example appears on system boot, in which the "Run /init as init process"
-message gets intermixed with the messages that init actually writes() to
-stdout. For example, here's a snippet from build.wireguard.com:
 
-    [    0.469732] Freeing unused kernel image (initmem) memory: 4576K
-    [    0.469738] Write protecting the kernel read-only data: 10240k
-    [    0.473823] Freeing unused kernel image (text/rodata gap) memory: 2044K
-    [    0.475228] Freeing unused kernel image (rodata/data gap) memory: 1136K
-    [    0.475236] Run /init as init process
+Commit dfd5e3f5fe27 ("locking/lockdep: Mark local_lock_t") added yet
+another lockdep_init_map_*() variant, but forgot to update all the
+existing users of the most complicated version.
 
-        WireGuard Test Suite on Linux 5.19.0-rc2+ x86_64
+This could lead to a loss of lock_type and hence an incorrect report.
+Given the relative rarity of both local_lock and these annotations,
+this is unlikely to happen in practise, still, best fix things.
 
-    [+] Mounting filesystems...
-    [+] Module self-tests:
-     *  allowedips self-tests: pass
-     *  nonce counter self-tests: pass
-     *  ratelimiter self-tests: pass
-    [+] Enabling logging...
-    [+] Launching tests...
-    [    0.475237]   with arguments:
-    [    0.475238]     /init
-    [    0.475238]   with environment:
-    [    0.475239]     HOME=/
-    [    0.475240]     TERM=linux
-    [+] ip netns add wg-test-46-0
-    [+] ip netns add wg-test-46-1
-
-Before the "with arguments:" and such would print prior to the
-"wireguard test suite on linux 5.19" banner. Now it shows after.
-
-I see the same thing with "Freeing unused kernel image (text/rodata gap)
-memory" printing interwoven into the console of my initramfs on my
-laptop. And so forth.
-
-But the bigger issue for me is that it makes it very confusing to
-interpret CI results later on. Prior, I would nice a nice correlation
-of:
-
-[+] some userspace command
-[    1.2345 ] some kernel log output
-[+] some userspace command
-[    1.2346 ] some kernel log output
-[+] some userspace command
-[    1.2347 ] some kernel log output
-
-Now, the kernel log outputs are all over the place and out of order with
-the sequence of commands. This makes debugging issues somewhat tricky,
-because post hoc ergo propter hoc winds up being a good intuition to
-follow when tracking down bugs, and now the post hoc part is muddled.
-
-This is caused by threaded printk. In order to restore this in debugging
-sessions and in CI, this commit adds the ability to always use direct
-printk, either set by default at compile time, or overridden with a
-runtime command line switch.
-
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Marco Elver <elver@google.com>
-Fixes: 09c5ba0aa2fc ("printk: add kthread console printers")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: dfd5e3f5fe27 ("locking/lockdep: Mark local_lock_t")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  8 ++++++++
- init/Kconfig                                    | 12 ++++++++++++
- kernel/printk/printk.c                          | 12 ++++++++++++
- 3 files changed, 32 insertions(+)
+ include/linux/lockdep.h  |   30 +++++++++++++++++-------------
+ kernel/locking/lockdep.c |    7 ++++---
+ 2 files changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 8090130b544b..a960c47a2002 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4389,6 +4389,14 @@
- 	printk.time=	Show timing data prefixed to each printk message line
- 			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
- 
-+	printk.always_direct=
-+			Rather than using kthreads for printk output, always
-+			write to the console immediately. This has performance
-+			implications, but will result in a more faithful
-+			ordering and interleaving with other processes writing
-+			to the console.
-+			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
-+
- 	processor.max_cstate=	[HW,ACPI]
- 			Limit processor to maximum C-state
- 			max_cstate=9 overrides any DMI blacklist limit.
-diff --git a/init/Kconfig b/init/Kconfig
-index c7900e8975f1..7676897f2321 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -798,6 +798,18 @@ config PRINTK_INDEX
- 
- 	  There is no additional runtime cost to printk with this enabled.
- 
-+config PRINTK_ALWAYS_DIRECT
-+	bool "Flush printk output immediately"
-+	depends on PRINTK
-+	help
-+	  Rather than using kthreads for printk output, always write to the
-+	  console immediately. This has performance implications, but will
-+	  result in a more faithful ordering and interleaving with other
-+	  processes writing to the console.
-+
-+	  Say N here unless you really need this. This may also be controlled
-+	  at boot time with printk.always_direct=0/1.
-+
- #
- # Architectures with an unreliable sched_clock() should select this:
- #
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index ea3dd55709e7..d9f419a88429 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -178,6 +178,14 @@ static int __init control_devkmsg(char *str)
- }
- __setup("printk.devkmsg=", control_devkmsg);
- 
-+static bool always_direct_printk = IS_ENABLED(CONFIG_PRINTK_ALWAYS_DIRECT);
-+
-+static int __init control_always_direct_printk(char *str)
-+{
-+	return kstrtobool(str, &always_direct_printk);
-+}
-+__setup("printk.always_direct=", control_always_direct_printk);
-+
- char devkmsg_log_str[DEVKMSG_STR_MAX_SIZE] = "ratelimit";
- #if defined(CONFIG_PRINTK) && defined(CONFIG_SYSCTL)
- int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
-@@ -471,6 +479,10 @@ void printk_prefer_direct_exit(void)
-  */
- static inline bool allow_direct_printing(void)
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -188,7 +188,7 @@ static inline void
+ lockdep_init_map_waits(struct lockdep_map *lock, const char *name,
+ 		       struct lock_class_key *key, int subclass, u8 inner, u8 outer)
  {
-+	/* If the user has explicitly enabled this to be on always. */
-+	if (always_direct_printk)
-+		return true;
-+
- 	/*
- 	 * Checking kthread availability is a possible race because the
- 	 * kthread printers can become permanently disabled during runtime.
--- 
-2.35.1
-
+-	lockdep_init_map_type(lock, name, key, subclass, inner, LD_WAIT_INV, LD_LOCK_NORMAL);
++	lockdep_init_map_type(lock, name, key, subclass, inner, outer, LD_LOCK_NORMAL);
+ }
+ 
+ static inline void
+@@ -211,24 +211,28 @@ static inline void lockdep_init_map(stru
+  * or they are too narrow (they suffer from a false class-split):
+  */
+ #define lockdep_set_class(lock, key)				\
+-	lockdep_init_map_waits(&(lock)->dep_map, #key, key, 0,	\
+-			       (lock)->dep_map.wait_type_inner,	\
+-			       (lock)->dep_map.wait_type_outer)
++	lockdep_init_map_type(&(lock)->dep_map, #key, key, 0,	\
++			      (lock)->dep_map.wait_type_inner,	\
++			      (lock)->dep_map.wait_type_outer,	\
++			      (lock)->dep_map.lock_type)
+ 
+ #define lockdep_set_class_and_name(lock, key, name)		\
+-	lockdep_init_map_waits(&(lock)->dep_map, name, key, 0,	\
+-			       (lock)->dep_map.wait_type_inner,	\
+-			       (lock)->dep_map.wait_type_outer)
++	lockdep_init_map_type(&(lock)->dep_map, name, key, 0,	\
++			      (lock)->dep_map.wait_type_inner,	\
++			      (lock)->dep_map.wait_type_outer,	\
++			      (lock)->dep_map.lock_type)
+ 
+ #define lockdep_set_class_and_subclass(lock, key, sub)		\
+-	lockdep_init_map_waits(&(lock)->dep_map, #key, key, sub,\
+-			       (lock)->dep_map.wait_type_inner,	\
+-			       (lock)->dep_map.wait_type_outer)
++	lockdep_init_map_type(&(lock)->dep_map, #key, key, sub,	\
++			      (lock)->dep_map.wait_type_inner,	\
++			      (lock)->dep_map.wait_type_outer,	\
++			      (lock)->dep_map.lock_type)
+ 
+ #define lockdep_set_subclass(lock, sub)					\
+-	lockdep_init_map_waits(&(lock)->dep_map, #lock, (lock)->dep_map.key, sub,\
+-			       (lock)->dep_map.wait_type_inner,		\
+-			       (lock)->dep_map.wait_type_outer)
++	lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key, sub,\
++			      (lock)->dep_map.wait_type_inner,		\
++			      (lock)->dep_map.wait_type_outer,		\
++			      (lock)->dep_map.lock_type)
+ 
+ #define lockdep_set_novalidate_class(lock) \
+ 	lockdep_set_class_and_name(lock, &__lockdep_no_validate__, #lock)
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -5238,9 +5238,10 @@ __lock_set_class(struct lockdep_map *loc
+ 		return 0;
+ 	}
+ 
+-	lockdep_init_map_waits(lock, name, key, 0,
+-			       lock->wait_type_inner,
+-			       lock->wait_type_outer);
++	lockdep_init_map_type(lock, name, key, 0,
++			      lock->wait_type_inner,
++			      lock->wait_type_outer,
++			      lock->lock_type);
+ 	class = register_lock_class(lock, subclass, 0);
+ 	hlock->class_idx = class - lock_classes;
+ 

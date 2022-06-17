@@ -2,123 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEFE54FE4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1FD54FE69
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242313AbiFQU1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S241449AbiFQU34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiFQU1q (ORCPT
+        with ESMTP id S229952AbiFQU3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:27:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E722DEF8;
-        Fri, 17 Jun 2022 13:27:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 069B362020;
-        Fri, 17 Jun 2022 20:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C76E9C3411B;
-        Fri, 17 Jun 2022 20:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655497664;
-        bh=1h7MPvCH+0ac659Y59O+LN7H9yf7FDL7AzRyBezl7Ms=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vAdK1iR7a1WmLfVx5wRu4og+zBfk6P1uN39+gS6uvwC1k/3eefV6ILqmVxxWnZygQ
-         bBBOoIxihb0QmMQWOSV4VTF/L2bWEchyx/e//N/c6pYQvi8xU2lKBgwnYRqy701IKG
-         ssin1X/FApCNiJh7UqRMIBdBF9N8dHd9ROFutNCfyAobYjQv5VoAedCEVbGiDMcB6b
-         oU7ul27EaaCoZMvopX6aBu27/m86c8BzFJVWs6TSb4O8xF5Q/pWYL/CNBCGDGXrx4S
-         rgd2ceX8FSUrsv+DobF4lumuhsMka6+CtL70oaOV8GR5nfOmNwERtvTdMDNEnMURGm
-         v2a45NA/RU2YA==
-Date:   Fri, 17 Jun 2022 14:27:40 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
- regions"
-Message-ID: <YqzjvO34ebaRpraz@kbusch-mbp.dhcp.thefacebook.com>
-References: <YqkeF2uqAyyxiZrQ@kbusch-mbp.dhcp.thefacebook.com>
- <20220615151100.GA937185@bhelgaas>
+        Fri, 17 Jun 2022 16:29:54 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463365C667;
+        Fri, 17 Jun 2022 13:29:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GSP+4iogq+TFLoNY5uQODqxcaOwKchkxJvKyMcPW7ChkKOKLlI0S3m9PoUEDKbpRsRSSLrxzgRuAqHvsZtFuz7sv9AyXzsek7lOVwQQnJ/HLHzm1ORI7pd9ApPTa08Yu0EVQDyqe3MLw1vsH8NF80GE++z3jhB8lOz471u7WWVXKFmQkGnoViY6byntF4rVtAwQVIkNupkyVYVH//JqciXsqU6Rht7UUZ8bgMcm/jC/ob7gQE3F+jo8QAigJUtcVtjv19W9s40MAphLYSCWtqaVymDqdU2DlQBpTNfS5IBbrQulENwCmjetKiHe9uGhaKv03rfreKpDUPNgk7gHWFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h71o3MzoDzF3LLHXKe1qKHVG9WVQKO/eyAIcHygqIMo=;
+ b=J/R0I59PG/NNb7DVhjCtdmfAr1QZqVoEkCwAxZHV4kkUueJnuewkgMP7UKdKeXWRMnraV4pwpcafbMOdB0s9yLdRyicLbqtj2ZMRT4WjRL7ykrR0PWoPhTtYEhB6JiQlT4tXAItvaHuAzCDpQ7V7JpICbHl9qKLs50zyDj3L6aKCbKpLXwfBhN6hYxIF0FJGUINyB8J9hnCvrApQJLmHl08X02u0dhXBEtvnmBcw348VK5hHEhZqaoGlZN7Irm2NG6Q2vWbmoj6HM6SgTLPxbVo9mk6mXG5zBadEVxRAfvclpZwvjUkgWrP+pNtDt+2lBJrPSZ31w7DgSHEz9DHFxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h71o3MzoDzF3LLHXKe1qKHVG9WVQKO/eyAIcHygqIMo=;
+ b=hs7Hxx06Cl9SF3NVQdxIoYXjyKgfKy/9w06xnNt0oaguAyeSl0p93r6BY3JfGb3/7YuDcGvYIiRlOwaaNE/VPnk3T/DhIaKI57i8gawZgWTkGj9Wo8tAAJJP5D0FOZ4KCL7TnBSk3F9SGQO79UnWVn88Y+BfjS7Oyr0I4SBuS2M=
+Received: from BN8PR04CA0063.namprd04.prod.outlook.com (2603:10b6:408:d4::37)
+ by DM5PR12MB1210.namprd12.prod.outlook.com (2603:10b6:3:75::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.19; Fri, 17 Jun 2022 20:29:51 +0000
+Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:d4:cafe::b6) by BN8PR04CA0063.outlook.office365.com
+ (2603:10b6:408:d4::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15 via Frontend
+ Transport; Fri, 17 Jun 2022 20:29:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Fri, 17 Jun 2022 20:29:51 +0000
+Received: from BLR-5CG1345Z9Y.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 17 Jun
+ 2022 15:29:48 -0500
+From:   Kalpana Shetty <kalpana.shetty@amd.com>
+To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Kalpana Shetty <kalpana.shetty@amd.com>
+Subject: [PATCH V4] selftests/vm: Add protection_keys tests to run_vmtests
+Date:   Sat, 18 Jun 2022 01:59:31 +0530
+Message-ID: <20220617202931.357-1-kalpana.shetty@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615151100.GA937185@bhelgaas>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fec8738d-2d02-467c-895b-08da50a0219c
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1210:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1210BC11A4EC8705886E24DF8CAF9@DM5PR12MB1210.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KhykEKRTA6hShTR3G8CNwJaJCyku4SFFhP4KN4L6NxsGtIpPqIJXqHmrbAJFjTZ4R8uDOTEagzJufdrthR9WrZJQyEQtAg2zijsvMJeCUsg0VousraNrYZBO0AyP8PZkrlEYjLyqQDVXlzMZCgj0fdwz9hqbIVO+9gxSFoNoc9jmx4zDHSxmHkKoR0h/LoEI791poilABV1T4YcCnI2U3/8CXvWXFoH+zbOQFVg8dvoofxUd1lXmb2R6eKo/jMUkfgsBOjFj+CPGw5NPOHL5nVwit3Iw5JecbT0fkmTL505qSv6mx4fwARClVhGQMvFtr31g1SNcO0IJxHB75NPWRwapHxHo8QGPhARmfSfvPtJgHpdtZY9Mqi/baZfosS3XE76QHx1rlmaLAmjlPPf8dIejIas8JKW5x8zf76zdybjgDmg7gFfgnyjS6qD+A/9nuoCTG4K43F5SpLY5HpBwhK/vMuaIFs0DKB55iwOBj7kMvgd8+lmTKVVrK6TJQRoO7fNR22lS4KPpJJ5JpUzfnbxtfB7eGc3ZOyoROFjOXx7/3+zNElOOvI6JgXVnJjSa+qWPot755THSgyal8lyJ2YoStfbHHtSZDpItNQkRWsAThCjyv7YTeCaZ3tjtGNczrFkkGfsjHLikmOFZhuZDiuNnAT+4QlPIeSRvapVuhxQJukqhDdiwRSBpUv00hVRh67pKXE2irmZo0BRQ32jcv8K6uMNROKthnTZg68kzwRw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(46966006)(36840700001)(40470700004)(26005)(70586007)(8676002)(70206006)(110136005)(186003)(426003)(1076003)(4326008)(336012)(8936002)(356005)(16526019)(47076005)(2616005)(7696005)(86362001)(82310400005)(316002)(2906002)(5660300002)(6666004)(40460700003)(36756003)(4744005)(498600001)(36860700001)(81166007)(44832011)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 20:29:51.4461
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fec8738d-2d02-467c-895b-08da50a0219c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1210
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:11:00AM -0500, Bjorn Helgaas wrote:
-> On Tue, Jun 14, 2022 at 04:47:35PM -0700, Keith Busch wrote:
-> > On Tue, Jun 14, 2022 at 06:01:28PM -0500, Bjorn Helgaas wrote:
-> > > [+cc NVMe folks]
-> > > 
-> > > On Tue, Jun 14, 2022 at 07:49:27PM -0300, Guilherme G. Piccoli wrote:
-> > > > On 14/06/2022 12:47, Hans de Goede wrote:
-> > > > > [...]
-> > > > > 
-> > > > > Have you looked at the log of the failed boot in the Steam Deck kernel
-> > > > > bugzilla? Everything there seems to work just fine and then the system
-> > > > > just hangs. I think that maybe it cannot find its root disk, so maybe
-> > > > > an NVME issue ?
-> > > > 
-> > > > *Exactly* that - NVMe device is the root disk, it cannot boot since the
-> > > > device doesn't work, hence no rootfs =)
-> > > 
-> > > Beginning of thread: https://lore.kernel.org/r/20220612144325.85366-1-hdegoede@redhat.com
-> > > 
-> > > Steam Deck broke because we erroneously trimmed out the PCI host
-> > > bridge window where BIOS had placed most devices, successfully
-> > > reassigned all the PCI bridge windows and BARs, but some devices,
-> > > apparently including NVMe, didn't work at the new addresses.
-> > > 
-> > > Do you NVMe folks know of gotchas in this area?  I want to know
-> > > because we'd like to be able to move devices around someday to
-> > > make room for hot-added devices.
-> > > 
-> > > This reassignment happened before drivers claimed the devices, so
-> > > from a PCI point of view, I don't know why the NVMe device
-> > > wouldn't work at the new address.
-> > 
-> > The probe status quickly returns ENODEV. Based on the output (we
-> > don't log much, so this is just an educated guesss), I think that
-> > means the driver read all F's from the status register, which
-> > indicates we can't read it when using the reassigned memory window.
-> > 
-> > Why changing memory windows may not work tends to be platform or
-> > device specific. Considering the renumbered windows didn't cause a
-> > problem for other devices, it sounds like this nvme device may be
-> > broken.
-> 
-> It sounds like you've seen this sort of problem before, so we
-> shouldn't assume that it's safe to reassign BARs.
+Adding "protected_keys" tests to "run_vmtests.sh" would help out to run all VM related tests
+from a single shell script.
 
-I haven't seen this type of problem in years, but as I recall, it was always
-low-end consumer crap that couldn't deal with changing BARs; you're stuck with
-whatever was set after it was initially powered on. The PCI topology will
-reflect the expected renumbering, but whatever is happening on the other side
-of the PCI function seems to be unaware of the change.
+Signed-off-by: Kalpana Shetty <kalpana.shetty@amd.com>
+---
+Changes in V4:
+ Shuah Khan's review comments incorporated, added -x executable check.
+
+ tools/testing/selftests/vm/run_vmtests.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index 41fce8bea929..61b1ca129a30 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -179,4 +179,15 @@ run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+ run_test ./ksm_tests -N -m 0
+ 
++# protection_keys tests
++if [ -x ./protection_keys_32 ]
++then
++	run_test ./protection_keys_32
++fi
++
++if [ -x ./protection_keys_64 ]
++then
++	run_test ./protection_keys_64
++fi
++
+ exit $exitcode
+-- 
+2.25.1
+

@@ -2,212 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD054F689
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF2754F68B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381339AbiFQLQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S235272AbiFQLSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbiFQLQD (ORCPT
+        with ESMTP id S232020AbiFQLSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:16:03 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5033396A4;
-        Fri, 17 Jun 2022 04:16:01 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id r5so4201570iod.5;
-        Fri, 17 Jun 2022 04:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=t/crlnZbBJQszYNcH9+aCU70dM7HBkp9N2s5QyPNLUk=;
-        b=KjYSoJjQbHSzBiIh2OvctpgUON2u4IbMNHkuAcnrPX5S/8O+2ZqVL+M1OTWti1TgGE
-         U3a+c0waowlN8KRIlHNwYNlX5PWBWecrqUFBF2t3EinouRe/3mJ3rUJmCVzpd4yKgyB7
-         XAQjJrF5yzz/4IN635jYJA6DDgneEYjQIzB19Mv89dJJg1k3jF0EPSbZbfZy8eD5BmJv
-         umqzL5gXktsRNmAiumwyLQQIsRbOm0kcPe2HywZwOMl/bFqj4uo9yMOhxmtIYtFNnKfx
-         7kpkppI8wiEpDGOFh8+AmBeXhAgGr/cVeZamCja94WfRWTAgXgfTFpQckCHWWnOziQwd
-         aSfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=t/crlnZbBJQszYNcH9+aCU70dM7HBkp9N2s5QyPNLUk=;
-        b=TyvS4Hg5PaPKIeL+IPDHhrLjZ1QpCeAgSHQyRPf/Te+nnXYV0t9tpzqCMiw6Hrj+L+
-         /0DArzInyJpZnR4IirXK7KOVxVSgk989AcW+ficZwlAlKMuxfpuQnzs+gGz9jlnlGcFp
-         60Bz/0J+NmRA1fXdXyAHtbuuAL1rlzzHIbczN1TEIXgKOQqoYgZG5NmOyv6kjJpOiL1T
-         W1FA0EjfI8TDX6LPfXcRQCjCZyd0xq2BaytQUPLNi3PRVb0vqhAiqP6Yq/0L7iDVp9yS
-         OSAU1XgwlgLlIg1BNmg/Ut4lWnlTcTpeP5Ge2p0EzWPyE7BLnyZFq3cMDak8+Kz1AWuu
-         +PkA==
-X-Gm-Message-State: AJIora8JdPKjZKanrsTptkI7uuM+GRRnOS41VGX3ho7FUITmWczyzSXD
-        rGzVDsDUlvHflZKJH91paogNLRJiluimSJPGCuk=
-X-Google-Smtp-Source: AGRyM1tFKZjYJUHdgUMGn9EB6+U2f/oxJq7gDzAwy6h/11fXVSFDBb4uXbC7kjFkRKwg/y/yQilyfk1BrMK1DcJRUUI=
-X-Received: by 2002:a5d:9d8d:0:b0:669:cd5e:f953 with SMTP id
- ay13-20020a5d9d8d000000b00669cd5ef953mr4655343iob.153.1655464561141; Fri, 17
- Jun 2022 04:16:01 -0700 (PDT)
+        Fri, 17 Jun 2022 07:18:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CEB34CD63
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:18:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E29FD113E;
+        Fri, 17 Jun 2022 04:17:59 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF7333F73B;
+        Fri, 17 Jun 2022 04:17:57 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 12:16:47 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
+ core/thread from /cpu-map
+Message-ID: <20220617111647.62hsqbpl3bk7xb2y@bogus>
+References: <20220525081416.3306043-14-sudeep.holla@arm.com>
+ <20220525081416.3306043-15-sudeep.holla@arm.com>
+ <20220525081416.3306043-16-sudeep.holla@arm.com>
+ <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
+ <20220606102159.dduxmvq4m2fm6gks@bogus>
+ <CAKfTPtB8iPzEXipsJqNtd9-aJMKx-FAaiGMzOg58HgRQuo39iA@mail.gmail.com>
+ <20220610102753.virkx47uyfsojol6@bogus>
+ <af7d6f49-09c5-6e60-988c-51c3c7c04d96@arm.com>
+ <20220613111743.3od6a5dyyogad4ay@bogus>
+ <73574a8f-5c72-8f7e-3dc4-42493131681e@arm.com>
 MIME-Version: 1.0
-References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-7-peterwu.pub@gmail.com>
- <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 17 Jun 2022 19:15:49 +0800
-Message-ID: <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
-To:     Rob Herring <robh@kernel.org>
-Cc:     pavel@ucw.cz, robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, szunichen@gmail.com,
-        lars@metafoo.de, matthias.bgg@gmail.com,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        lee.jones@linaro.org, ChiYuan Huang <cy_huang@richtek.com>,
-        linux-leds@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        jingoohan1@gmail.com, devicetree@vger.kernel.org, jic23@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73574a8f-5c72-8f7e-3dc4-42493131681e@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=8813=E6=97=A5 =
-=E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A9:33=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Mon, 13 Jun 2022 19:11:37 +0800, ChiaEn Wu wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add Mediatek MT6370 binding documentation.
-> >
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
-> >  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
-> >  2 files changed, 297 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt63=
-70.yaml
-> >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> ./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable to f=
-ind schema file matching $id: http://devicetree.org/schemas/leds/backlight/=
-mediatek,mt6370-backlight.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/=
-mediatek,mt6370.example.dtb: pmic@34: backlight: False schema does not allo=
-w {'compatible': ['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use'=
-: b'\x0f'}
->         From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/mfd/mediatek,mt6370.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/=
-mediatek,mt6370.example.dtb: pmic@34: charger: False schema does not allow =
-{'compatible': ['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]]=
-, 'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels': [[1,=
- 5]], 'usb-otg-vbus-regulator': {'regulator-name': ['mt6370-usb-otg-vbus'],=
- 'regulator-min-microvolt': [[4350000]], 'regulator-max-microvolt': [[58000=
-00]], 'regulator-min-microamp': [[500000]], 'regulator-max-microamp': [[300=
-0000]], 'phandle': [[2]]}}
->         From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/mfd/mediatek,mt6370.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/=
-mediatek,mt6370.example.dtb: pmic@34: tcpc: False schema does not allow {'c=
-ompatible': ['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, =
-4, 8]], 'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C']=
-, 'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'], 'try=
--power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos': [[570527=
-944]], 'op-sink-microwatt': [[10000000]], 'ports': {'#address-cells': [[1]]=
-, '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpo=
-int': [[4294967295]]}}, 'port@1': {'reg': [[1]], 'endpoint': {'remote-endpo=
-int': [[4294967295]]}}, 'port@2': {'reg': [[2]], 'endpoint': {'remote-endpo=
-int': [[4294967295]]}}}}}
->         From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/mfd/mediatek,mt6370.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/=
-mediatek,mt6370.example.dtb: pmic@34: indicator: False schema does not allo=
-w {'compatible': ['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#=
-size-cells': [[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator']=
-, 'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells': [[1]], '=
-#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]}, 'led@1': {'re=
-g': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]], 'color': [[3]]}}, 'led@=
-3': {'reg': [[3]], 'function': ['indicator'], 'color': [[0]], 'led-max-micr=
-oamp': [[6000]]}}
->         From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/mfd/mediatek,mt6370.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/=
-mediatek,mt6370.example.dtb: pmic@34: flashlight: False schema does not all=
-ow {'compatible': ['mediatek,mt6370-flashlight'], '#address-cells': [[1]], =
-'#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]], 'functi=
-on': ['flash'], 'color': [[0]], 'function-enumerator': [[1]], 'led-max-micr=
-oamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us'=
-: [[1248000]]}, 'led@1': {'reg': [[1]], 'led-sources': [[1]], 'function': [=
-'flash'], 'color': [[0]], 'function-enumerator': [[2]], 'led-max-microamp':=
- [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[12=
-48000]]}}
->         From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/mfd/mediatek,mt6370.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/=
-mediatek,mt6370.example.dtb: backlight: mediatek,bled-channel-use: b'\x0f' =
-is not of type 'object', 'array', 'boolean', 'null'
->         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/sch=
-emas/dt-core.yaml
-> Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /e=
-xample-0/i2c/pmic@34/backlight: failed to match any schema with compatible:=
- ['mediatek,mt6370-backlight']
-> Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /e=
-xample-0/i2c/pmic@34/charger: failed to match any schema with compatible: [=
-'mediatek,mt6370-charger']
-> Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /e=
-xample-0/i2c/pmic@34/indicator: failed to match any schema with compatible:=
- ['mediatek,mt6370-indicator']
-> Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /e=
-xample-0/i2c/pmic@34/flashlight: failed to match any schema with compatible=
-: ['mediatek,mt6370-flashlight']
-> Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /e=
-xample-0/i2c/pmic@34/tcpc: failed to match any schema with compatible: ['me=
-diatek,mt6370-tcpc']
+On Thu, Jun 16, 2022 at 05:02:28PM +0100, Dietmar Eggemann wrote:
+> On 13/06/2022 12:17, Sudeep Holla wrote:
+> > On Mon, Jun 13, 2022 at 11:19:36AM +0200, Dietmar Eggemann wrote:
+> >> On 10/06/2022 12:27, Sudeep Holla wrote:
+> >>> On Fri, Jun 10, 2022 at 12:08:44PM +0200, Vincent Guittot wrote:
+> >>>> On Mon, 6 Jun 2022 at 12:22, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> 
+> [...]
+> 
+> >>> Again I completely disagree. Let us look at the problems separately.
+> >>> The hardware topology that some of the tools like lscpu and lstopo expects
+> >>> what the hardware looks like and not the scheduler's view of the hardware.
+> >>> So the topology masks that gets exposed to the user-space needs fixing
+> >>> even today. I have reports from various tooling people about the same.
+> >>> E.g. Juno getting exposed as dual socket system is utter non-sense.
+> >>>
+> >>> Yes scheduler uses most of the topology masks as is but that is not a must.
+> >>> There are these *group_mask functions that can implement what scheduler
+> >>> needs to be fed.
+> >>>
+> >>> I am not sure why the 2 issues are getting mixed up and that is the main
+> >>> reason why I jumped into this to make sure the topology masks are
+> >>> not tampered based on the way it needs to be used for scheduler.
+> >>
+> >> I'm all in favor of not mixing up those 2 issues. But I don't understand
+> >> why you have to glue them together.
+> >>
+> > 
+> > What are you referring as 'glue them together'. As I said this series just
+> > address the hardware topology and if there is any impact on sched domains
+> > then it is do with alignment with ACPI and DT platform behaviour. I am not
+> > adding anything more to glue topology and info needed for sched domains.
+> 
+> You can fix (1) without (2) parsing 1. level cluster nodes as
+> cluster_siblings.
 >
 
-Before we submitted these patches, we had already checked by running
-this command below,
-"make DT_CHECKER_FLAGS=3D-m dt_binding_check
-DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/mfd/mediatek,mt6370.yam=
-l".
-But we could not find any errors like your error msg after the checking pro=
-cess.
+Technically yes, but I see no point in delaying it as it is considered as
+broken with respect to the moment ACPI exposed the correct value and at the
+same time resulted in exposing incorrect value in case of DT. I am referring
+to the same change that introduced SCHED_CLUSTER. The damage is done and it
+needs repairing ASAP.
 
-Our mfd dt-binding patch is dependent on "backlight dt-binding",
-"charger dt-binding", "tcpc dt-binding", "indicator dt-binding" and
-"flashlight dt-binding" patches.
-Would you please apply them before you check mfd dt-binding patch?
-Thank you so much!
+> > Indeed. But I don't get what you mean by 2 level here. ACPI puts 1st level
+> 
+> cpu_map {
+>   socket0 {
+>     cluster0 {    <-- 1. level cluster
+>       cluster0 {  <-- 2. level cluster (3 -->)
 
-> doc reference errors (make refcheckdocs):
+Oh I had misunderstood this level nomenclature, I refer it as leaf cluster
+node which is 2. level cluster in this DT snippet.
+
+>         core0 {
+> 
+>         };
+>         core1 {
+> 
+>         };
+>       cluster1 {
+>   ...
+> 
+> Armv9 L2 complexes: e.g. QC SM8450:
+> 
+>       .---------------.
+> CPU   |0 1 2 3 4 5 6 7|
+>       +---------------+
+> uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
+>       +---------------+
+>   L2  |   |   | | | | | <-- 2. level cluster, Armv9 L2 complexes (<-- 3)
+
+Again before I assume, what exactly <--3 here and in above snippet mean ?
+
+>       +---------------+
+>   L3  |<--         -->|
+>       +---------------+
+>       |<-- cluster -->|
+
+I think this is 2 level cluster or only cluster in this system w.r.t hardware.
+So lets not confuse with multi-level if not necessary.
+
+>       +---------------+
+>       |<--   DSU   -->|
+>       '---------------'
 >
-> See https://patchwork.ozlabs.org/patch/
->
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit.
+> Only if we map (i) into cluster_sibling, we get the same hardware
+> representation (for the task scheduler) for ACPI (4) and DT (5) systems.
 >
 
-Best regards,
-ChiaEn Wu
+What is (i) above ?
+
+> (4) examples:
+>
+> Kunpeng920 - 24 CPUs sharing LLC (cpu_coregroup_mask()), 4 CPUs sharing
+> L3-tag (cpu_clustergroup_mask()).
+>
+
+Again decouple cache info and cluster info from h/w, you have all the info.
+You can couple them together if that helps when you feed sched_domains.
+
+> X86 Jacobsville - 24 CPUs sharing LLC (L3), 4 CPUs sharing L2
+>
+> Armv9 L2 complexes: e.g. QC SM8450 - 8 CPUs sharing LLC (L3), (for A510
+> (little CPUs)) 2 CPUs sharing L2
+
+[...]
+
+> > And yes lstopo doesn't read cluster IDs. But we expose them in ACPI system
+> > and not on DT which was my main point.
+> 
+> Understood. But a Kunpeng920 `cluster_cpus_list` file would contain
+> logically different information than a Juno `cluster_cpus_list` file.
+>
+
+And why is that ?
+
+> Kunpeng920 `cluster_cpus_list` contain 4 CPUs sharing L3-tag (less than
+> LLC) whereas Juno cluster_cpus_list contain 2 or 4 CPUs (which is LLC).
+>
+
+Correct because that is how the hardware clusters are designed on those SoC.
+Cache topology is different.
+
+> I think key is to agree what a CLUSTER actually represent and especially
+> in case when `the level of topology above CPUs` is congruent with LLC
+> boundaries. Because my feeling is that people didn't pay attention to
+> this detail when they introduced SCHED_CONFIG_CLUSTER. A related issue
+> is the Ampere Altra hack in cpu_coregroup_mask().
+>
+
+The is defined by hardware and DT/ACPI has bindings for it. We can't redefine
+CLUSTER in a way that breaks those definitions. Again cluster is part of CPU
+topology and cache topology can be different and need not be congruent with
+CPU topology in some ways, Ofcourse they are in some other ways but there will
+be no single line of alignment across SoCs which is quite evident with the
+examples you have listed. Just add Ampere Altra to make it more fun.
+
+> > As pointed out earlier, have you checked ACPI on Juno and with 
+> > CONFIG_SCHED_CLUSTER ? If the behaviour with my series on DT and ACPI
+> > differs, then it is an issue. But AFAIU, it doesn't and that is my main
+> > argument. You are just assuming what we have on Juno with DT is correct
+> > which may be w.r.t to scheduler but definitely not with respect to the
+> > hardware topology exposed to the users. So my aim is to get that fixed.
+> 
+> I never run Juno w/ ACPI. Are you saying that
+> find_acpi_cpu_topology_cluster() returns cpu_topology[cpu].cluster_id's
+> which match the `1. level cluster nodes`?
+>
+
+Again I am totally confused as why this is now 1.level cluster where as above
+SDM was 2.level cluster. Both SoCs have only 1 level of cluster. While SDM
+has 1 DSU cluster, Juno has 2 clusters.
+
+> The function header of find_acpi_cpu_topology_cluster() says that `...
+> the cluster, if present is the level of topology above CPUs. ...`.
+>
+
+Exactly and that's how sysfs is also defined and we can't go back and change
+that now. I don't see any issue TBH.
+
+> From this perspective I can see your point. But this is then still
+> clearly poorly designed.
+
+Not really as per the definition.
+
+> How would we ever support CONFIG_SCHED_CLUSTER
+> in DT when it really (potentially) would bring a benefit (i.e. in the
+> Armv9 L2-complex case) and not only create trouble for the task
+> scheduler to setup its domains correctly?
+
+Indeed, that is the next problem once we get all these aligned across
+DT and ACPI. They have diverged and I prefer not to allow that anymore
+by adding more divergence e.g. to support Armv9 L2-complex case. Please
+consider that on top of these, I am not addressing that at the moment.
+In fact I am not addressing any sched_domain topics or issues. I have made
+that clear 😉.
+
+> Also in case we stick to
+> setting CONFIG_SCHED_CLUSTER=1 by default, CLS should be the default LLC
+> sched domain and MC the exceptional one. Just to respect the way how the
+> task scheduler removes not useful domains today.
+>
+
+Fix the cpu_clustergroup_mask or any other cpu_*group_mask as per your
+taste. The topology masks are just inputs to these and will not be changed
+or diverged for these reasons. Sorry if that is not helpful, but that is the
+reality with sysfs exposed to the user-space.
+
+> > If you are not happy with that, then how can be be happy with what is the
+> > current behaviour on ACPI + and - CONFIG_SCHED_CLUSTER. I haven't got
+> > your opinion yet on that matter.
+> 
+> I guess it's clear now that ACPI + CONFIG_SCHED_CLUSTER with ``the level
+> of topology above CPUs` is congruent with LLC` creates trouble to the
+> scheduler. So I don't see why we should replicate this for DT. Let's
+> discuss further tomorrow in person.
+
+I see it differently. If that creates a trouble, fix that and you will not
+have any issues with DT too.
+
+-- 
+Regards,
+Sudeep

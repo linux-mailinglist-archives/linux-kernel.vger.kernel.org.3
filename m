@@ -2,266 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4764F54F60A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6E354F60E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380196AbiFQK5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S1381964AbiFQK7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380407AbiFQK5m (ORCPT
+        with ESMTP id S236167AbiFQK7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:57:42 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120075.outbound.protection.outlook.com [40.107.12.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC75286EB
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:57:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c1N3Jpd/QLjlKgIbHiNRpScRcoKwf6+53X2mWjKk2LUuaCcGDoS5XEDLwrwZf2vsVJ1uK76vdxgv0V9xELAf4OlBE+2WHNN0MXLuoSw9FTyHLijnlZscdqtxvoKRBlIBW7DP/dG8SBR3DFa+EHCt0bIs7cZfSrQt05/K4lFtHDYxAORRBz7i6p0ur5192Ig2vHPmvl+ym4DmNnEjZD9/lJ8INQafOFr+lOg9xuFQJP56mKPRFPxDCopeWj59FU3GBfPgl41DF/3LjqddoBv/0obvAh8NN28aJz/qVCerp72+eu93ovPwfMw4sNEVbYKYiY6CTwlVww9G3JJ6H24e+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xBgjAhcd7x6wuVBPSSmulRKLHVlytHY27R71L0Juuhs=;
- b=aS0yd+VJ4vcE3znQfvEu44YG8yMHpk80zwSrvpPoQoYfgsZlrSex4uUIRZjzXSw/foDclD/aTEXFz75hEEVoCBOvyx3bMRc4mvriPwThGFgD1+HGkhdLpeycLWhXW3QS0XyCTFC7aCq7nUySWEYGXz+y2JHUQaNcDanL/d/LI2RnB4ywhXwHPGCOcSqYNetnTXhHpD0C5gf9QmPANGsa4sdBsQ3qUBOgVX/JMx2RIBJTYcmE4qDQ/dxhnq9F/Yd++4VsTlbTN4oVAKApXFdZv0iC3M0eusbeQ/2Yse1FCgKJRg9/V8Qtxbnz870sszNEAhWNXhx+eKuxY08oYcs8UA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xBgjAhcd7x6wuVBPSSmulRKLHVlytHY27R71L0Juuhs=;
- b=XYVz5mDbk1V2uf4fLlgtxzrL9d4f8uUNXCMnUWb+d8IcR3QJ0R13OTlkimBqyICLEIdp1bs0cDZAJupsIfs//+I8aSb0OzEDfqerfYRrmOve4y6TPNYPNJq8enN/82ZR9xtjTUFZPddqZ3osIc9x1s4hUcw3SW9VaGXLUERcu8hKM+eWuJ93tMxAS+Rmos9GzBvNd0iConO+rZlunDTtlYlIgniwhRuucAu2bb/Gj5lOHYmZjo+FH1a5ETzvMUdyyprYuuCJ3+2ikYrRcjQW+GO1Ls+NiJLm9PCwz8PVWmPSHRJflyAAnIWG9fZYgi8nX0csZQS4QjlXEYJyWTsQ5g==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB3609.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:164::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
- 2022 10:57:36 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
- 10:57:36 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Liang He <windhl@126.com>,
-        "Conor.Dooley@microchip.com" <Conor.Dooley@microchip.com>
-CC:     "oss@buserror.net" <oss@buserror.net>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in sgy_cst1000
-Thread-Topic: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
- sgy_cst1000
-Thread-Index: AQHYgjkOCymayD7j1k+DQNhVAl5A6Q==
-Date:   Fri, 17 Jun 2022 10:57:36 +0000
-Message-ID: <f93ef357-3336-fdc0-55e9-b09beeb2da72@csgroup.eu>
-References: <20220617060827.4004795-1-windhl@126.com>
- <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
- <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
- <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
- <64ac3dc9.5bd1.18170bcb6a6.Coremail.windhl@126.com>
- <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
- <71b517f4.7854.1817145ff77.Coremail.windhl@126.com>
-In-Reply-To: <71b517f4.7854.1817145ff77.Coremail.windhl@126.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cf7b7492-3cad-415e-bdd8-08da5050308a
-x-ms-traffictypediagnostic: PR0P264MB3609:EE_
-x-microsoft-antispam-prvs: <PR0P264MB3609B02539572118B95EFAF0EDAF9@PR0P264MB3609.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9NIfxlm9/ul9t3pfqUyXGa6HybiPbgaZH9nZxNkVXshFNkwMcm8TPEm1tRD9r7jKCzeI7lYN767UC8fopglBiZDCVvUXma+BAXbg92T5YPsTFMLsBmLcEFigczoR7IWn/YGTYWbE5ofu/yguKPX+we17LVjU0Lkuin8lFeAhw1GmM4qEI8mNzLC45yvqfK8Aqv+8Q2fGV/mclHvoIJYGseronNOwnEIm2gvJyA6SJlnvnJ8zmtfdOYwavfSwvKQ25Zqh+0AB7hbKjgSguwYUGtqQ5/Hd6+6uTUw4UL4SpWUtfFBRUr3asRY/EWsOpIeOI7tJRDc73bLiFejCCnxOtLSkg/8qG9iX3xHMkxOK+VHjuFI+gIR2QpAxo4ueA8SeOF509ihERzK89ACE39y30Ak9yQxudCyvagKnb/vdh2Xif76bxIgKTUGhP0UAgnwHRwIsw+dZuD/upPJ2gywHRcEIcXFtfxgKJfQVaJt8FH+o+0uFhNpqy7usOP5Y7ZouY+hSacAuy6+aDx3LoD7iUEb/BL5l30np/chHoLJe5t3gGiKGsba33M4HykC6mriTCczl7NTyTmgcwmDl3fZ56HNF3glP0SCBSS3IS/C9h368RkhQUSnzwypzetx7O6Y3iDADXrF1v8C3ex8BrJnjKpoEsFpndAtROmRBrlJ9yVYio0ghedXOvKP6hdg6kl7uHXADauY7ALTNsZkCQ9ltd/wyzRl0aaZBf28uhuV/yLF2hWMg+BspMWsNzLKv+lywAiwbTC0BkEaJ51O0GNokNbRiLt55V6zXsAS2+J673HKNIf5CVU6RE/5lkN9X14jywmANukMnmwqaZa1IRa83JqHhlkmm17GKbD14TGGfA78=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(26005)(6512007)(2616005)(54906003)(4326008)(66556008)(66476007)(31686004)(66446008)(38070700005)(36756003)(64756008)(91956017)(76116006)(110136005)(53546011)(966005)(8676002)(6486002)(186003)(71200400001)(316002)(6506007)(38100700002)(31696002)(2906002)(122000001)(44832011)(66574015)(8936002)(66946007)(83380400001)(86362001)(5660300002)(498600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ekw0dzZDdU1MQjlqYVhUSVBTYVphNGxsQ05temlJUlkwWGtjNnZJRytpYlFr?=
- =?utf-8?B?T3ltTnZ6VU94YVJ3ZGtxWE5uV2dNQ3RXOE5Ia2tYOCtXYXRUYjlIc3NiMExm?=
- =?utf-8?B?RnVwUUczazYvOEhoalR4N0lteGlOdThqaGNPOVYzY3p2ejJjSXdJQUFGWDVt?=
- =?utf-8?B?OE0wQjNQNjc0cDI0dXptTzJZaUljcW4zWitDNkNUMCt1aGJFcW8zOTI5UXBw?=
- =?utf-8?B?WUdYdXlsMDdhTUJGb3pqL3FDVGlLVTVwNmpVL0tNU3BSbk9Ld3l0Z0lxbTFp?=
- =?utf-8?B?Y0hzc2Y1ZE5kbjNHMWtEVE5jUG1aNWZDd0tyMU02VVR5MG1DWE1EZFhNOGVH?=
- =?utf-8?B?UGZOamk0WTE4MldYOTZGUEZWTkNzeTdpOXJVVmxqWkxwekJiOG9TOXF0K1pL?=
- =?utf-8?B?UThqREI5NFdGc1lQTnNGc1ZwZE9oRkVNY0YrZGVWclZiR1lDQytyN3NQNDFB?=
- =?utf-8?B?Uk84dU5EK0NSTnRLamt3UjQ1UGJFMTBhSXRyZW9BR2NZcG9TeUpjOXEyU2Fw?=
- =?utf-8?B?eS8wbWFoQXdsR1JGc0pDMGpZdXFjREpVaUZiRHlOT2k2RzhmdERobDMyU0dZ?=
- =?utf-8?B?aWpEWGtEeUE5Y0Q1ZlZienA0a0ZneFJ2ZlQvK2JJVUp0TFZHRG5UZlpMNHl4?=
- =?utf-8?B?UDFvc2lkc2VZTldGdTNZNnZCWVVCdHZ0WjRod2t2bXRrYXY2OEE1ZUNGRVll?=
- =?utf-8?B?YWRCRUllWTJjSWxVTWV2L0wrRHF6V1pmUWFiUW1hZUE2d1dQQVkreXhtcFRB?=
- =?utf-8?B?SWRGMWpBWjlncEF4UWVOYitWMlkwRlkrUW9UMWVtVjhOeHd5UFRrTFVYeGVa?=
- =?utf-8?B?VkhWMVF2S2NObE1vaEkrTFRSRlhZajhuYnBmcFNkdU1sZXVNZU1KZHFSWmJL?=
- =?utf-8?B?ZmoxQU1qRW8xYnVsNC93MlFLbDdLd3RFL1ZueTNrQU0vRGhoWndMaUlXV1hH?=
- =?utf-8?B?U1MvOFFJMENsSlBzdEIyblZDQWVtejVVdkhkMHZGTDM2bi8xNnJmNkVORW5Q?=
- =?utf-8?B?OVNCQkRkbnVKWGVLZFd4QmVmeU9rWWNYQzhaVkZpSGtwRUsrTkF6TllaeVg4?=
- =?utf-8?B?eUlhRUNRRzVoWlRXLzl3RGd1czlXVU0vUWFwSzRFS2ZlOExUQy9wdlBQdFFk?=
- =?utf-8?B?OXJsYkdnRkRnZVdGcFZLcE94OG1tdHdIMkEvWlhuN0dybUM0NmRZK2lDYmVG?=
- =?utf-8?B?V2I5N0VRNTJhWXU3WWNhZnNkd1J2VFhzbGg0ZmZCcmNBdXN6VENuMXpzbVFE?=
- =?utf-8?B?NEwrV0pjNG8xMEtXVmNuaW1sRjJINDhxR3l5N3RxbmE4eG1hSTJEWVMrZFUv?=
- =?utf-8?B?VjRTMDhONnNmWlZyaHEwWENhYkY0VTFhNHlZY2FxUHlRNXVLQk9ESzRkOUpI?=
- =?utf-8?B?bThyaktIdGFDWkFhMk1IcDN6SVhMSTc4TnMybXpWa2IydEZUM2RneTZQTTk5?=
- =?utf-8?B?UHhYK2JVUUlmQ2JOWU9iT2lCKzRWMDNOMmpvcnJBRG1LZzliQjJtRXpYSFBr?=
- =?utf-8?B?b0RSb1BaUTl2RFVscUJVZ2c0T2RsRllBV3ZxVUZBakc1azNmcmFNb2dNTHBq?=
- =?utf-8?B?aitwNE5GVjJJNTF6c1JEUjBnaGlpUXovRUFtMWN0ZE1xdTNNYVdWQTNpckoz?=
- =?utf-8?B?T2hheERqRGl4VXJ0ME5VZ0FDOWsyMW93V3lWbXNsb3EySy85amN2VUdPQlRT?=
- =?utf-8?B?LzJveUt4b3pBdCtlZkh4cU9RdG05SDNNWTVGRGc2akpBVzdIMEpVdU1JTUNh?=
- =?utf-8?B?bHhHdU1meHAzMDFLMmNXL1hGT2U2eExXU3JsRjZsSVpPYVJnaXhPNEtDTks0?=
- =?utf-8?B?VE5Ic0JRN1JGWkVURVNESXF6WldoYTVuV3NPdmZzbEdramFrQXFzVWt0Qkpo?=
- =?utf-8?B?OUVEamtSZkFidDJud3ovK1JNSXhYdnZYd09vNExJdGJzOCtIVWxncjVOdzkx?=
- =?utf-8?B?aEYyT1lOek5vTHJrcWdHTEhUZVVCQklSSE9DQlYzV2RLV2F2Y2hqd0xRYmp1?=
- =?utf-8?B?blNpaGk0am5WdkpIYUVySHZ5RTgvWnBWVHVpeFljcmJQdVFwQnFaWUV2M1JD?=
- =?utf-8?B?RDNrbnZxRTYwSEU2V09VOGxFMi9zVzJ1VkFvbXl6bTRGc0U5VWMvYmlIUldE?=
- =?utf-8?B?ZUxqYWtESElGUTRPdUVJMUhsaFovVHVBYlZ0ZUc4a2tSQzNBT1FNdG1xYnBk?=
- =?utf-8?B?K1RFWWlvRVRMK0hVSzNRMjJVdnlvVHpwUHZZTlFZNTBsWFZ1MVpJakFsRSs3?=
- =?utf-8?B?cEJnNHY0L1dncUljYmJqL3FNbFlPSWpmcmNxcjFSZ25uVGNpVkl1bktXZmhO?=
- =?utf-8?B?RkF4TzFvQ1JtbUgrTkxCK05Ba3hHK0NOTVRKN1RUd2xKa0ovK3V3c3daRXFL?=
- =?utf-8?Q?Y7CZMvU8WPmFGW9i521I4pGF+wFoLSnl36zl0?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <ECC2A0E76B813E4685A65DDC5D1C6C7B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 17 Jun 2022 06:59:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C826066FBC;
+        Fri, 17 Jun 2022 03:59:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87DAEB828D2;
+        Fri, 17 Jun 2022 10:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDED4C3411B;
+        Fri, 17 Jun 2022 10:58:55 +0000 (UTC)
+Message-ID: <ae3a7a1b-23bf-ecc8-5afe-2c3ce4ecec05@xs4all.nl>
+Date:   Fri, 17 Jun 2022 12:58:54 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf7b7492-3cad-415e-bdd8-08da5050308a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 10:57:36.7882
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uRkhdWp1kKUF2bD1GhYBr9tNxasA1d4qtxZ3ZLahDexFdH4fzmriTUkA4L6UvR5nA4jiL5GCsSaXePkt9pLG4D9c2u8ZSSZvrQLHEkrPScc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3609
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v9 00/17] Move HEVC stateless controls out of staging
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE3LzA2LzIwMjIgw6AgMTI6NDcsIExpYW5nIEhlIGEgw6ljcml0wqA6DQo+IA0KPiAN
-Cj4gDQo+IEF0IDIwMjItMDYtMTcgMTY6Mjc6MDMsIENvbm9yLkRvb2xleUBtaWNyb2NoaXAuY29t
-IHdyb3RlOg0KPj4gT24gMTcvMDYvMjAyMiAwOToxNywgTGlhbmcgSGUgd3JvdGU6DQo+Pj4NCj4+
-Pg0KPj4+DQo+Pj4gQXQgMjAyMi0wNi0xNyAxNDo1MzoxMywgIkNocmlzdG9waGUgTGVyb3kiIDxj
-aHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0KPj4+Pg0KPj4+Pg0KPj4+PiBMZSAx
-Ny8wNi8yMDIyIMOgIDA4OjQ1LCBMaWFuZyBIZSBhIMOpY3JpdMKgOg0KPj4+Pj4NCj4+Pj4+DQo+
-Pj4+Pg0KPj4+Pj4gQXQgMjAyMi0wNi0xNyAxNDoyODo1NiwgIkNocmlzdG9waGUgTGVyb3kiIDxj
-aHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0KPj4+Pj4+DQo+Pj4+Pj4NCj4+Pj4+
-PiBMZSAxNy8wNi8yMDIyIMOgIDA4OjA4LCBMaWFuZyBIZSBhIMOpY3JpdMKgOg0KPj4+Pj4+PiBJ
-biBncGlvX2hhbHRfcHJvYmUoKSwgb2ZfZmluZF9tYXRjaGluZ19ub2RlKCkgd2lsbCByZXR1cm4g
-YSBub2RlDQo+Pj4+Pj4+IHBvaW50ZXIgd2l0aCByZWZjb3VudCBpbmNyZW1lbnRlZC4gV2Ugc2hv
-dWxkIHVzZSBvZl9ub2RlX3B1dCgpIGluDQo+Pj4+Pj4+IGZhaWwgcGF0aCBvciB3aGVuIGl0IGlz
-IG5vdCB1c2VkIGFueW1vcmUuDQo+Pj4+Pj4+DQo+Pj4+Pj4+IFNpZ25lZC1vZmYtYnk6IExpYW5n
-IEhlIDx3aW5kaGxAMTI2LmNvbT4NCj4+Pj4+Pj4gLS0tDQo+Pj4+Pj4+ICAgICAgY2hhbmdlbG9n
-Og0KPj4+Pj4+PiAgICAgIHY0OiByZXVzZSBleGlzdCAnZXJyJyBhbmQgdXNlIGEgc2ltcGxlIGNv
-ZGUgc3R5bGUsIGFkdmlzZWQgYnkgQ0oNCj4+Pj4+Pj4gICAgICB2MzogdXNlIGxvY2FsICdjaGls
-ZF9ub2RlJyBhZHZpc2VkIGJ5IE1pY2hhZWwuDQo+Pj4+Pj4+ICAgICAgdjI6IHVzZSBnb3RvLWxh
-YmVsIHBhdGNoIHN0eWxlIGFkdmlzZWQgYnkgQ2hyaXN0b3BoZSBMZXJveS4NCj4+Pj4+Pj4gICAg
-ICB2MTogYWRkIG9mX25vZGVfcHV0KCkgYmVmb3JlIGVhY2ggZXhpdC4NCj4+Pj4+Pj4NCj4+Pj4+
-Pj4gICAgICBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDM1ICsr
-KysrKysrKysrKysrLS0tLS0tLS0tDQo+Pj4+Pj4+ICAgICAgMSBmaWxlIGNoYW5nZWQsIDIyIGlu
-c2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQ0KPj4+Pj4+Pg0KPj4+Pj4+PiBkaWZmIC0tZ2l0
-IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMgYi9hcmNoL3Bvd2Vy
-cGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYw0KPj4+Pj4+PiBpbmRleCA5OGFlNjQwNzUx
-OTMuLmU0NTg4OTQzZmU3ZSAxMDA2NDQNCj4+Pj4+Pj4gLS0tIGEvYXJjaC9wb3dlcnBjL3BsYXRm
-b3Jtcy84NXh4L3NneV9jdHMxMDAwLmMNCj4+Pj4+Pj4gKysrIGIvYXJjaC9wb3dlcnBjL3BsYXRm
-b3Jtcy84NXh4L3NneV9jdHMxMDAwLmMNCj4+Pj4+Pj4gQEAgLTcxLDYgKzcxLDcgQEAgc3RhdGlj
-IGludCBncGlvX2hhbHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+Pj4+
-Pj4gICAgICB7DQo+Pj4+Pj4+ICAgICAgCWVudW0gb2ZfZ3Bpb19mbGFncyBmbGFnczsNCj4+Pj4+
-Pj4gICAgICAJc3RydWN0IGRldmljZV9ub2RlICpub2RlID0gcGRldi0+ZGV2Lm9mX25vZGU7DQo+
-Pj4+Pj4+ICsJc3RydWN0IGRldmljZV9ub2RlICpjaGlsZF9ub2RlOw0KPj4+Pj4+PiAgICAgIAlp
-bnQgZ3BpbywgZXJyLCBpcnE7DQo+Pj4+Pj4+ICAgICAgCWludCB0cmlnZ2VyOw0KPj4+Pj4+PiAg
-ICAgIA0KPj4+Pj4+PiBAQCAtNzgsMjYgKzc5LDI5IEBAIHN0YXRpYyBpbnQgZ3Bpb19oYWx0X3By
-b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+Pj4+Pj4+ICAgICAgCQlyZXR1cm4g
-LUVOT0RFVjsNCj4+Pj4+Pj4gICAgICANCj4+Pj4+Pj4gICAgICAJLyogSWYgdGhlcmUncyBubyBt
-YXRjaGluZyBjaGlsZCwgdGhpcyBpc24ndCByZWFsbHkgYW4gZXJyb3IgKi8NCj4+Pj4+Pj4gLQlo
-YWx0X25vZGUgPSBvZl9maW5kX21hdGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOw0KPj4+
-Pj4+PiAtCWlmICghaGFsdF9ub2RlKQ0KPj4+Pj4+PiArCWNoaWxkX25vZGUgPSBvZl9maW5kX21h
-dGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOw0KPj4+Pj4+PiArCWlmICghY2hpbGRfbm9k
-ZSkNCj4+Pj4+Pj4gICAgICAJCXJldHVybiAwOw0KPj4+Pj4+PiAgICAgIA0KPj4+Pj4+PiAgICAg
-IAkvKiBUZWNobmljYWxseSB3ZSBjb3VsZCBqdXN0IHJlYWQgdGhlIGZpcnN0IG9uZSwgYnV0IHB1
-bmlzaA0KPj4+Pj4+PiAgICAgIAkgKiBEVCB3cml0ZXJzIGZvciBpbnZhbGlkIGZvcm0uICovDQo+
-Pj4+Pj4+IC0JaWYgKG9mX2dwaW9fY291bnQoaGFsdF9ub2RlKSAhPSAxKQ0KPj4+Pj4+PiAtCQly
-ZXR1cm4gLUVJTlZBTDsNCj4+Pj4+Pj4gKwlpZiAob2ZfZ3Bpb19jb3VudChjaGlsZF9ub2RlKSAh
-PSAxKSB7DQo+Pj4+Pj4+ICsJCWVyciA9IC1FSU5WQUw7DQo+Pj4+Pj4+ICsJCWdvdG8gZXJyX3B1
-dDsNCj4+Pj4+Pj4gKwl9DQo+Pj4+Pj4+ICAgICAgDQo+Pj4+Pj4+ICAgICAgCS8qIEdldCB0aGUg
-Z3BpbyBudW1iZXIgcmVsYXRpdmUgdG8gdGhlIGR5bmFtaWMgYmFzZS4gKi8NCj4+Pj4+Pj4gLQln
-cGlvID0gb2ZfZ2V0X2dwaW9fZmxhZ3MoaGFsdF9ub2RlLCAwLCAmZmxhZ3MpOw0KPj4+Pj4+PiAt
-CWlmICghZ3Bpb19pc192YWxpZChncGlvKSkNCj4+Pj4+Pj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+
-Pj4+Pj4+ICsJZ3BpbyA9IG9mX2dldF9ncGlvX2ZsYWdzKGNoaWxkX25vZGUsIDAsICZmbGFncyk7
-DQo+Pj4+Pj4+ICsJaWYgKCFncGlvX2lzX3ZhbGlkKGdwaW8pKSB7DQo+Pj4+Pj4+ICsJCWVyciA9
-IC1FSU5WQUw7DQo+Pj4+Pj4+ICsJCWdvdG90IGVycl9wdXQ7DQo+Pj4+Pj4NCj4+Pj4+PiBEaWQg
-eW91IHRlc3QgdGhlIGJ1aWxkID8NCj4+Pj4+DQo+Pj4+PiBTb3JyeSBmb3IgdGhpcyBmYXVsdC4N
-Cj4+Pj4+DQo+Pj4+PiBJbiBmYWN0LCBJIGFtIHN0aWxsIGZpbmRpbmcgYW4gZWZmaWNpZW50IHdh
-eSB0byBidWlsZGluZyBkaWZmZXJlbnQgYXJjaCBzb3VyY2UgY29kZSBhcyBJIG9ubHkgaGF2ZSB4
-ODYtNjQuDQo+Pj4+Pg0KPj4+Pj4gTm93IEkgYW0gdHJ5IHVzaW5nIFFFTVUuDQo+Pj4+Pg0KPj4+
-Pj4gQW55d2F5LCBzb3JyeSBmb3IgdGhpcyBmYXVsdC4NCj4+Pj4NCj4+Pj4gWW91IGNhbiBmaW5k
-IGNyb3NzIGNvbXBpbGVycyBmb3IgbW9zdCBhcmNoaXRlY3R1cmVzIGZvciB4ODYtNjQgaGVyZSA6
-DQo+Pj4+IGh0dHBzOi8vbWlycm9ycy5lZGdlLmtlcm5lbC5vcmcvcHViL3Rvb2xzL2Nyb3NzdG9v
-bC8NCj4+Pj4NCj4+Pj4gQ2hyaXN0b3BoZQ0KPj4+DQo+Pj4gSGksIENocmlzdG9waGUgYW5kIENv
-bm9yLg0KPj4+DQo+Pj4gU29ycnkgdG8gdHJvdWJsZSB5b3UgYWdhaW4uDQo+Pj4NCj4+PiBOb3cg
-SSBvbmx5IGtub3cgaG93IHRvIHF1aWNrbHkgaWRlbnRpZnkgdGhlIHJlZmNvdW50aW5nIGJ1Z3Ms
-IGJ1dCBJIGNhbm5vdCBlZmZpY2llbnRseSBnaXZlIGEgYnVpbGQgdGVzdC4NCj4+Pg0KPj4+IEZv
-ciBleGFtcGxlLCBJIHVzZSB0aGUgY3Jvc3MgY29tcGlsZXJzICdwb3dlcnBjLWxpbnV4LWdudS1n
-Y2MnIHRvIGNvbXBpbGUgJ2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5j
-JyB3aXRoIC1mc3ludGF4LW9ubHkgZmxhZy4NCj4+PiBCdXQgSSBtZWV0IHRvbyBtYW55IGhlYWRl
-ciBmaWxlIG1pc3NpbmcgZXJyb3JzLiBFdmVuIGlmIEkgYWRkIHNvbWUgJ2luY2x1ZGUnIHBhdGhl
-cywgZS5nLiwgLi9hcmNoL3Bvd2VycGMvaW5jbHVkZSwgLi9pbmNsdWRlLA0KPj4+IHRoZXJlIGFy
-ZSBzdGlsbCB0b28gbWFueSBvdGhlciBlcnJvcnMuDQo+Pj4NCj4+PiBTbyBpZiB0aGVyZSBpcyBh
-bnkgZWZmaWNpZW50IHdheSB0byBjaGVjayBteSBwYXRjaCBjb2RlIHRvIGF2b2lkICdnb3RvdCcg
-ZXJyb3IgYWdhaW4uDQo+Pg0KPj4gaWRrIGFueXRoaW5nIGFib3V0IHBvd2VycGMsIGJ1dCB3aGF0
-IEkgZmluZCBpcyBhIG5pY2Ugd2F5IHRvIGdldCBhIGNvbXBpbGVyDQo+PiBmb3IgYW4gYXJjaCBJ
-IGRvbid0IHVzZSBpcyB0byBzZWFyY2ggb24gbG9yZS5rZXJuZWwub3JnIGZvciBhIDBkYXkgcm9i
-b3QNCj4+IGJ1aWxkIGVycm9yIHNpbmNlIGl0IGdpdmVzIGluc3RydWN0aW9ucyBmb3IgYnVpbGRp
-bmcgb24gdGhhdCBhcmNoLg0KPj4gRm9yIGV4YW1wbGU6DQo+PiBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9saW51eHBwYy1kZXYvMjAyMjA2MDYwOTEwLnJZTlRGcWRJLWxrcEBpbnRlbC5jb20vDQo+
-Pg0KPj4NCj4+IEluIHRoaXMgY2FzZSwgeW91ciBidWcgc2VlbXMgb2J2aW91cz8gWW91IHR5cGVk
-ICJnb3RvdCIgaW5zdGVhZCBvZiAiZ290byIuDQo+Pg0KPj4gSG9wZSB0aGF0IGhlbHBzLA0KPj4g
-Q29ub3IuDQo+Pg0KPj4+DQo+Pj4gVGhhbmtzIGFnYWluLCBDaHJpc3RvcGhlIGFuZCBDb25vci4N
-Cj4+Pg0KPj4+IExpYW5nDQo+IA0KPiBUaGFua3MsIENvbm9yIGFuZCBDaHJpc3RvcGhlLg0KPiAN
-Cj4gSSBmaW5hbGx5IGZpZ3VyZSBvdXQgYW4gZWZmaWNpZW50IHdheSBpbiB3aGljaCBJIGNhbiB1
-c2UgY3Jvc3MtY29tcGlsZXIgdG8gY2hlY2sgbXkgc2luZ2xlIHBhdGNoZWQgZmlsZSBhcyBmb2xs
-b3c6DQo+IA0KPiBwb3dlcnBjNjRsZS1saW51eC1nbnUtZ2NjIC1XcCwtTU1ELGFyY2gvcG93ZXJw
-Yy9rZXJuZWwvLmlvLm8uZCAgLW5vc3RkaW5jIC1JLi9hcmNoL3Bvd2VycGMvaW5jbHVkZSAtSS4v
-YXJjaC9wb3dlcnBjL2luY2x1ZGUvZ2VuZXJhdGVkICAtSS4vaW5jbHVkZSAtSS4vYXJjaC9wb3dl
-cnBjL2luY2x1ZGUvdWFwaSAtSS4vYXJjaC9wb3dlcnBjL2luY2x1ZGUvZ2VuZXJhdGVkL3VhcGkg
-LUkuL2luY2x1ZGUvdWFwaSAtSS4vaW5jbHVkZS9nZW5lcmF0ZWQvdWFwaSAtaW5jbHVkZSAuL2lu
-Y2x1ZGUvbGludXgvY29tcGlsZXItdmVyc2lvbi5oIC1pbmNsdWRlIC4vaW5jbHVkZS9saW51eC9r
-Y29uZmlnLmggLWluY2x1ZGUgLi9pbmNsdWRlL2xpbnV4L2NvbXBpbGVyX3R5cGVzLmggLURfX0tF
-Uk5FTF9fIC1JIC4vYXJjaC9wb3dlcnBjIC1mbWFjcm8tcHJlZml4LW1hcD0uLz0gLVdhbGwgLVd1
-bmRlZiAtV2Vycm9yPXN0cmljdC1wcm90b3R5cGVzIC1Xbm8tdHJpZ3JhcGhzIC1mbm8tc3RyaWN0
-LWFsaWFzaW5nIC1mbm8tY29tbW9uIC1mc2hvcnQtd2NoYXIgLWZuby1QSUUgLVdlcnJvcj1pbXBs
-aWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbiAtV2Vycm9yPWltcGxpY2l0LWludCAtV2Vycm9yPXJl
-dHVybi10eXBlIC1Xbm8tZm9ybWF0LXNlY3VyaXR5IC1zdGQ9Z251MTEgLW1jcHU9cG93ZXJwYyAt
-bWNwdT1wb3dlcnBjIC1tMzIgLW1zb2Z0LWZsb2F0IC1waXBlIC1mZml4ZWQtcjIgLW1uby1yZWFk
-b25seS1pbi1zZGF0YSAtbW5vLWFsdGl2ZWMgLW1uby12c3ggLWZuby1hc3luY2hyb25vdXMtdW53
-aW5kLXRhYmxlcyAtbW5vLXN0cmluZyAtbWJpZy1lbmRpYW4gLW1zdGFjay1wcm90ZWN0b3ItZ3Vh
-cmQ9dGxzIC1tc3RhY2stcHJvdGVjdG9yLWd1YXJkLXJlZz1yMiAtZm5vLWRlbGV0ZS1udWxsLXBv
-aW50ZXItY2hlY2tzIC1Xbm8tZnJhbWUtYWRkcmVzcyAtV25vLWZvcm1hdC10cnVuY2F0aW9uIC1X
-bm8tZm9ybWF0LW92ZXJmbG93IC1Xbm8tYWRkcmVzcy1vZi1wYWNrZWQtbWVtYmVyIC1PMiAtLXBh
-cmFtPWFsbG93LXN0b3JlLWRhdGEtcmFjZXM9MCAtV2ZyYW1lLWxhcmdlci10aGFuPTEwMjQgLWZz
-dGFjay1wcm90ZWN0b3Itc3Ryb25nIC1XaW1wbGljaXQtZmFsbHRocm91Z2g9NSAtV25vLW1haW4g
-LVduby11bnVzZWQtYnV0LXNldC12YXJpYWJsZSAtV25vLXVudXNlZC1jb25zdC12YXJpYWJsZSAt
-Zm9taXQtZnJhbWUtcG9pbnRlciAtZm5vLXN0YWNrLWNsYXNoLXByb3RlY3Rpb24gLVdkZWNsYXJh
-dGlvbi1hZnRlci1zdGF0ZW1lbnQgLVd2bGEgLVduby1wb2ludGVyLXNpZ24gLVdjYXN0LWZ1bmN0
-aW9uLXR5cGUgLVduby1zdHJpbmdvcC10cnVuY2F0aW9uIC1Xbm8tc3RyaW5nb3Atb3ZlcmZsb3cg
-LVduby1yZXN0cmljdCAtV25vLW1heWJlLXVuaW5pdGlhbGl6ZWQgLVduby1hbGxvYy1zaXplLWxh
-cmdlci10aGFuIC1mbm8tc3RyaWN0LW92ZXJmbG93IC1mbm8tc3RhY2stY2hlY2sgLWZjb25zZXJ2
-ZS1zdGFjayAtV2Vycm9yPWRhdGUtdGltZSAtV2Vycm9yPWluY29tcGF0aWJsZS1wb2ludGVyLXR5
-cGVzIC1XZXJyb3I9ZGVzaWduYXRlZC1pbml0IC1Xbm8tcGFja2VkLW5vdC1hbGlnbmVkIC1tc3Rh
-Y2stcHJvdGVjdG9yLWd1YXJkLW9mZnNldD01NzYgLVdlcnJvciAtREtCVUlMRF9NT0ROQU1FPSci
-ODV4eCInIC1ES0JVSUxEX01PREZJTEU9JyJhcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5
-X2N0czEwMDAuYyInIC1mc3ludGF4LW9ubHkgLi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgv
-c2d5X2N0czEwMDAuYw0KPiANCg0KRWFzaWVzdCB3YXkgaXM6DQotIERvd25sb2FkIGNyb3NzIGNv
-bXBpbGVyIGFuZCBleHRyYWN0IGl0IHNvbWV3aGVyZSBvbiB5b3VyIFBDIGFuZCBlbnN1cmUgDQpp
-dCBpcyBpbiB0aGUgUEFUSC4NCi0gVGhlbjoNCg0KcnVuICJtYWtlIENST1NTX0NPTVBJTEU9cG93
-ZXJwYzY0LWxpbnV4LWdudSBBUkNIPXBvd2VycGMgDQpjb3JlbmV0MzJfc21wX2RlZmNvbmZpZyIN
-Cg0KbW9kaWZ5IC5jb25maWcgdG8gYWN0aXZhdGUgQ09ORklHX1NHWV9DVFMxMDAwDQoNCnJ1biAi
-bWFrZSBDUk9TU19DT01QSUxFPXBvd2VycGM2NC1saW51eC1nbnUgQVJDSD1wb3dlcnBjIA0KYXJj
-aC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLm8iDQoNCg==
+Hi Benjamin,
+
+On 6/17/22 10:35, Benjamin Gaignard wrote:
+> This series aims to make HEVC uapi stable and usable for hardware
+> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+> and 2 out of the tree drivers (rkvdec and RPI).
+> 
+> version 9:
+> - Reword some commit message
+> - Use fls()
+> - Remove useless padding at the end of hevc structures
+> - Reword all _minus* field description
+> - change CVS to codec video sequence
+> - Fix various typo
+> - Fix undefined label: v4l2-ctrl-flag-dynamic-array warning
+> - fix the waring reported by 'scripts/kernel-doc -none
+>   include/uapi/linux/v4l2-controls.h'
+
+This looks great, all my tests (sparse, smatch, etc) pass and all my issues are now
+addressed.
+
+So all I need is some more Acked-by/Reviewed-by tags for this series, esp. from Nicolas.
+
+Once I have that I'll make a PR for this.
+
+Regards,
+
+	Hans
+
+> 
+> This version has been tested with these branches:
+> - GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+> - Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V9
+> 
+> With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
+> which was 77/147 before, is now 141/147.
+> The 10-bits series will comes after this because of it dependency to
+> uAPI change. If you are curious you can find the WIP branch here:
+> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V9
+> 
+> The 6 failing tests are:
+> - PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
+> - WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
+>   difference exist on 5 decoded frames. Some pixels values are no the same 
+>   the very end of few lines.
+> 
+> version 8:
+> - Same than v7 but rebased on media_stage/master
+> 
+> version 7:
+> - Apply Jernej patches for Cedrus about bit offset definition and
+>   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
+> - Based on media_tree/master
+> 
+> version 6:
+> - Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
+>   in v4l2_ctrl_hevc_decode_params structure.
+> - Change slice_pic_order_cnt type to s32 to match with PoC type.
+> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+>   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+> - Add a define for max slices count
+> - Stop using Hantro dedicated control.
+> 
+> version 5:
+> - Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
+>   hevc_dpb_entry structure
+> - Add defines for SEI pic_struct values (patch 4)
+> - Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
+> - Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
+>   documentation (patch 8)
+> - Rebased on v5-18-rc1
+> 
+> Version 4:
+> - Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
+> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+> - Fix space/tab issue in kernel-doc
+> - Add patch to change data_bit_offset definition
+> - Fix hantro-media SPDX license
+> - put controls under stateless section in v4l2-ctrls-defs.c
+> 
+> Benjamin Gaignard (14):
+>   media: uapi: HEVC: Add missing fields in HEVC controls
+>   media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+>     prefix
+>   media: uapi: HEVC: Change pic_order_cnt definition in
+>     v4l2_hevc_dpb_entry
+>   media: uapi: HEVC: Add SEI pic struct flags
+>   media: uapi: HEVC: Add documentation to uAPI structure
+>   media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
+>     dynamic array
+>   media: uapi: Move parsed HEVC pixel format out of staging
+>   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+>   media: uapi: Move the HEVC stateless control type out of staging
+>   media: controls: Log HEVC stateless control in .std_log
+>   media: hantro: Stop using Hantro dedicated control
+>   media: uapi: HEVC: fix padding in v4l2 control structures
+>   media: uapi: Change data_bit_offset definition
+>   media: uapi: move HEVC stateless controls out of staging
+> 
+> Hans Verkuil (3):
+>   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+>   v4l2-ctrls: add support for dynamically allocated arrays.
+>   vivid: add dynamic array test control
+> 
+>  .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
+>  .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
+>  .../media/v4l/pixfmt-compressed.rst           |   7 +-
+>  .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+>  .../media/v4l/vidioc-queryctrl.rst            |   8 +
+>  .../media/videodev2.h.rst.exceptions          |   6 +
+>  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+>  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 212 ++++-
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+>  drivers/staging/media/hantro/hantro_drv.c     |  62 +-
+>  .../staging/media/hantro/hantro_g2_hevc_dec.c |  44 +-
+>  drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
+>  drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |  26 +-
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
+>  .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
+>  include/media/hevc-ctrls.h                    | 250 -----
+>  include/media/v4l2-ctrls.h                    |  48 +-
+>  include/uapi/linux/v4l2-controls.h            | 459 +++++++++
+>  include/uapi/linux/videodev2.h                |  13 +
+>  24 files changed, 1826 insertions(+), 1226 deletions(-)
+>  delete mode 100644 include/media/hevc-ctrls.h
+> 

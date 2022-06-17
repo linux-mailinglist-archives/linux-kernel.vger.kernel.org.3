@@ -2,167 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBCE54F0A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0145454F0A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380112AbiFQFhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 01:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S1380129AbiFQFid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 01:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380111AbiFQFhS (ORCPT
+        with ESMTP id S1380111AbiFQFi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 01:37:18 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A666AFA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 22:37:17 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 24fQokGfyP8Ap24fQoQhjx; Fri, 17 Jun 2022 07:37:15 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 17 Jun 2022 07:37:15 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <b42b4644-5c22-f39d-eb5b-b3a4d5404630@wanadoo.fr>
-Date:   Fri, 17 Jun 2022 07:37:12 +0200
+        Fri, 17 Jun 2022 01:38:29 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E42863BF8;
+        Thu, 16 Jun 2022 22:38:27 -0700 (PDT)
+X-UUID: 9c60530ada6a41a0adfc0f9e9ae758f0-20220617
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:3d496b69-7c90-45ff-8a99-3c0b8a399582,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:fb68db48-4c92-421c-ad91-b806c0f58b2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 9c60530ada6a41a0adfc0f9e9ae758f0-20220617
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 621481764; Fri, 17 Jun 2022 13:38:23 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 17 Jun 2022 13:38:22 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 17 Jun 2022 13:38:21 +0800
+Message-ID: <df498cc98c02a580a50ff7aa5b06cb74f502e1e4.camel@mediatek.com>
+Subject: Re: [PATCH 2/7] dt-bindings: display: mediatek: dpi: add binding
+ for MT8365
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Fabien Parent <fparent@baylibre.com>, <matthias.bgg@gmail.com>,
+        <jitao.shi@mediatek.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>
+CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 17 Jun 2022 13:38:21 +0800
+In-Reply-To: <20220530201436.902505-2-fparent@baylibre.com>
+References: <20220530201436.902505-1-fparent@baylibre.com>
+         <20220530201436.902505-2-fparent@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3] powerpc:85xx: Add missing of_node_put() in sgy_cst1000
-Content-Language: en-US
-To:     Liang He <windhl@126.com>, oss@buserror.net, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220617052214.4004188-1-windhl@126.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220617052214.4004188-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 17/06/2022 à 07:22, Liang He a écrit :
-> In gpio_halt_probe(), of_find_matching_node() will return a node
-> pointer with refcount incremented. We should use of_node_put() in
-> fail path or when it is not used anymore.
+Hi, Fabien:
+
+On Mon, 2022-05-30 at 22:14 +0200, Fabien Parent wrote:
+> DPI for MT8365 is compatible with MT8192 but requires an additional
+> clock. Modify the documentation to requires this clock only on MT8365
+> SoCs.
 > 
-> Signed-off-by: Liang He <windhl@126.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > ---
->   arch/powerpc/platforms/85xx/sgy_cts1000.c | 39 +++++++++++++++--------
->   1 file changed, 25 insertions(+), 14 deletions(-)
+>  .../display/mediatek/mediatek,dpi.yaml        | 44 ++++++++++++++++-
+> --
+>  1 file changed, 37 insertions(+), 7 deletions(-)
 > 
-> diff --git a/arch/powerpc/platforms/85xx/sgy_cts1000.c b/arch/powerpc/platforms/85xx/sgy_cts1000.c
-> index 98ae64075193..a8690fc552cf 100644
-> --- a/arch/powerpc/platforms/85xx/sgy_cts1000.c
-> +++ b/arch/powerpc/platforms/85xx/sgy_cts1000.c
-> @@ -71,33 +71,39 @@ static int gpio_halt_probe(struct platform_device *pdev)
->   {
->   	enum of_gpio_flags flags;
->   	struct device_node *node = pdev->dev.of_node;
-> +	struct device_node *child_node;
->   	int gpio, err, irq;
->   	int trigger;
-> +	int ret;
->   
->   	if (!node)
->   		return -ENODEV;
->   
->   	/* If there's no matching child, this isn't really an error */
-> -	halt_node = of_find_matching_node(node, child_match);
-> -	if (!halt_node)
-> +	child_node = of_find_matching_node(node, child_match);
-> +	if (!child_node)
->   		return 0;
->   
->   	/* Technically we could just read the first one, but punish
->   	 * DT writers for invalid form. */
-> -	if (of_gpio_count(halt_node) != 1)
-> -		return -EINVAL;
-> +	if (of_gpio_count(child_node) != 1) {
-> +		ret = -EINVAL;
-> +		goto err_put;
-> +	}
->   
->   	/* Get the gpio number relative to the dynamic base. */
-> -	gpio = of_get_gpio_flags(halt_node, 0, &flags);
-> -	if (!gpio_is_valid(gpio))
-> -		return -EINVAL;
-> +	gpio = of_get_gpio_flags(child_node, 0, &flags);
-> +	if (!gpio_is_valid(gpio)) {
-> +		ret = -EINVAL;
-> +		gotot err_put;
-> +	}
->   
->   	err = gpio_request(gpio, "gpio-halt");
->   	if (err) {
->   		printk(KERN_ERR "gpio-halt: error requesting GPIO %d.\n",
->   		       gpio);
-> -		halt_node = NULL;
-> -		return err;
-> +		ret = err;
+> diff --git
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> index caf4c88708f4..c9c9f4d5ebe7 100644
+> ---
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> +++
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> @@ -17,13 +17,18 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - mediatek,mt2701-dpi
+> -      - mediatek,mt7623-dpi
+> -      - mediatek,mt8173-dpi
+> -      - mediatek,mt8183-dpi
+> -      - mediatek,mt8186-dpi
+> -      - mediatek,mt8192-dpi
+> +    oneOf:
+> +      - enum:
+> +          - mediatek,mt2701-dpi
+> +          - mediatek,mt7623-dpi
+> +          - mediatek,mt8173-dpi
+> +          - mediatek,mt8183-dpi
+> +          - mediatek,mt8186-dpi
+> +          - mediatek,mt8192-dpi
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8365-dpi
+> +          - const: mediatek,mt8192-dpi
+>  
+>    reg:
+>      maxItems: 1
+> @@ -32,16 +37,20 @@ properties:
+>      maxItems: 1
+>  
+>    clocks:
+> +    minItems: 3
+>      items:
+>        - description: Pixel Clock
+>        - description: Engine Clock
+>        - description: DPI PLL
+> +      - description: DPI Clock
 
-Sorry for not seeing and asking before, but why do you need 'ret'?
-Can't you use the existing 'err' in place in this whole patch?
+Why MT8365 has this additional clock? What is the new hardware block
+(compared with other SoC) need this clock? Why this is different than
+other SoC?
 
-> +		goto err_put;
->   	}
->   
->   	trigger = (flags == OF_GPIO_ACTIVE_LOW);
-> @@ -105,15 +111,15 @@ static int gpio_halt_probe(struct platform_device *pdev)
->   	gpio_direction_output(gpio, !trigger);
->   
->   	/* Now get the IRQ which tells us when the power button is hit */
-> -	irq = irq_of_parse_and_map(halt_node, 0);
-> +	irq = irq_of_parse_and_map(child_node, 0);
->   	err = request_irq(irq, gpio_halt_irq, IRQF_TRIGGER_RISING |
-> -			  IRQF_TRIGGER_FALLING, "gpio-halt", halt_node);
-> +			  IRQF_TRIGGER_FALLING, "gpio-halt", child_node);
->   	if (err) {
->   		printk(KERN_ERR "gpio-halt: error requesting IRQ %d for "
->   		       "GPIO %d.\n", irq, gpio);
->   		gpio_free(gpio);
-> -		halt_node = NULL;
-> -		return err;
-> +		ret = err;
-> +		goto err_put;
->   	}
->   
->   	/* Register our halt function */
-> @@ -122,8 +128,12 @@ static int gpio_halt_probe(struct platform_device *pdev)
->   
->   	printk(KERN_INFO "gpio-halt: registered GPIO %d (%d trigger, %d"
->   	       " irq).\n", gpio, trigger, irq);
-> +	ret = 0;
-> +	halt_node = of_node_get(child_node);
+Is this case the same as [1]? If so, I think you should not add this
+clock.
 
-LGTM, but my preferred style would be:
-	halt_node = child_node;
-	return 0;
+[1] 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220613064841.10481-2-rex-bc.chen@mediatek.com/
 
-I'm not a maintainer, so this is just my opinion and it is mostly a 
-mater of taste.
+Regards,
+CK
 
-CJ
-
->   
-> -	return 0;
-> +err_put:
-> +	of_node_put(child_node);
-> +	return ret;
->   }
->   
->   static int gpio_halt_remove(struct platform_device *pdev)
-> @@ -139,6 +149,7 @@ static int gpio_halt_remove(struct platform_device *pdev)
->   
->   		gpio_free(gpio);
->   
-> +		of_node_put(halt_node);
->   		halt_node = NULL;
->   	}
->   
+>  
+>    clock-names:
+> +    minItems: 3
+>      items:
+>        - const: pixel
+>        - const: engine
+>        - const: pll
+> +      - const: dpi
+>  
+>    pinctrl-0: true
+>    pinctrl-1: true
+> @@ -71,6 +80,27 @@ required:
+>  
+>  additionalProperties: false
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mediatek,mt8365-dpi
+> +
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 4
+> +        clock-names:
+> +          maxItems: 4
+> +
+> +    else:
+> +      properties:
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          maxItems: 3
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
 

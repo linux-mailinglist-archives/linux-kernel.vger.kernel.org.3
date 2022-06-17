@@ -2,129 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3939854F97B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E2754F983
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382859AbiFQOqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S1382919AbiFQOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382802AbiFQOqb (ORCPT
+        with ESMTP id S1382917AbiFQOr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:46:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B71C53FDA1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655477189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9WJ3fcpXL0f2WOS1lh4X7CDZ3Ewdk0gaVvZYQvOA7jA=;
-        b=d+rJIo9fNstpU1X52hJPrUAmMGTnhuVSTgZJxHx5yiPtBQ4cisIRDhWuE1pnzCV7bC7GWh
-        tx1aWNFGVWyWWluaLAdj8+BPtU1wjIVqOBmxhMtMVlCyCpZmnU2bPvxYTfXV2xiDtIRST2
-        4NA1TwnLZMfj1U5+T1d5YTWoCAbdJuI=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-169-WPjPXVGsO82LwYy5duO4Rg-1; Fri, 17 Jun 2022 10:46:28 -0400
-X-MC-Unique: WPjPXVGsO82LwYy5duO4Rg-1
-Received: by mail-qk1-f200.google.com with SMTP id bi36-20020a05620a31a400b006a79f0706e5so5223659qkb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:46:28 -0700 (PDT)
+        Fri, 17 Jun 2022 10:47:29 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9092E562E6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:47:26 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id i64so4358478pfc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MPCG/baINSN05E8zLaHp5M05nQJo561R1Rf9UyABPAE=;
+        b=TM8LtHg0PZhQ/2UAkr9KYK2tpeXbOEeI7MkDDaIGtu8fdkRsnwGbYoIrAOOff4sO1K
+         zG4HqYLeD6VnXOiEPW4emUCjahf4wzykvdeyEZ0632XOcMNsqz3nxXb1Vlj+eUtycHIx
+         5mczs8OOoPA6MnS6JDxY8rvh2Yc7/AjFj1ZaDsIvyI7DNzYdEjhhwPARjQwIj9v6wVIz
+         3PJRJ5erC0csJxWFpJtQAonks5YQ6h39ipBnzJu3ikbiS2XQtVzFTWk3K9sV83odxmoI
+         n3P6D4jSvHFPUljYWpmdrDvbcQvXViZvPH1UvHpJguw8cgvmtqudDuRuREaZrCWu/+5V
+         2ryA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=9WJ3fcpXL0f2WOS1lh4X7CDZ3Ewdk0gaVvZYQvOA7jA=;
-        b=W78abTdmoAS/XujHCyeDIZhIfE8QJRU+/IiFle7HvlUxMp9wj8H/YUhRi4cFbEFIUG
-         gSJ5POQB+8weGJhE+Q3G8d64w1v/Ac6XvahD5hQ3G2WVjo5x5fpQUjL1dhLzUJ3GZ+Ty
-         OwVWM+MSbnEOmEQgzGyAhMA7bm4LSwbAFox6objJoCRRr+GSAmfsy3FBZTbMptV7Ureh
-         TwBzHsBRfNE/GmoTsNB7+y+uEXAtXkR+mhM62gWSkFFCOKMkUq19g7IMd77pXWo+b5xQ
-         1aaMDsNakzh3gXWnjt2RWOx8xbvP5glPYNx+aSgoxX20/cDGRHAt7HLkd/7afQZF2nU7
-         xvtA==
-X-Gm-Message-State: AJIora8Zo86mlSmIQkmZLaJwVNC+ZYydWe3ARXY1B30OHiXqONKp/o5O
-        WY+xW5aoqLJERdijYpkmsd7dsUfe+h7uaWCzIsHz4Aa8ySaIt5naa4JXpESY4rYArBnZbMoRT1Z
-        0CUM408YwlC2mUeQjT3eFa7u6
-X-Received: by 2002:ad4:5c4a:0:b0:464:5920:7c1a with SMTP id a10-20020ad45c4a000000b0046459207c1amr8736674qva.58.1655477188328;
-        Fri, 17 Jun 2022 07:46:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tAXwW2mpsUavrlypnLTFvGbZu5tQk5+gn1Z1EAvySMi1FHasDEGVadg1bRJOm3lqNdYXoCAg==
-X-Received: by 2002:ad4:5c4a:0:b0:464:5920:7c1a with SMTP id a10-20020ad45c4a000000b0046459207c1amr8736646qva.58.1655477188058;
-        Fri, 17 Jun 2022 07:46:28 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id a15-20020ac85b8f000000b00304e38fb3dasm4813173qta.35.2022.06.17.07.46.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MPCG/baINSN05E8zLaHp5M05nQJo561R1Rf9UyABPAE=;
+        b=N9cgV+vRIiX2gGz12mzE6IvUcPMFN/llC+7HgPpo+svk5luxJQs3bRXAtK5dSiBXet
+         HGEuBExkHxgnR//t1x1Dn0DIqFZ9vSYMkuc5mcEyaiv627T5AeN2i7TAdPXE43zbEsg4
+         9sQJXOCXu5+vit0A3XWLNveIUiMPBzlrzfM3vDmc/2C/yNupJCDNEC/3NWE30bLBxdIG
+         wtvy3McNcn2+LLfmKN06QBZOJsCUiN5Or0zmJGxrTgnq/JGGoBL3DcZL5/poxUsd4923
+         JM0M0IVz/YZR1XJKbBNj/Az5YaElrSgpG44Tn7nHEIQ6C4i84L/DboPlShYQK+2/6bW1
+         LRMA==
+X-Gm-Message-State: AJIora8VHjgAwg9sv/JmnX2X2QI0BzFva4en+j8hr+FDKkmG2MxbSDMW
+        9Q3JdFKhXQHIZmgFQLEZMoLAmfOAkkFJsw==
+X-Google-Smtp-Source: AGRyM1sK/wlloRYyR7vlWUmhOQ3QnbdmRtRUme3wdZEAUvbT/Uu58RIpFtP1SI6BqkSkdM3syrtshw==
+X-Received: by 2002:a63:1653:0:b0:3fd:cbe2:c031 with SMTP id 19-20020a631653000000b003fdcbe2c031mr9243617pgw.398.1655477245876;
+        Fri, 17 Jun 2022 07:47:25 -0700 (PDT)
+Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
+        by smtp.gmail.com with ESMTPSA id o12-20020a63a80c000000b003db822e2170sm3832453pgf.23.2022.06.17.07.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 07:46:27 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Tao Zhou <tao.zhou@linux.dev>, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-rt-users@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Fri, 17 Jun 2022 07:47:25 -0700 (PDT)
+From:   Zhang Boyang <zhangboyang.id@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <jlelli@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Subject: Re: [PATCH] panic, kexec: Don't mutex_trylock() in __crash_kexec()
-In-Reply-To: <YqyHGxPCgiXuep3/@alley>
-References: <20220616123709.347053-1-vschneid@redhat.com>
- <Yqxaf6V+hvCSXQSM@geo.homenetwork>
- <xhsmhh74j7biy.mognet@vschneid.remote.csb> <YqyHGxPCgiXuep3/@alley>
-Date:   Fri, 17 Jun 2022 15:46:23 +0100
-Message-ID: <xhsmhczf773gg.mognet@vschneid.remote.csb>
+        Kees Cook <keescook@chromium.org>,
+        Ivan Djelic <ivan.djelic@parrot.com>,
+        Boris Brezillon <boris.brezillon@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Zhang Boyang <zhangboyang.id@gmail.com>
+Subject: [PATCH v2 5/5] rslib: Fix integer overflow on large fcr or prim
+Date:   Fri, 17 Jun 2022 22:46:24 +0800
+Message-Id: <20220617144624.158973-6-zhangboyang.id@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220617144624.158973-1-zhangboyang.id@gmail.com>
+References: <20220617144624.158973-1-zhangboyang.id@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/22 15:52, Petr Mladek wrote:
-> On Fri 2022-06-17 12:52:05, Valentin Schneider wrote:
->> If you look at __crash_kexec() in isolation yes, but if you look at panic()
->> and nmi_panic() only a single NMI can get in there. I think that is also
->> true for invocations via crash_kexec().
->
-> It is true that panic() could be called only once, see this code
-> in panic():
->
-> 	 * Only one CPU is allowed to execute the panic code from here. For
-> 	this_cpu = raw_smp_processor_id();
-> 	old_cpu  = atomic_cmpxchg(&panic_cpu, PANIC_CPU_INVALID, this_cpu);
->
-> 	if (old_cpu != PANIC_CPU_INVALID && old_cpu != this_cpu)
-> 		panic_smp_self_stop();
->
->
-> One the other hand, the aproach with two variables is strage
-> and brings exactly these questions.
->
-> If a trylock is enough that the mutex can be replaced by two
-> simple atomic operations. The mutex would be needed only
-> when a user really would need to wait for another one.
->
->
-> 	atomic_t crash_kexec_lock;
->
-> 	/* trylock part */
-> 	if (atomic_cmpxchg_acquire(&crash_kexec_lock, 0, 1) != 0)
-> 		return -EBUSY;
->
-> 	/* do anything guarded by crash_kexec_lock */
->
-> 	/* release lock */
-> 	atomic_set_release(&crash_kexec_lock, 0);
->
-> The _acquire, _release variants will do the barriers correctly.
->
+Current rslib support symsize up to 16, so the max value of rs->nn can
+be 0xFFFF. Since fcr <= nn, prim <= nn, multiplications on them can
+overflow easily, e.g. fcr*root[j], fcr*prim.
 
-Looks saner! I can't think of anything wrong with it so I'll shove that in
-v2. Thanks!
+This patch fixes these problems by introducing rs_modnn_mul(a, b). This
+function is same as rs_modnn(a*b) but it will avoid overflow when
+calculating a*b. It requires 0 <= a <= nn && 0 <= b <= nn, because it
+use uint32_t to do the multiplication internally, so there will be no
+overflow as long as 0 <= a <= nn <= 0xFFFF && 0 <= b <= nn <= 0xFFFF. In
+fact, if we use `unsigned int' everywhere, there is no need to have
+rs_modnn_mul(). But the `unsigned int' approach has poor scalability and
+it may bring us to the mess of signed and unsigned integers.
 
-> Best Regards,
-> Petr
+With rs_modnn(), the intermediate result is now restricted to [0, nn).
+This enables us to use rs_modnn_fast(a+b) to replace rs_modnn(a+b), as
+long as 0 <= a+b < 2*nn. The most common case is one addend in [0, nn]
+and the other addend in [0, nn). The examples of values in [0, nn] are
+fcr, prim, indexes taken from rs->index_of[0...nn], etc. The examples of
+values in [0, nn) are results from rs_modnn(), indexes taken from
+rs->index_of[1...nn], etc.
+
+Since the roots of RS generator polynomial, i.e. (fcr+i)*prim%nn, is
+often used. It's now precomputed into rs->genroot[], to avoid writing
+rs_modnn_mul(rs, rs_modnn_fast(rs, fcr + i), prim) everywhere.
+
+The algorithm of searching for rs->iprim is also changed. Instead of
+searching for (1+what*nn)%prim == 0, then iprim = (1+what*nn)/prim, it
+now searches for iprim*prim%nn == 1 directly.
+
+A new test case is also added to test_rslib.c to ensure correctness.
+
+Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
+---
+ include/linux/rslib.h           | 22 ++++++++++++
+ lib/reed_solomon/decode_rs.c    | 60 +++++++++++++++++++--------------
+ lib/reed_solomon/reed_solomon.c | 30 ++++++++++++-----
+ lib/reed_solomon/test_rslib.c   |  8 ++---
+ 4 files changed, 82 insertions(+), 38 deletions(-)
+
+diff --git a/include/linux/rslib.h b/include/linux/rslib.h
+index 44ec7c6f24b2..29abfb2de257 100644
+--- a/include/linux/rslib.h
++++ b/include/linux/rslib.h
+@@ -22,6 +22,7 @@
+  * @alpha_to:	exp() lookup table
+  * @index_of:	log() lookup table
+  * @genpoly:	Generator polynomial
++ * @genroot:	Roots of generator polynomial, index form
+  * @nroots:	Number of generator roots = number of parity symbols
+  * @fcr:	First consecutive root, index form
+  * @prim:	Primitive element, index form
+@@ -37,6 +38,7 @@ struct rs_codec {
+ 	uint16_t	*alpha_to;
+ 	uint16_t	*index_of;
+ 	uint16_t	*genpoly;
++	uint16_t	*genroot;
+ 	int		nroots;
+ 	int		fcr;
+ 	int		prim;
+@@ -127,6 +129,26 @@ static inline int rs_modnn(struct rs_codec *rs, int x)
+ 	return x;
+ }
+ 
++/** modulo replacement for galois field arithmetics
++ *
++ *  @rs:	Pointer to the RS codec
++ *  @a:		0 <= a <= nn ; a*b is the value to reduce
++ *  @b:		0 <= b <= nn ; a*b is the value to reduce
++ *
++ *  Same as rs_modnn(a*b), but avoid interger overflow when calculating a*b
++*/
++static inline int rs_modnn_mul(struct rs_codec *rs, int a, int b)
++{
++	/* nn <= 0xFFFF, so (a * b) will not overflow uint32_t */
++	uint32_t x = (uint32_t)a * (uint32_t)b;
++	uint32_t nn = (uint32_t)rs->nn;
++	while (x >= nn) {
++		x -= nn;
++		x = (x >> rs->mm) + (x & nn);
++	}
++	return (int)x;
++}
++
+ /** modulo replacement for galois field arithmetics
+  *
+  *  @rs:	Pointer to the RS codec
+diff --git a/lib/reed_solomon/decode_rs.c b/lib/reed_solomon/decode_rs.c
+index 6c1d53d1b702..3387465ab429 100644
+--- a/lib/reed_solomon/decode_rs.c
++++ b/lib/reed_solomon/decode_rs.c
+@@ -20,6 +20,7 @@
+ 	int iprim = rs->iprim;
+ 	uint16_t *alpha_to = rs->alpha_to;
+ 	uint16_t *index_of = rs->index_of;
++	uint16_t *genroot = rs->genroot;
+ 	uint16_t u, q, tmp, num1, num2, den, discr_r, syn_error;
+ 	int count = 0;
+ 	int num_corrected;
+@@ -69,8 +70,8 @@
+ 			} else {
+ 				syn[i] = ((((uint16_t) data[j]) ^
+ 					   invmsk) & msk) ^
+-					alpha_to[rs_modnn(rs, index_of[syn[i]] +
+-						       (fcr + i) * prim)];
++					alpha_to[rs_modnn_fast(rs,
++						index_of[syn[i]] + genroot[i])];
+ 			}
+ 		}
+ 	}
+@@ -81,8 +82,8 @@
+ 				syn[i] = ((uint16_t) par[j]) & msk;
+ 			} else {
+ 				syn[i] = (((uint16_t) par[j]) & msk) ^
+-					alpha_to[rs_modnn(rs, index_of[syn[i]] +
+-						       (fcr+i)*prim)];
++					alpha_to[rs_modnn_fast(rs,
++						index_of[syn[i]] + genroot[i])];
+ 			}
+ 		}
+ 	}
+@@ -108,15 +109,17 @@
+ 
+ 	if (no_eras > 0) {
+ 		/* Init lambda to be the erasure locator polynomial */
+-		lambda[1] = alpha_to[rs_modnn(rs,
+-					prim * (nn - 1 - (eras_pos[0] + pad)))];
++		lambda[1] = alpha_to[rs_modnn_mul(rs,
++					 prim, (nn - 1 - (eras_pos[0] + pad)))];
+ 		for (i = 1; i < no_eras; i++) {
+-			u = rs_modnn(rs, prim * (nn - 1 - (eras_pos[i] + pad)));
++			u = rs_modnn_mul(rs,
++					 prim, (nn - 1 - (eras_pos[i] + pad)));
+ 			for (j = i + 1; j > 0; j--) {
+ 				tmp = index_of[lambda[j - 1]];
+ 				if (tmp != nn) {
+ 					lambda[j] ^=
+-						alpha_to[rs_modnn(rs, u + tmp)];
++						alpha_to[rs_modnn_fast(rs,
++							 u + tmp)];
+ 				}
+ 			}
+ 		}
+@@ -137,9 +140,9 @@
+ 		for (i = 0; i < r; i++) {
+ 			if ((lambda[i] != 0) && (s[r - i - 1] != nn)) {
+ 				discr_r ^=
+-					alpha_to[rs_modnn(rs,
+-							  index_of[lambda[i]] +
+-							  s[r - i - 1])];
++					alpha_to[rs_modnn_fast(rs,
++						 index_of[lambda[i]] +
++						 s[r - i - 1])];
+ 			}
+ 		}
+ 		discr_r = index_of[discr_r];	/* Index form */
+@@ -153,8 +156,8 @@
+ 			for (i = 0; i < nroots; i++) {
+ 				if (b[i] != nn) {
+ 					t[i + 1] = lambda[i + 1] ^
+-						alpha_to[rs_modnn(rs, discr_r +
+-								  b[i])];
++						alpha_to[rs_modnn_fast(rs,
++							 discr_r + b[i])];
+ 				} else
+ 					t[i + 1] = lambda[i + 1];
+ 			}
+@@ -166,8 +169,9 @@
+ 				 */
+ 				for (i = 0; i <= nroots; i++) {
+ 					b[i] = (lambda[i] == 0) ? nn :
+-						rs_modnn(rs, index_of[lambda[i]]
+-							 - discr_r + nn);
++						rs_modnn_fast(rs,
++						        index_of[lambda[i]] +
++							nn - discr_r);
+ 				}
+ 			} else {
+ 				/* 2 lines below: B(x) <-- x*B(x) */
+@@ -197,11 +201,11 @@
+ 	/* Find roots of error+erasure locator polynomial by Chien search */
+ 	memcpy(&reg[1], &lambda[1], nroots * sizeof(reg[0]));
+ 	count = 0;		/* Number of roots of lambda(x) */
+-	for (i = 1, k = iprim - 1; i <= nn; i++, k = rs_modnn(rs, k + iprim)) {
++	for (i = 1, k = iprim-1; i <= nn; i++, k = rs_modnn_fast(rs, k+iprim)) {
+ 		q = alpha_to[0];	/* lambda[0] is always 0 */
+ 		for (j = deg_lambda; j > 0; j--) {
+ 			if (reg[j] != nn) {
+-				reg[j] = rs_modnn(rs, reg[j] + j);
++				reg[j] = rs_modnn_fast(rs, reg[j] + j);
+ 				q ^= alpha_to[reg[j]];
+ 			}
+ 		}
+@@ -238,8 +242,8 @@
+ 		tmp = 0;
+ 		for (j = i; j >= 0; j--) {
+ 			if ((s[i - j] != nn) && (lambda[j] != nn))
+-				tmp ^=
+-				    alpha_to[rs_modnn(rs, s[i - j] + lambda[j])];
++				tmp ^= alpha_to[rs_modnn_fast(rs,
++						s[i - j] + lambda[j])];
+ 		}
+ 		omega[i] = index_of[tmp];
+ 	}
+@@ -254,8 +258,9 @@
+ 		num1 = 0;
+ 		for (i = deg_omega; i >= 0; i--) {
+ 			if (omega[i] != nn)
+-				num1 ^= alpha_to[rs_modnn(rs, omega[i] +
+-							i * root[j])];
++				num1 ^= alpha_to[rs_modnn_fast(rs,
++						 omega[i] +
++						 rs_modnn_mul(rs, i, root[j]))];
+ 		}
+ 
+ 		if (num1 == 0) {
+@@ -264,15 +269,18 @@
+ 			continue;
+ 		}
+ 
+-		num2 = alpha_to[rs_modnn(rs, root[j] * (fcr - 1) + nn)];
++		num2 = alpha_to[rs_modnn_fast(rs,
++				rs_modnn_mul(rs, root[j], fcr) +
++				nn - root[j])];
+ 		den = 0;
+ 
+ 		/* lambda[i+1] for i even is the formal derivative
+ 		 * lambda_pr of lambda[i] */
+ 		for (i = min(deg_lambda, nroots - 1) & ~1; i >= 0; i -= 2) {
+ 			if (lambda[i + 1] != nn) {
+-				den ^= alpha_to[rs_modnn(rs, lambda[i + 1] +
+-						       i * root[j])];
++				den ^= alpha_to[rs_modnn_fast(rs,
++						lambda[i + 1] +
++						rs_modnn_mul(rs, i, root[j]))];
+ 			}
+ 		}
+ 
+@@ -292,8 +300,8 @@
+ 			if (b[j] == 0)
+ 				continue;
+ 
+-			k = (fcr + i) * prim * (nn-loc[j]-1);
+-			tmp ^= alpha_to[rs_modnn(rs, index_of[b[j]] + k)];
++			k = rs_modnn_mul(rs, genroot[i], nn - loc[j] - 1);
++			tmp ^= alpha_to[rs_modnn_fast(rs, index_of[b[j]] + k)];
+ 		}
+ 
+ 		if (tmp != alpha_to[s[i]])
+diff --git a/lib/reed_solomon/reed_solomon.c b/lib/reed_solomon/reed_solomon.c
+index da46026a60b8..2c86e4dfcbaa 100644
+--- a/lib/reed_solomon/reed_solomon.c
++++ b/lib/reed_solomon/reed_solomon.c
+@@ -100,6 +100,10 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
+ 	if(rs->genpoly == NULL)
+ 		goto err;
+ 
++	rs->genroot = kmalloc_array(rs->nroots, sizeof(uint16_t), gfp);
++	if(rs->genroot == NULL)
++		goto err;
++
+ 	/* Generate Galois field lookup tables */
+ 	rs->index_of[0] = rs->nn;	/* log(zero) = -inf */
+ 	rs->alpha_to[rs->nn] = 0;	/* alpha**-inf = 0 */
+@@ -126,26 +130,34 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
+ 		goto err;
+ 
+ 	/* Find prim-th root of 1, used in decoding */
+-	for(iprim = 1; (iprim % prim) != 0; iprim += rs->nn);
++	for (iprim = 1; rs_modnn_mul(rs, iprim, prim) != 1; iprim++);
+ 	/* prim-th root of 1, index form */
+-	rs->iprim = iprim / prim;
++	rs->iprim = iprim;
++
++	/* Precompute generator polynomial roots */
++	root = rs_modnn_mul(rs, fcr, prim);
++	for (i = 0; i < nroots; i++) {
++		rs->genroot[i] = root; /*  = (fcr + i) * prim % nn  */
++		root = rs_modnn_fast(rs, root + prim);
++	}
+ 
+ 	/* Form RS code generator polynomial from its roots */
+ 	rs->genpoly[0] = rs->alpha_to[0];
+-	for (i = 0, root = fcr * prim; i < nroots; i++, root += prim) {
++	for (i = 0; i < nroots; i++) {
++		root = rs->genroot[i];
+ 		rs->genpoly[i + 1] = rs->alpha_to[0];
+ 		/* Multiply rs->genpoly[] by  @**(root + x) */
+ 		for (j = i; j > 0; j--) {
+ 			if (rs->genpoly[j] != 0) {
+-				rs->genpoly[j] = rs->genpoly[j -1] ^
+-					rs->alpha_to[rs_modnn(rs,
++				rs->genpoly[j] = rs->genpoly[j - 1] ^
++					rs->alpha_to[rs_modnn_fast(rs,
+ 					rs->index_of[rs->genpoly[j]] + root)];
+ 			} else
+ 				rs->genpoly[j] = rs->genpoly[j - 1];
+ 		}
+ 		/* rs->genpoly[0] can never be zero */
+ 		rs->genpoly[0] =
+-			rs->alpha_to[rs_modnn(rs,
++			rs->alpha_to[rs_modnn_fast(rs,
+ 				rs->index_of[rs->genpoly[0]] + root)];
+ 	}
+ 	/* convert rs->genpoly[] to index form for quicker encoding */
+@@ -157,6 +169,7 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
+ 	return rs;
+ 
+ err:
++	kfree(rs->genroot);
+ 	kfree(rs->genpoly);
+ 	kfree(rs->index_of);
+ 	kfree(rs->alpha_to);
+@@ -188,6 +201,7 @@ void free_rs(struct rs_control *rs)
+ 		kfree(cd->alpha_to);
+ 		kfree(cd->index_of);
+ 		kfree(cd->genpoly);
++		kfree(cd->genroot);
+ 		kfree(cd);
+ 	}
+ 	mutex_unlock(&rslistlock);
+@@ -340,7 +354,7 @@ EXPORT_SYMBOL_GPL(encode_rs8);
+  *  @data:	data field of a given type
+  *  @par:	received parity data field
+  *  @len:	data length
+- *  @s: 	syndrome data field, must be in index form
++ *  @s: 	syndrome data field, must be in index form, 0 <= index <= nn
+  *		(if NULL, syndrome is calculated)
+  *  @no_eras:	number of erasures
+  *  @eras_pos:	position of erasures, can be NULL
+@@ -393,7 +407,7 @@ EXPORT_SYMBOL_GPL(encode_rs16);
+  *  @data:	data field of a given type
+  *  @par:	received parity data field
+  *  @len:	data length
+- *  @s: 	syndrome data field, must be in index form
++ *  @s: 	syndrome data field, must be in index form, 0 <= index <= nn
+  *		(if NULL, syndrome is calculated)
+  *  @no_eras:	number of erasures
+  *  @eras_pos:	position of erasures, can be NULL
+diff --git a/lib/reed_solomon/test_rslib.c b/lib/reed_solomon/test_rslib.c
+index d9d1c33aebda..a03c7249f920 100644
+--- a/lib/reed_solomon/test_rslib.c
++++ b/lib/reed_solomon/test_rslib.c
+@@ -55,6 +55,7 @@ static struct etab Tab[] = {
+ 	{8,	0x11d,	1,	1,	30,	100	},
+ 	{8,	0x187,	112,	11,	32,	100	},
+ 	{9,	0x211,	1,	1,	33,	80	},
++	{16,  0x1ffed,	65534,	65534,	50,	5	},
+ 	{0, 0, 0, 0, 0, 0},
+ };
+ 
+@@ -232,9 +233,8 @@ static void compute_syndrome(struct rs_control *rsc, uint16_t *data,
+ 	struct rs_codec *rs = rsc->codec;
+ 	uint16_t *alpha_to = rs->alpha_to;
+ 	uint16_t *index_of = rs->index_of;
++	uint16_t *genroot = rs->genroot;
+ 	int nroots = rs->nroots;
+-	int prim = rs->prim;
+-	int fcr = rs->fcr;
+ 	int i, j;
+ 
+ 	/* Calculating syndrome */
+@@ -245,8 +245,8 @@ static void compute_syndrome(struct rs_control *rsc, uint16_t *data,
+ 				syn[i] = data[j];
+ 			} else {
+ 				syn[i] = data[j] ^
+-					alpha_to[rs_modnn(rs, index_of[syn[i]]
+-						+ (fcr + i) * prim)];
++					alpha_to[rs_modnn_fast(rs,
++						index_of[syn[i]] + genroot[i])];
+ 			}
+ 		}
+ 	}
+-- 
+2.30.2
 

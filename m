@@ -2,69 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9691454F501
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683ED54F507
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381676AbiFQKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S1381707AbiFQKM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381655AbiFQKKu (ORCPT
+        with ESMTP id S1381689AbiFQKMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:10:50 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB356A02C;
-        Fri, 17 Jun 2022 03:10:48 -0700 (PDT)
-X-UUID: c532be217fc54cc69614eaa295a05c49-20220617
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:b14705de-28a6-4434-a274-7c34c82fd3c1,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:d181e748-4c92-421c-ad91-b806c0f58b2a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: c532be217fc54cc69614eaa295a05c49-20220617
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1485325868; Fri, 17 Jun 2022 18:10:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 17 Jun 2022 18:10:43 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Jun 2022 18:10:43 +0800
-Message-ID: <a3c480a3aa87b87c707b92bc80040764d2434a03.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/2] clk: mediatek: clk-mt8195-vdo1: Reparent and set
- rate on vdo1_dpintf's parent
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>
-CC:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "Miles Chen =?UTF-8?Q?=28=E9=99=B3=E6=B0=91=E6=A8=BA=29?=" 
-        <Miles.Chen@mediatek.com>,
-        "chun-jie.chen@mediatek.com" <chun-jie.chen@mediatek.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Fri, 17 Jun 2022 18:10:42 +0800
-In-Reply-To: <20220617093424.75589-3-angelogioacchino.delregno@collabora.com>
-References: <20220617093424.75589-1-angelogioacchino.delregno@collabora.com>
-         <20220617093424.75589-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 17 Jun 2022 06:12:53 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF55F10FD9;
+        Fri, 17 Jun 2022 03:12:49 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 932341E80D72;
+        Fri, 17 Jun 2022 18:11:02 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9FD_6Uz1XKnf; Fri, 17 Jun 2022 18:10:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [39.144.44.120])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 69D9C1E80D66;
+        Fri, 17 Jun 2022 18:10:57 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] scsi: mpt3sas: Fix space and spelling mistake
+Date:   Fri, 17 Jun 2022 18:11:03 +0800
+Message-Id: <20220617101103.3162-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-17 at 17:34 +0800, AngeloGioacchino Del Regno wrote:
-> Like it was done for the vdo0_dp_intf0_dp_intf clock (used for eDP),
-> add the CLK_SET_RATE_PARENT flag to CLK_VDO1_DPINTF (used for DP)
-> and also fix its parent clock name as it has to be "top_dp" for two
-> reasons:
->  - This is its real parent!
->  - Likewise to eDP/VDO0 counterpart, we need clock source
->    selection on CLK_TOP_DP.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> Fixes: 269987505ba9 ("clk: mediatek: Add MT8195 vdosys1 clock
-> support")
-> 
-Hello Angelo,
+There is a splling mistake in _base_sas_ioc_info. Change 'cant' to 'can't'.
+There are 3 space mistakes. Remove blank space before ','.
 
-Thanks for this series.
-I can use this series to do modetest using MT8195 Tomato Chromebook for
-both dp and edp in kernel v5.19-rc1.
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Therefore,
-Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-and,
-Reviewed-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-
-BRs,
-Bo-Chen
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 9a1ae52bb621..565339a0811d 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -873,7 +873,7 @@ mpt3sas_base_stop_watchdog(struct MPT3SAS_ADAPTER *ioc)
+  * @fault_code: fault code
+  */
+ void
+-mpt3sas_base_fault_info(struct MPT3SAS_ADAPTER *ioc , u16 fault_code)
++mpt3sas_base_fault_info(struct MPT3SAS_ADAPTER *ioc, u16 fault_code)
+ {
+ 	ioc_err(ioc, "fault_state(0x%04x)!\n", fault_code);
+ }
+@@ -1057,7 +1057,7 @@ _base_sas_ioc_info(struct MPT3SAS_ADAPTER *ioc, MPI2DefaultReply_t *mpi_reply,
+ 		desc = "config no defaults";
+ 		break;
+ 	case MPI2_IOCSTATUS_CONFIG_CANT_COMMIT:
+-		desc = "config cant commit";
++		desc = "config can't commit";
+ 		break;
+ 
+ /****************************************************************************
+@@ -1321,7 +1321,7 @@ _base_display_event_data(struct MPT3SAS_ADAPTER *ioc,
+  * @log_info: log info
+  */
+ static void
+-_base_sas_log_info(struct MPT3SAS_ADAPTER *ioc , u32 log_info)
++_base_sas_log_info(struct MPT3SAS_ADAPTER *ioc, u32 log_info)
+ {
+ 	union loginfo_type {
+ 		u32	loginfo;
+@@ -1393,7 +1393,7 @@ _base_display_reply_info(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index,
+ 
+ 	if ((ioc_status & MPI2_IOCSTATUS_MASK) &&
+ 	    (ioc->logging_level & MPT_DEBUG_REPLY)) {
+-		_base_sas_ioc_info(ioc , mpi_reply,
++		_base_sas_ioc_info(ioc, mpi_reply,
+ 		   mpt3sas_base_get_msg_frame(ioc, smid));
+ 	}
+ 
+-- 
+2.25.1
 

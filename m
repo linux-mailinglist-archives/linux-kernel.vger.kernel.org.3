@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CBA54F116
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CF354F11D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380116AbiFQGdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        id S1379841AbiFQGjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbiFQGdT (ORCPT
+        with ESMTP id S229696AbiFQGjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:33:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012D053E18
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:33:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77E3961E84
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:33:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8152BC3411B;
-        Fri, 17 Jun 2022 06:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655447597;
-        bh=/syOBghp3XtUP61v44swnoBkqYYl6tKIHy8X+FrSWy4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UEP3v9qMG7QtsKC8BgMLQkHW87ogmA5wiSmhCaHWDto2RER4eoBR1idhKhwJObk/U
-         8KYMzlq+HgGytUrYp1/+PIhPktG+29WXD1eZc7clXgriSOPbtpZ/P8lPp+Dk8utl33
-         TEN7StrLvtoHfH7kYDhOyNf4i1hUpC2hIeCE2rvQ=
-Date:   Fri, 17 Jun 2022 08:33:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     HighW4y2H3ll <huzh@nyu.edu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fix use of uninitialized variable in
- rts5261_init_from_hw, when efuse_valid == 1.
-Message-ID: <YqwgKlSD4wJpzy/w@kroah.com>
-References: <20220617044755.37535-1-huzh@nyu.edu>
+        Fri, 17 Jun 2022 02:39:03 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC6E56F9B;
+        Thu, 16 Jun 2022 23:39:01 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id d14so130089pjs.3;
+        Thu, 16 Jun 2022 23:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3nq0sEVdb/x1ukcdXtYcrvwvNzqDSLocc4o0m2aVSjk=;
+        b=dPPVfjCWxsXxpFGOHcqPC1fV/pXZ22W1hnFF4jLJBIkdlTzQPC4jQnXeALFShf5UXP
+         Viml177LUX8WdXFfPhqlGOweqgVY+2mDCh3j/jZP7z04R8pggPhjAPzX/OAgN7C/b3pV
+         9gnIUYYPygjp6S24Cz6oL6nJSlA56+fYY3chmnnx+GESAAlmIm2/hmCK6GPhfVN0lvvf
+         dAtTfPRfNrNu354w3i/JVwUoTGPir8GmZjw3dfyyu+ZyRr06kbfDTsnQ+6qgWuhXp+3l
+         l+Cy/WvN4ius6CCYO/Rx4ge0E9/RwEqrM3UTgzwhezMS6mFg4jm7Je/idEJKemYV9R7e
+         an0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3nq0sEVdb/x1ukcdXtYcrvwvNzqDSLocc4o0m2aVSjk=;
+        b=SHp5j6Q0Ya9OS4Q4XagsbIVzjN9BLas3RJqGj7e7SDv+R5OwKLBP+rpBOe1hXFVCll
+         lnTIkMPCZYX5ZEPfesE5MUzQVvrqsjLRbBQRRBabqS1eDQxkIA9wrOUCA/4OvMVomU1+
+         MJofTNuUXCasc5CEikr0Isyfv1Np4UCAda4h7MXSZMUfoQq1qQux3H9gidOgs5pGCPwO
+         wtJgDeXmSxkK7P/Vwkli0gqNm7+TfMuByoa18kmVoSZVtQAMGi2Kqp7Wn9j5kIW7Fu4g
+         AzdqFlzOajflc2Z9oJmx41mrTih5Sg1gVxWmSEQ0mrLF6hQZOSmidzCl7xM52rJYfxGw
+         i2pQ==
+X-Gm-Message-State: AJIora9t0gpumCxliMYMKUfbfnCNPSYvfTCEE5bFKbCUi8cKMTbirYMN
+        m3sbIGqARm9Bqali98t0/H0MYZey4BV3B4L2
+X-Google-Smtp-Source: AGRyM1ubEnpcjWuy2vE5xi70Fmbu5aLG0TLkWtOCP3AWGVcX09v8zJplUrZBh470nxoZgU1bVMBm3g==
+X-Received: by 2002:a17:902:aa0c:b0:168:faa0:50a1 with SMTP id be12-20020a170902aa0c00b00168faa050a1mr8271195plb.57.1655447941168;
+        Thu, 16 Jun 2022 23:39:01 -0700 (PDT)
+Received: from VM-155-146-centos.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id o1-20020a62f901000000b0052285857864sm2937781pfh.97.2022.06.16.23.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 23:39:00 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     dave.hansen@intel.com
+Cc:     bhe@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, kirill@shutemov.name, linux-kernel@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        stable@vger.kernel.org, tglx@linutronix.de, x86@kernel.org,
+        ytcoode@gmail.com
+Subject: Re: [PATCH] x86/mm: Fix possible index overflow when creating page table mapping
+Date:   Fri, 17 Jun 2022 14:38:55 +0800
+Message-Id: <20220617063855.1999092-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <8e2c9b2b-d8ad-5e9a-7aa6-23e0c599c2e9@intel.com>
+References: <8e2c9b2b-d8ad-5e9a-7aa6-23e0c599c2e9@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617044755.37535-1-huzh@nyu.edu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 12:47:55AM -0400, HighW4y2H3ll wrote:
-> Signed-off-by: zhenghao hu <huzh@nyu.edu>
-> ---
->  drivers/misc/cardreader/rts5261.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-> index 749cc5a46d13..f22634b14dc8 100644
-> --- a/drivers/misc/cardreader/rts5261.c
-> +++ b/drivers/misc/cardreader/rts5261.c
-> @@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
->  			setting_reg1 = PCR_SETTING_REG4;
->  			setting_reg2 = PCR_SETTING_REG5;
->  		}
-> -	} else if (efuse_valid == 0) {
-> +	} else {
->  		// default
->  		setting_reg1 = PCR_SETTING_REG1;
->  		setting_reg2 = PCR_SETTING_REG2;
-> -- 
-> 2.35.1
-> 
+On Thu, 16 Jun 2022 07:20:40 -0700, Dave Hansen wrote:
+> On 6/16/22 07:15, Yuntao Wang wrote:
+> > On Thu, 16 Jun 2022 07:02:56 -0700, Dave Hansen wrote:
+> >> On 6/16/22 06:55, Yuntao Wang wrote:
+> >>> There are two issues in phys_p4d_init():
+> >>>
+> >>> - The __kernel_physical_mapping_init() does not do boundary-checking for
+> >>>   paddr_end and passes it directly to phys_p4d_init(), phys_p4d_init() does
+> >>>   not do bounds checking either, so if the physical memory to be mapped is
+> >>>   large enough, 'p4d_page + p4d_index(vaddr)' will wrap around to the
+> >>>   beginning entry of the P4D table and its data will be overwritten.
+> >>>
+> >>> - The for loop body will be executed only when 'vaddr < vaddr_end'
+> >>>   evaluates to true, but if that condition is true, 'paddr >= paddr_end'
+> >>>   will evaluate to false, thus the 'if (paddr >= paddr_end) {}' block will
+> >>>   never be executed and become dead code.
+> >> Could you explain a bit how you found this?  Was this encountered in
+> >> practice and debugged or was it found by inspection?
+> > I found it by inspection.
+>
+> Dare I ask how this was tested?
 
-Hi,
+Due to some limitations, I didn't test the changes thoroughly, I just built
+the kernel and booted it in QEMU.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Considering that the patch was not fully tested, I spent a lot of time
+reviewing the code I changed and tried my best to make it correct.

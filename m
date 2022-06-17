@@ -2,135 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A34B54FFE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8A554FFE6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346786AbiFQW1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S1350694AbiFQW3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245162AbiFQW1g (ORCPT
+        with ESMTP id S231913AbiFQW3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:27:36 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73305E4B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:27:34 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id bd16so6939579oib.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BWoZH05gfMTA7sYUbTkU0N63/c9r6q3L+sOo8Fl00Ng=;
-        b=Xgyi4MQcDW1OVDu1nFkyetAQAAdhN/kvJcA3uyoQR+T1CXxXyUwGN4a/pqHIDHVX4P
-         07fxzEziBlveMKdrE416PECbuRmAyrHT+Kx96DJJ/+xyjg5WDtYkTeuAJdwdp4aCRAMr
-         d97NyRLt9uX9EAw9QAQbWhcI1MQQJzTkHD6ug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BWoZH05gfMTA7sYUbTkU0N63/c9r6q3L+sOo8Fl00Ng=;
-        b=tZrF6bMQSL7suJfSXC8d3N5ocJJHZKK/RS8uolaqGYfS0KnBdTK6jogwX6R8FJcsJ4
-         r+uxW05H6zmDC4ZKJRflwbnV62ibT/NIn32mY8HF0ekeCX5UDX8AKn7GjhiCeT84JGWF
-         LACAZvBM3ZW9hc3kNAKYkwuvGycX1rzRtcxuVeIcIrKwLe+tuVWdUUCf1DGVcn+zRDcW
-         7a3wNwsxqP8HKtzBiaDM2ywqmU2mjsKvriaw+dZPR3vv23X6PcRAXjXKKbpcSfT3Cr9g
-         aTOWsjPRb+nEzUTuhb+B4mGzdpx2ZMU8ol+ip6qDlaXHx1DfxRESFoIyv8BciFCVUTEK
-         NsWg==
-X-Gm-Message-State: AJIora+qFTw/7aqsdJKxWM03rdq3+j1r8hg7JquvanLdRvAq5miO1Dul
-        G43cGQ6sG/UnuLuwIRSv6N/rHA==
-X-Google-Smtp-Source: AGRyM1vwbUKpGIaPpmfhAkyPsgnwGP8/J7U2qq1EK/rp9ZP2Hd/8lvIt2wjzbVH62NfsvERArFJJ6Q==
-X-Received: by 2002:a05:6808:23d6:b0:333:1a12:f682 with SMTP id bq22-20020a05680823d600b003331a12f682mr1216419oib.44.1655504853779;
-        Fri, 17 Jun 2022 15:27:33 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id 89-20020a9d0362000000b0060603221281sm3223566otv.81.2022.06.17.15.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 15:27:33 -0700 (PDT)
-Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
-To:     Dylan Hatch <dylanbhatch@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220616211016.4037482-1-dylanbhatch@google.com>
- <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
- <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
- <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
- <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
-Date:   Fri, 17 Jun 2022 16:27:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 17 Jun 2022 18:29:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0382661634;
+        Fri, 17 Jun 2022 15:29:24 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 020CA6601797;
+        Fri, 17 Jun 2022 23:29:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655504963;
+        bh=RUtkDl+kWjurrUM7JaIercsTTzu0XKltvnmwlVJ3WMo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ta20+N4xzU3IVSjLZxfAKClCXe/Tx+0FvcfeR6qQsRpsK8QwQ0unBhGIsxBEYiMZ3
+         4rXwu20Fa/s4prn8TER8Vz+tTOVq1s/EWdqAgbp0g7QSZ9QW9eM90wktAgeDs0j3w5
+         knnwZULMssfXibYNiKNMmmP2y8EyP81Ih+8+NHTxa3E26y5c33CE/w6Cv2rHz0QyPM
+         fWLwIq4a1kq2EllM9ypOtgx5wVDwASMcJZ4EVxJiV1Yot9xB4LAkmTHvw9nUI1YTAh
+         m+m7PJPnd03t9pxpyvlWupQvK+2cyaMy/77/ayGU3R26yyRwikBPABXICk9+XZjrbZ
+         2mBQ2z2XaZCxQ==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH 0/3] Fixes for dtbs_check warnings on Mediatek XHCI nodes
+Date:   Fri, 17 Jun 2022 18:29:13 -0400
+Message-Id: <20220617222916.2435618-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 4:05 PM, Dylan Hatch wrote:
-> On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 6/17/22 12:45 PM, Dylan Hatch wrote:
->>> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>>
->
->>
->> It depends on the goal of the test. Is the test looking to see if the
->> probe fails with insufficient permissions, then you are changing the
->> test to not check for that condition.
-> 
-> The goal of the test is to validate the output of /proc/$PID/maps, and
-> the memory probe is only needed as setup to determine what the
-> expected output should be. This used to be sufficient, but now it can
-> no longer fully disambiguate it with the introduction of
-> vsyscall=xonly. The solution proposed here is to disambiguate it by
-> also checking the length read from /proc/$PID/maps.
-> 
->>
 
-Makes sense. However the question is does this test need to be enhanced
-with the addition of vsyscall=xonly?
+The two first patches fix inconsistencies in the mtk-xhci dt-binding,
+while the third patch is a DTS change to use the clock order required by
+the binding (and that was fixed in patch 2).
 
->> I would say in this case, the right approach would be to leave the test
->> as is and report expected fail and add other cases.
->>
->> The goal being adding more coverage and not necessarily opt for a simple
->> solution.
-> 
-> What does it mean to report a test as expected fail? Is this a
-> mechanism unique to kselftest? I agree adding another test case would
-> work, but I'm unsure how to do it within the framework of kselftest.
-> Ideally, there would be separate test cases for vsyscall=none,
-> vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
-> both in the kernel config and on the kernel command line, meaning (to
-> the best of my knowledge) these test cases would have to be built
-> conditionally against the conflig options and also parse the command
-> line for the 'vsyscall' option.
-> 
+This series gets rid of a couple dtbs_check warnings on mt8192.dtsi and
+another on mt8195.dtsi.
 
-Expected fail isn't unique kselftest. It is a testing criteria where
-a test is expected to fail. For example if a file can only be opened
-with privileged user a test that runs and looks for failure is an
-expected to fail case - we are looking for a failure.
 
-A complete battery of tests for vsyscall=none, vsyscall=emulate,
-vsyscall=xonly would test for conditions that are expected to pass
-and fail based on the config.
+Nícolas F. R. A. Prado (3):
+  dt-bindings: usb: mtk-xhci: Allow wakeup interrupt-names to be
+    optional
+  dt-bindings: usb: mtk-xhci: Allow middle optional clocks to be missing
+  arm64: dts: mt8192: Follow clock order for XHCI
 
-tools/testing/selftests/proc/config doesn't have any config options
-that are relevant to VSYSCALL
+ .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml     | 10 ++++++++--
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi               |  6 +++---
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-Can you please send me the how you are running the test and what the
-failure output looks like?
+-- 
+2.36.1
 
-thanks,
--- Shuah

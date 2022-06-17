@@ -2,175 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4223D54FDCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CBF54FDCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242790AbiFQTio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S244071AbiFQTjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242248AbiFQTiX (ORCPT
+        with ESMTP id S243415AbiFQTjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:38:23 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2032F028
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:38:21 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id h7so3612068ila.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:38:21 -0700 (PDT)
+        Fri, 17 Jun 2022 15:39:17 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39A531513
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:39:15 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id u99so8841696ybi.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:39:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wmbuV7JBORPXXzvNtfIZq/lTzS3aE7SHxRte41av5uM=;
-        b=E0B1WMNGy43PvdJGAw2GYGQ5aKuCRPlGDVLSnor2QZJNSRe5zTPsqxbwe6DludNLxs
-         R4wYYbLa/fc/Ecl0bf0NnRRH8HbpYCn+8yNpx2sS/CcpcFAfgg29nSpNUvdaE7ZyKLUe
-         X2pIoc6EroL/LYddX/FkGtSPgP77qKkI6tr/o=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tSqgzYhEhTmwCEZgsVFvzKQzzLPTMjzLV3IQghkxetY=;
+        b=neswoRsAQx+DPNdXI7N2SPE05WwMU+uwfI85AVZh6CnkYRFLwKHV8ZmksHQqhHfuIx
+         z0cv4zvkzCe020PpGv/LDF19hAEJdyXd7yK+qO8vYLfurg+p6neDChVW/6e/BWjHTZR6
+         Q61wm/EXQewGecJDJiSpJp+r/vGl9MRttd8OgdHLNHMwYkoJVAnxDEPXpk2nmtOYy5Aq
+         hvC9iJQCU0mvFP9tl6siWpukTWE8zNpCEHsujvoZJ/3VE8jCRzQxoMwVmF69WDQ8Wcjy
+         yor2SgqP+hnOQXJf40kLOEK1RcWbTaxEPar/5c2mcT3SlauMqmh3pZKo2G4cXFW/12Gm
+         sx/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wmbuV7JBORPXXzvNtfIZq/lTzS3aE7SHxRte41av5uM=;
-        b=rAYkW/YLjZX3TiY8Pp5DfozEIDR6TuhSnZPZ6LITMd7pYmV4S8xovwTTXdgz3vneLS
-         GEt07MOphfQSJNNdJcjiWixenbM2Ma58ECuiOW2nWK4vzT51Ira/nF/OiTkvtL1//k5R
-         GEy0P5FdyEEqjijC8w96OpdhBvLbZibbqVSis0e/kYnSLr4IpPb4KoeWlbbCGPTHyqxG
-         BzHqXFJWnd0tg6K4oM61DdFTn6Xrs5X8LBrBRajkKd39MceAY7+ms280sKKLZlLObHx7
-         IWc4qOCafy2JIt0O1EZw2wa6UQoyeeoY+3XR68IxM71eN1PT29Oq3B5TqbwQh42PLm9A
-         DiRg==
-X-Gm-Message-State: AJIora/PJ313Z2wbfx25xT7+AFq/deIsyZvT2NhehX+3xzl/neTau2Oi
-        Y3liJ72Wx/sJSzhq9LbAGG/NZA==
-X-Google-Smtp-Source: AGRyM1tEue9xzls/gET9Q/THpzqGhH2Ss/UxUuncgPwKpQV957JCH1xLpqkKlgCFSExHWhnOMXGSmw==
-X-Received: by 2002:a05:6e02:1a23:b0:2d3:82bb:4dae with SMTP id g3-20020a056e021a2300b002d382bb4daemr6485677ile.62.1655494700776;
-        Fri, 17 Jun 2022 12:38:20 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m2-20020a6bbc02000000b006656f9eefa3sm2917727iof.18.2022.06.17.12.38.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 12:38:20 -0700 (PDT)
-Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
-To:     Dylan Hatch <dylanbhatch@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220616211016.4037482-1-dylanbhatch@google.com>
- <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
- <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
-Date:   Fri, 17 Jun 2022 13:38:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tSqgzYhEhTmwCEZgsVFvzKQzzLPTMjzLV3IQghkxetY=;
+        b=XRnich4Yigf7gCwX3aArA+cCj3J2PfbY6KiNMrIg2QVZQPQzIAqClS2nh8/JK/t09t
+         is+O/lF30JxjCP2gRJgwB2Xk9f7oXPyOBVlnDIJTlzRWPgWK7eoZAEzFlb8MSxKPhcN/
+         xLuIOjazu+8XvRUGKylZB+Hd9QXzhxFiEfHM3Aoe0qA95acKHOjQkTL8jFdS7+WeToR0
+         kRb24mQv4unpceDzXgWc2D0TfJBzL/poaQ/lzcCn2KL1M85lETrMssMkNkPQ7j8fjlcw
+         fnWiwuNjDeI8uYCXjjAyl2qKQMiLzM+w1kjG5GvIbMoAKH2T+Z5uGOKRGd44y/adFdTZ
+         Wn3A==
+X-Gm-Message-State: AJIora/fVq2T62SdQ7UvO75I2+g9JIoo/Aq22745kWGZCHUUVXk87qq7
+        H9NCZRSwODz7Pic8YKGEmafOnH8q/Ypt8hAqVWw43Q==
+X-Google-Smtp-Source: AGRyM1uTJYHzEb6jbhMK4VZbcJr10IsBP1JuFLAet7k0WsaObA+7k08tIH+87mb9YO8lSxTUbLq342fgIPulsyakhB0=
+X-Received: by 2002:a25:8181:0:b0:668:c835:eb7c with SMTP id
+ p1-20020a258181000000b00668c835eb7cmr3245468ybk.598.1655494754702; Fri, 17
+ Jun 2022 12:39:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
+ <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net> <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
+ <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
+ <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com> <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
+ <7499dd05-30d1-669c-66b4-5cb06452b476@redhat.com> <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
+ <YqzQKER4JRoudTJE@hirez.programming.kicks-ass.net> <CANn89iKO1koPa5R_mvK0k2dkFaq+F0PgcbvpVt+JpzzR5xsu6g@mail.gmail.com>
+ <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
+ <CANn89i+wBM+ewcP9u+ZWDqv3zQeK7ovKB+YJf9S6Om5QkqhLHA@mail.gmail.com> <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com>
+In-Reply-To: <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 17 Jun 2022 21:39:03 +0200
+Message-ID: <CANn89iJXeUJRV2+8reUdaeARxYPPbCoG+9atmRFfy4kv0XX00A@mail.gmail.com>
+Subject: Re: [PATCH] locking/rwlocks: do not starve writers
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 12:45 PM, Dylan Hatch wrote:
-> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 6/16/22 3:10 PM, Dylan Hatch wrote:
->>> This test would erroneously fail the /proc/$PID/maps case if
->>> vsyscall=xonly since the existing probe of the vsyscall page only
->>> succeeds if the process has read permissions. Fix this by checking for
->>> either no vsyscall mapping OR an execute-only vsyscall mapping in the
->>> case were probing the vsyscall page segfaults.
->>>
->>
->> Does this fix include skipping the test with a clear message that
->> says why test is skipped?
->>
->>> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
->>> ---
->>>    tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
->>>    1 file changed, 15 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
->>> index 28604c9f805c..5ca85520131f 100644
->>> --- a/tools/testing/selftests/proc/proc-pid-vm.c
->>> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
->>> @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
->>>
->>>    static bool g_vsyscall = false;
->>>
->>> -static const char str_vsyscall[] =
->>> +static const char str_vsyscall_rx[] =
->>>    "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
->>>
->>> +static const char str_vsyscall_x[] =
->>> +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
->>> +
->>>    #ifdef __x86_64__
->>>    static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
->>>    {
->>> @@ -261,6 +264,7 @@ int main(void)
->>>        int exec_fd;
->>>
->>>        vsyscall();
->>> +     const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
->>>
->>>        atexit(ate);
->>>
->>> @@ -314,7 +318,8 @@ int main(void)
->>>
->>>        /* Test /proc/$PID/maps */
->>>        {
->>> -             const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
->>> +             const size_t len_buf0 = strlen(buf0);
->>> +             const size_t len_vsys = strlen(str_vsyscall);
->>>                char buf[256];
->>>                ssize_t rv;
->>>                int fd;
->>> @@ -325,11 +330,16 @@ int main(void)
->>>                        return 1;
->>>                }
->>>                rv = read(fd, buf, sizeof(buf));
->>> -             assert(rv == len);
->>> -             assert(memcmp(buf, buf0, strlen(buf0)) == 0);
->>>                if (g_vsyscall) {
->>> -                     assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
->>> +                     assert(rv == len_buf0 + len_vsys);
->>> +             } else {
->>> +                     /* If vsyscall isn't readable, it's either x-only or not mapped at all */
->>> +                     assert(rv == len_buf0 + len_vsys || rv == len_buf0);
->>>                }
->>> +             assert(memcmp(buf, buf0, len_buf0) == 0);
->>> +             /* Check for vsyscall mapping if buf is long enough */
->>> +             if (rv == len_buf0 + len_vsys)
->>> +                     assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
->>>        }
->>>
->>>        /* Test /proc/$PID/smaps */
->>>
->>
->> The change looks good to me. Doesn't look like it skips the test though?
-> 
-> Instead of skipping the test, it changes the passing condition to
-> accept both cases of an unmapped vsyscall page and an x-only vsyscall
-> page. Differentiating between these two cases without relying on
-> /proc/$PID/maps would involve both checking the kernel command line
-> for vsyscall=xonly and having a special ifdef block for
-> CONFIG_VSYSCALL_XONLY, so accepting both as passing conditions seems
-> like a simpler solution.
-> 
+On Fri, Jun 17, 2022 at 9:35 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Jun 17, 2022 at 2:25 PM Eric Dumazet <edumazet@google.com> wrote:
+> >
+> > Interesting...
+> >
+> >  I think getrusage(RUSAGE_SELF) is blocking interrupts in the
+> > possible long loop:
+>
+> Yeah, that looks bad.
+>
+> It needs that interrupt disable due to sighand->siglock, but normally
+> we would expect to *not* have a big loop inside the siglock.
+>
+> Nasty.
+>
+> I wonder if this is possibly a situation where we should actually make
+> siglock be a rwlock.
+>
+> But considering that this RUSAGE_SELF is hopefully a special case,
+> maybe we could write it differently.
+>
+> Instead of taking the sighand lock, we might be able to iterate just
+> over the regular thread list (using the tasklist lock), and then do
+> the "does sighand match" as a one-off check in
+> accumulate_thread_rusage().
+>
+> It's not like we even really need that strict locking there, I suspect.
+>
+> Anyway, I should have noted in my previous email that my "rwlock is
+> often not the win you'd think it is" that that is only true for this
+> *spinning* rwlock.
+>
+> For the actual sleeping reader-writer lock (down_read/down_write and
+> friends), the whole "you can have multiple readers" is often a *huge*
+> deal and very central to using a rwlock. It's literally just the
+> spinning one that is often better as a spinlock unless you have those
+> magical reasons to use it.
+>
 
-It depends on the goal of the test. Is the test looking to see if the
-probe fails with insufficient permissions, then you are changing the
-test to not check for that condition.
+I am converting RAW sockets to RCU.
 
-I would say in this case, the right approach would be to leave the test
-as is and report expected fail and add other cases.
-
-The goal being adding more coverage and not necessarily opt for a simple
-solution.
-
-thanks,
--- Shuah
+We will likely need to use RCU in place of rwlock in most networking code.

@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F2954EFDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE9954EFD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379811AbiFQDuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 23:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S1379850AbiFQDvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379746AbiFQDu3 (ORCPT
+        with ESMTP id S1379833AbiFQDu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:50:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB17663DD;
-        Thu, 16 Jun 2022 20:50:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 999B161DB8;
-        Fri, 17 Jun 2022 03:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02247C341C6;
-        Fri, 17 Jun 2022 03:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655437827;
-        bh=qryEHpeEJUqn20vEoUi1DYcDxt737X17S9fdpDAEVIg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gfhXPoy3C8G9OV1nNevTaOrf3bPXdJ7BqKK9Qfuxq8+pwMzdJnNqEk4mfW7cHJp+k
-         M868gXIRX4jPxSZS+JWQQPze2EDSncVJdSOLq8ZcotHfPWg5exMdb4s/RLQ0ucPWmM
-         ab+tvOshrEbcxsQhRrYfNGhbrWZruc6L/KLG48r9zNQBOFQV5FiNcYGiTKxeZybEBa
-         7HGC4Kc2dwqdJ3Dem8s1SgOFlVeOQLUvbTUX3mt14NncV9dmVPLYh7aNncaLbbB1B3
-         iHCvXLmMwiSjw0DxylsvySHwMF39yp0mnIDGMf5owg6b/BG/SQKpaEP0/XXVzghgZY
-         IE5wcM73Z50jw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAFA1E7385E;
-        Fri, 17 Jun 2022 03:50:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Jun 2022 23:50:57 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E4663FF;
+        Thu, 16 Jun 2022 20:50:56 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id u2so3146609pfc.2;
+        Thu, 16 Jun 2022 20:50:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q1Tw5gtlbm60jQgJOmSoiCUD1TeB/fsK0N0NTHe/6HI=;
+        b=hMiFIuYhYV5Q4OkfRPt36XS+aI4r9sVrFzQwi/ueqcxuS46zD1TqtNy3WoGA9jjqPT
+         /YEeRmDffJZlQ3XDwpdTAsI2LEFXI13tvqVcE4DqWyLRZobhC0bOPk7bRvP7EYJrX1no
+         AyThKFD3LKezL7vpIZFuQ69qJIjrSI7nO2ov9GSO+ccethw9t9QwyQiC4Mk8TxdeTs4m
+         V0TEeRMqPxWyCdRUCLpMTqECBnS/MxyzJHb70YVPQ1wuKSWVuFHuUko0Abr1yTwANoHq
+         UFGB5svqWZyLv8M6VhLFiWdMlNJdfxV/Sx3JBIG8CYbXyFVBMoEqmnGzf6+azkt3M0tg
+         osIw==
+X-Gm-Message-State: AJIora+25ELLLQhO/OKagYeS4TIjXDf2owEiY+6/0DWrJQyIpwwr1BoS
+        Z0097UcDIf2mAV1wBsrgBS8THN5HHRI=
+X-Google-Smtp-Source: AGRyM1s9OsXBGRQWFItQf69mSxYRhA6/ZQgWKvQqGrgAgMRlNCuNPlWjLWaSNAVKQnerbzJoMZ5UAA==
+X-Received: by 2002:a63:5205:0:b0:401:7586:74f6 with SMTP id g5-20020a635205000000b00401758674f6mr7228645pgb.591.1655437855982;
+        Thu, 16 Jun 2022 20:50:55 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id a14-20020a63704e000000b00408c592db61sm2588606pgn.71.2022.06.16.20.50.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 20:50:55 -0700 (PDT)
+Message-ID: <2205b7c0-53d5-a485-72e3-12810d8c0a42@acm.org>
+Date:   Thu, 16 Jun 2022 20:50:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/3] dt-bindings: dp83867: add binding for
- io_impedance_ctrl nvmem cell
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165543782689.2027.4534991935889934108.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Jun 2022 03:50:26 +0000
-References: <20220614084612.325229-1-linux@rasmusvillemoes.dk>
-In-Reply-To: <20220614084612.325229-1-linux@rasmusvillemoes.dk>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, kuba@kernel.org, davem@davemloft.net,
-        grygorii.strashko@ti.com, praneeth@ti.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4] scsi: support packing multi-segment in UNMAP command
+Content-Language: en-US
+To:     Chao Yu <chao@kernel.org>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@infradead.org
+References: <20220616013617.2284341-1-chao@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220616013617.2284341-1-chao@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,36 +65,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 14 Jun 2022 10:46:09 +0200 you wrote:
-> We have a board where measurements indicate that the current three
-> options - leaving IO_IMPEDANCE_CTRL at the reset value (which is
-> factory calibrated to a value corresponding to approximately 50 ohms)
-> or using one of the two boolean properties to set it to the min/max
-> value - are too coarse.
+On 6/15/22 18:36, Chao Yu wrote:
+> As SCSI SBC4 specification section 5.30.2 describes that it can
+> support unmapping one or more LBA range in single UNMAP command.
 > 
-> This series adds a device tree binding for an nvmem cell which can be
-> populated during production with a suitable value calibrated for each
-> board, and corresponding support in the driver. The second patch adds
-> a trivial phy wrapper for dev_err_probe(), used in the third.
+> However, previously we only pack one LBA range in UNMAP command
+> by default no matter device gives the block limits that says it
+> can support unmapping multiple LBA ranges with a single UNMAP
+> command.
 > 
-> [...]
+> This patch sets max_discard_segments config according to block
+> limits of device, and supports unmapping multiple LBA ranges with
+> a single UNMAP command.
 
-Here is the summary with links:
-  - [net-next,v2,1/3] dt-bindings: dp83867: add binding for io_impedance_ctrl nvmem cell
-    https://git.kernel.org/netdev/net-next/c/ab1e9de84aff
-  - [net-next,v2,2/3] linux/phy.h: add phydev_err_probe() wrapper for dev_err_probe()
-    https://git.kernel.org/netdev/net-next/c/a793679827a8
-  - [net-next,v2,3/3] net: phy: dp83867: implement support for io_impedance_ctrl nvmem cell
-    https://git.kernel.org/netdev/net-next/c/5c2d0a6a0701
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

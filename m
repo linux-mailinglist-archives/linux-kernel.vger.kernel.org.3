@@ -2,412 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D1654F2DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B2454F2D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380939AbiFQIZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S1380921AbiFQIZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380922AbiFQIZp (ORCPT
+        with ESMTP id S232020AbiFQIZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:25:45 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1769C68323
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:25:37 -0700 (PDT)
-X-UUID: 57794b13054148f0b9c8bab759e9ecc9-20220617
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:de822b26-532c-423c-8e03-90e40310dca6,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:de822b26-532c-423c-8e03-90e40310dca6,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:580ce348-4c92-421c-ad91-b806c0f58b2a,C
-        OID:d65a67a1ec62,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 57794b13054148f0b9c8bab759e9ecc9-20220617
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1435036830; Fri, 17 Jun 2022 16:25:31 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 17 Jun 2022 16:25:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Jun 2022 16:25:30 +0800
-Message-ID: <d060eab1fe9a76fe53e5f2a60cfca7b1960ff18d.camel@mediatek.com>
-Subject: Re: [PATCH v11 1/1] phy: phy-mtk-dp: Add driver for DP phy
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <chunfeng.yun@mediatek.com>, <kishon@ti.com>,
-        <matthias.bgg@gmail.com>, <airlied@linux.ie>, <msp@baylibre.com>,
-        <granquet@baylibre.com>, <jitao.shi@mediatek.com>,
-        <wenst@chromium.org>, <angelogioacchino.delregno@collabora.com>,
-        <ck.hu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 17 Jun 2022 16:25:30 +0800
-In-Reply-To: <YqvPJg67Zb76lhap@matsya>
-References: <20220613072648.11081-1-rex-bc.chen@mediatek.com>
-         <20220613072648.11081-2-rex-bc.chen@mediatek.com> <YqvPJg67Zb76lhap@matsya>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 17 Jun 2022 04:25:43 -0400
+Received: from out199-7.us.a.mail.aliyun.com (out199-7.us.a.mail.aliyun.com [47.90.199.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA966831D;
+        Fri, 17 Jun 2022 01:25:40 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VGe5yuS_1655454335;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VGe5yuS_1655454335)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Jun 2022 16:25:37 +0800
+Subject: Re: [PATCH 4.9] mm: page_alloc: validate buddy page before using
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     akpm@linux-foundation.org, ziy@nvidia.com, stable@vger.kernel.org,
+        guoren@kernel.org, huanyi.xj@alibaba-inc.com, guohanjun@huawei.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220616161928.3565294-1-xianting.tian@linux.alibaba.com>
+ <Yqw5ZPyeMemfeKKY@kroah.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <c091b3a2-394a-59b4-dd98-98774e33afea@linux.alibaba.com>
+Date:   Fri, 17 Jun 2022 16:25:35 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yqw5ZPyeMemfeKKY@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-16 at 17:47 -0700, Vinod Koul wrote:
-> On 13-06-22, 15:26, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This is a new driver that supports the integrated DisplayPort phy
-> > for
-> > mediatek SoCs, especially the mt8195. The phy is integrated into
-> > the
-> > DisplayPort controller and will be created by the mtk-dp driver.
-> > This
-> > driver expects a struct regmap to be able to work on the same
-> > registers
-> > as the DisplayPort controller. It sets the device data to be the
-> > struct
-> > phy so that the DisplayPort controller can easily work with it.
-> > 
-> > The driver does not have any devicetree bindings because the
-> > datasheet
-> > does not list the controller and the phy as distinct units.
-> > 
-> > The interaction with the controller can be covered by the configure
-> > callback of the phy framework and its displayport parameters.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > [Bo-Chen: Modify reviewers' comments.]
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  MAINTAINERS                       |   1 +
-> >  drivers/phy/mediatek/Kconfig      |   8 ++
-> >  drivers/phy/mediatek/Makefile     |   1 +
-> >  drivers/phy/mediatek/phy-mtk-dp.c | 202
-> > ++++++++++++++++++++++++++++++
-> >  4 files changed, 212 insertions(+)
-> >  create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index a6d3bd9d2a8d..f1460ee9ce83 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -6698,6 +6698,7 @@ L:	linux-mediatek@lists.infradead.org
-> > (moderated for non-subscribers)
-> >  S:	Supported
-> >  F:	Documentation/devicetree/bindings/display/mediatek/
-> >  F:	drivers/gpu/drm/mediatek/
-> > +F:	drivers/phy/mediatek/phy-mtk-dp.c
-> >  F:	drivers/phy/mediatek/phy-mtk-hdmi*
-> >  F:	drivers/phy/mediatek/phy-mtk-mipi*
-> >  
-> > diff --git a/drivers/phy/mediatek/Kconfig
-> > b/drivers/phy/mediatek/Kconfig
-> > index 55f8e6c048ab..d631525d12e1 100644
-> > --- a/drivers/phy/mediatek/Kconfig
-> > +++ b/drivers/phy/mediatek/Kconfig
-> > @@ -55,3 +55,11 @@ config PHY_MTK_MIPI_DSI
-> >  	select GENERIC_PHY
-> >  	help
-> >  	  Support MIPI DSI for Mediatek SoCs.
-> > +
-> > +config PHY_MTK_DP
-> > +	tristate "MediaTek DP-PHY Driver"
-> > +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +	depends on OF
-> > +	select GENERIC_PHY
-> > +	help
-> > +	  Support DisplayPort PHY for MediaTek SoCs.
-> > diff --git a/drivers/phy/mediatek/Makefile
-> > b/drivers/phy/mediatek/Makefile
-> > index ace660fbed3a..4ba1e0650434 100644
-> > --- a/drivers/phy/mediatek/Makefile
-> > +++ b/drivers/phy/mediatek/Makefile
-> > @@ -3,6 +3,7 @@
-> >  # Makefile for the phy drivers.
-> >  #
-> >  
-> > +obj-$(CONFIG_PHY_MTK_DP)		+= phy-mtk-dp.o
-> >  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
-> >  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
-> >  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> > diff --git a/drivers/phy/mediatek/phy-mtk-dp.c
-> > b/drivers/phy/mediatek/phy-mtk-dp.c
-> > new file mode 100644
-> > index 000000000000..c4d5ca1719a4
-> > --- /dev/null
-> > +++ b/drivers/phy/mediatek/phy-mtk-dp.c
-> > @@ -0,0 +1,202 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * MediaTek DisplayPort PHY driver
-> > + *
-> > + * Copyright (c) 2022 BayLibre
-> > + * Copyright (c) 2022 MediaTek
-> 
-> It should be proper name of companies (hint see other uses)
-> 
 
-Hello Vinod,
+在 2022/6/17 下午4:20, Greg KH 写道:
+> On Fri, Jun 17, 2022 at 12:19:28AM +0800, Xianting Tian wrote:
+>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
+>> fixes a bug in 1dd214b8f21c and there is a similar bug in d9dddbf55667 that
+>> can be fixed in a similar way too.
+>>
+>> In addition, for RISC-V arch the first 2MB RAM could be reserved for opensbi,
+>> so it would have pfn_base=512 and mem_map began with 512th PFN when
+>> CONFIG_FLATMEM=y.
+>> But __find_buddy_pfn algorithm thinks the start pfn 0, it could get 0 pfn or
+>> less than the pfn_base value. We need page_is_buddy() to verify the buddy to
+>> prevent accessing an invalid buddy.
+>>
+>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: zjb194813@alibaba-inc.com
+>> Reported-by: tianhu.hh@alibaba-inc.com
+>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>> ---
+>>   mm/page_alloc.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index a6e682569e5b..1c423faa4b62 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -864,6 +864,9 @@ static inline void __free_one_page(struct page *page,
+>>   
+>>   			buddy_idx = __find_buddy_index(page_idx, order);
+>>   			buddy = page + (buddy_idx - page_idx);
+>> +
+>> +			if (!page_is_buddy(page, buddy, order))
+>> +				goto done_merging;
+>>   			buddy_mt = get_pageblock_migratetype(buddy);
+>>   
+>>   			if (migratetype != buddy_mt
+>> -- 
+>> 2.17.1
+>>
+> What is the git commit id of this change in Linus's tree?
 
-Thanks for review.
-I will modify like this:
- /*
-  * MediaTek DisplayPort PHY driver
-  *
-  * Copyright (c) 2022 BayLibre Inc.
-  * Copyright (c) 2022 MediaTek Inc.
-  */
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/io.h>
-> > +#include <linux/mfd/syscon.h>
-> > +#include <linux/of.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +
-> > +#define PHY_OFFSET			0x1000
-> > +
-> > +#define MTK_DP_PHY_DIG_PLL_CTL_1	(PHY_OFFSET + 0x14)
-> > +#define TPLL_SSC_EN			BIT(3)
-> > +
-> > +#define MTK_DP_PHY_DIG_BIT_RATE		(PHY_OFFSET + 0x3C)
-> > +#define BIT_RATE_RBR			0
-> > +#define BIT_RATE_HBR			1
-> > +#define BIT_RATE_HBR2			2
-> > +#define BIT_RATE_HBR3			3
-> > +
-> > +#define MTK_DP_PHY_DIG_SW_RST		(PHY_OFFSET + 0x38)
-> > +#define DP_GLB_SW_RST_PHYD		BIT(0)
-> > +
-> > +#define MTK_DP_LANE0_DRIVING_PARAM_3		(PHY_OFFSET +
-> > 0x138)
-> > +#define MTK_DP_LANE1_DRIVING_PARAM_3		(PHY_OFFSET +
-> > 0x238)
-> > +#define MTK_DP_LANE2_DRIVING_PARAM_3		(PHY_OFFSET +
-> > 0x338)
-> > +#define MTK_DP_LANE3_DRIVING_PARAM_3		(PHY_OFFSET +
-> > 0x438)
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE0_DEFAULT	BIT(4)
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT	(BIT(10) | BIT(12))
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT	GENMASK(20, 19)
-> > +#define XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT	GENMASK(29, 29)
-> > +#define DRIVING_PARAM_3_DEFAULT	(XTP_LN_TX_LCTXC0_SW0_PRE0_DEFA
-> > ULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT)
-> > +
-> > +#define XTP_LN_TX_LCTXC0_SW1_PRE0_DEFAULT	GENMASK(4, 3)
-> > +#define XTP_LN_TX_LCTXC0_SW1_PRE1_DEFAULT	GENMASK(12, 9)
-> > +#define XTP_LN_TX_LCTXC0_SW1_PRE2_DEFAULT	(BIT(18) | BIT(21))
-> > +#define XTP_LN_TX_LCTXC0_SW2_PRE0_DEFAULT	GENMASK(29, 29)
-> > +#define DRIVING_PARAM_4_DEFAULT	(XTP_LN_TX_LCTXC0_SW1_PRE0_DEFA
-> > ULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW1_PRE1_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW1_PRE2_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW2_PRE0_DEFAULT)
-> > +
-> > +#define XTP_LN_TX_LCTXC0_SW2_PRE1_DEFAULT	(BIT(3) | BIT(5))
-> > +#define XTP_LN_TX_LCTXC0_SW3_PRE0_DEFAULT	GENMASK(13, 12)
-> > +#define DRIVING_PARAM_5_DEFAULT	(XTP_LN_TX_LCTXC0_SW2_PRE1_DEFA
-> > ULT | \
-> > +				 XTP_LN_TX_LCTXC0_SW3_PRE0_DEFAULT)
-> > +
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE0_DEFAULT	0
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE1_DEFAULT	GENMASK(10, 10)
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE2_DEFAULT	GENMASK(19, 19)
-> > +#define XTP_LN_TX_LCTXCP1_SW0_PRE3_DEFAULT	GENMASK(28, 28)
-> > +#define DRIVING_PARAM_6_DEFAULT	(XTP_LN_TX_LCTXCP1_SW0_PRE0_DEF
-> > AULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW0_PRE1_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW0_PRE2_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW0_PRE3_DEFAULT)
-> > +
-> > +#define XTP_LN_TX_LCTXCP1_SW1_PRE0_DEFAULT	0
-> > +#define XTP_LN_TX_LCTXCP1_SW1_PRE1_DEFAULT	GENMASK(10, 9)
-> > +#define XTP_LN_TX_LCTXCP1_SW1_PRE2_DEFAULT	GENMASK(19, 18)
-> > +#define XTP_LN_TX_LCTXCP1_SW2_PRE0_DEFAULT	0
-> > +#define DRIVING_PARAM_7_DEFAULT	(XTP_LN_TX_LCTXCP1_SW1_PRE0_DEF
-> > AULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW1_PRE1_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW1_PRE2_DEFAULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW2_PRE0_DEFAULT)
-> > +
-> > +#define XTP_LN_TX_LCTXCP1_SW2_PRE1_DEFAULT	GENMASK(3, 3)
-> > +#define XTP_LN_TX_LCTXCP1_SW3_PRE0_DEFAULT	0
-> > +#define DRIVING_PARAM_8_DEFAULT	(XTP_LN_TX_LCTXCP1_SW2_PRE1_DEF
-> > AULT | \
-> > +				 XTP_LN_TX_LCTXCP1_SW3_PRE0_DEFAULT)
-> > +
-> > +struct mtk_dp_phy {
-> > +	struct regmap *regs;
-> > +};
-> > +
-> > +static int mtk_dp_phy_init(struct phy *phy)
-> > +{
-> > +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> > +	u32 driving_params[] = {
-> > +		DRIVING_PARAM_3_DEFAULT,
-> > +		DRIVING_PARAM_4_DEFAULT,
-> > +		DRIVING_PARAM_5_DEFAULT,
-> > +		DRIVING_PARAM_6_DEFAULT,
-> > +		DRIVING_PARAM_7_DEFAULT,
-> > +		DRIVING_PARAM_8_DEFAULT
-> > +	};
-> > +
-> > +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE0_DRIVING_PARAM_3,
-> > +			  driving_params, ARRAY_SIZE(driving_params));
-> > +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE1_DRIVING_PARAM_3,
-> > +			  driving_params, ARRAY_SIZE(driving_params));
-> > +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE2_DRIVING_PARAM_3,
-> > +			  driving_params, ARRAY_SIZE(driving_params));
-> > +	regmap_bulk_write(dp_phy->regs, MTK_DP_LANE3_DRIVING_PARAM_3,
-> > +			  driving_params, ARRAY_SIZE(driving_params));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_dp_phy_configure(struct phy *phy, union
-> > phy_configure_opts *opts)
-> > +{
-> > +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> > +	u32 val;
-> > +
-> > +	if (opts->dp.set_rate) {
-> > +		switch (opts->dp.link_rate) {
-> > +		default:
-> > +			dev_err(&phy->dev,
-> > +				"Implementation error, unknown linkrate
-> > %x\n",
-> > +				opts->dp.link_rate);
-> > +			return -EINVAL;
-> > +		case 1620:
-> > +			val = BIT_RATE_RBR;
-> > +			break;
-> > +		case 2700:
-> > +			val = BIT_RATE_HBR;
-> > +			break;
-> > +		case 5400:
-> > +			val = BIT_RATE_HBR2;
-> > +			break;
-> > +		case 8100:
-> > +			val = BIT_RATE_HBR3;
-> > +			break;
-> > +		}
-> > +		regmap_write(dp_phy->regs, MTK_DP_PHY_DIG_BIT_RATE,
-> > val);
-> > +	}
-> > +
-> > +	regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_PLL_CTL_1,
-> > +			   TPLL_SSC_EN, opts->dp.ssc ? TPLL_SSC_EN :
-> > 0);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_dp_phy_reset(struct phy *phy)
-> > +{
-> > +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
-> > +
-> > +	regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
-> > +			   DP_GLB_SW_RST_PHYD, 0);
-> > +	usleep_range(50, 200);
-> > +	regmap_update_bits(dp_phy->regs, MTK_DP_PHY_DIG_SW_RST,
-> > +			   DP_GLB_SW_RST_PHYD, 1);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct phy_ops mtk_dp_phy_dev_ops = {
-> > +	.init = mtk_dp_phy_init,
-> > +	.configure = mtk_dp_phy_configure,
-> > +	.reset = mtk_dp_phy_reset,
-> > +	.owner = THIS_MODULE,
-> > +};
-> > +
-> > +static int mtk_dp_phy_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct mtk_dp_phy *dp_phy;
-> > +	struct phy *phy;
-> > +	struct regmap *regs;
-> > +
-> > +	regs = *(struct regmap **)dev->platform_data;
-> 
-> why do you need this cast away from void?
-> 
+It is this one,
 
-When register platform data (in mtk_dp.c prober)
-we do this where "struct regmap *regs;":
+commit 787af64d05cd528aac9ad16752d11bb1c6061bb9
+Author: Zi Yan <ziy@nvidia.com>
+Date:   Wed Mar 30 15:45:43 2022 -0700
 
-mtk_dp->phy_dev = platform_device_register_data(
-			dev, "mediatek-dp-phy",
-			PLATFORM_DEVID_AUTO, &mtk_dp->regs,
-			sizeof(struct regmap *));
+     mm: page_alloc: validate buddy before check its migratetype.
 
-refer to [1].
+     Whenever a buddy page is found, page_is_buddy() should be called to
+     check its validity.  Add the missing check during pageblock merge 
+check.
 
-[1]: 
-https://lore.kernel.org/all/20220610105522.13449-6-rex-bc.chen@mediatek.com/
+     Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging 
+non-fallbackable pageblocks with others")
+     Link: 
+https://lore.kernel.org/all/20220330154208.71aca532@gandalf.local.home/
+     Reported-and-tested-by: Steven Rostedt <rostedt@goodmis.org>
+     Signed-off-by: Zi Yan <ziy@nvidia.com>
+     Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 
-BRs,
-Bo-Chen
-> > +	if (!regs)
-> > +		return dev_err_probe(dev, EINVAL,
-> > +				     "No data passed, requires struct
-> > regmap**\n");
-> > +
-> > +	dp_phy = devm_kzalloc(dev, sizeof(*dp_phy), GFP_KERNEL);
-> > +	if (!dp_phy)
-> > +		return -ENOMEM;
-> > +
-> > +	dp_phy->regs = regs;
-> > +	phy = devm_phy_create(dev, NULL, &mtk_dp_phy_dev_ops);
-> > +	if (IS_ERR(phy))
-> > +		return dev_err_probe(dev, PTR_ERR(phy),
-> > +				     "Failed to create DP PHY\n");
-> > +
-> > +	phy_set_drvdata(phy, dp_phy);
-> > +	if (!dev->of_node)
-> > +		phy_create_lookup(phy, "dp", dev_name(dev));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +struct platform_driver mtk_dp_phy_driver = {
-> > +	.probe = mtk_dp_phy_probe,
-> > +	.driver = {
-> > +		.name = "mediatek-dp-phy",
-> > +	},
-> > +};
-> > +module_platform_driver(mtk_dp_phy_driver);
-> > +
-> > +MODULE_AUTHOR("Markus Schneider-Pargmann <msp@baylibre.com>");
-> > +MODULE_DESCRIPTION("MediaTek DP PHY Driver");
-> > +MODULE_LICENSE("GPL");
-> > -- 
-> > 2.18.0
-> 
-> 
-
+>
+> thanks,
+>
+> greg k-h

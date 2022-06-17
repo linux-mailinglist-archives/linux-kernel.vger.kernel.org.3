@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661CF54FFA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5615854FFAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237252AbiFQWBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S245188AbiFQWDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiFQWBu (ORCPT
+        with ESMTP id S235469AbiFQWC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:01:50 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900125D1A4;
-        Fri, 17 Jun 2022 15:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+N2H+x44Iv08WsRXm2it/nhRDV8pHzv6Cqk9ZurKm5k=; b=X2qZ8Kde29X9DMRY4lTIZ/k3NS
-        7krTSzi2HiIlRyudWk10Um2yZAkDxYoutdORY4W7lG9yTNwZ4c9RE5/nRES0AQPNWNMh1lOXL2sZq
-        sFf8B5UOm4QQoYfsVg+qpKOJAqC+8M2CGHZ80E1zuGirpOm74jKERmPhDIUNgGZ96w6hAzej3/rjQ
-        bu6sXtU8AIuxbT6BvaR8grdRWPf7mtDB7MQlH2XzD1XffIUrN3pss0BnRscM7xvo31OU/9bXuUGCp
-        r6m6kbbZyG4FhwEjlszkU3ydaJHnII45fQ84SohWkixNIavNqrUJvJMLJ2fsjTMftb/JLHN0y05yJ
-        QsthPtag==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32904)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o2K27-0003OY-MH; Fri, 17 Jun 2022 23:01:39 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o2K25-0002HX-13; Fri, 17 Jun 2022 23:01:37 +0100
-Date:   Fri, 17 Jun 2022 23:01:36 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 25/28] [RFC] net: dpaa: Convert to phylink
-Message-ID: <Yqz5wHy9zAQL1ddg@shell.armlinux.org.uk>
-References: <20220617203312.3799646-1-sean.anderson@seco.com>
- <20220617203312.3799646-26-sean.anderson@seco.com>
+        Fri, 17 Jun 2022 18:02:58 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464DD6551;
+        Fri, 17 Jun 2022 15:02:57 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id i10so3510032wrc.0;
+        Fri, 17 Jun 2022 15:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iACHHJOTxtILwtD0NFxtS+BXQ6VW7TBL7A+QIQz2pXY=;
+        b=HNj7zDr2dXc86u2dQaninkTvR1QJJpNTuGDBAGGV+uz23Q2V+KclgGsn/nTpSQ5Ut4
+         zGB9IBBVadWFDs08ibIkJ23RU9kf2rvZhDgC8nyQv3PIdHpglN16NWL2VEZDXjNP+yas
+         ppaH9OHrZoGRZ7qO0+GZQ+IGav2t4RveDvO07tK9KxvCrqXH26wfp9dDhIUPuiG0JJpg
+         A9espWCvJfe6XigBwejHCV3hc5dN8et8yV6oeiiB6uNC0eV8ZOS6rZKXN27ms+rPmnZK
+         Vv9qB+yvlYXwak8iR1sfHt2GfQMWRZ7YKerKzRmSHXoeGt8Xd8E+Vz/cCmyvctflAVRB
+         KaaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iACHHJOTxtILwtD0NFxtS+BXQ6VW7TBL7A+QIQz2pXY=;
+        b=5k2n1vaQvMm2iiuzSx0YfT7xryd/S7Cm474Rk15cPL78zJqlD3jcirpfu81GYNmvb2
+         eOWo9iVrKYvvr1KVzbzLjYcNP7e5/VPcCkJInnVyp2s2qBc/0woJeO64aFFymI92HjEa
+         DIMKG4Jo27DMcyTl2mjSdL0OqHqFbnoeYyRpcdtrP3v02mm1ZJrnTk3AZq+OdTMw955g
+         jJGAALF+QmGF2eB6QS8WJbWDeiGALdj4uSNVy7xJgYh3GVV0/Qb7sSCEdsKeTK8QAOD6
+         Ckhh59PW3CEe6A4g3ig9uPHQcx6UnsNyWN7sjT0B9OeUWnaupdOvo4NjN8pTkG84W39l
+         ZEKA==
+X-Gm-Message-State: AJIora+5kFXhZxHqmYwKxq7TCXWghNanXX4vbc6Frnbc3YXXASMm40e4
+        aZZhTp2UJjph9Akj14kp4obfl35L42A=
+X-Google-Smtp-Source: AGRyM1vKe47NBTiCIGTZ3A2mNS/C9PuKLNUynKpXlPkWjnRGvm1VIeGePR6zGx2kldrH4LxaKZr9uA==
+X-Received: by 2002:a5d:6192:0:b0:219:aa98:897b with SMTP id j18-20020a5d6192000000b00219aa98897bmr10855625wru.341.1655503375761;
+        Fri, 17 Jun 2022 15:02:55 -0700 (PDT)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id n68-20020a1c2747000000b0039c5a765388sm6638406wmn.28.2022.06.17.15.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 15:02:55 -0700 (PDT)
+Message-ID: <5bdf862c-8aed-5dd4-17c4-b2c7a2961e92@gmail.com>
+Date:   Fri, 17 Jun 2022 23:02:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617203312.3799646-26-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] media: ov7251: add missing clk_disable_unprepare() on
+ error in ov7251_set_power_on()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com
+References: <20220617013943.851327-1-yangyingliang@huawei.com>
+From:   Daniel Scally <djrscally@gmail.com>
+In-Reply-To: <20220617013943.851327-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello
 
-On Fri, Jun 17, 2022 at 04:33:09PM -0400, Sean Anderson wrote:
-> This converts DPAA to phylink. For the moment, only MEMAC is converted.
-> This should work with no device tree modifications (including those made in
-> this series), except for QSGMII (as noted previously).
-> 
-> One area where I wasn't sure how to do things was regarding when to call
-> phy_init and phy_power_on. Should that happen when selecting the PCS?
+On 17/06/2022 02:39, Yang Yingliang wrote:
+> Add the missing clk_disable_unprepare() before return
+> from ov7251_set_power_on() in the error handling case.
+>
+> Fixes: 9e1d3012cc10 ("media: i2c: Remove .s_power() from ov7251")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Is this a common serdes PHY that is shared amongst the various PCS? I
-think from what I understand having read the other patches, it is. In
-which case, initialising the PHY prior to calling phylink_start() and
-powering down the PHY after phylink_stop() should be sufficient.
 
-> Similarly, I wasn't sure where to reconfigure the thresholds in
-> dpaa_eth_cgr_init. Should happen in link_up? If so, I think we will need
-> some kind of callback.
+Thanks for spotting this - with Andy's comment addressed:
 
-Bear in mind that with 1000BASE-X, SGMII, etc, we need the link working
-in order for the link to come up, so if the serdes PHY hasn't been
-properly configured for the interface mode, then the link may not come
-up.
 
-How granular are these threshold configurations? Do they depend on
-speed? (Note that SGMII operates at a constant speed irrespective of
-the data rate due to symbol replication, so there shouldn't be a speed
-component beyond that described by the interface mode, aka
-phy_interface_t.)
+Reviewed-by: Daniel Scally <djrscally@gmail.com>
 
-> This has been tested on an LS1046ARDB. Without the serdes enabled,
-> everything works. With the serdes enabled, everything works but eth3 (aka
-> MAC6). On that interface, SGMII never completes AN for whatever reason. I
-> haven't tested the counterfactual (serdes enabled but no phylink). With
-> managed=phy (e.g. unspecified), I was unable to get the interfaces to come
-> up at all.
-
-I'm not sure of the level of accurate detail in the above statement,
-so the following is just to cover all bases...
-
-It's worth enabling debug in phylink so you can see what's going on -
-for example, whether the "MAC" (actually PCS today) is reporting that
-the link came up (via its pcs_get_state() callback.) Also whether
-phylib is reporting that the PHY is saying that the link is up. That
-should allow you to identify which part of the system is not
-
-Having looked through your phylink implementation, nothing obviously
-wrong stands out horribly in terms of how you're using it.
-
-The only issue I've noticed is in dpaa_ioctl(), where you only forward
-one ioctl command to phylink, whereas there are actually three ioctls
-for PHY access - SIOCGMIIPHY, SIOCGMIIREG and SIOCSMIIREG. Note that
-phylink (and phylib) return -EOPNOTSUPP if the ioctl is not appropriate
-for them to handle. However, note that phylib will handle
-SIOCSHWTSTAMP.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> ---
+>  drivers/media/i2c/ov7251.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
+> index 0e7be15bc20a..40c207d1d7af 100644
+> --- a/drivers/media/i2c/ov7251.c
+> +++ b/drivers/media/i2c/ov7251.c
+> @@ -934,6 +934,7 @@ static int ov7251_set_power_on(struct device *dev)
+>  					ARRAY_SIZE(ov7251_global_init_setting));
+>  	if (ret < 0) {
+>  		dev_err(ov7251->dev, "error during global init\n");
+> +		clk_disable_unprepare(ov7251->xclk);
+>  		ov7251_regulators_disable(ov7251);
+>  		return ret;
+>  	}

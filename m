@@ -2,211 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3666A550058
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45D855005B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbiFQXHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S1382328AbiFQXIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235920AbiFQXH2 (ORCPT
+        with ESMTP id S235735AbiFQXIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:07:28 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2070.outbound.protection.outlook.com [40.107.100.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B5B64BC5;
-        Fri, 17 Jun 2022 16:07:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B2u1DuZRSJtYp1iYwBrTRinuMfGzrZL9LEraKsC9XGIevLrpfG7FQa/DXfJgh3WYPBVpZkg8R1HKgauL+oE4ogIyiBDhczlJCBgi6rdZofHqVq97NxK1OkjFbqtdH2PM9AV+bBz9iSBhD5QztoAir5etC0Y7/2dHgNSLmnUxUcCjDIA3ivTglW1mBeOq6fVPsq3vpVc2zFtxIVmL2cAUoh8pBSWpDWbvAffn7LYzheSoWU9OAOYbX006hjw/NDtEUJjbYLT+IrO1jXqv0S5NQXAm3ejlunludt5iyiEYOf0VlarrOrLIfB9Pnn+Tu5y1VW38OhECWw8ooQZmJ5HRnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZLqILRQ8qtWCoOCdvWIzsW3EHWsqOopa7YG7IislUhQ=;
- b=niPg26Two2vNEDuiElaBDjx2COtJriFJvOLp0uIaCL2rlrGuSIbk2D0RpUE+6zazMA9GLSRh63swn/pKktvHhbYegMcDBBnLMmUw4tUVK63ibN2bjkW2Ohdm2qhJn+pj9gGdWvviqAGjsxi9eUuufP3cDkShr8v31Y33M0BdMA9wgBXwIWlfGP5/WtS0hBmuZnObllDRHaxVAEE2IJTC7Ui4TbSgr/onHuTCdWgg3sVXtJIyeOIU2BD0VlOpOxtcavuZ2WBe2G15s6ie0HXAmxAySHhytd2lMbLmSRVb4FnDloC0I/MLquZQ2PG794nIyuDm5ChPL4rGz0VKraEpfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=svenpeter.dev smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZLqILRQ8qtWCoOCdvWIzsW3EHWsqOopa7YG7IislUhQ=;
- b=N6EY401QARm2CcqK/sz57/2L26KKb/UTfFojb0OqFFGZlk91ppipJDvblWmndJTRNljY7KYyrCEUHecgPYftA+GfEzuIUdD/G8Kz1JZJXHLXRxag8Unz6uModf8jbkXih9IwSk6783gbFmemug8gheFy6xRrZneH4X3SfLFzQ45YLRx1bJxVFTCqYrUIyIiHCCo4R3FHN+CJz0nX8HAErQ7mPqQr2i1zpcBgPE3I0yHhqAbx+rylIV+4uIsfTZTuXhgWhGJCdp9yK8UFkei07eKnDqLux8t/BDXUP+YfBxUHy9Bp7fJVd6qIjyuKqqYb+QWv/HFhsT4Cf6xLYDETEQ==
-Received: from DM3PR14CA0132.namprd14.prod.outlook.com (2603:10b6:0:53::16) by
- PH7PR12MB5975.namprd12.prod.outlook.com (2603:10b6:510:1da::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14; Fri, 17 Jun
- 2022 23:07:24 +0000
-Received: from DM6NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:53:cafe::e) by DM3PR14CA0132.outlook.office365.com
- (2603:10b6:0:53::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
- Transport; Fri, 17 Jun 2022 23:07:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT046.mail.protection.outlook.com (10.13.172.121) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5353.14 via Frontend Transport; Fri, 17 Jun 2022 23:07:24 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Fri, 17 Jun 2022 23:07:24 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 17 Jun 2022 16:07:23 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Fri, 17 Jun 2022 16:07:21 -0700
-Date:   Fri, 17 Jun 2022 16:07:20 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "sven@svenpeter.dev" <sven@svenpeter.dev>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "saiprakash.ranjan@codeaurora.org" <saiprakash.ranjan@codeaurora.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "isaacm@codeaurora.org" <isaacm@codeaurora.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>
-Subject: Re: [PATCH v2 5/5] vfio/iommu_type1: Simplify group attachment
-Message-ID: <Yq0JKBiQfTkWh4nq@Asurada-Nvidia>
-References: <20220616000304.23890-1-nicolinc@nvidia.com>
- <20220616000304.23890-6-nicolinc@nvidia.com>
- <BL1PR11MB52710E360B50DDA99C9A65D18CAC9@BL1PR11MB5271.namprd11.prod.outlook.com>
- <YquxcH2S1fM+llOf@Asurada-Nvidia>
- <BN9PR11MB5276C7BFA77C2C176491B56A8CAF9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 17 Jun 2022 19:08:06 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E8F1F62E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:08:02 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id g12so89298ljk.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6ZYaMoRyFzzdVkOyMeMhxNNQQcfk+a73MTAQKe18VZo=;
+        b=RXh3EgnMC/4kWNHclXpiSul9Dc/Ob4bXsZK6inOyualZGJ4iznqD1kHoc0adcTZZnD
+         L+L6W8ndCsJGT1OORGpESaqm5/p/30VgrLRgo8zT75zpmLE5F7XhS6J6Vnid+cHtpWZG
+         Hb1oX53AxFwTOw+3PJdhs+aDez8q9p095mpVq6gMzrh54J1a3hXPRx/865gRmszCMxTR
+         bugoa6F+cw0baRkUNVYLM675cgALD2YVe3LgDH3tWPKytzq7YDGep3PDBcAymNicXVKZ
+         Dw7aIHO+SP3NEs5GBdh3pDWDxKCxruFMN1UEEyVRn3SR4BE+CF9Y4Ednvamdvd26XIqN
+         HklA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6ZYaMoRyFzzdVkOyMeMhxNNQQcfk+a73MTAQKe18VZo=;
+        b=3lB91tlI8MFLsnLVwois5GD6sWeZXhlgHh+ljn5hmaUE/7fSAQvaXxtU5ereYSyxDh
+         y0moSifCHv1w70Qo3+j4pMeUYE3KBLQpAsb6paUHpDCsg4V+aVCnPUpqyq+tkgvxxAzp
+         D0he4PWpkm5HY7fJlyzPhzUr2D9T6XUOomWlCY5JiUWVNQh3elBdsE50YfcjhXxVrXuL
+         PdCxITvllBbXicElJGPBC3fDvMzbg2s8fxuIc9OOJBD8QlU8KOoPjhoGs+6BrdqTxukr
+         gWB1XpLxof7nx6M/qbrA5lnoscmVESkyhjEv8FfXf86xktVKnVuko9Qt9L/vQZl0wzmO
+         UiFQ==
+X-Gm-Message-State: AJIora/nZ7h48TIK5ovr13zl1f3iauWsg7ZLnOuNp+CqCera0AhdrH2/
+        l2JOIDIu/XC2rXkt0SkuN20r9g==
+X-Google-Smtp-Source: AGRyM1u4px/R5mYa/q2Ih7N60pbaP0+87kXGXeIvKyOLQnhWdyhLroYYlme5OHm8OUgyfr0MVJVTgA==
+X-Received: by 2002:a2e:80d3:0:b0:255:5c62:7614 with SMTP id r19-20020a2e80d3000000b002555c627614mr6140247ljg.389.1655507280420;
+        Fri, 17 Jun 2022 16:08:00 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u8-20020a2e9f08000000b00255446b1726sm680292ljk.121.2022.06.17.16.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 16:08:00 -0700 (PDT)
+Message-ID: <bb98ca29-8752-6864-ddbd-19547fb6f73b@linaro.org>
+Date:   Sat, 18 Jun 2022 02:07:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276C7BFA77C2C176491B56A8CAF9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 74598408-44ba-43b6-c24e-08da50b62411
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5975:EE_
-X-Microsoft-Antispam-PRVS: <PH7PR12MB59753098F671ED317266ADB0ABAF9@PH7PR12MB5975.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rHBGjZj+43wUi5J064DSf+xSBM6gqkjXjw8pjRCTikmQ0UCv2CXBfRvisL+HhxpcTIwK8PXxKGXgE/ZuzSWbkzp4x5hui4L6zvMDZRjzjZFGyMk+u+xJ8vltErWCFCVE9ebu04/ciUDkBXLKmJCB8goEkXpXweUQQNg0SHHJ9qkTgrWFyW3NXwV404h6oDEcqhvhiGcxXaiXa3t3aFumJpW7q1czcoI6SXVvlcQQYaaToCuw19VxliBJpeXWrDZ8MUiEA2eXvtaQ4Rz8SQTCIKqNCWGtK3JcnFtdgh4EK4u8eGHOH5WOhy/VbMn+H39kdAkiJLCfI/fPa4QMoCPo5LwurP7xRPueUyTkMz7eFn7HcWAvTILnB46iS5doggpgQJDJ1SbLUboryP45zO9+AfaleuFQkV0v8LePFu8R0sQM/LATxb7UQEG7f0kmJx7O9fo2m4LdoAidvd4ilWbred2r2QrIHQ8aQ8ZAMdAClFqJ37TU2ObVmjywLDERUTqZOVSPzQ7cMts+cnhhd1NssKLcm5LcUj6qr0FxcxvVtjYfYI6ewoK0KuBjtLJec/M6WGKiPnjSI1Zz6zMruIcLCkM0E0X6HYSIb9qVMNgEFYd/tvj6ct4ogXfUfAT//zeK+iv43TL0e7uSxV7Bx//70Boqvi8z6AkehopmXex2d+aoaXnl4MhV/IWyrhljnSOZPrGD3p41hX4WpPF1DxrwPQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(36840700001)(40470700004)(46966006)(4326008)(26005)(70586007)(86362001)(7416002)(82310400005)(33716001)(316002)(2906002)(40460700003)(9686003)(83380400001)(7406005)(8676002)(5660300002)(47076005)(498600001)(8936002)(186003)(55016003)(70206006)(426003)(81166007)(110136005)(356005)(54906003)(36860700001)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 23:07:24.4666
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74598408-44ba-43b6-c24e-08da50b62411
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5975
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
+Content-Language: en-GB
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+References: <20220617204750.2347797-1-swboyd@chromium.org>
+ <20220617204750.2347797-3-swboyd@chromium.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220617204750.2347797-3-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 02:53:13AM +0000, Tian, Kevin wrote:
-> > > ...
-> > > > -     if (resv_msi) {
-> > > > +     if (resv_msi && !domain->msi_cookie) {
-> > > >               ret = iommu_get_msi_cookie(domain->domain,
-> > > > resv_msi_base);
-> > > >               if (ret && ret != -ENODEV)
-> > > >                       goto out_detach;
-> > > > +             domain->msi_cookie = true;
-> > > >       }
-> > >
-> > > why not moving to alloc_attach_domain() then no need for the new
-> > > domain field? It's required only when a new domain is allocated.
-> >
-> > When reusing an existing domain that doesn't have an msi_cookie,
-> > we can do iommu_get_msi_cookie() if resv_msi is found. So it is
-> > not limited to a new domain.
+On 17/06/2022 23:47, Stephen Boyd wrote:
+> This struct member is stored to in the function that calls the function
+> which uses it. That's possible with a function argument instead of
+> storing to a struct member. Pass the pixel_rate as an argument instead
+> to simplify the code. Note that dp_ctrl_link_maintenance() was storing
+> the pixel_rate but never using it so we just remove the assignment from
+> there.
 > 
-> Looks msi_cookie requirement is per platform (currently only
-> for smmu. see arm_smmu_get_resv_regions()). If there is
-> no mixed case then above check is not required.
-
-Do you mean "reusing existing domain" for the "mixed case"?
-
-> But let's hear whether Robin has a different thought here.
-
-Yea, sure.
-
-> > > > -                     iommu_domain_free(domain->domain);
-> > > > -                     list_del(&domain->next);
-> > > > -                     kfree(domain);
-> > > > -                     vfio_iommu_aper_expand(iommu, &iova_copy);
-> > >
-> > > Previously the aperture is adjusted when a domain is freed...
-> > >
-> > > > -                     vfio_update_pgsize_bitmap(iommu);
-> > > > -             }
-> > > > -             /*
-> > > > -              * Removal of a group without dirty tracking may allow
-> > > > -              * the iommu scope to be promoted.
-> > > > -              */
-> > > > -             if (!group->pinned_page_dirty_scope) {
-> > > > -                     iommu->num_non_pinned_groups--;
-> > > > -                     if (iommu->dirty_page_tracking)
-> > > > -                             vfio_iommu_populate_bitmap_full(iommu);
-> > > > -             }
-> > > > +             vfio_iommu_detach_destroy_domain(domain, iommu,
-> > > > group);
-> > > >               kfree(group);
-> > > >               break;
-> > > >       }
-> > > >
-> > > > +     vfio_iommu_aper_expand(iommu, &iova_copy);
-> > >
-> > > but now it's done for every group detach. The aperture is decided
-> > > by domain geometry which is not affected by attached groups.
-> >
-> > Yea, I've noticed this part. Actually Jason did this change for
-> > simplicity, and I think it'd be safe to do so?
+> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c | 57 ++++++++++++++++----------------
+>   drivers/gpu/drm/msm/dp/dp_ctrl.h |  1 -
+>   2 files changed, 28 insertions(+), 30 deletions(-)
 > 
-> Perhaps detach_destroy() can return a Boolean to indicate whether
-> a domain is destroyed.
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index bd445e683cfc..e114521af2e9 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -1336,7 +1336,7 @@ static void dp_ctrl_set_clock_rate(struct dp_ctrl_private *ctrl,
+>   				name, rate);
+>   }
+>   
+> -static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl)
+> +static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl, unsigned long pixel_rate)
 
-It could be a solution but doesn't feel that common for a clean
-function to have a return value indicating a special case. Maybe
-passing in "&domain" so that we can check if it's NULL after?
+
+I think we can read pixel_rate here rather than getting it as an 
+argument. We'd need to move handling (DP_TEST_LINK_PHY_TEST_PATTERN && 
+!ctrl->panel->dp_mode.drm_mode.clock) case here from dp_ctrl_on_link().
+
+>   {
+>   	int ret = 0;
+>   	struct dp_io *dp_io = &ctrl->parser->io;
+> @@ -1357,25 +1357,25 @@ static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl)
+>   	if (ret)
+>   		DRM_ERROR("Unable to start link clocks. ret=%d\n", ret);
+>   
+> -	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%d\n",
+> -		ctrl->link->link_params.rate, ctrl->dp_ctrl.pixel_rate);
+> +	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%lu\n",
+> +		ctrl->link->link_params.rate, pixel_rate);
+>   
+>   	return ret;
+>   }
+>   
+> -static int dp_ctrl_enable_stream_clocks(struct dp_ctrl_private *ctrl)
+> +static int dp_ctrl_enable_stream_clocks(struct dp_ctrl_private *ctrl,
+> +					unsigned long pixel_rate)
+>   {
+> -	int ret = 0;
+> +	int ret;
+>   
+> -	dp_ctrl_set_clock_rate(ctrl, DP_STREAM_PM, "stream_pixel",
+> -					ctrl->dp_ctrl.pixel_rate * 1000);
+> +	dp_ctrl_set_clock_rate(ctrl, DP_STREAM_PM, "stream_pixel", pixel_rate * 1000);
+
+Note to myself (or to anybody doing further cleanup): store stream_pixel 
+clock into dp_ctrl_private and set it directly here. Then 
+dp_ctrl_set_clock_rate() can be removed.
+
+>   
+>   	ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, true);
+>   	if (ret)
+>   		DRM_ERROR("Unabled to start pixel clocks. ret=%d\n", ret);
+>   
+> -	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%d\n",
+> -			ctrl->link->link_params.rate, ctrl->dp_ctrl.pixel_rate);
+> +	drm_dbg_dp(ctrl->drm_dev, "link rate=%d pixel_clk=%lu\n",
+> +			ctrl->link->link_params.rate, pixel_rate);
+>   
+>   	return ret;
+>   }
+> @@ -1445,7 +1445,7 @@ static bool dp_ctrl_use_fixed_nvid(struct dp_ctrl_private *ctrl)
+>   	return false;
+>   }
+>   
+> -static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private *ctrl)
+> +static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private *ctrl, unsigned long pixel_rate)
+>   {
+>   	int ret = 0;
+>   	struct dp_io *dp_io = &ctrl->parser->io;
+> @@ -1469,7 +1469,7 @@ static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private *ctrl)
+>   	/* hw recommended delay before re-enabling clocks */
+>   	msleep(20);
+>   
+> -	ret = dp_ctrl_enable_mainlink_clocks(ctrl);
+> +	ret = dp_ctrl_enable_mainlink_clocks(ctrl, pixel_rate);
+>   	if (ret) {
+>   		DRM_ERROR("Failed to enable mainlink clks. ret=%d\n", ret);
+>   		return ret;
+> @@ -1517,8 +1517,6 @@ static int dp_ctrl_link_maintenance(struct dp_ctrl_private *ctrl)
+>   	ctrl->link->phy_params.p_level = 0;
+>   	ctrl->link->phy_params.v_level = 0;
+>   
+> -	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+> -
+>   	ret = dp_ctrl_setup_main_link(ctrl, &training_step);
+>   	if (ret)
+>   		goto end;
+> @@ -1588,12 +1586,12 @@ static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
+>   {
+>   	int ret;
+>   	struct dp_ctrl_private *ctrl;
+> +	unsigned long pixel_rate;
+>   
+>   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>   
+> -	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+> -
+> -	ret = dp_ctrl_enable_stream_clocks(ctrl);
+> +	pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+> +	ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
+
+I think we can take another step forward here. Read the 
+ctrl->panel->dp_mode.drm_mode.clock from within the 
+dp_ctrl_enable_stream_clocks() function. This removes the need to pass 
+pixel_rate as an argument here.
+
+>   	if (ret) {
+>   		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
+>   		return ret;
+> @@ -1709,6 +1707,7 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
+>   	u32 const phy_cts_pixel_clk_khz = 148500;
+>   	u8 link_status[DP_LINK_STATUS_SIZE];
+>   	unsigned int training_step;
+> +	unsigned long pixel_rate;
+>   
+>   	if (!dp_ctrl)
+>   		return -EINVAL;
+> @@ -1723,25 +1722,25 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
+>   		drm_dbg_dp(ctrl->drm_dev,
+>   				"using phy test link parameters\n");
+>   		if (!ctrl->panel->dp_mode.drm_mode.clock)
+> -			ctrl->dp_ctrl.pixel_rate = phy_cts_pixel_clk_khz;
+> +			pixel_rate = phy_cts_pixel_clk_khz;
+>   	} else {
+>   		ctrl->link->link_params.rate = rate;
+>   		ctrl->link->link_params.num_lanes =
+>   			ctrl->panel->link_info.num_lanes;
+> -		ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+> +		pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>   	}
+>   
+> -	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%d\n",
+> +	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%lu\n",
+>   		ctrl->link->link_params.rate, ctrl->link->link_params.num_lanes,
+> -		ctrl->dp_ctrl.pixel_rate);
+> +		pixel_rate);
+>   
+>   
+> -	rc = dp_ctrl_enable_mainlink_clocks(ctrl);
+> +	rc = dp_ctrl_enable_mainlink_clocks(ctrl, pixel_rate);
+>   	if (rc)
+>   		return rc;
+>   
+>   	while (--link_train_max_retries) {
+> -		rc = dp_ctrl_reinitialize_mainlink(ctrl);
+> +		rc = dp_ctrl_reinitialize_mainlink(ctrl, pixel_rate);
+>   		if (rc) {
+>   			DRM_ERROR("Failed to reinitialize mainlink. rc=%d\n",
+>   					rc);
+> @@ -1836,6 +1835,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+>   	int ret = 0;
+>   	bool mainlink_ready = false;
+>   	struct dp_ctrl_private *ctrl;
+> +	unsigned long pixel_rate;
+>   	unsigned long pixel_rate_orig;
+>   
+>   	if (!dp_ctrl)
+> @@ -1843,25 +1843,24 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+>   
+>   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>   
+> -	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+> +	pixel_rate = pixel_rate_orig = ctrl->panel->dp_mode.drm_mode.clock;
+>   
+> -	pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
+>   	if (dp_ctrl->wide_bus_en)
+> -		ctrl->dp_ctrl.pixel_rate >>= 1;
+> +		pixel_rate >>= 1;
+>   
+> -	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%d\n",
+> +	drm_dbg_dp(ctrl->drm_dev, "rate=%d, num_lanes=%d, pixel_rate=%lu\n",
+>   		ctrl->link->link_params.rate,
+> -		ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
+> +		ctrl->link->link_params.num_lanes, pixel_rate);
+>   
+>   	if (!dp_power_clk_status(ctrl->power, DP_CTRL_PM)) { /* link clk is off */
+> -		ret = dp_ctrl_enable_mainlink_clocks(ctrl);
+> +		ret = dp_ctrl_enable_mainlink_clocks(ctrl, pixel_rate);
+>   		if (ret) {
+>   			DRM_ERROR("Failed to start link clocks. ret=%d\n", ret);
+>   			goto end;
+>   		}
+>   	}
+>   
+> -	ret = dp_ctrl_enable_stream_clocks(ctrl);
+> +	ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
+>   	if (ret) {
+>   		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
+>   		goto end;
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> index b563e2e3bfe5..9f29734af81c 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> @@ -16,7 +16,6 @@
+>   struct dp_ctrl {
+>   	bool orientation;
+>   	atomic_t aborted;
+> -	u32 pixel_rate;
+>   	bool wide_bus_en;
+>   };
+>   
+
+
+-- 
+With best wishes
+Dmitry

@@ -2,162 +2,635 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A7654EEF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 03:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F8754EEFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 03:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379650AbiFQBsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 21:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S1379240AbiFQBwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 21:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379411AbiFQBsd (ORCPT
+        with ESMTP id S231591AbiFQBwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 21:48:33 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD335930C;
-        Thu, 16 Jun 2022 18:48:32 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H0qMhX026649;
-        Fri, 17 Jun 2022 01:48:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=wt689crj3pOysbwsczbLz8BmmCMbgiZGtDf4c1bAWoA=;
- b=wFSt3a+Fp6ULt/5tOpF5gUpP1QKsjQ9U96qVzTnPkqaqN6zSHZB4PfDk+25yWjhvwIeZ
- 7+56X/pNdLG/uUZLKUAlxKVaFVdpxRyY9754Vke4DTpg/q1GJZi/oyc+Aw23ZWofBByN
- 5BHcmBEZv0rxfYhYgsdl0E0NmUjDhz4ZOqA6ay5qMSUlxf5lb2hiN0GjT2VQVQqfAi8L
- rvn2tsEsfKXvwrUbcyjAPVtDKFFBHNT4URUzS0Cf5d3kv7YtAe8x4eAXmLcRO1MsXF2n
- HiWEJzt4D2hlIgzK4fApp+bDzGZ0CtHxRCwQOBjfJqGMvYMX0v99HIfH1Bb+1mnckMlX ew== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmhn0ms4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jun 2022 01:48:19 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25H1k2kQ001364;
-        Fri, 17 Jun 2022 01:48:18 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpr7qq1p3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jun 2022 01:48:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K5g1j0SZ5B9pYNvwhrCovOfGPkKAlGrA7UvEIZugVvRqUzaSsgmjv0h5rpX238qpTTIwvUcM7qb9mY+5HqhzXUWZjViRWoyng/9MHgpMJkkI+hxABAcFMuG2M1tJL4//QrV+S2frgaw52VsbPCVhs54TJ8o8EBC6cd73bTcRIPZoa+U7BgVxGv9PYFsTQSqajWcPLsZPR8ybeSgEIEF6IA4UmTEPOnsu4z35Leh2fLBeC+hDHMhVhYItt1iv3dPu6aHMYAOvZXQQj2376L9L85ah5G7JEvZy5/rwV5dPzjDa6dpG6fXP7UJ9GtmZ8Y1YH/EmoKpRKibE8qjSmEWRbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wt689crj3pOysbwsczbLz8BmmCMbgiZGtDf4c1bAWoA=;
- b=QRqp3//gelUD+3J4A40q4Pk7nicdWrqZfqtq6OlgT8nGAVvSiQIPVz4bmNitSv+ThTCjuUaAahXwpdzm9hbpWxIBQZKM5aQ2dNIvSs6bKAmuo7QQr6ZLxLtuTMLgJ45lRn1Kpw/gLg8aCIdhzs1pvJ/Y0Znz+3xM2hwA/4nPCtVOlCyT2iptu47+hlq9IpN/h6WTlf45tYONZ95nNY9KWScpaJHDnNn3iXtGzH6135MyWrYPpFZpwbUaabmSV9k5doExeNsSiWOakY245dk4m1dWMijOCDSqoW57rtwH5sVaPktR+3q1MguqdHQGMnsjz/gsjOi8ORvwUQpYGDpexA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wt689crj3pOysbwsczbLz8BmmCMbgiZGtDf4c1bAWoA=;
- b=HxJSgnO5T3pyY/BvaRMAhKd0xuIrB+y9YeD5U4/MZsW6pOUPgwt8rnrbr7kgnFP2RDV8fCDk+2rTtNl7sPGpfhxWNp9wHxVQoU6xtwVeffvZZM9giY1DnXoAZaPtrzK6uLJ/EyRgvMZNRe6mcdZUkDRhkbT/i2boS9uj5U4KJuQ=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by SN4PR10MB5621.namprd10.prod.outlook.com (2603:10b6:806:20f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Fri, 17 Jun
- 2022 01:48:16 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::6516:e908:d2bd:ca45]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::6516:e908:d2bd:ca45%5]) with mapi id 15.20.5353.015; Fri, 17 Jun 2022
- 01:48:16 +0000
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org,
-        beanhuo@micron.com, krzysztof.kozlowski+dt@linaro.org,
-        avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, chanho61.park@samsung.com,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 1/3] ufs: host: ufs-exynos: remove unused defines
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq18rpwoyaw.fsf@ca-mkp.ca.oracle.com>
-References: <CGME20220615121508epcas5p3a42f8503bb6c6120cb4c0606109fe9c4@epcas5p3.samsung.com>
-        <20220615121204.16642-1-alim.akhtar@samsung.com>
-Date:   Thu, 16 Jun 2022 21:48:14 -0400
-In-Reply-To: <20220615121204.16642-1-alim.akhtar@samsung.com> (Alim Akhtar's
-        message of "Wed, 15 Jun 2022 17:42:02 +0530")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0085.namprd03.prod.outlook.com
- (2603:10b6:a03:331::30) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Thu, 16 Jun 2022 21:52:34 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE5B2607;
+        Thu, 16 Jun 2022 18:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655430751; x=1686966751;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LR/TtMbdYbKYc1yu1vLfpLLNfqqnzA1JurT4iXUoq7I=;
+  b=cQCm+IgMav8BLeD2GtKHkX+NVpjFkSOEd7DIgrR4nN4WqziRmhhQxLbi
+   w7ipMIryj8CSIaBDYXzNjfYS8NqJiAGcqw7IAvusJQH+pYrxKooihtAdT
+   ROuN8V9stQlGV7Bv/Kbok7pGKJ2t+lTsg3e28F9UrkoEpiLujUIjcOSyQ
+   AlwZtVlbSfs7M8Fg1zvouJJa+BpyHzt1jEbnbs1L33LLUzr9jWt8a1rgm
+   FBShxBIFr7GU3CkzmLVKEBFh1YfTR83cqUASA3dPQrKrVTwH4Fj1j5z+6
+   TI9lEdjipWu6Xd/dyemW16wZXHS4GJLjtO1U39PSC15Fco1sCvcjM5HII
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="276970421"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="276970421"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 18:52:31 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="641820386"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.30.135]) ([10.255.30.135])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 18:52:25 -0700
+Message-ID: <3108fd92-c05b-961f-2367-81925535bf4f@linux.intel.com>
+Date:   Fri, 17 Jun 2022 09:52:23 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6425e697-30ed-46fc-ea43-08da50037289
-X-MS-TrafficTypeDiagnostic: SN4PR10MB5621:EE_
-X-Microsoft-Antispam-PRVS: <SN4PR10MB5621C69B4376949F78434D5E8EAF9@SN4PR10MB5621.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oX9+OxVo0WQ863dnoEpBKmraZZ/loArj046/5ZZdaIvJmorogyprux3+eGQWBVU1u60VQvuoyue4aaEJJoij+pPCCN7G1X5B+19tAlKQMlwKkWt9whAkam+Rq5fKpCqcQpUO3XdDhQ3grh4t2JwdxuvtMmw6P2Ke/6/L2wptZ1EfPdXyrgNrCvbh/vh9M9FfFQMfLgdcIvzGBSzsoVThjf1eTTmcUs4WJ9ekdjBDLQZD175d2mTfqsFezV2xiUHX4v6Dk2C+hGcLJGiI3hgdMuhZLRtVNHN7oQBsNW5cNtpY2e6LQIts4UJcNYYOvzEDDCW9J1s6JleK6RQt6Q1uxm8O6+ziYkmOQyhwSL7eo9X8eQL/21vD1O1FRTIbY3v1Cq1RAex3uDrx7T25lJuetJGEF9HECajRTeze4/88oq19qhTyRTpZKXNuyh5k/inHIqwxB7DG+XiQ5fzpNyui+vKbk7UYrMCfXROOTHZbOHmFzXG6q5PXqrja565wbnA09Zoi8uK5NBl2o8ZoIlBK6Nwcx6r5Qj0ikEI3QsK4E1CqG2eNqX9WzTV7TgQm/BGZX1Czyy/CEqocaEXTdgTAncl0hc+MC1Y9d6tmAoMaEsbvy87bcMqdzJY6EBlBXK3mo967RT/xzlfWuHvXqEzxDPHavE2mrWc4xoGv+cZJeyHcvvbpeZlNSwMFocdn3Tlya5ZIaSQGrg1s3NWINQFbuQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(66556008)(6916009)(2906002)(508600001)(36916002)(6512007)(38100700002)(5660300002)(26005)(66946007)(8936002)(52116002)(38350700002)(6486002)(66476007)(6506007)(4326008)(316002)(7416002)(8676002)(186003)(558084003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JBorLIrv4G4ymRKGCa9nJsA4gpL7CZ0mrp2liikt/HuqA3YBnkGmmuMZtYwZ?=
- =?us-ascii?Q?wSKuqhAm6lX+9obVlAMJdUZds28DW8h82aWJiznf3YLO//dw6VQAXzhqKB9o?=
- =?us-ascii?Q?y1vMhx9G9BjS+D9AXmADsCsfYhAE5G8Pqco0In/rCNJAHu6v/raXowwSlLZW?=
- =?us-ascii?Q?4D5tr+dplVlonSBGcvl5nW5NlikfoXfymOjyEvWIIp33wSSSSidZDWyEny2F?=
- =?us-ascii?Q?GZysOmVmUi2ngWadp/MPXDDk8upCVud76bPSt/qXpot5u/KDB3y7xXoIPMB2?=
- =?us-ascii?Q?AGrrRQp04JbYMMu+BfN0vOZYuSbJ3vy/AKtUAzWEdvnkbNuyyEe4guT+PR+K?=
- =?us-ascii?Q?v0/U2bmmYI0L0lytZDRcrPhDuN/JW4d65lKw8mgjXaAOS7ZtnwDqmt18wLhg?=
- =?us-ascii?Q?igK5rhdlAvaeiOk8ZKKTrZTiKqFdM3kq23s0R7WfDKvWAOTn1wWJgDV7Jv7X?=
- =?us-ascii?Q?PK8j9u25eKRO76mXIsAjFDWQy8UuVeqI6h0SVTBMzFQAKqMHSwFtyzNynhWq?=
- =?us-ascii?Q?cDtTDd9ymQYpXstIVN88ILFbgDI61RugKXW4gSaCiLTQ1HJSa0+fcmmF05kL?=
- =?us-ascii?Q?9lYvWk+swVYFTs/vV+sPZg5WVYT2gwrPBOtCxLsDV7VJbky48CSHDTl7Lacd?=
- =?us-ascii?Q?5cQzPIuVo498giNQGOocWEWGK0yhz2iXKk/87JsTUsxuSunsyzLo+ZuhyyS5?=
- =?us-ascii?Q?N6NqciDywazOIhNhCznMUWd0zrwfDVd0b5jtWq68/lyeiZAH56RYyJaRw59C?=
- =?us-ascii?Q?+TBl5PvkALSsuUICPu93t5eGnhi4ml/g00k0PhohKnhP8EbkikFcNWOSSYOy?=
- =?us-ascii?Q?grqSNb8g97mfjl0c7HVn6mw5guGNf27GOlbCZlm41SqONhUt2dmAfp2UJc3r?=
- =?us-ascii?Q?nT+t4iDHq9pBiWu9OsWApkuUH3uqVUi3o4hMGNbRNlx4XJDRDg3vb0WL0a9G?=
- =?us-ascii?Q?jriv+S7zPrxyE+0Uku0Eur5/jls+umgUbb1jqw4ZqqEkhyOFxBG4r0KQgk5E?=
- =?us-ascii?Q?LuF/BRHLuQpAbhlh81vJ5Yn+oAxjBNo0CLiEbCVSA+RelxgiGSl+/+eEw2tO?=
- =?us-ascii?Q?wh42bwJU77w4JUzxgFCXsVk1p4W0RAf2+gaJ66kauKTitL3qvC3UNSKPTyth?=
- =?us-ascii?Q?+RhiouLWMzrxXZA5vjq69kiUWqQcFRFJVx6Oc6GyNBjPXtS/CtaxXQTpIond?=
- =?us-ascii?Q?UsaeSpNzJ4xNgp1B9IVrkpqUSVYWvWJKfAWHTYYa8P5dKwYFu+/IPYd2uiKQ?=
- =?us-ascii?Q?TxkiiP72xjvYbfyQ+STWbdSbT9EPf+XeoLPucVotJqvVPX4D0JyI0irTz1X2?=
- =?us-ascii?Q?OPJ/n3x7z17alCvLLAQMvLrhFU0RKs81PH9SCQgNRugrYT8dq5BUsGahP6cS?=
- =?us-ascii?Q?18JamO2qhx5sXYL8C+NSefR4hUEh8vo+dNIP9rS+0UIbWviu4wIMHUZoNYGl?=
- =?us-ascii?Q?UfmgkonSnXyV8e+y2i3EbtG3XwBe1FodxNsl1VFK/UIdiOeQAFNwiB2VZ4K8?=
- =?us-ascii?Q?8w63joIuqe09jr1TVSMgJwysiG9uwbRH4wD1AS2enQQg8MpqWiWeUETuz/+f?=
- =?us-ascii?Q?ZqZ+Nddd5rAVqC4y3O4qCcEzmlbmS46SDDSBD5OSotEQ0MAzFniqRBPOv2wa?=
- =?us-ascii?Q?RMWGYvAtlU9+Tq4aFUqvtVKWFwOytryIKHoyyIE5ijTqOaQoykaxXNUyPd16?=
- =?us-ascii?Q?7GICnkWlNnqvDvDX5uC/azeNunfpnV6wze6P03kD3pcUK0R3QrtNYFfn9w6b?=
- =?us-ascii?Q?nwoH8JCiPVuaUVdKHYVdaI/V1O4Lw38=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6425e697-30ed-46fc-ea43-08da50037289
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 01:48:16.4517
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a+FzZA+gr19Gv15ySk2hy8RxuZuU1xAz8sE13x7s+raoo8jfSj/qfBfR2CvR8ye5Gqjn9U9c5OdRUYhuhrK9tjjwNy2fwWqbOAZf4N/mf64=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5621
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-16_18:2022-06-16,2022-06-16 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
- adultscore=0 suspectscore=0 mlxlogscore=657 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206170006
-X-Proofpoint-GUID: gy0pHELY2up0thdguwigKfFv8AqDZTFi
-X-Proofpoint-ORIG-GUID: gy0pHELY2up0thdguwigKfFv8AqDZTFi
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 2/4] perf jevents: Add python converter script
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, Felix Fietkau <nbd@nbd.name>,
+        Qi Liu <liuqi115@huawei.com>, Like Xu <likexu@tencent.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
+        Stephane Eranian <eranian@google.com>
+References: <20220616044806.47770-1-irogers@google.com>
+ <20220616044806.47770-3-irogers@google.com>
+ <7eb148e5-0763-1dbe-d1f5-80e5159be7c8@linux.intel.com>
+ <CAP-5=fUy=_HFhhdghRJs-+G75ppsYCRg72SSnoeijvdqb8hyVQ@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAP-5=fUy=_HFhhdghRJs-+G75ppsYCRg72SSnoeijvdqb8hyVQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ian,
 
-Alim,
+On 6/17/2022 9:26 AM, Ian Rogers wrote:
+> On Thu, Jun 16, 2022 at 5:04 PM Xing Zhengjun
+> <zhengjun.xing@linux.intel.com> wrote:
+>>
+>> Hi Ian,
+>>
+>>     I applied this patch series based on the head of the perf/core
+>> branch, but it failed when do make.
+>>     My python version:
+>>     Python 2.7.18 (default, Mar  8 2021, 13:02:45)
+>>     [GCC 9.3.0] on linux2
+>>
+>>
+>>     GEN     pmu-events/pmu-events.c
+>> make[3]: Nothing to be done for 'install_headers'.
+>>     GEN     python/perf.so
+>> Traceback (most recent call last):
+>>     File "pmu-events/jevents.py", line 23, in <module>
+>>       def file_name_to_table_name(parents: list[str], dirname: str) -> str:
+>> TypeError: 'type' object is not subscriptable
+>> make[3]: *** [pmu-events/Build:20: pmu-events/pmu-events.c] Error 1
+>> make[2]: *** [Makefile.perf:663: pmu-events/pmu-events-in.o] Error 2
+>> make[2]: *** Waiting for unfinished jobs....
+>> make[1]: *** [Makefile.perf:240: sub-make] Error 2
+>> make: *** [Makefile:70: all] Error 2
+> 
+> Hi Zhengjun,
+> 
+> Thanks for testing! You are running the test script and not the main
+> build. Unlike the main build I didn't add a Python version test for
+> the test script. As mentioned in the cover letter you need Python 3.6
+> as Python 2 was sunset in 2020.
+> 
 
-> Remove #defines as those are not used anywhere in the driver file
+In fact, I run the main build,
+$ cd tools/perf
+$ make
 
-Applied to 5.20/scsi-staging, thanks!
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04.3 LTS
+Release:        20.04
+Codename:       focal
+
+The default python in Ubuntu 20.04.3 is Python2
+
+I think a lot of developers also use the Ubuntu 20.04.3 LTS,
+it's better to support python2.
+
+
+> Thanks,
+> Ian
+> 
+> 
+>> On 6/16/2022 12:48 PM, Ian Rogers wrote:
+>>> jevents.c is large, has a dependency on an old forked version of jsmn,
+>>> and is challenging to work upon. A lot of jevents.c's complexity comes
+>>> from needing to write json and csv parsing from first principles. In
+>>> contrast python has this functionality in standard libraries and is
+>>> already a build pre-requisite for tools like asciidoc (that builds all
+>>> of the perf man pages).
+>>>
+>>> Introduce jevents.py that produces identical output to jevents.c. Add a
+>>> test that runs both converter tools and validates there are no output
+>>> differences. The test can be invoked with a phony build target like:
+>>>
+>>> make -C tools/perf jevents-py-test
+>>>
+>>> The python code deliberately tries to replicate the behavior of
+>>> jevents.c so that the output matches and transitioning tools shouldn't
+>>> introduce regressions. In some cases the code isn't as elegant as hoped,
+>>> but fixing this can be done as follow up.
+>>>
+>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>> ---
+>>>    tools/perf/Makefile.perf              |   6 +
+>>>    tools/perf/pmu-events/jevents-test.sh |  33 +++
+>>>    tools/perf/pmu-events/jevents.py      | 394 ++++++++++++++++++++++++++
+>>>    3 files changed, 433 insertions(+)
+>>>    create mode 100755 tools/perf/pmu-events/jevents-test.sh
+>>>    create mode 100755 tools/perf/pmu-events/jevents.py
+>>>
+>>> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+>>> index 8f738e11356d..1e29c8936f71 100644
+>>> --- a/tools/perf/Makefile.perf
+>>> +++ b/tools/perf/Makefile.perf
+>>> @@ -669,6 +669,12 @@ $(JEVENTS_IN): FORCE
+>>>    $(JEVENTS): $(JEVENTS_IN)
+>>>        $(QUIET_LINK)$(HOSTCC) $(JEVENTS_IN) -o $@
+>>>
+>>> +JEVENTS_PY   :=  pmu-events/jevents.py
+>>> +JEVENTS_PY_TEST      :=  pmu-events/jevents-test.sh
+>>> +.PHONY: jevents-py-test
+>>> +jevents-py-test: $(JEVENTS)
+>>> +     $(Q)$(call echo-cmd,gen)$(JEVENTS_PY_TEST) $(JEVENTS) $(JEVENTS_PY) pmu-events/arch
+>>> +
+>>>    $(PMU_EVENTS_IN): $(JEVENTS) FORCE
+>>>        $(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
+>>>
+>>> diff --git a/tools/perf/pmu-events/jevents-test.sh b/tools/perf/pmu-events/jevents-test.sh
+>>> new file mode 100755
+>>> index 000000000000..9ae852292576
+>>> --- /dev/null
+>>> +++ b/tools/perf/pmu-events/jevents-test.sh
+>>> @@ -0,0 +1,33 @@
+>>> +#!/bin/sh
+>>> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+>>> +# Validate that the legacy jevents and jevents.py produce identical output.
+>>> +set -e
+>>> +
+>>> +JEVENTS="$1"
+>>> +JEVENTS_PY="$2"
+>>> +ARCH_PATH="$3"
+>>> +JEVENTS_C_GENERATED=$(mktemp /tmp/jevents_c.XXXXX.c)
+>>> +JEVENTS_PY_GENERATED=$(mktemp /tmp/jevents_py.XXXXX.c)
+>>> +
+>>> +cleanup() {
+>>> +  rm "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
+>>> +  trap - exit term int
+>>> +}
+>>> +trap cleanup exit term int
+>>> +
+>>> +for path in "$ARCH_PATH"/*
+>>> +do
+>>> +  arch=$(basename $path)
+>>> +  if [ "$arch" = "test" ]
+>>> +  then
+>>> +    continue
+>>> +  fi
+>>> +  echo "Checking architecture: $arch"
+>>> +  echo "Generating using jevents.c"
+>>> +  "$JEVENTS" "$arch" "$ARCH_PATH" "$JEVENTS_C_GENERATED"
+>>> +  echo "Generating using jevents.py"
+>>> +  "$JEVENTS_PY" "$arch" "$ARCH_PATH" "$JEVENTS_PY_GENERATED"
+>>> +  echo "Diffing"
+>>> +  diff -u "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
+>>> +done
+>>> +cleanup
+>>> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+>>> new file mode 100755
+>>> index 000000000000..658eb2696f9a
+>>> --- /dev/null
+>>> +++ b/tools/perf/pmu-events/jevents.py
+>>> @@ -0,0 +1,394 @@
+>>> +#!/usr/bin/env python3
+>>> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+>>> +"""Convert directories of JSON events to C code."""
+>>> +import argparse
+>>> +import csv
+>>> +import json
+>>> +import os
+>>> +import sys
+>>> +from typing import Callable
+>>> +
+>>> +# Global command line arguments.
+>>> +args = None
+>>> +# List of event tables generated from "/sys" directories.
+>>> +sys_event_tables = []
+>>> +# Map from an event name to an architecture standard
+>>> +# JsonEvent. Architecture standard events are in json files in the top
+>>> +# f'{args.starting_dir}/{args.arch}' directory.
+>>> +arch_std_events = dict()
+>>> +# Track whether an events table is currently being defined and needs closing.
+>>> +close_table = False
+>>> +
+>>> +
+>>> +def file_name_to_table_name(parents: list[str], dirname: str) -> str:
+>>> +  """Generate a C table name from directory names."""
+>>> +  tblname = 'pme'
+>>> +  for p in parents:
+>>> +    tblname += '_' + p
+>>> +  tblname += '_' + dirname
+>>> +  return tblname.replace('-', '_')
+>>> +
+>>> +
+>>> +class JsonEvent:
+>>> +  """Representation of an event loaded from a json file dictionary."""
+>>> +
+>>> +  def __init__(self, dict):
+>>> +    """Constructor passed the dictionary of parsed json values."""
+>>> +
+>>> +    def llx(x: int) -> str:
+>>> +      """Convert an int to a string similar to a printf modifier of %#llx."""
+>>> +      return '0' if x == 0 else hex(x)
+>>> +
+>>> +    def fixdesc(s: str) -> str:
+>>> +      """Fix formatting issue for the desc string."""
+>>> +      if s is None:
+>>> +        return None
+>>> +      return s.removesuffix('.  ').removesuffix('. ').removesuffix('.').replace(
+>>> +          '\n', '\\n').replace('\"', '\\"').replace('\r', '\\r')
+>>> +
+>>> +    def convert_aggr_mode(aggr_mode: str) -> str:
+>>> +      """Returns the aggr_mode_class enum value associated with the JSON string."""
+>>> +      if not aggr_mode:
+>>> +        return None
+>>> +      aggr_mode_to_enum = {
+>>> +          'PerChip': '1',
+>>> +          'PerCore': '2',
+>>> +      }
+>>> +      return aggr_mode_to_enum[aggr_mode]
+>>> +
+>>> +    def lookup_msr(num: str) -> str:
+>>> +      """Converts the msr number, or first in a list to the appropriate event field."""
+>>> +      if not num:
+>>> +        return None
+>>> +      msrmap = {
+>>> +          0x3F6: 'ldlat=',
+>>> +          0x1A6: 'offcore_rsp=',
+>>> +          0x1A7: 'offcore_rsp=',
+>>> +          0x3F7: 'frontend=',
+>>> +      }
+>>> +      return msrmap[int(num.split(',', 1)[0], 0)]
+>>> +
+>>> +    def real_event(name: str, event: str) -> str:
+>>> +      """Convert well known event names to an event string otherwise use the event argument."""
+>>> +      fixed = {
+>>> +          'inst_retired.any': 'event=0xc0,period=2000003',
+>>> +          'inst_retired.any_p': 'event=0xc0,period=2000003',
+>>> +          'cpu_clk_unhalted.ref': 'event=0x0,umask=0x03,period=2000003',
+>>> +          'cpu_clk_unhalted.thread': 'event=0x3c,period=2000003',
+>>> +          'cpu_clk_unhalted.core': 'event=0x3c,period=2000003',
+>>> +          'cpu_clk_unhalted.thread_any': 'event=0x3c,any=1,period=2000003',
+>>> +      }
+>>> +      if not name:
+>>> +        return None
+>>> +      if name.lower() in fixed:
+>>> +        return fixed[name.lower()]
+>>> +      return event
+>>> +
+>>> +    def unit_to_pmu(unit: str) -> str:
+>>> +      """Convert a JSON Unit to Linux PMU name."""
+>>> +      if not unit:
+>>> +        return None
+>>> +      # Comment brought over from jevents.c:
+>>> +      # it's not realistic to keep adding these, we need something more scalable ...
+>>> +      table = {
+>>> +          'CBO': 'uncore_cbox',
+>>> +          'QPI LL': 'uncore_qpi',
+>>> +          'SBO': 'uncore_sbox',
+>>> +          'iMPH-U': 'uncore_arb',
+>>> +          'CPU-M-CF': 'cpum_cf',
+>>> +          'CPU-M-SF': 'cpum_sf',
+>>> +          'UPI LL': 'uncore_upi',
+>>> +          'hisi_sicl,cpa': 'hisi_sicl,cpa',
+>>> +          'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
+>>> +          'hisi_sccl,hha': 'hisi_sccl,hha',
+>>> +          'hisi_sccl,l3c': 'hisi_sccl,l3c',
+>>> +          'imx8_ddr': 'imx8_ddr',
+>>> +          'L3PMC': 'amd_l3',
+>>> +          'DFPMC': 'amd_df',
+>>> +          'cpu_core': 'cpu_core',
+>>> +          'cpu_atom': 'cpu_atom',
+>>> +      }
+>>> +      return table[unit] if unit in table else f'uncore_{unit.lower()}'
+>>> +
+>>> +    eventcode = 0
+>>> +    if 'EventCode' in dict:
+>>> +      eventcode = int(dict['EventCode'].split(',', 1)[0], 0)
+>>> +    if 'ExtSel' in dict:
+>>> +      eventcode |= int(dict['ExtSel']) << 8
+>>> +    configcode = int(dict['ConfigCode'], 0) if 'ConfigCode' in dict else None
+>>> +    self.name = dict['EventName'].lower() if 'EventName' in dict else None
+>>> +    self.compat = dict.get('Compat')
+>>> +    self.desc = fixdesc(dict.get('BriefDescription'))
+>>> +    self.long_desc = fixdesc(dict.get('PublicDescription'))
+>>> +    precise = dict.get('PEBS')
+>>> +    msr = lookup_msr(dict.get('MSRIndex'))
+>>> +    msrval = dict.get('MSRValue')
+>>> +    extra_desc = ''
+>>> +    if 'Data_LA' in dict:
+>>> +      extra_desc += '  Supports address when precise'
+>>> +      if 'Errata' in dict:
+>>> +        extra_desc += '.'
+>>> +    if 'Errata' in dict:
+>>> +      extra_desc += '  Spec update: ' + dict['Errata']
+>>> +    self.pmu = unit_to_pmu(dict.get('Unit'))
+>>> +    filter = dict.get('Filter')
+>>> +    self.unit = dict.get('ScaleUnit')
+>>> +    self.perpkg = dict.get('PerPkg')
+>>> +    self.aggr_mode = convert_aggr_mode(dict.get('AggregationMode'))
+>>> +    self.deprecated = dict.get('Deprecated')
+>>> +    self.metric_name = dict.get('MetricName')
+>>> +    self.metric_group = dict.get('MetricGroup')
+>>> +    self.metric_constraint = dict.get('MetricConstraint')
+>>> +    self.metric_expr = dict.get('MetricExpr')
+>>> +    if self.metric_expr:
+>>> +      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
+>>> +    arch_std = dict.get('ArchStdEvent')
+>>> +    if precise and self.desc and not '(Precise Event)' in self.desc:
+>>> +      extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
+>>> +                                                                 'event)')
+>>> +    event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
+>>> +    event_fields = [
+>>> +        ('AnyThread', 'any='),
+>>> +        ('PortMask', 'ch_mask='),
+>>> +        ('CounterMask', 'cmask='),
+>>> +        ('EdgeDetect', 'edge='),
+>>> +        ('FCMask', 'fc_mask='),
+>>> +        ('Invert', 'inv='),
+>>> +        ('SampleAfterValue', 'period='),
+>>> +        ('UMask', 'umask='),
+>>> +    ]
+>>> +    for key, value in event_fields:
+>>> +      if key in dict and dict[key] != '0':
+>>> +        event += ',' + value + dict[key]
+>>> +    if filter:
+>>> +      event += f',{filter}'
+>>> +    if msr:
+>>> +      event += f',{msr}{msrval}'
+>>> +    if self.desc and extra_desc:
+>>> +      self.desc += extra_desc
+>>> +    if self.long_desc and extra_desc:
+>>> +      self.long_desc += extra_desc
+>>> +    if self.pmu:
+>>> +      if self.desc and not self.desc.endswith('. '):
+>>> +        self.desc += '. '
+>>> +      self.desc = (self.desc if self.desc else '') + ('Unit: ' + self.pmu + ' ')
+>>> +    if arch_std and arch_std.lower() in arch_std_events:
+>>> +      event = arch_std_events[arch_std.lower()].event
+>>> +      # Copy from the architecture standard event to self for undefined fields.
+>>> +      for attr, value in arch_std_events[arch_std.lower()].__dict__.items():
+>>> +        if hasattr(self, attr) and not getattr(self, attr):
+>>> +          setattr(self, attr, value)
+>>> +
+>>> +    self.event = real_event(self.name, event)
+>>> +
+>>> +  def __repr__(self) -> str:
+>>> +    """String representation primarily for debugging."""
+>>> +    s = '{\n'
+>>> +    for attr, value in self.__dict__.items():
+>>> +      if value:
+>>> +        s += f'\t{attr} = {value},\n'
+>>> +    return s + '}'
+>>> +
+>>> +  def ToCString(self, topic_local: str) -> str:
+>>> +    """Representation of the event as a C struct initializer."""
+>>> +
+>>> +    def AttrString(attr: str, value: str) -> str:
+>>> +      return '\t.%s = \"%s\",\n' % (attr, value)
+>>> +
+>>> +    def StrIfPresent(self, attr: str) -> str:
+>>> +      if not getattr(self, attr):
+>>> +        return ''
+>>> +      return AttrString(attr, getattr(self, attr))
+>>> +
+>>> +    s = '{\n'
+>>> +    for attr in ['name', 'event']:
+>>> +      s += StrIfPresent(self, attr)
+>>> +    if self.desc is not None:
+>>> +      s += AttrString('desc', self.desc)
+>>> +    else:
+>>> +      s += AttrString('desc', '(null)')
+>>> +    s += StrIfPresent(self, 'compat')
+>>> +    s += f'\t.topic = "{topic_local}",\n'
+>>> +    for attr in [
+>>> +        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
+>>> +        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
+>>> +    ]:
+>>> +      s += StrIfPresent(self, attr)
+>>> +    s += '},\n'
+>>> +    return s
+>>> +
+>>> +
+>>> +def read_json_events(path: str) -> list[JsonEvent]:
+>>> +  """Read json events from the specified file."""
+>>> +  return json.load(open(path), object_hook=lambda d: JsonEvent(d))
+>>> +
+>>> +def preprocess_arch_std_files(archpath: str) -> None:
+>>> +  """Read in all architecture standard events."""
+>>> +  global arch_std_events
+>>> +  for item in os.scandir(archpath):
+>>> +    if item.is_file() and item.name.endswith('.json'):
+>>> +      for event in read_json_events(item.path):
+>>> +        if event.name:
+>>> +          arch_std_events[event.name.lower()] = event
+>>> +
+>>> +
+>>> +def print_events_table_prefix(tblname: str) -> None:
+>>> +  """Called when a new events table is started."""
+>>> +  global close_table
+>>> +  if close_table:
+>>> +    raise IOError('Printing table prefix but last table has no suffix')
+>>> +  args.output_file.write('static const struct pmu_event %s[] = {\n' % tblname)
+>>> +  close_table = True
+>>> +
+>>> +
+>>> +def print_events_table_entries(item: os.DirEntry, topic: str) -> None:
+>>> +  """Create contents of an events table."""
+>>> +  if not close_table:
+>>> +    raise IOError('Table entries missing prefix')
+>>> +  for event in read_json_events(item.path):
+>>> +    args.output_file.write(event.ToCString(topic))
+>>> +
+>>> +def print_events_table_suffix() -> None:
+>>> +  """Optionally close events table."""
+>>> +  global close_table
+>>> +  if close_table:
+>>> +    args.output_file.write("""{
+>>> +\t.name = 0,
+>>> +\t.event = 0,
+>>> +\t.desc = 0,
+>>> +},
+>>> +};
+>>> +""")
+>>> +  close_table = False
+>>> +
+>>> +def process_one_file(parents: list[str], item: os.DirEntry) -> None:
+>>> +  """Process a JSON file during the main walk."""
+>>> +  global sys_event_tables
+>>> +
+>>> +  def get_topic(topic: str) -> str:
+>>> +    return topic.removesuffix('.json').replace('-', ' ')
+>>> +
+>>> +  def is_leaf_dir(path: str) -> bool:
+>>> +    for item in os.scandir(path):
+>>> +      if item.is_dir():
+>>> +        return False
+>>> +    return True
+>>> +
+>>> +  # model directory, reset topic
+>>> +  if item.is_dir() and is_leaf_dir(item.path):
+>>> +    print_events_table_suffix()
+>>> +
+>>> +    tblname = file_name_to_table_name(parents, item.name)
+>>> +    if item.name == 'sys':
+>>> +      sys_event_tables.append(tblname)
+>>> +    print_events_table_prefix(tblname)
+>>> +    return
+>>> +
+>>> +  # base dir or too deep
+>>> +  level = len(parents)
+>>> +  if level == 0 or level > 4:
+>>> +    return
+>>> +
+>>> +  # Ignore other directories. If the file name does not have a .json
+>>> +  # extension, ignore it. It could be a readme.txt for instance.
+>>> +  if not item.is_file() or not item.name.endswith('.json'):
+>>> +    return
+>>> +
+>>> +  print_events_table_entries(item, get_topic(item.name))
+>>> +
+>>> +
+>>> +def print_mapping_table() -> None:
+>>> +  """Read the mapfile and generate the struct from cpuid string to event table."""
+>>> +  table = csv.reader(open(f'{args.starting_dir}/{args.arch}/mapfile.csv'))
+>>> +  args.output_file.write('const struct pmu_events_map pmu_events_map[] = {\n')
+>>> +  first = True
+>>> +  for row in table:
+>>> +    # Skip the first row or any row beginning with #.
+>>> +    if not first and len(row) > 0 and not row[0].startswith('#'):
+>>> +      tblname = file_name_to_table_name([], row[2].replace('/', '_'))
+>>> +      args.output_file.write("""{
+>>> +\t.cpuid = \"%s\",
+>>> +\t.version = \"%s\",
+>>> +\t.type = \"%s\",
+>>> +\t.table = %s
+>>> +},
+>>> +""" % (row[0].replace('\\', '\\\\'), row[1], row[3], tblname))
+>>> +    first = False
+>>> +
+>>> +  args.output_file.write("""{
+>>> +\t.cpuid = "testcpu",
+>>> +\t.version = "v1",
+>>> +\t.type = "core",
+>>> +\t.table = pme_test_soc_cpu,
+>>> +},
+>>> +{
+>>> +\t.cpuid = 0,
+>>> +\t.version = 0,
+>>> +\t.type = 0,
+>>> +\t.table = 0,
+>>> +},
+>>> +};
+>>> +""")
+>>> +
+>>> +
+>>> +def print_system_mapping_table() -> None:
+>>> +  """C struct mapping table array for tables from /sys directories."""
+>>> +  args.output_file.write(
+>>> +      '\nconst struct pmu_sys_events pmu_sys_event_tables[] = {\n')
+>>> +  for tblname in sys_event_tables:
+>>> +    args.output_file.write("""\t{
+>>> +\t\t.table = %s,
+>>> +\t\t.name = \"%s\",
+>>> +\t},
+>>> +""" % (tblname, tblname))
+>>> +  args.output_file.write("""\t{
+>>> +\t\t.table = 0
+>>> +\t},
+>>> +};
+>>> +""")
+>>> +
+>>> +
+>>> +def main() -> None:
+>>> +  global args
+>>> +
+>>> +  def dir_path(path: str) -> str:
+>>> +    """Validate path is a directory for argparse."""
+>>> +    if os.path.isdir(path):
+>>> +      return path
+>>> +    else:
+>>> +      raise argparse.ArgumentTypeError(f'\'{path}\' is not a valid directory')
+>>> +
+>>> +  def ftw(path: str, parents: list[str],
+>>> +          action: Callable[[list[str], os.DirEntry], None]) -> None:
+>>> +    """Replicate the directory/file walking behavior of C's file tree walk."""
+>>> +    for item in os.scandir(path):
+>>> +      action(parents, item)
+>>> +      if item.is_dir():
+>>> +        ftw(item.path, parents + [item.name], action)
+>>> +
+>>> +  ap = argparse.ArgumentParser()
+>>> +  ap.add_argument('arch', help='Architecture name like x86')
+>>> +  ap.add_argument(
+>>> +      'starting_dir',
+>>> +      type=dir_path,
+>>> +      help='Root of tree containing architecture directories containing json files'
+>>> +  )
+>>> +  ap.add_argument(
+>>> +      'output_file', type=argparse.FileType('w'), nargs='?', default=sys.stdout)
+>>> +  args = ap.parse_args()
+>>> +
+>>> +  args.output_file.write("#include \"pmu-events/pmu-events.h\"\n")
+>>> +  for path in [args.arch, 'test']:
+>>> +    arch_path = f'{args.starting_dir}/{path}'
+>>> +    if not os.path.isdir(arch_path):
+>>> +      raise IOError(f'Missing architecture directory in \'{arch_path}\'')
+>>> +    preprocess_arch_std_files(arch_path)
+>>> +    ftw(arch_path, [], process_one_file)
+>>> +    print_events_table_suffix()
+>>> +
+>>> +  print_mapping_table()
+>>> +  print_system_mapping_table()
+>>> +
+>>> +
+>>> +if __name__ == '__main__':
+>>> +  main()
+>>
+>> --
+>> Zhengjun Xing
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Zhengjun Xing

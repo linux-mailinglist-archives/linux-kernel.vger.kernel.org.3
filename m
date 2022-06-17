@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C86254EE53
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 02:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D94654EE55
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 02:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378857AbiFQAKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 20:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S1379121AbiFQALi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 20:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiFQAKJ (ORCPT
+        with ESMTP id S229454AbiFQALg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 20:10:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E136212F;
-        Thu, 16 Jun 2022 17:10:08 -0700 (PDT)
+        Thu, 16 Jun 2022 20:11:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDB862215;
+        Thu, 16 Jun 2022 17:11:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD02EB8268A;
-        Fri, 17 Jun 2022 00:10:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B08EC34114;
-        Fri, 17 Jun 2022 00:10:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 486976182F;
+        Fri, 17 Jun 2022 00:11:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD0CC34114;
+        Fri, 17 Jun 2022 00:11:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655424605;
-        bh=cD73xFTYbV7d8FwYS/+LxjiTrj6GgeC/IFBJ0+It07Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tsv9SdWuVyJNQeGUF1E0Nr3uDUJB7EeBVN4u0A2d1DNJmaibpJ6rwo//bI+x83hie
-         aqyUD+fTDgnqYB6+kjpDVxuVMQbM5ZhBaucwIzgRmR66O2Y73qfViA6R4DUSDKG8ot
-         26pywnT/zcUitfw8JYK3Av8QaIknlH0gJhsoG3o3NGo0fh2OsXwG1K5CyBtrn0ZCoa
-         yry1hDGnxYxhmOGfpf/4zKhfGF+GHYrpP9OuvTx18I7hEMr+wGmdQPKsPyZPR+hmdR
-         gO8VzaiAsi/SeYo6HlyAOkvp3lJcdb51Rvn5HBnbqA7Tstf42V8uC4MJQ1rkXllg6a
-         mvXY0iCAi1/Vg==
-Date:   Thu, 16 Jun 2022 17:10:04 -0700
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-phy@lists.infradead.org, Stephen Boyd <swboyd@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 2/2] dt-bindings: phy: List supplies for qcom,edp-phy
-Message-ID: <YqvGXNGIzVHp7QtV@matsya>
-References: <20220425210643.2420919-1-dianders@chromium.org>
- <20220425140619.2.Iae013f0ff4599294189f3a6e91376fad137bbabf@changeid>
- <CAD=FV=Wbi=CXhPpOUJj=1PdgB8i6Lf1Sfr=T7wrQsgBx790S_w@mail.gmail.com>
+        s=k20201202; t=1655424694;
+        bh=uQeVB00AjJrbZT5b4yd3bF+T7xqW+4EKimhddU+zKSc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=oJ1o0qOkIqjaahotZjelLA95CRGSCBeyUZCf31ei/1X/0WSeF0ZKdDuayhIRGRJaN
+         6j1kQcUVqOjkYoKEw876rX7umHBVYVEBNJwY24iO8e0Yw7YTCBu71WcIRxPo6hldkU
+         qpwPiNw/XYPAUnoX6TGRaeru4wkyTjt7Bm+EiSkfrDnqRCAKBKUBY1FPvHtx7X5IYp
+         wYKZfsJgBT5LsbGLO5L/VPtlxW2yDXypTR8NjdFK3+9M6mD9Qp7CUE7123WMclPqVx
+         /2Zgj0GtMcEnyiA89/ZeAgyCEhZb0S0Ug+cYCSAcgkDaNSwMaJczKIJLGsLfjaIJJ+
+         vWXbe0S3qEFfQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=Wbi=CXhPpOUJj=1PdgB8i6Lf1Sfr=T7wrQsgBx790S_w@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <88be9f00-2b1a-977d-dadd-95a131bf7f1f@collabora.com>
+References: <20220614091020.21472-1-angelogioacchino.delregno@collabora.com> <20220616024442.1337EC3411E@smtp.kernel.org> <88be9f00-2b1a-977d-dadd-95a131bf7f1f@collabora.com>
+Subject: Re: [PATCH] clk: mediatek: clk-mt8195-vdo0: Set rate on vdo0_dp_intf0_dp_intf's parent
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     matthias.bgg@gmail.com, wenst@chromium.org,
+        miles.chen@mediatek.com, chun-jie.chen@mediatek.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
+Date:   Thu, 16 Jun 2022 17:11:32 -0700
+User-Agent: alot/0.10
+Message-Id: <20220617001134.9AD0CC34114@smtp.kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,43 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-06-22, 08:35, Doug Anderson wrote:
-> Hi,
-> 
-> On Mon, Apr 25, 2022 at 2:07 PM Douglas Anderson <dianders@chromium.org> wrote:
-> >
-> > We're supposed to list the supplies in the dt bindings but there are
-> > none in the eDP PHY bindings.
-> >
-> > Looking at the driver in Linux, I can see that there seem to be two
-> > relevant supplies: "vdda-phy" and "vdda-pll". Let's add those to the
-> > bindings.
-> >
-> > NOTE: from looking at the Qualcomm datasheet for sc7280, it's not
-> > immediately clear how to figure out how to fill in these supplies. The
-> > only two eDP related supplies are simply described as "power for eDP
-> > 0.9V circuits" and "power for eDP 1.2V circuits". From guessing and
-> > from comparing how a similar PHY is hooked up on other similar
-> > Qualcomm boards, I'll make the educated guess that the 1.2V supply
-> > goes to "vdda-phy" and the 0.9V supply goes to "vdda-pll" and I'll use
-> > that in the example here.
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >  Documentation/devicetree/bindings/phy/qcom,edp-phy.yaml | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> 
-> Even though patch #1 in this series should be dropped, this patch
-> (patch #2) is still valid. Vinod: I assume this would land in your
-> tree along with the first two patches in Kuogee's series [1], which
-> are related. Please let me know if you need me to re-send or anything.
+Quoting AngeloGioacchino Del Regno (2022-06-16 01:48:44)
+> Il 16/06/22 04:44, Stephen Boyd ha scritto:
+> > Quoting AngeloGioacchino Del Regno (2022-06-14 02:10:20)
+> >> Add the CLK_SET_RATE_PARENT flag to the CLK_VDO0_DP_INTF0_DP_INTF
+> >> clock: this is required to trigger clock source selection on
+> >> CLK_TOP_EDP, while avoiding to manage the enablement of the former
+> >> separately from the latter in the displayport driver.
+> >>
+> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@c=
+ollabora.com>
+> >> ---
+> >=20
+> > Any Fixes tag?
+>=20
+> Backporting is useless because there's no DisplayPort driver that support=
+s MT8195
+> in the previous kernel versions, so this clock (and whatever logic behind=
+ it) is
+> unused.
+>=20
+> Though, if you think that's going to be useful in any way, I can add one?
+>=20
 
-I have applied this patch, thanks
-
-> [1] https://lore.kernel.org/r/1653507433-22585-1-git-send-email-quic_khsieh@quicinc.com/
-
-This needs rebase on phy split which I have picked
-
--- 
-~Vinod
+It's always useful. A Fixes tag doesn't mean anything for backporting to
+stable kernels.

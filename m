@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB13E54F340
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A177D54F344
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380632AbiFQImz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S1380674AbiFQIns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380537AbiFQImx (ORCPT
+        with ESMTP id S1381069AbiFQInZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:42:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4981E1146F;
-        Fri, 17 Jun 2022 01:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0+txUdQ43jf+UIe9zCVUaGGeb7a9BrmjbJwClV7VdAQ=; b=PiIGLlDRnD4KR6sJKZqqRuNH4y
-        A1WYA1tieOBnORXjxYl7vYwDNHafaUH7kYlCGCM7t1x+LNel94rwNqbGLhL4BlEC1MZI6OoXIujQ+
-        vShzmh+5ZQkZyPwkWL4IeGPcVy3qPp0FVWp+1X3n5/wOKktGNoZ+yXqlvb1GolNq7m204U7ValNhe
-        PkayypEKB6d3IiePr18juhMYL99/5gj5wb8bEduIdLVbW/pWQRg5bqTa0WI1L1c72qUazXmBQ3noN
-        dvIC73wU5vA/zg4eIo53LFb51U5nQ1OmOZtia6HZ6P0IvRSnO212m0w+el6cH6nOpWbqjM0UR53we
-        YsE01FbA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o27Yw-006PUX-Gk; Fri, 17 Jun 2022 08:42:42 +0000
-Date:   Fri, 17 Jun 2022 01:42:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kwankhede@nvidia.com, corbet@lwn.net, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com,
-        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
-        alex.williamson@redhat.com, cohuck@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, jchrist@linux.ibm.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RFT][PATCH v1 3/6] vfio: Pass in starting IOVA to
- vfio_pin/unpin_pages API
-Message-ID: <Yqw+goqTJwb0lrxy@infradead.org>
-References: <20220616235212.15185-1-nicolinc@nvidia.com>
- <20220616235212.15185-4-nicolinc@nvidia.com>
+        Fri, 17 Jun 2022 04:43:25 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4355C2B26D;
+        Fri, 17 Jun 2022 01:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655455404; x=1686991404;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Vw1zRoLepBKUeO0HYeEdzkJaAQbGQ2petXz77myYyLs=;
+  b=HKbUOGrScA10OMOeN6BUfg52Henk0k4kclY6lxbW/Hg7Ug4vyF4zRKlk
+   XsblBnXofhtq9DZAH92DNFT8UOJ7gCkVknnTUbuCcDp98F5RcIQy8OqbI
+   3YuVTTeFEBVCjjZE7t2RQ9hlFiQHO0EikMJ4lYyxgmhLPEVN054DKu2Hy
+   9lthOkAS5Rxgmpz/h6dQQahpi9oLzqc6C+vgYErI6fuM9XTfMIvi+j2eH
+   1UNfbiJlX/4BzdVdP34VuAF5lBraMr+viJUZdzYtCGwtOY3WieKIQGvTg
+   +GGADT6Fwwb5mcDAnCoQSdkwIaHAlTQrmSSvQiAX1rlrHu2uxvLlIHb58
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="168515102"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jun 2022 01:43:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Jun 2022 01:43:22 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 17 Jun 2022 01:43:18 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Russell King" <linux@armlinux.org.uk>
+Subject: [Patch net-next 00/11] net: dsa: microchip: common spi probe for the ksz series switches - part 1
+Date:   Fri, 17 Jun 2022 14:12:44 +0530
+Message-ID: <20220617084255.19376-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616235212.15185-4-nicolinc@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,21 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 04:52:09PM -0700, Nicolin Chen wrote:
-> +	ret = vfio_unpin_pages(&vgpu->vfio_device, gfn << PAGE_SHIFT, npage);
-> +	drm_WARN_ON(&i915->drm, ret != npage);
+This patch series aims to refactor the ksz_switch_register routine to have the
+common flow for the ksz series switch. At present ksz8795.c & ksz9477.c have
+its own dsa_switch_ops and switch detect functionality.
+In ksz_switch_register, ksz_dev_ops is assigned based on the function parameter
+passed by the individual ksz8/ksz9477 switch register function. And then switch
+detect is performed based on the ksz_dev_ops.detect hook.  This patch modifies
+the ksz_switch_register such a way that switch detect is performed first, based
+on the chip ksz_dev_ops is assigned to ksz_device structure. It ensures the
+common flow for the existing as well as LAN937x switches.
+In the next series of patch, it will move ksz_dsa_ops and dsa_switch_ops
+from ksz8795.c and ksz9477.c to ksz_common.c and have the common spi
+probe all the ksz based switches.
 
-The shifting of gfn seems to happen bother here and in the callers.
+Changes in v1
+- Splitted the patch series into two.
+- Replaced all occurrence of REG_PORT_STATUS_0 and PORT_FIBER_MODE to
+  KSZ8_PORT_STATUS_0 and KSZ8_PORT_FIBER_MODE.
+- Separated the tag protocol and phy read/write patch into two.
+- Assigned the DSA_TAG_PROTO_NONE as the default value for get_tag_protocol hook.
+- Reduced the indentation level by using the if(!dev->dev_ops->mirror_add).
+- Added the stp_ctrl_reg as a member in ksz_chip_data and removed the member
+  in ksz_dev_ops.
+- Removed the r_dyn_mac_table, r_sta_mac_table and w_sta_mac_table from the
+  ksz_dev_ops since it is used only in the ksz8795.c.
 
-Also this is the only caller that does anything withthe vfio_unpin_pages
-return value.  Given that you touch the API here we might as well
-not return any value, and turn the debug checks that can return errors
-into WARN_ON_ONCE calls the vfio/iommu_type1 code.
+Changes in RFC v2
+- Fixed the compilation issue.
+- Reduced the patch set to 15.
 
-> +extern int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
->  			  int npage, int prot, unsigned long *phys_pfn);
-> -extern int vfio_unpin_pages(struct vfio_device *device, unsigned long *user_pfn,
-> +extern int vfio_unpin_pages(struct vfio_device *device, dma_addr_t iova,
->  			    int npage);
+Arun Ramadoss (11):
+  net: dsa: microchip: ksz9477: cleanup the ksz9477_switch_detect
+  net: dsa: microchip: move switch chip_id detection to ksz_common
+  net: dsa: microchip: move tag_protocol to ksz_common
+  net: dsa: microchip: ksz9477: use ksz_read_phy16 & ksz_write_phy16
+  net: dsa: microchip: move vlan functionality to ksz_common
+  net: dsa: microchip: move the port mirror to ksz_common
+  net: dsa: microchip: get P_STP_CTRL in ksz_port_stp_state by
+    ksz_dev_ops
+  net: dsa: microchip: update the ksz_phylink_get_caps
+  net: dsa: microchip: update the ksz_port_mdb_add/del
+  net: dsa: microchip: update fdb add/del/dump in ksz_common
+  net: dsa: microchip: move get_phy_flags & mtu to ksz_common
 
-This will clash with the extern removal patch that Alex has sent.
+ drivers/net/dsa/microchip/ksz8795.c     | 233 ++++++++--------
+ drivers/net/dsa/microchip/ksz8795_reg.h |  16 --
+ drivers/net/dsa/microchip/ksz9477.c     | 181 +++++--------
+ drivers/net/dsa/microchip/ksz9477_reg.h |   1 -
+ drivers/net/dsa/microchip/ksz_common.c  | 342 ++++++++++++++++++------
+ drivers/net/dsa/microchip/ksz_common.h  |  80 +++++-
+ 6 files changed, 517 insertions(+), 336 deletions(-)
+
+
+base-commit: e8b03391b6a7353368d0d2d6ed2b5f03e0c6112f
+-- 
+2.36.1
+

@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F205E5500F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD555500FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiFQXxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S1383064AbiFQX4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiFQXxB (ORCPT
+        with ESMTP id S231852AbiFQX4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:53:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180CB2252B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F49561DD9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA55C3411B;
-        Fri, 17 Jun 2022 23:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655509978;
-        bh=38NvZHDn60vRMd49ZIcaM3UlD3xicv2XgemZTeKzlzs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DR9/1jgQG9f7/nSQ0N1IZnElWl9pJQueUPT3XPzhp7NZ4JO+1Aga9lj4XiIa3m9mV
-         miEPhO47LkTd/aqlFWo3kexCj6geHI7Y7DwqPClebJA9FgiEMPiaR1uL8IfZXgFpEw
-         coLwL+Frt2+yv+dUpX9U4/OjibXgTPFcYV8PtOUk=
-Date:   Fri, 17 Jun 2022 16:52:56 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [syzbot] KASAN: null-ptr-deref Read in hugepage_vma_check
-Message-Id: <20220617165256.b5b9b257b30bc1dbb21fc8c6@linux-foundation.org>
-In-Reply-To: <0000000000003189f305e19f5d3e@google.com>
-References: <0000000000003189f305e19f5d3e@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Fri, 17 Jun 2022 19:56:15 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6482B53B41
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:56:13 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id c13so3581275eds.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wIj4Q0gRsP/qN9h13QLqgVMhBgoL9NgHslA6rsRH+yo=;
+        b=bOrLXJjr6zGSJp2lEZK+5dKKWqdz3y2YaTUIII3tHj6GlYeRG/3HUIyJhPUGWSdxcz
+         R2emx0w7W47RmLyYCKb/Ma9YF1BMyorM0Aq3s3ts5hAg8OPtXFf2fYWuetVslu/yCsNT
+         YgHtRgJwhRn+9VvftUg0Wl2A63ukAKhQWInGM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wIj4Q0gRsP/qN9h13QLqgVMhBgoL9NgHslA6rsRH+yo=;
+        b=CNz3ceT9D+7nejyYgGPinG3E7Yy7AZEyEjhkyxRwmbcbIV0FCG34u1rEWVVfvY/HPg
+         OgWwTnirMa3I6bIzbqblAmsu5PD1zMkDFpuH9xDaQH0FNur6RIZmJOJ9Ts27fEw34YRf
+         IpH7FbB6BwdsjHk45RsgMEDLBoOqdJpxxi6y6t2phMb50+KQbV+3+GGXu1yEVuUKOPDL
+         Bcu7+uYcKoIGRs6g7kX1mZAhxOzcipk1hZghbKEo8Dlzvxk7rmVaDJj2iF8Z9Q9XwnKy
+         BOhsV1/q09JHTGGNjzE1aAqya/yCwtN0TXqgVv5sYVSYPD1ButM89KlbcGtT/kZTM+J8
+         Pecw==
+X-Gm-Message-State: AJIora9xLOEvHyaJQ/YgrqkASzXQFRNB8Ai/4vS3915Bc1WxaikA9JhR
+        6q8IEP6ysiRg8lgJnhB+Zchb7WgUGw1W1XUx
+X-Google-Smtp-Source: AGRyM1veVfA+htShsJoAzeaZDyoZuFtawNzB6PUPDdJ3dW8aPJaQTO5ghRGsuIJkwVT1Jn/lOTWQPg==
+X-Received: by 2002:aa7:dd46:0:b0:435:2a52:3395 with SMTP id o6-20020aa7dd46000000b004352a523395mr15393255edw.252.1655510172017;
+        Fri, 17 Jun 2022 16:56:12 -0700 (PDT)
+Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id z21-20020aa7d415000000b0043566884333sm1452538edq.63.2022.06.17.16.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 16:56:11 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v7 0/8] uvcvideo: Fix handling of power_line_frequency
+Date:   Sat, 18 Jun 2022 01:56:01 +0200
+Message-Id: <20220617235610.321917-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,81 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 00:04:23 -0700 syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com> wrote:
+Hello,
 
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    c6d7e3b385f1 Add linux-next specific files for 20220616
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10d9fb1bf00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=9d495405e4a98620
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4d875b4d2e2b60bae9b4
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-> BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-> BUG: KASAN: null-ptr-deref in hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
-> Read of size 8 at addr 00000000000005a8 by task syz-executor.5/21978
+This series is a new version of "[PATCH v3 0/7] uvcvideo: Fix handling
+of power_line_frequency", with an attempt to generalize the
+UVC_QUIRK_LIMITED_POWERLINE quirk that it introduced and turn it into a
+control mappings override mechanism.
 
-vma->vm_mm is NULL in show_smap->hugepage_vma_check().
+The goal is still to support the UVC 1.5 power line frequency control
+extra option (patch 1/7), and work around an issue with devices that do
+not implement support for disabling the power line frequency (patches
+2/7 to 7/7).
 
-Perhaps m_start() should be checking the mm after taking
-mmap_read_lock() instead of before?
+Changelog v8:
+- media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+  New patch
+- media: uvcvideo: Use standard names for menus
+  New patch
 
-Matthew, you mucked with it last ;) Can you please take a look?
+Changelog v7:
+- Support minimum for V4L2_CTRL_TYPE_MENU
+  Fix uvc_query_v4l2_menu
 
-> CPU: 0 PID: 21978 Comm: syz-executor.5 Not tainted 5.19.0-rc2-next-20220616-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
->  instrument_atomic_read include/linux/instrumented.h:71 [inline]
->  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
->  hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
->  show_smap+0x1c6/0x470 fs/proc/task_mmu.c:866
->  traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
->  traverse fs/seq_file.c:101 [inline]
->  seq_read_iter+0x90f/0x1280 fs/seq_file.c:195
->  seq_read+0x337/0x4b0 fs/seq_file.c:162
->  do_loop_readv_writev fs/read_write.c:763 [inline]
->  do_loop_readv_writev fs/read_write.c:750 [inline]
->  do_iter_read+0x4f8/0x750 fs/read_write.c:805
->  vfs_readv+0xe5/0x150 fs/read_write.c:923
->  do_preadv fs/read_write.c:1015 [inline]
->  __do_sys_preadv fs/read_write.c:1065 [inline]
->  __se_sys_preadv fs/read_write.c:1060 [inline]
->  __x64_sys_preadv+0x22b/0x310 fs/read_write.c:1060
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f5c1d889109
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f5c1ea69168 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
-> RAX: ffffffffffffffda RBX: 00007f5c1d99bf60 RCX: 00007f5c1d889109
-> RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000005
-> RBP: 00007f5c1d8e305d R08: 0000000000000000 R09: 0000000000000000
-> R10: 00000000fffffffe R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffd8514b43f R14: 00007f5c1ea69300 R15: 0000000000022000
->  </TASK>
-> ==================================================================
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changelog v6:
+- Add support for per-device control mapping overrides
+  Fix invalid memory access
+- Support minimum for V4L2_CTRL_TYPE_MENU
+  New patch
+- Limit power line control for Quanta UVC Webcam
+  Fix id
+
+Ricardo Ribalda (9):
+  media: uvcvideo: Add missing value for power_line_frequency
+  media: uvcvideo: Add support for per-device control mapping overrides
+  media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+  media: uvcvideo: Use standard names for menus
+  media: uvcvideo: Limit power line control for Quanta UVC Webcam
+  media: uvcvideo: Limit power line control for Chicony Easycamera
+  media: uvcvideo: Limit power line control for Chicony Easycamera
+  media: uvcvideo: Limit power line control for Quanta cameras
+  media: uvcvideo: Limit power line control for Acer EasyCamera
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 208 ++++++++++++++++++++++-------
+ drivers/media/usb/uvc/uvc_driver.c |  81 +++++++++++
+ drivers/media/usb/uvc/uvc_v4l2.c   |  77 ++++++++---
+ drivers/media/usb/uvc/uvcvideo.h   |   6 +-
+ include/uapi/linux/uvcvideo.h      |   3 +-
+ 5 files changed, 303 insertions(+), 72 deletions(-)
+
+-- 
+2.37.0.rc0.104.g0611611a94-goog
+

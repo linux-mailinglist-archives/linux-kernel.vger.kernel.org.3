@@ -2,141 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4034F54F152
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAB154F157
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379887AbiFQHBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S1380097AbiFQHDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiFQHBN (ORCPT
+        with ESMTP id S231145AbiFQHDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:01:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7985F4F457
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:01:12 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1o25yW-00017n-Lh; Fri, 17 Jun 2022 09:01:00 +0200
-Message-ID: <45432169-5f9d-0913-6cf9-06dc821d1c65@pengutronix.de>
-Date:   Fri, 17 Jun 2022 09:00:57 +0200
+        Fri, 17 Jun 2022 03:03:01 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D6E1400E;
+        Fri, 17 Jun 2022 00:02:54 -0700 (PDT)
+X-UUID: a573ebdf18a74de787c7815098840eac-20220617
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:1308e62f-dbac-473e-8dbe-8b3da10378ca,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:1f799bf6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: a573ebdf18a74de787c7815098840eac-20220617
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 9831849; Fri, 17 Jun 2022 15:02:50 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 17 Jun 2022 15:02:48 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 17 Jun 2022 15:02:47 +0800
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Wei-Shun Chang <weishunc@google.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Subject: [PATCH v10 0/2] phy: mediatek: Add PCIe PHY driver
+Date:   Fri, 17 Jun 2022 15:02:44 +0800
+Message-ID: <20220617070246.20142-1-jianjun.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V4 1/2] mtd: allow getting MTD device associated with a
- specific DT node
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Tom Rini <trini@konsulko.com>,
-        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220615194300.13358-1-zajec5@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220615194300.13358-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.22 21:42, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> MTD subsystem API allows interacting with MTD devices (e.g. reading,
-> writing, handling bad blocks). So far a random driver could get MTD
-> device only by its name (get_mtd_device_nm()). This change allows
-> getting them also by a DT node.
-> 
-> This API is required for drivers handling DT defined MTD partitions in a
-> specific way (e.g. U-Boot (sub)partition with environment variables).
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+These series patches add support for PCIe PHY driver on MediaTek chipsets.
 
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Changes in v10:
+1. Sort the order in Kconfig and Makefile.
 
-> ---
-> V3: First introduction of of_get_mtd_device_by_node()
-> V4: Use EPROBE_DEFER
-> 
-> Srinivas: in V3 Miquel said it's OK to push this patch through NVMEM 
-> ---
->  drivers/mtd/mtdcore.c   | 28 ++++++++++++++++++++++++++++
->  include/linux/mtd/mtd.h |  1 +
->  2 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-> index 9eb0680db312..3613cc142f25 100644
-> --- a/drivers/mtd/mtdcore.c
-> +++ b/drivers/mtd/mtdcore.c
-> @@ -1154,6 +1154,34 @@ int __get_mtd_device(struct mtd_info *mtd)
->  }
->  EXPORT_SYMBOL_GPL(__get_mtd_device);
->  
-> +/**
-> + * of_get_mtd_device_by_node - obtain an MTD device associated with a given node
-> + *
-> + * @np: device tree node
-> + */
-> +struct mtd_info *of_get_mtd_device_by_node(struct device_node *np)
-> +{
-> +	struct mtd_info *mtd = NULL;
-> +	struct mtd_info *tmp;
-> +	int err;
-> +
-> +	mutex_lock(&mtd_table_mutex);
-> +
-> +	err = -EPROBE_DEFER;
-> +	mtd_for_each_device(tmp) {
-> +		if (mtd_get_of_node(tmp) == np) {
-> +			mtd = tmp;
-> +			err = __get_mtd_device(mtd);
-> +			break;
-> +		}
-> +	}
-> +
-> +	mutex_unlock(&mtd_table_mutex);
-> +
-> +	return err ? ERR_PTR(err) : mtd;
-> +}
-> +EXPORT_SYMBOL_GPL(of_get_mtd_device_by_node);
-> +
->  /**
->   *	get_mtd_device_nm - obtain a validated handle for an MTD device by
->   *	device name
-> diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
-> index 955aee14b0f7..6fc841ceef31 100644
-> --- a/include/linux/mtd/mtd.h
-> +++ b/include/linux/mtd/mtd.h
-> @@ -677,6 +677,7 @@ extern int mtd_device_unregister(struct mtd_info *master);
->  extern struct mtd_info *get_mtd_device(struct mtd_info *mtd, int num);
->  extern int __get_mtd_device(struct mtd_info *mtd);
->  extern void __put_mtd_device(struct mtd_info *mtd);
-> +extern struct mtd_info *of_get_mtd_device_by_node(struct device_node *np);
->  extern struct mtd_info *get_mtd_device_nm(const char *name);
->  extern void put_mtd_device(struct mtd_info *mtd);
->  
+Changes in v9:
+1. Check if the return value is -ENOMEM when reading efuse data fails.
 
+Changes in v8:
+1. Use "device_property_present()" to increase human readability;
+2. Use "GPL" as recommended in commit bf7fbeeae6db ("module: Cure
+   the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity").
+
+Changes in v7:
+1. Add bitfield.h header to fix the build error on non-arm64 platforms.
+
+Changes in v6:
+1. Remove unnecessary header files;
+2. Use FILELD_PREP in bitfield.h to set value.
+
+Changes in v5:
+1. Fix typo in kerneldoc: "eFues" => "eFuse".
+
+Changes in v4:
+1. Fix no return when calling dev_err_probe.
+
+Changes in v3:
+1. Add introductions for structure members;
+2. Add SoC dependent data;
+3. Dynamically allocate efuse data;
+4. Check return value if it's an -EPROBE_DEFER.
+
+Changes in v2:
+1. Add specific compatible name;
+2. Read NVMEM data at probe time;
+3. Fix typos.
+
+Jianjun Wang (2):
+  dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
+  phy: mediatek: Add PCIe PHY driver
+
+ .../bindings/phy/mediatek,pcie-phy.yaml       |  75 +++++
+ drivers/phy/mediatek/Kconfig                  |  11 +
+ drivers/phy/mediatek/Makefile                 |   1 +
+ drivers/phy/mediatek/phy-mtk-pcie.c           | 267 ++++++++++++++++++
+ 4 files changed, 354 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+ create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.18.0
+

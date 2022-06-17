@@ -2,123 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC24554FBCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3782254FBCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 19:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383182AbiFQQ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S231410AbiFQRAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 13:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383083AbiFQQ6l (ORCPT
+        with ESMTP id S229794AbiFQRAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:58:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAF32F679
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:58:40 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id l6-20020a25bf86000000b00668c915a3f2so929221ybk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:58:40 -0700 (PDT)
+        Fri, 17 Jun 2022 13:00:14 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C086A3054F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 10:00:09 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b8so6932284edj.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 10:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=HIkosMxJu0DsWXpVdxpWrXztbgfsO84tS9Or7dZuu1Q=;
-        b=hNEMukuOffSzyw5d6QBcwxNcqKUnC8L7F85D8e4DMiaNmNOcfyuY3Zx7l9WU+TMSNN
-         bng7bOJtVv2lMxmVy9WRgT/M1tn0wUyWP+6xcjbbtGndZqD195wLuodEcCItkC1CZnwm
-         /yxrwNI4Jl3rGOwj9tm7zr/ciXe+j2yqDhblmTlIoLedlOlLT8hBZJzfF50f4JP6HsDE
-         TTStfbmqBaNN8+9kBYjLLKaASBEYJYJhXGYhCWWlCOyrbr25ynvp1kJOOXIRI90IP9Jv
-         y88Cvk9Toe3vn+iXOoUKaaV/nJk7QeRSxPxV71CsQGaCI4XKbAKe8LGojB2WJ/BVl/2m
-         PH6A==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iE5OYluhOlLYmCxuJVh+ozmHKah+06JaPO4OAH+rP5I=;
+        b=dXtqDKVQ9Xm7BzEXh0Vo1XCT3DGI0YbjEAvcNhmAsbk5qi2bpUyZ5uzs/iLMjFzRha
+         gT/SiiG+hFi/3uC61x1i9318bgqLsc5yU4SOVCKrrXlXnCoYcWoI5CjENDvaXhxAX/QN
+         SZbZXbLa+Dv1azY7wP++VbCbdbzlaEvIZZ7xQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=HIkosMxJu0DsWXpVdxpWrXztbgfsO84tS9Or7dZuu1Q=;
-        b=0Y07OdZQ6yHboiw/OH0b2iUBT13DgHckxSq9LNhIo8oL5vVNmt9MSQrZJl/CQFGv6d
-         ZBbsK23kpcqGouoBp8dRV8SbTVpi/cCi+I6cYOPTEE+Ca8GUFkE7JF0pixA2L++B5dIN
-         eh5nFpGtk+aE63Qd9xy0elv5+E1Su0pjbHVAqC0yuDyjqWxyjfvMeunjSVIl0HHzA4K8
-         j0v8ri1WECgUqglEzqbzDsVzD72u5j9P5e2bXxmWePFs38IOGTVxecu00iI1YO5SFO/h
-         pOjxvTs5jRGrKvplIA8HNfqIjcKSDBOxdndUWZyj+MZixQZDwNcoREvLpYwnWq1q6/V8
-         u2Zg==
-X-Gm-Message-State: AJIora/LzW8bgNiBrIYU+3C3CsxILhhJ0ZS5+xbCfbGAHYxf9UngkEXS
-        opsm708uO3EHmOLg4Ofxg3M15BJlgY1JWP2gRM0=
-X-Google-Smtp-Source: AGRyM1uaTYh1F8LDuoxG1oRipLMJSHEmWpZiFQyuyySsXPgzvm1S5MjCu7Uh4zVtK17/lbBhl7nz67P0zLVAEzLDqRc=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:7e0c:dc00:6576:994e])
- (user=ndesaulniers job=sendgmr) by 2002:a0d:cf04:0:b0:30f:c6e3:b62c with SMTP
- id r4-20020a0dcf04000000b0030fc6e3b62cmr12128627ywd.306.1655485120058; Fri,
- 17 Jun 2022 09:58:40 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 09:58:17 -0700
-Message-Id: <20220617165817.3204917-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1655485097; l=1310;
- s=20211004; h=from:subject; bh=pe+YwCN7a/5bmdaqbfY3NE5BJF4TRtPW3C6ELb8zZF8=;
- b=eNQ0gyHPhuoYjZ/pWdaRl9A62Rla+ymyhL1crK6lecZwFPypboi8Y9gWiEqW6dcb1XWwvQeLFVZ1
- KEYzifuFCQCYqa7UTDNE+9DgoPPpMYO6Qjfxhtbg/G3o5f3JfD/C
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] Documentation/llvm: Update Supported Arch table
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michael Opdenacker <michael.opdenacker@bootlin.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iE5OYluhOlLYmCxuJVh+ozmHKah+06JaPO4OAH+rP5I=;
+        b=SHTVWRxUKYtTFS7y1hFb9lxz9ja7pD9QBukFigotwyJUI0tAtTgKtcEbzc9TxV5YwR
+         1BWmYudz6tpk0cjbd+ScYeidaOHUen2f50tM069GQDHntG8m7L7qRk5ZUKerPmVv44Ys
+         jhUzJYpUlkLHVK5ym5LDLgtV4FDKPU8l+DiqGmaZxpIsLLX9MFauBfhcjWAUWbU1r5/a
+         law5UHOgFWVAvk7QEwMG+E+zf41ODtiXg/+aZ7rtvMXmF1KmIG/62pYsYYomPz36QAjJ
+         VRBYgQhg0woH+lMSm+uTJjd5kyiW5KM4ip8/3fjKgqoClj5+BwW+c5Hj9vv0zqO45aRM
+         H1Cg==
+X-Gm-Message-State: AJIora8+nsOw8AU1bicGto6/e03A/JVc8kbq/WMtA+h1n4LvLReaQAaD
+        uCHy0+B//g9m8gFLupx4pRbaKNuh9NfyHaP/
+X-Google-Smtp-Source: AGRyM1tbka0tI0cJP8tJYGYpXexTh1mavUhpIw6YzgJ01IOXu9XG1/tln43CUccCPfE10WR8nBmyIg==
+X-Received: by 2002:a05:6402:3886:b0:435:643a:b7ae with SMTP id fd6-20020a056402388600b00435643ab7aemr3824763edb.4.1655485207956;
+        Fri, 17 Jun 2022 10:00:07 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id y24-20020a056402135800b0042dce73168csm4015298edw.13.2022.06.17.10.00.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 10:00:07 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so4674254wma.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 10:00:06 -0700 (PDT)
+X-Received: by 2002:a05:600c:3485:b0:39c:7db5:f0f7 with SMTP id
+ a5-20020a05600c348500b0039c7db5f0f7mr11311533wmq.8.1655485206627; Fri, 17 Jun
+ 2022 10:00:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <Yqw4Jujzz5ZzZ2Wg@kroah.com> <Yqywy+Md2AfGDu8v@dev-arch.thelio-3990X>
+In-Reply-To: <Yqywy+Md2AfGDu8v@dev-arch.thelio-3990X>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Jun 2022 09:59:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh59Decy5ksYBW1kD2pmcgo8T0JdKa37iaeaEO5LUN62g@mail.gmail.com>
+Message-ID: <CAHk-=wh59Decy5ksYBW1kD2pmcgo8T0JdKa37iaeaEO5LUN62g@mail.gmail.com>
+Subject: Re: [GIT PULL] Char/Misc driver fixes 5.19-rc3
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While watching Michael's new talk on Clang-built-Linux, I noticed the
-arch table in our docs that he refers to is outdated.
+On Fri, Jun 17, 2022 at 9:50 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> I think you tagged the wrong branch (char-misc-next vs. char-misc-linus)?
+> The commits below do not match the tag description above.
 
-Add hexagon and User Mode.  Bump MIPS and RISCV to LLVM=1.  PowerPC is
-almost LLVM=1 capable; ppc64le works, but ppc64 (big endian) and ppc32
-still need more work.
+Good catch. I verified the diffstat etc, but yeah, the actual
+explanation in the tag doesn't match the contents.
 
-Link: https://youtu.be/W4zdEDpvR5c?t=399
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Documentation/kbuild/llvm.rst | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+It's pulled now, and the code changes look fairly harmless, but I
+suspect Greg will want to send a real pull for the changes that were
+intended to come in here..
 
-diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-index b854bb413164..6b2bac8e9ce0 100644
---- a/Documentation/kbuild/llvm.rst
-+++ b/Documentation/kbuild/llvm.rst
-@@ -129,18 +129,24 @@ yet. Bug reports are always welcome at the issue tracker below!
-    * - arm64
-      - Supported
-      - ``LLVM=1``
-+   * - hexagon
-+     - Maintained
-+     - ``LLVM=1``
-    * - mips
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1``
-    * - powerpc
-      - Maintained
-      - ``CC=clang``
-    * - riscv
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1``
-    * - s390
-      - Maintained
-      - ``CC=clang``
-+   * - um (User Mode)
-+     - Maintained
-+     - ``LLVM=1``
-    * - x86
-      - Supported
-      - ``LLVM=1``
--- 
-2.36.1.476.g0c4daa206d-goog
-
+                   Linus

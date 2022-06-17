@@ -2,270 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047B154F63A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28D354F644
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382346AbiFQLCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S1380446AbiFQLFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382340AbiFQLCd (ORCPT
+        with ESMTP id S1380066AbiFQLFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:02:33 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CAE6CAA6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:02:22 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id n19-20020a056602341300b0066850b49e09so2334361ioz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:02:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=HyXFehABl+7QL2Y6QnW1Ir7miTXNYNj//hof0DssKgc=;
-        b=B8B0SlwSboWaoBzV8azn2zn3NJYrLz6WgwDNNBNqw0nLyagPpb2YmMa0I+dRqoFrA6
-         wskc6wot//xbOmhlyZ3h7NiAzXK3YXQlHs2HQcwQLewRhW9/BdJ3WZD+Ut6HNB/MaSPj
-         42AzdyqGperlFxTeR63Wk6gjdSbgwXt/TYXEw3lkKkfukk7Bfp9G5fi9Dz7geDvXhEJE
-         8i4Zdw0uElM0vQ8GTlO9tadvWTrHAa/nGSNzEfPNPuf3RrIKgr+OBy7zX+xxqwMFVXVw
-         BDBwj8BEzQHZqxxjCaQr9fEU6Dv+AiIQ90xc6gelgpscAyYQiPKFG/8oG2HzuhT983k7
-         ruCQ==
-X-Gm-Message-State: AJIora8yHYnPz7vof/sAAG3/nyNA+rxcZqYIpK0MbW5Dix9ImE2YVgtf
-        tBnFNGd8ouN3AxnGoIScXHciPjggiV/y7JyNQPp0B1ZAYpeQ
-X-Google-Smtp-Source: AGRyM1vmjQ/bdkFysu6pU9/R0IHadGHtw/gJjL+ft0AGU24U1K5gbZQuj2kwv9f0nfg5JE15VCTBiOMJk7qHSYD4e8Kwf2HgYcR0
+        Fri, 17 Jun 2022 07:05:37 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120051.outbound.protection.outlook.com [40.107.12.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE16C540;
+        Fri, 17 Jun 2022 04:05:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SS2iJsShMAFfAvTfIRDTZa1WUlZqbAnVe/wu/sMpVTfIS/8IZbidYPeTuBI0+ctTvMaae2AvNc7XTJK2gIOz0jZKXJsg3sgSo3OCbkf8D/wo6kmM4aUKLsfDFBNexJAX4y9Pm4ZTP2yb6aQP5ioh582W3IaazB/513MVkFJ2mTcPtIpzp9y0/RRYoUQOi8vO6se7nY/j2BjSnsLwwyPdCpz6dlakj3Sc+5bQX9lKgZC+R/9LJaOqPdsyBytmAs3XNux9m9SZ3kmZw7mopQ538gX4xXtN8ubNnIerPEBCdt1ospc9innDgdUZAFSVh4vx4JNzI5ntgDypo+b4csCLHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H/SkJ599AQEHvQlLJG9YzlrxxoS0f84POSSZW8Lzoo0=;
+ b=oDZKbtdmO8XkMVMHTjzPnkD+LJmMBMbe6FHBdG3xa/MuElUnSJYA5kPJJvJ6yYMOQJzlEz4FcUAiK2EXhaG+2JmbIfSAatA6gj8yow05R2s2sGq/jp4GhjETp8CVGCzQQEeB5Wm7m7U+/ARTx/mkoA+QAnFz399wLCRNSkkXoAvC+z/BgCnZdR4z/Q5pJJKBepJL4IiDawdRVEADq82zj4Vel1GmHH6/gLsM/hbqXZVXQhEEjuC2Yh/a8b/tLaDdaZpZaG+UHLH+CJ40nUf72FqQ+LXfB0refrDeP3EF/CFNxv2imh9UlUgJf+/y3pnRn8KwwMCH4ju09hsGbqovzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H/SkJ599AQEHvQlLJG9YzlrxxoS0f84POSSZW8Lzoo0=;
+ b=0zPOGWoNqCLweLcAAzSJe6ZgeGQayDfn/rigMIJvG/Vt2WZRRDroRbudnPPOa5BBhA1Dpp3bogNFxto6zLBN2UkyQeOk/cFzCOdL9V5Dk2orSTD1FRQqgjrxJhSF+zfpdiL8xiSkQu4SuTxrfmd5wZ2Yscw/EG7oThLtHJ0yDQxzGrNe2Xhmn3LJPgC+HQUxsRnr4L0fCGcWMi6gwOws3ziyP2LwhnGXX2Z16+VnuDHHGQ5s6CHO/ReF+vpWXZ6zHUNBLkifApHY1ip1WTGfpJi/5tCL+Xdu8ihcSu5hhgLd5gdS7guLkKbwV9wOZNB8+OOB19VJaJd/mo0wqVSl8Q==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB3786.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:149::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
+ 2022 11:05:33 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
+ 11:05:32 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
+Thread-Topic: [PATCH] usercopy: use unsigned long instead of uintptr_t
+Thread-Index: AQHYgY56XB5uBmp1zEOymlHEC/X3ka1SGkAAgAADqACAAAiSAIAACqGAgAAMdQCAAANVgIAAJpIAgADVkYCAADQtAA==
+Date:   Fri, 17 Jun 2022 11:05:32 +0000
+Message-ID: <ec7f0c59-f67e-1d7e-c0b3-b0a409623e98@csgroup.eu>
+References: <20220616143617.449094-1-Jason@zx2c4.com>
+ <YqtAShjjo1zC6EgO@casper.infradead.org> <YqtDXPWdFQ/fqgDo@zx2c4.com>
+ <YqtKjAZRPBVjlE8S@casper.infradead.org>
+ <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
+ <Yqtd6hTS52mbb9+q@casper.infradead.org>
+ <CAHk-=wj_K2MnhC6N_LyY6ezmQyWzqBnfobXC354HJuKdqMePzA@mail.gmail.com>
+ <CAHk-=whS3xhJ=quD5bzDb6JsAhKd0vem4K-U=DhUGf-tDJUMHg@mail.gmail.com>
+ <CAMuHMdXxAwbCQPn4jg8X=_p5cYkpvNE4bXfQHWk2vz2Y6hL2-w@mail.gmail.com>
+In-Reply-To: <CAMuHMdXxAwbCQPn4jg8X=_p5cYkpvNE4bXfQHWk2vz2Y6hL2-w@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5c48a4ef-9203-424f-8c70-08da50514c56
+x-ms-traffictypediagnostic: PR0P264MB3786:EE_
+x-microsoft-antispam-prvs: <PR0P264MB37865C6CA62EB43593A8FF6DEDAF9@PR0P264MB3786.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: U4/hHpoHO3siG/HfuXZEey2TtOtK/hyJ14OgEl01nfX7Ujy+aR7+kzc3RW92qeOKouesa94n7/Q80qoeBGdgZryhnNdNiFmWjYJ9whfJWBeld/G54DCbzK9XLOE2ucYmukEyFqmNRVzcGIlzSBQDfQNZ/a5P9U9ymnwZ8KoUx2M8Cv8tMePbcN7IDakG/O5kmqZAY86t+KYBqCpQ/3cqjOwH0yA114aEDNsBnj07raPThwVArQ7ydl7LyN4PVtq1JF9iQd6Ps4wxXI5Fa+J31ereN9kQHYqOwm1OhJFpNSssv7oTUDe7nJN7uRGK570CamcBayJBoxBqwLd18ASBr0mmwXhgwyj40NY0BpHa6ngJaCXn+Nx6m5q0Zj5mpzP9GSwTUh9gLTPJ2kF4V7rKSSiY5n2rzwBjlRUJQwYo62lLAaR+g2px7tnv7MHsUYiUF++Z53bwIk1sjhKi+IqfrxuGBYTZRVlEXTHlse2DJ9HTMH0nkfplgksy7l7ikhZ8FhzxT7q3EQveeFUMdt+ve30duvoyHMjNEzCcJTHh6C0LZxg6Q25gLB95lKhgDgG0nc1PozR/5QMqqx1T+Jg4Id52PI9gkXRT1fzuKWFjBdrf2Jki3aoQReeloib/74jEzz2yGShCPlnKqqopezIh4iz7/Q9SmO8+RPBok1bODYHRgtp499IPquqWrwibySlHeJ/68NE8tzNA5g04DOlEIacM1EiwCqS4jwwJLHMKvI7iUSeCfz4U2QhpbHwwITlwgCw7UR8SXUNt5PMwHIdrug==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(122000001)(110136005)(54906003)(31696002)(6506007)(26005)(66556008)(86362001)(66946007)(6512007)(2616005)(38070700005)(6486002)(66476007)(5660300002)(38100700002)(186003)(4744005)(7416002)(316002)(498600001)(36756003)(8936002)(76116006)(91956017)(2906002)(64756008)(66446008)(44832011)(8676002)(4326008)(31686004)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akZ5NFFUdjVORkhwQzlnNHVlZzJvRGhkRWlSbDhFTDhBNWlpeFQ2WHk2UnpF?=
+ =?utf-8?B?a3hrTXdMZ3pjS2Z6ZnRNbXFyWm1TZDAwZkJ6MmRQdGhFOWx2MDBVVHVuVEk5?=
+ =?utf-8?B?NWhuVDcvZGNzSXpWbE5UYkVncDEzVXZ1MVE2L1pmeEVCbS91cG5leVcrS1Vn?=
+ =?utf-8?B?SlpQMGR4Z1NLbUY2a05Va1lhZzgzWG5WV0x1UExCcmV2aXNzQWYwUVZWa3lD?=
+ =?utf-8?B?VDkyTHBsYVdnQjVhaWwwSHh5QzBDNGl2UUQvQlhkazAwZHJnWEo5VFduMEZs?=
+ =?utf-8?B?YlNpSGlxY3Jqbk9ISzYvZ21MU1NwNGRrb1RkeEFWNXZoNlJlWXZCTEhrMUNa?=
+ =?utf-8?B?TEpEV0d2NXhsZUV5OTlVZG9IdVR1UmJndGo3b0F1c1lMaU1HV2RET2xFUCtR?=
+ =?utf-8?B?U1h5NXBBNmVlRHEyVFVTamdGVUptK2RlbVI3RzUwQ1JwRjc2K2FkMVlUbEdW?=
+ =?utf-8?B?OTh2bFFta0xsNFBJTUp3Nm1ZQmNVNzAxaVFmOTJsTERDajRjSk1TYWRvOTlh?=
+ =?utf-8?B?bVc0dzM2Zi9zS2V1dmhCekdtdjc2dnZEK2tiVWsweG1IYk02NHNpblRpb2lY?=
+ =?utf-8?B?dE4yN002TVU5U2YvazljN1pJRUhyVzg1U3B0SlZsR01rTnYxZFUzTUk1ZjVh?=
+ =?utf-8?B?bkxtRnNZWHpvQXVxRER0NWRXeFlCNnpiMkV3UE1VR2kyNTBiNldDVXdjMldQ?=
+ =?utf-8?B?UU5QWXhBRmwzVmpSOXlaT2VEWUNLbjlzTEdhTWxuZk8rS0VubnRCRUlDY0xD?=
+ =?utf-8?B?aXI4ZkVZbzNXVCtldEs4YjFQM0FZNS8wNk1LTFRnbHV6aEppQjdCWGNVTUtn?=
+ =?utf-8?B?aWttM3pLUzBkSHVqcFNCQVdiTDh1SCt4U0ZZMk81MHhEMXhZYkIzMXNTOFc3?=
+ =?utf-8?B?OW5ubXBUZXdVT0ZoRVgrWHpKTGY4M0JFT3ZwMUxlOTVPU2J2SFh3VEg0YlVO?=
+ =?utf-8?B?U1ZpVDZkSU5UMFdMY0c2UEdzWEREa2RidnlmU1NtcTJ0bTdFMUpPOEZ4ZnVP?=
+ =?utf-8?B?eG02T2orS1kwaDFvOUxGYWxMQmNvbUgyc2o3WGh3VzBpcXZxTUJQNFhTQmYr?=
+ =?utf-8?B?UytCdkZOWVQzbGxtQWdQdUE3TmpnQzBEOGpTYjVNenc1Qko5aE50SGRRQmhm?=
+ =?utf-8?B?N041MlZNWml3SVZHMHVFQVlteUFnY21hdGhhSnJRSUY1NjNXUGZ5bmhzQlBB?=
+ =?utf-8?B?R25YaVBxQ2dndVEyNldHZU0vMmFmemxXNWJhZzlXU29USWh3RDNkWTE4T0FL?=
+ =?utf-8?B?UkxNK3c5blBtWHgycC91Z0dTQ3pGZzBWWWx0aGNURlg0SFI3cmZRaW01UGRB?=
+ =?utf-8?B?SUNhV3YxQnFmdnMyOThrZG1uUUZDT0VUZTZNRW56SjB2bDJzV0RLa0Jjd3Az?=
+ =?utf-8?B?bkJxd2VpZXBTQS9BS3ZzWXBld2NRSm41M3pqaWJjcWFBSlZZZUpra25IL3Bw?=
+ =?utf-8?B?d2JsZnlodmtoSVdZeFFmdDNnSFd6WlVDUkVnUVdpck12RDFoRDIySU1tS05w?=
+ =?utf-8?B?Z3RVcE5FZThzc1hNUC9TMWpQbkdUQk9ZMC9IME9ZNlZqTkVLMWVBU0hoUStJ?=
+ =?utf-8?B?TFpsMUEvZEpyMXJva0o0cmM0a1NyUmlXU1FHYmtyM3NoRVhONk16Wld3dlZt?=
+ =?utf-8?B?ZkVPN1FXSnhyYXZoZi9pUUJMUXl5N1ZqSElrNG45UThDZnpaNW91T0xHMVFJ?=
+ =?utf-8?B?NTQ2ZkVkck05UTEzNHNwbnFtVjdlbzN6ZWNaWmQxRTRwN3ljbmI4blVzSXlw?=
+ =?utf-8?B?NWtuUU9hZFVENWZzQS9FSjhIRmcrMFk5Q3I1U3E3WVdoUjZsblM2ZGZmdGJv?=
+ =?utf-8?B?cHllNXFXR2tWVmxRSjloTldSUjBGektVSjBSTVlVZmJza2dMb3hEaG5xSnBw?=
+ =?utf-8?B?YmRZdldHNnZjR09JMWlxK0p3Y1JMUDRkYk1Ja0ZXWWpiWTdaMDBEbjZ6QXlS?=
+ =?utf-8?B?Mk01aE1YV1ZXN0JYRUxjWjhFRkNxV2NET1hZUEV2aXg2QUZQZmNuRXd6UHdM?=
+ =?utf-8?B?TVpzdElaT2k0Y211dWRFRHV2N2JrNUNCRFlEZURBcGo1RW51WWcvN1VzSXg4?=
+ =?utf-8?B?UkZnendodmljczJaSktmbGlRc012bUVscGJaUytDRnFFYldHSlNxYzYwejFa?=
+ =?utf-8?B?SHdJZWUrdFlqSDdWTzJGdXIzUitCZ3lxcEw4NVBrczFuMHFBZEwwVDBkN3I5?=
+ =?utf-8?B?TytVa05Nb2xhVmJVZG40RVRudmxxalkyanNzVjVJcjRVOUhUTllPK3hxSWtm?=
+ =?utf-8?B?V3hzdVQyaEFjLzBEZDN4UkIzak9nS2RXYzdXZkpTU3h3Nk1ldlJYdzJnSmpG?=
+ =?utf-8?B?QWpCeEtjamJ3Vnljdi82YnFmMlkwV0M4dlhvMlVseUFqaXJjT2pmN0RGdklB?=
+ =?utf-8?Q?h/2/Atd5dy2ylmoBlHZoxYC2tm6VuvhsRB7Fp?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A4B5B5E775053B46B136A46F7D38608B@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:194d:b0:2d5:ef3:999e with SMTP id
- x13-20020a056e02194d00b002d50ef3999emr5557271ilu.192.1655463742291; Fri, 17
- Jun 2022 04:02:22 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 04:02:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004c477d05e1a2b0e4@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in ct_idle_exit
-From:   syzbot <syzbot+4d413df7954a713bc5c4@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c48a4ef-9203-424f-8c70-08da50514c56
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 11:05:32.9503
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jJudpVy3aRNZ8ePh9XymzMbNM3qm8ILn0kKb8Ta9xNS+fcOegxIGo5o+vqvn/AWUXD3/LA+6CbEvgxYDY7JYVOML6GO8qH/56L8xmKYStLQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3786
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    07dc787be231 Add linux-next specific files for 20220617
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1409b090080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d2512136c9b01d87
-dashboard link: https://syzkaller.appspot.com/bug?extid=4d413df7954a713bc5c4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4d413df7954a713bc5c4@syzkaller.appspotmail.com
-
-kfence: initialized - using 2097152 bytes for 255 objects at 0xffff88823bc00000-0xffff88823be00000
-random: crng init done
-Console: colour VGA+ 80x25
-printk: console [ttyS0] enabled
-printk: console [ttyS0] enabled
-printk: bootconsole [earlyser0] disabled
-printk: bootconsole [earlyser0] disabled
-Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-... MAX_LOCKDEP_SUBCLASSES:  8
-... MAX_LOCK_DEPTH:          48
-... MAX_LOCKDEP_KEYS:        8192
-... CLASSHASH_SIZE:          4096
-... MAX_LOCKDEP_ENTRIES:     131072
-... MAX_LOCKDEP_CHAINS:      262144
-... CHAINHASH_SIZE:          131072
- memory used by lock dependency info: 20657 kB
- memory used for stack traces: 8320 kB
- per task-struct memory footprint: 1920 bytes
-mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl
-ACPI: Core revision 20220331
-APIC: Switch to symmetric I/O mode setup
-..TIMER: vector=0x30 apic1=0 pin1=0 apic2=-1 pin2=-1
-clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1fb63109b96, max_idle_ns: 440795265316 ns
-Calibrating delay loop (skipped) preset value.. 4399.99 BogoMIPS (lpj=21999980)
-pid_max: default: 32768 minimum: 301
-LSM: Security Framework initializing
-landlock: Up and running.
-Yama: becoming mindful.
-TOMOYO Linux initialized
-AppArmor: AppArmor initialized
-LSM support for eBPF active
-Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc hugepage)
-Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc hugepage)
-Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
-Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
-Last level iTLB entries: 4KB 64, 2MB 8, 4MB 8
-Last level dTLB entries: 4KB 64, 2MB 0, 4MB 0, 1GB 4
-Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
-Spectre V2 : Kernel not compiled with retpoline; no mitigation available!
-Spectre V2 : Vulnerable
-Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
-Spectre V2 : Enabling Restricted Speculation for firmware calls
-Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
-Spectre V2 : User space: Mitigation: STIBP via prctl
-Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
-MDS: Mitigation: Clear CPU buffers
-TAA: Mitigation: Clear CPU buffers
-MMIO Stale Data: Vulnerable: Clear CPU buffers attempted, no microcode
-Freeing SMP alternatives memory: 108K
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:335 ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
-
-=============================
-WARNING: suspicious RCU usage
-5.19.0-rc2-next-20220617-syzkaller #0 Not tainted
------------------------------
-include/trace/events/lock.h:24 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-RCU used illegally from extended quiescent state!
-no locks held by swapper/0/0.
-
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- trace_lock_acquire include/trace/events/lock.h:24 [inline]
- lock_acquire.cold+0x1f/0x40 kernel/locking/lockdep.c:5636
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- down_trylock+0xe/0x60 kernel/locking/semaphore.c:139
- __down_trylock_console_sem+0xfb/0x120 kernel/printk/printk.c:276
- console_trylock+0x13/0xd0 kernel/printk/printk.c:2731
- console_trylock_spinning kernel/printk/printk.c:2003 [inline]
- vprintk_emit+0x127/0x680 kernel/printk/printk.c:2403
- vprintk+0x80/0x90 kernel/printk/printk_safe.c:52
- _printk+0xba/0xed kernel/printk/printk.c:2425
- __warn+0x91/0x190 kernel/panic.c:611
- report_bug+0x1bc/0x210 lib/bug.c:198
- handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
- exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
- asm_exc_invalid_op+0x1b/0x20 arch/x86/include/asm/idtentry.h:568
-RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
-Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
-RSP: 0000:ffffffff8ba07d90 EFLAGS: 00010206
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
-RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
- call_cpuidle kernel/sched/idle.c:155 [inline]
- cpuidle_idle_call kernel/sched/idle.c:236 [inline]
- do_idle+0x3e8/0x590 kernel/sched/idle.c:303
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
- rest_init+0x169/0x270 init/main.c:729
- arch_call_rest_init+0xf/0x14 init/main.c:886
- start_kernel+0x473/0x494 init/main.c:1142
- secondary_startup_64_no_verify+0xce/0xdb
- </TASK>
-
-=============================
-WARNING: suspicious RCU usage
-5.19.0-rc2-next-20220617-syzkaller #0 Not tainted
------------------------------
-include/trace/events/lock.h:69 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-RCU used illegally from extended quiescent state!
-1 lock held by swapper/0/0:
- #0: ffffffff8bd75ed8 ((console_sem).lock){....}-{2:2}, at: down_trylock+0xe/0x60 kernel/locking/semaphore.c:139
-
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- trace_lock_release include/trace/events/lock.h:69 [inline]
- lock_release.cold+0x1f/0x4e kernel/locking/lockdep.c:5676
- __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:149 [inline]
- _raw_spin_unlock_irqrestore+0x16/0x70 kernel/locking/spinlock.c:194
- down_trylock+0x45/0x60 kernel/locking/semaphore.c:143
- __down_trylock_console_sem+0xfb/0x120 kernel/printk/printk.c:276
- console_trylock+0x13/0xd0 kernel/printk/printk.c:2731
- console_trylock_spinning kernel/printk/printk.c:2003 [inline]
- vprintk_emit+0x127/0x680 kernel/printk/printk.c:2403
- vprintk+0x80/0x90 kernel/printk/printk_safe.c:52
- _printk+0xba/0xed kernel/printk/printk.c:2425
- __warn+0x91/0x190 kernel/panic.c:611
- report_bug+0x1bc/0x210 lib/bug.c:198
- handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
- exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
- asm_exc_invalid_op+0x1b/0x20 arch/x86/include/asm/idtentry.h:568
-RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
-Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
-RSP: 0000:ffffffff8ba07d90 EFLAGS: 00010206
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
-RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
- call_cpuidle kernel/sched/idle.c:155 [inline]
- cpuidle_idle_call kernel/sched/idle.c:236 [inline]
- do_idle+0x3e8/0x590 kernel/sched/idle.c:303
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
- rest_init+0x169/0x270 init/main.c:729
- arch_call_rest_init+0xf/0x14 init/main.c:886
- start_kernel+0x473/0x494 init/main.c:1142
- secondary_startup_64_no_verify+0xce/0xdb
- </TASK>
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
-Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
-RSP: 0000:ffffffff8ba07d90 EFLAGS: 00010206
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
-RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000ba8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
- call_cpuidle kernel/sched/idle.c:155 [inline]
- cpuidle_idle_call kernel/sched/idle.c:236 [inline]
- do_idle+0x3e8/0x590 kernel/sched/idle.c:303
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
- rest_init+0x169/0x270 init/main.c:729
- arch_call_rest_init+0xf/0x14 init/main.c:886
- start_kernel+0x473/0x494 init/main.c:1142
- secondary_startup_64_no_verify+0xce/0xdb
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+DQoNCkxlIDE3LzA2LzIwMjIgw6AgMDk6NTgsIEdlZXJ0IFV5dHRlcmhvZXZlbiBhIMOpY3JpdMKg
+Og0KPj4gQnV0IGl0IHRoZW4gY2F1c2VzIHBvaW50bGVzcyBwcm9ibGVtcyB3aGVuIHBlb3BsZSBj
+YW4ndCByZWFsbHkgcmVseSBvbg0KPj4gbW9yZSB0aGFuIDMyIGJpdHMgZm9yIGF0b21pYyBiaXQg
+b3BlcmF0aW9ucywgYW5kIG9uIDY0LWJpdA0KPj4gYXJjaGl0ZWN0dXJlcyB3ZSB1bm5lY2Vzc2Fy
+aWx5IHVzZSAibG9uZyIgYW5kIHdhc3RlIHRoZSB1cHBlciBiaXRzLg0KPiANCj4gV2VsbCwgYXRv
+bWljIHdvcmtzIHVwIHRvIG5hdGl2ZSB3b3JkIHNpemUsIGkuZS4gbG9uZy4NCj4gDQoNCnBvd2Vy
+cGM2NCBoYXMgYSBwYWlyIG9mIGluc3RydWN0aW9ucyB0byBwZXJmb3JtIDEyOGJpdHMgYXRvbWlj
+IA0Kb3BlcmF0aW9ucyA6IGxxYXJ4IC8gc3RxY3gu

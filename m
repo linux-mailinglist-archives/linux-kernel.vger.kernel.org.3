@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAFF54F003
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 06:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8103154F005
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 06:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379879AbiFQENP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 00:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S1379915AbiFQEOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 00:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiFQENL (ORCPT
+        with ESMTP id S231650AbiFQEN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 00:13:11 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2C622BFF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:13:10 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b8so4597945edj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:13:10 -0700 (PDT)
+        Fri, 17 Jun 2022 00:13:57 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC2865D25
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:13:54 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fu3so6437799ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jkcre2VBtMzxrZPMCfkOrbliJifXwznY6q+h4wI7Wog=;
-        b=ks4gT/sjz/WSG+M5zgBy04ySeXYNutXYYTK+m3oKvm+UTsWFHoZV8YN+/uk7OnvEtx
-         cWE8AppXxMsByuappwZWKZ1/yzO5k4172qqWeNux1iwTxPBLFVcXB432LsD88WrCOZWa
-         UJoWq936BeiriVTzTt2Kfj2qdZRECUzGyDuqbDMte/Pwm+2hs+zb78HDqLztmlX9LwGB
-         paddvZRoiD/fQBG5dyW3TFK6cmufzLK71Wpdjc1/ZnXoOWIDh9RmzuCS/wuOppl7IZ+Y
-         qTlQ8rBbEQmJyhdz/Y7tgs7+GddN58IZifVaMKUzvH234WJThH5eOleuQHWWy/oZQ/Rs
-         sAJw==
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=MjbVE20S3qu8gYoRUcT9DaTHPrRc+KU19/yYOvnNiNw=;
+        b=jCHMvuN/ftN05EQta/ACsyjK5DBeZbWH7sqdlr5GgBZ4E68PuT3q6D9BIgy2C5xLiA
+         Z5cHbbz0xLVuPuuK80hp5/Uy7yNtk3owcx31Kpyw+8wvs1o1AnFq/UzBeYvSzu8Lirfx
+         JstvYW0pulf1imRJEVXQAlAwT5RooNnVNJucHV3LEQ7ZU0SYNhvJEfGuNcra7g+ar6fa
+         Wo28f2s1/osmb0Towsnt0nmTnyeX3uAy5EkWw7qUEHr9STXeSIhUCWXwOnmdZAW1U4f/
+         p3cpG4SeEwxC8hnp990ZczXKO1Vs7fv3SRpFrcVtAToL181MQlQCFY2vL+7x7KTSD5Z+
+         rEfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jkcre2VBtMzxrZPMCfkOrbliJifXwznY6q+h4wI7Wog=;
-        b=uk1PCXc28Ih6CG4PEVg3lUtR44OenMJnypPMM2e8p3SpEVQC9ANgyEWvXfKGMcEKDu
-         UI/kv9qWKYe8mwSqCgKlox98/QylSsVjp0DMAd1TZKWvX3s70k0bp7VOt+jsGU/A3aUr
-         7P6YnHd/EhyELXYAzui1y2aiz9EeeGMRHJsxSwvy46b90D3ZZd+MVQDUNgwBeBu6NaR7
-         n59PdsOtkp4xsX7Pg4v7EC1KL0eVbVHx9IuuMzXSowe2KG4FCl7VjnJU9KIut7id484I
-         TUECnDMUqiN/3Vz5NJskhDy4HXcEBepDt9XqHpHQ4yZ/5+8GixZ67AswQLa/NYoXjeus
-         lOmQ==
-X-Gm-Message-State: AJIora+BPpFLG6Ar83XSIPNfByphh8CBt+0O+FCDAlX5ulqyzG9qqlvJ
-        5Y1hKKK7cMbVW2cNen4DJk4=
-X-Google-Smtp-Source: AGRyM1vDq6JtWJzZZ4jWmMy/sOS/uWzEGjgdqQ8zfDxc/FoUMgzm2o+2uai90JO5XUJAJJlsQ9RbCw==
-X-Received: by 2002:a05:6402:149:b0:431:7dde:9b59 with SMTP id s9-20020a056402014900b004317dde9b59mr10021996edu.339.1655439188935;
-        Thu, 16 Jun 2022 21:13:08 -0700 (PDT)
-Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042dcac2afc6sm2874051edu.72.2022.06.16.21.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 21:13:08 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, wens@csie.org,
-        Samuel Holland <samuel@sholland.org>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/sun4i: Add DMA mask and segment size
-Date:   Fri, 17 Jun 2022 06:13:06 +0200
-Message-ID: <10094862.nUPlyArG6x@jernej-laptop>
-In-Reply-To: <e4a73a0f-c725-fad2-021b-5b5ee5ead1b3@sholland.org>
-References: <20220616213240.392041-1-jernej.skrabec@gmail.com> <e4a73a0f-c725-fad2-021b-5b5ee5ead1b3@sholland.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=MjbVE20S3qu8gYoRUcT9DaTHPrRc+KU19/yYOvnNiNw=;
+        b=IR//c0ByY9eXs5KNUgPurlUnCGI7OGdCoeS02tEHN5xsjxxi6o5RazzyQRVByhi8T7
+         IzFUFUCziG+/4mLBx2f3mfwrU7+s6df/rxjBaeY1IZ6Wef+1irsIR0sv/7XaYfbRBd5c
+         fyAYiCgiAGYiJUYoSExhuUoP74rcBq7ee//I+vhT47xr4wLZTXeFyzmiVJK8iS6ghCST
+         1McRAbPQXHlpyw/BMPOMFj5abB0gtJEGOWVTrf2wjek5CfU6bYat/GoA8zCkNCKVPdbF
+         trzrTK/YCIF9hKL3Vi3gZfjkDoVooQmZ9yKwKx6yuV8hJ/ULigTPuoCokk5f41mo5mOM
+         Viag==
+X-Gm-Message-State: AJIora/Zwqq138Ypqyb+/Ifttc8vt8ZVll/Zs3NBzZw95bbgBdfsjtLo
+        7CaiA2ulkoi/kmqGBr9FQz9h4yrW596av/gsCE0=
+X-Google-Smtp-Source: AGRyM1tK6PF/PK/vLjlN9Eud6B6YF77e91UMiWvQZYlQS+8pE3oEqsVt/e3BdltY/BtSHFuS5MlGqdb+aBQ/Dvq7aak=
+X-Received: by 2002:a17:906:149:b0:712:502:bc62 with SMTP id
+ 9-20020a170906014900b007120502bc62mr7490981ejh.720.1655439233122; Thu, 16 Jun
+ 2022 21:13:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 17 Jun 2022 14:13:41 +1000
+Message-ID: <CAPM=9twTA=AXfjj=eq558KLmE_TfmkoRsm6Sm5MUB0zCZ174Wg@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.19-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,64 +66,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 17. junij 2022 ob 05:03:11 CEST je Samuel Holland napisal(a):
-> Hi Jernej,
-> 
-> On 6/16/22 4:32 PM, Jernej Skrabec wrote:
-> > Kernel occasionally complains that there is mismatch in segment size
-> > when trying to render HW decoded videos and rendering them directly with
-> > sun4i DRM driver.
-> > 
-> > Fix that by setting DMA mask and segment size.
-> > 
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > ---
-> > 
-> >  drivers/gpu/drm/sun4i/sun4i_drv.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c
-> > b/drivers/gpu/drm/sun4i/sun4i_drv.c index 275f7e4a03ae..83f4e87f77f6
-> > 100644
-> > --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-> > +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-> > @@ -7,6 +7,7 @@
-> > 
-> >   */
-> >  
-> >  #include <linux/component.h>
-> > 
-> > +#include <linux/dma-mapping.h>
-> > 
-> >  #include <linux/kfifo.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_graph.h>
-> > 
-> > @@ -367,6 +368,9 @@ static int sun4i_drv_probe(struct platform_device
-> > *pdev)> 
-> >  	INIT_KFIFO(list.fifo);
-> > 
-> > +	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> 
-> Isn't this already the default, from of_dma_configure_id or
-> setup_pdev_dma_masks?
+Hi Linus,
 
-Not sure, I need to check.
+Regular drm fixes for rc3. Nothing too serious, i915, amdgpu and
+exynos all have a few small driver fixes, and two ttm fixes, and one
+compiler warning.
 
-> > +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-> 
-> This looks like a good change. In fact, I think we need a similar change in
-> some other drivers.
+Dave.
 
-Should be DMA_BIT_MASK(25) as in your other patch?
+drm-fixes-2022-06-17:
+drm fixes for 5.19-rc3
 
-Best regards,
-Jernej
+atomic:
+- fix spurious compiler warning
 
-> 
-> Regards,
-> Samuel
+ttm:
+- add NULL ptr check in swapout code
+- fix bulk move handling
 
+i915:
+- Fix page fault on error state read
+- Fix memory leaks in per-gt sysfs
+- Fix multiple fence handling
+- Remove accidental static from a local variable
 
+amdgpu:
+- Fix regression in GTT size reporting
+- OLED backlight fix
 
+exynos:
+- Check a null pointer instead of IS_ERR().
+- Rework initialization code of Exynos MIC driver.
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3=
+:
 
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-06-17
+
+for you to fetch changes up to 65cf7c02cfc7c36a3e86f3da5818dabc32c270ff:
+
+  Merge tag 'exynos-drm-fixes-v5.19-rc3' of
+git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
+drm-fixes (2022-06-17 11:32:35 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.19-rc3
+
+atomic:
+- fix spurious compiler warning
+
+ttm:
+- add NULL ptr check in swapout code
+- fix bulk move handling
+
+i915:
+- Fix page fault on error state read
+- Fix memory leaks in per-gt sysfs
+- Fix multiple fence handling
+- Remove accidental static from a local variable
+
+amdgpu:
+- Fix regression in GTT size reporting
+- OLED backlight fix
+
+exynos:
+- Check a null pointer instead of IS_ERR().
+- Rework initialization code of Exynos MIC driver.
+
+----------------------------------------------------------------
+Alan Previn (1):
+      drm/i915/reset: Fix error_state_read ptr + offset use
+
+Ashutosh Dixit (1):
+      drm/i915/gt: Fix memory leaks in per-gt sysfs
+
+Christian K=C3=B6nig (2):
+      drm/ttm: fix missing NULL check in ttm_device_swapout
+      drm/ttm: fix bulk move handling v2
+
+Dan Carpenter (1):
+      drm/exynos: fix IS_ERR() vs NULL check in probe
+
+Dave Airlie (4):
+      Merge tag 'drm-misc-fixes-2022-06-16' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-intel-fixes-2022-06-16' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'amd-drm-fixes-5.19-2022-06-15' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'exynos-drm-fixes-v5.19-rc3' of
+git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
+drm-fixes
+
+GONG, Ruiqi (1):
+      drm/atomic: fix warning of unused variable
+
+Jani Nikula (1):
+      drm/i915/uc: remove accidental static from a local variable
+
+Marek Szyprowski (1):
+      drm/exynos: mic: Rework initialization
+
+Michel D=C3=A4nzer (1):
+      drm/amdgpu: Fix GTT size reporting in amdgpu_ioctl
+
+Nirmoy Das (1):
+      drm/i915: Individualize fences before adding to dma_resv obj
+
+Roman Li (1):
+      drm/amd/display: Cap OLED brightness per max frame-average luminance
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c           |  2 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  8 ++--
+ drivers/gpu/drm/exynos/exynos_drm_drv.c           |  6 +--
+ drivers/gpu/drm/exynos/exynos_drm_mic.c           | 42 ++++++------------
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c    |  3 +-
+ drivers/gpu/drm/i915/gt/intel_gt.c                |  1 +
+ drivers/gpu/drm/i915/gt/intel_gt_sysfs.c          | 29 ++++++-------
+ drivers/gpu/drm/i915/gt/intel_gt_sysfs.h          |  6 +--
+ drivers/gpu/drm/i915/gt/intel_gt_types.h          |  3 ++
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c          |  2 +-
+ drivers/gpu/drm/i915/i915_sysfs.c                 | 17 ++++++--
+ drivers/gpu/drm/i915/i915_vma.c                   | 48 ++++++++++++-------=
+--
+ drivers/gpu/drm/ttm/ttm_bo.c                      | 22 ++++++----
+ drivers/gpu/drm/ttm/ttm_device.c                  |  6 ++-
+ drivers/gpu/drm/ttm/ttm_resource.c                | 52 ++++++++++++++++---=
+----
+ include/drm/drm_atomic.h                          |  1 +
+ include/drm/ttm/ttm_resource.h                    |  8 ++--
+ 17 files changed, 141 insertions(+), 115 deletions(-)

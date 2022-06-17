@@ -2,169 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B82D54F9AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C2E54F9B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382884AbiFQOwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        id S237235AbiFQO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382593AbiFQOwX (ORCPT
+        with ESMTP id S233098AbiFQO5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:52:23 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445ED41611
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=G4AnqWACppeg9bBHgdGkT1GET6BfWkp9HpS86zAfg54=; b=NsP6V3fPC0mZxJhJCiW9GMp3pu
-        TQ9/d5W4gWOpsVhUFeILg/vHYralItAh5fIHvMmabefmn3eVIjaCTF7JR6iSU8U1tJkC55N5GdSyS
-        Gfc2VjCELKnLxmJd6I188QkdZ8zsBs9Ldqdyk42THEm2TolzYGRFhAmRBHqjOBIm3osrQ5J6FvcbG
-        taUNClZ2d2VOubVbkA/XxJZoJTmHUihaofPmRedqkopZ6DAMzlWV3y8bvQKIapV0ituwL5Jsmxjau
-        jVRcI26pFAEFsMRUgVToi9TSmUabKF0L5FnlASIa0VG8HF9HCvvwrn8Nlzlk8o0ieNLtA8yFYhQo5
-        ztMCLTUg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o2DKS-008iO0-TS; Fri, 17 Jun 2022 14:52:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9F93E9816B5; Fri, 17 Jun 2022 16:52:06 +0200 (CEST)
-Date:   Fri, 17 Jun 2022 16:52:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>, jpoimboe@redhat.com,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC] pr_warn_once() issue in x86 MSR extable code
-Message-ID: <YqyVFsbviKjVGGZ9@worktop.programming.kicks-ass.net>
-References: <CABPqkBRVF9qmxKFgmjZpzN3tx=U+_8udECMLHs7BrtzfPwmuhQ@mail.gmail.com>
+        Fri, 17 Jun 2022 10:57:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08BD31C904
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655477844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uniI+7opA4GgaBU7ugVhxnYnlTgmV7mzxs05nkJW+Q8=;
+        b=gDiqXMqRCEPnxdjR9jMaG4GgdgzqFTX6pqEKU7km4FZaCaOL1ygtFCdgfzrcWp4iar9lDi
+        LKFDeLfLsIDgC7/wLiN+cLQQFidcAhq/KNbreCLh/J7gBQKYTpYXtrSChVrycjac0pxtbA
+        UeoQvB5SWKSmR4S4blGJYmL/tcvZOjg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-eAIq3FvkNKWyttyitBS9jA-1; Fri, 17 Jun 2022 10:57:23 -0400
+X-MC-Unique: eAIq3FvkNKWyttyitBS9jA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 369A41881435;
+        Fri, 17 Jun 2022 14:57:12 +0000 (UTC)
+Received: from [10.22.18.98] (unknown [10.22.18.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DF3F0492CA5;
+        Fri, 17 Jun 2022 14:57:11 +0000 (UTC)
+Message-ID: <b14e4943-a2b2-6bfc-6530-46bec9eadb9e@redhat.com>
+Date:   Fri, 17 Jun 2022 10:57:11 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABPqkBRVF9qmxKFgmjZpzN3tx=U+_8udECMLHs7BrtzfPwmuhQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] locking/lockdep: Fix lockdep_init_map_*() confusion
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+References: <YqyEDtoan20K0CVD@worktop.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YqyEDtoan20K0CVD@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 02:08:52PM +0300, Stephane Eranian wrote:
-> Hi,
-> 
-> Some changes to the way invalid MSR accesses are reported by the kernel is
-> causing some problems with messages printed on the console.
-> 
-> We have seen several cases of ex_handler_msr() printing invalid MSR
-> accesses once but
-> the callstack multiple times causing confusion on the console.
-> 
-> The last time the exception MSR code was modified (5.16) by PeterZ was:
-> 
->   d52a7344bdfa x86/msr: Remove .fixup usage:
-> 
->   if (!safe && wrmsr &&  pr_warn_once("unchecked MSR access error: ..."))
->                show_stack_regs(regs);
-> 
-> Note that this code pattern was also present, though in a different
-> form, before this commit.
-> 
-> The problem here is that another earlier commit (5.13):
-> 
-> a358f40600b3 once: implement DO_ONCE_LITE for non-fast-path "do once"
-> functionality
-> 
-> Modifies all the pr_*_once() calls to always return true claiming that
-> no caller is ever
-> checking the return value of the functions.
-> 
-> This is why we are seeing the callstack printed without the associated
-> printk() msg.
-> 
-> I believe that having the pr_*_once() functions return true the first
-> time they are called
-> is useful especially when extra information, such as callstack, must
-> be printed to help
-> track the origin of the problem.
-> 
-> The exception handling code seems to be the only place where the
-> return value is checked
-> for pr_warn_once(). A minimal change would be to create another
-> version of that function
-> that calls DO_ONCE() instead of DO_ONCE_LITE(), e.g., pr_warn_once_return().
-> 
-> I can post a patch to that effect if we all agree on the approach.
-> 
-> Thanks.
+On 6/17/22 09:39, Peter Zijlstra wrote:
+> Commit dfd5e3f5fe27 ("locking/lockdep: Mark local_lock_t") added yet
+> another lockdep_init_map_*() variant, but forgot to update all the
+> existing users of the most complicated version.
+>
+> This could lead to a loss of lock_type and hence an incorrect report.
+> Given the relative rarity of both local_lock and these annotations,
+> this is unlikely to happen in practise, still, best fix things.
+>
+> Fixes: dfd5e3f5fe27 ("locking/lockdep: Mark local_lock_t")
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>   include/linux/lockdep.h  |   30 +++++++++++++++++-------------
+>   kernel/locking/lockdep.c |    7 ++++---
+>   2 files changed, 21 insertions(+), 16 deletions(-)
+>
+> --- a/include/linux/lockdep.h
+> +++ b/include/linux/lockdep.h
+> @@ -188,7 +188,7 @@ static inline void
+>   lockdep_init_map_waits(struct lockdep_map *lock, const char *name,
+>   		       struct lock_class_key *key, int subclass, u8 inner, u8 outer)
+>   {
+> -	lockdep_init_map_type(lock, name, key, subclass, inner, LD_WAIT_INV, LD_LOCK_NORMAL);
+> +	lockdep_init_map_type(lock, name, key, subclass, inner, outer, LD_LOCK_NORMAL);
+>   }
+>   
+>   static inline void
+> @@ -211,24 +211,28 @@ static inline void lockdep_init_map(stru
+>    * or they are too narrow (they suffer from a false class-split):
+>    */
+>   #define lockdep_set_class(lock, key)				\
+> -	lockdep_init_map_waits(&(lock)->dep_map, #key, key, 0,	\
+> -			       (lock)->dep_map.wait_type_inner,	\
+> -			       (lock)->dep_map.wait_type_outer)
+> +	lockdep_init_map_type(&(lock)->dep_map, #key, key, 0,	\
+> +			      (lock)->dep_map.wait_type_inner,	\
+> +			      (lock)->dep_map.wait_type_outer,	\
+> +			      (lock)->dep_map.lock_type)
+>   
+>   #define lockdep_set_class_and_name(lock, key, name)		\
+> -	lockdep_init_map_waits(&(lock)->dep_map, name, key, 0,	\
+> -			       (lock)->dep_map.wait_type_inner,	\
+> -			       (lock)->dep_map.wait_type_outer)
+> +	lockdep_init_map_type(&(lock)->dep_map, name, key, 0,	\
+> +			      (lock)->dep_map.wait_type_inner,	\
+> +			      (lock)->dep_map.wait_type_outer,	\
+> +			      (lock)->dep_map.lock_type)
+>   
+>   #define lockdep_set_class_and_subclass(lock, key, sub)		\
+> -	lockdep_init_map_waits(&(lock)->dep_map, #key, key, sub,\
+> -			       (lock)->dep_map.wait_type_inner,	\
+> -			       (lock)->dep_map.wait_type_outer)
+> +	lockdep_init_map_type(&(lock)->dep_map, #key, key, sub,	\
+> +			      (lock)->dep_map.wait_type_inner,	\
+> +			      (lock)->dep_map.wait_type_outer,	\
+> +			      (lock)->dep_map.lock_type)
+>   
+>   #define lockdep_set_subclass(lock, sub)					\
+> -	lockdep_init_map_waits(&(lock)->dep_map, #lock, (lock)->dep_map.key, sub,\
+> -			       (lock)->dep_map.wait_type_inner,		\
+> -			       (lock)->dep_map.wait_type_outer)
+> +	lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key, sub,\
+> +			      (lock)->dep_map.wait_type_inner,		\
+> +			      (lock)->dep_map.wait_type_outer,		\
+> +			      (lock)->dep_map.lock_type)
+>   
+>   #define lockdep_set_novalidate_class(lock) \
+>   	lockdep_set_class_and_name(lock, &__lockdep_no_validate__, #lock)
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -5238,9 +5238,10 @@ __lock_set_class(struct lockdep_map *loc
+>   		return 0;
+>   	}
+>   
+> -	lockdep_init_map_waits(lock, name, key, 0,
+> -			       lock->wait_type_inner,
+> -			       lock->wait_type_outer);
+> +	lockdep_init_map_type(lock, name, key, 0,
+> +			      lock->wait_type_inner,
+> +			      lock->wait_type_outer,
+> +			      lock->lock_type);
+>   	class = register_lock_class(lock, subclass, 0);
+>   	hlock->class_idx = class - lock_classes;
+>   
+>
+You have almost eliminated all usage of lockdep_init_map_waits() except 
+in lockdep_init_map_wait(). Should we just kill lockdep_init_map_waits() 
+and make lockdep_init_map_wait() call lockdep_init_map_type() directly?
 
-How about something like this?
+Cheers,
+Longman
 
-diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-index dba2197c05c3..331310c29349 100644
---- a/arch/x86/mm/extable.c
-+++ b/arch/x86/mm/extable.c
-@@ -94,16 +94,18 @@ static bool ex_handler_copy(const struct exception_table_entry *fixup,
- static bool ex_handler_msr(const struct exception_table_entry *fixup,
- 			   struct pt_regs *regs, bool wrmsr, bool safe, int reg)
- {
--	if (!safe && wrmsr &&
--	    pr_warn_once("unchecked MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
--			 (unsigned int)regs->cx, (unsigned int)regs->dx,
--			 (unsigned int)regs->ax,  regs->ip, (void *)regs->ip))
-+	if (__ONCE_LITE_IF(!safe && wrmsr)) {
-+		pr_warn("unchecked MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
-+			(unsigned int)regs->cx, (unsigned int)regs->dx,
-+			(unsigned int)regs->ax,  regs->ip, (void *)regs->ip);
- 		show_stack_regs(regs);
-+	}
- 
--	if (!safe && !wrmsr &&
--	    pr_warn_once("unchecked MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
--			 (unsigned int)regs->cx, regs->ip, (void *)regs->ip))
-+	if (__ONCE_LITE_IF(!safe && !wrmsr)) {
-+		pr_warn("unchecked MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
-+			(unsigned int)regs->cx, regs->ip, (void *)regs->ip);
- 		show_stack_regs(regs);
-+	}
- 
- 	if (!wrmsr) {
- 		/* Pretend that the read succeeded and returned 0. */
-diff --git a/include/linux/once_lite.h b/include/linux/once_lite.h
-index 861e606b820f..63c3bbcef694 100644
---- a/include/linux/once_lite.h
-+++ b/include/linux/once_lite.h
-@@ -9,15 +9,27 @@
-  */
- #define DO_ONCE_LITE(func, ...)						\
- 	DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
--#define DO_ONCE_LITE_IF(condition, func, ...)				\
-+
-+#define __ONCE_LITE_IF(condition)					\
- 	({								\
- 		static bool __section(".data.once") __already_done;	\
--		bool __ret_do_once = !!(condition);			\
-+		bool __ret_cond = !!(condition);			\
-+		bool __ret_once = false;				\
- 									\
- 		if (unlikely(__ret_do_once && !__already_done)) {	\
- 			__already_done = true;				\
--			func(__VA_ARGS__);				\
-+			__ret_once = true;				\
- 		}							\
-+		unlikely(__ret_once);					\
-+	})
-+
-+#define DO_ONCE_LITE_IF(condition, func, ...)				\
-+	({								\
-+		bool __ret_do_once = !!(condition);			\
-+									\
-+		if (__ONCE_LITE_IF(__ret_do_once))			\
-+			func(__VA_ARGS__);				\
-+									\
- 		unlikely(__ret_do_once);				\
- 	})
- 

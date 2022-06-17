@@ -2,158 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28D354F644
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8812D54F646
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380446AbiFQLFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S1380726AbiFQLG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380066AbiFQLFh (ORCPT
+        with ESMTP id S232020AbiFQLGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:05:37 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120051.outbound.protection.outlook.com [40.107.12.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE16C540;
-        Fri, 17 Jun 2022 04:05:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SS2iJsShMAFfAvTfIRDTZa1WUlZqbAnVe/wu/sMpVTfIS/8IZbidYPeTuBI0+ctTvMaae2AvNc7XTJK2gIOz0jZKXJsg3sgSo3OCbkf8D/wo6kmM4aUKLsfDFBNexJAX4y9Pm4ZTP2yb6aQP5ioh582W3IaazB/513MVkFJ2mTcPtIpzp9y0/RRYoUQOi8vO6se7nY/j2BjSnsLwwyPdCpz6dlakj3Sc+5bQX9lKgZC+R/9LJaOqPdsyBytmAs3XNux9m9SZ3kmZw7mopQ538gX4xXtN8ubNnIerPEBCdt1ospc9innDgdUZAFSVh4vx4JNzI5ntgDypo+b4csCLHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H/SkJ599AQEHvQlLJG9YzlrxxoS0f84POSSZW8Lzoo0=;
- b=oDZKbtdmO8XkMVMHTjzPnkD+LJmMBMbe6FHBdG3xa/MuElUnSJYA5kPJJvJ6yYMOQJzlEz4FcUAiK2EXhaG+2JmbIfSAatA6gj8yow05R2s2sGq/jp4GhjETp8CVGCzQQEeB5Wm7m7U+/ARTx/mkoA+QAnFz399wLCRNSkkXoAvC+z/BgCnZdR4z/Q5pJJKBepJL4IiDawdRVEADq82zj4Vel1GmHH6/gLsM/hbqXZVXQhEEjuC2Yh/a8b/tLaDdaZpZaG+UHLH+CJ40nUf72FqQ+LXfB0refrDeP3EF/CFNxv2imh9UlUgJf+/y3pnRn8KwwMCH4ju09hsGbqovzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H/SkJ599AQEHvQlLJG9YzlrxxoS0f84POSSZW8Lzoo0=;
- b=0zPOGWoNqCLweLcAAzSJe6ZgeGQayDfn/rigMIJvG/Vt2WZRRDroRbudnPPOa5BBhA1Dpp3bogNFxto6zLBN2UkyQeOk/cFzCOdL9V5Dk2orSTD1FRQqgjrxJhSF+zfpdiL8xiSkQu4SuTxrfmd5wZ2Yscw/EG7oThLtHJ0yDQxzGrNe2Xhmn3LJPgC+HQUxsRnr4L0fCGcWMi6gwOws3ziyP2LwhnGXX2Z16+VnuDHHGQ5s6CHO/ReF+vpWXZ6zHUNBLkifApHY1ip1WTGfpJi/5tCL+Xdu8ihcSu5hhgLd5gdS7guLkKbwV9wOZNB8+OOB19VJaJd/mo0wqVSl8Q==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB3786.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:149::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
- 2022 11:05:33 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
- 11:05:32 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH] usercopy: use unsigned long instead of uintptr_t
-Thread-Topic: [PATCH] usercopy: use unsigned long instead of uintptr_t
-Thread-Index: AQHYgY56XB5uBmp1zEOymlHEC/X3ka1SGkAAgAADqACAAAiSAIAACqGAgAAMdQCAAANVgIAAJpIAgADVkYCAADQtAA==
-Date:   Fri, 17 Jun 2022 11:05:32 +0000
-Message-ID: <ec7f0c59-f67e-1d7e-c0b3-b0a409623e98@csgroup.eu>
-References: <20220616143617.449094-1-Jason@zx2c4.com>
- <YqtAShjjo1zC6EgO@casper.infradead.org> <YqtDXPWdFQ/fqgDo@zx2c4.com>
- <YqtKjAZRPBVjlE8S@casper.infradead.org>
- <CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com>
- <Yqtd6hTS52mbb9+q@casper.infradead.org>
- <CAHk-=wj_K2MnhC6N_LyY6ezmQyWzqBnfobXC354HJuKdqMePzA@mail.gmail.com>
- <CAHk-=whS3xhJ=quD5bzDb6JsAhKd0vem4K-U=DhUGf-tDJUMHg@mail.gmail.com>
- <CAMuHMdXxAwbCQPn4jg8X=_p5cYkpvNE4bXfQHWk2vz2Y6hL2-w@mail.gmail.com>
-In-Reply-To: <CAMuHMdXxAwbCQPn4jg8X=_p5cYkpvNE4bXfQHWk2vz2Y6hL2-w@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5c48a4ef-9203-424f-8c70-08da50514c56
-x-ms-traffictypediagnostic: PR0P264MB3786:EE_
-x-microsoft-antispam-prvs: <PR0P264MB37865C6CA62EB43593A8FF6DEDAF9@PR0P264MB3786.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: U4/hHpoHO3siG/HfuXZEey2TtOtK/hyJ14OgEl01nfX7Ujy+aR7+kzc3RW92qeOKouesa94n7/Q80qoeBGdgZryhnNdNiFmWjYJ9whfJWBeld/G54DCbzK9XLOE2ucYmukEyFqmNRVzcGIlzSBQDfQNZ/a5P9U9ymnwZ8KoUx2M8Cv8tMePbcN7IDakG/O5kmqZAY86t+KYBqCpQ/3cqjOwH0yA114aEDNsBnj07raPThwVArQ7ydl7LyN4PVtq1JF9iQd6Ps4wxXI5Fa+J31ereN9kQHYqOwm1OhJFpNSssv7oTUDe7nJN7uRGK570CamcBayJBoxBqwLd18ASBr0mmwXhgwyj40NY0BpHa6ngJaCXn+Nx6m5q0Zj5mpzP9GSwTUh9gLTPJ2kF4V7rKSSiY5n2rzwBjlRUJQwYo62lLAaR+g2px7tnv7MHsUYiUF++Z53bwIk1sjhKi+IqfrxuGBYTZRVlEXTHlse2DJ9HTMH0nkfplgksy7l7ikhZ8FhzxT7q3EQveeFUMdt+ve30duvoyHMjNEzCcJTHh6C0LZxg6Q25gLB95lKhgDgG0nc1PozR/5QMqqx1T+Jg4Id52PI9gkXRT1fzuKWFjBdrf2Jki3aoQReeloib/74jEzz2yGShCPlnKqqopezIh4iz7/Q9SmO8+RPBok1bODYHRgtp499IPquqWrwibySlHeJ/68NE8tzNA5g04DOlEIacM1EiwCqS4jwwJLHMKvI7iUSeCfz4U2QhpbHwwITlwgCw7UR8SXUNt5PMwHIdrug==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(122000001)(110136005)(54906003)(31696002)(6506007)(26005)(66556008)(86362001)(66946007)(6512007)(2616005)(38070700005)(6486002)(66476007)(5660300002)(38100700002)(186003)(4744005)(7416002)(316002)(498600001)(36756003)(8936002)(76116006)(91956017)(2906002)(64756008)(66446008)(44832011)(8676002)(4326008)(31686004)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akZ5NFFUdjVORkhwQzlnNHVlZzJvRGhkRWlSbDhFTDhBNWlpeFQ2WHk2UnpF?=
- =?utf-8?B?a3hrTXdMZ3pjS2Z6ZnRNbXFyWm1TZDAwZkJ6MmRQdGhFOWx2MDBVVHVuVEk5?=
- =?utf-8?B?NWhuVDcvZGNzSXpWbE5UYkVncDEzVXZ1MVE2L1pmeEVCbS91cG5leVcrS1Vn?=
- =?utf-8?B?SlpQMGR4Z1NLbUY2a05Va1lhZzgzWG5WV0x1UExCcmV2aXNzQWYwUVZWa3lD?=
- =?utf-8?B?VDkyTHBsYVdnQjVhaWwwSHh5QzBDNGl2UUQvQlhkazAwZHJnWEo5VFduMEZs?=
- =?utf-8?B?YlNpSGlxY3Jqbk9ISzYvZ21MU1NwNGRrb1RkeEFWNXZoNlJlWXZCTEhrMUNa?=
- =?utf-8?B?TEpEV0d2NXhsZUV5OTlVZG9IdVR1UmJndGo3b0F1c1lMaU1HV2RET2xFUCtR?=
- =?utf-8?B?U1h5NXBBNmVlRHEyVFVTamdGVUptK2RlbVI3RzUwQ1JwRjc2K2FkMVlUbEdW?=
- =?utf-8?B?OTh2bFFta0xsNFBJTUp3Nm1ZQmNVNzAxaVFmOTJsTERDajRjSk1TYWRvOTlh?=
- =?utf-8?B?bVc0dzM2Zi9zS2V1dmhCekdtdjc2dnZEK2tiVWsweG1IYk02NHNpblRpb2lY?=
- =?utf-8?B?dE4yN002TVU5U2YvazljN1pJRUhyVzg1U3B0SlZsR01rTnYxZFUzTUk1ZjVh?=
- =?utf-8?B?bkxtRnNZWHpvQXVxRER0NWRXeFlCNnpiMkV3UE1VR2kyNTBiNldDVXdjMldQ?=
- =?utf-8?B?UU5QWXhBRmwzVmpSOXlaT2VEWUNLbjlzTEdhTWxuZk8rS0VubnRCRUlDY0xD?=
- =?utf-8?B?aXI4ZkVZbzNXVCtldEs4YjFQM0FZNS8wNk1LTFRnbHV6aEppQjdCWGNVTUtn?=
- =?utf-8?B?aWttM3pLUzBkSHVqcFNCQVdiTDh1SCt4U0ZZMk81MHhEMXhZYkIzMXNTOFc3?=
- =?utf-8?B?OW5ubXBUZXdVT0ZoRVgrWHpKTGY4M0JFT3ZwMUxlOTVPU2J2SFh3VEg0YlVO?=
- =?utf-8?B?U1ZpVDZkSU5UMFdMY0c2UEdzWEREa2RidnlmU1NtcTJ0bTdFMUpPOEZ4ZnVP?=
- =?utf-8?B?eG02T2orS1kwaDFvOUxGYWxMQmNvbUgyc2o3WGh3VzBpcXZxTUJQNFhTQmYr?=
- =?utf-8?B?UytCdkZOWVQzbGxtQWdQdUE3TmpnQzBEOGpTYjVNenc1Qko5aE50SGRRQmhm?=
- =?utf-8?B?N041MlZNWml3SVZHMHVFQVlteUFnY21hdGhhSnJRSUY1NjNXUGZ5bmhzQlBB?=
- =?utf-8?B?R25YaVBxQ2dndVEyNldHZU0vMmFmemxXNWJhZzlXU29USWh3RDNkWTE4T0FL?=
- =?utf-8?B?UkxNK3c5blBtWHgycC91Z0dTQ3pGZzBWWWx0aGNURlg0SFI3cmZRaW01UGRB?=
- =?utf-8?B?SUNhV3YxQnFmdnMyOThrZG1uUUZDT0VUZTZNRW56SjB2bDJzV0RLa0Jjd3Az?=
- =?utf-8?B?bkJxd2VpZXBTQS9BS3ZzWXBld2NRSm41M3pqaWJjcWFBSlZZZUpra25IL3Bw?=
- =?utf-8?B?d2JsZnlodmtoSVdZeFFmdDNnSFd6WlVDUkVnUVdpck12RDFoRDIySU1tS05w?=
- =?utf-8?B?Z3RVcE5FZThzc1hNUC9TMWpQbkdUQk9ZMC9IME9ZNlZqTkVLMWVBU0hoUStJ?=
- =?utf-8?B?TFpsMUEvZEpyMXJva0o0cmM0a1NyUmlXU1FHYmtyM3NoRVhONk16Wld3dlZt?=
- =?utf-8?B?ZkVPN1FXSnhyYXZoZi9pUUJMUXl5N1ZqSElrNG45UThDZnpaNW91T0xHMVFJ?=
- =?utf-8?B?NTQ2ZkVkck05UTEzNHNwbnFtVjdlbzN6ZWNaWmQxRTRwN3ljbmI4blVzSXlw?=
- =?utf-8?B?NWtuUU9hZFVENWZzQS9FSjhIRmcrMFk5Q3I1U3E3WVdoUjZsblM2ZGZmdGJv?=
- =?utf-8?B?cHllNXFXR2tWVmxRSjloTldSUjBGektVSjBSTVlVZmJza2dMb3hEaG5xSnBw?=
- =?utf-8?B?YmRZdldHNnZjR09JMWlxK0p3Y1JMUDRkYk1Ja0ZXWWpiWTdaMDBEbjZ6QXlS?=
- =?utf-8?B?Mk01aE1YV1ZXN0JYRUxjWjhFRkNxV2NET1hZUEV2aXg2QUZQZmNuRXd6UHdM?=
- =?utf-8?B?TVpzdElaT2k0Y211dWRFRHV2N2JrNUNCRFlEZURBcGo1RW51WWcvN1VzSXg4?=
- =?utf-8?B?UkZnendodmljczJaSktmbGlRc012bUVscGJaUytDRnFFYldHSlNxYzYwejFa?=
- =?utf-8?B?SHdJZWUrdFlqSDdWTzJGdXIzUitCZ3lxcEw4NVBrczFuMHFBZEwwVDBkN3I5?=
- =?utf-8?B?TytVa05Nb2xhVmJVZG40RVRudmxxalkyanNzVjVJcjRVOUhUTllPK3hxSWtm?=
- =?utf-8?B?V3hzdVQyaEFjLzBEZDN4UkIzak9nS2RXYzdXZkpTU3h3Nk1ldlJYdzJnSmpG?=
- =?utf-8?B?QWpCeEtjamJ3Vnljdi82YnFmMlkwV0M4dlhvMlVseUFqaXJjT2pmN0RGdklB?=
- =?utf-8?Q?h/2/Atd5dy2ylmoBlHZoxYC2tm6VuvhsRB7Fp?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A4B5B5E775053B46B136A46F7D38608B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 17 Jun 2022 07:06:55 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5E36C0F4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:06:53 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id y32so6407537lfa.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Pxelp0mlXw7ofIJBAMyS7m5vlv5CqMMtvgve3HH6URo=;
+        b=nbi+Op7+S3UI6uRFe54fzpRZmQTnYvCJ9W6mDAav1KqTQFmiWs0LZU2DYxukUSwhhs
+         toSWaj9HfhnJsN4h1QPkxf31YW/H/hL5E4WqIn7eOqBWyemPZfiCF0Azl5JCDjvUDW99
+         WsPwjIsAzXHSq1TIt6xXDTUuJRlk4Fqx1TCBw+3mgrsoviuYZVyH6kagmJN+zhB6pw9h
+         Kad+7oKEa0lHPii6ySlH9wlqDcWgv/X6Iu2l4S10o+NX0wgezvozQ0fI4SOyXKvePm+x
+         KCWVDt04wLOffi6lC6YfJXj+1JSq1u7X3JWf7G3pMxjEzMTwwbkQi7EGHXRIbbc3rI7y
+         Stvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pxelp0mlXw7ofIJBAMyS7m5vlv5CqMMtvgve3HH6URo=;
+        b=5edHFPLDVKRtE0DNxi5Mpq1Xka+4vp+qkAdgFjCaMr9EvjKpLm0AZTk5m/E/rOvKjg
+         IeLKVDMEMr88HOHVaYaNieTAfMYVLfRfgw58Tjq+UEi78jKjD4RV/6IUddlimVaXLWkZ
+         a8ydOUDXb83z2AJP0zWLUhljO9zhaPA3CCY4eQJypVchczneBgMyzcS7dcppG8wI/RpP
+         iLPcrsgFntl2a2KISitRVU/x1qNo8SF9TqYUxRcAc4AwW2uvzp5RCQr7/d/pdVFJ8Epn
+         zGb4cujfDOfX0HdVyjMEgOCOXhCGLazlZJcQmPQ93cMaLSyCQzpKyPow3t0JE1fIzjNo
+         acHA==
+X-Gm-Message-State: AJIora8Azftcg/9S6QXglhwlMIorahYr5SDZMR9cGEzS5vi210o4aCXk
+        3ZAiy1F5PzoEZzAZU3EI7bryPeT5OyjHI+78Z4vXUg==
+X-Google-Smtp-Source: AGRyM1tzHHvUmJ9zCPd2azKDVi6TbHpIrf+5E1vbtEdT/LMtLxnIQ1DVlGNPcB3Mt9MLeCz3Sz5vesDcMxW/jZRpSYA=
+X-Received: by 2002:a05:6512:12cc:b0:479:5cb3:96ac with SMTP id
+ p12-20020a05651212cc00b004795cb396acmr5611671lfg.112.1655464012080; Fri, 17
+ Jun 2022 04:06:52 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c48a4ef-9203-424f-8c70-08da50514c56
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 11:05:32.9503
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jJudpVy3aRNZ8ePh9XymzMbNM3qm8ILn0kKb8Ta9xNS+fcOegxIGo5o+vqvn/AWUXD3/LA+6CbEvgxYDY7JYVOML6GO8qH/56L8xmKYStLQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3786
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220606152636.3996-1-mike.leach@linaro.org> <c58d1e20-9b2a-cba4-40b7-075d844f0ae7@arm.com>
+ <27643261-7e52-ed2c-3491-50a139ea9a06@arm.com> <CAJ9a7VjoHP7myATdXVnC2w-vMBjPsJo024f8jLYRsjJ8UEXSsw@mail.gmail.com>
+ <CAJ9a7VhvVEKN1GzJwv2vdBuZVjV9+e7oXEQs5npfT7jsOYXChg@mail.gmail.com>
+In-Reply-To: <CAJ9a7VhvVEKN1GzJwv2vdBuZVjV9+e7oXEQs5npfT7jsOYXChg@mail.gmail.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Fri, 17 Jun 2022 12:06:41 +0100
+Message-ID: <CAJ9a7ViVAz5quE2Cs-p4DzRWpia5NipXc3+_G2gZhxFjzONq4g@mail.gmail.com>
+Subject: Re: [PATCH v2] coresight: configfs: Fix unload of configurations on
+ module exit
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        mathieu.poirier@linaro.org, leo.yan@linaro.org,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE3LzA2LzIwMjIgw6AgMDk6NTgsIEdlZXJ0IFV5dHRlcmhvZXZlbiBhIMOpY3JpdMKg
-Og0KPj4gQnV0IGl0IHRoZW4gY2F1c2VzIHBvaW50bGVzcyBwcm9ibGVtcyB3aGVuIHBlb3BsZSBj
-YW4ndCByZWFsbHkgcmVseSBvbg0KPj4gbW9yZSB0aGFuIDMyIGJpdHMgZm9yIGF0b21pYyBiaXQg
-b3BlcmF0aW9ucywgYW5kIG9uIDY0LWJpdA0KPj4gYXJjaGl0ZWN0dXJlcyB3ZSB1bm5lY2Vzc2Fy
-aWx5IHVzZSAibG9uZyIgYW5kIHdhc3RlIHRoZSB1cHBlciBiaXRzLg0KPiANCj4gV2VsbCwgYXRv
-bWljIHdvcmtzIHVwIHRvIG5hdGl2ZSB3b3JkIHNpemUsIGkuZS4gbG9uZy4NCj4gDQoNCnBvd2Vy
-cGM2NCBoYXMgYSBwYWlyIG9mIGluc3RydWN0aW9ucyB0byBwZXJmb3JtIDEyOGJpdHMgYXRvbWlj
-IA0Kb3BlcmF0aW9ucyA6IGxxYXJ4IC8gc3RxY3gu
+Hi Suzuki,
+
+On Thu, 16 Jun 2022 at 09:10, Mike Leach <mike.leach@linaro.org> wrote:
+>
+> On Wed, 15 Jun 2022 at 12:33, Mike Leach <mike.leach@linaro.org> wrote:
+> >
+> > Hi Suzuki,
+> >
+> > I found something similar when I was testing v4 of the configfs load
+> > set with lockdep enabled. (Mathieu reviewed v3 of this a little while
+> > ago).
+> >
+> > Firstly, some of this goes away if you update configfs to enhance the
+> > lockdep nest lock depth mapping on the (&p->frag_sem) nested locking
+> > elements in a similar way to which other nested semaphores in configfs
+> > have. (I have a patch - see below).
+> >
+> > I initially noted issues related to the new 'load' & 'unload' files in
+> > my case, but the underlying issue can occur for any configfs file that
+> > calls back into the main configuration handling call and locks the
+> > main cscfg_mutex, which protects the lists of configuration and
+> > feature data.
+> >
+> > In the v4 set I redesigned the locking code so that the cscfg_mutex is
+> > never held while calling configfs calls that manipulate the file
+> > system (register / unregister subsystem, register / unregister group)
+> > are called.
+> >
+> > I was intending to retest all this on 5.19-rc2 when I hit the boot
+> > issue we discussed earlier. I was also going to test if the configfs
+> > lockdep patch was strictly necessary after the re-design.
+> >
+> > So we have a choice here:
+> > a) absorb this small fix patch into the larger v4 configfs load set -
+> > and fix everything as part of that update.
+> > b) move some of the locking re-design into the fix patchset, and
+> > submit separately and before the v4 configfs load set.
+> >
+> > Which do you prefer?
+> >
+>
+> Hi Suzuki,
+>
+> Thinking about it - option b) above seems to make the most sense so
+> I'll do that.
+>
+> Mike
+>
+>
+> > Regards
+> >
+> > Mike
+> >
+> > On Wed, 15 Jun 2022 at 10:24, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+> > >
+> > > Cc: configfs folks.
+> > >
+> > > Hi Mike
+> > >
+> > > On 14/06/2022 23:00, Suzuki K Poulose wrote:
+> > > > Hi Mike,
+> > > >
+> > > > Thanks for fixing this. Except for a minor nit, the patch looks good to me.
+> > >
+> > > Spoke too soon. I am able to reproduce the original problem with this
+> > > patch applied. Here is what I did :
+> > >
+> > > # Load the coresight_etm4x module
+> > >
+> > > $ modprobe coresight_etm4x
+> > >
+> > > # enable autofdo configuration
+> > > $ echo 1 >  /sys/kernel/config/cs-syscfg/configurations/autofdo/enable
+> > >
+> > > # Unload the coresight_etm4x module
+> > > $ rmmod coresight_etm4x
+> > > $ lsmod
+> > > Module                  Size  Used by
+> > > coresight              77824  0
+> > > $ cat  /sys/kernel/config/cs-syscfg/configurations/autofdo/enable
+> > > 1
+> > >
+> > > # Now unload the coresight module, this triggers the splat.
+> > > $ rmmod coresight
+> > >
+> > >
+> > > [  202.455667] cscfg: unloading preloaded configurations
+> > > [  202.455689] ======================================================
+> > >
+> > >
+> > >
+> > >
+> > > [  202.455691] WARNING: possible circular locking dependency detected
+> > > [  202.455695] 5.19.0-rc2+ #53 Tainted: G                T
+> > > [  202.455700] ------------------------------------------------------
+> > > [  202.455702] rmmod/454 is trying to acquire lock:
+> > > [  202.455707] ffff00080363f580 (&p->frag_sem){++++}-{4:4}, at:
+> > > configfs_unregister_group+0x4c/0x190
+> > > [  202.455733]
+> > >                 but task is already holding lock:
+> > > [  202.455735] ffff8000012e4b98 (cscfg_mutex){+.+.}-{4:4}, at:
+> > > cscfg_clear_device+0x34/0xfc [coresight]
+> > > [  202.455777]
+> > >                 which lock already depends on the new lock.
+> > >
+> > > [  202.455779]
+> > >                 the existing dependency chain (in reverse order) is:
+> > > [  202.455781]
+> > >                 -> #1 (cscfg_mutex){+.+.}-{4:4}:
+> > > [  202.455791]        lock_acquire+0x68/0x8c
+> > > [  202.455801]        __mutex_lock+0xa0/0x464
+> > > [  202.455811]        mutex_lock_nested+0x44/0x70
+> > > [  202.455819]        cscfg_config_sysfs_activate+0x3c/0xec [coresight]
+> > > [  202.455846]        cscfg_cfg_enable_store+0x84/0xcc [coresight]
+> > > [  202.455872]        configfs_write_iter+0xd4/0x130
+> > > [  202.455878]        new_sync_write+0xdc/0x160
+> > > [  202.455885]        vfs_write+0x1c8/0x210
+> > > [  202.455892]        ksys_write+0x74/0x100
+> > > [  202.455897]        __arm64_sys_write+0x28/0x34
+> > > [  202.455904]        invoke_syscall+0x50/0x120
+> > > [  202.455913]        el0_svc_common.constprop.0+0x68/0x124
+> > > [  202.455921]        do_el0_svc+0x38/0xcc
+> > > [  202.455928]        el0_svc+0x58/0x100
+> > > [  202.455933]        el0t_64_sync_handler+0xf4/0x100
+> > > [  202.455938]        el0t_64_sync+0x18c/0x190
+> > > [  202.455944]
+> > >                 -> #0 (&p->frag_sem){++++}-{4:4}:
+> > > [  202.455954]        __lock_acquire+0x11f4/0x1ddc
+> > > [  202.455961]        lock_acquire.part.0+0xe4/0x220
+> > > [  202.455967]        lock_acquire+0x68/0x8c
+> > > [  202.455973]        down_write+0x78/0x164
+> > > [  202.455980]        configfs_unregister_group+0x4c/0x190
+> > > [  202.455985]        cscfg_configfs_del_config+0x2c/0x40 [coresight]
+> > > [  202.456011]        cscfg_unload_owned_cfgs_feats+0x1d0/0x2c0 [coresight]
+> > > [  202.456036]        cscfg_clear_device+0xec/0xfc [coresight]
+> > > [  202.456060]        cscfg_exit+0x1c/0x90 [coresight]
+> > > [  202.456085]        coresight_exit+0x10/0xd80 [coresight]
+> > > [  202.456109]        __arm64_sys_delete_module+0x19c/0x250
+> > > [  202.456115]        invoke_syscall+0x50/0x120
+> > > [  202.456122]        el0_svc_common.constprop.0+0x68/0x124
+> > > [  202.456130]        do_el0_svc+0x38/0xcc
+> > > [  202.456138]        el0_svc+0x58/0x100
+> > > [  202.456142]        el0t_64_sync_handler+0xf4/0x100
+> > > [  202.456148]        el0t_64_sync+0x18c/0x190
+> > > [  202.456152]
+> > >                 other info that might help us debug this:
+> > >
+> > > [  202.456154]  Possible unsafe locking scenario:
+> > >
+> > > [  202.456156]        CPU0                    CPU1
+> > > [  202.456158]        ----                    ----
+> > > [  202.456159]   lock(cscfg_mutex);
+> > > [  202.456164]                                lock(&p->frag_sem);
+> > > [  202.456169]                                lock(cscfg_mutex);
+> > > [  202.456173]   lock(&p->frag_sem);
+> > > [  202.456177]
+> > >                  *** DEADLOCK ***
+> > >
+> > > [  202.456178] 1 lock held by rmmod/454:
+> > > [  202.456183]  #0: ffff8000012e4b98 (cscfg_mutex){+.+.}-{4:4}, at:
+> > > cscfg_clear_device+0x34/0xfc [coresight]
+> > > [  202.456219]
+> > >                 stack backtrace:
+> > > [  202.456222] CPU: 1 PID: 454 Comm: rmmod Tainted: G                T
+> > > 5.19.0-rc2+ #53
+> > > [  202.456230] Hardware name: ARM LTD ARM Juno Development Platform/ARM
+> > > Juno Development Platform, BIOS EDK II Feb  1 2019
+> > > [  202.456234] Call trace:
+> > > [  202.456236]  dump_backtrace.part.0+0xd8/0xe4
+> > > [  202.456243]  show_stack+0x24/0x80
+> > > [  202.456248]  dump_stack_lvl+0x8c/0xb8
+> > > [  202.456257]  dump_stack+0x18/0x34
+> > > [  202.456264]  print_circular_bug+0x1f8/0x200
+> > > [  202.456271]  check_noncircular+0x130/0x144
+> > > [  202.456277]  __lock_acquire+0x11f4/0x1ddc
+> > > [  202.456284]  lock_acquire.part.0+0xe4/0x220
+> > > [  202.456290]  lock_acquire+0x68/0x8c
+> > > [  202.456295]  down_write+0x78/0x164
+> > > [  202.456302]  configfs_unregister_group+0x4c/0x190
+> > > [  202.456308]  cscfg_configfs_del_config+0x2c/0x40 [coresight]
+> > > [  202.456333]  cscfg_unload_owned_cfgs_feats+0x1d0/0x2c0 [coresight]
+> > > [  202.456357]  cscfg_clear_device+0xec/0xfc [coresight]
+> > > [  202.456381]  cscfg_exit+0x1c/0x90 [coresight]
+> > > [  202.456405]  coresight_exit+0x10/0xd80 [coresight]
+> > > [  202.456429]  __arm64_sys_delete_module+0x19c/0x250
+> > > [  202.456435]  invoke_syscall+0x50/0x120
+> > > [  202.456442]  el0_svc_common.constprop.0+0x68/0x124
+> > > [  202.456450]  do_el0_svc+0x38/0xcc
+> > > [  202.456458]  el0_svc+0x58/0x100
+> > > [  202.456462]  el0t_64_sync_handler+0xf4/0x100
+> > > [  202.456468]  el0t_64_sync+0x18c/0x190
+> > >
+> > >
+> > > Suzuki
+> > >
+> > >
+> > > >
+> > > > On 06/06/2022 16:26, Mike Leach wrote:
+> > > >> Any loaded configurations must be correctly unloaded on coresight module
+> > > >> exit, or issues can arise with nested locking in the configfs directory
+> > > >> code if built with CONFIG_LOCKDEP.
+> > > >>
+> > > >> Prior to this patch, the preloaded configuration configfs directory
+> > > >> entries
+> > > >> were being unloaded by the recursive code in
+> > > >> configfs_unregister_subsystem().
+> > > >>
+> > > >> However, when built with CONFIG_LOCKDEP, this caused a nested lock
+> > > >> warning,
+> > > >> which was not mitigated by the LOCKDEP dependent code in
+> > > >> fs/configfs/dir.c
+> > > >> designed to prevent this, due to the different directory levels for the
+> > > >> root of the directory being removed.
+> > > >>
+> > > >> As the preloaded (and all other) configurations are registered after
+> > > >> configfs_register_subsystem(), we now explicitly unload them before the
+> > > >> call to configfs_unregister_subsystem().
+> > > >>
+> > > >> The new routine cscfg_unload_cfgs_on_exit() iterates through the load
+> > > >> owner list to unload any remaining configurations that were not unloaded
+> > > >> by the user before the module exits. This covers both the
+> > > >> CSCFG_OWNER_PRELOAD and CSCFG_OWNER_MODULE owner types, and will be
+> > > >> extended to cover future load owner types for CoreSight configurations.
+> > > >>
+> > > >> Applies to coresight/next
+> > > >>
+> > > >> Fixes: eb2ec49606c2 ("coresight: syscfg: Update load API for config
+> > > >> loadable modules")
+> > > >> Reported-by: Suzuki Poulose <suzuki.poulose@arm.com>
+> > > >> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> > > >> ---
+> > > >>
+> > > >> Changes since v1:
+> > > >> Altered ordering of init of cscfg_mgr to ensure lists valid for
+> > > >> potential exit path on error.
+> > > >>
+> > > >> ---
+> > > >>   .../hwtracing/coresight/coresight-syscfg.c    | 72 ++++++++++++++++---
+> > > >>   1 file changed, 61 insertions(+), 11 deletions(-)
+> > > >>
+> > > >> diff --git a/drivers/hwtracing/coresight/coresight-syscfg.c
+> > > >> b/drivers/hwtracing/coresight/coresight-syscfg.c
+> > > >> index 11850fd8c3b5..050a32f7e439 100644
+> > > >> --- a/drivers/hwtracing/coresight/coresight-syscfg.c
+> > > >> +++ b/drivers/hwtracing/coresight/coresight-syscfg.c
+> > > >> @@ -1042,6 +1042,13 @@ static int cscfg_create_device(void)
+> > > >>       if (!cscfg_mgr)
+> > > >>           goto create_dev_exit_unlock;
+> > > >> +    /* initialise the cscfg_mgr structure */
+> > > >> +    INIT_LIST_HEAD(&cscfg_mgr->csdev_desc_list);
+> > > >> +    INIT_LIST_HEAD(&cscfg_mgr->feat_desc_list);
+> > > >> +    INIT_LIST_HEAD(&cscfg_mgr->config_desc_list);
+> > > >> +    INIT_LIST_HEAD(&cscfg_mgr->load_order_list);
+> > > >> +    atomic_set(&cscfg_mgr->sys_active_cnt, 0);
+> > > >> +
+> > > >>       /* setup the device */
+> > > >>       dev = cscfg_device();
+> > > >>       dev->release = cscfg_dev_release;
+> > > >> @@ -1056,14 +1063,61 @@ static int cscfg_create_device(void)
+> > > >>       return err;
+> > > >>   }
+> > > >> -static void cscfg_clear_device(void)
+> > > >> +/*
+> > > >> + * Loading and unloading is generally on user discretion.
+> > > >> + * If exiting due to coresight module unload, we need to unload any
+> > > >> configurations that remain,
+> > > >> + * before we unregister the configfs intrastructure.
+> > > >> + *
+> > > >> + * Do this by walking the load_owner list and taking appropriate
+> > > >> action, depending on the load
+> > > >> + * owner type.
+> > > >> + *
+> > > >> + * called with the cscfg_mutex held
+> > > >> + */
+> > > >> +
+> > > >> +#define LOADABLE_MOD_ERR "cscfg: ERROR - a loadable module failed to
+> > > >> unload configs on exit\n"
+> > > >
+> > > > minor nit: Could we skip this ?
+> > > >
+> > > >> +
+> > > >> +static void cscfg_unload_cfgs_on_exit(void)
+> > > >>   {
+> > > >> -    struct cscfg_config_desc *cfg_desc;
+> > > >> +    struct cscfg_load_owner_info *owner_info = NULL;
+> > > >> -    mutex_lock(&cscfg_mutex);
+> > > >> -    list_for_each_entry(cfg_desc, &cscfg_mgr->config_desc_list, item) {
+> > > >> -        etm_perf_del_symlink_cscfg(cfg_desc);
+> > > >> +    while (!list_empty(&cscfg_mgr->load_order_list)) {
+> > > >> +
+> > > >> +        /* remove in reverse order of loading */
+> > > >> +        owner_info = list_last_entry(&cscfg_mgr->load_order_list,
+> > > >> +                         struct cscfg_load_owner_info, item);
+> > > >> +
+> > > >> +        /* action according to type */
+> > > >> +        switch (owner_info->type) {
+> > > >> +        case CSCFG_OWNER_PRELOAD:
+> > > >> +            /*
+> > > >> +             * preloaded  descriptors are statically allocated in
+> > > >> +             * this module - just need to unload dynamic items from
+> > > >> +             * csdev lists, and remove from configfs directories.
+> > > >> +             */
+> > > >> +            pr_info("cscfg: unloading preloaded configurations\n");
+> > > >> +            cscfg_unload_owned_cfgs_feats(owner_info);
+> > > >> +            break;
+> > > >> +
+> > > >> +        case  CSCFG_OWNER_MODULE:
+> > > >> +            /*
+> > > >> +             * this is an error - the loadable module must have been
+> > > >> unloaded prior
+> > > >> +             * to the coresight module unload. Therefore that module
+> > > >> has not
+> > > >> +             * correctly unloaded configs in its own exit code.
+> > > >> +             * Nothing to do other than emit an error string.
+> > > >> +             */
+> > > >> +            pr_err(LOADABLE_MOD_ERR);
+> > > >
+> > > > Instead :
+> > > >              pr_err("cscfg: ERROR - a loadable module failed"
+> > > >                  " to unload configs on exit\n");
+> > > >
+
+I have made this change but this results in a WANING in checkpatch.pl:-
+
+"WARNING: quoted string split across lines"
+
+Mike
+
+
+> > > > Otherwise, I can confirm that the patch fixes the reported problem.
+> > > >
+> > > >> +            break;
+> > > >> +        }
+> > > >> +
+> > > >> +        /* remove from load order list */
+> > > >> +        list_del(&owner_info->item);
+> > > >>       }
+> > > >> +}
+> > > >> +
+> > > >> +static void cscfg_clear_device(void)
+> > > >> +{
+> > > >> +    mutex_lock(&cscfg_mutex);
+> > > >> +    cscfg_unload_cfgs_on_exit();
+> > > >>       cscfg_configfs_release(cscfg_mgr);
+> > > >>       device_unregister(cscfg_device());
+> > > >>       mutex_unlock(&cscfg_mutex);
+> > > >> @@ -1074,20 +1128,16 @@ int __init cscfg_init(void)
+> > > >>   {
+> > > >>       int err = 0;
+> > > >> +    /* create the device and init cscfg_mgr */
+> > > >>       err = cscfg_create_device();
+> > > >>       if (err)
+> > > >>           return err;
+> > > >> +    /* initialise configfs subsystem */
+> > > >>       err = cscfg_configfs_init(cscfg_mgr);
+> > > >>       if (err)
+> > > >>           goto exit_err;
+> > > >> -    INIT_LIST_HEAD(&cscfg_mgr->csdev_desc_list);
+> > > >> -    INIT_LIST_HEAD(&cscfg_mgr->feat_desc_list);
+> > > >> -    INIT_LIST_HEAD(&cscfg_mgr->config_desc_list);
+> > > >> -    INIT_LIST_HEAD(&cscfg_mgr->load_order_list);
+> > > >> -    atomic_set(&cscfg_mgr->sys_active_cnt, 0);
+> > > >> -
+> > > >>       /* preload built-in configurations */
+> > > >>       err = cscfg_preload(THIS_MODULE);
+> > > >>       if (err)
+> > > >
+> > >
+> >
+> >
+> > --
+> > Mike Leach
+> > Principal Engineer, ARM Ltd.
+> > Manchester Design Centre. UK
+>
+>
+>
+> --
+> Mike Leach
+> Principal Engineer, ARM Ltd.
+> Manchester Design Centre. UK
+
+
+
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

@@ -2,48 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD2254F8C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0836A54F8CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382642AbiFQN7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
+        id S1381889AbiFQOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382571AbiFQN6x (ORCPT
+        with ESMTP id S231490AbiFQOBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:58:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496A84C400;
-        Fri, 17 Jun 2022 06:58:46 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LPgXn6pykzBrmp;
-        Fri, 17 Jun 2022 21:55:21 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 21:58:24 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
- 2022 21:58:23 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <axboe@kernel.dk>, <ming.lei@redhat.com>
-CC:     <jack@suse.cz>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH RFC -next] sbitmap: fix possible io hung due to lost wakeups
-Date:   Fri, 17 Jun 2022 22:11:25 +0800
-Message-ID: <20220617141125.3024491-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 17 Jun 2022 10:01:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E9149C95;
+        Fri, 17 Jun 2022 07:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655474507; x=1687010507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iVg+fkchqNy0NLwD7C0/R3ieqtSh8cMlhM0PEw8K7Bs=;
+  b=EnSS1Tcocn2SKfFXnKk9d8pvStGKzPC6MvGBoMvQBq0hhW/AB6A9nxCd
+   LH4oXPYToYrLtXDFCOjcLvPoXD/sMQN7NxkHkpDYKk4bu2FbRobSQrso8
+   4EsR4Q6fZ7s/AV8BBesXDG1SW6LER3DNzaB9jAGIEV8X89gqQ2OInFft9
+   UfGBO+nBk1/CeYPrjGB7qe1yEtPtt4fmSq9p0iWrtAQG86HYKXKYDrSLJ
+   JPl+CUaXBKltCHtEIwG8fnDrl9sZALOfSo5Sc/ab20yJx6Omlri42B5pw
+   PNss2O4bpuEyzzJaez+gKEq0BpvXqrV1qEhGuyyo7BO1zXyfz4wSituVg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341183723"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="341183723"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:01:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="578005427"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 17 Jun 2022 07:01:43 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2CXe-000PUP-Rr;
+        Fri, 17 Jun 2022 14:01:42 +0000
+Date:   Fri, 17 Jun 2022 22:01:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        netdev@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>
+Subject: Re: [PATCH V2 net-next 4/4] net: marvell: prestera: implement
+ software MDB entries allocation
+Message-ID: <202206172146.gg9GL71Z-lkp@intel.com>
+References: <20220617101520.19794-5-oleksandr.mazur@plvision.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617101520.19794-5-oleksandr.mazur@plvision.eu>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,164 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, same waitqueue might be woken up continuously:
+Hi Oleksandr,
 
-__sbq_wake_up		__sbq_wake_up
- sbq_wake_ptr -> assume	0
-			 sbq_wake_ptr -> 0
- atomic_dec_return
-			atomic_dec_return
- atomic_cmpxchg -> succeed
-			 atomic_cmpxchg -> failed
-			  return true
+Thank you for the patch! Perhaps something to improve:
 
-			__sbq_wake_up
-			 sbq_wake_ptr
-			  atomic_read(&sbq->wake_index) -> still 0
- sbq_index_atomic_inc -> inc to 1
-			  if (waitqueue_active(&ws->wait))
-			   if (wake_index != atomic_read(&sbq->wake_index))
-			    atomic_set -> reset from 1 to 0
- wake_up_nr -> wake up first waitqueue
-			    // continue to wake up in first waitqueue
+[auto build test WARNING on net-next/master]
 
-What's worse, io hung is possible in theory because wakeups might be
-missed. For example, 2 * wake_batch tags are put, while only wake_batch
-threads are worken:
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksandr-Mazur/net-marvell-prestera-add-MDB-offloading-support/20220617-181737
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 982c3e2948d6a30d34f186e3b7d592a33147719b
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220617/202206172146.gg9GL71Z-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e58f821bf9b04f502947d46edce5e694afba26ca
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oleksandr-Mazur/net-marvell-prestera-add-MDB-offloading-support/20220617-181737
+        git checkout e58f821bf9b04f502947d46edce5e694afba26ca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/marvell/prestera/
 
-__sbq_wake_up
- atomic_cmpxchg -> reset wait_cnt
-			__sbq_wake_up -> decrease wait_cnt
-			...
-			__sbq_wake_up -> wait_cnt is decreased to 0 again
-			 atomic_cmpxchg
-			 sbq_index_atomic_inc -> increase wake_index
-			 wake_up_nr -> wake up and waitqueue might be empty
- sbq_index_atomic_inc -> increase again, one waitqueue is skipped
- wake_up_nr -> invalid wake up because old wakequeue might be empty
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-To fix the problem, refactor to make sure waitqueues will be woken up
-one by one,
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- lib/sbitmap.c | 83 ++++++++++++++++++++++++++-------------------------
- 1 file changed, 43 insertions(+), 40 deletions(-)
+   drivers/net/ethernet/marvell/prestera/prestera_switchdev.c: In function 'prestera_mdb_flush_bridge_port':
+>> drivers/net/ethernet/marvell/prestera/prestera_switchdev.c:1776:36: warning: variable 'mdb' set but not used [-Wunused-but-set-variable]
+    1776 |         struct prestera_mdb_entry *mdb;
+         |                                    ^~~
 
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index ae4fd4de9ebe..dc2959cb188c 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -574,66 +574,69 @@ void sbitmap_queue_min_shallow_depth(struct sbitmap_queue *sbq,
- }
- EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
- 
--static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
-+static void sbq_update_wake_index(struct sbitmap_queue *sbq,
-+				  int old_wake_index)
- {
- 	int i, wake_index;
--
--	if (!atomic_read(&sbq->ws_active))
--		return NULL;
-+	struct sbq_wait_state *ws;
- 
- 	wake_index = atomic_read(&sbq->wake_index);
--	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
--		struct sbq_wait_state *ws = &sbq->ws[wake_index];
-+	if (old_wake_index != wake_index)
-+		return;
- 
-+	for (i = 1; i < SBQ_WAIT_QUEUES; i++) {
-+		wake_index = sbq_index_inc(wake_index);
-+		ws = &sbq->ws[wake_index];
-+		/* Find the next active waitqueue in round robin manner */
- 		if (waitqueue_active(&ws->wait)) {
--			if (wake_index != atomic_read(&sbq->wake_index))
--				atomic_set(&sbq->wake_index, wake_index);
--			return ws;
-+			atomic_cmpxchg(&sbq->wake_index, old_wake_index,
-+				       wake_index);
-+			return;
- 		}
--
--		wake_index = sbq_index_inc(wake_index);
- 	}
--
--	return NULL;
- }
- 
- static bool __sbq_wake_up(struct sbitmap_queue *sbq)
- {
- 	struct sbq_wait_state *ws;
- 	unsigned int wake_batch;
--	int wait_cnt;
-+	int wait_cnt, wake_index;
- 
--	ws = sbq_wake_ptr(sbq);
--	if (!ws)
-+	if (!atomic_read(&sbq->ws_active))
- 		return false;
- 
--	wait_cnt = atomic_dec_return(&ws->wait_cnt);
--	if (wait_cnt <= 0) {
--		int ret;
--
--		wake_batch = READ_ONCE(sbq->wake_batch);
--
--		/*
--		 * Pairs with the memory barrier in sbitmap_queue_resize() to
--		 * ensure that we see the batch size update before the wait
--		 * count is reset.
--		 */
--		smp_mb__before_atomic();
-+	wake_index = atomic_read(&sbq->wake_index);
-+	ws = &sbq->ws[wake_index];
-+	/*
-+	 * This can only happen in the first wakeup when sbitmap waitqueues
-+	 * are no longer idle.
-+	 */
-+	if (!waitqueue_active(&ws->wait)) {
-+		sbq_update_wake_index(sbq, wake_index);
-+		return true;
-+	}
- 
--		/*
--		 * For concurrent callers of this, the one that failed the
--		 * atomic_cmpxhcg() race should call this function again
--		 * to wakeup a new batch on a different 'ws'.
--		 */
--		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
--		if (ret == wait_cnt) {
--			sbq_index_atomic_inc(&sbq->wake_index);
--			wake_up_nr(&ws->wait, wake_batch);
--			return false;
--		}
-+	wait_cnt = atomic_dec_return(&ws->wait_cnt);
-+	if (wait_cnt > 0)
-+		return false;
- 
-+	sbq_update_wake_index(sbq, wake_index);
-+	/*
-+	 * Concurrent callers should call this function again
-+	 * to wakeup a new batch on a different 'ws'.
-+	 */
-+	if (wait_cnt < 0)
- 		return true;
--	}
-+
-+	wake_batch = READ_ONCE(sbq->wake_batch);
-+	/*
-+	 * Pairs with the memory barrier in sbitmap_queue_resize() to
-+	 * ensure that we see the batch size update before the wait
-+	 * count is reset.
-+	 */
-+	smp_mb__before_atomic();
-+	atomic_set(&ws->wait_cnt, wake_batch);
-+	wake_up_nr(&ws->wait, wake_batch);
- 
- 	return false;
- }
+
+vim +/mdb +1776 drivers/net/ethernet/marvell/prestera/prestera_switchdev.c
+
+  1769	
+  1770	static void
+  1771	prestera_mdb_flush_bridge_port(struct prestera_bridge_port *br_port)
+  1772	{
+  1773		struct prestera_br_mdb_port *br_mdb_port, *tmp_port;
+  1774		struct prestera_br_mdb_entry *br_mdb, *br_mdb_tmp;
+  1775		struct prestera_bridge *br_dev = br_port->bridge;
+> 1776		struct prestera_mdb_entry *mdb;
+  1777	
+  1778		list_for_each_entry_safe(br_mdb, br_mdb_tmp, &br_dev->br_mdb_entry_list,
+  1779					 br_mdb_entry_node) {
+  1780			mdb = br_mdb->mdb;
+  1781	
+  1782			list_for_each_entry_safe(br_mdb_port, tmp_port,
+  1783						 &br_mdb->br_mdb_port_list,
+  1784						 br_mdb_port_node) {
+  1785				prestera_mdb_port_del(br_mdb->mdb,
+  1786						      br_mdb_port->br_port->dev);
+  1787				prestera_br_mdb_port_del(br_mdb,  br_mdb_port->br_port);
+  1788			}
+  1789			prestera_br_mdb_entry_put(br_mdb);
+  1790		}
+  1791	}
+  1792	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCCD55005F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F06550066
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383266AbiFQXIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
+        id S1356425AbiFQXLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377857AbiFQXIN (ORCPT
+        with ESMTP id S234393AbiFQXLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:08:13 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2350322518;
-        Fri, 17 Jun 2022 16:08:11 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id c4so403106ilj.7;
-        Fri, 17 Jun 2022 16:08:11 -0700 (PDT)
+        Fri, 17 Jun 2022 19:11:43 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2777F62BE9;
+        Fri, 17 Jun 2022 16:11:42 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id n11so5955838iod.4;
+        Fri, 17 Jun 2022 16:11:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=boBsEYeSmkjb+BOCaUDQtsmmY5mPhlPnMP5EgdS/R1I=;
-        b=XCboexXKqf0oZfGfLRH13Iaz4TxS8T8ZL5VnJr8yF1Nv/g9Pg3B5Cb7Gb2dZE9KbhB
-         Q3E26ozz4BuPBfOuz1+0lnSMb/HD420AZCtHNcFClZezQdKecrVonj7AZbVnVLjuDNLi
-         vm8uWQ4svZwKJrIbouvZXz2KrqD+/EvFVI+GKS0bh10xCFq6rKvxoLjt7fqfb9P0q7Ld
-         qzK6q8S3h4G+Tc+xPnzVpL4KP9iT7lPSqWXsH12Q680WlRw2wtH9rHKlCd025XN2uwu7
-         X9Qb4pkgZO5WAeOHtgsTMZ9rBserrxStrgCmSX7MfpmegPQ/ZaYQ/k/+I4cml3H6oCqM
-         wXgg==
-X-Gm-Message-State: AJIora/TRVVj7M5KZ7UiFa6gyzoM+Skp+hO6b9IrnnO+W+Q+wuW05O6+
-        RIJVgdRrNM/R+W0gyTy0qA==
-X-Google-Smtp-Source: AGRyM1uXiG8Xggf+u/lRmTS4EnGutEnUuUzhwGjsExceUCQKBvQOrA5/yQzEqlo4Qn7q5VQa0INI7Q==
-X-Received: by 2002:a92:dc91:0:b0:2d8:ecc3:ffb5 with SMTP id c17-20020a92dc91000000b002d8ecc3ffb5mr1765920iln.170.1655507290320;
-        Fri, 17 Jun 2022 16:08:10 -0700 (PDT)
+        bh=ocSDv0KbLxR8Foonu4dTQCyLR9CdgrTx1ewUehoAImk=;
+        b=f9q3BaDPLCCaTCMvb4nFWKQTsHYZmeakXN8C0fTJ052ckWBpxsxBZp8AlB69yxBGAF
+         YL1GsrMrqaMVZchBZpVNcSg2i3ZPyoyYrLdgtEc3B78X+zxzJ7KwZO45mTqKtlkMoFW1
+         9aji31+AZDT+zLL+06KvFnHpkVjTkZ33f9EYlRAo9cHFgy9/nEtPOQyYZZJvb/UdYN3f
+         5467il9KkhTJttnNommsNM9ls3RfGiePsmw60e/UzO/dLq0hPkz+MQLgj4hkVtCLrDdS
+         0zbm6MVjhjzWXN+VWI99BYbfKWChVB0wzFf/oGSV/suY4GbGvsmV9m3wu/XSPw5zI1mL
+         aTkQ==
+X-Gm-Message-State: AJIora/6B6rV+YY0MLSJqTUeSLBhgrCnjLMYLmccsvzhIssrO+BBACvZ
+        4pmPCR3Bt1Q8wyCS8+pg2ZkLn/dOqQ==
+X-Google-Smtp-Source: AGRyM1u/VBMhTIF5VYeYK/B6h2IXUlXNo6UGJ2e9kLLlnK2XJcQKAGLVeLDCBOfHHOTs2DPhDBiHvg==
+X-Received: by 2002:a05:6638:3389:b0:331:f5e7:7dda with SMTP id h9-20020a056638338900b00331f5e77ddamr6686415jav.93.1655507501367;
+        Fri, 17 Jun 2022 16:11:41 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id h18-20020a02c732000000b0032e3b0933c6sm2730805jao.162.2022.06.17.16.08.08
+        by smtp.gmail.com with ESMTPSA id z25-20020a05663803b900b00335d838f40bsm2402913jap.138.2022.06.17.16.11.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 16:08:09 -0700 (PDT)
-Received: (nullmailer pid 2608063 invoked by uid 1000);
-        Fri, 17 Jun 2022 23:08:08 -0000
-Date:   Fri, 17 Jun 2022 17:08:08 -0600
+        Fri, 17 Jun 2022 16:11:41 -0700 (PDT)
+Received: (nullmailer pid 2613068 invoked by uid 1000);
+        Fri, 17 Jun 2022 23:11:39 -0000
+Date:   Fri, 17 Jun 2022 17:11:39 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Irui Wang <irui.wang@mediatek.com>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -55,15 +55,15 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
         maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
         srv_heupstream@mediatek.com
-Subject: Re: [RESEND V3,1/8] dt-bindings: mediatek: Add
- mediatek,mt8195-jpgdec compatible
-Message-ID: <20220617230808.GA2594727-robh@kernel.org>
-References: <20220614121004.31616-1-irui.wang@mediatek.com>
- <20220614121004.31616-2-irui.wang@mediatek.com>
+Subject: Re: [RESEND V9,1/7] dt-bindings: mediatek: Add mediatek,
+ mt8195-jpgenc compatible
+Message-ID: <20220617231139.GA2610098-robh@kernel.org>
+References: <20220614121024.31667-1-irui.wang@mediatek.com>
+ <20220614121024.31667-2-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614121004.31616-2-irui.wang@mediatek.com>
+In-Reply-To: <20220614121024.31667-2-irui.wang@mediatek.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -75,27 +75,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 08:09:57PM +0800, Irui Wang wrote:
+On Tue, Jun 14, 2022 at 08:10:18PM +0800, Irui Wang wrote:
 > From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> Add mediatek,mt8195-jpgdec compatible to binding document.
+> Add mediatek,mt8195-jpgenc compatible to binding document.
 > 
 > Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 > ---
->  .../media/mediatek,mt8195-jpegdec.yaml        | 175 ++++++++++++++++++
->  1 file changed, 175 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+>  .../media/mediatek,mt8195-jpegenc.yaml        | 153 ++++++++++++++++++
+>  1 file changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
 > new file mode 100644
-> index 000000000000..7b3df7c714aa
+> index 000000000000..a7f9f723d5db
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
-> @@ -0,0 +1,175 @@
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+> @@ -0,0 +1,153 @@
 > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml#
+> +$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegenc.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
 > +title: MediaTek JPEG Encoder Device Tree Bindings
@@ -104,14 +104,14 @@ On Tue, Jun 14, 2022 at 08:09:57PM +0800, Irui Wang wrote:
 > +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
 > +
 > +description: |-
-> +  MediaTek JPEG Decoder is the JPEG decode hardware present in MediaTek SoCs
+> +  MediaTek JPEG Encoder is the JPEG encode hardware present in MediaTek SoCs
 > +
 > +properties:
 > +  compatible:
 > +    items:
-> +      - const: mediatek,mt8195-jpgdec
+> +      - const: mediatek,mt8195-jpgenc
 > +
-> +  mediatek,jpegdec-multi-core:
+> +  mediatek,jpegenc-multi-core:
 > +    type: boolean
 > +    description: |
 > +      Indicates whether the jpeg encoder has multiple cores or not.
@@ -120,7 +120,7 @@ On Tue, Jun 14, 2022 at 08:09:57PM +0800, Irui Wang wrote:
 > +    maxItems: 1
 > +
 > +  iommus:
-> +    maxItems: 6
+> +    maxItems: 4
 > +    description: |
 > +      Points to the respective IOMMU block with master port as argument, see
 > +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
@@ -136,24 +136,25 @@ On Tue, Jun 14, 2022 at 08:09:57PM +0800, Irui Wang wrote:
 > +
 > +# Required child node:
 > +patternProperties:
-> +  "^jpgdec@[0-9a-f]+$":
+> +  "^jpgenc@[0-9a-f]+$":
 > +    type: object
 > +    description: |
-> +      The jpeg decoder hardware device node which should be added as subnodes to
+> +      The jpeg encoder hardware device node which should be added as subnodes to
 > +      the main jpeg node.
 > +
 > +    properties:
 > +      compatible:
-> +        const: mediatek,mt8195-jpgdec-hw
+> +        const: mediatek,mt8195-jpgenc-hw
 > +
 > +      reg:
 > +        maxItems: 1
 > +
 > +      hw_id:
 > +        description: |
-> +          Current jpegdec hw id.
+> +          Current jpegenc hw id.
 
-What's this for and how is it used? We generally don't do indexes in DT.
+Same question here. Surely, I asked sometime in the last 8 versions, but 
+no explanation here and I'm not going to go look for it.
 
 > +
 > +      iommus:
@@ -171,7 +172,7 @@ What's this for and how is it used? We generally don't do indexes in DT.
 > +
 > +      clock-names:
 > +        items:
-> +          - const: jpgdec
+> +          - const: jpgenc
 > +
 > +      power-domains:
 > +        maxItems: 1
@@ -207,66 +208,44 @@ What's this for and how is it used? We generally don't do indexes in DT.
 > +        #address-cells = <2>;
 > +        #size-cells = <2>;
 > +
-> +        jpgdec_master {
-> +                compatible = "mediatek,mt8195-jpgdec";
-> +                mediatek,jpegdec-multi-core;
-> +                power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
-> +                iommus = <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA0>,
-> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA0>,
-> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA1>,
-> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA1>,
-> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
-> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +        jpgenc_master {
+> +                compatible = "mediatek,mt8195-jpgenc";
+> +                mediatek,jpegenc-multi-core;
+> +                power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
+> +                iommus = <&iommu_vpp M4U_PORT_L20_JPGENC_Y_RDMA>,
+> +                <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
+> +                <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
+> +                <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
 > +                #address-cells = <2>;
 > +                #size-cells = <2>;
 > +                ranges;
 > +
-> +                jpgdec@1a040000 {
-> +                    compatible = "mediatek,mt8195-jpgdec-hw";
-> +                    reg = <0 0x1a040000 0 0x10000>;/* JPGDEC_C0 */
-> +                    hw_id = <0>;
-> +                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
-> +                    interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH 0>;
-> +                    clocks = <&vencsys CLK_VENC_JPGDEC>;
-> +                    clock-names = "jpgdec";
-> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
+> +                jpgenc@1a030000 {
+> +                        compatible = "mediatek,mt8195-jpgenc-hw";
+> +                        reg = <0 0x1a030000 0 0x10000>;
+> +                        hw_id = <0>;
+> +                        iommus = <&iommu_vdo M4U_PORT_L19_JPGENC_Y_RDMA>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_C_RDMA>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_Q_TABLE>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_BSDMA>;
+> +                        interrupts = <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                        clocks = <&vencsys CLK_VENC_JPGENC>;
+> +                        clock-names = "jpgenc";
+> +                        power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
 > +                };
 > +
-> +                jpgdec@1a050000 {
-> +                    compatible = "mediatek,mt8195-jpgdec-hw";
-> +                    reg = <0 0x1a050000 0 0x10000>;/* JPGDEC_C1 */
-> +                    hw_id = <1>;
-> +                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
-> +                    interrupts = <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH 0>;
-> +                    clocks = <&vencsys CLK_VENC_JPGDEC_C1>;
-> +                    clock-names = "jpgdec";
-> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
-> +                };
-> +
-> +                jpgdec@1b040000 {
-> +                    compatible = "mediatek,mt8195-jpgdec-hw";
-> +                    reg = <0 0x1b040000 0 0x10000>;/* JPGDEC_C2 */
-> +                    hw_id = <2>;
-> +                    iommus = <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA0>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA0>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA1>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA1>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET1>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET0>;
-> +                    interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH 0>;
-> +                    clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGDEC>;
-> +                    clock-names = "jpgdec";
-> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC2>;
+> +                jpgenc@1b030000 {
+> +                        compatible = "mediatek,mt8195-jpgenc-hw";
+> +                        reg = <0 0x1b030000 0 0x10000>;
+> +                        hw_id = <1>;
+> +                        iommus = <&iommu_vpp M4U_PORT_L20_JPGENC_Y_RDMA>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
+> +                        interrupts = <GIC_SPI 347 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                        clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGENC>;
+> +                        clock-names = "jpgenc";
+> +                        power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
 > +                };
 > +        };
 > +    };

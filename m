@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8122654F94A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0E154F955
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382436AbiFQOiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S1382771AbiFQOjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiFQOiv (ORCPT
+        with ESMTP id S233234AbiFQOjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:38:51 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7E39684
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:38:47 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25HDU16D027696;
-        Fri, 17 Jun 2022 16:38:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=MrCSWINS2GfAc4BiOcRjdRsIo2RBOjPuhfPkTDR+o4E=;
- b=kqp0tkFourtjKPnGdVNU+vmUxAaa5nd+cSC+CGQIwcUTRCJJ9xG24Mly8kCNMbbmfQhh
- viqqbu6ZxpM4Iay9Wrd7OGI0LgDHel4Yb5PUwl9vvHxHnyWjvB9wb/9hQBX9ILopR8bb
- MlwCAiQFEGgq+g7/q6q/OfVAKAEtvYg24UUbp2UCky/uMCcj60CJKqYOYmlzLqMaKiOk
- e6SWx3MiDD4IBqHhYmdPUgMLPmNSSyQzIOIm/VvYODblkbcnHddYEQRVFdLmZgzO/rv2
- GDQX1iZOSlVm+Qhu0ouOg2S2ULaFPRf60sQGhcZRoXyeqKxqEgK2oexIgBHozO9C5eDD aw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gqd18763v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 16:38:22 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FFFF10002A;
-        Fri, 17 Jun 2022 16:38:20 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A33CF21BF79;
-        Fri, 17 Jun 2022 16:38:20 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 17 Jun
- 2022 16:38:20 +0200
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-CC:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH] scripts/gdb: fix 'lx-dmesg' on 32 bits arch
-Date:   Fri, 17 Jun 2022 16:37:58 +0200
-Message-ID: <20220617143758.137307-1-antonio.borneo@foss.st.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 17 Jun 2022 10:39:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D689239684;
+        Fri, 17 Jun 2022 07:39:33 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPhTm4850z6H6mV;
+        Fri, 17 Jun 2022 22:37:48 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 16:39:31 +0200
+Received: from [10.126.175.22] (10.126.175.22) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 15:39:29 +0100
+Message-ID: <cb61ea57-ea48-ccd7-fa3f-6e46f196de1e@huawei.com>
+Date:   Fri, 17 Jun 2022 15:39:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-17_10,2022-06-17_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 2/4] perf jevents: Add python converter script
+To:     Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, Felix Fietkau <nbd@nbd.name>,
+        Qi Liu <liuqi115@huawei.com>, Like Xu <likexu@tencent.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        "Nick Forrington" <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "James Clark" <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
+        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
+        Stephane Eranian <eranian@google.com>
+References: <20220616044806.47770-1-irogers@google.com>
+ <20220616044806.47770-3-irogers@google.com>
+ <7eb148e5-0763-1dbe-d1f5-80e5159be7c8@linux.intel.com>
+ <CAP-5=fUy=_HFhhdghRJs-+G75ppsYCRg72SSnoeijvdqb8hyVQ@mail.gmail.com>
+ <3108fd92-c05b-961f-2367-81925535bf4f@linux.intel.com>
+ <CAP-5=fW10QAD1MZ_RhdCvOTwiWTcYoQps5hSGH4F2JsVYeAB5A@mail.gmail.com>
+ <5e27d1e8-f329-7e11-2f5a-cc0d53ce1db3@linux.intel.com>
+ <CAP-5=fUZbi2359+jgMx8MNjT0aEt1Ai0aBzA4kc+iKphpJWwCg@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAP-5=fUZbi2359+jgMx8MNjT0aEt1Ai0aBzA4kc+iKphpJWwCg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.175.22]
+X-ClientProxiedBy: lhreml732-chm.china.huawei.com (10.201.108.83) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,60 +82,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type atomic_long_t can have size 4 or 8 bytes, depending on
-CONFIG_64BIT; it's only content, the field 'counter', is either an
-int or a s64 value.
+On 17/06/2022 14:33, Ian Rogers wrote:
+>> ...                       libzstd: [ on  ]
+>> ...        disassembler-four-args: [ on  ]
+>> ...         python-dev-is-python3: [ off ]
+>>
+> Agreed on cleaning up the python Makefile logic. I'd rather do it out
+> of these patches.
+IMHO I know it's painful to get right but we should have it shouted that 
+python is not properly configured and jevents won't get compiled 
+(properly) - the message "Python interpreter too old (older than 3.6) 
+disabling jevent generation" is too quiet.
 
-Current code incorrectly uses the fixed size utils.read_u64() to
-read the field 'counter' inside atomic_long_t.
-
-On 32 bits architectures reading the last element 'tail_id' of the
-struct prb_desc_ring:
-	struct prb_desc_ring {
-		...
-		atomic_long_t tail_id;
-	};
-causes the utils.read_u64() to access outside the boundary of the
-struct and the gdb command 'lx-dmesg' exits with error:
-	Python Exception <class 'IndexError'>: index out of range
-	Error occurred in Python: index out of range
-
-Use the existing utils.read_ulong() to read 'counter' inside the
-atomic_long_t.
-
-Fixes: e60768311af8 ("scripts/gdb: update for lockless printk ringbuffer")
-Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
----
- scripts/gdb/linux/dmesg.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/gdb/linux/dmesg.py b/scripts/gdb/linux/dmesg.py
-index d5983cf3db7d..e2d9ab3aa836 100644
---- a/scripts/gdb/linux/dmesg.py
-+++ b/scripts/gdb/linux/dmesg.py
-@@ -89,9 +89,9 @@ class LxDmesg(gdb.Command):
- 
-         # read in tail and head descriptor ids
-         off = prb_desc_ring_type.get_type()['tail_id'].bitpos // 8
--        tail_id = utils.read_u64(desc_ring, off + counter_off)
-+        tail_id = utils.read_ulong(desc_ring, off + counter_off)
-         off = prb_desc_ring_type.get_type()['head_id'].bitpos // 8
--        head_id = utils.read_u64(desc_ring, off + counter_off)
-+        head_id = utils.read_ulong(desc_ring, off + counter_off)
- 
-         did = tail_id
-         while True:
-@@ -102,7 +102,7 @@ class LxDmesg(gdb.Command):
-             desc = utils.read_memoryview(inf, desc_addr + desc_off, desc_sz).tobytes()
- 
-             # skip non-committed record
--            state = 3 & (utils.read_u64(desc, sv_off + counter_off) >> desc_flags_shift)
-+            state = 3 & (utils.read_ulong(desc, sv_off + counter_off) >> desc_flags_shift)
-             if state != desc_committed and state != desc_finalized:
-                 if did == head_id:
-                     break
-
-base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
--- 
-2.36.1
-
+Thanks!

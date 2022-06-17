@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AD854F8B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF18854F8C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382623AbiFQN6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S1382586AbiFQN6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382604AbiFQN6i (ORCPT
+        with ESMTP id S1382599AbiFQN6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:58:38 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCD236E06;
-        Fri, 17 Jun 2022 06:58:37 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id d123so4587258iof.10;
-        Fri, 17 Jun 2022 06:58:37 -0700 (PDT)
+        Fri, 17 Jun 2022 09:58:36 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B494C3701C;
+        Fri, 17 Jun 2022 06:58:35 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id i16so4607102ioa.6;
+        Fri, 17 Jun 2022 06:58:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=vuzioXxWsL/LcXE/Jqc7Srz2yPLtSw7sPrasQK3imCE=;
-        b=UrbAbQQqewa3ugHyygGUF81t1gS0So1VJ+L2kxtco84NxolnV0pk1OSyCaB3cap0bU
-         N2ji5zf1DgsCAMAvuK9IzyVh6Zu2HoK/gJij88xPrdt6yMKPqtXoNxLMdv+UTcaAxT3J
-         YDo6Kq050Cbs1eiCA8Mi9fslFjDlaqPOR2IzaG/h6MdOkyxMhAHbdNu/2rlaCG4eqAtp
-         paAyLc31jHrq4gLI1tl6GSLmggqXVe2uHZqIZ3IUi2Y77n9r9JdQ+9fZMHpWonDUnaIh
-         BAVPy1bY/AmHNQJJJ9ZshOkBFWMvUYTQ4NBjMDMX2MfmRxvWJfpD8HryP9kHceiD2bFi
-         LN/w==
-X-Gm-Message-State: AJIora+wi1EaIm2dIMXvs0kiONBut9aLXe8pcrNzoUfoflt0jC1mD3Cg
-        AvoVuGQYhL+bODsbIDrvGw==
-X-Google-Smtp-Source: AGRyM1vYq1BYKmRuq3VRfAghK7cb6KqmC2erUpwmgKbKRaDaFDu43hXLoJnn3kmyeL2LSr8JhE19lw==
-X-Received: by 2002:a05:6638:5b0:b0:331:61eb:618a with SMTP id b16-20020a05663805b000b0033161eb618amr5695136jar.164.1655474316816;
-        Fri, 17 Jun 2022 06:58:36 -0700 (PDT)
+        bh=lbcreYN4VPYy/7BTtnrYijE6k2/8OFKvf2b09R9U1rM=;
+        b=Upr96FBmxLEFb6NvmJk5S9is+NOJM4KdG9v5z3MvWky6p0yxlA+7ta80p+nJAn0fJK
+         QyujpS/heOzQbJZJVTdkOmsuV7Gw0AFTsyQznbpI4nnjiSqLVMuzkQKU6IGlLo2Ry9hD
+         CjZMG2WcaSyInE8M8Tbzya8tlnQUk7vTxymN74CMfsvBhKLU3msirDSHmlGpiZeW2dJU
+         xmYEbdlp3E3iW98Vz2Fc5Ha/6YAfmSKYCW2bBAW2K1uxki4GP4zO9vuxCkQTuqY2BW5h
+         zcQBGGJC+EN57wnUArAHNc/pZkiWLIwEePojX/NA8htpueEGkw7VVqsPgvPdhrmJY1nS
+         6wwQ==
+X-Gm-Message-State: AJIora+0gP1MBo/oLRjQB49A4RrK3r+V99JxT1yfskq0B6hr28vDQL6F
+        nf+HptAodoIC2AQ0cOwImg==
+X-Google-Smtp-Source: AGRyM1sZImmgKGvXl9lNZCtvIonUpMe2eH9SdATYtuai25d6h0SGbbNKAcwmJhGbh3nw4UVIq+uLiA==
+X-Received: by 2002:a05:6638:160f:b0:332:6ac:ed93 with SMTP id x15-20020a056638160f00b0033206aced93mr5660462jas.222.1655474314922;
+        Fri, 17 Jun 2022 06:58:34 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id a12-20020a029f8c000000b00337de103c08sm356429jam.27.2022.06.17.06.58.35
+        by smtp.gmail.com with ESMTPSA id i186-20020a6bb8c3000000b0065a47e16f44sm2556059iof.22.2022.06.17.06.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 06:58:36 -0700 (PDT)
-Received: (nullmailer pid 1508990 invoked by uid 1000);
+        Fri, 17 Jun 2022 06:58:34 -0700 (PDT)
+Received: (nullmailer pid 1508987 invoked by uid 1000);
         Fri, 17 Jun 2022 13:58:32 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     Nicolas.Ferre@microchip.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Claudiu.Beznea@microchip.com, krzysztof.kozlowski@linaro.org,
-        UNGLinuxDriver@microchip.com
-In-Reply-To: <20220617130729.12072-2-kavyasree.kotagiri@microchip.com>
-References: <20220617130729.12072-1-kavyasree.kotagiri@microchip.com> <20220617130729.12072-2-kavyasree.kotagiri@microchip.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: mfd: atmel,flexcom: Convert to json-schema
+Cc:     UNGLinuxDriver@microchip.com, Nicolas.Ferre@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        Claudiu.Beznea@microchip.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org
+In-Reply-To: <20220617130729.12072-3-kavyasree.kotagiri@microchip.com>
+References: <20220617130729.12072-1-kavyasree.kotagiri@microchip.com> <20220617130729.12072-3-kavyasree.kotagiri@microchip.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: mfd: atmel,flexcom: Add new compatible string for lan966x
 Date:   Fri, 17 Jun 2022 07:58:32 -0600
-Message-Id: <1655474312.882258.1508989.nullmailer@robh.at.kernel.org>
+Message-Id: <1655474312.871814.1508986.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -62,42 +62,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 18:37:27 +0530, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
+On Fri, 17 Jun 2022 18:37:28 +0530, Kavyasree Kotagiri wrote:
+> LAN966x SoC flexcoms has two optional I/O lines. Namely, CS0 and CS1
+> in flexcom SPI mode. CTS and RTS in flexcom USART mode. These pins
+> can be mapped to lan966x FLEXCOM_SHARED[0-20] pins and usage depends on
+> functions being configured.
 > 
 > Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 > ---
 > v3 -> v4:
->  - Corrected format of enum used for compatible string.
+>  - Added else condition to allOf:if:then.
 > 
 > v2 -> v3:
->  - used enum for compatible string.
->  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
->  - fixed dtschema errors.
+>  - Add reg property of lan966x missed in v2.
 > 
 > v1 -> v2:
->  - Fix title.
+>  - Use allOf:if:then for lan966x dt properties
 > 
->  .../bindings/mfd/atmel,flexcom.yaml           | 104 ++++++++++++++++++
->  .../devicetree/bindings/mfd/atmel-flexcom.txt |  63 -----------
->  2 files changed, 104 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+>  .../bindings/mfd/atmel,flexcom.yaml           | 80 ++++++++++++++++++-
+>  1 file changed, 79 insertions(+), 1 deletion(-)
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: allOf:0:else:properties:reg: {'maxItems': 1, 'items': [{'description': 'Flexcom base regsiters map'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: allOf:0:then:properties:reg: 'oneOf' conditional failed, one must be fixed:
+	[{'description': 'Flexcom base regsiters map'}, {'description': 'Flexcom shared registers map'}] is too long
+	[{'description': 'Flexcom base regsiters map'}, {'description': 'Flexcom shared registers map'}] is too short
+	False schema does not allow 2
+	1 was expected
+	hint: "minItems" is only needed if less than the "items" list length
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: ignoring, error in schema: allOf: 0: else: properties: reg
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000: failed to match any schema with compatible: ['atmel,sama5d2-flexcom']
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000/spi@400: failed to match any schema with compatible: ['atmel,at91rm9200-spi']
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-1/flexcom@e0064000: failed to match any schema with compatible: ['microchip,lan966x-flexcom']
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-1/flexcom@e0064000/spi@400: failed to match any schema with compatible: ['atmel,at91rm9200-spi']
 
+doc reference errors (make refcheckdocs):
 
-flexcom@f0000000: spi@400:compatible:0: 'atmel,at91rm9200-spi' was expected
-	arch/arm/boot/dts/at91-sam9x60ek.dtb
+See https://patchwork.ozlabs.org/patch/
 
-flexcom@f0000000: spi@400:compatible: ['microchip,sam9x60-spi', 'atmel,at91rm9200-spi'] is too long
-	arch/arm/boot/dts/at91-sam9x60ek.dtb
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

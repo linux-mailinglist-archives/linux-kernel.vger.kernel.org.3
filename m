@@ -2,173 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A741054F782
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC4654F779
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382342AbiFQM2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 08:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        id S1381669AbiFQM1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 08:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382197AbiFQM2F (ORCPT
+        with ESMTP id S245358AbiFQM1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 08:28:05 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989B219C2D;
-        Fri, 17 Jun 2022 05:28:01 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eo8so6031104edb.0;
-        Fri, 17 Jun 2022 05:28:01 -0700 (PDT)
+        Fri, 17 Jun 2022 08:27:30 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D37650B2B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:27:30 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id s10so4548649ljh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:27:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6n/2pFzaPVH0G41YfmWwCvM9JbKPxBYICuNwYJcUzhA=;
-        b=fxhyTLXRaQmjffcKebPAhrCz0/mBiSKvbvixB62cf8rYpxCrrWB3sLGzva5Uv3T0Jn
-         U+g+S70QYfa0DqM10QWK/LtOF3nfKUn7tiL9lwwRH4OQ1g/nxTDz99ZpzglVnVIWQiIf
-         WdkddcrkB/IhonbMcSBAJBgV00Txr5jwJud3+/mrxN/oCrohWHrSMC3YakheI5IVvyFs
-         t9beg4gcrrsWJjPK7YnbBOXpbv+lPn/0iyoOuKSbnQ60FOkulzdnMafdFnp0fV3TcVTN
-         T1bblB/Hs+jV8rL8vC/814vWkNNPTzQazsEjHWlRxudbDBl+kRlup6gUshlgf3iqgmz1
-         azwQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JnQ7ER3/BznrTK6nfzGkCBcRLScePRNEds8wSayDWBU=;
+        b=T640Ob++YeWd+T4ihz7vTm05LTeY1mBKCkrscFUItH+rfgs8IQ0zuI+rF5wsrv/uSE
+         4smrU/D1K55NAapM7LpLvaSXHuQP8eg2yb3SWc2rmTcxAS5KSD2hsN3fqqIII8A+6MiP
+         DbMWkdHmpqnFG0903QpZnEqTu9a5INuuekBkb8vVdCQirDUsG+lZHGpma8s/o7UzVIK8
+         t72yJNWYaYTxkgjlJmAJnETqJtChitTyUpd6IcxFgltNZKauQiOWqEAt71NVwEEkD52L
+         ivKggtaNSmYESsaOGpLfWglIE624MgV/4TyiIfLSanXQMC47IcQ/kflPwVGXVu68120j
+         q5NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6n/2pFzaPVH0G41YfmWwCvM9JbKPxBYICuNwYJcUzhA=;
-        b=tAMqP1oDPKNuR9Bb0jZf5bOFTWKWzA666Dqff0d2NDEGP0d2xZZo3XSkM66/JePK/+
-         FgaAsxVxJC8VBk4t/apATQyl/d59XkYPbmyZzCqN7kbH3W4clPo/vVq5wernmRUwfvKR
-         L47/3M3c4GBCWObCUhzk5HpQw9WLywFB7X4FFJ7nEoH5P9mYJ6/MzUs4DaPlpGcWQinz
-         6KAsQ08ouyXxQ4GQFpq8VDHrw+wcuKJSreaa2bsyvmOlM7EyP/Y99BjpSet3u0OQ1Ide
-         eCQBcQqzErvLzNDJuirXGZ6bsy3/mvnXTHm7/FWf6+7rn3abNVMmXp1wSKppQ36vPN/r
-         VPrw==
-X-Gm-Message-State: AJIora/u8WMEs/PDj2WQPyIJB7pTh7ubkb9aCistAshb+UaPAqEmhSJ/
-        caGpSWm58TlbKh/6/qDryDQ=
-X-Google-Smtp-Source: AGRyM1vqbq5YK6BFxrltot0aDVi3HLTVaJltTlM/iLoLlIzIMjxdHKy2O657RN12iRQ7fUpbzwnuIw==
-X-Received: by 2002:a05:6402:3482:b0:42d:e063:7c1d with SMTP id v2-20020a056402348200b0042de0637c1dmr12337169edc.40.1655468880253;
-        Fri, 17 Jun 2022 05:28:00 -0700 (PDT)
-Received: from localhost (92.40.168.194.threembb.co.uk. [92.40.168.194])
-        by smtp.gmail.com with ESMTPSA id e7-20020a50ec87000000b0043561e0c9adsm1032499edr.52.2022.06.17.05.27.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 05:27:59 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     linus.walleij@linaro.org, paul@crapouillou.net
-Cc:     maz@kernel.org, andy.shevchenko@gmail.com,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] pinctrl: ingenic: Convert to immutable irq chip
-Date:   Fri, 17 Jun 2022 13:28:55 +0100
-Message-Id: <20220617122855.739190-3-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220617122855.739190-1-aidanmacdonald.0x0@gmail.com>
-References: <20220617122855.739190-1-aidanmacdonald.0x0@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JnQ7ER3/BznrTK6nfzGkCBcRLScePRNEds8wSayDWBU=;
+        b=yxVufD8p26MkHy1lQc4z8ELZrwFaMrnWMWs4EHXal4Icv19gNUJk+J4PL6EPi8dIap
+         XW6tmv6RFID8YBU5v7jfgfH0hAx7VLayY8inGA02bUMoUAtqc/eVLLHlTsirogIWsrbO
+         Y7XrCG84T3HvR/aKAf8dYPJjuIgExBoPqQZfnYZ2HX9ba9jv862Fi7oVEQLdkJpJ42mv
+         WL3J4o4YRDuE+1FpEx2+D35h2dzd3djnZBETlsIaAzT3KjCtXDJgDVEpTem4zAHSmKfn
+         IfG6YMEW7C7L4XFTxDMYlNnK26/5qJRAoQx7SWgb6x+Bp4XEYesWsnS8fUS1rDyPufyt
+         jRpA==
+X-Gm-Message-State: AJIora9Zx81ZF53mhgJl9cAiehgsXQ7EDn7zes3L4WqEB7vEAQrm24Us
+        yLkdB6TNE5SJkiydfc6MZTg=
+X-Google-Smtp-Source: AGRyM1thk1l/pNJzxUInKJ0RZ+VOJmvPhKqfi3rTTC9JzaLkrNZkk9MrxX7xO+x0ncaIaqoA7DXVtg==
+X-Received: by 2002:a2e:a783:0:b0:255:9be1:a471 with SMTP id c3-20020a2ea783000000b002559be1a471mr4816519ljf.215.1655468848267;
+        Fri, 17 Jun 2022 05:27:28 -0700 (PDT)
+Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
+        by smtp.gmail.com with ESMTPSA id x8-20020a056512046800b0047e0061a611sm621093lfd.235.2022.06.17.05.27.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 05:27:27 -0700 (PDT)
+Message-ID: <bc447b49-a02c-5c4f-4e04-8071ecdfe1bd@gmail.com>
+Date:   Fri, 17 Jun 2022 15:28:59 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 11/11] ASoC: ti: davinci-mcasp: use
+ pm_runtime_resume_and_get()
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org
+Cc:     tiwai@suse.de, broonie@kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220616220427.136036-1-pierre-louis.bossart@linux.intel.com>
+ <20220616220427.136036-12-pierre-louis.bossart@linux.intel.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20220616220427.136036-12-pierre-louis.bossart@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the driver to use an immutable IRQ chip to fix this warning:
+Hi Pierre,
 
-    "not an immutable chip, please consider fixing it!"
+On 17/06/2022 01:04, Pierre-Louis Bossart wrote:
+> The use of pm_runtime_get_sync() is buggy with no use of put_noidle on
+> error.
+> 
+> Use pm_runtime_resume_and_get() instead.
 
-Preserve per-chip labels by adding an irq_print_chip callback.
+Thanks for the fix,
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/pinctrl/pinctrl-ingenic.c | 41 ++++++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-index 69e0d88665d3..787a8daa400e 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -22,6 +22,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
-+#include <linux/seq_file.h>
- 
- #include "core.h"
- #include "pinconf.h"
-@@ -135,7 +136,6 @@ struct ingenic_pinctrl {
- struct ingenic_gpio_chip {
- 	struct ingenic_pinctrl *jzpc;
- 	struct gpio_chip gc;
--	struct irq_chip irq_chip;
- 	unsigned int irq, reg_base;
- };
- 
-@@ -3419,6 +3419,8 @@ static void ingenic_gpio_irq_enable(struct irq_data *irqd)
- 	struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
- 	irq_hw_number_t irq = irqd_to_hwirq(irqd);
- 
-+	gpiochip_enable_irq(gc, irq);
-+
- 	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
- 	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
-@@ -3443,6 +3445,8 @@ static void ingenic_gpio_irq_disable(struct irq_data *irqd)
- 		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
-+
-+	gpiochip_disable_irq(gc, irq);
- }
- 
- static void ingenic_gpio_irq_ack(struct irq_data *irqd)
-@@ -3687,6 +3691,27 @@ static void ingenic_gpio_irq_release(struct irq_data *data)
- 	return gpiochip_relres_irq(gpio_chip, irq);
- }
- 
-+static void ingenic_gpio_irq_print_chip(struct irq_data *data, struct seq_file *p)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+
-+	seq_printf(p, "%s", gpio_chip->label);
-+}
-+
-+static const struct irq_chip ingenic_gpio_irqchip = {
-+	.irq_enable		= ingenic_gpio_irq_enable,
-+	.irq_disable		= ingenic_gpio_irq_disable,
-+	.irq_unmask		= ingenic_gpio_irq_unmask,
-+	.irq_mask		= ingenic_gpio_irq_mask,
-+	.irq_ack		= ingenic_gpio_irq_ack,
-+	.irq_set_type		= ingenic_gpio_irq_set_type,
-+	.irq_set_wake		= ingenic_gpio_irq_set_wake,
-+	.irq_request_resources	= ingenic_gpio_irq_request,
-+	.irq_release_resources	= ingenic_gpio_irq_release,
-+	.irq_print_chip		= ingenic_gpio_irq_print_chip,
-+	.flags			= IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
-+};
-+
- static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
- 		int pin, int func)
- {
-@@ -4175,20 +4200,8 @@ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
- 	if (!jzgc->irq)
- 		return -EINVAL;
- 
--	jzgc->irq_chip.name = jzgc->gc.label;
--	jzgc->irq_chip.irq_enable = ingenic_gpio_irq_enable;
--	jzgc->irq_chip.irq_disable = ingenic_gpio_irq_disable;
--	jzgc->irq_chip.irq_unmask = ingenic_gpio_irq_unmask;
--	jzgc->irq_chip.irq_mask = ingenic_gpio_irq_mask;
--	jzgc->irq_chip.irq_ack = ingenic_gpio_irq_ack;
--	jzgc->irq_chip.irq_set_type = ingenic_gpio_irq_set_type;
--	jzgc->irq_chip.irq_set_wake = ingenic_gpio_irq_set_wake;
--	jzgc->irq_chip.irq_request_resources = ingenic_gpio_irq_request;
--	jzgc->irq_chip.irq_release_resources = ingenic_gpio_irq_release;
--	jzgc->irq_chip.flags = IRQCHIP_MASK_ON_SUSPEND;
--
- 	girq = &jzgc->gc.irq;
--	girq->chip = &jzgc->irq_chip;
-+	gpio_irq_chip_set_chip(girq, &ingenic_gpio_irqchip);
- 	girq->parent_handler = ingenic_gpio_irq_handler;
- 	girq->num_parents = 1;
- 	girq->parents = devm_kcalloc(dev, 1, sizeof(*girq->parents),
+> 
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> ---
+>  sound/soc/ti/davinci-mcasp.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/ti/davinci-mcasp.c b/sound/soc/ti/davinci-mcasp.c
+> index e2aab4729f3ab..0201000b619f6 100644
+> --- a/sound/soc/ti/davinci-mcasp.c
+> +++ b/sound/soc/ti/davinci-mcasp.c
+> @@ -2111,8 +2111,7 @@ static int davinci_mcasp_gpio_request(struct gpio_chip *chip, unsigned offset)
+>  	}
+>  
+>  	/* Do not change the PIN yet */
+> -
+> -	return pm_runtime_get_sync(mcasp->dev);
+> +	return pm_runtime_resume_and_get(mcasp->dev);
+>  }
+>  
+>  static void davinci_mcasp_gpio_free(struct gpio_chip *chip, unsigned offset)
+
 -- 
-2.35.1
-
+Péter

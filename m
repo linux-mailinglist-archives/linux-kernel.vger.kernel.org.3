@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC7054FEF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FE154FF0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383628AbiFQUj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S1381091AbiFQUkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383565AbiFQUjN (ORCPT
+        with ESMTP id S1350359AbiFQUjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:39:13 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FB95E143
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:35:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id n20so3970506ejz.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:35:56 -0700 (PDT)
+        Fri, 17 Jun 2022 16:39:55 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40CD6B029;
+        Fri, 17 Jun 2022 13:36:57 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id be31so8529870lfb.10;
+        Fri, 17 Jun 2022 13:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZYo99Jl3LGzr9HFTUWTWp9Lg1npO6/JXpviJKHAL/ZI=;
-        b=Bm8rJ/ViS0zAwjBWQ+cmcwjfW+NOujryCz5hKE/NOw/jntdQqKtcL5OpsEAbIuMKQI
-         oNEDUZk1fuJZucdeF05VF8G54Ha/DJEfkAT+Cq3D/Yj722b4Ewoi9sZdCBRhzAKVWna2
-         ZtHkZHaniYlY5uR7AXaDT7pHr7ojzFwUTGmsU=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oISNlUz9ZficuYsPA/Qge/7xO0eNE7k8Vy/EmxWpRmI=;
+        b=cPydoDo5WZvGMR5+LSnh4cU2jc/hWCi4BCd0UK//fM7ymk/dflR8sjrxE89dsaE2I0
+         TUsmJdTNRYD0rsLiY3DJH1VXacZGP5SqrlYNQXxOCAHCgCyCEr/0nSo1SroaNxcbalMV
+         z+JXmlYqa4ApElo1U8JMmSrXirGuKiNO9tVeXwwfP1iU+Y8aRZUMYZkI+NY4gslnwFuQ
+         XS/WL9qaHffT6+f2eV2yx1T+F0hm90sG8MIZdmXVpFyBiybpeAXK4CSfRAJRhFAYQoKo
+         P1myqMugwjwhykwPB1+Fi1TsHr+sHSx2AAggonGQG6hPcmN+UwIqHSYDow7sE2qt8Eg0
+         7G+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZYo99Jl3LGzr9HFTUWTWp9Lg1npO6/JXpviJKHAL/ZI=;
-        b=jFhbKyElK9xE1impPX5vqRccx31sIgB5tiHrYUWSvchg+Y6KmyI95imGCxItUMfEZF
-         n6z/+mZpEErYkPpwg6f4XS01/74rWI6SwZLwM1/FNW86D2zBAzkIFQ320+FPT1pawqxd
-         j0Q5c+7BvI12TVhlpaKqvVj4Ngx3rw/fBJMjXNzKaHHxqPSJWh5FOxVzur8VI2nqg+2M
-         BvOndudMEV2WarcyyV/mcR1O1EJ6M9d0UD09QZm3ff4DaYozFs1cZUDEalMOLmsn+Jrb
-         jcvK6Z5zEF27P9iYFcLOAjf4VJ71fmsBR1kQ7UGLx50ZUhQ2gFeFgNafw5SbvlRYll/S
-         ngQg==
-X-Gm-Message-State: AJIora+Robt2WXrDRVAlpjHWtFEETBzVytOhZHjw7c4nva6aHt0JKJ88
-        gYH4S0Tv7H9ZE8S6a4uXrWEEYS1qHOQuKsfks+A=
-X-Google-Smtp-Source: AGRyM1vYRREbagsX+zLkdUXNIAGFWf9I7s1T6lPwRrf2l6xZKyL6g7y0V1hLY5VbVXmEf8cMbbxVSA==
-X-Received: by 2002:a17:906:7297:b0:712:56de:3c43 with SMTP id b23-20020a170906729700b0071256de3c43mr10559926ejl.549.1655498154717;
-        Fri, 17 Jun 2022 13:35:54 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id dm22-20020a05640222d600b00435681476c7sm820384edb.10.2022.06.17.13.35.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 13:35:54 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id x6-20020a1c7c06000000b003972dfca96cso2900465wmc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:35:53 -0700 (PDT)
-X-Received: by 2002:a05:600c:2054:b0:39c:3f73:3552 with SMTP id
- p20-20020a05600c205400b0039c3f733552mr12095980wmg.15.1655498153414; Fri, 17
- Jun 2022 13:35:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oISNlUz9ZficuYsPA/Qge/7xO0eNE7k8Vy/EmxWpRmI=;
+        b=RS/0oDQ1547YbbMTUC1jZmuD7Cp3iwWNX7eVQ6giLt7L3a7pG5edHCRdOo2NShgwAz
+         XS1xlrxeTDo1IZuH5HalwrjoBrkDQs3RhFGC/6vIB6ZNLbWnZaCr3fVJupItSzY8FesH
+         sncVVVWFnUYr7y4IuvlT9xWgce46S8u+jevWzXSt5LXn9FugJsO9Repne7rzdifXbYGp
+         wgcK1W31jqBBeZhDbFvgguz9DN76uKRSP8qV6kqngNHxxgZQZZsG9wQLoIX1U1tGP0TQ
+         +Us3w63In/KvZALz3HZ0LCBytOzh1nq0/cfUG8MKZjv7brXZvoKJfM3gJbh/rJsk8/+o
+         U3MQ==
+X-Gm-Message-State: AJIora919EvZ0ZbojV9/zSo2tS/Jetd8bFTrZcRXNjNlKXsr48T4Ztgb
+        MlLcabjmNwGnW2mUHx5IO4s=
+X-Google-Smtp-Source: AGRyM1u3aMO9KEyXbJIiCCbg9Kcfnq5GIbxgvcamCCxYVJoX9MOACf6DU7PZMSrao1T7QShHYxY1NQ==
+X-Received: by 2002:a19:a417:0:b0:479:15ef:4ded with SMTP id q23-20020a19a417000000b0047915ef4dedmr6476478lfc.225.1655498211994;
+        Fri, 17 Jun 2022 13:36:51 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id o1-20020a2e7301000000b00253bd515f88sm627825ljc.68.2022.06.17.13.36.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 13:36:51 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 23:36:49 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 19/23] ata: ahci: Add DWC AHCI SATA controller support
+Message-ID: <20220617203649.wa2b3etx6gpm3s5g@mobilestation>
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-20-Sergey.Semin@baikalelectronics.ru>
+ <6c02f8ef-8aea-8f80-590d-343f67a96f8d@infradead.org>
+ <20220610215850.ju76kxjquwef6kd3@mobilestation>
+ <73716f9f-892c-41c5-89f0-64a1985438aa@infradead.org>
+ <20220615213029.3upsmasnnhigqozm@mobilestation>
+ <bfaf0208-8416-c159-93f8-8cc31dbc7ef5@opensource.wdc.com>
 MIME-Version: 1.0
-References: <20220617111021.v6.1.I9e299d3fa6fbf50df6fc7207050bf5c3a7bf4c61@changeid>
- <20220617111021.v6.3.I0977b1a08830d0caa8bfb1bdedb4ecceac709a7f@changeid>
-In-Reply-To: <20220617111021.v6.3.I0977b1a08830d0caa8bfb1bdedb4ecceac709a7f@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 17 Jun 2022 13:35:41 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XyAbZEhny4_NdnEZD44VgatdODfY36ufx_omg7gApV4A@mail.gmail.com>
-Message-ID: <CAD=FV=XyAbZEhny4_NdnEZD44VgatdODfY36ufx_omg7gApV4A@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] arm64: dts: qcom: sc7180: Add quackingstick dts files
-To:     "Joseph S. Barrera III" <joebar@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bfaf0208-8416-c159-93f8-8cc31dbc7ef5@opensource.wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jun 16, 2022 at 09:31:30AM +0900, Damien Le Moal wrote:
+> On 2022/06/16 6:30, Serge Semin wrote:
+> > On Fri, Jun 10, 2022 at 04:34:13PM -0700, Randy Dunlap wrote:
+> >> Hi Serge,
+> >>
+> >> On 6/10/22 14:58, Serge Semin wrote:
+> >>> On Fri, Jun 10, 2022 at 09:34:46AM -0700, Randy Dunlap wrote:
+> >>>> Hi--
+> >>>
+> >>> Hi Randy
+> >>>
+> >>>>
+> >>>> On 6/10/22 01:17, Serge Semin wrote:
+> >>>>> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> >>>>> index bb45a9c00514..95e0e022b5bb 100644
+> >>>>> --- a/drivers/ata/Kconfig
+> >>>>> +++ b/drivers/ata/Kconfig
+> >>>>> @@ -176,6 +176,16 @@ config AHCI_DM816
+> >>>>>  
+> >>>>>  	  If unsure, say N.
+> >>>>>  
+> >>>>> +config AHCI_DWC
+> >>>>> +	tristate "Synopsys DWC AHCI SATA support"
+> >>>>> +	select SATA_HOST
+> >>>>> +	default SATA_AHCI_PLATFORM
+> >>>>
+> >>>
+> >>>> I don't think this needs to default to SATA_AHCI_PLATFORM.
+> >>>> It might build a driver that isn't needed.
+> >>>> And it's incompatible with "If unsure, say N."
+> >>>
+> >>> Basically you are right, but this particular setting is connected with
+> >>> the modification I've done in the drivers/ata/ahci_platform.c driver
+> >>> in the framework of this commit. I've moved the "snps,spear-ahci" and
+> >>> "snps,dwc-ahci" compatible devices support to the new driver. Thus
+> >>> should I omit the SATA_AHCI_PLATFORM dependency their default kernel
+> >>> configs will lack the corresponding controllers support. If it's not a
+> >>> problem and we can rely on the kernel build system ability to ask
+> >>> whether the new config needs to be set/cleared, then I would be very
+> >>> happy to drop the default setting. What do you think?
+> >>
+> > 
+> >> I'd prefer to try it like that.
+> >> If it becomes a problem, we can go back to this v4 patch.
+> > 
+> > Agreed then (seeing Damien is silent about your comment).
+> 
 
-On Fri, Jun 17, 2022 at 11:12 AM Joseph S. Barrera III
-<joebar@chromium.org> wrote:
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-> new file mode 100644
-> index 000000000000..d39f43757932
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-> @@ -0,0 +1,324 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Quackingstick board device tree source
-> + *
-> + * Copyright 2021 Google LLC.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sc7180.dtsi"
-> +
-> +ap_ec_spi: &spi6 {};
-> +ap_h1_spi: &spi0 {};
-> +
-> +#include "sc7180-trogdor.dtsi"
+> I have not thought about it :)
+> I do not use SATA PLATFORM at all, so I am not familiar with its dependencies.
+> Will have a look and do my usual build tests anyway.
 
-In my response to your v5, I explicitly pointed out that you should
-take into account this patch that landed downstream since you posted
-your v5.
+Ok. I'll be waiting for you reply in this regard the before
+re-submitting the next series version.
 
-https://crrev.com/c/3652958
+-Sergey
 
-...but you don't seem to have taken it into account.
-
--Doug
+> 
+> > 
+> > -Sergey
+> > 
+> >>
+> >>>>> +	help
+> >>>>> +	  This option enables support for the Synopsys DWC AHCI SATA
+> >>>>> +	  controller implementation.
+> >>>>> +
+> >>>>> +	  If unsure, say N.
+> >>>>
+> >>>> -- 
+> >>>> ~Randy
+> >>
+> >> Thanks.
+> >> -- 
+> >> ~Randy
+> 
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research

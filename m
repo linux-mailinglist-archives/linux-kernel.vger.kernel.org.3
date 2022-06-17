@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF554FFE8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAA254FFF1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378430AbiFQW3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S1378997AbiFQW3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245202AbiFQW33 (ORCPT
+        with ESMTP id S1349268AbiFQW3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:29:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79F26163E;
-        Fri, 17 Jun 2022 15:29:28 -0700 (PDT)
+        Fri, 17 Jun 2022 18:29:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4145662101;
+        Fri, 17 Jun 2022 15:29:31 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1307766017C8;
-        Fri, 17 Jun 2022 23:29:25 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19FB966017D5;
+        Fri, 17 Jun 2022 23:29:28 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655504967;
-        bh=oVlNccAWXofCU1rOW8Wgk44NVgnvXfyJSycx5cQ756M=;
+        s=mail; t=1655504969;
+        bh=LiuIt0O1st4pigoWLWLdzdDQsMQyWjLJmbkbK2WQ2JQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L2L0Z+39SRcUlLM8Q14KmtnBdkik0nW0Xwl/uqTRuD/oODMJYjJKW/aN0+vbwH+At
-         MJFqWrpxklyeNec+W4YpaPJ3pr1+iQHLR+/QsTWniE8s9GimUvlzJx+16I9S2BEBVH
-         Qy/zRTjf8DqVrWp8aZ8r/DGwwXmbZPZaqoBRhDLrGyzkwANIwf8RymB7wJipZhcAsP
-         xasmWbZiOX/ADwadbDmbfRgQWNIGmc+B4O+ZFUs7uza3YtLQ1GHcC9mMaBZ9tDrAbF
-         aASUpk76bW6CDoerCKvewSf3E4VZgHmZLNPF9ipFi7824O9Ztr9aBzXLjrO7mzibri
-         IbbLLf9cJnuwg==
+        b=B0qW1zKQn7s7lkcwKhRcS7dJcW/uaGGSGTqmn2M3zYGnho0ENhwBUOMxi/EgdpwNs
+         WkutZM4ZhmAeCcSlxmOJJZEpmsZk1QcxOhMdiD95PQSar8nhW/gNMHVk1pSR7BCCtV
+         yfZ+Lpb3S0JcuI0/w530vjQcDMRIdm9NT3OMSen1OoiyhYS2gK8/j0EmZKqtnnjc8q
+         UVJny3NnxHeHBrZDbCzC5CJ4ORVYEvfpqWM19uKwl1xcqgAJ7gj4F5HS4JH0FXbll9
+         C7ppEBde34noGxQ5v5sNLw2BNIt0PYWAYmIL7JpKMm/AR//aXnW0YJiheLWyrltRVO
+         5mkAVMTkZwQrA==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,14 +40,14 @@ Cc:     AngeloGioacchino Del Regno
         <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
         =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional clocks to be missing
-Date:   Fri, 17 Jun 2022 18:29:15 -0400
-Message-Id: <20220617222916.2435618-3-nfraprado@collabora.com>
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 3/3] arm64: dts: mt8192: Follow clock order for XHCI
+Date:   Fri, 17 Jun 2022 18:29:16 -0400
+Message-Id: <20220617222916.2435618-4-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220617222916.2435618-1-nfraprado@collabora.com>
 References: <20220617222916.2435618-1-nfraprado@collabora.com>
@@ -63,42 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current clock list in the binding doesn't allow for one of the
-optional clocks to be missing and a subsequent clock to be present. An
-example where this is an issue is in mt8192.dtsi, which has "sys_ck",
-"ref_ck", "xhci_ck" and would cause dtbs_check warnings.
+Even though "ref_ck" and "xhci_ck" are optional clocks for XHCI, the
+binding expects them to follow a specific order. Fix the order to get
+rid of a dtbs_check warning.
 
-Change the clock list in a way that allows the middle optional clocks to
-be missing, while still guaranteeing a fixed order. The "ref_ck" is kept
-as a const even though it is optional for simplicity, since it is
-present in all current dts files.
-
+Fixes: e5aac2258e66 ("arm64: dts: mt8192: Add xhci node")
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
 
- .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml       | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-index 63cbc2b62d18..99a1b233ec90 100644
---- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-@@ -80,8 +80,13 @@ properties:
-     items:
-       - const: sys_ck  # required, the following ones are optional
-       - const: ref_ck
--      - const: mcu_ck
--      - const: dma_ck
-+      - enum:
-+          - mcu_ck
-+          - dma_ck
-+          - xhci_ck
-+      - enum:
-+          - dma_ck
-+          - xhci_ck
-       - const: xhci_ck
- 
-   assigned-clocks:
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 733aec2e7f77..c8158b573bf8 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -723,9 +723,9 @@ xhci: usb@11200000 {
+ 			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+ 						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+ 			clocks = <&infracfg CLK_INFRA_SSUSB>,
+-				 <&infracfg CLK_INFRA_SSUSB_XHCI>,
+-				 <&apmixedsys CLK_APMIXED_USBPLL>;
+-			clock-names = "sys_ck", "xhci_ck", "ref_ck";
++				 <&apmixedsys CLK_APMIXED_USBPLL>,
++				 <&infracfg CLK_INFRA_SSUSB_XHCI>;
++			clock-names = "sys_ck", "ref_ck", "xhci_ck";
+ 			wakeup-source;
+ 			mediatek,syscon-wakeup = <&pericfg 0x420 102>;
+ 			status = "disabled";
 -- 
 2.36.1
 

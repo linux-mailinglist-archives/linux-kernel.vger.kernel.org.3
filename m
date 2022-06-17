@@ -2,118 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8644154F3E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7BE54F3E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381472AbiFQJHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S1380714AbiFQJHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380185AbiFQJHA (ORCPT
+        with ESMTP id S230307AbiFQJHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:07:00 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E003F4B1DC;
-        Fri, 17 Jun 2022 02:06:59 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id m16so1072511ilf.6;
-        Fri, 17 Jun 2022 02:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qSNsJXRAq4gUj6ivdXbrjgAuRPp+HHbhKrKeTXicOCg=;
-        b=Dl6LB9Q7n5EpkbYyX81Yn4cmxCMk5bOsvIkbCtCocr/dTjXuNz2CrJSviTnH0BS1ZA
-         csEqG/oDAowT6GKI5Jv33GJEiHpYxvdMlDZhfZBBuw/eZ9Eo831Cknv0KsMHy7G0DWSs
-         3swp9MPgLARrnm6iLy+/DP1EEaXbJ7LnAHzCQlBxp5v/D0UiuJmor5kJKMxWAzEUyXZI
-         1+858U9fStR05SV0oD9CPijH25+Hp8jW+T2+F6TYxR/pS4vViGBRihmxY3Mm2QYpLSfc
-         pMc8NksdwBd9eDGRApyinNjzZgukXbDtZkXMIRDLUvQKRqSpj3sI5S1JKd3VMT+YO5Eb
-         /7oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qSNsJXRAq4gUj6ivdXbrjgAuRPp+HHbhKrKeTXicOCg=;
-        b=Oc49Mh4jy5yl8WXqLr2F8DcSrI9ZuHuz1dXMVc9JOcwhcUf6nI0bmU4cC7QLqT7kFM
-         HCgdGhkkZFGHm30nqdWCK8eS8HBTkVibeQi4wLfeQNqQRmLzuSSwnk+OKU+sBQ902OJX
-         NkqAiCMon0ihKbyV1t8YjUZkDPXwaKq68qllN3vsl40ZugTHS6wj52ptzJ7Lqo8fpgnB
-         ykCyfNffEpTpTvUqzTesyv6sIPGANiStbAmSdUf6SNYyrBPkoqE3N/WuKxeaIXKE7Njw
-         3kdVVdXosCNsix5DLGpgm/oL91hQC9orfoU9EbkifkklxV7rmU55lDqHuAxFiU39wBgj
-         NTuA==
-X-Gm-Message-State: AJIora8ExwknEIcqRGu/HaKBcPU02TaKCUGFiwIvEtyxn0a0a+50kta5
-        Yu3J99mRA4IjTPW6fn3PFLcR9UCt4S00vXfiseNmvMY/gBE=
-X-Google-Smtp-Source: AGRyM1tGCu6AS9wDCH8Gur5zYW6uSfoWWJs4DOW5mFrlMgAa3+NrBz1Bdl1bq12S+LuODQiyUM9pGAPCWwXJA6zrKuk=
-X-Received: by 2002:a05:6e02:1aa4:b0:2d3:aeb9:930 with SMTP id
- l4-20020a056e021aa400b002d3aeb90930mr5026082ilv.45.1655456819325; Fri, 17 Jun
- 2022 02:06:59 -0700 (PDT)
+        Fri, 17 Jun 2022 05:07:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D544BB8F;
+        Fri, 17 Jun 2022 02:07:00 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5714F660179B;
+        Fri, 17 Jun 2022 10:06:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655456818;
+        bh=ZfN+iTTLkYxGBt09zpT++//W9d1lWZqfDMoUcHkoJt4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=f7iK5VEv9T29HFlRTqonK9vtRFO95AyzZhZuByVucqefPKF+PvoW7JgiWlsicT+Dr
+         xEmQ+aTajlU9I3vRL91trcNTSAfX1MQCag1dy9Ib2k64s53VdQQ7V2E9XuMOIqp7wH
+         lzFQFTllEDFeiDW2mPIC/3x5NQdxaJAiTer5/jZakHpru8RNrdQy84KoltKKIgN/Kn
+         aAd94p/moTtU67du2IGfu5z3ltiwuogQ9h9D+/zEpscKCnmEbDiRIB4m3Aby2IRoD2
+         LNkuv31jeCX1BJCO4l/BH3t5JPF/HC1SR3jdMrWAdJOLUX+cfR263DWiGO/U1YLjb8
+         TqrHwzT1U5dVg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     rafael@kernel.org
+Cc:     viresh.kumar@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, rex-bc.chen@mediatek.com,
+        jia-wei.chang@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist
+Date:   Fri, 17 Jun 2022 11:06:52 +0200
+Message-Id: <20220617090652.56247-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-11-peterwu.pub@gmail.com>
- <31b588e9-2233-3b40-e452-83f0f6bfb744@infradead.org>
-In-Reply-To: <31b588e9-2233-3b40-e452-83f0f6bfb744@infradead.org>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 17 Jun 2022 17:06:48 +0800
-Message-ID: <CABtFH5K9SiOO-JDMoJJ9=5Y2XpMBirgX0ce+8F4e_Kgsk9Udaw@mail.gmail.com>
-Subject: Re: [PATCH v2 10/15] regulator: mt6370: Add mt6370 DisplayBias and
- VibLDO support
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        lee.jones@linaro.org, Daniel Thompson <daniel.thompson@linaro.org>,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+This SoC shall use the mediatek-cpufreq driver, or the system will
+crash upon any clock scaling request: add it to the cpufreq-dt-platdev
+blocklist.
 
-Thanks for your helpful comments!
-We will refine them in the next patch, thanks!
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: 39b360102f3a ("cpufreq: mediatek: Add support for MT8186")
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Randy Dunlap <rdunlap@infradead.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=8814=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A84:15=E5=AF=AB=E9=81=93=EF=BC=9A
->
->
->
-> On 6/13/22 04:11, ChiaEn Wu wrote:
-> > diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> > index cbe0f96ca342..dcb6866dab53 100644
-> > --- a/drivers/regulator/Kconfig
-> > +++ b/drivers/regulator/Kconfig
-> > @@ -804,6 +804,14 @@ config REGULATOR_MT6360
-> >         2-channel buck with Thermal Shutdown and Overload Protection
-> >         6-channel High PSRR and Low Dropout LDO.
-> >
-> > +config REGULATOR_MT6370
-> > +     tristate "MT6370 SubPMIC Regulator"
-> > +     depends on MFD_MT6370
-> > +     help
-> > +       Say Y here to enable MT6370 regulator support.
-> > +       This driver support the control for DisplayBias voltages and on=
-e
->
->                       supports
->
-> > +       general purpose LDO which commonly used to drive the vibrator.
->
->                               which is commonly used to drive the vibrato=
-r.
->
->
-> --
-> ~Randy
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 96de1536e1cb..2c96de3f2d83 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -127,6 +127,7 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "mediatek,mt8173", },
+ 	{ .compatible = "mediatek,mt8176", },
+ 	{ .compatible = "mediatek,mt8183", },
++	{ .compatible = "mediatek,mt8186", },
+ 	{ .compatible = "mediatek,mt8365", },
+ 	{ .compatible = "mediatek,mt8516", },
+ 
+-- 
+2.35.1
 
-Best regards,
-ChiaEn Wu

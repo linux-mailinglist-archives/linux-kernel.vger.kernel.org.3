@@ -2,139 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE92D54FB7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E6054FB07
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382150AbiFQQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S1383246AbiFQQ2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379637AbiFQQuZ (ORCPT
+        with ESMTP id S229602AbiFQQ16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:50:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF3E5548A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655484579; x=1687020579;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=668uDU/sASSfAktCzQOI/YXPVgTX1rB+v9u1BzSgtFc=;
-  b=VDp++cESgqycfEcCgsChPC47s6kpVGJw9TS1qZ2YweBPCgBAh2qg+N1A
-   +zLr/dQST3Azf4EOmLx5S2IHJrxDP0RoJQcYBflAKi3fs3kNHXsLk4mq9
-   eGpPrid8EuMwKuN63udIRpOlEk850dWMQrJLd01Vny2CV+606mr8NtCDe
-   +GpnqhdmrGJbRacMaVBmFIE0BdBvSrzk7CEOvBmPYQ5L7gCg+GIVatjO5
-   sduS/fTnDEdGVZo9GVspeTHtU2Avn9WIORKkmeVOlKgx+HsEmK5p3+zei
-   EW1unTb5kNvgsmVhe33uPmNpSg84bPCtCzQVcPrDv1KKOi8hStKicx5yL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277062079"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="277062079"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:26:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="832077675"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Jun 2022 09:26:49 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2Eo4-000PbN-Ig;
-        Fri, 17 Jun 2022 16:26:48 +0000
-Date:   Sat, 18 Jun 2022 00:26:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Fri, 17 Jun 2022 12:27:58 -0400
+Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20321583F;
+        Fri, 17 Jun 2022 09:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1655483276; i=@motorola.com;
+        bh=2kDYzt/VGbsG0nzURDxax2rcRa5S2Q9ZXehQBx7o2So=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=FyELOb68bKc/Wx57kMVFf2Pn1se1hE1RevDfi+7XKFNEf4htk16C6iEJjRbqbZjZn
+         uM420vq/B/KUchC/iKdbUdUiFWdp+yPsi5bu/Bp6X9stCXyPD1uuNSkVrvNTOcYMVA
+         T01iR8jSYDJF5mgbOQsNQiE7g5dxR9bgQdlFlQq9sx8C2CBFX7E1hveTZv3w9h63U8
+         4pjTnJPA709rQOXPNxnk+hb1TMtf3N+/xlsimeXoCWDEcdGgvD7TxjOEQiPJdcG9L+
+         jyYRThGk+7Od690ZGmkZzMqv1aQlXhUbfqz60/NslQsQjy9w44DDsmq2olXWXqtt+p
+         ElnRVZ5KIIhDQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGIsWRWlGSWpSXmKPExsUyYU+Ds2736jV
+  JBjtfylkca3vCbtG8eD2bRefEJewWl3fNYbNYtKyV2WJL2xUmix9/+pgtFmx8xOjA4TG7Yyar
+  x6ZVnWwe++euYffo/2vg8XmTXABrFGtmXlJ+RQJrxo65Z5gKJgtV7GroZ2lgvMTXxcjFISQwm
+  Uli+ZqpzBDOQiaJRc1P2bsYOTlYBFQlHsyZwgJiswmoSSx4vYoZxBYRsJDoXTSdEcRmFmhhkj
+  hzURjEFhbwlTg4fw9YnFdAWeLn+glsILaQQIbEm4YT7BBxQYmTM5+wQPRqSdz495Kpi5EDyJa
+  WWP6PAyTMKWAlce35V6YJjLyzkHTMQtIxC6FjASPzKkbrpKLM9IyS3MTMHF1DAwNdQ0MTXUtL
+  XUMTM73EKt1EvdJi3fLU4hJdI73E8mK91OJiveLK3OScFL281JJNjMAgTylKnrSD8XvfT71Dj
+  JIcTEqivGVL1yQJ8SXlp1RmJBZnxBeV5qQWH2KU4eBQkuD9uwIoJ1iUmp5akZaZA4w4mLQEB4
+  +SCK/scqA0b3FBYm5xZjpE6hSjLkfn/q4DzEIsefl5qVLivLtXARUJgBRllObBjYBF/yVGWSl
+  hXkYGBgYhnoLUotzMElT5V4ziHIxKwrznQS7hycwrgdv0CugIJqAjGvetADmiJBEhJdXAlNtj
+  9S3pZofHhKtnJ54usHJLmhgZYrZvwdXpTP1Xps/u3jqBSVB0Unb8bv77fccXKgmFbK9UuGFSu
+  vN5iDfjvfCXUZ/uN+9eJcO6TCiOV7vg3s3WTWIZzHtKZBc36u5aEqXXuGfidcWSztu3DSb8WC
+  +xYIdRvVDO1+0rHt7Re8b2I+yZ/P/ze3QYa2bEeBlPj53Ra57yZZlc9zLnPj+h1LtxUX68jvI
+  3BX2482frbXOzF3o5banZI/FnG1bMebM/163eO/rHGovs4MVPUmw7Gi1vWxSruyx2W1a/NWE7
+  f97PlO7ZzmcFV1dOqbz0zYB/p6bZyQdSbW2c+lNPBeRfiTC/0XnOI0AleV+MlXOpEktxRqKhF
+  nNRcSIAqyBdWHkDAAA=
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-13.tower-636.messagelabs.com!1655483274!23406!1
+X-Originating-IP: [144.188.128.67]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.7; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 18209 invoked from network); 17 Jun 2022 16:27:55 -0000
+Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
+  by server-13.tower-636.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jun 2022 16:27:55 -0000
+Received: from ilclmmrp02.lenovo.com (ilclmmrp02.mot.com [100.65.83.26])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4LPkwp5DcFzfBZq;
+        Fri, 17 Jun 2022 16:27:54 +0000 (UTC)
+Received: from p1g3 (unknown [10.45.6.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by ilclmmrp02.lenovo.com (Postfix) with ESMTPSA id 4LPkwp3x5XzbrlP;
+        Fri, 17 Jun 2022 16:27:54 +0000 (UTC)
+Date:   Fri, 17 Jun 2022 11:27:35 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [superna9999:amlogic/v5.20/g12-dsi-wip 9/12]
- drivers/gpu/drm/meson/meson_venc.c:1595:10: error: call to undeclared
- function 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202206180004.GHjxyBau-lkp@intel.com>
+Subject: Re: [PATCH] usb: gadget: uvc: fix list double add in uvcg_video_pump
+Message-ID: <Yqyrd6vY/rdhAONd@p1g3>
+References: <20220616030915.149238-1-w36195@motorola.com>
+ <Yqx4vPp78Sl2I3nU@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yqx4vPp78Sl2I3nU@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/superna9999/linux amlogic/v5.20/g12-dsi-wip
-head:   0e725ea0a5ab9f70fc54c2e76475b8d594b90c4e
-commit: 927953782b0c6c12a73654c526a12678e348f817 [9/12] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
-config: arm-randconfig-r014-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180004.GHjxyBau-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/superna9999/linux/commit/927953782b0c6c12a73654c526a12678e348f817
-        git remote add superna9999 https://github.com/superna9999/linux
-        git fetch --no-tags superna9999 amlogic/v5.20/g12-dsi-wip
-        git checkout 927953782b0c6c12a73654c526a12678e348f817
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/
+Hi Laurent,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the review!
 
-All errors (new ones prefixed by >>):
+On Fri, Jun 17, 2022 at 03:51:08PM +0300, Laurent Pinchart wrote:
+> Hi Dan,
+> 
+> Thank you for the patch.
+> 
+> On Wed, Jun 15, 2022 at 10:09:15PM -0500, Dan Vacura wrote:
+> > A panic can occur if the endpoint becomes disabled and the
+> > uvcg_video_pump adds the request back to the req_free list after it has
+> > already been queued to the endpoint. The endpoint complete will add the
+> > request back to the req_free list. Invalidate the local request handle
+> > once it's been queued.
+> 
+> Good catch !
+> 
+> > <6>[  246.796704][T13726] configfs-gadget gadget: uvc: uvc_function_set_alt(1, 0)
+> > <3>[  246.797078][   T26] list_add double add: new=ffffff878bee5c40, prev=ffffff878bee5c40, next=ffffff878b0f0a90.
+> > <6>[  246.797213][   T26] ------------[ cut here ]------------
+> > <2>[  246.797224][   T26] kernel BUG at lib/list_debug.c:31!
+> > <6>[  246.807073][   T26] Call trace:
+> > <6>[  246.807180][   T26]  uvcg_video_pump+0x364/0x38c
+> > <6>[  246.807366][   T26]  process_one_work+0x2a4/0x544
+> > <6>[  246.807394][   T26]  worker_thread+0x350/0x784
+> > <6>[  246.807442][   T26]  kthread+0x2ac/0x320
+> > 
+> > Fixes: f9897ec0f6d3 ("usb: gadget: uvc: only pump video data if necessary")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Dan Vacura <w36195@motorola.com>
+> > ---
+> >  drivers/usb/gadget/function/uvc_video.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> > index 93f42c7f800d..59e2f51b53a5 100644
+> > --- a/drivers/usb/gadget/function/uvc_video.c
+> > +++ b/drivers/usb/gadget/function/uvc_video.c
+> > @@ -427,6 +427,9 @@ static void uvcg_video_pump(struct work_struct *work)
+> >  		if (ret < 0) {
+> >  			uvcg_queue_cancel(queue, 0);
+> >  			break;
+> > +		} else {
+> > +			/* Endpoint now owns the request */
+> > +			req = NULL;
+> >  		}
+> >  		video->req_int_count++;
+> 
+> I'd write it as
+> 
+> 		if (ret < 0) {
+> 			uvcg_queue_cancel(queue, 0);
+> 			break;
+> 		}
+> 
+> 		/* Endpoint now owns the request. */
+> 		req = NULL;
+> 		video->req_int_count++;
 
->> drivers/gpu/drm/meson/meson_venc.c:1595:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                          FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
-                          ^
-   1 error generated.
+This is cleaner. I'll send a v2 with this suggestion.
 
-
-vim +/FIELD_PREP +1595 drivers/gpu/drm/meson/meson_venc.c
-
-  1579	
-  1580	static void meson_encl_set_gamma_table(struct meson_drm *priv, u16 *data,
-  1581					       u32 rgb_mask)
-  1582	{
-  1583		int i, ret;
-  1584		u32 reg;
-  1585	
-  1586		writel_bits_relaxed(L_GAMMA_CNTL_PORT_EN, 0,
-  1587				    priv->io_base + _REG(L_GAMMA_CNTL_PORT));
-  1588	
-  1589		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
-  1590						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
-  1591		if (ret)
-  1592			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
-  1593	
-  1594		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
-> 1595			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
-  1596			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
-  1597	
-  1598		for (i = 0; i < 256; i++) {
-  1599			ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
-  1600							 reg, reg & L_GAMMA_CNTL_PORT_WR_RDY,
-  1601							 10, 10000);
-  1602			if (ret)
-  1603				pr_warn_once("%s: GAMMA WR_RDY timeout\n", __func__);
-  1604	
-  1605			writel_relaxed(data[i], priv->io_base + _REG(L_GAMMA_DATA_PORT));
-  1606		}
-  1607	
-  1608		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
-  1609						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
-  1610		if (ret)
-  1611			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
-  1612	
-  1613		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
-  1614			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0x23),
-  1615			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
-  1616	}
-  1617	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Apart from that,
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> >  	}
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart

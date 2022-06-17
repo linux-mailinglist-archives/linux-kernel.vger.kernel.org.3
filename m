@@ -2,119 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B902E54F102
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2958C54F104
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380276AbiFQG1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S1380283AbiFQG2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiFQG1e (ORCPT
+        with ESMTP id S230307AbiFQG17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:27:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142B72A4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655447252; x=1686983252;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=740VTPWrUShQ8Brh8mDxlSFegDdp59K64YGFrcrtl6s=;
-  b=ME7UPtLHduSZ254R6dBXcifKu+SD/fl0MrIpqxO/mf9E6sUrpEcgG/vt
-   WuPSf9vL+sFFiJG84m2Fbgf9yecepmb+VE/m7m6iHwrzNcx1FkorzWVsN
-   21eKCThxKv/wm2NNz1vWprUI4cLR5O/A/WnhUDQG5GwBm2DO3B7E+6evJ
-   3Av/2eWqKDRQAnIXJnAFkpZL/QGRINs2BXp0WSX1XrRA5fy5N4qJlQUO6
-   BlDdrISU73cWcPrIXSUieUm6dpn4qAlXlsbYfwLsi8pO3MEssmYTnuKiy
-   E39hlx6sRtVfvnZs2wHNXRLzdSmqAqjwkhwaN6E9yO2n8fQRtuRoQuj8P
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268122020"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="268122020"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 23:27:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="713652152"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 16 Jun 2022 23:27:30 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o25S5-000P9t-QE;
-        Fri, 17 Jun 2022 06:27:29 +0000
-Date:   Fri, 17 Jun 2022 14:27:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [cip:linux-4.19.y-cip-rt-rebase 2065/9999]
- net/xfrm/xfrm_ipcomp.c:40:30: warning: 'ipcomp_scratches_lock' defined but
- not used
-Message-ID: <202206171457.YUwoAiZH-lkp@intel.com>
+        Fri, 17 Jun 2022 02:27:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37304E0A5;
+        Thu, 16 Jun 2022 23:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sLPXcyRRmleh61O7Zeku+xyyWKO3/zEOGCYBg9pcfuo=; b=RGLvb0tbAp71EMnijOBRCXGWq/
+        PBSmJYrYoue854tCDVOhiR3Sqf2GrAJ4LAPPsnyrnEwW2XI1SbzpUOBJN6Wl7PINcbdGIoq27AV7/
+        KXVK4B+zGzLq1GBSSIuvhTpyneuj2hd1kb3r0e5S2v80NzWylq3sX8z5PuSnKhKITJ0MARi9nue6a
+        L+nHo+g51L0v4/eofsTk4oh4IUVRgiyS+TddxZQa8rEXIZ/a2xWxf4h/8xRpBM7JjX05aGKC0etNm
+        07V+zBml48P9I2+opEhcdU3PGXikW599AmvuUSZt3ZSqtfWvprXc/QmdDeNu1PVXrGQNZp6CKANjG
+        7F06uE4Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o25SS-005jF0-1Y; Fri, 17 Jun 2022 06:27:52 +0000
+Date:   Thu, 16 Jun 2022 23:27:52 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v4 01/11] md/raid5-ppl: Fix argument order in
+ bio_alloc_bioset()
+Message-ID: <Yqwe6NXL9sedvx7v@infradead.org>
+References: <20220608162756.144600-1-logang@deltatee.com>
+ <20220608162756.144600-2-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220608162756.144600-2-logang@deltatee.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git linux-4.19.y-cip-rt-rebase
-head:   4784425d57541175db8c44ceef091a8fb42e5c6f
-commit: ad01e51437422285ac98eced7c7136b368bd2ffc [2065/9999] net: xfrm: fix compress vs decompress serialization
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220617/202206171457.YUwoAiZH-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/commit/?id=ad01e51437422285ac98eced7c7136b368bd2ffc
-        git remote add cip https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git
-        git fetch --no-tags cip linux-4.19.y-cip-rt-rebase
-        git checkout ad01e51437422285ac98eced7c7136b368bd2ffc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/xfrm/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from net/xfrm/xfrm_ipcomp.c:23:
->> net/xfrm/xfrm_ipcomp.c:40:30: warning: 'ipcomp_scratches_lock' defined but not used [-Wunused-const-variable=]
-      40 | static DEFINE_LOCAL_IRQ_LOCK(ipcomp_scratches_lock);
-         |                              ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/locallock.h:244:71: note: in definition of macro 'DEFINE_LOCAL_IRQ_LOCK'
-     244 | #define DEFINE_LOCAL_IRQ_LOCK(lvar)             __typeof__(const int) lvar
-         |                                                                       ^~~~
-
-
-vim +/ipcomp_scratches_lock +40 net/xfrm/xfrm_ipcomp.c
-
-  > 23	#include <linux/locallock.h>
-    24	#include <linux/percpu.h>
-    25	#include <linux/slab.h>
-    26	#include <linux/smp.h>
-    27	#include <linux/vmalloc.h>
-    28	#include <net/ip.h>
-    29	#include <net/ipcomp.h>
-    30	#include <net/xfrm.h>
-    31	
-    32	struct ipcomp_tfms {
-    33		struct list_head list;
-    34		struct crypto_comp * __percpu *tfms;
-    35		int users;
-    36	};
-    37	
-    38	static DEFINE_MUTEX(ipcomp_resource_mutex);
-    39	static void * __percpu *ipcomp_scratches;
-  > 40	static DEFINE_LOCAL_IRQ_LOCK(ipcomp_scratches_lock);
-    41	static int ipcomp_scratch_users;
-    42	static LIST_HEAD(ipcomp_tfms_list);
-    43	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+While I think this whole series needs to get in of course, this one
+seems even morge urgent.  Song, can you send it to Jens ASAP, please?

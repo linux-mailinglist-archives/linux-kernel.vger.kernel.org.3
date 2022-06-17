@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFC854EFA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC58954EF8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379969AbiFQDIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 23:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S1379936AbiFQDIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379936AbiFQDIP (ORCPT
+        with ESMTP id S1379971AbiFQDIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:08:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1A905DE4F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:08:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D2A912FC;
-        Thu, 16 Jun 2022 20:08:14 -0700 (PDT)
-Received: from [192.168.0.146] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B9533F73B;
-        Thu, 16 Jun 2022 20:08:11 -0700 (PDT)
-Message-ID: <f5fe2622-5003-707c-a1b3-0f5de18c4912@arm.com>
-Date:   Fri, 17 Jun 2022 08:37:39 +0530
+        Thu, 16 Jun 2022 23:08:18 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69BD5F8E5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:08:17 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id f8so2788521plo.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=05w5k2H6iAH0ZgNLPs0+l2PLAxsLXlw8R/ymoZjeiWA=;
+        b=L1ijCKGk+5t0GFYr6QoXTOuTW2lQ5YXPwcnoiMY7ETJ5r4InHxmUSox96iNVWIPCw7
+         geORc75Yp0A2REzbnK7CIdy4w5GE43FtCMMn1KwfKHunoyksryjt4mWmipSGDdYq0/n9
+         lIjFSVM6xulhkuDMwgJZR2poUmQXSO0NCrT6BipgsBFZI8EbiGVxoW5IvB41/vO8bGRw
+         1I+pOnNq0JSBJJuz0wWkvhx0xh9qMLS5zzji571ujkr6aO79+/rEATfwIp4eQf/8qK9p
+         YcV53uvub22JVngjEt0OaMC306j0pcf9eYPTI5R+PbBbCPBuIIzX3yFQy2g3Z8+gXsID
+         ngaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=05w5k2H6iAH0ZgNLPs0+l2PLAxsLXlw8R/ymoZjeiWA=;
+        b=kZd8L0Wjtign6b1abfTBa8OGlOZQjM7otIFjeDB86tICiiLm9Hbtu+hyOZ3olC8El+
+         KdRZYlO0zbW2neQl2dhTQ9oJ9Pplx2h2winXIhd4MjZ2yGeLjhLLZsjmR7ot6df2IkIe
+         nWQ2hKtpq5dNFY+kv1sJCDBFjlqHKWedygYNCmv1/Ws/3KNPAvrUnXj+yRmdU5boceBi
+         C69VyaBjZAvUiV5391QhtjWg0u0d+ONIFtLJmQv3Xw+liNg0hy5C9AlPToLe/Rvbtqpz
+         WeS4ybEf5fNDSgbH/YvJG8HCRqPVJ+h+Aj++pWrXdlD4U1gv9NABlmSkOsYD53mtcfNX
+         U4Pw==
+X-Gm-Message-State: AJIora9r7tcHQdovlVob/XkPo9AdEH8/cNHhn5n/orGI65W59A0GtGRC
+        0Lly9dmbRQnYClsXi2HK+gquPQ==
+X-Google-Smtp-Source: AGRyM1v2X0TnjSzAadnit9H8W9ElwHqlbqJ1rgB3Cfo5mtc3wxQzXXIyyIBCXj/bQoPI/AWse5xmBA==
+X-Received: by 2002:a17:90b:4b47:b0:1e8:9529:27c6 with SMTP id mi7-20020a17090b4b4700b001e8952927c6mr18956391pjb.178.1655435297320;
+        Thu, 16 Jun 2022 20:08:17 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b00168c1668a49sm2334325plm.85.2022.06.16.20.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 20:08:16 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 20:08:14 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Yuming Chen <chenyuming.junnan@bytedance.com>,
+        Ted Lin <ted@mostlyuseful.tech>,
+        Dave Taht <dave.taht@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net] net/sched: sch_netem: Fix arithmetic in
+ netem_dump() for 32-bit platforms
+Message-ID: <20220616200814.15fff125@hermes.local>
+In-Reply-To: <20220616234336.2443-1-yepeilin.cs@gmail.com>
+References: <20220616234336.2443-1-yepeilin.cs@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 0/2] mm/mmap: Drop __SXXX/__PXXX macros from across
- platforms
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     "hch@infradead.org" <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220616040924.1022607-1-anshuman.khandual@arm.com>
- <1fe37a32-f11b-fbc4-7fca-46dcc89b50c4@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <1fe37a32-f11b-fbc4-7fca-46dcc89b50c4@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 16 Jun 2022 16:43:36 -0700
+Peilin Ye <yepeilin.cs@gmail.com> wrote:
 
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> As reported by Yuming, currently tc always show a latency of UINT_MAX
+> for netem Qdisc's on 32-bit platforms:
+> 
+>     $ tc qdisc add dev dummy0 root netem latency 100ms
+>     $ tc qdisc show dev dummy0
+>     qdisc netem 8001: root refcnt 2 limit 1000 delay 275s  275s
+>                                                ^^^^^^^^^^^^^^^^
+> 
+> Let us take a closer look at netem_dump():
+> 
+>         qopt.latency = min_t(psched_tdiff_t, PSCHED_NS2TICKS(q->latency,
+>                              UINT_MAX);
+> 
+> qopt.latency is __u32, psched_tdiff_t is signed long,
+> (psched_tdiff_t)(UINT_MAX) is negative for 32-bit platforms, so
+> qopt.latency is always UINT_MAX.
+> 
+> Fix it by using psched_time_t (u64) instead.
+> 
+> Note: confusingly, users have two ways to specify 'latency':
+> 
+>   1. normally, via '__u32 latency' in struct tc_netem_qopt;
+>   2. via the TCA_NETEM_LATENCY64 attribute, which is s64.
+> 
+> For the second case, theoretically 'latency' could be negative.  This
+> patch ignores that corner case, since it is broken (i.e. assigning a
+> negative s64 to __u32) anyways, and should be handled separately.
+> 
+> Thanks Ted Lin for the analysis [1] .
+> 
+> [1] https://github.com/raspberrypi/linux/issues/3512
+> 
+> Reported-by: Yuming Chen <chenyuming.junnan@bytedance.com>
+> Fixes: 112f9cb65643 ("netem: convert to qdisc_watchdog_schedule_ns")
+> Reviewed-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> ---
+>  net/sched/sch_netem.c | 4 ++--
 
-On 6/16/22 10:52, Christophe Leroy wrote:
-> 
-> 
-> Le 16/06/2022 à 06:09, Anshuman Khandual a écrit :
->> __SXXX/__PXXX macros is an unnecessary abstraction layer in creating the
->> generic protection_map[] array which is used for vm_get_page_prot(). This
->> abstraction layer can be avoided, if the platforms just define the array
->> protection_map[] for all possible vm_flags access permission combinations.
->>
->> This series drops __SXXX/__PXXX macros from across platforms in the tree.
->> First it makes protection_map[] array private (static) on platforms which
->> enable ARCH_HAS_VM_GET_PAGE_PROT, later moves protection_map[] array into
->> arch for all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT), dropping
->> the generic one. In the process __SXXX/__PXXX macros become redundant and
->> thus get dropped off completely. I understand that the diff stat is large
->> here, but please do suggest if there is a better way. This series applies
->> on v5.19-rc1 and has been build tested for multiple platforms.
-> 
-> Maybe this patch could be split with one patch per architecture. All you 
-> have to do for that is to guard the generic protection_map declaration 
-> with #ifdef __S000 , then the architectures can be migrated one by one.
-> 
->>
->> The CC list for this series has been reduced to just minimum, until there
->> is some initial agreement.
-> 
-> Agreement with who if people don't know this series exists ?
-> 
-> I think you should keep the architecture lists in copy allthough you 
-> don't include individual maintainers/reviewers for now.
+Thanks for fixing. 
+Guess it is time to run netem on one of the Pi's.
 
-Sure, will do.
-
-> 
->>
->> - Anshuman
->>
->> Changes in V3:
->>
->> - Fix build issues on powerpc and riscv
->>
->> Changes in V2:
-> 
-> I guess V2 was only sent to linux-mm as well ? Too bad.
-
-I was in a dilemma, whether to first arrive at something more acceptable or
-just engage all stake holders from the beginning. I understand your concern
-and hence will copy architecture mailing lists from next time onward.
+Acked-by: Stephen Hemminger <stephen@networkplumber.org>

@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B2654F5FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDB254F61A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382235AbiFQKuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S235112AbiFQLBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235871AbiFQKuQ (ORCPT
+        with ESMTP id S233957AbiFQLBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:50:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB336BFD4;
-        Fri, 17 Jun 2022 03:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 764BFB829CA;
-        Fri, 17 Jun 2022 10:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C205C3411D;
-        Fri, 17 Jun 2022 10:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655463013;
-        bh=Dlexy7QWYg/TkIheC/nhYJ/sRfJObWjZgkqajRN2T2Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=At0+kFvmwfs5Xo82sMShkmt2pBpM6hmUWL9OYMj883ZNFw1oSuik3g+jHIB920doZ
-         BbaJSmeGVveDOsi5BvC8o6KCjSJlzuB3LNQ3J/0IK3yrfDkeIMmukWbOgkTqsGP7r8
-         2eUFZ0eCHajYfCnAJmUwU3MZqsWVlAPNMt/NOLxV7m1rih8PTlvkbGwvp65UCXDcN+
-         VjiGUv6mCtHsAJGhBSGS5Qa7ynd7LY+CfVDgeIHakkytmPQAnAs9cgfiiq4GjwbQKa
-         3/ui7RAIlnYSWxUzT052p08jeHqIKDtI0NxWr6251UsF00pCvgQHg4RlZcJ5zdkU3O
-         D9sKCRvn71aeA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 11499E56ADF;
-        Fri, 17 Jun 2022 10:50:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Jun 2022 07:01:40 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D026C0DF;
+        Fri, 17 Jun 2022 04:01:37 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPbfJ20Xgz6H6l9;
+        Fri, 17 Jun 2022 18:59:52 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 13:01:34 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 12:01:30 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
+        <bvanassche@acm.org>, <hch@lst.de>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hare@suse.de>, <satishkh@cisco.com>,
+        <sebaddel@cisco.com>, <kartilak@cisco.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-nvme@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <mpi3mr-linuxdrv.pdl@broadcom.com>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <nbd@other.debian.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/5] blk-mq: Add a flag for reserved requests series
+Date:   Fri, 17 Jun 2022 18:55:15 +0800
+Message-ID: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 1/1] net: macb: fix negative max_mtu size for
- sama5d3
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165546301306.24969.17301326997601395011.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Jun 2022 10:50:13 +0000
-References: <20220617071607.3782772-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220617071607.3782772-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+In [0] I included "blk-mq: Add a flag for reserved requests" to identify
+if a request is 'reserved' for special handling. Doing this is easier than
+passing a 'reserved' arg to the blk_mq_ops callbacks. Indeed, only 1x
+timeout implementation or blk-mq iter function actually uses the
+'reserved' arg (or 3x if you count SCSI core and FNIC SCSI driver). So
+this series drops the 'reserved' arg for these timeout and iter functions.
+Christoph suggested that I try to upstream now.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+About the SCSI changes, I can leave them in place if people prefer.
 
-On Fri, 17 Jun 2022 09:16:07 +0200 you wrote:
-> JML register on probe will return zero . This register is configured
-> later on macb_init_hw() which is called on open.
-> Since we have zero, after header and FCS length subtraction we will get
-> negative max_mtu size. This issue was affecting DSA drivers with MTU support
-> (for example KSZ9477).
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> [...]
+Based on following:
+c13794dbe936 (block/for-5.20/block) block: Directly use ida_alloc()/free()
 
-Here is the summary with links:
-  - [net-next,v2,1/1] net: macb: fix negative max_mtu size for sama5d3
-    https://git.kernel.org/netdev/net-next/c/46e31db55da8
+[0] https://lore.kernel.org/linux-scsi/1654770559-101375-1-git-send-email-john.garry@huawei.com/T/#m22aa9f89e55835edc2e650d43f7e3219a3a1a324
 
-You are awesome, thank you!
+John Garry (5):
+  scsi: core: Remove reserved request time-out handling
+  blk-mq: Add a flag for reserved requests
+  blk-mq: Drop blk_mq_ops.timeout 'reserved' arg
+  scsi: fnic: Drop reserved request handling
+  blk-mq: Drop 'reserved' member of busy_tag_iter_fn
+
+ block/blk-mq-debugfs.c              |  2 +-
+ block/blk-mq-tag.c                  | 13 +++++--------
+ block/blk-mq.c                      | 22 +++++++++++++---------
+ block/bsg-lib.c                     |  2 +-
+ drivers/block/mtip32xx/mtip32xx.c   | 11 +++++------
+ drivers/block/nbd.c                 |  5 ++---
+ drivers/block/null_blk/main.c       |  2 +-
+ drivers/infiniband/ulp/srp/ib_srp.c |  3 +--
+ drivers/mmc/core/queue.c            |  3 +--
+ drivers/nvme/host/apple.c           |  3 +--
+ drivers/nvme/host/core.c            |  2 +-
+ drivers/nvme/host/fc.c              |  6 ++----
+ drivers/nvme/host/nvme.h            |  2 +-
+ drivers/nvme/host/pci.c             |  2 +-
+ drivers/nvme/host/rdma.c            |  3 +--
+ drivers/nvme/host/tcp.c             |  3 +--
+ drivers/s390/block/dasd.c           |  2 +-
+ drivers/s390/block/dasd_int.h       |  2 +-
+ drivers/scsi/aacraid/comminit.c     |  2 +-
+ drivers/scsi/aacraid/linit.c        |  2 +-
+ drivers/scsi/fnic/fnic_scsi.c       | 14 ++++----------
+ drivers/scsi/hosts.c                | 14 ++++++--------
+ drivers/scsi/mpi3mr/mpi3mr_os.c     | 16 ++++------------
+ drivers/scsi/scsi_lib.c             | 12 ++----------
+ include/linux/blk-mq.h              | 10 ++++++++--
+ include/scsi/scsi_host.h            |  2 +-
+ 26 files changed, 67 insertions(+), 93 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.3
 

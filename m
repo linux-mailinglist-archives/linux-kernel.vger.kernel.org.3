@@ -2,95 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54F354F79B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1346554F7A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382192AbiFQMa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 08:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S1382369AbiFQMdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 08:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382160AbiFQMaZ (ORCPT
+        with ESMTP id S1381218AbiFQMdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 08:30:25 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6374C60DB7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xvV3S
-        hcwPUAxPUy8RY8/spKuTd4n6cJ6dM39gAWGT9o=; b=hsQtTn/b7QSI/8IR91sFQ
-        SefLSW+wFhORPfQpkrQ5/fUEOzTLs8zPNg4fI7t8gtcJi+bBmXa+jRvJs+++CEBD
-        b79wAyX7E0tpDxoe3AcOpD/ge0ymFPqul1r7PdWZLM3eeqADH1oLRa4YhV/d3coT
-        M/gNLWNyqSDn857BpmUypk=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgAHlYHLc6xiv4JwFw--.38903S2;
-        Fri, 17 Jun 2022 20:30:03 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     linus.walleij@linaro.org, linux@armlinux.org.uk
-Cc:     windhl@126.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm: mach-versatile: Fix refcount leak bug in tc2_pm
-Date:   Fri, 17 Jun 2022 20:30:03 +0800
-Message-Id: <20220617123003.4048328-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 17 Jun 2022 08:33:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 010431706A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:33:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655469193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=92UlDs3RgFNfmwdasYrOfS3jw16tdOBEhgL58+p+c74=;
+        b=Avkw6i9RePt74MOQN3q7fq4RVByzy9YmSfqHoRtpyeditdfIm2PIVjE814qbgeWfxSpEk2
+        8+X8i9xcIehk7ny8TrIF8VQFHQk/8M8O3nPHJ8aJYDTCHdi07Z6qB34YT474haMhifPuhf
+        DN3rU+G5lgBDT89yHiELO89Zr6oOiiI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-FapzQTCvO_O0R0Et4sghvw-1; Fri, 17 Jun 2022 08:33:01 -0400
+X-MC-Unique: FapzQTCvO_O0R0Et4sghvw-1
+Received: by mail-wm1-f72.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso2681642wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:33:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=92UlDs3RgFNfmwdasYrOfS3jw16tdOBEhgL58+p+c74=;
+        b=qlm7TW/wGXwRuj0GzPZdADmfqRXhWwyJ5TfLXT5DTA7diy+Z9rDlVUtZrsYTJLaQUJ
+         skWyossNUpeSS4KM3bBbB+Y7S1tuIEXCvXrm4nkNiY4LQwGCSzGFbI0+8/jPB504Hhop
+         iwQfFkKB0wUdx1C406Vw9ltS8JVnmn/XW5tVTX+NsTKxDy8e1YCXwSXKKiJCya+wgLYU
+         YF69K4znaNdeFzMn5nqKsduBXL6sdO3PIYkchxK6YZaGuqZnM3xlwkCoDEjVO4ejDRlg
+         aRmhNmlKXOzOzTm+uXeL4LD5MVrYBfeRNPZudlu+b3hkdkd4pRCct7SlSdqtMaqI/9Hm
+         5twQ==
+X-Gm-Message-State: AJIora8A7Sv8ZXLe7aKdfyTjpOEO6s5mK3/Xn4uOUkDtw+kIWP7kjZwk
+        TLYXHy9qqeWtujbfWqcT7lG8DF+5xncJd5QY35We4++AUuAnMWIQDblnkhJlyRKahio3uMWw3nu
+        +uMwx//babiB+chQDrl3fSzBb
+X-Received: by 2002:a5d:4dc9:0:b0:215:c611:db73 with SMTP id f9-20020a5d4dc9000000b00215c611db73mr9566015wru.551.1655469179981;
+        Fri, 17 Jun 2022 05:32:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vrMleQODBYjJTSi8fIIhoUhRue0NuBsJFkxO9IRFJgdZFWFEeDm8+sGhF94gyh54rHFnh3Dw==
+X-Received: by 2002:a5d:4dc9:0:b0:215:c611:db73 with SMTP id f9-20020a5d4dc9000000b00215c611db73mr9565992wru.551.1655469179714;
+        Fri, 17 Jun 2022 05:32:59 -0700 (PDT)
+Received: from redhat.com ([2.54.189.19])
+        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b0039c4ba160absm18336881wmq.2.2022.06.17.05.32.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 05:32:59 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 08:32:55 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virtio-net: fix race between ndo_open() and
+ virtio_device_ready()
+Message-ID: <20220617083141-mutt-send-email-mst@kernel.org>
+References: <20220617072949.30734-1-jasowang@redhat.com>
+ <20220617060632-mutt-send-email-mst@kernel.org>
+ <CACGkMEtTVs5W+qqt9Z6BcorJ6wcqcnSVuCBrHrLZbbKzG-7ULQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgAHlYHLc6xiv4JwFw--.38903S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy3Aw45CF4xtFy7JrWDArb_yoW8GrW7pr
-        10k395Jr10gw1DKa95KFyDZrWFya4q9FW0vr1a93Wak3Z7X3y8AF18tryFyF1DGayrAan5
-        Ar15KF17uan8C3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U0385UUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2gwjF1uwMOUJngAAsL
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEtTVs5W+qqt9Z6BcorJ6wcqcnSVuCBrHrLZbbKzG-7ULQ@mail.gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In tc2_pm_init(), of_find_compatible_node() will return a node pointer
-with refcount incremented. We should use of_node_put() in fail path or
-when it is not used anymore.
+On Fri, Jun 17, 2022 at 07:46:23PM +0800, Jason Wang wrote:
+> On Fri, Jun 17, 2022 at 6:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 03:29:49PM +0800, Jason Wang wrote:
+> > > We used to call virtio_device_ready() after netdev registration. This
+> > > cause a race between ndo_open() and virtio_device_ready(): if
+> > > ndo_open() is called before virtio_device_ready(), the driver may
+> > > start to use the device before DRIVER_OK which violates the spec.
+> > >
+> > > Fixing this by switching to use register_netdevice() and protect the
+> > > virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
+> > > only be called after virtio_device_ready().
+> > >
+> > > Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > ---
+> > >  drivers/net/virtio_net.c | 8 +++++++-
+> > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > index db05b5e930be..8a5810bcb839 100644
+> > > --- a/drivers/net/virtio_net.c
+> > > +++ b/drivers/net/virtio_net.c
+> > > @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
+> > >       if (vi->has_rss || vi->has_rss_hash_report)
+> > >               virtnet_init_default_rss(vi);
+> > >
+> > > -     err = register_netdev(dev);
+> > > +     /* serialize netdev register + virtio_device_ready() with ndo_open() */
+> > > +     rtnl_lock();
+> > > +
+> > > +     err = register_netdevice(dev);
+> > >       if (err) {
+> > >               pr_debug("virtio_net: registering device failed\n");
+> > > +             rtnl_unlock();
+> > >               goto free_failover;
+> > >       }
+> > >
+> > >       virtio_device_ready(vdev);
+> > >
+> > > +     rtnl_unlock();
+> > > +
+> > >       err = virtnet_cpu_notif_add(vi);
+> > >       if (err) {
+> > >               pr_debug("virtio_net: registering cpu notifier failed\n");
+> >
+> >
+> > Looks good but then don't we have the same issue when removing the
+> > device?
+> >
+> > Actually I looked at  virtnet_remove and I see
+> >         unregister_netdev(vi->dev);
+> >
+> >         net_failover_destroy(vi->failover);
+> >
+> >         remove_vq_common(vi); <- this will reset the device
+> >
+> > a window here?
+> 
+> Probably. For safety, we probably need to reset before unregistering.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- arch/arm/mach-versatile/tc2_pm.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-versatile/tc2_pm.c b/arch/arm/mach-versatile/tc2_pm.c
-index 0fe78da0c109..2a7aeab7b3da 100644
---- a/arch/arm/mach-versatile/tc2_pm.c
-+++ b/arch/arm/mach-versatile/tc2_pm.c
-@@ -212,19 +212,24 @@ static int __init tc2_pm_init(void)
- 	np = of_find_compatible_node(NULL, NULL,
- 			"arm,vexpress-scc,v2p-ca15_a7");
- 	scc = of_iomap(np, 0);
--	if (!scc)
-+	if (!scc) {
-+		of_node_put(np);
- 		return -ENODEV;
-+	}
- 
- 	a15_cluster_id = readl_relaxed(scc + A15_CONF) & 0xf;
- 	a7_cluster_id = readl_relaxed(scc + A7_CONF) & 0xf;
--	if (a15_cluster_id >= TC2_CLUSTERS || a7_cluster_id >= TC2_CLUSTERS)
-+	if (a15_cluster_id >= TC2_CLUSTERS || a7_cluster_id >= TC2_CLUSTERS) {
-+		of_node_put(np);
- 		return -EINVAL;
-+	}
- 
- 	sys_info = readl_relaxed(scc + SYS_INFO);
- 	tc2_nr_cpus[a15_cluster_id] = (sys_info >> 16) & 0xf;
- 	tc2_nr_cpus[a7_cluster_id] = (sys_info >> 20) & 0xf;
- 
- 	irq = irq_of_parse_and_map(np, 0);
-+	of_node_put(np);
- 
- 	/*
- 	 * A subset of the SCC registers is also used to communicate
--- 
-2.25.1
+careful not to create new races, let's analyse this one to be
+sure first.
+
+> >
+> >
+> > Really, I think what we had originally was a better idea -
+> > instead of dropping interrupts they were delayed and
+> > when driver is ready to accept them it just enables them.
+> 
+> The problem is that it works only on some specific setup:
+> 
+> - doesn't work on shared IRQ
+> - doesn't work on some specific driver e.g virtio-blk
+
+can some core irq work fix that?
+
+> > We just need to make sure driver does not wait for
+> > interrupts before enabling them.
+> >
+> > And I suspect we need to make this opt-in on a per driver
+> > basis.
+> 
+> Exactly.
+> 
+> Thanks
+> 
+> >
+> >
+> >
+> > > --
+> > > 2.25.1
+> >
 

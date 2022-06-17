@@ -2,44 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C6254EF30
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F47054EF33
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379595AbiFQCUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 22:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
+        id S1379671AbiFQCUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 22:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiFQCUS (ORCPT
+        with ESMTP id S232651AbiFQCUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 22:20:18 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384C760AA3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:20:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VGcj5NA_1655432410;
-Received: from 30.240.112.119(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VGcj5NA_1655432410)
-          by smtp.aliyun-inc.com;
-          Fri, 17 Jun 2022 10:20:11 +0800
-Message-ID: <e20118fb-074e-c199-fd50-56ef1fa8ef73@linux.alibaba.com>
-Date:   Fri, 17 Jun 2022 10:20:09 +0800
+        Thu, 16 Jun 2022 22:20:34 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9981464BF6;
+        Thu, 16 Jun 2022 19:20:31 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H2FfQd029754;
+        Fri, 17 Jun 2022 02:20:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=JraEGcq645uaUTZHc2tASRhn8rvhQfMYW+IL7QF6ELI=;
+ b=gUmt8KhukmpjSJSTSC2v39gg6OuTJ+RNef8IqdlAjvbtVfRxzsbN9+xulZvJEaxVq5C8
+ bLiRiR0a3WRHQ3EKs3AePUyidKyjVp+IjVFOKF3mRcI2ZCjncAzCZgFkEG9HcYe660al
+ CNBWGc7z7R3jdJ7Jh+EOYK2JywLU1wfUevyHfCYVu5cY+rL3Tqn3VK1w9YD81QvsOCdc
+ UrAlqH4BKV6oVm5SivD0siSagakrihpAzsbUOGq8JNWyAeltdcds4A5jTmunpRrUst66
+ jCzdzozBPdm2HRgdZcZaLsBWzCYfMKgGGqcWBCP4QNLHMnZMCycmhrIyCUvyUOvGj+xV Qg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmjx9mfn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jun 2022 02:20:25 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25H2GK9V038707;
+        Fri, 17 Jun 2022 02:20:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpqq327eq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jun 2022 02:20:24 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25H2KMSc006844;
+        Fri, 17 Jun 2022 02:20:24 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpqq327d4-2;
+        Fri, 17 Jun 2022 02:20:23 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     haiyangz@microsoft.com,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        wei.liu@kernel.org, kys@microsoft.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org, mikelley@microsoft.com,
+        decui@microsoft.com, sthemmin@microsoft.com, jejb@linux.ibm.com,
+        ssengar@microsoft.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v3] scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+Date:   Thu, 16 Jun 2022 22:20:19 -0400
+Message-Id: <165543238454.26073.6374641443239965869.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <1655190355-28722-1-git-send-email-ssengar@linux.microsoft.com>
+References: <1655190355-28722-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [RFC PATCH -next] arm64: ras: add uce kernel recovery support
-Content-Language: en-US
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Luck, Tony" <tony.luck@intel.com>
-References: <20220323033705.3966643-1-tongtiangen@huawei.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20220323033705.3966643-1-tongtiangen@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Proofpoint-ORIG-GUID: HaMWH-0UJBwIz5X0lao9AB56iGqQIO3Q
+X-Proofpoint-GUID: HaMWH-0UJBwIz5X0lao9AB56iGqQIO3Q
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,361 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tiangen,
+On Tue, 14 Jun 2022 00:05:55 -0700, Saurabh Sengar wrote:
 
-在 2022/3/23 AM11:37, Tong Tiangen 写道:
-> uce means uncorrectable memory error.
+> Current code is based on the idea that the max number of SGL entries
+> also determines the max size of an I/O request.  While this idea was
+> true in older versions of the storvsc driver when SGL entry length
+> was limited to 4 Kbytes, commit 3d9c3dcc58e9 ("scsi: storvsc: Enable
+> scatterlist entry lengths > 4Kbytes") removed that limitation. It's
+> now theoretically possible for the block layer to send requests that
+> exceed the maximum size supported by Hyper-V. This problem doesn't
+> currently happen in practice because the block layer defaults to a
+> 512 Kbyte maximum, while Hyper-V in Azure supports 2 Mbyte I/O sizes.
+> But some future configuration of Hyper-V could have a smaller max I/O
+> size, and the block layer could exceed that max.
 > 
-> In the sea fault handling process of the kernel, if it is judged that the
-> RAS error is consumed in the kernel, the current processing is kernel panic
-> . However, it is not optimal. In some case, the page accessed in kernel is
-> a user page (such as copy_from_user/get_user), in this case, kill the user
-> process and isolate the user page with hardware error is a better choice.
-> 
-> This feature provides the option. We implement it to add new extable type
-> (XXX_UCE_RECOVERY), these new types indicates they can be fixup from
-> uncorrectable memory error and it is fixuped in do_sea(). If the exception
-> is fixuped correctly, the kernel can avoid panic.
-> 
-> In copy_from_user, record the exception reason to regs->regs[0] at
-> ex_handler_fixup_uce_recovery() which is used to check sea fault triggered.
-> 
-> In get_user, the processing of EX_TYPE_UACCESS_ERR_ZERO and
-> EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY is same and both return -EFAULT.
-> 
-> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> ---
->  arch/arm64/Kconfig                   | 10 ++++++++
->  arch/arm64/include/asm/asm-extable.h | 35 ++++++++++++++++++++++++----
->  arch/arm64/include/asm/asm-uaccess.h | 16 +++++++++++++
->  arch/arm64/include/asm/esr.h         |  5 ++++
->  arch/arm64/include/asm/extable.h     |  2 +-
->  arch/arm64/include/asm/uaccess.h     |  2 +-
->  arch/arm64/kernel/probes/kprobes.c   |  2 +-
->  arch/arm64/lib/copy_from_user.S      | 11 +++++----
->  arch/arm64/mm/extable.c              | 21 ++++++++++++++++-
->  arch/arm64/mm/fault.c                | 30 +++++++++++++++++++++++-
->  10 files changed, 119 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 962c84952c98..39f828c5b931 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1681,6 +1681,16 @@ config ARM64_CNP
->  	  at runtime, and does not affect PEs that do not implement
->  	  this feature.
->  
-> +config ARM64_UCE_KERNEL_RECOVERY
-> +	bool "Enable support for uncorrectable memory error(uce) kernel recovery"
-> +	default y
-> +	depends on ACPI_APEI_SEA
-> +	help
-> +	  With ARM v8.2 RAS Extension, SEA are usually triggered when memory
-> +	  error are consumed. In some cases, if the error address is in a
-> +	  user page there is a chance to recover. we can isolate this page
-> +	  and killing process instead of die.
-> +
->  endmenu
->  
->  menu "ARMv8.3 architectural features"
-> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-> index c39f2437e08e..9debab58c2b2 100644
-> --- a/arch/arm64/include/asm/asm-extable.h
-> +++ b/arch/arm64/include/asm/asm-extable.h
-> @@ -2,11 +2,19 @@
->  #ifndef __ASM_ASM_EXTABLE_H
->  #define __ASM_ASM_EXTABLE_H
->  
-> -#define EX_TYPE_NONE			0
-> -#define EX_TYPE_FIXUP			1
-> -#define EX_TYPE_BPF			2
-> -#define EX_TYPE_UACCESS_ERR_ZERO	3
-> -#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
-> +#define EX_TYPE_NONE				0
-> +#define EX_TYPE_FIXUP				1
-> +#define EX_TYPE_BPF				2
-> +#define EX_TYPE_UACCESS_ERR_ZERO		3
-> +#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD		4
-> +
-> +/* _UCE_RECOVERY indicates that can fixup from unrecoverable memory errors */
-> +#define EX_TYPE_FIXUP_UCE_RECOVERY		5
-> +#define EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY	6
-> +
-> +#define IS_EX_TYPE_UCE_RECOVERY(type)				\
-> +	(type == EX_TYPE_FIXUP_UCE_RECOVERY ||			\
-> +	 type == EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY)
->  
->  #ifdef __ASSEMBLY__
->  
-> @@ -27,6 +35,14 @@
->  	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
->  	.endm
->  
-> +/*
-> + * Create an exception table entry for `insn`, which will branch to `fixup`
-> + * when an unhandled fault(include sea fault) is taken.
-> + */
-> +	.macro		_asm_extable_uce_recovery, insn, fixup
-> +	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP_UCE_RECOVERY, 0)
-> +	.endm
-> +
->  /*
->   * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
->   * do nothing.
-> @@ -64,6 +80,15 @@
->  #define EX_DATA_REG(reg, gpr)						\
->  	"((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
->  
-> +#define _ASM_EXTABLE_UACCESS_ERR_ZERO_UCE_RECOVERY(insn, fixup, err, zero)		\
-> +	__DEFINE_ASM_GPR_NUMS								\
-> +	__ASM_EXTABLE_RAW(#insn, #fixup,						\
-> +			  __stringify(EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY),		\
-> +			  "("								\
-> +			    EX_DATA_REG(ERR, err) " | "					\
-> +			    EX_DATA_REG(ZERO, zero)					\
-> +			  ")")
-> +
->  #define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)		\
->  	__DEFINE_ASM_GPR_NUMS						\
->  	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
-> diff --git a/arch/arm64/include/asm/asm-uaccess.h b/arch/arm64/include/asm/asm-uaccess.h
-> index 0557af834e03..36692ec1fdbb 100644
-> --- a/arch/arm64/include/asm/asm-uaccess.h
-> +++ b/arch/arm64/include/asm/asm-uaccess.h
-> @@ -92,4 +92,20 @@ alternative_else_nop_endif
->  
->  		_asm_extable	8888b,\l;
->  	.endm
-> +
-> +	.macro user_ldp_uce_recovery l, reg1, reg2, addr, post_inc
-> +8888:		ldtr	\reg1, [\addr];
-> +8889:		ldtr	\reg2, [\addr, #8];
-> +		add	\addr, \addr, \post_inc;
-> +
-> +		_asm_extable_uce_recovery	8888b, \l;
-> +		_asm_extable_uce_recovery	8889b, \l;
-> +	.endm
-> +
-> +	.macro user_ldst_uce_recovery l, inst, reg, addr, post_inc
-> +8888:		\inst		\reg, [\addr];
-> +		add		\addr, \addr, \post_inc;
-> +
-> +		_asm_extable_uce_recovery	8888b, \l;
-> +	.endm
->  #endif
-> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-> index d52a0b269ee8..11fcfc002654 100644
-> --- a/arch/arm64/include/asm/esr.h
-> +++ b/arch/arm64/include/asm/esr.h
-> @@ -330,6 +330,11 @@
->  #ifndef __ASSEMBLY__
->  #include <asm/types.h>
->  
-> +static inline bool esr_is_sea(u32 esr)
-> +{
-> +	return (esr & ESR_ELx_FSC) == ESR_ELx_FSC_EXTABT;
-> +}
-> +
->  static inline bool esr_is_data_abort(u32 esr)
->  {
->  	const u32 ec = ESR_ELx_EC(esr);
-> diff --git a/arch/arm64/include/asm/extable.h b/arch/arm64/include/asm/extable.h
-> index 72b0e71cc3de..f7835b0f473b 100644
-> --- a/arch/arm64/include/asm/extable.h
-> +++ b/arch/arm64/include/asm/extable.h
-> @@ -45,5 +45,5 @@ bool ex_handler_bpf(const struct exception_table_entry *ex,
->  }
->  #endif /* !CONFIG_BPF_JIT */
->  
-> -bool fixup_exception(struct pt_regs *regs);
-> +bool fixup_exception(struct pt_regs *regs, unsigned int esr);
->  #endif
-> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-> index e8dce0cc5eaa..a229f86e6542 100644
-> --- a/arch/arm64/include/asm/uaccess.h
-> +++ b/arch/arm64/include/asm/uaccess.h
-> @@ -236,7 +236,7 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
->  	asm volatile(							\
->  	"1:	" load "	" reg "1, [%2]\n"			\
->  	"2:\n"								\
-> -	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
-> +	_ASM_EXTABLE_UACCESS_ERR_ZERO_UCE_RECOVERY(1b, 2b, %w0, %w1)	\
->  	: "+r" (err), "=&r" (x)						\
->  	: "r" (addr))
->  
-> diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
-> index d9dfa82c1f18..16a069e8eec3 100644
-> --- a/arch/arm64/kernel/probes/kprobes.c
-> +++ b/arch/arm64/kernel/probes/kprobes.c
-> @@ -285,7 +285,7 @@ int __kprobes kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr)
->  		 * In case the user-specified fault handler returned
->  		 * zero, try to fix up.
->  		 */
-> -		if (fixup_exception(regs))
-> +		if (fixup_exception(regs, fsr))
->  			return 1;
->  	}
->  	return 0;
-> diff --git a/arch/arm64/lib/copy_from_user.S b/arch/arm64/lib/copy_from_user.S
-> index 34e317907524..f16104c63dde 100644
-> --- a/arch/arm64/lib/copy_from_user.S
-> +++ b/arch/arm64/lib/copy_from_user.S
-> @@ -21,7 +21,7 @@
->   */
->  
->  	.macro ldrb1 reg, ptr, val
-> -	user_ldst 9998f, ldtrb, \reg, \ptr, \val
-> +	user_ldst_uce_recovery 9998f, ldtrb, \reg, \ptr, \val
->  	.endm
->  
->  	.macro strb1 reg, ptr, val
-> @@ -29,7 +29,7 @@
->  	.endm
->  
->  	.macro ldrh1 reg, ptr, val
-> -	user_ldst 9997f, ldtrh, \reg, \ptr, \val
-> +	user_ldst_uce_recovery 9997f, ldtrh, \reg, \ptr, \val
->  	.endm
->  
->  	.macro strh1 reg, ptr, val
-> @@ -37,7 +37,7 @@
->  	.endm
->  
->  	.macro ldr1 reg, ptr, val
-> -	user_ldst 9997f, ldtr, \reg, \ptr, \val
-> +	user_ldst_uce_recovery 9997f, ldtr, \reg, \ptr, \val
->  	.endm
->  
->  	.macro str1 reg, ptr, val
-> @@ -45,7 +45,7 @@
->  	.endm
->  
->  	.macro ldp1 reg1, reg2, ptr, val
-> -	user_ldp 9997f, \reg1, \reg2, \ptr, \val
-> +	user_ldp_uce_recovery 9997f, \reg1, \reg2, \ptr, \val
->  	.endm
->  
->  	.macro stp1 reg1, reg2, ptr, val
-> @@ -62,7 +62,8 @@ SYM_FUNC_START(__arch_copy_from_user)
->  	ret
->  
->  	// Exception fixups
-> -9997:	cmp	dst, dstin
-> +9997:	cbz	x0, 9998f
-> +	cmp	dst, dstin
->  	b.ne	9998f
->  	// Before being absolutely sure we couldn't copy anything, try harder
->  USER(9998f, ldtrb tmp1w, [srcin])
-> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-> index 489455309695..b6b76e839b4b 100644
-> --- a/arch/arm64/mm/extable.c
-> +++ b/arch/arm64/mm/extable.c
-> @@ -9,6 +9,7 @@
->  
->  #include <asm/asm-extable.h>
->  #include <asm/ptrace.h>
-> +#include <asm/esr.h>
->  
->  static inline unsigned long
->  get_ex_fixup(const struct exception_table_entry *ex)
-> @@ -23,6 +24,18 @@ static bool ex_handler_fixup(const struct exception_table_entry *ex,
->  	return true;
->  }
->  
-> +static bool ex_handler_fixup_uce_recovery(const struct exception_table_entry *ex,
-> +					  struct pt_regs *regs, unsigned int esr)
-> +{
-> +	if (esr_is_sea(esr))
-> +		regs->regs[0] = 0;
-> +	else
-> +		regs->regs[0] = 1;
-> +
-> +	regs->pc = get_ex_fixup(ex);
-> +	return true;
-> +}
-> +
->  static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
->  					struct pt_regs *regs)
->  {
-> @@ -63,7 +76,7 @@ ex_handler_load_unaligned_zeropad(const struct exception_table_entry *ex,
->  	return true;
->  }
->  
-> -bool fixup_exception(struct pt_regs *regs)
-> +bool fixup_exception(struct pt_regs *regs, unsigned int esr)
->  {
->  	const struct exception_table_entry *ex;
->  
-> @@ -71,12 +84,18 @@ bool fixup_exception(struct pt_regs *regs)
->  	if (!ex)
->  		return false;
->  
-> +	if (esr_is_sea(esr) && !IS_EX_TYPE_UCE_RECOVERY(ex->type))
-> +		return false;
-> +
->  	switch (ex->type) {
->  	case EX_TYPE_FIXUP:
->  		return ex_handler_fixup(ex, regs);
-> +	case EX_TYPE_FIXUP_UCE_RECOVERY:
-> +		return ex_handler_fixup_uce_recovery(ex, regs, esr);
->  	case EX_TYPE_BPF:
->  		return ex_handler_bpf(ex, regs);
->  	case EX_TYPE_UACCESS_ERR_ZERO:
-> +	case EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY:
->  		return ex_handler_uaccess_err_zero(ex, regs);
->  	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
->  		return ex_handler_load_unaligned_zeropad(ex, regs);
-> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> index 77341b160aca..47c447554d2a 100644
-> --- a/arch/arm64/mm/fault.c
-> +++ b/arch/arm64/mm/fault.c
-> @@ -361,7 +361,7 @@ static void __do_kernel_fault(unsigned long addr, unsigned int esr,
->  	 * Are we prepared to handle this kernel fault?
->  	 * We are almost certainly not prepared to handle instruction faults.
->  	 */
-> -	if (!is_el1_instruction_abort(esr) && fixup_exception(regs))
-> +	if (!is_el1_instruction_abort(esr) && fixup_exception(regs, esr))
->  		return;
->  
->  	if (WARN_RATELIMIT(is_spurious_el1_translation_fault(addr, esr, regs),
-> @@ -695,6 +695,30 @@ static int do_bad(unsigned long far, unsigned int esr, struct pt_regs *regs)
->  	return 1; /* "fault" */
->  }
->  
-> +static bool arm64_process_kernel_sea(unsigned long addr, unsigned int esr,
-> +				     struct pt_regs *regs, int sig, int code)
-> +{
-> +	if (!IS_ENABLED(CONFIG_ARM64_UCE_KERNEL_RECOVERY))
-> +		return false;
-> +
-> +	if (user_mode(regs) || !current->mm)
-> +		return false;
-> +
-> +	if (apei_claim_sea(regs) < 0)
-> +		return false;
-> +
-> +	current->thread.fault_address = 0;
-> +	current->thread.fault_code = esr;
-> +
-> +	if (!fixup_exception(regs, esr))
-> +		return false;
-> +
-> +	arm64_force_sig_fault(sig, code, addr,
-> +		"Uncorrected hardware memory error in kernel-access\n");
-> +
-> +	return true;
-> +}
+> [...]
 
-Based on X86 RAS implementation[1], I don't think we shoud use arm64_force_sig_fault to
-kill process in this case. Instead, we could return -EFAULT in fixup_exception and left
-the rest work in memory_failure.
+Applied to 5.19/scsi-fixes, thanks!
 
+[1/1] scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+      https://git.kernel.org/mkp/scsi/c/1d3e0980782f
 
-> Sending a SIGBUS for a copy from user is not the correct semantic.
-> System calls should return -EFAULT (or a short count for write(2)).
-
-[1]https://lore.kernel.org/all/20210818002942.1607544-3-tony.luck@intel.com/T/#m6707a73fc8316690818b6e7eea0329b5925e1f9d
-
-
-Best Regards,
-Shuai
+-- 
+Martin K. Petersen	Oracle Linux Engineering

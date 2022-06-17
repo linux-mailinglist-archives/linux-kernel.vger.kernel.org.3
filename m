@@ -2,154 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F7B54FB42
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BE354FB46
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383138AbiFQQh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S1383429AbiFQQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiFQQhX (ORCPT
+        with ESMTP id S1382699AbiFQQj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:37:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F149243
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:37:22 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2Ey7-0007cZ-1m; Fri, 17 Jun 2022 18:37:11 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2Ey4-0015oi-MY; Fri, 17 Jun 2022 18:37:10 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2Ey4-00H0DT-Vg; Fri, 17 Jun 2022 18:37:08 +0200
-Date:   Fri, 17 Jun 2022 18:37:02 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kbuild@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [RFC] Kbuild: change CONFIG_FRAME_WARN for 32-bit
-Message-ID: <20220617163702.fqyomgoknvinlq6u@pengutronix.de>
-References: <20220617150922.1878926-1-arnd@kernel.org>
+        Fri, 17 Jun 2022 12:39:26 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6E3427C0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:39:25 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id f16so3357153pjj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:39:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=h6IrLdY6w4OsypWEzzKKv5b850fPgk5gwMN7Tf3l3vQ=;
+        b=cGB9S6qXHZUmmKqLb8Czce7aQQ31G8cciRGY3uS9OqZ2KLHawZOjaiA/UhIeiPKRoQ
+         RGuqtkjn3l21zbzDcWWuJPd0THw5jwa7NmutFVEycllAOF3tWpkr/85h2O2wCLkiuLFw
+         8N+27G96xzt/eUHx0kvvnLRlNMnhPTX+o7qiAHUN7skj0o/o0ZlnsCy7YjPfQp37Ly3L
+         3DHUV3EqAvFn4BVzjqNIkCCIOAJ3Mmd1LEB5SVxYqSMvp87RZlon0Wxd+CymmWt6tIn9
+         vNMFfo2Z+LtXNL6Yc6HoJcu2P+UwgmfKDfQlpdHrykmwYAPkaV+JwMzziTavYhEc7RlI
+         pz4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=h6IrLdY6w4OsypWEzzKKv5b850fPgk5gwMN7Tf3l3vQ=;
+        b=K5vcS3fFQ0NLchdIk/V4CqcyrYy4uIv82T0gQhY36bgtmuPw6sxmoGrkH/l2orqoQC
+         2lzExTFZR3F/klOxdbJCicOV7oy8k128sar1kUnxkULBi6I5sHW/HwYpODchYVgouZLh
+         no+C7Q92qfLjP0bLc12H7G7EqtxEx80tFpMCpA8Y1o8TjQCWnIJ2nHHlLIeZg/oYdM5+
+         Jy/BaY03+3OKuGiFgtWxZbEFhwNGJB5w2t+JLV/CoFROPsESMwqciM6g0wb4IChDi/xg
+         Pyt5aSsoLfjp/dP3h1uy+znGrQHoyge/wHP97ksxGzzYRT6H690SptPcyKqU3G1UNlge
+         Wgrw==
+X-Gm-Message-State: AJIora9GAyQYEy21b1sjxKavkGLzVL+1huE1BIZTEVeWm6dxeCJwv8JH
+        Ll+JAHSoc7zAGkZ5J9JJFRmYfg==
+X-Google-Smtp-Source: AGRyM1tSNcsBlD5rmWFBnXmaOQSTZiEb3QWszdo4GJLGK5UOx6thlgdZtHfv+x5h3/bswUKYS8BMdQ==
+X-Received: by 2002:a17:90b:1b07:b0:1e8:41d8:fa2 with SMTP id nu7-20020a17090b1b0700b001e841d80fa2mr11466844pjb.204.1655483965098;
+        Fri, 17 Jun 2022 09:39:25 -0700 (PDT)
+Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
+        by smtp.gmail.com with ESMTPSA id o12-20020a62f90c000000b0051be16492basm3934309pfh.195.2022.06.17.09.39.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 09:39:24 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 16:39:21 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Riccardo Paolo Bestetti <pbl@bestov.io>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
+Subject: Re: [PATCH v2] ipv4: ping: fix bind address validity check
+Message-ID: <YqyuOfvR4mesRTfe@google.com>
+References: <20220617085435.193319-1-pbl@bestov.io>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6vvxfvo7nyze7l5k"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220617150922.1878926-1-arnd@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220617085435.193319-1-pbl@bestov.io>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---6vvxfvo7nyze7l5k
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Arnd,
-
-your To: was empty, I wonder if that was on purpose?!
-
-On Fri, Jun 17, 2022 at 05:08:53PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The introduction of CONFIG_GCC_PLUGIN_LATENT_ENTROPY raised the
-> warning limit for 32-bit architectures to a much higher value in
-> 2016. Initially this had no effect for Arm machines as their kernels
-> tend to be cross-compiled, and the feature detection for the plugin did
-> not work with common cross compilers.
->=20
-> I could not find the original regression report that led to the warning
-> limit getting raised, but I have been unable to reproduce this with gcc-12
-> and linux-5.18 -- all frame sizes appear to be be below the normal 1024
-> byte limit on at least arm32 and i386.
->=20
-> However, the KASAN feature introduced later on does raise the frame size
-> of a number of functions above the warning limit, in almost all cases to
-> somewhere below 1280 bytes. The effect is that an arm allmodconfig build
-> produces no warnings because of the check for the latent entropy plugin,
-> but a normal KASAN based build with gcc does produce build warnings or
-> failures when CONFIG_WERROR is set.
->=20
-> The 1280 byte limit is an arbitrary choice here, as it disables almost
-> all warnings but leaves a few outliers that are probably better addressed
-> with code changes. There are a number of functions that are just below the
-> normal 1024 byte limit at the moment, and an extra 256 bytes for those
-> is within the expectation, but more than that is probably an indication
-> of a bad design or a real bug.
->=20
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: linux-kbuild@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 17, 2022 at 10:54:35AM +0200, Riccardo Paolo Bestetti wrote:
+> Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+> introduced a helper function to fold duplicated validity checks of bind
+> addresses into inet_addr_valid_or_nonlocal(). However, this caused an
+> unintended regression in ping_check_bind_addr(), which previously would
+> reject binding to multicast and broadcast addresses, but now these are
+> both incorrectly allowed as reported in [1].
+> 
+> This patch restores the original check. A simple reordering is done to
+> improve readability and make it evident that multicast and broadcast
+> addresses should not be allowed. Also, add an early exit for INADDR_ANY
+> which replaces lost behavior added by commit 0ce779a9f501 ("net: Avoid
+> unnecessary inet_addr_type() call when addr is INADDR_ANY").
+> 
+> Furthermore, this patch introduces regression selftests to catch these
+> specific cases.
+> 
+> [1] https://lore.kernel.org/netdev/CANP3RGdkAcDyAZoT1h8Gtuu0saq+eOrrTiWbxnOs+5zn+cpyKg@mail.gmail.com/
+> 
+> Fixes: 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> Reported-by: Maciej Żenczykowski <maze@google.com>
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
 > ---
->  lib/Kconfig.debug | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 3da5f9acb966..8a3afd837e99 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -387,9 +387,9 @@ endif # DEBUG_INFO
->  config FRAME_WARN
->  	int "Warn for stack frames larger than"
->  	range 0 8192
-> -	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
->  	default 2048 if PARISC
->  	default 1536 if (!64BIT && XTENSA)
-> +	default 1280 if (!64BIT && KASAN_STACK)
->  	default 1024 if !64BIT
->  	default 2048 if 64BIT
->  	help
+> This patch is sent as a follow-up to the discussion on the v1 by Carlos
+> Llamas.
+> 
+> Original thread:
+> https://lore.kernel.org/netdev/20220617020213.1881452-1-cmllamas@google.com/
+> 
 
-I wasn't aware this was configurable with a Kconfig symbol.
+Reviewed-by: Carlos Llamas <cmllamas@google.com>
 
-Thanks for addressing that issue, the reasoning looks good and right.
-I just now noticed you explained your findings earlier in irc, only
-found them because I digged my irc logs for my original report to you.
+Thanks Riccardo for adding the test cases. I would appreciate it if next
+time you add a co-developed tag or maybe a separate commit as opposed to
+overriding the original author. This is fine though.
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6vvxfvo7nyze7l5k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKsraYACgkQwfwUeK3K
-7Am13wgAht/EoLIfsWbf01mPJ4JarrmTBuxvcJRWOGPorV9nmUkfVpopm/uNctk+
-Gcag/FXrsgkSbTcM29QN6ziWWgCK08ashS0YFNr1069GCuiTVISlXB2cUoDFYVbf
-o4WQdz0uYvHKJGbWHLbgnaOxnjp3B1X5uujI5k2AL4CeaD7VG4fVBBic4g3lzkdh
-HibLDNrIFFdM3jp/BrQZwrXrusVhkbWn7PO9L4wpD9lSYB9OgCDGu4qHJOCz1DGL
-UQx8FhbPNcG2PLtVfWNCAyaq5q+rpmLlpZnLOkmLzAG3FGsF5XEDIhccgs+5IyDi
-V95j9pAzlh/UBYyHJAxD9/Zknefp4Q==
-=ledw
------END PGP SIGNATURE-----
-
---6vvxfvo7nyze7l5k--
+--
+Carlos Llamas

@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFC454F950
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFC554F979
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382836AbiFQOlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S1382851AbiFQOnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382808AbiFQOlP (ORCPT
+        with ESMTP id S1382876AbiFQOnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:41:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31253517C2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:41:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC122B82ACA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1494FC3411F;
-        Fri, 17 Jun 2022 14:41:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QzkYhGe9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655476869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d8vYn2o7BallV+Qa266BjqpvAHp10+eqXCKCBj7r/eo=;
-        b=QzkYhGe99W1kq2eyE2vfuWMPLRmckrTq5O2txU8I/ySiZrfGA19pjm7Jh2zbGz7f2km2eE
-        ZTj7z3HPmLA0BscMpOvDmsj7XopUMTzWYXu/SrLGdRlGixRfXiiJTElcz5V2HhZq6mIRpn
-        BRDJJSv9+aQ3HCrEw47R0oEbBSSbZsg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 87fa2686 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 17 Jun 2022 14:41:09 +0000 (UTC)
-Date:   Fri, 17 Jun 2022 16:41:05 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: 5.19 printk breaks message ordering
-Message-ID: <YqySgdH3sGj7o9O8@zx2c4.com>
-References: <YqyANveL50uxupfQ@zx2c4.com>
- <YqyN20jpRw1SaaTw@alley>
+        Fri, 17 Jun 2022 10:43:47 -0400
+Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D9924F9ED
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=oqTFS
+        HQR0LyoKRjMr2/vnSyFVI269+kRaqPVQCinquA=; b=YUbWt5fwnt/qeuRUmA3ks
+        eVCpZ2psR0iXF1+SWD6egNuCcjodxyAm8GSiCgo5o0xD45yq6mZpxNt31gJUPPWs
+        4Zu2nyVGceNZd+r9Q4L5CpPrlk6Q1FOH/wELEeUK5ApmuVtgj2z/Y/aZJBdZbCFY
+        jMmJxz4160rAY0fqjpIZ7A=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp7 (Coremail) with SMTP id DsmowACHJv+Ckqxin0VlDg--.21214S2;
+        Fri, 17 Jun 2022 22:41:07 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     jic23@kernel.org, lars@metafoo.de, joel@jms.id.au, andrew@aj.id.au,
+        p.zabel@pengutronix.de, lgirdwood@gmail.com, broonie@kernel.org,
+        billy_tsai@aspeedtech.com, colin.king@intel.com
+Cc:     windhl@126.com, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: adc: Fix refcount leak bug in aspeed_adc
+Date:   Fri, 17 Jun 2022 22:41:06 +0800
+Message-Id: <20220617144106.4050677-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YqyN20jpRw1SaaTw@alley>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsmowACHJv+Ckqxin0VlDg--.21214S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZF4fWry3Gry7Cr4UZr15XFb_yoW3CrcEgw
+        s7WwsxXrnrAFZ0vrWqvw1fXr909Fy8WFWkuF10v34fWa4UArZ7AryDWF4YvrWUZrs2va45
+        ZF4DX34xJrnxGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjn2-3UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuA0jF2JVj6h7ygABsh
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,19 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 04:21:15PM +0200, Petr Mladek wrote:
-> In fact, in your case you might get even better synchronization
-> if you do it the other way and write userspace messages into
-> the kernel log via /dev/kmsg:
-> 
->      echo "Hello world" > /dev/kmsg
+In aspeed_adc_set_trim_data(), of_find_node_by_name() will return
+a node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-The idea is to interleave stderr/stdout properly, as CI has done for
-ages, which threaded printk breaks, and which my patch (now posted)
-fixes behind a default-off option. You can't dup2 /dev/kmsg to 1 and 2,
-as the write() semantics are different, with respect to buffering and
-with respect to new lines. The interfaces aren't comparable, so this
-isn't quite a solution. (Besides, not breaking things as they currently
-exist has a certain benefit.)
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/iio/adc/aspeed_adc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Jason
+diff --git a/drivers/iio/adc/aspeed_adc.c b/drivers/iio/adc/aspeed_adc.c
+index 0793d2474cdc..9341e0e0eb55 100644
+--- a/drivers/iio/adc/aspeed_adc.c
++++ b/drivers/iio/adc/aspeed_adc.c
+@@ -186,6 +186,7 @@ static int aspeed_adc_set_trim_data(struct iio_dev *indio_dev)
+ 		return -EOPNOTSUPP;
+ 	}
+ 	scu = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(scu)) {
+ 		dev_warn(data->dev, "Failed to get syscon regmap\n");
+ 		return -EOPNOTSUPP;
+-- 
+2.25.1
+

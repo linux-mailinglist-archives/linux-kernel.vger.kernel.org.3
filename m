@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC0654F5AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226E954F5B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381942AbiFQKlo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Jun 2022 06:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S1381954AbiFQKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381868AbiFQKlm (ORCPT
+        with ESMTP id S1381952AbiFQKlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:41:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408736B023
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:41:40 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPb8w3WG6z687Rd;
-        Fri, 17 Jun 2022 18:37:52 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Fri, 17 Jun 2022 12:41:37 +0200
-Received: from localhost (10.81.209.131) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Fri, 17 Jun
- 2022 11:41:36 +0100
-Date:   Fri, 17 Jun 2022 11:41:32 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ying Huang <ying.huang@intel.com>
-CC:     Johannes Weiner <hannes@cmpxchg.org>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Alistair Popple" <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Feng Tang" <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        "Baolin Wang" <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory
- tiers
-Message-ID: <20220617114132.00000e4b@Huawei.com>
-In-Reply-To: <2b261518bbb5b8466301f8ab978f408141fa6e68.camel@intel.com>
-References: <YqDncfLeEeBaosrY@cmpxchg.org>
-        <02ee2c97-3bca-8eb6-97d8-1f8743619453@linux.ibm.com>
-        <YqH74WaUzJlb+smt@cmpxchg.org>
-        <20220609152243.00000332@Huawei.com>
-        <YqJa4N/VlS4zN4vf@cmpxchg.org>
-        <20220610105708.0000679b@Huawei.com>
-        <YqdEEhJFr3SlfvSJ@cmpxchg.org>
-        <4297bd21-e984-9d78-2bca-e70c11749a72@linux.ibm.com>
-        <Yqdc4DE8gYJ3zesO@cmpxchg.org>
-        <42f536af-b17d-b001-7b6b-2c6b928f3ecf@linux.ibm.com>
-        <YqjZyP11O0yCMmiO@cmpxchg.org>
-        <2b261518bbb5b8466301f8ab978f408141fa6e68.camel@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 17 Jun 2022 06:41:49 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28F76B023;
+        Fri, 17 Jun 2022 03:41:47 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id m25so4283445lji.11;
+        Fri, 17 Jun 2022 03:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xyIh7SRi1+uQL1EcstdGCewgYDmpWa5/DYnD0Wi9meA=;
+        b=hur8IJerFsNRVOx4RBRLr+jnfw8dufcv54gIBIauLsqyU3jWZZzpI/myuKkOyu65aI
+         pplfh5QNq2Ecug/fhc22KLgPUHXyNWZ+cO15eHk1cYPv2FWfX9+7AZhT5EzDSNQ428WG
+         c/9ETnw6L9oayrl8xCHudGn6qPLpcL2YiuX0SPmisHeHKAYgMmwail1ChUodr4AzPUiQ
+         yfgHK2ziXmplsqjED603UaE0m0ql8f2k+ekOW/SPyw8ExWW9DirYf0pEXaJ8G4aOJc2n
+         r6bRgGsra6XcrgMOkIOeYtGRAJQtrA08yiATlrFEy0HvA/MgEWSfnl2FQKQM2DIuWVf4
+         22hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xyIh7SRi1+uQL1EcstdGCewgYDmpWa5/DYnD0Wi9meA=;
+        b=CqXQ3XZkfOP7lBYKtcE/1oh1/9XUEoI87cbChsKGO8632TVmVMycCh2rL0nN7AWgnF
+         npXqj3Z3eWitK8/6OECyKlBqs2ISElNFEzPMn2XyTyotCkXMWaNqwMPgbDGYsIIHDKsh
+         KLuxZcWI5XQ8FEL3gGPhtdTXfn2BW+bwfmJa3aOBTYkeLbuLsF7lEP4M63tQGCpku2Pf
+         +RbRC2x25n/Aw/D7QyKdh0+gStTrU5R35aT1dTAwn8841O6/+HS08V13TnXdMSVnLAj5
+         a5I3904zO2xjQsO9GtzE4w3NUk1Yta6qp2AUy/RQaX6Z3Mm8yVgnU2ynLH4z2ei9F2UG
+         yvEQ==
+X-Gm-Message-State: AJIora/obuBPsulYqALptsFXRHiEKjofV4MzFe8QWaK9eey4f/EZzPDK
+        Al++rItV2RxdlkwaRcN1g6M=
+X-Google-Smtp-Source: AGRyM1sUBgFASvsZCX+N7xQuvyLpKw0H8qKSzJdquZm4VXGzOue/rBHIm/rCVxd82VUUi7oilY7NxQ==
+X-Received: by 2002:a2e:94cc:0:b0:24f:81d:15f3 with SMTP id r12-20020a2e94cc000000b0024f081d15f3mr4661643ljh.407.1655462505810;
+        Fri, 17 Jun 2022 03:41:45 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id s12-20020a05651c200c00b00253cd476074sm499276ljo.111.2022.06.17.03.41.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 03:41:45 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 13:41:43 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/18] PCI: dwc: Various fixes and cleanups
+Message-ID: <20220617104143.yj2mlnj4twoxoeld@mobilestation>
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220616200316.GA1106102@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.81.209.131]
-X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220616200316.GA1106102@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,192 +83,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 09:11:24 +0800
-Ying Huang <ying.huang@intel.com> wrote:
-
-> On Tue, 2022-06-14 at 14:56 -0400, Johannes Weiner wrote:
-> > On Tue, Jun 14, 2022 at 01:31:37PM +0530, Aneesh Kumar K V wrote:  
-> > > On 6/13/22 9:20 PM, Johannes Weiner wrote:  
-> > > > On Mon, Jun 13, 2022 at 07:53:03PM +0530, Aneesh Kumar K V wrote:  
-> > > > > If the kernel still can't make the right decision, userspace could rearrange
-> > > > > them in any order using rank values. Without something like rank, if
-> > > > > userspace needs to fix things up,  it gets hard with device
-> > > > > hotplugging. ie, the userspace policy could be that any new PMEM tier device
-> > > > > that is hotplugged, park it with a very low-rank value and hence lowest in
-> > > > > demotion order by default. (echo 10 >
-> > > > > /sys/devices/system/memtier/memtier2/rank) . After that userspace could
-> > > > > selectively move the new devices to the correct memory tier?  
-> > > > 
-> > > > I had touched on this in the other email.
-> > > > 
-> > > > This doesn't work if two drivers that should have separate policies
-> > > > collide into the same tier - which is very likely with just 3 tiers.
-> > > > So it seems to me the main usecase for having a rank tunable falls
-> > > > apart rather quickly until tiers are spaced out more widely. And it
-> > > > does so at the cost of an, IMO, tricky to understand interface.
-> > > >   
-> > > 
-> > > Considering the kernel has a static map for these tiers, how can two drivers
-> > > end up using the same tier? If a new driver is going to manage a memory
-> > > device that is of different characteristics than the one managed by dax/kmem,
-> > > we will end up adding 
-> > > 
-> > > #define MEMORY_TIER_NEW_DEVICE 4
-> > > 
-> > > The new driver will never use MEMORY_TIER_PMEM
-> > > 
-> > > What can happen is two devices that are managed by DAX/kmem that
-> > > should be in two memory tiers get assigned the same memory tier
-> > > because the dax/kmem driver added both the device to the same memory tier.
-> > > 
-> > > In the future we would avoid that by using more device properties like HMAT
-> > > to create additional memory tiers with different rank values. ie, we would
-> > > do in the dax/kmem create_tier_from_rank() .  
+On Thu, Jun 16, 2022 at 03:03:16PM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 10, 2022 at 11:25:16AM +0300, Serge Semin wrote:
+> > This patchset is a first one in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
 > > 
-> > Yes, that's the type of collision I mean. Two GPUs, two CXL-attached
-> > DRAMs of different speeds etc.
+> > [1: In-progress v4] PCI: dwc: Various fixes and cleanups
+> > Link: ---you are looking at it---
+> > [2: In-progress v2] PCI: dwc: Add hw version and dma-ranges support
+> > Link: https://lore.kernel.org/linux-pci/20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru/
+> > [3: In-progress v2] PCI: dwc: Add extended YAML-schema and Baikal-T1 support
+> > Link: https://lore.kernel.org/linux-pci/20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru/
+> > [4: In-progress v2] dmaengine: dw-edma: Add RP/EP local DMA support
+> > Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
 > > 
-> > I also like Huang's idea of using latency characteristics instead of
-> > abstract distances. Though I'm not quite sure how feasible this is in
-> > the short term, and share some concerns that Jonathan raised. But I
-> > think a wider possible range to begin with makes sense in any case.
-> >   
-> > > > In the other email I had suggested the ability to override not just
-> > > > the per-device distance, but also the driver default for new devices
-> > > > to handle the hotplug situation.
-> > > >   
-> > > 
-> > > I understand that the driver override will be done via module parameters.
-> > > How will we implement device override? For example in case of dax/kmem driver
-> > > the device override will be per dax device? What interface will we use to set the override?
-> > > 
-> > > IIUC in the above proposal the dax/kmem will do
-> > > 
-> > > node_create_and_set_memory_tier(numa_node, get_device_tier_index(dev_dax));
-> > > 
-> > > get_device_tier_index(struct dev_dax *dev)
-> > > {
-> > > ††††return dax_kmem_tier_index; // module parameter
-> > > }
-> > > 
-> > > Are you suggesting to add a dev_dax property to override the tier defaults?  
+> > Note it is very recommended to merge the patchsets in the same order as
+> > they are placed in the list above in order to prevent possible merge
+> > conflicts. Nothing prevents them from being reviewed synchronously though.
+> > Any tests are very welcome!
 > > 
-> > I was thinking a new struct memdevice and struct memtype(?). Every
-> > driver implementing memory devices like this sets those up and
-> > registers them with generic code and preset parameters. The generic
-> > code creates sysfs directories and allows overriding the parameters.
+> > As it can be easily inferred from the patchset title, this series is about
+> > the DW PCIe Root Port/Endpoint driver fixes and the code cleanups, where
+> > fixes come before the cleanup patches. The patchset starts with adding the
+> > stop_link() platform-specific method invocation in case of the PCIe host
+> > probe procedure errors. It has been missing in the cleanup-on-error path
+> > of the DW PCIe Host initialization method. After that the unrolled CSRs
+> > layout is added to the iATU disable procedure. In third the disable iATU
+> > procedure is fixed to be called only for the internal ATU as being
+> > specific for the internal ATU implementation. Then the outbound iATU
+> > extended region setup procedure is fixed to have the INCREASE_REGION_SIZE
+> > flag set based on the limit-address - not the region size one. The last
+> > but not least the CDM-check enabling procedure is fixed to be independent
+> > from the non-related num_lanes field state.
 > > 
-> > struct memdevice {
-> > 	struct device dev;
-> > 	unsigned long distance;
-> > 	struct list_head siblings;
-> > 	/* nid? ... */
-> > };
+> > Afterwards there is a series of cleanups. It concerns the changes like
+> > adding braces to the multi-line if-else constructions, trailing new-lines
+> > to the print format-string, dropping unnecessary version checking, and
+> > various code simplifications and optimizations.
 > > 
-> > struct memtype {
-> > 	struct device_type type;
-> > 	unsigned long default_distance;
-> > 	struct list_head devices;
-> > };
+> > New features like adding two-level DT bindings abstraction, adding better
+> > structured IP-core version interface, adding iATU regions size detection
+> > and the PCIe regions verification procedure, adding dma-ranges support,
+> > introducing a set of generic platform clocks and resets and finally adding
+> > Baikal-T1 PCIe interface support will be submitted in the next part of the
+> > series.
 > > 
-> > That forms the (tweakable) tree describing physical properties.  
-> 
-> In general, I think memtype is a good idea.  I have suggested
-> something similar before.  It can describe the characters of a
-> specific type of memory (same memory media with different interface
-> (e.g., CXL, or DIMM) will be different memory types).  And they can
-> be used to provide overriding information.
-I'm not sure you are suggesting interface as one element of distinguishing
-types, or as the element - just in case it's as 'the element'.
-Ignore the next bit if not ;)
-
-Memory "interface" isn't going to be enough of a distinction.  If you want to have
-a default distance it would need to be different for cases where the
-same 'type' of RAM has very different characteristics. Applies everywhere
-but given CXL 'defines' a lot of this - if we just have DRAM attached
-via CXL:
-
-1. 16-lane direct attached DRAM device.  (low latency - high bw)
-2. 4x 16-lane direct attached DRAM interleaved (low latency - very high bw)
-3. 4-lane direct attached DRAM device (low latency - low bandwidth)
-4. 16-lane to single switch, 4x 4-lane devices interleaved (mid latency - high bw)
-5. 4-lane to single switch, 4x 4-lane devices interleaved (mid latency, mid bw)
-6. 4x 16-lane so 4 switch, each switch to 4 DRAM devices (mid latency, very high bw)
-(7. 16 land directed attached nvram. (midish latency, high bw - perf wise might be
-    similarish to 4).
-
-It could be a lot more complex, but hopefully that conveys that 'type'
-is next to useless to characterize things unless we have a very large number
-of potential subtypes. If we were on current tiering proposal
-we'd just have the CXL subsystem manage multiple tiers to cover what is
-attached.
-
-> 
-> As for memdevice, I think that we already have "node" to represent
-> them in sysfs.  Do we really need another one?  Is it sufficient to
-> add some links to node in the appropriate directory?  For example,
-> make memtype class device under the physical device (e.g. CXL device),
-> and create links to node inside the memtype class device directory?
-> 
-> > From that, the kernel then generates the ordered list of tiers.  
-> 
-> As Jonathan Cameron pointed, we may need the memory tier ID to be
-> stable if possible.  I know this isn't a easy task.  At least we can
-> make the default memory tier (CPU local DRAM) ID stable (for example
-> make it always 128)?  That provides an anchor for users to understand.
-> 
-> Best Regards,
-> Huang, Ying
-> 
-> > > > This should be less policy than before. Driver default and per-device
-> > > > distances (both overridable) combined with one tunable to set the
-> > > > range of distances that get grouped into tiers.
-> > > >   
-> > > 
-> > > Can you elaborate more on how distance value will be used? The device/device NUMA node can have
-> > > different distance value from other NUMA nodes. How do we group them?
-> > > for ex: earlier discussion did outline three different topologies. Can you
-> > > ellaborate how we would end up grouping them using distance?
-> > > 
-> > > For ex: in the topology below node 2 is at distance 30 from Node0 and 40 from Nodes
-> > > so how will we classify node 2?
-> > > 
-> > > 
-> > > Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
-> > > 
-> > > 		  20
-> > > ††Node 0 (DRAM)  ----  Node 1 (DRAM)
-> > > †††††††|        \   /       |
-> > > †††††††| 30    40 X 40      | 30
-> > > †††††††|        /   \       |
-> > > ††Node 2 (PMEM)  ----  Node 3 (PMEM)
-> > > 		  40
-> > > 
-> > > node distances:
-> > > node   0    1    2    3
-> > > †††0  10   20   30   40
-> > > †††1  20   10   40   30
-> > > †††2  30   40   10   40
-> > > †††3  40   30   40   10  
+> > Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v2:
+> > - Fix the end address of the example in the patch log with
+> >   the INCREASE_REGION_SIZE flag usage fixup. It should be
+> >   0x1000FFFF and not 0x0000FFFF (@Manivannan).
+> > - Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+> >   (@Manivannan)
 > > 
-> > I'm fairly confused by this example. Do all nodes have CPUs? Isn't
-> > this just classic NUMA, where optimizing for locality makes the most
-> > sense, rather than tiering?
+> > Link: https://lore.kernel.org/linux-pci/20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v3:
+> > - Convert region variable type to u32 in order to fix the implicit type
+> >   conversion peculiarity. (@kbot)
+> > - Rebase onto v5.18-rc6.
 > > 
-> > Forget the interface for a second, I have no idea how tiering on such
-> > a system would work. One CPU's lower tier can be another CPU's
-> > toptier. There is no lowest rung from which to actually *reclaim*
-> > pages. Would the CPUs just demote in circles?
+> > Link: https://lore.kernel.org/linux-pci/20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v4:
+> > - Move the patch "PCI: dwc: Deallocate EPC memory on EP init error" to
+> >   being applied before the cleanup patches.
+> > - Add a new fixes patch: "PCI: dwc: Enable CDM-check independently from
+> >   the num_lanes value".
+> > - Add a new cleanup patch: "PCI: dwc: Organize local variables usage".
+> > - Add a new cleanup patch: "PCI: dwc: Re-use local pointer to the
+> >   resource data".
+> > - Add a new cleanup patch: "PCI: dwc: Add start_link/stop_link inliners".
+> > - Add a new cleanup patch: "PCI: dwc: Move io_cfg_atu_shared to the Root
+> >   Port descriptor".
+> > - Add a new cleanup patch: "PCI: dwc: Add dw_ prefix to the pcie_port
+> >   structure name".
+> > - Drop the patch "PCI: dwc: Don't use generic IO-ops for DBI-space
+> >   access". (@Rob)
+> > - Drop Manivannan tested tag from the changed patches.
+> > - Rebase onto v5.18.
 > > 
-> > And the coldest pages on one socket would get demoted into another
-> > socket and displace what that socket considers hot local memory?
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > Cc: Jingoo Han <jingoohan1@gmail.com>
+> > Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+> > Cc: "Krzysztof Wilczy≈Ñski" <kw@linux.com>
+> > Cc: Frank Li <Frank.Li@nxp.com>
+> > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Cc: linux-pci@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
 > > 
-> > I feel like I missing something.
+> > Serge Semin (18):
+> >   PCI: dwc: Stop link in the host init error and de-initialization
+> >   PCI: dwc: Add unroll iATU space support to the regions disable method
+> >   PCI: dwc: Disable outbound windows for controllers with iATU
+> >   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+> >   PCI: dwc: Deallocate EPC memory on EP init error
+> >   PCI: dwc: Enable CDM-check independently from the num_lanes value
+> >   PCI: dwc: Add braces to the multi-line if-else statements
+> >   PCI: dwc: Add trailing new-line literals to the log messages
+> >   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+> >   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+> >   PCI: dwc: Organize local variables usage
+> >   PCI: dwc: Re-use local pointer to the resource data
+> >   PCI: dwc: Add start_link/stop_link inliners
+> >   PCI: dwc: Move io_cfg_atu_shared to the Root Port descriptor
+> >   PCI: dwc: Add dw_ prefix to the pcie_port structure name
+> >   PCI: dwc-plat: Simplify the probe method return value handling
+> >   PCI: dwc-plat: Discard unused regmap pointer
+> >   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
 > > 
-> > When we're talking about tiered memory, I'm thinking about CPUs
-> > utilizing more than one memory node. If those other nodes have CPUs,
-> > you can't reliably establish a singular tier order anymore and it
-> > becomes classic NUMA, no?  
-> 
+> >  drivers/pci/controller/dwc/pci-dra7xx.c       |  12 +-
+> >  drivers/pci/controller/dwc/pci-exynos.c       |   6 +-
+> >  drivers/pci/controller/dwc/pci-imx6.c         |   6 +-
+> >  drivers/pci/controller/dwc/pci-keystone.c     |  20 ++--
+> >  .../pci/controller/dwc/pci-layerscape-ep.c    |  12 --
+> >  drivers/pci/controller/dwc/pci-layerscape.c   |   2 +-
+> >  drivers/pci/controller/dwc/pci-meson.c        |   2 +-
+> >  drivers/pci/controller/dwc/pcie-al.c          |   6 +-
+> >  drivers/pci/controller/dwc/pcie-armada8k.c    |   4 +-
+> >  drivers/pci/controller/dwc/pcie-artpec6.c     |   4 +-
+> >  .../pci/controller/dwc/pcie-designware-ep.c   |  30 +++--
+> >  .../pci/controller/dwc/pcie-designware-host.c | 104 ++++++++++--------
+> >  .../pci/controller/dwc/pcie-designware-plat.c |  25 +----
+> >  drivers/pci/controller/dwc/pcie-designware.c  |  72 +++++++-----
+> >  drivers/pci/controller/dwc/pcie-designware.h  |  46 +++++---
+> >  drivers/pci/controller/dwc/pcie-dw-rockchip.c |   4 +-
+> >  drivers/pci/controller/dwc/pcie-fu740.c       |   2 +-
+> >  drivers/pci/controller/dwc/pcie-histb.c       |  10 +-
+> >  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
+> >  drivers/pci/controller/dwc/pcie-keembay.c     |   4 +-
+> >  drivers/pci/controller/dwc/pcie-kirin.c       |   2 +-
+> >  drivers/pci/controller/dwc/pcie-qcom.c        |   4 +-
+> >  drivers/pci/controller/dwc/pcie-spear13xx.c   |   6 +-
+> >  drivers/pci/controller/dwc/pcie-tegra194.c    |  22 ++--
+> >  drivers/pci/controller/dwc/pcie-uniphier.c    |  10 +-
+> >  drivers/pci/controller/dwc/pcie-visconti.c    |   6 +-
+> >  26 files changed, 225 insertions(+), 202 deletions(-)
 > 
 
+> This doesn't apply cleanly on v5.19-rc1 (my "main" branch).  v5.19-rc1
+> was tagged June 5, but apparently v4 was rebased to v5.18 and posted
+> June 10?  That's just a non-starter because many of these files were
+> changed during the merge window between v5.18 and v5.19-rc1.
+
+Ok. I'll rebase it on top of v5.19-rcX on the next cycle.
+
+> 
+> I'll be looking for an ack from Jingoo and/or Gustavo, maintainers of
+> pcie-designware.c and related files.
+
+Alas this will be very unluckily to happen. They have been inactive
+for more than four months on this and the rest of the patchsets
+(that's how long the patchsets have been hanging out on review).
+The last commit authored by Gustavo was the commit ce31ff786ddf
+("PCI: dwc: Fix 'cast truncates bits from constant value'") posted
+in Sep 22, 2020 and no review activity afterwards. Jingoo' last
+ack was in Jun 25, 2019. So two and three years of silence accordingly
+doesn't give any hope on the sooner reaction from them.
+
+> 
+> Generally I wait for owners of files to comment before I review in
+> detail.  This is just expedient because they know the code better than
+> I do and can resolve lots of things in parallel before getting
+> single-threaded on me or Lorenzo.
+
+I do understand the standard approach, but in this case it seems like
+the official maintainers've abandoned the drivers (DW PCIe and eDMA).
+That's why I offered my hands (at least twice) in looking for both DW
+PCIe and eDMA drivers seeing none of the maintainers have shown any
+sign of interest in reviewing the submitted cleanup/fixes/features
+patches (there are about 110 patches I've submitted altogether).
+
+-Sergey
+
+> 
+> Bjorn

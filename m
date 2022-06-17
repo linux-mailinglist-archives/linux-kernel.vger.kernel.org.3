@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F63354FFEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E210A54FFF7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378596AbiFQW3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        id S236497AbiFQWb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348242AbiFQW3c (ORCPT
+        with ESMTP id S235060AbiFQWbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:29:32 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3FE62107
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:29:31 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-101bc0d279cso2116718fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S9l9aGJ8OWlkPL90OX67eL3mtz7dIUCfETgWKj+djr0=;
-        b=dTe/NxZQBPQAy1F7WnL23okeDwPy38Noiw8RFQrcizVeGg3jD9pD69ShC7xavkNH4l
-         Hj9JhgoSpeDHNfyt6SFU6z4BMaCPgD8wfiDIficii6RRXnUdpr4X8TMkBCcZOCGOomdv
-         l5kkHr4OAgQLl8oP+tZ19yjKHd4uHxaKJjVLU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S9l9aGJ8OWlkPL90OX67eL3mtz7dIUCfETgWKj+djr0=;
-        b=HryHfZBkmgWMvzUd89jF0bm4dP5tQU3/vxtTMbFgNRM8iNpPcOzfPKfOGdeBlSA+mO
-         26Yaz2W6jVm5mXqnzjlBN4iJGcFM8JXaF7FHUIdOvO5hqaMhST0nUT6FGQ2FwJLyi1dp
-         g6wDpDCQMWkB1mLve5KwZHnq4E6l818ykn2dOUNGVv/yi+/uLTSiOHdAHvtrJTFXR1eQ
-         Dtc72qr4LvV15vMxSSFhJRxtTwxV8d3nrMM5Yd+sUHVdw7yd/aucFSEze5o3c4MV7exk
-         SiQLOniSd7oqKYwOR5DJiTCreDI4zjxGgyX1/dG7M8gu6dAFLWON+KrBAJ8lJFrjV4ju
-         7hmw==
-X-Gm-Message-State: AJIora/7AQmFPefFq5cjLTvj8G3QlAHAYKfhcmAUJ0OWIG2dY6k8Zl94
-        8BZa0Pqc3q+yJz3p9ppRlOOsWg==
-X-Google-Smtp-Source: AGRyM1scSMtgPqx2X4Uo4L2udxcp1XJ6fjTLMu6AaI0BKuQTxtkoRuARdlmR4tjh2Rm+0QhKu/60Sg==
-X-Received: by 2002:a05:6870:434d:b0:e5:9115:cb15 with SMTP id x13-20020a056870434d00b000e59115cb15mr12253484oah.53.1655504970747;
-        Fri, 17 Jun 2022 15:29:30 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id 125-20020a4a1183000000b0035f6cf71391sm3339452ooc.43.2022.06.17.15.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 15:29:30 -0700 (PDT)
-Subject: Re: [PATCH 2/2] selftests/x86/amx: Fix the test to avoid failure when
- AMX is unavailable
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220401221014.13556-1-chang.seok.bae@intel.com>
- <20220401221014.13556-3-chang.seok.bae@intel.com>
- <aaab50d2-592c-69e4-58a6-0a0926669de3@linuxfoundation.org>
- <327cde12-daea-84ba-4b24-64fe12e89dea@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <de61ffdb-638a-ca84-31b5-55f6a8616597@linuxfoundation.org>
-Date:   Fri, 17 Jun 2022 16:29:28 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 17 Jun 2022 18:31:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3352C62125;
+        Fri, 17 Jun 2022 15:31:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3374B82B1E;
+        Fri, 17 Jun 2022 22:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB69C3411B;
+        Fri, 17 Jun 2022 22:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655505080;
+        bh=Jp4eIONtSs6CWILka62alidYJLIpx9VDEl4Ouzu1iBE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cfe2aC3SsNv0taX/O9yxiekxXZfxv7Xte5M7lNEsPf9x0mhp1IskXj9gxyIHxJQeM
+         SMXqmYDl6hCotPpO7UIzpuF5kXqA/b561wOipbmHC6YV1wYklHKqHaZmmi1HGGnajd
+         Mxhthm91pBBjLjNK2knc9Royz6jSdAjxwpTtwQFWE8UYt9hnGD5e6IcSn6qIx+aRyi
+         qMvIReINpOQ++H5QLWm4pDap7NU8sZiiBCagoXMnDWeFOrH1lg5c0lkj1pIlEnWWm+
+         OaYHWWY6rsZRtmxOZLoDYNkTvhR10qy1yj/rBNEsN+Rn248lpISKV7bKA6ND7yPRla
+         3uIeLQYhieXBg==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 1/3] f2fs: attach inline_data after setting compression
+Date:   Fri, 17 Jun 2022 15:31:04 -0700
+Message-Id: <20220617223106.3517374-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-In-Reply-To: <327cde12-daea-84ba-4b24-64fe12e89dea@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 4:21 PM, Chang S. Bae wrote:
-> On 6/16/2022 3:54 PM, Shuah Khan wrote:
->> On 4/1/22 4:10 PM, Chang S. Bae wrote:
->>>
+This fixes the below corruption.
 
->>
->> This should KSFT_SKIP for this to be reported as a skip. Returning 0
->> will be reported as a Pass.
-> 
-> I think that's a good point, thanks.
-> 
-> Now, along with the on-going documentation [1], this test code can be simplified like the below changes, instead of having those cpuid functions:
-> 
+[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
 
-Simplifying is always good. Send me v2 and I will review it.
+Cc: <stable@vger.kernel.org>
+Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/namei.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+index c549acb52ac4..a841abe6a071 100644
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 	if (test_opt(sbi, INLINE_XATTR))
+ 		set_inode_flag(inode, FI_INLINE_XATTR);
+ 
+-	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+-		set_inode_flag(inode, FI_INLINE_DATA);
+ 	if (f2fs_may_inline_dentry(inode))
+ 		set_inode_flag(inode, FI_INLINE_DENTRY);
+ 
+@@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 
+ 	f2fs_init_extent_tree(inode, NULL);
+ 
+-	stat_inc_inline_xattr(inode);
+-	stat_inc_inline_inode(inode);
+-	stat_inc_inline_dir(inode);
+-
+ 	F2FS_I(inode)->i_flags =
+ 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
+ 
+@@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 			set_compress_context(inode);
+ 	}
+ 
++	/* Should enable inline_data after compression set */
++	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
++		set_inode_flag(inode, FI_INLINE_DATA);
++
++	stat_inc_inline_xattr(inode);
++	stat_inc_inline_inode(inode);
++	stat_inc_inline_dir(inode);
++
+ 	f2fs_set_inode_flags(inode);
+ 
+ 	trace_f2fs_new_inode(inode, 0);
+@@ -325,6 +327,8 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+ 		if (!is_extension_exist(name, ext[i], false))
+ 			continue;
+ 
++		/* Do not use inline_data with compression */
++		clear_inode_flag(inode, FI_INLINE_DATA);
+ 		set_compress_context(inode);
+ 		return;
+ 	}
+-- 
+2.36.1.476.g0c4daa206d-goog
+

@@ -2,56 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF02354F1FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ADB54F20E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380182AbiFQHaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S1380617AbiFQHgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiFQHaA (ORCPT
+        with ESMTP id S1380565AbiFQHgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:30:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8F5CB7C3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655450999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Fl5g9NFjvXIN0xGJA157NHcsEoJ12uvuRlfGLrOUGTg=;
-        b=UHPpzlb2Kv9v0LJJ6/6qOQYyfKiil5josN93Y837pPHG3nozBvWp+dTSXekZxnupgnoePI
-        PXZA40qyJnV/03q1TST2P2KqQQsSDkt40WxdicV6pjbbmD2Mkw3mgaXpQWD+LPfcV6kul2
-        ymL7PusPgWRdmg7LBw4QcG2/oeXkWpQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-ndiwV_2hPRySbG87GwEyPg-1; Fri, 17 Jun 2022 03:29:55 -0400
-X-MC-Unique: ndiwV_2hPRySbG87GwEyPg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CD8D802C17;
-        Fri, 17 Jun 2022 07:29:55 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-87.pek2.redhat.com [10.72.13.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 68F4740C141F;
-        Fri, 17 Jun 2022 07:29:52 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] virtio-net: fix race between ndo_open() and virtio_device_ready()
-Date:   Fri, 17 Jun 2022 15:29:49 +0800
-Message-Id: <20220617072949.30734-1-jasowang@redhat.com>
+        Fri, 17 Jun 2022 03:36:45 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05B266FAB;
+        Fri, 17 Jun 2022 00:36:43 -0700 (PDT)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LPW7L1R8YzDrCs;
+        Fri, 17 Jun 2022 15:36:14 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500022.china.huawei.com
+ (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
+ 2022 15:36:41 +0800
+From:   Zhang Zekun <zhangzekun11@huawei.com>
+To:     <ezequiel@vanguardiasur.com.ar>, <mchehab@kernel.org>,
+        <gregkh@linuxfoundation.org>, <andrzej.p@collabora.com>,
+        <hverkuil-cisco@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] media: rkvdec: Fix memset size error
+Date:   Fri, 17 Jun 2022 07:31:01 +0000
+Message-ID: <20220617073101.101234-1-zhangzekun11@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500022.china.huawei.com (7.185.36.66)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,47 +48,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We used to call virtio_device_ready() after netdev registration. This
-cause a race between ndo_open() and virtio_device_ready(): if
-ndo_open() is called before virtio_device_ready(), the driver may
-start to use the device before DRIVER_OK which violates the spec.
+'dma_alloc_coherent()' alloc a 'RKVDEC_VP9_COUNT_SIZE' size area to
+'unsigned char *count_tbl', however, the memset() bellow only set
+'sizeof(*count_tbl)', which equals to 1, bytes to zero. This can
+ cause unexpected error.
 
-Fixing this by switching to use register_netdevice() and protect the
-virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
-only be called after virtio_device_ready().
-
-Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
+Fixes: f25709c4ff15 ("media: rkvdec: Add the VP9 backend")
+Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
 ---
- drivers/net/virtio_net.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/staging/media/rkvdec/rkvdec-vp9.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index db05b5e930be..8a5810bcb839 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
- 	if (vi->has_rss || vi->has_rss_hash_report)
- 		virtnet_init_default_rss(vi);
+diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+index 311a12656072..3ad303a3de48 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-vp9.c
++++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+@@ -1026,7 +1026,7 @@ static int rkvdec_vp9_start(struct rkvdec_ctx *ctx)
  
--	err = register_netdev(dev);
-+	/* serialize netdev register + virtio_device_ready() with ndo_open() */
-+	rtnl_lock();
-+
-+	err = register_netdevice(dev);
- 	if (err) {
- 		pr_debug("virtio_net: registering device failed\n");
-+		rtnl_unlock();
- 		goto free_failover;
- 	}
+ 	vp9_ctx->count_tbl.size = RKVDEC_VP9_COUNT_SIZE;
+ 	vp9_ctx->count_tbl.cpu = count_tbl;
+-	memset(count_tbl, 0, sizeof(*count_tbl));
++	memset(count_tbl, 0, RKVDEC_VP9_COUNT_SIZE);
+ 	rkvdec_init_v4l2_vp9_count_tbl(ctx);
  
- 	virtio_device_ready(vdev);
- 
-+	rtnl_unlock();
-+
- 	err = virtnet_cpu_notif_add(vi);
- 	if (err) {
- 		pr_debug("virtio_net: registering cpu notifier failed\n");
+ 	return 0;
 -- 
-2.25.1
+2.17.1
 

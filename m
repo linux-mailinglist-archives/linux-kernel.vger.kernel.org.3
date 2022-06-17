@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47544550035
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC22550039
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347556AbiFQWwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S1380988AbiFQW4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiFQWwD (ORCPT
+        with ESMTP id S1357128AbiFQW4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:52:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C4659322
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:52:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DFF4B825F3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 22:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30599C3411B;
-        Fri, 17 Jun 2022 22:51:59 +0000 (UTC)
-Date:   Fri, 17 Jun 2022 18:51:57 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] x86/ftrace: Remove OBJECT_FILES_NON_STANDARD usage
-Message-ID: <20220617185157.3c6f442a@gandalf.local.home>
-In-Reply-To: <b7a7a42fe306aca37826043dac89e113a1acdbac.1654268610.git.jpoimboe@kernel.org>
-References: <b7a7a42fe306aca37826043dac89e113a1acdbac.1654268610.git.jpoimboe@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 17 Jun 2022 18:56:23 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C1E53E2F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:56:22 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id u8-20020a056e021a4800b002d3a5419d1bso3451347ilv.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:56:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=d1m6r5UmiAcvgQ8crrCKZSa9ReWYu3X/3xrsp+5+VXk=;
+        b=bX8FrdqPuv46mR2jKooEVA7Kkyz8tk0/T6ytLLbwRCvZSR9zEpVehOJkSPLATuhe//
+         R2LC1clIdJ0WvJGQsloM7nWSaFhdfo+IrOFqhYpsciHsM+P0vqNWpFCYAM5wRXZqVams
+         WAjoTiF4DVpR6P5X+8SyibHJjxtBeAcs3UyH7mgYs+zzew6sd/G2cferHO7dzdzjqm5W
+         n8RzaHgSSQvCGJSCmiRpGmwQGe1V1YllDfY0nqXopemE+ibN6wf33QhDwT6x2hr4pO7S
+         YeP/Qkcy+yuIqfFPYvgepBG7pLQlOtNZ16cllHbGOsJhNVMvpUAHDDgbdShm9Lvt5ppp
+         Nn4Q==
+X-Gm-Message-State: AJIora+bIbqxkSTnN7AAIlTnZUvDwBpebB0uDxCT0xqWaRqUQmoj4nfk
+        c1DTUa2/JbOmuSnWPPYvt7gr6bqJqkvE1z9LrfU/1tvuWLki
+X-Google-Smtp-Source: AGRyM1upPBNd/kP47pX87o147yhNcQltg77oLi5veVxVHqa2J97ObRWmezkeILWuWcO3ZkgcK/Q5eHfvVZlhjEAYKmTXzKZ7VFNH
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:78a:b0:2d3:af3f:a9e2 with SMTP id
+ q10-20020a056e02078a00b002d3af3fa9e2mr6902555ils.96.1655506581707; Fri, 17
+ Jun 2022 15:56:21 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 15:56:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b9edeb05e1aca987@google.com>
+Subject: [syzbot] WARNING: suspicious RCU usage (5)
+From:   syzbot <syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Jun 2022 08:04:44 -0700
-Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+Hello,
 
-> The file-wide OBJECT_FILES_NON_STANDARD annotation is used with
-> CONFIG_FRAME_POINTER to tell objtool to skip the entire file when frame
-> pointers are enabled.  However that annotation is now deprecated because
-> it doesn't work with IBT, where objtool runs on vmlinux.o instead of
-> individual translation units.
-> 
-> Instead, use more fine-grained function-specific annotations:
-> 
-> - The 'save_mcount_regs' macro does funny things with the frame pointer.
->   Use STACK_FRAME_NON_STANDARD_FP to tell objtool to ignore the
->   functions using it.
-> 
-> - The return_to_handler() "function" isn't actually a callable function.
->   Instead of being called, it's returned to.  The real return address
->   isn't on the stack, so unwinding is already doomed no matter which
->   unwinder is used.  So just remove the STT_FUNC annotation, telling
->   objtool to ignore it.  That also removes the implicit
->   ANNOTATE_NOENDBR, which now needs to be made explicit.
-> 
-> Fixes the following warning:
-> 
->   vmlinux.o: warning: objtool: __fentry__+0x16: return with modified stack frame
-> 
-> Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> ---
-> v2:
-> - fix return_to_handler()
+syzbot found the following issue on:
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+HEAD commit:    a5b00f5b78b7 Merge branch 'hns3-fixres'
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=105d68bbf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=9cbc6bed3a22f1d37395
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b22abf00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125194eff00000
 
--- Steve
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com
+
+netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+=============================
+WARNING: suspicious RCU usage
+5.19.0-rc1-syzkaller-00254-ga5b00f5b78b7 #0 Not tainted
+-----------------------------
+net/ipv6/addrconf
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

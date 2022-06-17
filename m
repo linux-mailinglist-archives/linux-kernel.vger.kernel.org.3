@@ -2,152 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDBD54F416
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0386A54F479
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbiFQJSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S1381001AbiFQJhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbiFQJS2 (ORCPT
+        with ESMTP id S233947AbiFQJhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:18:28 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4755677A;
-        Fri, 17 Jun 2022 02:18:26 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LPYLv5d4Qz1K9xM;
-        Fri, 17 Jun 2022 17:16:23 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 17:18:16 +0800
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 17:18:15 +0800
-From:   Xu Jia <xujia39@huawei.com>
-To:     <linux-hams@vger.kernel.org>, <pabeni@redhat.com>,
-        <ajk@comnets.uni-bremen.de>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xujia39@huawei.com>
-Subject: [PATCH v2] hamradio: 6pack: fix array-index-out-of-bounds in decode_std_command()
-Date:   Fri, 17 Jun 2022 17:31:06 +0800
-Message-ID: <1655458266-27879-1-git-send-email-xujia39@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Fri, 17 Jun 2022 05:37:40 -0400
+X-Greylist: delayed 368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jun 2022 02:37:36 PDT
+Received: from cstnet.cn (smtp85.cstnet.cn [159.226.251.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4A1EDB1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:37:36 -0700 (PDT)
+Received: by ajax-webmail-APP-13 (Coremail) ; Fri, 17 Jun 2022 17:31:25
+ +0800 (GMT+08:00)
+X-Originating-IP: [49.77.99.12]
+Date:   Fri, 17 Jun 2022 17:31:25 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5a2Z5rui?= <sunying@nj.iscas.ac.cn>
+To:     linux-kernel@vger.kernel.org
+Subject: Will the "CONFIG_CGROUP_DEBUG"  x86_64 default configuration be
+ turned off in later versions?
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn cnic.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <f12557f.8fe4.1817100c80f.Coremail.sunying@nj.iscas.ac.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: twCowABXG_TuSaxiOTcDAA--.14173W
+X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/1tbiCQ0AAWKY1i0dwwABsb
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_20,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hulk Robot reports incorrect sp->rx_count_cooked value in decode_std_command().
-This should be caused by the subtracting from sp->rx_count_cooked before.
-It seems that sp->rx_count_cooked value is changed to 0, which bypassed the
-previous judgment.
-
-The situation is shown below:
-
-         (Thread 1)			|  (Thread 2)
-decode_std_command()		| resync_tnc()
-...					|
-if (rest == 2)			|
-	sp->rx_count_cooked -= 2;	|
-else if (rest == 3)			| ...
-					| sp->rx_count_cooked = 0;
-	sp->rx_count_cooked -= 1;	|
-for (i = 0; i < sp->rx_count_cooked; i++) // report error
-	checksum += sp->cooked_buf[i];
-
-sp->rx_count_cooked is a shared variable but is not protected by a lock.
-The same applies to sp->rx_count. This patch adds a lock to fix the bug.
-
-The fail log is shown below:
-=======================================================================
-UBSAN: array-index-out-of-bounds in drivers/net/hamradio/6pack.c:925:31
-index 400 is out of range for type 'unsigned char [400]'
-CPU: 3 PID: 7433 Comm: kworker/u10:1 Not tainted 5.18.0-rc5-00163-g4b97bac0756a #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-Workqueue: events_unbound flush_to_ldisc
-Call Trace:
- <TASK>
- dump_stack_lvl+0xcd/0x134
- ubsan_epilogue+0xb/0x50
- __ubsan_handle_out_of_bounds.cold+0x62/0x6c
- sixpack_receive_buf+0xfda/0x1330
- tty_ldisc_receive_buf+0x13e/0x180
- tty_port_default_receive_buf+0x6d/0xa0
- flush_to_ldisc+0x213/0x3f0
- process_one_work+0x98f/0x1620
- worker_thread+0x665/0x1080
- kthread+0x2e9/0x3a0
- ret_from_fork+0x1f/0x30
- ...
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Xu Jia <xujia39@huawei.com>
----
- drivers/net/hamradio/6pack.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/hamradio/6pack.c b/drivers/net/hamradio/6pack.c
-index ff2bb3d..833dcc7 100644
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -99,6 +99,7 @@ struct sixpack {
- 
- 	unsigned int		rx_count;
- 	unsigned int		rx_count_cooked;
-+	spinlock_t		rxlock;
- 
- 	int			mtu;		/* Our mtu (to spot changes!) */
- 	int			buffsize;       /* Max buffers sizes */
-@@ -565,6 +566,7 @@ static int sixpack_open(struct tty_struct *tty)
- 	sp->dev = dev;
- 
- 	spin_lock_init(&sp->lock);
-+	spin_lock_init(&sp->rxlock);
- 	refcount_set(&sp->refcnt, 1);
- 	init_completion(&sp->dead);
- 
-@@ -913,6 +915,7 @@ static void decode_std_command(struct sixpack *sp, unsigned char cmd)
- 			sp->led_state = 0x60;
- 			/* fill trailing bytes with zeroes */
- 			sp->tty->ops->write(sp->tty, &sp->led_state, 1);
-+			spin_lock_bh(&sp->rxlock);
- 			rest = sp->rx_count;
- 			if (rest != 0)
- 				 for (i = rest; i <= 3; i++)
-@@ -930,6 +933,7 @@ static void decode_std_command(struct sixpack *sp, unsigned char cmd)
- 				sp_bump(sp, 0);
- 			}
- 			sp->rx_count_cooked = 0;
-+			spin_unlock_bh(&sp->rxlock);
- 		}
- 		break;
- 	case SIXP_TX_URUN: printk(KERN_DEBUG "6pack: TX underrun\n");
-@@ -959,8 +963,11 @@ static void decode_std_command(struct sixpack *sp, unsigned char cmd)
- 			decode_prio_command(sp, inbyte);
- 		else if ((inbyte & SIXP_STD_CMD_MASK) != 0)
- 			decode_std_command(sp, inbyte);
--		else if ((sp->status & SIXP_RX_DCD_MASK) == SIXP_RX_DCD_MASK)
-+		else if ((sp->status & SIXP_RX_DCD_MASK) == SIXP_RX_DCD_MASK) {
-+			spin_lock_bh(&sp->rxlock);
- 			decode_data(sp, inbyte);
-+			spin_unlock_bh(&sp->rxlock);
-+		}
- 	}
- }
- 
--- 
-1.8.3.1
-
+SGksCkkgbm90aWNlZCB0aGF0IGFmdGVyIHY1LjE4LjAtcmMxIHRoZSBkZWZhdWx0IGNvbmZpZ3Vy
+YXRpb24gb2YgIkNPTkZJR19DR1JPVVBfREVCVUciIGF0IHg4Nl82NCBhcmNoaXRlY3R1cmUgaXMg
+dHVybmVkIG9uLCBpcyB0aGlzIGNvbmZpZ3VyYXRpb24ganVzdCB1c2VkIGZvciBjZ3JvdXBzIGRl
+YnVnZ2luZywgd2lsbCBpdCBiZSB0dXJuZWQgb2ZmIGluIGxhdGVyIHZlcnNpb25zPwpUaGUgY29u
+ZmlndXJhdGlvbiBpcyBzZXQgaW4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4
+L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC9sb2cvYXJjaC94ODYvY29uZmlncy94ODZfNjRf
+ZGVmY29uZmlnIC4KClRoYW5rcyEKCgo=

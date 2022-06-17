@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2B754F377
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C543554F364
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381249AbiFQIor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S1381352AbiFQIpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381202AbiFQIoj (ORCPT
+        with ESMTP id S1381382AbiFQIpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:44:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F3F6972F;
-        Fri, 17 Jun 2022 01:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cRcPliFH8a5nYGYbcpuAxJdVHyV2ltCZ23v97rgf1A4=; b=KiuwHF6aDNvC5t/LWv3aUEPzwE
-        KBgvUpfkf5qDI6GElmlPwqGlCsWtGNTsSld0WuZewPo0/4mkHtzAiWM6dEK1eY4RySKpAlhO65R1D
-        WAwqSuEBlSHCf5DkNowUItxtdZkM4ZA/lqbf20XRt3tR3vQic1RG+gSiipHa082lrFeJntOO3nL6y
-        th0tSkAnySXos78OuuOupQOTbIqiHOC5RM5RDCtt86BUATvPwCygEQGPiY1c2rMXDglxq26ZxUHjd
-        msVefU68/GFcLY3Vs1Mt7LyDHUYqx6nUIuYz/IWEJAxO+kEDCvTyVrRF9ed8BsbP8AEHXp6NHAjQ4
-        s9lEnYkg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o27ag-006QLd-PI; Fri, 17 Jun 2022 08:44:30 +0000
-Date:   Fri, 17 Jun 2022 01:44:30 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kwankhede@nvidia.com, corbet@lwn.net, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com,
-        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
-        alex.williamson@redhat.com, cohuck@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, jchrist@linux.ibm.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RFT][PATCH v1 5/6] vfio/ccw: Add kmap_local_page() for memcpy
-Message-ID: <Yqw+7gM3Lz96UFdz@infradead.org>
-References: <20220616235212.15185-1-nicolinc@nvidia.com>
- <20220616235212.15185-6-nicolinc@nvidia.com>
+        Fri, 17 Jun 2022 04:45:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF1B6A028
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:45:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9FEF6119F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBD5C3411B;
+        Fri, 17 Jun 2022 08:45:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655455523;
+        bh=yqzhLHcKPAJYHbRZbKXDOvARyleooSL+Wl+IzjUN4p4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UcxHZnnNY9YJMK/0j7CavYwMR4LNBIcWcBMa62qHUvOAEXrVqtH6V+LS5oz+jZJS0
+         qT3ZRdlvEcrhBCUzfISNq/c15rlmZyHYbMtG/IQ1ZMcwSCRgR8tqWt6Su0WOpDfQZm
+         yvwQYttfIBB+6uaRfR5uD1uLtRCWyc+XQVrKF6yVaxAYhr0lLUvDerQGnT7b1tj8Eh
+         K+Ojta6jA3AFtXowcVyEOZ6WSccsFNoPm6lcNxSWIHyVHr0qbyqDec3VGeuoR8Ld8t
+         Ipq/iCF/S2AQiIWP0AmmCfkROXNAacAy3UsBgGLK7d3+pIXCZ6eLkTlMDSXJj4ag9R
+         pLZ2vAdO16r9w==
+Date:   Fri, 17 Jun 2022 09:45:17 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Chen-Yu Tsai <wenst@chromium.org>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] ASoC: rockchip: i2s: switch BCLK to GPIO
+Message-ID: <Yqw/HbgbdkFPht8D@sirena.org.uk>
+References: <20220616155836.3401420-1-judyhsiao@chromium.org>
+ <20220617044251.4029697-1-judyhsiao@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aLv2GpDJ47ZFHIwQ"
 Content-Disposition: inline
-In-Reply-To: <20220616235212.15185-6-nicolinc@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220617044251.4029697-1-judyhsiao@chromium.org>
+X-Cookie: 98% lean.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,12 +63,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 04:52:11PM -0700, Nicolin Chen wrote:
-> The pinned PFN list returned from vfio_pin_pages() is simply converted
-> using page_to_pfn() without protection, so direct access via memcpy()
-> will crash on S390 if the PFN is an IO PFN. Instead, the pages should
-> be touched using kmap_local_page().
 
-I don't see how this helps.  kmap_local_page only works for either
-pages in the kernel direct map or highmem, but not for memory that needs
-to be ioremapped.  And there is no highmem on s390.
+--aLv2GpDJ47ZFHIwQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 17, 2022 at 04:42:48AM +0000, Judy Hsiao wrote:
+> The patches series is to fix the unexpected large
+> DC output voltage of Max98357a to burn the speakers=20
+> on rockchip platform when BCLK and SD_MODE are ON but LRCLK is OFF.
+
+Please don't send new patches in reply to old patches or serieses, this
+makes it harder for both people and tools to understand what is going
+on - it can bury things in mailboxes and make it difficult to keep track
+of what current patches are, both for the new patches and the old ones.
+
+--aLv2GpDJ47ZFHIwQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKsPxwACgkQJNaLcl1U
+h9C/VAf6Ah6++LNhpFFUJaZ0Bc+FLeKDMzIEESVc0bMzROauZlkjBbR2EunJMmq4
+BhlzGKMafwI0RT4sGVbO7nPwVr5ltH7tfcIxMz57xvVwie7Bb2tld2ZTSAqP5xXq
+bJUNA+bJVHSW8KwiYfcydoQeCvcNMuik4ywZ6nubQPX806JQLxM9cQFdu0ayaMzM
+pjFAFbXkeyJKUrsbvXfP0BQ+PVAoqnJe53NAHwd7GkTOw/vHO7zx+0Mz5HSSZ3p5
+HEM9h42NagL4ZomdmeStvS2zUxms/g62hrgi9KcWiclSYGBWXDfvL4nbJ3MFugRY
+ZufRWrarft2pGXl6wfWVsQwSmx05Rg==
+=tvsr
+-----END PGP SIGNATURE-----
+
+--aLv2GpDJ47ZFHIwQ--

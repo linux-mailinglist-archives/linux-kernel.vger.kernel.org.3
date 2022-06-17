@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BE354FB46
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D05954FB4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383429AbiFQQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S1383357AbiFQQlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382699AbiFQQj0 (ORCPT
+        with ESMTP id S1383354AbiFQQlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:39:26 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6E3427C0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:39:25 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id f16so3357153pjj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:39:25 -0700 (PDT)
+        Fri, 17 Jun 2022 12:41:14 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BD649B71
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:41:13 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id p31so7200779qvp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=h6IrLdY6w4OsypWEzzKKv5b850fPgk5gwMN7Tf3l3vQ=;
-        b=cGB9S6qXHZUmmKqLb8Czce7aQQ31G8cciRGY3uS9OqZ2KLHawZOjaiA/UhIeiPKRoQ
-         RGuqtkjn3l21zbzDcWWuJPd0THw5jwa7NmutFVEycllAOF3tWpkr/85h2O2wCLkiuLFw
-         8N+27G96xzt/eUHx0kvvnLRlNMnhPTX+o7qiAHUN7skj0o/o0ZlnsCy7YjPfQp37Ly3L
-         3DHUV3EqAvFn4BVzjqNIkCCIOAJ3Mmd1LEB5SVxYqSMvp87RZlon0Wxd+CymmWt6tIn9
-         vNMFfo2Z+LtXNL6Yc6HoJcu2P+UwgmfKDfQlpdHrykmwYAPkaV+JwMzziTavYhEc7RlI
-         pz4w==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ICFZ/PbGc0+5fagTJPsSgzABld3cNYKFZAZogQ8d6KE=;
+        b=ICtoZJmNHccJ5Kb9uPkCDvMV7vNVJ0X4gmJBwqYRlBRYsHGBVYe0hs0sTepZTC98Az
+         d4UB0NsMX2sZzgaxUtxmN1VQrV0Ls3/5yPpBTWZsoXPEh1qLvL1aw1qQkpi5OxnbxMH1
+         fLUEo66SPBQJXQIJm+gwjoN7J/YEgQGH+91/AKJNE80p9nodSf7zzw6pBQA+dTtjBRdH
+         bCgWbAp9FkVsyC7S/ccEi+XLC0WDvJJS64uEaFssDGB9jOr6hUTIZFzWsD0Ibdq3LNJW
+         op+V/JrdOpJoJioFKR2zK6YUFzF3SQf6kz7YNn/UZ4fReQfQtv/+L0mXYMEfLMkp7t17
+         GkAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=h6IrLdY6w4OsypWEzzKKv5b850fPgk5gwMN7Tf3l3vQ=;
-        b=K5vcS3fFQ0NLchdIk/V4CqcyrYy4uIv82T0gQhY36bgtmuPw6sxmoGrkH/l2orqoQC
-         2lzExTFZR3F/klOxdbJCicOV7oy8k128sar1kUnxkULBi6I5sHW/HwYpODchYVgouZLh
-         no+C7Q92qfLjP0bLc12H7G7EqtxEx80tFpMCpA8Y1o8TjQCWnIJ2nHHlLIeZg/oYdM5+
-         Jy/BaY03+3OKuGiFgtWxZbEFhwNGJB5w2t+JLV/CoFROPsESMwqciM6g0wb4IChDi/xg
-         Pyt5aSsoLfjp/dP3h1uy+znGrQHoyge/wHP97ksxGzzYRT6H690SptPcyKqU3G1UNlge
-         Wgrw==
-X-Gm-Message-State: AJIora9GAyQYEy21b1sjxKavkGLzVL+1huE1BIZTEVeWm6dxeCJwv8JH
-        Ll+JAHSoc7zAGkZ5J9JJFRmYfg==
-X-Google-Smtp-Source: AGRyM1tSNcsBlD5rmWFBnXmaOQSTZiEb3QWszdo4GJLGK5UOx6thlgdZtHfv+x5h3/bswUKYS8BMdQ==
-X-Received: by 2002:a17:90b:1b07:b0:1e8:41d8:fa2 with SMTP id nu7-20020a17090b1b0700b001e841d80fa2mr11466844pjb.204.1655483965098;
-        Fri, 17 Jun 2022 09:39:25 -0700 (PDT)
-Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
-        by smtp.gmail.com with ESMTPSA id o12-20020a62f90c000000b0051be16492basm3934309pfh.195.2022.06.17.09.39.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 09:39:24 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 16:39:21 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Riccardo Paolo Bestetti <pbl@bestov.io>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
-Subject: Re: [PATCH v2] ipv4: ping: fix bind address validity check
-Message-ID: <YqyuOfvR4mesRTfe@google.com>
-References: <20220617085435.193319-1-pbl@bestov.io>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ICFZ/PbGc0+5fagTJPsSgzABld3cNYKFZAZogQ8d6KE=;
+        b=3I2mUWtGC7YbNOc/cQxWZmpMw2l2u0rh0Y6VC1+waj6wzP1epX5wAH9AMJCKKho8+B
+         Kl4HcaG4YbRObrIs7Rwl1c7JdogU02UGHe3t2TpG4uo/wPpUUIwD4Cbn4n7Brw9kcTZu
+         pZ1LSuoxfNS40lak77FcnXRgtbIbG4prmxOM17OeybEUaXK3SvsxDHEV1u5gyyl7YCY7
+         fqeeyrZXjIHtILPrRj32xQAEClhKAEn5zZiNiuNrdn6B+Rk5c99JvSMfcACv5NmKYYl/
+         upRrfShVYbPJ7cjcL3IPLM3BkhQcvBTm8TxslQePGz3wLYA/mKfg8AmNT56oEidunFRG
+         RaqQ==
+X-Gm-Message-State: AJIora9/Fq29txEOQysHtD0qh4hOSx/ZcCBK4rWaxHrahvg8aluvJV7l
+        MBy65lqkGIruQkhE5gH9okej2cf7E6htgKcclw==
+X-Google-Smtp-Source: AGRyM1uMa/VGc21wZOnWL0laNFhFMnGtz9S3xBOSazDWvMdn/L3NSLXjMKp6dZwcAHk972n0yWyiXg==
+X-Received: by 2002:a05:6214:2a8e:b0:464:5b2f:76bf with SMTP id jr14-20020a0562142a8e00b004645b2f76bfmr9152409qvb.60.1655484072736;
+        Fri, 17 Jun 2022 09:41:12 -0700 (PDT)
+Received: from [192.168.1.210] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id s3-20020a05620a0bc300b006a67d257499sm5368395qki.56.2022.06.17.09.41.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 09:41:11 -0700 (PDT)
+Message-ID: <1856d213-6119-74f1-f768-6ff05ba8f03b@gmail.com>
+Date:   Fri, 17 Jun 2022 12:41:11 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220617085435.193319-1-pbl@bestov.io>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFCv4 3/4] lib/test_printf.c: split write-beyond-buffer
+ check in two
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Petr Mladek <pmladek@suse.com>, Jia He <justin.he@arm.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20210615154952.2744-1-justin.he@arm.com>
+ <20210615154952.2744-4-justin.he@arm.com> <YMtZcVy4gvmMtYv+@alley>
+ <d0798b26-9c77-7209-8c16-0d067ea5720c@rasmusvillemoes.dk>
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+In-Reply-To: <d0798b26-9c77-7209-8c16-0d067ea5720c@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,43 +78,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 10:54:35AM +0200, Riccardo Paolo Bestetti wrote:
-> Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-> introduced a helper function to fold duplicated validity checks of bind
-> addresses into inet_addr_valid_or_nonlocal(). However, this caused an
-> unintended regression in ping_check_bind_addr(), which previously would
-> reject binding to multicast and broadcast addresses, but now these are
-> both incorrectly allowed as reported in [1].
+On 6/17/22 03:15, Rasmus Villemoes wrote:
+> On 17/06/2021 16.17, Petr Mladek wrote:
+>> On Tue 2021-06-15 23:49:51, Jia He wrote:
+>>> From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>>>
+>>> Before each invocation of vsnprintf(), do_test() memsets the entire
+>>> allocated buffer to a sentinel value. That buffer includes leading and
+>>> trailing padding which is never included in the buffer area handed to
+>>> vsnprintf (spaces merely for clarity):
+>>>
+>>>    pad  test_buffer      pad
+>>>    **** **************** ****
+>>>
+>>> Then vsnprintf() is invoked with a bufsize argument <=
+>>> BUF_SIZE. Suppose bufsize=10, then we'd have e.g.
+>>>
+>>>   |pad |   test_buffer    |pad |
+>>>    **** pizza0 **** ****** ****
+>>>   A    B      C    D           E
+>>>
+>>> where vsnprintf() was given the area from B to D.
+>>>
+>>> It is obviously a bug for vsnprintf to touch anything between A and B
+>>> or between D and E. The former is checked for as one would expect. But
+>>> for the latter, we are actually a little stricter in that we check the
+>>> area between C and E.
+>>>
+>>> Split that check in two, providing a clearer error message in case it
+>>> was a genuine buffer overrun and not merely a write within the
+>>> provided buffer, but after the end of the generated string.
+>>>
+>>> So far, no part of the vsnprintf() implementation has had any use for
+>>> using the whole buffer as scratch space, but it's not unreasonable to
+>>> allow that, as long as the result is properly nul-terminated and the
+>>> return value is the right one. However, it is somewhat unusual, and
+>>> most %<something> won't need this, so keep the [C,D] check, but make
+>>> it easy for a later patch to make that part opt-out for certain tests.
+>>
+>> Excellent commit message.
+>>
+>>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>>> Tested-by: Jia He <justin.he@arm.com>
+>>> Signed-off-by: Jia He <justin.he@arm.com>
+>>
+>> Reviewed-by: Petr Mladek <pmladek@suse.com>
 > 
-> This patch restores the original check. A simple reordering is done to
-> improve readability and make it evident that multicast and broadcast
-> addresses should not be allowed. Also, add an early exit for INADDR_ANY
-> which replaces lost behavior added by commit 0ce779a9f501 ("net: Avoid
-> unnecessary inet_addr_type() call when addr is INADDR_ANY").
+> Hi Petr
 > 
-> Furthermore, this patch introduces regression selftests to catch these
-> specific cases.
+> It seems Justin's series got stalled, but I still think this patch makes
+> sense on its own (especially since another series in flight mucks about
+> in this area), so can you please pick it up directly?
 > 
-> [1] https://lore.kernel.org/netdev/CANP3RGdkAcDyAZoT1h8Gtuu0saq+eOrrTiWbxnOs+5zn+cpyKg@mail.gmail.com/
-> 
-> Fixes: 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
-> Reported-by: Maciej Żenczykowski <maze@google.com>
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
-> ---
-> This patch is sent as a follow-up to the discussion on the v1 by Carlos
-> Llamas.
-> 
-> Original thread:
-> https://lore.kernel.org/netdev/20220617020213.1881452-1-cmllamas@google.com/
-> 
+> The lore link for the above is
+> https://lore.kernel.org/lkml/20210615154952.2744-4-justin.he@arm.com/ ,
+> while my original submission is at
+> https://lore.kernel.org/lkml/20210615085044.1923788-1-linux@rasmusvillemoes.dk/
 
-Reviewed-by: Carlos Llamas <cmllamas@google.com>
+That patch definitely clarifies things, feel free to add my reviewed-by tag
 
-Thanks Riccardo for adding the test cases. I would appreciate it if next
-time you add a co-developed tag or maybe a separate commit as opposed to
-overriding the original author. This is fine though.
-
---
-Carlos Llamas

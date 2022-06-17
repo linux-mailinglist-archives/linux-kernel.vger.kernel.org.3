@@ -2,262 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16EF54FF5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BE054FF61
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235482AbiFQV1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 17:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S234649AbiFQVbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 17:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiFQV1b (ORCPT
+        with ESMTP id S231818AbiFQVbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 17:27:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FE536E32;
-        Fri, 17 Jun 2022 14:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655501248; x=1687037248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=WmlbIpa8tKIKwHtk2vU55R2bfgbhvPFn3mU/igiV7O4=;
-  b=UQu86+QHfJ9MO2i8DoeuZq0HaR3+motWykEm9utAh68V1W2eYXTMA2q4
-   ABhsROXRw/lxKSwtGgDzcqy+yOpJvdipI0F/7NS3vhTTogiQBElU6m0Ks
-   BXSrhdPvLr7h3C4NDBBBne+bPpyesbYwMKZmBmYFMAIQ73mtiQT/pJmXt
-   +FeljP27Bboj5mU2EoB+NYjZDoTnkfl7AI8ns4IE4RyWlXNz8U/aLUxUS
-   cQHQ5ADpLdFIx75jh20Yoen7d1gzSs/S/6z/b2KhkiAI8G+22q/Taj4Kx
-   RYdvy9H5VEjweKpeUTPk5UyTmVmMMRpO8tYFUpzjzMahIJ5FdQjjRaAG7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260020379"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260020379"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 14:27:27 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="578899894"
-Received: from ecastill-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.204.20])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 14:27:27 -0700
-Date:   Fri, 17 Jun 2022 14:27:27 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        Sergei Miroshnichenko <s.miroshnichenko@yadro.com>,
-        linux-kernel@vger.kernel.org, priyanka.dandamudi@intel.com,
-        matthew.auld@intel.com, Bjorn Helgaas <bhelgaas@google.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Subject: Re: [Intel-gfx] [PATCH 1/2] drm/i915: Add support for LMEM PCIe
- resizable bar
-Message-ID: <20220617212727.h5r2o3schvl73bbk@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220617184441.7kbs4al7gmpxjuuy@ldmartin-desk2>
- <20220617203252.GA1203491@bhelgaas>
+        Fri, 17 Jun 2022 17:31:00 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547BD4BFE0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:30:58 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso5649354pjg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:30:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UqA+O2iAjJVJVS6ckVZAwOszKMvVWnDYVURyulma9/8=;
+        b=rLPJAR88grVVrICam06LN8y5WgV/N1UDXOZUtwxnT05CZs2/+ScUbmlvPg7YNGt8jN
+         CP/H23Hb5io+PPWzCiRobvcwa6QKaczN/XFJbCJ1xw5FJnKufBcNrQBq2QH3TVs6m/8S
+         pT7Ot2jqLIXY5UYrEa9kMivftMhJQ3dtAiEYVicHj41LHpVN49WNN2gyfFOFkPL51bRO
+         e2VE7PExegoxz8xRDdxSEKwgJlf0YXMCZQmM3cCvHURRIH33DMEbdALixtIGM0z5DMcv
+         vU/sCc0n/YzSIEkmBVf46E+uON/ergwqcFB9WJP4GXemBs6Udj4I3LMO75CQIwPrcj5u
+         /Kow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UqA+O2iAjJVJVS6ckVZAwOszKMvVWnDYVURyulma9/8=;
+        b=MKRE2CjcZ2adF0it1SNPllKCoXRwzFn9oDyBM3A1W6EwwN3lA2e1k/VrYrccNNMIWL
+         Kch5Fz5BGJL/dS/nuhheEzwLnchlmMHNlQoHJ+JphQWnuwSkZjBjkvfQRisXvd2ujRRU
+         VnBAFiwGmfTvPZkNec9VD80oY1EPzdJ6fuj0iEaM9bQyJAzMtnRj8UaHWB1LJFT8n1QG
+         E2LmXI3d+raRGpMT9mIhtSABcqL8p6HDyH7qr/Hpa+TYoYwVd7/TPMqmnh2frvGktNdY
+         nNMiaZESzUhLpsD4V5Y7yb13sCAP2j+Fl8N+umD6YohSS+7Y1rOBP1SB4Ci2SeACLuSM
+         qpzQ==
+X-Gm-Message-State: AJIora+TKSJLI/2qC/DwkvICbwCd5WytnV0jW8mcLS2VJtP8KHBMzvKS
+        Y+UPba00NeD6TKMZSotVOqEDiw==
+X-Google-Smtp-Source: AGRyM1uGkQimPoB8kL1Wht4vTq43JoT8EC6dik/7IAdBWeLMjfdAenHlbc0UpgOFY4oFjdeqquWEtw==
+X-Received: by 2002:a17:90a:e507:b0:1ea:fa43:21de with SMTP id t7-20020a17090ae50700b001eafa4321demr9134913pjy.177.1655501457594;
+        Fri, 17 Jun 2022 14:30:57 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id f16-20020a633810000000b003fd9b8b865dsm4281929pga.0.2022.06.17.14.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 14:30:57 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 21:30:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
+Message-ID: <YqzyjZnflCMPo8b/@google.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-7-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220617203252.GA1203491@bhelgaas>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220519153713.819591-7-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 03:32:52PM -0500, Bjorn Helgaas wrote:
->[+cc Christian, author of pci_resize_resource(), Sergei, author of
->rebalancing patches]
->
->Hi Lucas,
->
->On Fri, Jun 17, 2022 at 11:44:41AM -0700, Lucas De Marchi wrote:
->> Cc'ing intel-pci, lkml, Bjorn
->>
->> On Fri, Jun 17, 2022 at 11:32:37AM +0300, Jani Nikula wrote:
->> > On Thu, 16 Jun 2022, priyanka.dandamudi@intel.com wrote:
->> > > From: Akeem G Abodunrin <akeem.g.abodunrin@intel.com>
->> > >
->> > > Add support for the local memory PICe resizable bar, so that
->> > > local memory can be resized to the maximum size supported by the device,
->> > > and mapped correctly to the PCIe memory bar. It is usual that GPU
->> > > devices expose only 256MB BARs primarily to be compatible with 32-bit
->> > > systems. So, those devices cannot claim larger memory BAR windows size due
->> > > to the system BIOS limitation. With this change, it would be possible to
->> > > reprogram the windows of the bridge directly above the requesting device
->> > > on the same BAR type.
->>
->> There is a big caveat here that this may be too late as other drivers
->> may have already mapped their BARs - so probably too late in the pci scan
->> for it to be effective. In fact, after using this for a while, it seems
->> to fail too often, particularly on CFL systems.
->
->Help me understand the "too late" part.  Do you mean that there is
->enough available space for the max BAR size, but it's fragmented and
->therefore not usable?  And that if we could do something earlier,
->before drivers have claimed their devices, we might be able to compact
->the BARs of other devices to make a larger contiguous available space?
+On Thu, May 19, 2022, Chao Peng wrote:
+> @@ -4028,8 +4081,11 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+>  	if (!sp && kvm_test_request(KVM_REQ_MMU_FREE_OBSOLETE_ROOTS, vcpu))
+>  		return true;
+>  
+> -	return fault->slot &&
+> -	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> +	if (fault->is_private)
+> +		return mmu_notifier_retry(vcpu->kvm, mmu_seq);
 
-yes. I will dig some logs I had in the past to confirm.
+Hmm, this is somewhat undesirable, because faulting in private pfns will be blocked
+by unrelated mmu_notifier updates.  The issue is mitigated to some degree by bumping
+the sequence count if and only if overlap with a memslot is detected, e.g. mapping
+changes that affects only userspace won't block the guest.
 
+It probably won't be an issue, but at the same time it's easy to solve, and I don't
+like piggybacking mmu_notifier_seq as private mappings shouldn't be subject to the
+mmu_notifier.
 
->That is theoretically possible, but I think the current
->pci_resize_resource() only supports resizing of the specified BAR and
->any upstream bridge windows.  I don't think it supports moving BARs of
->other devices.
->
->Sergei did some nice work that might help with this situation because
->it can move BARs around more generally.  It hasn't quite achieved
->critical mass yet, but maybe this would help get there:
->
->  https://lore.kernel.org/linux-pci/20201218174011.340514-1-s.miroshnichenko@yadro.com/
+That would also fix a theoretical bug in this patch where mmu_notifier_retry()
+wouldn't be defined if CONFIG_MEMFILE_NOTIFIER=y && CONFIG_MMU_NOTIFIER=n.a
 
-oh... I hadn't thought about pause/ioremap/unpause. That looks rad :).
-So it seems this would integrate neatly with
-pci_resize_resource() (what this patch is doing), as long as drivers for
-devices affected implement
-.bar_fixed()/.rescan_prepare()/.rescan_done(). That seems it would solve
-our issues too.
+---
+ arch/x86/kvm/mmu/mmu.c   | 11 ++++++-----
+ include/linux/kvm_host.h | 16 +++++++++++-----
+ virt/kvm/kvm_main.c      |  2 +-
+ 3 files changed, 18 insertions(+), 11 deletions(-)
 
-thanks
-Lucas De Marchi
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 0b455c16ec64..a4cbd29433e7 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4100,10 +4100,10 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+ 		return true;
 
->
->If I understand Sergei's series correctly, this rebalancing actually
->cannot be done during enumeration because we only move BARs if a
->driver for the device indicates that it supports it, so there would be
->no requirement to do this early.
->
->> Do we have any alternative to be done in the PCI subsystem during the
->> scan?  There is other work in progress to allow i915 to use the rest of
->> the device memory even with a smaller BAR, but it would be better if we
->> can improve our chances of succeeding the resize.
->
->> > > Signed-off-by: Akeem G Abodunrin <akeem.g.abodunrin@intel.com>
->> > > Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
->> > > Cc: Stuart Summers <stuart.summers@intel.com>
->> > > Cc: Michael J Ruhl <michael.j.ruhl@intel.com>
->> > > Cc: Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>
->> > > Signed-off-by: Priyanka Dandamudi <priyanka.dandamudi@intel.com>
->> > > Reviewed-by: Matthew Auld <matthew.auld@intel.com>
->> >
->> > Please see https://lore.kernel.org/r/87pmj8vesm.fsf@intel.com
->> >
->> > > ---
->> > >  drivers/gpu/drm/i915/i915_driver.c | 92 ++++++++++++++++++++++++++++++
->> > >  1 file changed, 92 insertions(+)
->> > >
->> > > diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
->> > > index d26dcca7e654..4bdb471cb2e2 100644
->> > > --- a/drivers/gpu/drm/i915/i915_driver.c
->> > > +++ b/drivers/gpu/drm/i915/i915_driver.c
->> > > @@ -303,6 +303,95 @@ static void sanitize_gpu(struct drm_i915_private *i915)
->> > >  		__intel_gt_reset(to_gt(i915), ALL_ENGINES);
->> > >  }
->> > >
->> > > +static void __release_bars(struct pci_dev *pdev)
->> > > +{
->> > > +	int resno;
->> > > +
->> > > +	for (resno = PCI_STD_RESOURCES; resno < PCI_STD_RESOURCE_END; resno++) {
->> > > +		if (pci_resource_len(pdev, resno))
->> > > +			pci_release_resource(pdev, resno);
->> > > +	}
->> > > +}
->> > > +
->> > > +static void
->> > > +__resize_bar(struct drm_i915_private *i915, int resno, resource_size_t size)
->> > > +{
->> > > +	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
->> > > +	int bar_size = pci_rebar_bytes_to_size(size);
->> > > +	int ret;
->> > > +
->> > > +	__release_bars(pdev);
->> > > +
->> > > +	ret = pci_resize_resource(pdev, resno, bar_size);
->> > > +	if (ret) {
->> > > +		drm_info(&i915->drm, "Failed to resize BAR%d to %dM (%pe)\n",
->> > > +			 resno, 1 << bar_size, ERR_PTR(ret));
->> > > +		return;
->> > > +	}
->> > > +
->> > > +	drm_info(&i915->drm, "BAR%d resized to %dM\n", resno, 1 << bar_size);
->> > > +}
->> > > +
->> > > +/* BAR size starts from 1MB - 2^20 */
->> > > +#define BAR_SIZE_SHIFT 20
->> > > +static resource_size_t
->> > > +__lmem_rebar_size(struct drm_i915_private *i915, int resno)
->> > > +{
->> > > +	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
->> > > +	u32 rebar = pci_rebar_get_possible_sizes(pdev, resno);
->> > > +	resource_size_t size;
->> > > +
->> > > +	if (!rebar)
->> > > +		return 0;
->> > > +
->> > > +	size = 1ULL << (__fls(rebar) + BAR_SIZE_SHIFT);
->> > > +
->> > > +	if (size <= pci_resource_len(pdev, resno))
->> > > +		return 0;
->> > > +
->> > > +	return size;
->> > > +}
->> > > +
->> > > +#define LMEM_BAR_NUM 2
->> > > +static void i915_resize_lmem_bar(struct drm_i915_private *i915)
->> > > +{
->> > > +	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
->> > > +	struct pci_bus *root = pdev->bus;
->> > > +	struct resource *root_res;
->> > > +	resource_size_t rebar_size = __lmem_rebar_size(i915, LMEM_BAR_NUM);
->> > > +	u32 pci_cmd;
->> > > +	int i;
->> > > +
->> > > +	if (!rebar_size)
->> > > +		return;
->> > > +
->> > > +	/* Find out if root bus contains 64bit memory addressing */
->> > > +	while (root->parent)
->> > > +		root = root->parent;
->> > > +
->> > > +	pci_bus_for_each_resource(root, root_res, i) {
->> > > +		if (root_res && root_res->flags & (IORESOURCE_MEM |
->> > > +					IORESOURCE_MEM_64) && root_res->start > 0x100000000ull)
->> > > +			break;
->> > > +	}
->> > > +
->> > > +	/* pci_resize_resource will fail anyways */
->> > > +	if (!root_res) {
->> > > +		drm_info(&i915->drm, "Can't resize LMEM BAR - platform support is missing\n");
->> > > +		return;
->> > > +	}
->> > > +
->> > > +	/* First disable PCI memory decoding references */
->> > > +	pci_read_config_dword(pdev, PCI_COMMAND, &pci_cmd);
->> > > +	pci_write_config_dword(pdev, PCI_COMMAND,
->> > > +			       pci_cmd & ~PCI_COMMAND_MEMORY);
->> > > +
->> > > +	__resize_bar(i915, LMEM_BAR_NUM, rebar_size);
->> > > +
->> > > +	pci_assign_unassigned_bus_resources(pdev->bus);
->> > > +	pci_write_config_dword(pdev, PCI_COMMAND, pci_cmd);
->> > > +}
->> > > +
->> > >  /**
->> > >   * i915_driver_early_probe - setup state not requiring device access
->> > >   * @dev_priv: device private
->> > > @@ -852,6 +941,9 @@ int i915_driver_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->> > >
->> > >  	disable_rpm_wakeref_asserts(&i915->runtime_pm);
->> > >
->> > > +	if (HAS_LMEM(i915))
->> > > +		i915_resize_lmem_bar(i915);
->> > > +
->> > >  	intel_vgpu_detect(i915);
->> > >
->> > >  	ret = intel_gt_probe_all(i915);
->> >
->> > --
->> > Jani Nikula, Intel Open Source Graphics Center
+ 	if (fault->is_private)
+-		return mmu_notifier_retry(vcpu->kvm, mmu_seq);
+-	else
+-		return fault->slot &&
+-			mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
++		return memfile_notifier_retry(vcpu->kvm, mmu_seq);
++
++	return fault->slot &&
++	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+ }
+
+ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+@@ -4127,7 +4127,8 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	if (r)
+ 		return r;
+
+-	mmu_seq = vcpu->kvm->mmu_notifier_seq;
++	mmu_seq = fault->is_private ? vcpu->kvm->memfile_notifier_seq :
++				      vcpu->kvm->mmu_notifier_seq;
+ 	smp_rmb();
+
+ 	r = kvm_faultin_pfn(vcpu, fault);
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 92afa5bddbc5..31f704c83099 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -773,16 +773,15 @@ struct kvm {
+ 	struct hlist_head irq_ack_notifier_list;
+ #endif
+
+-#if (defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)) ||\
+-	defined(CONFIG_MEMFILE_NOTIFIER)
++#if (defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER))
+ 	unsigned long mmu_notifier_seq;
+-#endif
+-
+-#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+ 	struct mmu_notifier mmu_notifier;
+ 	long mmu_notifier_count;
+ 	unsigned long mmu_notifier_range_start;
+ 	unsigned long mmu_notifier_range_end;
++#endif
++#ifdef CONFIG_MEMFILE_NOTIFIER
++	unsigned long memfile_notifier_seq;
+ #endif
+ 	struct list_head devices;
+ 	u64 manual_dirty_log_protect;
+@@ -1964,6 +1963,13 @@ static inline int mmu_notifier_retry_hva(struct kvm *kvm,
+ }
+ #endif
+
++#ifdef CONFIG_MEMFILE_NOTIFIER
++static inline bool memfile_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
++{
++	return kvm->memfile_notifier_seq != mmu_seq;
++}
++#endif
++
+ #ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
+
+ #define KVM_MAX_IRQ_ROUTES 4096 /* might need extension/rework in the future */
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 2b416d3bd60e..e6d34c964d51 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -898,7 +898,7 @@ static void kvm_private_mem_notifier_handler(struct memfile_notifier *notifier,
+ 	KVM_MMU_LOCK(kvm);
+ 	if (kvm_unmap_gfn_range(kvm, &gfn_range))
+ 		kvm_flush_remote_tlbs(kvm);
+-	kvm->mmu_notifier_seq++;
++	kvm->memfile_notifier_seq++;
+ 	KVM_MMU_UNLOCK(kvm);
+ 	srcu_read_unlock(&kvm->srcu, idx);
+ }
+
+base-commit: 333ef501c7f6c6d4ef2b7678905cad0f8ef3e271
+--
+
+> +	else
+> +		return fault->slot &&
+> +			mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+>  }
+>  
+>  static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> @@ -4088,7 +4144,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  		read_unlock(&vcpu->kvm->mmu_lock);
+>  	else
+>  		write_unlock(&vcpu->kvm->mmu_lock);
+> -	kvm_release_pfn_clean(fault->pfn);
+> +
+> +	if (fault->is_private)
+> +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
+
+Why does the shmem path lock the page, and then unlock it here?
+
+Same question for why this path marks it dirty?  The guest has the page mapped
+so the dirty flag is immediately stale.
+
+In other words, why does KVM need to do something different for private pfns?
+
+> +	else
+> +		kvm_release_pfn_clean(fault->pfn);
+> +
+>  	return r;
+>  }
+>  
+
+...
+
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 7f8f1c8dbed2..1d857919a947 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -878,7 +878,10 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  
+>  out_unlock:
+>  	write_unlock(&vcpu->kvm->mmu_lock);
+> -	kvm_release_pfn_clean(fault->pfn);
+> +	if (fault->is_private)
+
+Indirect MMUs can't support private faults, i.e. this is unnecessary.
+
+> +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
+> +	else
+> +		kvm_release_pfn_clean(fault->pfn);
+>  	return r;
+>  }
+>  
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 3fd168972ecd..b0a7910505ed 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -2241,4 +2241,26 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+>  /* Max number of entries allowed for each kvm dirty ring */
+>  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+>  
+> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> +static inline int kvm_private_mem_get_pfn(struct kvm_memory_slot *slot,
+> +					  gfn_t gfn, kvm_pfn_t *pfn, int *order)
+> +{
+> +	int ret;
+> +	pfn_t pfnt;
+> +	pgoff_t index = gfn - slot->base_gfn +
+> +			(slot->private_offset >> PAGE_SHIFT);
+> +
+> +	ret = slot->notifier.bs->get_lock_pfn(slot->private_file, index, &pfnt,
+> +						order);
+> +	*pfn = pfn_t_to_pfn(pfnt);
+> +	return ret;
+> +}
+> +
+> +static inline void kvm_private_mem_put_pfn(struct kvm_memory_slot *slot,
+> +					   kvm_pfn_t pfn)
+> +{
+> +	slot->notifier.bs->put_unlock_pfn(pfn_to_pfn_t(pfn));
+> +}
+> +#endif /* CONFIG_HAVE_KVM_PRIVATE_MEM */
+> +
+>  #endif
+> -- 
+> 2.25.1
+> 

@@ -2,131 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB8E54F696
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA65954F69A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381008AbiFQLWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S1377454AbiFQLZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiFQLW2 (ORCPT
+        with ESMTP id S1380197AbiFQLZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:22:28 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2062.outbound.protection.outlook.com [40.107.102.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12566C569;
-        Fri, 17 Jun 2022 04:22:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=niP0p9RLacaH613XoyrNvra9iwt0as/cLpLgyvR1i9Abrp2FzE0YU+YhwRjppbnQNXHi/GyvcUgLlLUME5TBS6TtMNFn43SgODEIfWDf3/0aOYZuik0QxCEjggQQeaeHMsVeX+CPtPVR8XP5ofh7E61k6kk3aHeb07nVsSWRkxYMSNl3/j+2MpdclXrvBZLN1SUPq0xGupfB1CSPCTwEDwoZEKtLlnwunmj+GrOeuSB45GO475hKDsg3NvGACwG3YUX3ixHR1qqw3WGkCTko7poO1cOU4hZjxJsJqCB9RsLw+LriHxiabARLtj9DiJkz7jbNBnsf+Ph02tuiuAbUVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YaZz8K70RhJyHbsbj8KnmRC7kShKQ0FqvibACCuLg5M=;
- b=h28UC8N6LUDZPPPyWYOIvuKYinxwEBuODmM9phmsk0w1lPHJHSyPWeiEIGvO+JXPLLK1NZ8bvHfrRFT32yke0Cb8py5NuGIS/d50oKwDqiB8uGoUZBRicef/uBBGSq6dlQQLNDe5tgm1BC9ybQnsyimPVFNWAVNqjvT8sXgwfrBAflknHXitqxxbwNeE37ERt5x2C15v/UD6JBG0fQ0EhCuyucMEIEujr3FiFwt7k+6RQOW1gTjE720pOhz+mZhIu47975vY/m3vgkm4VWK9TJfeX2Mii45gIDZW956ykIDcIbK7eRJbBlDpYBSXBGmwKdEW9SW192ccgJJ4FDmHSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YaZz8K70RhJyHbsbj8KnmRC7kShKQ0FqvibACCuLg5M=;
- b=MwwxveQ1QNjoN3hOR0RAZg5V0uIRxPloEFG/Yw4ikxnyTmZMayr3KJtL4ebcT0DAQdp8B7Z9gy2E4q6VHgbFDGDoC/PdYZi0cD2YND5O8PlDoqkJskOXERx2JRFn6WtdHicnETvXFnZjnNaWPBQtowEnsa08FA6TC4B6ZGSLg/o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL3PR12MB6449.namprd12.prod.outlook.com (2603:10b6:208:3b8::6)
- by DM4PR12MB6278.namprd12.prod.outlook.com (2603:10b6:8:a4::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Fri, 17 Jun
- 2022 11:22:25 +0000
-Received: from BL3PR12MB6449.namprd12.prod.outlook.com
- ([fe80::5552:c915:15f5:cb5b]) by BL3PR12MB6449.namprd12.prod.outlook.com
- ([fe80::5552:c915:15f5:cb5b%9]) with mapi id 15.20.5353.015; Fri, 17 Jun 2022
- 11:22:25 +0000
-Message-ID: <13351a41-75f3-2247-e8fa-72a919e2b5cb@amd.com>
-Date:   Fri, 17 Jun 2022 16:52:15 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2] selftests/vm: Add protection_keys tests to run_vmtests
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, akpm@linux-foundation.org,
-        shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610090704.296-1-kalpana.shetty@amd.com>
- <8e7fca3a-096c-7d6c-e43b-9292995ab970@linuxfoundation.org>
- <e1703fcf-c5e2-70b1-cae2-30330108ad26@amd.com>
- <2f157493-02ed-4bc8-6624-b7d077c0d5af@linuxfoundation.org>
- <442c7cb4-7ec5-bf34-b9d6-ce9480b4b491@amd.com>
- <b63d3373-0a42-afdc-1f03-875301e9b6c8@linuxfoundation.org>
-From:   "Shetty, Kalpana" <kalpana.shetty@amd.com>
-In-Reply-To: <b63d3373-0a42-afdc-1f03-875301e9b6c8@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0041.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:22::16) To BL3PR12MB6449.namprd12.prod.outlook.com
- (2603:10b6:208:3b8::6)
+        Fri, 17 Jun 2022 07:25:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C91B6A068
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:25:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=X7fRud6yQ7cQfqbAZYfTi2NBxyZZ/DZLX0VgIQ8mijU=; b=Q7IKlLCMqYvOupi4Mck5jUJOES
+        w//dPuDUG+BKmRqxhSA3XF/yf6mHPqlXUm5r47Vsm/5jetcT+Wa0tSvHoouotbu2KOy3S/z/i8dZz
+        zNyNTEbLP5Kd5Rtj88SgKNqgynzcEGISYAs8apXRH+N1iDda3nZ3vZTJ/iJEBm9FIgcAOVkTBlKs8
+        PCtOT1UBGHUYHNR6ZjGOHcW5SKoCEJcIQ6tsOSEcvQ1UJvKUNKwxNV4W7TQqO9ZHbuyNZd0xbNFg/
+        7GvQE4jgj5ViHvNZM/9erBAtV/+2V2Ha/dWNhPePPtA2Cd6AE7oaekDVc/OZySO0bAac2Vyp3rpdn
+        CmflJ36Q==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2A5w-008fbk-FC; Fri, 17 Jun 2022 11:24:56 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 18C5B9816B5; Fri, 17 Jun 2022 13:24:54 +0200 (CEST)
+Date:   Fri, 17 Jun 2022 13:24:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        christophe.leroy@csgroup.eu, naveen.n.rao@linux.vnet.ibm.com,
+        mbenes@suse.cz
+Subject: [RFC][PATCH] ftrace,objtool: PC32 based __mcount_loc
+Message-ID: <YqxkhV1YcI6e+xXp@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e1c6059-6936-4768-7ea6-08da5053a7cf
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6278:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB62789DA7A77F79E7ECF7611C8CAF9@DM4PR12MB6278.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MXjyjOOYtKD+d/Kzc6EHsuLYhfDcsgJS0Nwf0jG7m2Lu1DTsj8xstCxWbIGKRCns/+zfCc4fmrZ0/fs4IyFB13LlXsQNHofyKweXXptY3yzEjJpINS81r7MgSSEJQ18H+rahB7Yn7qRVLj6dIwCoMik3dOPwzce4hKrFtENbDtWWlb+OSHwi6dUAg10AE1zYxIp/I7kTpI5lP17QKm6Ms4ubs6bxMGXRIRDmjzDbubIkhPe6rvOtWiKGf/XRYde9Co2OPgpHfC1cbDYnWCAjkV+afTPBXBX5VGRZlmfZjibrJMJjup4wGhm9H1rRZ2SxJjpDTVe3yu76V+DhR5S8O2oxjTpVuD8HhjScuUUAB33NtHu2MTGSRW8y0ZPU6jfHRXZHLS7Dpgjzaljx+PRBf3flA/H1+OYgOO0VlrIv0s+paaZOH9n5hJjp2+/jWnurarmZg7Bj1CwiIg/t2Z/JwyPOhKFcOfrILg7BC7ipzMxaNTCzmrNKoVHovir/0vgesYQ24nSCpR5ICuylnV3zaM+R74TjNI63ZhfYgf2qYRP3aHhplGubxc1oz1wFSrnpOuJj/VcbAalaq5w2Ym1tke6Zj3NJa3v03LUCfFSsW4mnsTaJ6ESFyVasUl3MuiU0U7R68DXJsDRCKfWtP5xIVJ2IR4pYrechemI2sE4qJXNI55IFFCdPR8dMlUD3LNssRwnnlC6Qs64z5CCcGxiAufAgJ0cCpFMsqgLnvPQouGk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR12MB6449.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(6506007)(186003)(2616005)(26005)(6666004)(66946007)(66476007)(53546011)(6512007)(86362001)(38100700002)(31696002)(5660300002)(8936002)(31686004)(36756003)(316002)(6486002)(2906002)(66556008)(498600001)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TG0rT3dQTEx0ZVBaUDIyWTdXUkphVmNHUE13cFVTc3JmMWwxZ3ptWXVFa0JF?=
- =?utf-8?B?MnR5elQ3dVJNZktBNXByZlk2RmVSN0pUcEtwQSsrZ3dWMTdlQlJ1L2tSQkQ2?=
- =?utf-8?B?aWxQbkE3NXR0ZjZ4dHkvOGcyUjBKcW8rTkR0S1g4WkRub0Ywa25LTlNCWFU0?=
- =?utf-8?B?bjhtbWs3cGcrVmpSbXZwNmFTb0lNRjVRbkhVdCtGeExwMVpkNTE2TjRMRkhX?=
- =?utf-8?B?eGY1L1o3cm9Nc09kNUxTb3BESVNCbTNkSFJ0WXAzWW5RVUlGWXR4bWJWTG9K?=
- =?utf-8?B?aUVqZWl6QlE4Zmc0ZlE4UEpocUh3emJQT01JZzhVOWhrc05FZG00b1Nudks3?=
- =?utf-8?B?V2MrbC9ickRXNncrTW1oM25iSDNpS0hkOVg4MU1yZnFHYVdLYWZKSEtmVEl0?=
- =?utf-8?B?YWNYNXBCY0RnU1duYmgxZTNxd2ptTDdJUXpnVHRXS0xTZDU0TXhET29YZ3Y1?=
- =?utf-8?B?L0lDUWhFTU5CKzlLbk9veDNoRFd1R3p5VngrUTlQZDI4NTFFM2pqcDRwaFVy?=
- =?utf-8?B?YTdqcGlaVHlvK21kZFYrS1BPYlhQT1dLWEJmL2QxaS81VWhyRXpuTDlSOGQ2?=
- =?utf-8?B?S1d0QndDc3ZlcStHRlRySU1rYWJqdGIyWjFSMCtvbGNFeUljUG90ZjlmVFF6?=
- =?utf-8?B?Q1M2MVNKbTlUYlBLSUIyMGFaUlNyajNLUCtObUduMlhqeW5ENC9EVmRsTnJN?=
- =?utf-8?B?YXZhS3E5Y0k0YW54ZlJGM1l6LzViczlvc0Vta1NXQWdBODNYSTJ4TUg5bVdu?=
- =?utf-8?B?eEpGc2h3eFZscUdmL05jMDdWZ3MwWGpDNDFyc00ycG0va05JdmhUYVR4dWZh?=
- =?utf-8?B?NTlOcHcybUNZRkUvSUFJTDUycXI3Tk1SZzdZZUdwRStPQ0UyVHZjOVM2aUNV?=
- =?utf-8?B?T2ZvcnA2RXZRdldFVCtPejdWU2U5amh3NFNRNkN0cEJPUmFNWUJuSmdqSk1M?=
- =?utf-8?B?YVBvcWpJZVRURlVCaWdCOVlTZGc2Z3cxS2IwbWVuQmZSUTRIVWkyM3N5K05J?=
- =?utf-8?B?QVFWVlVtT2FiTXVBcnNRVWtrQm82Q21hSmtJSG1rdndsLzJRS0dubUtUS0pZ?=
- =?utf-8?B?VFFkbWd4cWJLbE5VTE52YVFydXJNWjgvRHMzVzduNThUaGJJa3JWRHc4MHUz?=
- =?utf-8?B?ZWdRQWxpOTZYSVlxK3NJNWhaV2ZXeDBhZmJkQ1dIaE1sWVFNeVZUd1NrOTZi?=
- =?utf-8?B?cUJHMzNpcnN2Vm1pU3dET0JiMnZNTk9aV2JBNVF3Wnc3ckZKMlg4S0FIdkRw?=
- =?utf-8?B?amNDYkh0b01CNmdmTU1DM3pCU2V3bXJXY3FEZHd2Rm1HSnFZMXdHUmtBaVJx?=
- =?utf-8?B?RWNFY0kxUmZuOUJleU5xOWdwQTNsWUZYdjlvSXBMclJNSnA4ZUVWNmhjc0V3?=
- =?utf-8?B?MXM2REFxS2xlRUtWWDVEOGJEdW8wZGZpM2RaN2tRQVk1UEgxUW1PV1NlMHcv?=
- =?utf-8?B?bkJVSlNyTHUzeE1lb0VSM0w1QUdDS3Q3cm1VdmtyQlRmL3A0RmtJeSsza2k0?=
- =?utf-8?B?bk1BdjEyVlBzMHhLUVFIQ1lJelNnSmgzd0xiN2hReFJBSU1jYWNHcDNEYklG?=
- =?utf-8?B?ZWN5V3o2NlZXZXF6TUFQNngvcnFxZlB6bE9HK1RVeWtGZjcra0dMWDEwSkJq?=
- =?utf-8?B?aWdrNXR3M1BqZkFSenZvMG4rTnppbDZMaHRCaU0xMTBaVkZ3Z2R6TnI4NmNT?=
- =?utf-8?B?d01JQTdqNm1LKzc5M0xMcEFobkNxMlNkRHg4NWUrSnRoU0M5OTJ1QklEdGZx?=
- =?utf-8?B?TlRIcjIxckhDTFZFSnBqUWgwcUczN1NLV3Y5eERYZ1ozR3VrcnJ2VlkwNktD?=
- =?utf-8?B?a1pucmJCU0NHSWhHN1g2cVJBZVJEOE9ybXRsMzR2ajdFYm50S0lCRmN4OHRU?=
- =?utf-8?B?d0w0cjZTNkU2bVVoUFRLeXM4UzhQOUYxMFNIZTFOWWU4Q3NxS1dmVGlKUnVD?=
- =?utf-8?B?QWV1RjQzNE0xb0loNG1HcUNJUHVCclcweUVkRGRkSWt1NVR4dVN6NTNmaEFL?=
- =?utf-8?B?cVl3VEE4VDNLQjYzbTlkYjVZRGF0d0ZKTllYeFRmbmFEY0FNOU1jKzI4RUxl?=
- =?utf-8?B?TklwM056QUhmL0kreFQzWjVRSHpGa2VFRXhJUHFTeWpiZGlwRVlzbzlvMzhw?=
- =?utf-8?B?WXRiRW1QcjloKzNndGZEbjRXK2lZcTRpUlJjM0FvdHBsTGxTSnlzekI1ZG55?=
- =?utf-8?B?TlFxNHI2ekhQRkYyNTIzM3JVZzdBV2RzU3ozRWJkODNlNmoxb3piRDF3TzZW?=
- =?utf-8?B?eVQ1c1NjTmJycnN1ZkJDbUttTFBMT2xuUnVKVG0rbll3bHhEdlg2dE91enBS?=
- =?utf-8?B?cjhiV3lTSjV3ZWhWZWdtd3hXSDRpQVRRbXBzVjB4ZjY3aXVvbXdlUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e1c6059-6936-4768-7ea6-08da5053a7cf
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR12MB6449.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 11:22:25.7371
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F7MyXKZeCL2RnjM1vZDaTyGQ77E+MmNt8gUYlkHHD7+Gryxt9FErfmqQ/wOsK9amuYt4UIL1eR9BtGgpddwl9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6278
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -134,56 +53,374 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 6/17/2022 1:23 AM, Shuah Khan wrote:
-> On 6/15/22 6:04 AM, Shetty, Kalpana wrote:
->>
->> On 6/14/2022 10:50 PM, Shuah Khan wrote:
->>> On 6/14/22 6:15 AM, Shetty, Kalpana wrote:
->>>>
->>>> On 6/14/2022 3:14 AM, Shuah Khan wrote:
->>>>> On 6/10/22 3:07 AM, Kalpana Shetty wrote:
->>>>>> Adding "protected_keys" tests to "run_vmtests.sh" would help out 
->>>>>> to run all VM related tests
->>>>>> from a single shell script.
->>>>>>
->>>>>
->>>>> Makes sense - can you explain why you can't just run
->>>>> protection_keys_32 without checks? 
->>>>
->>>> Yes; we can run protection_keys_32 without check.
->>>>
->>>>
->>>>> Why are you checking for VADDR64? 
->>>>
->>>> The check is added to ensure if the system is in 64-bit mode before 
->>>> executing 64-bit binary.
->>>>
->>>>
->>>
->>> Okay. protection_keys_32 will only be built on 32-bit system and.
->>> protection_keys_64 on 64-bit system.
->>
->> On 64-bit system, we get both 32-bit and 64-bit binary.
->>
->>
->>>
->>> Won't it be better to check if binary exists and run either _32 or
->>> _64 instead of checking for VADDR64?
->>
->> makes sense;
->>
->> In this case on 64-bit platform we would run both _32 and _64 and 
->> this should be fine.
->>
->>
->
-> Okay - send v3 with the change.
-Done; thanks for your input/review comments.
->
-> thanks,
-> -- Shuah
+Hi,
 
-Thanks,
+I recently noticed that __mcount_loc is 64bit wide, containing absolute
+addresses. Since __mcount_loc is a permanent section (not one we drop
+after boot), this bloats the kernel memory usage for no real purpose.
 
-Kalpana
+The below patch adds __mcount_loc_32 and objtool support to generate it.
+This saves, on an x86_64-defconfig + FTRACE, 23975*4 ~= 94K of permanent
+storage.
 
+XXX hobbled sorttable for now
+XXX compile tested only
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ Makefile                                |    3 ++
+ arch/x86/Kconfig                        |    2 -
+ include/asm-generic/vmlinux.lds.h       |    1 
+ include/linux/ftrace.h                  |    6 -----
+ include/linux/ftrace_types.h            |   21 +++++++++++++++++
+ include/linux/module.h                  |    3 +-
+ kernel/trace/Kconfig                    |   18 +++++++++++++++
+ kernel/trace/ftrace.c                   |   38 +++++++++++++++++++++-----------
+ scripts/Makefile.lib                    |    1 
+ tools/objtool/builtin-check.c           |    2 +
+ tools/objtool/check.c                   |   25 ++++++++++-----------
+ tools/objtool/include/objtool/builtin.h |    1 
+ 12 files changed, 90 insertions(+), 31 deletions(-)
+
+--- a/Makefile
++++ b/Makefile
+@@ -858,6 +858,9 @@ endif
+ ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
+   CC_FLAGS_USING	+= -DCC_USING_NOP_MCOUNT
+ endif
++ifdef CONFIG_FTRACE_MCOUNT32_USE_OBJTOOL
++  CC_FLAGS_USING	+= -DCC_USING_NOP_MCOUNT -DCC_USING_MCOUNT_LOC_32
++endif
+ ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+   ifdef CONFIG_HAVE_C_RECORDMCOUNT
+     BUILD_C_RECORDMCOUNT := y
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -190,7 +190,7 @@ config X86
+ 	select HAVE_CONTEXT_TRACKING_OFFSTACK	if HAVE_CONTEXT_TRACKING
+ 	select HAVE_C_RECORDMCOUNT
+ 	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
+-	select HAVE_BUILDTIME_MCOUNT_SORT
++	select HAVE_BUILDTIME_MCOUNT_SORT	if !HAVE_OBJTOOL_MCOUNT
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DMA_CONTIGUOUS
+ 	select HAVE_DYNAMIC_FTRACE
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -172,6 +172,7 @@
+ #define MCOUNT_REC()	. = ALIGN(8);				\
+ 			__start_mcount_loc = .;			\
+ 			KEEP(*(__mcount_loc))			\
++			KEEP(*(__mcount_loc_32))		\
+ 			KEEP(*(__patchable_function_entries))	\
+ 			__stop_mcount_loc = .;			\
+ 			ftrace_stub_graph = ftrace_stub;	\
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -19,6 +19,7 @@
+ #include <linux/types.h>
+ #include <linux/init.h>
+ #include <linux/fs.h>
++#include <linux/ftrace_types.h>
+ 
+ #include <asm/ftrace.h>
+ 
+@@ -926,11 +927,6 @@ static inline unsigned long get_lock_par
+ 
+ #ifdef CONFIG_FTRACE_MCOUNT_RECORD
+ extern void ftrace_init(void);
+-#ifdef CC_USING_PATCHABLE_FUNCTION_ENTRY
+-#define FTRACE_CALLSITE_SECTION	"__patchable_function_entries"
+-#else
+-#define FTRACE_CALLSITE_SECTION	"__mcount_loc"
+-#endif
+ #else
+ static inline void ftrace_init(void) { }
+ #endif
+--- /dev/null
++++ b/include/linux/ftrace_types.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _LINUX_FTRACE_TYPES_H
++#define _LINUX_FTRACE_TYPES_H
++
++#ifdef CONFIG_FTRACE_MCOUNT_RECORD
++
++#ifdef CC_USING_PATCHABLE_FUNCTION_ENTRY
++#define FTRACE_CALLSITE_SECTION	"__patchable_function_entries"
++typedef unsigned long mcount_t;
++#elif CC_USING_MCOUNT_LOC_32
++#define FTRACE_CALLSITE_SECTION	"__mcount_loc_32"
++typedef u32 mcount_t;
++#else
++#define FTRACE_CALLSITE_SECTION	"__mcount_loc"
++typedef unsigned long mcount_t;
++#endif
++
++#endif /* CONFIG_FTRACE_MCOUNT_RECORD */
++
++#endif /* _LINUX_FTRACE_TYPES_H */
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -28,6 +28,7 @@
+ #include <linux/srcu.h>
+ #include <linux/static_call_types.h>
+ #include <linux/cfi.h>
++#include <linux/ftrace_types.h>
+ 
+ #include <linux/percpu.h>
+ #include <asm/module.h>
+@@ -493,7 +494,7 @@ struct module {
+ #endif
+ #ifdef CONFIG_FTRACE_MCOUNT_RECORD
+ 	unsigned int num_ftrace_callsites;
+-	unsigned long *ftrace_callsites;
++	mcount_t *ftrace_callsites;
+ #endif
+ #ifdef CONFIG_KPROBES
+ 	void *kprobes_text_start;
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -717,16 +717,33 @@ config FTRACE_MCOUNT_USE_PATCHABLE_FUNCT
+ 	bool
+ 	depends on FTRACE_MCOUNT_RECORD
+ 
++#
++# mcount preference:
++#  * objtool --mcount32
++#  * gcc -mrecord-mcount
++#  * objtool --mcount
++#  * recordmcount
++#
++
++config FTRACE_MCOUNT32_USE_OBJTOOL
++	def_bool y
++	depends on HAVE_OBJTOOL_MCOUNT
++	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
++	depends on FTRACE_MCOUNT_RECORD
++	select OBJTOOL
++
+ config FTRACE_MCOUNT_USE_CC
+ 	def_bool y
+ 	depends on $(cc-option,-mrecord-mcount)
+ 	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
++	depends on !FTRACE_MCOUNT32_USE_OBJTOOL
+ 	depends on FTRACE_MCOUNT_RECORD
+ 
+ config FTRACE_MCOUNT_USE_OBJTOOL
+ 	def_bool y
+ 	depends on HAVE_OBJTOOL_MCOUNT
+ 	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
++	depends on !FTRACE_MCOUNT32_USE_OBJTOOL
+ 	depends on !FTRACE_MCOUNT_USE_CC
+ 	depends on FTRACE_MCOUNT_RECORD
+ 	select OBJTOOL
+@@ -735,6 +752,7 @@ config FTRACE_MCOUNT_USE_RECORDMCOUNT
+ 	def_bool y
+ 	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+ 	depends on !FTRACE_MCOUNT_USE_CC
++	depends on !FTRACE_MCOUNT32_USE_OBJTOOL
+ 	depends on !FTRACE_MCOUNT_USE_OBJTOOL
+ 	depends on FTRACE_MCOUNT_RECORD
+ 
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6544,18 +6544,26 @@ static __init int ftrace_init_dyn_tracef
+ 
+ static int ftrace_cmp_ips(const void *a, const void *b)
+ {
+-	const unsigned long *ipa = a;
+-	const unsigned long *ipb = b;
++	const mcount_t *_a = a;
++	const mcount_t *_b = b;
+ 
+-	if (*ipa > *ipb)
++#ifdef CC_USING_MCOUNT_LOC_32
++	const unsigned long ipa = (unsigned long)_a + *_a;
++	const unsigned long ipb = (unsigned long)_b + *_b;
++#else
++	const unsigned long ipa = *_a;
++	const unsigned long ipb = *_b;
++#endif
++
++	if (ipa > ipb)
+ 		return 1;
+-	if (*ipa < *ipb)
++	if (ipa < ipb)
+ 		return -1;
+ 	return 0;
+ }
+ 
+ #ifdef CONFIG_FTRACE_SORT_STARTUP_TEST
+-static void test_is_sorted(unsigned long *start, unsigned long count)
++static void test_is_sorted(mcount_t *start, unsigned long count)
+ {
+ 	int i;
+ 
+@@ -6570,23 +6578,23 @@ static void test_is_sorted(unsigned long
+ 		pr_info("ftrace section at %px sorted properly\n", start);
+ }
+ #else
+-static void test_is_sorted(unsigned long *start, unsigned long count)
++static void test_is_sorted(mcount_t *start, unsigned long count)
+ {
+ }
+ #endif
+ 
+ static int ftrace_process_locs(struct module *mod,
+-			       unsigned long *start,
+-			       unsigned long *end)
++			       mcount_t *start,
++			       mcount_t *end)
+ {
+ 	struct ftrace_page *start_pg;
+ 	struct ftrace_page *pg;
+ 	struct dyn_ftrace *rec;
+ 	unsigned long count;
+-	unsigned long *p;
+ 	unsigned long addr;
+ 	unsigned long flags = 0; /* Shut up gcc */
+ 	int ret = -ENOMEM;
++	mcount_t *p;
+ 
+ 	count = end - start;
+ 
+@@ -6637,7 +6645,13 @@ static int ftrace_process_locs(struct mo
+ 	pg = start_pg;
+ 	while (p < end) {
+ 		unsigned long end_offset;
+-		addr = ftrace_call_adjust(*p++);
++#ifdef CC_USING_MCOUNT_LOC_32
++		addr = (unsigned long)p + *p;
++		p++;
++#else
++		addr = *p++;
++#endif
++		addr = ftrace_call_adjust(addr);
+ 		/*
+ 		 * Some architecture linkers will pad between
+ 		 * the different mcount_loc sections of different
+@@ -7280,8 +7294,8 @@ int __init __weak ftrace_dyn_arch_init(v
+ 
+ void __init ftrace_init(void)
+ {
+-	extern unsigned long __start_mcount_loc[];
+-	extern unsigned long __stop_mcount_loc[];
++	extern mcount_t __start_mcount_loc[];
++	extern mcount_t __stop_mcount_loc[];
+ 	unsigned long count, flags;
+ 	int ret;
+ 
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -234,6 +234,7 @@ objtool_args =								\
+ 	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)		\
+ 	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
+ 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
++	$(if $(CONFIG_FTRACE_MCOUNT32_USE_OBJTOOL), --mcount32)		\
+ 	$(if $(CONFIG_UNWINDER_ORC), --orc)				\
+ 	$(if $(CONFIG_RETPOLINE), --retpoline)				\
+ 	$(if $(CONFIG_SLS), --sls)					\
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -65,6 +65,7 @@ const struct option check_options[] = {
+ 	OPT_CALLBACK_OPTARG('h', "hacks", NULL, NULL, "jump_label,noinstr", "patch toolchain bugs/limitations", parse_hacks),
+ 	OPT_BOOLEAN('i', "ibt", &opts.ibt, "validate and annotate IBT"),
+ 	OPT_BOOLEAN('m', "mcount", &opts.mcount, "annotate mcount/fentry calls for ftrace"),
++	OPT_BOOLEAN(0,   "mcount32", &opts.mcount32, "annotate mcount/fentry calls for ftrace"),
+ 	OPT_BOOLEAN('n', "noinstr", &opts.noinstr, "validate noinstr rules"),
+ 	OPT_BOOLEAN('o', "orc", &opts.orc, "generate ORC metadata"),
+ 	OPT_BOOLEAN('r', "retpoline", &opts.retpoline, "validate and annotate retpoline usage"),
+@@ -120,6 +121,7 @@ static bool opts_valid(void)
+ 	    opts.hack_noinstr		||
+ 	    opts.ibt			||
+ 	    opts.mcount			||
++	    opts.mcount32		||
+ 	    opts.noinstr		||
+ 	    opts.orc			||
+ 	    opts.retpoline		||
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -803,15 +803,16 @@ static int create_ibt_endbr_seal_section
+ 
+ static int create_mcount_loc_sections(struct objtool_file *file)
+ {
+-	struct section *sec;
+-	unsigned long *loc;
++	const char *secname = opts.mcount32 ? "__mcount_loc_32" : "__mcount_loc";
++	unsigned int entsize = opts.mcount32 ? sizeof(u32) : sizeof(u64);
+ 	struct instruction *insn;
++	struct section *sec;
+ 	int idx;
+ 
+-	sec = find_section_by_name(file->elf, "__mcount_loc");
++	sec = find_section_by_name(file->elf, secname);
+ 	if (sec) {
+ 		INIT_LIST_HEAD(&file->mcount_loc_list);
+-		WARN("file already has __mcount_loc section, skipping");
++		WARN("file already has %s section, skipping", secname);
+ 		return 0;
+ 	}
+ 
+@@ -822,19 +823,18 @@ static int create_mcount_loc_sections(st
+ 	list_for_each_entry(insn, &file->mcount_loc_list, call_node)
+ 		idx++;
+ 
+-	sec = elf_create_section(file->elf, "__mcount_loc", 0, sizeof(unsigned long), idx);
++	sec = elf_create_section(file->elf, secname, 0, entsize, idx);
+ 	if (!sec)
+ 		return -1;
+ 
+ 	idx = 0;
+ 	list_for_each_entry(insn, &file->mcount_loc_list, call_node) {
+-
+-		loc = (unsigned long *)sec->data->d_buf + idx;
+-		memset(loc, 0, sizeof(unsigned long));
++		void *loc = sec->data->d_buf + idx * entsize;
++		memset(loc, 0, entsize);
+ 
+ 		if (elf_add_reloc_to_insn(file->elf, sec,
+-					  idx * sizeof(unsigned long),
+-					  R_X86_64_64,
++					  idx * entsize,
++					  opts.mcount32 ? R_X86_64_PC32 : R_X86_64_64,
+ 					  insn->sec, insn->offset))
+ 			return -1;
+ 
+@@ -1174,7 +1174,7 @@ static void annotate_call_site(struct ob
+ 		return;
+ 	}
+ 
+-	if (opts.mcount && sym->fentry) {
++	if ((opts.mcount || opts.mcount32) && sym->fentry) {
+ 		if (sibling)
+ 			WARN_FUNC("Tail call to __fentry__ !?!?", insn->sec, insn->offset);
+ 
+@@ -3827,6 +3827,7 @@ static int validate_ibt(struct objtool_f
+ 		    !strcmp(sec->name, "__ex_table")			||
+ 		    !strcmp(sec->name, "__jump_table")			||
+ 		    !strcmp(sec->name, "__mcount_loc")			||
++		    !strcmp(sec->name, "__mcount_loc_32")		||
+ 		    !strcmp(sec->name, "__tracepoints"))
+ 			continue;
+ 
+@@ -3974,7 +3975,7 @@ int check(struct objtool_file *file)
+ 		warnings += ret;
+ 	}
+ 
+-	if (opts.mcount) {
++	if (opts.mcount || opts.mcount32) {
+ 		ret = create_mcount_loc_sections(file);
+ 		if (ret < 0)
+ 			goto out;
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -16,6 +16,7 @@ struct opts {
+ 	bool hack_noinstr;
+ 	bool ibt;
+ 	bool mcount;
++	bool mcount32;
+ 	bool noinstr;
+ 	bool orc;
+ 	bool retpoline;

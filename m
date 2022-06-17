@@ -2,725 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7030954F138
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27AB54F13C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380325AbiFQGvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S1380226AbiFQGxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiFQGvb (ORCPT
+        with ESMTP id S1380098AbiFQGxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:51:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679D05C34C;
-        Thu, 16 Jun 2022 23:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655448689; x=1686984689;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=v0FfUwdyis13vPTgRtAbqJHxaRqphsB1CizBc0dmw3w=;
-  b=dirPkFBJhRBIrhft8Oh7dkBZbupe2oEGBDkoykVht29w3cBiEXJ1ljyz
-   lkRMk+cnwevv14WdTO31ou8TqIzSQ0lO0Am86xI68xpXaiHUyhq34EJs7
-   OD8C0nEBuBfhquoP7OIrAuHaFDn5hRJlEGnJHI04qUhjop5NYzjRoXdum
-   U/8+l2ltkMTxYgPmnxlmjXo7JztZUCeTJpjMpye+4Kkx8J9W+LII9GoHv
-   /peDLAWhhjmZeAbKGP2rd0BnWjceBnOM2vawjDGT+JCT8hqc83ekNxQvD
-   yZYqVFrQTMnkoNyz+R+fCyuJcxzJ4hwME/foa9evVtR2CP0OXXeGzUxiW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280148312"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280148312"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 23:51:28 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="641916111"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.30.135]) ([10.255.30.135])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 23:51:22 -0700
-Message-ID: <5e27d1e8-f329-7e11-2f5a-cc0d53ce1db3@linux.intel.com>
-Date:   Fri, 17 Jun 2022 14:51:20 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 2/4] perf jevents: Add python converter script
+        Fri, 17 Jun 2022 02:53:17 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C0414D2D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:53:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IHxuQsl3zvkegBUE/ZYzeaQ174tYWEe6ZF5g79KzMc6Et7HQczgaliVEluKHqt9RnbyAruY0SvXy1TwtZsUUuDSG9M5jlhfOUO/Klj0C0pPKeOIYR8OsrHVyTW4uexR5QlOnhunJj25nTzxjJl7mpwL7+4I5v1rd8TeChJUf4P4yffH0Q25Hy2yABw3dyBb0ra7rpmMWA2+r9bWxmewoLIDrqe8wAVUhNMbFIFrrPErf/pyHKxX1DLpGpOfI9wFcjaWDt/HveC2Xk6s9nJ3GXN31mlbZRrXjMyDtThbiIxON54mjrofIOzd6hsFVxF57qqfM3jqPtqQw2vExRA5Rig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8xkNGV+DWHHxsohWyffVVQZ1Bg2tTaSMtbrvdlR8xIA=;
+ b=N4EqmhVNPO9Xwk4OlSmnlq43736RMqLvznvGVBTTBeznMt/nuFetjIh1OcxcfxhjgwKBvwic3/cNmoq0cAvSPksPPs6Qabfczwgu/Jycu+8vMj2ietg3Fi1RAIUkd8SjhxydMgMhV4Cc5PElWVWk8DL5pM0eBQ+WYV033Lsq/ZuTaK8eClh4kOnWt1fGuqRvtlnREjXrhMeceDdavWpGKdc8emkaWpawr9vtcpgFcL2jmB4jjgQ78tdl6BIzn9gX117HHQL2UzEkxHWdrASVDuPeJKAML+JyQckZtjZL1v5SfhTMFdFBRVGLI1eNmZuQHb9SoVE9eFxY5woUuSAyXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8xkNGV+DWHHxsohWyffVVQZ1Bg2tTaSMtbrvdlR8xIA=;
+ b=L3U8c7fJRdJPm3Zo0+U+44y2fF0WVBVMQfOhjbqECy0wHA/yao+jPKRp1RoS7LeTLXqHXq1SLP14nCOJJ/HuTmrkfpkW7W6w2LgBaqOp0qQFqVsIGpPkMLyRGWrNKA99lx7JRbbMOpW1hJcPR7/UjrClEujBvAv6CfH97hz81cMWWjcW4MTbPkMf6EGOda5m8l3XoNBcBcCJoNPgT8MNgn3ZFzsGAmY8A0vxEz76MQBeKp/TELFm7uO2PCL8Z9HV7gcy1JvNxZzxgj8XsUTXnOgmDwgs3kWXVCyOE3CxL1IFtOTehXJhOHn60OAnL1UVn3+Z/MJx01LvG+uTI6HEOA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2311.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Fri, 17 Jun
+ 2022 06:53:13 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
+ 06:53:13 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Liang He <windhl@126.com>
+CC:     "oss@buserror.net" <oss@buserror.net>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in sgy_cst1000
+Thread-Topic: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
+ sgy_cst1000
+Thread-Index: AQHYghbqBxHmWj5zmk2B/xk+JkyGug==
+Date:   Fri, 17 Jun 2022 06:53:13 +0000
+Message-ID: <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
+References: <20220617060827.4004795-1-windhl@126.com>
+ <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
+ <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
+In-Reply-To: <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Felix Fietkau <nbd@nbd.name>,
-        Qi Liu <liuqi115@huawei.com>, Like Xu <likexu@tencent.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-References: <20220616044806.47770-1-irogers@google.com>
- <20220616044806.47770-3-irogers@google.com>
- <7eb148e5-0763-1dbe-d1f5-80e5159be7c8@linux.intel.com>
- <CAP-5=fUy=_HFhhdghRJs-+G75ppsYCRg72SSnoeijvdqb8hyVQ@mail.gmail.com>
- <3108fd92-c05b-961f-2367-81925535bf4f@linux.intel.com>
- <CAP-5=fW10QAD1MZ_RhdCvOTwiWTcYoQps5hSGH4F2JsVYeAB5A@mail.gmail.com>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <CAP-5=fW10QAD1MZ_RhdCvOTwiWTcYoQps5hSGH4F2JsVYeAB5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f31c159b-9d35-4415-a5ec-08da502e0cba
+x-ms-traffictypediagnostic: PR0P264MB2311:EE_
+x-microsoft-antispam-prvs: <PR0P264MB2311EA6F30751278906D3E85EDAF9@PR0P264MB2311.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: feSG/DEKTzEVP5nXDvwI/JNnaP9zizR1R9P52cUFZD1l7cOBy2FQ413UUXtyHS5ZTLQQQ3xIl2BgeDaJ8Cr76+EP/VN8cpjhxtjwByTn/qDMPfTCQ6pYYh4AbX4Fe02vUO4wXuAT1uLg+UAFStRZqeOqZPtVlcytsgP36M/sJNdFMpkBc8tKREV8jbBabdgY0r5TZvTHIxTsuxMcEVbmTy4ja/37nfvYjf2ljtWlSLv7G/R2Qe37xfmfelVsUD8l8Zs8Ur0lTjCrUVEU2CYeUgMGwNxlJFU4B4Z5DAwSaZLg3Ifa/TGuxLZuwAQLauoPidP9pwNnRmfS2SiRrv72dqp5aADfQvEPVzkKCHotbaUDxIoR8uhg3peYfg5M2WEzh9/VK7A694e2x9Jdy7BKDHtDD2xxk8CTh4vMPkICdxzPugd1iMPzmqdNd86QRCXjIu5D6TptDIE6yf8ZfCWDqpXdutX0/CiHA9G/eG/GOGw5vR6OH6737MaFoQ/OMsuf4o7GyHNpEI/cQnUkCZz4g8ODrHYmj9I0Fl2NMY2YkhtqAS8XpdnrLUSf9HMkAfSfksDZEvYdOXSMoDEBOG8CT0b+OTuJWDSOtanVFrWrGuoX+Crn1zxr+ilTnsuf36lYNj2HBfvKc0WjKYoM6m2jQbsHQHp1tnuIyQS4ldaNaQhZVupZZZxkNgwMKKmz61QSC2kX3g0EllvueYIVemQkAMiPcTaXbxFthnD2FToQgapXopfnrxoyI+c5YCrGcHGeEl5WXpKKpOu557auFViai/4IZzkKXMi+7ABlWLk4xhNz9TX3j35imcWMAS4ew7+KTl/PGHolpVM+EqcOlLMBp+Ik7qXgpLy1X+k351YPTps=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(36756003)(8936002)(316002)(498600001)(8676002)(31686004)(64756008)(4326008)(66446008)(44832011)(71200400001)(76116006)(2906002)(83380400001)(6512007)(66476007)(66556008)(66946007)(2616005)(86362001)(54906003)(122000001)(6506007)(31696002)(26005)(966005)(5660300002)(38100700002)(6486002)(186003)(38070700005)(6916009)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UEZQL0diRWJOWUw2M0R4U083YVVqUnVtOFNUVjNlQ3VIdTVGOUMzaktqQWVl?=
+ =?utf-8?B?RFFuY0dIalIyTTRZeDA0anpwMm1kTDRmWGZrYmpWb3ZtOXowK3ZjMHJPVTdY?=
+ =?utf-8?B?NEw1S3czVkdEdHpkZDJTaGgzWEQ0UmhSU2owbGtBdWxuT1czeEtKcnFQaGdI?=
+ =?utf-8?B?V0NOUnQvMW5vSzJqODdKVnZ2M3dpYlQ2WVBKNHBGWlp3UGZzNityU1VweWp4?=
+ =?utf-8?B?Uys2eTN1T3R2bjVWMTJBNElQVkppdWhNNWtTb2pGZ3Rmb3k2VFFZNTFMYjVS?=
+ =?utf-8?B?c1J0Q05VdE5wSDBpais0T3U5eU5FRk5XTTI1NDQ1T0lnMFZvemc4bDlHcWJD?=
+ =?utf-8?B?RzdqV25pUkdHVVUrbjlXQ1c3eFJRV0toblllWkh6OHZTMEh3eElXZXdFNFFE?=
+ =?utf-8?B?OWM5VENUN1ZHU2VZL2dzS044djFqNXhSL3lpaXFkbG9jcDNLRUpRdU5oZ2Ix?=
+ =?utf-8?B?VGorMUVSdWIyY0ozaDVkMnk1dEdLb3hldzJpUmpqVXNHcHlUY3JYWk5BUGc1?=
+ =?utf-8?B?MVBuTlIxNHVnRU9tak1iSERBc3FGUnJMUDFyRGgxMXVPNFgveDZaeGNQaDhH?=
+ =?utf-8?B?NW5aQmxLZFZ0UC80NUZ3KzJNclpsYW5WM3ZRM2VycWlJcU1WOW9XbUZEczRr?=
+ =?utf-8?B?K2NubzdZaFRlOUxScWREeHo1cnN1VlZXa2lhNlhod3JJZWd2YklSKzdIUWk1?=
+ =?utf-8?B?SHJKaEN4em8yL3l5Z0NkUC9UYU04ZVpBcDQyYTBVa1BrSFp2Q0R6Zm96ZjFl?=
+ =?utf-8?B?ZCtlOWdhUVE0WTNKUzhXMWoyT1VyZUR1OFg1NDljV0ZMN296d3BhUTJDMkNz?=
+ =?utf-8?B?YUZDenk2Ym9teGlha3BGU2dhVXFqUmtwTVJINGhDcGZPWFRIT1lnZnhLMzcr?=
+ =?utf-8?B?cnpQcDVLMmt1c3hkYTJxaVdQUDBmamhOM1kyWncwMzJ5K09ObXlsTzBmRnRv?=
+ =?utf-8?B?TFoyWkxnMElzTXVEb095MFp1cVNxTTBTL3BjZDU0Y3R3RzNNUitUeWtVYlkv?=
+ =?utf-8?B?UUtCZjRuZHczYmNyc1h1WWN3STNWczZHWFQ2VTIyTi9kSzAxNGRvU2RnVEFo?=
+ =?utf-8?B?a2FDVUhEYkVmVEFuN3hibzdBaUh0R0MzeHRuUlpXSHRyem53VXBkcXVsVzhF?=
+ =?utf-8?B?Nk5zZXBRWGpVN0ZaVStuSExEWUZOT0lYbjlyeEROdGZjaE9FUzE3UHcvNXor?=
+ =?utf-8?B?b3BlYzhsWDB2L0V0dU43b3ArUjBEUzF0dXRQOEQyNldMSGRHaklxZDF2NzYz?=
+ =?utf-8?B?dWp3ZHgrTEwreUhFaW5lWlNjYjkxcmNNcE9KeHNpcXNUcW5nZ21DN01iZnNY?=
+ =?utf-8?B?aEZycTJQbXlYT1FQc1B1Ynl0cUkvNDJFdUFmRW1kK1N4K1lhUk0zNFlzcTFK?=
+ =?utf-8?B?WXZ5V1l5dlU1aFlZWEw4NzZUUnN4NXVmUEN5cGVmZnpTcnZvak5zOE5FM25X?=
+ =?utf-8?B?UTg1dEt3eUVUc01mMnVLblRQemh1M1g0UkJsc2gwSXA1bE11OW0zZEsySUNu?=
+ =?utf-8?B?TGN5alJBU0Y2UnVZZTF3Z3h3Q2RmaTFsMitrMFN6SlJWYlRIcHJta3JwTlY0?=
+ =?utf-8?B?ajB5TFNDL0RBWnhidzdPaytGS1F3VW9TeGlPOCttaXJCKzZhWjhaMFpteGtJ?=
+ =?utf-8?B?bG5IUnZ5bW10QldPMjI5MjJDdnFiaVlWa2RaVlpxeWU4TDJjcHVHTkYwZStO?=
+ =?utf-8?B?eEZmMzArNEh6aGdod2xYTWNKMkRxcUJlOUt3R1oyNjVhWXMzVExpdFJUZUdv?=
+ =?utf-8?B?M1AzNHlnT0Z2MnN4YkV0bzNweDNUMUlTZ3JBQmpNeWtKZ1AvSDhuYXdUaWNq?=
+ =?utf-8?B?WXNGQ2RtWkxnOXZYWDhPeTRzRlBsSTJDZm5HQVJvYmlNSStiNEtHUEdkSGpM?=
+ =?utf-8?B?MEpHcXQzZzBMeVVjV3JEbVR3VjkreDdjN1BYTGFGMEM4anBPRHE2ZGFXbWwx?=
+ =?utf-8?B?aXd4QkhobzVua1F1L1FjQjN2cVBRcVY4cWJSVmx4ZHBjZjF6UDhMeVdhQnY4?=
+ =?utf-8?B?OUpERVJGK3pzVTBuazNJZnp5UDZtY2dLN0U4VWRGTVpnL3pEL3Z3eGNVRThT?=
+ =?utf-8?B?QytUYkljcUFtdkc1SlFQZUxDWjRPeldVUUpVcFR6N2lkQmM3Z2tKUnlpdno5?=
+ =?utf-8?B?OEEzZzQreVcvVno3b1Exa21EUTR4eU9TY0c4T2hvTms1V2Nobmk1K0o3TFB5?=
+ =?utf-8?B?dE1CRWdmUmYzUkF6VmFVNDZZOWY3TkRQT0hyZTg2amsrMjhrMEY2YXRzaEJM?=
+ =?utf-8?B?N1M2Q1JiaWxEbGlSVzVsOG1Pb0dNaTcwYUVsTFk1elhJUGFCZEN2WHdZSWlO?=
+ =?utf-8?B?U2F4YW9ieTByd3JYVXYranNhV01HTTVpdUcwT3ZFM2dVbGpzUEloNWZuZisr?=
+ =?utf-8?Q?CkfOFAcLM9nx80amkYhJe5GDqwAxnCHGdyUIv?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4281C3A67FC4E247AECEBB153BA1B8F1@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f31c159b-9d35-4415-a5ec-08da502e0cba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 06:53:13.8310
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LE7+2vIFLiAq+qTGhGCq/TCCeH5PUz4nQbvX5rzCeM9fgiNRFRl/f9NFf8R6jpzodKBGlX8xPXqryPTGjB4ZOTRrcPdUe/rZe0hbYaQe9+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2311
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/17/2022 10:40 AM, Ian Rogers wrote:
-> On Thu, Jun 16, 2022 at 6:52 PM Xing Zhengjun
-> <zhengjun.xing@linux.intel.com> wrote:
->>
->> Hi Ian,
->>
->> On 6/17/2022 9:26 AM, Ian Rogers wrote:
->>> On Thu, Jun 16, 2022 at 5:04 PM Xing Zhengjun
->>> <zhengjun.xing@linux.intel.com> wrote:
->>>>
->>>> Hi Ian,
->>>>
->>>>      I applied this patch series based on the head of the perf/core
->>>> branch, but it failed when do make.
->>>>      My python version:
->>>>      Python 2.7.18 (default, Mar  8 2021, 13:02:45)
->>>>      [GCC 9.3.0] on linux2
->>>>
->>>>
->>>>      GEN     pmu-events/pmu-events.c
->>>> make[3]: Nothing to be done for 'install_headers'.
->>>>      GEN     python/perf.so
->>>> Traceback (most recent call last):
->>>>      File "pmu-events/jevents.py", line 23, in <module>
->>>>        def file_name_to_table_name(parents: list[str], dirname: str) -> str:
->>>> TypeError: 'type' object is not subscriptable
->>>> make[3]: *** [pmu-events/Build:20: pmu-events/pmu-events.c] Error 1
->>>> make[2]: *** [Makefile.perf:663: pmu-events/pmu-events-in.o] Error 2
->>>> make[2]: *** Waiting for unfinished jobs....
->>>> make[1]: *** [Makefile.perf:240: sub-make] Error 2
->>>> make: *** [Makefile:70: all] Error 2
->>>
->>> Hi Zhengjun,
->>>
->>> Thanks for testing! You are running the test script and not the main
->>> build. Unlike the main build I didn't add a Python version test for
->>> the test script. As mentioned in the cover letter you need Python 3.6
->>> as Python 2 was sunset in 2020.
->>>
->>
->> In fact, I run the main build,
->> $ cd tools/perf
->> $ make
->>
->> $ lsb_release -a
->> No LSB modules are available.
->> Distributor ID: Ubuntu
->> Description:    Ubuntu 20.04.3 LTS
->> Release:        20.04
->> Codename:       focal
->>
->> The default python in Ubuntu 20.04.3 is Python2
->>
->> I think a lot of developers also use the Ubuntu 20.04.3 LTS,
->> it's better to support python2.
-> 
-> TL;DR "apt install python-dev-is-python3" :-)
-> 
-> The problem is what you lose by making the code work with python2:
-> f-strings, various library functions. You end up coding to a worse
-> standard of Python and the code is considered non-pythonic. Python 3.6
-> was released in Dec. 2016 and so is over 5 years old now - ie I'm not
-> pushing for the bleeding edge.
-> 
-> A problem we face in the regular perf Python build is that Python 2
-> doesn't support new APIs and Python3 has deprecated the old APIs [1].
-> I think the sensible thing is to follow Python 3's deprecation plan
-> which will mean losing Python 2 support, ie we shouldn't look for
-> python2-config in the build any more as python2 won't support the APIs
-> our scripts are now using.
-> 
-> I think arguing that Python 2 was something not worth sunsetting was
-> an argument to be made 2 years ago, but now we have to live with the
-> consequences. I don't think there is any hardship except an install
-> step. For the build changes in these patches if an old version of
-> Python is detected then you just don't get jevents and there is a
-> warning at build time.
-
-After "sudo apt install python-dev-is-python3", now the python version :
-Python 3.8.10 (default, Mar 15 2022, 12:22:08)
-[GCC 9.4.0] on linux
-
-But the issue still happened.
-
-$cd tools/perf
-$make
-   GEN     pmu-events/pmu-events.c
-make[3]: Nothing to be done for 'install_headers'.
-   GEN     python/perf.so
-Traceback (most recent call last):
-   File "pmu-events/jevents.py", line 23, in <module>
-     def file_name_to_table_name(parents: list[str], dirname: str) -> str:
-TypeError: 'type' object is not subscriptable
-make[3]: *** [pmu-events/Build:20: pmu-events/pmu-events.c] Error 1
-make[2]: *** [Makefile.perf:663: pmu-events/pmu-events-in.o] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [Makefile.perf:240: sub-make] Error 2
-make: *** [Makefile:70: all] Error 2
-
-
-For the python version, I think python3 is ok.
-But during the build, we need to add a warning and how to fix messages 
-when detecting the system is using pthon2, just like it did before:
-
-Auto-detecting system features:
-...                         dwarf: [ on  ]
-...            dwarf_getlocations: [ on  ]
-...                         glibc: [ on  ]
-...                        libbfd: [ on  ]
-...                libbfd-buildid: [ on  ]
-...                        libcap: [ on  ]
-...                        libelf: [ on  ]
-...                       libnuma: [ on  ]
-...        numa_num_possible_cpus: [ on  ]
-...                       libperl: [ on  ]
-...                     libpython: [ on  ]
-...                     libcrypto: [ on  ]
-...                     libunwind: [ on  ]
-...            libdw-dwarf-unwind: [ on  ]
-...                          zlib: [ on  ]
-...                          lzma: [ on  ]
-...                     get_cpuid: [ on  ]
-...                           bpf: [ on  ]
-...                        libaio: [ on  ]
-...                       libzstd: [ on  ]
-...        disassembler-four-args: [ on  ]
-...         python-dev-is-python3: [ off ]
-
-
-> 
-> Thanks,
-> Ian
-> 
-> [1] https://lore.kernel.org/lkml/20220615014206.26651-1-irogers@google.com/
-> 
-> 
->>> Thanks,
->>> Ian
->>>
->>>
->>>> On 6/16/2022 12:48 PM, Ian Rogers wrote:
->>>>> jevents.c is large, has a dependency on an old forked version of jsmn,
->>>>> and is challenging to work upon. A lot of jevents.c's complexity comes
->>>>> from needing to write json and csv parsing from first principles. In
->>>>> contrast python has this functionality in standard libraries and is
->>>>> already a build pre-requisite for tools like asciidoc (that builds all
->>>>> of the perf man pages).
->>>>>
->>>>> Introduce jevents.py that produces identical output to jevents.c. Add a
->>>>> test that runs both converter tools and validates there are no output
->>>>> differences. The test can be invoked with a phony build target like:
->>>>>
->>>>> make -C tools/perf jevents-py-test
->>>>>
->>>>> The python code deliberately tries to replicate the behavior of
->>>>> jevents.c so that the output matches and transitioning tools shouldn't
->>>>> introduce regressions. In some cases the code isn't as elegant as hoped,
->>>>> but fixing this can be done as follow up.
->>>>>
->>>>> Signed-off-by: Ian Rogers <irogers@google.com>
->>>>> ---
->>>>>     tools/perf/Makefile.perf              |   6 +
->>>>>     tools/perf/pmu-events/jevents-test.sh |  33 +++
->>>>>     tools/perf/pmu-events/jevents.py      | 394 ++++++++++++++++++++++++++
->>>>>     3 files changed, 433 insertions(+)
->>>>>     create mode 100755 tools/perf/pmu-events/jevents-test.sh
->>>>>     create mode 100755 tools/perf/pmu-events/jevents.py
->>>>>
->>>>> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
->>>>> index 8f738e11356d..1e29c8936f71 100644
->>>>> --- a/tools/perf/Makefile.perf
->>>>> +++ b/tools/perf/Makefile.perf
->>>>> @@ -669,6 +669,12 @@ $(JEVENTS_IN): FORCE
->>>>>     $(JEVENTS): $(JEVENTS_IN)
->>>>>         $(QUIET_LINK)$(HOSTCC) $(JEVENTS_IN) -o $@
->>>>>
->>>>> +JEVENTS_PY   :=  pmu-events/jevents.py
->>>>> +JEVENTS_PY_TEST      :=  pmu-events/jevents-test.sh
->>>>> +.PHONY: jevents-py-test
->>>>> +jevents-py-test: $(JEVENTS)
->>>>> +     $(Q)$(call echo-cmd,gen)$(JEVENTS_PY_TEST) $(JEVENTS) $(JEVENTS_PY) pmu-events/arch
->>>>> +
->>>>>     $(PMU_EVENTS_IN): $(JEVENTS) FORCE
->>>>>         $(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
->>>>>
->>>>> diff --git a/tools/perf/pmu-events/jevents-test.sh b/tools/perf/pmu-events/jevents-test.sh
->>>>> new file mode 100755
->>>>> index 000000000000..9ae852292576
->>>>> --- /dev/null
->>>>> +++ b/tools/perf/pmu-events/jevents-test.sh
->>>>> @@ -0,0 +1,33 @@
->>>>> +#!/bin/sh
->>>>> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
->>>>> +# Validate that the legacy jevents and jevents.py produce identical output.
->>>>> +set -e
->>>>> +
->>>>> +JEVENTS="$1"
->>>>> +JEVENTS_PY="$2"
->>>>> +ARCH_PATH="$3"
->>>>> +JEVENTS_C_GENERATED=$(mktemp /tmp/jevents_c.XXXXX.c)
->>>>> +JEVENTS_PY_GENERATED=$(mktemp /tmp/jevents_py.XXXXX.c)
->>>>> +
->>>>> +cleanup() {
->>>>> +  rm "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
->>>>> +  trap - exit term int
->>>>> +}
->>>>> +trap cleanup exit term int
->>>>> +
->>>>> +for path in "$ARCH_PATH"/*
->>>>> +do
->>>>> +  arch=$(basename $path)
->>>>> +  if [ "$arch" = "test" ]
->>>>> +  then
->>>>> +    continue
->>>>> +  fi
->>>>> +  echo "Checking architecture: $arch"
->>>>> +  echo "Generating using jevents.c"
->>>>> +  "$JEVENTS" "$arch" "$ARCH_PATH" "$JEVENTS_C_GENERATED"
->>>>> +  echo "Generating using jevents.py"
->>>>> +  "$JEVENTS_PY" "$arch" "$ARCH_PATH" "$JEVENTS_PY_GENERATED"
->>>>> +  echo "Diffing"
->>>>> +  diff -u "$JEVENTS_C_GENERATED" "$JEVENTS_PY_GENERATED"
->>>>> +done
->>>>> +cleanup
->>>>> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
->>>>> new file mode 100755
->>>>> index 000000000000..658eb2696f9a
->>>>> --- /dev/null
->>>>> +++ b/tools/perf/pmu-events/jevents.py
->>>>> @@ -0,0 +1,394 @@
->>>>> +#!/usr/bin/env python3
->>>>> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
->>>>> +"""Convert directories of JSON events to C code."""
->>>>> +import argparse
->>>>> +import csv
->>>>> +import json
->>>>> +import os
->>>>> +import sys
->>>>> +from typing import Callable
->>>>> +
->>>>> +# Global command line arguments.
->>>>> +args = None
->>>>> +# List of event tables generated from "/sys" directories.
->>>>> +sys_event_tables = []
->>>>> +# Map from an event name to an architecture standard
->>>>> +# JsonEvent. Architecture standard events are in json files in the top
->>>>> +# f'{args.starting_dir}/{args.arch}' directory.
->>>>> +arch_std_events = dict()
->>>>> +# Track whether an events table is currently being defined and needs closing.
->>>>> +close_table = False
->>>>> +
->>>>> +
->>>>> +def file_name_to_table_name(parents: list[str], dirname: str) -> str:
->>>>> +  """Generate a C table name from directory names."""
->>>>> +  tblname = 'pme'
->>>>> +  for p in parents:
->>>>> +    tblname += '_' + p
->>>>> +  tblname += '_' + dirname
->>>>> +  return tblname.replace('-', '_')
->>>>> +
->>>>> +
->>>>> +class JsonEvent:
->>>>> +  """Representation of an event loaded from a json file dictionary."""
->>>>> +
->>>>> +  def __init__(self, dict):
->>>>> +    """Constructor passed the dictionary of parsed json values."""
->>>>> +
->>>>> +    def llx(x: int) -> str:
->>>>> +      """Convert an int to a string similar to a printf modifier of %#llx."""
->>>>> +      return '0' if x == 0 else hex(x)
->>>>> +
->>>>> +    def fixdesc(s: str) -> str:
->>>>> +      """Fix formatting issue for the desc string."""
->>>>> +      if s is None:
->>>>> +        return None
->>>>> +      return s.removesuffix('.  ').removesuffix('. ').removesuffix('.').replace(
->>>>> +          '\n', '\\n').replace('\"', '\\"').replace('\r', '\\r')
->>>>> +
->>>>> +    def convert_aggr_mode(aggr_mode: str) -> str:
->>>>> +      """Returns the aggr_mode_class enum value associated with the JSON string."""
->>>>> +      if not aggr_mode:
->>>>> +        return None
->>>>> +      aggr_mode_to_enum = {
->>>>> +          'PerChip': '1',
->>>>> +          'PerCore': '2',
->>>>> +      }
->>>>> +      return aggr_mode_to_enum[aggr_mode]
->>>>> +
->>>>> +    def lookup_msr(num: str) -> str:
->>>>> +      """Converts the msr number, or first in a list to the appropriate event field."""
->>>>> +      if not num:
->>>>> +        return None
->>>>> +      msrmap = {
->>>>> +          0x3F6: 'ldlat=',
->>>>> +          0x1A6: 'offcore_rsp=',
->>>>> +          0x1A7: 'offcore_rsp=',
->>>>> +          0x3F7: 'frontend=',
->>>>> +      }
->>>>> +      return msrmap[int(num.split(',', 1)[0], 0)]
->>>>> +
->>>>> +    def real_event(name: str, event: str) -> str:
->>>>> +      """Convert well known event names to an event string otherwise use the event argument."""
->>>>> +      fixed = {
->>>>> +          'inst_retired.any': 'event=0xc0,period=2000003',
->>>>> +          'inst_retired.any_p': 'event=0xc0,period=2000003',
->>>>> +          'cpu_clk_unhalted.ref': 'event=0x0,umask=0x03,period=2000003',
->>>>> +          'cpu_clk_unhalted.thread': 'event=0x3c,period=2000003',
->>>>> +          'cpu_clk_unhalted.core': 'event=0x3c,period=2000003',
->>>>> +          'cpu_clk_unhalted.thread_any': 'event=0x3c,any=1,period=2000003',
->>>>> +      }
->>>>> +      if not name:
->>>>> +        return None
->>>>> +      if name.lower() in fixed:
->>>>> +        return fixed[name.lower()]
->>>>> +      return event
->>>>> +
->>>>> +    def unit_to_pmu(unit: str) -> str:
->>>>> +      """Convert a JSON Unit to Linux PMU name."""
->>>>> +      if not unit:
->>>>> +        return None
->>>>> +      # Comment brought over from jevents.c:
->>>>> +      # it's not realistic to keep adding these, we need something more scalable ...
->>>>> +      table = {
->>>>> +          'CBO': 'uncore_cbox',
->>>>> +          'QPI LL': 'uncore_qpi',
->>>>> +          'SBO': 'uncore_sbox',
->>>>> +          'iMPH-U': 'uncore_arb',
->>>>> +          'CPU-M-CF': 'cpum_cf',
->>>>> +          'CPU-M-SF': 'cpum_sf',
->>>>> +          'UPI LL': 'uncore_upi',
->>>>> +          'hisi_sicl,cpa': 'hisi_sicl,cpa',
->>>>> +          'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
->>>>> +          'hisi_sccl,hha': 'hisi_sccl,hha',
->>>>> +          'hisi_sccl,l3c': 'hisi_sccl,l3c',
->>>>> +          'imx8_ddr': 'imx8_ddr',
->>>>> +          'L3PMC': 'amd_l3',
->>>>> +          'DFPMC': 'amd_df',
->>>>> +          'cpu_core': 'cpu_core',
->>>>> +          'cpu_atom': 'cpu_atom',
->>>>> +      }
->>>>> +      return table[unit] if unit in table else f'uncore_{unit.lower()}'
->>>>> +
->>>>> +    eventcode = 0
->>>>> +    if 'EventCode' in dict:
->>>>> +      eventcode = int(dict['EventCode'].split(',', 1)[0], 0)
->>>>> +    if 'ExtSel' in dict:
->>>>> +      eventcode |= int(dict['ExtSel']) << 8
->>>>> +    configcode = int(dict['ConfigCode'], 0) if 'ConfigCode' in dict else None
->>>>> +    self.name = dict['EventName'].lower() if 'EventName' in dict else None
->>>>> +    self.compat = dict.get('Compat')
->>>>> +    self.desc = fixdesc(dict.get('BriefDescription'))
->>>>> +    self.long_desc = fixdesc(dict.get('PublicDescription'))
->>>>> +    precise = dict.get('PEBS')
->>>>> +    msr = lookup_msr(dict.get('MSRIndex'))
->>>>> +    msrval = dict.get('MSRValue')
->>>>> +    extra_desc = ''
->>>>> +    if 'Data_LA' in dict:
->>>>> +      extra_desc += '  Supports address when precise'
->>>>> +      if 'Errata' in dict:
->>>>> +        extra_desc += '.'
->>>>> +    if 'Errata' in dict:
->>>>> +      extra_desc += '  Spec update: ' + dict['Errata']
->>>>> +    self.pmu = unit_to_pmu(dict.get('Unit'))
->>>>> +    filter = dict.get('Filter')
->>>>> +    self.unit = dict.get('ScaleUnit')
->>>>> +    self.perpkg = dict.get('PerPkg')
->>>>> +    self.aggr_mode = convert_aggr_mode(dict.get('AggregationMode'))
->>>>> +    self.deprecated = dict.get('Deprecated')
->>>>> +    self.metric_name = dict.get('MetricName')
->>>>> +    self.metric_group = dict.get('MetricGroup')
->>>>> +    self.metric_constraint = dict.get('MetricConstraint')
->>>>> +    self.metric_expr = dict.get('MetricExpr')
->>>>> +    if self.metric_expr:
->>>>> +      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
->>>>> +    arch_std = dict.get('ArchStdEvent')
->>>>> +    if precise and self.desc and not '(Precise Event)' in self.desc:
->>>>> +      extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
->>>>> +                                                                 'event)')
->>>>> +    event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
->>>>> +    event_fields = [
->>>>> +        ('AnyThread', 'any='),
->>>>> +        ('PortMask', 'ch_mask='),
->>>>> +        ('CounterMask', 'cmask='),
->>>>> +        ('EdgeDetect', 'edge='),
->>>>> +        ('FCMask', 'fc_mask='),
->>>>> +        ('Invert', 'inv='),
->>>>> +        ('SampleAfterValue', 'period='),
->>>>> +        ('UMask', 'umask='),
->>>>> +    ]
->>>>> +    for key, value in event_fields:
->>>>> +      if key in dict and dict[key] != '0':
->>>>> +        event += ',' + value + dict[key]
->>>>> +    if filter:
->>>>> +      event += f',{filter}'
->>>>> +    if msr:
->>>>> +      event += f',{msr}{msrval}'
->>>>> +    if self.desc and extra_desc:
->>>>> +      self.desc += extra_desc
->>>>> +    if self.long_desc and extra_desc:
->>>>> +      self.long_desc += extra_desc
->>>>> +    if self.pmu:
->>>>> +      if self.desc and not self.desc.endswith('. '):
->>>>> +        self.desc += '. '
->>>>> +      self.desc = (self.desc if self.desc else '') + ('Unit: ' + self.pmu + ' ')
->>>>> +    if arch_std and arch_std.lower() in arch_std_events:
->>>>> +      event = arch_std_events[arch_std.lower()].event
->>>>> +      # Copy from the architecture standard event to self for undefined fields.
->>>>> +      for attr, value in arch_std_events[arch_std.lower()].__dict__.items():
->>>>> +        if hasattr(self, attr) and not getattr(self, attr):
->>>>> +          setattr(self, attr, value)
->>>>> +
->>>>> +    self.event = real_event(self.name, event)
->>>>> +
->>>>> +  def __repr__(self) -> str:
->>>>> +    """String representation primarily for debugging."""
->>>>> +    s = '{\n'
->>>>> +    for attr, value in self.__dict__.items():
->>>>> +      if value:
->>>>> +        s += f'\t{attr} = {value},\n'
->>>>> +    return s + '}'
->>>>> +
->>>>> +  def ToCString(self, topic_local: str) -> str:
->>>>> +    """Representation of the event as a C struct initializer."""
->>>>> +
->>>>> +    def AttrString(attr: str, value: str) -> str:
->>>>> +      return '\t.%s = \"%s\",\n' % (attr, value)
->>>>> +
->>>>> +    def StrIfPresent(self, attr: str) -> str:
->>>>> +      if not getattr(self, attr):
->>>>> +        return ''
->>>>> +      return AttrString(attr, getattr(self, attr))
->>>>> +
->>>>> +    s = '{\n'
->>>>> +    for attr in ['name', 'event']:
->>>>> +      s += StrIfPresent(self, attr)
->>>>> +    if self.desc is not None:
->>>>> +      s += AttrString('desc', self.desc)
->>>>> +    else:
->>>>> +      s += AttrString('desc', '(null)')
->>>>> +    s += StrIfPresent(self, 'compat')
->>>>> +    s += f'\t.topic = "{topic_local}",\n'
->>>>> +    for attr in [
->>>>> +        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
->>>>> +        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
->>>>> +    ]:
->>>>> +      s += StrIfPresent(self, attr)
->>>>> +    s += '},\n'
->>>>> +    return s
->>>>> +
->>>>> +
->>>>> +def read_json_events(path: str) -> list[JsonEvent]:
->>>>> +  """Read json events from the specified file."""
->>>>> +  return json.load(open(path), object_hook=lambda d: JsonEvent(d))
->>>>> +
->>>>> +def preprocess_arch_std_files(archpath: str) -> None:
->>>>> +  """Read in all architecture standard events."""
->>>>> +  global arch_std_events
->>>>> +  for item in os.scandir(archpath):
->>>>> +    if item.is_file() and item.name.endswith('.json'):
->>>>> +      for event in read_json_events(item.path):
->>>>> +        if event.name:
->>>>> +          arch_std_events[event.name.lower()] = event
->>>>> +
->>>>> +
->>>>> +def print_events_table_prefix(tblname: str) -> None:
->>>>> +  """Called when a new events table is started."""
->>>>> +  global close_table
->>>>> +  if close_table:
->>>>> +    raise IOError('Printing table prefix but last table has no suffix')
->>>>> +  args.output_file.write('static const struct pmu_event %s[] = {\n' % tblname)
->>>>> +  close_table = True
->>>>> +
->>>>> +
->>>>> +def print_events_table_entries(item: os.DirEntry, topic: str) -> None:
->>>>> +  """Create contents of an events table."""
->>>>> +  if not close_table:
->>>>> +    raise IOError('Table entries missing prefix')
->>>>> +  for event in read_json_events(item.path):
->>>>> +    args.output_file.write(event.ToCString(topic))
->>>>> +
->>>>> +def print_events_table_suffix() -> None:
->>>>> +  """Optionally close events table."""
->>>>> +  global close_table
->>>>> +  if close_table:
->>>>> +    args.output_file.write("""{
->>>>> +\t.name = 0,
->>>>> +\t.event = 0,
->>>>> +\t.desc = 0,
->>>>> +},
->>>>> +};
->>>>> +""")
->>>>> +  close_table = False
->>>>> +
->>>>> +def process_one_file(parents: list[str], item: os.DirEntry) -> None:
->>>>> +  """Process a JSON file during the main walk."""
->>>>> +  global sys_event_tables
->>>>> +
->>>>> +  def get_topic(topic: str) -> str:
->>>>> +    return topic.removesuffix('.json').replace('-', ' ')
->>>>> +
->>>>> +  def is_leaf_dir(path: str) -> bool:
->>>>> +    for item in os.scandir(path):
->>>>> +      if item.is_dir():
->>>>> +        return False
->>>>> +    return True
->>>>> +
->>>>> +  # model directory, reset topic
->>>>> +  if item.is_dir() and is_leaf_dir(item.path):
->>>>> +    print_events_table_suffix()
->>>>> +
->>>>> +    tblname = file_name_to_table_name(parents, item.name)
->>>>> +    if item.name == 'sys':
->>>>> +      sys_event_tables.append(tblname)
->>>>> +    print_events_table_prefix(tblname)
->>>>> +    return
->>>>> +
->>>>> +  # base dir or too deep
->>>>> +  level = len(parents)
->>>>> +  if level == 0 or level > 4:
->>>>> +    return
->>>>> +
->>>>> +  # Ignore other directories. If the file name does not have a .json
->>>>> +  # extension, ignore it. It could be a readme.txt for instance.
->>>>> +  if not item.is_file() or not item.name.endswith('.json'):
->>>>> +    return
->>>>> +
->>>>> +  print_events_table_entries(item, get_topic(item.name))
->>>>> +
->>>>> +
->>>>> +def print_mapping_table() -> None:
->>>>> +  """Read the mapfile and generate the struct from cpuid string to event table."""
->>>>> +  table = csv.reader(open(f'{args.starting_dir}/{args.arch}/mapfile.csv'))
->>>>> +  args.output_file.write('const struct pmu_events_map pmu_events_map[] = {\n')
->>>>> +  first = True
->>>>> +  for row in table:
->>>>> +    # Skip the first row or any row beginning with #.
->>>>> +    if not first and len(row) > 0 and not row[0].startswith('#'):
->>>>> +      tblname = file_name_to_table_name([], row[2].replace('/', '_'))
->>>>> +      args.output_file.write("""{
->>>>> +\t.cpuid = \"%s\",
->>>>> +\t.version = \"%s\",
->>>>> +\t.type = \"%s\",
->>>>> +\t.table = %s
->>>>> +},
->>>>> +""" % (row[0].replace('\\', '\\\\'), row[1], row[3], tblname))
->>>>> +    first = False
->>>>> +
->>>>> +  args.output_file.write("""{
->>>>> +\t.cpuid = "testcpu",
->>>>> +\t.version = "v1",
->>>>> +\t.type = "core",
->>>>> +\t.table = pme_test_soc_cpu,
->>>>> +},
->>>>> +{
->>>>> +\t.cpuid = 0,
->>>>> +\t.version = 0,
->>>>> +\t.type = 0,
->>>>> +\t.table = 0,
->>>>> +},
->>>>> +};
->>>>> +""")
->>>>> +
->>>>> +
->>>>> +def print_system_mapping_table() -> None:
->>>>> +  """C struct mapping table array for tables from /sys directories."""
->>>>> +  args.output_file.write(
->>>>> +      '\nconst struct pmu_sys_events pmu_sys_event_tables[] = {\n')
->>>>> +  for tblname in sys_event_tables:
->>>>> +    args.output_file.write("""\t{
->>>>> +\t\t.table = %s,
->>>>> +\t\t.name = \"%s\",
->>>>> +\t},
->>>>> +""" % (tblname, tblname))
->>>>> +  args.output_file.write("""\t{
->>>>> +\t\t.table = 0
->>>>> +\t},
->>>>> +};
->>>>> +""")
->>>>> +
->>>>> +
->>>>> +def main() -> None:
->>>>> +  global args
->>>>> +
->>>>> +  def dir_path(path: str) -> str:
->>>>> +    """Validate path is a directory for argparse."""
->>>>> +    if os.path.isdir(path):
->>>>> +      return path
->>>>> +    else:
->>>>> +      raise argparse.ArgumentTypeError(f'\'{path}\' is not a valid directory')
->>>>> +
->>>>> +  def ftw(path: str, parents: list[str],
->>>>> +          action: Callable[[list[str], os.DirEntry], None]) -> None:
->>>>> +    """Replicate the directory/file walking behavior of C's file tree walk."""
->>>>> +    for item in os.scandir(path):
->>>>> +      action(parents, item)
->>>>> +      if item.is_dir():
->>>>> +        ftw(item.path, parents + [item.name], action)
->>>>> +
->>>>> +  ap = argparse.ArgumentParser()
->>>>> +  ap.add_argument('arch', help='Architecture name like x86')
->>>>> +  ap.add_argument(
->>>>> +      'starting_dir',
->>>>> +      type=dir_path,
->>>>> +      help='Root of tree containing architecture directories containing json files'
->>>>> +  )
->>>>> +  ap.add_argument(
->>>>> +      'output_file', type=argparse.FileType('w'), nargs='?', default=sys.stdout)
->>>>> +  args = ap.parse_args()
->>>>> +
->>>>> +  args.output_file.write("#include \"pmu-events/pmu-events.h\"\n")
->>>>> +  for path in [args.arch, 'test']:
->>>>> +    arch_path = f'{args.starting_dir}/{path}'
->>>>> +    if not os.path.isdir(arch_path):
->>>>> +      raise IOError(f'Missing architecture directory in \'{arch_path}\'')
->>>>> +    preprocess_arch_std_files(arch_path)
->>>>> +    ftw(arch_path, [], process_one_file)
->>>>> +    print_events_table_suffix()
->>>>> +
->>>>> +  print_mapping_table()
->>>>> +  print_system_mapping_table()
->>>>> +
->>>>> +
->>>>> +if __name__ == '__main__':
->>>>> +  main()
->>>>
->>>> --
->>>> Zhengjun Xing
->>
->> --
->> Zhengjun Xing
-
--- 
-Zhengjun Xing
+DQoNCkxlIDE3LzA2LzIwMjIgw6AgMDg6NDUsIExpYW5nIEhlIGEgw6ljcml0wqA6DQo+IA0KPiAN
+Cj4gDQo+IEF0IDIwMjItMDYtMTcgMTQ6Mjg6NTYsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0
+b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cm90ZToNCj4+DQo+Pg0KPj4gTGUgMTcvMDYvMjAyMiDD
+oCAwODowOCwgTGlhbmcgSGUgYSDDqWNyaXTCoDoNCj4+PiBJbiBncGlvX2hhbHRfcHJvYmUoKSwg
+b2ZfZmluZF9tYXRjaGluZ19ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlDQo+Pj4gcG9pbnRlciB3
+aXRoIHJlZmNvdW50IGluY3JlbWVudGVkLiBXZSBzaG91bGQgdXNlIG9mX25vZGVfcHV0KCkgaW4N
+Cj4+PiBmYWlsIHBhdGggb3Igd2hlbiBpdCBpcyBub3QgdXNlZCBhbnltb3JlLg0KPj4+DQo+Pj4g
+U2lnbmVkLW9mZi1ieTogTGlhbmcgSGUgPHdpbmRobEAxMjYuY29tPg0KPj4+IC0tLQ0KPj4+ICAg
+IGNoYW5nZWxvZzoNCj4+PiAgICB2NDogcmV1c2UgZXhpc3QgJ2VycicgYW5kIHVzZSBhIHNpbXBs
+ZSBjb2RlIHN0eWxlLCBhZHZpc2VkIGJ5IENKDQo+Pj4gICAgdjM6IHVzZSBsb2NhbCAnY2hpbGRf
+bm9kZScgYWR2aXNlZCBieSBNaWNoYWVsLg0KPj4+ICAgIHYyOiB1c2UgZ290by1sYWJlbCBwYXRj
+aCBzdHlsZSBhZHZpc2VkIGJ5IENocmlzdG9waGUgTGVyb3kuDQo+Pj4gICAgdjE6IGFkZCBvZl9u
+b2RlX3B1dCgpIGJlZm9yZSBlYWNoIGV4aXQuDQo+Pj4NCj4+PiAgICBhcmNoL3Bvd2VycGMvcGxh
+dGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDM1ICsrKysrKysrKysrKysrLS0tLS0tLS0tDQo+
+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQ0K
+Pj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3Rz
+MTAwMC5jIGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMNCj4+PiBp
+bmRleCA5OGFlNjQwNzUxOTMuLmU0NTg4OTQzZmU3ZSAxMDA2NDQNCj4+PiAtLS0gYS9hcmNoL3Bv
+d2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYw0KPj4+ICsrKyBiL2FyY2gvcG93ZXJw
+Yy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAwMC5jDQo+Pj4gQEAgLTcxLDYgKzcxLDcgQEAgc3Rh
+dGljIGludCBncGlvX2hhbHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+
+PiAgICB7DQo+Pj4gICAgCWVudW0gb2ZfZ3Bpb19mbGFncyBmbGFnczsNCj4+PiAgICAJc3RydWN0
+IGRldmljZV9ub2RlICpub2RlID0gcGRldi0+ZGV2Lm9mX25vZGU7DQo+Pj4gKwlzdHJ1Y3QgZGV2
+aWNlX25vZGUgKmNoaWxkX25vZGU7DQo+Pj4gICAgCWludCBncGlvLCBlcnIsIGlycTsNCj4+PiAg
+ICAJaW50IHRyaWdnZXI7DQo+Pj4gICAgDQo+Pj4gQEAgLTc4LDI2ICs3OSwyOSBAQCBzdGF0aWMg
+aW50IGdwaW9faGFsdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4+ICAg
+IAkJcmV0dXJuIC1FTk9ERVY7DQo+Pj4gICAgDQo+Pj4gICAgCS8qIElmIHRoZXJlJ3Mgbm8gbWF0
+Y2hpbmcgY2hpbGQsIHRoaXMgaXNuJ3QgcmVhbGx5IGFuIGVycm9yICovDQo+Pj4gLQloYWx0X25v
+ZGUgPSBvZl9maW5kX21hdGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOw0KPj4+IC0JaWYg
+KCFoYWx0X25vZGUpDQo+Pj4gKwljaGlsZF9ub2RlID0gb2ZfZmluZF9tYXRjaGluZ19ub2RlKG5v
+ZGUsIGNoaWxkX21hdGNoKTsNCj4+PiArCWlmICghY2hpbGRfbm9kZSkNCj4+PiAgICAJCXJldHVy
+biAwOw0KPj4+ICAgIA0KPj4+ICAgIAkvKiBUZWNobmljYWxseSB3ZSBjb3VsZCBqdXN0IHJlYWQg
+dGhlIGZpcnN0IG9uZSwgYnV0IHB1bmlzaA0KPj4+ICAgIAkgKiBEVCB3cml0ZXJzIGZvciBpbnZh
+bGlkIGZvcm0uICovDQo+Pj4gLQlpZiAob2ZfZ3Bpb19jb3VudChoYWx0X25vZGUpICE9IDEpDQo+
+Pj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4gKwlpZiAob2ZfZ3Bpb19jb3VudChjaGlsZF9ub2Rl
+KSAhPSAxKSB7DQo+Pj4gKwkJZXJyID0gLUVJTlZBTDsNCj4+PiArCQlnb3RvIGVycl9wdXQ7DQo+
+Pj4gKwl9DQo+Pj4gICAgDQo+Pj4gICAgCS8qIEdldCB0aGUgZ3BpbyBudW1iZXIgcmVsYXRpdmUg
+dG8gdGhlIGR5bmFtaWMgYmFzZS4gKi8NCj4+PiAtCWdwaW8gPSBvZl9nZXRfZ3Bpb19mbGFncyho
+YWx0X25vZGUsIDAsICZmbGFncyk7DQo+Pj4gLQlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpDQo+
+Pj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+Pj4gKwlncGlvID0gb2ZfZ2V0X2dwaW9fZmxhZ3MoY2hp
+bGRfbm9kZSwgMCwgJmZsYWdzKTsNCj4+PiArCWlmICghZ3Bpb19pc192YWxpZChncGlvKSkgew0K
+Pj4+ICsJCWVyciA9IC1FSU5WQUw7DQo+Pj4gKwkJZ290b3QgZXJyX3B1dDsNCj4+DQo+PiBEaWQg
+eW91IHRlc3QgdGhlIGJ1aWxkID8NCj4gDQo+IFNvcnJ5IGZvciB0aGlzIGZhdWx0Lg0KPiANCj4g
+SW4gZmFjdCwgSSBhbSBzdGlsbCBmaW5kaW5nIGFuIGVmZmljaWVudCB3YXkgdG8gYnVpbGRpbmcg
+ZGlmZmVyZW50IGFyY2ggc291cmNlIGNvZGUgYXMgSSBvbmx5IGhhdmUgeDg2LTY0Lg0KPiANCj4g
+Tm93IEkgYW0gdHJ5IHVzaW5nIFFFTVUuDQo+IA0KPiBBbnl3YXksIHNvcnJ5IGZvciB0aGlzIGZh
+dWx0Lg0KDQpZb3UgY2FuIGZpbmQgY3Jvc3MgY29tcGlsZXJzIGZvciBtb3N0IGFyY2hpdGVjdHVy
+ZXMgZm9yIHg4Ni02NCBoZXJlIDogDQpodHRwczovL21pcnJvcnMuZWRnZS5rZXJuZWwub3JnL3B1
+Yi90b29scy9jcm9zc3Rvb2wvDQoNCkNocmlzdG9waGU=

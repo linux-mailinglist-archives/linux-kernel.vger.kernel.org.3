@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6486154FB7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5FA54FB5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383063AbiFQQvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
+        id S1382912AbiFQQsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382897AbiFQQvF (ORCPT
+        with ESMTP id S1383405AbiFQQsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:51:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB32658E79;
-        Fri, 17 Jun 2022 09:50:02 -0700 (PDT)
+        Fri, 17 Jun 2022 12:48:24 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9C112D35
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655484602; x=1687020602;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zQS/FHBe/xvbUhzuffrSKUw2wu4SEZ9837E6Yr3LE3Y=;
-  b=colkhA1mwpG7qYdoioWSxkKuATNj286C0ZGgCRMxZ9NuBzg1bMoHhdw6
-   8UPWqkS9Z5Ww6pF8fWcYN02cQqBjyUFBq6A8ibS3o5gQa/ADgJCi1Joma
-   W6WfcsjiOtpX2EwiAMFXWx+H+wn2kxmOYTsb0pJRLBTBLlL1hsMXpTl5F
-   4yVeehgIVizk24j3v4FbOVgH7y6bb2uhsYOVNH5t0DUhzLD0/LCfohPXU
-   3cfEKvntcl7fnCWkT5Yv7osugtdqkpe1hA7oYjrre29rvm3jq3rK/LMbh
-   g7b7fl0cjzjnt5Kg9Ede8zkhDJP/UXrKG+y3M+Koz0jRHEdxJKlLSKGhN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365830199"
+  t=1655484502; x=1687020502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tz/jD2Salb21vnVNTIoALhjVotJpZYYZiJs32UY8QMI=;
+  b=MOXms13hnV3f3HDTw4FKoTUVru6w5i0K8hLChXA02Z9V0jltRzxaEApj
+   zmGofuenrB3MVNUJENvrbHB3PJa+2W92R/7SA4HTkjlNQZLZHARRXWw0Q
+   MIFaW+GJBOpHGCFINYb+byG7SvLUd/9SaN4KSgc9GD6vHXRtyqK8Pl3LY
+   HwE6CpZBSMQFVqFpWaVS6SkJJBktFftdbThU06DCDTD90a4eHXRij6Ota
+   weV9g9sUSBF+A0U0dDwsXE4iZmejoNnFyE9P/041MmxQta9jGH9CRzkhJ
+   M6kIFFAxQkMqyQsnsL4zLBGGdRYz9Xadwk2bejaruf3aDHS9Yk9D+R2sG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259329840"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="365830199"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 04:46:57 -0700
+   d="scan'208";a="259329840"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 05:17:44 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642003930"
-Received: from spr.sh.intel.com ([10.239.53.118])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 04:46:53 -0700
-From:   Chao Gao <chao.gao@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Chao Gao <chao.gao@intel.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] KVM: x86/vmx: Suppress posted interrupt notification when CPU is in host
-Date:   Fri, 17 Jun 2022 19:46:41 +0800
-Message-Id: <20220617114641.146243-1-chao.gao@intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="584013616"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jun 2022 05:17:41 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Auz-000PRE-6l;
+        Fri, 17 Jun 2022 12:17:41 +0000
+Date:   Fri, 17 Jun 2022 20:17:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        mike.kravetz@oracle.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        songmuchun@bytedance.com, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, baolin.wang@linux.alibaba.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] arm64/hugetlb: Implement arm64 specific
+ hugetlb_mask_last_hp
+Message-ID: <202206172000.6Fwmo99P-lkp@intel.com>
+References: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,149 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PIN (Posted interrupt notification) is useless to host as KVM always syncs
-pending guest interrupts in PID to guest's vAPIC before each VM entry. In
-fact, Sending PINs to a CPU running in host will lead to additional
-overhead due to interrupt handling.
+Hi Baolin,
 
-Currently, software path, vmx_deliver_posted_interrupt(), is optimized to
-issue PINs only if target vCPU is in IN_GUEST_MODE. But hardware paths
-(VT-d and Intel IPI virtualization) aren't optimized.
+I love your patch! Perhaps something to improve:
 
-Set PID.SN right after VM exits and clear it before VM entry to minimize
-the chance of hardware issuing PINs to a CPU when it's in host.
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on linus/master v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Also honour PID.SN bit in vmx_deliver_posted_interrupt().
+url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/arm64-hugetlb-Implement-arm64-specific-hugetlb_mask_last_hp/20220616-113640
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-randconfig-r011-20220616 (https://download.01.org/0day-ci/archive/20220617/202206172000.6Fwmo99P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f1309dfbc2b70ec5dd72ac38e95a49b7be42b9b6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baolin-Wang/arm64-hugetlb-Implement-arm64-specific-hugetlb_mask_last_hp/20220616-113640
+        git checkout f1309dfbc2b70ec5dd72ac38e95a49b7be42b9b6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
 
-When IPI virtualization is enabled, this patch increases "perf bench" [*]
-by 4% from 8.12 us/ops to 7.80 us/ops.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[*] test cmd: perf bench sched pipe -T. Note that we change the source
-code to pin two threads to two different vCPUs so that it can reproduce
-stable results.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Chao Gao <chao.gao@intel.com>
----
- arch/x86/kvm/vmx/posted_intr.c | 28 ++--------------------------
- arch/x86/kvm/vmx/vmx.c         | 24 +++++++++++++++++++++++-
- 2 files changed, 25 insertions(+), 27 deletions(-)
+>> arch/arm64/mm/hugetlbpage.c:371:15: warning: no previous prototype for function 'hugetlb_mask_last_hp' [-Wmissing-prototypes]
+   unsigned long hugetlb_mask_last_hp(struct hstate *h)
+                 ^
+   arch/arm64/mm/hugetlbpage.c:371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long hugetlb_mask_last_hp(struct hstate *h)
+   ^
+   static 
+   1 warning generated.
 
-diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-index 237a1f40f939..a0458f72df99 100644
---- a/arch/x86/kvm/vmx/posted_intr.c
-+++ b/arch/x86/kvm/vmx/posted_intr.c
-@@ -70,12 +70,6 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
- 	 * needs to be changed.
- 	 */
- 	if (pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR && vcpu->cpu == cpu) {
--		/*
--		 * Clear SN if it was set due to being preempted.  Again, do
--		 * this even if there is no assigned device for simplicity.
--		 */
--		if (pi_test_and_clear_sn(pi_desc))
--			goto after_clear_sn;
- 		return;
- 	}
- 
-@@ -99,12 +93,8 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
- 	do {
- 		old.control = new.control = READ_ONCE(pi_desc->control);
- 
--		/*
--		 * Clear SN (as above) and refresh the destination APIC ID to
--		 * handle task migration (@cpu != vcpu->cpu).
--		 */
- 		new.ndst = dest;
--		new.sn = 0;
-+		new.sn = 1;
- 
- 		/*
- 		 * Restore the notification vector; in the blocking case, the
-@@ -114,19 +104,6 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
- 	} while (pi_try_set_control(pi_desc, old.control, new.control));
- 
- 	local_irq_restore(flags);
--
--after_clear_sn:
--
--	/*
--	 * Clear SN before reading the bitmap.  The VT-d firmware
--	 * writes the bitmap and reads SN atomically (5.2.3 in the
--	 * spec), so it doesn't really have a memory barrier that
--	 * pairs with this, but we cannot do that and we need one.
--	 */
--	smp_mb__after_atomic();
--
--	if (!pi_is_pir_empty(pi_desc))
--		pi_set_on(pi_desc);
- }
- 
- static bool vmx_can_use_vtd_pi(struct kvm *kvm)
-@@ -154,13 +131,12 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
- 		      &per_cpu(wakeup_vcpus_on_cpu, vcpu->cpu));
- 	raw_spin_unlock(&per_cpu(wakeup_vcpus_on_cpu_lock, vcpu->cpu));
- 
--	WARN(pi_desc->sn, "PI descriptor SN field set before blocking");
--
- 	do {
- 		old.control = new.control = READ_ONCE(pi_desc->control);
- 
- 		/* set 'NV' to 'wakeup vector' */
- 		new.nv = POSTED_INTR_WAKEUP_VECTOR;
-+		new.sn = 0;
- 	} while (pi_try_set_control(pi_desc, old.control, new.control));
- 
- 	/*
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index a3c5504601a8..fa915b1680eb 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4036,6 +4036,9 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
- 	if (pi_test_and_set_pir(vector, &vmx->pi_desc))
- 		return 0;
- 
-+	if (pi_test_sn(&vmx->pi_desc))
-+		return 0;
-+
- 	/* If a previous notification has sent the IPI, nothing to do.  */
- 	if (pi_test_and_set_on(&vmx->pi_desc))
- 		return 0;
-@@ -6520,8 +6523,17 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
- 	if (KVM_BUG_ON(!enable_apicv, vcpu->kvm))
- 		return -EIO;
- 
--	if (pi_test_on(&vmx->pi_desc)) {
-+	if (pi_test_on(&vmx->pi_desc) || pi_test_sn(&vmx->pi_desc)) {
- 		pi_clear_on(&vmx->pi_desc);
-+
-+		/*
-+		 * IN_GUEST_MODE means we are about to enter vCPU. Allow
-+		 * PIN (posted interrupt notification) to deliver is key
-+		 * to interrupt posting. Clear PID.SN.
-+		 */
-+		if (vcpu->mode == IN_GUEST_MODE)
-+			pi_clear_sn(&vmx->pi_desc);
-+
- 		/*
- 		 * IOMMU can write to PID.ON, so the barrier matters even on UP.
- 		 * But on x86 this is just a compiler barrier anyway.
-@@ -6976,6 +6988,16 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
- 	/* The actual VMENTER/EXIT is in the .noinstr.text section. */
- 	vmx_vcpu_enter_exit(vcpu, vmx);
- 
-+	/*
-+	 * Suppress notification right after VM exits to minimize the
-+	 * window where VT-d or remote CPU may send a useless notification
-+	 * when posting interrupts to a VM. Note that the notification is
-+	 * useless because KVM syncs pending interrupts in PID.IRR to vAPIC
-+	 * IRR before VM entry.
-+	 */
-+	if (kvm_vcpu_apicv_active(vcpu))
-+		pi_set_sn(&vmx->pi_desc);
-+
- 	/*
- 	 * We do not use IBRS in the kernel. If this vCPU has used the
- 	 * SPEC_CTRL MSR it may have left it on; save the value and
+
+vim +/hugetlb_mask_last_hp +371 arch/arm64/mm/hugetlbpage.c
+
+   370	
+ > 371	unsigned long hugetlb_mask_last_hp(struct hstate *h)
+   372	{
+   373		unsigned long hp_size = huge_page_size(h);
+   374	
+   375		switch (hp_size) {
+   376		case PUD_SIZE:
+   377			return PGDIR_SIZE - PUD_SIZE;
+   378		case CONT_PMD_SIZE:
+   379			return PUD_SIZE - CONT_PMD_SIZE;
+   380		case PMD_SIZE:
+   381			return PUD_SIZE - PMD_SIZE;
+   382		case CONT_PTE_SIZE:
+   383			return PMD_SIZE - CONT_PTE_SIZE;
+   384		default:
+   385			break;
+   386		}
+   387	
+   388		return ~0UL;
+   389	}
+   390	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

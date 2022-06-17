@@ -2,140 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616B654F133
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D03554F136
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380337AbiFQGqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S1380351AbiFQGrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380318AbiFQGq1 (ORCPT
+        with ESMTP id S1380358AbiFQGrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:46:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 457F124962
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655448384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+hQ4DbL4FBpOEp/E50yBIWWCZyfpTsZUOXGgMRiUx5A=;
-        b=G1/pTfJy2OCbNrOSW32zfzuZAFdZaPiOsJXyl2USrFCmRbPY1pXGP+P9GxIqXw6RkYByLN
-        zK+B2tY5FTOfwBmrSoYilg6NADCHv57rNWM/cT5r08jKhHTKWsugtC7FYt/Pak7tFBfv60
-        pfZrnXS5U4ynkaxus3uyZ4vU1Jyf9Ns=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-306-X5Tyf6aVNA6fgLtD0ypjaA-1; Fri, 17 Jun 2022 02:46:22 -0400
-X-MC-Unique: X5Tyf6aVNA6fgLtD0ypjaA-1
-Received: by mail-wm1-f70.google.com with SMTP id j31-20020a05600c1c1f00b0039c481c4664so1265789wms.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:46:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+hQ4DbL4FBpOEp/E50yBIWWCZyfpTsZUOXGgMRiUx5A=;
-        b=IB2tz9xGwINVln8E0/GDMyQoldKqxgl0Drq640G7YDQX+Z6v+5Y+hTUCsYbeg5bdKi
-         B8/P5B1++VYdSz7A2vAVV/VcW4l6mmGhRU7LjlkWKP4dDJgkYZ0Fr5VwFDgn1BvmPIX6
-         zD141jxrwL5ge1N3k3Yyt0q630yygxtuGynnBwXJzErq558AeXzaQOVGU4bGwm+rtCJd
-         aTjmTvWWdQZNF/hqWoANycyALoexRXDn5SzYmbs4M9JoKuYe4YBvbIwcZ9GTZ8d2CIrZ
-         eOq8qZARQ4DUkkXT0UktYcU03LHsbljCQAYpsQFBHl8px4+1zXat67FJ6hDp10n8npcz
-         aakA==
-X-Gm-Message-State: AJIora9WrSkZJLltb1c5J4amZLxwOhqq8MkLMS/paDy0zMsQvJbUOwkd
-        fW2xGWXyXlN++1umBR26NPMvsuyazYZQKzsh4JywYmHUmCGf/AMHCH8Q2GIwX2RP5zo2luum8AJ
-        XZhbvYL3AL0kJ6J4l5qIJmGTv
-X-Received: by 2002:a05:600c:3489:b0:39d:b58f:6797 with SMTP id a9-20020a05600c348900b0039db58f6797mr8604231wmq.205.1655448381561;
-        Thu, 16 Jun 2022 23:46:21 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sQ/maUwRNsLJ+dTUUPQVEZ65LnPBk/IMQjAM9szqh0Rf1kxBOzJQNiJ8h903v4iEFev4ehFw==
-X-Received: by 2002:a05:600c:3489:b0:39d:b58f:6797 with SMTP id a9-20020a05600c348900b0039db58f6797mr8604207wmq.205.1655448381308;
-        Thu, 16 Jun 2022 23:46:21 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b003973a3fe4fasm4787183wmq.42.2022.06.16.23.46.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 23:46:20 -0700 (PDT)
-Message-ID: <aa144e20-a555-5c30-4796-09713c12ab0e@redhat.com>
-Date:   Fri, 17 Jun 2022 08:46:18 +0200
+        Fri, 17 Jun 2022 02:47:16 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354C65C871
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:47:12 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220617064710euoutp024c8bd9b0e9292b075efcc6e199752f30~5VZOVALtk0704707047euoutp02f
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:47:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220617064710euoutp024c8bd9b0e9292b075efcc6e199752f30~5VZOVALtk0704707047euoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655448430;
+        bh=een82VKDnqFNGMLU70JcfFDIvtHY5EZzNOJCeSzNxBA=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=iAAlqGJOjAiF217auWutyHwZEC065ssRQNgzDS7AvuVLB4zp+jge0b3p25DWmzazz
+         2aWW7fpzjQYaRt/zrzzxHQ16XVbyxVkc1g4bOWbZXpmpFEU8IQaMsx03+OhUco91TU
+         HjMtl8qCsZ88jYBCydKvabdsaxD4aj+hSQOQOn/I=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220617064710eucas1p2e62f26bcd719fd07c121d000f13253a0~5VZOFw40e2116021160eucas1p2q;
+        Fri, 17 Jun 2022 06:47:10 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 48.AD.10067.E632CA26; Fri, 17
+        Jun 2022 07:47:10 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220617064709eucas1p10e6e72f0655c42d00ae4c2275297bffb~5VZNoDYOu2048020480eucas1p1U;
+        Fri, 17 Jun 2022 06:47:09 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220617064709eusmtrp26bc55ed0228cf66805137e12c33a80f3~5VZNmrEgW1689716897eusmtrp2F;
+        Fri, 17 Jun 2022 06:47:09 +0000 (GMT)
+X-AuditID: cbfec7f4-dd7ff70000002753-1c-62ac236ede72
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 8D.3D.09038.D632CA26; Fri, 17
+        Jun 2022 07:47:09 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220617064709eusmtip1d15f57ce6b2b2b0b469d129719b52fb8~5VZNC_KxB0652206522eusmtip1X;
+        Fri, 17 Jun 2022 06:47:08 +0000 (GMT)
+Message-ID: <09fb9691-828e-1f53-6eaa-27ed9a113872@samsung.com>
+Date:   Fri, 17 Jun 2022 08:47:08 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 3/5] fbdev: Disable sysfb device registration when
- removing conflicting FBs
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH 7/7] mm/page_alloc: Replace local_lock with normal
+ spinlock
 Content-Language: en-US
-To:     Zack Rusin <zackr@vmware.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "lersek@redhat.com" <lersek@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "deller@gmx.de" <deller@gmx.de>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>
-References: <20220607182338.344270-1-javierm@redhat.com>
- <20220607182338.344270-4-javierm@redhat.com>
- <de83ae8cb6de7ee7c88aa2121513e91bb0a74608.camel@vmware.com>
- <38473dcd-0666-67b9-28bd-afa2d0ce434a@redhat.com>
- <603e3613b9b8ff7815b63f294510d417b5b12937.camel@vmware.com>
- <a633d605-4cb3-2e04-1818-85892cf6f7b0@redhat.com>
- <97565fb5-cf7f-5991-6fb3-db96fe239ee8@redhat.com>
- <711c88299ef41afd8556132b7c1dcb75ee7e6117.camel@vmware.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <711c88299ef41afd8556132b7c1dcb75ee7e6117.camel@vmware.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220615160446.be1f75fd256d67e57b27a9fc@linux-foundation.org>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOKsWRmVeSWpSXmKPExsWy7djP87p5ymuSDP79Y7aYs34Nm8XTT30s
+        Fpd3zWGzuLfmP6vFjqX7mCxef1vGbLGxZxKrxeSXKxgtZjf2MVq8m/CF1YHLY8GmUo9NqzrZ
+        PDZ9msTucWLGbxaP9/uusnmcWXCE3WPrLzuPz5vkAjiiuGxSUnMyy1KL9O0SuDJmrN/GVHCY
+        u+Lb11WMDYz/OLoYOTkkBEwk5l54ztLFyMUhJLCCUWJD+29GCOcLo0TP1C9Qmc+MErMmvGCH
+        aZl4o4kJIrGcUeLJh5nsEM5HRoktjRPZuhg5OHgF7CROfXIEaWARUJVY/uk8WDOvgKDEyZlP
+        WEBsUYEkifnbWllBbGGBQImW98fYQGxmAXGJW0/mM4HYIgJeEhvf3mEFmc8ssIlJ4sGBNWAN
+        bAKGEl1vu8B2cQp4Szw7LwzRKy+x/e0cZpB6CYFuTonze/ezQFztIjG78ScThC0s8er4Fqhv
+        ZCT+7wRZxgFk50v8nWEMEa6QuPZ6DTOEbS1x59wvsFXMApoS63fpQ4QdJeZPmcMK0cknceOt
+        IMQFfBKTtk1nhgjzSnS0CUFUq0nMOr4ObufBC5eYJzAqzUIKk1lIfp+F5JdZCHsXMLKsYhRP
+        LS3OTU8tNspLLdcrTswtLs1L10vOz93ECExbp/8d/7KDcfmrj3qHGJk4GA8xSnAwK4nwmgWv
+        TBLiTUmsrEotyo8vKs1JLT7EKM3BoiTOm5y5IVFIID2xJDU7NbUgtQgmy8TBKdXAFKyw94Pm
+        XU0Gz2crFE4uW9gT4HmtnuuY6O0pV5PCnj/261feuZBRs2v9/JMlkkyMd2OPL5096Vmf3ap5
+        +u6Vf4R6Zz3M+lMt9uKbVsoHlTjHFVdkeTbeStGomlz/9JHawtPvMvaWTLE1iRHIvGuu4LHh
+        jHKqs56yzVFNNhbXoAhPOfYDycHn2/4GPhFa51/5fL5F8eNQ1f/a7HbpVtclpy63feb2/NiG
+        2zzPz2lxvnji781v+mS/wYQElXs5Uw6YtK15Z5e+IezN3SjOeYLzvQK5rApc5A7+eyfmIreG
+        mdWm5HlHrue6xXqSBlMsGzZM2XlNd9nxF59NAlucPNb/U9EO7KgMX+Lr4Vl4NfK+EktxRqKh
+        FnNRcSIAFnyIxMoDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFIsWRmVeSWpSXmKPExsVy+t/xu7q5ymuSDBb9UbCYs34Nm8XTT30s
+        Fpd3zWGzuLfmP6vFjqX7mCxef1vGbLGxZxKrxeSXKxgtZjf2MVq8m/CF1YHLY8GmUo9NqzrZ
+        PDZ9msTucWLGbxaP9/uusnmcWXCE3WPrLzuPz5vkAjii9GyK8ktLUhUy8otLbJWiDS2M9Awt
+        LfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJmrN/GVHCYu+Lb11WMDYz/OLoYOTkkBEwk
+        Jt5oYgKxhQSWMkq8PhkFEZeRODmtgRXCFpb4c62LrYuRC6jmPaPE3f9fWLoYOTh4BewkTn1y
+        BKlhEVCVWP7pPDuIzSsgKHFy5hMWEFtUIEli3t7VjCC2sECgRMv7Y2wgNrOAuMStJ/PB9ooI
+        eElsfHuHFSK+iUli9e8KiF0HmSSu3G4Aa2YTMJToegtyBAcHp4C3xLPzwhD1ZhJdW7sYIWx5
+        ie1v5zBPYBSaheSMWUjWzULSMgtJywJGllWMIqmlxbnpucVGesWJucWleel6yfm5mxiBkbrt
+        2M8tOxhXvvqod4iRiYPxEKMEB7OSCK9Z8MokId6UxMqq1KL8+KLSnNTiQ4ymwLCYyCwlmpwP
+        TBV5JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1Mbv6rvv/1OBfD
+        MYur/w7H9K3W8Y+39RpUh61Ik/i77tuL9o8pFx469qwMiYjoKPdfkL51RiCbRc5iSRn99wJu
+        zI5bO08vVTQoat724f4rDcnt7X0GF99KL3lUf3TCzK+R3LtY5txdPTfDgkVg0kqZt04nolWU
+        XYrW7ozau9FkpaW7+IXWlz1sJ/cff+z6ZNfXs6rXvq0L+mpToF94SbdHQOiviuH3/ZphXDwy
+        bU91E4u/Gf7RW5byuamXS/CZgt62+DXd93/KM+e+d/jj+7MglmV7v+I5syOcLnfqovxeTn+e
+        +4Xv3fMbC45/jKlr2XRR4Lp4bvwEXf3Qb8Kn3sz1Mr9mG8dfuWDPLIPOvezGSizFGYmGWsxF
+        xYkAh6zTJV0DAAA=
+X-CMS-MailID: 20220617064709eucas1p10e6e72f0655c42d00ae4c2275297bffb
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220615224855eucas1p1ea6d90c23ec9423dfe04b267f6dddd2a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220615224855eucas1p1ea6d90c23ec9423dfe04b267f6dddd2a
+References: <20220613125622.18628-1-mgorman@techsingularity.net>
+        <20220613125622.18628-8-mgorman@techsingularity.net>
+        <CGME20220615224855eucas1p1ea6d90c23ec9423dfe04b267f6dddd2a@eucas1p1.samsung.com>
+        <e1c73640-3f29-bf57-b98d-84b1800cf4e3@samsung.com>
+        <20220615160446.be1f75fd256d67e57b27a9fc@linux-foundation.org>
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Zack,
+Hi Andrew,
 
-On 6/17/22 03:35, Zack Rusin wrote:
-> On Fri, 2022-06-17 at 01:21 +0200, Javier Martinez Canillas wrote:
->> On 6/17/22 00:18, Javier Martinez Canillas wrote:
->>> On 6/16/22 23:03, Zack Rusin wrote:
->>
->> [snip]
->>
->>>
->>> I'll look at this tomorrow but in the meantime, could you please look if the following
->>> commits on top of drm-misc-next help ?
->>>
->>> d258d00fb9c7 fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove
->>> 1b5853dfab7f fbdev: efifb: Fix a use-after-free due early fb_info cleanup
->>>
->>
->> Scratch that. I see in your config now that you are not using efifb but instead
->> simpledrm: CONFIG_DRM_SIMPLEDRM=y, CONFIG_SYSFB_SIMPLEFB=y and CONFIG_DRM_VMWGFX.
->>
->> Since you mentioned efifb I misunderstood that you are using it. Anyways, as
->> said I'll investigate this tomorrow.
-> 
-> Sounds good. Let me know if you'd like me to try it without SIMPLEFB.
+On 16.06.2022 01:04, Andrew Morton wrote:
+> On Thu, 16 Jun 2022 00:48:55 +0200 Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 >
+>> In the logs I see lots of errors like:
+>>
+>> BUG: sleeping function called from invalid context at
+>> ./include/linux/sched/mm.h:274
+>>
+>> BUG: scheduling while atomic: systemd-udevd/288/0x00000002
+>>
+>> BUG: sleeping function called from invalid context at mm/filemap.c:2647
+>>
+>> however there are also a fatal ones like:
+>>
+>> Unable to handle kernel paging request at virtual address 00000000017a87b4
+>>
+>>
+>> The issues seems to be a bit random. Looks like memory trashing.
+>> Reverting $subject on top of current linux-next fixes all those issues.
+>>
+>>
+> This?
+>
+> --- a/mm/page_alloc.c~mm-page_alloc-replace-local_lock-with-normal-spinlock-fix
+> +++ a/mm/page_alloc.c
+> @@ -183,8 +183,10 @@ static DEFINE_MUTEX(pcp_batch_high_lock)
+>   	type *_ret;							\
+>   	pcpu_task_pin();						\
+>   	_ret = this_cpu_ptr(ptr);					\
+> -	if (!spin_trylock_irqsave(&_ret->member, flags))		\
+> +	if (!spin_trylock_irqsave(&_ret->member, flags)) {		\
+> +		pcpu_task_unpin();					\
+>   		_ret = NULL;						\
+> +	}								\
+>   	_ret;								\
+>   })
+>   
+>
+> I'll drop Mel's patch for next -next.
 
-Yes, please do. Either with CONFIG_SYSFB_SIMPLEFB disabled and CONFIG_FB_EFI
-enabled (so that "efi-framebuffer" is registered and efifb probed) or with
-CONFIG_SYSFB_SIMPLEFB but CONFIG_FB_SIMPLE enabled (so "simple-framebuffer
-is used too but with simplefb instead of simpledrm).
- 
-I'm not able to reproduce, it would be useful to have another data point.
+Yes, this fixes the issues I've observed. Feel free to add:
 
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
+Best regards
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

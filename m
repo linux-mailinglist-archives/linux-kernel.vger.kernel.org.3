@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE5654F855
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA85754F854
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236122AbiFQNb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S1380904AbiFQNbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236792AbiFQNby (ORCPT
+        with ESMTP id S235274AbiFQNbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:31:54 -0400
-Received: from out28-77.mail.aliyun.com (out28-77.mail.aliyun.com [115.124.28.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5CBCF5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:31:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09729436|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0811532-0.0012695-0.917577;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.O76jcEA_1655472657;
-Received: from 192.168.220.136(mailfrom:victor@allwinnertech.com fp:SMTPD_---.O76jcEA_1655472657)
-          by smtp.aliyun-inc.com;
-          Fri, 17 Jun 2022 21:31:31 +0800
-Message-ID: <ecabcfa6-7408-d10b-7d88-b1a202b2a90d@allwinnertech.com>
-Date:   Fri, 17 Jun 2022 21:30:57 +0800
+        Fri, 17 Jun 2022 09:31:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945E514D32
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kSD0Hz53mJC34EP3TCGfokG3QT5E0kZOaBd3T7HkYc4=; b=YYcsqLU8LbStVS+t+V5ekzL4aD
+        Em8jzEN++MuegQwCGXjquu92aMXAigIVZrCJs3+akeIkc+poGRMGr4l8KrMoLZzGsj8GZ3PE+rzne
+        CLydDEQtH+xq8fWsAyqhWzSaTyLqZl91KkZEGcTBmoi/PMEJ3ZOl7woBcc3eZyqjbEZstDT5JFkEy
+        Q9e+vTDOG4Yr9Ex29os6rvIVCv5vHTxNNo32z1JtrEX0sJNPjX/HwaRep9cVypGfg0dnZYU79HC5o
+        Qi7f2XDanr1YBM0l9Mpqd+NVOQ5uAdX8MNHxOvXDNEpbIB2Q2+YzTuC6gAFMXycI6niIsIBwMxoT7
+        lt2zdsdg==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2C4K-008hRe-CR; Fri, 17 Jun 2022 13:31:24 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EAA8A9816B5; Fri, 17 Jun 2022 15:31:23 +0200 (CEST)
+Date:   Fri, 17 Jun 2022 15:31:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ben Segall <bsegall@google.com>, linux-kernel@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] sched: Drop outdated compile-optimization comment
+Message-ID: <YqyCK+31YgOlBY9U@worktop.programming.kicks-ass.net>
+References: <20220615222745.3371892-1-briannorris@chromium.org>
+ <xhsmhk09f7dgy.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] ARM: mmu: fix access to illegal address when using
- earlycon & memblock=debug
-Content-Language: en-US
-From:   Victor Hassan <victor@allwinnertech.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk,
-        yanfei.xu@windriver.com, ardb@kernel.org, tglx@linutronix.de,
-        mirq-linux@rere.qmqm.pl, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220316023356.120595-1-victor@allwinnertech.com>
- <CACRpkdabVpD8fQYowCFibdc-r7of6JQnUJAeo0Quqg=cCuOjAQ@mail.gmail.com>
- <0fa192d1-b6cc-4a8a-c319-36471cba79e8@allwinnertech.com>
-In-Reply-To: <0fa192d1-b6cc-4a8a-c319-36471cba79e8@allwinnertech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhk09f7dgy.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/2022 11:08 PM, Victor Hassan wrote:
-> On 18/04/2022 07:21, Linus Walleij wrote:
->> On Wed, Mar 16, 2022 at 3:33 AM Victor Hassan 
->> <victor@allwinnertech.com> wrote:
->>
->>> earlycon uses fixmap to create a memory map,
->>> So we need to close earlycon before closing fixmap,
->>> otherwise printk will access illegal addresses.
->>> After creating a new memory map, we open earlycon again.
->>>
->>> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
->>
->> I think noone really noticed this because everyone on Arm systems
->> use CONFIG_DEBUG_LL, and that makes printascii hammer out
->> stuff on the console very early, it even accounts for whether we have
->> MMU on or not.
->>
-> Hi Linus,
-> Thank you for the reply. I used earlycon, in early_fixmap_shutdown, the 
-> base address of earlycon is in the critical stage of release and 
-> reassignment, so early_fixmap_shutdown -> create_mapping should not call 
-> earlycon in this process, and create_mapping has a lot of conditions 
-> that trigger print, memblock=debug just makes it easier to expose problems.
+On Fri, Jun 17, 2022 at 12:10:05PM +0100, Valentin Schneider wrote:
+> On 15/06/22 15:27, Brian Norris wrote:
+> > Looks like this exists from way back in 2011 (commit 095c0aa83e52
+> > ("sched: adjust scheduler cpu power for stolen time")), when there was a
+> > little more aggressive use of #if around these variables. That #if is
+> > gone, and the comment just confuses the reader now. (For one, we don't
+> > call sched_rt_avg_update() directly any more either.)
+> >
 > 
->> How are you using this on Arm even? What system and what serial
->> driver?
-> I'm using serial driver 8250 on arm32, with cmdline: memblock=debug.
-> CONFIG_SERIAL_8250=y
-> CONFIG_SERIAL_8520_CONSOLE=y
->>
->> That said, it looks correct.
->> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> So that sched_rt_avg_update() became update_irq_load_avg() with
+> 
+>   91c27493e78d ("sched/irq: Add IRQ utilization tracking")
+> 
+> and then the #ifdef configs were reorganized in
+> 
+>   11d4afd4ff66 ("sched/pelt: Fix warning and clean up IRQ PELT config")
+> 
+> I'd argue that comment is still somewhat relevant but it applies to that
+> block:
+> 
+> #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
+> 	if ((irq_delta + steal) && sched_feat(NONTASK_CAPACITY))
+> 		update_irq_load_avg(rq, irq_delta + steal);
+> #endif
+> 
+> if !CONFIG_HAVE_SCHED_AVG_IRQ then yes you'd expect the compiler to not
+> even add a call to update_irq_load_avg() in there, but compilers aren't the
+> most trustworthy things :-) If you feel like it, you could play with
+> GCC/clang and see what they emit if you remove those #ifdefs.
 
-Hi Linus,
-Sorry to disturb. Is there any question about this issue? Thank you :)
+Mostly I think it was the jump_label stuff getting them confused. I
+suspect that's fixed in todays compilers tho, so yeah, it might be good
+to get rid of it.

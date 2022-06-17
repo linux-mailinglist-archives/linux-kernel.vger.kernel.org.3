@@ -2,135 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A982C54F32E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D9954F309
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiFQIiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S1380739AbiFQIf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiFQIiK (ORCPT
+        with ESMTP id S1380547AbiFQIf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:38:10 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA05A19C03
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=I7Pi+
-        Im12M8ou/QoSMecx1nm7zEUMo5TJmtZNFXx6oU=; b=RDb0KWoMRPSX7T87//JdG
-        5Fm5ZW6pY00uwrtQD1KnL09nwc+LMqKNd9qMu0Gy8VzsF3pGm8SRTwr0mwYcetuH
-        a0Q3bDyMfpHHm5tGOwYpGc7yGAqtocDRopwu2Ivps8lqk8OiUkQ39mkoZUlgsOM6
-        Eh2UmV3Qal7DiOkrmz7hC8=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Fri, 17 Jun 2022 16:34:56 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Fri, 17 Jun 2022 16:34:56 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     Conor.Dooley@microchip.com
-Cc:     christophe.leroy@csgroup.eu, oss@buserror.net, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
- sgy_cst1000
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
-References: <20220617060827.4004795-1-windhl@126.com>
- <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
- <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
- <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
- <64ac3dc9.5bd1.18170bcb6a6.Coremail.windhl@126.com>
- <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 17 Jun 2022 04:35:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD1064BF0;
+        Fri, 17 Jun 2022 01:35:55 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:faf2:1a12:f903:cc5e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0BDEA660179A;
+        Fri, 17 Jun 2022 09:35:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655454953;
+        bh=7x8/8HIIJI7T1pseYga/Y7jcduOcSFuotK39n2h+Ncw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iOfLp4XMB9xXSuz6oTsB0aRx934JkSWZ51zGng/ukPDKfdybILfVJJZ0nmPa6/RZY
+         eMdP1POd1Ym9GBcqh7PMgJcCRgKqCIvdCPEAIMThsdoOtqnipEnehFRfoAo3NNu1ro
+         /VP8MsnOqcfFjKEKWoPGfslTPVZvROFkpewa5knFsiaKQi4JS/nZ83deSyxIePBFi+
+         +CK/4urNOvAeFE904IX9vZ3UkVHb3gn+7TE/LorDzqnLJbaW+mj8XInU5yWPe3ldeT
+         0D480VWpUgs+2Zl5ec1JhxrKrVAL/AZOl3rlpiOYR8mNAVCRso0xI5pnWcmrSD+Uk1
+         QJaYPaptlwD7g==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 00/17] Move HEVC stateless controls out of staging
+Date:   Fri, 17 Jun 2022 10:35:28 +0200
+Message-Id: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Message-ID: <4be090c8.607e.18170cd11ad.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowABnvfGxPKxiGoc4AA--.57772W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AUjF1pEDvT03AABsg
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkF0IDIwMjItMDYtMTcgMTY6Mjc6MDMsIENvbm9yLkRvb2xleUBtaWNyb2NoaXAuY29tIHdyb3Rl
-Ogo+T24gMTcvMDYvMjAyMiAwOToxNywgTGlhbmcgSGUgd3JvdGU6Cj4+IAo+PiAKPj4gCj4+IEF0
-IDIwMjItMDYtMTcgMTQ6NTM6MTMsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0b3BoZS5sZXJv
-eUBjc2dyb3VwLmV1PiB3cm90ZToKPj4+Cj4+Pgo+Pj4gTGUgMTcvMDYvMjAyMiDDoCAwODo0NSwg
-TGlhbmcgSGUgYSDDqWNyaXTCoDoKPj4+Pgo+Pj4+Cj4+Pj4KPj4+PiBBdCAyMDIyLTA2LTE3IDE0
-OjI4OjU2LCAiQ2hyaXN0b3BoZSBMZXJveSIgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4g
-d3JvdGU6Cj4+Pj4+Cj4+Pj4+Cj4+Pj4+IExlIDE3LzA2LzIwMjIgw6AgMDg6MDgsIExpYW5nIEhl
-IGEgw6ljcml0wqA6Cj4+Pj4+PiBJbiBncGlvX2hhbHRfcHJvYmUoKSwgb2ZfZmluZF9tYXRjaGlu
-Z19ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlCj4+Pj4+PiBwb2ludGVyIHdpdGggcmVmY291bnQg
-aW5jcmVtZW50ZWQuIFdlIHNob3VsZCB1c2Ugb2Zfbm9kZV9wdXQoKSBpbgo+Pj4+Pj4gZmFpbCBw
-YXRoIG9yIHdoZW4gaXQgaXMgbm90IHVzZWQgYW55bW9yZS4KPj4+Pj4+Cj4+Pj4+PiBTaWduZWQt
-b2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4+Pj4+PiAtLS0KPj4+Pj4+ICAgICBj
-aGFuZ2Vsb2c6Cj4+Pj4+PiAgICAgdjQ6IHJldXNlIGV4aXN0ICdlcnInIGFuZCB1c2UgYSBzaW1w
-bGUgY29kZSBzdHlsZSwgYWR2aXNlZCBieSBDSgo+Pj4+Pj4gICAgIHYzOiB1c2UgbG9jYWwgJ2No
-aWxkX25vZGUnIGFkdmlzZWQgYnkgTWljaGFlbC4KPj4+Pj4+ICAgICB2MjogdXNlIGdvdG8tbGFi
-ZWwgcGF0Y2ggc3R5bGUgYWR2aXNlZCBieSBDaHJpc3RvcGhlIExlcm95Lgo+Pj4+Pj4gICAgIHYx
-OiBhZGQgb2Zfbm9kZV9wdXQoKSBiZWZvcmUgZWFjaCBleGl0Lgo+Pj4+Pj4KPj4+Pj4+ICAgICBh
-cmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDM1ICsrKysrKysrKysr
-KysrLS0tLS0tLS0tCj4+Pj4+PiAgICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyks
-IDEzIGRlbGV0aW9ucygtKQo+Pj4+Pj4KPj4+Pj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMv
-cGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4
-eC9zZ3lfY3RzMTAwMC5jCj4+Pj4+PiBpbmRleCA5OGFlNjQwNzUxOTMuLmU0NTg4OTQzZmU3ZSAx
-MDA2NDQKPj4+Pj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAw
-MC5jCj4+Pj4+PiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAu
-Ywo+Pj4+Pj4gQEAgLTcxLDYgKzcxLDcgQEAgc3RhdGljIGludCBncGlvX2hhbHRfcHJvYmUoc3Ry
-dWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4+Pj4+ICAgICB7Cj4+Pj4+PiAgICAgCWVudW0g
-b2ZfZ3Bpb19mbGFncyBmbGFnczsKPj4+Pj4+ICAgICAJc3RydWN0IGRldmljZV9ub2RlICpub2Rl
-ID0gcGRldi0+ZGV2Lm9mX25vZGU7Cj4+Pj4+PiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAqY2hpbGRf
-bm9kZTsKPj4+Pj4+ICAgICAJaW50IGdwaW8sIGVyciwgaXJxOwo+Pj4+Pj4gICAgIAlpbnQgdHJp
-Z2dlcjsKPj4+Pj4+ICAgICAKPj4+Pj4+IEBAIC03OCwyNiArNzksMjkgQEAgc3RhdGljIGludCBn
-cGlvX2hhbHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4+Pj4+ICAgICAJ
-CXJldHVybiAtRU5PREVWOwo+Pj4+Pj4gICAgIAo+Pj4+Pj4gICAgIAkvKiBJZiB0aGVyZSdzIG5v
-IG1hdGNoaW5nIGNoaWxkLCB0aGlzIGlzbid0IHJlYWxseSBhbiBlcnJvciAqLwo+Pj4+Pj4gLQlo
-YWx0X25vZGUgPSBvZl9maW5kX21hdGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOwo+Pj4+
-Pj4gLQlpZiAoIWhhbHRfbm9kZSkKPj4+Pj4+ICsJY2hpbGRfbm9kZSA9IG9mX2ZpbmRfbWF0Y2hp
-bmdfbm9kZShub2RlLCBjaGlsZF9tYXRjaCk7Cj4+Pj4+PiArCWlmICghY2hpbGRfbm9kZSkKPj4+
-Pj4+ICAgICAJCXJldHVybiAwOwo+Pj4+Pj4gICAgIAo+Pj4+Pj4gICAgIAkvKiBUZWNobmljYWxs
-eSB3ZSBjb3VsZCBqdXN0IHJlYWQgdGhlIGZpcnN0IG9uZSwgYnV0IHB1bmlzaAo+Pj4+Pj4gICAg
-IAkgKiBEVCB3cml0ZXJzIGZvciBpbnZhbGlkIGZvcm0uICovCj4+Pj4+PiAtCWlmIChvZl9ncGlv
-X2NvdW50KGhhbHRfbm9kZSkgIT0gMSkKPj4+Pj4+IC0JCXJldHVybiAtRUlOVkFMOwo+Pj4+Pj4g
-KwlpZiAob2ZfZ3Bpb19jb3VudChjaGlsZF9ub2RlKSAhPSAxKSB7Cj4+Pj4+PiArCQllcnIgPSAt
-RUlOVkFMOwo+Pj4+Pj4gKwkJZ290byBlcnJfcHV0Owo+Pj4+Pj4gKwl9Cj4+Pj4+PiAgICAgCj4+
-Pj4+PiAgICAgCS8qIEdldCB0aGUgZ3BpbyBudW1iZXIgcmVsYXRpdmUgdG8gdGhlIGR5bmFtaWMg
-YmFzZS4gKi8KPj4+Pj4+IC0JZ3BpbyA9IG9mX2dldF9ncGlvX2ZsYWdzKGhhbHRfbm9kZSwgMCwg
-JmZsYWdzKTsKPj4+Pj4+IC0JaWYgKCFncGlvX2lzX3ZhbGlkKGdwaW8pKQo+Pj4+Pj4gLQkJcmV0
-dXJuIC1FSU5WQUw7Cj4+Pj4+PiArCWdwaW8gPSBvZl9nZXRfZ3Bpb19mbGFncyhjaGlsZF9ub2Rl
-LCAwLCAmZmxhZ3MpOwo+Pj4+Pj4gKwlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpIHsKPj4+Pj4+
-ICsJCWVyciA9IC1FSU5WQUw7Cj4+Pj4+PiArCQlnb3RvdCBlcnJfcHV0Owo+Pj4+Pgo+Pj4+PiBE
-aWQgeW91IHRlc3QgdGhlIGJ1aWxkID8KPj4+Pgo+Pj4+IFNvcnJ5IGZvciB0aGlzIGZhdWx0Lgo+
-Pj4+Cj4+Pj4gSW4gZmFjdCwgSSBhbSBzdGlsbCBmaW5kaW5nIGFuIGVmZmljaWVudCB3YXkgdG8g
-YnVpbGRpbmcgZGlmZmVyZW50IGFyY2ggc291cmNlIGNvZGUgYXMgSSBvbmx5IGhhdmUgeDg2LTY0
-Lgo+Pj4+Cj4+Pj4gTm93IEkgYW0gdHJ5IHVzaW5nIFFFTVUuCj4+Pj4KPj4+PiBBbnl3YXksIHNv
-cnJ5IGZvciB0aGlzIGZhdWx0Lgo+Pj4KPj4+IFlvdSBjYW4gZmluZCBjcm9zcyBjb21waWxlcnMg
-Zm9yIG1vc3QgYXJjaGl0ZWN0dXJlcyBmb3IgeDg2LTY0IGhlcmUgOgo+Pj4gaHR0cHM6Ly9taXJy
-b3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9vbHMvY3Jvc3N0b29sLwo+Pj4KPj4+IENocmlzdG9w
-aGUKPj4gCj4+IEhpLCBDaHJpc3RvcGhlIGFuZCBDb25vci4KPj4gCj4+IFNvcnJ5IHRvIHRyb3Vi
-bGUgeW91IGFnYWluLgo+PiAKPj4gTm93IEkgb25seSBrbm93IGhvdyB0byBxdWlja2x5IGlkZW50
-aWZ5IHRoZSByZWZjb3VudGluZyBidWdzLCBidXQgSSBjYW5ub3QgZWZmaWNpZW50bHkgZ2l2ZSBh
-IGJ1aWxkIHRlc3QuCj4+IAo+PiBGb3IgZXhhbXBsZSwgSSB1c2UgdGhlIGNyb3NzIGNvbXBpbGVy
-cyAncG93ZXJwYy1saW51eC1nbnUtZ2NjJyB0byBjb21waWxlICdhcmNoL3Bvd2VycGMvcGxhdGZv
-cm1zLzg1eHgvc2d5X2N0czEwMDAuYycgd2l0aCAtZnN5bnRheC1vbmx5IGZsYWcuCj4+IEJ1dCBJ
-IG1lZXQgdG9vIG1hbnkgaGVhZGVyIGZpbGUgbWlzc2luZyBlcnJvcnMuIEV2ZW4gaWYgSSBhZGQg
-c29tZSAnaW5jbHVkZScgcGF0aGVzLCBlLmcuLCAuL2FyY2gvcG93ZXJwYy9pbmNsdWRlLCAuL2lu
-Y2x1ZGUsCj4+IHRoZXJlIGFyZSBzdGlsbCB0b28gbWFueSBvdGhlciBlcnJvcnMuCj4+IAo+PiBT
-byBpZiB0aGVyZSBpcyBhbnkgZWZmaWNpZW50IHdheSB0byBjaGVjayBteSBwYXRjaCBjb2RlIHRv
-IGF2b2lkICdnb3RvdCcgZXJyb3IgYWdhaW4uCj4KPmlkayBhbnl0aGluZyBhYm91dCBwb3dlcnBj
-LCBidXQgd2hhdCBJIGZpbmQgaXMgYSBuaWNlIHdheSB0byBnZXQgYSBjb21waWxlcgo+Zm9yIGFu
-IGFyY2ggSSBkb24ndCB1c2UgaXMgdG8gc2VhcmNoIG9uIGxvcmUua2VybmVsLm9yZyBmb3IgYSAw
-ZGF5IHJvYm90Cj5idWlsZCBlcnJvciBzaW5jZSBpdCBnaXZlcyBpbnN0cnVjdGlvbnMgZm9yIGJ1
-aWxkaW5nIG9uIHRoYXQgYXJjaC4KPkZvciBleGFtcGxlOgo+aHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvbGludXhwcGMtZGV2LzIwMjIwNjA2MDkxMC5yWU5URnFkSS1sa3BAaW50ZWwuY29tLwo+Cj4K
-PkluIHRoaXMgY2FzZSwgeW91ciBidWcgc2VlbXMgb2J2aW91cz8gWW91IHR5cGVkICJnb3RvdCIg
-aW5zdGVhZCBvZiAiZ290byIuCj4KPkhvcGUgdGhhdCBoZWxwcywKPkNvbm9yLgo+Cj4+IAo+PiBU
-aGFua3MgYWdhaW4sIENocmlzdG9waGUgYW5kIENvbm9yLgo+PiAKPj4gTGlhbmcKCgpUaGFua3Mg
-c28gbXVjaCwgSSB3aWxsIHRyeSBpdC4=
+This series aims to make HEVC uapi stable and usable for hardware
+decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+and 2 out of the tree drivers (rkvdec and RPI).
+
+version 9:
+- Reword some commit message
+- Use fls()
+- Remove useless padding at the end of hevc structures
+- Reword all _minus* field description
+- change CVS to codec video sequence
+- Fix various typo
+- Fix undefined label: v4l2-ctrl-flag-dynamic-array warning
+- fix the waring reported by 'scripts/kernel-doc -none
+  include/uapi/linux/v4l2-controls.h'
+
+This version has been tested with these branches:
+- GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+- Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V9
+
+With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
+which was 77/147 before, is now 141/147.
+The 10-bits series will comes after this because of it dependency to
+uAPI change. If you are curious you can find the WIP branch here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V9
+
+The 6 failing tests are:
+- PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
+- WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
+  difference exist on 5 decoded frames. Some pixels values are no the same 
+  the very end of few lines.
+
+version 8:
+- Same than v7 but rebased on media_stage/master
+
+version 7:
+- Apply Jernej patches for Cedrus about bit offset definition and
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
+- Based on media_tree/master
+
+version 6:
+- Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
+  in v4l2_ctrl_hevc_decode_params structure.
+- Change slice_pic_order_cnt type to s32 to match with PoC type.
+- Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+- Add a define for max slices count
+- Stop using Hantro dedicated control.
+
+version 5:
+- Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
+  hevc_dpb_entry structure
+- Add defines for SEI pic_struct values (patch 4)
+- Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
+- Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
+  documentation (patch 8)
+- Rebased on v5-18-rc1
+
+Version 4:
+- Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
+- Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+- Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+- Fix space/tab issue in kernel-doc
+- Add patch to change data_bit_offset definition
+- Fix hantro-media SPDX license
+- put controls under stateless section in v4l2-ctrls-defs.c
+
+Benjamin Gaignard (14):
+  media: uapi: HEVC: Add missing fields in HEVC controls
+  media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+    prefix
+  media: uapi: HEVC: Change pic_order_cnt definition in
+    v4l2_hevc_dpb_entry
+  media: uapi: HEVC: Add SEI pic struct flags
+  media: uapi: HEVC: Add documentation to uAPI structure
+  media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
+    dynamic array
+  media: uapi: Move parsed HEVC pixel format out of staging
+  media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+  media: uapi: Move the HEVC stateless control type out of staging
+  media: controls: Log HEVC stateless control in .std_log
+  media: hantro: Stop using Hantro dedicated control
+  media: uapi: HEVC: fix padding in v4l2 control structures
+  media: uapi: Change data_bit_offset definition
+  media: uapi: move HEVC stateless controls out of staging
+
+Hans Verkuil (3):
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
+
+ .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
+ .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
+ .../media/v4l/pixfmt-compressed.rst           |   7 +-
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+ .../media/v4l/vidioc-queryctrl.rst            |   8 +
+ .../media/videodev2.h.rst.exceptions          |   6 +
+ .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 212 ++++-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  62 +-
+ .../staging/media/hantro/hantro_g2_hevc_dec.c |  44 +-
+ drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
+ drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  26 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
+ .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
+ include/media/hevc-ctrls.h                    | 250 -----
+ include/media/v4l2-ctrls.h                    |  48 +-
+ include/uapi/linux/v4l2-controls.h            | 459 +++++++++
+ include/uapi/linux/videodev2.h                |  13 +
+ 24 files changed, 1826 insertions(+), 1226 deletions(-)
+ delete mode 100644 include/media/hevc-ctrls.h
+
+-- 
+2.32.0
+

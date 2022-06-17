@@ -2,73 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43D254F3F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9285D54F3FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380682AbiFQJKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S235131AbiFQJLZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Jun 2022 05:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiFQJKp (ORCPT
+        with ESMTP id S234893AbiFQJLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:10:45 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA2554BE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:10:44 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id s37so3651338pfg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PJGnbwi5MYQyjS4+9q5Y7gKs9wxJntkJMUiVbv/TYHI=;
-        b=NyiA/gs6QG0Ta4mkYNXUvyn1qOn1K+ZO30n5HI3lmBVDQAJYvZBupBPVyEMe9wBTIU
-         j2DtNgtCFk/g/jp/Dbd/W+fG2CEkl2p9H3YO+t/E//0sM8fxuGVp7BNquAyX2SeI/j1f
-         zZ4/FIPIURLTAQQdgTsouj20s6Bk69Lc3R9rOrpK2a+iS28efzILEefHdCWThlLnK23K
-         HctuUwrcwaqu6nzqI9jPl7xInYUZ1CqRCHbn1l2JKK8Eipgve2VegiOACvLhHZUxNx6X
-         /TuZwGfE0a9cFIei7/TQzQtULShDeHujYG2QNKLgNiw1XDwl9aXFceDFN1NIThchpMH1
-         g6mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PJGnbwi5MYQyjS4+9q5Y7gKs9wxJntkJMUiVbv/TYHI=;
-        b=3b+sRejZX2k2JJfO8J7KtqDSo1xafgb/cnzhm6JhnBY6OX3iYr1YWxbSb0VZVLd6EE
-         dvE0u+9LayTsO7215F8Fl/fdIOBBsyVvkwd0n2yKxeFwSMIEvX+Zm+axZjae4sPMCTXw
-         1cZL+Ny3V7epg2lnGpAFLSUkMtDZKxKgjpcO7PH/wHLSpUgpipsoVGV2XbXp4FsORFaC
-         18/desOtzyoTJq/Re/R7CK/TxRKzkHelt0H/Tu2LI5KgjJiGI/SQD+RXZiHeAHKU+Zcq
-         oZpIeJKViIv4qGl5/U4wwTRhe1CpxXzka0EtjMH8PL+0wVLGblK1jwpMsKDj8CIV9+x5
-         nwcQ==
-X-Gm-Message-State: AJIora8KQfXTn5VrbrQNPEg97HI5ARNM3STJ55Ccv5PZh5z4BX/ilkiA
-        1BHxBQSbY7gGURyyhllqec0=
-X-Google-Smtp-Source: AGRyM1s/ndiCPHLLQcu2gvM1GW8ShZw9MwH6w3kTK1PxJbNF0lorQiBEKZklvOD/sgdqq4Q+zzboaw==
-X-Received: by 2002:a63:fc01:0:b0:403:af21:9729 with SMTP id j1-20020a63fc01000000b00403af219729mr8233226pgi.54.1655457043691;
-        Fri, 17 Jun 2022 02:10:43 -0700 (PDT)
-Received: from edumazet1.svl.corp.google.com ([2620:15c:2c4:201:d5d2:fc18:6baf:e16b])
-        by smtp.gmail.com with ESMTPSA id e11-20020a63744b000000b003c25dfd7372sm3272201pgn.26.2022.06.17.02.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 02:10:42 -0700 (PDT)
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Roman Penyaev <rpenyaev@suse.de>,
-        Shakeel Butt <shakeelb@google.com>
-Subject: [PATCH] locking/rwlocks: do not starve writers
-Date:   Fri, 17 Jun 2022 02:10:39 -0700
-Message-Id: <20220617091039.2257083-1-eric.dumazet@gmail.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        Fri, 17 Jun 2022 05:11:22 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC19F5640F;
+        Fri, 17 Jun 2022 02:11:19 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPYDn718dz687wq;
+        Fri, 17 Jun 2022 17:11:05 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 11:11:17 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Fri, 17 Jun 2022 11:11:17 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "dhowells@redhat.com" <dhowells@redhat.com>
+Subject: RE: [RESEND][PATCH v4 2/4] bpf: Add bpf_request_key_by_id() helper
+Thread-Topic: [RESEND][PATCH v4 2/4] bpf: Add bpf_request_key_by_id() helper
+Thread-Index: AQHYf++U6MIlvDYsd0yY3m2zPy+uQa1S2DKAgABsoGA=
+Date:   Fri, 17 Jun 2022 09:11:17 +0000
+Message-ID: <b146ee9242cb4c128e56bc9cb3b20b26@huawei.com>
+References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
+ <20220614130621.1976089-3-roberto.sassu@huawei.com>
+ <20220617034617.db23phfavuhqx4vi@MacBook-Pro-3.local>
+In-Reply-To: <20220617034617.db23phfavuhqx4vi@MacBook-Pro-3.local>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.221.51]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,81 +67,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+> From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Sent: Friday, June 17, 2022 5:46 AM
 
-Networking is still using rwlocks and read_lock() is called
-from softirq context, potentially from many cpus.
+Adding in CC the keyring mailing list and David.
 
-In this (soft)irq context, rwlock code is unfair to writers
-and can cause soft lockups.
+Sort summary: we are adding an eBPF helper, to let eBPF programs
+verify PKCS#7 signatures. The helper simply calls verify_pkcs7_signature().
 
-We first noticed an issue with epoll after commit a218cc491420
-("epoll: use rwlock in order to reduce ep_poll_callback() contention"),
-but it is trivial to brick a host using this repro:
+The problem is how to pass the key for verification.
 
-for i in {1..48}
-do
- ping -f -n -q 127.0.0.1 &
- sleep 0.1
-done
+For hardcoded keyring IDs, it is easy, pass 0, 1 or 2 for respectively
+the built-in, secondary and platform keyring.
 
-If really an unfair version of rwlocks is needed, we should introduce
-a new read_lock_unfair().
+If you want to pass another keyring, you need to do a lookup,
+which returns a key with reference count increased.
 
-[  673.678717][   C34] watchdog: BUG: soft lockup - CPU#34 stuck for 82s! [ping:17794]
-[  673.700713][   C45] watchdog: BUG: soft lockup - CPU#45 stuck for 82s! [ping:17796]
-[  673.702712][   C46] watchdog: BUG: soft lockup - CPU#46 stuck for 78s! [ping:17802]
-[  673.704712][   C47] watchdog: BUG: soft lockup - CPU#47 stuck for 82s! [ping:17798]
-[  677.636023][   C13] watchdog: BUG: soft lockup - CPU#13 stuck for 82s! [ping:17804]
-[  677.638022][   C14] watchdog: BUG: soft lockup - CPU#14 stuck for 75s! [ping:17825]
-[  677.644021][   C17] watchdog: BUG: soft lockup - CPU#17 stuck for 75s! [ping:17821]
-[  677.650020][   C20] watchdog: BUG: soft lockup - CPU#20 stuck for 82s! [ping:17800]
-[  677.686014][   C38] watchdog: BUG: soft lockup - CPU#38 stuck for 75s! [ping:17819]
-[  681.691318][   C41] watchdog: BUG: soft lockup - CPU#41 stuck for 74s! [ping:17823]
-[  684.657807][   C46] rcu: INFO: rcu_sched self-detected stall on CPU
-[  684.664075][   C46] rcu: 	46-....: (1 GPs behind) idle=529/1/0x4000000000000000 softirq=22717/22717 fqs=20200
-[  705.633252][   C14] watchdog: BUG: soft lockup - CPU#14 stuck for 101s! [ping:17825]
-[  706.999058][  T309] rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks: { 14-... 41-... } 88575 jiffies s: 2325 root: 0x5/.
-[  706.999069][  T309] rcu: blocking rcu_node structures (internal RCU debug): l=1:0-15:0x4000/. l=1:32-47:0x200/.
-[  709.686574][   C41] watchdog: BUG: soft lockup - CPU#41 stuck for 100s! [ping:17823]
-[  714.457782][   C41] rcu: INFO: rcu_sched self-detected stall on CPU
-[  714.464047][   C41] rcu: 	41-....: (1 GPs behind) idle=403/1/0x4000000000000000 softirq=24654/24655 fqs=4653
+While in the kernel you can call key_put() to decrease the
+reference count, that is not guaranteed with an eBPF program,
+if the developer forgets about it. What probably is necessary,
+is to add the capability to the verifier to check whether the
+reference count is decreased, or adding a callback mechanism
+to call automatically key_put() when the eBPF program is
+terminated.
 
-Fixes: 70af2f8a4f48 ("locking/rwlocks: Introduce 'qrwlocks' - fair, queued rwlocks")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Roman Penyaev <rpenyaev@suse.de>
-Cc: Shakeel Butt <shakeelb@google.com>
----
- kernel/locking/qrwlock.c | 10 ----------
- 1 file changed, 10 deletions(-)
+Is there an alternative solution?
 
-diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-index 2e1600906c9f5cd868415d20e2d7024c5b1e0531..bf64d14f0fc88613363c3c007bca8c0918709123 100644
---- a/kernel/locking/qrwlock.c
-+++ b/kernel/locking/qrwlock.c
-@@ -23,16 +23,6 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 	/*
- 	 * Readers come here when they cannot get the lock without waiting
- 	 */
--	if (unlikely(in_interrupt())) {
--		/*
--		 * Readers in interrupt context will get the lock immediately
--		 * if the writer is just waiting (not holding the lock yet),
--		 * so spin with ACQUIRE semantics until the lock is available
--		 * without waiting in the queue.
--		 */
--		atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
--		return;
--	}
- 	atomic_sub(_QR_BIAS, &lock->cnts);
- 
- 	trace_contention_begin(lock, LCB_F_SPIN | LCB_F_READ);
--- 
-2.36.1.476.g0c4daa206d-goog
+Thanks
 
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH,
+HRB 56063 Managing Director: Li Peng, Yang Xi, Li He
+
+> On Tue, Jun 14, 2022 at 03:06:19PM +0200, Roberto Sassu wrote:
+> > Add the bpf_request_key_by_id() helper, so that an eBPF program can
+> > obtain a suitable key pointer to pass to the
+> > bpf_verify_pkcs7_signature() helper, to be introduced in a later patch.
+> >
+> > The passed identifier can have the following values: 0 for the primary
+> > keyring (immutable keyring of system keys); 1 for both the primary and
+> > secondary keyring (where keys can be added only if they are vouched
+> > for by existing keys in those keyrings); 2 for the platform keyring
+> > (primarily used by the integrity subsystem to verify a kexec'ed kerned
+> > image and, possibly, the initramfs signature); ULONG_MAX for the
+> > session keyring (for testing purposes).
+> >
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/uapi/linux/bpf.h       | 17 +++++++++++++++++
+> >  kernel/bpf/bpf_lsm.c           | 30 ++++++++++++++++++++++++++++++
+> >  scripts/bpf_doc.py             |  2 ++
+> >  tools/include/uapi/linux/bpf.h | 17 +++++++++++++++++
+> >  4 files changed, 66 insertions(+)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h index
+> > f4009dbdf62d..dfd93e0e0759 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -5249,6 +5249,22 @@ union bpf_attr {
+> >   *		Pointer to the underlying dynptr data, NULL if the dynptr is
+> >   *		read-only, if the dynptr is invalid, or if the offset and length
+> >   *		is out of bounds.
+> > + *
+> > + * struct key *bpf_request_key_by_id(unsigned long id)
+> > + *	Description
+> > + *		Request a keyring by *id*.
+> > + *
+> > + *		*id* can have the following values (some defined in
+> > + *		verification.h): 0 for the primary keyring (immutable keyring
+> of
+> > + *		system keys); 1 for both the primary and secondary keyring
+> > + *		(where keys can be added only if they are vouched for by
+> > + *		existing keys in those keyrings); 2 for the platform keyring
+> > + *		(primarily used by the integrity subsystem to verify a
+> kexec'ed
+> > + *		kerned image and, possibly, the initramfs signature);
+> ULONG_MAX
+> > + *		for the session keyring (for testing purposes).
+> 
+> It's never ok to add something like this to uapi 'for testing purposes'.
+> If it's not useful in general it should not be a part of api.
+> 
+> > + *	Return
+> > + *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
+> > + *		otherwise.
+> >   */
+> >  #define __BPF_FUNC_MAPPER(FN)		\
+> >  	FN(unspec),			\
+> > @@ -5455,6 +5471,7 @@ union bpf_attr {
+> >  	FN(dynptr_read),		\
+> >  	FN(dynptr_write),		\
+> >  	FN(dynptr_data),		\
+> > +	FN(request_key_by_id),		\
+> >  	/* */
+> >
+> >  /* integer value in 'imm' field of BPF_CALL instruction selects which
+> > helper diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c index
+> > c1351df9f7ee..e1911812398b 100644
+> > --- a/kernel/bpf/bpf_lsm.c
+> > +++ b/kernel/bpf/bpf_lsm.c
+> > @@ -16,6 +16,7 @@
+> >  #include <linux/bpf_local_storage.h>
+> >  #include <linux/btf_ids.h>
+> >  #include <linux/ima.h>
+> > +#include <linux/verification.h>
+> >
+> >  /* For every LSM hook that allows attachment of BPF programs, declare a
+> nop
+> >   * function where a BPF program can be attached.
+> > @@ -132,6 +133,31 @@ static const struct bpf_func_proto
+> bpf_get_attach_cookie_proto = {
+> >  	.arg1_type	= ARG_PTR_TO_CTX,
+> >  };
+> >
+> > +#ifdef CONFIG_KEYS
+> > +BTF_ID_LIST_SINGLE(bpf_request_key_by_id_btf_ids, struct, key)
+> > +
+> > +BPF_CALL_1(bpf_request_key_by_id, unsigned long, id) {
+> > +	const struct cred *cred = current_cred();
+> > +
+> > +	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING && id !=
+> ULONG_MAX)
+> > +		return (unsigned long)NULL;
+> > +
+> > +	if (id == ULONG_MAX)
+> > +		return (unsigned long)cred->session_keyring;
+> > +
+> > +	return id;
+> 
+> It needs to do a proper lookup.
+> Why cannot it do lookup_user_key ?
+> The helper needs 'flags' arg too.
+> Please think hard of extensibility and long term usefulness of api.
+> At present this api feels like it was 'let me just hack something quickly'. Not
+> ok.

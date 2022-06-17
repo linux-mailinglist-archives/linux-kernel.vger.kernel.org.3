@@ -2,133 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C420554F210
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8314354F213
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380620AbiFQHiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S1380646AbiFQHjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380565AbiFQHiq (ORCPT
+        with ESMTP id S1380565AbiFQHjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:38:46 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D93550005
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:38:46 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id w5-20020a17090aea0500b001ec7c45794bso240214pjy.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0JRZE0Z29r4UlodpfRtV08NQRTnigdJxgN3DP8hXpHY=;
-        b=NEY2iKtHtUL4IQc6zDdgegvPzcuaw41bP35nUj4lBy/tvaeYi7elW4M+N690lLhGq2
-         0rJfaSTXaD/T7z4qm+9e6kKlfFQlLg9rDkuMl4K8VoAZI8D9f/xlUf78quh946+BOpsD
-         qWyWBO4LGd/dmaYObpXd2Yttb5VUc766BKpIpyhI25Lbwh5ZkazF29qI1oBEL6FHlSSB
-         ohtbxmFYvqtW0Gi3MsDd1MW2rF1sTusEgoaTQKuAxO93n8+q9S16xOvtdu199048/KUN
-         jzKT9FYQpIMikudcJA71wbR9YJceiV8xJP6AGrJiw2KJ2/uavXGJMAJ4YWWhOWraM8lm
-         ZDMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0JRZE0Z29r4UlodpfRtV08NQRTnigdJxgN3DP8hXpHY=;
-        b=dZXXxSpHeJgrrcJLL0uBnKCB4GBawWFF1yl5Q5wOCv6WMPO2UgNVNDn537ar096xZA
-         YZNmI+u5TVi2x+FkaXrYKa/d+zFSShTVgXqV550SJKCT0mfJm8Pofwt5B045MXnOBzzB
-         xgbEKr8Qn/iIOZQ2445KyTOYIurla9LocnkA3Qgh8BI44xmkAFcslfbkGAQ6p2Fs9hZ/
-         GQgb3vcuFt0RitdpO+SAIU9t8GhjFPo7uc1ZWl3p2sZ1AcCRhP8LTis8nly6cm592oTX
-         DzmrrzAEuS5D+4WD5wyDUWAKZG3CMmOOOjjnwaK/J6yLuEqnWhrdhHliCFXFEo/Rmw70
-         DI9A==
-X-Gm-Message-State: AJIora8CElmcY/V3CVUGmPZ89qJiiPpnEDBsIrtDbrPRxLy1Yb7uTBoo
-        LkmNrjDx70KSKX17w2bnLF54iw==
-X-Google-Smtp-Source: AGRyM1tUyfYz20VN7BXvpIfxhhyVOdn7+NV09gMOWoEO8ZHM10dORUVqR3B883OKoeWHwEhkbW7ejw==
-X-Received: by 2002:a17:902:ba8d:b0:168:ff8f:c1f with SMTP id k13-20020a170902ba8d00b00168ff8f0c1fmr8039334pls.6.1655451525503;
-        Fri, 17 Jun 2022 00:38:45 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (n058152077154.netvigator.com. [58.152.77.154])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001676f87473fsm2827966plk.302.2022.06.17.00.38.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 00:38:45 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 15:38:40 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
+        Fri, 17 Jun 2022 03:39:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6E8663F8;
+        Fri, 17 Jun 2022 00:39:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LPW8Q0yF8zhXb1;
+        Fri, 17 Jun 2022 15:37:10 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 15:39:08 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 15:39:07 +0800
+Subject: Re: [PATCH 1/5] arm64: kdump: Provide default size when
+ crashkernel=Y,low is not specified
+To:     Baoquan He <bhe@redhat.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        German Gomez <german.gomez@arm.com>
-Subject: Re: [PATCH v2] perf test: Add ARM SPE system wide test
-Message-ID: <20220617073840.GA45710@leoy-ThinkPad-X240s>
-References: <20220616230546.1390813-1-namhyung@kernel.org>
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220613080932.663-1-thunder.leizhen@huawei.com>
+ <20220613080932.663-2-thunder.leizhen@huawei.com>
+ <20220617024042.GC234358@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <26bb3d13-fb8b-3e1d-2529-31d34d3c1c1d@huawei.com>
+Date:   Fri, 17 Jun 2022 15:39:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616230546.1390813-1-namhyung@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220617024042.GC234358@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Namhyung,
 
-On Thu, Jun 16, 2022 at 04:05:46PM -0700, Namhyung Kim wrote:
 
-[...]
-
-> +arm_spe_system_wide_test() {
-> +	echo "Recording trace with system-wide mode $perfdata"
-> +	perf record -o ${perfdata} -e arm_spe// -a \
-> +		-- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
-> +
-> +	if [ $? != 0 ]; then
-> +		arm_spe_report "SPE system-wide testing" 2
-> +		return
-> +	fi
-
-I am awared the root permission issue after I saw German's suggestion.
-
-If the snapshot test is passed, no matter the system wide test is passed
-or not, we will always return 0 for 'passed' result.  But we might miss
-to capture the system-wide testing failure.
-
-How about use 'dummy' event to verіfy the root permission?
-(actually I referred to intel-pt test):
-
-        perf record -o ${tmpfile} -B -N --no-bpf-event -e dummy:u -a true 2>&1 >/dev/null
-        if [ $? != 0 ]; then
-        	arm_spe_report "SPE system-wide testing" 2
-        	return
-        fi
-
-        perf record -o ${perfdata} -e arm_spe// -a \
-                  -- dd if=/dev/zero of=/dev/null count=100000 > /dev/null 2>&1
-
-Thanks,
-Leo
-
-> +	perf_script_samples dd &&
-> +	perf_report_samples dd
-> +
-> +	err=$?
-> +	arm_spe_report "SPE system-wide testing" $err
-> +}
-> +
->  arm_spe_snapshot_test
-> +arm_spe_system_wide_test
-> +
->  exit $glb_err
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
+On 2022/6/17 10:40, Baoquan He wrote:
+> On 06/13/22 at 04:09pm, Zhen Lei wrote:
+>> To be consistent with the implementation of x86 and improve cross-platform
+>> user experience. Try to allocate at least 256 MiB low memory automatically
+>> when crashkernel=Y,low is not specified.
 > 
+> This should correspond to the case that crashkernel=,high is explicitly
+> specified, while crashkenrel=,low is omitted. It could be better to
+> mention these.
+
+Okay, I'll update the description in the next version.
+
+> 
+> Otherwise, this looks good to me.
+> 
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  Documentation/admin-guide/kernel-parameters.txt |  8 +-------
+>>  arch/arm64/mm/init.c                            | 12 +++++++++++-
+>>  2 files changed, 12 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 8090130b544b070..61b179232b68001 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -843,7 +843,7 @@
+>>  			available.
+>>  			It will be ignored if crashkernel=X is specified.
+>>  	crashkernel=size[KMG],low
+>> -			[KNL, X86-64] range under 4G. When crashkernel=X,high
+>> +			[KNL, X86-64, ARM64] range under 4G. When crashkernel=X,high
+>                         ~~~~ exceeds 80 characters, it should be OK.
+> 
+>>  			is passed, kernel could allocate physical memory region
+>>  			above 4G, that cause second kernel crash on system
+>>  			that require some amount of low memory, e.g. swiotlb
+>> @@ -857,12 +857,6 @@
+>>  			It will be ignored when crashkernel=X,high is not used
+>>  			or memory reserved is below 4G.
+>>  
+>> -			[KNL, ARM64] range in low memory.
+>> -			This one lets the user specify a low range in the
+>> -			DMA zone for the crash dump kernel.
+>> -			It will be ignored when crashkernel=X,high is not used
+>> -			or memory reserved is located in the DMA zones.
+>> -
+>>  	cryptomgr.notests
+>>  			[KNL] Disable crypto self-tests
+>>  
+>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+>> index 339ee84e5a61a0b..5390f361208ccf7 100644
+>> --- a/arch/arm64/mm/init.c
+>> +++ b/arch/arm64/mm/init.c
+>> @@ -96,6 +96,14 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+>>  #define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
+>>  #define CRASH_ADDR_HIGH_MAX		(PHYS_MASK + 1)
+>>  
+>> +/*
+>> + * This is an empirical value in x86_64 and taken here directly. Please
+>> + * refer to the code comment in reserve_crashkernel_low() of x86_64 for more
+>> + * details.
+>> + */
+>> +#define DEFAULT_CRASH_KERNEL_LOW_SIZE	\
+>> +	max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20)
+>> +
+>>  static int __init reserve_crashkernel_low(unsigned long long low_size)
+>>  {
+>>  	unsigned long long low_base;
+>> @@ -147,7 +155,9 @@ static void __init reserve_crashkernel(void)
+>>  		 * is not allowed.
+>>  		 */
+>>  		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+>> -		if (ret && (ret != -ENOENT))
+>> +		if (ret == -ENOENT)
+>> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>> +		else if (ret)
+>>  			return;
+>>  
+>>  		crash_max = CRASH_ADDR_HIGH_MAX;
+>> -- 
+>> 2.25.1
+>>
+> 
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei

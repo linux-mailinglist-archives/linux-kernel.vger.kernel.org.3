@@ -2,155 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5102454F00B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 06:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092B554F00F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 06:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379960AbiFQEQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 00:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S1379971AbiFQEVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 00:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379940AbiFQEQo (ORCPT
+        with ESMTP id S1379966AbiFQEVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 00:16:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFAA566696
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655439403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rv0vNXKXyCH9T82Y1Ot9urO7/UnO0DqQajZUCOmTg8E=;
-        b=bjp4DPpxhd9zPgJ0k+q8uFwxd/QHVAbGalHmWgrWWcFE+gSL9iz2oEKYpfiugViKH8I3om
-        Qd5H6+OKVHq2PN4g/UMmVwMbv8SefGTKc4GQLDu/O1nQVJaiMSTtXUdAg6ptNjxz4JGK9o
-        YMblMbwQFWXH+e9UFvm08dmntdpaOD8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-81-NCX5GbcZNReCBVP6NcqkMg-1; Fri, 17 Jun 2022 00:16:39 -0400
-X-MC-Unique: NCX5GbcZNReCBVP6NcqkMg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6386F185A79C;
-        Fri, 17 Jun 2022 04:16:38 +0000 (UTC)
-Received: from localhost (ovpn-12-144.pek2.redhat.com [10.72.12.144])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 43DDE1121314;
-        Fri, 17 Jun 2022 04:16:37 +0000 (UTC)
-Date:   Fri, 17 Jun 2022 12:16:33 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH 2/5] arm64: kdump: Support crashkernel=X fall back to
- reserve region above DMA zones
-Message-ID: <20220617041633.GD234358@MiWiFi-R3L-srv>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-3-thunder.leizhen@huawei.com>
+        Fri, 17 Jun 2022 00:21:42 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17690666A4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ENvGQ
+        PwIvf1KPG42t7qvZiJODByyrvbH42c33b2b8TU=; b=kTU2lWOAAwxs67X1r/NHj
+        TqT3s4m+mBoWxZTK7sPw7137FzgDrueWkFEuYdYW4uGl/eCeHjmgaR54l0lxQYVs
+        ZnPPl4at5zHOB5OGLWbvKm1yfjbACta6QImmZRs0kj4z+Ux5mO+nyelnAvZT05oc
+        N5kQXCWwGFCojsVeff4K/g=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp8 (Coremail) with SMTP id NORpCgDndoMYAaxioZlTFw--.27823S2;
+        Fri, 17 Jun 2022 12:20:41 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org
+Cc:     windhl@126.com, nick.child@ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: powernv: Fix refcount leak bug in opal-powercap
+Date:   Fri, 17 Jun 2022 12:20:38 +0800
+Message-Id: <20220617042038.4003704-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613080932.663-3-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgDndoMYAaxioZlTFw--.27823S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFyfGw1fZr13Ww13Gw18Grg_yoW8Jw48pr
+        9093yxXa18CrWIyayIyaykuF4UtFn5Cr4UG34UCry7AwsxZwnayr4jyry3JFn7AF45Jw1F
+        vr4ag3s8tFnxuaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziW8BUUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGhEjF1-HZUM9IgAAse
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/13/22 at 04:09pm, Zhen Lei wrote:
-> For crashkernel=X without '@offset', select a region within DMA zones
-> first, and fall back to reserve region above DMA zones. This allows
-> users to use the same configuration on multiple platforms.
+In opal_powercap_init(), of_find_compatible_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
+in fail path or when it is not used anymore.
 
-LGTM,
+Besides, for_each_child_of_node() will automatically *inc* and *dec*
+refcount during iteration. However, we should add the of_node_put()
+if there is a break.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/powerpc/platforms/powernv/opal-powercap.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt |  2 +-
->  arch/arm64/mm/init.c                            | 16 +++++++++++++++-
->  2 files changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 61b179232b68001..fdac18beba5624e 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -823,7 +823,7 @@
->  			memory region [offset, offset + size] for that kernel
->  			image. If '@offset' is omitted, then a suitable offset
->  			is selected automatically.
-> -			[KNL, X86-64] Select a region under 4G first, and
-> +			[KNL, X86-64, ARM64] Select a region under 4G first, and
->  			fall back to reserve region above 4G when '@offset'
->  			hasn't been specified.
->  			See Documentation/admin-guide/kdump/kdump.rst for further details.
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 5390f361208ccf7..8539598f9e58b4d 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -138,6 +138,7 @@ static void __init reserve_crashkernel(void)
->  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
->  	char *cmdline = boot_command_line;
->  	int ret;
-> +	bool fixed_base;
->  
->  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
->  		return;
-> @@ -166,15 +167,28 @@ static void __init reserve_crashkernel(void)
->  		return;
->  	}
->  
-> +	fixed_base = !!crash_base;
->  	crash_size = PAGE_ALIGN(crash_size);
->  
->  	/* User specifies base address explicitly. */
-> -	if (crash_base)
-> +	if (fixed_base)
->  		crash_max = crash_base + crash_size;
->  
-> +retry:
->  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->  					       crash_base, crash_max);
->  	if (!crash_base) {
-> +		/*
-> +		 * Attempt to fully allocate low memory failed, fall back
-> +		 * to high memory, the minimum required low memory will be
-> +		 * reserved later.
-> +		 */
-> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-> +			crash_max = CRASH_ADDR_HIGH_MAX;
-> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-> +			goto retry;
-> +		}
-> +
->  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
->  			crash_size);
->  		return;
-> -- 
-> 2.25.1
-> 
+diff --git a/arch/powerpc/platforms/powernv/opal-powercap.c b/arch/powerpc/platforms/powernv/opal-powercap.c
+index 64506b46e77b..b102477d3f95 100644
+--- a/arch/powerpc/platforms/powernv/opal-powercap.c
++++ b/arch/powerpc/platforms/powernv/opal-powercap.c
+@@ -153,7 +153,7 @@ void __init opal_powercap_init(void)
+ 	pcaps = kcalloc(of_get_child_count(powercap), sizeof(*pcaps),
+ 			GFP_KERNEL);
+ 	if (!pcaps)
+-		return;
++		goto out_powercap;
+ 
+ 	powercap_kobj = kobject_create_and_add("powercap", opal_kobj);
+ 	if (!powercap_kobj) {
+@@ -236,6 +236,9 @@ void __init opal_powercap_init(void)
+ 		kfree(pcaps[i].pg.name);
+ 	}
+ 	kobject_put(powercap_kobj);
++	of_node_put(node);
+ out_pcaps:
+ 	kfree(pcaps);
++out_powercap:
++	of_node_put(powercap);
+ }
+-- 
+2.25.1
 

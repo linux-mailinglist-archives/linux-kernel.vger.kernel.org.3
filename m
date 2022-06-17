@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2353854F4BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D010654F4BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381416AbiFQJ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S1381493AbiFQJ77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbiFQJ7v (ORCPT
+        with ESMTP id S1380804AbiFQJ7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 05:59:51 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2606517DE;
-        Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 010D4522FE;
+        Fri, 17 Jun 2022 02:59:51 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC2D812FC;
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1A111474;
         Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
 Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D4353F73B;
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 93B5E3F73B;
         Fri, 17 Jun 2022 02:59:50 -0700 (PDT)
 From:   Yoan Picchi <yoan.picchi@arm.com>
 To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
@@ -28,10 +28,12 @@ To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Andre Przywara <andre.przywara@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v3 0/2] crypto: qat - Remove x86 dependency on QAT drivers
-Date:   Fri, 17 Jun 2022 09:59:43 +0000
-Message-Id: <20220617095945.437601-1-yoan.picchi@arm.com>
+Subject: [PATCH v3 1/2] crypto: qat - replace get_current_node() with numa_node_id()
+Date:   Fri, 17 Jun 2022 09:59:44 +0000
+Message-Id: <20220617095945.437601-2-yoan.picchi@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220617095945.437601-1-yoan.picchi@arm.com>
+References: <20220617095945.437601-1-yoan.picchi@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -43,37 +45,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QAT acceleration card can be very helpfull for some tasks like dealing
-with IPSEC but it is currently restricted to be used only on x86 machine.
-Looking at the code we didn't see any reasons why those drivers might not
-work on other architectures. We've successfully built all of them on x86,
-arm64, arm32, mips64, powerpc64, riscv64 and sparc64.
+From: Andre Przywara <andre.przywara@arm.com>
 
-We also have tested the driver with an Intel Corporation C62x Chipset
-QuickAssist Technology (rev 04) PCIe card on an arm64 server. After the numa
-patch, it works with the AF_ALG crypto userland interface, allowing us to
-encrypt some data with cbc for instance. We've also successfully created some
-VF, bound them to DPDK, and used the card this way, thus showing some real
-life usecases of x86 do work on arm64 too.
+Currently the QAT driver code uses a self-defined wrapper function
+called get_current_node() when it wants to learn the current NUMA node.
+This implementation references the topology_physical_package_id[] array,
+which more or less coincidentally contains the NUMA node id, at least
+on x86.
 
-Changelog v1 ... v2:
-- Add COMPILE_TEST to Kconfig
+Because this is not universal, and Linux offers a direct function to
+learn the NUMA node ID, replace that function with a call to
+numa_node_id(), which would work everywhere.
 
-Changelog v2 ... v3:
-- Add the Crypto tag to the commit header
+This fixes the QAT driver operation on arm64 machines.
 
-Andre Przywara (1):
-  crypto: qat - replace get_current_node() with numa_node_id()
+Reported-by: Yoan Picchi <Yoan.Picchi@arm.com>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
+---
+ drivers/crypto/qat/qat_common/adf_common_drv.h | 5 -----
+ drivers/crypto/qat/qat_common/qat_algs.c       | 4 ++--
+ drivers/crypto/qat/qat_common/qat_asym_algs.c  | 4 ++--
+ 3 files changed, 4 insertions(+), 9 deletions(-)
 
-Yoan Picchi (1):
-  crypto: qat - Removes the x86 dependency on the QAT drivers
-
- drivers/crypto/qat/Kconfig                     | 14 +++++++-------
- drivers/crypto/qat/qat_common/adf_common_drv.h |  5 -----
- drivers/crypto/qat/qat_common/qat_algs.c       |  4 ++--
- drivers/crypto/qat/qat_common/qat_asym_algs.c  |  4 ++--
- 4 files changed, 11 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/crypto/qat/qat_common/adf_common_drv.h b/drivers/crypto/qat/qat_common/adf_common_drv.h
+index e8c9b77c0d66..b582107db67b 100644
+--- a/drivers/crypto/qat/qat_common/adf_common_drv.h
++++ b/drivers/crypto/qat/qat_common/adf_common_drv.h
+@@ -49,11 +49,6 @@ struct service_hndl {
+ 	struct list_head list;
+ };
+ 
+-static inline int get_current_node(void)
+-{
+-	return topology_physical_package_id(raw_smp_processor_id());
+-}
+-
+ int adf_service_register(struct service_hndl *service);
+ int adf_service_unregister(struct service_hndl *service);
+ 
+diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
+index f998ed58457c..c0ffaebcc8b8 100644
+--- a/drivers/crypto/qat/qat_common/qat_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_algs.c
+@@ -618,7 +618,7 @@ static int qat_alg_aead_newkey(struct crypto_aead *tfm, const u8 *key,
+ {
+ 	struct qat_alg_aead_ctx *ctx = crypto_aead_ctx(tfm);
+ 	struct qat_crypto_instance *inst = NULL;
+-	int node = get_current_node();
++	int node = numa_node_id();
+ 	struct device *dev;
+ 	int ret;
+ 
+@@ -1042,7 +1042,7 @@ static int qat_alg_skcipher_newkey(struct qat_alg_skcipher_ctx *ctx,
+ {
+ 	struct qat_crypto_instance *inst = NULL;
+ 	struct device *dev;
+-	int node = get_current_node();
++	int node = numa_node_id();
+ 	int ret;
+ 
+ 	inst = qat_crypto_get_instance_node(node);
+diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+index b0b78445418b..3701eac10bce 100644
+--- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+@@ -480,7 +480,7 @@ static int qat_dh_init_tfm(struct crypto_kpp *tfm)
+ {
+ 	struct qat_dh_ctx *ctx = kpp_tfm_ctx(tfm);
+ 	struct qat_crypto_instance *inst =
+-			qat_crypto_get_instance_node(get_current_node());
++			qat_crypto_get_instance_node(numa_node_id());
+ 
+ 	if (!inst)
+ 		return -EINVAL;
+@@ -1218,7 +1218,7 @@ static int qat_rsa_init_tfm(struct crypto_akcipher *tfm)
+ {
+ 	struct qat_rsa_ctx *ctx = akcipher_tfm_ctx(tfm);
+ 	struct qat_crypto_instance *inst =
+-			qat_crypto_get_instance_node(get_current_node());
++			qat_crypto_get_instance_node(numa_node_id());
+ 
+ 	if (!inst)
+ 		return -EINVAL;
 -- 
 2.25.1
 

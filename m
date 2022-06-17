@@ -2,121 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABED54FF0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8611954FEC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383452AbiFQUwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S1383547AbiFQUwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235359AbiFQUwI (ORCPT
+        with ESMTP id S1383497AbiFQUwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:52:08 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8B85DD11;
-        Fri, 17 Jun 2022 13:52:04 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 567006C19F8;
-        Fri, 17 Jun 2022 20:52:01 +0000 (UTC)
-Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id DDA396C0F04;
-        Fri, 17 Jun 2022 20:51:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655499120; a=rsa-sha256;
-        cv=none;
-        b=kpZKv1CSK0g3cc9uwoWs9OMRgo6+6ZF4ikFqw70H6a6y2BKcbeI7JLbzDuTFIA9otHLe7a
-        3vkM899LhUVnIj5auR3lvKixkZrSykMJ99ND+hOSatXI/1ikOWAJ/Tsu/eB95l/XajYEuU
-        BCQbyZQ+IPpLOJqYXaacrax/KNIHPEKezdD7hTFAuJC7DJ6ZDWXugD7va/2RKpremRU64/
-        6rXUimk9cmOBhkQ8jLbbR9ssCOFRX1m6SvBOQ1BrxPR3QcGqW9HyuYG4JXulf7gC7X6+a2
-        eTnlZgBFn8YPL7BK5J5pIvH+3CGhtdMWSKali8TWRquXtiqCCaqlnfb7nCac+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1655499120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=H33TwgwIplad2YK1FMTzaxvDoDxT65RNtg46unDmCoU=;
-        b=h5v9TlVvfZv5jvbJKsyiJ+IDtnhOZ6IeqyWxyyI6K/Zp9NDL2RbB+H5KqjKXH1r6wUaBRO
-        ygx0GDqbhH6nRJWghHHyelazOsWa2QnR9cQBXrp9om1D1HFd+5o0I08QSi6sQ+kpMeGAmb
-        YeCCvj1vHOahEDadZubIq7x4dok9cq8uEa4vciX8XA/p0RHm9Wa9+5jXfXPj1LWysn2Ij8
-        Q9YUf52QeZj7wAJP6OXTefqfknhkiYtAYU52kt9xYSGkAUvTDOpTbwSYnZZ7iKjAOBneTH
-        ZDycoRmlY0idAVEQY6ZeY2Da2aNvT9KHDvp8jhWtxl4jEXzwWOdOwP2MRp9twg==
-ARC-Authentication-Results: i=1;
-        rspamd-848669fb87-9pggl;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Blushing-Lettuce: 6c19f45016bec545_1655499121003_3845772308
-X-MC-Loop-Signature: 1655499121003:2385804167
-X-MC-Ingress-Time: 1655499121002
-Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.123.1 (trex/6.7.1);
-        Fri, 17 Jun 2022 20:52:01 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LPrnV0x49z23;
-        Fri, 17 Jun 2022 13:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1655499118;
-        bh=H33TwgwIplad2YK1FMTzaxvDoDxT65RNtg46unDmCoU=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=eFxiupgOiGPatoBnkBlPLD64Fvs+BXBg4mID0ESTwDLcX30idMDhkg9NKA1tkThJ9
-         uAUIqPsqcv0DNzfHfSDPMer0UOUhogA524LTICEEyAmnfH0r5hY8lXr04Kmn07haY0
-         U7SUJMke0GcNUT45qPMpuUoP91uNVKA8MSztEBiJm+oN9qHnVNmLe06ETQZFITGX43
-         BIQ3gGde2+iTnMvYBDIEmhdK3ZblNQPPBzE3uAIlONREUO/Nf7mODb/ta38sfjDw79
-         bGt8G0Vs8fWtTBq4Ub9eNBd0ynkjXlk5rTH4i9dKhZw/ZpZ341BW1xac6o89UgTVTJ
-         aNcPMdZPq7Bfg==
-Date:   Fri, 17 Jun 2022 13:51:55 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     "ira.weiny@intel.com" <ira.weiny@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org, a.manzanares@samsung.com
-Subject: Re: [PATCH v11 4/8] cxl/pci: Create PCI DOE mailbox's for memory
- devices
-Message-ID: <20220617205155.yk6qt3qcc3mpipek@offworld>
-References: <20220610202259.3544623-1-ira.weiny@intel.com>
- <20220610202259.3544623-5-ira.weiny@intel.com>
- <20220617204046.qdkza6iemkfv2aze@offworld>
+        Fri, 17 Jun 2022 16:52:23 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610E65E17A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:52:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so1557045pjr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0gvTzgsYSiMbpMdNzx7QQ0trcTLfq0qz6qq+d/xtlqM=;
+        b=Tm8fa78A+8xoP3d1vCfCPWpSCzWj+i2sJA/HPesmtuW0WMA5RtXd8iQDFxpA6qnpWj
+         wBRS1u0wecIeTRbxK8Gvt9RweINogdUBePYhR7lrzoNnF83AL1EhBDPIsG2P4LsKfvjj
+         ttjEyi9Fit5b3gG154/moMPm/lVvZAp4uLT57JQgKeitkDyKmrVK02sDA6Ax1ld05qdf
+         pHz22A+L+cEY7/LSa3Ah2ecGSGVEe+9KAB/GSJIfCUDRfXSVs0RllQyfmcEru1D0w1Fe
+         lz1ro/0YeBLRjS5RYvDHkjd9t+a0tND1zjuM8uuDkkuZHNsaQui6mPrJ1fudbeWdMDCh
+         b2yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0gvTzgsYSiMbpMdNzx7QQ0trcTLfq0qz6qq+d/xtlqM=;
+        b=265Nka8qWxzXs8aWtjgeAWi22XuFa6KiPK/dtfhSZio2lJfFZ3Q7BRq4oImyPrRyYH
+         AuGRGQFvbzVJl+zz6CjtKRpIGkIkWZv4Lq1HwXoWvHtzkrwAG9Ja/3GkWjL2IH5wLVzP
+         9Ai772C6cA5xb3xHwg1oUBcB9d+lvQMiXYV/F52Gg2ChDqfTbgHJVGaKTvt4OVTnXwA8
+         8d7sAOacY24jIS/8xEBRhT8tKZt/JviBbPC5PWhtpUZbsC052LMYWcKq2BYAwT7IyULS
+         jAEOQSgY8MtbOuA/r2suyrCzLn6XDUiysMUOYl+tmp38TvBVkSE9t/W7r/lRScIRkrUW
+         CnPw==
+X-Gm-Message-State: AJIora8Onx/nTJrv2uR1NJoeCKQ+c4l9ZcRikZr3+/3sS0UJArnYMekh
+        +62xM5jFqSJiip2Iv3XC/f/HXwrZ1bSxHw==
+X-Google-Smtp-Source: AGRyM1t/zG6fhbTElhgwQ8jpzkHKKzon/AJS4F2Xyo6NtESIYzM5NELoKnpSdcxh3Foi9ICA7Z0Xtg==
+X-Received: by 2002:a17:902:ef47:b0:169:a2a7:94cf with SMTP id e7-20020a170902ef4700b00169a2a794cfmr7330944plx.143.1655499139356;
+        Fri, 17 Jun 2022 13:52:19 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id y1-20020a63ad41000000b003fae8a7e3e5sm4127465pgo.91.2022.06.17.13.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 13:52:18 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 20:52:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Yqzpf3AEYabFWjnW@google.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-5-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617204046.qdkza6iemkfv2aze@offworld>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220519153713.819591-5-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022, Davidlohr Bueso wrote:
+On Thu, May 19, 2022, Chao Peng wrote:
+> @@ -653,12 +662,12 @@ struct kvm_irq_routing_table {
+>  };
+>  #endif
+>  
+> -#ifndef KVM_PRIVATE_MEM_SLOTS
+> -#define KVM_PRIVATE_MEM_SLOTS 0
+> +#ifndef KVM_INTERNAL_MEM_SLOTS
+> +#define KVM_INTERNAL_MEM_SLOTS 0
+>  #endif
 
->@@ -457,6 +451,10 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->	u16 off = 0;
->	int num_mbs = 0;
->	int rc;
->+	bool doe_use_irq = false;
->+
->+	if (cxl_alloc_irq_vectors(cxlds))
+This rename belongs in a separate patch.
 
-if (!cxl_alloc_irq_vectors()), that is.
+>  #define KVM_MEM_SLOTS_NUM SHRT_MAX
+> -#define KVM_USER_MEM_SLOTS (KVM_MEM_SLOTS_NUM - KVM_PRIVATE_MEM_SLOTS)
+> +#define KVM_USER_MEM_SLOTS (KVM_MEM_SLOTS_NUM - KVM_INTERNAL_MEM_SLOTS)
+>  
+>  #ifndef __KVM_VCPU_MULTIPLE_ADDRESS_SPACE
+>  static inline int kvm_arch_vcpu_memslots_id(struct kvm_vcpu *vcpu)
+> @@ -1087,9 +1096,9 @@ enum kvm_mr_change {
+>  };
+>  
+>  int kvm_set_memory_region(struct kvm *kvm,
+> -			  const struct kvm_userspace_memory_region *mem);
+> +			  const struct kvm_user_mem_region *mem);
+>  int __kvm_set_memory_region(struct kvm *kvm,
+> -			    const struct kvm_userspace_memory_region *mem);
+> +			    const struct kvm_user_mem_region *mem);
+>  void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot);
+>  void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen);
+>  int kvm_arch_prepare_memory_region(struct kvm *kvm,
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index e10d131edd80..28cacd3656d4 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -103,6 +103,29 @@ struct kvm_userspace_memory_region {
+>  	__u64 userspace_addr; /* start of the userspace allocated memory */
+>  };
+>  
+> +struct kvm_userspace_memory_region_ext {
+> +	struct kvm_userspace_memory_region region;
+> +	__u64 private_offset;
+> +	__u32 private_fd;
+> +	__u32 pad1;
+> +	__u64 pad2[14];
+> +};
+> +
+> +#ifdef __KERNEL__
+> +/* Internal helper, the layout must match above user visible structures */
 
->+		doe_use_irq = true;
+It's worth explicity calling out which structureso this aliases.  And rather than
+add a comment about the layout needing to match that, enforce it in code. I
+personally wouldn't bother with an expolicit comment about the layout, IMO that's
+a fairly obvious implication of aliasing.
+
+/*
+ * kvm_user_mem_region is a kernel-only alias of kvm_userspace_memory_region_ext
+ * that "unpacks" kvm_userspace_memory_region so that KVM can directly access
+ * all fields from the top-level "extended" region.
+ */
+
+
+And I think it's in this patch that you missed a conversion to the alias, in the
+prototype for check_memory_region_flags() (looks like it gets fixed up later in
+the series).
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 0f81bf0407be..8765b334477d 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1466,7 +1466,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+        }
+ }
+
+-static int check_memory_region_flags(const struct kvm_userspace_memory_region *mem)
++static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+ {
+        u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+
+@@ -4514,6 +4514,33 @@ static int kvm_vm_ioctl_get_stats_fd(struct kvm *kvm)
+        return fd;
+ }
+
++#define SANITY_CHECK_MEM_REGION_FIELD(field)                                   \
++do {                                                                           \
++       BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=             \
++                    offsetof(struct kvm_userspace_memory_region, field));      \
++       BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=         \
++                    sizeof_field(struct kvm_userspace_memory_region, field));  \
++} while (0)
++
++#define SANITY_CHECK_MEM_REGION_EXT_FIELD(field)                                       \
++do {                                                                                   \
++       BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=                     \
++                    offsetof(struct kvm_userspace_memory_region_ext, field));          \
++       BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=                 \
++                    sizeof_field(struct kvm_userspace_memory_region_ext, field));      \
++} while (0)
++
++static void kvm_sanity_check_user_mem_region_alias(void)
++{
++       SANITY_CHECK_MEM_REGION_FIELD(slot);
++       SANITY_CHECK_MEM_REGION_FIELD(flags);
++       SANITY_CHECK_MEM_REGION_FIELD(guest_phys_addr);
++       SANITY_CHECK_MEM_REGION_FIELD(memory_size);
++       SANITY_CHECK_MEM_REGION_FIELD(userspace_addr);
++       SANITY_CHECK_MEM_REGION_EXT_FIELD(private_offset);
++       SANITY_CHECK_MEM_REGION_EXT_FIELD(private_fd);
++}
++
+ static long kvm_vm_ioctl(struct file *filp,
+                           unsigned int ioctl, unsigned long arg)
+ {
+@@ -4541,6 +4568,8 @@ static long kvm_vm_ioctl(struct file *filp,
+                unsigned long size;
+                u32 flags;
+
++               kvm_sanity_check_user_mem_region_alias();
++
+                memset(&mem, 0, sizeof(mem));
+
+                r = -EFAULT;
+
+> +struct kvm_user_mem_region {
+> +	__u32 slot;
+> +	__u32 flags;
+> +	__u64 guest_phys_addr;
+> +	__u64 memory_size;
+> +	__u64 userspace_addr;
+> +	__u64 private_offset;
+> +	__u32 private_fd;
+> +	__u32 pad1;
+> +	__u64 pad2[14];
+> +};
+> +#endif
+> +
+>  /*
+>   * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for userspace,
+>   * other bits are reserved for kvm internal use which are defined in
+> @@ -110,6 +133,7 @@ struct kvm_userspace_memory_region {
+>   */
+>  #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
+>  #define KVM_MEM_READONLY	(1UL << 1)
+> +#define KVM_MEM_PRIVATE		(1UL << 2)
+
+Hmm, KVM_MEM_PRIVATE is technically wrong now that a "private" memslot maps private
+and/or shared memory.  Strictly speaking, we don't actually need a new flag.  Valid
+file descriptors must be >=0, so the logic for specifying a memslot that can be
+converted between private and shared could be that "(int)private_fd < 0" means
+"not convertible", i.e. derive the flag from private_fd.
+
+And looking at the two KVM consumers of the flag, via kvm_slot_is_private(), they're
+both wrong.  Both kvm_faultin_pfn() and kvm_mmu_max_mapping_level() should operate
+on the _fault_, not the slot.  So it would actually be a positive to not have an easy
+way to query if a slot supports conversion.
+
+>  /* for KVM_IRQ_LINE */
+>  struct kvm_irq_level {
+
+...
+
+> +		if (flags & KVM_MEM_PRIVATE) {
+
+An added bonus of dropping KVM_MEM_PRIVATE is that these checks go away.
+
+> +			r = -EINVAL;
+> +			goto out;
+> +		}
+> +
+> +		size = sizeof(struct kvm_userspace_memory_region);
+> +
+> +		if (copy_from_user(&mem, argp, size))
+> +			goto out;
+> +
+> +		r = -EINVAL;
+> +		if ((flags ^ mem.flags) & KVM_MEM_PRIVATE)
+>  			goto out;
+>  
+> -		r = kvm_vm_ioctl_set_memory_region(kvm, &kvm_userspace_mem);
+> +		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+>  		break;
+>  	}
+>  	case KVM_GET_DIRTY_LOG: {
+> -- 
+> 2.25.1
+> 

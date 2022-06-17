@@ -2,165 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882D154F67D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3EA54F67E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382329AbiFQLM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S1382352AbiFQLM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381154AbiFQLMy (ORCPT
+        with ESMTP id S1380571AbiFQLMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 07:12:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 308941A04A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 04:12:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97581113E;
-        Fri, 17 Jun 2022 04:12:52 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7371A3F73B;
-        Fri, 17 Jun 2022 04:12:51 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 12:12:45 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, nicola.mazzucato@arm.com,
-        vincent.guittot@linaro.org, f.fainelli@gmail.com
-Subject: Re: [PATCH] firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES
- out-of-spec checks
-Message-ID: <Yqxhrd/wMmW1WkN0@e120937-lin>
-References: <20220616170347.2800771-1-cristian.marussi@arm.com>
- <5fa97307-19d7-a834-dbb9-c7001969a011@arm.com>
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922F322500;
+        Fri, 17 Jun 2022 04:12:53 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B53C4660179A;
+        Fri, 17 Jun 2022 12:12:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655464372;
+        bh=gW6UerJ1ORzjD0MbtZbHUrldkZVnFiwBi9ZNmW1eHC4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RaLfKMPnFOjxHSKNhZi9a076M0kae3pMwZPels+9MG7T2PpBuOzGeANIeecEnyxv1
+         yBq0dD6q91QPoRPUGw6NB5zX74ty0TcTp0AB8yQnuplI/SELLOWZyokBz6+om4u23l
+         RKzlH8jOExlvcCwKhsYVRBcuZmrI8jyLnCLPKDjtQ/W5gas0NcSQtLBRiiM0fEg0Om
+         wHHIM6Y7u2znG3dFXGhvqGroM3d/ZFqDqvJ8BrMXdApmuLpGuw5LcGWohiubucE6cj
+         YXtNoTcxvN8A5V4eH37yWm1aI9rOP5RxfVpebCKbsZHAw3y0p5/OvulpMCp3c9RNbe
+         f7V8MV84larPA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, wenst@chromium.org,
+        angelogioacchino.delregno@collabora.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] MediaTek Kompanio 1200 MT8195 - DisplayPort clocks fixes
+Date:   Fri, 17 Jun 2022 13:12:46 +0200
+Message-Id: <20220617111248.90505-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5fa97307-19d7-a834-dbb9-c7001969a011@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 07:02:49PM +0100, Robin Murphy wrote:
-> On 2022-06-16 18:03, Cristian Marussi wrote:
-> > A reply to CLOCK_DESCRIBE_RATES issued against a non rate-discrete clock
-> > should be composed of a triplet of rates descriptors (min/max/step)
-> > returned all in one reply message.
-> > 
-> > This is not always the case when dealing with some SCMI server deployed in
-> > the wild: relax such constraint while maintaining memory safety by checking
-> > carefully the returned payload size.
-> > 
-> > While at that cleanup a stale debug printout.
-> 
-> I know we're testing on the same platform so it's of limited value, but for
-> the record this does indeed make my display work again, so FWIW:
-> 
-> Tested-by: Robin Murphy <robin.murphy@arm.com>
-> 
-> Thanks for the quick turnaround!
-> Robin.
-> 
+This series fixes the two DPINTF clocks to propagate rate change
+requests to their own parent (and also fixes vdo1_dpintf's parent name).
 
-Thanks Robin.
+This is needed in order to stay clean in the DisplayPort driver and
+avoid adding (now useless) custom handling of clocks reparenting based
+on the wanted final clock rate.
 
-Testing is never enough :P
+Changes in v3:
+ - Fixed tags ordering.
 
-Thanks,
-Cristian
+AngeloGioacchino Del Regno (2):
+  clk: mediatek: clk-mt8195-vdo0: Set rate on vdo0_dp_intf0_dp_intf's
+    parent
+  clk: mediatek: clk-mt8195-vdo1: Reparent and set rate on vdo1_dpintf's
+    parent
 
-> > Fixes: 7bc7caafe6b1 ("firmware: arm_scmi: Use common iterators in the clock protocol")
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >   drivers/firmware/arm_scmi/clock.c     | 26 +++++++++++++++++++++++++-
-> >   drivers/firmware/arm_scmi/driver.c    |  1 +
-> >   drivers/firmware/arm_scmi/protocols.h |  3 +++
-> >   3 files changed, 29 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
-> > index c7a83f6e38e5..3ed7ae0d6781 100644
-> > --- a/drivers/firmware/arm_scmi/clock.c
-> > +++ b/drivers/firmware/arm_scmi/clock.c
-> > @@ -194,6 +194,7 @@ static int rate_cmp_func(const void *_r1, const void *_r2)
-> >   }
-> >   struct scmi_clk_ipriv {
-> > +	struct device *dev;
-> >   	u32 clk_id;
-> >   	struct scmi_clock_info *clk;
-> >   };
-> > @@ -223,6 +224,29 @@ iter_clk_describe_update_state(struct scmi_iterator_state *st,
-> >   	st->num_returned = NUM_RETURNED(flags);
-> >   	p->clk->rate_discrete = RATE_DISCRETE(flags);
-> > +	/* Warn about out of spec replies ... */
-> > +	if (!p->clk->rate_discrete &&
-> > +	    (st->num_returned != 3 || st->num_remaining != 0)) {
-> > +		dev_warn(p->dev,
-> > +			 "Out-of-spec CLOCK_DESCRIBE_RATES reply for %s - returned:%d remaining:%d rx_len:%zd\n",
-> > +			 p->clk->name, st->num_returned, st->num_remaining,
-> > +			 st->rx_len);
-> > +
-> > +		/*
-> > +		 * A known quirk: a triplet is returned but num_returned != 3
-> > +		 * Check for a safe payload size and fix.
-> > +		 */
-> > +		if (st->num_returned != 3 && st->num_remaining == 0 &&
-> > +		    st->rx_len == sizeof(*r) + sizeof(__le32) * 2 * 3) {
-> > +			st->num_returned = 3;
-> > +			st->num_remaining = 0;
-> > +		} else {
-> > +			dev_err(p->dev,
-> > +				"Cannot fix out-of-spec reply !\n");
-> > +			return -EPROTO;
-> > +		}
-> > +	}
-> > +
-> >   	return 0;
-> >   }
-> > @@ -255,7 +279,6 @@ iter_clk_describe_process_response(const struct scmi_protocol_handle *ph,
-> >   		*rate = RATE_TO_U64(r->rate[st->loop_idx]);
-> >   		p->clk->list.num_rates++;
-> > -		//XXX dev_dbg(ph->dev, "Rate %llu Hz\n", *rate);
-> >   	}
-> >   	return ret;
-> > @@ -275,6 +298,7 @@ scmi_clock_describe_rates_get(const struct scmi_protocol_handle *ph, u32 clk_id,
-> >   	struct scmi_clk_ipriv cpriv = {
-> >   		.clk_id = clk_id,
-> >   		.clk = clk,
-> > +		.dev = ph->dev,
-> >   	};
-> >   	iter = ph->hops->iter_response_init(ph, &ops, SCMI_MAX_NUM_RATES,
-> > diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-> > index c1922bd650ae..8b7ac6663d57 100644
-> > --- a/drivers/firmware/arm_scmi/driver.c
-> > +++ b/drivers/firmware/arm_scmi/driver.c
-> > @@ -1223,6 +1223,7 @@ static int scmi_iterator_run(void *iter)
-> >   		if (ret)
-> >   			break;
-> > +		st->rx_len = i->t->rx.len;
-> >   		ret = iops->update_state(st, i->resp, i->priv);
-> >   		if (ret)
-> >   			break;
-> > diff --git a/drivers/firmware/arm_scmi/protocols.h b/drivers/firmware/arm_scmi/protocols.h
-> > index c679f3fb8718..51c31379f9b3 100644
-> > --- a/drivers/firmware/arm_scmi/protocols.h
-> > +++ b/drivers/firmware/arm_scmi/protocols.h
-> > @@ -179,6 +179,8 @@ struct scmi_protocol_handle {
-> >    * @max_resources: Maximum acceptable number of items, configured by the caller
-> >    *		   depending on the underlying resources that it is querying.
-> >    * @loop_idx: The iterator loop index in the current multi-part reply.
-> > + * @rx_len: Size in bytes of the currenly processed message; it can be used by
-> > + *	    the user of the iterator to verify a reply size.
-> >    * @priv: Optional pointer to some additional state-related private data setup
-> >    *	  by the caller during the iterations.
-> >    */
-> > @@ -188,6 +190,7 @@ struct scmi_iterator_state {
-> >   	unsigned int num_remaining;
-> >   	unsigned int max_resources;
-> >   	unsigned int loop_idx;
-> > +	size_t rx_len;
-> >   	void *priv;
-> >   };
+ drivers/clk/mediatek/clk-mt8195-vdo0.c | 7 ++++++-
+ drivers/clk/mediatek/clk-mt8195-vdo1.c | 6 +++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+-- 
+2.35.1
+

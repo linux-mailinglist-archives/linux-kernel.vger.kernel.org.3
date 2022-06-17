@@ -2,138 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B7C54FEEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB3B54FF08
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383673AbiFQUmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S1383722AbiFQUnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383703AbiFQUmN (ORCPT
+        with ESMTP id S1383611AbiFQUmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:42:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448E06832C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:39:56 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id m68-20020a253f47000000b006683bd91962so4675739yba.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=hwEgWIR0X85RGbQAj+svKs+3iD8LEQXAbh8uTtcQjN8=;
-        b=GYpZo5sqQ8SQSD4HyIyKmvltTLLdATTj+vC4WuZ1I0yMVvJFKVCF4SN8OiKWc/ww1M
-         Dja/Suxxoj05vcezMVDShUNx64G6Ltu3JLQM0haK1k2UMD2SmyWRQyljdU6ENT+Qsulr
-         LKaM+46LNEBcDeSNLAY4vMtfCl7R34EJE/u15ce+vn4HC8+L2f12VUtYJXxMD1z5PdWK
-         dYRbMnUmEuCHAjqdL2aaa9jBEClpUPug0WPGRe6Ypm64iBu6exPbyFoOuGutn5GbRkni
-         iqJZrgId1nAWlErB89kLdJa1Erc85Uj9PDRP8BhF13MWJplaJLHyQXvm8BvVxYsbPWRd
-         Td3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=hwEgWIR0X85RGbQAj+svKs+3iD8LEQXAbh8uTtcQjN8=;
-        b=BQ2ejOK/xRj683Kiv8tLzEGGLWFoMQUjbHMVD3GfGT448GZ/KuqjsYL+XqdHOW9g5z
-         BNCCHPJJsjv0vdYLt1CjhUc4/CA4uKhnPD3/JyxTRs4Sn0NtMFFJnsn6fHdm7kA1pWq/
-         xzDWNxTxmdES2X8xeEADJngTbM2ptFNCwA6nyCOUKWiWtRjayQ5SDgp5Rxr7hHfrqDNP
-         nZ2r180dAIMvifNpUi4EAk9zVLPk/RCg1vVJWUQX5JjUvDjRK9eyhO8yXO+rgISKtwig
-         0pzvxiOuCcvHq8kqzYgZ65eESXbaeLq3Jl/mkawVE5DEaO+tACCq03yyLqFx7nmxIZP6
-         MbqA==
-X-Gm-Message-State: AJIora+9d1zTnF/9QHv6/uhrBGmInO1kpNVp8sd4pQ2b3jhf5bC123ov
-        hcH8DbAQa+3YNTMZJbfqZKyVI4SeQR6CvBXcz/Y=
-X-Google-Smtp-Source: AGRyM1vhWQDkQUMsanYQiT8DtJL648P2moNgLjHrALU55AH+aSb47mlB2poP2REKbLw5J+IRKKSwbpYUjSr4aNLSuKo=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:7e0c:dc00:6576:994e])
- (user=ndesaulniers job=sendgmr) by 2002:a0d:df90:0:b0:30c:2910:1b21 with SMTP
- id i138-20020a0ddf90000000b0030c29101b21mr14025781ywe.223.1655498394201; Fri,
- 17 Jun 2022 13:39:54 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 13:39:48 -0700
-Message-Id: <20220617203948.3714905-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1655498387; l=2636;
- s=20211004; h=from:subject; bh=ufYK5a8BPMKRRuKsgMjeRCb9dbi3hV+UvS6IFEpaf8U=;
- b=9/ATX7BxXQb89TKRCMMKH7sZW7gJbC7H4+0wHvip644aAWcz8gXewtghL0H78X35puGlVEg6no/J
- 6UX1kw7VCGJ01v+7imdOmTpBrKVmLY4c/tera3lBspgRRIt5hJXR
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] scripts/Makefile.clang: set --target for host based on make -v
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 17 Jun 2022 16:42:51 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDE15DBCB;
+        Fri, 17 Jun 2022 13:40:52 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 9AC5D81C3D;
+        Fri, 17 Jun 2022 20:40:50 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id EC95481BD3;
+        Fri, 17 Jun 2022 20:40:49 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655498450; a=rsa-sha256;
+        cv=none;
+        b=Tpd2yyDntqlMU2V3crqNRy7l32e+tOrYkOTu672CLdYmdsoRMG5tAdB+AZd5NormH7moWJ
+        4l1DLWwWf5oK1u4MfN6knukpTeluw0VpFle8IYOzmTbJDOsMyiMf6uJA/VNSgEU2/igfFO
+        L/U3sNXP+JOlTGr0WFpJdbv3+yluVYSfWOTnzWRgXg26i+0Lgg+x5hf83vzw50ZhoWnff+
+        Vzcm3pT9QqEsaPCDL1VFqzAWby+YY8fkn/lqz+AtabchRpNPhTXnUlZbbOiELOHB4EclbV
+        PULlOG3AnINgs30hB8Ff44aojerMmN0V/2KeOrTs3ztnvOtsMqsrGMX26yGB3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1655498450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=lykkFNFOZt2FNRu8ye1JiltrQXiKX3YS6Z0KwMe5t+A=;
+        b=a4GUn6f89hPru0lAdg6fp0olXpgGOm2LHGdc80pJuKw4cT+sDqQa5eVXOtdCK47fW5bOA8
+        1YvjD6a68faw8UM92qx/eYAVv4sX/o5d5iIKaV8I+dbcAT7Bz1kFKKP5LWItlnPfyYGUTR
+        fhNVSIsKSmZMajs+28vY1GSL/m6/tJprtQI9nwTp3bn/cknWUwsUfwFnGME4Z8dQKYedRi
+        hlNEPVbGpAjOPc4ZgvCLEbZM1jOwVHa6JOo0sY33xs2a3+6CJu9WnlRaIN4eQD2RLA0aDu
+        B3w40CsJ4oyY47JRbKeYgDuUctzvIR9+iMjhh6uWSJOqBNqOugO6BsenbvpORQ==
+ARC-Authentication-Results: i=1;
+        rspamd-848669fb87-5ggpz;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Dime-Bubble: 075ab45a0c46bfcc_1655498450381_1563642052
+X-MC-Loop-Signature: 1655498450381:944370204
+X-MC-Ingress-Time: 1655498450381
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.115.45.51 (trex/6.7.1);
+        Fri, 17 Jun 2022 20:40:50 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LPrXc6zkPz23;
+        Fri, 17 Jun 2022 13:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1655498449;
+        bh=lykkFNFOZt2FNRu8ye1JiltrQXiKX3YS6Z0KwMe5t+A=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=hS7tj7gUaj5TRliMGlbeoU1+ope3BBKKY5DSoTT2PctnfK1AO16RI7XgznA2G8H0H
+         ru+BrpZSdfz2JWdMKXeaqDiVEHcCr7IbkMvHudjTx4blAIKUaSyskAtCdkRmu/P0yX
+         joOrhJ24RDAmqCFRdJVtEZfhDdFNfN8UrXZu9+ywIMUon1fFbKPck2Q6FJYns9IQEY
+         VjhhcPJnLwZJhdMN4WnIH4en1Winrd2fixTLhVcTKoa8/X7xHlxjQECIkV2YESeQxw
+         jcNBwxw2d7YrU4nDJbWeQL3pM7CahQD8p3lLV5JzxXUyfxi/ARt5yfEEfD6Nv10BMH
+         dhugcMvqb7Zbg==
+Date:   Fri, 17 Jun 2022 13:40:46 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     "ira.weiny@intel.com" <ira.weiny@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org, a.manzanares@samsung.com
+Subject: Re: [PATCH v11 4/8] cxl/pci: Create PCI DOE mailbox's for memory
+ devices
+Message-ID: <20220617204046.qdkza6iemkfv2aze@offworld>
+References: <20220610202259.3544623-1-ira.weiny@intel.com>
+ <20220610202259.3544623-5-ira.weiny@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220610202259.3544623-5-ira.weiny@intel.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're working on providing statically linked images of clang to host on
-kernel.org. We're building them in Alpine Linux based Docker containers,
-which are MUSL based systems.
+On Fri, 10 Jun 2022, ira.weiny@intel.com wrote:
+>+++ b/drivers/cxl/cxlmem.h
+>@@ -191,6 +191,8 @@ struct cxl_endpoint_dvsec_info {
+>  * @component_reg_phys: register base of component registers
+>  * @info: Cached DVSEC information about the device.
+>  * @serial: PCIe Device Serial Number
 
-In order to keep bootstrapping simpler, I'd like for them to have an
-implicit default --target of x86_64-alpine-linux-musl (set via LLVM's
-cmake variable LLVM_DEFAULT_TARGET_TRIPLE).
+Missing doc:
 
-Similarly, if one were to use a different build of clang meant for a
-glibc or bionic based system on a MUSL based host, we'd prefer to use
-the correct MUSL based triple for target hosts.
+@doe_use_irq: Use interrupt vectors for DOEs over polling.
 
-Borrowed from the Zen of Python: Explicit is better than implicit. Let's
-be explicit about the target triple for HOSTCC when building with
-HOSTCC=clang or LLVM=1.
+However introducing such flags is not pretty, and this is only used by
+devm_cxl_pci_create_doe(). Do we really need it? See below.
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Makefile               |  3 +--
- scripts/Makefile.clang | 10 ++++++++++
- 2 files changed, 11 insertions(+), 2 deletions(-)
+>+ * @doe_mbs: PCI DOE mailbox array
+>+ * @num_mbs: Number of DOE mailboxes
+>  * @mbox_send: @dev specific transport for transmitting mailbox commands
+>  *
+>  * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
+>@@ -224,6 +226,10 @@ struct cxl_dev_state {
+>	resource_size_t component_reg_phys;
+>	u64 serial;
+>
+>+	bool doe_use_irq;
+>+	struct pci_doe_mb **doe_mbs;
+>+	int num_mbs;
+>+
+>	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
+> };
+>
+>diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+>index 5a0ae46d4989..72c7b535f5df 100644
+>--- a/drivers/cxl/pci.c
+>+++ b/drivers/cxl/pci.c
+>@@ -8,6 +8,7 @@
+> #include <linux/mutex.h>
+> #include <linux/list.h>
+> #include <linux/pci.h>
+>+#include <linux/pci-doe.h>
+> #include <linux/io.h>
+> #include "cxlmem.h"
+> #include "cxlpci.h"
+>@@ -386,6 +387,116 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+>	return rc;
+> }
+>
+>+static void cxl_pci_free_irq_vectors(void *data)
+>+{
+>+	pci_free_irq_vectors(data);
+>+}
+>+
+>+static void cxl_doe_destroy_mb(void *ds)
+>+{
+>+	struct cxl_dev_state *cxlds = ds;
+>+	int i;
+>+
+>+	for (i = 0; i < cxlds->num_mbs; i++) {
+>+		if (cxlds->doe_mbs[i])
+>+			pci_doe_destroy_mb(cxlds->doe_mbs[i]);
+>+	}
+>+}
+>+
+>+static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+>+{
+>+	struct device *dev = cxlds->dev;
+>+	struct pci_dev *pdev = to_pci_dev(dev);
+>+	int max_irqs = 0;
+>+	int off = 0;
+>+	int rc;
+>+
+>+	/* Account for all the DOE vectors needed */
+>+	pci_doe_for_each_off(pdev, off) {
+>+		int irq = pci_doe_get_irq_num(pdev, off);
+>+
+>+		if (irq < 0)
+>+			continue;
+>+		max_irqs = max(max_irqs, irq + 1);
+>+	}
+>+
+>+	if (!max_irqs)
+>+		return;
+>+
+>+	cxlds->doe_use_irq = false;
 
-diff --git a/Makefile b/Makefile
-index 1a6678d817bd..87712d9b043c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -600,10 +600,9 @@ endif
- # CC_VERSION_TEXT is referenced from Kconfig (so it needs export),
- # and from include/config/auto.conf.cmd to detect the compiler upgrade.
- CC_VERSION_TEXT = $(subst $(pound),,$(shell LC_ALL=C $(CC) --version 2>/dev/null | head -n 1))
-+HOSTCC_VERSION_TEXT = $(subst $(pound),,$(shell LC_ALL=C $(HOSTCC) --version 2>/dev/null | head -n 1))
- 
--ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
- include $(srctree)/scripts/Makefile.clang
--endif
- 
- # Include this also for config targets because some architectures need
- # cc-cross-prefix to determine CROSS_COMPILE.
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 87285b76adb2..a4505cd62d7b 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -1,3 +1,4 @@
-+ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
- # Individual arch/{arch}/Makefiles should use -EL/-EB to set intended
- # endianness and -m32/-m64 to set word size based on Kconfigs instead of
- # relying on the target triple.
-@@ -39,3 +40,12 @@ CLANG_FLAGS	+= -Werror=ignored-optimization-argument
- KBUILD_CFLAGS	+= $(CLANG_FLAGS)
- KBUILD_AFLAGS	+= $(CLANG_FLAGS)
- export CLANG_FLAGS
-+endif
+Is this unnecessary, it should already be 0 per the devm_kzalloc().
+
+>+
+>+	/*
+>+	 * Allocate enough vectors for the DOE's
+>+	 */
+>+	rc = pci_alloc_irq_vectors(pdev, max_irqs, max_irqs, PCI_IRQ_MSI |
+>+							     PCI_IRQ_MSIX);
+>+	if (rc != max_irqs) {
+>+		pci_err(pdev, "Not enough interrupts; use polling\n");
+>+		/* Some got allocated; clean them up */
+>+		if (rc > 0)
+>+			cxl_pci_free_irq_vectors(pdev);
+>+		return;
+>+	}
+>+
+>+	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
+>+	if (rc)
+>+		return;
+>+
+>+	cxlds->doe_use_irq = true;
+>+}
+>+
+>+/**
+>+ * devm_cxl_pci_create_doe - Scan and set up DOE mailboxes
+>+ *
+>+ * @cxlds: The CXL device state
+>+ */
+>+static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+>+{
+>+	struct device *dev = cxlds->dev;
+>+	struct pci_dev *pdev = to_pci_dev(dev);
+>+	u16 off = 0;
+>+	int num_mbs = 0;
+>+	int rc;
+>+
+>+	pci_doe_for_each_off(pdev, off)
+>+		num_mbs++;
+>+
+>+	if (!num_mbs) {
+>+		pci_dbg(pdev, "0 DOE mailbox's found\n");
+>+		return;
+>+	}
+>+
+>+	cxlds->doe_mbs = devm_kcalloc(dev, num_mbs, sizeof(*cxlds->doe_mbs),
+>+				      GFP_KERNEL);
+>+	if (!cxlds->doe_mbs)
+>+		return;
+>+
+>+	pci_doe_for_each_off(pdev, off) {
+>+		struct pci_doe_mb *doe_mb;
+>+		int irq = -1;
+>+
+>+		if (cxlds->doe_use_irq)
+>+			irq = pci_doe_get_irq_num(pdev, off);
+>+
+>+		doe_mb = pci_doe_create_mb(pdev, off, irq);
+>+		if (IS_ERR(doe_mb)) {
+>+			pci_err(pdev,
+>+				"Failed to create MB object for MB @ %x\n",
+>+				off);
+>+			doe_mb = NULL;
+>+		}
+>+
+>+		cxlds->doe_mbs[cxlds->num_mbs] = doe_mb;
+>+		cxlds->num_mbs++;
+>+	}
+>+
+>+	rc = devm_add_action_or_reset(dev, cxl_doe_destroy_mb, cxlds);
+>+	if (rc)
+>+		return;
+>+
+>+	pci_info(pdev, "Configured %d DOE mailbox's\n", cxlds->num_mbs);
+>+}
+>+
+> static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> {
+>	struct cxl_register_map map;
+>@@ -434,6 +545,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>
+>	cxlds->component_reg_phys = cxl_regmap_to_base(pdev, &map);
+>
+>+	cxl_alloc_irq_vectors(cxlds);
+>+	devm_cxl_pci_create_doe(cxlds);
+
+Should cxl_alloc_irq_vectors() just be called directly from devm_cxl_pci_create_doe()
+instead? Also if devm_cxl_pci_create_doe() fails (say ENOMEM), why do we
+bother continuing the cxl_pci probing?
+
+Thanks,
+Davidlohr
+
+------
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index ce5b00f3ebcb..44098c785a8b 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -230,7 +230,6 @@ struct cxl_dev_state {
+	resource_size_t component_reg_phys;
+	u64 serial;
+
+-	bool doe_use_irq;
+	struct pci_doe_mb **doe_mbs;
+	int num_mbs;
+
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index 72c7b535f5df..47c3741f7768 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -403,7 +403,7 @@ static void cxl_doe_destroy_mb(void *ds)
+	}
+  }
+
+-static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
++static int cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+  {
+	struct device *dev = cxlds->dev;
+	struct pci_dev *pdev = to_pci_dev(dev);
+@@ -421,9 +421,7 @@ static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+	}
+
+	if (!max_irqs)
+-		return;
+-
+-	cxlds->doe_use_irq = false;
++		return -ENOMEM;
+
+	/*
+	 * Allocate enough vectors for the DOE's
+@@ -435,14 +433,10 @@ static void cxl_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+		/* Some got allocated; clean them up */
+		if (rc > 0)
+			cxl_pci_free_irq_vectors(pdev);
+-		return;
++		return -ENOMEM;
+	}
+
+-	rc = devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
+-	if (rc)
+-		return;
+-
+-	cxlds->doe_use_irq = true;
++	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
+  }
+
+  /**
+@@ -457,6 +451,10 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+	u16 off = 0;
+	int num_mbs = 0;
+	int rc;
++	bool doe_use_irq = false;
 +
-+# If HOSTCC is clang, set the host target triple explicitly; do not rely on
-+# implicit defaults.
-+ifneq ($(findstring clang,$(HOSTCC_VERSION_TEXT)),)
-+HOST_TRIPLE		:= --target=$(shell make --version | head -n2 | tail -n1 | cut -d ' ' -f 3)
-+KBUILD_HOSTCFLAGS	+= $(HOST_TRIPLE)
-+KBUILD_HOSTLDFLAGS	+= $(HOST_TRIPLE)
-+endif
++	if (cxl_alloc_irq_vectors(cxlds))
++		doe_use_irq = true;
 
-base-commit: 79fe0f863f920c5fcf9dea61676742f813f0b7a6
--- 
-2.36.1.476.g0c4daa206d-goog
+	pci_doe_for_each_off(pdev, off)
+		num_mbs++;
+@@ -475,7 +473,7 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+		struct pci_doe_mb *doe_mb;
+		int irq = -1;
 
+-		if (cxlds->doe_use_irq)
++		if (doe_use_irq)
+			irq = pci_doe_get_irq_num(pdev, off);
+
+		doe_mb = pci_doe_create_mb(pdev, off, irq);
+@@ -545,7 +543,6 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+
+	cxlds->component_reg_phys = cxl_regmap_to_base(pdev, &map);
+
+-	cxl_alloc_irq_vectors(cxlds);
+	devm_cxl_pci_create_doe(cxlds);
+
+	rc = cxl_pci_setup_mailbox(cxlds);

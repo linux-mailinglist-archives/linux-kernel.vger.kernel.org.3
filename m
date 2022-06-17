@@ -2,125 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CBF54FDCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54EC54FDC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244071AbiFQTjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S237659AbiFQTj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243415AbiFQTjR (ORCPT
+        with ESMTP id S231890AbiFQTj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:39:17 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39A531513
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:39:15 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id u99so8841696ybi.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tSqgzYhEhTmwCEZgsVFvzKQzzLPTMjzLV3IQghkxetY=;
-        b=neswoRsAQx+DPNdXI7N2SPE05WwMU+uwfI85AVZh6CnkYRFLwKHV8ZmksHQqhHfuIx
-         z0cv4zvkzCe020PpGv/LDF19hAEJdyXd7yK+qO8vYLfurg+p6neDChVW/6e/BWjHTZR6
-         Q61wm/EXQewGecJDJiSpJp+r/vGl9MRttd8OgdHLNHMwYkoJVAnxDEPXpk2nmtOYy5Aq
-         hvC9iJQCU0mvFP9tl6siWpukTWE8zNpCEHsujvoZJ/3VE8jCRzQxoMwVmF69WDQ8Wcjy
-         yor2SgqP+hnOQXJf40kLOEK1RcWbTaxEPar/5c2mcT3SlauMqmh3pZKo2G4cXFW/12Gm
-         sx/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tSqgzYhEhTmwCEZgsVFvzKQzzLPTMjzLV3IQghkxetY=;
-        b=XRnich4Yigf7gCwX3aArA+cCj3J2PfbY6KiNMrIg2QVZQPQzIAqClS2nh8/JK/t09t
-         is+O/lF30JxjCP2gRJgwB2Xk9f7oXPyOBVlnDIJTlzRWPgWK7eoZAEzFlb8MSxKPhcN/
-         xLuIOjazu+8XvRUGKylZB+Hd9QXzhxFiEfHM3Aoe0qA95acKHOjQkTL8jFdS7+WeToR0
-         kRb24mQv4unpceDzXgWc2D0TfJBzL/poaQ/lzcCn2KL1M85lETrMssMkNkPQ7j8fjlcw
-         fnWiwuNjDeI8uYCXjjAyl2qKQMiLzM+w1kjG5GvIbMoAKH2T+Z5uGOKRGd44y/adFdTZ
-         Wn3A==
-X-Gm-Message-State: AJIora/fVq2T62SdQ7UvO75I2+g9JIoo/Aq22745kWGZCHUUVXk87qq7
-        H9NCZRSwODz7Pic8YKGEmafOnH8q/Ypt8hAqVWw43Q==
-X-Google-Smtp-Source: AGRyM1uTJYHzEb6jbhMK4VZbcJr10IsBP1JuFLAet7k0WsaObA+7k08tIH+87mb9YO8lSxTUbLq342fgIPulsyakhB0=
-X-Received: by 2002:a25:8181:0:b0:668:c835:eb7c with SMTP id
- p1-20020a258181000000b00668c835eb7cmr3245468ybk.598.1655494754702; Fri, 17
- Jun 2022 12:39:14 -0700 (PDT)
+        Fri, 17 Jun 2022 15:39:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CF753E22;
+        Fri, 17 Jun 2022 12:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655494796; x=1687030796;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5SgFd7WkR3Wqzp/vk0OtAaks+k5JfvTv93sayUfSxWw=;
+  b=Z+knRYh8YcCiIsKkymh6qnoUN65UV14wBTIh/3XTHtPo47VWSVsCXxPE
+   XISATpq9nSjv59EjJ/f8VG9erv+7hzcD0GmDpFdi5llXq0KRFcZDlbsxw
+   jMOPKIJZDpJCLFjzFwe00mKknquJMHPTsU0KKXZc8lcziS1B/OPemsoB1
+   Zs7opteSCH1a0sR7/RzqUjxqqIgkYxw8E7uzm/4aPRMLZ2PZ4Gl9Sg0I/
+   Gtw3O5/MShlQrZ8Al/yLSuzgfz3IbPZSeKTtJ4APqkzwArCvV7f/xe86f
+   GgxGPgmvYe7hEpdRKBAadOPVYOeS+2ded3/561zEDO+P/eTO7JBOjB0cS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343557983"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="343557983"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:39:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="642160152"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Jun 2022 12:39:53 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Hov-000Pi5-AF;
+        Fri, 17 Jun 2022 19:39:53 +0000
+Date:   Sat, 18 Jun 2022 03:39:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
+ unused variable 'mtk_mdp_comp_dt_ids'
+Message-ID: <202206180318.LDlpyiIW-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
- <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net> <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
- <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
- <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com> <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
- <7499dd05-30d1-669c-66b4-5cb06452b476@redhat.com> <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
- <YqzQKER4JRoudTJE@hirez.programming.kicks-ass.net> <CANn89iKO1koPa5R_mvK0k2dkFaq+F0PgcbvpVt+JpzzR5xsu6g@mail.gmail.com>
- <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
- <CANn89i+wBM+ewcP9u+ZWDqv3zQeK7ovKB+YJf9S6Om5QkqhLHA@mail.gmail.com> <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com>
-In-Reply-To: <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 17 Jun 2022 21:39:03 +0200
-Message-ID: <CANn89iJXeUJRV2+8reUdaeARxYPPbCoG+9atmRFfy4kv0XX00A@mail.gmail.com>
-Subject: Re: [PATCH] locking/rwlocks: do not starve writers
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 9:35 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Jun 17, 2022 at 2:25 PM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > Interesting...
-> >
-> >  I think getrusage(RUSAGE_SELF) is blocking interrupts in the
-> > possible long loop:
->
-> Yeah, that looks bad.
->
-> It needs that interrupt disable due to sighand->siglock, but normally
-> we would expect to *not* have a big loop inside the siglock.
->
-> Nasty.
->
-> I wonder if this is possibly a situation where we should actually make
-> siglock be a rwlock.
->
-> But considering that this RUSAGE_SELF is hopefully a special case,
-> maybe we could write it differently.
->
-> Instead of taking the sighand lock, we might be able to iterate just
-> over the regular thread list (using the tasklist lock), and then do
-> the "does sighand match" as a one-off check in
-> accumulate_thread_rusage().
->
-> It's not like we even really need that strict locking there, I suspect.
->
-> Anyway, I should have noted in my previous email that my "rwlock is
-> often not the win you'd think it is" that that is only true for this
-> *spinning* rwlock.
->
-> For the actual sleeping reader-writer lock (down_read/down_write and
-> friends), the whole "you can have multiple readers" is often a *huge*
-> deal and very central to using a rwlock. It's literally just the
-> spinning one that is often better as a spinlock unless you have those
-> magical reasons to use it.
->
+Hi Mauro,
 
-I am converting RAW sockets to RCU.
+FYI, the error/warning still remains.
 
-We will likely need to use RCU in place of rwlock in most networking code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   274295c6e53f8b8b8dfa8b24a3fcb8a9d670c22c
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   3 months ago
+config: mips-randconfig-c004-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180318.LDlpyiIW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+
+:::::: The code at line 31 was first introduced by commit
+:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
+
+:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

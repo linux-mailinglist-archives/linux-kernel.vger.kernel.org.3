@@ -2,94 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FF554F80C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A6B54F80F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381848AbiFQNAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S1382425AbiFQNBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiFQNAt (ORCPT
+        with ESMTP id S1382224AbiFQNBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:00:49 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABAF5639E;
-        Fri, 17 Jun 2022 06:00:47 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25HD0X4N098085;
-        Fri, 17 Jun 2022 08:00:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655470833;
-        bh=qMt+eqdqMqmv6B0S+kHhjsC9CezQb77SSLn3IbZZsAA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=RZBBKPTclbfOlKlnZzDgDUpMCCC9JFF0kiREYVpeZzk0B0pWgfYynxU8a6Cg/zp1S
-         8B7Anwa2oCFsnZrmVs5C0UK+K6KW/DAShjPX7Kokh4BQIcnBZEG/Xz67QJW8TIm1aa
-         3FbrxfbkkCA/UuJmfopsf+ByZxgy+E52fdOe07dc=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25HD0XaC041957
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jun 2022 08:00:33 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 08:00:32 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 08:00:32 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25HD0WwN114708;
-        Fri, 17 Jun 2022 08:00:32 -0500
-Date:   Fri, 17 Jun 2022 08:00:32 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, <arm@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] arm64: dts: ti: adjust whitespace around '='
-Message-ID: <20220617130032.ihevrk47sbhbwnbn@diner>
-References: <20220526204139.831895-1-krzysztof.kozlowski@linaro.org>
- <ba0ae6b9-c66d-81a3-f324-79efb4455ea7@linaro.org>
+        Fri, 17 Jun 2022 09:01:34 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A5A56B00;
+        Fri, 17 Jun 2022 06:01:32 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPfLQ5030z6GDCt;
+        Fri, 17 Jun 2022 21:01:18 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 15:01:30 +0200
+Received: from localhost (10.81.209.131) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Fri, 17 Jun
+ 2022 14:01:29 +0100
+Date:   Fri, 17 Jun 2022 14:01:25 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command
+ support
+Message-ID: <20220617140125.0000081e@Huawei.com>
+In-Reply-To: <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+        <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ba0ae6b9-c66d-81a3-f324-79efb4455ea7@linaro.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.209.131]
+X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13:39-20220616, Krzysztof Kozlowski wrote:
-> On 26/05/2022 13:41, Krzysztof Kozlowski wrote:
-> > Fix whitespace coding style: use single space instead of tabs or
-> > multiple spaces around '=' sign in property assignment.  No functional
-> > changes (same DTB).
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > ---
-> > 
-> > Output compared with dtx_diff and fdtdump.
+On Tue, 14 Jun 2022 17:10:27 -0700
+alison.schofield@intel.com wrote:
+
+> From: Alison Schofield <alison.schofield@intel.com>
 > 
-> Hi Nishanth,
+> CXL devices that support persistent memory maintain a list of locations
+> that are poisoned or result in poison if the addresses are accessed by
+> the host.
 > 
-> Are you ok with the patches? Any comments?
+> Per the spec (CXL 2.0 8.2.8.5.4.1), the device returns this Poison
+> list as a set of  Media Error Records that include the source of the
+> error, the starting device physical address and length. The length is
+> the number of adjacent DPAs in the record and is in units of 64 bytes.
+> 
+> Retrieve the list and log each Media Error Record as a trace event of
+> type cxl_poison_list.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> ---
+ 
+> +int cxl_mem_get_poison_list(struct device *dev)
+> +{
+> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	struct cxl_mbox_poison_payload_out *po;
+> +	struct cxl_mbox_poison_payload_in pi;
+> +	int nr_records = 0;
+> +	int rc, i;
+> +
+> +	if (range_len(&cxlds->pmem_range)) {
+> +		pi.offset = cpu_to_le64(cxlds->pmem_range.start);
+> +		pi.length = cpu_to_le64(range_len(&cxlds->pmem_range));
+> +	} else {
+> +		return -ENXIO;
+> +	}
+> +
+> +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
+> +	if (!po)
+> +		return -ENOMEM;
+> +
+> +	do {
+> +		rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_POISON, &pi,
+> +				       sizeof(pi), po, cxlds->payload_size);
+> +		if (rc)
+> +			goto out;
+> +
+> +		if (po->flags & CXL_POISON_FLAG_OVERFLOW) {
+> +			time64_t o_time = le64_to_cpu(po->overflow_timestamp);
+> +
+> +			dev_err(dev, "Poison list overflow at %ptTs UTC\n",
+> +				&o_time);
+> +			rc = -ENXIO;
+> +			goto out;
+> +		}
+> +
+> +		if (po->flags & CXL_POISON_FLAG_SCANNING) {
+> +			dev_err(dev, "Scan Media in Progress\n");
+> +			rc = -EBUSY;
+> +			goto out;
+> +		}
+> +
+> +		for (i = 0; i < le16_to_cpu(po->count); i++) {
+> +			u64 addr = le64_to_cpu(po->record[i].address);
+> +			u32 len = le32_to_cpu(po->record[i].length);
+> +			int source = FIELD_GET(CXL_POISON_SOURCE_MASK, addr);
+> +
+> +			if (!CXL_POISON_SOURCE_VALID(source)) {
+> +				dev_dbg(dev, "Invalid poison source %d",
+> +					source);
+> +				source = CXL_POISON_SOURCE_INVALID;
+> +			}
+> +
+> +			trace_cxl_poison_list(dev, source, addr, len);
+> +		}
+> +
+> +		/* Protect against an uncleared _FLAG_MORE */
+> +		nr_records = nr_records + le16_to_cpu(po->count);
+> +		if (nr_records >= cxlds->poison_max)
+
+If this happens and _FLAG_MORE is set (it will occur anyway currently
+if we happen to have poison_max records - I hit this in QEMU because
+until now default of poison_max == 0)
+then we should spit out an error message as I think that means the
+hardware is broken.
 
 
-I will be lining up the patches later today. will respond.
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+> +			goto out;
+> +
+> +	} while (po->flags & CXL_POISON_FLAG_MORE);
+> +
+> +out:
+> +	kvfree(po);
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_mem_get_poison_list, CXL);
+> +
+>  struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
+>  {
+>  	struct cxl_dev_state *cxlds;
+

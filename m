@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9190B54FCDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 20:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B0C54FCE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 20:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiFQSXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 14:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S229969AbiFQSYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 14:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347292AbiFQSXj (ORCPT
+        with ESMTP id S229485AbiFQSYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 14:23:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586871707B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 11:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655490217; x=1687026217;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iMDQaKo1ZNDhXG5eBnwD6lEJLVOQIIteMogq7Kf3Xjo=;
-  b=W5FxT6NIClSA2nRZN3Xt/bMwkaLR7zocTK33PMQSi2h85TtEj7tkD9yX
-   XyP2IN1oLEylctU1jvWdLYnjv0NHk8ufjDiR4nJ9jLGrNcVypE4R2AVPf
-   sLpi0wUSw+/NA/MZwkjpAixfPEV8h9Ta915ycwOEWxoZTmrvkiLY2QO1T
-   4vR+1QbLrIRErSxYEis3yzB+O4gLYwxZAbhrf9ar4z/h7H2g6lcBVY5kE
-   pAKoexr38EqXfxyrqlhppz4o+GM5lgOk95lpwYe4hFWgZU75qkKxSUa/e
-   jmO1IOxsX8UB+sznTvdOjyYecuEIVi/y9L9CYSpj/Y949jUpAE/kZ4i16
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259989895"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="259989895"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 11:23:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="619344439"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jun 2022 11:23:35 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D2519132; Fri, 17 Jun 2022 21:23:39 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jack Andersen <jackoalan@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH v1 1/1] mfd: dln2: Automatically detect and fill endpoint pointers
-Date:   Fri, 17 Jun 2022 21:23:38 +0300
-Message-Id: <20220617182338.32402-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 17 Jun 2022 14:24:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3557E19FB9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 11:24:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0966B82815
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:24:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F62AC3411B;
+        Fri, 17 Jun 2022 18:24:39 +0000 (UTC)
+Date:   Fri, 17 Jun 2022 19:24:35 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Will Deacon <will@kernel.org>, James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: errata: add detection for AMEVCNTR01 incrementing
+ incorrectly
+Message-ID: <YqzG47X3oQYSEJmn@arm.com>
+References: <20220607125340.13635-1-ionela.voinescu@arm.com>
+ <YqN1kJlIkhNAEl/K@arm.com>
+ <YqiQYikYTFVPE8GG@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqiQYikYTFVPE8GG@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usb_find_common_endpoints() finds and fills the endpoints
-in accordance with their types. Use it to automatically detect
-and fill endpoint pointers.
+On Tue, Jun 14, 2022 at 02:42:58PM +0100, Ionela Voinescu wrote:
+> On Friday 10 Jun 2022 at 17:47:12 (+0100), Catalin Marinas wrote:
+> > On Tue, Jun 07, 2022 at 01:53:40PM +0100, Ionela Voinescu wrote:
+> > > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> > > index 42ea2bd856c6..b9e4b2bd2c63 100644
+> > > --- a/arch/arm64/kernel/cpufeature.c
+> > > +++ b/arch/arm64/kernel/cpufeature.c
+> > > @@ -1791,6 +1791,19 @@ int get_cpu_with_amu_feat(void)
+> > >  	return cpumask_any(&amu_cpus);
+> > >  }
+> > >  
+> > > +bool cpu_has_broken_amu_constcnt(void)
+> > > +{
+> > > +	/* List of CPUs which have broken AMEVCNTR01 (constant counter) */
+> > > +	static const struct midr_range cpus[] = {
+> > > +#ifdef CONFIG_ARM64_ERRATUM_2457168
+> > > +		MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1),
+> > > +#endif
+> > > +		{},
+> > > +	};
+> > > +
+> > > +	return is_midr_in_range(read_cpuid_id(), cpus);
+> > > +}
+> > 
+> > I'd rather not have this in cpufeature.c as it's not really a feature.
+> > We have some precedent with checking errata in cpufeature.c but IIRC we
+> > did that only to check whether to enable a feature or not in that file
+> > (DBM).
+> 
+> If it's okay with you I can move this to cpu_errata.c:arm64_errata[], but
+> the type of the capability would have to be
+> ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE. I see there are other workarounds
+> like this so I hope it's not a problem.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/mfd/dln2.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+I think this should work. If you want to make a per-CPU decision,
+instead of checking cpus_have_const_cap(), use this_cpu_has_cap(). It
+would read the actual CPU regs pretty much like your
+cpu_has_broken_amu_constcnt() but at least is more unified with the
+errata framework.
 
-diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
-index 852129ea0766..6cd0b0c752d6 100644
---- a/drivers/mfd/dln2.c
-+++ b/drivers/mfd/dln2.c
-@@ -91,11 +91,6 @@ struct dln2_mod_rx_slots {
- 	spinlock_t lock;
- };
- 
--enum dln2_endpoint {
--	DLN2_EP_OUT	= 0,
--	DLN2_EP_IN	= 1,
--};
--
- struct dln2_dev {
- 	struct usb_device *usb_dev;
- 	struct usb_interface *interface;
-@@ -777,16 +772,12 @@ static int dln2_probe(struct usb_interface *interface,
- 	int ret;
- 	int i, j;
- 
--	if (hostif->desc.bInterfaceNumber != 0 ||
--	    hostif->desc.bNumEndpoints < 2)
-+	if (hostif->desc.bInterfaceNumber != 0)
- 		return -ENODEV;
- 
--	epout = &hostif->endpoint[DLN2_EP_OUT].desc;
--	if (!usb_endpoint_is_bulk_out(epout))
--		return -ENODEV;
--	epin = &hostif->endpoint[DLN2_EP_IN].desc;
--	if (!usb_endpoint_is_bulk_in(epin))
--		return -ENODEV;
-+	ret = usb_find_common_endpoints(hostif, &epin, &epout, NULL, NULL);
-+	if (ret)
-+		return ret;
- 
- 	dln2 = kzalloc(sizeof(*dln2), GFP_KERNEL);
- 	if (!dln2)
 -- 
-2.35.1
-
+Catalin

@@ -2,77 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CFE54FD52
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176EA54FD48
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbiFQTEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        id S234781AbiFQTFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiFQTEe (ORCPT
+        with ESMTP id S233779AbiFQTFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:04:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BDA41996
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5vYR7KSYeCrksqMEKKx6lAlNtUm65l3b2zgw5cBNVZY=; b=GmKG+czD9r+6YuXcOU0eGuv1mB
-        bLV85SBAhzlxA68vumtThkIlv1ePcziOiXnzHAdxepI+RLkQk9w2XGgcn3GTfb7ZYkzLd4Dq8mb6S
-        mOt6F67sMH9VKDc3ygsoKqZ5S2YjX9x/0lgsFa3xYCkzRAqYk4S4x92j3YO/NtakgEb2FNUbWJox4
-        UaneyR3WbamjxPv7mKkMvi6shrVruBe0iUJYncdJxDTzxL8TaC9WsSxH/QsgF7DVVIpuBLU0eZmpf
-        k9UxA7aok0jv9QVgUMM9F02u8xFe+E/+oxQZXH9KeSDecOQq5N33wsXWu0iBx9Ie2OqUtmMmr2spo
-        FocKJ+uA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o2HGM-008l30-Dp; Fri, 17 Jun 2022 19:04:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Fri, 17 Jun 2022 15:05:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7187F44756
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:05:43 -0700 (PDT)
+Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29A36300212;
-        Fri, 17 Jun 2022 21:04:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 10E9F2020B7B6; Fri, 17 Jun 2022 21:04:08 +0200 (CEST)
-Date:   Fri, 17 Jun 2022 21:04:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
-Subject: Re: [PATCH] locking/rwlocks: do not starve writers
-Message-ID: <YqzQKER4JRoudTJE@hirez.programming.kicks-ass.net>
-References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
- <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net>
- <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
- <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
- <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com>
- <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
- <7499dd05-30d1-669c-66b4-5cb06452b476@redhat.com>
- <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbeckett)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F3E366017B7;
+        Fri, 17 Jun 2022 20:05:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655492741;
+        bh=KHg3eOnYqUoUcg57EXhLlpoQHXoJLlQC7w8GyVbN4OU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IIBvAjFPtkVClQ1mBiVjn1VM/ywQXL4o4og1pGdVGyrzpuF5iXpLhcQYo71P14vqv
+         IfdgKx5TDnGAo0hLPWoBqPbwfdXkW0A5VVXh5T03hWVsLjacjA7G9ahSEkiSiy3CTv
+         yv1Vi1u+CqVqDDWAUVEpu59N/4mFHL7WQsSFAPv5ljRshFFo8GIYK8An6LQrkaLPgo
+         IxeX+z2sh21OclcQaQAfK63mioC1C6M3wisfOxHbiPCe23IbLNlaBvnYTVO8zniy7r
+         nc3G8eJCgU0wsB7wwSQ4TqVLGkv5XJa+8rVrPXDI/aDuMew8czB9g1L2Txm7e/6//R
+         Ol81QZJdjruOg==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 01/10] drm/i915/ttm: dont trample cache_level overrides during ttm move
+Date:   Fri, 17 Jun 2022 19:05:07 +0000
+Message-Id: <20220617190516.2805572-2-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220617190516.2805572-1-bob.beckett@collabora.com>
+References: <20220617190516.2805572-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 07:45:14PM +0200, Eric Dumazet wrote:
+Various places within the driver override the default chosen cache_level.
+Before ttm, these overrides were permanent until explicitly changed again
+or for the lifetime of the buffer.
 
-> Were rwlocks always unfair, and we have been lucky ?
+TTM movement code came along and decided that it could make that
+decision at that time, which is usually well after object creation, so
+overrode the cache_level decision and reverted it back to its default
+decision.
 
-Yes.
+Add logic to indicate whether the caching mode has been set by anything
+other than the move logic. If so, assume that the code that overrode the
+defaults knows best and keep it.
+
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_object.c       | 1 +
+ drivers/gpu/drm/i915/gem/i915_gem_object_types.h | 1 +
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c          | 1 +
+ drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c     | 9 ++++++---
+ 4 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.c b/drivers/gpu/drm/i915/gem/i915_gem_object.c
+index 06b1b188ce5a..519887769c08 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_object.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_object.c
+@@ -125,6 +125,7 @@ void i915_gem_object_set_cache_coherency(struct drm_i915_gem_object *obj,
+ 	struct drm_i915_private *i915 = to_i915(obj->base.dev);
+ 
+ 	obj->cache_level = cache_level;
++	obj->ttm.cache_level_override = true;
+ 
+ 	if (cache_level != I915_CACHE_NONE)
+ 		obj->cache_coherent = (I915_BO_CACHE_COHERENT_FOR_READ |
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+index 2c88bdb8ff7c..6632ed52e919 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
++++ b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+@@ -605,6 +605,7 @@ struct drm_i915_gem_object {
+ 		struct i915_gem_object_page_iter get_io_page;
+ 		struct drm_i915_gem_object *backup;
+ 		bool created:1;
++		bool cache_level_override:1;
+ 	} ttm;
+ 
+ 	/*
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+index 4c25d9b2f138..27d59639177f 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -1241,6 +1241,7 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
+ 	i915_gem_object_init_memory_region(obj, mem);
+ 	i915_ttm_adjust_domains_after_move(obj);
+ 	i915_ttm_adjust_gem_after_move(obj);
++	obj->ttm.cache_level_override = false;
+ 	i915_gem_object_unlock(obj);
+ 
+ 	return 0;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+index a10716f4e717..4c1de0b4a10f 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+@@ -123,9 +123,12 @@ void i915_ttm_adjust_gem_after_move(struct drm_i915_gem_object *obj)
+ 	obj->mem_flags |= i915_ttm_cpu_maps_iomem(bo->resource) ? I915_BO_FLAG_IOMEM :
+ 		I915_BO_FLAG_STRUCT_PAGE;
+ 
+-	cache_level = i915_ttm_cache_level(to_i915(bo->base.dev), bo->resource,
+-					   bo->ttm);
+-	i915_gem_object_set_cache_coherency(obj, cache_level);
++	if (!obj->ttm.cache_level_override) {
++		cache_level = i915_ttm_cache_level(to_i915(bo->base.dev),
++						   bo->resource, bo->ttm);
++		i915_gem_object_set_cache_coherency(obj, cache_level);
++		obj->ttm.cache_level_override = false;
++	}
+ }
+ 
+ /**
+-- 
+2.25.1
+

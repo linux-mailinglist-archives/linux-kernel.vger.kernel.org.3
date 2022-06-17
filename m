@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156FC54FAED
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8B154FAF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383213AbiFQQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
+        id S1383223AbiFQQRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383009AbiFQQQq (ORCPT
+        with ESMTP id S1383009AbiFQQRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:16:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D206723178;
-        Fri, 17 Jun 2022 09:16:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5317161D5C;
-        Fri, 17 Jun 2022 16:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44426C3411B;
-        Fri, 17 Jun 2022 16:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655482602;
-        bh=lnu81QyPDi00Mq1jQuI7cW9W9cwwy3aOWczD2B7ak38=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WcGbIAr+AAeY7smpw+ugWXhb0Eazs3O6ql6zVB/Dsj3knY0vxQOpQmhP51T2TRqq2
-         tHbGrW/jexZR8LSeL/Z2XMWZxVIyRhdaqUjZH/XIC1/altbw6iYQxa7xegHeCBvBCT
-         A86EnRqQp532TRxTIZVGQyFMb4tHBgagHh9aMJ2nBpL6ke23AhXMByosncgkqnNFhQ
-         pkQliK6SlXu584vYJGaPC2iyj3F1leRc37z7znbECzqwAuKDY4r1GvKmpxOBi+aTfq
-         QjZhP6tzF2jPuLSP9uT45Swl4BosYVBtJv5fnLVkvKG7gtGM3P03AQeGNQGEqhtgQ0
-         xs9uTRVa7TXzA==
-Message-ID: <e20d30c4-2971-5e1f-f7dd-be30560d5689@kernel.org>
-Date:   Fri, 17 Jun 2022 18:16:36 +0200
+        Fri, 17 Jun 2022 12:17:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C346423178;
+        Fri, 17 Jun 2022 09:17:14 -0700 (PDT)
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPkc658G4z67NJj;
+        Sat, 18 Jun 2022 00:13:26 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 17 Jun 2022 18:17:12 +0200
+Received: from localhost (10.81.209.131) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Fri, 17 Jun
+ 2022 17:17:11 +0100
+Date:   Fri, 17 Jun 2022 17:17:07 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] trace, cxl: Introduce a TRACE_EVENT for CXL Poison
+ Records
+Message-ID: <20220617171707.00001c84@Huawei.com>
+In-Reply-To: <32a761fe7046680a4d50762fc43988def24a4bcd.1655250669.git.alison.schofield@intel.com>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+        <32a761fe7046680a4d50762fc43988def24a4bcd.1655250669.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V4 17/20] watchdog/dev: Add tracepoints
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1655368610.git.bristot@kernel.org>
- <e153b772306577bcb3915474ed10eb3dcb228eda.1655368610.git.bristot@kernel.org>
- <a141e63a-c62c-8094-fedf-7f22f9090b0f@roeck-us.net>
- <4d8c53a1-7b94-fb0e-29e5-ed13b72093f1@kernel.org>
- <dc48373d-6568-4fab-cbe6-39f2c84ee1b5@roeck-us.net>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <dc48373d-6568-4fab-cbe6-39f2c84ee1b5@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.209.131]
+X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,141 +60,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 01:55, Guenter Roeck wrote:
-> On 6/16/22 08:47, Daniel Bristot de Oliveira wrote:
->> On 6/16/22 15:44, Guenter Roeck wrote:
->>> On 6/16/22 01:44, Daniel Bristot de Oliveira wrote:
->>>> Add a set of tracepoints, enabling the observability of the watchdog
->>>> device interactions with user-space.
->>>>
->>>> The events are:
->>>>      watchdog:watchdog_open
->>>>      watchdog:watchdog_close
->>>>      watchdog:watchdog_start
->>>>      watchdog:watchdog_stop
->>>>      watchdog:watchdog_set_timeout
->>>>      watchdog:watchdog_ping
->>>>      watchdog:watchdog_nowayout
->>>>      watchdog:watchdog_set_keep_alive
->>>>      watchdog:watchdog_keep_alive
->>>>      watchdog:watchdog_set_pretimeout
->>>>      watchdog:watchdog_pretimeout
->>>>
->>>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
->>>> Cc: Guenter Roeck <linux@roeck-us.net>
->>>> Cc: Jonathan Corbet <corbet@lwn.net>
->>>> Cc: Steven Rostedt <rostedt@goodmis.org>
->>>> Cc: Ingo Molnar <mingo@redhat.com>
->>>> Cc: Thomas Gleixner <tglx@linutronix.de>
->>>> Cc: Peter Zijlstra <peterz@infradead.org>
->>>> Cc: Will Deacon <will@kernel.org>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Marco Elver <elver@google.com>
->>>> Cc: Dmitry Vyukov <dvyukov@google.com>
->>>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->>>> Cc: Shuah Khan <skhan@linuxfoundation.org>
->>>> Cc: Gabriele Paoloni <gpaoloni@redhat.com>
->>>> Cc: Juri Lelli <juri.lelli@redhat.com>
->>>> Cc: Clark Williams <williams@redhat.com>
->>>> Cc: linux-doc@vger.kernel.org
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Cc: linux-trace-devel@vger.kernel.org
->>>> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
->>>> ---
->>>>    drivers/watchdog/watchdog_dev.c        |  43 ++++++++++-
->>>>    drivers/watchdog/watchdog_pretimeout.c |   2 +
->>>>    include/linux/watchdog.h               |   7 +-
->>>>    include/trace/events/watchdog.h        | 101 +++++++++++++++++++++++++
->>>>    4 files changed, 143 insertions(+), 10 deletions(-)
->>>>    create mode 100644 include/trace/events/watchdog.h
->>>>
->>>> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
->>>> index 54903f3c851e..2f28dc5ab763 100644
->>>> --- a/drivers/watchdog/watchdog_dev.c
->>>> +++ b/drivers/watchdog/watchdog_dev.c
->>>> @@ -44,6 +44,9 @@
->>>>    #include <linux/watchdog.h>    /* For watchdog specific items */
->>>>    #include <linux/uaccess.h>    /* For copy_to_user/put_user/... */
->>>>    +#define CREATE_TRACE_POINTS
->>>> +#include <trace/events/watchdog.h>
->>>> +
->>>>    #include "watchdog_core.h"
->>>>    #include "watchdog_pretimeout.h"
->>>>    @@ -130,9 +133,11 @@ static inline void watchdog_update_worker(struct
->>>> watchdog_device *wdd)
->>>>        if (watchdog_need_worker(wdd)) {
->>>>            ktime_t t = watchdog_next_keepalive(wdd);
->>>>    -        if (t > 0)
->>>> +        if (t > 0) {
->>>>                hrtimer_start(&wd_data->timer, t,
->>>>                          HRTIMER_MODE_REL_HARD);
->>>> +            trace_watchdog_set_keep_alive(wdd, ktime_to_ms(t));
->>>> +        }
->>>>        } else {
->>>>            hrtimer_cancel(&wd_data->timer);
->>>>        }
->>>> @@ -141,7 +146,7 @@ static inline void watchdog_update_worker(struct
->>>> watchdog_device *wdd)
->>>>    static int __watchdog_ping(struct watchdog_device *wdd)
->>>>    {
->>>>        struct watchdog_core_data *wd_data = wdd->wd_data;
->>>> -    ktime_t earliest_keepalive, now;
->>>> +    ktime_t earliest_keepalive, now, next_keepalive;
->>>>        int err;
->>>>          earliest_keepalive = ktime_add(wd_data->last_hw_keepalive,
->>>> @@ -149,14 +154,16 @@ static int __watchdog_ping(struct watchdog_device *wdd)
->>>>        now = ktime_get();
->>>>          if (ktime_after(earliest_keepalive, now)) {
->>>> -        hrtimer_start(&wd_data->timer,
->>>> -                  ktime_sub(earliest_keepalive, now),
->>>> +        next_keepalive = ktime_sub(earliest_keepalive, now);
->>>> +        hrtimer_start(&wd_data->timer, next_keepalive,
->>>>                      HRTIMER_MODE_REL_HARD);
->>>> +        trace_watchdog_set_keep_alive(wdd, ktime_to_ms(next_keepalive));
->>>>            return 0;
->>>>        }
->>>>          wd_data->last_hw_keepalive = now;
->>>>    +    trace_watchdog_ping(wdd);
->>>>        if (wdd->ops->ping)
->>>>            err = wdd->ops->ping(wdd);  /* ping the watchdog */
->>>>        else
->>>> @@ -215,6 +222,7 @@ static void watchdog_ping_work(struct kthread_work *work)
->>>>        wd_data = container_of(work, struct watchdog_core_data, work);
->>>>          mutex_lock(&wd_data->lock);
->>>> +    trace_watchdog_keep_alive(wd_data->wdd);
->>>>        if (watchdog_worker_should_ping(wd_data))
->>>>            __watchdog_ping(wd_data->wdd);
->>>>        mutex_unlock(&wd_data->lock);
->>>> @@ -250,6 +258,8 @@ static int watchdog_start(struct watchdog_device *wdd)
->>>>          set_bit(_WDOG_KEEPALIVE, &wd_data->status);
->>>>    +    trace_watchdog_start(wdd);
->>>> +
->>>>        started_at = ktime_get();
->>>>        if (watchdog_hw_running(wdd) && wdd->ops->ping) {
->>>>            err = __watchdog_ping(wdd);
->>>> @@ -294,6 +304,7 @@ static int watchdog_stop(struct watchdog_device *wdd)
->>>>            return -EBUSY;
->>>>        }
->>>>    +    trace_watchdog_stop(wdd);
->>>>        if (wdd->ops->stop) {
->>>>            clear_bit(WDOG_HW_RUNNING, &wdd->status);
->>>>            err = wdd->ops->stop(wdd);
->>>> @@ -367,6 +378,7 @@ static int watchdog_set_timeout(struct watchdog_device *wdd,
->>>>
->>>>        if (watchdog_timeout_invalid(wdd, timeout))
->>>>            return -EINVAL;
->>>>    +    trace_watchdog_set_timeout(wdd, timeout);
->>>
->>> The driver has no obligation to set the timeout to the
->>> requested value. It might be more valuable to report both
->>> the requested and the actual values.
->>>
->>>
->>
->> Ack! how do I get the actual value?
->>
-> Read it from the data structure after the driver function returned.
+On Tue, 14 Jun 2022 17:10:26 -0700
+alison.schofield@intel.com wrote:
 
-Got it! I will add this field too.
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> Add a trace event for CXL Poison List Media Error Records that
+> includes the starting DPA of the poison, the length, and the
+> the source of the poison.
+> 
+> This trace event will be used by the CXL_MEM driver to log the
+> Media Errors returned by the GET_POISON_LIST Mailbox command.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 
--- Daniel
+Some comments on how this is used than the actual trace point for which
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+The patch set currently just pushes through the length as provided
+in the CXL record.  That is in units of 64 byte cachelines so I'd suggest
+the result will be more readable if we multiply it up to be in bytes.
+
+Also the address should be masked to the same length, but I mentioned that
+at the caller.
+
+Jonathan
+
+
+> ---
+>  include/trace/events/cxl.h | 60 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 include/trace/events/cxl.h
+> 
+> diff --git a/include/trace/events/cxl.h b/include/trace/events/cxl.h
+> new file mode 100644
+> index 000000000000..17e707c3817e
+> --- /dev/null
+> +++ b/include/trace/events/cxl.h
+> @@ -0,0 +1,60 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM cxl
+> +
+> +#if !defined(_CXL_TRACE_H) ||  defined(TRACE_HEADER_MULTI_READ)
+> +#define _CXL_TRACE_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_UNKNOWN);
+> +TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_INTERNAL);
+> +TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_EXTERNAL);
+> +TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_INJECTED);
+> +TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_VENDOR);
+> +TRACE_DEFINE_ENUM(CXL_POISON_SOURCE_INVALID);
+> +
+> +#define show_poison_source(source)					\
+> +	__print_symbolic(source,					\
+> +			{CXL_POISON_SOURCE_UNKNOWN,  "UNKNOWN"},	\
+> +			{CXL_POISON_SOURCE_EXTERNAL, "EXTERNAL"},	\
+> +			{CXL_POISON_SOURCE_INTERNAL, "INTERNAL"},	\
+> +			{CXL_POISON_SOURCE_INJECTED, "INJECTED"},	\
+> +			{CXL_POISON_SOURCE_VENDOR,   "VENDOR"},		\
+> +			{CXL_POISON_SOURCE_INVALID,  "INVALID"})
+> +
+> +TRACE_EVENT(cxl_poison_list,
+> +
+> +	    TP_PROTO(struct device *dev,
+> +		     int source,
+> +		     unsigned long start,
+> +		     unsigned int length),
+> +
+> +	    TP_ARGS(dev, source, start, length),
+> +
+> +	    TP_STRUCT__entry(
+> +		__string(name, dev_name(dev))
+> +		__field(int, source)
+> +		__field(u64, start)
+> +		__field(u32, length)
+> +	    ),
+> +
+> +	    TP_fast_assign(
+> +		__assign_str(name, dev_name(dev));
+> +		__entry->source = source;
+> +		__entry->start = start;
+> +		__entry->length = length;
+> +	    ),
+> +
+> +	    TP_printk("dev %s source %s start %llu length %u",
+> +		__get_str(name),
+> +		show_poison_source(__entry->source),
+> +		__entry->start,
+> +		__entry->length)
+> +);
+> +#endif /* _CXL_TRACE_H */
+> +
+> +/* This part must be outside protection */
+> +#undef TRACE_INCLUDE_FILE
+> +#define TRACE_INCLUDE_FILE cxl
+> +#include <trace/define_trace.h>
+

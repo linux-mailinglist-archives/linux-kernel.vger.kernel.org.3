@@ -2,167 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711B254F4ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5BB54F4E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381478AbiFQKIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S1381578AbiFQKJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiFQKIq (ORCPT
+        with ESMTP id S235799AbiFQKI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:08:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC5E2182A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:08:45 -0700 (PDT)
-Received: from mercury (dyndsl-095-033-171-130.ewe-ip-backbone.de [95.33.171.130])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 73BFB660179A;
-        Fri, 17 Jun 2022 11:08:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655460524;
-        bh=MhsAOhB4QkXuwHstp4nO0ailRsQJvH3siehK4nQ2VZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dt4LyTZp8kwBJ8EpbQB2z9TEFviyHw4I99vgQA5lpdNvvWr+UaOl0UKPpT8Tu5eBA
-         caQFZNHBGEvuu4nr69xyawVhuk6NB8ni5X7uhiByj4Mw4TDrN1lT1Fz8NH8btSxACl
-         3FjF111coQKuDBJoMFc2r3yo6XKhBW6b+kQ+awXoWMoXSZFMCPuOgfAhD3OmkDlf0b
-         6gbLUViv+Y4SNuZrTd/EK3csPCqCNdsrQOWx0mUyVy/Boc4PnOaTjTNcVC16ZFwESK
-         HeFvlsgpdPmwe6DJBPzkLaJ3txWC/wFtD6ctoPukbcc5F0IQjHXiYGFzN6jW/Ghfyh
-         Nz/ftnwHyQ6pQ==
-Received: by mercury (Postfix, from userid 1000)
-        id C524A106031F; Fri, 17 Jun 2022 12:08:41 +0200 (CEST)
-Date:   Fri, 17 Jun 2022 12:08:41 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] drm/panel: sony-acx565akm: Use backlight helpers
-Message-ID: <20220617100841.dk2txmttdi5iccvi@mercury.elektranox.org>
-References: <20220616172316.1355133-4-steve@sk2.org>
+        Fri, 17 Jun 2022 06:08:58 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BE02182A;
+        Fri, 17 Jun 2022 03:08:57 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3176b6ed923so37502437b3.11;
+        Fri, 17 Jun 2022 03:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8ZtTCbfKlPy1sL/nTBNWOhi7Cc4DXnL97uQEVaSoU5Y=;
+        b=Bn9B64Pt3h6XPuX2xWZhh1L40RUgLFZn8YPoo453y7DYbt3jiKhoxaPdbdQoM2OVlP
+         qGRR8vPqBRWgs7M+UljIO+i2rZ1i3HpW+C4AcrVhmPYbsLuxo7l/VPKjIVCqSJRqLxBo
+         QdVQGH61qRJDbo/9XXdrSkyteARSwL8wSWzAdZBUPNNKJtG6QDwoc9RpKtbXrzQQ1F/n
+         0WNVbXlY7jIQuhm8gAcQX9kDW83Y1z+RtOy/uWoFpWKWcEjoZfTeUtOwcTb+hBAZ+120
+         bN+5PjBi1XEZSDWy7N4dujgTcYlKy6Gq+wQ1GiMlrZDkz+wr40dPA9HD2RTDfNG2kMyV
+         xZXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8ZtTCbfKlPy1sL/nTBNWOhi7Cc4DXnL97uQEVaSoU5Y=;
+        b=5JSF1HCLpkqQylzXv+F4FzmmZrCBzzKkKiB52xLFqFLvkhQQ5lNdGjQ1R8HlgVBf/E
+         /6ACMXNTzJz+x64dISuGwmd96s2yAQ5UlzqjFZIRbV2re8oLkKhNILmfhoqiQYdiWmFV
+         E80Iz0Thb4P6J1OqUI0RtXccIefPrjROwSTxt05uUCAxXpYdJ8h3hYVC4WTPlJ+56bWr
+         xlXMJcQl2V+zw0arUoD/Ou9XWL7yd3Ber5EJoN4EcA5MlS3pYlHhVJTNOHCDryYQL/PT
+         HrPkUpP+Z6DOZFkbS3V0AVIX2g+F24vGapsblmOKtCrC5EUENTMZyiDsdol2NliOk0j+
+         dg9Q==
+X-Gm-Message-State: AJIora8IpAv6UGP0KjqNQiU+i1TjgaZUIDwci17HtbCyPZbqANcULMGl
+        OD2gVAem0usCWWfYrUA5IGjSmFnkPZrKaMdnHgo=
+X-Google-Smtp-Source: AGRyM1uHItNie6E+DKP/KEFCrtfManttjsqKWZrVKmAP7oSq4xHHGuslFvTiGJSYcaPG3Jb3ElMPpoeai9beNh+z4Cs=
+X-Received: by 2002:a81:a24c:0:b0:314:4396:5aca with SMTP id
+ z12-20020a81a24c000000b0031443965acamr10979392ywg.386.1655460536806; Fri, 17
+ Jun 2022 03:08:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ru3t7sry2gd7yant"
-Content-Disposition: inline
-In-Reply-To: <20220616172316.1355133-4-steve@sk2.org>
+References: <20220605145835.26916-1-wuchi.zero@gmail.com>
+In-Reply-To: <20220605145835.26916-1-wuchi.zero@gmail.com>
+From:   chi wu <wuchi.zero@gmail.com>
+Date:   Fri, 17 Jun 2022 18:08:45 +0800
+Message-ID: <CA+tQmHAkkxFkuabjh1Apwp1ZkNEtY+7ijLEs931aFA+MZngECA@mail.gmail.com>
+Subject: Re: [PATCH] lib/sbitmap: Fix invalid loop in __sbitmap_queue_get_batch()
+To:     axboe@kernel.dk, mwilck@suse.com, andriy.shevchenko@linux.intel.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ping....
 
---ru3t7sry2gd7yant
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Thu, Jun 16, 2022 at 07:23:15PM +0200, Stephen Kitt wrote:
-> Instead of retrieving the backlight brightness in struct
-> backlight_properties manually, and then checking whether the backlight
-> should be on at all, use backlight_get_brightness() which does all
-> this and insulates this from future changes.
->=20
-> Instead of manually checking the power state in struct
-> backlight_properties, use backlight_is_blank().
->=20
-> While we're at it, drop .fb_blank from the initialisation function; it
-> is deprecated, and this helps make progress towards enabling its
-> removal. This change makes no functional difference since
-> FB_BLANK_UNBLANK is the default value.
->=20
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
+wuchi <wuchi.zero@gmail.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=885=E6=97=A5=E5=
+=91=A8=E6=97=A5 22:58=E5=86=99=E9=81=93=EF=BC=9A
+>
+> 1. Getting next index before continue branch.
+> 2. Checking free bits when setting the target bits. Otherwise,
+> it may reuse the busying bits.
+>
+> Signed-off-by: wuchi <wuchi.zero@gmail.com>
 > ---
-> Changes since v1: removed the last remaining .fb_blank reference
-> ---
-
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/gpu/drm/panel/panel-sony-acx565akm.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/panel/panel-sony-acx565akm.c b/drivers/gpu/d=
-rm/panel/panel-sony-acx565akm.c
-> index 0d7541a33f87..3d6a286056a0 100644
-> --- a/drivers/gpu/drm/panel/panel-sony-acx565akm.c
-> +++ b/drivers/gpu/drm/panel/panel-sony-acx565akm.c
-> @@ -298,13 +298,7 @@ static void acx565akm_set_brightness(struct acx565ak=
-m_panel *lcd, int level)
->  static int acx565akm_bl_update_status_locked(struct backlight_device *de=
-v)
->  {
->  	struct acx565akm_panel *lcd =3D dev_get_drvdata(&dev->dev);
-> -	int level;
-> -
-> -	if (dev->props.fb_blank =3D=3D FB_BLANK_UNBLANK &&
-> -	    dev->props.power =3D=3D FB_BLANK_UNBLANK)
-> -		level =3D dev->props.brightness;
-> -	else
-> -		level =3D 0;
-> +	int level =3D backlight_get_brightness(dev);
-> =20
->  	acx565akm_set_brightness(lcd, level);
-> =20
-> @@ -330,8 +324,7 @@ static int acx565akm_bl_get_intensity(struct backligh=
-t_device *dev)
-> =20
->  	mutex_lock(&lcd->mutex);
-> =20
-> -	if (dev->props.fb_blank =3D=3D FB_BLANK_UNBLANK &&
-> -	    dev->props.power =3D=3D FB_BLANK_UNBLANK)
-> +	if (!backlight_is_blank(dev))
->  		intensity =3D acx565akm_get_actual_brightness(lcd);
->  	else
->  		intensity =3D 0;
-> @@ -349,7 +342,6 @@ static const struct backlight_ops acx565akm_bl_ops =
-=3D {
->  static int acx565akm_backlight_init(struct acx565akm_panel *lcd)
->  {
->  	struct backlight_properties props =3D {
-> -		.fb_blank =3D FB_BLANK_UNBLANK,
->  		.power =3D FB_BLANK_UNBLANK,
->  		.type =3D BACKLIGHT_RAW,
->  	};
-> --=20
-> 2.30.2
->=20
-
---ru3t7sry2gd7yant
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKsUqkACgkQ2O7X88g7
-+pqc+A/7BVnwVuT6BtOozU/v/rUvX3HVWDAmcgAFoy8eLJG+aD8Ho21zL+HdBT0H
-Ug5OBy3J2gUHbqrMlIt1gIQ9duluzuMe7VxGpMt4rFRsCrLdOkLz8rhPNIhFyX+i
-qaOzioDfSK9Hyfk7bH2ygAyZpVuNvXTAcuXUSV3YlwJ1tv4FEaDVGMUMDuHmDxHS
-LGgChyCdDj+0QPzThBKLD/Wx/dmlLrXwEvkdVUaTAnrBksLjq4GR53DXSm5M8Wa9
-i9MpewaMWFFm2JgXGllmstfnR1mXKHksigiDqC8ii3aO3RMaxSJjhJelqLMR3mkq
-LslPk5LafrfhzcJRuBxBow5XBjBUBzC3sVeGO9946MbsZiKsNvZUdsTEtvm4gup8
-Xv1LP5m6nSgIqQ8cdamQrDXH8UYbzVFGnyTBvSnsD3KEbqpGy3uP3hQwhKoLxl/o
-Wp/EfC7bb7xWdjXUqo5TCD1IRauFMddOk1rNTjwN3pgmIbc0tMyhEV68dUzmsbWm
-gIxFkD+/PI+e2JmTKpZcJJ5Sc2gMKuSXhaDE9ulBHeG/bGfd8fCiBQL482kaV8kq
-bRjX3SakhNpkYrygLIPtMKnZaB+K6hzo512tHfN4tkHsghW9R0aIL32X6W7oZRxn
-SVKcoC6+PTYrGcbEPI7GCfpyB7AdHdhQhZetHD6N9Ywxm+dnq1s=
-=CH6t
------END PGP SIGNATURE-----
-
---ru3t7sry2gd7yant--
+>  lib/sbitmap.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index ae4fd4de9ebe..29eb0484215a 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -528,7 +528,7 @@ unsigned long __sbitmap_queue_get_batch(struct sbitma=
+p_queue *sbq, int nr_tags,
+>
+>                 sbitmap_deferred_clear(map);
+>                 if (map->word =3D=3D (1UL << (map_depth - 1)) - 1)
+> -                       continue;
+> +                       goto next;
+>
+>                 nr =3D find_first_zero_bit(&map->word, map_depth);
+>                 if (nr + nr_tags <=3D map_depth) {
+> @@ -539,6 +539,8 @@ unsigned long __sbitmap_queue_get_batch(struct sbitma=
+p_queue *sbq, int nr_tags,
+>                         get_mask =3D ((1UL << map_tags) - 1) << nr;
+>                         do {
+>                                 val =3D READ_ONCE(map->word);
+> +                               if ((val & ~get_mask) !=3D val)
+> +                                       goto next;
+>                                 ret =3D atomic_long_cmpxchg(ptr, val, get=
+_mask | val);
+>                         } while (ret !=3D val);
+>                         get_mask =3D (get_mask & ~ret) >> nr;
+> @@ -549,6 +551,7 @@ unsigned long __sbitmap_queue_get_batch(struct sbitma=
+p_queue *sbq, int nr_tags,
+>                                 return get_mask;
+>                         }
+>                 }
+> +next:
+>                 /* Jump to next index. */
+>                 if (++index >=3D sb->map_nr)
+>                         index =3D 0;
+> --
+> 2.20.1
+>

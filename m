@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F975500A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B365500A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383644AbiFQXUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
+        id S1383667AbiFQXUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383671AbiFQXT5 (ORCPT
+        with ESMTP id S1383674AbiFQXT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 19:19:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4E966CA1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:19:48 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFF566FA3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:19:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 155DDB82BFD
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B984C3411D;
-        Fri, 17 Jun 2022 23:19:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 818AFB82C0A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE71C3411E;
+        Fri, 17 Jun 2022 23:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655507985;
-        bh=0/gO3abdMtjXJJpqM36aCEMHAeb67MB4T5VdLEmQPhU=;
+        s=k20201202; t=1655507987;
+        bh=1ZQAmxpThkE2DLyss9Wc6dIO9PFD69OSF6CfY8xWydE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=mSYB4A8vVI8/80VKW+wQI60aipjNbjGuov8aEaeV3xzY0qi+mC1IsiMJlrSyx2mcu
-         7tgluN/XY6yo1SBCnBgB4ZGnckTjbQMxu7tuwyPKm0E+6Tz2TWP66lT1QfRraSLtHs
-         8iz9aXtIeDFQlh0JV8hEwAyc0FQWdR1W3REhmkGYayAm7OFCO50HmRrIq8PiLP6BCV
-         +TOnacjJxVxcCl+DC5vFEIYdoyv8hWiA5rvY2sSJX/36lENJjIBfqe7zVHSplywl+W
-         gcPoT1cuH8XPRDWTUGocZhKUufUszJyxqfEBrr6Ze4WB1J9SZ9fEn3Mt+93EkJfBON
-         DoBIr/62K9WRg==
+        b=pk/mbNWthNkCEDjD0aDVFlePtSIelO8IwNo1zp+ymn6vxb6jwtPjiTcQHjhxEnKxU
+         JxTBSgjXTPWMnhMlT1XdJdAzLpManKtq9/bIJpIvguJNtpwreUEhMTL4KubdOiyutq
+         fZ7qTTBmuGX+Vrj9r9Dr2cpDa+uoTrshQNvfc5RfmkpopGqoV35m7aQI1pN6rCZvfg
+         aPf09t16WuzEbf3jLneas3RM3Xk0SBWOHXQO0cj1CxC9rIDC2UszxC3wNiiBUDrpSq
+         +Fz++F6tVQgbJP1sOu8PxJnBcodeucpFeQDkoee/wDPTRUcc9TyVcJcKUWAMha7Isj
+         wuTRSuMrI+hOw==
 From:   Mark Brown <broonie@kernel.org>
-To:     jiaxin.yu@mediatek.com, fshao@chromium.org
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+To:     sbinding@opensource.cirrus.com, lgirdwood@gmail.com
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220617111003.2014395-1-fshao@chromium.org>
-References: <20220617111003.2014395-1-fshao@chromium.org>
-Subject: Re: [PATCH v2] ASoC: mediatek: mt8186: Fix mutex double unlock in GPIO request
-Message-Id: <165550798423.994018.10916752817659523759.b4-ty@kernel.org>
-Date:   Sat, 18 Jun 2022 00:19:44 +0100
+In-Reply-To: <20220617153606.2619457-1-sbinding@opensource.cirrus.com>
+References: <20220617153606.2619457-1-sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v1] ASoC: ops: Fix integer detection for when max possible values > 1
+Message-Id: <165550798591.994018.15249156290558800333.b4-ty@kernel.org>
+Date:   Sat, 18 Jun 2022 00:19:45 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,14 +54,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 19:10:04 +0800, Fei Shao wrote:
-> The lockdep mechanism revealed an unbalanced unlocking on MT8186:
-> 
->   [    2.993966] WARNING: bad unlock balance detected!
->   [    2.993978] -------------------------------------
->   [    2.993983] kworker/u16:1/10 is trying to release lock (gpio_request_mutex) at:
->   [    2.993994] [<ffffffdcd9adebf8>] mt8186_afe_gpio_request+0xf8/0x210
->   [    2.994012] but there are no more locks to release!
+On Fri, 17 Jun 2022 16:36:06 +0100, Stefan Binding wrote:
+> The standard snd_soc_info_volsw() allows a two value control to be
+> defined as an integer control only if the control name ends in
+> "Volume". It achieves this by creating a substring if it contains
+> " Volume", and ensuring this exists at the end of the name. The
+> volume substring is then used to decide whether the type is a
+> SNDRV_CTL_ELEM_TYPE_INTEGER or SNDRV_CTL_ELEM_TYPE_BOOLEAN.
+> However this volume substring is only computed for a two value
+> control.
+> This means for controls where there are more than two possible
+> values, the substring is never created, so in this case the
+> substring remains NULL, and the condition yields
+> SNDRV_CTL_ELEM_TYPE_BOOLEAN, even though there are more than 2
+> possible values.
+> If there are more than 2 possible values for the control,
+> then it should always be an integer control.
 > 
 > [...]
 
@@ -72,8 +79,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: mediatek: mt8186: Fix mutex double unlock in GPIO request
-      commit: 6c9e9046e1ff356bda66661213735d33c6cfea53
+[1/1] ASoC: ops: Fix integer detection for when max possible values > 1
+      commit: 442302003bd2b151e12d52b0af9a7dac131bf931
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

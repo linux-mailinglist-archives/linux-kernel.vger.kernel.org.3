@@ -2,124 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A818554F50F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74DD54F514
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381736AbiFQKNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S1381714AbiFQKON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381655AbiFQKNh (ORCPT
+        with ESMTP id S1381719AbiFQKOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:13:37 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB98D20BEE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:13:35 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g25so7839014ejh.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=KhgoAFL4YE8/w5osrKBBcrivW48W7YCjIa5U+90LszM=;
-        b=IozZi4thPYspyRFGAM0wEZ8bu1mpvv+hdz/lhFfVezJ+JiVd8vVSydQ75GmcJxGW7O
-         trKDElyiWZRBVGEGKzDNTRc0RrILQgBWDxz255YZotxdkw0Sw30TbjmXImnKIq8FhZKl
-         SI7YoyzSDqsrqiQsydG/znxopzzJoiM8DHYNBj5bbrHFnH6OQEM11nFKUF7nx6e+ekpk
-         OHK8BuBhP/lQQKpP9i2uqUsLivnjcoH3+tMQK4fVFCXdW8dS5aJ3yVEGxkdwimSh7K4P
-         gpIhHNmiVTmhSE17Yy6J3BvkSBx+K+KiPVuC4lYQQHHEtbI0RqcZI/Vdv9EVs9AS0GTh
-         Ti5Q==
+        Fri, 17 Jun 2022 06:14:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98B7D6A055
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655460846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OO/vzqKXxtmhmREmRXYJJgBI7tFlamAdTQoTX2eqNDk=;
+        b=GWPkoTSQW1cXR9tZjTTR2CIbJDiJY9iP0Be6aehgk8Dcz3haU9L0VHiIWAkcsbfZ7QdRr4
+        viTxSs8QrmtoKLCMCDjfV1FDF/Xuwvrgkd5SwjyDNSYewZMVIAR4G8vPiFandWXwtG/Ql5
+        pw7syzFMxdpdfyTlkruULcHqa5kZeW8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-574-ZoBAubxPPJ-Ew5wSyzjeiw-1; Fri, 17 Jun 2022 06:14:05 -0400
+X-MC-Unique: ZoBAubxPPJ-Ew5wSyzjeiw-1
+Received: by mail-wm1-f70.google.com with SMTP id p24-20020a05600c1d9800b0039c51c2da19so3650863wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 03:14:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=KhgoAFL4YE8/w5osrKBBcrivW48W7YCjIa5U+90LszM=;
-        b=Ji1Im9ZrED4N57Y6Z0Yb06pi88MWWkhUS8U0nQML+J7WvXmuPDUIfwsuW24Q7bLM3X
-         JurDDjEgT1hvscBBG2Niy9WlFCjGny2CK2R5HmBsyFt86MprIA8xHkq1fgj3atSVxFih
-         7G08SfauQeGh72HOtKfeo87vpJvgTPoiISOcVJQ2Do9QPW673Rd0ZqJ7MjNmj9gpJc5L
-         S6nWAVMKiI8kx/LoTXsYK8uyze/s3IdDn8yzEyBigH8BaPn12C2zIZTVKT6AFBb/6JvE
-         kVE1XqVEEeX8HVnU11+s9C/DeMfdZSl+vfZFOJJjTYWHlaEqX5nNAU1wZDKqMTZ5rTV3
-         ZPhA==
-X-Gm-Message-State: AJIora++CFggE/vWjwvUQRzozJRxugav4NFOBxvtbkMJJfyHoIvtgtqw
-        Rloai53yUbk9HhfmlRVPmvIYDU7NfNKFMYs8CO8=
-X-Google-Smtp-Source: AGRyM1tcq0FpysLJ+7FKgbQo7IbAmjHKoQctDpgHQUviNlD4fPIEREcNkQGw6xGLFjqiI+gXutuCeBAL9j5COp50Q4M=
-X-Received: by 2002:a17:907:868f:b0:702:f865:55de with SMTP id
- qa15-20020a170907868f00b00702f86555demr8718964ejc.24.1655460814192; Fri, 17
- Jun 2022 03:13:34 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=OO/vzqKXxtmhmREmRXYJJgBI7tFlamAdTQoTX2eqNDk=;
+        b=UzZTPXJBMLkNIRtXGvokKZI6LA9Z/denDDnxFOBPzrVssQIUpv0Pjrp91XaKeftvX+
+         haVTM/yE2tPnlUqsNMHZdVjwMz3M7mSqEe1/3KeZEja6J2bjuZVHO7JDB/A7hI+LsCpr
+         UComgYycsZ6ODSye9XkG76NWzb3X/mfYb84IkFfgHXruLIII32j3rRhBMOZwtQDI4FLv
+         jaqrXpIhs63fWxcKl0slxowfxFaNreFqb5wu1g1e95tVsxx/6yrPci7KlEJdv02s9yaW
+         zTJiXSj8kC735l+0F9IfW89yh+PGzybzu3fSqEDeVVkel09zy3cduz51U9WMRVFTrQli
+         Cvbw==
+X-Gm-Message-State: AOAM5326otqw5fnva7ErqKyVF2gEGuzVCgp/BDskG6HWFuvvEnn1hoD/
+        B7n87ImYq1N+Itydf2mpnKt86JoYfVrdPAnepwPR/OMc1FjlMK38HadX+L9uqp6nV6u572TpOj3
+        MMFq/6PQDIXMHfxH0J/mP2QHL
+X-Received: by 2002:a05:600c:4f47:b0:39c:62cc:75da with SMTP id m7-20020a05600c4f4700b0039c62cc75damr20098276wmq.114.1655460843747;
+        Fri, 17 Jun 2022 03:14:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyAqCbokM4EypDJ6RFBar89VSpzcIn9BxE48MuTqUwN0XUnXRQ8aU829NJZHCJkS0ZFmCCu7w==
+X-Received: by 2002:a05:600c:4f47:b0:39c:62cc:75da with SMTP id m7-20020a05600c4f4700b0039c62cc75damr20098249wmq.114.1655460843470;
+        Fri, 17 Jun 2022 03:14:03 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:7e00:bb5b:b526:5b76:5824? (p200300cbc70a7e00bb5bb5265b765824.dip0.t-ipconnect.de. [2003:cb:c70a:7e00:bb5b:b526:5b76:5824])
+        by smtp.gmail.com with ESMTPSA id q17-20020a056000137100b002183ee5c0c5sm4276786wrz.50.2022.06.17.03.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 03:14:02 -0700 (PDT)
+Message-ID: <a2f5cb7e-0aaa-cb3c-5437-3aba9ae015d1@redhat.com>
+Date:   Fri, 17 Jun 2022 12:14:02 +0200
 MIME-Version: 1.0
-Sender: barpeterkobby4@gmail.com
-Received: by 2002:a17:906:cc46:0:0:0:0 with HTTP; Fri, 17 Jun 2022 03:13:33
- -0700 (PDT)
-From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
-Date:   Fri, 17 Jun 2022 13:13:33 +0300
-X-Google-Sender-Auth: -nl26qL9x8My2eNuDwwHowqP2js
-Message-ID: <CAKSfp-zyRRn4QHrw=wPEm3xogrcjwNOeNe3DnVEXCdjSw1fY0A@mail.gmail.com>
-Subject: UNITED NATIONS COVID-19 COMPENSATION FUNDS.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,LOTTO_DEPT,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:632 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5110]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jimmymoore265[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [barpeterkobby4[at]gmail.com]
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  2.0 LOTTO_DEPT Claims Department
-        *  0.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Muchun Song <songmuchun@bytedance.com>, corbet@lwn.net,
+        akpm@linux-foundation.org, paulmck@kernel.org,
+        mike.kravetz@oracle.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+References: <20220520025538.21144-1-songmuchun@bytedance.com>
+ <20220520025538.21144-3-songmuchun@bytedance.com>
+ <53024884-0182-df5f-9ca2-00652c64ce36@redhat.com>
+ <YqqqPjkh9r8ZrH0r@localhost.localdomain>
+ <24d5ec20-9c9e-93aa-11f4-c4619f51f7d1@redhat.com>
+ <YqwVTT+50vt5WpeG@localhost.localdomain>
+ <186924ab-651f-71a1-93d2-3500a67dffee@redhat.com>
+ <YqxPTUuqdDpoU9o3@localhost.localdomain>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 2/2] mm: memory_hotplug: introduce
+ SECTION_CANNOT_OPTIMIZE_VMEMMAP
+In-Reply-To: <YqxPTUuqdDpoU9o3@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
-REFERENCE PAYMENT CODE: 8525595
-BAILOUT AMOUNT:$3.5 MILLION USD
-ADDRESS: NEW YORK, NY 10017, UNITED STATES
+On 17.06.22 11:54, Oscar Salvador wrote:
+> On Fri, Jun 17, 2022 at 09:43:33AM +0200, David Hildenbrand wrote:
+>> VmemmapSelfHosted, then the function names get nicer.
+> 
+> Definitely.
+> 
+>>
+>>> +#endif
+>>> +
+>>>  /*
+>>>   * On an anonymous page mapped into a user virtual memory area,
+>>>   * page->mapping points to its anon_vma, not to a struct address_space;
+>>> diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+>>> index 1089ea8a9c98..e2de7ed27e9e 100644
+>>> --- a/mm/hugetlb_vmemmap.c
+>>> +++ b/mm/hugetlb_vmemmap.c
+>>> @@ -101,6 +101,14 @@ void hugetlb_vmemmap_free(struct hstate *h, struct page *head)
+>>>  {
+>>>  	unsigned long vmemmap_addr = (unsigned long)head;
+>>>  	unsigned long vmemmap_end, vmemmap_reuse, vmemmap_pages;
+>>> +	struct mem_section *ms = __pfn_to_section(page_to_pfn(head));
+>>> +	struct page *memmap;
+>>> +
+>>> +	memmap = sparse_decode_mem_map(ms->section_mem_map,
+>>> +				       pfn_to_section_nr(page_to_pfn(head)));
+>>
+>> Why can't we check the head page directly? Either I need more coffee or
+>> this can be simplified.
+> 
+> Uhm, maybe I'm the one who needs coffe here but we have something like:
+> 
+> [    hot-plugges section   ]
+> [memmap pages][normal pages]
 
-Dear award recipient, Covid-19 Compensation funds.
+Oh, right, we need the memmap for our hugetlb page (which resides in the
+reserved section), but these are not marked. We need the memmap of that
+memmap.
 
-You are receiving this correspondence because we have finally reached
-a consensus with the UN, IRS, and IMF that your total fund worth $3.5
-Million Dollars of Covid-19 Compensation payment shall be delivered to
-your nominated mode of receipt, and you are expected to pay the sum of
-$12,000 for levies owed to authorities after receiving your funds.
+I assume one could directly via the page address. Because we want the
+memmap of the memmap.
 
-You have a grace period of 2 weeks to pay the $12,000 levy after you
-have received your Covid-19 Compensation total sum of $3.5 Million. We
-shall proceed with the payment of your bailout grant only if you agree
-to the terms and conditions stated.
+vmmemmap_page = virt_to_page(head);
 
-Contact Dr. Mustafa Ali for more information by email at:(
-mustafaliali180@gmail.com ) Your consent in this regard would be
-highly appreciated.
+Not sure, though, if that would work with that function.
 
-Regards,
-Mr. Jimmy Moore.
-Undersecretary-General United Nations
-Office of Internal Oversight-UNIOS
+-- 
+Thanks,
+
+David / dhildenb
+

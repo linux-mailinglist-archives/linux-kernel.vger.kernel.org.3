@@ -2,43 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734C354F3B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DF954F3AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381444AbiFQI5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S1381401AbiFQIzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381427AbiFQI53 (ORCPT
+        with ESMTP id S1381388AbiFQIzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:57:29 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690C5250B;
-        Fri, 17 Jun 2022 01:57:27 -0700 (PDT)
-Received: (Authenticated sender: pbl@bestov.io)
-        by mail.gandi.net (Postfix) with ESMTPSA id 99015FF803;
-        Fri, 17 Jun 2022 08:57:19 +0000 (UTC)
-From:   Riccardo Paolo Bestetti <pbl@bestov.io>
-To:     Carlos Llamas <cmllamas@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Riccardo Paolo Bestetti <pbl@bestov.io>
-Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-Subject: [PATCH v2] ipv4: ping: fix bind address validity check
-Date:   Fri, 17 Jun 2022 10:54:35 +0200
-Message-Id: <20220617085435.193319-1-pbl@bestov.io>
-X-Mailer: git-send-email 2.36.1
+        Fri, 17 Jun 2022 04:55:20 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD6619C36;
+        Fri, 17 Jun 2022 01:55:19 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id n1so4626701wrg.12;
+        Fri, 17 Jun 2022 01:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=l1z5xMg7Bxc7h4S4BHi9usNXj+Js+8iNVIXmak/bgfM=;
+        b=RKJ1YvdJYubxI1dhPY/OQUYcZNWvwsR3hSMnW3DhjtzNLWCCUqePpnEVUmin4CQfti
+         DHgIXWxq/oSzN4P2yukrmn7h/76ydybVyQtkBMrIfEjY5Cuhv9r8vXhGkaNqmPp/cMgl
+         lbprEc8QkvX0HO5e55gVYsEbhcvsmkUr3AsDXveZ7znPCDaGWyAwvdq7Pyle8L74Zeb7
+         Btz/hBqxHorw71Si78l1S9BTHji1t+zhn5iRX2mquy1ZUYTZ+II2CTLlV9frl3YPEBR1
+         p8ZNg70hEKNCAL8Rdz6a/uyzunLIhbUD/bx3vo/ily6rQDnOZKtvhVRVS7MYL4XBHPnY
+         9Xag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l1z5xMg7Bxc7h4S4BHi9usNXj+Js+8iNVIXmak/bgfM=;
+        b=qdFm6zvFqkzB5p3007oLlWcLNoMhG4Bgw2/cm0TXmnKGvC/YFQmqEWZqaI66PSL4YX
+         kbQOKvrkAZ7Ed+a5TGBGiaujrjAgSO7OQpQp+1JBcRinENE5VF9CvSoludbh1Vpe1JlE
+         gll+XI7Sv7UHd5Y/23kHhed1x9TpxJlGQjvedvgeVBlxl0aOZK2BFMGNlAEag3xUAyN7
+         NVXfjvn8qa59ApGX0SzYPv6XR9xR0HVSHyPIk/L78wcFTpvLMwwA4qaOzvPZBtkRY1Rd
+         mfz8zfBTQT20Oaf1iTBpC6Qdu0X5v40jBnQyvj2/YIRXjEyJQ8wF/Tu5OkuINyyJK/GU
+         gnrA==
+X-Gm-Message-State: AJIora9YOi6PMEmyv09Oq/Gz2vw6fxJOn5O3w6bPPluyd1gcGhgtAcGu
+        +LFDgkULTUNlLainw+7OBuI=
+X-Google-Smtp-Source: AGRyM1sTqhhfw1OBLLlglJklCS+Ig6NucsZXKW2fUndS2h0EKP0isqvDTqr404xZJVJ0pDiCuLZL4w==
+X-Received: by 2002:adf:f446:0:b0:21b:821f:a916 with SMTP id f6-20020adff446000000b0021b821fa916mr321884wrp.11.1655456117655;
+        Fri, 17 Jun 2022 01:55:17 -0700 (PDT)
+Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
+        by smtp.gmail.com with ESMTPSA id n125-20020a1c2783000000b003974cb37a94sm8397306wmn.22.2022.06.17.01.55.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 01:55:16 -0700 (PDT)
+Message-ID: <a4d832b4-e850-5e48-39e0-ba3e61bea89f@gmail.com>
+Date:   Fri, 17 Jun 2022 10:55:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/2] arm64: dts: mediatek: mt8195: add efuse node and
+ cells
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20220617072344.21461-1-chunfeng.yun@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220617072344.21461-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,129 +80,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-introduced a helper function to fold duplicated validity checks of bind
-addresses into inet_addr_valid_or_nonlocal(). However, this caused an
-unintended regression in ping_check_bind_addr(), which previously would
-reject binding to multicast and broadcast addresses, but now these are
-both incorrectly allowed as reported in [1].
+Series applied, thanks!
 
-This patch restores the original check. A simple reordering is done to
-improve readability and make it evident that multicast and broadcast
-addresses should not be allowed. Also, add an early exit for INADDR_ANY
-which replaces lost behavior added by commit 0ce779a9f501 ("net: Avoid
-unnecessary inet_addr_type() call when addr is INADDR_ANY").
-
-Furthermore, this patch introduces regression selftests to catch these
-specific cases.
-
-[1] https://lore.kernel.org/netdev/CANP3RGdkAcDyAZoT1h8Gtuu0saq+eOrrTiWbxnOs+5zn+cpyKg@mail.gmail.com/
-
-Fixes: 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-Cc: Miaohe Lin <linmiaohe@huawei.com>
-Reported-by: Maciej Żenczykowski <maze@google.com>
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
-Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
----
-This patch is sent as a follow-up to the discussion on the v1 by Carlos
-Llamas.
-
-Original thread:
-https://lore.kernel.org/netdev/20220617020213.1881452-1-cmllamas@google.com/
-
- net/ipv4/ping.c                           | 10 ++++---
- tools/testing/selftests/net/fcnal-test.sh | 33 +++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 3 deletions(-)
-
-diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-index 1a43ca73f94d..3c6101def7d6 100644
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -319,12 +319,16 @@ static int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
- 		pr_debug("ping_check_bind_addr(sk=%p,addr=%pI4,port=%d)\n",
- 			 sk, &addr->sin_addr.s_addr, ntohs(addr->sin_port));
- 
-+		if (addr->sin_addr.s_addr == htonl(INADDR_ANY))
-+			return 0;
-+
- 		tb_id = l3mdev_fib_table_by_index(net, sk->sk_bound_dev_if) ? : tb_id;
- 		chk_addr_ret = inet_addr_type_table(net, addr->sin_addr.s_addr, tb_id);
- 
--		if (!inet_addr_valid_or_nonlocal(net, inet_sk(sk),
--					         addr->sin_addr.s_addr,
--	                                         chk_addr_ret))
-+		if (chk_addr_ret == RTN_MULTICAST ||
-+		    chk_addr_ret == RTN_BROADCAST ||
-+		    (chk_addr_ret != RTN_LOCAL &&
-+		     !inet_can_nonlocal_bind(net, isk)))
- 			return -EADDRNOTAVAIL;
- 
- #if IS_ENABLED(CONFIG_IPV6)
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 54701c8b0cd7..75223b63e3c8 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -70,6 +70,10 @@ NSB_LO_IP6=2001:db8:2::2
- NL_IP=172.17.1.1
- NL_IP6=2001:db8:4::1
- 
-+# multicast and broadcast addresses
-+MCAST_IP=224.0.0.1
-+BCAST_IP=255.255.255.255
-+
- MD5_PW=abc123
- MD5_WRONG_PW=abc1234
- 
-@@ -308,6 +312,9 @@ addr2str()
- 	127.0.0.1) echo "loopback";;
- 	::1) echo "IPv6 loopback";;
- 
-+	${BCAST_IP}) echo "broadcast";;
-+	${MCAST_IP}) echo "multicast";;
-+
- 	${NSA_IP})	echo "ns-A IP";;
- 	${NSA_IP6})	echo "ns-A IPv6";;
- 	${NSA_LO_IP})	echo "ns-A loopback IP";;
-@@ -1800,6 +1807,19 @@ ipv4_addr_bind_novrf()
- 	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
- 	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after device bind"
- 
-+	#
-+	# check that ICMP sockets cannot bind to broadcast and multicast addresses
-+	#
-+	a=${BCAST_IP}
-+	log_start
-+	run_cmd nettest -s -R -P icmp -l ${a} -b
-+	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address"
-+
-+	a=${MCAST_IP}
-+	log_start
-+	run_cmd nettest -s -R -P icmp -f -l ${a} -b
-+	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address"
-+
- 	#
- 	# tcp sockets
- 	#
-@@ -1857,6 +1877,19 @@ ipv4_addr_bind_vrf()
- 	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
- 	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
- 
-+	#
-+	# check that ICMP sockets cannot bind to broadcast and multicast addresses
-+	#
-+	a=${BCAST_IP}
-+	log_start
-+	run_cmd nettest -s -R -P icmp -l ${a} -I ${VRF} -b
-+	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address after VRF bind"
-+
-+	a=${MCAST_IP}
-+	log_start
-+	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
-+	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address after VRF bind"
-+
- 	#
- 	# tcp sockets
- 	#
--- 
-2.36.1
-
+On 17/06/2022 09:23, Chunfeng Yun wrote:
+> Add efuse node and cells used by t-phy to fix the bit shift issue
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v4: no changes
+> 
+> v3:
+>    add reviewed-by and tested-by;
+>    fix duplicated unit-address warning;
+> 
+> NOTE:
+>    based on v5.18-next/dts64 of matthias.bgg's branch;
+> 
+> v2: no changes, just based on new mt8195.dtsi
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 55 ++++++++++++++++++++++++
+>   1 file changed, 55 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index b57e620c2c72..d5bc4cf5f4ac 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -691,6 +691,53 @@
+>   			status = "disabled";
+>   		};
+>   
+> +		efuse: efuse@11c10000 {
+> +			compatible = "mediatek,mt8195-efuse", "mediatek,efuse";
+> +			reg = <0 0x11c10000 0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			u3_tx_imp_p0: usb3-tx-imp@184,1 {
+> +				reg = <0x184 0x1>;
+> +				bits = <0 5>;
+> +			};
+> +			u3_rx_imp_p0: usb3-rx-imp@184,2 {
+> +				reg = <0x184 0x2>;
+> +				bits = <5 5>;
+> +			};
+> +			u3_intr_p0: usb3-intr@185 {
+> +				reg = <0x185 0x1>;
+> +				bits = <2 6>;
+> +			};
+> +			comb_tx_imp_p1: usb3-tx-imp@186,1 {
+> +				reg = <0x186 0x1>;
+> +				bits = <0 5>;
+> +			};
+> +			comb_rx_imp_p1: usb3-rx-imp@186,2 {
+> +				reg = <0x186 0x2>;
+> +				bits = <5 5>;
+> +			};
+> +			comb_intr_p1: usb3-intr@187 {
+> +				reg = <0x187 0x1>;
+> +				bits = <2 6>;
+> +			};
+> +			u2_intr_p0: usb2-intr-p0@188,1 {
+> +				reg = <0x188 0x1>;
+> +				bits = <0 5>;
+> +			};
+> +			u2_intr_p1: usb2-intr-p1@188,2 {
+> +				reg = <0x188 0x2>;
+> +				bits = <5 5>;
+> +			};
+> +			u2_intr_p2: usb2-intr-p2@189,1 {
+> +				reg = <0x189 0x1>;
+> +				bits = <2 5>;
+> +			};
+> +			u2_intr_p3: usb2-intr-p3@189,2 {
+> +				reg = <0x189 0x2>;
+> +				bits = <7 5>;
+> +			};
+> +		};
+> +
+>   		u3phy2: t-phy@11c40000 {
+>   			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
+>   			#address-cells = <1>;
+> @@ -873,6 +920,10 @@
+>   				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
+>   					 <&topckgen CLK_TOP_SSUSB_PHY_P1_REF>;
+>   				clock-names = "ref", "da_ref";
+> +				nvmem-cells = <&comb_intr_p1>,
+> +					      <&comb_rx_imp_p1>,
+> +					      <&comb_tx_imp_p1>;
+> +				nvmem-cell-names = "intr", "rx_imp", "tx_imp";
+>   				#phy-cells = <1>;
+>   			};
+>   		};
+> @@ -897,6 +948,10 @@
+>   				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
+>   					 <&topckgen CLK_TOP_SSUSB_PHY_REF>;
+>   				clock-names = "ref", "da_ref";
+> +				nvmem-cells = <&u3_intr_p0>,
+> +					      <&u3_rx_imp_p0>,
+> +					      <&u3_tx_imp_p0>;
+> +				nvmem-cell-names = "intr", "rx_imp", "tx_imp";
+>   				#phy-cells = <1>;
+>   			};
+>   		};

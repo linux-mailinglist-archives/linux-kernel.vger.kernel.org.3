@@ -2,290 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB4254FD80
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F6954FD85
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbiFQT1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S233878AbiFQT2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiFQT1q (ORCPT
+        with ESMTP id S229952AbiFQT21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:27:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881D71FCCC;
-        Fri, 17 Jun 2022 12:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655494065; x=1687030065;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=kD9T98S7GkjkZthivYxqYBBUCkNDdR/mQBrukF/wEaQ=;
-  b=c+YfJyUiWT6cWOdzp534YlDdGfV/sGU3CP/99HSXYGuXxmEHwFdwDjXl
-   9ma2KmSMxgwDghFvSBCYb9+gg9aXnux3FtECBjm+HHGGB+pRcGc6Wjt8z
-   cFL4rzzWboEtFHHdo2LvGr3bEYPAoUhzcp/UfREs1THa+EHyNgn62B5AI
-   lA1/ZBIevBkytq8ws6V8lwzB38b6F+bk/Qyniuw5BDWK/WsPQSy7AnIx/
-   Ng+loUMFzhu73PsaJU76DcycmmRdqo7Q8s9aJv3A+sLONL19xHBzGJ6qy
-   8RD6Pbw1n6SmHC0Ec2nsfM2Pq6A5vbp4g2hGXIBxLg9M+ElGN44ZXK9+c
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341254473"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341254473"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:27:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="688432733"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Jun 2022 12:27:44 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 17 Jun 2022 12:27:44 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 17 Jun 2022 12:27:43 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 17 Jun 2022 12:27:43 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 17 Jun 2022 12:27:43 -0700
+        Fri, 17 Jun 2022 15:28:27 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3C345510;
+        Fri, 17 Jun 2022 12:28:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YF0b9Mapkxk1lKde1e6C04fF50d9ux+VOE6puI6vK55GBGMN+ZI8j/+P2W+sLHHCllPtWfTceYSYDeCvYU2PmwmFCmU4R4mDyva1rQsx79SkaWB7Ebrjf2BmvZmWaWmiibg8H7Fm/+eiaCDbKN3IW8ZJ1cEDuPWdZ6YmuVFsFWhGwrNcca9RMZ79JiRf+QV3MkbcxcSN1zdy5H7XDSQx61//JvxaYYDPc7MdtT401P2xbdhKALzsXq6d3/B3UToc6Rhy12wAzfxbJBRysKAkzR13ipqOveDq15A3TOyhN2rPJXcoLvxAfet5xUeRh4fjf1xyg+flaa0hbQIfyPKfJw==
+ b=Q725Wyq7WAyFnyPgKz1nu8p4LP17R7mOFRfSD8qnJownUz4UEIIh5UftEojuqpBSANMKhed/qVJpHsKiFLVbbFcsfSPe/MyK85/k4YTwdtlppOn+3DPU1k7keIdWr21fOghAqcgNelYY22+SgnZl9lH6bG1JZaDGTzlvOeQI+hQ5UgGzg0ezO0dH/4zky4ZAALY7pu21b5SIDIoI5WunhalwPIfMDQsuMpj/6P71TRQ3KwwiOiktMc8oR0sWBsRzhx7MuCODDVB0xH2aMEV5XTBlB+O+rr1dgkeUIPl0hX2frpZnEbL1Fv+2XjG1GJX4qt4aIJQT8rI4bAZGkfEdtA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zQkTiAqaN4p+sYmdWAA0WF5gklolYkRmuodA8JTBz/4=;
- b=FZqML6BVJ0mSLgykDe1blOaro+5BdoIOyhR3F5nRs4Ij8O36NYNoWFHw0QytM1WBtSpfi03azwdIqqd/aqTKGFe2C0o2UgVZyG3H7a/EhF7sgjt8v70pOu/6HlvOqN5dpjn/CUVkduaKhQkWSaqdnW9aMTG36NR+mCmgZPCrC5yBRQyhqUA+SA5U/2p9Vg1vLdAzMTpw1uSZIrNp+8gUeEwa1GucWMFXu1pThVVvDURtgATCvP/2ZvYoOjbIEO4N7IDWBae4zNfIRyu/xcYmpwDbRD6TzOS/Y/BV9jVcnh3frqaLvfOLuiYzQRMs54iiM+TCsj+sIhASbQfyZ7aO9g==
+ bh=cz1u0PvpDxC4/rnVanBgpT5w08uEahfomKTDHyKlIQ0=;
+ b=deNloFRqyWb3ninNbmRuD3lEYrNv3mVcGs8DoPHfKXgxzXfazap5u1iTSqJAuDACebIoKb+teyQdo97JUpOSmz0j9Cl3jnwV4KtE/apEf0xCyQEP0NBkofiV/VWVk6EUrBeNmY6XWAFmGMF8d1Wb+c9Q+4633BZ5ToMgCYVkobiLaBFUcYWzKMj2Vqf8FE2eOt0NQyMy6DDURA7Aoap81jeYjJMvQXYwtCZU97StKwnusjoqAD1T3y7LVVc4wZc2NbQSxAK1Qb3IULU3IiAeYzWrnV4e5d0nbMQSGL+emr/zkxR8Pi/+cQ4YWvwPYVVkz8Tta8m/Mk4n/PSRabeVdg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cz1u0PvpDxC4/rnVanBgpT5w08uEahfomKTDHyKlIQ0=;
+ b=KK9sCWdlgeZf7sdMRygjJ/eb//5yB/6YmldeiTAC/N1Z2v8C9dqwiQ8Z7auNpv9m8aMeF/yjwdiy9dr/DSPiwsSfwWzAcTh10DZngN5E8W1wnTyXmEQRBJV+Rqsgluk5dmum3CNie14Dnaf3FIVQP6KWc2qvndQ/TfNJr0cTalU=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by BN9PR11MB5289.namprd11.prod.outlook.com
- (2603:10b6:408:136::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
- 2022 19:27:41 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf%7]) with mapi id 15.20.5332.023; Fri, 17 Jun 2022
- 19:27:40 +0000
-Date:   Fri, 17 Jun 2022 12:27:38 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        <alison.schofield@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
-Message-ID: <62acd5aa94391_844b129490@dwillia2-xfh.notmuch>
-References: <cover.1655250669.git.alison.schofield@intel.com>
- <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
- <20220617150508.0000266a@Huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220617150508.0000266a@Huawei.com>
-X-ClientProxiedBy: MW4PR03CA0103.namprd03.prod.outlook.com
- (2603:10b6:303:b7::18) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by CH2PR12MB3767.namprd12.prod.outlook.com (2603:10b6:610:26::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Fri, 17 Jun
+ 2022 19:28:23 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::9084:a97b:ab5c:6642]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::9084:a97b:ab5c:6642%6]) with mapi id 15.20.5353.018; Fri, 17 Jun 2022
+ 19:28:23 +0000
+Message-ID: <af8038c6-d14e-a327-7685-14bcee778c96@amd.com>
+Date:   Fri, 17 Jun 2022 14:28:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7P220CA0008.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:806:123::13) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 09ddb08b-9c06-4672-76c6-08da509771bd
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5289:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN9PR11MB52892FC317ADA492A0483443C6AF9@BN9PR11MB5289.namprd11.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d7696e11-142c-49d2-492f-08da50978b47
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3767:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3767F1A1256E0F94D5AF6A04ECAF9@CH2PR12MB3767.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: honSdZ5qWYtPFnAd3KwqyM4kHgBTOF1XuIRBf5sH1SZJBs2ELQvkgsMJ33BgXSbSwpZ34mS+C2CYZjYQR6Yu8+Bvqh4y0RvHPmfiZzscZ652lqHn2xWYDwgbTE4rwEGm96jLJM7Bn9g1dWHFmZ+Zrqkx/h6B7DkY7HQZGNUnogq5XgdaInQ+NQ2EksK0FefGw3AnMj7qt7oMa4tBVCqobP96bvz4yJKq3fvGzGo2OXL3iYTW+1JX7Z/yGw8rnHtmGv+4rKKqcA6o2pujm643H2fg3E1vHzQNyPXSt9aEh38TTyO1Cor+n6bN0qPWMJ7SlCPWnmk4HXX0dSI43dBuHlJgrKtFqtllQcdKP7yH9JSj5FiB+reMaJ57sbK+OIm75GQFimJG6vImU5omOz+PE9qJ/rYMiRXs7ipTlCgeCCQfyujcH4sG5HAUc8qPVnnn2PGeS877uZBwaGbUMoE+KtEfY8GFDKmxVRcVqq3nDhs39qLgdqzt5z9MqSe9BsEkMLpShKCrS24PU6soFIuu0hI3TP7HzEYv34HjNq6EishBifbLFZOXdwdwls9J+Yr5wJSBnRgYUVSIpswKou9ToFOfAr+tPrjyR3eKrsf6BUcTzJamAeFYni1Depym85YrRxbnoGry/wZ1cwYlkQ2vTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(6636002)(186003)(498600001)(82960400001)(8676002)(66556008)(5660300002)(9686003)(54906003)(6506007)(26005)(66946007)(83380400001)(4326008)(6512007)(38100700002)(2906002)(6486002)(86362001)(316002)(66476007)(8936002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: RPc7sbdeza4D55/0s69liWWcSd8eFSQbUilxMGAt8GJgnHEuV2PHc2LG8UhOxmvC1FW4zYO+nAZQvOzm9145Bz6dCWIEEhlSpJYaWp36wMYhOGaBh9tsaGExeRpiZDtkJ2cmRLHoFbQCwsd/4cNf42p38n1XbPUoXqq62cFmDqplvDQyW+0RFj2jMXqvQe7p8c8FZB3/7o1eEJBiypMUzlaSLUek505W0NLAn4sCwupvyTUdBaF4TqZJoOr+j/FREOWWCz6+GOP06AI+4iYkzRvF/WKR1AqAvG82wOn+WqlQSGikWq0FrN5hKMu3Ky8qQze0VfMZ2hI2xg+SiObNexYTXUi5MH8hB2qnTvHP1hHnKEJDHUks2qaflkW4E4P8PUutfVgiWFYUgIPFJSNOM2Rw/exSFLWJb+P+zUgpDfdyXBCBvCYcK2HqwLQJPL1Rk2Py2Zu0eusThhSggMhWDAoTg43TkoQnKeV13N5Y2TUUP6S60hwi7bCIVsvGUCsDqBgDYZVbP/5HOSSuSEGdE6WP/K/FtheY4VPe+sWz4H8kehGEigCy7N3QrKDnck2tRWpqaG2u/UeZ9S16OLZwWXMj39qXgiTV2BeJ2huNYm+JhpxLmIWrCKe7vHO87Ff+Yzvn08eVcsX7h8EvdVbnpBDXf1374D3DAP67PY+dX7aKQS18Nne15uUfoOBPKHy9gr2zQFKNKhjjBFn2cU6MonN6xpC05/2TwT8CM/6OprXofw5oGtlioSNszciN9/1W
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(2906002)(6486002)(6506007)(31696002)(316002)(7406005)(6512007)(66946007)(4326008)(53546011)(110136005)(54906003)(8676002)(26005)(38100700002)(66556008)(7416002)(8936002)(186003)(498600001)(5660300002)(2616005)(83380400001)(66476007)(86362001)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zTRc/OX1j1tvsXcdMSc0QFEaPQEXg8fn6WjMCP/5nK2A0k6/YRmeWWFHfGMi?=
- =?us-ascii?Q?suD6iJ9kbIDSLLNluXzMfho0+9nOjaYv3A+RQP0JU/L1Dz2iJnV969rv5m8R?=
- =?us-ascii?Q?iKSofAXQQlNDwOsIQJcOckVB03Kr8d72a+3AJFLkpJ4mjt3FNK1wMegrUE96?=
- =?us-ascii?Q?gqztCWXbLdGodfghTcy60Q3VaLvBBziImgDbX55vcrCPRM5Q5ZB8bw8XCjKl?=
- =?us-ascii?Q?4AET+2UNtTSDt4WChvFsaaxThPeM4aVVSzy+KUXKhbiM5/1zF6VHvHw4a1v/?=
- =?us-ascii?Q?8npebMNjM/JnK53AmR6M1SxxcqiszbT2ARXxbcoNKUydiebk8N6KNHvhOk48?=
- =?us-ascii?Q?sLHLFTb4R7cBuhcrfHVgrMFTvPGDwpa7ZtyDGsgi2LZcnpg40Q84/BYNEgIl?=
- =?us-ascii?Q?qo1z/MFW2qfLhd9d3Njbhm9RaAmt7ZFI8m+k/IMAtsp+R83lYY1CMfKkJtF4?=
- =?us-ascii?Q?hfYlARHt7kZGbnriPludjXK+dwpEaTfBPXAS70b4zkzzONTL3U6ykCGzYEiL?=
- =?us-ascii?Q?fi/wPntZjAoShWRQRRWmnqmpyajOP14KJG8KyBSoGVKh14hhyQUeTN9/Zn/r?=
- =?us-ascii?Q?zmeJP6LR9XE2RQfQFbagLOuJ52wvHUfVPP7A5lw7fQeiLAxxl09SxrKCqTct?=
- =?us-ascii?Q?vw8sDDPfC8fGH3dYy+BU7tBSCeXe2V7bWan8CZqf8f6ET5PRQlONEP6PQG0s?=
- =?us-ascii?Q?M3nR3ZKTaiYTMD9THSa15m19NM420aR4lnrsqV1m73He0uhSs4qJx/MVKsrT?=
- =?us-ascii?Q?CfKjp3xmiI9DqNC8Zlihpa6W8lW52eNUbu04nJfg8iGGkfc3/pCd0OQgZES0?=
- =?us-ascii?Q?5qsZ8c0lo6EpAuHeUmWCrGNiRJdXTMcmifUwTb9bJKBTaayQrnBC8mWOTvz0?=
- =?us-ascii?Q?KaMx2sfjopromeSKfS0bU4xLAot+wGMywInlzPxiteFXwsWVYeTlPFG6nrwv?=
- =?us-ascii?Q?VMpK1BLRDjEWEaOtiHEQHMUvDirAtela5vON7+1B0fYPOEg+ZpNC76ZCI5H+?=
- =?us-ascii?Q?3RgAMdrUo0lc9/hLxaxz3WWhmWMPDESR0etf5XyGzrt0P+N/axdYYv77j3hd?=
- =?us-ascii?Q?3SNjv/9LtAL97qWj+ixhqAhmzoq0eY9gbiJdZgQHjSIpl/6vf419P/zJ0V79?=
- =?us-ascii?Q?1L1vMnagW87N/edPLVB9b3uauNSTwkpyYVNo2Ao+c77efHyy2VjGrezTbI5b?=
- =?us-ascii?Q?f49WgOsvb/EO4ONxtaYYyNVRqWq/OIYiaHKlI/O8USgEZ//DH95ZXlG3btSa?=
- =?us-ascii?Q?XpoYBYPLueI6CbdAO49pSuGA+1sd4yN3tJlA8ytgmgNNgFWTigCPsm/Io2Ul?=
- =?us-ascii?Q?VcvkX+qQlcUKsLq/XOxxZxSbXTypJVksbb2ywPZakO69ztxzoX9p+jBB5TxG?=
- =?us-ascii?Q?euWLfZjZcmuIzDqK1dW/kZLcjQd0Z/H1bg8rt2mMXKFtQ9mZ3nb/sPPO3TIR?=
- =?us-ascii?Q?r8Q02/hZigeI4CME5pp824PzutByEBMEjoH8a+fvKN8UXI4aVE7GWvYZkwjY?=
- =?us-ascii?Q?HYqXNUrqWQ9YdHsijtMia+f+lj6Z/xyI2qczMC/KSED9/nBAkQVFz+wIqNEF?=
- =?us-ascii?Q?voBurQsSlhzCurCZcW6CUig8LtRfG8UYGho/bpyhBfaFQaVEaRs3HmLbQyQN?=
- =?us-ascii?Q?TXSUnyv15hqO+D9ymmrLRORm24GEIEmjNpHZSrkquP4CwRJScK9ky680PgWi?=
- =?us-ascii?Q?7DU+AU9lKG4+13c4ff0c3xngZAX3i2984S5L2pat6R6OvXvQPKrY+p6aL97r?=
- =?us-ascii?Q?SdEAA4oH/JzG303BCOArhvfrZlCyu3I=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09ddb08b-9c06-4672-76c6-08da509771bd
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzRPNWhMZ3dYNVIwdityMmNYUi9kNFRVcGs5Sy95NFZEbnE3Zk03Q1Z2MElp?=
+ =?utf-8?B?NkNEUytsc1RMN2xzOEprelBUTFBuRXpEZG9QeDZpR2ZYNDdKZVVaaUZWMXA1?=
+ =?utf-8?B?bDdSVkFiR3lqczEvUVVJNDNnWDkyT2J4MWFtRTFaVkNpbHFncnhDQ3doTUFV?=
+ =?utf-8?B?L3MxOGVZZTE4c2REaDRpMnY5VFZvWjVsZ0NZaTJMSVhKd29PNm10SWsyMk1P?=
+ =?utf-8?B?bWVZdi9uRmt0bU5Ic3dHN0dPMzNyYkJlSzFmM3VJVjh5U25GamtvanlGZTV3?=
+ =?utf-8?B?QjNrMVl0NDhNUitlVGVuVDNpMG1pQmI3czd2WmJEWWdBUWNPa3FHc0tvaTdS?=
+ =?utf-8?B?S2FYb3NPUUtBa3JBemtnRlQvWGlGVWE0N29LM2lBYVR6ZWVFMkNHWHczRThG?=
+ =?utf-8?B?b2wrQmc2SGt1R2JRUmsxNTJuZTJxdkN1ZElrQ0FnNmFnRU5NK1I0YWdlVnZ6?=
+ =?utf-8?B?ZlpLSmk5QXNBTEl2TWIxcXptODNXTEQrbDJSZUE0T1NjaGJxWUFGVFpLSTZk?=
+ =?utf-8?B?OWY2MmdFOWJscFZPM0x3MElmNUFMeldjeUFUdzlDejdBUjBIYnRvTm9iSDRL?=
+ =?utf-8?B?Z2pRZTlhOHZSUUZBbFVqY0tJaHRnNVFFZndQdjJYQ3kwN0ExbkFPaE02SnZM?=
+ =?utf-8?B?R21Jd1VJVUR6ODhHWW5zRVI2aU9XbFZUUUhaV05PekRCNXJyZEFxVUxRVVB1?=
+ =?utf-8?B?R1haZ0c5UUNaV1dlS0ZYU1Y3N0hta3hBczBYWEU3ekgzUnlrRlk0L2M0STEx?=
+ =?utf-8?B?V1hGemJEbGpEK3JYK09ScFg1WVJhcmJHTzh3b3V2ejRLUVJRZ05kYjlRSTkx?=
+ =?utf-8?B?KzJ3NHNyMDZBU2N0eUwzZ2pnTmV2d0d1aFZGQUJ1U1E3c1BzaHJRM3dIQ3Vx?=
+ =?utf-8?B?RGEwUG9mQ1UxZDM5Y0sySHdRZEExZ2VOcWx3OGliNnNySDB3TVVFZjB4K1VZ?=
+ =?utf-8?B?R2M0TytLQ0pxQXhyZ2JaSHUzakhZS2s0aGg1YmpTS1VsbTM3SHgvaEdwdVEx?=
+ =?utf-8?B?NjE5d053V0pmZGM1SjdrMG9Jb2hIMnEyVVpaSTlWSTkyZTFMNnZ3bXYzbU4w?=
+ =?utf-8?B?K1kzbTBhM3RkcmlYYkZFM0U2VTFCM1dUeG5EYVBlbnhFTnZhT1JJMHdaYzMv?=
+ =?utf-8?B?akNIYWRLeGd2TWJtZ2ExNDVRL08zcmhVMEZJV05xRll0anMzbmJDR1NwRUZk?=
+ =?utf-8?B?bHNScEF5K3dsL0FPdmJKeW1oVk9WaWVKSUhTS3g3YzFKTm91NGZWc3plT0du?=
+ =?utf-8?B?VjlRZ0RTNW5RYm96cnVLdXlqa2lkdUZyWUZGN0gzNDg1dTVXMW9WUGljaFhS?=
+ =?utf-8?B?b3FqeWdRWVJvUkp1RU9ZZVVWdXJLbU1GZnc5S0J5aWhyT0RRczNiRU1TZ3Bp?=
+ =?utf-8?B?V1N3VTBubFh2NHFxUEFTcTl4RTVhNlJJbEVRQXZiYnVFZEZ0ZVEvUUltUlhr?=
+ =?utf-8?B?UkJaaXpFcEIrN21VYUtuMkdZblAwWlpkOEpITEg4MkVhcU9TWGFxN2JFL0dB?=
+ =?utf-8?B?T3BManFGU21hMUVOOThXQ0wvZ0NTaFdVNFUrMUxENFJVTVNpRXFXQlZreXcw?=
+ =?utf-8?B?bFB0NlVhckdqMkZUUUtXWFZaMnJzbjhuQUhTQVEza1pxMzRDR3BLWjhLbDg3?=
+ =?utf-8?B?bzg0OFozNkp4eUUwL2xURXpJTmpjVS9iU3YyK2ZmMzNXN2JOVXlzQkhKTk53?=
+ =?utf-8?B?bGdhZjNvNGZSR1I5bWI3TVBSRVdORkpJaVZuTmhudnpYNnU2R3Z2MlBIcld0?=
+ =?utf-8?B?OTUvUW5KY0ZrdVA2UGZzK3RlZm54Y09FUzA5N2ZlTlNyOVBqNzJpeFBKa3E0?=
+ =?utf-8?B?cTgzb0xQdTg5bFdUMWx2bzVqak1lb1N3VjNRQzhkTGdnUXhqVjdnRXM3ck1Z?=
+ =?utf-8?B?RFY1Ynd3anlyMktZNFhValU4WUR6YzlYVUhUKzY1Z1pUUnFDRVdqYXltMndw?=
+ =?utf-8?B?c2FNNDc3eW1YMUpXNWk2RENJNzBnc1ZKbi9sQjJjMVl4Q3N3NjlHdXhxQW1p?=
+ =?utf-8?B?dURoN3dMMkJzY2x0NkJCbkJCMGVScGVZVTNqZ2tyRlBHU1REbS92YVQySSts?=
+ =?utf-8?B?bnViQlRHSFl3aGlJaDBNRjdzVlNLTlN6UVJEci85UWdJeGNwOXRYUzRzSVpS?=
+ =?utf-8?B?V1lVRzBEMkVQQXpiSlRhZWlRTUNEeXNsbGtJejg5OC9EbExwYm02WWFKV2hp?=
+ =?utf-8?B?cVBhd2lXRWp4WUJxV2Q3bUsvM2FWczE1N0szaTdadWQreG1GeWRaTU41REtP?=
+ =?utf-8?B?N3pXVlptMGZmNkJqUXk2Y2VvM0tNMDJzTnNVNDNHbFRocG8rNHlEaTl1SUg5?=
+ =?utf-8?B?eUhSa2FTdFZ1bGt3VTdTQWtRSWJoQmM2QktNTU1DUGpHanJiU1hrdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7696e11-142c-49d2-492f-08da50978b47
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 19:27:40.6590
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 19:28:23.5379
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z218A/B462sH4aXNPIB1F5dGA7zt/hM2yG47VNgUKiqORyfO59m13LFWcgk4kZqf8+ahIn8HkXG3p2zZgQg/YF0qWWTbN19EP+T4DZBgEjw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5289
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: DwHdOcKe4xQ0vZoR0bJ8AEhBw9dbWZcPPLM6Q72ueRIpSCC/dcVSaiiHSfgKXa7yl0vo+wc6VBl7t6GVSomCfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3767
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Cameron wrote:
-> On Tue, 14 Jun 2022 17:10:27 -0700
-> alison.schofield@intel.com wrote:
+On 6/14/22 07:02, Kirill A. Shutemov wrote:
+> UEFI Specification version 2.9 introduces the concept of memory
+> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
+> SEV-SNP, require memory to be accepted before it can be used by the
+> guest. Accepting happens via a protocol specific to the Virtual Machine
+> platform.
 > 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > CXL devices that support persistent memory maintain a list of locations
-> > that are poisoned or result in poison if the addresses are accessed by
-> > the host.
-> > 
-> > Per the spec (CXL 2.0 8.2.8.5.4.1), the device returns this Poison
-> > list as a set of  Media Error Records that include the source of the
-> > error, the starting device physical address and length. The length is
-> > the number of adjacent DPAs in the record and is in units of 64 bytes.
-> > 
-> > Retrieve the list and log each Media Error Record as a trace event of
-> > type cxl_poison_list.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> There are several ways kernel can deal with unaccepted memory:
 > 
-> A few more things inline.
+>   1. Accept all the memory during the boot. It is easy to implement and
+>      it doesn't have runtime cost once the system is booted. The downside
+>      is very long boot time.
 > 
-> Otherwise, can confirm it works with some hack QEMU code.
-> I'll tidy that up and post soon.
+>      Accept can be parallelized to multiple CPUs to keep it manageable
+>      (i.e. via DEFERRED_STRUCT_PAGE_INIT), but it tends to saturate
+>      memory bandwidth and does not scale beyond the point.
 > 
-> > +int cxl_mem_get_poison_list(struct device *dev)
-> > +{
-> > +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-> > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> > +	struct cxl_mbox_poison_payload_out *po;
-> > +	struct cxl_mbox_poison_payload_in pi;
-> > +	int nr_records = 0;
-> > +	int rc, i;
-> > +
-> > +	if (range_len(&cxlds->pmem_range)) {
-> > +		pi.offset = cpu_to_le64(cxlds->pmem_range.start);
-> > +		pi.length = cpu_to_le64(range_len(&cxlds->pmem_range));
-> > +	} else {
-> > +		return -ENXIO;
-> > +	}
-> > +
-> > +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
-> > +	if (!po)
-> > +		return -ENOMEM;
-> > +
-> > +	do {
-> > +		rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_POISON, &pi,
-> > +				       sizeof(pi), po, cxlds->payload_size);
-> > +		if (rc)
-> > +			goto out;
-> > +
-> > +		if (po->flags & CXL_POISON_FLAG_OVERFLOW) {
-> > +			time64_t o_time = le64_to_cpu(po->overflow_timestamp);
-> > +
-> > +			dev_err(dev, "Poison list overflow at %ptTs UTC\n",
-> > +				&o_time);
-> > +			rc = -ENXIO;
-> > +			goto out;
-> > +		}
-> > +
-> > +		if (po->flags & CXL_POISON_FLAG_SCANNING) {
-> > +			dev_err(dev, "Scan Media in Progress\n");
-> > +			rc = -EBUSY;
-> > +			goto out;
-> > +		}
-> > +
-> > +		for (i = 0; i < le16_to_cpu(po->count); i++) {
-> > +			u64 addr = le64_to_cpu(po->record[i].address);
+>   2. Accept a block of memory on the first use. It requires more
+>      infrastructure and changes in page allocator to make it work, but
+>      it provides good boot time.
 > 
-> > +			u32 len = le32_to_cpu(po->record[i].length);
+>      On-demand memory accept means latency spikes every time kernel steps
+>      onto a new memory block. The spikes will go away once workload data
+>      set size gets stabilized or all memory gets accepted.
 > 
+>   3. Accept all memory in background. Introduce a thread (or multiple)
+>      that gets memory accepted proactively. It will minimize time the
+>      system experience latency spikes on memory allocation while keeping
+>      low boot time.
 > 
-> > +			int source = FIELD_GET(CXL_POISON_SOURCE_MASK, addr);
-> > +
-> > +			if (!CXL_POISON_SOURCE_VALID(source)) {
-> > +				dev_dbg(dev, "Invalid poison source %d",
-> > +					source);
-> > +				source = CXL_POISON_SOURCE_INVALID;
-> > +			}
-> > +
-> > +			trace_cxl_poison_list(dev, source, addr, len);
+>      This approach cannot function on its own. It is an extension of #2:
+>      background memory acceptance requires functional scheduler, but the
+>      page allocator may need to tap into unaccepted memory before that.
 > 
-> Need to mask off the lower 6 bits of addr as they contain the source
-> + a few reserved bits.
+>      The downside of the approach is that these threads also steal CPU
+>      cycles and memory bandwidth from the user's workload and may hurt
+>      user experience.
 > 
-> I was confused how you were geting better than 64 byte precision in your
-> example.
+> Implement #2 for now. It is a reasonable default. Some workloads may
+> want to use #1 or #3 and they can be implemented later based on user's
+> demands.
 > 
-> > +		}
-> > +
-> > +		/* Protect against an uncleared _FLAG_MORE */
-> > +		nr_records = nr_records + le16_to_cpu(po->count);
-> > +		if (nr_records >= cxlds->poison_max)
-> > +			goto out;
-> > +
-> > +	} while (po->flags & CXL_POISON_FLAG_MORE);
-> So.. A conundrum here.  What happens if:
+> Support of unaccepted memory requires a few changes in core-mm code:
 > 
-> 1. We get an error mid way through a set of multiple reads
->    (something intermittent - maybe a software issue)
-> 2. We will drop out of here fine and report the error.
-> 3. We run this function again.
+>    - memblock has to accept memory on allocation;
 > 
-> It will (I think) currently pick up where we left off, but we have
-> no way of knowing that as there isn't a 'total records' count or
-> any other form of index in the output payload.
+>    - page allocator has to accept memory on the first allocation of the
+>      page;
 > 
-> So, software solutions I think should work (though may warrant a note
-> to be added to the spec).
+> Memblock change is trivial.
 > 
-> 1. Read whole thing twice. First time is just to ensure we get
->    to the end and flush out any prior half done reads.
-> 2. Issue a read for a different region (perhaps length 0) first
->    and assume everything starts from scratch when we go back to
->    this region.
+> The page allocator is modified to accept pages on the first allocation.
+> The new page type (encoded in the _mapcount) -- PageUnaccepted() -- is
+> used to indicate that the page requires acceptance.
+> 
+> Architecture has to provide two helpers if it wants to support
+> unaccepted memory:
+> 
+>   - accept_memory() makes a range of physical addresses accepted.
+> 
+>   - range_contains_unaccepted_memory() checks anything within the range
+>     of physical addresses requires acceptance.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> ---
+>   include/linux/page-flags.h | 31 +++++++++++++
+>   mm/internal.h              | 12 +++++
+>   mm/memblock.c              |  9 ++++
+>   mm/page_alloc.c            | 89 +++++++++++++++++++++++++++++++++++++-
+>   4 files changed, 139 insertions(+), 2 deletions(-)
+> 
 
-It would be nice if this was codified as *the* way to reset the
-retrieval, but I worry that neither length==0 or length==1 can be used
-for this purpose since the "more" bit is attached to the last passed in
-*range*, not request. I.e. spec seems to allow for overlapping
-retrievals, although I doubt any implementation gets that fancy.
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..a1f7f8b304d5 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -1405,6 +1405,15 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
+>   		 */
+>   		kmemleak_alloc_phys(found, size, 0, 0);
+>   
+> +	/*
+> +	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
+> +	 * require memory to be accepted before it can be used by the
+> +	 * guest.
+> +	 *
+> +	 * Accept the memory of the allocated buffer.
+> +	 */
+> +	accept_memory(found, found + size);
 
-I think it is sufficient to just include the "more" flag in the trace
-event and if userspace suspects that it is getting "more" results from a
-previous run it can reissue the scan. This is another reason that the
-trace event should include the pid of the process that triggered the
-results so it can delineate re-requests. Otherwise, the poison list
-cache is opportunistic so I am not sure that missing records in this
-corner case is fatal.
+The SNP support will kmalloc a descriptor that can be used to supply the 
+range to the hypervisor using the GHCB/VMGEXIT. But kmalloc won't work 
+when called this early, so we are likely to need an early_accept_memory or 
+some kind of flag to know whether this is an early call or not in order to 
+use a static descriptor in the file.
+
+Thanks,
+Tom
+
+> +
+>   	return found;
+>   }
+>   

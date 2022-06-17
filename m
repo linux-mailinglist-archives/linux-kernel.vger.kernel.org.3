@@ -2,85 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD70754F007
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 06:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B4E54F161
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiFQEON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 00:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S1380370AbiFQHG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiFQEOD (ORCPT
+        with ESMTP id S1380086AbiFQHGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 00:14:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7158465D1D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:14:02 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LPQbh5D3Jz1K9RG;
-        Fri, 17 Jun 2022 12:12:00 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 12:14:00 +0800
-Received: from huawei.com (10.67.174.191) by dggpeml500018.china.huawei.com
- (7.185.36.186) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
- 2022 12:14:00 +0800
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <zhangqiao22@huawei.com>
-Subject: [PATCH 2/2] sched: Remove unused function group_first_cpu()
-Date:   Sat, 18 Jun 2022 02:11:51 +0800
-Message-ID: <20220617181151.29980-3-zhangqiao22@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
-In-Reply-To: <20220617181151.29980-1-zhangqiao22@huawei.com>
-References: <20220617181151.29980-1-zhangqiao22@huawei.com>
+        Fri, 17 Jun 2022 03:06:55 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35766006C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:06:51 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id LDX00144;
+        Fri, 17 Jun 2022 15:06:44 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
+ 15.1.2308.27; Fri, 17 Jun 2022 15:06:45 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] virtio: Remove unnecessary variable assignments
+Date:   Fri, 17 Jun 2022 01:59:52 -0400
+Message-ID: <20220617055952.5364-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.67.174.191]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.200.104.97]
+tUid:   2022617150644eebf72efbf489856870321ce69408a8d
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-group_first_cpu() is an unused function, remove it.
+In function vp_modern_probe(), "mdev->pci_dev" is assigned to
+variable "pci_dev", variable "pci_dev" and "mdev->pci_dev" have
+the same value. There is no need to assign variable "pci_dev" to
+"mdev->pci_dev". So remove it.
 
-Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
- kernel/sched/sched.h | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/virtio/virtio_pci_modern_dev.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 01259611beb9..8f57e9391e82 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1810,15 +1810,6 @@ static inline struct cpumask *group_balance_mask(struct sched_group *sg)
- 	return to_cpumask(sg->sgc->cpumask);
- }
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index b790f30b2b56..fa2a9445bb18 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -220,8 +220,6 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
  
--/**
-- * group_first_cpu - Returns the first CPU in the cpumask of a sched_group.
-- * @group: The group whose first CPU is to be returned.
-- */
--static inline unsigned int group_first_cpu(struct sched_group *group)
--{
--	return cpumask_first(sched_group_span(group));
--}
+ 	check_offsets();
+ 
+-	mdev->pci_dev = pci_dev;
 -
- extern int group_balance_cpu(struct sched_group *sg);
- 
- #ifdef CONFIG_SCHED_DEBUG
+ 	/* We only own devices >= 0x1000 and <= 0x107f: leave the rest. */
+ 	if (pci_dev->device < 0x1000 || pci_dev->device > 0x107f)
+ 		return -ENODEV;
 -- 
-2.18.0
+2.27.0
 

@@ -2,140 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5BB54F279
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C4854F27B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380724AbiFQIDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S1380755AbiFQIDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344176AbiFQIDT (ORCPT
+        with ESMTP id S1380711AbiFQID2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:03:19 -0400
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3072140BF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:03:16 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so1977759wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dzg4HckHFSbHYNGKJ4i1YLB0dVmoVIir8olD0ftfqDQ=;
-        b=BPdxVEr0m+p9FS8U+hdVHlvdLJz0CZCuuCK80VvYZJPz32Ojr1Mr8hFZQ4d3ERTfxr
-         X65TWuKdNyYDyXvdW/YspAb/61Igsk6g1EbBmZ+fMHc4mLNq5k7m4W9yKurKmW0Td+El
-         x/tNVCMTu0wBoOFThi6YRahckHnLKsOws80OUGak5JracqFkcUFVQg2HTGdPGlPULhHi
-         ryYmJKdDlvhLxnURb4TgJBp6RPWwXKQ4T9ZfLkSF1FIlnO65fRXFFrKP6uhm9cCtFDNt
-         tPwFrp4wsGXro7ZadM2/KNtr2J+LbQ6anavf9wBxYjLnTDK9Quf4GQ2iG47AbWhspJAZ
-         A/kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dzg4HckHFSbHYNGKJ4i1YLB0dVmoVIir8olD0ftfqDQ=;
-        b=UHo0KpdYSq8eLfJYbo+cWyHBb/50azq/oLqQHOm+kejzK6kF6SdljmaPFn55Mxlh9O
-         vJRMt3B23BfXIqPlh+q2RQthzwDHu7KX3i3UJw965iJweaqMcjOTcG9KEwyprkwfpTP6
-         Q8OZjuG3iOgX29rJO+c9xfolNfLCaedtsZaZO8v+qfDrXWBHN1s992+s1zdM6nHaDnCX
-         qqh5l3tj8QUNiKqJQU5bNkQduZD3jXh7P4rj3rv/wosMel7aLAHKRlFxMWVRWIwe5ku9
-         Un9BfOTi78qwlaaAwEdZVBcOuZA9t1anYtPf3crGlrUB1Yb/yDjPMtdbxNsthhgbqkYI
-         7Nbg==
-X-Gm-Message-State: AOAM531jfIP6o6X/kdPjdIPHn4YupVoY+OCYL5jx5GdHv5A/m5VqkyeR
-        Q/oWFB2MnsCw6lExewLjkAShb9VQvu5qjKKLtQ2AaA==
-X-Google-Smtp-Source: ABdhPJwGllmaptIB/AllP0uZ7jUHDq3fElMzxdIzeWpPDwzjF5/4d7ZsZCjqkbwg6Xxo0AMkCT6JRUznOVtgQEyIMpA=
-X-Received: by 2002:a05:600c:294a:b0:39c:4df5:f825 with SMTP id
- n10-20020a05600c294a00b0039c4df5f825mr19543009wmd.55.1655452935448; Fri, 17
- Jun 2022 01:02:15 -0700 (PDT)
+        Fri, 17 Jun 2022 04:03:28 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0073465B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:03:24 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220617080319euoutp02952dc17dbef04d20ef7a33305a869c84~5Wbtr1waw2849628496euoutp02i
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:03:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220617080319euoutp02952dc17dbef04d20ef7a33305a869c84~5Wbtr1waw2849628496euoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655452999;
+        bh=V56MV+Qvk7y7TAMM/soQkLYo1sKwNGw8wGk0cO7nBts=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=msBXOrJKU2HMtwesLG6oLPUPTtV+MhGG8K57beMc0NorDbQIUIfIZfsAslUoUzbJX
+         p7gRHVNz2B8BppsnNQ8Z/LDzBzNvvtkGnVn9JtQiRzwqkdH0DXJtAyiOJGF3sjRpaE
+         f9gIw+8RFBU/byI2wlLacwjJ2rd/gA/hT4umzadg=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220617080319eucas1p1bc4b7ac79368be83ed169769bac13881~5WbtZaKPz2524025240eucas1p1F;
+        Fri, 17 Jun 2022 08:03:19 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 1D.1A.10067.7453CA26; Fri, 17
+        Jun 2022 09:03:19 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220617080318eucas1p18554421449b17c4a2ad7816dd6584383~5Wbs4YchD3237732377eucas1p1S;
+        Fri, 17 Jun 2022 08:03:18 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220617080318eusmtrp2b71751d429c288c6d12854d27dd0fcf5~5Wbs3fT1h2980029800eusmtrp2E;
+        Fri, 17 Jun 2022 08:03:18 +0000 (GMT)
+X-AuditID: cbfec7f4-dd7ff70000002753-21-62ac3547daa1
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F1.09.09095.6453CA26; Fri, 17
+        Jun 2022 09:03:18 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220617080318eusmtip13a348e9cbb58e5ec3aaf8dfa8d77b2a0~5WbsqjC4S2368423684eusmtip1X;
+        Fri, 17 Jun 2022 08:03:18 +0000 (GMT)
+Received: from [192.168.1.12] (106.210.248.244) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Fri, 17 Jun 2022 09:03:12 +0100
+Message-ID: <f83eb255-89fe-90dc-3670-79b8684389f1@samsung.com>
+Date:   Fri, 17 Jun 2022 10:03:09 +0200
 MIME-Version: 1.0
-References: <20220616180430.930721-1-dlatypov@google.com>
-In-Reply-To: <20220616180430.930721-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 17 Jun 2022 16:02:04 +0800
-Message-ID: <CABVgOSnevOm1djuJrAR3K1kcVkXrZxugHL-b2bBPhHNSXE1GyA@mail.gmail.com>
-Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     mark.rutland@arm.com, boqun.feng@gmail.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.9.1
+Subject: Re: [PATCH v7 13/13] dm: add non power of 2 zoned target
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>, <hch@lst.de>,
+        <snitzer@redhat.com>, <axboe@kernel.dk>
+CC:     <bvanassche@acm.org>, <linux-kernel@vger.kernel.org>,
+        <jiangbo.365@bytedance.com>, <hare@suse.de>, <pankydev8@gmail.com>,
+        <dm-devel@redhat.com>, <jonathan.derrick@linux.dev>,
+        <gost.dev@samsung.com>, <dsterba@suse.com>, <jaegeuk@kernel.org>,
+        <linux-nvme@lists.infradead.org>, <Johannes.Thumshirn@wdc.com>,
+        <linux-block@vger.kernel.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <f4cf6348-dd94-aa82-7519-318248c51151@opensource.wdc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.244]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsWy7djPc7rupmuSDK59Z7FYfbefzWLah5/M
+        Fr/Pnme22PtuNqvFhR+NTBZ7Fk1isli5+iiTxZP1s5gteg58YLH423UPKNbyEKjulrbF5V1z
+        2CzmL3vKbrHm5lMWi7aNXxkdBDwuX/H2+HdiDZvHzll32T0uny312LSqk81jYcNUZo/NS+o9
+        dt9sAMq13mf1eL/vKpvH+i1XWTw2n672+LxJzqP9QDdTAF8Ul01Kak5mWWqRvl0CV8aqu59Z
+        C/4LVHT8e8PawPiWt4uRg0NCwETix46ELkZODiGBFYwSRy9JQNhfGCWmrhDvYuQCsj8zSqxp
+        ecMKkgCp39fzhwUisZxRYt2FKexwVVNfvoBydjFKLGn+yAjSwitgJ3Hr11wWEJtFQFXi/q3F
+        UHFBiZMzn4DFRQUiJFa2vmEBOUlYwFGi6UQSSJhZQFzi1pP5TCBhEYE8iXn/oMK3mCTuP60D
+        CbMJaEk0drKDhDkF3CTuff7NDlGiKdG6HcaWl9j+dg4zxL/KEv92MkO8Uiux9tgZsIMlBL5x
+        Sux7eosJIuEi8fb4NhYIW1ji1fEt7BC2jMT/nfOhaqolnt74zQzR3MIo0b9zPRvEAmuJvjM5
+        EDWOEqtanjBChPkkbrwVhDiHT2LStunMExhVZyEFwywk/85C8sEsJB8sYGRZxSieWlqcm55a
+        bJSXWq5XnJhbXJqXrpecn7uJEZgmT/87/mUH4/JXH/UOMTJxMB5ilOBgVhLhNQtemSTEm5JY
+        WZValB9fVJqTWnyIUZqDRUmcNzlzQ6KQQHpiSWp2ampBahFMlomDU6qBKet7l0PagYbSmUyc
+        K1ySGjNvZfYwSonOn57Ix2zXnM28y1lURS9V/lbkZpW6t+wZD/f7Bja2+0wLecBgnHqkc/V8
+        U7462aAcz6u/4htO5rjt5dFdpHOHZappR9CSW0UrVSIksvrSd0R17ensm2GuxHN06fvW7r7p
+        E9bMYU2NSrm47re41dIJVo4WXneZfu8pKLXluLvIfJ7X/Mm9F+X0N56ecXtV2Sr1Dfo2NmF2
+        nj6/fZLnzGcTlfrG1GNzYoPbghUl+hsVOFeL2DBaMGWfWfRZqc9Y+pLA8tJVNufnxQTNts/2
+        4Vy9VDg8ZnNDXleA4PkvztMu7/u7brGsco6vQEdyrHbCnN47jkt7ipVYijMSDbWYi4oTAdVN
+        gNACBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRmVeSWpSXmKPExsVy+t/xu7pupmuSDPouKVisvtvPZjHtw09m
+        i99nzzNb7H03m9Xiwo9GJos9iyYxWaxcfZTJ4sn6WcwWPQc+sFj87boHFGt5CFR3S9vi8q45
+        bBbzlz1lt1hz8ymLRdvGr4wOAh6Xr3h7/Duxhs1j56y77B6Xz5Z6bFrVyeaxsGEqs8fmJfUe
+        u282AOVa77N6vN93lc1j/ZarLB6bT1d7fN4k59F+oJspgC9Kz6Yov7QkVSEjv7jEVina0MJI
+        z9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI3y5BL2PV3c+sBf8FKjr+vWFtYHzL28XIySEh
+        YCKxr+cPSxcjF4eQwFJGiaa5jSwQCRmJT1c+skPYwhJ/rnWxQRR9ZJRY+OIdM4Szi1Hi2YTb
+        TCBVvAJ2Erd+zQXrZhFQlbh/azEjRFxQ4uTMJ2BxUYEIiU/LJrB2MXJwCAs4SjSdSAIJMwuI
+        S9x6Mp8JJCwikCcx7x9U+BaTxP2ndRCrzrNIXD68mR2khk1AS6KxE+w2TgE3iXuff7ND1GtK
+        tG6HseUltr+dwwxSLiGgLPFvJzPEK7USr+7vZpzAKDoLyW2zkBwxC8mkWUgmLWBkWcUoklpa
+        nJueW2yoV5yYW1yal66XnJ+7iRGYYrYd+7l5B+O8Vx/1DjEycTAeYpTgYFYS4TULXpkkxJuS
+        WFmVWpQfX1Sak1p8iNEUGEATmaVEk/OBSS6vJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEk
+        NTs1tSC1CKaPiYNTqoFJeNO+zT3SdTe6CmSn1c+ae+6E2/0gl8kcEonyM9+yng/4pZzW0fM4
+        b1Pm6lllfmpJbw+Vzr4xfc6bYO9LfwML/t+Zsdp/ouQmz4lZ525J6Xkb7ug+xSJYd8r3r5Q5
+        E9v0+dNWq5i2yU5eMeXk0za29CVW+3y2TWnjNq40iq0tM+a+XN+7jfFTRNJrqXmf2kx//n0/
+        zVLRqWqWB/d+zvIs/rMmujrtDg87K6uPln3YMOf7xcy8nJBnjSK+PyWEcjIs/i2x22J8Y3ba
+        pah6DtlOO20mOynt48kM9+7oFNzaeWHDe7PD9Wuj/5Xsfbh88paIBIXbK/+oVNjo17LnLDK1
+        dT5+3LNieuzrRqEOxa9KLMUZiYZazEXFiQATp8hqugMAAA==
+X-CMS-MailID: 20220617080318eucas1p18554421449b17c4a2ad7816dd6584383
+X-Msg-Generator: CA
+X-RootMTR: 20220615102011eucas1p220368db4a186181b1927dea50a79e5d4
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220615102011eucas1p220368db4a186181b1927dea50a79e5d4
+References: <20220615101920.329421-1-p.raghav@samsung.com>
+        <CGME20220615102011eucas1p220368db4a186181b1927dea50a79e5d4@eucas1p2.samsung.com>
+        <20220615101920.329421-14-p.raghav@samsung.com>
+        <63b0cfb6-eb24-f058-e502-2637039c5a98@opensource.wdc.com>
+        <0b819562-8b16-37b6-9220-28bf1960bccb@samsung.com>
+        <0c4f30f2-c206-0201-31e3-fbb9edbdf666@opensource.wdc.com>
+        <4746a000-2220-211e-1bd6-79c15c18a85c@samsung.com>
+        <e0dc08fd-cd00-240d-edc4-5799d51aa5a8@opensource.wdc.com>
+        <a945def3-ba5a-7539-e96a-43ade0ae674a@samsung.com>
+        <f4cf6348-dd94-aa82-7519-318248c51151@opensource.wdc.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 2:04 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> The test currently is a bunch of checks (implemented using BUG_ON())
-> that can be built into the kernel or as a module.
->
-> Convert it to a KUnit test, which can also run in both modes.
-> From a user's perspective, this change adds a CONFIG_KUNIT=y dep and
-> changes the output format of the test [1] and makes it less destructive
-> on failure. The test itself is the same.
->
-> This hopefully makes the test easier to run and more consistent with
-> similar tests in lib/.
-> Since it has no dependencies, it can be run without explicitly setting
-> up a .kunitconfig via
-> $ ./tools/testing/kunit/kunit.py run atomic
-> ...
-> [13:53:44] Starting KUnit Kernel (1/1)...
-> [13:53:44] ============================================================
-> [13:53:47] =================== atomic (2 subtests) ====================
-> [13:53:47] [PASSED] test_atomic
-> [13:53:47] [PASSED] test_atomic64
-> [13:53:47] ===================== [PASSED] atomic ======================
-> [13:53:47] ============================================================
-> [13:53:47] Testing complete. Passed: 2, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
-> [13:53:47] Elapsed time: 13.902s total, 1.629s configuring, 9.331s building, 2.852s running
->
-> It can be run on ARCH=x86_64 (and others) via:
-> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 atomic
->
-> The message about which platform the test ran on won't show up in
-> kunit.py, but still gets printed out in dmesg, e.g.
-> > TAP version 14
-> > 1..1
-> >     # Subtest: atomic
-> >     1..2
-> >     ok 1 - test_atomic
-> >     ok 2 - test_atomic64
-> >     # atomic: ran on x86-64 platform with CX8 and with SSE
-> > # atomic: pass:2 fail:0 skip:0 total:2
-> > # Totals: pass:2 fail:0 skip:0 total:2
-> > ok 1 - atomic
->
-> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-> ---
-> Meta: this is a resend of https://lore.kernel.org/linux-kselftest/20220502192327.81153-1-dlatypov@google.com/
-> Michael kindly pointed me to the right MAINTAINERS entry (this test file
-> isn't covered by it, and it slipped my mind to check the non-test code).
->
-> I've waited until 5.19-rc1 so that the relevant KUnit patches this
-> depended on have been merged.
-> Rebasing and tweaking the commit message a bit are the only changes.
-> ---
+On 2022-06-17 08:56, Damien Le Moal wrote:
+>>
+>> So we call this function device_not_matches_zone_sectors() from
+>> validate_hardware_zoned_model() for each target and we let the validate
+>> succeed even if the target's zone size is different from the underlying
+>> device zone size if this feature flag is set. Let me know if I am
+>> missing something and how this can be moved to
+>> validate_hardware_zoned_model().
+> 
+> Your change does not match the function name
+> device_not_matches_zone_sectors(), at all. So I think this is wrong.
+> 
+> The fact is that zone support in DM has been built under the following
+> assumptions:
+> 1) A zoned device can be used to create a *zoned* target (e.g. dm-linear,
+> dm-flakey, dm-crypt). For this case, the target *must* use the same zone
+> size as the underlying devices and all devices used for the target must
+> have the same zone size.
+> 2) A zoned device can be used to create a *regular* device target (e.g.
+> dm-zoned). All zoned devices used for the target must have the same zone size.
+> 
+> This new target driver completely breaks (1) and does not fit with (2). I
+> suspect this is why you are seeing problems with dm_revalidate_zones() as
+> that one uses the underlying device instead of the target report zones.
+> 
+> Based on this analysis, validate_hardware_zoned_model() definitely needs
+> to be changed. But device_not_matches_zone_sectors() is to check the
+> assumptions (1) and (2) so changing it for your new case is wrong in my
+> opinion. You need another set of assumptions (3) (define that well please)
+> and modify validate_hardware_zoned_model() so that the defined constraints
+> are checked. Using a target flag to indicate the type of zoned target is
+> fine by me.
+> 
+Got it. Thanks for the explanation. Renaming
+device_not_matches_zone_sectors() function to something meaningful with
+my changes should address what you have pointed out to accommodate all
+three types.
 
-Tested this again just to be sure, and it still builds, runs, and
-passes for me on:
-
-- UML (x86_64)
-- x86_64 + qemu
-- i386 + qemu
-- arm64 + qemu + clang/LLVM
-
-Cheers,
--- David
+I see that something similar was done to dm_table_supports_zoned_model()
+to accommodate type 2(dm-zoned) with different underlying zoned models
+even though the initial impl. supported only type 1.

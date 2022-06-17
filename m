@@ -2,67 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF3154F848
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91E154F84A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 15:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381920AbiFQNW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 09:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S1382109AbiFQNXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 09:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiFQNW0 (ORCPT
+        with ESMTP id S229728AbiFQNXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:22:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E305EBEE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:22:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MDR12awW51Ll0dBLqMaR6ReVFOSITZQ6xw6in44GvX0=; b=FJuRoKamFQBxRuRHYyHn7LY1b/
-        kmD3gZeeSSnjNFJ8uvWhRC5Z3kolqsE1354U0RYcPee5cBY81SBmQ0+FgKvaKCDKe5MLXrm8yOiys
-        6aIQOF5lFqkr952B0c9jmzUwEQ7aenTrk+5IgLXLkcVJxuSlNLEIMHmi9Nhj7DFCyAXOKR2oJBH7L
-        zKUT4SfQz7wCR8wbDZOF3ObNVo96hExCeFMM/DXaEcbjjGUaK6wsdS7dv/paHh/6gKGWrTA8n2q6o
-        0PxePUoRFR3Vz6hWGidhV8YhQDZF1nxDA6WT8aD+ZRHlvqyu2lrqF6wlyoad6OOtCnStewqNhuOlf
-        hHW6AUPg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o2BvQ-008hHY-Ct; Fri, 17 Jun 2022 13:22:12 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8DB749816B5; Fri, 17 Jun 2022 15:22:10 +0200 (CEST)
-Date:   Fri, 17 Jun 2022 15:22:10 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Jun <chenjun102@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com, will@kernel.org,
-        xuqiang36@huawei.com
-Subject: Re: [PATCH 1/1] lockdep: pass curr_inner to
- print_lock_invalid_wait_context
-Message-ID: <YqyAAvSw3+0GyHhg@worktop.programming.kicks-ass.net>
-References: <20220616134042.130002-1-chenjun102@huawei.com>
+        Fri, 17 Jun 2022 09:23:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8B62F3A0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 06:23:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95DA1B82854
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:23:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69C9C3411B;
+        Fri, 17 Jun 2022 13:23:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BZZvlLv5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1655472189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=tRP6CBQmuP9Bt+VjJuAK5G+mZBi0qlyfhbg9gs/d+FU=;
+        b=BZZvlLv5OSaD4hgQ3Jzwb/nYsvsB2FBhvKd9ni+SPr6EOINBsaxDKrZynagbnYi7wjPBRu
+        dw4EkMRXAcopwAVxEN25qu6+heSLf8JTZfwAN70N/uGYEUd8P+Nh6OMCsba996vKV+LA2T
+        vgE6P7Q18TiZzYFhoJsSkMVHZZ1uGkM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id baf4eaae (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 17 Jun 2022 13:23:08 +0000 (UTC)
+Date:   Fri, 17 Jun 2022 15:23:02 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Marco Elver <elver@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: 5.19 printk breaks message ordering
+Message-ID: <YqyANveL50uxupfQ@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220616134042.130002-1-chenjun102@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 01:40:42PM +0000, Chen Jun wrote:
-> Same information (task_wait_context(curr)) is printed twice.
+Hi John & folks,
 
-Yes, because at that point the inner and outer context are the same.
+In 5.19, I'm seeing some changes in message ordering / interleaving
+which lead to confusion. The most obvious (and benign) example appears
+on system boot, in which the "Run /init as init process" message gets
+intermixed with the messages that init actually writes() to stdout. For
+example, here's a snippet from build.wireguard.com:
 
-> curr_inner in check_wait_context is what we need.
+    [    0.469732] Freeing unused kernel image (initmem) memory: 4576K
+    [    0.469738] Write protecting the kernel read-only data: 10240k
+    [    0.473823] Freeing unused kernel image (text/rodata gap) memory: 2044K
+    [    0.475228] Freeing unused kernel image (rodata/data gap) memory: 1136K
+    [    0.475236] Run /init as init process
+    
+    
+        WireGuard Test Suite on Linux 5.19.0-rc2+ x86_64
+    
+    
+    [+] Mounting filesystems...
+    [+] Module self-tests:
+     *  allowedips self-tests: pass
+     *  nonce counter self-tests: pass
+     *  ratelimiter self-tests: pass
+    [+] Enabling logging...
+    [+] Launching tests...
+    [    0.475237]   with arguments:
+    [    0.475238]     /init
+    [    0.475238]   with environment:
+    [    0.475239]     HOME=/
+    [    0.475240]     TERM=linux
+    [+] ip netns add wg-test-46-0
+    [+] ip netns add wg-test-46-1
 
-IIRC it simply prints the task_wait_context as a starting point, the
-lockdep_print_held_locks() should include the contexts for each of
-those, after which you can compute the resulting value.
+Before the "with arguments:" and such would print prior to the
+"wireguard test suite on linux 5.19" banner. Now it shows after.
 
-IOW, the information is complete.
+I see the same thing with "Freeing unused kernel image (text/rodata gap)
+memory" printing interwoven into the console of my initramfs on my
+laptop. And so forth.
 
+But the bigger issue for me is that it makes it very confusing to
+interpret CI results later on. Prior, I would nice a nice correlation
+of:
+
+[+] some userspace command
+[    1.2345 ] some kernel log output
+[+] some userspace command
+[    1.2346 ] some kernel log output
+[+] some userspace command
+[    1.2347 ] some kernel log output
+
+Now, the kernel log outputs are all over the place and out of order with
+the sequence of commands. This makes debugging issues somewhat tricky,
+because post hoc ergo propter hoc winds up being a good intuition to
+follow when tracking down bugs, and now the post hoc part is muddled.
+
+I assume this is mostly caused by your threaded printk patchset, which
+moves some of that printing into a worker, which means it's more
+dependent on the scheduler than before. This probably has important
+benefits. But it certainly makes CI and related debugging a bit
+trickier as a result.
+
+So I was wondering if there was some way to boot the kernel with a
+command line option or compile-time flag that always flushes printk
+messages when they're made, or does something to make the ordering a bit
+more faithful.
+
+Thanks,
+Jason

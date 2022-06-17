@@ -2,149 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259B354F441
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F09254F443
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235791AbiFQJ2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S1380813AbiFQJ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiFQJ2v (ORCPT
+        with ESMTP id S235673AbiFQJ2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:28:51 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B68D62CE2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655458097;
-        bh=lxm3FN8DBM/LQtAAtZ4qd37cIBuRAbivab/rs+t/ymE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ZlqpuQJAolicMh3LZlgrPD6chXcZthFRCP5qGBAgODb7giVx8rvPats3h73/cgqDG
-         TvfqXndH5gYbgFqzdvMerrvcTUfM8Tnu3DI9CP4lHzL4GAPRBsBCnVustVTuzW4P98
-         Cs6x/keV9kaQO9EcGwJt2HqYYznZDw51pkWbtKrM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwfWU-1nnMbr2fkY-00yAum; Fri, 17
- Jun 2022 11:28:17 +0200
-Date:   Fri, 17 Jun 2022 11:28:14 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Hector Martin <marcan@marcan.st>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] soc: nuvoton: Add SoC info driver for WPCM450
-Message-ID: <YqxJLhkCQ2WcHdAp@latitude>
-References: <20220609213513.88479-1-j.neuschaefer@gmx.net>
- <CAK8P3a0-m1iQ2bP+dsoGTPZGMNBKqB5a6315jdgaT3tuR4WfTw@mail.gmail.com>
+        Fri, 17 Jun 2022 05:28:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD9862CF1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655458131; x=1686994131;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZgMetKx+YLnThO+dTo98kWNrDs507igXhK+g21MkmsA=;
+  b=UizPpfR/srgAO1O2KRHt4AUIl3GOSaknK3o+DLPcmfUnIm6hd2uHoKCZ
+   QgzfYhg+pUEvHH6MUqi9suhm4jzsogfF0EH29KDran5nzgf9aD1VKNY1f
+   NctcLbvwDt24GLPRZXFsZReAhskEKSjz68SkM1NIY0Q7/mxTMZM+Vu6Dt
+   +dNNeM7n4nAb1wSyDsXF9ufreXkJk+Unj+aeJkbiJNTgPWWDiZpv4EHaT
+   QKnabhWOl8rDlyJp9C4OJp9yhz2hhYFAmVHQSBIEICzIEBj+3+9E3nvoq
+   wIgmW9M1aiozszb2uKZmCU23KrXX2O0KiDvx0jITmRGmDDWL9mpcdUoY7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365815314"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="365815314"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 02:28:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="675420912"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2022 02:28:37 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o28HM-000PJZ-LB;
+        Fri, 17 Jun 2022 09:28:36 +0000
+Date:   Fri, 17 Jun 2022 17:28:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu-tasks-test.2022.06.16a] BUILD SUCCESS
+ c7c3062b83aed82c8f89842ca74cb7fe3dc45d51
+Message-ID: <62ac492e.ygGrt+7CQSCAWqrX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jKjRAf+U0chs2ccJ"
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0-m1iQ2bP+dsoGTPZGMNBKqB5a6315jdgaT3tuR4WfTw@mail.gmail.com>
-X-Provags-ID: V03:K1:AbjFIQKAkPkfwuEeVxt0fDYDtem8sVSjnt2fM1vuQjcZZXp7GEi
- J8SjMxC5qB6gXxWXqb59WqaGeGFHk3xwNQ27Bs6TaPBrxPfk3HXw8NdgPgUcAnhAOdmo1NR
- 9yjvHT5JUm8NI4HsBrCehSqvKk7SOQ4xLTj52/WBFgJrjfeUlR29yfTcilD3GUt4T1mXMbV
- NbWeUSzgihFBMwoYu8muA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5d/Y/aZVbeU=:ADtktXYRoO7EKquC0v3A9k
- uuoI6bKXECBeHvo0MertvMpAWl7dO6GEJM5B9WjORcl79+Fa60x4M78+3vJcykHrWqaQVWzz4
- 70L4UD7Sh+wV1lAldnh8kk9T7X4qGrjCFkaJBqq3Yo/Kk6DkVL0NBcyNoufhx0aP1t2c+e5Z8
- hx63anC7e1SmJ7hq1NFAimKT4pQuo8MBoO6+HjAdny/0hgBz7NjFkAQ13vOUNvENYswqC4OmL
- 6c/Qo4Tt773H+UJLe8EUurz73by1y1Z9VAtKljZbg61FxXEVz6qD7YmCo00AoMGDvGQc5YwfL
- Y9QfcXXSnkk6U/ZNwfFIJGF5+gfnLnKbH3NrUpz0L6n95XoMPIxq3AKNQyPgMvSaA2aGBqhfH
- pnOD3NgUGdgejkxRfeNBFODqnhnO5nJ2i/GGjkE9adQupqwOm5bF1mO7lDhZaMamhGfA8HRaM
- Ljz+jqVW4QhVr3Dbc2piGWn7JGRcvL+Llnv6pZJII6lI4dew+vQ2zhbK2ijzaLPpm8sdcNoYx
- My41ZkUzvHvQqxSGASyBMsk36QK3oKAt4WVTRlTPSjk+eQaH391kgyMgaMw7QDydhlGl7Y5JN
- nGf25AYZcbi2UPN/Qf/fHNyHmil0uORW5LfhhKiUN6i6A29USrRDd0n0XHm375Rf2vqoUTp8Y
- 0H1DBYMOiSJMRjFDabOLTovGWiuQHy6rKuJE/Smk6BqK3VmxhlQIM9MBXCz+n9aSSRUuJ5Trw
- G11bEk2kfQ02EiVfdnhVV5ccXUKzWyTkQXlyxvvyPu3sMg+AswciocoeoRbITlX7xUa3rO8q2
- /PoUqeWV75GhXlHQWr6ywr5zWlxzUTkqoKnf1x7obnC11KPRBUWT2zXujlyIFS+F+xJBR5QJm
- IRIK7h0fI0qZf/VZsQkiqRRHsNYcs/D9RnRJx1jGxZVIo6Sg/8q8NOJ4YJklyr5yUQtns6O/e
- e6i0D/fU40s3qyZrIGYeCmm6qGVFgi0GuZ/4Y27sbXxfwCWmHq4Q/kNTNaXnf2vf2qQOJvhrA
- QvYmcD5pODJXqvMpJLNkW2aNeXErv7ZZLllRX+OVvLc/fFfnpi/f2C85GaLw+2hviEmz/pS/c
- mCzGX4fIxbNCzfpKUJ0M1cCA1QLqj93LR0a6gl2onXZVQqbu4TYc3DFjQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu-tasks-test.2022.06.16a
+branch HEAD: c7c3062b83aed82c8f89842ca74cb7fe3dc45d51  rcu-tasks: Use delayed_work to delay rcu_tasks_verify_self_tests()
 
---jKjRAf+U0chs2ccJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 747m
 
-On Wed, Jun 15, 2022 at 04:00:17PM +0200, Arnd Bergmann wrote:
-> On Thu, Jun 9, 2022 at 11:35 PM Jonathan Neusch=C3=A4fer
-> <j.neuschaefer@gmx.net> wrote:
-> >
-> > Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
-> > information such as the SoC revision.
-> >
-> > Usage example:
-> >
-> >   # grep . /sys/devices/soc0/*
-> >   /sys/devices/soc0/family:Nuvoton NPCM
-> >   /sys/devices/soc0/revision:A3
-> >   /sys/devices/soc0/soc_id:WPCM450
-> >
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
->=20
-> Looks good overall.
->=20
-> > +menuconfig WPCM450_SOC
-> > +       bool "Nuvoton WPCM450 SoC driver"
-> > +       default y if ARCH_WPCM450
->=20
-> It would be nice to make this a tristate option, as we generally
-> like to keep optional drivers out of the allmodconfig vmlinux file,
-> even if this is a tiny one.
+configs tested: 124
+configs skipped: 3
 
-Ok.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Just add the trivial cleanup function and MODULE_LICENSE() etc tags.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+microblaze                          defconfig
+powerpc                 mpc834x_itx_defconfig
+sh                   rts7751r2dplus_defconfig
+m68k                       m5475evb_defconfig
+powerpc                     tqm8548_defconfig
+m68k                             allyesconfig
+parisc64                            defconfig
+sh                             sh03_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                          pxa910_defconfig
+sh                      rts7751r2d1_defconfig
+sh                         microdev_defconfig
+parisc64                         alldefconfig
+ia64                        generic_defconfig
+mips                           xway_defconfig
+powerpc                      ppc40x_defconfig
+sh                            hp6xx_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                             allmodconfig
+xtensa                  cadence_csp_defconfig
+mips                  decstation_64_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                           u8500_defconfig
+powerpc                      arches_defconfig
+arc                         haps_hs_defconfig
+m68k                        m5407c3_defconfig
+arc                           tb10x_defconfig
+arm                        realview_defconfig
+sh                             espt_defconfig
+sh                     sh7710voipgw_defconfig
+sh                   sh7724_generic_defconfig
+sh                              ul2_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                      maltasmvp_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220617
+ia64                                defconfig
+riscv                             allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220617
+arc                  randconfig-r043-20220617
+s390                 randconfig-r044-20220617
+arc                  randconfig-r043-20220616
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-The right thing to do seems to be to unregister the SoC device in the
-cleanup function. Is that what you mean?
+clang tested configs:
+arm                           sama7_defconfig
+mips                      malta_kvm_defconfig
+arm                      pxa255-idp_defconfig
+riscv                             allnoconfig
+arm                          collie_defconfig
+mips                          ath79_defconfig
+powerpc                      acadia_defconfig
+arm                       cns3420vb_defconfig
+powerpc                     tqm5200_defconfig
+arm                          moxart_defconfig
+arm                         s5pv210_defconfig
+hexagon                             defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220616
+hexagon              randconfig-r045-20220616
+s390                 randconfig-r044-20220616
+riscv                randconfig-r042-20220616
 
-
-Jonathan
-
---jKjRAf+U0chs2ccJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKsSQoACgkQCDBEmo7z
-X9v7ag//ULZktidbg2z7RnwVy6ePYuuYsXSdl2wtC3kdzVwdJwgt+0M/BezrQ1/6
-lHXqtAcjtyaRtAJ5yw8fRtCEx9zdz1jL0bdgFA6CxcaHPP9Nr9NHTOSWNevFIg4w
-7lj6RvlbkLie8799JAmgZDVQBzsMByQaZueA2dXcFddaANmqGTQP0RdKu2SqF1eR
-IJEq78QnqjguDz+wLrnqcU4j+WWVTmZw6VCUImmQvur1X9wmJ9CvikZt0GCMhmw/
-7QjTpAMGrGl/iN+b9OZrdtytbHj+YsNBlZGuTFoPLtN6hItyxb1ISLaiEKRVCVtQ
-egswr9lXGrMqwK9A7435DdcmrWoYdQ/7VlbXSVwbDYNsPjZRbAy7rGsWXOsiM1fA
-RPbYmoxxi2ZrLeINT900xtXHovtRM4ICWbj5uJPdLJu/IJNvRfYmYlJKisnr+xU1
-RGp+97USsPZTn3pnqEKH7nAkLV3zO7LPXWsaDRAvhn1a9E5KTrKhg/yqWj6RTMOJ
-trsl9UB8kKeekcP8Z3/DAjF9g8H7dR5pnpmLXSRMVBH3L08P22Ot8S8BTmELpt+F
-yAZenVbFBhnVQ3huJTd6QTzAvW+q3DxCR+1eE+PYJzghYfcae1jDl8hm9zFfbn3d
-rw0B0QUEf9m3aXP+lZlOrZfNKEgpQWG4napZVoPxvGtlkUV6u9M=
-=8EJF
------END PGP SIGNATURE-----
-
---jKjRAf+U0chs2ccJ--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

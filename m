@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C557454FFC4
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1318254FFCE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236787AbiFQWQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S234505AbiFQWUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiFQWQg (ORCPT
+        with ESMTP id S231913AbiFQWT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:16:36 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756E358E5F;
-        Fri, 17 Jun 2022 15:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655504184;
-        bh=1zuZo17yQkJ4UonOeU2RtRocYcJmCWHTL/EIH5YEV28=;
-        h=X-UI-Sender-Class:Date:To:References:From:Subject:In-Reply-To;
-        b=Nu5zgEVSGUyD41EScqAnpNUDp5d8NZrXiX386SgDOC0liMIZpOLD7PBofLOLfxZ9M
-         iR9bNV+A2E56cnzvzMBLhizvrB3D/TlrtBbwWc8SZOmYMc4n62TyUxaqNNjcoinzEA
-         RIrxPjjlUb0s7YUoQCGn2A21xlNxhOsZTy5GeHME=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MsYux-1nj8ge2jwR-00u3jE; Sat, 18
- Jun 2022 00:16:24 +0200
-Message-ID: <94f8d618-ec7a-f68e-c302-2639ae3d7549@gmx.com>
-Date:   Sat, 18 Jun 2022 06:16:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        Fri, 17 Jun 2022 18:19:59 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D884606E4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:19:58 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 193so2300095pgc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y4NHgUg9WpFHNCRb+agzIiQQzsx+4mBHzK/+oNn7d6g=;
+        b=RfN4KU0jVEQKDvQTiuFWwY4goDFGm3D/RyCojWYKCi67pzOqYOiC6r2XOV9md4whw7
+         NDBf8LmdKo3PbX8cbMekXZ2UihRItmDBR0Ht4UwGwLt2o2dWr72Chu36i3AbVmIObVni
+         tF+Z2DDiD8TMNrEFrZaipVqVC/9HDskPDP2j3KwPU7MCqzv6ijclWSVleWVqlu7ZqfZz
+         kXksVD6cwot8cBY8KFEIkA/erGEwqRAfetES5Lo75YPO1eP9dOqGR4ajiu8ReeH9SZtS
+         hAZRGFaT2/qnzYiOo+Z9Q1KoREAf1DfK7L+hMUqE87KLDGnXvM7in0z2wlt9AiSB1a8W
+         7Cng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y4NHgUg9WpFHNCRb+agzIiQQzsx+4mBHzK/+oNn7d6g=;
+        b=mPzxJaAecd+u732edsWGiqESPk1c3i2t0JF7lm+0jbMOLHX8Gg5Sq0lXdIMELcEkgn
+         gVDW7dNMVdDvfTrJR+4PmAYNsfc59cGF8/Paa6MjiWWVimpgXWTh59IUaZhYw1BkG0dJ
+         C1coqNwzFI76ClTklIO82Deqlwi7msZvYyCXXN2xhIKqOFGtY6EU9QUSzT6/b0fiMBQi
+         zJN2WWpWQsD6gdqXel3j0edMA5M8OB6GMOF2aNtwPGiI7IPC+5VQAl6948XtdZKChZN9
+         Guvsuekc17ON5jGQO+2ePm4T9LdvM+ZkvVJ2Zi7O2p+Yfi/zxoKEWP7PgYYDXrqRfftg
+         eRJw==
+X-Gm-Message-State: AJIora9WcRnuIR8sYl3eQsE0jjR1Do2GU26nDNKhknfpwIjgwKUNkGf6
+        gOldUAF4WmxmMh5tp3tLNH5RpQ==
+X-Google-Smtp-Source: AGRyM1u58z4nj7/dF8PdoIPsV7W3Gcn9ao2II7+rRYdrWFEBoFhFxD2eH/q6ieN6aE+p441nFrTSfw==
+X-Received: by 2002:a63:894a:0:b0:3fc:a724:578c with SMTP id v71-20020a63894a000000b003fca724578cmr11065712pgd.499.1655504397759;
+        Fri, 17 Jun 2022 15:19:57 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id m14-20020a170902bb8e00b00168a651316csm4024462pls.270.2022.06.17.15.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 15:19:57 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 22:19:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, Marc Orr <marcorr@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
         linux-kernel@vger.kernel.org
-References: <20220617120538.18091-1-fmdefrancesco@gmail.com>
- <20220617120538.18091-4-fmdefrancesco@gmail.com>
- <8cbfc1ff-f86d-f2cc-d37e-ef874f4600bc@gmx.com> <14654011.tv2OnDr8pf@opensuse>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [RFC PATCH v2 3/3] btrfs: Use kmap_local_page() on "in_page" in
- zlib_compress_pages()
-In-Reply-To: <14654011.tv2OnDr8pf@opensuse>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:T3AWC4njoZEfrQGkSjPULUpIoCzpmdwWypJW4ohMv5CdvtPfv4f
- ShmSkMHlxk+phdGNazCMjajaoa2D3sFnVls7hAQcABC0GcRB9O9fsG4hBOqHnIcVV9xzicr
- mqzlKC/Vuab4D6GUeUXeici1PThNe19QNQyZ5VrpNtqXYJE8w/AoWU3F6AM2Xsli0CxuVOn
- ZghQhz/vuiTuFnaQr4fQQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4Dxt56PQQKc=:h6986K481FP2pcAIhkfDOj
- Vo6qi74/eRV40qTbd64sMnev3XEBObdNWVD/FSKL9igZY05D5SyB6MchIg8mnTPq85TeUkFqp
- vihsVv68Q40Bn9r/umWziXwFN0lC/fMxslRJ1NqF2jbHGtDfiZ5N7NXAw1hyqsQyG0KObsYZx
- 8wNP0GjMJqLrPeCC43CaS38LAAPEWmzUP4uLUWLxHWiwjuk3dz48Ay6WuxU1SgJRhCiEHkxWa
- Ue8r9knQf34hvTcKTrh8075fDOwQb5/o8mhpWCc/XU3AeqdDtuXXtS8UNlg8kgke16IkfBzeY
- TkFvLSHqajrVTvQdpfi7LyAtv0JIs0MoHEKzWWQb9QA+HcD8FKcvRP2e1ew+aBRR+LBljc+NF
- g11lrU4SBDxzY8NFYErP1NRzRdhAt09xk7X39a4d7H7GCN8+ZkD9lJ5eY65dW7w0sjew6PN9/
- 7L3q/szjRJnWQWT8Ea3ngcGWmFiw0rcCMJPiElmvUo5Fo68ziyCe06kpML+JohzY0RA7BgPLO
- ss77SmCkpo0EZ/AxYL0xBYz/PbbE/MFb+ad34sFog/scHQ5mqoIeceLWqiBhfIzq6PRvrD67l
- 8xFv5SG17AF920D8C1YJ8X3yACAmzTDfYudC6ZvTH63x5oGvaZIc6bC5RtVoVgzR0iM2M0rGM
- uSdZm3A+TSYUClfI2lVOuacEGc8nBC2kYJY5FPRrBJQWnbG0oQHqNtXL8eCgZN3y1pO8Bx5Pm
- ej3mCzv7SoNAiuOjpfx4AjUsS2JXAgJVjUK99ZDT260EUHlFvtvrgYfqk7Mr8mTCYT4ZpTeDX
- OH8Ylgp6JPfSBQwMH9PFR71DmKeGQjkQM/dWc6BazRLmedJXAu8LYhMCUSVSkLLshYudpYx4R
- ViOUgzDToIup3VA/fTzXefBBjRHYn82Ul3Hb8+YpKrIayMo0IA5ZXWlWZq4DIOw9le4n+IrAD
- OH3ZQ7ITt1IxsubTZvSc0/M1EEApV2alCpSJRqIfgzkQXikuNHdSwAC+x4m8NNKaVlcnid0iP
- VY0VcahlPgn25rIKFUstJB/BPG24R1Bmwfw/g1jkWCbNbM+Hn9eJOUKxaBYF1sXdhRsT/Ee7U
- hMATP1vLHWCsN3B+qEVj28ph2RcpSpnjYs7AQL33IggH97wgskN3N1P2g==
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Subject: Re: [PATCH] KVM: SEV: Init target VMCBs in sev_migrate_from
+Message-ID: <Yqz+CZlGCoQo7lMQ@google.com>
+References: <20220617195141.2866706-1-pgonda@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617195141.2866706-1-pgonda@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,322 +73,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 17, 2022, Peter Gonda wrote:
+> @@ -1681,6 +1683,10 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+>  
+>  	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+>  
+> +	kvm_for_each_vcpu(i, vcpu, dst_kvm) {
+> +		sev_init_vmcb(to_svm(vcpu));
 
+Curly braces are unnecessary.
 
-On 2022/6/18 02:13, Fabio M. De Francesco wrote:
-> On venerd=C3=AC 17 giugno 2022 15:09:47 CEST Qu Wenruo wrote:
->>
->> On 2022/6/17 20:05, Fabio M. De Francesco wrote:
->>> The use of kmap() is being deprecated in favor of kmap_local_page().
-> With
->>> kmap_local_page(), the mapping is per thread, CPU local and not
-> globally
->>> visible.
->>>
->>> Therefore, use kmap_local_page() / kunmap_local() on "in_page" in
->>> zlib_compress_pages() because in this function the mappings are per
-> thread
->>> and are not visible in other contexts.
->>>
->>> Use an array based stack in order to take note of the order of mapping=
-s
->>> and un-mappings to comply to the rules of nesting local mappings.
->>
->> Any extra comment on the "rules of nesting local mappings" part?
->>
->
-> Actually, I'm not sure about what to add. I thought that whoever need mo=
-re
-> information about LIFO mappings / un-mappings can look at highmem.rst. I=
-'ve
-> changed that document and now it contains information on why and how to =
-use
-> kmap_local_page() in place of kmap() and kmap_atomic().
->
-> Am I misunderstanding what you are trying to say? If so, any specific
-> suggestions would be greatly appreciated.
+> +	}
+> +
+>  	/*
+>  	 * If this VM has mirrors, "transfer" each mirror's refcount of the
+>  	 * source to the destination (this KVM).  The caller holds a reference
+> @@ -1739,6 +1745,8 @@ static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+>  		src_svm->vmcb->control.ghcb_gpa = INVALID_PAGE;
+>  		src_svm->vmcb->control.vmsa_pa = INVALID_PAGE;
+>  		src_vcpu->arch.guest_state_protected = false;
+> +
+> +		sev_es_init_vmcb(dst_svm);
+>  	}
+>  	to_kvm_svm(src)->sev_info.es_active = false;
+>  	to_kvm_svm(dst)->sev_info.es_active = true;
+> @@ -2914,6 +2922,12 @@ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in)
+>  				    count, in);
+>  }
+>  
+> +void sev_init_vmcb(struct vcpu_svm *svm)
+> +{
+> +	svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
+> +	clr_exception_intercept(svm, UD_VECTOR);
 
-Thanks for pointing to the doc, and that doc is enough to answer my
-question.
+I don't love separating SEV and SEV-ES VMCB initialization, especially since they're
+both doing RMW operations and not straight writes.  E.g. migration ends up reversing
+the order between the two relatively to init_vmcb().  That's just asking for a subtle
+bug to be introduced that affects only due to the ordering difference.
 
->
->>>
->>> Tested with xfstests on QEMU + KVM 32 bits VM with 4GB of RAM and
->>> HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
->>>
->>> Suggested-by: Ira Weiny <ira.weiny@intel.com>
->>> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
->>> ---
->>>    fs/btrfs/zlib.c | 65 +++++++++++++++++++++++++++++++++++++++
-> +---------
->>>    1 file changed, 53 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
->>> index c7c69ce4a1a9..1f16014e8ff3 100644
->>> --- a/fs/btrfs/zlib.c
->>> +++ b/fs/btrfs/zlib.c
->>> @@ -99,6 +99,8 @@ int zlib_compress_pages(struct list_head *ws, struct
-> address_space *mapping,
->>>    	int ret;
->>>    	char *data_in =3D NULL;
->>>    	char *cpage_out =3D NULL;
->>> +	char mstack[2];
->>> +	int sind =3D 0;
->>>    	int nr_pages =3D 0;
->>>    	struct page *in_page =3D NULL;
->>>    	struct page *out_page =3D NULL;
->>> @@ -126,6 +128,8 @@ int zlib_compress_pages(struct list_head *ws,
-> struct address_space *mapping,
->>>    		ret =3D -ENOMEM;
->>>    		goto out;
->>>    	}
->>> +	mstack[sind] =3D 'A';
->>> +	sind++;
->>>    	cpage_out =3D kmap_local_page(out_page);
->>>    	pages[0] =3D out_page;
->>>    	nr_pages =3D 1;
->>> @@ -148,26 +152,32 @@ int zlib_compress_pages(struct list_head *ws,
-> struct address_space *mapping,
->>>    				int i;
->>>
->>>    				for (i =3D 0; i < in_buf_pages; i++)
-> {
->>> -					if (in_page) {
->>> -
-> kunmap(in_page);
->>
->> I don't think we really need to keep @in_page mapped for that long.
->>
->> We only need the input pages (pages from inode page cache) when we run
->> out of input.
->>
->> So what we really need is just to map the input, copy the data to
->> buffer, unmap the page.
->>
->>> +					if (data_in) {
->>> +						sind--;
->>> +
-> kunmap_local(data_in);
->>>
-> put_page(in_page);
->>>    					}
->>>    					in_page =3D
-> find_get_page(mapping,
->>>
-> start >> PAGE_SHIFT);
->>> -					data_in =3D kmap(in_page);
->>> +					mstack[sind] =3D 'B';
->>> +					sind++;
->>> +					data_in =3D
-> kmap_local_page(in_page);
->>>    					memcpy(workspace->buf + i
-> * PAGE_SIZE,
->>>    					       data_in,
-> PAGE_SIZE);
->>>    					start +=3D PAGE_SIZE;
->>>    				}
->>>    				workspace->strm.next_in =3D
-> workspace->buf;
->>>    			} else {
->>
->> I think we can clean up the code.
->>
->> In fact the for loop can handle both case, I didn't see any special
->> reason to do different handling, we can always use workspace->buf,
->> instead of manually dancing using different paths.
->>
-> As I said in a recent email, I'm relatively new to kernel development,
-> especially to Btrfs and other filesystems.
+What about using common top-level flows for SEV and SEV-ES so that the sequencing
+between SEV and SEV-ES is more rigid?  The resulting sev_migrate_from() is a little
+gross, but IMO it's worth having a fixed sequence, and the flip side to the ugliness
+it that it documents some of the differences between SEV and SEV-ES migration.
 
-That's not a big deal, that's why we're here to provide help.
+---
+ arch/x86/kvm/svm/sev.c | 75 +++++++++++++++++++++++++++---------------
+ arch/x86/kvm/svm/svm.c | 11 ++-----
+ arch/x86/kvm/svm/svm.h |  2 +-
+ 3 files changed, 52 insertions(+), 36 deletions(-)
 
->
-> However, I noted that this code does different handling depending on how
-> many "in_page" is going to map. I am not able to say why...
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 51fd985cf21d..9efb679d89d1 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1665,7 +1665,10 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+ {
+ 	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
+ 	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
++	struct kvm_vcpu *dst_vcpu, *src_vcpu;
++	struct vcpu_svm *dst_svm, *src_svm;
+ 	struct kvm_sev_info *mirror;
++	unsigned long i;
 
-AFAIK the reason is optimization.
+ 	dst->active = true;
+ 	dst->asid = src->asid;
+@@ -1704,27 +1707,22 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+ 		list_del(&src->mirror_entry);
+ 		list_add_tail(&dst->mirror_entry, &owner_sev_info->mirror_vms);
+ 	}
+-}
 
-The idea is like this, if there are multiple pages left as input, we
-copy the pages from page cache into the workspace buffer.
+-static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+-{
+-	unsigned long i;
+-	struct kvm_vcpu *dst_vcpu, *src_vcpu;
+-	struct vcpu_svm *dst_svm, *src_svm;
+-
+-	if (atomic_read(&src->online_vcpus) != atomic_read(&dst->online_vcpus))
+-		return -EINVAL;
+-
+-	kvm_for_each_vcpu(i, src_vcpu, src) {
+-		if (!src_vcpu->arch.guest_state_protected)
+-			return -EINVAL;
+-	}
+-
+-	kvm_for_each_vcpu(i, src_vcpu, src) {
+-		src_svm = to_svm(src_vcpu);
+-		dst_vcpu = kvm_get_vcpu(dst, i);
++	kvm_for_each_vcpu(i, dst_vcpu, dst_kvm) {
+ 		dst_svm = to_svm(dst_vcpu);
 
-If there is no more than one page left, we use that page from page cache
-directly.
++		sev_init_vmcb(dst_svm);
++
++		if (!src->es_active)
++			continue;
++
++		/*
++		 * Note, the source is not required to have the same number of
++		 * vCPUs as the destination when migrating a vanilla SEV VM.
++		 */
++		src_vcpu = kvm_get_vcpu(dst_kvm, i);
++		src_svm = to_svm(src_vcpu);
++
+ 		/*
+ 		 * Transfer VMSA and GHCB state to the destination.  Nullify and
+ 		 * clear source fields as appropriate, the state now belongs to
+@@ -1740,8 +1738,26 @@ static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+ 		src_svm->vmcb->control.vmsa_pa = INVALID_PAGE;
+ 		src_vcpu->arch.guest_state_protected = false;
+ 	}
+-	to_kvm_svm(src)->sev_info.es_active = false;
+-	to_kvm_svm(dst)->sev_info.es_active = true;
++
++	dst->es_active = src->es_active;
++	src->es_active = false;
++}
++
++static int sev_check_source_vcpus(struct kvm *dst, struct kvm *src)
++{
++	struct kvm_vcpu *src_vcpu;
++	unsigned long i;
++
++	if (!sev_es_guest(src))
++		return 0;
++
++	if (atomic_read(&src->online_vcpus) != atomic_read(&dst->online_vcpus))
++		return -EINVAL;
++
++	kvm_for_each_vcpu(i, src_vcpu, src) {
++		if (!src_vcpu->arch.guest_state_protected)
++			return -EINVAL;
++	}
 
-I believe that's the problem causing the difficult in converting to
-kmap_local_page().
+ 	return 0;
+ }
+@@ -1789,11 +1805,9 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 	if (ret)
+ 		goto out_dst_vcpu;
 
->
->>
->> I believe with all these cleanup, it should be much simpler to convert
->> to kmap_local_page().
->>
->> I'm pretty happy to provide help on this refactor if you don't feel
->> confident enough on this part of btrfs.
->>
->
-> Thanks for any help you can provide, but let me be clear about what my g=
-oal
-> is. I've been assigned with the task to convert kmap() (and possibly als=
-o
-> kmap_atomic()) to kmap_local_page() wherever it can be done across the
-> entire kernel.
->
-> Furthermore, wherever it cannot be done with the API we already have,
-> changes to the API will be required. One small change has already been
-> carried out upon David's suggestion to make kunmap_local() to take point=
-ers
-> to const void. However I'm also talking of much larger changes, if they =
-are
-> needed.
->
-> This is to say that I cannot spend too much on Btrfs. There is lot of wo=
-rk
-> to be done in other subsystems where I don't yet know which kinds of
-> difficulties I'm going to find out.
->
-> Any help with clean-ups / refactoring of zlib_compress_pages() will be m=
-uch
-> appreciated for the reasons I've tried to convey in the paragraphs above=
-.
+-	if (sev_es_guest(source_kvm)) {
+-		ret = sev_es_migrate_from(kvm, source_kvm);
+-		if (ret)
+-			goto out_source_vcpu;
+-	}
++	ret = sev_check_source_vcpus(kvm, source_kvm);
++	if (ret)
++		goto out_source_vcpu;
 
-I'll send out a cleanup for zlib_compress_pages(), mostly to make the
-(strm.avail_in =3D=3D 0) branch to call kmap() and kunmap() in pairs,
-without holding @in_page mapped.
+ 	sev_migrate_from(kvm, source_kvm);
+ 	kvm_vm_dead(source_kvm);
+@@ -2914,7 +2928,7 @@ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in)
+ 				    count, in);
+ }
 
-Would that make it easier?
+-void sev_es_init_vmcb(struct vcpu_svm *svm)
++static void sev_es_init_vmcb(struct vcpu_svm *svm)
+ {
+ 	struct kvm_vcpu *vcpu = &svm->vcpu;
 
-Thanks,
-Qu
+@@ -2967,6 +2981,15 @@ void sev_es_init_vmcb(struct vcpu_svm *svm)
+ 	}
+ }
 
->
-> Thank you so much,
->
-> Fabio
->
->> Thanks,
->> Qu
->>
->>> -				if (in_page) {
->>> -					kunmap(in_page);
->>> +				if (data_in) {
->>> +					sind--;
->>> +					kunmap_local(data_in);
->>>    					put_page(in_page);
->>>    				}
->>>    				in_page =3D find_get_page(mapping,
->>>    							start
->>> PAGE_SHIFT);
->>> -				data_in =3D kmap(in_page);
->>> +				mstack[sind] =3D 'B';
->>> +				sind++;
->>> +				data_in =3D kmap_local_page(in_page);
->>>    				start +=3D PAGE_SIZE;
->>>    				workspace->strm.next_in =3D data_in;
->>>    			}
->>> @@ -196,23 +206,39 @@ int zlib_compress_pages(struct list_head *ws,
-> struct address_space *mapping,
->>>    		 * the stream end if required
->>>    		 */
->>>    		if (workspace->strm.avail_out =3D=3D 0) {
->>> +			sind--;
->>> +			kunmap_local(data_in);
->>> +			data_in =3D NULL;
->>> +
->>> +			sind--;
->>>    			kunmap_local(cpage_out);
->>>    			cpage_out =3D NULL;
->>> +
->>>    			if (nr_pages =3D=3D nr_dest_pages) {
->>>    				out_page =3D NULL;
->>> +				put_page(in_page);
->>>    				ret =3D -E2BIG;
->>>    				goto out;
->>>    			}
->>> +
->>>    			out_page =3D alloc_page(GFP_NOFS);
->>>    			if (out_page =3D=3D NULL) {
->>> +				put_page(in_page);
->>>    				ret =3D -ENOMEM;
->>>    				goto out;
->>>    			}
->>> +
->>> +			mstack[sind] =3D 'A';
->>> +			sind++;
->>>    			cpage_out =3D kmap_local_page(out_page);
->>>    			pages[nr_pages] =3D out_page;
->>>    			nr_pages++;
->>>    			workspace->strm.avail_out =3D PAGE_SIZE;
->>>    			workspace->strm.next_out =3D cpage_out;
->>> +
->>> +			mstack[sind] =3D 'B';
->>> +			sind++;
->>> +			data_in =3D kmap_local_page(in_page);
->>>    		}
->>>    		/* we're all done */
->>>    		if (workspace->strm.total_in >=3D len)
->>> @@ -235,10 +261,16 @@ int zlib_compress_pages(struct list_head *ws,
-> struct address_space *mapping,
->>>    			goto out;
->>>    		} else if (workspace->strm.avail_out =3D=3D 0) {
->>>    			/* get another page for the stream end */
->>> +			sind--;
->>> +			kunmap_local(data_in);
->>> +			data_in =3D NULL;
->>> +
->>> +			sind--;
->>>    			kunmap_local(cpage_out);
->>>    			cpage_out =3D NULL;
->>>    			if (nr_pages =3D=3D nr_dest_pages) {
->>>    				out_page =3D NULL;
->>> +				put_page(in_page);
->>>    				ret =3D -E2BIG;
->>>    				goto out;
->>>    			}
->>> @@ -247,11 +279,18 @@ int zlib_compress_pages(struct list_head *ws,
-> struct address_space *mapping,
->>>    				ret =3D -ENOMEM;
->>>    				goto out;
->>>    			}
->>> +
->>> +			mstack[sind] =3D 'A';
->>> +			sind++;
->>>    			cpage_out =3D kmap_local_page(out_page);
->>>    			pages[nr_pages] =3D out_page;
->>>    			nr_pages++;
->>>    			workspace->strm.avail_out =3D PAGE_SIZE;
->>>    			workspace->strm.next_out =3D cpage_out;
->>> +
->>> +			mstack[sind] =3D 'B';
->>> +			sind++;
->>> +			data_in =3D kmap_local_page(in_page);
->>>    		}
->>>    	}
->>>    	zlib_deflateEnd(&workspace->strm);
->>> @@ -266,13 +305,15 @@ int zlib_compress_pages(struct list_head *ws,
-> struct address_space *mapping,
->>>    	*total_in =3D workspace->strm.total_in;
->>>    out:
->>>    	*out_pages =3D nr_pages;
->>> -	if (cpage_out)
->>> -		kunmap_local(cpage_out);
->>> -
->>> -	if (in_page) {
->>> -		kunmap(in_page);
->>> -		put_page(in_page);
->>> +	while (--sind >=3D 0) {
->>> +		if (mstack[sind] =3D=3D 'B') {
->>> +			kunmap_local(data_in);
->>> +			put_page(in_page);
->>> +		} else {
->>> +			kunmap_local(cpage_out);
->>> +		}
->>>    	}
->>> +
->>>    	return ret;
->>>    }
->>>
->>
->
->
->
->
++void sev_init_vmcb(struct vcpu_svm *svm)
++{
++	svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
++	clr_exception_intercept(svm, UD_VECTOR);
++
++	if (sev_es_guest(svm->vcpu.kvm))
++		sev_es_init_vmcb(svm);
++}
++
+ void sev_es_vcpu_reset(struct vcpu_svm *svm)
+ {
+ 	/*
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index c6cca0ce127b..a6bb67738005 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1259,15 +1259,8 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+ 		svm->vmcb->control.int_ctl |= V_GIF_ENABLE_MASK;
+ 	}
+
+-	if (sev_guest(vcpu->kvm)) {
+-		svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
+-		clr_exception_intercept(svm, UD_VECTOR);
+-
+-		if (sev_es_guest(vcpu->kvm)) {
+-			/* Perform SEV-ES specific VMCB updates */
+-			sev_es_init_vmcb(svm);
+-		}
+-	}
++	if (sev_guest(vcpu->kvm))
++		sev_init_vmcb(svm);
+
+ 	svm_hv_init_vmcb(vmcb);
+ 	init_vmcb_after_set_cpuid(vcpu);
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 128993feb4c6..444a7a67122a 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -653,10 +653,10 @@ void __init sev_set_cpu_caps(void);
+ void __init sev_hardware_setup(void);
+ void sev_hardware_unsetup(void);
+ int sev_cpu_init(struct svm_cpu_data *sd);
++void sev_init_vmcb(struct vcpu_svm *svm);
+ void sev_free_vcpu(struct kvm_vcpu *vcpu);
+ int sev_handle_vmgexit(struct kvm_vcpu *vcpu);
+ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in);
+-void sev_es_init_vmcb(struct vcpu_svm *svm);
+ void sev_es_vcpu_reset(struct vcpu_svm *svm);
+ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
+ void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa);
+
+base-commit: 8baacf67c76c560fed954ac972b63e6e59a6fba0
+--
+

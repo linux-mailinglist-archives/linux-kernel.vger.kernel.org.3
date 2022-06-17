@@ -2,87 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E6054FB07
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2178A54FB0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383246AbiFQQ2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S1383274AbiFQQ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiFQQ16 (ORCPT
+        with ESMTP id S230144AbiFQQ2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:27:58 -0400
-Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20321583F;
-        Fri, 17 Jun 2022 09:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1655483276; i=@motorola.com;
-        bh=2kDYzt/VGbsG0nzURDxax2rcRa5S2Q9ZXehQBx7o2So=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=FyELOb68bKc/Wx57kMVFf2Pn1se1hE1RevDfi+7XKFNEf4htk16C6iEJjRbqbZjZn
-         uM420vq/B/KUchC/iKdbUdUiFWdp+yPsi5bu/Bp6X9stCXyPD1uuNSkVrvNTOcYMVA
-         T01iR8jSYDJF5mgbOQsNQiE7g5dxR9bgQdlFlQq9sx8C2CBFX7E1hveTZv3w9h63U8
-         4pjTnJPA709rQOXPNxnk+hb1TMtf3N+/xlsimeXoCWDEcdGgvD7TxjOEQiPJdcG9L+
-         jyYRThGk+7Od690ZGmkZzMqv1aQlXhUbfqz60/NslQsQjy9w44DDsmq2olXWXqtt+p
-         ElnRVZ5KIIhDQ==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGIsWRWlGSWpSXmKPExsUyYU+Ds2736jV
-  JBjtfylkca3vCbtG8eD2bRefEJewWl3fNYbNYtKyV2WJL2xUmix9/+pgtFmx8xOjA4TG7Yyar
-  x6ZVnWwe++euYffo/2vg8XmTXABrFGtmXlJ+RQJrxo65Z5gKJgtV7GroZ2lgvMTXxcjFISQwm
-  Uli+ZqpzBDOQiaJRc1P2bsYOTlYBFQlHsyZwgJiswmoSSx4vYoZxBYRsJDoXTSdEcRmFmhhkj
-  hzURjEFhbwlTg4fw9YnFdAWeLn+glsILaQQIbEm4YT7BBxQYmTM5+wQPRqSdz495Kpi5EDyJa
-  WWP6PAyTMKWAlce35V6YJjLyzkHTMQtIxC6FjASPzKkbrpKLM9IyS3MTMHF1DAwNdQ0MTXUtL
-  XUMTM73EKt1EvdJi3fLU4hJdI73E8mK91OJiveLK3OScFL281JJNjMAgTylKnrSD8XvfT71Dj
-  JIcTEqivGVL1yQJ8SXlp1RmJBZnxBeV5qQWH2KU4eBQkuD9uwIoJ1iUmp5akZaZA4w4mLQEB4
-  +SCK/scqA0b3FBYm5xZjpE6hSjLkfn/q4DzEIsefl5qVLivLtXARUJgBRllObBjYBF/yVGWSl
-  hXkYGBgYhnoLUotzMElT5V4ziHIxKwrznQS7hycwrgdv0CugIJqAjGvetADmiJBEhJdXAlNtj
-  9S3pZofHhKtnJ54usHJLmhgZYrZvwdXpTP1Xps/u3jqBSVB0Unb8bv77fccXKgmFbK9UuGFSu
-  vN5iDfjvfCXUZ/uN+9eJcO6TCiOV7vg3s3WTWIZzHtKZBc36u5aEqXXuGfidcWSztu3DSb8WC
-  +xYIdRvVDO1+0rHt7Re8b2I+yZ/P/ze3QYa2bEeBlPj53Ra57yZZlc9zLnPj+h1LtxUX68jvI
-  3BX2482frbXOzF3o5banZI/FnG1bMebM/163eO/rHGovs4MVPUmw7Gi1vWxSruyx2W1a/NWE7
-  f97PlO7ZzmcFV1dOqbz0zYB/p6bZyQdSbW2c+lNPBeRfiTC/0XnOI0AleV+MlXOpEktxRqKhF
-  nNRcSIAqyBdWHkDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-13.tower-636.messagelabs.com!1655483274!23406!1
-X-Originating-IP: [144.188.128.67]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.86.7; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 18209 invoked from network); 17 Jun 2022 16:27:55 -0000
-Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
-  by server-13.tower-636.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jun 2022 16:27:55 -0000
-Received: from ilclmmrp02.lenovo.com (ilclmmrp02.mot.com [100.65.83.26])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4LPkwp5DcFzfBZq;
-        Fri, 17 Jun 2022 16:27:54 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.6.83])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by ilclmmrp02.lenovo.com (Postfix) with ESMTPSA id 4LPkwp3x5XzbrlP;
-        Fri, 17 Jun 2022 16:27:54 +0000 (UTC)
-Date:   Fri, 17 Jun 2022 11:27:35 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: fix list double add in uvcg_video_pump
-Message-ID: <Yqyrd6vY/rdhAONd@p1g3>
-References: <20220616030915.149238-1-w36195@motorola.com>
- <Yqx4vPp78Sl2I3nU@pendragon.ideasonboard.com>
+        Fri, 17 Jun 2022 12:28:46 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBE441F9F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:28:44 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id y6so4328475plg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ikdZWQajtcXHyKH9cwfe1WfBf7z5hZlJ5ctRUGfamlg=;
+        b=bKOqTm4VHtoh+tNs1+zszHl4qT0YMrNAovePO+NULfamQiOqwVXuW1ln4Bh/4sKdg0
+         cXGRAf02ro+LfrtUjyEvIJ8kgm0ihYvyksME03mbgpmFBvPrCeOwvSFy27O14i6EDfBb
+         qmJmtctX4Dp/Djfs7qZDcEaw85XVtdDf1wPxsF8ddJ1UXcuevlDnld5OMTw6qOhWdEXe
+         wB+0CoejzSloI3rmuMW/4ZmyOhQWfWc05l9xlSBjQXdGTHA7scPn/f8qaaIzkclLsSaT
+         xhZjNKq1t7QNzRvCIgNsNn55ViSkKG+k50D+hlZrYOUIdBeds9EMX0EceU6RLhnp6FmE
+         842A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ikdZWQajtcXHyKH9cwfe1WfBf7z5hZlJ5ctRUGfamlg=;
+        b=TVuw4bDib4Ln5oBnb1zEJpKe/6B/Xvpo86/lmwVSSmjBycZ0NZamrzw1/xNH0Zms/2
+         SZkbRaLkprfy20gs2/cn3KvgyhkAyXj3b4mV6nw8US7PzmWnm/+Y/mYA2X4pn4exckkM
+         P+gtRcWUySLYTQjuOAdYMcovw5He9ODUl+n5zq+NDManEcWH5uXOxADEl/HSW+CsaZFA
+         cn3WXBu1oT47Vvq4EKe4LXzA+SSVbCGFYVRi8RYIBQsuVVh2lWO20VjOHEoR2vWPp9vG
+         gZYpzvOBUkF0a4fSWX/wKPhEvO7n06+Uh2rhogesfH39lkirI8qAtxpHZQ9PzZ9azHXo
+         +I+g==
+X-Gm-Message-State: AJIora9kRrXxmlpHuKcHk91yK8+0EjWE0x/tgjYuu5SZF6BwA+KdP2WS
+        OiMHORhnGaZZwqdIzxns/I0OrQ==
+X-Google-Smtp-Source: AGRyM1uxx3rxCTzmjYp2x2InU4H6kqXPbe9/j3UBIM4H5kEze44ULSzDQhVLhvnKHdaDYluwfj0+MQ==
+X-Received: by 2002:a17:902:efc6:b0:167:8177:60a7 with SMTP id ja6-20020a170902efc600b00167817760a7mr10319625plb.110.1655483323741;
+        Fri, 17 Jun 2022 09:28:43 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056a001d0b00b00518895f0dabsm3877205pfx.59.2022.06.17.09.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 09:28:43 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 16:28:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Red Hat Product Security <secalert@redhat.com>
+Cc:     mingo@redhat.com, bp@alien8.de, pgn@zju.edu.cn,
+        pbonzini@redhat.com, wanpengli@tencent.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        kangel@zju.edu.cn, syzkaller@googlegroups.com, jmattson@google.com,
+        vkuznets@redhat.com, dave.hansen@linux.intel.com,
+        linux-sgx@vger.kernel.org, jarkko@kernel.org, joro@8bytes.org,
+        hpa@zytor.com
+Subject: Re: 'WARNING in vcpu_enter_guest' bug in arch/x86/kvm/x86.c:9877
+Message-ID: <Yqyrt71TG1v0gPSf@google.com>
+References: <25270242.531.1655475119097@app133160.ycg3.service-now.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Yqx4vPp78Sl2I3nU@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <25270242.531.1655475119097@app133160.ycg3.service-now.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,76 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Fri, Jun 17, 2022, Red Hat Product Security wrote:
+> Hello!
+> 
+> INC2131147 ('WARNING in vcpu_enter_guest' bug in arch/x86/kvm/x86.c:9877) is pending your review.
+> 
+> Opened for: pgn@zju.edu.cn
+> Followers: Paolo Bonzini, seanjc@google.com, Vitaly Kuznetsov, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, tglx@linutronix.de, Ingo Molnar, bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com, jarkko@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org, kangel@zju.edu.cn, syzkaller@googlegroups.com
+> 
+> Mauro Matteo Cascella updated your request with the following comments:
+> 
+> Hi Sean,
+>  Thanks for the fix: https://github.com/torvalds/linux/commit/423ecfea77dda83823c71b0fad1c2ddb2af1e5fc [https://github.com/torvalds/linux/commit/423ecfea77dda83823c71b0fad1c2ddb2af1e5fc].
+> Is this CVE worthy? As /dev/kvm is world accessible and unprivileged users could trigger the bug IIUC. We (Red Hat) can assign one if needed.
 
-Thanks for the review!
-
-On Fri, Jun 17, 2022 at 03:51:08PM +0300, Laurent Pinchart wrote:
-> Hi Dan,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Jun 15, 2022 at 10:09:15PM -0500, Dan Vacura wrote:
-> > A panic can occur if the endpoint becomes disabled and the
-> > uvcg_video_pump adds the request back to the req_free list after it has
-> > already been queued to the endpoint. The endpoint complete will add the
-> > request back to the req_free list. Invalidate the local request handle
-> > once it's been queued.
-> 
-> Good catch !
-> 
-> > <6>[  246.796704][T13726] configfs-gadget gadget: uvc: uvc_function_set_alt(1, 0)
-> > <3>[  246.797078][   T26] list_add double add: new=ffffff878bee5c40, prev=ffffff878bee5c40, next=ffffff878b0f0a90.
-> > <6>[  246.797213][   T26] ------------[ cut here ]------------
-> > <2>[  246.797224][   T26] kernel BUG at lib/list_debug.c:31!
-> > <6>[  246.807073][   T26] Call trace:
-> > <6>[  246.807180][   T26]  uvcg_video_pump+0x364/0x38c
-> > <6>[  246.807366][   T26]  process_one_work+0x2a4/0x544
-> > <6>[  246.807394][   T26]  worker_thread+0x350/0x784
-> > <6>[  246.807442][   T26]  kthread+0x2ac/0x320
-> > 
-> > Fixes: f9897ec0f6d3 ("usb: gadget: uvc: only pump video data if necessary")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Dan Vacura <w36195@motorola.com>
-> > ---
-> >  drivers/usb/gadget/function/uvc_video.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> > index 93f42c7f800d..59e2f51b53a5 100644
-> > --- a/drivers/usb/gadget/function/uvc_video.c
-> > +++ b/drivers/usb/gadget/function/uvc_video.c
-> > @@ -427,6 +427,9 @@ static void uvcg_video_pump(struct work_struct *work)
-> >  		if (ret < 0) {
-> >  			uvcg_queue_cancel(queue, 0);
-> >  			break;
-> > +		} else {
-> > +			/* Endpoint now owns the request */
-> > +			req = NULL;
-> >  		}
-> >  		video->req_int_count++;
-> 
-> I'd write it as
-> 
-> 		if (ret < 0) {
-> 			uvcg_queue_cancel(queue, 0);
-> 			break;
-> 		}
-> 
-> 		/* Endpoint now owns the request. */
-> 		req = NULL;
-> 		video->req_int_count++;
-
-This is cleaner. I'll send a v2 with this suggestion.
-
-> 
-> Apart from that,
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> >  	}
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+IMO, it's not CVE worthy.  Unprivileged users can trigger the bug, but the bug
+itself is not harmful to the system at large, only to that user's VM/workload.
+The splat is a WARN_ON_ONCE() so it won't spam the kernel log.  panic_on_warn
+would be problematic, but assigning a CVE for every WARN seems excessive.

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E1554F5B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A1F54F5BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 12:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382000AbiFQKnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 06:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
+        id S1382008AbiFQKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 06:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382043AbiFQKnm (ORCPT
+        with ESMTP id S1382005AbiFQKnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:43:42 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA276B098;
-        Fri, 17 Jun 2022 03:43:41 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 25so5645031edw.8;
-        Fri, 17 Jun 2022 03:43:41 -0700 (PDT)
+        Fri, 17 Jun 2022 06:43:52 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526306B098;
+        Fri, 17 Jun 2022 03:43:50 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id n20so1213445ejz.10;
+        Fri, 17 Jun 2022 03:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=v5ecjoqfrtonTaDC6C0FL6A10bdamLrdFYiT8G5VOw4=;
-        b=i9vP6RSHB3vHCWE4RcV+HJ7iNa3yq76y+QY1jM2hM3XW30wf/IpH2PYhW7PjjWYdPl
-         FnqF4MY1FWpWmG/tInRWbGGRUlq5fOUBIRpqGOUPd00Y0fJI+wBSk0Sk/D/TyosFFW5R
-         eDf3zmrZD/g1r7hS3VyzLNDAbbkl16Bhal3vADJhDYj3ELdqcONpuYcNn0AfBNvr6vGi
-         VBSww3vMhxoeLHx3ZWL2K7B9n0zo1x4SBXkekziqpWI5BcKNBpIH12C66NB/XTdHMMl8
-         k4KSyVmEIab/YXL6INbKpXWiiTJuNemZKohU4Afojnen0VzWidI7IsWlIxHRLKMHeyz7
-         BIPA==
+        bh=AiGd/G18mnXfAnwyT/vN2yw57fx/1UEELfONJBgsPiU=;
+        b=VJGDBaLwKCaTN0E3YXVF9jHgxLrlNG7667EGq4tM8lH0Jj5v9IeJ8Bp5VWKq5NMyYb
+         5iMXOXz2KivIOmNkOxjk4YgJL5l3L9HKBsazeqCv8lVt/dcBtU8qfDqfmHEQZZQdetrq
+         97mTgq9S+mBB4iprd0LRRQxKEmQGn6d9auRVXTdQ3HImBt3EiTBui/aJIK98KA5pph6p
+         OZNU0KgucPKhFX8qM53dhe3LQUOFyJCpS/tcexfirlbNPevl5K7UwUwf92nmrtSCtUHL
+         t+BKrJoviExSkCSNDQLMaY3h82RHo66dvs7SjNMGC6SKbB9SZexPspyWcaBwwm7yTdJ/
+         UKIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=v5ecjoqfrtonTaDC6C0FL6A10bdamLrdFYiT8G5VOw4=;
-        b=cXgU7NoOUynSXmfj8MV7B29KsJukY5Ru5lUvw/veYQqMfzNhAziPhwsZ826FtBks8t
-         rkHIFjXieZEg8lLNA99XL288v2OerDc2xolN720Y1izNx8lxPw/eYLtXrt5yHnJV/BNb
-         3wVHeiNU0H05kMZ7bhSzhTwFI9j2XyaUPudZLQM5uFv1fNturTKEP01XSM4BeFTw2Jfy
-         SuvTgZDDS/+zsH8BGREbBi9zJa57J1DXGvTmdYKE+ZBKmE2BxZrgMAyuIvqb+TYSPQXb
-         d4Z3owi0PpjIbs7eB/C3hLUDH1qs081qAmiCIUnBi7ETuUVuSewM+NgYlQm9Ap/jV1cR
-         K4VA==
-X-Gm-Message-State: AJIora9uye3NVUfoGDu/vuB7AylaUlwXkZN96zbJmYTVF8rsfA7Yn7sb
-        In8e2jSZ10JFJCkFDgS3oerDYlrIZy3nSw==
-X-Google-Smtp-Source: AGRyM1vGje4sUJAcYpjSJzolDvmR/43gla1gcSQu/6kGI0U0BANsb2e78Xdl4mzbofJwfzp3bj4U5w==
-X-Received: by 2002:a05:6402:334:b0:435:584e:514c with SMTP id q20-20020a056402033400b00435584e514cmr6465853edw.410.1655462620199;
-        Fri, 17 Jun 2022 03:43:40 -0700 (PDT)
+        bh=AiGd/G18mnXfAnwyT/vN2yw57fx/1UEELfONJBgsPiU=;
+        b=P/bF1ATpoe1nzYyDfgCY6iojSQO9SncUMLldgj4V58HeSEo/sNhfXR5v19TJfjhq2Z
+         CxGW0kDvybarokjC8xMODMNhD/Hk0vlMR5FYrek6tg0SsebQjPerQafcexZctikdkV7e
+         tYBAvEPtDwrPAhAzBOxPUktmWCWbDffpMZs9oznI2rR9BQniy/hfhU339M2KILBguTxO
+         HPmWF4nIa6yD7pLBqie5QsbZ1Y5XVB0YsLUpaLuuqxOJM2lv9ZOck8nWDK5HcfCQBWj8
+         vJX0kD5K+KCzybr4liK+w6Na1/kIdRELxG4/5aOSuBhrxTI9XSBQ5hZE03cQaxF05Gqi
+         tiiw==
+X-Gm-Message-State: AJIora91KBL80RTh3Ms0YuwvuANO/6vQjZJnqPUu5E/j89HOlUIwOTYd
+        9zv3vD6QCNYXL8mddWZwP94=
+X-Google-Smtp-Source: AGRyM1u5wVHvSt+IqLZK0au6HLE1grAgjeBZEKVVVQaH/p4dMq24y0opu3PhRSo42Jyp+s1jT4scDg==
+X-Received: by 2002:a17:906:7a57:b0:711:faf1:587d with SMTP id i23-20020a1709067a5700b00711faf1587dmr8328834ejo.581.1655462628898;
+        Fri, 17 Jun 2022 03:43:48 -0700 (PDT)
 Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
-        by smtp.gmail.com with ESMTPSA id x16-20020aa7cd90000000b0042fb3badd48sm3464631edv.9.2022.06.17.03.43.38
+        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042dcac2afc6sm3425003edu.72.2022.06.17.03.43.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 03:43:39 -0700 (PDT)
-Message-ID: <7788acc5-a9b9-1be7-0e6f-217e9b54b28f@gmail.com>
-Date:   Fri, 17 Jun 2022 12:43:37 +0200
+        Fri, 17 Jun 2022 03:43:47 -0700 (PDT)
+Message-ID: <8f9d7850-fe31-41b3-cded-63a020356e13@gmail.com>
+Date:   Fri, 17 Jun 2022 12:43:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v3 15/40] arm64: dts: mediatek: align gpio-key node names
- with dtschema
+Subject: Re: [PATCH v3 16/40] arm64: dts: mediatek: mt7622-bananapi-bpi-r64:
+ align led node names with dtschema
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
@@ -65,9 +65,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-15-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-16-krzysztof.kozlowski@linaro.org>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220616005333.18491-15-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-16-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,192 +84,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 16/06/2022 02:53, Krzysztof Kozlowski wrote:
 > The node names should be generic and DT schema expects certain pattern
-> (e.g. with key/button/switch).
+> with 'led'.  Use generic color properties instead of the node name.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Applied, thanks
+Applied, thanks!
 
 > ---
->   .../boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts      |  4 ++--
->   arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts           |  4 ++--
->   arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts  |  6 +++---
->   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi           | 10 +++++-----
->   arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi |  4 ++--
->   arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi  |  2 +-
->   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi         |  2 +-
->   arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi       |  4 ++--
->   8 files changed, 18 insertions(+), 18 deletions(-)
+>   arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 > 
 > diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-> index 2b9bf8dd14ec..c2311733d2de 100644
+> index c2311733d2de..7d1ecf72a6c3 100644
 > --- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
 > +++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-> @@ -40,13 +40,13 @@ cpu@1 {
->   	gpio-keys {
->   		compatible = "gpio-keys";
+> @@ -8,6 +8,7 @@
+>   /dts-v1/;
+>   #include <dt-bindings/input/input.h>
+>   #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
 >   
-> -		factory {
-> +		factory-key {
->   			label = "factory";
->   			linux,code = <BTN_0>;
->   			gpios = <&pio 0 GPIO_ACTIVE_HIGH>;
+>   #include "mt7622.dtsi"
+>   #include "mt6380.dtsi"
+> @@ -56,14 +57,16 @@ wps-key {
+>   	leds {
+>   		compatible = "gpio-leds";
+>   
+> -		green {
+> +		led-0 {
+>   			label = "bpi-r64:pio:green";
+> +			color = <LED_COLOR_ID_GREEN>;
+>   			gpios = <&pio 89 GPIO_ACTIVE_HIGH>;
+>   			default-state = "off";
 >   		};
 >   
-> -		wps {
-> +		wps-key {
->   			label = "wps";
->   			linux,code = <KEY_WPS_BUTTON>;
->   			gpios = <&pio 102 GPIO_ACTIVE_HIGH>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts b/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
-> index 596c073d8b05..c28da9323a9c 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
-> @@ -42,13 +42,13 @@ gpio-keys {
->   		compatible = "gpio-keys";
->   		poll-interval = <100>;
->   
-> -		factory {
-> +		key-factory {
->   			label = "factory";
->   			linux,code = <BTN_0>;
->   			gpios = <&pio 0 0>;
+> -		red {
+> +		led-1 {
+>   			label = "bpi-r64:pio:red";
+> +			color = <LED_COLOR_ID_RED>;
+>   			gpios = <&pio 88 GPIO_ACTIVE_HIGH>;
+>   			default-state = "off";
 >   		};
->   
-> -		wps {
-> +		key-wps {
->   			label = "wps";
->   			linux,code = <KEY_WPS_BUTTON>;
->   			gpios = <&pio 102 0>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts
-> index 44f6149c1307..28433b94f7c7 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts
-> @@ -21,7 +21,7 @@ cpu_crit: cpu_crit0 {
->   };
->   
->   &gpio_keys {
-> -	/delete-node/tablet_mode;
-> -	/delete-node/volume_down;
-> -	/delete-node/volume_up;
-> +	/delete-node/switch-tablet-mode;
-> +	/delete-node/switch-volume-down;
-> +	/delete-node/switch-volume-up;
->   };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> index 9c75fbb31f98..d20378758213 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> @@ -53,7 +53,7 @@ gpio_keys: gpio-keys {
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&gpio_keys_pins>;
->   
-> -		lid {
-> +		switch-lid {
->   			label = "Lid";
->   			gpios = <&pio 69 GPIO_ACTIVE_LOW>;
->   			linux,code = <SW_LID>;
-> @@ -61,7 +61,7 @@ lid {
->   			gpio-key,wakeup;
->   		};
->   
-> -		power {
-> +		switch-power {
->   			label = "Power";
->   			gpios = <&pio 14 GPIO_ACTIVE_HIGH>;
->   			linux,code = <KEY_POWER>;
-> @@ -69,7 +69,7 @@ power {
->   			gpio-key,wakeup;
->   		};
->   
-> -		tablet_mode {
-> +		switch-tablet-mode {
->   			label = "Tablet_mode";
->   			gpios = <&pio 121 GPIO_ACTIVE_HIGH>;
->   			linux,code = <SW_TABLET_MODE>;
-> @@ -77,13 +77,13 @@ tablet_mode {
->   			gpio-key,wakeup;
->   		};
->   
-> -		volume_down {
-> +		switch-volume-down {
->   			label = "Volume_down";
->   			gpios = <&pio 123 GPIO_ACTIVE_LOW>;
->   			linux,code = <KEY_VOLUMEDOWN>;
->   		};
->   
-> -		volume_up {
-> +		switch-volume-up {
->   			label = "Volume_up";
->   			gpios = <&pio 124 GPIO_ACTIVE_LOW>;
->   			linux,code = <KEY_VOLUMEUP>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-> index 2d7a193272ae..3ac83be53627 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-> @@ -73,7 +73,7 @@ volume_buttons: volume-buttons {
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&volume_button_pins>;
->   
-> -		volume_down {
-> +		button-volume-down {
->   			label = "Volume Down";
->   			linux,code = <KEY_VOLUMEDOWN>;
->   			debounce-interval = <100>;
-> @@ -81,7 +81,7 @@ volume_down {
->   			gpios = <&pio 6 GPIO_ACTIVE_LOW>;
->   		};
->   
-> -		volume_up {
-> +		button-volume-up {
->   			label = "Volume Up";
->   			linux,code = <KEY_VOLUMEUP>;
->   			debounce-interval = <100>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-> index 28966a65391b..50a0dd36b5fb 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-> @@ -45,7 +45,7 @@ gpio-keys {
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&pen_eject>;
->   
-> -		pen-insert {
-> +		switch-pen-insert {
->   			label = "Pen Insert";
->   			/* Insert = low, eject = high */
->   			gpios = <&pio 6 GPIO_ACTIVE_LOW>;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> index b035e06840e6..b50261e8b9ed 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -144,7 +144,7 @@ wifi_wakeup: wifi-wakeup {
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&wifi_pins_wakeup>;
->   
-> -		wowlan {
-> +		button-wowlan {
->   			label = "Wake on WiFi";
->   			gpios = <&pio 113 GPIO_ACTIVE_HIGH>;
->   			linux,code = <KEY_WAKEUP>;
-> diff --git a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
-> index 7a717f926929..8ee1529683a3 100644
-> --- a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
-> @@ -28,7 +28,7 @@ gpio-keys {
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&gpio_keys_default>;
->   
-> -		volume-up {
-> +		key-volume-up {
->   			gpios = <&pio 42 GPIO_ACTIVE_LOW>;
->   			label = "volume_up";
->   			linux,code = <115>;
-> @@ -36,7 +36,7 @@ volume-up {
->   			debounce-interval = <15>;
->   		};
->   
-> -		volume-down {
-> +		key-volume-down {
->   			gpios = <&pio 43 GPIO_ACTIVE_LOW>;
->   			label = "volume_down";
->   			linux,code = <114>;

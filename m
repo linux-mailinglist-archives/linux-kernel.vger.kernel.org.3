@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F06550066
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AA855006C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356425AbiFQXLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S1383304AbiFQXMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiFQXLn (ORCPT
+        with ESMTP id S1383221AbiFQXMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:11:43 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2777F62BE9;
-        Fri, 17 Jun 2022 16:11:42 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id n11so5955838iod.4;
-        Fri, 17 Jun 2022 16:11:42 -0700 (PDT)
+        Fri, 17 Jun 2022 19:12:10 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A2864BFC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:12:06 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 187so5317265pfu.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:12:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=294ojvCzJG+QxzRogH/Uf6cGP9X/olCBo7vsCMUaWUs=;
+        b=rRMAv5j+Hd/iJN32vcBDVL12U3rDEOOrDCl0MNjeuoB8nfWV1YTHVPRQxhLQzoJgkX
+         ZJG8iKXWOMEzcoSSx4BzvL4tW/FkQYqnQyv12OpGhLHgnqsF6MA0Zv/JSKUyme4TAdC1
+         PK4UNdO1p7nq6ua9IRX7f5y8kq4TRP0rZ11wo6jCd21bxBCR0qCtS3EqGZPgSOcsLfsG
+         FG4f5UYmY07Jsv9z6xEuBtiNjJlIeAgxtaZTK9tJdqWjWANTPiGOVJybe7hvJ9oZqXL9
+         HFn/y5aQTdGOOA9aVIAvXAe7Q0YJ5X8tMP0RYR8Qd7xIDEPKM+u0LrMy9wJIkIzH20SK
+         yGQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ocSDv0KbLxR8Foonu4dTQCyLR9CdgrTx1ewUehoAImk=;
-        b=f9q3BaDPLCCaTCMvb4nFWKQTsHYZmeakXN8C0fTJ052ckWBpxsxBZp8AlB69yxBGAF
-         YL1GsrMrqaMVZchBZpVNcSg2i3ZPyoyYrLdgtEc3B78X+zxzJ7KwZO45mTqKtlkMoFW1
-         9aji31+AZDT+zLL+06KvFnHpkVjTkZ33f9EYlRAo9cHFgy9/nEtPOQyYZZJvb/UdYN3f
-         5467il9KkhTJttnNommsNM9ls3RfGiePsmw60e/UzO/dLq0hPkz+MQLgj4hkVtCLrDdS
-         0zbm6MVjhjzWXN+VWI99BYbfKWChVB0wzFf/oGSV/suY4GbGvsmV9m3wu/XSPw5zI1mL
-         aTkQ==
-X-Gm-Message-State: AJIora/6B6rV+YY0MLSJqTUeSLBhgrCnjLMYLmccsvzhIssrO+BBACvZ
-        4pmPCR3Bt1Q8wyCS8+pg2ZkLn/dOqQ==
-X-Google-Smtp-Source: AGRyM1u/VBMhTIF5VYeYK/B6h2IXUlXNo6UGJ2e9kLLlnK2XJcQKAGLVeLDCBOfHHOTs2DPhDBiHvg==
-X-Received: by 2002:a05:6638:3389:b0:331:f5e7:7dda with SMTP id h9-20020a056638338900b00331f5e77ddamr6686415jav.93.1655507501367;
-        Fri, 17 Jun 2022 16:11:41 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id z25-20020a05663803b900b00335d838f40bsm2402913jap.138.2022.06.17.16.11.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 16:11:41 -0700 (PDT)
-Received: (nullmailer pid 2613068 invoked by uid 1000);
-        Fri, 17 Jun 2022 23:11:39 -0000
-Date:   Fri, 17 Jun 2022 17:11:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Irui Wang <irui.wang@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
-        srv_heupstream@mediatek.com
-Subject: Re: [RESEND V9,1/7] dt-bindings: mediatek: Add mediatek,
- mt8195-jpgenc compatible
-Message-ID: <20220617231139.GA2610098-robh@kernel.org>
-References: <20220614121024.31667-1-irui.wang@mediatek.com>
- <20220614121024.31667-2-irui.wang@mediatek.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=294ojvCzJG+QxzRogH/Uf6cGP9X/olCBo7vsCMUaWUs=;
+        b=eMYAbXkogkt95tAth4gbPWlzqZC6xnNnlXzSha2doWZ6ybIASWdLAPKABpXluoancQ
+         bjS/oJcivuc1dwrdpe/2L2Kkos9kYVEGjcH6ks07voI40zXZf1X84lEZregpniDlASuS
+         W+pZLWXZ7eE/gdwvBHtltVds/4PSn2NwQm6wH7CyWxknwJ4X8wQfnwDp7x5e8RjISaiM
+         MVO1uAV2ewWu2g4H+mvJfc0xqTjaMYSft1UMDVdNI++iltzjv3dLMT+skjWNMZnoQsCx
+         B9CoV20j4gAJs/n4kUSbXGYmEsP3cG77CWJq6s2O+0FaFWvrLaK7fHGRTPjlVhL0haZT
+         q+jA==
+X-Gm-Message-State: AJIora8ePzFGNslXV0Yzg+eNW8xW42IsO0G2kawUIciFz6Dla0xwncbV
+        Mw0xI0uz7jddWhOEm3CcLL4MlA==
+X-Google-Smtp-Source: AGRyM1stFAPlhmMkLY1NazO67J7oIwcpQv5+571CFcD+wsnGDHo4hdZrZyBBUSUL5SYGrTcERU92tQ==
+X-Received: by 2002:a63:4f05:0:b0:405:5463:2ea8 with SMTP id d5-20020a634f05000000b0040554632ea8mr10679545pgb.94.1655507526105;
+        Fri, 17 Jun 2022 16:12:06 -0700 (PDT)
+Received: from [172.31.235.92] ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id c2-20020a639602000000b003fb098151c9sm4301292pge.64.2022.06.17.16.12.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 16:12:05 -0700 (PDT)
+Message-ID: <b59237c7-fb60-35e2-66f9-668d9946bd3c@linaro.org>
+Date:   Fri, 17 Jun 2022 16:12:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614121024.31667-2-irui.wang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 02/15] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
+        lee.jones@linaro.org, Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-3-peterwu.pub@gmail.com>
+ <dd9b9be2-7bdf-6cb6-b8ad-d7c0a0d5b98a@linaro.org>
+ <CABtFH5+5Y5Tq3vO6Sg3kf98CWm9Aijv7qkdBcpm2SB0JZ1gCiA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CABtFH5+5Y5Tq3vO6Sg3kf98CWm9Aijv7qkdBcpm2SB0JZ1gCiA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,181 +86,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 08:10:18PM +0800, Irui Wang wrote:
-> From: kyrie wu <kyrie.wu@mediatek.com>
+On 17/06/2022 03:19, ChiaEn Wu wrote:
+> Hi Krzysztof,
 > 
-> Add mediatek,mt8195-jpgenc compatible to binding document.
+> Thanks for your helpful comments! I have so some questions want to ask
+> you below.
 > 
-> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-> ---
->  .../media/mediatek,mt8195-jpegenc.yaml        | 153 ++++++++++++++++++
->  1 file changed, 153 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年6月17日 週五 清晨5:05寫道：
+>>
+>> On 13/06/2022 04:11, ChiaEn Wu wrote:
+>>> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>>>
+>>> Add Mediatek MT6370 Charger binding documentation.
+>>>
+>>> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+>>> ---
+>>>  .../power/supply/mediatek,mt6370-charger.yaml | 60 +++++++++++++++++++
+>>>  1 file changed, 60 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+>>> new file mode 100644
+>>> index 000000000000..b63553ebb15b
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+>>> @@ -0,0 +1,60 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Mediatek MT6370 Battery Charger
+>>> +
+>>> +maintainers:
+>>> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+>>> +
+>>> +description: |
+>>> +  This module is part of the MT6370 MFD device.
+>>> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: mediatek,mt6370-charger
+>>> +
+>>> +  interrupts:
+>>> +    description: |
+>>> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
+>>> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
+>>> +      are required.
+>>> +    items:
+>>> +      - description: BC1.2 done irq
+>>> +      - description: usb plug in irq
+>>> +      - description: mivr irq
+>>> +
+>>> +  interrupt-names:
+>>> +    items:
+>>> +      - const: attach_i
+>>> +      - const: uvp_d_evt
+>>> +      - const: mivr
+>>> +
+>>> +  io-channels:
+>>> +    description: |
+>>> +      Use ADC channel to read vbus, ibus, ibat, etc., info. Ibus ADC channel
+>>> +      is required.
+>>
+>> Add io-channel-names and describe each item - what type of ADC it is
+>> expected to be.
+>>
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
-> new file mode 100644
-> index 000000000000..a7f9f723d5db
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
-> @@ -0,0 +1,153 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegenc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek JPEG Encoder Device Tree Bindings
-> +
-> +maintainers:
-> +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
-> +
-> +description: |-
-> +  MediaTek JPEG Encoder is the JPEG encode hardware present in MediaTek SoCs
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: mediatek,mt8195-jpgenc
-> +
-> +  mediatek,jpegenc-multi-core:
-> +    type: boolean
-> +    description: |
-> +      Indicates whether the jpeg encoder has multiple cores or not.
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  iommus:
-> +    maxItems: 4
-> +    description: |
-> +      Points to the respective IOMMU block with master port as argument, see
-> +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
-> +      Ports are according to the HW.
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
-> +
-> +  ranges: true
-> +
-> +# Required child node:
-> +patternProperties:
-> +  "^jpgenc@[0-9a-f]+$":
-> +    type: object
-> +    description: |
-> +      The jpeg encoder hardware device node which should be added as subnodes to
-> +      the main jpeg node.
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mt8195-jpgenc-hw
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      hw_id:
-> +        description: |
-> +          Current jpegenc hw id.
+> I'm afraid I might not be understanding what you mean.
+> I will try to add some text in "description" and "io-channel-names", like below
+> ----------------------------------
+> io-channels:
+>   description: |
+>     Use ADC channel to read VBUS, IBUS, IBAT, etc., info. Ibus ADC channel
+>     is required. It can be seen in
+> include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
+>   minItems: 1
+>   maxItems: 9
+> 
+> io-channel-names:
+>   items:
+>     - const: vbusdiv5
+>     - const: vbusdiv2
 
-Same question here. Surely, I asked sometime in the last 8 versions, but 
-no explanation here and I'm not going to go look for it.
+Almost. The best would be something like this:
+Documentation/devicetree/bindings/power/supply/cpcap-charger.yaml
+so also "items" with description under "io-channels". You need to skip
+maxItems in such case (keep minItems).
 
-> +
-> +      iommus:
-> +        minItems: 1
-> +        maxItems: 32
-> +        description: |
-> +          List of the hardware port in respective IOMMU block for current Socs.
-> +          Refer to bindings/iommu/mediatek,iommu.yaml.
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      clocks:
-> +        maxItems: 1
-> +
-> +      clock-names:
-> +        items:
-> +          - const: jpgenc
-> +
-> +      power-domains:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - hw_id
-> +      - iommus
-> +      - interrupts
-> +      - clocks
-> +      - clock-names
-> +      - power-domains
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - power-domains
-> +  - iommus
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        jpgenc_master {
-> +                compatible = "mediatek,mt8195-jpgenc";
-> +                mediatek,jpegenc-multi-core;
-> +                power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
-> +                iommus = <&iommu_vpp M4U_PORT_L20_JPGENC_Y_RDMA>,
-> +                <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
-> +                <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
-> +                <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
-> +                #address-cells = <2>;
-> +                #size-cells = <2>;
-> +                ranges;
-> +
-> +                jpgenc@1a030000 {
-> +                        compatible = "mediatek,mt8195-jpgenc-hw";
-> +                        reg = <0 0x1a030000 0 0x10000>;
-> +                        hw_id = <0>;
-> +                        iommus = <&iommu_vdo M4U_PORT_L19_JPGENC_Y_RDMA>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_C_RDMA>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_Q_TABLE>,
-> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_BSDMA>;
-> +                        interrupts = <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH 0>;
-> +                        clocks = <&vencsys CLK_VENC_JPGENC>;
-> +                        clock-names = "jpgenc";
-> +                        power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
-> +                };
-> +
-> +                jpgenc@1b030000 {
-> +                        compatible = "mediatek,mt8195-jpgenc-hw";
-> +                        reg = <0 0x1b030000 0 0x10000>;
-> +                        hw_id = <1>;
-> +                        iommus = <&iommu_vpp M4U_PORT_L20_JPGENC_Y_RDMA>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
-> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
-> +                        interrupts = <GIC_SPI 347 IRQ_TYPE_LEVEL_HIGH 0>;
-> +                        clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGENC>;
-> +                        clock-names = "jpgenc";
-> +                        power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
-> +                };
-> +        };
-> +    };
-> -- 
-> 2.18.0
+>     - ...
+> ----------------------------------
+> Did these modifications meet your expectations?
 > 
+>>> +    minItems: 1
+>>> +    maxItems: 9
+>>> +
+>>> +  usb-otg-vbus-regulator:
+>>> +    type: object
+>>> +    description: OTG boost regulator.
+>>> +    $ref: /schemas/regulator/regulator.yaml#
+>>
+>> unevaluatedProperties: false
 > 
+> I will add this in the next patch.
+> 
+>>
+>>> +
+>>> +    properties:
+>>> +      enable-gpio:
+>>
+>> "gpios", so:
+>> enable-gpios
+> 
+> If this otg regulator only uses one GPIO Pin, do I still need to
+> change to "gpios"?
+
+Yes, because "gpios" is the preferred suffix. This is requirement for
+all such properties. enable-gpios are also documented here:
+Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml
+
+
+> If so, I will refine it along with the regulator "enable-gpio" in MFD
+> dt-binding.
+
+Yes, there it should be "enable-gpios" as well.
+
+
+
+
+Best regards,
+Krzysztof

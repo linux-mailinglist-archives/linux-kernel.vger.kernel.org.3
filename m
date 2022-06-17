@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F85A54FEE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB4054FED7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382833AbiFQUlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S234278AbiFQUmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383649AbiFQUlF (ORCPT
+        with ESMTP id S1383548AbiFQUl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:41:05 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF06D3AF;
-        Fri, 17 Jun 2022 13:38:35 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id y17so3698155ilj.11;
-        Fri, 17 Jun 2022 13:38:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WxC8y4xgzpsGIQGT5vC3MH6pL5FDuKzI7XWPboiHFXc=;
-        b=LYbQQF+KB2wM8B7yVpZDvjRaPEqgEk8Mpr9eqd8kxG6HVP7/SmWgPa62y9TP71Fszv
-         DUE1jSfB2caq8/VYYnBYnZwYM+tlWVIu7MfjvDmH4O8FYJL9bLzFw+GXEH6cKiVjWBZq
-         aqhdMKkSNzdI7M1z/bqnjY3OV8qeHsU5re21mkkHhjQQtq+23X38p7INDjyBj6SRj2jl
-         fNQQ+vwYytPTU1XnfBREKGzVBelr+5bUYMOe9qhY0B67TVTOW0x2ckSz7oaqzwj4UWKz
-         8etfqBVKXnJdzD5tusR83UUAww25ROyFthpfDcepNWT8KQ+2zSuztZAJJ68rxTkL6aXk
-         M0lg==
-X-Gm-Message-State: AJIora8KnlMlWZZ1kNi7ZeqWyFAPXkO2NTq64O9MROtDKDBXv8zDwlhL
-        3m/3ABe4GpxHKaFfzw3kYw==
-X-Google-Smtp-Source: AGRyM1tRfGyyxlHmt6DVN6C8QJwoAzdTs2WSfZKnyY/mpeCUg4tFUo332pxr0ovhLfFD051ISEv6SA==
-X-Received: by 2002:a05:6e02:1188:b0:2d8:c8cb:3fd0 with SMTP id y8-20020a056e02118800b002d8c8cb3fd0mr6715419ili.150.1655498289906;
-        Fri, 17 Jun 2022 13:38:09 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id l124-20020a6bbb82000000b006694bc50b82sm2991817iof.35.2022.06.17.13.38.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 13:38:09 -0700 (PDT)
-Received: (nullmailer pid 2402049 invoked by uid 1000);
-        Fri, 17 Jun 2022 20:38:08 -0000
-Date:   Fri, 17 Jun 2022 14:38:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: rcc: stm32: select the "secure" path for
- stm32mp13
-Message-ID: <20220617203808.GA2400871-robh@kernel.org>
-References: <20220613093815.18334-1-alexandre.torgue@foss.st.com>
- <20220616175531.GA3716982-robh@kernel.org>
- <abf9247c-085b-05ff-a589-d9b190e88666@foss.st.com>
+        Fri, 17 Jun 2022 16:41:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CC45C874;
+        Fri, 17 Jun 2022 13:39:26 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CABF76601797;
+        Fri, 17 Jun 2022 21:39:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655498352;
+        bh=unOJLRCDw7ZgTYa/8lyD2J+JxtKXBgGo6Z3sHYVsN/8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XZ1pKxO8HcDYK1nHIJdH1GIT8ak5uIfYf37+VzFupVfJsNIC95X6RrjzhvnwWv+eL
+         1V5kGuBt0rMJU8N2FslzzJj+IQzzcxbeUyGz02gMuwdbzAy/NxNEfhX03BHTTPo0kd
+         iEZ7/eVobt29a+zVlMRMZZGwQD28ZeNLli4JaqRnpGXNvnuGYMLVfJlwQrzQ5PKhRU
+         PKOjMLScWEeqGZtCNW7JB+kJceemCwEfvLAwwlBN44YgrgZNRBE/3lHsmhMlva7QJQ
+         stYS3wC3VTM9qo9O3Fe2IGrp3nZtZC0APwZiZMHs0Y2+rnon+bgd5PJV82PG/gF9Ie
+         Umha8AdstBUlw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH] media: mediatek: vcodec: Drop platform_get_resource(IORESOURCE_IRQ)
+Date:   Fri, 17 Jun 2022 16:39:06 -0400
+Message-Id: <20220617203906.2422868-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abf9247c-085b-05ff-a589-d9b190e88666@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 09:21:40AM +0200, Alexandre TORGUE wrote:
-> Hi Rob
-> 
-> On 6/16/22 19:55, Rob Herring wrote:
-> > On Mon, Jun 13, 2022 at 11:38:15AM +0200, Alexandre Torgue wrote:
-> > > Like for stm32mp15, when stm32 RCC node is used to interact with a secure
-> > 
-> > 'st,stm32mp1' is stm32mp15?
-> 
-> Yes "st,stm32mp1-rcc" is for the STM32MP15.
-> 
-> > 
-> > > context (using clock SCMI protocol), a different path has to be used for
-> > > yaml verification.
-> > > 
-> > > Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> > > 
-> > > ---
-> > > 
-> > > Hi Rob, Krzysztof,
-> > > 
-> > > If you agree with this patch, I'll apply it directly in my STM32 tree.
-> > > 
-> > > Thanks
-> > > Alex
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-> > > index f8c474227807..242fe922b035 100644
-> > > --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-> > > +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-> > > @@ -78,6 +78,7 @@ if:
-> > >         contains:
-> > >           enum:
-> > >             - st,stm32mp1-rcc-secure
-> > > +          - st,stm32mp13-rcc
-> > 
-> > You don't need '-secure' because it's always secure?
-> 
-> Yes. Compare to STM32MP15, the STM32MP13 is by default "secure". In our case
-> it is "mapped" to OPTEE, using SCMI protocols.
+Commit a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource
+from DT core") removed support for calling platform_get_resource(...,
+IORESOURCE_IRQ, ...) on DT-based drivers, but the probe() function of
+mtk-vcodec's encoder was still making use of it. This caused the encoder
+driver to fail probe.
 
-Okay,
+Since the platform_get_resource() call was only being used to check for
+the presence of the interrupt (its returned resource wasn't even used)
+and platform_get_irq() was already being used to get the IRQ, simply
+drop the use of platform_get_resource(IORESOURCE_IRQ) and handle the
+failure of platform_get_irq(), to get the driver probing again.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+Tested on mt8192-asurada-spherion.
+
+ .../media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c   | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index 95e8c29ccc65..b91c27e79796 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+@@ -272,14 +272,12 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_res;
+ 	}
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (res == NULL) {
+-		dev_err(&pdev->dev, "failed to get irq resource");
+-		ret = -ENOENT;
++	dev->enc_irq = platform_get_irq(pdev, 0);
++	if (dev->enc_irq < 0) {
++		ret = dev->enc_irq;
+ 		goto err_res;
+ 	}
+ 
+-	dev->enc_irq = platform_get_irq(pdev, 0);
+ 	irq_set_status_flags(dev->enc_irq, IRQ_NOAUTOEN);
+ 	ret = devm_request_irq(&pdev->dev, dev->enc_irq,
+ 			       mtk_vcodec_enc_irq_handler,
+-- 
+2.36.1
+

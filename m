@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7575754FB27
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F44754FB38
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382486AbiFQQfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S1383341AbiFQQgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiFQQfc (ORCPT
+        with ESMTP id S231784AbiFQQgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:35:32 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1CF4739B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:35:31 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d13so4292017plh.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:35:31 -0700 (PDT)
+        Fri, 17 Jun 2022 12:36:13 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D198B47AFE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:36:11 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id x4so4596678pfj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YC4lHPVY+NpHj3GKC25ozKimf28WFmpvKhW7LG+BTy8=;
-        b=UsxyjyMoLjBPKYKC3U2zf532HFCp04b5+9o9WujpjaYtYQf+8vWwqXRK1bK7kGqDvk
-         tgPnltWu4COg7LTZpq8kRcB8gpxorwCbp4SnSXkNWWYYbOmlrnqyD1G8ai9wvE6SiiMJ
-         3P+yE/xhOgzjwkeQ/230iRZ1yEHyg0vA4BqGyaycZuxmZgvCSTKaQVMAW48Y/dvRXSQu
-         ak36qYhHA5Ic+O6Lg9fjWV+mk/krYzVDdv3r1LrkSl5tONmsKxWsTGWtkjN3wvDddNT3
-         HLXeW87raNT+eeZz3H4S0r6qksCmTY+KNYSaiKV2mPsxuCnRraUd/mku2blH6ekOnkMq
-         MQdg==
+         :cc;
+        bh=Ds9sHIxHYkjR26pnCeyoMVU/P12KXF209Sq9UKrds8k=;
+        b=By41oxTmYVidV9wJ7/PXR4fBMNg6Jo1ihyRbkgbxl+E8IqmAc6YMAeShxcqfiCvTyp
+         KPXAj4Nk2SzLiZN0RUvGM8wEm/D8kV/8a3l3QDeNEvwPVb5IpnRhGvHQl1CzOgS7ibGZ
+         wkL+CO7P0HEZg2f+v1yGGi8PfHes4UpuyAmLMxmvQiP3rnORDxbRQB3o/7Nd/faT1hTU
+         2X/uYSRsEYf7bZp3dqXDoAgNSq9SO7bHA4D7L9r0Lv3IIe0rlqfQweDgclpttnMO0Ayt
+         fYbVFiNkvzh939ka0SBpB7g1KCOKWHTIXOl34WQ59UMZYVjEUsmqzU4lr9mvXKpoYzrX
+         vDTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YC4lHPVY+NpHj3GKC25ozKimf28WFmpvKhW7LG+BTy8=;
-        b=67KofJfZmuD+Zmw0ooiUCXQdPvFZ5CYw5sIYXcNNNlIopPkqH8gEALRYLuvQmcfdeL
-         tbPfk5z2GRs0zZ69wfuUeu/dQKjEAC1ut/TjcOjNZOwgFCir0i7sD+V7VRXO2ePOUxEl
-         9ROoJa2FH0m8X4U7u3EvUGghCvtRh+FiYOtvT3WD7MkIc61dNIQZOb/Rq+QEBalMUg8i
-         84/4IQ3XwdO1qdpYX3sEEZIxC4m7f3O8M9E8XBEm+s1lpiRNHaPERc4C3KaiZeTKaAQV
-         ex+k7WlKuSKRfxi3SYm6u/Qkz9yTsRxfniKPUMlRLupxwKI8IF+tJCK5dsM2FdqYsFaX
-         1/dg==
-X-Gm-Message-State: AJIora/aLV7CBmM9kUA4zFH6A5Ifoms1OdwZtzBhfx4kYWxWbiqCD+uv
-        if7TZnif1RoOWBvAyCU76tSWWFon1XkvrA0c3feTAw==
-X-Google-Smtp-Source: AGRyM1sN0DcOFBiV+zxTkpfPAqlvlWi7aS2OR55Qj/QMUtyPp2fnRrdwjyOz3nP/haPqOGfi6GtpJrWH31oSMj7lAEs=
-X-Received: by 2002:a17:90b:4382:b0:1ea:f4b6:1e29 with SMTP id
- in2-20020a17090b438200b001eaf4b61e29mr8933813pjb.159.1655483731236; Fri, 17
- Jun 2022 09:35:31 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=Ds9sHIxHYkjR26pnCeyoMVU/P12KXF209Sq9UKrds8k=;
+        b=coLZaoT7Mv9enzXYH6dfbM9bcOFTLliOWIgpRC0JzQzBggf90eeuSeX31BfUMFwkLz
+         5A9Jfps0fV2NECNkQhGnyre8hUtCBiTgvg3EphLZVRs9VMAN2oJ0rVfZxq0V+KAj1giI
+         DCvmWg6xxrTtnq+Q7U71NUK7CmswhUnajgmk2fMUMVeh3+sHGW8A9TkuEEOC9oqTYHZ2
+         VnwKmqHMdAVPQ3ViPZLrplAnW/g8fJffarFMtsdCG6wTarXx01+GzP8x+zajc/8fCyhz
+         j7XR5r4n3caB8yEPZGZIlqpCI4XDIlmkl6Vd52fcfKvW7Jzzqac2ZRSgasCvL6oQlprX
+         cCbw==
+X-Gm-Message-State: AJIora8ioKZDdYK6qVRE8CZ1VVE8XqdXbPHlcj5gV9LCxTLDDXpd/A+p
+        flVnYhnq3WZCDMsv3SRMj5WuTDO7G3wGw80HeIU=
+X-Google-Smtp-Source: AGRyM1t/gN6AHNlG0eredzwDueJ5eJmaUc3a2hZrTC2f3CM+Ze0WlYRbdUg0N7sAEIia++0d78xrWLwCj0a/ZKUZ2c8=
+X-Received: by 2002:a63:3183:0:b0:3fd:6797:70a8 with SMTP id
+ x125-20020a633183000000b003fd679770a8mr9753719pgx.206.1655483771315; Fri, 17
+ Jun 2022 09:36:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615211415.3111271-1-daolu@rivosinc.com> <6b52cc2c-7bc5-5015-b7a6-4c13bb4789f7@sholland.org>
-In-Reply-To: <6b52cc2c-7bc5-5015-b7a6-4c13bb4789f7@sholland.org>
-From:   Dao Lu <daolu@rivosinc.com>
-Date:   Fri, 17 Jun 2022 09:35:20 -0700
-Message-ID: <CAKh7v-QB4+UHjmtmBNQBojx8jB6fDT0WCvjPSPwFU0K_4wqbdg@mail.gmail.com>
-Subject: Re: [PATCH v3] arch/riscv: add Zihintpause support
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>, Wei Fu <wefu@redhat.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Rob Herring <robh@kernel.org>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
+References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-8-linmiaohe@huawei.com>
+ <CAHbLzkoYkN+QzdfSUkHbLMUYX=zkrgGCrqM6xRaVssFSJh9KqA@mail.gmail.com>
+ <87617483-7945-30e2-471e-578da4f4d9c7@huawei.com> <CAHbLzkqAJK3C8svOm4mhCP_oP6od=NMKpeW9=oRcczDJ=FXPcw@mail.gmail.com>
+ <17d610f7-4d85-e9b4-6429-4ad89274cb48@huawei.com>
+In-Reply-To: <17d610f7-4d85-e9b4-6429-4ad89274cb48@huawei.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 17 Jun 2022 09:35:58 -0700
+Message-ID: <CAHbLzkq+-XeFJYry8j80VUDbY6BY2dFNA5FT3u9eF-v5MckQTA@mail.gmail.com>
+Subject: Re: [PATCH 7/7] mm/khugepaged: try to free transhuge swapcache when possible
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,142 +77,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will look at rebasing to use the unified static key mechanism for
-the next version.
+On Thu, Jun 16, 2022 at 7:27 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> On 2022/6/16 23:53, Yang Shi wrote:
+> > On Thu, Jun 16, 2022 at 12:42 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+> >>
+> >> On 2022/6/16 7:58, Yang Shi wrote:
+> >>> On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+> >>>>
+> >>>> Transhuge swapcaches won't be freed in __collapse_huge_page_copy().
+> >>>> It's because release_pte_page() is not called for these pages and
+> >>>> thus free_page_and_swap_cache can't grab the page lock. These pages
+> >>>> won't be freed from swap cache even if we are the only user until
+> >>>> next time reclaim. It shouldn't hurt indeed, but we could try to
+> >>>> free these pages to save more memory for system.
+> >>>
+> >>>
+> >>>>
+> >>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> >>>> ---
+> >>>>  include/linux/swap.h | 5 +++++
+> >>>>  mm/khugepaged.c      | 1 +
+> >>>>  mm/swap.h            | 5 -----
+> >>>>  3 files changed, 6 insertions(+), 5 deletions(-)
+> >>>>
+> >>>> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> >>>> index 8672a7123ccd..ccb83b12b724 100644
+> >>>> --- a/include/linux/swap.h
+> >>>> +++ b/include/linux/swap.h
+> >>>> @@ -456,6 +456,7 @@ static inline unsigned long total_swapcache_pages(void)
+> >>>>         return global_node_page_state(NR_SWAPCACHE);
+> >>>>  }
+> >>>>
+> >>>> +extern void free_swap_cache(struct page *page);
+> >>>>  extern void free_page_and_swap_cache(struct page *);
+> >>>>  extern void free_pages_and_swap_cache(struct page **, int);
+> >>>>  /* linux/mm/swapfile.c */
+> >>>> @@ -540,6 +541,10 @@ static inline void put_swap_device(struct swap_info_struct *si)
+> >>>>  /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=0 */
+> >>>>  #define free_swap_and_cache(e) is_pfn_swap_entry(e)
+> >>>>
+> >>>> +static inline void free_swap_cache(struct page *page)
+> >>>> +{
+> >>>> +}
+> >>>> +
+> >>>>  static inline int add_swap_count_continuation(swp_entry_t swp, gfp_t gfp_mask)
+> >>>>  {
+> >>>>         return 0;
+> >>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> >>>> index ee0a719c8be9..52109ad13f78 100644
+> >>>> --- a/mm/khugepaged.c
+> >>>> +++ b/mm/khugepaged.c
+> >>>> @@ -756,6 +756,7 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
+> >>>>         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
+> >>>>                 list_del(&src_page->lru);
+> >>>>                 release_pte_page(src_page);
+> >>>> +               free_swap_cache(src_page);
+> >>>
+> >>> Will this really work? The free_swap_cache() will just dec refcounts
+> >>> without putting the page back to buddy. So the hugepage is not
+> >>> actually freed at all. Am I missing something?
+> >>
+> >> Thanks for catching this! If page is on percpu lru_pvecs cache, page will
+> >> be released when lru_pvecs are drained. But if not, free_swap_cache() won't
+> >> free the page as it assumes the caller has a reference on the page and thus
+> >> only does page_ref_sub(). Does the below change looks sense for you?
+> >
+> > THP gets drained immediately so they won't stay in pagevecs.
+>
+> Yes, you're right. I missed this.
+>
+> >
+> >>
+> >> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> >> index 52109ad13f78..b8c96e33591d 100644
+> >> --- a/mm/khugepaged.c
+> >> +++ b/mm/khugepaged.c
+> >> @@ -755,8 +755,12 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
+> >>
+> >>         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
+> >>                 list_del(&src_page->lru);
+> >> -               release_pte_page(src_page);
+> >> +               mod_node_page_state(page_pgdat(src_page),
+> >> +                                   NR_ISOLATED_ANON + page_is_file_lru(src_page),
+> >> +                                   -compound_nr(src_page));
+> >> +               unlock_page(src_page);
+> >>                 free_swap_cache(src_page);
+> >> +               putback_lru_page(src_page);
+> >
+> > I'm not sure if it is worth it or not for a rare corner case since THP
+> > should not stay in swapcache unless try_to_unmap() in vmscan fails
+>
+> IIUC, even if try_to_unmap() in vmscan succeeds, THP might be still in the
+> swapcache if shrink_page_list is not called for this THP again after writeback
+> is done, e.g. when shrink_page_list is called from madvise, so there might be
 
-Regards,
-Dao
+I don't get, doesn't __remove_mapping() delete the page from swap cache?
 
-On Thu, Jun 16, 2022 at 8:49 PM Samuel Holland <samuel@sholland.org> wrote:
+> no memory pressure, or do_swap_page puts the THP into page table again. Also THP
+
+do_swap_page() just swaps in base page, never THP.
+
+> might not be splited when deferred_split_shrinker is not called, e.g. due to
+
+I don't see how deferred split is related to this.
+
+> not lacking of memory. Even if there is memory pressure, the THP will stay in
+> swapcache until next round page reclaim for this THP is done. So there should
+> be a non-negligible window that THP will stay in the swapcache.
+> Or am I miss something?
+
+I guess you may misunderstand what I meant. This patch is trying to
+optimize freeing THP in swapcache. But it should be very rare that
+khugepaged sees THP from swap cache. The only case I could think of is
+try_to_unmap() in vmscan fails. That might leave THP in swap cache so
+that khugepaged could see it.
+
+
 >
-> On 6/15/22 4:14 PM, Dao Lu wrote:
-> > Implement support for the ZiHintPause extension.
-> >
-> > The PAUSE instruction is a HINT that indicates the current hart=E2=80=
-=99s rate
-> > of instruction retirement should be temporarily reduced or paused.
-> >
-> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > Signed-off-by: Dao Lu <daolu@rivosinc.com>
-> > ---
-> >
-> > v1 -> v2:
-> >  Remove the usage of static branch, use PAUSE if toolchain supports it
-> > v2 -> v3:
-> >  Added the static branch back, cpu_relax() behavior is unchanged if eit=
-her the
-> > system or the toolchain does not support ZiHintPause
-> > ---
-> >  arch/riscv/Makefile                     |  4 ++++
-> >  arch/riscv/include/asm/hwcap.h          |  1 +
-> >  arch/riscv/include/asm/vdso/processor.h | 19 ++++++++++++++++---
-> >  arch/riscv/kernel/cpu.c                 |  1 +
-> >  arch/riscv/kernel/cpufeature.c          |  8 ++++++++
-> >  5 files changed, 30 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > index 34cf8a598617..6ddacc6f44b9 100644
-> > --- a/arch/riscv/Makefile
-> > +++ b/arch/riscv/Makefile
-> > @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)  :=3D $(riscv-marc=
-h-y)c
-> >  toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(ris=
-cv-march-y)_zicsr_zifencei)
-> >  riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_zic=
-sr_zifencei
-> >
-> > +# Check if the toolchain supports Zihintpause extension
-> > +toolchain-supports-zihintpause :=3D $(call cc-option-yn, -march=3D$(ri=
-scv-march-y)_zihintpause)
-> > +riscv-march-$(toolchain-supports-zihintpause) :=3D $(riscv-march-y)_zi=
-hintpause
-> > +
-> >  KBUILD_CFLAGS +=3D -march=3D$(subst fd,,$(riscv-march-y))
-> >  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
-> >
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
-cap.h
-> > index 4e2486881840..f24f4f8c9144 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -53,6 +53,7 @@ extern unsigned long elf_hwcap;
-> >  enum riscv_isa_ext_id {
-> >       RISCV_ISA_EXT_SSCOFPMF =3D RISCV_ISA_EXT_BASE,
-> >       RISCV_ISA_EXT_SVPBMT,
-> > +     RISCV_ISA_EXT_ZIHINTPAUSE,
-> >       RISCV_ISA_EXT_ID_MAX =3D RISCV_ISA_EXT_MAX,
-> >  };
-> >
-> > diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/inclu=
-de/asm/vdso/processor.h
-> > index 134388cbaaa1..314ec17c40d8 100644
-> > --- a/arch/riscv/include/asm/vdso/processor.h
-> > +++ b/arch/riscv/include/asm/vdso/processor.h
-> > @@ -4,15 +4,28 @@
-> >
-> >  #ifndef __ASSEMBLY__
-> >
-> > +#include <linux/jump_label.h>
-> >  #include <asm/barrier.h>
-> > +#include <asm/hwcap.h>
-> >
-> > +extern struct static_key_false riscv_pause_available;
-> >  static inline void cpu_relax(void)
-> >  {
-> > +     if (!static_branch_likely(&riscv_pause_available)) {
-> >  #ifdef __riscv_muldiv
-> > -     int dummy;
-> > -     /* In lieu of a halt instruction, induce a long-latency stall. */
-> > -     __asm__ __volatile__ ("div %0, %0, zero" : "=3Dr" (dummy));
-> > +             int dummy;
-> > +             /* In lieu of a halt instruction, induce a long-latency s=
-tall. */
-> > +             __asm__ __volatile__ ("div %0, %0, zero" : "=3Dr" (dummy)=
-);
-> >  #endif
-> > +#ifdef __riscv_zihintpause
-> > +     } else {
-> > +             /*
-> > +              * Reduce instruction retirement.
-> > +              * This assumes the PC changes.
-> > +              */
-> > +             __asm__ __volatile__ ("pause");
-> > +#endif
-> > +     }
-> >       barrier();
-> >  }
-> >
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index fba9e9f46a8c..a123e92b14dd 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -89,6 +89,7 @@ int riscv_of_parent_hartid(struct device_node *node)
-> >  static struct riscv_isa_ext_data isa_ext_arr[] =3D {
-> >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> >       __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
-> > +     __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
-> >       __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
-> >  };
-> >
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
-ure.c
-> > index a6f62a6d1edd..78c284c487e8 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -30,6 +30,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) _=
-_read_mostly;
-> >  #ifdef CONFIG_FPU
-> >  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
-> >  #endif
-> > +DEFINE_STATIC_KEY_FALSE(riscv_pause_available);
-> > +EXPORT_SYMBOL_GPL(riscv_pause_available);
+> > IIUC. And it is not guaranteed that free_swap_cache() will get the
+> > page lock.
 >
-> This patch should probably be rebased to use the unified static key
-> mechanism[1], since that patch has now been merged.
+> IMHO, we're not guaranteed that free_swap_cache() will get the page lock for the normal
+> page anyway.
 >
-> Regards,
-> Samuel
+> Thanks!
 >
-> [1]: https://lore.kernel.org/linux-riscv/20220522153543.2656-2-jszhang@ke=
-rnel.org/
+> >
+> >>         }
+> >>  }
+> >>
+> >> Thanks!
+> >>
+> >>>
+> >>>>         }
+> >>>>  }
+> >>>>
+> >>>> diff --git a/mm/swap.h b/mm/swap.h
+> >>>> index 0193797b0c92..863f6086c916 100644
+> >>>> --- a/mm/swap.h
+> >>>> +++ b/mm/swap.h
+> >>>> @@ -41,7 +41,6 @@ void __delete_from_swap_cache(struct page *page,
+> >>>>  void delete_from_swap_cache(struct page *page);
+> >>>>  void clear_shadow_from_swap_cache(int type, unsigned long begin,
+> >>>>                                   unsigned long end);
+> >>>> -void free_swap_cache(struct page *page);
+> >>>>  struct page *lookup_swap_cache(swp_entry_t entry,
+> >>>>                                struct vm_area_struct *vma,
+> >>>>                                unsigned long addr);
+> >>>> @@ -81,10 +80,6 @@ static inline struct address_space *swap_address_space(swp_entry_t entry)
+> >>>>         return NULL;
+> >>>>  }
+> >>>>
+> >>>> -static inline void free_swap_cache(struct page *page)
+> >>>> -{
+> >>>> -}
+> >>>> -
+> >>>>  static inline void show_swap_cache_info(void)
+> >>>>  {
+> >>>>  }
+> >>>> --
+> >>>> 2.23.0
+> >>>>
+> >>>>
+> >>> .
+> >>>
+> >>
+> > .
+> >
+>

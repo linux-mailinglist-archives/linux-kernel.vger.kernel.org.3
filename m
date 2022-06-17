@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1346554F7A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2499E54F7AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382369AbiFQMdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 08:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S1382377AbiFQMeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 08:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381218AbiFQMdP (ORCPT
+        with ESMTP id S1381579AbiFQMeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 08:33:15 -0400
+        Fri, 17 Jun 2022 08:34:17 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 010431706A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:33:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4643A6161E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655469193;
+        s=mimecast20190719; t=1655469255;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=92UlDs3RgFNfmwdasYrOfS3jw16tdOBEhgL58+p+c74=;
-        b=Avkw6i9RePt74MOQN3q7fq4RVByzy9YmSfqHoRtpyeditdfIm2PIVjE814qbgeWfxSpEk2
-        8+X8i9xcIehk7ny8TrIF8VQFHQk/8M8O3nPHJ8aJYDTCHdi07Z6qB34YT474haMhifPuhf
-        DN3rU+G5lgBDT89yHiELO89Zr6oOiiI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=sNsK5VV48v+4Pt6W8O4pM7sdsWEZT55OqmvpYIk2hsQ=;
+        b=SjwTb5Ht4zgqOwe9BgqqEJiKls4sTWYAqniFeX7ZIvGzsORO56J3tMLvcy3WWQch9okLeZ
+        UFg/IODHXEkafntUxS+UJiGBwrzGYbujK7wLv+sDYc/vVPGch7vUuAJf7ZgrjuIziVw2MA
+        hMsxPMNlQnC8a21ksWYMI/Q88xS9F4A=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-FapzQTCvO_O0R0Et4sghvw-1; Fri, 17 Jun 2022 08:33:01 -0400
-X-MC-Unique: FapzQTCvO_O0R0Et4sghvw-1
-Received: by mail-wm1-f72.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso2681642wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:33:00 -0700 (PDT)
+ us-mta-59-UtIgtcRKPheKmF8cBwcbFA-1; Fri, 17 Jun 2022 08:34:14 -0400
+X-MC-Unique: UtIgtcRKPheKmF8cBwcbFA-1
+Received: by mail-ej1-f72.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso2000964ejc.18
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:34:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=92UlDs3RgFNfmwdasYrOfS3jw16tdOBEhgL58+p+c74=;
-        b=qlm7TW/wGXwRuj0GzPZdADmfqRXhWwyJ5TfLXT5DTA7diy+Z9rDlVUtZrsYTJLaQUJ
-         skWyossNUpeSS4KM3bBbB+Y7S1tuIEXCvXrm4nkNiY4LQwGCSzGFbI0+8/jPB504Hhop
-         iwQfFkKB0wUdx1C406Vw9ltS8JVnmn/XW5tVTX+NsTKxDy8e1YCXwSXKKiJCya+wgLYU
-         YF69K4znaNdeFzMn5nqKsduBXL6sdO3PIYkchxK6YZaGuqZnM3xlwkCoDEjVO4ejDRlg
-         aRmhNmlKXOzOzTm+uXeL4LD5MVrYBfeRNPZudlu+b3hkdkd4pRCct7SlSdqtMaqI/9Hm
-         5twQ==
-X-Gm-Message-State: AJIora8A7Sv8ZXLe7aKdfyTjpOEO6s5mK3/Xn4uOUkDtw+kIWP7kjZwk
-        TLYXHy9qqeWtujbfWqcT7lG8DF+5xncJd5QY35We4++AUuAnMWIQDblnkhJlyRKahio3uMWw3nu
-        +uMwx//babiB+chQDrl3fSzBb
-X-Received: by 2002:a5d:4dc9:0:b0:215:c611:db73 with SMTP id f9-20020a5d4dc9000000b00215c611db73mr9566015wru.551.1655469179981;
-        Fri, 17 Jun 2022 05:32:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vrMleQODBYjJTSi8fIIhoUhRue0NuBsJFkxO9IRFJgdZFWFEeDm8+sGhF94gyh54rHFnh3Dw==
-X-Received: by 2002:a5d:4dc9:0:b0:215:c611:db73 with SMTP id f9-20020a5d4dc9000000b00215c611db73mr9565992wru.551.1655469179714;
-        Fri, 17 Jun 2022 05:32:59 -0700 (PDT)
+        bh=sNsK5VV48v+4Pt6W8O4pM7sdsWEZT55OqmvpYIk2hsQ=;
+        b=YAb+bLtXOZ2a60Qryxtxp/Cx/NHxzQDvs2L5BXi21NUshbA3jdTqPWTNH0LCOv5IvZ
+         cPzp6W5qpt+sAxUxoRsilVHpu957Fa4y3EIZbi5C7fvY22YbbGIwRYg1CyRV1yn25DtB
+         RIakqa2RgMaJBV7nk8RV1rxMekKDNuaX43YHiBAsDaKO5F0tJ/mt0EWobd0jQ1Hl4bPn
+         yk5eclh/nGerpkTPyd3ywcmcBekSbo0GdjGNUuFMZOgK+HaxnZUOX0ROP7D9fAMxs5jF
+         itPWo7McVKEW+nYVboqf4iIV+li+CsTCut/z/BzKap2TnEKRF2Q1gC47Xl0aP6mknqoO
+         dr9Q==
+X-Gm-Message-State: AJIora+2YhXqfd18FRg8Z3kaoGjWliZaqF5TbcYM1xFcfnUqMgbj5erD
+        t0R7YWq+bsvqRuSMelimKquZivm73B3JqNpYziXHtLa4AvMJmIpsmAiznU2EYWAzwJR2L/9zEpP
+        cNSO+WlYyd6baR3y+0N213p0+
+X-Received: by 2002:a17:906:a57:b0:718:bd7e:e45b with SMTP id x23-20020a1709060a5700b00718bd7ee45bmr8973404ejf.204.1655469252665;
+        Fri, 17 Jun 2022 05:34:12 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uetBAoDUswjTrKzjPLBZk+a2VJDZzU+POciodvxjH1l6wMuN3Sr6EJUi2y+5mbeAOAFWQM3Q==
+X-Received: by 2002:a17:906:a57:b0:718:bd7e:e45b with SMTP id x23-20020a1709060a5700b00718bd7ee45bmr8973378ejf.204.1655469252385;
+        Fri, 17 Jun 2022 05:34:12 -0700 (PDT)
 Received: from redhat.com ([2.54.189.19])
-        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b0039c4ba160absm18336881wmq.2.2022.06.17.05.32.57
+        by smtp.gmail.com with ESMTPSA id g18-20020a17090604d200b0070d9aad64a1sm2041541eja.208.2022.06.17.05.34.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 05:32:59 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 08:32:55 -0400
+        Fri, 17 Jun 2022 05:34:11 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 08:34:08 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] virtio-net: fix race between ndo_open() and
- virtio_device_ready()
-Message-ID: <20220617083141-mutt-send-email-mst@kernel.org>
-References: <20220617072949.30734-1-jasowang@redhat.com>
- <20220617060632-mutt-send-email-mst@kernel.org>
- <CACGkMEtTVs5W+qqt9Z6BcorJ6wcqcnSVuCBrHrLZbbKzG-7ULQ@mail.gmail.com>
+Subject: Re: [PATCH] virtio: disable notification hardening by default
+Message-ID: <20220617083353-mutt-send-email-mst@kernel.org>
+References: <20220617072626.30503-1-jasowang@redhat.com>
+ <20220617060111-mutt-send-email-mst@kernel.org>
+ <CACGkMEsx77aTyx84Q6OAmogni97nt3wWsRguzTBKY8msqrYK-A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACGkMEtTVs5W+qqt9Z6BcorJ6wcqcnSVuCBrHrLZbbKzG-7ULQ@mail.gmail.com>
+In-Reply-To: <CACGkMEsx77aTyx84Q6OAmogni97nt3wWsRguzTBKY8msqrYK-A@mail.gmail.com>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,97 +78,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 07:46:23PM +0800, Jason Wang wrote:
-> On Fri, Jun 17, 2022 at 6:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Fri, Jun 17, 2022 at 07:47:21PM +0800, Jason Wang wrote:
+> On Fri, Jun 17, 2022 at 6:01 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 > >
-> > On Fri, Jun 17, 2022 at 03:29:49PM +0800, Jason Wang wrote:
-> > > We used to call virtio_device_ready() after netdev registration. This
-> > > cause a race between ndo_open() and virtio_device_ready(): if
-> > > ndo_open() is called before virtio_device_ready(), the driver may
-> > > start to use the device before DRIVER_OK which violates the spec.
+> > On Fri, Jun 17, 2022 at 03:26:26PM +0800, Jason Wang wrote:
+> > > We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
+> > > harden vring IRQ"). It works with the assumption that the driver or
+> > > core can properly call virtio_device_ready() at the right
+> > > place. Unfortunately, this seems to be not true and uncover various
+> > > bugs of the existing drivers, mainly the issue of using
+> > > virtio_device_ready() incorrectly.
 > > >
-> > > Fixing this by switching to use register_netdevice() and protect the
-> > > virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
-> > > only be called after virtio_device_ready().
+> > > So let's having a Kconfig option and disable it by default. It gives
+> > > us a breath to fix the drivers and then we can consider to enable it
+> > > by default.
 > > >
-> > > Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
 > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > ---
-> > >  drivers/net/virtio_net.c | 8 +++++++-
-> > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index db05b5e930be..8a5810bcb839 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
-> > >       if (vi->has_rss || vi->has_rss_hash_report)
-> > >               virtnet_init_default_rss(vi);
-> > >
-> > > -     err = register_netdev(dev);
-> > > +     /* serialize netdev register + virtio_device_ready() with ndo_open() */
-> > > +     rtnl_lock();
-> > > +
-> > > +     err = register_netdevice(dev);
-> > >       if (err) {
-> > >               pr_debug("virtio_net: registering device failed\n");
-> > > +             rtnl_unlock();
-> > >               goto free_failover;
-> > >       }
-> > >
-> > >       virtio_device_ready(vdev);
-> > >
-> > > +     rtnl_unlock();
-> > > +
-> > >       err = virtnet_cpu_notif_add(vi);
-> > >       if (err) {
-> > >               pr_debug("virtio_net: registering cpu notifier failed\n");
 > >
 > >
-> > Looks good but then don't we have the same issue when removing the
-> > device?
-> >
-> > Actually I looked at  virtnet_remove and I see
-> >         unregister_netdev(vi->dev);
-> >
-> >         net_failover_destroy(vi->failover);
-> >
-> >         remove_vq_common(vi); <- this will reset the device
-> >
-> > a window here?
+> > Do you want to drop irq_lock lock/unlock in ccw too?
 > 
-> Probably. For safety, we probably need to reset before unregistering.
-
-
-careful not to create new races, let's analyse this one to be
-sure first.
-
-> >
-> >
-> > Really, I think what we had originally was a better idea -
-> > instead of dropping interrupts they were delayed and
-> > when driver is ready to accept them it just enables them.
-> 
-> The problem is that it works only on some specific setup:
-> 
-> - doesn't work on shared IRQ
-> - doesn't work on some specific driver e.g virtio-blk
-
-can some core irq work fix that?
-
-> > We just need to make sure driver does not wait for
-> > interrupts before enabling them.
-> >
-> > And I suspect we need to make this opt-in on a per driver
-> > basis.
-> 
-> Exactly.
+> Not a must I think. But if you insist, I can remove them.
 > 
 > Thanks
-> 
+
+
+With the ifdef. Seems safer ...
+
 > >
-> >
-> >
+> > > ---
+> > >  drivers/virtio/Kconfig        |  6 ++++++
+> > >  drivers/virtio/virtio.c       |  2 ++
+> > >  drivers/virtio/virtio_ring.c  | 12 ++++++++++++
+> > >  include/linux/virtio_config.h |  2 ++
+> > >  4 files changed, 22 insertions(+)
+> > >
+> > > diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+> > > index b5adf6abd241..b059c39af3d4 100644
+> > > --- a/drivers/virtio/Kconfig
+> > > +++ b/drivers/virtio/Kconfig
+> > > @@ -35,6 +35,12 @@ menuconfig VIRTIO_MENU
+> > >
+> > >  if VIRTIO_MENU
+> > >
+> > > +config VIRTIO_HARDEN_NOTIFICATION
+> > > +        bool "Harden virtio notification"
+> > > +        help
+> > > +          Enable to this to harden the device notifications and
+> > > +          supress the ones that are illegal.
+> > > +
+> > >  config VIRTIO_PCI
+> > >       tristate "PCI driver for virtio devices"
+> > >       depends on PCI
+> > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> > > index ef04a96942bf..21dc08d2f32d 100644
+> > > --- a/drivers/virtio/virtio.c
+> > > +++ b/drivers/virtio/virtio.c
+> > > @@ -220,6 +220,7 @@ static int virtio_features_ok(struct virtio_device *dev)
+> > >   * */
+> > >  void virtio_reset_device(struct virtio_device *dev)
+> > >  {
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       /*
+> > >        * The below virtio_synchronize_cbs() guarantees that any
+> > >        * interrupt for this line arriving after
+> > > @@ -228,6 +229,7 @@ void virtio_reset_device(struct virtio_device *dev)
+> > >        */
+> > >       virtio_break_device(dev);
+> > >       virtio_synchronize_cbs(dev);
+> > > +#endif
+> > >
+> > >       dev->config->reset(dev);
+> > >  }
+> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > index 13a7348cedff..d9d3b6e201fb 100644
+> > > --- a/drivers/virtio/virtio_ring.c
+> > > +++ b/drivers/virtio/virtio_ring.c
+> > > @@ -1688,7 +1688,11 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > >       vq->we_own_ring = true;
+> > >       vq->notify = notify;
+> > >       vq->weak_barriers = weak_barriers;
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       vq->broken = true;
+> > > +#else
+> > > +     vq->broken = false;
+> > > +#endif
+> > >       vq->last_used_idx = 0;
+> > >       vq->event_triggered = false;
+> > >       vq->num_added = 0;
+> > > @@ -2135,9 +2139,13 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> > >       }
+> > >
+> > >       if (unlikely(vq->broken)) {
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >               dev_warn_once(&vq->vq.vdev->dev,
+> > >                             "virtio vring IRQ raised before DRIVER_OK");
+> > >               return IRQ_NONE;
+> > > +#else
+> > > +             return IRQ_HANDLED;
+> > > +#endif
+> > >       }
+> > >
+> > >       /* Just a hint for performance: so it's ok that this can be racy! */
+> > > @@ -2180,7 +2188,11 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> > >       vq->we_own_ring = false;
+> > >       vq->notify = notify;
+> > >       vq->weak_barriers = weak_barriers;
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       vq->broken = true;
+> > > +#else
+> > > +     vq->broken = false;
+> > > +#endif
+> > >       vq->last_used_idx = 0;
+> > >       vq->event_triggered = false;
+> > >       vq->num_added = 0;
+> > > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> > > index 9a36051ceb76..d15c3cdda2d2 100644
+> > > --- a/include/linux/virtio_config.h
+> > > +++ b/include/linux/virtio_config.h
+> > > @@ -257,6 +257,7 @@ void virtio_device_ready(struct virtio_device *dev)
+> > >
+> > >       WARN_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > >
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       /*
+> > >        * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> > >        * will see the driver specific setup if it sees vq->broken
+> > > @@ -264,6 +265,7 @@ void virtio_device_ready(struct virtio_device *dev)
+> > >        */
+> > >       virtio_synchronize_cbs(dev);
+> > >       __virtio_unbreak_device(dev);
+> > > +#endif
+> > >       /*
+> > >        * The transport should ensure the visibility of vq->broken
+> > >        * before setting DRIVER_OK. See the comments for the transport
 > > > --
 > > > 2.25.1
 > >

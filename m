@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337EE5500F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F205E5500F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381101AbiFQXqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S237889AbiFQXxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 19:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiFQXqI (ORCPT
+        with ESMTP id S230296AbiFQXxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:46:08 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935EC56C13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:46:04 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id p128so6016191iof.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v+CtxF5jqTCvHtrkh/Tp3q/wyDmiOTtwUhSwgsvpJ3w=;
-        b=YGI/OqaRkadQXXxsJnM8uGyOtjDZ6+A5GQjelvB1B3X6TwS5V3C66lWgNbx51CvUWU
-         XgSrKKU9DJpc5ofYqMNNzNijwDz7Cwd7HiQ1xSTNhmQieX3/tAsb7n8oQTpgU1kOP7hR
-         cHflRSYq3M56cSGCoG6//ypA+QjlZMq+AIONrdqck9QbHFG1+PBfZbEXvYZo5NeUnbSj
-         g2hATSAaX/qsS7h9BFS3x3XNSS5hMAAPigWi8nUMDnL21PHTh4043HEssgBvTKaaIpeT
-         QfdoAN1HGyHbpbC9hbw7N6fugvvOPBStQP9iMGtqvnOAdZsXHLT6VNM8VMy+RtkTDwGO
-         LikQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v+CtxF5jqTCvHtrkh/Tp3q/wyDmiOTtwUhSwgsvpJ3w=;
-        b=EArhITlOsdlZ/KPFCN+GcsUgpqrtSQvCcoJgcJwyhf2YC8Nwf0mmc3XxayTu8Lf4n1
-         cSTMd7HhiE6Ob+vE+u4cHkoDxA8LaYma4WyOCXg5e1WrMTE2qGuvZwHYIC4C28s9aPk6
-         aVtlKA1zVtVP7bdjctsWC/eerQHsMuNhZezWFU1Pbh4A69LSgXXV/kD9b0J72eSoANWg
-         fkaN0ipK0gmA0/aqdZvvMUqdYU77zsakdK6dWvgwsrmIw3WgNoOd5++2UsWogVNJnQ/V
-         ptbjvTO1HV8mdZjWXq2uUasQGnDiSWdYuNcv6zxA2WdcGfmSZU//eNn9k++LZGT8wai8
-         JCLg==
-X-Gm-Message-State: AJIora/O7VvqP5WzNXls2PH+op+1sA5Jr3WisUBUBv46U2SOW3ZhLkLm
-        XWc65LhW0ylp3GMMK8ka5Knd6kvu/mE2WsVR3knBRw==
-X-Google-Smtp-Source: AGRyM1voqSRNK9+66QbW2UwaqOdOzzUm4CcNFzFX9HbLBxFWAOlUpdCA0GV41UPO+AKUQpFtMdRJ0et8XJJ2K7EEugI=
-X-Received: by 2002:a02:90ce:0:b0:32e:e2ce:b17c with SMTP id
- c14-20020a0290ce000000b0032ee2ceb17cmr6926427jag.268.1655509563773; Fri, 17
- Jun 2022 16:46:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220617085435.193319-1-pbl@bestov.io> <165546541315.12170.9716012665055247467.git-patchwork-notify@kernel.org>
-In-Reply-To: <165546541315.12170.9716012665055247467.git-patchwork-notify@kernel.org>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Fri, 17 Jun 2022 16:45:52 -0700
-Message-ID: <CANP3RGcMqXH2+g1=40zwpzbpDORjDpyo4cVYZWS_tfVR8A_6CQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ipv4: ping: fix bind address validity check
-To:     patchwork-bot+netdevbpf@kernel.org, stable@vger.kernel.org
-Cc:     Riccardo Paolo Bestetti <pbl@bestov.io>,
-        Carlos Llamas <cmllamas@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel-team@android.com,
-        Kernel hackers <linux-kernel@vger.kernel.org>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Jun 2022 19:53:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180CB2252B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:52:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F49561DD9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA55C3411B;
+        Fri, 17 Jun 2022 23:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655509978;
+        bh=38NvZHDn60vRMd49ZIcaM3UlD3xicv2XgemZTeKzlzs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DR9/1jgQG9f7/nSQ0N1IZnElWl9pJQueUPT3XPzhp7NZ4JO+1Aga9lj4XiIa3m9mV
+         miEPhO47LkTd/aqlFWo3kexCj6geHI7Y7DwqPClebJA9FgiEMPiaR1uL8IfZXgFpEw
+         coLwL+Frt2+yv+dUpX9U4/OjibXgTPFcYV8PtOUk=
+Date:   Fri, 17 Jun 2022 16:52:56 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in hugepage_vma_check
+Message-Id: <20220617165256.b5b9b257b30bc1dbb21fc8c6@linux-foundation.org>
+In-Reply-To: <0000000000003189f305e19f5d3e@google.com>
+References: <0000000000003189f305e19f5d3e@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 4:30 AM <patchwork-bot+netdevbpf@kernel.org> wrote:
->
-> Hello:
->
-> This patch was applied to netdev/net.git (master)
-> by David S. Miller <davem@davemloft.net>:
->
-> On Fri, 17 Jun 2022 10:54:35 +0200 you wrote:
-> > Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
-> > introduced a helper function to fold duplicated validity checks of bind
-> > addresses into inet_addr_valid_or_nonlocal(). However, this caused an
-> > unintended regression in ping_check_bind_addr(), which previously would
-> > reject binding to multicast and broadcast addresses, but now these are
-> > both incorrectly allowed as reported in [1].
-> >
-> > [...]
->
-> Here is the summary with links:
->   - [v2] ipv4: ping: fix bind address validity check
->     https://git.kernel.org/netdev/net/c/b4a028c4d031
->
-> You are awesome, thank you!
-> --
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
+On Fri, 17 Jun 2022 00:04:23 -0700 syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com> wrote:
 
-I believe this [
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b4a028c4d031
-] needs to end up in 5.17+ LTS (though I guess 5.17 is eol, so
-probably just 5.18)
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    c6d7e3b385f1 Add linux-next specific files for 20220616
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10d9fb1bf00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=9d495405e4a98620
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4d875b4d2e2b60bae9b4
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+> BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+> BUG: KASAN: null-ptr-deref in hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+> Read of size 8 at addr 00000000000005a8 by task syz-executor.5/21978
+
+vma->vm_mm is NULL in show_smap->hugepage_vma_check().
+
+Perhaps m_start() should be checking the mm after taking
+mmap_read_lock() instead of before?
+
+Matthew, you mucked with it last ;) Can you please take a look?
+
+> CPU: 0 PID: 21978 Comm: syz-executor.5 Not tainted 5.19.0-rc2-next-20220616-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
+>  check_region_inline mm/kasan/generic.c:183 [inline]
+>  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+>  instrument_atomic_read include/linux/instrumented.h:71 [inline]
+>  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+>  hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+>  show_smap+0x1c6/0x470 fs/proc/task_mmu.c:866
+>  traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
+>  traverse fs/seq_file.c:101 [inline]
+>  seq_read_iter+0x90f/0x1280 fs/seq_file.c:195
+>  seq_read+0x337/0x4b0 fs/seq_file.c:162
+>  do_loop_readv_writev fs/read_write.c:763 [inline]
+>  do_loop_readv_writev fs/read_write.c:750 [inline]
+>  do_iter_read+0x4f8/0x750 fs/read_write.c:805
+>  vfs_readv+0xe5/0x150 fs/read_write.c:923
+>  do_preadv fs/read_write.c:1015 [inline]
+>  __do_sys_preadv fs/read_write.c:1065 [inline]
+>  __se_sys_preadv fs/read_write.c:1060 [inline]
+>  __x64_sys_preadv+0x22b/0x310 fs/read_write.c:1060
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7f5c1d889109
+> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f5c1ea69168 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
+> RAX: ffffffffffffffda RBX: 00007f5c1d99bf60 RCX: 00007f5c1d889109
+> RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000005
+> RBP: 00007f5c1d8e305d R08: 0000000000000000 R09: 0000000000000000
+> R10: 00000000fffffffe R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007ffd8514b43f R14: 00007f5c1ea69300 R15: 0000000000022000
+>  </TASK>
+> ==================================================================
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

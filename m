@@ -2,269 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1710454FDB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D9D54FDBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234555AbiFQTck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S242173AbiFQTdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiFQTch (ORCPT
+        with ESMTP id S242313AbiFQTd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:32:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26EA185;
-        Fri, 17 Jun 2022 12:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655494352; x=1687030352;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=3gzeJtqcX0o/BkQAq9o37TbkBECXFUGNTf+Benowf8I=;
-  b=g0ms45Ha6pI/xqOilC0Tl6K9r9KMAtusPCX1Um/9tSw5UlMJiQZtdK7C
-   Fsk2zWcUBTX7kL65OFJ9njB2pj85wgRPIZCuybq1ySCEhE6eLEcsxZAxf
-   Uj+YZZVd0Dc7twwkc/6J46qa2dCWF0ihw0Pt5avwpyUFiMqn26KAL3GDo
-   6LF7eEDAKBsXAYl5pKMNQqgI6fXTAH+1dIHgPcjfFwAcDN1nVSwj9f/G+
-   XLO3lT4fimUPjhYGIMOSAqCC65X9l9XiMROAedUndVAIXvZYeBIyfxH5h
-   724MIwhM2KCOU5b+Nim185B+keeiUauksBtQ7s0oROVt+1OCcu7QPXwwt
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341255386"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341255386"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:32:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="912731828"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Jun 2022 12:32:32 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 17 Jun 2022 12:32:31 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 17 Jun 2022 12:32:31 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 17 Jun 2022 12:32:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oMcr5QkDY239IIa6J/l5jUTARJYJmqJ9QS92ciGBDJ8NZ1+QP9woAsZO1TpMhwlRvvB7RGvz2D7Xy7UBEYWB159bAtzaGgWmL3u9th27VHlkI1Fu7OzR2GRInu0NBK9oLn2sRRQ0qlH2HVUDaBDo0FWwdViUcy10U6ol17PuLTyhAjo0LINbnrAs/+pqK9wrRbR+1cCOzW4/GF76GfWoEXAgEQEncRjtC4jz3mmYCMf/uqcEshZ75OtrZ6YpU0HSr/+sxqtrUF0hgr6XcmZ1jYD8Jg06wIKu3J9kUHp6CoKftrfa/2tF+VFfOWsragavUYcK9/IRDLBay8H2+I4M5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PRMh9my0YNiucuTkpRvFn7oIV3z9+oVbQ1gDmDsoOeo=;
- b=DfXmdoWNScg3SG9hzgHXY24nUaQ3eOlj2UdQfqHBzmvH81gFpRXVdGUuu2oCBKLENrp388XtEcqW6+cB8FyCDX7tdoE0tfwTenPZYvxbjMnzT3R4C7sm3esrAbHUrnPuY+qrgYdEx2mSDUVMPBnRkZ9f9AriRfLJXNoHsh95LlGdfMXKwghUY02322eZkjCRwJhOQwm6W2EVbkL4AEmde7elfZMARuOJvEsJmjmbjAozdkjk2ysg4Z3v2nU6LgGfaLjYSZHKLNuIyTfmTcg3Hl4KyY/ki9+1vyMExk7vT/bxbKr17hGx/9Cs181aBC6n5VBF0uRkbXYtE56GQv4bhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by BN9PR11MB5289.namprd11.prod.outlook.com
- (2603:10b6:408:136::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
- 2022 19:32:30 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf%7]) with mapi id 15.20.5332.023; Fri, 17 Jun 2022
- 19:32:30 +0000
-Date:   Fri, 17 Jun 2022 12:32:28 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Alison Schofield <alison.schofield@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
-Message-ID: <62acd6cc72637_844b129463@dwillia2-xfh.notmuch>
-References: <cover.1655250669.git.alison.schofield@intel.com>
- <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
- <20220617150508.0000266a@Huawei.com>
- <20220617162935.GA1532720@alison-desk>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220617162935.GA1532720@alison-desk>
-X-ClientProxiedBy: MWHPR11CA0009.namprd11.prod.outlook.com
- (2603:10b6:301:1::19) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Fri, 17 Jun 2022 15:33:26 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA88411441;
+        Fri, 17 Jun 2022 12:33:24 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id z14so4865404pgh.0;
+        Fri, 17 Jun 2022 12:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=ZBfsCeFHa7qdrvuP6qUnqaXyZVzCHTMNQZo7kaThjTg=;
+        b=WQtkgRxTDNopse1zjTcHlNC2cLnG+XAu8rC2CcRr/g+k4zueI4AReJ2iDI2k2vjOnS
+         FcXU6E1SoHfqqlhJR8PVLcUjN7kzWsgLL7qQg6vsmsHjAvMdsToqUtSIRBQi/2s6L1ss
+         FZN+M8Vns547qIllNJmH0ERsfq1ZhCQmAGhfHSuwpo/zcdmL+BTMpcHm9HaI0Uo7yFTf
+         pLFS3Zwn4Xi5IVFEwAo0hs5Icd0K73KwLm3QNXVn9tud3oKx+O0RLqyX/dAgdwDQSyUe
+         Kn1MaxTaTYSn6MymDVFkrAGts58yg3IUnLLJArr+PD2Zo1+YDF4XOVLanXAlR48hbtMF
+         S2SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZBfsCeFHa7qdrvuP6qUnqaXyZVzCHTMNQZo7kaThjTg=;
+        b=QARFdNp/eZLU89Yh2/ecliFBfrNn7NmmauqTTgAR3WMJw+8BkbFaJXWLuqt+9ceBLx
+         MDBjIoOBNclcIcHouUc9PFyqg0hjqLfFZNedqwtr0K+bS84TUJ1V6NKlQ/rm2RfI8TYZ
+         X94DughMPpIjJMiP1PVB2MO1DqYG4WTDIRJxZ2ZcOAcS0fkFVjOv+zqJDsQUhIqavky7
+         WDETvXyFrT9cOrX731GSUfU6KVwPow6XI7JsgeMtOKbwrLZC/pwY+pmaaSBnP0s36NRL
+         fccE3FJGIuaPtWGxIvJF9XqSXaaIgDpzk6DhSOXVuRJUjc/6NDUyPUPTALP7K641lxyU
+         +urQ==
+X-Gm-Message-State: AJIora/CMEDWN0An30pNaGZK4CGJWv21xRJ9717Z3VAUIUUdQe7jMb/r
+        y9YL1osEPmmvjK+BDOOiofM=
+X-Google-Smtp-Source: AGRyM1sdOjVSEYCvdzauTVaYwwoARnKDlcikLMcJhahvbAhSe9j+id0eO70E0KNYn/So6GXo727ONA==
+X-Received: by 2002:a65:6499:0:b0:3fc:dcaa:ad62 with SMTP id e25-20020a656499000000b003fcdcaaad62mr10494897pgv.63.1655494404195;
+        Fri, 17 Jun 2022 12:33:24 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id mm21-20020a17090b359500b001ec86a0490csm82442pjb.32.2022.06.17.12.33.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 12:33:23 -0700 (PDT)
+Message-ID: <02753520-ad02-7658-c117-a4c2febb059b@gmail.com>
+Date:   Sat, 18 Jun 2022 04:33:19 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6e5f4d13-27dd-4f75-f572-08da50981e3d
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5289:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN9PR11MB5289C675843CB3C27DA30473C6AF9@BN9PR11MB5289.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5IdKRGjbzsTqmFGSQiH8r1pc4g3WgOXkij5evpfQ+DcgihEFEnWwU1u8Ik7QWQk5zXkJ5RZSW3Oryy4R7LY+SnFbC/CSjrgvJBkolNb0AEUdPnIalJXWBoCxjJU+uWTUsSxn8LXrtjYeg1K9LAOs1GMAKL6s13WYPJWP0MNn9asfmk7+ZQjC7/zJdCbRw+skFy94QpbazNS4UdW6KkN2zhFMSqqcrfawH+X/iuRnypYff2aJWNi4cj33t8+Mh6sRxaJ7et+qhZcuFJU5EXSgCk7PS6l92vwgz8RnUv/aTcILf44q6CWC/WPAUGs4Ij49iY0xM6YM525/l0yUePtaWfAOsiDgJ5sYeMxdkOE88mWTwS9d5qCHr66ltdgIACmgOieuN+Mbbs5Ac9tWtdjrA6WZEw7wW0MVqkWf8rsr6ODsDRtxmkgb2D03K8AUnCghDWOR/0ti0l4M/UfvLInHDmvdTvOhbv9wvBLzWHZMb8hiYmVSqU1z04IiACR4A7y3HqCL5HRZ7qXJJ3W1s7Kwx1tsqiBtEXwP+13HfWlolw3KFPvr4KzWrTQrdqGEL3BX1fGPr8ZpaklygzQj+/mwlbqcxvPQBaSGMq2GgFlzsEfZkeVJGMCKdBWYKbYWENgzrfLWPdk8XrCiXgGpn+mc/w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(186003)(498600001)(82960400001)(8676002)(66556008)(110136005)(5660300002)(9686003)(54906003)(6506007)(26005)(66946007)(83380400001)(4326008)(6512007)(38100700002)(2906002)(6486002)(86362001)(15650500001)(316002)(66476007)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N2Cdqrcwzner7Ld3JMvYY8XowxYiGhuW2j+g6P0CVO4rZadsCqVOotnkM/Be?=
- =?us-ascii?Q?TgPXAt9nUT9Qm/xKCwxG+Qh8C12IXVa+gexhFz194zf0CucQT5xZZTDrG4iW?=
- =?us-ascii?Q?/lTYiUF9Ow+AEJMhYY8i6z9SeozkyuG4IZOtK9bxrSqzSbg7yqXW+Ibbp1bV?=
- =?us-ascii?Q?I6yqJ6C8yYJjNpwy8xU0Sny0C2c0GmlJk0HB4iPObHRn3SE47A5ESrHLv7lq?=
- =?us-ascii?Q?HXAFqYqYrZJmeCYVw5dXtFimx0FP/jvom94PGlcii1DH3YNRGZbhOJSY8vA1?=
- =?us-ascii?Q?JsMzQVZggGgPLePnAAnRTMpfCwNLZheYXJqXJNkwgGUWdj75JowCH9qEAFgr?=
- =?us-ascii?Q?qLdpi5JMeENOlXHZxEa6q9bCKc+CTN0oxNJS4flMellsIMSShRmVKfCz3vt0?=
- =?us-ascii?Q?Ak7aV0xhDKc6AmzINFkm9z1zy2/D/5Yl9+lXO3cVzmlrUwq5ZwFU2jV4YFfS?=
- =?us-ascii?Q?VTgFxIlmW9qQixyJae1uP+EP8EUQ5o1q+sZpDpIfEpF37b29Edwcfc6V/6PZ?=
- =?us-ascii?Q?IpNxT8kWZ01cuF93iJoOzIR33y5Av9cLizGQpBhlrz0PotZ8NT1l2loyS1T9?=
- =?us-ascii?Q?J/9yo+2sGU4NxJyWtFCBkDn+H969LesUs56jWIA7cunsdq8dJcIKB0KK09LJ?=
- =?us-ascii?Q?gcWJ3sSnUpL7WUpyQEbjTTWD8afYe01MUNMP6b5fRWQN/icDK4Thgvgwxpto?=
- =?us-ascii?Q?a19NtIdfdSzJilipQ5zWul5FkmHnbV9MEvRkXwLkWQjSwDNVaR1gHBF6p//B?=
- =?us-ascii?Q?h41OWV9KUxWp9ETelLBdRgQct5nWONCJ3IoKDbnFUMAJ+cVgMwGxYIOXR+Fy?=
- =?us-ascii?Q?hVj5c+eC9zvn91fGGDjSCxgshgo3gjXtJ+vM4xtWmayn0Bp8lfgKfyRLz+rD?=
- =?us-ascii?Q?NJi3Q0IUE43qmxaPlneE+GCDsW9tUWLMuvO7QOdDPPaIjnhElDzwIRnjOUz4?=
- =?us-ascii?Q?aaUIrcCIELkTq2d+wipMKinPEuJTcFfEJQ7zEKZb8O4vnyNPmHOMvk91wx+/?=
- =?us-ascii?Q?BmMkfPA6QjhciDvRsYhzzdRopUUFIsFPECkzDkTcCOZXZgOqBj6ipffPxQdS?=
- =?us-ascii?Q?1jB3yl+nCcpRaCFjvF2cSC83V7i+w4mPCaYjAYg6WBR/9zHw6d4Qx6JaIhC2?=
- =?us-ascii?Q?138WQtAuHZNCz9NUUJuGxNUbYqLn3DND294/lxccTyUcE3FUJ6gedWcz+sSK?=
- =?us-ascii?Q?DdaNLuim4ZPIpt42DS9bj4C7a6Wf6HjOtyeu6AnjvcTseFTY9UB6hOkX2fmx?=
- =?us-ascii?Q?FyfAFekEuEdAB5iefQDovly0qX4JYY3XdMGWKND83Jc7m76HpcXO3GSP9xOj?=
- =?us-ascii?Q?73KDMNQVw9VBUqq1yfiqEjOFEir57VUiNfdrDq1CNJjSF5Haj1AocTFxp2xz?=
- =?us-ascii?Q?nts2A0G5NuH076mRg4tNpO/cCta+q73++paBKDtWQTrku0LXXN5UxE8ZTrlR?=
- =?us-ascii?Q?xEHlHxpn8KDtxiOUPaM/ApDZB6obQt4J/VCLFeHW93zPanz/+GNDW9DxrFAU?=
- =?us-ascii?Q?AnCKilJQd9qUAr6AU8TaSAcaIm9S1amnxk7w8S912UE+d9pXPj+uwGjGnlXh?=
- =?us-ascii?Q?c8dWm0k99SlujOx4vtrFDTrxKYe5mFVHDYr4efCCaH2KwYy/TyfFnyBCRO+9?=
- =?us-ascii?Q?16FhrH3xJGu+98eMRJgKUkvrzVnCmwQ6IEbC82zfS5dzTFIiz+9UvhQumeWM?=
- =?us-ascii?Q?9KojM1W6ArIu0nbtEaT6XlUlPawlxwMlait/bG/WMSuMTb4PuHxREr5kOLKM?=
- =?us-ascii?Q?62KBo7+KbnemVbPP0pPh0hNPCtF2t74=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e5f4d13-27dd-4f75-f572-08da50981e3d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 19:32:30.0224
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cdclxWAlWAfSIANMn/qEo+H4VP/mcpbQCYp/gX84+/jta4grupSW9blo82W4+QMxznXlRekXJ+RtT2qsYlVJuKjbo+tBtMKCXyZSe2aWdEA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5289
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/4] PM / devfreq: Rework freq_table to be local to
+ devfreq struct
+Content-Language: en-US
+To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220614230950.426-1-ansuelsmth@gmail.com>
+ <20220614230950.426-4-ansuelsmth@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220614230950.426-4-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alison Schofield wrote:
-> On Fri, Jun 17, 2022 at 07:05:08AM -0700, Jonathan Cameron wrote:
-> > On Tue, 14 Jun 2022 17:10:27 -0700
-> > alison.schofield@intel.com wrote:
-> > 
-> > > From: Alison Schofield <alison.schofield@intel.com>
-> > > 
-> > > CXL devices that support persistent memory maintain a list of locations
-> > > that are poisoned or result in poison if the addresses are accessed by
-> > > the host.
-> > > 
-> > > Per the spec (CXL 2.0 8.2.8.5.4.1), the device returns this Poison
-> > > list as a set of  Media Error Records that include the source of the
-> > > error, the starting device physical address and length. The length is
-> > > the number of adjacent DPAs in the record and is in units of 64 bytes.
-> > > 
-> > > Retrieve the list and log each Media Error Record as a trace event of
-> > > type cxl_poison_list.
-> > > 
-> > > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > A few more things inline.
-> > 
-> > Otherwise, can confirm it works with some hack QEMU code.
-> > I'll tidy that up and post soon.
-> > 
-> > > +int cxl_mem_get_poison_list(struct device *dev)
-> > > +{
-> snip
-> > > +
-> > > +			trace_cxl_poison_list(dev, source, addr, len);
-> > 
-> > Need to mask off the lower 6 bits of addr as they contain the source
-> > + a few reserved bits.
-> > 
-> > I was confused how you were geting better than 64 byte precision in your
-> > example.
-> >
-> Ah...got it. Thanks!
-> 
-> > > +		}
-> > > +
-> > > +		/* Protect against an uncleared _FLAG_MORE */
-> > > +		nr_records = nr_records + le16_to_cpu(po->count);
-> > > +		if (nr_records >= cxlds->poison_max)
-> > > +			goto out;
-> > > +
-> > > +	} while (po->flags & CXL_POISON_FLAG_MORE);
-> > So.. A conundrum here.  What happens if:
-> > 
-> > 1. We get an error mid way through a set of multiple reads
-> >    (something intermittent - maybe a software issue)
-> > 2. We will drop out of here fine and report the error.
-> > 3. We run this function again.
-> > 
-> > It will (I think) currently pick up where we left off, but we have
-> > no way of knowing that as there isn't a 'total records' count or
-> > any other form of index in the output payload.
-> 
-> Yes. That is sad. I'm assume it's by design and CXL devices never
-> intended to keep any totals.
-> 
-> > 
-> > So, software solutions I think should work (though may warrant a note
-> > to be added to the spec).
-> > 
-> > 1. Read whole thing twice. First time is just to ensure we get
-> >    to the end and flush out any prior half done reads.
-> > 2. Issue a read for a different region (perhaps length 0) first
-> >    and assume everything starts from scratch when we go back to
-> >    this region.
-> 
-> Can you tell me more about 2 ?
-> 
-> Also, Since posting this I have added protection to this path to ensure
-> only one reader of the poison list for this device. Like this:
-> 
-> if (!completion_done(&cxlds->read_poison_complete);
->               return -EBUSY;
-> wait_for_completion_interruptible(&cxlds->read_poison_complete);
-> 	...GET ALL THE POISON...
-> complete(&cxlds->read_poison_complete);
+Hi,
 
-Since this runs in the context of the requester a completion feels out
-of place. What this probably wants is a mutex() protecting the state
-machine of the Media Error Record retrieval and the "more" flag.
-
-> 
-> And will add the error message on that unexpected _FLAG_MORE too.
-> 
-> Alison
-> > 
-> > Jonathan
-> > 
-> 
-> 
-> 
-> > > +
-> > > +out:
-> > > +	kvfree(po);
-> > > +	return rc;
-> > > +}
-> > > +EXPORT_SYMBOL_NS_GPL(cxl_mem_get_poison_list, CXL);
-> > > +
-> > >  struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
-> > >  {
-> > >  	struct cxl_dev_state *cxlds;
-> > 
+Thanks for the good catch. 
 
 
+I think that this patch fixes issue of commit 0ec09ac2cebe
+("PM / devfreq: Set the freq_table of devfreq device").
+
+When some devfreq driver without using passive governor
+faces on the all errors including PROBE_DEFER
+after executing devfreq_add_device, this issue will happen.
+
+Also need to check the devfreq device driver using freq_table
+which was allocated dynamically. In case of devfreq/drivers/exynos-bus.c
+used the devfreq->profile->freq_table after devfreq_add_device.
+
+On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
+> Currently we reference the freq_table to the profile defined one and we
+> make changes on it. Devfreq never supported PROBE_DEFER before the cpu
+> based scaling support to the passive governor and assumed that a devfreq
+> device could only had error and be done with it.
+> Now that a device can PROBE_DEFER a rework to the freq_table logic is
+> required.
+> 
+> If a device PROBE_DEFER on the GOV_START, the freq_table is already set
+> in the device profile struct and its init is skipped. This is due to the
+> fact that it's common for devs to declare this kind of struct static.
+> This cause the devfreq logic to find a freq table declared (freq_table
+> not NULL) with random data and poiting to the old addrs freed by devm.
+ > This problem CAN be solved by devs by clearing the freq_table in their
+> profile struct on driver exit path but it should not be trusted and it
+> looks to use a flawed logic.
+> 
+> A better solution is to move the freq_table and max_state to the
+> devfreq struct and never change the profile struct.
+> This permit to correctly handle PROBE_DEFER since the devfreq struct is
+> reallocated and contains new values.
+> Also the profile struct should only be used to init the driver and should
+> not be used by the devfreq to write the freq_table if it's not provided
+> by the driver.
+> 
+
+If possible, could you explain the patch description more simply?
+Maybe, just focus on the 'freq_table' issue by device managed functions (devs).
+
+
+> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
+> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/devfreq/devfreq.c          | 71 ++++++++++++++----------------
+>  drivers/devfreq/governor_passive.c | 14 +++---
+>  include/linux/devfreq.h            |  4 ++
+>  3 files changed, 45 insertions(+), 44 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 01474daf4548..2e2b3b414d67 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -123,7 +123,7 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
+>  			    unsigned long *min_freq,
+>  			    unsigned long *max_freq)
+>  {
+> -	unsigned long *freq_table = devfreq->profile->freq_table;
+> +	unsigned long *freq_table = devfreq->freq_table;
+>  	s32 qos_min_freq, qos_max_freq;
+>  
+>  	lockdep_assert_held(&devfreq->lock);
+> @@ -133,11 +133,11 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
+>  	 * The devfreq drivers can initialize this in either ascending or
+>  	 * descending order and devfreq core supports both.
+>  	 */
+> -	if (freq_table[0] < freq_table[devfreq->profile->max_state - 1]) {
+> +	if (freq_table[0] < freq_table[devfreq->max_state - 1]) {
+>  		*min_freq = freq_table[0];
+> -		*max_freq = freq_table[devfreq->profile->max_state - 1];
+> +		*max_freq = freq_table[devfreq->max_state - 1];
+>  	} else {
+> -		*min_freq = freq_table[devfreq->profile->max_state - 1];
+> +		*min_freq = freq_table[devfreq->max_state - 1];
+>  		*max_freq = freq_table[0];
+>  	}
+>  
+> @@ -169,8 +169,8 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
+>  {
+>  	int lev;
+>  
+> -	for (lev = 0; lev < devfreq->profile->max_state; lev++)
+> -		if (freq == devfreq->profile->freq_table[lev])
+> +	for (lev = 0; lev < devfreq->max_state; lev++)
+> +		if (freq == devfreq->freq_table[lev])
+>  			return lev;
+>  
+>  	return -EINVAL;
+> @@ -178,7 +178,6 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
+>  
+>  static int set_freq_table(struct devfreq *devfreq)
+>  {
+> -	struct devfreq_dev_profile *profile = devfreq->profile;
+>  	struct dev_pm_opp *opp;
+>  	unsigned long freq;
+>  	int i, count;
+> @@ -188,25 +187,22 @@ static int set_freq_table(struct devfreq *devfreq)
+>  	if (count <= 0)
+>  		return -EINVAL;
+>  
+> -	profile->max_state = count;
+> -	profile->freq_table = devm_kcalloc(devfreq->dev.parent,
+> -					profile->max_state,
+> -					sizeof(*profile->freq_table),
+> -					GFP_KERNEL);
+> -	if (!profile->freq_table) {
+> -		profile->max_state = 0;
+> +	devfreq->max_state = count;
+> +	devfreq->freq_table = devm_kcalloc(devfreq->dev.parent,
+> +					   devfreq->max_state,
+> +					   sizeof(*devfreq->freq_table),
+> +					   GFP_KERNEL);
+> +	if (!devfreq->freq_table)
+>  		return -ENOMEM;
+> -	}
+>  
+> -	for (i = 0, freq = 0; i < profile->max_state; i++, freq++) {
+> +	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
+>  		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
+>  		if (IS_ERR(opp)) {
+> -			devm_kfree(devfreq->dev.parent, profile->freq_table);
+> -			profile->max_state = 0;
+> +			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
+>  			return PTR_ERR(opp);
+>  		}
+>  		dev_pm_opp_put(opp);
+> -		profile->freq_table[i] = freq;
+> +		devfreq->freq_table[i] = freq;
+>  	}
+>  
+>  	return 0;
+> @@ -246,7 +242,7 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
+>  
+>  	if (lev != prev_lev) {
+>  		devfreq->stats.trans_table[
+> -			(prev_lev * devfreq->profile->max_state) + lev]++;
+> +			(prev_lev * devfreq->max_state) + lev]++;
+>  		devfreq->stats.total_trans++;
+>  	}
+>  
+> @@ -835,6 +831,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  		if (err < 0)
+>  			goto err_dev;
+>  		mutex_lock(&devfreq->lock);
+> +	} else {
+> +		devfreq->freq_table = devfreq->profile->freq_table;
+> +		devfreq->max_state = devfreq->profile->max_state;
+>  	}
+>  
+>  	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
+> @@ -870,8 +869,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	devfreq->stats.trans_table = devm_kzalloc(&devfreq->dev,
+>  			array3_size(sizeof(unsigned int),
+> -				    devfreq->profile->max_state,
+> -				    devfreq->profile->max_state),
+> +				    devfreq->max_state,
+> +				    devfreq->max_state),
+>  			GFP_KERNEL);
+>  	if (!devfreq->stats.trans_table) {
+>  		mutex_unlock(&devfreq->lock);
+> @@ -880,7 +879,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	}
+>  
+>  	devfreq->stats.time_in_state = devm_kcalloc(&devfreq->dev,
+> -			devfreq->profile->max_state,
+> +			devfreq->max_state,
+>  			sizeof(*devfreq->stats.time_in_state),
+>  			GFP_KERNEL);
+>  	if (!devfreq->stats.time_in_state) {
+> @@ -1665,9 +1664,9 @@ static ssize_t available_frequencies_show(struct device *d,
+>  
+>  	mutex_lock(&df->lock);
+>  
+> -	for (i = 0; i < df->profile->max_state; i++)
+> +	for (i = 0; i < df->max_state; i++)
+>  		count += scnprintf(&buf[count], (PAGE_SIZE - count - 2),
+> -				"%lu ", df->profile->freq_table[i]);
+> +				"%lu ", df->freq_table[i]);
+>  
+>  	mutex_unlock(&df->lock);
+>  	/* Truncate the trailing space */
+> @@ -1690,7 +1689,7 @@ static ssize_t trans_stat_show(struct device *dev,
+>  
+>  	if (!df->profile)
+>  		return -EINVAL;
+> -	max_state = df->profile->max_state;
+> +	max_state = df->max_state;
+>  
+>  	if (max_state == 0)
+>  		return sprintf(buf, "Not Supported.\n");
+> @@ -1707,19 +1706,17 @@ static ssize_t trans_stat_show(struct device *dev,
+>  	len += sprintf(buf + len, "           :");
+>  	for (i = 0; i < max_state; i++)
+>  		len += sprintf(buf + len, "%10lu",
+> -				df->profile->freq_table[i]);
+> +				df->freq_table[i]);
+>  
+>  	len += sprintf(buf + len, "   time(ms)\n");
+>  
+>  	for (i = 0; i < max_state; i++) {
+> -		if (df->profile->freq_table[i]
+> -					== df->previous_freq) {
+> +		if (df->freq_table[i] == df->previous_freq)
+>  			len += sprintf(buf + len, "*");
+> -		} else {
+> +		else
+>  			len += sprintf(buf + len, " ");
+> -		}
+> -		len += sprintf(buf + len, "%10lu:",
+> -				df->profile->freq_table[i]);
+> +
+> +		len += sprintf(buf + len, "%10lu:", df->freq_table[i]);
+>  		for (j = 0; j < max_state; j++)
+>  			len += sprintf(buf + len, "%10u",
+>  				df->stats.trans_table[(i * max_state) + j]);
+> @@ -1743,7 +1740,7 @@ static ssize_t trans_stat_store(struct device *dev,
+>  	if (!df->profile)
+>  		return -EINVAL;
+>  
+> -	if (df->profile->max_state == 0)
+> +	if (df->max_state == 0)
+>  		return count;
+>  
+>  	err = kstrtoint(buf, 10, &value);
+> @@ -1751,11 +1748,11 @@ static ssize_t trans_stat_store(struct device *dev,
+>  		return -EINVAL;
+>  
+>  	mutex_lock(&df->lock);
+> -	memset(df->stats.time_in_state, 0, (df->profile->max_state *
+> +	memset(df->stats.time_in_state, 0, (df->max_state *
+>  					sizeof(*df->stats.time_in_state)));
+>  	memset(df->stats.trans_table, 0, array3_size(sizeof(unsigned int),
+> -					df->profile->max_state,
+> -					df->profile->max_state));
+> +					df->max_state,
+> +					df->max_state));
+>  	df->stats.total_trans = 0;
+>  	df->stats.last_update = get_jiffies_64();
+>  	mutex_unlock(&df->lock);
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index dcc9dd518197..1810966fd61d 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -145,18 +145,18 @@ static int get_target_freq_with_devfreq(struct devfreq *devfreq,
+>  		goto out;
+>  
+>  	/* Use interpolation if required opps is not available */
+> -	for (i = 0; i < parent_devfreq->profile->max_state; i++)
+> -		if (parent_devfreq->profile->freq_table[i] == *freq)
+> +	for (i = 0; i < parent_devfreq->max_state; i++)
+> +		if (parent_devfreq->freq_table[i] == *freq)
+>  			break;
+>  
+> -	if (i == parent_devfreq->profile->max_state)
+> +	if (i == parent_devfreq->max_state)
+>  		return -EINVAL;
+>  
+> -	if (i < devfreq->profile->max_state) {
+> -		child_freq = devfreq->profile->freq_table[i];
+> +	if (i < devfreq->max_state) {
+> +		child_freq = devfreq->freq_table[i];
+>  	} else {
+> -		count = devfreq->profile->max_state;
+> -		child_freq = devfreq->profile->freq_table[count - 1];
+> +		count = devfreq->max_state;
+> +		child_freq = devfreq->freq_table[count - 1];
+>  	}
+>  
+>  out:
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index dc10bee75a72..770a7532655c 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -185,6 +185,10 @@ struct devfreq {
+>  	struct notifier_block nb;
+>  	struct delayed_work work;
+>  
+> +	/* devfreq local freq_table */
+> +	unsigned long *freq_table;
+> +	unsigned int max_state;
+> +
+>  	unsigned long previous_freq;
+>  	struct devfreq_dev_status last_status;
+>  
+
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

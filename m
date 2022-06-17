@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB9D54F9C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF66454F9C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382942AbiFQPAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 11:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S1382950AbiFQPBm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Jun 2022 11:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381652AbiFQPAl (ORCPT
+        with ESMTP id S1382627AbiFQPBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 11:00:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C17B3B552
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655478039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ONdx8UrD/iFgfBJOk2FUQJlKyfF0Fn1r/7hliPk7HK0=;
-        b=KSGaJBw2XkfBG6L63aEoILl3XFFjEJfE3LQ1Oyi+Fir+QpPrHFJz9jHNf66WO89Pwe3HvU
-        SZgbpVOWkqTjINd+PsUqY7aQ0sVib5qEB49LmIjnT6e9yUkQYlaosQiC9/tCr+JMRZGrGW
-        TjqwmGmse+GYIS0DZGi2w8EjOf2RROk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-547-hVOxLB2yNgenoGphNrK42w-1; Fri, 17 Jun 2022 11:00:28 -0400
-X-MC-Unique: hVOxLB2yNgenoGphNrK42w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B8D93810D20;
-        Fri, 17 Jun 2022 15:00:28 +0000 (UTC)
-Received: from [10.22.18.98] (unknown [10.22.18.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D18FD40CFD0A;
-        Fri, 17 Jun 2022 15:00:27 +0000 (UTC)
-Message-ID: <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com>
-Date:   Fri, 17 Jun 2022 11:00:27 -0400
+        Fri, 17 Jun 2022 11:01:40 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A64A3E0E4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:01:39 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-56-yIBenb7EPhWdGuPCD_Wigg-1; Fri, 17 Jun 2022 16:01:36 +0100
+X-MC-Unique: yIBenb7EPhWdGuPCD_Wigg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Fri, 17 Jun 2022 16:01:34 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Fri, 17 Jun 2022 16:01:34 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Petr Mladek' <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     John Ogness <john.ogness@linutronix.de>,
+        Marco Elver <elver@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: 5.19 printk breaks message ordering
+Thread-Topic: 5.19 printk breaks message ordering
+Thread-Index: AQHYglWHYY5jQBSQoEy5fw0dudLMr61Tr9rQ
+Date:   Fri, 17 Jun 2022 15:01:33 +0000
+Message-ID: <a35dc47eb9924d56bb6dca7868c34c94@AcuMS.aculab.com>
+References: <YqyANveL50uxupfQ@zx2c4.com> <YqyN20jpRw1SaaTw@alley>
+In-Reply-To: <YqyN20jpRw1SaaTw@alley>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] locking/rwlocks: do not starve writers
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
-References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
- <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net>
- <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
- <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 10:57, Shakeel Butt wrote:
-> On Fri, Jun 17, 2022 at 7:43 AM Waiman Long <longman@redhat.com> wrote:
->> On 6/17/22 08:07, Peter Zijlstra wrote:
->>> On Fri, Jun 17, 2022 at 02:10:39AM -0700, Eric Dumazet wrote:
->>>> --- a/kernel/locking/qrwlock.c
->>>> +++ b/kernel/locking/qrwlock.c
->>>> @@ -23,16 +23,6 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
->>>>       /*
->>>>        * Readers come here when they cannot get the lock without waiting
->>>>        */
->>>> -    if (unlikely(in_interrupt())) {
->>>> -            /*
->>>> -             * Readers in interrupt context will get the lock immediately
->>>> -             * if the writer is just waiting (not holding the lock yet),
->>>> -             * so spin with ACQUIRE semantics until the lock is available
->>>> -             * without waiting in the queue.
->>>> -             */
->>>> -            atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
->>>> -            return;
->>>> -    }
->>>>       atomic_sub(_QR_BIAS, &lock->cnts);
->>>>
->>>>       trace_contention_begin(lock, LCB_F_SPIN | LCB_F_READ);
->>> This is known to break tasklist_lock.
->>>
->> We certainly can't break the current usage of tasklist_lock.
->>
->> I am aware of this problem with networking code and is thinking about
->> either relaxing the check to exclude softirq or provide a
->> read_lock_unfair() variant for networking use.
-> read_lock_unfair() for networking use or tasklist_lock use?
+From: Petr Mladek
+> Sent: 17 June 2022 15:21
+...
+> > I assume this is mostly caused by your threaded printk patchset
+> 
+> Console has never been fully synchronous. printk() did console_trylock()
+> and flushed the message to the console only the lock was available.
+> The console kthreads made it asynchronous always when the kthreads
+> are available and system is in normal state.
 
-I mean to say read_lock_fair(), but it could also be the other way 
-around. Thanks for spotting that.
+What priority do these kthreads run at?
 
-Cheers,
-Longman
+I'd have thought they ought to run at a high priority?
+That should tend to give kernel messages priority over user ones.
+
+Quite how high is another matter.
+Probably a bit below the RT/FIFO:50 of threaded ISR.
+
+Although if an x86 one ends up doing software scrolling of
+the vga text buffer using the ISA speed accesses that usually
+requires maybe not!
+Maybe that is faster on modern systems - but I doubt it.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

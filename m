@@ -2,111 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D1F54F496
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E1A54F498
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380453AbiFQJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S1380984AbiFQJsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbiFQJsR (ORCPT
+        with ESMTP id S1381250AbiFQJsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:48:17 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F33457B2;
-        Fri, 17 Jun 2022 02:48:16 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id x5so5488459edi.2;
-        Fri, 17 Jun 2022 02:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wD2kpKzJqFUX67y53Ka9TC3u1l6m/HfRCHZEF9+P7LY=;
-        b=O3oJ7EBa1DSYeSpPAl2pwHKAAIzqbPtTv2ruY4dJURFxUWkylGAOtt1Nzx/4Co1l/p
-         qZD1unk8hoGYMxLOI3HBtWnp/KbI6TxpXQSplt7cgBmRuiZYF1qG9eO1Y9H1JF78nYvD
-         02sUN3pSjcCiBGmKyoWqwhiXELO/e3rajJ9N1y74na1jHkb1OARIPTKFEIN06npNihbb
-         /F2WvaDOVAbBG/8bebnVJLyHO0HH+O2pIvNo3v3fQX3wv01pdrqnKOk39RGmsayLYrBU
-         yNm1P/qcrFCBqu1tiVF8+cMc/xprN+NsbOUoSptWxNkELNtC4JpXykXIN84fao/jWUnk
-         bnCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wD2kpKzJqFUX67y53Ka9TC3u1l6m/HfRCHZEF9+P7LY=;
-        b=WGlGooKCt9+ngo6NI9EHENyemEJR9XrT0YmO00NkNJBFKI30JK6hJmaS4psN5T7JpS
-         PvNRmNT5dvT4HSHbvQM+4PVTFaXJKKjNTWvX8kyznQOeKA6dAztuPbb9Y0aWkoz0pRFa
-         pxq8VVbvXyEAvyxvGEK9lTPtF0K/peMYJRaxWBWX8bjNWnlvWgOTHHeZiAMJe+/CG82E
-         xYEcPyyA/dfwpNxCjhIGvk1315MZd1nQhUQcTN0/wbuSC6rNtShZaHhacv/SwBLlFvmm
-         ZG3w9jtVscTkEdPGbPmspt+UfThh6B0ivkV3Ul3/+Rr7/tbiZ7NMgM//aFCZPjG5dvAb
-         FItw==
-X-Gm-Message-State: AJIora+W+0guPVR9eOs6ISGL5JLAQfimJkMSMhv9gVf5j495zleHDg2B
-        FHAJZbehzdC4kPoP+nZPGqtg6GRupZjwwO+RiNQ=
-X-Google-Smtp-Source: AGRyM1uqFe/JXStvN3glFnviA4pS3N3gxtDC5EfBtKciin5PrqBbU8kQk1XiTEG3zneSSb/vnLFf+3CRhVTZ94qZ+tU=
-X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
- o16-20020a056402439000b0042e0b7ee9acmr11329544edc.97.1655459294822; Fri, 17
- Jun 2022 02:48:14 -0700 (PDT)
+        Fri, 17 Jun 2022 05:48:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0756833A;
+        Fri, 17 Jun 2022 02:48:25 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D7FAB660179A;
+        Fri, 17 Jun 2022 10:48:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655459303;
+        bh=uN6wnbzAZuoDWwRcuXfVxiPLqXUDSzCb7JMLgqXhcJY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PiYfAcyPeP0HfwUiZkJpxWz8nAl4hgrf5aNPMEFifj35+464fd2lwcx/ebiiChtPM
+         DpjmiH90rIx/6+VUzJDkpM/4d+WGK/9zI1HKHapcXJ5O0Lu7w2bT+QSNT94isb+UbY
+         M8PUye0LtMKw22fs0VSawR1LKce7KVYuAnn7xVkji+UR8YzV26irDQf5WpWvGmB/GU
+         iwezIe0MY1BokCxkUKX6N7UicST6Db6rzBmXWTjykRB9tS7eCat8DgW94Qon7sopIo
+         wnNQcb1NzdIF4KM4LcPD6eclqVVZF+5iAIdQnRCF4lzdyK+EPtXdoBww+jQeoGA4NQ
+         vualHWAqQimFQ==
+Message-ID: <d5566b11-e3eb-28bf-73d1-b17e0802b0c0@collabora.com>
+Date:   Fri, 17 Jun 2022 11:48:20 +0200
 MIME-Version: 1.0
-References: <be58b398-71ff-7c12-1bf1-a09181d9c80@linux.intel.com>
-In-Reply-To: <be58b398-71ff-7c12-1bf1-a09181d9c80@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 17 Jun 2022 11:47:37 +0200
-Message-ID: <CAHp75VcRgCjD578XrDeuz6WWqMCtS6k-BE7pa4iMfGFkUnhdbg@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update DW 8250 UART maintainership
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v10 2/2] phy: mediatek: Add PCIe PHY driver
+Content-Language: en-US
+To:     Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Wei-Shun Chang <weishunc@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+References: <20220617070246.20142-1-jianjun.wang@mediatek.com>
+ <20220617070246.20142-3-jianjun.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220617070246.20142-3-jianjun.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 11:41 AM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> Add myself as maintainer for DW 8250 UART and up it to Supported.
+Il 17/06/22 09:02, Jianjun Wang ha scritto:
+> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
+> 
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
 
-Thanks!
+Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
->
-> ---
->  MAINTAINERS | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6d3bd9d2a8d..6c90484f395b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19230,8 +19230,9 @@ F:      Documentation/devicetree/bindings/gpio/sn=
-ps,creg-gpio.txt
->  F:     drivers/gpio/gpio-creg-snps.c
->
->  SYNOPSYS DESIGNWARE 8250 UART DRIVER
-> +M:     Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
->  R:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> -S:     Maintained
-> +S:     Supported
->  F:     drivers/tty/serial/8250/8250_dw.c
->  F:     drivers/tty/serial/8250/8250_dwlib.*
->  F:     drivers/tty/serial/8250/8250_lpss.c
->
-> --
-> tg: (f2906aa86338..) dw/maintainer (depends on: tty-next)
-
-
-
---=20
-With Best Regards,
-Andy Shevchenko

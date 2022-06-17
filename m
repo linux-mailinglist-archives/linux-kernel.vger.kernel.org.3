@@ -2,48 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921A854EFCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A503054EFCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243043AbiFQDnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 23:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        id S1379561AbiFQDqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 23:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiFQDnt (ORCPT
+        with ESMTP id S229750AbiFQDqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:43:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1387764D3E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 20:43:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3E8712FC;
-        Thu, 16 Jun 2022 20:43:47 -0700 (PDT)
-Received: from [192.168.0.146] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 874E23F73B;
-        Thu, 16 Jun 2022 20:43:45 -0700 (PDT)
-Message-ID: <ed58c478-e245-63e7-b48a-ab54b221e4fa@arm.com>
-Date:   Fri, 17 Jun 2022 09:13:19 +0530
+        Thu, 16 Jun 2022 23:46:23 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6241665D09;
+        Thu, 16 Jun 2022 20:46:22 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id w29so2984586pgl.8;
+        Thu, 16 Jun 2022 20:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zMFxF1dps3FFy1Csp9JLYJx8ndjCnJRCu+jFZkoArKo=;
+        b=HtTeHOo9BHWbZoHy/pEv3QUVXbb9ShKGBsOT1QulYweyqQk7hyNpRHeLGVzEKQ98rT
+         JhESAdD0IYdJimorX5NKxFe9s6hye5CCDY+Un/+vEUROS708QRbZQOWC2o1kxdgBm5pw
+         /1N7/Vr/YANbYYjYq5vlCVzOMKTQtofoHcFL64hezXuz71Jh1eggkn7SEzeQE//zfp9k
+         zahhZYHZSTE3gj/+a9dVJcp2gKFmaz+hr2BGMB8vFcDAfknHXgxOxQkWh88KN3cQYEZm
+         E68Iy9ragbxNdALvT5l1T1dp6Djpv3d8Ah6/mgAt/V+4/F9An7m5PMKOLg4TpxbXyobD
+         Tb7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zMFxF1dps3FFy1Csp9JLYJx8ndjCnJRCu+jFZkoArKo=;
+        b=yCoKoAYxIN7UgG3dH5PnLkJ4jVsdqg4kg1Sxy9+gIabcAcJbgKc9zV0sGozys2WGDS
+         ug8rdX971vMXnQVLJ3eok0ToWp+SBv5GMKC7xCYRDJwfig3mP0Y5kurph8h5lfPb6UA9
+         X2p089iuW/reVuTSIWEesYvssyOUjLaltZqgzd8fvytQXfCLYO/S+6WyIbIql9/1vcyY
+         fohpRv8hoCBapMPen34vMogZXbBlhzzS0pJ49oPp4ydpisCUTd5jqxIgo7EXB10gWs/v
+         YpiWgFdIctAMByGZkQPfi4zWSSHKslRT/JZpUc3gITLEJ7RJKnN7CT8LYw27bbCMv8I4
+         YPHg==
+X-Gm-Message-State: AJIora/DcD6qmYPKR3m4MJJ8A+DKMNRyRO+Bsm+6M3OO6Udh8RGlN4b3
+        tiuExH8+sxdLFJZJcZbeTzM=
+X-Google-Smtp-Source: AGRyM1tNfMAJ6rxox42YsjqzmdmTHXZxY7Lk4uwn4jVj4c3LfYwcHs1HZUCuTQFAQRMDLD1Wm8zIzA==
+X-Received: by 2002:a05:6a00:24c1:b0:518:c52f:f5 with SMTP id d1-20020a056a0024c100b00518c52f00f5mr8045022pfv.15.1655437581704;
+        Thu, 16 Jun 2022 20:46:21 -0700 (PDT)
+Received: from MacBook-Pro-3.local ([2620:10d:c090:400::5:29cb])
+        by smtp.gmail.com with ESMTPSA id i135-20020a62878d000000b0051baeb06c0bsm2481532pfe.168.2022.06.16.20.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 20:46:20 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 20:46:17 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, john.fastabend@gmail.com,
+        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND][PATCH v4 2/4] bpf: Add bpf_request_key_by_id() helper
+Message-ID: <20220617034617.db23phfavuhqx4vi@MacBook-Pro-3.local>
+References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
+ <20220614130621.1976089-3-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 2/2] mm/mmap: Drop generic protection_map[] array
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     "hch@infradead.org" <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20220616040924.1022607-1-anshuman.khandual@arm.com>
- <20220616040924.1022607-3-anshuman.khandual@arm.com>
- <7cf922f4-2367-e173-0280-cb498391d9f7@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <7cf922f4-2367-e173-0280-cb498391d9f7@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614130621.1976089-3-roberto.sassu@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,156 +74,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/16/22 11:15, Christophe Leroy wrote:
+On Tue, Jun 14, 2022 at 03:06:19PM +0200, Roberto Sassu wrote:
+> Add the bpf_request_key_by_id() helper, so that an eBPF program can obtain
+> a suitable key pointer to pass to the bpf_verify_pkcs7_signature() helper,
+> to be introduced in a later patch.
 > 
-> Le 16/06/2022 à 06:09, Anshuman Khandual a écrit :
->> Move the protection_array[] array inside the arch for those platforms which
->> do not enable ARCH_HAS_VM_GET_PAGE_PROT. Afterwards __SXXX/__PXX macros can
->> be dropped completely which are now redundant.
->>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: linux-mm@kvack.org
->> Cc: linux-kernel@vger.kernel.org
->> Reported-by: kernel test robot <lkp@intel.com>
->> Acked-by: Christoph Hellwig <hch@lst.de>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   arch/alpha/include/asm/pgtable.h          | 17 -------
->>   arch/alpha/mm/init.c                      | 21 +++++++++
->>   arch/arc/include/asm/pgtable-bits-arcv2.h | 18 --------
->>   arch/arc/mm/mmap.c                        | 19 ++++++++
->>   arch/arm/include/asm/pgtable.h            | 17 -------
->>   arch/arm/lib/uaccess_with_memcpy.c        |  2 +-
->>   arch/arm/mm/mmu.c                         | 19 ++++++++
->>   arch/csky/include/asm/pgtable.h           | 18 --------
->>   arch/csky/mm/init.c                       | 19 ++++++++
->>   arch/hexagon/include/asm/pgtable.h        | 27 ------------
->>   arch/hexagon/mm/init.c                    | 41 +++++++++++++++++
->>   arch/ia64/include/asm/pgtable.h           | 18 --------
->>   arch/ia64/mm/init.c                       | 27 +++++++++++-
->>   arch/loongarch/include/asm/pgtable-bits.h | 19 --------
->>   arch/loongarch/mm/cache.c                 | 45 +++++++++++++++++++
->>   arch/m68k/include/asm/mcf_pgtable.h       | 54 -----------------------
->>   arch/m68k/include/asm/motorola_pgtable.h  | 22 ---------
->>   arch/m68k/include/asm/sun3_pgtable.h      | 17 -------
->>   arch/m68k/mm/mcfmmu.c                     | 54 +++++++++++++++++++++++
->>   arch/m68k/mm/motorola.c                   | 19 ++++++++
->>   arch/m68k/mm/sun3mmu.c                    | 19 ++++++++
->>   arch/microblaze/include/asm/pgtable.h     | 17 -------
->>   arch/microblaze/mm/init.c                 | 19 ++++++++
->>   arch/mips/include/asm/pgtable.h           | 22 ---------
->>   arch/mips/mm/cache.c                      |  2 +
->>   arch/nios2/include/asm/pgtable.h          | 16 -------
->>   arch/nios2/mm/init.c                      | 19 ++++++++
->>   arch/openrisc/include/asm/pgtable.h       | 18 --------
->>   arch/openrisc/mm/init.c                   | 19 ++++++++
->>   arch/parisc/include/asm/pgtable.h         | 18 --------
->>   arch/parisc/mm/init.c                     | 19 ++++++++
->>   arch/powerpc/include/asm/pgtable.h        | 20 ---------
->>   arch/powerpc/mm/book3s64/pgtable.c        | 24 +++-------
->>   arch/powerpc/mm/pgtable.c                 | 20 +++++++++
->>   arch/riscv/include/asm/pgtable.h          | 20 ---------
->>   arch/riscv/mm/init.c                      | 19 ++++++++
->>   arch/s390/include/asm/pgtable.h           | 17 -------
->>   arch/s390/mm/mmap.c                       | 19 ++++++++
->>   arch/sh/include/asm/pgtable.h             | 17 -------
->>   arch/sh/mm/mmap.c                         | 19 ++++++++
->>   arch/sparc/include/asm/pgtable_32.h       | 19 --------
->>   arch/sparc/mm/init_32.c                   | 19 ++++++++
->>   arch/sparc/mm/init_64.c                   |  2 +-
->>   arch/um/include/asm/pgtable.h             | 17 -------
->>   arch/um/kernel/mem.c                      | 19 ++++++++
->>   arch/x86/um/mem_32.c                      |  2 +-
->>   arch/xtensa/include/asm/pgtable.h         | 18 --------
->>   arch/xtensa/mm/init.c                     | 19 ++++++++
->>   include/linux/mm.h                        |  2 +-
->>   mm/mmap.c                                 | 19 --------
->>   50 files changed, 503 insertions(+), 489 deletions(-)
->>
->> diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
->> index 8ed2a80c896e..bd636295a794 100644
->> --- a/arch/powerpc/include/asm/pgtable.h
->> +++ b/arch/powerpc/include/asm/pgtable.h
->> @@ -21,26 +21,6 @@ struct mm_struct;
->>   #endif /* !CONFIG_PPC_BOOK3S */
->>   
->>   /* Note due to the way vm flags are laid out, the bits are XWR */
->> -#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
->> -#define __P000	PAGE_NONE
->> -#define __P001	PAGE_READONLY
->> -#define __P010	PAGE_COPY
->> -#define __P011	PAGE_COPY
->> -#define __P100	PAGE_READONLY_X
->> -#define __P101	PAGE_READONLY_X
->> -#define __P110	PAGE_COPY_X
->> -#define __P111	PAGE_COPY_X
->> -
->> -#define __S000	PAGE_NONE
->> -#define __S001	PAGE_READONLY
->> -#define __S010	PAGE_SHARED
->> -#define __S011	PAGE_SHARED
->> -#define __S100	PAGE_READONLY_X
->> -#define __S101	PAGE_READONLY_X
->> -#define __S110	PAGE_SHARED_X
->> -#define __S111	PAGE_SHARED_X
->> -#endif
->> -
->>   #ifndef __ASSEMBLY__
->>   
->>   #ifndef MAX_PTRS_PER_PGD
->> diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
->> index d3b019b95c1d..de76dd4d447c 100644
->> --- a/arch/powerpc/mm/book3s64/pgtable.c
->> +++ b/arch/powerpc/mm/book3s64/pgtable.c
->> @@ -551,25 +551,11 @@ unsigned long memremap_compat_align(void)
->>   EXPORT_SYMBOL_GPL(memremap_compat_align);
->>   #endif
->>   
->> -/* Note due to the way vm flags are laid out, the bits are XWR */
->> -static const pgprot_t protection_map[16] = {
->> -	[VM_NONE]					= PAGE_NONE,
->> -	[VM_READ]					= PAGE_READONLY,
->> -	[VM_WRITE]					= PAGE_COPY,
->> -	[VM_WRITE | VM_READ]				= PAGE_COPY,
->> -	[VM_EXEC]					= PAGE_READONLY_X,
->> -	[VM_EXEC | VM_READ]				= PAGE_READONLY_X,
->> -	[VM_EXEC | VM_WRITE]				= PAGE_COPY_X,
->> -	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_X,
->> -	[VM_SHARED]					= PAGE_NONE,
->> -	[VM_SHARED | VM_READ]				= PAGE_READONLY,
->> -	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
->> -	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
->> -	[VM_SHARED | VM_EXEC]				= PAGE_READONLY_X,
->> -	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY_X,
->> -	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_X,
->> -	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_X
->> -};
->> +/*
->> + * Generic declaration in (include/linux/mm.h) is not available
->> + * here as the platform enables ARCH_HAS_VM_GET_PAGE_PROT.
->> + */
->> +extern pgprot_t protection_map[16];
->>   
->>   pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>   {
->> diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
->> index e6166b71d36d..780fbecd7bf6 100644
->> --- a/arch/powerpc/mm/pgtable.c
->> +++ b/arch/powerpc/mm/pgtable.c
->> @@ -472,3 +472,23 @@ pte_t *__find_linux_pte(pgd_t *pgdir, unsigned long ea,
->>   	return ret_pte;
->>   }
->>   EXPORT_SYMBOL_GPL(__find_linux_pte);
->> +
->> +/* Note due to the way vm flags are laid out, the bits are XWR */
->> +pgprot_t protection_map[16] = {
->
-> Was const previously, now back to non const ? Maybe due to a conflict 
-> with linux/mm.h ? At least it should be __ro_after_init.
+> The passed identifier can have the following values: 0 for the primary
+> keyring (immutable keyring of system keys); 1 for both the primary and
+> secondary keyring (where keys can be added only if they are vouched for by
+> existing keys in those keyrings); 2 for the platform keyring (primarily
+> used by the integrity subsystem to verify a kexec'ed kerned image and,
+> possibly, the initramfs signature); ULONG_MAX for the session keyring (for
+> testing purposes).
 > 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  include/uapi/linux/bpf.h       | 17 +++++++++++++++++
+>  kernel/bpf/bpf_lsm.c           | 30 ++++++++++++++++++++++++++++++
+>  scripts/bpf_doc.py             |  2 ++
+>  tools/include/uapi/linux/bpf.h | 17 +++++++++++++++++
+>  4 files changed, 66 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index f4009dbdf62d..dfd93e0e0759 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5249,6 +5249,22 @@ union bpf_attr {
+>   *		Pointer to the underlying dynptr data, NULL if the dynptr is
+>   *		read-only, if the dynptr is invalid, or if the offset and length
+>   *		is out of bounds.
+> + *
+> + * struct key *bpf_request_key_by_id(unsigned long id)
+> + *	Description
+> + *		Request a keyring by *id*.
+> + *
+> + *		*id* can have the following values (some defined in
+> + *		verification.h): 0 for the primary keyring (immutable keyring of
+> + *		system keys); 1 for both the primary and secondary keyring
+> + *		(where keys can be added only if they are vouched for by
+> + *		existing keys in those keyrings); 2 for the platform keyring
+> + *		(primarily used by the integrity subsystem to verify a kexec'ed
+> + *		kerned image and, possibly, the initramfs signature); ULONG_MAX
+> + *		for the session keyring (for testing purposes).
 
-Right, the generic declaration in linux/mm.h prevents different types 
-for protection_map[] on different platforms. As mentioned before, may
-be we should move generic vm_get_page_prot() inside the platforms ?
+It's never ok to add something like this to uapi 'for testing purposes'.
+If it's not useful in general it should not be a part of api.
+
+> + *	Return
+> + *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
+> + *		otherwise.
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)		\
+>  	FN(unspec),			\
+> @@ -5455,6 +5471,7 @@ union bpf_attr {
+>  	FN(dynptr_read),		\
+>  	FN(dynptr_write),		\
+>  	FN(dynptr_data),		\
+> +	FN(request_key_by_id),		\
+>  	/* */
+>  
+>  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index c1351df9f7ee..e1911812398b 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/bpf_local_storage.h>
+>  #include <linux/btf_ids.h>
+>  #include <linux/ima.h>
+> +#include <linux/verification.h>
+>  
+>  /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>   * function where a BPF program can be attached.
+> @@ -132,6 +133,31 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
+>  	.arg1_type	= ARG_PTR_TO_CTX,
+>  };
+>  
+> +#ifdef CONFIG_KEYS
+> +BTF_ID_LIST_SINGLE(bpf_request_key_by_id_btf_ids, struct, key)
+> +
+> +BPF_CALL_1(bpf_request_key_by_id, unsigned long, id)
+> +{
+> +	const struct cred *cred = current_cred();
+> +
+> +	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING && id != ULONG_MAX)
+> +		return (unsigned long)NULL;
+> +
+> +	if (id == ULONG_MAX)
+> +		return (unsigned long)cred->session_keyring;
+> +
+> +	return id;
+
+It needs to do a proper lookup.
+Why cannot it do lookup_user_key ?
+The helper needs 'flags' arg too.
+Please think hard of extensibility and long term usefulness of api.
+At present this api feels like it was 'let me just hack something quickly'. Not ok.

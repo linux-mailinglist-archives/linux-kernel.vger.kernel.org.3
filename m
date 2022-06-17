@@ -2,99 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7D354F144
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4034F54F152
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243756AbiFQG4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S1379887AbiFQHBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240710AbiFQG4q (ORCPT
+        with ESMTP id S234203AbiFQHBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:56:46 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39B65C651
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:56:44 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g7so4965730eda.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sLhfCJ8PekgBeiM3KU80x7Qwq344wsuKnT/r+LcG2GM=;
-        b=e7KAaUnuA0HYGg2Lg9mBPj3DrKLEvfZUjQBilNBT6iFsQwiChqYLbSFMpt1CZw49hu
-         Uhh/Z4UzfmH1tgChFd4GYmJPuADEzaM36JeRF/stmNvDIRYGsPkJEfUx2gcYqjIzk+1Z
-         4pTq/kEcbLMa+GGo+ioysby8f4NVMsOllC4QI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sLhfCJ8PekgBeiM3KU80x7Qwq344wsuKnT/r+LcG2GM=;
-        b=AnjOA9KJ+KRJs0Q8auKNmQCrF+l35/zON7fX/rMh+xrEY/ogfLADrbwiLL7e7ejoEE
-         8nr5YGkPtBFSTX57FUtsleUA6sy1/N/azlpVJuBq1xivKX4c7kWr2Ne+ovpDDrD+usF9
-         RE8DvMVcG/O5zKXv5gER+wCRb9l5GyVe9NYidu+Gap669hmaxqiZrTH4yjxc1QW7lg/g
-         w7w+ALGxH6KLdt4w8v1BGGXqE+0CLrt3UzzlZ7ZCdDI22dGQBLS7nT+n/EI+9ozNKR1x
-         NI3j4l6RfCLOWdphIEzR7HAk7VCARaJZCgSrP9Punmul45YpY7AkfrpEgqITu9hIqFXa
-         whyA==
-X-Gm-Message-State: AJIora9syjVhA0KSwzj8t8KuPlrmK5Fftt/HrNKFRfjoT8hKAhgTxKB6
-        dpiQpxJEq/pw3BBs7j96h84Girc2xWcTBLsb3OALiA==
-X-Google-Smtp-Source: AGRyM1tIbRFLJsIG8ha9JMgB0N9ZCD+AhfPO/Aq8IF+A20gJm7k5xF0so9i5AD1klMG7BMMrL3Xu6QF5ZW0ApN7BiWc=
-X-Received: by 2002:a05:6402:6cc:b0:42d:bd2d:9f82 with SMTP id
- n12-20020a05640206cc00b0042dbd2d9f82mr10669676edy.59.1655449003429; Thu, 16
- Jun 2022 23:56:43 -0700 (PDT)
+        Fri, 17 Jun 2022 03:01:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7985F4F457
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:01:12 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1o25yW-00017n-Lh; Fri, 17 Jun 2022 09:01:00 +0200
+Message-ID: <45432169-5f9d-0913-6cf9-06dc821d1c65@pengutronix.de>
+Date:   Fri, 17 Jun 2022 09:00:57 +0200
 MIME-Version: 1.0
-References: <20220617032113.18576-1-yunfei.dong@mediatek.com>
-In-Reply-To: <20220617032113.18576-1-yunfei.dong@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 17 Jun 2022 14:56:32 +0800
-Message-ID: <CAGXv+5EZ+Mu1481gM9h0kgqO3a0xFKP8drvGv7gRp6=3NU2oKA@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Fix non subdev architecture open
- power fail
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V4 1/2] mtd: allow getting MTD device associated with a
+ specific DT node
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tom Rini <trini@konsulko.com>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220615194300.13358-1-zajec5@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220615194300.13358-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 11:21 AM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
->
-> According to subdev_bitmap bit value to open hardware power, need to
-> set subdev_bitmap value for non subdev architecture.
->
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+On 15.06.22 21:42, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> MTD subsystem API allows interacting with MTD devices (e.g. reading,
+> writing, handling bad blocks). So far a random driver could get MTD
+> device only by its name (get_mtd_device_nm()). This change allows
+> getting them also by a DT node.
+> 
+> This API is required for drivers handling DT defined MTD partitions in a
+> specific way (e.g. U-Boot (sub)partition with environment variables).
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-Fixes: c05bada35f01 ("media: mtk-vcodec: Add to support multi hardware decode")
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-?
+> ---
+> V3: First introduction of of_get_mtd_device_by_node()
+> V4: Use EPROBE_DEFER
+> 
+> Srinivas: in V3 Miquel said it's OK to push this patch through NVMEM 
+> ---
+>  drivers/mtd/mtdcore.c   | 28 ++++++++++++++++++++++++++++
+>  include/linux/mtd/mtd.h |  1 +
+>  2 files changed, 29 insertions(+)
+> 
+> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+> index 9eb0680db312..3613cc142f25 100644
+> --- a/drivers/mtd/mtdcore.c
+> +++ b/drivers/mtd/mtdcore.c
+> @@ -1154,6 +1154,34 @@ int __get_mtd_device(struct mtd_info *mtd)
+>  }
+>  EXPORT_SYMBOL_GPL(__get_mtd_device);
+>  
+> +/**
+> + * of_get_mtd_device_by_node - obtain an MTD device associated with a given node
+> + *
+> + * @np: device tree node
+> + */
+> +struct mtd_info *of_get_mtd_device_by_node(struct device_node *np)
+> +{
+> +	struct mtd_info *mtd = NULL;
+> +	struct mtd_info *tmp;
+> +	int err;
+> +
+> +	mutex_lock(&mtd_table_mutex);
+> +
+> +	err = -EPROBE_DEFER;
+> +	mtd_for_each_device(tmp) {
+> +		if (mtd_get_of_node(tmp) == np) {
+> +			mtd = tmp;
+> +			err = __get_mtd_device(mtd);
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&mtd_table_mutex);
+> +
+> +	return err ? ERR_PTR(err) : mtd;
+> +}
+> +EXPORT_SYMBOL_GPL(of_get_mtd_device_by_node);
+> +
+>  /**
+>   *	get_mtd_device_nm - obtain a validated handle for an MTD device by
+>   *	device name
+> diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
+> index 955aee14b0f7..6fc841ceef31 100644
+> --- a/include/linux/mtd/mtd.h
+> +++ b/include/linux/mtd/mtd.h
+> @@ -677,6 +677,7 @@ extern int mtd_device_unregister(struct mtd_info *master);
+>  extern struct mtd_info *get_mtd_device(struct mtd_info *mtd, int num);
+>  extern int __get_mtd_device(struct mtd_info *mtd);
+>  extern void __put_mtd_device(struct mtd_info *mtd);
+> +extern struct mtd_info *of_get_mtd_device_by_node(struct device_node *np);
+>  extern struct mtd_info *get_mtd_device_nm(const char *name);
+>  extern void put_mtd_device(struct mtd_info *mtd);
+>  
 
-ChenYu
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

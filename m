@@ -2,130 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E15354F1C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ACE54F1CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380525AbiFQHWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S1380607AbiFQHX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiFQHWH (ORCPT
+        with ESMTP id S232890AbiFQHXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:22:07 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E509CD;
-        Fri, 17 Jun 2022 00:22:04 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H6R3Qk027749;
-        Fri, 17 Jun 2022 09:21:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=p1qmrfCOoCbbUibM0+WEnfsxFHthpkh+3u0jey7B2CQ=;
- b=Y1Yv1mxUyz99/KsdD+GqnRfdiGxjIC+9iqzRTZCxmISgn5dmu54MvQ90UuP4T3s0zmz/
- VMy5WzAjMy9jmb7XttGerKsRbuEjYxhoPVzgUl6PevqlGKIWy90MkfVvVpEwhzvjHclV
- qe2enatExrY214PhAbI+1YA1UWdn8Bo9DkThHjoj10mXV1ctlz5wRCuV3WybsG/a6cZD
- mqk1kRFKNAj9Kz4ZgL9k1V/yUqH7J4RHKF32iZ+2cN0P5Wkz5W9QgxZy8vdvirNKhOiB
- cTB1mHuHN0n3K4Mbz/xuux+N0jVBxeahb82uT1DEijuZJ1NULio/GVjx+J8GRCkaP4DS dQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3grmbw0adk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 09:21:42 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1858710002A;
-        Fri, 17 Jun 2022 09:21:41 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8C08A21683B;
-        Fri, 17 Jun 2022 09:21:41 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.119) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 17 Jun
- 2022 09:21:41 +0200
-Message-ID: <abf9247c-085b-05ff-a589-d9b190e88666@foss.st.com>
-Date:   Fri, 17 Jun 2022 09:21:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: rcc: stm32: select the "secure" path for
- stm32mp13
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Fri, 17 Jun 2022 03:23:55 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E5635DC7;
+        Fri, 17 Jun 2022 00:23:52 -0700 (PDT)
+X-UUID: fc930692f4894507b585ccf5ad166296-20220617
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:2a5e02a4-4662-4b11-8bfc-98096435f6c9,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:b14ad71,CLOUDID:fdb79cf6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: fc930692f4894507b585ccf5ad166296-20220617
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 258872297; Fri, 17 Jun 2022 15:23:47 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 17 Jun 2022 15:23:47 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 17 Jun 2022 15:23:46 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220613093815.18334-1-alexandre.torgue@foss.st.com>
- <20220616175531.GA3716982-robh@kernel.org>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220616175531.GA3716982-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.119]
-X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-17_06,2022-06-16_01,2022-02-23_01
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH v4 1/2] arm64: dts: mediatek: mt8195: add efuse node and cells
+Date:   Fri, 17 Jun 2022 15:23:43 +0800
+Message-ID: <20220617072344.21461-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob
+Add efuse node and cells used by t-phy to fix the bit shift issue
 
-On 6/16/22 19:55, Rob Herring wrote:
-> On Mon, Jun 13, 2022 at 11:38:15AM +0200, Alexandre Torgue wrote:
->> Like for stm32mp15, when stm32 RCC node is used to interact with a secure
-> 
-> 'st,stm32mp1' is stm32mp15?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v4: no changes
 
-Yes "st,stm32mp1-rcc" is for the STM32MP15.
+v3:
+  add reviewed-by and tested-by;
+  fix duplicated unit-address warning;
 
-> 
->> context (using clock SCMI protocol), a different path has to be used for
->> yaml verification.
->>
->> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>
->> ---
->>
->> Hi Rob, Krzysztof,
->>
->> If you agree with this patch, I'll apply it directly in my STM32 tree.
->>
->> Thanks
->> Alex
->>
->> diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
->> index f8c474227807..242fe922b035 100644
->> --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
->> +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
->> @@ -78,6 +78,7 @@ if:
->>         contains:
->>           enum:
->>             - st,stm32mp1-rcc-secure
->> +          - st,stm32mp13-rcc
-> 
-> You don't need '-secure' because it's always secure?
+NOTE:
+  based on v5.18-next/dts64 of matthias.bgg's branch;
 
-Yes. Compare to STM32MP15, the STM32MP13 is by default "secure". In our 
-case it is "mapped" to OPTEE, using SCMI protocols.
+v2: no changes, just based on new mt8195.dtsi
+---
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 55 ++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-regards
-Alex
-
-> 
->>   then:
->>     properties:
->>       clocks:
->> -- 
->> 2.17.1
->>
->>
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index b57e620c2c72..d5bc4cf5f4ac 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -691,6 +691,53 @@
+ 			status = "disabled";
+ 		};
+ 
++		efuse: efuse@11c10000 {
++			compatible = "mediatek,mt8195-efuse", "mediatek,efuse";
++			reg = <0 0x11c10000 0 0x1000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			u3_tx_imp_p0: usb3-tx-imp@184,1 {
++				reg = <0x184 0x1>;
++				bits = <0 5>;
++			};
++			u3_rx_imp_p0: usb3-rx-imp@184,2 {
++				reg = <0x184 0x2>;
++				bits = <5 5>;
++			};
++			u3_intr_p0: usb3-intr@185 {
++				reg = <0x185 0x1>;
++				bits = <2 6>;
++			};
++			comb_tx_imp_p1: usb3-tx-imp@186,1 {
++				reg = <0x186 0x1>;
++				bits = <0 5>;
++			};
++			comb_rx_imp_p1: usb3-rx-imp@186,2 {
++				reg = <0x186 0x2>;
++				bits = <5 5>;
++			};
++			comb_intr_p1: usb3-intr@187 {
++				reg = <0x187 0x1>;
++				bits = <2 6>;
++			};
++			u2_intr_p0: usb2-intr-p0@188,1 {
++				reg = <0x188 0x1>;
++				bits = <0 5>;
++			};
++			u2_intr_p1: usb2-intr-p1@188,2 {
++				reg = <0x188 0x2>;
++				bits = <5 5>;
++			};
++			u2_intr_p2: usb2-intr-p2@189,1 {
++				reg = <0x189 0x1>;
++				bits = <2 5>;
++			};
++			u2_intr_p3: usb2-intr-p3@189,2 {
++				reg = <0x189 0x2>;
++				bits = <7 5>;
++			};
++		};
++
+ 		u3phy2: t-phy@11c40000 {
+ 			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
+ 			#address-cells = <1>;
+@@ -873,6 +920,10 @@
+ 				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
+ 					 <&topckgen CLK_TOP_SSUSB_PHY_P1_REF>;
+ 				clock-names = "ref", "da_ref";
++				nvmem-cells = <&comb_intr_p1>,
++					      <&comb_rx_imp_p1>,
++					      <&comb_tx_imp_p1>;
++				nvmem-cell-names = "intr", "rx_imp", "tx_imp";
+ 				#phy-cells = <1>;
+ 			};
+ 		};
+@@ -897,6 +948,10 @@
+ 				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
+ 					 <&topckgen CLK_TOP_SSUSB_PHY_REF>;
+ 				clock-names = "ref", "da_ref";
++				nvmem-cells = <&u3_intr_p0>,
++					      <&u3_rx_imp_p0>,
++					      <&u3_tx_imp_p0>;
++				nvmem-cell-names = "intr", "rx_imp", "tx_imp";
+ 				#phy-cells = <1>;
+ 			};
+ 		};
+-- 
+2.18.0
 

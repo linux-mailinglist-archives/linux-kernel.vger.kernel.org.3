@@ -2,133 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B206B54FDE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A0454FDE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240348AbiFQTro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S232457AbiFQTss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiFQTrm (ORCPT
+        with ESMTP id S245188AbiFQTs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:47:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CCB64F2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655495260; x=1687031260;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UArsJI0e93/zPeU0GTpsxAfxvbVJorGPGyLoU1Vq9ig=;
-  b=c8qjOmPndDbIRr1L1dWL+6OJp83oJTrUAjSysGucTcjT/gEm7nnBadny
-   vAF18F/UCam8I7zAIa4AaP2m2qr0Qzh6LRZdWRSDCbSF2xu2GVo1vUkut
-   tnJUGp1zn44dNhzFe7mDkR7l3CxGNZyL8uf7gyIYfx6+9ZisXl8VuiGFW
-   Snl6N3o9X5lbi5tN12RBNvJO9zQHtEBSvEYlMBwgRI14bc3c6UvyMEtZk
-   +bsUAiF3H4tk2njas6oZ/NWQWX1hQ7OOfjwkJQdYYCD1CLo02p86NiQnS
-   fu9xhNnl50LhStsOm4g2gIfYBQs2+G+UyBHeJocWqgt944ILC7igxeY7i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279607011"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="279607011"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:47:40 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642163174"
-Received: from patelman-mobl1.amr.corp.intel.com (HELO [10.212.115.29]) ([10.212.115.29])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:47:39 -0700
-Message-ID: <e993c4c7-a956-b669-f5b5-5d42c8b35f1e@linux.intel.com>
-Date:   Fri, 17 Jun 2022 14:47:39 -0500
+        Fri, 17 Jun 2022 15:48:29 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D385321278
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:48:27 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id g25so10545095ejh.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+EKwqCsztIzjML5eTOI4DyB4igY/i9zv7rTWORQZJYU=;
+        b=V+sB5rMnGZRxn8yt2BHn5Ul5zj4u67xcYI16zxGhn/AndUz5pb4jxIvTXtTtF9VSs2
+         G6CGVFvL6OBJo0YqcNjRjvLqeMck9braWkKsDSqRhh4QFdy2VAq2Q+K7uWthjnQqVWIg
+         kyoo5rOek/vmTzszxHJfRJQnbXvu03AOFmSaM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+EKwqCsztIzjML5eTOI4DyB4igY/i9zv7rTWORQZJYU=;
+        b=dxNjfySQB7QAf9PMeazkUGKQzgkjX7NqDKTF7h7ZykCmL2WOkbzG2xal1hP/iuHVFh
+         Ggfy6r2Zowt/5H6t+WcWQ1rv+tC21dBfuScj9J6n15dGX1S6G1W/dh3Nh2nyBezYUUiU
+         IJXaBhMQJCaWGZGMcWwXD/S/sGv8/V8T4QXfg+ztPIGhqceLfr0RfHFwVbn+To9+I5If
+         N0zE4lXqdCpPMJoS0K9re1WNQBdvHBFczkATEh6Skv/cXYCmWl+Oy8zsatYM1buxh/ON
+         eHY8V3Wt4UQEgPE+dKkyt5IesxyAacJGRE52pLd4/8uimF4ij9AviG5efWP9w2zT/ycc
+         iaEA==
+X-Gm-Message-State: AJIora8EOs6zVJ0wi2OHNWOuy+DCz0KFooz0B8FCIWK8IIWFv1jm2ehx
+        zn0wrm9RglQw9sAja86xWQC1WBqyHCpSaOLm
+X-Google-Smtp-Source: AGRyM1vziQFc5SgyDj00yxKjrntPVatXmBpNNcAnvHSJuFie6/zgxBVdiRGNGTjqMuA2SuzRm+rYEA==
+X-Received: by 2002:a17:907:c24:b0:711:d4c6:9161 with SMTP id ga36-20020a1709070c2400b00711d4c69161mr10978709ejc.760.1655495306192;
+        Fri, 17 Jun 2022 12:48:26 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042dcac2afc6sm4234309edu.72.2022.06.17.12.48.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 12:48:25 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id q9so6954106wrd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:48:25 -0700 (PDT)
+X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
+ h4-20020a05600016c400b0020fcd5d4797mr10819451wrf.193.1655495305221; Fri, 17
+ Jun 2022 12:48:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH 03/11] ASoC: soc-component: use
- pm_runtime_resume_and_get()
-Content-Language: en-US
-To:     alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, tiwai@suse.de,
-        open list <linux-kernel@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        broonie@kernel.org,
-        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-References: <20220616220427.136036-1-pierre-louis.bossart@linux.intel.com>
- <20220616220427.136036-4-pierre-louis.bossart@linux.intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220616220427.136036-4-pierre-louis.bossart@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
+ <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net> <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
+ <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
+ <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com> <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
+ <7499dd05-30d1-669c-66b4-5cb06452b476@redhat.com> <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
+ <YqzQKER4JRoudTJE@hirez.programming.kicks-ass.net> <CANn89iKO1koPa5R_mvK0k2dkFaq+F0PgcbvpVt+JpzzR5xsu6g@mail.gmail.com>
+ <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
+ <CANn89i+wBM+ewcP9u+ZWDqv3zQeK7ovKB+YJf9S6Om5QkqhLHA@mail.gmail.com>
+ <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com> <CANn89iJXeUJRV2+8reUdaeARxYPPbCoG+9atmRFfy4kv0XX00A@mail.gmail.com>
+In-Reply-To: <CANn89iJXeUJRV2+8reUdaeARxYPPbCoG+9atmRFfy4kv0XX00A@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Jun 2022 14:48:08 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wiEZmzBUFkZkBrJv3JSJkQ+qxaMZU_Sx1WTpMHs2SOAiQ@mail.gmail.com>
+Message-ID: <CAHk-=wiEZmzBUFkZkBrJv3JSJkQ+qxaMZU_Sx1WTpMHs2SOAiQ@mail.gmail.com>
+Subject: Re: [PATCH] locking/rwlocks: do not starve writers
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 17, 2022 at 2:39 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> I am converting RAW sockets to RCU.
 
+RCU is usually absolutely the best approach. Use regular spinlocks for
+writers, and RCU for readers.
 
-On 6/16/22 17:04, Pierre-Louis Bossart wrote:
-> simplify the flow. No functionality change, except that on -EACCESS
-> the reference count will be decreased.
+I'd love to see the tasklist_lock be converted to RCU too.  But that
+locks predates RCU (and probably 99% of all kernel code), and it's
+messy, so nobody sane has ever willingly tried to do that afaik.
 
-This patch turns out to be incorrect and should not be merged.
-
-I missed the fact that the component pm_runtime_put() will decrease the
-reference count that is already decreased with
-pm_runtime_resume_and_get() when pm_runtime is not enabled. This leads
-to warnings:
-
-snd-soc-dummy snd-soc-dummy: Runtime PM usage count underflow!
-
-Unfortunately we missed those warnings during validation, that's not so
-good.
-
-pm_runtime_resume_and_get() really needs to be used ONLY when the
-get/put are part of the same function and the reference count can be
-checked. When the get/put are in different functions, it's asking for
-trouble.
-
-Also the check on -EACCES is problematic when the component is handled
-by a framework, it's not clear if that can happen or not.
-
-The rest of the patches follow the pattern get_sync/put and don't have a
-problem.
-
-Sorry for the noise.
-
-> 
-> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> ---
->  sound/soc/soc-component.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/sound/soc/soc-component.c b/sound/soc/soc-component.c
-> index e12f8244242b9..cb92e002c38bc 100644
-> --- a/sound/soc/soc-component.c
-> +++ b/sound/soc/soc-component.c
-> @@ -1213,11 +1213,11 @@ int snd_soc_pcm_component_pm_runtime_get(struct snd_soc_pcm_runtime *rtd,
->  	int i;
->  
->  	for_each_rtd_components(rtd, i, component) {
-> -		int ret = pm_runtime_get_sync(component->dev);
-> -		if (ret < 0 && ret != -EACCES) {
-> -			pm_runtime_put_noidle(component->dev);
-> +		int ret = pm_runtime_resume_and_get(component->dev);
-> +
-> +		if (ret < 0 && ret != -EACCES)
->  			return soc_component_ret(component, ret);
-> -		}
-> +
->  		/* mark stream if succeeded */
->  		soc_component_mark_push(component, stream, pm);
->  	}
+               Linus

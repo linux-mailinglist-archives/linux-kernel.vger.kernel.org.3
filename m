@@ -2,103 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0C854EF4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1361954EF50
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 04:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379602AbiFQC0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 22:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S1379727AbiFQC0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 22:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbiFQCZ6 (ORCPT
+        with ESMTP id S1379695AbiFQC0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 22:25:58 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F2E464D1F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=E/Bxr
-        7nAznkQj+DCO3QB/VqKusk+F6VTDI22OGiDTOw=; b=UuBaepJ31a+wMyWG+yXea
-        TfY7D+wxgaC3TGDJGW+xjYxfTXFsqzBLnrDiQhk0oAjbVY3M+X+6eYSsCWvBlpmI
-        qoaA7qUE8flADaH8TWBw6cq6yngcjvDzJG9SfUWtLIeDic+GM0+D93WhLVH9Tkgp
-        W91Owe/xgXspcNT9Jq4cbA=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Fri, 17 Jun 2022 10:25:13 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Fri, 17 Jun 2022 10:25:13 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Michael Ellerman" <mpe@ellerman.id.au>
-Cc:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
-        oss@buserror.net, paulus@samba.org, christophe.leroy@csgroup.eu,
-        nixiaoming@huawei.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH v2] arch: powerpc: platforms: 85xx: Add missing
- of_node_put in sgy_cts1000.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <87o7ysb2ot.fsf@mpe.ellerman.id.au>
-References: <20220616151901.3989078-1-windhl@126.com>
- <bc6eaf7e-ff88-9b82-eae7-7e6902c33a10@wanadoo.fr>
- <87o7ysb2ot.fsf@mpe.ellerman.id.au>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <6af17369.1d3d.1816f7a9707.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowADnPPEL5qtigyQ4AA--.54201W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuBkjF2JVj6QNfQACs7
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 16 Jun 2022 22:26:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16EC64D29
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 19:26:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39DBF61CEB
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427D4C34114;
+        Fri, 17 Jun 2022 02:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655432794;
+        bh=6VOa+7QBUumCXgg5WTFkjMY/uFxksnYGBxAdeAML8WI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a6BnmPp9Du4KU9X+wVEcd6RD+X3RKdnIWdmvHvBJiQwLrKKSH7F34drXjZSRRkgzg
+         FESlSWYMrv2Iz5ra2CXKR2c/FcFYjyVteRbtlvYji9piifmqhwt4ROrZ6+dumR19Xk
+         Dbs1Ef8fduD/Sg7UCFw3fq/GTLb8vrPquZafXItw=
+Date:   Thu, 16 Jun 2022 19:26:33 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v5 0/6] mm: introduce shrinker debugfs interface
+Message-Id: <20220616192633.c9da034b4e7d52cb7e6c8a2e@linux-foundation.org>
+In-Reply-To: <20220601032227.4076670-1-roman.gushchin@linux.dev>
+References: <20220601032227.4076670-1-roman.gushchin@linux.dev>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKQXQgMjAyMi0wNi0xNyAwNzozNzowNiwgIk1pY2hhZWwgRWxsZXJtYW4iIDxtcGVAZWxsZXJt
-YW4uaWQuYXU+IHdyb3RlOgo+Q2hyaXN0b3BoZSBKQUlMTEVUIDxjaHJpc3RvcGhlLmphaWxsZXRA
-d2FuYWRvby5mcj4gd3JpdGVzOgo+PiBMZSAxNi8wNi8yMDIyIMOgIDE3OjE5LCBMaWFuZyBIZSBh
-IMOpY3JpdMKgOgo+Pj4gSW4gZ3Bpb19oYWx0X3Byb2JlKCksIG9mX2ZpbmRfbWF0Y2hpbmdfbm9k
-ZSgpIHdpbGwgcmV0dXJuIGEgbm9kZSBwb2ludGVyIHdpdGgKPj4+IHJlZmNvdW50IGluY3JlbWVu
-dGVkLiBXZSBzaG91bGQgdXNlIG9mX25vZGVfcHV0KCkgaW4gZWFjaCBmYWlsIHBhdGggb3Igd2hl
-biBpdAo+Pj4gaXMgbm90IHVzZWQgYW55bW9yZS4KPj4+IAo+Pj4gU2lnbmVkLW9mZi1ieTogTGlh
-bmcgSGUgPHdpbmRobEAxMjYuY29tPgo+Pj4gLS0tCj4+PiAgIGNoYW5nZWxvZzoKPj4+IAo+Pj4g
-ICB2MjogdXNlIGdvdG8tbGFiZWwgcGF0Y2ggc3R5bGUgYWR2aXNlZCBieSBDaHJpc3RvcGhlLgo+
-Pj4gICB2MTogYWRkIG9mX25vZGVfcHV0KCkgYmVmb3JlIGVhY2ggZXhpdC4KPj4+IAo+Pj4gICBh
-cmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDI3ICsrKysrKysrKysr
-KysrKy0tLS0tLS0tCj4+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCA5IGRl
-bGV0aW9ucygtKQo+Pj4gCj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84
-NXh4L3NneV9jdHMxMDAwLmMgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEw
-MDAuYwo+Pj4gaW5kZXggOThhZTY0MDc1MTkzLi5lMjgwZjk2M2Q4OGMgMTAwNjQ0Cj4+PiAtLS0g
-YS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYwo+Pj4gKysrIGIvYXJj
-aC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3NneV9jdHMxMDAwLmMKPj4+IEBAIC03Myw2ICs3Myw3
-IEBAIHN0YXRpYyBpbnQgZ3Bpb19oYWx0X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBk
-ZXYpCj4uLi4KPj4+IEBAIC0xMjIsOCArMTI3LDEyIEBAIHN0YXRpYyBpbnQgZ3Bpb19oYWx0X3By
-b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4+PiAgIAo+Pj4gICAJcHJpbnRrKEtF
-Uk5fSU5GTyAiZ3Bpby1oYWx0OiByZWdpc3RlcmVkIEdQSU8gJWQgKCVkIHRyaWdnZXIsICVkIgo+
-Pj4gICAJICAgICAgICIgaXJxKS5cbiIsIGdwaW8sIHRyaWdnZXIsIGlycSk7Cj4+PiArCXJldCA9
-IDA7Cj4+PiAgIAo+Pj4gLQlyZXR1cm4gMDsKPj4+ICtlcnJfcHV0Ogo+Pj4gKwlvZl9ub2RlX3B1
-dChoYWx0X25vZGUpOwo+Pj4gKwloYWx0X25vZGUgPSBOVUxMOwo+Pgo+PiBIaSwKPj4gc28gbm93
-IHdlIHNldCAnaGFsdF9ub2RlJyB0byBOVUxMIGV2ZW4gaW4gdGhlIG5vcm1hbCBjYXNlLgo+PiBU
-aGlzIGlzIHJlYWxseSBzcHVyaW91cy4KPj4KPj4gTG9vayBhdCBncGlvX2hhbHRfY2IoKSwgYnV0
-IEkgdGhpbmsgdGhhdCB0aGlzIGlzIGp1c3Qgd3JvbmcgYW5kIGJhZGx5IAo+PiBicmVha3MgdGhp
-cyBkcml2ZXIuCj4KPkkgYWdyZWUsIHRoYW5rcyBmb3IgcmV2aWV3aW5nLgo+Cj5JIHRoaW5rIHRo
-ZSBjbGVhbmVzdCBzb2x1dGlvbiBpcyB0byB1c2UgYSBsb2NhbCB2YXJpYWJsZSBmb3IgdGhlIG5v
-ZGUgaW4KPnRoZSBib2R5IG9mIGdwaW9faGFsdF9wcm9iZSgpLCBhbmQgb25seSBhc3NpZ24gdG8g
-aGFsdF9ub2RlIG9uY2UgYWxsIHRoZQo+Y2hlY2tzIGhhdmUgcGFzc2VkLgo+Cj5TbyBzb21ldGhp
-bmcgbGlrZToKPgo+ICAgICAgICBzdHJ1Y3QgZGV2aWNlX25vZGUgKmNoaWxkX25vZGU7Cj4KPglj
-aGlsZF9ub2RlID0gb2ZfZmluZF9tYXRjaGluZ19ub2RlKG5vZGUsIGNoaWxkX21hdGNoKTsKPiAg
-ICAgICAgLi4uCj4KPglwcmludGsoS0VSTl9JTkZPICJncGlvLWhhbHQ6IHJlZ2lzdGVyZWQgR1BJ
-TyAlZCAoJWQgdHJpZ2dlciwgJWQiCj4JICAgICAgICIgaXJxKS5cbiIsIGdwaW8sIHRyaWdnZXIs
-IGlycSk7Cj4gICAgICAgIHJldCA9IDA7Cj4gICAgICAgIGhhbHRfbm9kZSA9IG9mX25vZGVfZ2V0
-KGNoaWxkX25vZGUpOwo+Cj5vdXRfcHV0Ogo+ICAgICAgICBvZl9ub2RlX3B1dChjaGlsZF9ub2Rl
-KTsKPiAgICAgICAgCj4JcmV0dXJuIHJldDsKPn0KPgo+Cj5jaGVlcnMKCkhpLCBNaWNoYWVsIGFu
-ZCBDaHJpc3RvcGhlLAoKSSBhbSB3cml0aW5nIHRoZSBuZXcgcGF0Y2ggYmFzZWQgb24gTWljaGFl
-bCdzIGFkdmljZS4gSG93ZXZlciwgSSB3b25kZXIgaWYgdGhlcmUgaXMKYW55IHBsYWNlIHRvIGNh
-bGwgb2Zfbm9kZV9wdXQoaGFsdF9ub2RlKT8gIEFzIEkgZG8gbm90IGV4YWN0bHkga25vdyBpZiBn
-cGlvX2hhbHRfcmVtb3ZlKCkKb3IgYW55b3RoZXIgcGxhY2UgY2FuIGNvcnJlY3RseSByZWxlYXNl
-IHRoaXMgZ2xvYmFsIHJlZmVyZW5jZe+8nwpJZiBub3QsIGl0IGlzIGNvcnJlY3QgdGhhdCBJIGFk
-ZCBhIG9mX25vZGVfcHV0KGhhbHRfbm9kZSkgaW4gZ3Bpb19oYWx0X3JlbW92ZSgpLCByaWdodD8K
-ClRoYW5rcyBhbmQgd2FpdCBmb3IgeW91ciByZXBsaWVzLgoKTGlhbmcK
+I plan to move this series into mm-stable in a few days - around June 20.

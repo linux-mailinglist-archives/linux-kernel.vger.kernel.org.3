@@ -2,253 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA18454FDEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF94E54FDE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234172AbiFQTuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        id S233841AbiFQTu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237436AbiFQTuB (ORCPT
+        with ESMTP id S237850AbiFQTuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:50:01 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C475424F14;
-        Fri, 17 Jun 2022 12:49:58 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id e4so5787973ljl.1;
-        Fri, 17 Jun 2022 12:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8cF0jLiNO24HEVg/eFcBOsZzwy8p5T1qe7dG9jJuCeU=;
-        b=oLc+30L51GLtSNIwz+1aokX4ZwOHGvE+O16kPLkMj5PUbVBSi7EvcKrJb6ItQmfBb/
-         zBn6fZT5O1gCOydciraB78awv0VhxOESGD90P0pth8ZcHX9PGjhbF3NnAOtZWXlxybek
-         NgnSy7+RA9anwFCM8TFP6olGzDfyDA0C3SlFDTYgaXvKyVnEXko4tRZQtvKwrCGjdcpM
-         PxxUN/qp9lZrZQFTRh72WcE7mFjhizyCg7ZRn0wEgl56Kg4EXcyjosqele9RpeTjUfsv
-         hn0+Ff5cxS5ZFhOL7GRgdh5puGAq8LT9EI/unobQXouMn941gxyDjeosdxDhkC04Dfp/
-         oboQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8cF0jLiNO24HEVg/eFcBOsZzwy8p5T1qe7dG9jJuCeU=;
-        b=321cimFble3dKNa7V4yd4djrvJPCwvSXcNMXh7FI8HnSIeNLkQZzXZCB7dl5RTgJiv
-         iIFvftvuVM4tpN0yNvM5HcNosTn9iRVw/ZKlZ/i6qGhuAEhpsh3XdxnoKJip46DO4TSZ
-         03SxvCrYxQrEL+48avvcV7puGqcns1VuVbpnvQmBcVzhmw4MKzbwgz1cgjybDrCdKKsX
-         NdPYx/5GWhCUitYox7/GmjkOzRa12P8LuiDM1yDZB+OE/MrVQPllwF9xxXkjfVbu4Itm
-         l44oLvRagw7rOVmYh3HuY6tYLGy+6/Tuq+CUnDJPYqLP+lYzFhAT5XQqmq3hjnPUS6vY
-         Gi/g==
-X-Gm-Message-State: AJIora+CTw2VRNiFV2q1fi0Jgd6lRbakygb5o6DjxayW5T0HnXSzbemA
-        Uq88eeNseO9fmSsWlfqe8FMOn6xLPXBxoVe5
-X-Google-Smtp-Source: AGRyM1tp6GDDUHFzOGPeMoJTIZSKkijB5O140rIglUlzjD7ZnfA6zsAAcu3uJfe2hEZg0MSCd1pQvg==
-X-Received: by 2002:a2e:881a:0:b0:255:7c2c:46d8 with SMTP id x26-20020a2e881a000000b002557c2c46d8mr5818333ljh.364.1655495397133;
-        Fri, 17 Jun 2022 12:49:57 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id u17-20020ac25bd1000000b004791c4858e0sm739976lfn.114.2022.06.17.12.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 12:49:56 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 22:49:54 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 20/23] dt-bindings: ata: ahci: Add Baikal-T1 AHCI SATA
- controller DT schema
-Message-ID: <20220617194954.ayoqkla3ww3hf2qy@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-21-Sergey.Semin@baikalelectronics.ru>
- <20220614222922.GB2830345-robh@kernel.org>
+        Fri, 17 Jun 2022 15:50:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579F63135B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:50:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0813FB82B8A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D1AC3411B;
+        Fri, 17 Jun 2022 19:50:21 +0000 (UTC)
+Date:   Fri, 17 Jun 2022 15:50:19 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: possible trace_printk() bug in v5.19-rc1
+Message-ID: <20220617155019.373adda7@gandalf.local.home>
+In-Reply-To: <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
+References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
+        <20220616113400.15335d91@gandalf.local.home>
+        <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614222922.GB2830345-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 04:29:22PM -0600, Rob Herring wrote:
-> On Fri, Jun 10, 2022 at 11:17:58AM +0300, Serge Semin wrote:
-> > Baikal-T1 AHCI controller is based on the DWC AHCI SATA IP-core v4.10a
-> > with the next specific settings: two SATA ports, cascaded CSR access based
-> > on two clock domains (APB and AXI), selectable source of the reference
-> > clock (though stable work is currently available from the external source
-> > only), two reset lanes for the application and SATA ports domains. Other
-> > than that the device is fully compatible with the generic DWC AHCI SATA
-> > bindings.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Hannes Reinecke <hare@suse.de>
-> > 
-> > ---
-> > 
-> > Changelog v2:
-> > - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> > - Drop macro usage from the example node.
-> > 
-> > Changelog v4:
-> > - Use the DWC AHCI port properties definition from the DWC AHCI SATA
-> >   common schema. (@Rob)
-> > - Drop Baikal-T1 syscon reference and implement the clock signal
-> >   source in the framework of the clock controller. (@Rob)
-> > ---
-> >  .../bindings/ata/baikal,bt1-ahci.yaml         | 116 ++++++++++++++++++
-> >  1 file changed, 116 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml b/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> > new file mode 100644
-> > index 000000000000..d5fbd7d561d8
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> > @@ -0,0 +1,116 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/ata/baikal,bt1-ahci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Baikal-T1 SoC AHCI SATA controller
-> > +
-> > +maintainers:
-> > +  - Serge Semin <fancer.lancer@gmail.com>
-> > +
-> > +description: |
-> > +  AHCI SATA controller embedded into the Baikal-T1 SoC is based on the
-> > +  DWC AHCI SATA v4.10a IP-core.
-> > +
-> > +allOf:
-> > +  - $ref: snps,dwc-ahci.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    contains:
-> > +      const: baikal,bt1-ahci
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Peripheral APB bus clock source
-> > +      - description: Application AXI BIU clock
-> > +      - description: SATA Ports reference clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: pclk
-> > +      - const: aclk
-> > +      - const: ref
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: Application AXI BIU domain reset
-> > +      - description: SATA Ports clock domain reset
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: arst
-> > +      - const: ref
-> > +
-> > +  ports-implemented:
-> > +    maximum: 0x3
-> > +
-> > +patternProperties:
-> > +  "^sata-port@[0-9a-e]$":
-> > +    $ref: /schemas/ata/snps,dwc-ahci.yaml#/$defs/dwc-ahci-port
-> > +
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 1
-> > +
-> > +      snps,tx-ts-max:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        description:
-> > +          Due to having AXI3 bus interface utilized the maximum Tx DMA
-> > +          transaction size can't exceed 16 beats (AxLEN[3:0]).
-> > +        enum: [ 1, 2, 4, 8, 16 ]
-> > +
-> > +      snps,rx-ts-max:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        description:
-> > +          Due to having AXI3 bus interface utilized the maximum Rx DMA
-> > +          transaction size can't exceed 16 beats (AxLEN[3:0]).
-> > +        enum: [ 1, 2, 4, 8, 16 ]
-> > +
-> > +    unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    sata@1f050000 {
-> > +      compatible = "baikal,bt1-ahci", "snps,dwc-ahci";
+On Thu, 16 Jun 2022 15:36:43 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
+
+> > Did you remove any modules before displaying the trace?  
 > 
+> I haven't explicitly removed nfsd.ko, and lsmod says it's still there.
+> And, trace_printk was working as expected on v5.18.
 
-> Just drop 'snps,dwc-ahci'. The generic IP block fallbacks have proven to 
-> be useless.
+Are you sure?
 
-Please see my answer to your comment to the patch
-[PATCH v4 17/23] dt-bindings: ata: ahci: Add DWC AHCI SATA controller DT schema
-in this series here:
-https://lore.kernel.org/linux-ide/20220617193744.av27axznbogademt@mobilestation/
-Let's settle the fallback usage in general otherwise I'll keep
-submitting patches with such functionality and will always be getting
-your notes in that regard.)
+I just checkout v5.19-rc2 and added the below patch. Then I did the
+following:
 
--Sergey
+ # rmmod bridge
+
+ # trace-cmd start -p function -l :mod:bridge
+
+ # insmod bridge
+
+ # trace-cmd show
+# tracer: function
+#
+# entries-in-buffer/entries-written: 23/23   #P:8
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+        modprobe-2155    [005] ...1.  4732.051406: br_init <-do_one_initcall
+        modprobe-2155    [005] .....  4732.051408: br_init: here in bridge
+        modprobe-2155    [005] ...1.  4732.051408: br_fdb_init <-br_init
+        modprobe-2155    [005] ...1.  4732.051418: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051418: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051418: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051418: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051418: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051419: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051419: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051419: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051419: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051419: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051419: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051420: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051420: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051420: br_device_event <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: br_device_event: this is an event
+        modprobe-2155    [005] ...1.  4732.051421: br_netlink_init <-br_init
+        modprobe-2155    [005] ...1.  4732.051421: br_mdb_init <-br_netlink_init
+
+ # rmmod bridge
+
+ # trace-cmd show
+# tracer: function
+#
+# entries-in-buffer/entries-written: 56/56   #P:8
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+        modprobe-2155    [005] ...1.  4732.051406: 0xffffffffc0cc7000 <-do_one_initcall
+        modprobe-2155    [005] .....  4732.051408: 0xffffffffc0cc702b: here in bridge
+        modprobe-2155    [005] ...1.  4732.051408: 0xffffffffc0cc7101 <-0xffffffffc0cc7043
+        modprobe-2155    [005] ...1.  4732.051418: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051418: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051418: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051418: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051418: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051419: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051419: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051419: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051419: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051419: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051419: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051420: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051420: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051420: 0xffffffffc0d81340 <-call_netdevice_register_net_notifiers
+        modprobe-2155    [005] .....  4732.051420: 0xffffffffc0d81345: this is an event
+        modprobe-2155    [005] ...1.  4732.051421: 0xffffffffc0cc7132 <-0xffffffffc0cc70a3
+        modprobe-2155    [005] ...1.  4732.051421: 0xffffffffc0da1500 <-0xffffffffc0cc713e
+   kworker/u16:2-2023    [004] ...1.  4737.946576: 0xffffffffc0d81340 <-raw_notifier_call_chain
+   kworker/u16:2-2023    [004] .....  4737.946578: 0xffffffffc0d81345: this is an event
+   kworker/u16:2-2023    [004] ...1.  4737.946634: 0xffffffffc0d8e1a0 <-if_nlmsg_size
+   kworker/u16:2-2023    [004] ...1.  4737.946735: 0xffffffffc0d81340 <-raw_notifier_call_chain
+   kworker/u16:2-2023    [004] .....  4737.946735: 0xffffffffc0d81345: this is an event
+   kworker/u16:2-2023    [004] ...1.  4737.946833: 0xffffffffc0d81340 <-raw_notifier_call_chain
+   kworker/u16:2-2023    [004] .....  4737.946833: 0xffffffffc0d81345: this is an event
+   kworker/u16:2-2023    [004] ...1.  4737.946834: 0xffffffffc0d8e1a0 <-if_nlmsg_size
+   kworker/u16:2-2023    [004] ...1.  4737.957648: 0xffffffffc0d81190 <-cleanup_net
+           rmmod-2206    [000] ...1.  5739.459376: 0xffffffffc0d8f880 <-0xffffffffc0da3d1d
+           rmmod-2206    [000] ...1.  5739.459378: 0xffffffffc0da1570 <-0xffffffffc0d8f88a
+           rmmod-2206    [000] ...1.  5739.471367: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471368: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471369: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471369: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471369: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471369: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471370: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471370: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471370: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471370: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471370: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471370: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471371: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471371: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471371: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471371: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471371: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471372: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.471372: 0xffffffffc0d81340 <-call_netdevice_unregister_notifiers
+           rmmod-2206    [000] .....  5739.471372: 0xffffffffc0d81345: this is an event
+           rmmod-2206    [000] ...1.  5739.477366: 0xffffffffc0d81190 <-unregister_pernet_operations
+           rmmod-2206    [000] ...1.  5739.477375: 0xffffffffc0d84910 <-__do_sys_delete_module.constprop.0
+
+Before removing the module, the names were all present. Then after I
+removed the module, they did not exist.
+
+Other than that, I cannot reproduce the issue.
+
+-- Steve
 
 
-> 
-> > +      reg = <0x1f050000 0x2000>;
-> > +      #address-cells = <1>;
-> > +      #size-cells = <0>;
-> > +
-> > +      interrupts = <0 64 4>;
-> > +
-> > +      clocks = <&ccu_sys 1>, <&ccu_axi 2>, <&sata_ref_clk>;
-> > +      clock-names = "pclk", "aclk", "ref";
-> > +
-> > +      resets = <&ccu_axi 2>, <&ccu_sys 0>;
-> > +      reset-names = "arst", "ref";
-> > +
-> > +      ports-implemented = <0x3>;
-> > +
-> > +      sata-port@0 {
-> > +        reg = <0>;
-> > +
-> > +        snps,tx-ts-max = <4>;
-> > +        snps,rx-ts-max = <4>;
-> > +      };
-> > +
-> > +      sata-port@1 {
-> > +        reg = <1>;
-> > +
-> > +        snps,tx-ts-max = <4>;
-> > +        snps,rx-ts-max = <4>;
-> > +      };
-> > +    };
-> > +...
-> > -- 
-> > 2.35.1
-> > 
-> > 
+diff --git a/net/bridge/br.c b/net/bridge/br.c
+index 96e91d69a9a8..4067760d3763 100644
+--- a/net/bridge/br.c
++++ b/net/bridge/br.c
+@@ -36,6 +36,7 @@ static int br_device_event(struct notifier_block *unused, unsigned long event, v
+ 	bool changed_addr;
+ 	int err;
+ 
++	trace_printk("this is an event\n");
+ 	if (netif_is_bridge_master(dev)) {
+ 		err = br_vlan_bridge_event(dev, event, ptr);
+ 		if (err)
+@@ -385,6 +386,7 @@ static int __init br_init(void)
+ 		return err;
+ 	}
+ 
++	trace_printk("here in bridge\n");
+ 	err = br_fdb_init();
+ 	if (err)
+ 		goto err_out;

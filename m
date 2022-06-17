@@ -2,44 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D73B54F41A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526F754F2C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380572AbiFQJTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S1380889AbiFQIYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380369AbiFQJT3 (ORCPT
+        with ESMTP id S1380867AbiFQIYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:19:29 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF9B5AEDA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:19:24 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id MHL00020;
-        Fri, 17 Jun 2022 17:19:20 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
- 15.1.2308.27; Fri, 17 Jun 2022 17:19:19 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] drm/connector: Remove usage of the deprecated ida_simple_xxx API
-Date:   Fri, 17 Jun 2022 04:23:19 -0400
-Message-ID: <20220617082319.7599-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Fri, 17 Jun 2022 04:24:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59F6764D08
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:24:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A3DD12FC;
+        Fri, 17 Jun 2022 01:24:02 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.39.168])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78B383F792;
+        Fri, 17 Jun 2022 01:23:58 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 09:23:50 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v5 1/8] arm64: extable: add new extable type
+ EX_TYPE_KACCESS_ERR_ZERO support
+Message-ID: <Yqw6Fh+b9hBx9VbB@FVFF77S0Q05N>
+References: <20220528065056.1034168-1-tongtiangen@huawei.com>
+ <20220528065056.1034168-2-tongtiangen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   20226171719206e264a16480dc3f810127f676d9583a4
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220528065056.1034168-2-tongtiangen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,64 +59,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc_xxx()/ida_free() instead of
-ida_simple_get()/ida_simple_remove().
-The latter is deprecated and more verbose.
+On Sat, May 28, 2022 at 06:50:49AM +0000, Tong Tiangen wrote:
+> Currently, The extable type EX_TYPE_UACCESS_ERR_ZERO is used by
+> __get/put_kernel_nofault(), but those helpers are not uaccess type, so we
+> add a new extable type EX_TYPE_KACCESS_ERR_ZERO which can be used by
+> __get/put_kernel_no_fault().
+> 
+> This is also to prepare for distinguishing the two types in machine check
+> safe process.
+> 
+> Suggested-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/gpu/drm/drm_connector.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+This looks good to me, so modulo one nit below:
 
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 1c48d162c77e..cfba71724f84 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -250,7 +250,7 @@ int drm_connector_init(struct drm_device *dev,
- 	connector->funcs = funcs;
- 
- 	/* connector index is used with 32bit bitmasks */
--	ret = ida_simple_get(&config->connector_ida, 0, 32, GFP_KERNEL);
-+	ret = ida_alloc_max(&config->connector_ida, 31, GFP_KERNEL);
- 	if (ret < 0) {
- 		DRM_DEBUG_KMS("Failed to allocate %s connector index: %d\n",
- 			      drm_connector_enum_list[connector_type].name,
-@@ -262,7 +262,7 @@ int drm_connector_init(struct drm_device *dev,
- 
- 	connector->connector_type = connector_type;
- 	connector->connector_type_id =
--		ida_simple_get(connector_ida, 1, 0, GFP_KERNEL);
-+		ida_alloc_min(connector_ida, 1, GFP_KERNEL);
- 	if (connector->connector_type_id < 0) {
- 		ret = connector->connector_type_id;
- 		goto out_put_id;
-@@ -322,10 +322,10 @@ int drm_connector_init(struct drm_device *dev,
- 	connector->debugfs_entry = NULL;
- out_put_type_id:
- 	if (ret)
--		ida_simple_remove(connector_ida, connector->connector_type_id);
-+		ida_free(connector_ida, connector->connector_type_id);
- out_put_id:
- 	if (ret)
--		ida_simple_remove(&config->connector_ida, connector->index);
-+		ida_free(&config->connector_ida, connector->index);
- out_put:
- 	if (ret)
- 		drm_mode_object_unregister(dev, &connector->base);
-@@ -479,11 +479,10 @@ void drm_connector_cleanup(struct drm_connector *connector)
- 	list_for_each_entry_safe(mode, t, &connector->modes, head)
- 		drm_mode_remove(connector, mode);
- 
--	ida_simple_remove(&drm_connector_enum_list[connector->connector_type].ida,
-+	ida_free(&drm_connector_enum_list[connector->connector_type].ida,
- 			  connector->connector_type_id);
- 
--	ida_simple_remove(&dev->mode_config.connector_ida,
--			  connector->index);
-+	ida_free(&dev->mode_config.connector_ida, connector->index);
- 
- 	kfree(connector->display_info.bus_formats);
- 	drm_mode_object_unregister(dev, &connector->base);
--- 
-2.27.0
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
+> ---
+>  arch/arm64/include/asm/asm-extable.h | 13 ++++
+>  arch/arm64/include/asm/uaccess.h     | 94 ++++++++++++++--------------
+>  arch/arm64/mm/extable.c              |  1 +
+>  3 files changed, 61 insertions(+), 47 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
+> index c39f2437e08e..56ebe183e78b 100644
+> --- a/arch/arm64/include/asm/asm-extable.h
+> +++ b/arch/arm64/include/asm/asm-extable.h
+> @@ -7,6 +7,7 @@
+>  #define EX_TYPE_BPF			2
+>  #define EX_TYPE_UACCESS_ERR_ZERO	3
+>  #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
+> +#define EX_TYPE_KACCESS_ERR_ZERO	5
+
+Could we please renumber this so the UACCESS and KACCESS definitions are next
+to one another, i.e.
+
+#define EX_TYPE_BPF			2
+#define EX_TYPE_UACCESS_ERR_ZERO	3
+#define EX_TYPE_KACCESS_ERR_ZERO	4
+#define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	5
+
+Thanks,
+Mark.
+
+>  
+>  #ifdef __ASSEMBLY__
+>  
+> @@ -73,9 +74,21 @@
+>  			    EX_DATA_REG(ZERO, zero)			\
+>  			  ")")
+>  
+> +#define _ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, zero)		\
+> +	__DEFINE_ASM_GPR_NUMS						\
+> +	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
+> +			  __stringify(EX_TYPE_KACCESS_ERR_ZERO),	\
+> +			  "("						\
+> +			    EX_DATA_REG(ERR, err) " | "			\
+> +			    EX_DATA_REG(ZERO, zero)			\
+> +			  ")")
+> +
+>  #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)			\
+>  	_ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
+>  
+> +#define _ASM_EXTABLE_KACCESS_ERR(insn, fixup, err)			\
+> +	_ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, wzr)
+> +
+>  #define EX_DATA_REG_DATA_SHIFT	0
+>  #define EX_DATA_REG_DATA	GENMASK(4, 0)
+>  #define EX_DATA_REG_ADDR_SHIFT	5
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index 63f9c828f1a7..2fc9f0861769 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -232,34 +232,34 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+>   * The "__xxx_error" versions set the third argument to -EFAULT if an error
+>   * occurs, and leave it unchanged on success.
+>   */
+> -#define __get_mem_asm(load, reg, x, addr, err)				\
+> +#define __get_mem_asm(load, reg, x, addr, err, type)			\
+>  	asm volatile(							\
+>  	"1:	" load "	" reg "1, [%2]\n"			\
+>  	"2:\n"								\
+> -	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
+> +	_ASM_EXTABLE_##type##ACCESS_ERR_ZERO(1b, 2b, %w0, %w1)		\
+>  	: "+r" (err), "=&r" (x)						\
+>  	: "r" (addr))
+>  
+> -#define __raw_get_mem(ldr, x, ptr, err)					\
+> -do {									\
+> -	unsigned long __gu_val;						\
+> -	switch (sizeof(*(ptr))) {					\
+> -	case 1:								\
+> -		__get_mem_asm(ldr "b", "%w", __gu_val, (ptr), (err));	\
+> -		break;							\
+> -	case 2:								\
+> -		__get_mem_asm(ldr "h", "%w", __gu_val, (ptr), (err));	\
+> -		break;							\
+> -	case 4:								\
+> -		__get_mem_asm(ldr, "%w", __gu_val, (ptr), (err));	\
+> -		break;							\
+> -	case 8:								\
+> -		__get_mem_asm(ldr, "%x",  __gu_val, (ptr), (err));	\
+> -		break;							\
+> -	default:							\
+> -		BUILD_BUG();						\
+> -	}								\
+> -	(x) = (__force __typeof__(*(ptr)))__gu_val;			\
+> +#define __raw_get_mem(ldr, x, ptr, err, type)					\
+> +do {										\
+> +	unsigned long __gu_val;							\
+> +	switch (sizeof(*(ptr))) {						\
+> +	case 1:									\
+> +		__get_mem_asm(ldr "b", "%w", __gu_val, (ptr), (err), type);	\
+> +		break;								\
+> +	case 2:									\
+> +		__get_mem_asm(ldr "h", "%w", __gu_val, (ptr), (err), type);	\
+> +		break;								\
+> +	case 4:									\
+> +		__get_mem_asm(ldr, "%w", __gu_val, (ptr), (err), type);		\
+> +		break;								\
+> +	case 8:									\
+> +		__get_mem_asm(ldr, "%x",  __gu_val, (ptr), (err), type);	\
+> +		break;								\
+> +	default:								\
+> +		BUILD_BUG();							\
+> +	}									\
+> +	(x) = (__force __typeof__(*(ptr)))__gu_val;				\
+>  } while (0)
+>  
+>  /*
+> @@ -274,7 +274,7 @@ do {									\
+>  	__chk_user_ptr(ptr);						\
+>  									\
+>  	uaccess_ttbr0_enable();						\
+> -	__raw_get_mem("ldtr", __rgu_val, __rgu_ptr, err);		\
+> +	__raw_get_mem("ldtr", __rgu_val, __rgu_ptr, err, U);		\
+>  	uaccess_ttbr0_disable();					\
+>  									\
+>  	(x) = __rgu_val;						\
+> @@ -314,40 +314,40 @@ do {									\
+>  									\
+>  	__uaccess_enable_tco_async();					\
+>  	__raw_get_mem("ldr", *((type *)(__gkn_dst)),			\
+> -		      (__force type *)(__gkn_src), __gkn_err);		\
+> +		      (__force type *)(__gkn_src), __gkn_err, K);	\
+>  	__uaccess_disable_tco_async();					\
+>  									\
+>  	if (unlikely(__gkn_err))					\
+>  		goto err_label;						\
+>  } while (0)
+>  
+> -#define __put_mem_asm(store, reg, x, addr, err)				\
+> +#define __put_mem_asm(store, reg, x, addr, err, type)			\
+>  	asm volatile(							\
+>  	"1:	" store "	" reg "1, [%2]\n"			\
+>  	"2:\n"								\
+> -	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
+> +	_ASM_EXTABLE_##type##ACCESS_ERR(1b, 2b, %w0)			\
+>  	: "+r" (err)							\
+>  	: "r" (x), "r" (addr))
+>  
+> -#define __raw_put_mem(str, x, ptr, err)					\
+> -do {									\
+> -	__typeof__(*(ptr)) __pu_val = (x);				\
+> -	switch (sizeof(*(ptr))) {					\
+> -	case 1:								\
+> -		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err));	\
+> -		break;							\
+> -	case 2:								\
+> -		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err));	\
+> -		break;							\
+> -	case 4:								\
+> -		__put_mem_asm(str, "%w", __pu_val, (ptr), (err));	\
+> -		break;							\
+> -	case 8:								\
+> -		__put_mem_asm(str, "%x", __pu_val, (ptr), (err));	\
+> -		break;							\
+> -	default:							\
+> -		BUILD_BUG();						\
+> -	}								\
+> +#define __raw_put_mem(str, x, ptr, err, type)					\
+> +do {										\
+> +	__typeof__(*(ptr)) __pu_val = (x);					\
+> +	switch (sizeof(*(ptr))) {						\
+> +	case 1:									\
+> +		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err), type);	\
+> +		break;								\
+> +	case 2:									\
+> +		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err), type);	\
+> +		break;								\
+> +	case 4:									\
+> +		__put_mem_asm(str, "%w", __pu_val, (ptr), (err), type);		\
+> +		break;								\
+> +	case 8:									\
+> +		__put_mem_asm(str, "%x", __pu_val, (ptr), (err), type);		\
+> +		break;								\
+> +	default:								\
+> +		BUILD_BUG();							\
+> +	}									\
+>  } while (0)
+>  
+>  /*
+> @@ -362,7 +362,7 @@ do {									\
+>  	__chk_user_ptr(__rpu_ptr);					\
+>  									\
+>  	uaccess_ttbr0_enable();						\
+> -	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err);		\
+> +	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err, U);		\
+>  	uaccess_ttbr0_disable();					\
+>  } while (0)
+>  
+> @@ -400,7 +400,7 @@ do {									\
+>  									\
+>  	__uaccess_enable_tco_async();					\
+>  	__raw_put_mem("str", *((type *)(__pkn_src)),			\
+> -		      (__force type *)(__pkn_dst), __pkn_err);		\
+> +		      (__force type *)(__pkn_dst), __pkn_err, K);	\
+>  	__uaccess_disable_tco_async();					\
+>  									\
+>  	if (unlikely(__pkn_err))					\
+> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+> index 489455309695..056591e5ca80 100644
+> --- a/arch/arm64/mm/extable.c
+> +++ b/arch/arm64/mm/extable.c
+> @@ -77,6 +77,7 @@ bool fixup_exception(struct pt_regs *regs)
+>  	case EX_TYPE_BPF:
+>  		return ex_handler_bpf(ex, regs);
+>  	case EX_TYPE_UACCESS_ERR_ZERO:
+> +	case EX_TYPE_KACCESS_ERR_ZERO:
+>  		return ex_handler_uaccess_err_zero(ex, regs);
+>  	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
+>  		return ex_handler_load_unaligned_zeropad(ex, regs);
+> -- 
+> 2.25.1
+> 

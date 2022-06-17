@@ -2,65 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A15550105
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 01:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D978550169
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345857AbiFQX5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 19:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S1383730AbiFRAfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 20:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383354AbiFQX4b (ORCPT
+        with ESMTP id S231921AbiFRAf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:56:31 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1965066AED
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:56:22 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id n20so4575818ejz.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=smgH2pDBx1ofaZrM152FsxaiSpM+uoxslxM+FEyW34c=;
-        b=BeEQ4TJ+StpwEeRKtNhqEWyR6951KbaWIfursLBbX0/XJas5D2wzyKEk+BS1ToHLhM
-         1yea3fbBN1B05sTYEYC0j/VfjOmSdYMqyx6WBpE3PX4Z0Biddp9iTb4t/I3JF47MWy4u
-         x8QhELQHJrISgpvWPiEKiKy7EQUp1igOTHMzw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=smgH2pDBx1ofaZrM152FsxaiSpM+uoxslxM+FEyW34c=;
-        b=5qgrAv2/NPQagjg7vmSzY84aqK59Zmj061cKnkLncWcTxbyyQ3zxOxFRwnqrfwMnbz
-         eR4KQXzRYpzdAPWGPgJ+MeWd9jBeakF3hf0oblJFXEyxo5H5HZBcH2zBXByik6r0i0+v
-         maFd/6okBthTrhOcfP+BI31cdqGR5ZH6ir0udIrKdX+ulA6pe0d2yEisC1XmpGetSYNB
-         z7ubc3mI5mdgnMsq9F9yYmolY/fIQYbjj61431yziZcPFBosqA13Q86rTHTnBz9y4uhs
-         +UBzJ6+Ptnv8uP+XDgXv8UbkY4Vjmt2CVsaEBSRCt7/zJKSM+4klCumfL09BZtdI7n12
-         Xd0g==
-X-Gm-Message-State: AJIora9V9IL9wPcFshFOhqfjDjwmyLWzP5ur2hWMNQRBad3UV6IhzsdL
-        SIPJBfaa2bQw9VXbHtQGE3JUHQ==
-X-Google-Smtp-Source: AGRyM1usF0zfm/ieUT9r1lbPRPzma4aEocNyIUPWHG/uKyyHfOm2qkqIawRoshKy0ZEENfPGxPRgyw==
-X-Received: by 2002:a17:907:1dd1:b0:715:73d2:df1f with SMTP id og17-20020a1709071dd100b0071573d2df1fmr11536181ejc.46.1655510180195;
-        Fri, 17 Jun 2022 16:56:20 -0700 (PDT)
-Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa7d415000000b0043566884333sm1452538edq.63.2022.06.17.16.56.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 16:56:19 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v8 9/9] media: uvcvideo: Limit power line control for Acer EasyCamera
-Date:   Sat, 18 Jun 2022 01:56:10 +0200
-Message-Id: <20220617235610.321917-10-ribalda@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-In-Reply-To: <20220617235610.321917-1-ribalda@chromium.org>
-References: <20220617235610.321917-1-ribalda@chromium.org>
+        Fri, 17 Jun 2022 20:35:28 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207BD65D28;
+        Fri, 17 Jun 2022 17:35:26 -0700 (PDT)
+Received: (Authenticated sender: pbl@bestov.io)
+        by mail.gandi.net (Postfix) with ESMTPSA id C5E45200004;
+        Sat, 18 Jun 2022 00:35:20 +0000 (UTC)
+From:   Riccardo Paolo Bestetti <pbl@bestov.io>
+To:     patchwork-bot+netdevbpf@kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     cmllamas@google.com, dsahern@kernel.org, kernel-team@android.com,
+        linmiaohe@huawei.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pbl@bestov.io, yoshfuji@linux-ipv6.org,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH net] ipv4: fix bind address validity regression tests
+Date:   Sat, 18 Jun 2022 01:46:49 +0200
+Message-Id: <20220617234647.24309-1-pbl@bestov.io>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: CKSU5Q2M1IE3.39AS0HDHTZPN@enhorning
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,52 +45,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device does not implement the power line control correctly. Add a
-corresponding control mapping override.
+Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+introduced support for binding to nonlocal addresses, as well as some
+basic test coverage for some of the cases.
 
-Bus 001 Device 003: ID 5986:1172 Acer, Inc EasyCamera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x5986 Acer, Inc
-  idProduct          0x1172
-  bcdDevice           56.04
-  iManufacturer           3 Bison
-  iProduct                1 EasyCamera
-  iSerial                 2
-  bNumConfigurations      1
+Commit b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+fixes a regression which incorrectly removed some checks for bind
+address validation. In addition, it introduces regression tests for
+those specific checks. However, those regression tests are defective, in
+that they perform the tests using an incorrect combination of bind
+flags. As a result, those tests fail when they should succeed.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+This commit introduces additional regression tests for nonlocal binding
+and fixes the defective regression tests.
+
+PLEASE NOTE THAT THIS PATCH SHOULD NOT BE APPLIED AS-IS. The ICMP
+broadcast and multicast regression tests succeed, but they do so while
+returning the wrong error status. In particular, it isn't the bind that
+fails, but the socket creation. This is /not/ correct, and it must be
+investigated to have proper regression testing. Other instances where
+this happens are: 1) if the broadcast/multicast addresses are replace
+with an allowed (e.g. local) address (bind should work, but socket is
+never created in the first place); 2) the commented out tests (nonlocal
+bind should work but ditto.) Additionally, please note that when the
+test cases are manually (i.e. without the network namespace setup from
+fcnal-test.sh) ran, the expected/correct outcome is observed. The reason
+I'm submitting this patch for comments, is that I'm failing to
+understand where the issue lies. (Disclamer: might be something
+stupid/trivial that I'm plainly missing due to tunnel vision.)
+
+Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/net/fcnal-test.sh | 36 +++++++++++++++++------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 387b85fa1998..e037d46b958e 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -3240,6 +3240,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
-+	/* Acer EasyCamera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x5986,
-+	  .idProduct		= 0x1172,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
- 	/* Intel RealSense D4M */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 75223b63e3c8..778288539879 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -1800,24 +1800,33 @@ ipv4_addr_bind_novrf()
+ 	done
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
+-	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after device bind"
++	run_cmd nettest -s -R -f -l ${a} -b
++	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -f -l ${a} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address"
++
++	# currently fails with ACCES
++	#log_start
++	#run_cmd nettest -s -D -P icmp -f -l ${a} -b
++	#log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address"
+ 
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address"
+ 
+ 	#
+@@ -1870,24 +1879,33 @@ ipv4_addr_bind_vrf()
+ 	log_test_addr ${a} $? 1 "Raw socket bind to out of scope address after VRF bind"
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -R -f -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
+ 
++	log_start
++	run_cmd nettest -s -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address after VRF bind"
++
++	# currently fails with ACCES
++	#log_start
++	#run_cmd nettest -s -D -P icmp -f -l ${a} -I ${VRF} -b
++	#log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address after VRF bind"
++
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address after VRF bind"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address after VRF bind"
+ 
+ 	#
 -- 
-2.37.0.rc0.104.g0611611a94-goog
+2.36.1
 

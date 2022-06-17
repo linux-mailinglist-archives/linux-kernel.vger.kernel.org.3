@@ -2,42 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A7754F1A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D54B54F1B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380465AbiFQHNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S1380559AbiFQHQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380406AbiFQHNo (ORCPT
+        with ESMTP id S1380558AbiFQHP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:13:44 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD30B13FA5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:13:38 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1o26Ag-0002uA-Uy; Fri, 17 Jun 2022 09:13:34 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-riscv@lists.infradead.org
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, mick@ics.forth.gr,
-        samuel@sholland.org, cmuellner@linux.com, philipp.tomsich@vrull.eu,
-        Christoph Hellwig <hch@lst.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Subject: Re: [PATCH v2 0/5] riscv: some svpbmt fixes
-Date:   Fri, 17 Jun 2022 09:13:34 +0200
-Message-ID: <37631570.10thIPus4b@diego>
-In-Reply-To: <mhng-55ae586c-07b7-4e6e-b695-6df8608b87d5@palmer-ri-x1c9>
-References: <mhng-55ae586c-07b7-4e6e-b695-6df8608b87d5@palmer-ri-x1c9>
+        Fri, 17 Jun 2022 03:15:59 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8581A13DEC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:15:57 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id r24so3830881ljn.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nCXTiSXIa6VZd+sgUkAbHZ+KTe0Z37C/bputo1uDhXI=;
+        b=BAArAmCenEHg6LD90XC12T8L2DajyIDpwPTMkGTA1PxVXkX55YokJR8h4IVTzob3Gi
+         nXJAJcuvCykMvUrMbYOSAORrk+TD4Yrs1jrGexsUR+cJiY1Uacgu3kJTQ3yX/bbt+Z2r
+         cEucls6ZPewssAVvR8C81iH/kOqku4Fyss7Kk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nCXTiSXIa6VZd+sgUkAbHZ+KTe0Z37C/bputo1uDhXI=;
+        b=6D8nqCrtIIH4bdezPM2D2m2E9T9FJYbrbnt61Mb/RESLLYvfxOQ69pmd+Zu+4J/lWJ
+         Mdy7LHtIXEbC/V2mLbKZoxVtoex/pYRtqm6ItwzAMEPOmf6ySE7yu+qcXPkiC46R8tkq
+         doo5mxNS6sGvZdLvZXy9MjR9U9isyyftDSjR03ZI9N44mll1yvjE7HF8Tnbv/pSol2Mg
+         kHNM/pnhoUZzGfnJP8XbdPnUUI1+LwMfk5d9EfI5yXkiUWW87Yx2y+G1QrTz05zETRr4
+         b2X+TM0XRtuqWNSUxLBZuIJ8/0FnuNnyKDYHz1vAmGMUh1nNeBh5/gZRn05Lubx9KTBN
+         ZFgw==
+X-Gm-Message-State: AJIora+AhYAW5Uv95u/QXxFpcEgXUdO5XJZvMTvoUGd7eN3MD+hi6l52
+        E0sTcKCw/VT4bI5qk/t8ylWlhStxjs9A1gw7
+X-Google-Smtp-Source: AGRyM1sfSqFa7LRrxVhIQobqHlZS8rNikbm1y7T3Fg6d5VUiCPfGy4SG5EsY2q52tIBRh3gONpP3TA==
+X-Received: by 2002:a2e:bf1c:0:b0:259:f33:a4db with SMTP id c28-20020a2ebf1c000000b002590f33a4dbmr4180159ljr.454.1655450155437;
+        Fri, 17 Jun 2022 00:15:55 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id l1-20020a194941000000b0047255d21205sm528170lfj.308.2022.06.17.00.15.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 00:15:54 -0700 (PDT)
+Message-ID: <d0798b26-9c77-7209-8c16-0d067ea5720c@rasmusvillemoes.dk>
+Date:   Fri, 17 Jun 2022 09:15:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH RFCv4 3/4] lib/test_printf.c: split write-beyond-buffer
+ check in two
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>, Jia He <justin.he@arm.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>
+References: <20210615154952.2744-1-justin.he@arm.com>
+ <20210615154952.2744-4-justin.he@arm.com> <YMtZcVy4gvmMtYv+@alley>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <YMtZcVy4gvmMtYv+@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,52 +75,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
-
-Am Freitag, 17. Juni 2022, 01:03:32 CEST schrieb Palmer Dabbelt:
-> On Thu, 26 May 2022 13:56:41 PDT (-0700), heiko@sntech.de wrote:
-> > Some additionals comments and notes from autobuilders received
-> > after the series got applied, warranted some changes.
-> >
-> > So this is a small collection of cleanups for the svpbmt v10 series.
-> >
-> > changes in v2:
-> > - add Guo's Review
-> > - add patch dropping the use of function pointers in code
-> >   that can run before relocation
-> >
-> > Heiko Stuebner (5):
-> >   riscv: drop cpufeature_apply_feature tracking variable
-> >   riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol
-> >   riscv: make patch-function pointer more generic in
-> >     cpu_manufacturer_info struct
-> >   riscv: fix dependency for t-head errata
-> >   riscv: remove usage of function-pointers from cpufeatures and t-head
-> >     errata
-> >
-> >  arch/riscv/Kconfig               |  9 ++++++--
-> >  arch/riscv/Kconfig.erratas       |  1 +
-> >  arch/riscv/errata/thead/errata.c | 38 ++++++++++----------------------
-> >  arch/riscv/kernel/alternative.c  | 18 +++++++--------
-> >  arch/riscv/kernel/cpufeature.c   | 37 +++++++++----------------------
-> >  5 files changed, 40 insertions(+), 63 deletions(-)
+On 17/06/2021 16.17, Petr Mladek wrote:
+> On Tue 2021-06-15 23:49:51, Jia He wrote:
+>> From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>>
+>> Before each invocation of vsnprintf(), do_test() memsets the entire
+>> allocated buffer to a sentinel value. That buffer includes leading and
+>> trailing padding which is never included in the buffer area handed to
+>> vsnprintf (spaces merely for clarity):
+>>
+>>   pad  test_buffer      pad
+>>   **** **************** ****
+>>
+>> Then vsnprintf() is invoked with a bufsize argument <=
+>> BUF_SIZE. Suppose bufsize=10, then we'd have e.g.
+>>
+>>  |pad |   test_buffer    |pad |
+>>   **** pizza0 **** ****** ****
+>>  A    B      C    D           E
+>>
+>> where vsnprintf() was given the area from B to D.
+>>
+>> It is obviously a bug for vsnprintf to touch anything between A and B
+>> or between D and E. The former is checked for as one would expect. But
+>> for the latter, we are actually a little stricter in that we check the
+>> area between C and E.
+>>
+>> Split that check in two, providing a clearer error message in case it
+>> was a genuine buffer overrun and not merely a write within the
+>> provided buffer, but after the end of the generated string.
+>>
+>> So far, no part of the vsnprintf() implementation has had any use for
+>> using the whole buffer as scratch space, but it's not unreasonable to
+>> allow that, as long as the result is properly nul-terminated and the
+>> return value is the right one. However, it is somewhat unusual, and
+>> most %<something> won't need this, so keep the [C,D] check, but make
+>> it easy for a later patch to make that part opt-out for certain tests.
 > 
-> IMO only three of these are actually fixes, the rest are cleanups.  I've 
-> got ahead and put everything on a branch, with
+> Excellent commit message.
 > 
->     riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol
->     riscv: drop cpufeature_apply_feature tracking variable
->     riscv: fix dependency for t-head errata
+>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>> Tested-by: Jia He <justin.he@arm.com>
+>> Signed-off-by: Jia He <justin.he@arm.com>
 > 
-> first.  Those are on fixes, the whole thing is in for-next.
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-thanks a lot.
+Hi Petr
 
-For the fixes I think Nathan's "riscv: Fix ALT_THEAD_PMA's asm parameters" [0]
-would also be quite important.
+It seems Justin's series got stalled, but I still think this patch makes
+sense on its own (especially since another series in flight mucks about
+in this area), so can you please pick it up directly?
 
-Heiko
+The lore link for the above is
+https://lore.kernel.org/lkml/20210615154952.2744-4-justin.he@arm.com/ ,
+while my original submission is at
+https://lore.kernel.org/lkml/20210615085044.1923788-1-linux@rasmusvillemoes.dk/
+.
 
-[0] https://lore.kernel.org/r/20220518184529.454008-1-nathan@kernel.org
-
-
+Rasmus

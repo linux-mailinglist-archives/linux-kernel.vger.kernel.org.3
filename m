@@ -2,129 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70D454F2AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA4B54F2AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380624AbiFQITV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S1380843AbiFQIUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380384AbiFQITN (ORCPT
+        with ESMTP id S1380809AbiFQIUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:19:13 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79BF68315
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:19:11 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id a10so1921166wmj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i6KN7qFz99qq/ALEKkoJkPgYJrjmF3EU2O4lIDewe7o=;
-        b=mtQXnNncLkH5+APNy+qa+gXYlCjcWp0W7PGKAfj+IFRVykr8G5oPo2oW38RIlhfBIU
-         oHB2kCRIZLFlAiyyfIO7CcTf6m9MP6snoDpTRdcgCiv3tt2YmCcZBI2LYbw7xDmuXHgv
-         Xzqez09XcW9J3W5ttBTNwR498IHRR0N1umoe0EGDdtFJr4ZlYS69p9OsslUiAP5Lpol2
-         ver6MQNRB2CHNr5Hi4xAXUv1Rtm5mG973JnVAcSh12HRLgsQBj4HC/Up35ID4CuwmMga
-         B7A+t9iG/jUgKD+7gIm1fbV7/Oy33nNsJF7mPodlfOmQHpvYxf7Bn4i1VBxdesgUKVhC
-         bxBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i6KN7qFz99qq/ALEKkoJkPgYJrjmF3EU2O4lIDewe7o=;
-        b=UrOLdvTItKJ6AiBrclw763oGVDu/4ppBDBQSJSjJL2/XwpGeNnqbSCC76ORxMEnfuy
-         9exZjyxn1WjONebTwajeP0SZDmNFtgjFzDCtpG0e+CJ6tSZJigFWLgNJm4Vci+PBQ9gV
-         5orAs98SuseTOi5Y+hZtYUXW6AYan/0b+b34v8yD4NBQ+cxhwbZnwiqNS+SqiLF5lLrg
-         mt/jIKE3NnH67SiyfvJVHjhQgqM4Z22fQG1Ep+0m1qeFXImgJ8+cQ5ShJM5MeqQ0+vF7
-         KfAnH45fIvl7zpyJY14rA90LlfjsqPHwTE6Qecgovv99k9qGDG4YlI1i9N2FkSb+qlYp
-         yzuA==
-X-Gm-Message-State: AJIora9tgmt+4iNXWiWeh1M95P0JQFGobew/UrQj5OzhyKSK2c1hH5c7
-        AUxiIDhkbJzw0W73fHDEw6h5fg==
-X-Google-Smtp-Source: AGRyM1tIXg2YoKkkCqDilEVxCCUSgr+DQnIy9x2PWUwFyjbZee7lkDg9EWeYCjC81sWbPrxlGE3Bvg==
-X-Received: by 2002:a05:600c:4f4e:b0:39c:1bbb:734f with SMTP id m14-20020a05600c4f4e00b0039c1bbb734fmr8830394wmq.116.1655453950431;
-        Fri, 17 Jun 2022 01:19:10 -0700 (PDT)
-Received: from groot.. ([2a01:cb19:85e6:1900:b8a0:45dd:a367:2e65])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b0039db500714fsm4970245wmq.6.2022.06.17.01.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 01:19:09 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Subject: [PATCH v3 2/2] Input: mt6779-keypad - implement row/column selection
-Date:   Fri, 17 Jun 2022 10:19:02 +0200
-Message-Id: <20220617081902.2931099-3-mkorpershoek@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220617081902.2931099-1-mkorpershoek@baylibre.com>
-References: <20220617081902.2931099-1-mkorpershoek@baylibre.com>
+        Fri, 17 Jun 2022 04:20:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D318168335
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:20:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C82BB827B2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63FCCC3411B;
+        Fri, 17 Jun 2022 08:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655453999;
+        bh=E98ek2nAdjr2+1dOqswVNwmAjmNqZLUSnkA74Yi2Hdk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IoAJ8yqUpL4PW8mFre9W/ARVGh+cjwFG7I4N+Uqj4se+L/2W7RuLg82tkg4wVAoW+
+         EBPh9scg7wsMU0oGmwRBhqfFYxY0vsvP7+9YYecRMEre/4n1r8DTPuEQXT5mym/nbM
+         SHCCOftaMBhC322Lft5RkiqBwdJYswmp0hZrcW298eqjzGMcMe79W1o2qfkq/IkUDU
+         HGQkiSic5QyQcRiXS7Y3U/boS13lyVLRhzEnaEL5cSyKdekE3tr6kCa0ZRCFdpkhXn
+         imwS9iwiwUirlaqrznkZ0SIVMyz8+GLuW61qkY4LFIgZioH8e5jXS+EmH1zliiw9SX
+         JvXkp9UJoVwnQ==
+Date:   Fri, 17 Jun 2022 11:19:49 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH] KVM: arm64: Prevent kmemleak from accessing pKVM memory
+Message-ID: <Yqw5JRrUJO73mtIy@kernel.org>
+References: <20220616161135.3997786-1-qperret@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616161135.3997786-1-qperret@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MediaTek keypad has a total of 6 input rows and 6 input columns.
-By default, rows/columns 0-2 are enabled.
+On Thu, Jun 16, 2022 at 04:11:34PM +0000, Quentin Perret wrote:
+> Commit a7259df76702 ("memblock: make memblock_find_in_range method
+> private") changed the API using which memory is reserved for the pKVM
+> hypervisor. However, it seems that memblock_phys_alloc() differs
+> from the original API in terms of kmemleak semantics -- the old one
+> excluded the reserved regions from kmemleak scans when the new one
+> doesn't seem to. Unfortunately, when protected KVM is enabled, all
 
-This is controlled by the KP_SEL register:
-- bits[9:4]   control row selection
-- bits[15:10] control column selection
+I'd rather say that memblock_find_in_range() didn't inform kmemleak about
+the reserved regions, while memblock_phys_alloc() does.
 
-Each bit enables the corresponding row/column number (e.g KP_SEL[4]
-enables ROW0)
+> kernel accesses to pKVM-private memory result in a fatal exception,
+> which can now happen because of kmemleak scans:
+> 
+> $ echo scan > /sys/kernel/debug/kmemleak
+> [   34.991354] kvm [304]: nVHE hyp BUG at: [<ffff800008fa3750>] __kvm_nvhe_handle_host_mem_abort+0x270/0x290!
+> [   34.991580] kvm [304]: Hyp Offset: 0xfffe8be807e00000
+> [   34.991813] Kernel panic - not syncing: HYP panic:
+> [   34.991813] PS:600003c9 PC:0000f418011a3750 ESR:00000000f2000800
+> [   34.991813] FAR:ffff000439200000 HPFAR:0000000004792000 PAR:0000000000000000
+> [   34.991813] VCPU:0000000000000000
+> [   34.993660] CPU: 0 PID: 304 Comm: bash Not tainted 5.19.0-rc2 #102
+> [   34.994059] Hardware name: linux,dummy-virt (DT)
+> [   34.994452] Call trace:
+> [   34.994641]  dump_backtrace.part.0+0xcc/0xe0
+> [   34.994932]  show_stack+0x18/0x6c
+> [   34.995094]  dump_stack_lvl+0x68/0x84
+> [   34.995276]  dump_stack+0x18/0x34
+> [   34.995484]  panic+0x16c/0x354
+> [   34.995673]  __hyp_pgtable_total_pages+0x0/0x60
+> [   34.995933]  scan_block+0x74/0x12c
+> [   34.996129]  scan_gray_list+0xd8/0x19c
+> [   34.996332]  kmemleak_scan+0x2c8/0x580
+> [   34.996535]  kmemleak_write+0x340/0x4a0
+> [   34.996744]  full_proxy_write+0x60/0xbc
+> [   34.996967]  vfs_write+0xc4/0x2b0
+> [   34.997136]  ksys_write+0x68/0xf4
+> [   34.997311]  __arm64_sys_write+0x20/0x2c
+> [   34.997532]  invoke_syscall+0x48/0x114
+> [   34.997779]  el0_svc_common.constprop.0+0x44/0xec
+> [   34.998029]  do_el0_svc+0x2c/0xc0
+> [   34.998205]  el0_svc+0x2c/0x84
+> [   34.998421]  el0t_64_sync_handler+0xf4/0x100
+> [   34.998653]  el0t_64_sync+0x18c/0x190
+> [   34.999252] SMP: stopping secondary CPUs
+> [   35.000034] Kernel Offset: disabled
+> [   35.000261] CPU features: 0x800,00007831,00001086
+> [   35.000642] Memory Limit: none
+> [   35.001329] ---[ end Kernel panic - not syncing: HYP panic:
+> [   35.001329] PS:600003c9 PC:0000f418011a3750 ESR:00000000f2000800
+> [   35.001329] FAR:ffff000439200000 HPFAR:0000000004792000 PAR:0000000000000000
+> [   35.001329] VCPU:0000000000000000 ]---
+> 
+> Fix this by explicitly excluding the hypervisor's memory pool from
+> kmemleak like we already do for the hyp BSS.
+> 
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Fixes: a7259df76702 ("memblock: make memblock_find_in_range method private")
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> ---
+> An alternative could be to actually exclude memory allocated using
+> memblock_phys_alloc_range() from kmemleak scans to revert back to the
+> old behaviour.
 
-Depending on how the keypad is wired, this may result in wrong readings
-of the keypad state.
+This would be wrong because memblock_phys_alloc() does allocate memory and
+unless there is a good reason to exclude it from kmemleak.
 
-Program the KP_SEL register to limit the key detection to n_rows,
-n_cols we retrieve from the device tree.
+> But nobody else has complained about this AFAIK, so I'd be inclined to
+> keep this local to pKVM. No strong opinion.
 
-Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
----
- drivers/input/keyboard/mt6779-keypad.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Yes, please :)
+An alternative to excluding this memory from kmemleak is to allocate it
+using 
 
-diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
-index bd86cb95bde3..bf447bf598fb 100644
---- a/drivers/input/keyboard/mt6779-keypad.c
-+++ b/drivers/input/keyboard/mt6779-keypad.c
-@@ -17,6 +17,11 @@
- #define MTK_KPD_DEBOUNCE	0x0018
- #define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
- #define MTK_KPD_DEBOUNCE_MAX_MS	256
-+#define MTK_KPD_SEL		0x0020
-+#define MTK_KPD_SEL_COL	GENMASK(15, 10)
-+#define MTK_KPD_SEL_ROW	GENMASK(9, 4)
-+#define MTK_KPD_SEL_COLMASK(c)	GENMASK((c) + 9, 10)
-+#define MTK_KPD_SEL_ROWMASK(r)	GENMASK((r) + 3, 4)
- #define MTK_KPD_NUM_MEMS	5
- #define MTK_KPD_NUM_BITS	136	/* 4*32+8 MEM5 only use 8 BITS */
- 
-@@ -161,6 +166,11 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
- 	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
- 		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
- 
-+	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_ROW,
-+			   MTK_KPD_SEL_ROWMASK(keypad->n_rows));
-+	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_COL,
-+			   MTK_KPD_SEL_COLMASK(keypad->n_cols));
-+
- 	keypad->clk = devm_clk_get(&pdev->dev, "kpd");
- 	if (IS_ERR(keypad->clk))
- 		return PTR_ERR(keypad->clk);
+	memblock_phys_alloc_range(size, align, 0, MEMBLOCK_ALLOC_NOLEAKTRACE)
+
+then it won't be added to kmemleak at the first place.
+
+> ---
+>  arch/arm64/kvm/arm.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 400bb0fe2745..28765bd22efb 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -2110,11 +2110,11 @@ static int finalize_hyp_mode(void)
+>  		return 0;
+>  
+>  	/*
+> -	 * Exclude HYP BSS from kmemleak so that it doesn't get peeked
+> -	 * at, which would end badly once the section is inaccessible.
+> -	 * None of other sections should ever be introspected.
+> +	 * Exclude HYP sections from kmemleak so that they don't get peeked
+> +	 * at, which would end badly once inaccessible.
+>  	 */
+>  	kmemleak_free_part(__hyp_bss_start, __hyp_bss_end - __hyp_bss_start);
+> +	kmemleak_free_part(__va(hyp_mem_base), hyp_mem_size);
+>  	return pkvm_drop_host_privileges();
+>  }
+>  
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
+> 
+
 -- 
-2.34.1
-
+Sincerely yours,
+Mike.

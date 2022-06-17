@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC8954F302
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A982C54F32E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381054AbiFQIca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S231313AbiFQIiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 04:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380987AbiFQIcX (ORCPT
+        with ESMTP id S234710AbiFQIiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:32:23 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B998E69282;
-        Fri, 17 Jun 2022 01:32:22 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o27Oq-0007dX-Lf; Fri, 17 Jun 2022 10:32:16 +0200
-Received: from [85.1.206.226] (helo=linux-3.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o27Oq-000CB7-Co; Fri, 17 Jun 2022 10:32:16 +0200
-Subject: Re: [PATCH] tracing/kprobes: Check whether get_kretprobe() returns
- NULL in kretprobe_dispatcher()
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <165366693881.797669.16926184644089588731.stgit@devnote2>
- <0204f480-cdb0-e49f-9034-602eced02966@iogearbox.net>
- <7619DB57-C39B-4A49-808C-7ACF12D58592@goodmis.org>
- <d28e1548-98fb-a533-4fdc-ae4f4568fb75@iogearbox.net>
- <20220608091017.0596dade@gandalf.local.home>
- <3d535ae1-69cd-dbae-32f6-7d571a88c2d8@iogearbox.net>
-Message-ID: <c4d48f60-a24b-459e-ccbd-617d0518efc7@iogearbox.net>
-Date:   Fri, 17 Jun 2022 10:32:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 17 Jun 2022 04:38:10 -0400
+Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA05A19C03
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=I7Pi+
+        Im12M8ou/QoSMecx1nm7zEUMo5TJmtZNFXx6oU=; b=RDb0KWoMRPSX7T87//JdG
+        5Fm5ZW6pY00uwrtQD1KnL09nwc+LMqKNd9qMu0Gy8VzsF3pGm8SRTwr0mwYcetuH
+        a0Q3bDyMfpHHm5tGOwYpGc7yGAqtocDRopwu2Ivps8lqk8OiUkQ39mkoZUlgsOM6
+        Eh2UmV3Qal7DiOkrmz7hC8=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
+ (Coremail) ; Fri, 17 Jun 2022 16:34:56 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Fri, 17 Jun 2022 16:34:56 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     Conor.Dooley@microchip.com
+Cc:     christophe.leroy@csgroup.eu, oss@buserror.net, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH v4] powerpc:85xx: Add missing of_node_put() in
+ sgy_cst1000
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
+References: <20220617060827.4004795-1-windhl@126.com>
+ <eb72976a-9ca3-b894-b2d5-8283a4cf486d@csgroup.eu>
+ <16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com>
+ <f79ebcc1-c060-f861-231d-85c377e2e885@csgroup.eu>
+ <64ac3dc9.5bd1.18170bcb6a6.Coremail.windhl@126.com>
+ <33668b61-4ae7-f625-0eb3-e15d2119623c@microchip.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-In-Reply-To: <3d535ae1-69cd-dbae-32f6-7d571a88c2d8@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26574/Thu Jun 16 10:06:40 2022)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <4be090c8.607e.18170cd11ad.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: MsqowABnvfGxPKxiGoc4AA--.57772W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AUjF1pEDvT03AABsg
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 10:26 AM, Daniel Borkmann wrote:
-> On 6/8/22 3:10 PM, Steven Rostedt wrote:
->> On Wed, 8 Jun 2022 14:38:39 +0200
->> Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->>>>>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>>>>
->>>>> Steven, I presume you'll pick this fix up?
->>>>
->>>> I'm currently at Embedded/Kernel Recipes, but yeah, I'll take a look at it. (Just need to finish my slides first ;-)
->>>
->>> Ok, thanks. If I don't hear back I presume you'll pick it up then.
->>
->> Yeah, I'm way behind due to the conference. And I'll be on PTO from
->> tomorrow and back on Tuesday. And registration for Linux Plumbers is
->> supposed to open today (but of course there's issues with that!), thus, I'm
->> really have too much on my plate today :-p
-> 
-> Steven, we still have this in our patchwork for tracking so it doesn't fall
-> off the radar. The patch is 3 weeks old by now. Has this been picked up yet,
-> or do you want to Ack and we ship the fix via bpf tree? Just asking as I
-> didn't see any further updates ever since.
-
-Same goes for these two fixes waiting for Ack:
-
-   https://lore.kernel.org/bpf/165461825202.280167.12903689442217921817.stgit@devnote2/
-
-Thanks,
-Daniel
+CkF0IDIwMjItMDYtMTcgMTY6Mjc6MDMsIENvbm9yLkRvb2xleUBtaWNyb2NoaXAuY29tIHdyb3Rl
+Ogo+T24gMTcvMDYvMjAyMiAwOToxNywgTGlhbmcgSGUgd3JvdGU6Cj4+IAo+PiAKPj4gCj4+IEF0
+IDIwMjItMDYtMTcgMTQ6NTM6MTMsICJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0b3BoZS5sZXJv
+eUBjc2dyb3VwLmV1PiB3cm90ZToKPj4+Cj4+Pgo+Pj4gTGUgMTcvMDYvMjAyMiDDoCAwODo0NSwg
+TGlhbmcgSGUgYSDDqWNyaXTCoDoKPj4+Pgo+Pj4+Cj4+Pj4KPj4+PiBBdCAyMDIyLTA2LTE3IDE0
+OjI4OjU2LCAiQ2hyaXN0b3BoZSBMZXJveSIgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4g
+d3JvdGU6Cj4+Pj4+Cj4+Pj4+Cj4+Pj4+IExlIDE3LzA2LzIwMjIgw6AgMDg6MDgsIExpYW5nIEhl
+IGEgw6ljcml0wqA6Cj4+Pj4+PiBJbiBncGlvX2hhbHRfcHJvYmUoKSwgb2ZfZmluZF9tYXRjaGlu
+Z19ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlCj4+Pj4+PiBwb2ludGVyIHdpdGggcmVmY291bnQg
+aW5jcmVtZW50ZWQuIFdlIHNob3VsZCB1c2Ugb2Zfbm9kZV9wdXQoKSBpbgo+Pj4+Pj4gZmFpbCBw
+YXRoIG9yIHdoZW4gaXQgaXMgbm90IHVzZWQgYW55bW9yZS4KPj4+Pj4+Cj4+Pj4+PiBTaWduZWQt
+b2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4+Pj4+PiAtLS0KPj4+Pj4+ICAgICBj
+aGFuZ2Vsb2c6Cj4+Pj4+PiAgICAgdjQ6IHJldXNlIGV4aXN0ICdlcnInIGFuZCB1c2UgYSBzaW1w
+bGUgY29kZSBzdHlsZSwgYWR2aXNlZCBieSBDSgo+Pj4+Pj4gICAgIHYzOiB1c2UgbG9jYWwgJ2No
+aWxkX25vZGUnIGFkdmlzZWQgYnkgTWljaGFlbC4KPj4+Pj4+ICAgICB2MjogdXNlIGdvdG8tbGFi
+ZWwgcGF0Y2ggc3R5bGUgYWR2aXNlZCBieSBDaHJpc3RvcGhlIExlcm95Lgo+Pj4+Pj4gICAgIHYx
+OiBhZGQgb2Zfbm9kZV9wdXQoKSBiZWZvcmUgZWFjaCBleGl0Lgo+Pj4+Pj4KPj4+Pj4+ICAgICBh
+cmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyB8IDM1ICsrKysrKysrKysr
+KysrLS0tLS0tLS0tCj4+Pj4+PiAgICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyks
+IDEzIGRlbGV0aW9ucygtKQo+Pj4+Pj4KPj4+Pj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMv
+cGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4
+eC9zZ3lfY3RzMTAwMC5jCj4+Pj4+PiBpbmRleCA5OGFlNjQwNzUxOTMuLmU0NTg4OTQzZmU3ZSAx
+MDA2NDQKPj4+Pj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9zZ3lfY3RzMTAw
+MC5jCj4+Pj4+PiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvc2d5X2N0czEwMDAu
+Ywo+Pj4+Pj4gQEAgLTcxLDYgKzcxLDcgQEAgc3RhdGljIGludCBncGlvX2hhbHRfcHJvYmUoc3Ry
+dWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4+Pj4+ICAgICB7Cj4+Pj4+PiAgICAgCWVudW0g
+b2ZfZ3Bpb19mbGFncyBmbGFnczsKPj4+Pj4+ICAgICAJc3RydWN0IGRldmljZV9ub2RlICpub2Rl
+ID0gcGRldi0+ZGV2Lm9mX25vZGU7Cj4+Pj4+PiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAqY2hpbGRf
+bm9kZTsKPj4+Pj4+ICAgICAJaW50IGdwaW8sIGVyciwgaXJxOwo+Pj4+Pj4gICAgIAlpbnQgdHJp
+Z2dlcjsKPj4+Pj4+ICAgICAKPj4+Pj4+IEBAIC03OCwyNiArNzksMjkgQEAgc3RhdGljIGludCBn
+cGlvX2hhbHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4+Pj4+ICAgICAJ
+CXJldHVybiAtRU5PREVWOwo+Pj4+Pj4gICAgIAo+Pj4+Pj4gICAgIAkvKiBJZiB0aGVyZSdzIG5v
+IG1hdGNoaW5nIGNoaWxkLCB0aGlzIGlzbid0IHJlYWxseSBhbiBlcnJvciAqLwo+Pj4+Pj4gLQlo
+YWx0X25vZGUgPSBvZl9maW5kX21hdGNoaW5nX25vZGUobm9kZSwgY2hpbGRfbWF0Y2gpOwo+Pj4+
+Pj4gLQlpZiAoIWhhbHRfbm9kZSkKPj4+Pj4+ICsJY2hpbGRfbm9kZSA9IG9mX2ZpbmRfbWF0Y2hp
+bmdfbm9kZShub2RlLCBjaGlsZF9tYXRjaCk7Cj4+Pj4+PiArCWlmICghY2hpbGRfbm9kZSkKPj4+
+Pj4+ICAgICAJCXJldHVybiAwOwo+Pj4+Pj4gICAgIAo+Pj4+Pj4gICAgIAkvKiBUZWNobmljYWxs
+eSB3ZSBjb3VsZCBqdXN0IHJlYWQgdGhlIGZpcnN0IG9uZSwgYnV0IHB1bmlzaAo+Pj4+Pj4gICAg
+IAkgKiBEVCB3cml0ZXJzIGZvciBpbnZhbGlkIGZvcm0uICovCj4+Pj4+PiAtCWlmIChvZl9ncGlv
+X2NvdW50KGhhbHRfbm9kZSkgIT0gMSkKPj4+Pj4+IC0JCXJldHVybiAtRUlOVkFMOwo+Pj4+Pj4g
+KwlpZiAob2ZfZ3Bpb19jb3VudChjaGlsZF9ub2RlKSAhPSAxKSB7Cj4+Pj4+PiArCQllcnIgPSAt
+RUlOVkFMOwo+Pj4+Pj4gKwkJZ290byBlcnJfcHV0Owo+Pj4+Pj4gKwl9Cj4+Pj4+PiAgICAgCj4+
+Pj4+PiAgICAgCS8qIEdldCB0aGUgZ3BpbyBudW1iZXIgcmVsYXRpdmUgdG8gdGhlIGR5bmFtaWMg
+YmFzZS4gKi8KPj4+Pj4+IC0JZ3BpbyA9IG9mX2dldF9ncGlvX2ZsYWdzKGhhbHRfbm9kZSwgMCwg
+JmZsYWdzKTsKPj4+Pj4+IC0JaWYgKCFncGlvX2lzX3ZhbGlkKGdwaW8pKQo+Pj4+Pj4gLQkJcmV0
+dXJuIC1FSU5WQUw7Cj4+Pj4+PiArCWdwaW8gPSBvZl9nZXRfZ3Bpb19mbGFncyhjaGlsZF9ub2Rl
+LCAwLCAmZmxhZ3MpOwo+Pj4+Pj4gKwlpZiAoIWdwaW9faXNfdmFsaWQoZ3BpbykpIHsKPj4+Pj4+
+ICsJCWVyciA9IC1FSU5WQUw7Cj4+Pj4+PiArCQlnb3RvdCBlcnJfcHV0Owo+Pj4+Pgo+Pj4+PiBE
+aWQgeW91IHRlc3QgdGhlIGJ1aWxkID8KPj4+Pgo+Pj4+IFNvcnJ5IGZvciB0aGlzIGZhdWx0Lgo+
+Pj4+Cj4+Pj4gSW4gZmFjdCwgSSBhbSBzdGlsbCBmaW5kaW5nIGFuIGVmZmljaWVudCB3YXkgdG8g
+YnVpbGRpbmcgZGlmZmVyZW50IGFyY2ggc291cmNlIGNvZGUgYXMgSSBvbmx5IGhhdmUgeDg2LTY0
+Lgo+Pj4+Cj4+Pj4gTm93IEkgYW0gdHJ5IHVzaW5nIFFFTVUuCj4+Pj4KPj4+PiBBbnl3YXksIHNv
+cnJ5IGZvciB0aGlzIGZhdWx0Lgo+Pj4KPj4+IFlvdSBjYW4gZmluZCBjcm9zcyBjb21waWxlcnMg
+Zm9yIG1vc3QgYXJjaGl0ZWN0dXJlcyBmb3IgeDg2LTY0IGhlcmUgOgo+Pj4gaHR0cHM6Ly9taXJy
+b3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9vbHMvY3Jvc3N0b29sLwo+Pj4KPj4+IENocmlzdG9w
+aGUKPj4gCj4+IEhpLCBDaHJpc3RvcGhlIGFuZCBDb25vci4KPj4gCj4+IFNvcnJ5IHRvIHRyb3Vi
+bGUgeW91IGFnYWluLgo+PiAKPj4gTm93IEkgb25seSBrbm93IGhvdyB0byBxdWlja2x5IGlkZW50
+aWZ5IHRoZSByZWZjb3VudGluZyBidWdzLCBidXQgSSBjYW5ub3QgZWZmaWNpZW50bHkgZ2l2ZSBh
+IGJ1aWxkIHRlc3QuCj4+IAo+PiBGb3IgZXhhbXBsZSwgSSB1c2UgdGhlIGNyb3NzIGNvbXBpbGVy
+cyAncG93ZXJwYy1saW51eC1nbnUtZ2NjJyB0byBjb21waWxlICdhcmNoL3Bvd2VycGMvcGxhdGZv
+cm1zLzg1eHgvc2d5X2N0czEwMDAuYycgd2l0aCAtZnN5bnRheC1vbmx5IGZsYWcuCj4+IEJ1dCBJ
+IG1lZXQgdG9vIG1hbnkgaGVhZGVyIGZpbGUgbWlzc2luZyBlcnJvcnMuIEV2ZW4gaWYgSSBhZGQg
+c29tZSAnaW5jbHVkZScgcGF0aGVzLCBlLmcuLCAuL2FyY2gvcG93ZXJwYy9pbmNsdWRlLCAuL2lu
+Y2x1ZGUsCj4+IHRoZXJlIGFyZSBzdGlsbCB0b28gbWFueSBvdGhlciBlcnJvcnMuCj4+IAo+PiBT
+byBpZiB0aGVyZSBpcyBhbnkgZWZmaWNpZW50IHdheSB0byBjaGVjayBteSBwYXRjaCBjb2RlIHRv
+IGF2b2lkICdnb3RvdCcgZXJyb3IgYWdhaW4uCj4KPmlkayBhbnl0aGluZyBhYm91dCBwb3dlcnBj
+LCBidXQgd2hhdCBJIGZpbmQgaXMgYSBuaWNlIHdheSB0byBnZXQgYSBjb21waWxlcgo+Zm9yIGFu
+IGFyY2ggSSBkb24ndCB1c2UgaXMgdG8gc2VhcmNoIG9uIGxvcmUua2VybmVsLm9yZyBmb3IgYSAw
+ZGF5IHJvYm90Cj5idWlsZCBlcnJvciBzaW5jZSBpdCBnaXZlcyBpbnN0cnVjdGlvbnMgZm9yIGJ1
+aWxkaW5nIG9uIHRoYXQgYXJjaC4KPkZvciBleGFtcGxlOgo+aHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvbGludXhwcGMtZGV2LzIwMjIwNjA2MDkxMC5yWU5URnFkSS1sa3BAaW50ZWwuY29tLwo+Cj4K
+PkluIHRoaXMgY2FzZSwgeW91ciBidWcgc2VlbXMgb2J2aW91cz8gWW91IHR5cGVkICJnb3RvdCIg
+aW5zdGVhZCBvZiAiZ290byIuCj4KPkhvcGUgdGhhdCBoZWxwcywKPkNvbm9yLgo+Cj4+IAo+PiBU
+aGFua3MgYWdhaW4sIENocmlzdG9waGUgYW5kIENvbm9yLgo+PiAKPj4gTGlhbmcKCgpUaGFua3Mg
+c28gbXVjaCwgSSB3aWxsIHRyeSBpdC4=

@@ -2,159 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A48B54F6B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2839054F6B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 13:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381443AbiFQL2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 07:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S1381516AbiFQL3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 07:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380502AbiFQL2B (ORCPT
+        with ESMTP id S1381321AbiFQL30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:28:01 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F35659A;
-        Fri, 17 Jun 2022 04:27:58 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id g25so8168677ejh.9;
-        Fri, 17 Jun 2022 04:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+xDLkTUrpIGE4sdGGpQ0KY6HGXBhkSTOiPmSfBkAp5k=;
-        b=TCuRdB8VNcvWdnfJqBpCQQEjN8N9CIUOHyN8ThmgD7De0DKDCpReBrE4+LKP9ZVflZ
-         RYxg1fvr3G4Ss8FgXvg1Rh8JPxSw39CkpeKAOeefcpCcT2emXZnoZz/s+PCQhqPzUO4K
-         tgunpJTO30yDyp2Cs1KG4kTOcXZDFfD6W+G2EnBkhlbZH5IeEK7HBLuKI5d3YTVTa4zv
-         9p+dCX976pXpMlTP8WShtJFfCaeivhMH3ljSq3uRVUehyj/8LWmMh1c/fWco0YN4985i
-         nRiEYdIVBN3owBHtx7ea8aC7y96CjXCyw90f99CLLGWVoou9HCLUMJuJmxt4DASQsfoO
-         cMfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+xDLkTUrpIGE4sdGGpQ0KY6HGXBhkSTOiPmSfBkAp5k=;
-        b=OjoZ5hAiLbKcuFf7PuBXk1PBFebQccgQ4QjsGSd74zryVQAPZVfSlt20K8qPQa5uO4
-         rubswdN2/84h+KAA+OR6yEwv/Jteb9nGIvH/bfFoxHE61LNBSlW0C5TwjxyByv3mzajw
-         HpQYG6jee7qGgzqftdbLDfEhvJVtdYr03IQrYnzlKYfcWkAPjTx8CqOy83TIPxWZ8CCL
-         DSR3wKRzA9FnYK4inSQp5sBgAGGeHSbQLIRi52/5JohkL+I9NuEon6Fk3NrTcXysLC8y
-         LlBMFLz0CrTaTfJJuSaiaBf3CWcxDBZRq2wna1b7JAtl6N1KzsIYzq7KTtxH4VRZddVM
-         jUVQ==
-X-Gm-Message-State: AJIora9IFRLJcbxh2n7SZjt0PFSaYTkXGJ33wmqAzcuqbawJbjVHKJ2m
-        kpdtirfOhbgj0m1ZSC1LK79HrF5s9Y8=
-X-Google-Smtp-Source: AGRyM1sVMoDeVGIVOiBygy8ZNHe4NgUk2yZVZz8h6NeBnaTDM0Ve2cZvsAZ5uuhI60r31L8B2x4u+w==
-X-Received: by 2002:a17:907:9805:b0:710:858f:ae0d with SMTP id ji5-20020a170907980500b00710858fae0dmr8651090ejc.360.1655465276533;
-        Fri, 17 Jun 2022 04:27:56 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b006fea43db5c1sm2072128ejt.21.2022.06.17.04.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 04:27:56 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 17 Jun 2022 13:27:54 +0200
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH bpf v2 0/2] rethook: Reject getting a rethook if RCU is
- not watching
-Message-ID: <YqxlOuz8xur5xqYf@krava>
-References: <165461825202.280167.12903689442217921817.stgit@devnote2>
+        Fri, 17 Jun 2022 07:29:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D466CA9F;
+        Fri, 17 Jun 2022 04:29:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F7B61F17;
+        Fri, 17 Jun 2022 11:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC99C3411B;
+        Fri, 17 Jun 2022 11:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655465364;
+        bh=9wuCQMmf4p3CO/lJPhcLoBAMVeXWYbFbN0sfWQQnDQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=H25MPIFra+fAN55+BKYFZ4qRV0crICkaD+vebhgb34i5Z2BJMHHmOmIHEKfYxYSoD
+         N+wn0p3XckwdBF+8BpdmB7Ti1dBLWJZzdeknxF8nhP0K8Fh8aZPwGhZLcn8FL8BBCi
+         bkPKcAqBsv4K+9LIsNZyBy92pHwQ2NkK2nFWAykbBDJRkngnMLlX84dTZWVuNlelDW
+         qTEDzpDElreRE3YcTPrh5Zq9KRWPwfVAxjBHXC/lBpyZQ2Jfn2YEniaSsOG0taJyEp
+         hziypQnY7SMFgsKucBvsyasYxMrKKUwkUrkzLau1cnWDuQRzIiBZ3PYwnZgSzdy894
+         IHoCfblca6xxA==
+Date:   Fri, 17 Jun 2022 06:29:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/18] PCI: dwc: Various fixes and cleanups
+Message-ID: <20220617112922.GA1176883@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <165461825202.280167.12903689442217921817.stgit@devnote2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220617104143.yj2mlnj4twoxoeld@mobilestation>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 01:10:52AM +0900, Masami Hiramatsu (Google) wrote:
-> Hi,
-> 
-> Here is the 2nd version of the patches to reject rethook if RCU is
-> not watching. The 1st version is here;
-> 
-> https://lore.kernel.org/all/165189881197.175864.14757002789194211860.stgit@devnote2/
-> 
-> This is actually related to the idle function tracing issue
-> reported by Jiri on LKML (*)
-> 
-> (*) https://lore.kernel.org/bpf/20220515203653.4039075-1-jolsa@kernel.org/
-> 
-> Jiri reported that fprobe (and rethook) based kprobe-multi bpf
-> trace kicks "suspicious RCU usage" warning. This is because the
-> RCU operation is used in the kprobe-multi handler. However, I
-> also found that the similar issue exists in the rethook because
-> the rethook uses RCU operation.
-> 
-> I added a new patch [1/2] to test this issue by fprobe_example.ko.
-> (with this patch, it can avoid using printk() which also involves
-> the RCU operation.)
-> 
->  ------
->  # insmod fprobe_example.ko symbol=arch_cpu_idle use_trace=1 stackdump=0 
->  fprobe_init: Planted fprobe at arch_cpu_idle
->  # rmmod fprobe_example.ko 
->  
->  =============================
->  WARNING: suspicious RCU usage
->  5.18.0-rc5-00019-gcae4ec21e87a-dirty #30 Not tainted
->  -----------------------------
->  include/trace/events/lock.h:37 suspicious rcu_dereference_check() usage!
->  
->  other info that might help us debug this:
->  
->  rcu_scheduler_active = 2, debug_locks = 1
->  
->  
->  RCU used illegally from extended quiescent state!
->  no locks held by swapper/0/0.
->  
->  stack backtrace:
->  CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.18.0-rc5-00019-gcae4ec21e87a-dirty #30
->  ------
->  
-> After applying [2/2] fix (which avoid initializing rethook on
-> function entry if !rcu_watching()), this warning was gone.
-> 
->  ------
->  # insmod fprobe_example.ko symbol=arch_cpu_idle use_trace=1 stackdump=0
->  fprobe_init: Planted fprobe at arch_cpu_idle
->  # rmmod fprobe_example.ko 
->  fprobe_exit: fprobe at arch_cpu_idle unregistered. 225 times hit, 230 times missed
->  ------
-> 
-> Note that you can test this program until the arch_cpu_idle()
-> is marked as noinstr. After that, the function can not be
-> traced.
-> 
-> Thank you,
-> 
-> ---
-> 
-> Masami Hiramatsu (Google) (2):
->       fprobe: samples: Add use_trace option and show hit/missed counter
->       rethook: Reject getting a rethook if RCU is not watching
+On Fri, Jun 17, 2022 at 01:41:43PM +0300, Serge Semin wrote:
+> On Thu, Jun 16, 2022 at 03:03:16PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Jun 10, 2022 at 11:25:16AM +0300, Serge Semin wrote:
+> > > This patchset is a first one in the series created in the framework of
+> > > my Baikal-T1 PCIe/eDMA-related work:
+> > > ...
 
-LGTM
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
+> > This doesn't apply cleanly on v5.19-rc1 (my "main" branch).  v5.19-rc1
+> > was tagged June 5, but apparently v4 was rebased to v5.18 and posted
+> > June 10?  That's just a non-starter because many of these files were
+> > changed during the merge window between v5.18 and v5.19-rc1.
 > 
+> Ok. I'll rebase it on top of v5.19-rcX on the next cycle.
+
+I merge things on topic branches based on -rc1, so there's no benefit
+to rebasing to anything past that (at least for me).  Normally it
+doesn't matter because very little will change between -rc1 and -rcX.
+
+> > I'll be looking for an ack from Jingoo and/or Gustavo, maintainers of
+> > pcie-designware.c and related files.
 > 
->  kernel/trace/rethook.c          |    9 +++++++++
->  samples/fprobe/fprobe_example.c |   21 +++++++++++++++++----
->  2 files changed, 26 insertions(+), 4 deletions(-)
-> 
-> --
-> Signature
+> Alas this will be very unluckily to happen. They have been inactive
+> for more than four months on this and the rest of the patchsets
+> (that's how long the patchsets have been hanging out on review).
+> The last commit authored by Gustavo was the commit ce31ff786ddf
+> ("PCI: dwc: Fix 'cast truncates bits from constant value'") posted
+> in Sep 22, 2020 and no review activity afterwards. Jingoo' last
+> ack was in Jun 25, 2019. So two and three years of silence accordingly
+> doesn't give any hope on the sooner reaction from them.
+
+Ok, thanks for the update.  I hadn't noticed that.
+
+Bjorn

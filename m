@@ -2,131 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D844C54FD45
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB38054FD42
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiFQTHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S238047AbiFQTIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232457AbiFQTHw (ORCPT
+        with ESMTP id S237770AbiFQTIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:07:52 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E0912D0A;
-        Fri, 17 Jun 2022 12:07:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FtUo5yIGrNAL/pyx9F3jVal4TQg2pJYo3IiLqHiXvQrKl+jmTWAa08dMvAHJi/fotfbl+hv/3QF2ZpuHbvOPc0mp9j8V+Z/axCzDANOj8/I+uZchPSwlVliL/KS9dU0Hif7zzn7q1mKaTNz6xs3HtAXuq6vobLKrdAKL7kmN/dkD+oh9eFDJFRKQJEmSX3ZvX4H/X1cTtJ0daIUEmPZN2ILoSEg7BGfGjJP/v3heUYW9bjIPdyVB2FhOO3WcFdwfUUNNknZ7yMtkFdG+Yfkkw0sg6vaEoUCLvSLQt/LB9HDHU530Q4QAKOcc1jFEZV9CAOd3FRa30oBlpFcKwjPkLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qZklmRXtqBGkAzQ8Npn/04iLc7LQMVRDpZbJTmXDye0=;
- b=KNtDK5n7tFn5e/BKea4pzU6c8ObW/Gw6U5C2NwaCqaFdlxbUFb53RUn80kbgiGO7ui4zxUgBeajJYPEf3PRDkvIaWvS5KGNf3ZJILUbiFBxXrXzkCOn3Z86zRH56710mZFXBq8tBJmQBoBfqAW6Z43KntjBp70R6xo8V3svn+7Ypto9MyJY8lMoCH5LbBrF4tKNfXFWsKVieHyPMhl/7RW3pu0K9p3NU48tAGaHAJlUqegccyT/88DiXJ+vcY/kRUS/xvNGVesS52bPHv8FQNC6jaoKNYcHBmTtWEBucD+9Ta2Oe/tOBVK/py0QMI4Uv5b0cUqGTgNLgYLCYtUcJDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=alsa-project.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qZklmRXtqBGkAzQ8Npn/04iLc7LQMVRDpZbJTmXDye0=;
- b=qoiP46nZkSa8DVRaVjdp4DpVtpiQCFLvEFygvS5Wga18bkXQT8Gu2Voxzu7KXlauZlmL+reqEp94iZcSO2YCWRFcUIY9ByOADw+BGrIi871YqGJazgjU9veGyh4PLMnz0JY+9gqcza/pEOv8sMzjuTn6FhT0t+qB+9l/vWRcftzQAQk/UzNcIyjm/VnthDzAlRDkylDbF7b1uc2jjkVohaArhupPc83i8e17tFOCE+TLppz9J2GHUxODMrU0WfXMUxVhzwsPpJ5r4mII0UTdEM/NWxHFeUNCf5g9evq4E3lC8W1387LieDzT0QJsWcS3/8eXV0J5Sj5f+f5mRCvXkA==
-Received: from BN8PR15CA0022.namprd15.prod.outlook.com (2603:10b6:408:c0::35)
- by DM5PR12MB1915.namprd12.prod.outlook.com (2603:10b6:3:10c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Fri, 17 Jun
- 2022 19:07:49 +0000
-Received: from BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:c0:cafe::41) by BN8PR15CA0022.outlook.office365.com
- (2603:10b6:408:c0::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.21 via Frontend
- Transport; Fri, 17 Jun 2022 19:07:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT011.mail.protection.outlook.com (10.13.176.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5353.14 via Frontend Transport; Fri, 17 Jun 2022 19:07:47 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Fri, 17 Jun 2022 19:07:47 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 17 Jun 2022 12:07:46 -0700
-Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Fri, 17 Jun 2022 12:07:44 -0700
-From:   Sameer Pujar <spujar@nvidia.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <perex@perex.cz>,
-        <tiwai@suse.com>
-CC:     <jonathanh@nvidia.com>, <alsa-devel@alsa-project.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sameer Pujar <spujar@nvidia.com>
-Subject: [PATCH] ASoC: ops: Fix multiple value control type
-Date:   Sat, 18 Jun 2022 00:37:08 +0530
-Message-ID: <1655492828-5471-1-git-send-email-spujar@nvidia.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 17 Jun 2022 15:08:46 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3A5562D8;
+        Fri, 17 Jun 2022 12:08:44 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id f65so4782519pgc.7;
+        Fri, 17 Jun 2022 12:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=j41E/BYoRqjAFP436187RxcFJdtJLeDsuRyt74Icg5Y=;
+        b=KAt/ZwIW6GKOk2RApSdAlLE9w/HUp3vrGRdYs6vuAfZyTRi008JVB0cQOEnfvn4GfV
+         EfZaBz2oup74Sbuv+ci8AjajLNlStT4KI74+q8hh6GcNfH14P6EA4fqLQhNFErCnxcI4
+         mnWMYhvPo63tmos4CoENDr/K+TJ8rvQiFdDtW81B9CQvWqJ4IUXP63QrblMccCHavw5D
+         2G/gMYyKW0AvKJfWAWH26w286QKQPPfSbdJhtib2r3E5lZod7kFFiU4wAyTtBb6R8Mm1
+         qehpuyTAF/AYJgwXTQF49T407noTHjRhS+ZSfUUk7lxVgVncOStzn4rh3uui/1Cm9ihK
+         SPOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j41E/BYoRqjAFP436187RxcFJdtJLeDsuRyt74Icg5Y=;
+        b=N6RinlXpzus7smzOJTit1HO0+1IQh5fkpOcC0n6taEYLIwr611NwRJCPsLR37tFCo7
+         Gg3u+4nVxvY2LZ2CejNbkvmFE2DHVZ1tHSRQch64QdXcaLb9D2A598OGX3MuymJbvEni
+         qEzt6+jIWswe5aFHmClDgBophzJLP1FgpuyplpFOjfioI2hyanEADWYIRaX+v/iKH55J
+         9Wr9fjCl2lukE/wUVuKImQqdf9LfKo3cieUEumKHOTqgb2P1GsYwOCdJ1daakhkzXOfp
+         iCztGqkhjx4jEiCkmlRP8b+/+ju+bJDDcqYKU8AcKdnhUWbrOuLjL4LXSFjMpUHdii/C
+         BLbA==
+X-Gm-Message-State: AJIora8lnpDZc7oBCCjTwnkiQSO1YQFj+/KBE+ogOYIe8WoI4irBJpOC
+        D6QrDx6xvgiQniV6bnY3TUovWyYDlrg=
+X-Google-Smtp-Source: AGRyM1ttAZVg0K9w9XHm96HKWsCLC6j8iniymytPCQmXG79ZrpEgSUP/964Q9fbkjz0kHvDC/xMRZg==
+X-Received: by 2002:aa7:92d2:0:b0:51b:4d60:6475 with SMTP id k18-20020aa792d2000000b0051b4d606475mr11560802pfa.73.1655492924171;
+        Fri, 17 Jun 2022 12:08:44 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id g4-20020a17090a67c400b001ec7ba41fe7sm1302753pjm.48.2022.06.17.12.08.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 12:08:43 -0700 (PDT)
+Message-ID: <8ec38d8c-2ece-dfbb-8435-5963d7e80049@gmail.com>
+Date:   Sat, 18 Jun 2022 04:08:35 +0900
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fffad9c2-d078-43f2-7741-08da5094aafb
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1915:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1915E3B780AC270773146FA6A7AF9@DM5PR12MB1915.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tShjVb9mIZjevzEsau1aybiBkVEhfsLII/QKbyW1TPiFL4P4CbE1yQKt7Gvv0OY/76uQPHYWauqOuWOktFNmolx3hxi3DEvzN9jIT5y2htoudYzIdKh7ccZ3DRDndvD/Lgiv3tpGnisVsQK2NPoEpnxGr+77kKNTkWuaU3hwd7sO5qGoC2/uEUzO2W6CchhhMcZF5TyJh51UbQCHv93QfLuAHTsCK6qmWqpkYHp8INJ07YOc2mYb4l74w6lWbcEeaE5Zb7h+2uu1Jh+rNZYA1Tx+dONt6ma6qWJqkji4+Al+ZGEvLgEpLM8Bt8NnxFtsTDR+yvvInbIKWv6uEGzI7Z+LUrxHVb/R93VgOngNR2vMSBzafuatFtjv6cPi2WvSHP5B5mXlkBd5ydgmHdE0rSn+SnVNeAG78gbFWlFiwHzrxF6o10hR33KxPPb4I3qZsvkK4U9IlIvbuqybGEdwxpdZIG4rN29GJruX68axihIAapcyPXbXpRqSX7yRH9kY5LmZP+Qj92xsSfZF+6FSlBecaAsGEMFyYpTMao8I/J7MNQmF16NpXKIRqdb2eK6apfO2LhqCq8nP941Na4kl/aoi/gm4uFurqd9OmywuAx1Jdd3PpJt1N0W4pnyAxf3QcGPFCAhdgkZOHMgxSivShE1Ad9dE8oi+LSJzEqrjvnkQ2WIBAYtGGHUlf6O9Oiu2cstBA5noDOaY/xvNzMSH1Q==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(36840700001)(46966006)(4744005)(7696005)(8936002)(5660300002)(70586007)(8676002)(4326008)(110136005)(498600001)(86362001)(54906003)(70206006)(81166007)(356005)(316002)(6666004)(186003)(2616005)(36860700001)(107886003)(82310400005)(36756003)(40460700003)(83380400001)(47076005)(426003)(336012)(2906002)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 19:07:47.8460
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fffad9c2-d078-43f2-7741-08da5094aafb
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1915
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/4] PM / devfreq: Fix kernel warning with cpufreq
+ passive register fail
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220614230950.426-1-ansuelsmth@gmail.com>
+ <20220614230950.426-3-ansuelsmth@gmail.com>
+ <5848a10e-e5bf-108f-3e3e-15e16332922d@gmail.com>
+ <62a9af8f.1c69fb81.56ead.2c48@mx.google.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <62a9af8f.1c69fb81.56ead.2c48@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit aa2a4b897132("ASoC: ops: Fix boolean/integer detection for
-simple controls") fixes false positives with controls not ending in
-" Volume" string. But it now forces boolean type for the multi value
-controls. Fix this by adding a max check before assigning types.
+On 22. 6. 15. 18:20, Ansuel Smith wrote:
+> On Wed, Jun 15, 2022 at 04:11:13PM +0900, Chanwoo Choi wrote:
+>> On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
+>>> When the cpufreq passive register path from the passive governor fails,
+>>> the cpufreq_passive_unregister is called and a kernel WARNING is always
+>>> reported.
 
-Fixes: aa2a4b897132("ASoC: ops: Fix boolean/integer detection for simple controls")
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
----
- sound/soc/soc-ops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>> This is caused by the fact that the devfreq driver already call the
+>>> governor unregister with the GOV_STOP, for this reason the second
+>>> cpufreq_passive_unregister always return error and a WARN is printed
+>>> from the WARN_ON function.
 
-diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
-index 0267e39..21be8e8 100644
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -190,7 +190,7 @@ int snd_soc_info_volsw(struct snd_kcontrol *kcontrol,
- 			vol_string = NULL;
- 	}
+>>> Remove the unregister call from the error handling of the cpufreq register
+>>> notifier as it's fundamentally wrong and already handled by the devfreq
+>>> core code.
+
+If possible, could you make the patch description more simply?
+
+>>>
+>>> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
+>>> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+>>> ---
+>>>  drivers/devfreq/governor_passive.c | 1 -
+>>>  1 file changed, 1 deletion(-)
+>>>
+>>> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+>>> index 95de336f20d5..dcc9dd518197 100644
+>>> --- a/drivers/devfreq/governor_passive.c
+>>> +++ b/drivers/devfreq/governor_passive.c
+>>> @@ -331,7 +331,6 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
+>>>  err_put_policy:
+>>>  	cpufreq_cpu_put(policy);
+>>>  err:
+>>> -	WARN_ON(cpufreq_passive_unregister_notifier(devfreq));
+>>>  
+>>>  	return ret;
+>>>  }
+>>
+>> I think that it is necessary to free the resource when error happen.
+> 
+> Thing is that it should not be done in the register. Following the flow
+> of the devfreq core code, if a gov fails to START, the gov STOP is
+> called and we correctly free our resources. In the current
+> implementation we call the free 2 times and the second time will always
+> print error as the notifier is already unregistered.
+> 
+>> Also, after merging the your patch1, I think that cpufreq_passive_unregister_notifier(devfreq)
+>> will not return error. Instead, just 0 for success.
+> 
+> With path1 we removed the error with the parent_cpu_data deletion but
+> the unregister error is still there.
+> 
+>>
+>> Instead, 'err_free_cpu_data' and 'err_put_policy' goto statement are wrong exception
+>> handling. If fix the exception handling code in cpufreq_passive_register_notifier
+>> as following and with your patch1, I'll handle the resource for free/un-registration
+>> when error happen during cpufreq_passive_register_notifier.
+>>
+> 
+> Don't know the main problem here is calling unregister 2 times.
+
+Ah. I understood. To fix the error path handling with unregister function
+is called twice, I think that need to to fix it as following:
+
+
+diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+index a35b39ac656c..8f38a63beefc 100644
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -289,22 +289,25 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
+                parent_cpu_data = kzalloc(sizeof(*parent_cpu_data),
+                                                GFP_KERNEL);
+                if (!parent_cpu_data) {
++                       cpufreq_cpu_put(policy);
+                        ret = -ENOMEM;
+-                       goto err_put_policy;
++                       goto err;
+                }
  
--	if (!vol_string)
-+	if (!vol_string && max == 1)
- 		uinfo->type = SNDRV_CTL_ELEM_TYPE_BOOLEAN;
- 	else
- 		uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
--- 
-2.7.4
+                cpu_dev = get_cpu_device(cpu);
+                if (!cpu_dev) {
+                        dev_err(dev, "failed to get cpu device\n");
++                       cpufreq_cpu_put(policy);
+                        ret = -ENODEV;
+-                       goto err_free_cpu_data;
++                       goto err;
+                }
+ 
+                opp_table = dev_pm_opp_get_opp_table(cpu_dev);
+                if (IS_ERR(opp_table)) {
+                        dev_err(dev, "failed to get opp_table of cpu%d\n", cpu);
++                       cpufreq_cpu_put(policy);
+                        ret = PTR_ERR(opp_table);
+-                       goto err_free_cpu_data;
++                       goto err;
+                }
+ 
+                parent_cpu_data->dev = cpu_dev;
+@@ -324,15 +327,7 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
+        if (ret)
+                dev_err(dev, "failed to update the frequency\n");
+ 
+-       return ret;
+-
+-err_free_cpu_data:
+-       kfree(parent_cpu_data);
+-err_put_policy:
+-       cpufreq_cpu_put(policy);
+ err:
+-       WARN_ON(cpufreq_passive_unregister_notifier(devfreq));
+-
+        return ret;
+ }
 
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

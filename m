@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBC954FDE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B731354FDEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245251AbiFQTwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S242761AbiFQTyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbiFQTwO (ORCPT
+        with ESMTP id S229794AbiFQTyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:52:14 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B1733350
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:52:13 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id q8-20020a632a08000000b00402de053ef9so2667775pgq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:52:13 -0700 (PDT)
+        Fri, 17 Jun 2022 15:54:08 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E022E9DA;
+        Fri, 17 Jun 2022 12:54:07 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id y32so8415160lfa.6;
+        Fri, 17 Jun 2022 12:54:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Lv+NejjYJPAtPZEJ3w1I1cBl7ejfDuSrn7GM/dgRjS8=;
-        b=eVdoaGWT3W3S+FNNXUl/8ah2ngDbVZZ/YVNxeA0nZ0gL47rhoODis3BvDFE9yqAcfH
-         cs4wBmNz80D72Ms77gB/eJBWKI65CEF42UxNx+XUDwpk9XX1+YDcy7Ml10Gy6s162N36
-         +q0K/skwNeIWULDIpliP4IfDnc/kArrCD/nfkLd+9kT5agyG6zFW126D7IOBmCnbe1io
-         tSRJbVTndrz4H2ATzb4kUDGeNnpfOsUIjNdxuvHcfYdNauvIzxyizN2KtgwDYL6zitfj
-         lQYg+qY4KYC3qrc17OqT3pJZSWV4py9IZJGT/6GCM2Vs7u3JmAmpeyhcSR0v8djKmCTT
-         7Rwg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=02rUpC1JaF7EaBeJHvEU6ZBWvHsGGlNTq1EAsa26d+U=;
+        b=qKuKUQO/dcX5z9teCBIMgIMk3uOFQJLA3kHLgJnf3nxxZ7xzS/DXSwQhi0dsCujAcf
+         3BXckUda/elXHotAMIpNINg170iI42nMz4NCxKxIaqXZ5C7V1x3pV2rKW2kIyEXBbQdS
+         l46xTw46DtID6yKeA7MEPDIFrok8wY0EntHqq/Sy/eP2oT5dfG8MsjG2vVz0UbF5jq6o
+         /XmaSdi3IZnBNmzrEivxuZqSOeMTxakgYM4UL8r+FwVQiAzkP8jH7KO3cYeT/dU9DH2o
+         ITCzXEqkEBMx0f1eo5mpo4XCURBWxCA1XCQSxHspUeV7C1G5Rf15NmQe1KvSjmcA7wyV
+         G7CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Lv+NejjYJPAtPZEJ3w1I1cBl7ejfDuSrn7GM/dgRjS8=;
-        b=2/DWQ0CFZFnEs74cYTWgDoJEWXy6H5++GUm2NU4DIZe4FplqJmBwvTts8zqQCvYQs0
-         3+hhXT8ZF695LzdGcJrQrsLNDEMmhCKfFwsDIvXdr40j/rCGcUdjmWMfgbr3xlVt1+Ti
-         XJGg3lLGCjw8SiPlJYSyITx2SjVycA6qopKXjqNSOvC8bHO7gYlPCzoL4elMxxv/euYD
-         KeiJcs1NRKX9Pa7JInHUKvmB8pP/BHWAg3lsZ4tYwu8edBLlG3G8elwl6uBk05C1sJOL
-         lMITr/2pVuZvnrE9K7QqL73RTaMNw9ghDRN4DutfW/xjXxabcOQPKdkmjjtsIuwwVEbS
-         YKsQ==
-X-Gm-Message-State: AJIora/+USTAUikvNZ3tjZMk9N639luaQyxbO51bpIE4WNwpzVcoygNt
-        Dp5JGAEggC0eyTMuKnTeF3ATqo+0nfw=
-X-Google-Smtp-Source: AGRyM1vQbx4q8SwKybNxxRMWTFV4usZRF+S42IgTimAM7QW0ZYWAuE2SSWY/hklamaqRNBbXHKxT3w7HMr0=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:a27f:324e:df09:e093])
- (user=pgonda job=sendgmr) by 2002:a17:902:f690:b0:163:f8eb:3741 with SMTP id
- l16-20020a170902f69000b00163f8eb3741mr10984379plg.112.1655495532341; Fri, 17
- Jun 2022 12:52:12 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 12:51:41 -0700
-Message-Id: <20220617195141.2866706-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH] KVM: SEV: Init target VMCBs in sev_migrate_from
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=02rUpC1JaF7EaBeJHvEU6ZBWvHsGGlNTq1EAsa26d+U=;
+        b=JlLjKdOPfaO6M0JcRiwhdnToMgWYmGQGlUylxVj0EOV4EqDh2bnRDXVx19AyCAdaEY
+         7kZuOCugaA4aaxFI0Ij8LxKW/MFbgtOap71IJAYkT+XVQ8ofFV4o1OCGz9AVDiQorBGS
+         26OtwcgfCmgKk4WbJ8V3MXYCOzcqyMQ3jH7lwhrMD7sSG5AhAXjdEQl3MxruZL7ZE0kv
+         8En4YPOhkGaJH2D+Ulfb+PakWajwkKO6vapkFJjs5ZCLFtd/i+w2WtW3SFoOvsQoGQW9
+         mogFKbB+cf9RJeDV6OGxDhKfpH+Kqcxikh26VqxZZM9tFSHGHDzev+LJv5ZTzHHsxVCE
+         AKUQ==
+X-Gm-Message-State: AJIora9cvLleZRWlPql3f0QsSmcS+2T7lKwZ0pwa5l2bsEtkELC3POZf
+        gjMr3wjQAjSTuF9WkeuwwhE=
+X-Google-Smtp-Source: AGRyM1scl8XJBZO2QfldF/lmnmDPuZMn9aZDccuJGjXCRN2CeOWsSuAYogHMxuezZr/3ib1KJwEHmw==
+X-Received: by 2002:ac2:4314:0:b0:47e:53ff:7db with SMTP id l20-20020ac24314000000b0047e53ff07dbmr6548634lfh.118.1655495645696;
+        Fri, 17 Jun 2022 12:54:05 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id g18-20020ac24d92000000b0047f523ae57csm381524lfe.17.2022.06.17.12.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 12:54:05 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 22:54:03 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 07/23] ata: libahci_platform: Convert to using devm
+ bulk clocks API
+Message-ID: <20220617195403.wbqy5ozm6x7tq3dh@mobilestation>
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-8-Sergey.Semin@baikalelectronics.ru>
+ <3bf20887-6e2f-41f4-e4ec-5c2278f6cb18@opensource.wdc.com>
+ <20220615204509.siz54h4vbgvb3zkm@mobilestation>
+ <0dcebae2-5e4e-a0d3-181d-37bb9b40d564@opensource.wdc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dcebae2-5e4e-a0d3-181d-37bb9b40d564@opensource.wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,110 +80,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The target VMCBs during an intra-host migration need to correctly setup
-for running SEV and SEV-ES guests. Use the sev_es_init_vmcb() to setup
-the sev-es VMCBs and refactor out a new sev_init_vmcb() function to
-handle SEV only migrations.
+On Thu, Jun 16, 2022 at 09:23:28AM +0900, Damien Le Moal wrote:
+> On 2022/06/16 5:45, Serge Semin wrote:
+> [...]
+> >>> +		hpriv->clks = devm_kzalloc(dev, sizeof(*hpriv->clks), GFP_KERNEL);
+> >>> +		if (!hpriv->clks) {
+> >>> +			rc = -ENOMEM;
+> >>> +			goto err_out;
+> >>> +		}
+> >>> +		hpriv->clks->clk = devm_clk_get_optional(dev, NULL);
+> > 
+> >>> +		if (IS_ERR(hpriv->clks->clk)) {
+> >>> +			rc = PTR_ERR(hpriv->clks->clk);
+> >>> +			goto err_out;
+> >>> +		} else if (hpriv->clks->clk) {
+> >>
+> >> Nit: the else is not needed here.
+> > 
+> > Well, it depends on what you see behind it. I see many reasons to keep
+> > it and only one tiny reason to drop it. Keeping it will improve the
+> > code readability and maintainability like having a more natural
+> > execution flow representation, thus clearer read-flow (else part as
+> > exception to the if part), less modifications should the goto part is
+> > changed/removed, a more exact program flow representation can be used
+> > by the compiler for some internal optimizations, it's one line shorter
+> > than the case we no 'else' here. On the other hand indeed we can drop
+> > it since if the conditional statement is true, the code afterwards
+> > won't be executed due to the goto operator. But as I see it dropping
+> > the else operator won't improve anything, but vise-versa will worsen
+> > the code instead. So if I get to miss something please justify why you
+> > want it being dropped, otherwise I would rather preserve it.
+> 
+> An else after a goto or return is never necessary and in my opinion makes the
+> code harder to read. I am not interested in debating this in general anyway. For
+> this particular case, the code would be:
+> 
+> 		hpriv->clks->clk = devm_clk_get_optional(dev, NULL);
+> 		if (IS_ERR(hpriv->clks->clk)) {
+> 			/* Error path */
+> 			rc = PTR_ERR(hpriv->clks->clk);
+> 			goto err_out;
+> 		}
+> 
+> 		/* Normal path */
+> 		if (hpriv->clks->clk) {
+> 			...
+> 		}
+> 
+> Which in my opinion is a lot easier to understand compared to having to parse
+> the if/else if and figure out which case in that sequence is normal vs error.
+> 
 
-Fixes: 0b020f5af092 ("KVM: SEV: Add support for SEV-ES intra host migration")
-Fixes: b56639318bb2 ("KVM: SEV: Add support for SEV intra host migration")
+> As noted, this is a nit. If you really insist, keep that else if.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Ok. I'll leave it as is then.
 
----
+Thanks
+-Sergey
 
-I had tested this with the selftests and by backporting patches to our
-kernel fork and running on our Vanadium VMM internally. Doing that however
-I dropped the requirement that SEV_INIT not be done on the target for
-minimal changes to our VMM for testing. This lead to me missing this bug.
-
-Tested by backporting back to our kernel fork and running our intra-host
-migration test suite without SEV_INITing the target VM.
-
----
- arch/x86/kvm/svm/sev.c | 14 ++++++++++++++
- arch/x86/kvm/svm/svm.c |  3 +--
- arch/x86/kvm/svm/svm.h |  1 +
- 3 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 655770522471..d483f253fcf5 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1666,6 +1666,8 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
- 	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
- 	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
- 	struct kvm_sev_info *mirror;
-+	struct kvm_vcpu *vcpu;
-+	unsigned long i;
- 
- 	dst->active = true;
- 	dst->asid = src->asid;
-@@ -1681,6 +1683,10 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
- 
- 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
- 
-+	kvm_for_each_vcpu(i, vcpu, dst_kvm) {
-+		sev_init_vmcb(to_svm(vcpu));
-+	}
-+
- 	/*
- 	 * If this VM has mirrors, "transfer" each mirror's refcount of the
- 	 * source to the destination (this KVM).  The caller holds a reference
-@@ -1739,6 +1745,8 @@ static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
- 		src_svm->vmcb->control.ghcb_gpa = INVALID_PAGE;
- 		src_svm->vmcb->control.vmsa_pa = INVALID_PAGE;
- 		src_vcpu->arch.guest_state_protected = false;
-+
-+		sev_es_init_vmcb(dst_svm);
- 	}
- 	to_kvm_svm(src)->sev_info.es_active = false;
- 	to_kvm_svm(dst)->sev_info.es_active = true;
-@@ -2914,6 +2922,12 @@ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in)
- 				    count, in);
- }
- 
-+void sev_init_vmcb(struct vcpu_svm *svm)
-+{
-+	svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
-+	clr_exception_intercept(svm, UD_VECTOR);
-+}
-+
- void sev_es_init_vmcb(struct vcpu_svm *svm)
- {
- 	struct kvm_vcpu *vcpu = &svm->vcpu;
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 12e792389e8b..9b9bbc228a69 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1247,8 +1247,7 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
- 	}
- 
- 	if (sev_guest(vcpu->kvm)) {
--		svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
--		clr_exception_intercept(svm, UD_VECTOR);
-+		sev_init_vmcb(svm);
- 
- 		if (sev_es_guest(vcpu->kvm)) {
- 			/* Perform SEV-ES specific VMCB updates */
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index cd92f4343753..33b6c6dd1a10 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -656,6 +656,7 @@ int sev_cpu_init(struct svm_cpu_data *sd);
- void sev_free_vcpu(struct kvm_vcpu *vcpu);
- int sev_handle_vmgexit(struct kvm_vcpu *vcpu);
- int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in);
-+void sev_init_vmcb(struct vcpu_svm *svm);
- void sev_es_init_vmcb(struct vcpu_svm *svm);
- void sev_es_vcpu_reset(struct vcpu_svm *svm);
- void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
--- 
-2.36.1.476.g0c4daa206d-goog
-
+> 
+> > 
+> > -Sergey
+> > 
+> >>
+> >>> +			hpriv->clks->id = __clk_get_name(hpriv->clks->clk);
+> >>> +			hpriv->n_clks = 1;
+> >>>  		}
+> >>> -		hpriv->clks[i] = clk;
+> >>>  	}
+> >>>  
+> >>>  	hpriv->ahci_regulator = devm_regulator_get(dev, "ahci");
+> >>
+> >>
+> >> -- 
+> >> Damien Le Moal
+> >> Western Digital Research
+> 
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research

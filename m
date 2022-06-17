@@ -2,138 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009CD54F92D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B6254F935
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382589AbiFQO3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S1382645AbiFQOdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbiFQO31 (ORCPT
+        with ESMTP id S231490AbiFQOc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:29:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00EEF4B1FF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655476164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gAYVwqMN/CZe6fC+f9RsMLvHlUb8Q6jQz2uIGknDWoM=;
-        b=SEwtLNpdrXbYew4TN+GBpOmDx75UUbxosmWArGQWfYZ3mipQdaxQP05cqihZ9bPXTiwRKC
-        pJ/OzLo3iU1GJnzEWHNBHRwl30nAkDZdEx3JWIGuUkKMoAlNMHMkGAgbLF5pFfT9edVNUv
-        MgVe1aaBP5/XbOF4cgMYSxi2iq8eEAI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-wjrKsoReO4ibwa5joUp36A-1; Fri, 17 Jun 2022 10:29:21 -0400
-X-MC-Unique: wjrKsoReO4ibwa5joUp36A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 124AB2932481;
-        Fri, 17 Jun 2022 14:29:21 +0000 (UTC)
-Received: from [10.22.18.98] (unknown [10.22.18.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E8762026609;
-        Fri, 17 Jun 2022 14:29:20 +0000 (UTC)
-Message-ID: <b92bdb56-bfed-9cd2-5eb2-0b96a68b21d8@redhat.com>
-Date:   Fri, 17 Jun 2022 10:29:20 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Lockups due to "locking/rwsem: Make handoff bit handling more
- consistent"
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Zhenhua Ma <mazhenhua@xiaomi.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>
-References: <20220617134325.GC30825@techsingularity.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220617134325.GC30825@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Jun 2022 10:32:56 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45779BCBC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:32:55 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id a17so2068613pls.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=+N/16cyFHOuLupQ+Fk4F91U88SFBJPVf6lD4I/mDTOc=;
+        b=V5KGDpPpLv4gKA2kex+nq5K86WkTiTIUPC09l4jO/cjP1ray0Y9Tr7B2ih/Eu/jpl2
+         LKuWx2XSlpztoIENI4/C9THP2gsEW8QKc3JDClcSL/kL4btjUNvOJBL9iAzeWXthdNLH
+         cDDhrJUtqfywTBaes+SYgeEm8et/TBg6dn1IccAZamdHRbyf4EnaChpBhwd3cBYR/uCm
+         dR0Mxuw7PIDS6k67D2uB0ScaaeDaZbRLh4a/CyRUvWy7TFCQLfUJrop1w9uI4H7/SMqR
+         /my/yQqVMu8QP2BWtGPmbAYUZIXyikuU3+Wi4Pr8too0nEhEWfoMlEH9Xhnu4QFzDXib
+         alrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+N/16cyFHOuLupQ+Fk4F91U88SFBJPVf6lD4I/mDTOc=;
+        b=RZuX4aKKGdlGeMiMfOaGU4zQnK71PDasMTjM63K+4MqTmFpWjMeeebLwVSGGUcvg6W
+         NCKtq7V1OlK8sB0x175DTnQdjPtAZRCR+599cZMpw8v+Wln9s+ksQTojUlrfGDT3G89E
+         b5XR9L5nRaMRwL6tbfU7UGO/j+u/6Q/op3oSYj2xmfL/Tu7upKfM01Uq40RIQ+lzKMD2
+         t3Xl+oMiseXt0d5pXBpF+wp0I8M+bb+IaQrUT/a0Hn00D0mAYMLxiy2OdN2RibPkChqU
+         yVCkGTgQa6lvfbfVXImAsjh3Rv+j/ZTBBcDqTr8566i668yoQ+4kcYFV2bIQM8R3tUgL
+         UppQ==
+X-Gm-Message-State: AJIora8SGNGTuEUljH6DlyzDpvjIGcWnmjS5Oz/kS5oWZJusLwC7oFYq
+        Z5JXOAGFW5SbNVYzXno38BE=
+X-Google-Smtp-Source: AGRyM1v6ZTA/PMfzY6SMN9+Ni8TVJCGyDlXFym+hzhe+n0abVIxkiAK6AA6TlqrqwQX+SuKqMSuWng==
+X-Received: by 2002:a17:902:d502:b0:168:faa0:50a0 with SMTP id b2-20020a170902d50200b00168faa050a0mr9964651plg.142.1655476374750;
+        Fri, 17 Jun 2022 07:32:54 -0700 (PDT)
+Received: from localhost.localdomain ([223.104.160.3])
+        by smtp.gmail.com with ESMTPSA id o4-20020a1709026b0400b00163de9e9342sm3684354plk.17.2022.06.17.07.32.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Jun 2022 07:32:54 -0700 (PDT)
+From:   Binglei Wang <l3b2w1@gmail.com>
+X-Google-Original-From: Binglei Wang
+To:     mhiramat@kernel.org
+Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        l3b2w1 <l3b2w1@gmail.com>
+Subject: [PATCH] kprobes: check the prameter offset in _kprobe_addr()
+Date:   Fri, 17 Jun 2022 22:32:45 +0800
+Message-Id: <1655476365-21662-1-git-send-email-l3b2w1@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 09:43, Mel Gorman wrote:
-> Hi Waiman,
->
-> I've received reports of lockups happening in kernels including
-> commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
-> consistent"). The exact symptoms vary but usually it's either a soft lockup
-> (older kernel with a backport), the task hanging and never exiting or the
-> machine becomes generally unresponsive and ssh is broken.  The problem
-> started in 5.16 and reliably bisected to commit d257cc8cb8d5. Reverting
-> the patch in 5.16, 5.17 and 5.18 finish the test successfully but I didn't
-> test a revert on 5.19-rc2 because of other changes layered on top.
->
-> The reproducer is simple -- start pairs of CPU hogs pinned to a CPU with
-> different SCHED_RR priorities that run for a few seconds. It does not
-> hit every time but usually happens within 10 attempts. On 5.16 at least,
-> the tasks failed to exit and kept retrying to exit using the following path
->
-> [<0>] rwsem_down_write_slowpath+0x2ad/0x580
-> [<0>] unlink_file_vma+0x2c/0x50
-> [<0>] free_pgtables+0xbe/0x110
-> [<0>] exit_mmap+0xc1/0x220
-> [<0>] mmput+0x52/0x110
-> [<0>] do_exit+0x2ec/0xb00
-> [<0>] do_group_exit+0x2d/0x90
-> [<0>] get_signal+0xb6/0x920
-> [<0>] arch_do_signal_or_restart+0xba/0x700
-> [<0>] exit_to_user_mode_prepare+0xb7/0x230
-> [<0>] irqentry_exit_to_user_mode+0x5/0x20
-> [<0>] asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [<0>] preempt_schedule_thunk+0x16/0x18
-> [<0>] rwsem_down_write_slowpath+0x2ad/0x580
-> [<0>] unlink_file_vma+0x2c/0x50
-> [<0>] free_pgtables+0xbe/0x110
-> [<0>] exit_mmap+0xc1/0x220
-> [<0>] mmput+0x52/0x110
-> [<0>] do_exit+0x2ec/0xb00
-> [<0>] do_group_exit+0x2d/0x90
-> [<0>] get_signal+0xb6/0x920
-> [<0>] arch_do_signal_or_restart+0xba/0x700
-> [<0>] exit_to_user_mode_prepare+0xb7/0x230
-> [<0>] irqentry_exit_to_user_mode+0x5/0x20
-> [<0>] asm_sysvec_apic_timer_interrupt+0x12/0x20
->
-> The C file and shell script to run it are attached.
->
-Thanks for the reproducer and I will try to reproduce it locally.
+From: l3b2w1 <l3b2w1@gmail.com>
 
-It is a known issue that I have receive similar report from an Oracle 
-engineer. That is the reason I posted commit 1ee326196c66 
-("locking/rwsem: Always try to wake waiters in out_nolock path") that 
-was merged in v5.19. I believe it helps but it may not be able to 
-eliminate all possible race conditions. To make rwsem behave more like 
-before commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling 
-more consistent"), I posted a follow-up patch
+I encounter a problem when using kprobe.
+There is no checkping about the parameter offset in _kprobe_address().
 
-https://lore.kernel.org/lkml/20220427173124.1428050-1-longman@redhat.com/
+a. execute command with a valid address, it succeed.
+echo 'p:km __kmalloc+4099' > kprobe_events
+In reality, __kmalloc+4099 points to free_debug_processing+579.
 
-But it hasn't gotten review yet.
+so we end up with:
+p:kprobes/kp __kmalloc+4099
 
-I will try your reproducer to see if these patches are able to address 
-the lockup problem.
+b. execute command with an invalid address,
+   failing because of addr crossing instruction boundary
+echo 'p:km __kmalloc+4096' > kprobe_events
+In reality, __kmalloc+4096 points to free_debug_processing+576.
 
-Thanks,
-Longman
+Thus, if not checkping the offset, it could point to anywhere,
+may succeed with a valid addr, or fail with an invalid addr.
+that's not what we want already.
 
-commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
-consistent").
+When registering a kprobe to debug something,
+either supplied with a symbol name through the sysfs trace
+interface,
+or programming kp.addr with a specific value in a module,
+that means the target function to be probed by us is determined.
+
+With or whitout an offset(0 or !0),
+it should be limited to be whithin the function body.
+to avoid ending up with a different and unknown function.
+
+Maybe it's better to check it.
+
+Thank you to review this!
+
+Signed-off-by: l3b2w1 <l3b2w1@gmail.com>
+---
+ kernel/kprobes.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index f214f8c..d5b907a 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1449,6 +1449,9 @@ static kprobe_opcode_t *
+ _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
+ 	     unsigned long offset, bool *on_func_entry)
+ {
++	unsigned long addr_offset;
++	unsigned long symbol_size;
++
+ 	if ((symbol_name && addr) || (!symbol_name && !addr))
+ 		goto invalid;
+ 
+@@ -1465,14 +1468,20 @@ _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
+ 			return ERR_PTR(-ENOENT);
+ 	}
+ 
++	if (!kallsyms_lookup_size_offset((unsigned long)addr,
++				&symbol_size, &addr_offset))
++		return ERR_PTR(-ENOENT);
++
++	/* Guarantee probed addr do not step over more than one function */
++	if (offset >= symbol_size || offset >= symbol_size - addr_offset)
++		goto invalid;
++
+ 	/*
+-	 * So here we have @addr + @offset, displace it into a new
+-	 * @addr' + @offset' where @addr' is the symbol start address.
++	 * @addr is the symbol start address
++	 * @offset is the real 'offset' relative to start address
+ 	 */
+-	addr = (void *)addr + offset;
+-	if (!kallsyms_lookup_size_offset((unsigned long)addr, NULL, &offset))
+-		return ERR_PTR(-ENOENT);
+-	addr = (void *)addr - offset;
++	addr -= addr_offset;
++	offset += addr_offset;
+ 
+ 	/*
+ 	 * Then ask the architecture to re-combine them, taking care of
+-- 
+2.7.4
 

@@ -2,121 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FF854FD6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A058854FD72
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiFQTTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S240096AbiFQTW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiFQTTx (ORCPT
+        with ESMTP id S231948AbiFQTWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:19:53 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F73A34642
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:19:51 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id ej4so3437560edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DI1RxyMzElXtlcQrNQZug30SgE2uSFwxG1kHH+iR6eM=;
-        b=OZMdtgldn2H7V3EtlQ5+jBb7O1GqZR6ZtJXHPkuqA2kIoPKyFiMkzZvQ31Bnq4pQii
-         HnoV3nD8jo9ufRDwBXvwpAw75D+Tsne78FPMg8gEP+jrgUZ1k8g1sEu8+vVSPjwhn6iF
-         zIy93qLf+DfBMXjP6Vs/ehN6+BnkJSdbH0ZCs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DI1RxyMzElXtlcQrNQZug30SgE2uSFwxG1kHH+iR6eM=;
-        b=tppv99ytj+EZxYrNl4hVJaNIy81TN/yceJgqFGtXDo9gvCztbnnk4X9N4ozl8sdt4e
-         y1U2M3eBT5/XROdJCUQkv7zCYvjz7Ox/Uuaujh2fveiCQ56CtwLL0wApIYMP8HYbGlVA
-         gXhthcP3hf1+9nQACJAf2KouQ2hKB7KshhE9PwjGUCyVE5OTXS4juzavxXP9XuLXfHTI
-         OkaoWpzYlePDOeFOUDX1kCVSYFiRI4b65EaeBVIs79wMlijb1xd0C8r6Rga/ntUrozPz
-         toOAJ8OExl+xwUmCko/0qZeoE6oy08gPeZoUCUUR9BLQS7MTYwNIBFoAqc8r5P1pTTjB
-         1Xlg==
-X-Gm-Message-State: AJIora/7CiqtuWzuc0/wPkwsfZ3rU3bA7MhKaFCm9ELV+zYeQC7vzqv0
-        ywNh1XgF9y9vobDVtI58+qeuwkqQ4b2JHw/g
-X-Google-Smtp-Source: AGRyM1sSW6j24TaXxkn1cI+lePMniNW5CXmGr1Cy56MU7yo1KrXUnq6PzkaP1X80mDnzFFrKsAsO5w==
-X-Received: by 2002:a05:6402:42d5:b0:433:1727:b31c with SMTP id i21-20020a05640242d500b004331727b31cmr14176207edc.9.1655493589781;
-        Fri, 17 Jun 2022 12:19:49 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id r26-20020a056402035a00b00435201d96f8sm4260036edw.16.2022.06.17.12.19.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 12:19:49 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id q9so6884818wrd.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:19:49 -0700 (PDT)
-X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id
- j17-20020a056000125100b0021aefae6cbemr4117896wrx.281.1655493588814; Fri, 17
- Jun 2022 12:19:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
- <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net> <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
- <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
- <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com> <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
- <7499dd05-30d1-669c-66b4-5cb06452b476@redhat.com> <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
- <YqzQKER4JRoudTJE@hirez.programming.kicks-ass.net> <CANn89iKO1koPa5R_mvK0k2dkFaq+F0PgcbvpVt+JpzzR5xsu6g@mail.gmail.com>
-In-Reply-To: <CANn89iKO1koPa5R_mvK0k2dkFaq+F0PgcbvpVt+JpzzR5xsu6g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Jun 2022 14:19:32 -0500
-X-Gmail-Original-Message-ID: <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
-Message-ID: <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
-Subject: Re: [PATCH] locking/rwlocks: do not starve writers
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 17 Jun 2022 15:22:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8505047A;
+        Fri, 17 Jun 2022 12:22:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 884CEB82B49;
+        Fri, 17 Jun 2022 19:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38CF6C3411B;
+        Fri, 17 Jun 2022 19:22:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655493739;
+        bh=Lz0ieny+u/I7cAPkDDl5yZ/SbgiN90K1CuHA7DQocXQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Oy0BNom3D4ksp1nFINUAZnXFBlevLGfROJ4rN2OUMu1lBgA5LdMXDfn4/R/jEz+H4
+         5/FIGVI/JeQESg1eWC3wYvvX5dGcD1yaSzbSaS4WvaJC9lTF1b9IMEhKyeYzw1wyB7
+         9qEWTkbNn9l7ji6Gmx8G7jWWYo5RHbDvOQN06JX3rILsV/wDDh2dSeUgqV0gDwU/KX
+         UW6oPjhsYLZzvxa0PqfHVRoB0L/5k+RSqaiMUAWfqln2t6cWhYZ6jrVCYkZrjU+lYa
+         MfV9mZZkn50JuvnRV2pJhDs14r237AgUxc9QQIrDerutqjoFXQnMpy6SUl3TAcjTs9
+         WEYiJ7RLdElgQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 25D3AE6D466;
+        Fri, 17 Jun 2022 19:22:19 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v5.19-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220617144428.569247-1-chenhuacai@loongson.cn>
+References: <20220617144428.569247-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <loongarch.lists.linux.dev>
+X-PR-Tracked-Message-Id: <20220617144428.569247-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-5.19-2
+X-PR-Tracked-Commit-Id: 03dfb4a3abc4cc497850e6968b59005485592369
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cc2fb31d49f8956283e7cd25face1327dcfa4c16
+Message-Id: <165549373914.16480.10476201775866298316.pr-tracker-bot@kernel.org>
+Date:   Fri, 17 Jun 2022 19:22:19 +0000
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 2:10 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> So I wonder why we replaced eventpoll spinlock with an rwlock.
+The pull request you sent on Fri, 17 Jun 2022 22:44:28 +0800:
 
-Yeah, usually we've actually gone the other way.
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-5.19-2
 
-Spinning rwlocks are seldom a big win, unless you can get some
-secondary indirect win out of them.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cc2fb31d49f8956283e7cd25face1327dcfa4c16
 
-That secondary win is often:
+Thank you!
 
- (a) unfairness is usually very good for throughput (iow, the very
-unfairness that you hit may *be* the reason why it looked good in some
-benchmark, and people decided "ok, let's do this").
-
- (b) the special case of "interrupts take the lock for reading only"
-thing that allows other readers to not disable interrupts
-
-IOW, the win of a spinning rwlock is not necessarily the "we allow
-multiple concurrent readers" that you'd expect, because if you have
-small sections of code you protect, that just isn't a big deal, and
-the costs are in the lock bouncing etc.
-
-It's also worth pointing out that rwlocks are only unfair *if* they
-hit that "reader from (soft)interrupt" case. Which means that such
-cases *really* had better either have very very short locked regions
-(with interrupts disabled), or they really need that (b) part above.
-
-And yes, the tasklist lock really needs the (b) part above. Disabling
-interrupts for task traversal would be completely and entirely
-unacceptable, because the traversal can actually be fairly expensive
-(lots and lots of threads).
-
-I suspect eventpoll just did the wrong thing.
-
-              Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

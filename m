@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166DE54FE23
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CDD54FE28
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242898AbiFQUL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S1345705AbiFQULj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244943AbiFQULZ (ORCPT
+        with ESMTP id S244439AbiFQULi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:11:25 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598252181A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:11:22 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id l192so3905150qke.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:11:22 -0700 (PDT)
+        Fri, 17 Jun 2022 16:11:38 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C631ADA2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:11:37 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id 43so7986986qvb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=5rlwEuaaxo2GmABtFmb86pra51ZtJdGFDNYMQBKtQiQ=;
-        b=Amwtt37q0TAHLJo9OWoQ57m7cwEXUUlK9BNAjiGkATrr0ZnlYY/ZIWZXz5jhtubAwa
-         ay6UvC5d7ucVemSZiVy72V4TFB4Hq7QzSsFxWzYE4hbfGxR6ASD5Oyt1WOrmnI/c3ZIn
-         Lg+U0tl3lBi62sVy4m1xiSvrEv4rzBYDpz9hY=
+        h=from:date:to:cc:message-id:mime-version;
+        bh=c6HUnYkSdwKF6VwZqapAdI/2A9eVLq9BatAO2vrrJnw=;
+        b=IX2PByp4AaPYCaHsl6YaKxCQDBLcbzVfewb/i5gDZJp4jC5hZnUusDaeihpND2VR3b
+         2sZT0iz0pv92t3hD0zp1TvJBu9l8dLLbEi7+msWg7AfZOIXgxBr5+apxMEFg4MuWs2ty
+         lLkNS/F1s2iGiJZURZjQDd3QjCpnH5JBlqEoA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=5rlwEuaaxo2GmABtFmb86pra51ZtJdGFDNYMQBKtQiQ=;
-        b=bQn/cTmk6PQs45R4xD1LRtcN6Jp7hhfK0BLYZ1q7jOzwpX2rLrVumOTHXsyXUBawyD
-         HVjBIC7Uy59EsOJAtXpu18eNsr3SnGa+3+/HcT5viyVWr86LBFtW+vu4ZXln43L+G6DN
-         b5iUeYfQARwaR5aVInPtgibtvsNHgHnINcGyN5ERhyXjj5+ihYY3hJkNISd6vaCM14/0
-         TmI/booOF9Y1LRO61pTFE+7acO/Si4jcPzdUnF5Sq1CVqA6SUHz0Ww5Zqmi80psfEo98
-         gSepwPujX1Rw+PpHcbqvw+Gy0NyTM2YQ5SpbM2UgZBsOaHXuOtDdtnuSa3ZLInEeq2b1
-         2DZQ==
-X-Gm-Message-State: AJIora8qCBn3oPh9+KpWd1lPQhdeuKY0Davk1zij1rpQk/u9e0XEib3P
-        xl+xRGXM8pMIRrajIXKmK7KxdQ==
-X-Google-Smtp-Source: AGRyM1tCJS31ETIPRbVR9J9Z+Pn7k5BuwKPDGFgxLIQ6d78ANXt8jtThPMTD0zCl4YXlFh97x7Vebg==
-X-Received: by 2002:a05:620a:4048:b0:6a7:7cb2:f48 with SMTP id i8-20020a05620a404800b006a77cb20f48mr8587526qko.578.1655496681451;
-        Fri, 17 Jun 2022 13:11:21 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:message-id:mime-version;
+        bh=c6HUnYkSdwKF6VwZqapAdI/2A9eVLq9BatAO2vrrJnw=;
+        b=C/E5++CxqZEvBUKaIdF85dW5Wth7SdvmmatKkUNlXZ9MT0Hw21+TzveMnawTrwGRN5
+         tjgJVGcE+wRbn6kNCsbn0U555NKAVAdo7T4tByTu+unNz7z78nY02MaOXU5ysy7J1C5v
+         SfOeWmnD3K8mK419oHHrJZf8bNQGWEc2SIwtgQ9+vLqHUTHMJBE2XRyY8bZdUDXcp97S
+         P+L3Cp/cru2o1o/+JD7psFlDoUpOlJBxNUVvbu8LNNEgUop1ZGqd8O2KWg9afT1ZzjIm
+         L6YK16M20OwTxfs70gmH295VCZlKed7hsKgih98rxru4Ktau4yzmLoGC55YZKaTBoQIM
+         W4dg==
+X-Gm-Message-State: AJIora+439SUOCzIBOm2P2w1hXmTQ+pFQZC/UxjVGvHdISr/99rNlhk9
+        YZNn9E/Xz4od1ZJEg+HnS+aU9AtOuvZKsQ==
+X-Google-Smtp-Source: AGRyM1uH6N33lIH+urBS+pxdMchukdpm2KfvwVdoRWcIoCCFoYOXcO7VRs/OEyCpGYrMfI3DsYiOlg==
+X-Received: by 2002:ac8:5e4f:0:b0:305:1e3d:b829 with SMTP id i15-20020ac85e4f000000b003051e3db829mr10040332qtx.471.1655496695881;
+        Fri, 17 Jun 2022 13:11:35 -0700 (PDT)
 Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id o12-20020a05620a2a0c00b006a726b03ad1sm5404695qkp.52.2022.06.17.13.11.19
+        by smtp.gmail.com with ESMTPSA id y29-20020a37f61d000000b006a3325fd985sm5011152qkj.13.2022.06.17.13.11.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 13:11:20 -0700 (PDT)
+        Fri, 17 Jun 2022 13:11:35 -0700 (PDT)
 From:   Vince Weaver <vincent.weaver@maine.edu>
 X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Fri, 17 Jun 2022 16:11:19 -0400 (EDT)
-To:     Rob Herring <robh@kernel.org>
-cc:     Vince Weaver <vincent.weaver@maine.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+Date:   Fri, 17 Jun 2022 16:11:34 -0400 (EDT)
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+cc:     Mark Rutland <mark.rutland@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
         Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [perf] why is /proc/sys/kernel/perf_user_access ARM64 only?
-In-Reply-To: <CAL_JsqL+0z1vc+T+9m-faoM-4W=x=7-UBu5=S-QGjTwU2biGNw@mail.gmail.com>
-Message-ID: <d4b3f6e2-46f7-7921-17ab-d249f5047a8@maine.edu>
-References: <30d95df2-c3b-b3e3-d65e-c6be0355fb1@maine.edu> <CAL_JsqL+0z1vc+T+9m-faoM-4W=x=7-UBu5=S-QGjTwU2biGNw@mail.gmail.com>
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>
+Message-ID: <db2031ec-cf4-4323-9d3-8262849add3d@maine.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022, Rob Herring wrote:
+Hello
 
-> On Wed, Jun 15, 2022 at 11:57 AM Vince Weaver <vincent.weaver@maine.edu> wrote:
-> > It turns out ARM64 has added a custom
-> >         "/proc/sys/kernel/perf_user_access"
-> > to control rdpmc access, but only on ARM64.
-> >         e2012600810c9ded81f6f63a8d04781be3c300ad
-> >
-> > Why is this ARM64-only?  Why isn't this generic perf infrastructure?
-> 
-> Adding it on x86 would break users at least if default off.
+Is the perf_mmap__read_self() interface as found in tools/lib/perf/mmap.c
+the "official" interface for accessing the perf mmap info from
+userspace?
 
-Well in theory the file could have been added on x86 but default to on.
-Some of the low-level perf feature detection is bad enough as is, without
-having architecture-dependent proc files to worry about too.
+Are the READ_ONCE() calls required?  If they are left out, will accessing 
+the mmap interface potentially fail?  Has this ever been seen in practice?
 
-> > How is this different from the existing
-> >         /sys/bus/event_source/devices/cpu/rdpmc
-> > tooling?
-> 
-> big.LITTLE
+Part of why I am asking is both
+	tools/lib/perf/mmap.c
+and
+	tools/linux/compiler.h (which defines READ_ONCE)
+have SPDX headers indicating they are GPL-2.0 licensed, which means it 
+seems like it would not be possible to easily use the perf mmap interface 
+from BSD-licensed code.  Would it be possible to get those two files 
+re-licensed?
 
-interesting.  I wonder how x86 Alder Lake deals with things.
+The (BSD-licensed) PAPI is currently using a mmap reading interface 
+based on early documentation for the feature, but it isn't 100% the same 
+as the version from libperf (and isn't using READ_ONCE).  Life would be 
+easier if we could use the perf version of the code because then we would 
+have one less variable to deal with when trying to track down issues.
 
-In any case I guess it's really too late to do anything about this.  I 
-should check to make sure the manpage gets updated.
+Vince Weaver
+vincent.weaver@maine.edu
 
-Vince
+

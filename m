@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D53754FB67
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15A154FB87
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383441AbiFQQtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S1383059AbiFQQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383444AbiFQQtF (ORCPT
+        with ESMTP id S1382967AbiFQQvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:49:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59341EC7C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:48:47 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 18:48:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655484524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lZNnFZWTpGOh34PezP9zx8zTHJmgqawQXcsCphAXtRE=;
-        b=KFIh50AnP7x90rLd8E/Jd7VNTDB0ZjdnIfwtjTnzpDDVeYDHGv7Muoj4Cl3Fztp95DaskO
-        PNg9C+ZCvAziko6U2b7b9V/1yj1trHUj08yRmQaTBjkhKkW3UyACv7KHmwJmV9PTOLWYNm
-        faQ6O6Vta9dwZ6jyOcRjAbEqyn/2mBxsoc1hhXCgIkQoMzx7zHG+iGArvILTMn3ueX84yF
-        54ZaOYZDd2QIYsFxGG0uGhogqVx8SXNXlpbgITLPZZAoetaeHWqL/Zb+julA7RKNBM+Z9z
-        xyPIsXpTjWpu51NQg/UVzHoNFJSWMRkTg2O2P0cFA3tJucYFjm40Zk0SDtD0vA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655484524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lZNnFZWTpGOh34PezP9zx8zTHJmgqawQXcsCphAXtRE=;
-        b=2agDK2fIdiLRAg1Gb6wuPEF+97wxLIue6b7U8f1kzU/PN2gSrNNsLC6DRSG1GAVT/JZ6KL
-        2PI+jvewV6W2efCA==
-From:   Sebastian Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Jann Horn <jannh@google.com>, Theodore Ts'o <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] random: Fix signal_pending() usage
-Message-ID: <YqywapDM7NPC/X+E@linutronix.de>
-References: <20220405163931.1108442-1-jannh@google.com>
- <CAHmME9pW6heXtPrfCP7J6ODgSc8sotsv6E3dnJoVBaPi+Ph=HA@mail.gmail.com>
+        Fri, 17 Jun 2022 12:51:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7240753724
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:50:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C0D50CE2964
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5784C3411C;
+        Fri, 17 Jun 2022 16:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655484621;
+        bh=prjUJrbVE5x0yiMzgyo3mK2A9LSWth8Gi1HX3PvfTp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OTyy4eLFepkJl5S9gSy7oHiErOL6sTJtIx0492eQEMH/6N5jsFc9onMCQ+ptZHGmw
+         Ns+rhHPxCW18IZjEWd90XlcKuHwxI7kp1eDtiQ5PF2onODY5sCAv0Nh5aZv19y9KQr
+         Rmqix7rw8rtse2JlJqBUsWFbnRAiFP0U1WcQID7E8Q3P9rT5xAeli9M+vxhV763Hgl
+         RtVqNk+mOUQkkNXyKLzimMxmucAX7hyQiFBRsX1TupL59AcFgL32YBJSyphHDLC6SS
+         iAQUj4s9I5siLd0uWA/VSE1FjopbL8opasJM2xSruv+jnGjzSN4PfztamyEuzKpIBR
+         /H9LsimG4/zxA==
+Date:   Fri, 17 Jun 2022 09:50:19 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] Char/Misc driver fixes 5.19-rc3
+Message-ID: <Yqywy+Md2AfGDu8v@dev-arch.thelio-3990X>
+References: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHmME9pW6heXtPrfCP7J6ODgSc8sotsv6E3dnJoVBaPi+Ph=HA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-05 20:07:27 [+0200], Jason A. Donenfeld wrote:
-> One funny aspect of the fact that signal_pending() hasn't worked right
-> since the genesis commit is that this has probably led to a lot of
-> userspace code that doesn't check the result from read() or
-> getrandom(), and that code has worked mostly fine.
+Hi Greg,
 
-:)
-
-> I wonder if we should do something about that. Worth noting is that
-> we're no longer contending with /dev/random periodically blocking as
-> the "entropy runs out" nonsense. I can think of two possible changes,
-> which maybe aren't mutually exclusive:
+On Fri, Jun 17, 2022 at 10:15:34AM +0200, Greg KH wrote:
+> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 > 
-> 1) Turn signal_pending() into fatal_signal_pending() throughout the file.
-> 2) Rather than not checking signal_pending() for reads of length <=
-> 256, we could not check for signal_pending() for the first 256 bytes
-> of any length read.
+>   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 > 
-> Both of these would be changing userspace behavior, so it should
-> probably be considered carefully. Any thoughts?
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.19-rc3
+> 
+> for you to fetch changes up to 0a35780c755ccec097d15c6b4ff8b246a89f1689:
+> 
+>   eeprom: at25: Split reads into chunks and cap write size (2022-06-10 16:42:48 +0200)
+> 
+> ----------------------------------------------------------------
+> Char/Misc driver fixes for 5.19-rc3
+> 
+> Here are some small char/misc driver fixes for 5.19-rc3 that resolve
+> some reported issues.
+> 
+> They include:
+> 	- mei driver fixes
+> 	- comedi driver fix
+> 	- rtsx build warning fix
+> 	- fsl-mc-bus driver fix
+> 
+> All of these have been in linux-next for a while with no reported
+> issues.
+> 
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-You are not doing any blocking as far as I can tell so there won't be
-any wake up via TASK_INTERRUPTIBLE for you here.
-You check for the signal_pending() every PAGE_SIZE so there will be at
-least 4KiB of data, not sure where this 256 is coming from.
-Since you always return the number of bytes, there won't be any visible
-change for requests < PAGE_SIZE. And for requests > PAGE_SIZE your
-getrandom() invocation may return less than asked for. This is _now_.
+I think you tagged the wrong branch (char-misc-next vs. char-misc-linus)?
+The commits below do not match the tag description above.
 
-If you drop that signal_pending() check then the user will always get
-the number of bytes he asked for. Given that this is *quick* as in
-no blocking, then there should be no harm in dropping this signal check.
+Cheers,
+Nathan
 
-> Jason
-
-Sebastian
+> ----------------------------------------------------------------
+> Brad Bishop (1):
+>       eeprom: at25: Split reads into chunks and cap write size
+> 
+> Miaoqian Lin (1):
+>       misc: atmel-ssc: Fix IRQ check in ssc_probe
+> 
+> Shreenidhi Shedi (1):
+>       char: lp: remove redundant initialization of err
+> 
+>  drivers/char/lp.c          |  2 +-
+>  drivers/misc/atmel-ssc.c   |  4 +-
+>  drivers/misc/eeprom/at25.c | 93 ++++++++++++++++++++++++++--------------------
+>  3 files changed, 56 insertions(+), 43 deletions(-)
+> 

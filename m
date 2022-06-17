@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F99154F160
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1063B54F164
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380204AbiFQHGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S1380386AbiFQHIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380330AbiFQHGI (ORCPT
+        with ESMTP id S1380379AbiFQHIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:06:08 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B50B6006C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:06:07 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id x4so3438769pfj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:06:07 -0700 (PDT)
+        Fri, 17 Jun 2022 03:08:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCE06350A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:08:09 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso3843317pjg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rtNddg8+QR7i3/tqYYzEhkG55nHCGbEucwWJ0AzfxSY=;
-        b=Y3Ikp1g3yXZryhp2RN3/d/ZQz2VkG9Sg8fgoWH6JRf2HFKVC6tNNx9Pv7JTbKCWr6r
-         0xBJ77YN7pfONa+9Hs/W6SVxVtMEoQ/+9fJZT51QNovBNoK0qeWib1Fu9bKoOBv9Mvgd
-         M3RovELRnuXDCp48MIhKVMP2IMn4RUa5a1/4wr+3i3k8J63jJf8O3eHUI9l9q/t7E3dF
-         HEORQSEZm2AHlS5MbPd4jho75QGyPwdoMUGRilokh9EpJhHfRSxdrVaHjbuQl2VWqk+J
-         y1f7wHrCxJC9h/X9KlBo4ooC3JaFY/58aDIMSkznEBHgZ3AwJQUpD4L7bYvrPIXK22bZ
-         Z12A==
+        bh=Lk5TQemGz4PyySED1h1MgKjL3fjCTm3RMzKUK+BNj/8=;
+        b=48cJHCpC+kdwm41s7RKBZpaVl+QSSQRhazKV8kkkj73Xuu0QfibG5U+rMFk1mPQbnd
+         jZ6LFuEifpMJkyjYZCZGZhNKkVqNookFx3a7dYC1rdIlmmeWd2DLr9EtEkxVgomliEUb
+         WwyZGRq0/l3L+mjygQ38gHSCjsAIJ+BOupQmvLd7zioM/3Vhcw1QveLccjlDobfxjpqb
+         W0N6Cht9/ThiD5dHPwiJh0Wjo2nV4L4dDCty9E/A2ue7CzI1ULNbHROMt89HFHqkIqaN
+         P4FsEJcSzVOJcGT5xqUHOFYGagQ9AANYp9MGa2D1A/8HQpIAD+uvMiVZmdoiJ6qKgLGY
+         B3Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rtNddg8+QR7i3/tqYYzEhkG55nHCGbEucwWJ0AzfxSY=;
-        b=MZd71xk1o7enPEWZFACVKQhYEHJWbUqN6mW0rAmoN6T2moBzAqW4Tk90gJ1R1ek2TB
-         vKaJdQ+PhtpE+0XoB6e8N27h9bzhjrUxHcodbOMEzYElFJvWkM6VzG774CSajRKYkGdn
-         ns+S/B6Afn7HhPfLuoX73WRDFQN7vdQFJchNVP/BPXkM5T0FS9YM3P7RafCGLQcUWaVD
-         KwOwNDIQ6rBYaSZwggyYifuf6KJJe0ACbdC8ZcguwFauUu4STCZMhTVHalOxzPF6HaSn
-         N7ZCTzBPp82JGuOE3PYqOvLFI2RropZ5DZVxDkg48ApnSVupPuO6Ji1qiVPB5yE7GCbv
-         0olw==
-X-Gm-Message-State: AJIora+Vi8TKHwt+BiGw1bFtzKa6qtcTFhqaxBGw+EAeWPil9nfFlVHE
-        eNJFgbnHZ3F0VO80tODBUfFs6z0B4qZYLF2c
-X-Google-Smtp-Source: AGRyM1uh5RH5fUU2TfkQKcXpEKfQHxSECH3JtIM2R0gAvOptpcEOcZuljlHoaBgseEZvPx4NRx+xkA==
-X-Received: by 2002:a63:77cc:0:b0:408:e3bc:6294 with SMTP id s195-20020a6377cc000000b00408e3bc6294mr7747507pgc.154.1655449566551;
-        Fri, 17 Jun 2022 00:06:06 -0700 (PDT)
-Received: from localhost.localdomain (47-72-206-164.dsl.dyn.ihug.co.nz. [47.72.206.164])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902d64b00b00161955fe0d5sm2743670plh.274.2022.06.17.00.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 00:06:06 -0700 (PDT)
-From:   Barry Song <21cnbao@gmail.com>
-To:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, huzhanyuan@oppo.com,
-        Barry Song <v-songbaohua@oppo.com>,
-        Yu Zhao <yuzhao@google.com>, Will Deacon <will@kernel.org>,
-        Alex Van Brunt <avanbrunt@nvidia.com>,
-        Shaohua Li <shli@kernel.org>
-Subject: [RFC PATCH] mm: rmap: Don't flush TLB after checking PTE young for page reference
-Date:   Fri, 17 Jun 2022 19:05:55 +1200
-Message-Id: <20220617070555.344368-1-21cnbao@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=Lk5TQemGz4PyySED1h1MgKjL3fjCTm3RMzKUK+BNj/8=;
+        b=f+INd0pbv/f8xDkMLv5/h4QdR/BBUmUNntsS1zTIZaWz/Hs5BpeGVohsNzEPvgijUr
+         0limvSxAi1d1rKsIkcE1B4ZFCQ6jCV9TFuatEedIahoNREkfMdSNTjR9zcV8imudABQe
+         S/o+Ig8g01eugkkHII2yp3tRdvlXDoO71Su0VkWg20TBFx76irqeamPyB2lfcLjLJyWT
+         H3zS1RaAKF2Nph2kQpqDJPMKdWIm7FSNDoAXFf3DIgKJ41rnEJTO0J6SdeaQ7Ketnijq
+         SnaP/6/tWl/0ihcmxlgsM3MaQ5Zj9NdMrnLm6rTOhVF6bCIZXvQ7fDb7bw08dHD8xpIY
+         P7pg==
+X-Gm-Message-State: AJIora8D/x40wDgEfFsJVCylcnp3Wbs5JBvtfqvliRuOUT/7aigsSzoT
+        kQ7FYH+HceXcCrOKzwwCVKvcXA==
+X-Google-Smtp-Source: AGRyM1uShlsBG6cg32B4UqtkQrFFeu6daHuFrC5T456ZKsJaJxX4yiKett4P5mZ3krl4Nq80expTng==
+X-Received: by 2002:a17:902:e5c9:b0:166:34ff:72a3 with SMTP id u9-20020a170902e5c900b0016634ff72a3mr8318177plf.80.1655449689047;
+        Fri, 17 Jun 2022 00:08:09 -0700 (PDT)
+Received: from FVFDK26JP3YV.bytedance.net ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id j1-20020a170903028100b00163d4c3ffabsm2757868plr.304.2022.06.17.00.08.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Jun 2022 00:08:08 -0700 (PDT)
+From:   Lei He <helei.sig11@bytedance.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dhowells@redhat.com, mst@redhat.com
+Cc:     arei.gonglei@huawei.com, jasowang@redhat.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pizhenwei@bytedance.com, helei.sig11@bytedance.com,
+        f4bug@amsat.org, berrange@redhat.com
+Subject: [PATCH 0/4] virtio-crypto: support ECDSA algorithm
+Date:   Fri, 17 Jun 2022 15:07:49 +0800
+Message-Id: <20220617070754.73667-1-helei.sig11@bytedance.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+From: lei he <helei.sig11@bytedance.com>
 
-Flushing TLB is usually quite expensive through hardware or software.
-Both x86 and arm64 have tried to decrease the overhead by either
-removing TLB flush and deferring it in ptep_clear_flush_young().
+This patch supports the ECDSA algorithm for virtio-crypto:
+1. fixed the problem that the max_signature_size of ECDSA is
+incorrectly calculated.
+2. make pkcs8_private_key_parser can identify ECDSA private keys.
+3. implement ECDSA algorithm for virtio-crypto device
 
-Removing the tlb flush gives about 20% ~ 30% swapout speedup on x86
-according to commit b13b1d2d8692b ("x86/mm: In the PTE swapout page
-reclaim case clear the accessed bit instead of flushing the TLB").
+lei he (4):
+  crypto: fix the calculation of max_size for ECDSA
+  crypto: pkcs8 parser support ECDSA private keys
+  crypto: remove unused field in pkcs8_parse_context
+  virtio-crypto: support ECDSA algorithm
 
-Similar result was also reported on arm64 by commit 3403e56b41c1("
-arm64: mm: Don't wait for completion of TLB invalidation when page
-aging").
+ crypto/Kconfig                                |   1 +
+ crypto/Makefile                               |   2 +
+ crypto/akcipher.c                             |  10 +
+ crypto/asymmetric_keys/pkcs8.asn1             |   2 +-
+ crypto/asymmetric_keys/pkcs8_parser.c         |  46 +++-
+ crypto/ecdsa.c                                |   3 +-
+ crypto/ecdsa_helper.c                         |  45 +++
+ .../virtio/virtio_crypto_akcipher_algs.c      | 259 ++++++++++++++++--
+ include/crypto/internal/ecdsa.h               |  15 +
+ include/linux/asn1_encoder.h                  |   2 +
+ lib/asn1_encoder.c                            |   3 +-
+ 11 files changed, 360 insertions(+), 28 deletions(-)
+ create mode 100644 crypto/ecdsa_helper.c
+ create mode 100644 include/crypto/internal/ecdsa.h
 
-While platforms like x86 and arm64 have noticed the problem and
-resolved it by modifying ptep_clear_flush_young() to drop flush
-by some means, most platforms are still doing TLB flush. In LRU,
-it seems pointless to do TLB broadcast simply because of update
-access bit.
-
-Dropping flush in general LRU code seems be a proper way than
-removing TLB flush in ptep_clear_flush_young() in all kind of
-platforms as the name of the function is implying flush should
-be included. Removing flush in a function who is named by flush
-sounds vague. So this patch moves to ptep_clear_young_notify()
-clearly without flush in LRU code.
-
-This will help decrease the cost of TLB broadcast due to access
-bit in LRU. The side effect is some minor lose in the accuracy
-of PTE young data, but this has been proven to be not harmful
-by those mainstream platforms like x86 and arm64.
-
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Alex Van Brunt <avanbrunt@nvidia.com>
-Cc: Shaohua Li <shli@kernel.org>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
----
- This RFC is inspired by the discussion in Yu Zhao's MGLRU:
- https://lore.kernel.org/lkml/CAOUHufYvH2LaGyAJZFQNOsGDBKD2++aFnTV6=qaVtcNrKjS_bA@mail.gmail.com/
-
- mm/rmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 5bcb334cd6f2..7ce6f0b6c330 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -830,7 +830,7 @@ static bool folio_referenced_one(struct folio *folio,
- 		}
- 
- 		if (pvmw.pte) {
--			if (ptep_clear_flush_young_notify(vma, address,
-+			if (ptep_clear_young_notify(vma, address,
- 						pvmw.pte)) {
- 				/*
- 				 * Don't treat a reference through
 -- 
-2.25.1
+2.20.1
 

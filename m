@@ -2,72 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCBF54F46B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F1F54F474
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381268AbiFQJev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S1380786AbiFQJgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379989AbiFQJer (ORCPT
+        with ESMTP id S233270AbiFQJgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:34:47 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C9562106;
-        Fri, 17 Jun 2022 02:34:46 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id s1so2644344ilj.0;
-        Fri, 17 Jun 2022 02:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DE+zQZQcyF759AJuVRCgUw1QrZjmmIkS9SVF/uua3CY=;
-        b=TDYeLEaQ+IkQCFwsN5ZQ3F+UqxbwCBkt2zAq1tT7vFaTl9fJAuS6YerABjtHK4mOxb
-         TrWcAGr6YdcXb4ALZYnuW0EpzY4enIB9a/N3rtcIPVVz4H1oggG/gQz0f3KJwQbFOZs+
-         ZDCH0HPt5AB9qRpQyELl2+owWkOE4MPyxjEyB1griWQ0FRFlaxna+kw6cHUIvotV2buP
-         qGa7xwHI7l3QT8uJSCUU0PAsReT6s7CYfX0V77qw7CtMyEcqx6Q0ejjLwWvhsopT7FxJ
-         em13cvYi2AvF5IlY6VaJ05xly218vuCyMNqAGbLG4d8okAD+4yvBpXEn1shR0HMx1yLK
-         ISlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DE+zQZQcyF759AJuVRCgUw1QrZjmmIkS9SVF/uua3CY=;
-        b=oHaMYD7fJVGzTCVgqnosNsPIxorQl8/Ti3z8ZuCVZNVc8r4Lre9AfzgVG0Wbys/noh
-         vpnsRLBYQr4Vjac/kIL/ANXeVv6qD6bsOZ/sY69t6zTIU+/xp4TbMvoCfdgS6aUDOfaH
-         w71zxoWbwP0vUp40/4oqojpcKVk9wAVsqhUREtMjA3xvm03ujnpxVBfBijMCbcGZHsUu
-         9YkX398bjuPzJ58WsjJWDgqSLV2ArpmXRGGkMjGvdPzHQpThjz/+WlRS3aAWk1FYrbFp
-         Nx0iHVgsU9aVlBeTkKBsQ1FX9WblkuBYmmrhJ/SHd91o1O3RD2+n1BCRqwxMJv187X5n
-         SeLg==
-X-Gm-Message-State: AJIora9+QLRIdb7oaLqEk7n4q0jk0AdlI1QPcoPyxQEIvxTicCYsbr6q
-        E9c6vbdyWoXzKwSqd05WrqzItQKWxXmr/uZAJABmNoLQnEM=
-X-Google-Smtp-Source: AGRyM1ubwnEFy3CYAH9fHWaontZ0WgA5WaEtmBHPaT66gte2AsL67svPaO35GdaGEkb9HpkJB7x7C2X7WR6oIGxmrjk=
-X-Received: by 2002:a05:6e02:4a1:b0:2d3:a778:f0f1 with SMTP id
- e1-20020a056e0204a100b002d3a778f0f1mr5168320ils.212.1655458485946; Fri, 17
- Jun 2022 02:34:45 -0700 (PDT)
+        Fri, 17 Jun 2022 05:36:48 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B5567D15;
+        Fri, 17 Jun 2022 02:36:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DW;RN=12;SR=0;TI=W4_0.1.30_DEFAULT_211267C8_1655458496779_o7001c314n;
+Received: from WS-web (tianjia.zhang@linux.alibaba.com[W4_0.1.30_DEFAULT_211267C8_1655458496779_o7001c314n]) at Fri, 17 Jun 2022 17:36:43 +0800
+Date:   Fri, 17 Jun 2022 17:36:43 +0800
+From:   "Tianjia Zhang" <tianjia.zhang@linux.alibaba.com>
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc:     "David Howells" <dhowells@redhat.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Biggers" <ebiggers@google.com>,
+        "Eric Biggers" <ebiggers@kernel.org>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "Vitaly Chikunov" <vt@altlinux.org>,
+        "Gilad Ben-Yossef" <gilad@benyossef.com>,
+        "keyrings" <keyrings@vger.kernel.org>,
+        "linux-crypto" <linux-crypto@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Reply-To: "Tianjia Zhang" <tianjia.zhang@linux.alibaba.com>
+Message-ID: <d76d7de3-59c2-4d83-9f53-b44ada7621d4.tianjia.zhang@linux.alibaba.com>
+Subject: =?UTF-8?B?5Zue5aSN77yaW1BBVENIXSBYLjUwOTogU3VwcG9ydCBwYXJzaW5nIGNlcnRpZmljYXRlIHVz?=
+  =?UTF-8?B?aW5nIFNNMiBhbGdvcml0aG0=?=
+X-Mailer: [Alimail-Mailagent][W4_0.1.30][DEFAULT][Safari]
 MIME-Version: 1.0
-References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-16-peterwu.pub@gmail.com>
- <20220613170853.bffuwkcmflfgg4gt@ash.lan>
-In-Reply-To: <20220613170853.bffuwkcmflfgg4gt@ash.lan>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 17 Jun 2022 17:34:35 +0800
-Message-ID: <CABtFH5JKnxF5TqV=9EiAZEm4Un0npNo-GX8xLD4W5+S+pA+ysg@mail.gmail.com>
-Subject: Re: [PATCH v2 15/15] video: backlight: mt6370: Add Mediatek MT6370 support
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+References: <20210712081352.23692-1-tianjia.zhang@linux.alibaba.com>     <99a79ccb-8dd9-ac37-2a1d-ec390bcb0c8a@linux.alibaba.com>,<1ea7a9bd9f6d74e1b9a002a19c0923f184c17c88.camel@kernel.org>
+x-aliyun-mail-creator: W4_0.1.30_DEFAULT_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNjA1LjEuMTUgKEtIVE1MLCBsaWtlIEdlY2tvKSBWZXJzaW9uLzE1LjUgU2FmYXJpLzYwNS4xLjE1La
+In-Reply-To: <1ea7a9bd9f6d74e1b9a002a19c0923f184c17c88.camel@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,181 +52,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-Thanks for your helpful feedback!
-
-Daniel Thompson <daniel.thompson@linaro.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=8814=E6=97=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A81:08=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Mon, Jun 13, 2022 at 07:11:46PM +0800, ChiaEn Wu wrote:
-> > +static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
-> > +                                         struct backlight_properties *=
-props)
->
-> Most of the changes in this version looks good... but it looks the new
-> code in this function has a number of problems. See below...
->
->
-> > +{
-> > +     struct device *dev =3D priv->dev;
-> > +     u8 prop_val;
-> > +     u32 brightness;
-> > +     unsigned int mask, val;
-> > +     int ret;
-> > +
-> > +     /* Vendor optional properties
-> > +      * if property not exist, keep value in default.
-> > +      */
->
-> That's not the right strategy for booleans. Not existing means false
-> (e.g. flags should actively be unset).
->
-
-I am so sorry for making these mistakes...
-I will try to refine them in the right strategy in the next patch!
-
->
-> > +     if (device_property_read_bool(dev, "mediatek,bled-pwm-enable")) {
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PW=
-M,
-> > +                                      MT6370_BL_PWM_EN_MASK,
-> > +                                      MT6370_BL_PWM_EN_MASK);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
->
-> As above comment... all of the boolean properties are now being read
-> incorrectly.
->
->
-> > +
-> > +     if (device_property_read_bool(dev, "mediatek,bled-pwm-hys-enable"=
-)) {
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PW=
-M,
-> > +                                      MT6370_BL_PWM_HYS_EN_MASK,
-> > +                                      MT6370_BL_PWM_HYS_EN_MASK);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-pwm-hys-input=
--bit",
-> > +                                   &prop_val);
-> > +     if (!ret) {
-> > +             val =3D min_t(u8, prop_val, 3)
-> > +                   << (ffs(MT6370_BL_PWM_HYS_SEL_MASK) - 1);
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PW=
-M,
-> > +                                      MT6370_BL_PWM_HYS_SEL_MASK, val)=
-;
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-ovp-microvolt=
-",
-> > +                                   &prop_val);
-> > +     if (!ret) {
-> > +             val =3D min_t(u8, prop_val, 3)
-> > +                   << (ffs(MT6370_BL_OVP_SEL_MASK) - 1);
->
-> This has been renamed but still seems to the using 0, 1, 2, 3 rather
-> than an actual value in microvolts.
-
-I=E2=80=99m so sorry for using the not actual value in microvolts and micro=
-amps.
-I will refine these mistakes along with DT in the next patch. Thank you!
-
->
->
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
-TCTRL,
-> > +                                      MT6370_BL_OVP_SEL_MASK, val);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     if (device_property_read_bool(dev, "mediatek,bled-ovp-shutdown"))=
- {
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
-TCTRL,
-> > +                                      MT6370_BL_OVP_EN_MASK,
-> > +                                      MT6370_BL_OVP_EN_MASK);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-ocp-microamp"=
-,
-> > +                                   &prop_val);
-> > +     if (!ret) {
-> > +             val =3D min_t(u8, prop_val, 3)
-> > +                   << (ffs(MT6370_BL_OC_SEL_MASK) - 1);
->
-> Likewise, should this be accepting a value in microamps?
->
->
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
-TCTRL,
-> > +                                      MT6370_BL_OC_SEL_MASK, val);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     if (device_property_read_bool(dev, "mediatek,bled-ocp-shutdown"))=
- {
-> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
-TCTRL,
-> > +                                      MT6370_BL_OC_EN_MASK,
-> > +                                      MT6370_BL_OC_EN_MASK);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     /* Common properties */
-> > +     ret =3D device_property_read_u32(dev, "max-brightness", &brightne=
-ss);
-> > +     if (ret)
-> > +             brightness =3D MT6370_BL_MAX_BRIGHTNESS;
-> > +
-> > +     props->max_brightness =3D min_t(u32, brightness,
-> > +                                   MT6370_BL_MAX_BRIGHTNESS);
-> > +
-> > +     ret =3D device_property_read_u32(dev, "default-brightness", &brig=
-htness);
-> > +     if (ret)
-> > +             brightness =3D props->max_brightness;
-> > +
-> > +     props->brightness =3D min_t(u32, brightness, props->max_brightnes=
-s);
-> > +
-> > +
-> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-channel-use",
-> > +                                   &prop_val);
-> > +     if (ret) {
-> > +             dev_err(dev, "mediatek,bled-channel-use DT property missi=
-ng\n");
-> > +             return ret;
-> > +     }
-> > +
-> > +     if (!prop_val || prop_val > MT6370_BL_MAX_CH) {
-> > +             dev_err(dev, "No channel specified (ch_val:%d)\n", prop_v=
-al);
->
-> Error string has not been updated to match condition that triggers it.
->
-
-I will refine this wrong error string in the next patch, thanks!
-
->
-> > +             return -EINVAL;
-> > +     }
->
->
-> Daniel.
-
-Best regards,
-ChiaEn Wu
+SGkgSmFya2tvLAoKPiBPbiA3LzEyLzIxIDQ6MTMgUE0sIFRpYW5qaWEgWmhhbmcgd3JvdGU6Cj4g
+PiBUaGUgU00yLXdpdGgtU00zIGNlcnRpZmljYXRlIGdlbmVyYXRlZCBieSBsYXRlc3Qgb3BlbnNz
+bCBubyBsb25nZXIKPiA+IHJldXNlcyB0aGUgT0lEX2lkX2VjUHVibGljS2V5LCBidXQgZGlyZWN0
+bHkgdXNlcyBPSURfc20yLiBUaGlzIHBhdGNoCj4gPiBzdXBwb3J0cyB0aGlzIHR5cGUgb2YgeDUw
+OSBjZXJ0aWZpY2F0ZSBwYXJzaW5nLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBUaWFuamlhIFpo
+YW5nIDx0aWFuamlhLnpoYW5nQGxpbnV4LmFsaWJhYmEuY29tPgo+ID4gLS0tCj4gPiAgIGNyeXB0
+by9hc3ltbWV0cmljX2tleXMveDUwOV9jZXJ0X3BhcnNlci5jIHwgMyArKysKPiA+ICAgMSBmaWxl
+IGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvY3J5cHRvL2Fz
+eW1tZXRyaWNfa2V5cy94NTA5X2NlcnRfcGFyc2VyLmMgYi9jcnlwdG8vYXN5bW1ldHJpY19rZXlz
+L3g1MDlfY2VydF9wYXJzZXIuYwo+ID4gaW5kZXggNmQwMDMwOTZiNWJjLi42YTk0NWE2Y2U3ODcg
+MTAwNjQ0Cj4gPiAtLS0gYS9jcnlwdG8vYXN5bW1ldHJpY19rZXlzL3g1MDlfY2VydF9wYXJzZXIu
+Ywo+ID4gKysrIGIvY3J5cHRvL2FzeW1tZXRyaWNfa2V5cy94NTA5X2NlcnRfcGFyc2VyLmMKPiA+
+IEBAIC00OTYsNiArNDk2LDkgQEAgaW50IHg1MDlfZXh0cmFjdF9rZXlfZGF0YSh2b2lkICpjb250
+ZXh0LCBzaXplX3QgaGRybGVuLAo+ID4gICAgY2FzZSBPSURfZ29zdDIwMTJQS2V5NTEyOgo+ID4g
+ICAgIGN0eC0+Y2VydC0+cHViLT5wa2V5X2FsZ28gPSAiZWNyZHNhIjsKPiA+ICAgICBicmVhazsK
+PiA+ICsgY2FzZSBPSURfc20yOgo+ID4gKyAgY3R4LT5jZXJ0LT5wdWItPnBrZXlfYWxnbyA9ICJz
+bTIiOwo+ID4gKyAgYnJlYWs7Cj4gPiAgICBjYXNlIE9JRF9pZF9lY1B1YmxpY0tleToKPiA+ICAg
+ICBpZiAocGFyc2VfT0lEKGN0eC0+cGFyYW1zLCBjdHgtPnBhcmFtc19zaXplLCAmb2lkKSAhPSAw
+KQo+ID4gICAgICByZXR1cm4gLUVCQURNU0c7Cj4gPiAKPgo+IEFja2VkLWJ5OiBKYXJra28gU2Fr
+a2luZW4gPGphcmtrb0BrZXJuZWwub3JnPgo+Cj4gL0phcmtrbwoKTGlrZXdpc2UsIE5vIHJlc3Bv
+bnNlIGZyb20gRGF2aWQsIGNhbiB5b3UgcGljayB0aGlzPyB0aGFua3MuCgpCZXN0IHJlZ2FyZHMs
+ClRpYW5qaWE=

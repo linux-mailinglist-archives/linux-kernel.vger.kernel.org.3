@@ -2,84 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F324D54F243
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D6E54F248
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 09:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380515AbiFQHz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 03:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S1380681AbiFQHzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 03:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379797AbiFQHzZ (ORCPT
+        with ESMTP id S1380682AbiFQHzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:55:25 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FFC3E5D3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:55:24 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id m125-20020a1ca383000000b0039c63fe5f64so1986872wme.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vD7VWSpQzcBQSXPMRjwm1FAxWtObCHQIjbkwYkqq2Zc=;
-        b=RjAuhyxiKH+UUiECGktc8CIfahq7ABkw9QGbdgJOJGgxD6WLTvF6Ss5m8gYBKjbHm9
-         oIoJ3zpyTned9c1q6GZiPUHce1qDqpHj9amPzUtCKnfhvIyrcfkoGSBtL0si83NVt4iQ
-         K6Bbw816g4V8A4AkRfw1FykNzh6nBgL7Ik7h5rnshMYpfaERnf5CIbArI5lfcD8010zx
-         N1I89Y/kRTLDV7J3ngQuaSjihIkLk1KRwkVzySxkQ26lPluQdpucZy4E507PpTrn3CRj
-         XP6H3m7Xr/SP8KgLSZyacNpJqo9mNQty3rq4A7sEd5Am5pQT1t81YSD/ZjZ4zZyuhXzd
-         VeIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vD7VWSpQzcBQSXPMRjwm1FAxWtObCHQIjbkwYkqq2Zc=;
-        b=zPWsFyggGbOzw70Ev9nt3iRUEcJ1vbtj7oAG+0u41PbriZKVLVktOURkfkC/kHK+GN
-         1mp6Wf62FG02b/cfW9umlYs56KOkwak1tjnJmn7hbVhi8s5t04TyKF6ghfWRpOEudgiV
-         IW5qJy5r2w4LGsobxmKbnGaQO8bRdqYks5Rz5IMCGVcM7SRTf2rZYl56c47pvgtnx5jW
-         2VmiBryPfuSaSbUZNbYCfGfOP88sWJjMydnOAO5iVmo0CpUQ2YOgmGSdFzL3Iqcv+sZE
-         11GK/GKjYmOzcUwgCnwAVfSWnozl0KASLr6hB0aLD8nIPK+VoptnijOssUA5BCKJMsgB
-         ruWg==
-X-Gm-Message-State: AJIora+WHZ0RoHVe69N5TUp3bKfwCu09lkIQwdh1TdtbjEwxZkZ0qzEO
-        76VD2hwZOU8Je+Bm0iS/xMXrukjzbuMztWkRjcypxQ==
-X-Google-Smtp-Source: AGRyM1tfVChwyDIlBb0orUq+mPQGXjKNmDtT8mPbODrQ1rPHW7Mae1N118ArHfVpa41Sud5Pdp2NbY6FRof/lc9TyH8=
-X-Received: by 2002:a1c:6a16:0:b0:39c:655a:ac2c with SMTP id
- f22-20020a1c6a16000000b0039c655aac2cmr9010421wmc.66.1655452522565; Fri, 17
- Jun 2022 00:55:22 -0700 (PDT)
+        Fri, 17 Jun 2022 03:55:43 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7EB674F6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 00:55:42 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VGeDMg5_1655452536;
+Received: from 30.25.208.161(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VGeDMg5_1655452536)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Jun 2022 15:55:37 +0800
+Message-ID: <5085437c-adc9-b6a3-dbd8-91dc0856cf19@linux.alibaba.com>
+Date:   Fri, 17 Jun 2022 15:55:35 +0800
 MIME-Version: 1.0
-References: <20220608010709.272962-1-maira.canal@usp.br> <CABVgOSmesj5MGfQrtdWCgXzm1VXRoG0fAMCbkBCAvtqediqAjQ@mail.gmail.com>
- <8b040fb2-7edd-6fd1-864e-ee04115c5b1d@usp.br>
-In-Reply-To: <8b040fb2-7edd-6fd1-864e-ee04115c5b1d@usp.br>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 17 Jun 2022 15:55:11 +0800
-Message-ID: <CABVgOSmyUC11fwpsH8Y6a_8hCKphyyZj2uYT+dhuRfHT2uonmA@mail.gmail.com>
-Subject: Re: [RFC 0/3] drm/amd/display: Introduce KUnit to Display Mode Library
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Jun Lei <jun.lei@amd.com>,
-        Nicholas Choi <Nicholas.Choi@amd.com>,
-        Harrison Chiu <harrison.chiu@amd.com>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000094299605e1a013b7"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+Content-Language: en-US
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     David Rientjes <rientjes@google.com>, songmuchun@bytedance.com,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        penberg@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+ <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
+ <ac9ba68f-9ee2-1611-9ff8-b486ed9c4df0@google.com>
+ <alpine.DEB.2.22.394.2206021712530.2924@gentwo.de>
+ <9794df4f-3ffe-4e99-0810-a1346b139ce8@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206071411460.375438@gentwo.de>
+ <29723aaa-5e28-51d3-7f87-9edf0f7b9c33@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206081417370.465021@gentwo.de>
+ <02298c0e-3293-9deb-f1ed-6d8862f7c349@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206131548420.295113@gentwo.de>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <alpine.DEB.2.22.394.2206131548420.295113@gentwo.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,231 +57,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000094299605e1a013b7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jun 17, 2022 at 6:41 AM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
-:
->
-> Hi David,
->
-> Thank you for your feedback!
->
-> On 6/16/22 11:39, David Gow wrote:
-> > On Wed, Jun 8, 2022 at 9:08 AM Ma=C3=ADra Canal <maira.canal@usp.br> wr=
-ote:
->
-> >>
-> >> As kunit_test_suites() defines itself as an init_module(), it conflict=
-s with
-> >> the existing one at amdgpu_drv. So, if we use kunit_test_suites(), we =
-won't
-> >> be able to compile the tests as modules and, therefore, won't be able =
-to use
-> >> IGT to run the tests. This problem with kunit_test_suites() was alread=
-y
-> >> discussed in the KUnit mailing list, as can be seen in [7].
-> >
-> > I'm not sure I fully understand why these tests need to be part of the
-> > amdgpu module, though admittedly I've not played with IGT much. Would
-> > it be possible to compile these tests as separate modules, which could
-> > depend on amdgpu (or maybe include the DML stuff directly), and
-> > therefore not have this conflict? I definitely was able to get these
-> > tests working under kunit_tool (albeit as built-ins) by using
-> > kunit_test_suites(). If each suite were built as a separate module (or
-> > indeed, even if all the tests were in one module, with one list of
-> > suites), then it should be possible to avoid the init_module()
-> > conflict. That'd also make it possible to run these tests without
-> > actually needing the driver to initialise, which seems like it might
-> > require actual hardware(?)
->
-> Initially, we tried the kunit_test_suites() approach. And it did work pre=
-tty well for the kunit_tool (although we didn't test any hardware-specific =
-unit test). But when compiling the test as a module, we would get a linking=
- error, pointing out multiple definitions of 'init_module'/'cleanup_module'=
- at kunit_test_suites().
->
-> At this point, we thought about a couple of options to resolve this probl=
-em:
-> - Add EXPORT_SYMBOL to the functions we would test. But, this doesn't sca=
-le pretty well, because it would pollute AMDGPU code as the tests expand.
-> - Take the Thunderbolt path and add the tests to the driver stack.
->
-> We end up taking the Thunderbolt path as it would be more maintainable.
->
-> Compiling the tests as a module is essential to make the tests run at IGT=
-, as IGT essentially loads the module, runs it, and parses the output (a ve=
-ry very simplified explanation of what IGT does). IGT is a very known tool =
-for DRI developers, so we believe that IGT support is crucial for this proj=
-ect.
->
-> If you have any other options on how to make the module compilation viabl=
-e without using the 'thunderbolt'-style, we would be glad to hear your sugg=
-estions.
-
-As you point out, there are really two separate problems with
-splitting the tests out totally:
-- It's ugly and pollutes the symbol namespace to have EXPORT_SYMBOL()
-everywhere.
-- It's impossible to have multiple init_module() "calls" in the same module=
-.
-
-The first of these is, I think, the harder to solve generally. (There
-are some ways to mitigate the namespace pollution part of it by either
-hiding the EXPORT_SYMBOL() directives behind #ifdef CONFIG_KUNIT or
-similar, or by using symbol namespaces:
-https://www.kernel.org/doc/html/latest/core-api/symbol-namespaces.html
--- or both -- but they don't solve the issue entirely.)
-
-That being said, it's as much a matter of taste as anything, so if
-keeping things in the amdgpu module works well, don't let me stop you.
-Either way should work, and have their own advantages and
-disadvantages.
-
-The latter is just a quirk of the current KUnit implementation of
-kunit_test_suites(). This multiple-definition issue will go away in
-the not-too-distant future.
-
-So my suggestion here would be to make sure any changes you make to
-work around the issue with multiple init_module definitions are easy
-to remove. I suspect you could probably significantly simplify the
-whole dml_test.{c,h} bit to just directly export the kunit_suites and
-maybe throw them all in one array to pass to
-__kunit_test_suites_init(). Then, when the improved modules work
-lands, they could be deleted entirely and replaced with one or more
-calls to kunit_test_suite().
-
-> >
-> > There are two other reasons the 'thunderbolt'-style technique is one
-> > we want to avoid:
-> > 1. It makes it much more difficult to run tests using kunit_tool and
-> > KUnit-based CI tools: these tests would not run automatically, and if
-> > they were built-in as-is, they'd need to be
-> > 2. We're planning to improve module support to replace the
-> > init_module()-based implementation of kunit_test_suites() with one
-> > which won't have these conflicts, so the need for this should be
-> > short-lived.
-> >
-> > If you're curious, an early version of the improved module support can
-> > be found here, though it's out-of-date enough it won't apply or work
-> > as-is:
-> > https://lore.kernel.org/all/101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.ca=
-mel@codeconstruct.com.au/
-> >
-> > Now, that's unlikely to be ready very soon, but I'd be hesitant to
-> > implement too extensive a system for avoiding kunit_test_suites()
-> > given at some point it should work and we'll need to migrate back to
-> > it.
->
-> We hope to see in the near future the improved module support from KUnit =
-as it would make the addition of tests much more simple and clean.
->
-> Could you explain more about what is missing to make this improved module=
- support come upstream?
->
-
-Mostly just time and some other priorities. We've taken another look
-at it over the last couple of days, and will try to accelerate getting
-it in within the next couple of kernel releases. (Hopefully sooner
-rather than later.)
-
-> >
-> > At the very least, having the dependency on KUNIT=3Dm is a very bad
-> > idea: it should be possible to have tests built as modules, even if
-> > KUnit itself isn't, and ideally (even if this sort-of implementation
-> > is required), it _should_ be possible to have these tests be built-in
-> > if all their dependencies (KUnit, amdgpu) are, which would make it
-> > possible to run the tests without a userland.
-> >
->
-> Thank you for the suggestion! We will change the KUNIT dependency.
-
-Thanks -- with that gone, the tests do build for me under kunit_tool,
-though I can't seem to get them to run as-is. (Moving the call to
-amdgpu_dml_test_init() into the amdgpu_init() function in amdgpu_drv.c
-does work, though I'm not sure if that's a sufficiently correct /
-viable solution.)
 
 
-Cheers,
--- David
+On 6/13/22 9:50 PM, Christoph Lameter wrote:
+> On Sat, 11 Jun 2022, Rongwei Wang wrote:
+> 
+>>> Ok so the idea is to take the lock only if kmem_cache_debug. That looks
+>>> ok. But it still adds a number of new branches etc to the free loop.
+>>>
+>>> Some performance tests would be useful.
+>> Hi Christoph
+>>
+>> Thanks for your time!
+>> Do you have some advice in benchmarks that need me to test? And I find that
+>> hackbench and lkp was used frequently in mm/slub.c commits[1,2]. But I have no
+>> idea how to use these two benchmarks test to cover the above changes. Can you
+>> give some examples? Thanks very much!
+> 
+> 
+> Hi Rongwei,
+> 
+> Well run hackbench with an without the change.
+> 
+> There are also synthetic benchmarks available  at
+> https://gentwo.org/christoph/slub/tests/
+Christoph, I refer [1] to test some data below. The slub_test case is 
+same to your provided. And here you the result of its test (the baseline 
+is the data of upstream kernel, and fix is results of patched kernel).
 
---00000000000094299605e1a013b7
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+my test environment: arm64 vm (32 cores and 128G memory)
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAz
-5ZAkQzNyom7f3RYgzuYTlMRiMkYPxawTWjJ4bL2OhjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA2MTcwNzU1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAoWZZ7/izHgOxFftrr2xg
-SyvChZjZXQpDT0PnF52aoskf9XJ6c1gwKj8TTGCAg3qUDbnzuC1Atv/3JHWWAoiMX8N7HLADKBm+
-pLrjRM/Rxox0h+Mw5ijozAnA67BlyTX7nmvUQbydsrgPjejBzHE+UBwHWERgFEDuNlxGI2bGX5kz
-un7MbY2SaOc8JJ2q6eex8CC3Vbjh3TwWFTKhUavcQ7n7hjtzBx2U/VETK5PTVs/PVm4/PYIN7p8A
-a0YwXVmpmQC46oApdLCiYTenhxw6ck9rHc6KmuzlQreH10qiC7epqfuvdjKBFU0232Bp1LQwGLqY
-KZHRxb2aNxZCGyMjJA==
---00000000000094299605e1a013b7--
+And I have removed 'slub_debug=UFPZ' in cmdline before testing the 
+following two groups of data.
+
+[1]https://lore.kernel.org/linux-mm/20200527103545.4348ac10@carbon/
+
+Single thread testing
+
+1. Kmalloc: Repeatedly allocate then free test
+
+                    before (baseline)        fix
+                    kmalloc      kfree       kmalloc      kfree
+10000 times 8      7 cycles     8 cycles    5 cycles     7 cycles
+10000 times 16     4 cycles     8 cycles    3 cycles     6 cycles
+10000 times 32     4 cycles     8 cycles    3 cycles     6 cycles
+10000 times 64     3 cycles     8 cycles    3 cycles     6 cycles
+10000 times 128    3 cycles     8 cycles    3 cycles     6 cycles
+10000 times 256    12 cycles    8 cycles    11 cycles    7 cycles
+10000 times 512    27 cycles    10 cycles   23 cycles    11 cycles
+10000 times 1024   18 cycles    9 cycles    20 cycles    10 cycles
+10000 times 2048   54 cycles    12 cycles   54 cycles    12 cycles
+10000 times 4096   105 cycles   20 cycles   105 cycles   25 cycles
+10000 times 8192   210 cycles   35 cycles   212 cycles   39 cycles
+10000 times 16384  133 cycles   45 cycles   119 cycles   46 cycles
+
+
+2. Kmalloc: alloc/free test
+
+                                   before (base)   fix
+10000 times kmalloc(8)/kfree      3 cycles        3 cycles
+10000 times kmalloc(16)/kfree     3 cycles        3 cycles
+10000 times kmalloc(32)/kfree     3 cycles        3 cycles
+10000 times kmalloc(64)/kfree     3 cycles        3 cycles
+10000 times kmalloc(128)/kfree    3 cycles        3 cycles
+10000 times kmalloc(256)/kfree    3 cycles        3 cycles
+10000 times kmalloc(512)/kfree    3 cycles        3 cycles
+10000 times kmalloc(1024)/kfree   3 cycles        3 cycles
+10000 times kmalloc(2048)/kfree   3 cycles        3 cycles
+10000 times kmalloc(4096)/kfree   3 cycles        3 cycles
+10000 times kmalloc(8192)/kfree   3 cycles        3 cycles
+10000 times kmalloc(16384)/kfree  33 cycles       33 cycles
+
+
+Concurrent allocs
+
+                                 before (baseline)   fix
+Kmalloc N*alloc N*free(8)       Average=17/18       Average=11/11
+Kmalloc N*alloc N*free(16)      Average=15/49       Average=9/11
+Kmalloc N*alloc N*free(32)      Average=15/40       Average=9/11
+Kmalloc N*alloc N*free(64)      Average=15/44       Average=9/10
+Kmalloc N*alloc N*free(128)     Average=15/42       Average=10/10
+Kmalloc N*alloc N*free(256)     Average=128/28      Average=71/22
+Kmalloc N*alloc N*free(512)     Average=206/34      Average=178/26
+Kmalloc N*alloc N*free(1024)	Average=762/37      Average=369/27
+Kmalloc N*alloc N*free(2048)	Average=327/58      Average=339/33
+Kmalloc N*alloc N*free(4096)    Average=2255/128    Average=1813/64
+
+                                 before (baseline)   fix
+Kmalloc N*(alloc free)(8)       Average=3           Average=3
+Kmalloc N*(alloc free)(16)      Average=3           Average=3
+Kmalloc N*(alloc free)(32)      Average=3           Average=3
+Kmalloc N*(alloc free)(64)      Average=3           Average=3
+Kmalloc N*(alloc free)(128)     Average=3           Average=3
+Kmalloc N*(alloc free)(256)     Average=3           Average=3
+Kmalloc N*(alloc free)(512)     Average=3           Average=3
+Kmalloc N*(alloc free)(1024)    Average=3           Average=3
+Kmalloc N*(alloc free)(2048)    Average=3           Average=3
+Kmalloc N*(alloc free)(4096)	Average=3           Average=3
+
+According to the above data, It seems that no significant performance 
+degradation in patched kernel. Plus, in concurrent allocs test, likes 
+Kmalloc N*alloc N*free(1024), the data of 'fix' column is better than 
+baseline (it looks less is better, if I am wrong, please let me know). 
+And if you have other suggestions, I can try to test more data.
+
+Thanks for your time!
+-wrw
+> 
+> These measure the cycles that slab operations take. However, they are a
+> bit old and I think Pekka may have a newer version of these
+> patches.
+> 
+> Greetings,
+> 	Christoph

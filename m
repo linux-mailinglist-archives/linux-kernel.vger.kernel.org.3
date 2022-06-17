@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E30254F97F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACECC54F991
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382878AbiFQOrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S1382928AbiFQOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382881AbiFQOrU (ORCPT
+        with ESMTP id S1382908AbiFQOr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:47:20 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3213F562E3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:47:19 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f8so4063263plo.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:47:19 -0700 (PDT)
+        Fri, 17 Jun 2022 10:47:28 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4225356B0C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:47:23 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso4795772pjg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QwOgz8AXr1w6XRcaYrmoN403wvhJobDQeRFmfFEMgXc=;
-        b=EUg+zaz0qog+WnK03DWiqIcLDr6sFTqUalTjRcdJWbpX2BdrkjIRH8EPzaBkSR8k5r
-         a7hmBQLvRTuUoqaJTtfnyJg1HrTXtOnY1yfv7KRzwmoW2QKe+S/WsbVlZM5gD91Ewe6M
-         aq6EtVETYvSz1+VBENixLUSxBKEsfCIckoxCGAFp//FxKv7O8K5R2m7cZ3LagY6Jl+TQ
-         kixEjp6kxyy4+ARFYmOQ6YD7OfWJJW+BsJtZoHVQU6fYFj8OADBIW8XsruKURgd4vUH4
-         +H3kkYkWIRuFh8p8CHMZOd9RAQru2AXF6r1VCzL5gdBaZtXxv7KZk4R90wznE4KZ/JCZ
-         Zu5Q==
+        bh=74dvXW85Si8OyW8s78GAB2ahyN6rAZk9avQp33MNw68=;
+        b=FnBYwws+9XD6kl3MvtDiIyoDoC5Ez+CtWjrY8hZAVTEzdzz+DN9MUTuZMh1clKkKH3
+         3drA7qu9zwU5Pe09dCysp4+KNjl1At6R95TW5Cll7XeRSYtkl7uWtLFgUtA2zzSqqwtv
+         E/kUOMuVGWSLKH+035PeZlYkkf88JItZnKFfWii+3H++cz9MsSYFgOfXB8p/xxkz7DXP
+         3/T+GktMzDnPO/VBxlkhyYY1AlWQScQ/cB3V53tHBQB/cby3JL1YZCl3xUy3401BQgf4
+         67Wmt52l1EQM1HoWCLXGIgeGJWuTTnD7jtG1c7xEhIPie6Feug9KFrOkWK9EoBa/PSsw
+         Bm8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QwOgz8AXr1w6XRcaYrmoN403wvhJobDQeRFmfFEMgXc=;
-        b=Cfk/yCV7sPt5hBnyc6sDQJR3fJnXC5lAZa9Lwhnmm5YhPWeGLoq4XbcdZ87WrwBQqe
-         h0wFXdRko4JEV57YIhk80W2FcdXliIAs1jqtOXm6PLsHO9NFa4cUpcbhM6QNtCObq26r
-         PU7zeaTisR3U+Mk+eEkqqsn9OR617BPq3t8RBfIC3/JW6P/jLymNdLDpcQFLg3235oaa
-         znrlFSYv/a6iM0iB4gZ/MOEbe7EO2A5gh3j8ezEWicoQsw+t78PS8QEoeQ9BJJOWSQV9
-         tTcdfYcS9MPYi5baVMxrXUpeCrbB6nOq+f9r4vFOHDtVwMO7X6gsNctecbjcOnZLtwkM
-         pAsA==
-X-Gm-Message-State: AJIora8F6xoS1GrGNLUQ3yZVTrCj9TXsx7iPr2gbqWZjfcyun9qpKXsX
-        16yIIxdeKQTZW5ydKMnrU3gadBaJb2OYlQ==
-X-Google-Smtp-Source: AGRyM1td4CTWQLndv9VsVSchQflWEfAy58fLNiXtGGAGLnHYiTLkVUW2Plw9zVJjgGI7pvB+B0MU9g==
-X-Received: by 2002:a17:902:a50a:b0:162:3488:27c4 with SMTP id s10-20020a170902a50a00b00162348827c4mr9591097plq.109.1655477238736;
-        Fri, 17 Jun 2022 07:47:18 -0700 (PDT)
+        bh=74dvXW85Si8OyW8s78GAB2ahyN6rAZk9avQp33MNw68=;
+        b=2OEPBtjy1W7oWfYxVzLheVvmo8G6loMAqNVpwthlXoYa609ZZOBbiQNP3dz2a1hjM6
+         t+wDvhS2nSn7ybXY5/9m0dV64zvvzTOzZ7bB43Rn9g7neXPzzbi+uuBH+GtLgVxIPMQe
+         m+mpcVvTmCp0DCW761SiDKykCperU0WLW3DFEdGaFPY8hweDixaJELvERw0lZhOuq8sN
+         AlCMkIhedsrejIMKlIQfA4Plz4WS+WI1ix44uXuevWY1fHIOGaikAemTqnV1D+M/CPeF
+         wBmNSb19xwADIUoDci9OJe+I/6Ak3k+oz9BmRPWusyY1/o66tSOMw9fhAfBXxjoNWhfq
+         4alw==
+X-Gm-Message-State: AJIora/Iz/tv2QG5uLunhUoeGSdUdVgTwWUAQUP2vJD2NuDf9gB3yxyT
+        hb2JXANEx21IP/lgDkjyGE4bF+Rn+JjoXg==
+X-Google-Smtp-Source: AGRyM1u+P2Y9EVcxgs85/JiQtD2bYVfrRxttO/agAeTUMFfJsb1YJ23qh+GGUz+jJQoZUBMNv2VwMQ==
+X-Received: by 2002:a17:902:e84b:b0:164:8ba3:9cd9 with SMTP id t11-20020a170902e84b00b001648ba39cd9mr9948546plg.49.1655477242580;
+        Fri, 17 Jun 2022 07:47:22 -0700 (PDT)
 Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id o12-20020a63a80c000000b003db822e2170sm3832453pgf.23.2022.06.17.07.47.15
+        by smtp.gmail.com with ESMTPSA id o12-20020a63a80c000000b003db822e2170sm3832453pgf.23.2022.06.17.07.47.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 07:47:18 -0700 (PDT)
+        Fri, 17 Jun 2022 07:47:21 -0700 (PDT)
 From:   Zhang Boyang <zhangboyang.id@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
@@ -57,9 +57,9 @@ Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
         Boris Brezillon <boris.brezillon@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Zhang Boyang <zhangboyang.id@gmail.com>
-Subject: [PATCH v2 3/5] rslib: Replace hard-coded 1 with alpha_to[0]
-Date:   Fri, 17 Jun 2022 22:46:22 +0800
-Message-Id: <20220617144624.158973-4-zhangboyang.id@gmail.com>
+Subject: [PATCH v2 4/5] rslib: Improve the performance of encode_rs.c
+Date:   Fri, 17 Jun 2022 22:46:23 +0800
+Message-Id: <20220617144624.158973-5-zhangboyang.id@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220617144624.158973-1-zhangboyang.id@gmail.com>
 References: <20220617144624.158973-1-zhangboyang.id@gmail.com>
@@ -75,58 +75,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the rslib allows customizing the finite field by the `gffunc'
-parameter of init_rs_non_canonical(). However, there are several places
-in rslib use hard-coded 1 instead of alpha_to[0], leading to errors if
-gffunc(0) != 1. This patch fixes the problem. One of such `gffunc' might
-be gffunc'(x) = swab16(gffunc(swab16(x))), as gffunc'(0) = swab16(1).
-This special gffunc'(x) is useful when implementing RS coder for
-16 bit foreign-endian symbols.
+This patch enhances the performance of RS encoder by following points:
+
+1) Avoid memmove(). The shifting operation done by memmove() can be
+   merged into the calculation loop above.
+
+2) Introduce rs_modnn_fast(). The original rs_modnn() contains a loop
+   which may be slow. Since (fb + genpoly[...]) is always strictly less
+   than (2 * rs->nn), we can use a ternary operator to do the same
+   calculation. The new faster function is named rs_modnn_fast(). The
+   new rs_modnn_fast(x) requires 0 <= x < 2*nn, in contrast, original
+   rs_modnn(x) only requires x >= 0. To make things clear, the
+   documentation of original rs_modnn() is also updated.
 
 Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
 ---
- lib/reed_solomon/decode_rs.c    | 4 ++--
- lib/reed_solomon/reed_solomon.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ include/linux/rslib.h        | 14 +++++++++++++-
+ lib/reed_solomon/encode_rs.c | 21 ++++++++++-----------
+ 2 files changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/lib/reed_solomon/decode_rs.c b/lib/reed_solomon/decode_rs.c
-index 805de84ae83d..6c1d53d1b702 100644
---- a/lib/reed_solomon/decode_rs.c
-+++ b/lib/reed_solomon/decode_rs.c
-@@ -104,7 +104,7 @@
+diff --git a/include/linux/rslib.h b/include/linux/rslib.h
+index cd0b5a7a5698..44ec7c6f24b2 100644
+--- a/include/linux/rslib.h
++++ b/include/linux/rslib.h
+@@ -110,7 +110,7 @@ void free_rs(struct rs_control *rs);
+ /** modulo replacement for galois field arithmetics
+  *
+  *  @rs:	Pointer to the RS codec
+- *  @x:		the value to reduce
++ *  @x:		x >= 0 ; the value to reduce
+  *
+  *  where
+  *  rs->mm = number of bits per symbol
+@@ -127,4 +127,16 @@ static inline int rs_modnn(struct rs_codec *rs, int x)
+ 	return x;
+ }
  
-  decode:
- 	memset(&lambda[1], 0, nroots * sizeof(lambda[0]));
--	lambda[0] = 1;
-+	lambda[0] = alpha_to[0];
++/** modulo replacement for galois field arithmetics
++ *
++ *  @rs:	Pointer to the RS codec
++ *  @x:		0 <= x < 2*nn ; the value to reduce
++ *
++ *  Same as rs_modnn(x), but faster, at the cost of limited value range of @x
++*/
++static inline int rs_modnn_fast(struct rs_codec *rs, int x)
++{
++	return x - rs->nn < 0 ? x : x - rs->nn;
++}
++
+ #endif
+diff --git a/lib/reed_solomon/encode_rs.c b/lib/reed_solomon/encode_rs.c
+index 9112d46e869e..6e3847b17ad4 100644
+--- a/lib/reed_solomon/encode_rs.c
++++ b/lib/reed_solomon/encode_rs.c
+@@ -27,19 +27,18 @@
  
- 	if (no_eras > 0) {
- 		/* Init lambda to be the erasure locator polynomial */
-@@ -198,7 +198,7 @@
- 	memcpy(&reg[1], &lambda[1], nroots * sizeof(reg[0]));
- 	count = 0;		/* Number of roots of lambda(x) */
- 	for (i = 1, k = iprim - 1; i <= nn; i++, k = rs_modnn(rs, k + iprim)) {
--		q = 1;		/* lambda[0] is always 0 */
-+		q = alpha_to[0];	/* lambda[0] is always 0 */
- 		for (j = deg_lambda; j > 0; j--) {
- 			if (reg[j] != nn) {
- 				reg[j] = rs_modnn(rs, reg[j] + j);
-diff --git a/lib/reed_solomon/reed_solomon.c b/lib/reed_solomon/reed_solomon.c
-index 9415899bf27c..da46026a60b8 100644
---- a/lib/reed_solomon/reed_solomon.c
-+++ b/lib/reed_solomon/reed_solomon.c
-@@ -131,9 +131,9 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
- 	rs->iprim = iprim / prim;
- 
- 	/* Form RS code generator polynomial from its roots */
--	rs->genpoly[0] = 1;
-+	rs->genpoly[0] = rs->alpha_to[0];
- 	for (i = 0, root = fcr * prim; i < nroots; i++, root += prim) {
--		rs->genpoly[i + 1] = 1;
-+		rs->genpoly[i + 1] = rs->alpha_to[0];
- 		/* Multiply rs->genpoly[] by  @**(root + x) */
- 		for (j = i; j > 0; j--) {
- 			if (rs->genpoly[j] != 0) {
+ 	for (i = 0; i < len; i++) {
+ 		fb = index_of[((((uint16_t) data[i])^invmsk) & msk) ^ par[0]];
+-		/* feedback term is non-zero */
+ 		if (fb != nn) {
+-			for (j = 1; j < nroots; j++) {
+-				par[j] ^= alpha_to[rs_modnn(rs, fb +
+-							 genpoly[nroots - j])];
+-			}
+-		}
+-		/* Shift */
+-		memmove(&par[0], &par[1], sizeof(uint16_t) * (nroots - 1));
+-		if (fb != nn) {
+-			par[nroots - 1] = alpha_to[rs_modnn(rs,
+-							    fb + genpoly[0])];
++			/* feedback term is non-zero */
++			for (j = 1; j < nroots; j++)
++				par[j - 1] = par[j] ^ alpha_to[rs_modnn_fast(rs,
++						      fb +
++						      genpoly[nroots - j])];
++			par[nroots - 1] = alpha_to[rs_modnn_fast(rs,
++					  fb +
++					  genpoly[0])];
+ 		} else {
++			for (j = 1; j < nroots; j++)
++				par[j - 1] = par[j];
+ 			par[nroots - 1] = 0;
+ 		}
+ 	}
 -- 
 2.30.2
 

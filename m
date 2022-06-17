@@ -2,201 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB0754EFBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F59C54EFA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 05:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379782AbiFQCmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 22:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S1379783AbiFQCpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 22:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379665AbiFQCmZ (ORCPT
+        with ESMTP id S229454AbiFQCpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 22:42:25 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2056.outbound.protection.outlook.com [40.107.220.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA6464D1B;
-        Thu, 16 Jun 2022 19:42:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lLVLb9fUFDH74I4MaMv4wyHXtjHqW8lOakV3oSoDoSCDZilxpDGOknUH/28fprApVzgr0HEosRxngr3FJoKg8TECok7WNojKrAyNbxxSNeulOOgaMnWbgiEJoM/4anzJzImF2eMDuiEJ0e5V7x56djsbw28G+BbLGd7CiuykzBPWdqLwCrAuSg4M863yKa6ZpzJjyRum/NXx6dHJhliMa3K1e6tSR0IF4iHInr0lS5fp/xD5gCVvYIxN0KafwbXA8eGnMoC4NkenNlbFtinnmbLGd5YmTd5iqVWhirSzpGqgjBW6OocA+ni9AvXBgEWfoamp+0D/rSAj+Kav8ikUYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HzfEDzrYkNA/N9JKYJ35gTfrzejfAQsD3ryOMK03uDM=;
- b=lNPqvNjGyte0qXOA3llTuWL1ScERgT3gPnVIx1Umi7wn+PfFu6ChgiQPay5ltbL6nrkG4qfDjg3j4qRKd3WRfGXCNnlSLDmGbQh0JSG128+e50+vLu7jLb5ws2bJOnusOPf1uS02y75/t0+D6LcmuDKLXgjSGqZZ9IdFf9iD6lyi++TprYHeDob80kiUljtLGdVS31LwW42x6m1zbyXgrkIbaihAACH7DoPKBJZZvfwDbJmI89Rkx4DWII1L/D55mIl2gDH519ROSXvr2jrh1UkOqyZw+6Rt6hpwk6NsHpvRevzH4RXTbt/ZPrTKb/QYXGUE5PjeW2x16iwQd9GXjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HzfEDzrYkNA/N9JKYJ35gTfrzejfAQsD3ryOMK03uDM=;
- b=ebVk6NU6jnB+Fvn/v+jeoYoBX7No3KrasEar/IwPFHXkfEa/mobv4rZpmOkt7FSJmLcv8xGNXVQRxIMqUV1YUvve9wot5lHjeJ5JvjNPj5eds9fccY0ks1Yksy8JQZcIUOewYVKKSH63sg7qJ2S8dBvYz/4AyvTKxe8Td3w52Tiy9dgl3jgb74TqfR5liykRHDg3l6wG4/xcXJByA5rJodYl4vc5zuJEzB1vYOL3Tb71VW3AI6IZ2HK9KBGyHbwOLmyN8/qAp3xgOmEaID1rj8ajcRfBiUlnIRRjBPqSaDraH/bIvbCpUla2Fn9+J0MBwIkWGdUalIaiI2eFKTDJuQ==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by PH7PR12MB5950.namprd12.prod.outlook.com (2603:10b6:510:1d9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
- 2022 02:42:20 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::8c53:1666:6a81:943e]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::8c53:1666:6a81:943e%3]) with mapi id 15.20.5353.015; Fri, 17 Jun 2022
- 02:42:20 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>
-CC:     "Michael S. Tsirkin" <mst@redhat.com>,
-        =?utf-8?B?RXVnZW5pbyBQw6lyZXo=?= <eperezma@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
-        "hanand@xilinx.com" <hanand@xilinx.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
-Subject: RE: [PATCH v4 0/4] Implement vdpasim stop operation
-Thread-Topic: [PATCH v4 0/4] Implement vdpasim stop operation
-Thread-Index: AQHYcP5BrBz66eonZEeOxjwIzt98aa0xHKkwgAFx+gCABD0SgIACqRJggABroACAAQ+R4IAAdxYAgAAMy4CAABLZgIAULSmggAAYr4CAAqccMIAAeciAgAAYI3A=
-Date:   Fri, 17 Jun 2022 02:42:20 +0000
-Message-ID: <PH0PR12MB5481B65329F3F21CE1F938D2DCAF9@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <20220526124338.36247-1-eperezma@redhat.com>
- <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
- <20220527065442-mutt-send-email-mst@kernel.org>
- <CACGkMEubfv_OJOsJ_ROgei41Qx4mPO0Xz8rMVnO8aPFiEqr8rA@mail.gmail.com>
- <PH0PR12MB5481695930E7548BAAF1B0D9DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEsSKF_MyLgFdzVROptS3PCcp1y865znLWgnzq9L7CpFVQ@mail.gmail.com>
- <PH0PR12MB5481CAA3F57892FF7F05B004DCDF9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEsJJL34iUYQMxHguOV2cQ7rts+hRG5Gp3XKCGuqNdnNQg@mail.gmail.com>
- <PH0PR12MB5481D099A324C91DAF01259BDCDE9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEueG76L8H+F70D=T5kjK_+J68ARNQmQQo51rq3CfcOdRA@mail.gmail.com>
- <PH0PR12MB5481994AF05D3B4999EC1F0EDCAD9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEtRTyymit=Zmwwcq0jNan-_C9p70vcLP0g7XmwQiOjUbw@mail.gmail.com>
- <PH0PR12MB548104990A5544C738A5A95BDCAC9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEtytpnCdWdmSh-BuFGXt55DJ9dYxnbw7JQwMXi9bQ8fvQ@mail.gmail.com>
-In-Reply-To: <CACGkMEtytpnCdWdmSh-BuFGXt55DJ9dYxnbw7JQwMXi9bQ8fvQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 126ddccb-f6f9-48de-fe24-08da500b004d
-x-ms-traffictypediagnostic: PH7PR12MB5950:EE_
-x-microsoft-antispam-prvs: <PH7PR12MB5950C69F46126B334E8A55A7DCAF9@PH7PR12MB5950.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qjP874+07qhM6LQpCWCIfarF2mXdKmLmSn5vFTS3XpsNzZIrlgHLHg5/7DojF6XtzLJNHXRNblMpG7tRvPm5yEi6fclfNsuWu0/0PEbZQXdMGKiI9tOsWeFGrIwMZEpNlp5IKJScU04vNSdDrjbVAYSzh0FVLAusSkbM+DOboT4uyESbuWHJb6lVy0vgRzy6w+ooEcpFR9casRv4gBwgJ50o14L2t1AC7c4Txgf0jc7MCmnIeeBK8Qxp3y8usmO+zX5trlhE9LGleYcxnATPxwuXfvIt+gg99ZQMUTBJDmkY3kw3XqRfy5y3D0picvqg3x+DWVa98sOCFmrtu3LMEVJbAD2OsnPRdK6gBFOaDA6ERBVzlLbsgC7f9vGaN6cjIUY3hWC8Cbdf7660Zuk+/BLgROj/PTx2EODcab38zwJJ6ULaWEODWeYhB0+sVW/reLvrCEuDTkWknmi7t29Zcxl4sOm4/GjHKWt+Kejnxxz8yrXL8c9N+8kLk6dvUNAbfuY4/CVAmLYj0U5yl3odobIVQmDpxTlKYMZKoyKxKWkJgRETKQ8x+hm2ZMsQ67bmtjGvzKWNLrGyqQIgiIXxUtkgEn73bmDhngUKolrPvs1FH1JkyhOB9epnyoKB3o31q0l8RuBVslGh/iANOcBAr9c4dIsBY6nIB9ElrCR/kPKy3mdM6HQzHciuLMzMSLPLFuMql9fNzH6mHUXQ+5Omfw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(5660300002)(6506007)(498600001)(9686003)(7416002)(52536014)(8676002)(64756008)(7696005)(66446008)(53546011)(86362001)(26005)(33656002)(122000001)(8936002)(38100700002)(55016003)(2906002)(186003)(38070700005)(316002)(66556008)(83380400001)(54906003)(66946007)(76116006)(6916009)(71200400001)(66476007)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UWxxMXprYUxiYm5oRW5mazN6THdUbGNEUitrME9HUTJTT2NFN0NmVTFuN1ZP?=
- =?utf-8?B?YW9oUFVMeWlURTZ5K1hGa2dGaXJWTlJnSlZidHJkb25zVlhCMnl3UGU1RDdL?=
- =?utf-8?B?V0Y1U0h5U0FxMnFZSjZFZFcvUEJ3VkZZMS9zRjJKOTcrczlUeHhIaHFveHpO?=
- =?utf-8?B?QmtId2Q1Y0MzTHlHSTNhenFJeE4vWW5ucFZBbjJJaEpJMzhRYy9JVktNeldU?=
- =?utf-8?B?cHMzaGx5RUlBVUJZTXNmOFlhaWQyUStRTmRvTXAwYzArS1FHcjlJamFMUS9I?=
- =?utf-8?B?aEg2UERVUmt4K2lYQzRNWmJlMG0xK3J4YjdGSWlyb3Y1REF2L0tMcHBjbndO?=
- =?utf-8?B?czlodmgxNTB4aFoxQ25DZEdSL1VMOCtHY0VmK3o5dkUrUklpYmc2SVlvblEv?=
- =?utf-8?B?RkV4ZzBtbnVBdjIwZFliRWlFZ04rdlBueUR5dnkzczZGSWM2ZzZEbCtNUTZM?=
- =?utf-8?B?SmxrYVRHZDZOMnJLeHRZNlM2UWorZVVGdmlxekYvNEpoWjJpdlZSS1NxNlNE?=
- =?utf-8?B?WUZxdTJkRXl4MHkzUjRoRWlnOE5qQjJvSXZ2VElNWXBDNXd2QmxETktwQVFI?=
- =?utf-8?B?Y01GL1ZtT3ZlY0VJL1B4eTduNWZUWEJKYXpraTRVU250ZkFGYURsc0JFUjc3?=
- =?utf-8?B?Mjllc2NQbWpMZVk1L1Q0WTZjU1FkckNoU0xtaGhFa2NxQzM0aThSTHViVUtP?=
- =?utf-8?B?cDViNzhvS2VVbXE5MTVDRzJiU3ljOEI4Yk5pNTgvcVNDK3dWV2ZqZnZNdTdN?=
- =?utf-8?B?ZGttVVlNcC92YVJsSHVEUVNnakw3SVJpdUxzTHhaV3VhVFkvckhsTEhWRldM?=
- =?utf-8?B?aDB4dURzT095NlJCVkN1NkFWZ1VrZHlxMTI3T3VuVWhDTE1BS29XREptUXBC?=
- =?utf-8?B?Q3ZHNEJ4czdQeUQ4ZUhQYTFWck9OU1BWRDZsUTBxaEhid003MEVYR2lhOWhE?=
- =?utf-8?B?VFRFRHpvZHM1eWtZNGdWaVV5eDErUUFhcWZscFRyZThsenBYbzdNOWgrb2lt?=
- =?utf-8?B?cEVHdXFIT3NjbVE1eVUyQS9ta21JQmVJN0JmUXpzTnNZSU5QaTFjQmhYR21G?=
- =?utf-8?B?SFBmVi96MXExMFowZjI3d3BmR0ZQcHBHS1FKRTdoNVNsSVh2SCtvbnB1ZlR0?=
- =?utf-8?B?bTYrU2NVNWFrekdxUEpFbTJvSERkcHNEZEtuS0ZEVHBBZGNaM1hxSkJuUDBW?=
- =?utf-8?B?c3BvS215SDdDUmptMlp0dlBRbjB2TjJua21yb2RHYVl5MElsZWxzSndDNjlV?=
- =?utf-8?B?NFV4cjJLRGxIaGN5WCt1bTd1NjYycTZEUkRscEZOZVhkRFJJd2xDNFNPcEc5?=
- =?utf-8?B?cUN5Q2tJd0h2RllwMGVDRVcwcVloRGkxSERhd09TbGh1UmpBVndScHM1ZjVq?=
- =?utf-8?B?RUJ1b3hPRzV1QzYwYmlGcElYbkFSSHJ6S1hTeWt0S0l5ekpScFBhV1ViZFNO?=
- =?utf-8?B?ck1pTVUvdmdDS1RBaWZ6Y1A2bVhxZ2E4UXRBbnZoVTcrS1NxbjNIaFZTUkxo?=
- =?utf-8?B?SWZtSjVQWnNtbzB6U3VDNWtoVlBKUGtBeW5ZbTh6VXNNV1BndXBwU04xMFlN?=
- =?utf-8?B?VE54MW1CWHlrc1BjQmRFYk9DUVRQKytDSjlmWVVWV3pTVUhIY1I5TGVtaHBI?=
- =?utf-8?B?OTJaeUdpSkFlcnd3Q1BXUzdXUFZHV2VDVm8zU2srNy9GQ1RUUWhLbm1nR1Bp?=
- =?utf-8?B?ZlVTTk11YTdja1RvbWlRYnJXVzIveXdZbnhja1ZLRjl6Uk8xcHZ4am5BZ01U?=
- =?utf-8?B?ZlVrb0FabC8vdHRZTjRacGRvdmxGb3ZWRW9pR2tMS1dqSk9YU04rUWVOeFVn?=
- =?utf-8?B?d0dXbjJ1WkRZZzBsN081cHZ5czZ0eUNydGZaUVdXK1h6NnVBSmVpV0JuY2ZG?=
- =?utf-8?B?R0tDaHFiWjY1WFIwVFBud0hZTW9lZmJEUytGYU44eWh4dXB5S0oxcHArYUI3?=
- =?utf-8?B?cDAyOEtuZjhUUjlLODg0NGswenZEd0tKUGtqVHV1N1RSL2Q5czJ3MmgvTUdS?=
- =?utf-8?B?NlhaK3lGWDd5WVNmR2wvaUJKVlVKRG4vdTRPTGxCdXFGN0JodXZiaTh2b091?=
- =?utf-8?B?UWxQYmc0MG1EdVU0YXJueHBJaEl1QlZhWGI0SVNPcjlKTjAyUDZRTExTNXJF?=
- =?utf-8?B?MDlDbGRmRUZ1eEp1QmI5a04vM0NLTUliMDJXOUV2L0Uwd0FES3N0U1c1UExS?=
- =?utf-8?B?cG9FSjVhNXhIRmY5bWVCMmtyNTd1RmFXcVBaKzVUQ0hIRnc3ZmxSWDRjeisy?=
- =?utf-8?B?Nm1xaExuQjM5MEwwSHdDSUlFZHZsMWNRSXZreDZGUkFZdkVTRmoydTR5NGRj?=
- =?utf-8?Q?jr8VOOp3cOXQb3Gp/K?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 16 Jun 2022 22:45:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72BA6540C;
+        Thu, 16 Jun 2022 19:45:10 -0700 (PDT)
+X-UUID: 91633a5d752a45f18f98ce0cc04b95a0-20220617
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:10bce423-1e76-48f9-8b67-89e3e316ca23,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.6,REQID:10bce423-1e76-48f9-8b67-89e3e316ca23,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:b14ad71,CLOUDID:f5b7d448-4c92-421c-ad91-b806c0f58b2a,C
+        OID:ebb5ecc694ff,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 91633a5d752a45f18f98ce0cc04b95a0-20220617
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 282833897; Fri, 17 Jun 2022 10:45:05 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 17 Jun 2022 10:45:04 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 17 Jun 2022 10:45:04 +0800
+Message-ID: <08f09092a778507004509818dbe4075840b73f6e.camel@mediatek.com>
+Subject: Re: [PATCH v11 01/10] dt-bindings: mediatek,dp: Add Display Port
+ binding
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <krzysztof.kozlowski+dt@linaro.org>,
+        <mripard@kernel.org>, <tzimmermann@suse.de>,
+        <matthias.bgg@gmail.com>, <deller@gmx.de>, <airlied@linux.ie>,
+        <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 17 Jun 2022 10:45:03 +0800
+In-Reply-To: <20220616212813.GA3991754-robh@kernel.org>
+References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
+         <20220610105522.13449-2-rex-bc.chen@mediatek.com>
+         <20220614202336.GA2400714-robh@kernel.org>
+         <aeebb6879d62865f8baf037e541c568eb9310f23.camel@mediatek.com>
+         <20220616212813.GA3991754-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 126ddccb-f6f9-48de-fe24-08da500b004d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 02:42:20.6163
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: o5wZA/hrvCNwtyPsBO2wJ4Lv6sWYS6MGgk9kaLYfCy6GWK5iU5uH63W3Ybz8cXykIY8j7PmSmHcsjYddpXr16Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5950
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gRnJvbTogSmFzb24gV2FuZyA8amFzb3dhbmdAcmVkaGF0LmNvbT4NCj4gU2VudDogVGh1
-cnNkYXksIEp1bmUgMTYsIDIwMjIgOToxNSBQTQ0KPiANCj4gT24gRnJpLCBKdW4gMTcsIDIwMjIg
-YXQgMzozNiBBTSBQYXJhdiBQYW5kaXQgPHBhcmF2QG52aWRpYS5jb20+IHdyb3RlOg0KPiA+DQo+
-ID4NCj4gPiA+IEZyb206IEphc29uIFdhbmcgPGphc293YW5nQHJlZGhhdC5jb20+DQo+ID4gPiBT
-ZW50OiBUdWVzZGF5LCBKdW5lIDE0LCAyMDIyIDk6MjkgUE0NCj4gPiA+DQo+ID4gPiBXZWxsLCBp
-dCdzIGFuIGV4YW1wbGUgb2YgaG93IHZEUEEgaXMgaW1wbGVtZW50ZWQuIEkgdGhpbmsgd2UgYWdy
-ZWUNCj4gPiA+IHRoYXQgZm9yIHZEUEEsIHZlbmRvcnMgaGF2ZSB0aGUgZmxleGliaWxpdHkgdG8g
-aW1wbGVtZW50IHRoZWlyIHBlcmZlcnJhYmxlDQo+IGRhdGFwYXRoLg0KPiA+ID4NCj4gPiBZZXMg
-Zm9yIHRoZSB2ZHBhIGxldmVsIGFuZCBmb3IgdGhlIHZpcnRpbyBsZXZlbC4NCj4gPg0KPiA+ID4g
-Pg0KPiA+ID4gPiBJIHJlbWVtYmVyIGZldyBtb250aHMgYmFjaywgeW91IGFja2VkIGluIHRoZSB3
-ZWVrbHkgbWVldGluZyB0aGF0DQo+ID4gPiA+IFRDIGhhcw0KPiA+ID4gYXBwcm92ZWQgdGhlIEFR
-IGRpcmVjdGlvbi4NCj4gPiA+ID4gQW5kIHdlIGFyZSBzdGlsbCBpbiB0aGlzIGNpcmNsZSBvZiBk
-ZWJhdGluZyB0aGUgQVEuDQo+ID4gPg0KPiA+ID4gSSB0aGluayBub3QuIEp1c3QgdG8gbWFrZSBz
-dXJlIHdlIGFyZSBvbiB0aGUgc2FtZSBwYWdlLCB0aGUgcHJvcG9zYWwNCj4gPiA+IGhlcmUgaXMg
-Zm9yIHZEUEEsIGFuZCBob3BlIGl0IGNhbiBwcm92aWRlIGZvcndhcmQgY29tcGF0aWJpbGl0eSB0
-bw0KPiA+ID4gdmlydGlvLiBTbyBpbiB0aGUgY29udGV4dCBvZiB2RFBBLCBhZG1pbiB2aXJ0cXVl
-dWUgaXMgbm90IGEgbXVzdC4NCj4gPiBJbiBjb250ZXh0IG9mIHZkcGEgb3ZlciB2aXJ0aW8sIGFu
-IGVmZmljaWVudCB0cmFuc3BvcnQgaW50ZXJmYWNlIGlzIG5lZWRlZC4NCj4gPiBJZiBBUSBpcyBu
-b3QgbXVjaCBhbnkgb3RoZXIgaW50ZXJmYWNlIHN1Y2ggYXMgaHVuZHJlZHMgdG8gdGhvdXNhbmRz
-IG9mDQo+IHJlZ2lzdGVycyBpcyBub3QgbXVzdCBlaXRoZXIuDQo+ID4NCj4gPiBBUSBpcyBvbmUg
-aW50ZXJmYWNlIHByb3Bvc2VkIHdpdGggbXVsdGlwbGUgYmVuZWZpdHMuDQo+ID4gSSBoYXZlbuKA
-mXQgc2VlbiBhbnkgb3RoZXIgYWx0ZXJuYXRpdmVzIHRoYXQgZGVsaXZlcnMgYWxsIHRoZSBiZW5l
-Zml0cy4NCj4gPiBPbmx5IG9uZSBJIGhhdmUgc2VlbiBpcyBzeW5jaHJvbm91cyBjb25maWcgcmVn
-aXN0ZXJzLg0KPiA+DQo+ID4gSWYgeW91IGxldCB2ZW5kb3JzIHByb2dyZXNzLCBoYW5kZnVsIG9m
-IHNlbnNpYmxlIGludGVyZmFjZXMgY2FuIGV4aXN0LCBlYWNoDQo+IHdpdGggZGlmZmVyZW50IGNo
-YXJhY3RlcmlzdGljcy4NCj4gPiBIb3cgd291bGQgd2UgcHJvY2VlZCBmcm9tIGhlcmU/DQo+IA0K
-PiBJJ20gcHJldHR5IGZpbmUgd2l0aCBoYXZpbmcgYWRtaW4gdmlydHF1ZXVlIGluIHRoZSB2aXJ0
-aW8gc3BlYy4gSWYgeW91DQo+IHJlbWVtYmVyLCBJJ3ZlIGV2ZW4gc3VibWl0dGVkIGEgcHJvcG9z
-YWwgdG8gdXNlIGFkbWluIHZpcnRxdWV1ZSBhcyBhDQo+IHRyYW5zcG9ydCBsYXN0IHllYXIuDQo+
-IA0KPiBMZXQncyBqdXN0IHByb2NlZWQgaW4gdGhlIHZpcnRpby1kZXYgbGlzdC4NCg0Kby5rLiB0
-aGFua3MuIEkgYW0gYWxpZ25lZCB3aXRoIHlvdXIgdGhvdWdodHMgbm93Lg0K
+On Thu, 2022-06-16 at 15:28 -0600, Rob Herring wrote:
+> On Thu, Jun 16, 2022 at 09:22:16PM +0800, Rex-BC Chen wrote:
+> > On Tue, 2022-06-14 at 14:23 -0600, Rob Herring wrote:
+> > > On Fri, Jun 10, 2022 at 06:55:13PM +0800, Bo-Chen Chen wrote:
+> > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > 
+> > > > This controller is present on several mediatek hardware.
+> > > > Currently
+> > > > mt8195 and mt8395 have this controller without a functional
+> > > > difference,
+> > > > so only one compatible field is added.
+> > > > 
+> > > > The controller can have two forms, as a normal display port and
+> > > > as
+> > > > an
+> > > > embedded display port.
+> > > > 
+> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > > [Bo-Chen: Fix reviewers' comment]
+> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > ---
+> > > >  .../display/mediatek/mediatek,dp.yaml         | 101
+> > > > ++++++++++++++++++
+> > > >  1 file changed, 101 insertions(+)
+> > > >  create mode 100644
+> > > > Documentation/devicetree/bindings/display/mediatek/mediatek,dp.
+> > > > yaml
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/display/mediatek/mediatek,d
+> > > > p.ya
+> > > > ml
+> > > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,d
+> > > > p.ya
+> > > > ml
+> > > > new file mode 100644
+> > > > index 000000000000..10f50a0dcf49
+> > > > --- /dev/null
+> > > > +++
+> > > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,d
+> > > > p.ya
+> > > > ml
+> > > > @@ -0,0 +1,101 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: 
+> > > > 
+https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml*__;Iw!!CTRNKA9wMg0ARbw!yqAl1KhfbHqHN7-5aeqhzqeOVhPU_Z5beko5q-y-s5pcfp1WL5oVGvY5UF4EfWm4PWjc5mjBwyBUMsr_RI45ipbhsw$
+> > > >  
+> > > > +$schema: 
+> > > > 
+https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!yqAl1KhfbHqHN7-5aeqhzqeOVhPU_Z5beko5q-y-s5pcfp1WL5oVGvY5UF4EfWm4PWjc5mjBwyBUMsr_RI5WzYKENQ$
+> > > >  
+> > > > +
+> > > > +title: MediaTek Display Port Controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > > > +  - Jitao shi <jitao.shi@mediatek.com>
+> > > > +
+> > > > +description: |
+> > > > +  Device tree bindings for the MediaTek display port and
+> > > > +  embedded display port controller present on some MediaTek
+> > > > SoCs.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    enum:
+> > > > +      - mediatek,mt8195-dp-tx
+> > > > +      - mediatek,mt8195-edp-tx
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  nvmem-cells:
+> > > > +    maxItems: 1
+> > > > +    description: efuse data for display port calibration
+> > > > +
+> > > > +  nvmem-cell-names:
+> > > > +    const: dp_calibration_data
+> > > > +
+> > > > +  power-domains:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  interrupts:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  ports:
+> > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > +    properties:
+> > > > +      port@0:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: Input endpoint of the controller, usually
+> > > > dp_intf
+> > > > +
+> > > > +      port@1:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: Output endpoint of the controller
+> > > > +
+> > > > +    required:
+> > > > +      - port@0
+> > > > +      - port@1
+> > > > +
+> > > > +  max-lanes:
+> > > > +    maxItems: 1
+> > > > +    description: maximum number of lanes supported by the
+> > > > hardware.
+> > > 
+> > > We already have a 'data-lanes' property defined in 
+> > > 'video-interfaces.yaml' that can serve this purpose.
+> > > 
+> > 
+> > Hello Rob,
+> > 
+> > Thanks for review.
+> > From the description of video-interfaces.yaml, I think it's not
+> > quite
+> > match what we need. We only need this value be one of "1,2,4".
+> 
+> data-lanes = <0>;
+> data-lanes = <0 1>;
+> data-lanes = <0 1 2 3>;
+> 
+> Limiting the number of lanes to something less than the max is
+> exactly 
+> how this property is used in addition to being able to show the
+> mapping 
+> of lanes.
+> 
+> Rob
+
+Hello Rob,
+
+I modify like this:
+  data-lanes:
+    $ref: /schemas/media/video-interfaces.yaml#
+    description: |
+      number of lanes supported by the hardware.
+      The possible values:
+      1     - For 1 lane enabled in IP.
+      1 2   - For 2 lanes enabled in IP.
+      1 2 4 - For 4 lanes enabled in IP.
+    minItems: 1
+    maxItems: 3
+
+example:
+data-lanes = <1 2 4>;
+
+But I encounter errorr:
+Documentation/devicetree/bindings/display/mediatek/mediatek,dp.example.
+dtb: dp_tx@1c600000: data-lanes: [[1, 2, 4]] is not of type 'object'
+Documentation/devicetree/bindings/display/mediatek/mediatek,dp.example.
+dtb: dp_tx@1c600000: data-lanes: [[1, 2, 4]] is not of type 'object'
+
+can you kindly give me some hint for this?
+
+Thanks
+
+BRs,
+Bo-Chen
+

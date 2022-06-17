@@ -2,160 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61E654FF8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3A854FF93
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236157AbiFQV5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 17:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
+        id S236166AbiFQV6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 17:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiFQV53 (ORCPT
+        with ESMTP id S237186AbiFQV6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 17:57:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208825AECC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:57:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0107B8282A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 21:57:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A6AC3411B;
-        Fri, 17 Jun 2022 21:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655503045;
-        bh=1IJ4AD9SFq1euCFzTE9wQhHs0AjfzBgxpQDgrJLIjZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gMupJjjJouPpcTAJQqVmLCnYU3ixmW3TvO4hicl5a8u2ILov4CQTNdjOoZieWnwLw
-         /GunKKORzBj/3fU9+9q5N5TT6GyTamJoqCr61uuK51ky07zN9Kn0Fo47fTadK9FMAx
-         eNpt6kC6KTtp/olRvIbqQ+shxi0Ga8+Om7JhyE4qDu54f7pcXbJxcPDdfWJQ0tg4S7
-         vl0msjqPtlzKa/R5N4gs5CLiz1JYBFJCHH9hFc91nSAmm+peJ2vHAjxAEieejkT1+6
-         W3b9J+fL2u8OjHil3SaC/lD4UxQR8oREFDHnl7/lQkg2GOSKkXfrvSJ0N9CyZKVD1F
-         FB263p5UBj7Mg==
-Date:   Fri, 17 Jun 2022 14:57:23 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        ndesaulniers@google.com, heiko@sntech.de,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev, jrtc27@jrtc27.com
-Subject: Re: [PATCH] riscv: Fix ALT_THEAD_PMA's asm parameters
-Message-ID: <Yqz4w3Udrsti3gnm@dev-arch.thelio-3990X>
-References: <YqedafxlnoXauefj@dev-arch.thelio-3990X>
- <mhng-9c9a8588-72a2-4e97-85d4-e843e77e3117@palmer-mbp2014>
+        Fri, 17 Jun 2022 17:58:00 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2048.outbound.protection.outlook.com [40.107.236.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E751900D;
+        Fri, 17 Jun 2022 14:57:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jPnXHaCh33Lo1i6PrqgIXhfpllLXqqjfnE54eUHIPONra1YNCl3c6PTjeeVX8fex954zNnvEN8hg6P8eY5jsm4usAno3yzSTJkx79SBo7j/fvYb6YBlhKRIvnRZImDVsCTR2ZCKqNmUr19EQs6Qi6lvcEtIgdNlx7gN3V3dg+B5SbPhhLFtYpes6Y7SrXzNZhBvxJOpaRhKuctnkKP7eo8jdrcrM19/4581U9mPIajx0Fh79hhviADl43XvjuOeqxShbDNMCzCD/v2uLa11Bn0WVwyii4BVFwNhYOaFONOeuXTLcno57Dx1Y9F1deDfAJr48HtzHDZaQ9SA9+8HPew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=znkRA8Z4zT0hhTVsPJ898SJImrtU5K4yJGKe7OqSB6c=;
+ b=YExOA1i8luexSwBWVDLzY7h0DWAo6JUFasILJuTVDdAF0XBxo7rBERRSQ58gVTiR/OlzYYYogDs396wRbgjngsCI9eD1wedmA+yPro0l46jRi59icKq5ZGIm15EoG2xBLEnQIoxH7/GFdxXmvjnvPWQta/yc5hnqKY8iwMOwhZROLbRpY8km3KBvhjuiGpjk3dPVuc5ivUfTWj3XSK8NkLyzVlQSEkdIsVItS23cZt414uSxaaUnhjNo42ahkdh3YskA1dHItTjOJG8TdQ6jsvwSjnMoLEKAeehCjhaVNgXp4qtzCOWjQJcI8yzJDh23DOEmjwrfQE5IH3A6PdGIpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=znkRA8Z4zT0hhTVsPJ898SJImrtU5K4yJGKe7OqSB6c=;
+ b=nyELMDJypZq3guG9eeth9mbIU2RAGswAzsgwpgZyyUjClN2zEgHJ9VxUKkX7Hisd6KbGY5FF3NY8HGBsO7ijZldT4rbbbOS0YF209BoPkvvIIi7rUx+FLP2y88Hn+19BFvj5zXHrKOtWxnrY1S73VlYI17AMjQaJdlxBHDTMXVN1KRKf5rvV9MB9Hp5QMMKe4+w3eYB01GDXQsAQ9UW0c8HO4Yx383uwIAqvt6FbeXrCUZE/9MACcpgtkZIurJNG0ZkTHFzACyMSZfwIShuAYh0MRZFIgNtEaa/qUj8G9lUpdVPlM7GQ1RaLovxfEQiONyhw7vGq1ux5Sn7vddXJUA==
+Received: from DM5PR1101CA0010.namprd11.prod.outlook.com (2603:10b6:4:4c::20)
+ by IA1PR12MB6433.namprd12.prod.outlook.com (2603:10b6:208:3af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Fri, 17 Jun
+ 2022 21:57:49 +0000
+Received: from DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:4c:cafe::17) by DM5PR1101CA0010.outlook.office365.com
+ (2603:10b6:4:4c::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.18 via Frontend
+ Transport; Fri, 17 Jun 2022 21:57:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT012.mail.protection.outlook.com (10.13.173.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5353.14 via Frontend Transport; Fri, 17 Jun 2022 21:57:48 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Fri, 17 Jun 2022 21:57:47 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 17 Jun 2022 14:57:47 -0700
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
+ Transport; Fri, 17 Jun 2022 14:57:45 -0700
+Date:   Fri, 17 Jun 2022 14:57:44 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     <kwankhede@nvidia.com>, <corbet@lwn.net>, <hca@linux.ibm.com>,
+        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+        <zhenyuw@linux.intel.com>, <zhi.a.wang@intel.com>,
+        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
+        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <farman@linux.ibm.com>,
+        <mjrosato@linux.ibm.com>, <pasic@linux.ibm.com>,
+        <vneethv@linux.ibm.com>, <oberpar@linux.ibm.com>,
+        <freude@linux.ibm.com>, <akrowiak@linux.ibm.com>,
+        <jjherne@linux.ibm.com>, <alex.williamson@redhat.com>,
+        <cohuck@redhat.com>, <jgg@nvidia.com>, <kevin.tian@intel.com>,
+        <jchrist@linux.ibm.com>, <kvm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>
+Subject: Re: [RFT][PATCH v1 3/6] vfio: Pass in starting IOVA to
+ vfio_pin/unpin_pages API
+Message-ID: <Yqz42ApyYoj3TUll@Asurada-Nvidia>
+References: <20220616235212.15185-1-nicolinc@nvidia.com>
+ <20220616235212.15185-4-nicolinc@nvidia.com>
+ <Yqw+goqTJwb0lrxy@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <mhng-9c9a8588-72a2-4e97-85d4-e843e77e3117@palmer-mbp2014>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yqw+goqTJwb0lrxy@infradead.org>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3062efc2-0ca8-4952-da21-08da50ac6b29
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6433:EE_
+X-Microsoft-Antispam-PRVS: <IA1PR12MB6433066883A6AD4BE583075BABAF9@IA1PR12MB6433.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VM+dx/Y2vxWca6s2eAiR3BY0m8c3ofVbtDDLu3qeTDDGV0Js0492B43lA9eoJZejx4CKlIJ3KAXjsEyc5J189XLWTf+pzhUJQmQdoZDxmgckyQeDc22X4ebEyFW4nP2M1BqeMNik3odgxCIoPDC0SL0cGfddEoKWLRRyVds+SvaJMdMVU0wNYNJYsRJuaa3BIAIbuc7155HIz6jmkv3WP3n8Z+cAj6WowKnC9dsVBMPcfqKqvpVJWoiIHHz8ZfUl7Dj+FmMPJC1RgJIaNqT9r14y2pbB5PvVYzlgXPKIsma9/aG0Wk8DIZUQ3N4mUhnBayNjIvK1WAD3J/Dd5v25X+mgYwOY5rwg/9GTW5MI2749SfL5pr40rxsnrMOzcMdfTMFzjftyCMb2zcMVCt15knqyxz7YEF3WAywWcjDUmjFkr88GubOUYgVDScC5q1zd004qXTstzZPJ+4XDhih1kBHSHXoparMWNxZy3gUFdqFJc5bts4rJ2AsUw9twoplvBTnCngovm7CRfqF7ilZhZkCz0x0SWFauCtlE6E45WhHOCqaPCCZ+j+MCLKCjQhoqyYNBVNl8w3QcSS/T4FN8IjVS8JcS5sKSvtLksJf7tpRUnXpWSGBTavgEbAn/R3S+xKkZuxvs9eEKIde8lXJoIcb43bTZ93NrO9YgTS795SKtMFY7J8uROItbvYHKRV91fBKovo0Ju9naDxwBJq5+RA==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(46966006)(40470700004)(36840700001)(33716001)(70586007)(82310400005)(70206006)(7416002)(8676002)(4326008)(316002)(186003)(55016003)(8936002)(7406005)(6916009)(54906003)(2906002)(36860700001)(5660300002)(498600001)(336012)(9686003)(86362001)(426003)(47076005)(26005)(40460700003)(81166007)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 21:57:48.7129
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3062efc2-0ca8-4952-da21-08da50ac6b29
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6433
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 02:54:37PM -0700, Palmer Dabbelt wrote:
-> On Mon, 13 Jun 2022 13:26:17 PDT (-0700), nathan@kernel.org wrote:
-> > On Wed, May 25, 2022 at 07:40:37PM -0700, Nathan Chancellor wrote:
-> > > Small ping on this and https://lore.kernel.org/20220516214520.3252074-1-nathan@kernel.org/.
-> > > 
-> > > Our builds on -next have been broken for a week now. Hopefully these can
-> > > make the first RISC-V pull request to avoid mainline being broken in the
-> > > same fashion.
-> > 
-> > One more small ping. The patch linked above made it into 5.19-rc1 but
-> > this one has not been applied so our builds are still broken.
+On Fri, Jun 17, 2022 at 01:42:42AM -0700, Christoph Hellwig wrote:
+> On Thu, Jun 16, 2022 at 04:52:09PM -0700, Nicolin Chen wrote:
+> > +	ret = vfio_unpin_pages(&vgpu->vfio_device, gfn << PAGE_SHIFT, npage);
+> > +	drm_WARN_ON(&i915->drm, ret != npage);
 > 
-> Sorry I dropped the ball on this one, it's in fixes.  Thanks!
+> The shifting of gfn seems to happen bother here and in the callers.
+> 
+> Also this is the only caller that does anything withthe vfio_unpin_pages
+> return value.  Given that you touch the API here we might as well
+> not return any value, and turn the debug checks that can return errors
+> into WARN_ON_ONCE calls the vfio/iommu_type1 code.
 
-Better late than never :) thanks a lot!
+Thanks for the suggestion. I will do that.
 
-Cheers,
-Nathan
+> > +extern int vfio_pin_pages(struct vfio_device *device, dma_addr_t iova,
+> >  			  int npage, int prot, unsigned long *phys_pfn);
+> > -extern int vfio_unpin_pages(struct vfio_device *device, unsigned long *user_pfn,
+> > +extern int vfio_unpin_pages(struct vfio_device *device, dma_addr_t iova,
+> >  			    int npage);
+> 
+> This will clash with the extern removal patch that Alex has sent.
 
-> > > On Wed, May 18, 2022 at 11:45:29AM -0700, Nathan Chancellor wrote:
-> > > > After commit a35707c3d850 ("riscv: add memory-type errata for T-Head"),
-> > > > builds with LLVM's integrated assembler fail like:
-> > > >
-> > > >   In file included from arch/riscv/kernel/asm-offsets.c:10:
-> > > >   In file included from ./include/linux/mm.h:29:
-> > > >   In file included from ./include/linux/pgtable.h:6:
-> > > >   In file included from ./arch/riscv/include/asm/pgtable.h:114:
-> > > >   ./arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
-> > > >           ALT_THEAD_PMA(prot_val);
-> > > >           ^
-> > > >   ./arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
-> > > >           : "0"(_val),                                                    \
-> > > >             ^
-> > > >
-> > > > This was reported upstream to LLVM where Jessica pointed out a couple of
-> > > > issues with the existing implementation of ALT_THEAD_PMA:
-> > > >
-> > > > * t3 is modified but not listed in the clobbers list.
-> > > >
-> > > > * "+r"(_val) marks _val as both an input and output of the asm but then
-> > > >   "0"(_val) marks _val as an input matching constraint, which does not
-> > > >   make much sense in this situation, as %1 is not actually used in the
-> > > >   asm and matching constraints are designed to be used for different
-> > > >   inputs that need to use the same register.
-> > > >
-> > > > Drop the matching contraint and shift all the operands by one, as %1 is
-> > > > unused, and mark t3 as clobbered. This resolves the build error and goes
-> > > > not cause any problems with GNU as.
-> > > >
-> > > > Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
-> > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1641
-> > > > Link: https://github.com/llvm/llvm-project/issues/55514
-> > > > Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
-> > > > Suggested-by: Jessica Clarke <jrtc27@jrtc27.com>
-> > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > > ---
-> > > >  arch/riscv/include/asm/errata_list.h | 14 +++++++-------
-> > > >  1 file changed, 7 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> > > > index 9e2888dbb5b1..416ead0f9a65 100644
-> > > > --- a/arch/riscv/include/asm/errata_list.h
-> > > > +++ b/arch/riscv/include/asm/errata_list.h
-> > > > @@ -75,20 +75,20 @@ asm volatile(ALTERNATIVE(						\
-> > > >  	"nop\n\t"							\
-> > > >  	"nop\n\t"							\
-> > > >  	"nop",								\
-> > > > -	"li      t3, %2\n\t"						\
-> > > > -	"slli    t3, t3, %4\n\t"					\
-> > > > +	"li      t3, %1\n\t"						\
-> > > > +	"slli    t3, t3, %3\n\t"					\
-> > > >  	"and     t3, %0, t3\n\t"					\
-> > > >  	"bne     t3, zero, 2f\n\t"					\
-> > > > -	"li      t3, %3\n\t"						\
-> > > > -	"slli    t3, t3, %4\n\t"					\
-> > > > +	"li      t3, %2\n\t"						\
-> > > > +	"slli    t3, t3, %3\n\t"					\
-> > > >  	"or      %0, %0, t3\n\t"					\
-> > > >  	"2:",  THEAD_VENDOR_ID,						\
-> > > >  		ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
-> > > >  	: "+r"(_val)							\
-> > > > -	: "0"(_val),							\
-> > > > -	  "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-> > > > +	: "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-> > > >  	  "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),			\
-> > > > -	  "I"(ALT_THEAD_PBMT_SHIFT))
-> > > > +	  "I"(ALT_THEAD_PBMT_SHIFT)					\
-> > > > +	: "t3")
-> > > >  #else
-> > > >  #define ALT_THEAD_PMA(_val)
-> > > >  #endif
-> > > >
-> > > > base-commit: 93c0651617a62a69717299f1464dda798af8bebb
-> > > > --
-> > > > 2.36.1
-> > > >
-> > > >
-> > > > _______________________________________________
-> > > > linux-riscv mailing list
-> > > > linux-riscv@lists.infradead.org
-> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> > > 
+And I will rebase on top of Alex's change.

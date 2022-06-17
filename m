@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A795354FD4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC6E54FD3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbiFQTFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
+        id S235279AbiFQTFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiFQTFo (ORCPT
+        with ESMTP id S233914AbiFQTFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Jun 2022 15:05:44 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4A042EF9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D943F45042
         for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:05:43 -0700 (PDT)
 Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: bbeckett)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE19B66017DF;
-        Fri, 17 Jun 2022 20:05:41 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D90666017FA;
+        Fri, 17 Jun 2022 20:05:42 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1655492742;
-        bh=JT0TnJkB0rL8RAGj5L8WxKKfTjJ2qr1XwBthtCgxh3Y=;
+        bh=8vOVoJXWNBNoAe7uHxF6kK6AtRixKpYtIjs6ocUktn4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Anldpq7wlROSc+hLiByOyaVG5S6tpj3HJfdgyeyPL33JqkkObbaMHGcDKsRQbiIG4
-         OTFVRrz6NmQipgBNa/UMgY7A26gj10Sg87LhExWPNkxwaJJc3fOR+lC2tOFj9QAo8s
-         5ms5RFLPaY01NgjmjiSqmEIrsN0tFDxcBYUX8EiGx70yrQOc+GdBMp0xnAjw8mL9h7
-         bRgg1kVgAwLkJG1BhW0XhJMqxupSTZxISivyA3tVR8eTxnZ7a2wdC8KejAOFW5Q2ai
-         8pjNTAec65GInP6X9ybQIMEQ0okDHR6UrMNOTngJcxs32UBlFL4jT8NC57GxT0eEk5
-         NQZD1CcStKjwA==
+        b=GPTBn8NOGqnuUZcxrYuvmdiXrILvdzQYT9WQLvHPfa0X/+sokBAfL1UlCZFzFsiKM
+         aiT+fl7fyAbSYHinJ0wjc9QdskgUbkBRfcgOCI9nujh5TLviWQov79tPoQJ8zFmA8z
+         y/UWiwNg1SH7vBnn/TK+ez48JzKw+El5HueSMO6h6b7PIayMiwAZlSBVfGQDeODYfA
+         2iH8bzoYwYTlQ9o1ER5Mbajbu/Gp8bXKkzTd4yXGuPjVi/wtZJNXyIY1rdkaRusi+m
+         LJ/1FmwS5GMVREwBccCqk2H3YDNrcv+MwUF81JEdYaT6DNjxZIGYaq2ibDuOjczU5N
+         IF06SlMgd97ng==
 From:   Robert Beckett <bob.beckett@collabora.com>
 To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -44,9 +44,9 @@ Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
         Matthew Auld <matthew.auld@intel.com>,
         =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
         <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 02/10] drm/i915: limit ttm to dma32 for i965G[M]
-Date:   Fri, 17 Jun 2022 19:05:08 +0000
-Message-Id: <20220617190516.2805572-3-bob.beckett@collabora.com>
+Subject: [PATCH v6 03/10] drm/i915/ttm: only trust snooping for dgfx when deciding default cache_level
+Date:   Fri, 17 Jun 2022 19:05:09 +0000
+Message-Id: <20220617190516.2805572-4-bob.beckett@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220617190516.2805572-1-bob.beckett@collabora.com>
 References: <20220617190516.2805572-1-bob.beckett@collabora.com>
@@ -61,35 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i965G[M] cannot relocate objects above 4GiB.
-Ensure ttm uses dma32 on these systems.
+By default i915_ttm_cache_level() decides I915_CACHE_LLC if HAS_SNOOP.
+This is divergent from existing backends code which only considers
+HAS_LLC.
+Testing shows that trusting snooping on gen5- is unreliable and bsw via
+ggtt mappings, so limit DGFX for now and maintain previous behaviour.
 
 Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
- drivers/gpu/drm/i915/intel_region_ttm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/intel_region_ttm.c b/drivers/gpu/drm/i915/intel_region_ttm.c
-index 62ff77445b01..fd2ecfdd8fa1 100644
---- a/drivers/gpu/drm/i915/intel_region_ttm.c
-+++ b/drivers/gpu/drm/i915/intel_region_ttm.c
-@@ -32,10 +32,15 @@
- int intel_region_ttm_device_init(struct drm_i915_private *dev_priv)
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+index 4c1de0b4a10f..40249fa28a7a 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+@@ -46,7 +46,9 @@ static enum i915_cache_level
+ i915_ttm_cache_level(struct drm_i915_private *i915, struct ttm_resource *res,
+ 		     struct ttm_tt *ttm)
  {
- 	struct drm_device *drm = &dev_priv->drm;
-+	bool use_dma32 = false;
+-	return ((HAS_LLC(i915) || HAS_SNOOP(i915)) &&
++	bool can_snoop = HAS_SNOOP(i915) && IS_DGFX(i915);
 +
-+	/* i965g[m] cannot relocate objects above 4GiB. */
-+	if (IS_I965GM(dev_priv) || IS_I965G(dev_priv))
-+		use_dma32 = true;
- 
- 	return ttm_device_init(&dev_priv->bdev, i915_ttm_driver(),
- 			       drm->dev, drm->anon_inode->i_mapping,
--			       drm->vma_offset_manager, false, false);
-+			       drm->vma_offset_manager, false, use_dma32);
- }
- 
- /**
++	return ((HAS_LLC(i915) || can_snoop) &&
+ 		!i915_ttm_gtt_binds_lmem(res) &&
+ 		ttm->caching == ttm_cached) ? I915_CACHE_LLC :
+ 		I915_CACHE_NONE;
 -- 
 2.25.1
 

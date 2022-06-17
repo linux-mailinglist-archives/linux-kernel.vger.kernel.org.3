@@ -2,440 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C4F54EED7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 03:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F6154EEDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 03:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379006AbiFQBeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 21:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S1379537AbiFQBfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 21:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiFQBd7 (ORCPT
+        with ESMTP id S232692AbiFQBf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 21:33:59 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F87463538;
-        Thu, 16 Jun 2022 18:33:51 -0700 (PDT)
-X-UUID: 77c23d7f60784fe5ae46b95dd7e076f5-20220617
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:58aeaab5-d4f1-4a8f-a4ca-0a58a9c1285f,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.6,REQID:58aeaab5-d4f1-4a8f-a4ca-0a58a9c1285f,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:b14ad71,CLOUDID:8afa8df6-e099-41ba-a32c-13b8bfe63214,C
-        OID:cdbf75633886,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 77c23d7f60784fe5ae46b95dd7e076f5-20220617
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1323354296; Fri, 17 Jun 2022 09:33:47 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 17 Jun 2022 09:33:46 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 17 Jun 2022 09:33:45 +0800
-Message-ID: <6f3745737588765b70f9d6f91786f9b13936be09.camel@mediatek.com>
-Subject: Re: [PATCH v9 2/2] phy: mediatek: Add PCIe PHY driver
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Wei-Shun Chang <weishunc@google.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
-        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Fri, 17 Jun 2022 09:33:44 +0800
-In-Reply-To: <YqvIFqFbDvH8At3c@matsya>
-References: <20220520064920.27313-1-jianjun.wang@mediatek.com>
-         <20220520064920.27313-3-jianjun.wang@mediatek.com>
-         <YqvIFqFbDvH8At3c@matsya>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 16 Jun 2022 21:35:29 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2090.outbound.protection.outlook.com [40.92.99.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5406353D;
+        Thu, 16 Jun 2022 18:35:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jD4AiHiJkjPUuLz3VxPzW/QvDRs2WP8MlLwAi2UrmQLiZSl9qxDejd9Sk6UxJejtDiKdzmJAaduIQtzQ5DFzTydg0mQIxLEnRMWkr4xK439BNH9Hnz/Ia5XRWU7S0zKh99IplYJIzTUHrFxrb3Ul0gesCRFFi06RK3Q5VgdY5u14qhiKEbi7/eySVD7XWgB4M0/nl/f4yGSWT8uZANq6/oNwz5puhQ2n4pKfnKYDXpm9+0THdrCsJvjLqaYpdpjWUAvoNCGYeVsKtmLfH+SoA22Bgtb0D5OpJJfQg/DIR7AeGZbTzqM02snLfUCf9diWV/vdK1YwV4GcQ+X7E6mjRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AUv1U8cfmOo7QeZB0EcIRiwewtL8Pp8Vf80cdyEU/cc=;
+ b=WKstzG1kR+8TrSCfkzn9OQv+He7srQ5MacHNq2m/EABqj6/Hsf7nLANKvFfWK6LCAbs9hpJn+AyXJGQ5H0oZbu2mRi9pyhnHpaIqvsxrj1vjS5yMendyaUOB950WVl5Mc0EFnhYOUY7HoNrEUCxybewOLZC/GWk6LSjbVcrLEJa2cN+WbXH+rv1uOf7ehoruqF3NE9K4NoNSOpXKBikUko7EVfHAs4SBZc7ABOTufcmtnQAWqtxsRfd5iibNvVQqsl8UVlMgdM1mUu4Tjn29DFOa3aOXOkRUQ+QcQkA/Bd0lCQGbDulrPwQDvgrPCDaRBRbMJd0FdDWkBuJCTvVVLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AUv1U8cfmOo7QeZB0EcIRiwewtL8Pp8Vf80cdyEU/cc=;
+ b=Bl3E+3m1WuqO/TnNT2vMlbVlxHa2cS5uAYyM2bIeAoe7xqxKI8T9XvV3NUKJPNrGd5Ps7QwXmtTMAYSjrD4lygCxgKuUTNJT2eFydHZW3MJikJe5Pm9LCsUTMJDjj7lRSpXy2htCNJWh/7C087wous0AIJQuvQ7UaxazhsCQLa/ZaVPPmTL/YO9BTrIBfE5VAytCQYITxniSRuK9L1Ki239nzuoFnTTBmI2tFmxiaOvMmA508IQkOT82Wd/yDWTuIm8emetTmo3ww5hTAPPG/F/1MX44JRATsw5T0BcNkbywFZlu7FkAzRtYywydD/sHdCVplno65S3yOWmqtoN+aQ==
+Received: from TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:248::14)
+ by OS3P286MB1158.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:126::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.13; Fri, 17 Jun
+ 2022 01:35:23 +0000
+Received: from TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9cb3:323f:e99e:39c1]) by TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9cb3:323f:e99e:39c1%9]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
+ 01:35:23 +0000
+Message-ID: <TYWP286MB2601A179E1973C5B94E231CFB1AF9@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+Date:   Fri, 17 Jun 2022 09:35:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] ACPI: Split out processor thermal register from ACPI
+ PSS
+Content-Language: en-US
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, rui.zhang@intel.com,
+        robert.moore@intel.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>
+References: <TYWP286MB2601DDBB0F472C876D36FBCCB1A69@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+ <877d5gpshb.fsf@stealth>
+From:   Riwen Lu <luriwen@hotmail.com>
+In-Reply-To: <877d5gpshb.fsf@stealth>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TMN:  [HujEl7i1HZwMJ0Z7A8hdIAFLPrNMmdaY1Umsc/qR8Uk=]
+X-ClientProxiedBy: SG2PR04CA0170.apcprd04.prod.outlook.com (2603:1096:4::32)
+ To TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:248::14)
+X-Microsoft-Original-Message-ID: <bd110487-f6da-deb7-52a1-e8a89249f4a1@hotmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c9e9feeb-9569-4263-a1cf-08da5001a5e1
+X-MS-TrafficTypeDiagnostic: OS3P286MB1158:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9dCc/nDKrcbZ8Pxi4Y6DpznySImFiVGgz8kkeN7Vl/fw2XnX2R7vJw6wJmivacpO3/1Q43Ql/kyrv/HK/en3GWRU52gDF4CZz1nvedcuSrFVr3F+1y7NKomHbBojUp1TmZox4TB4zjbMfTOqw0bNhtPgnayvXcgLV3p0VJvs/eej+BAUvPcu8z8bd0VTbRi5NpxXsRu701adDlQ5fnDCx+3LBKgcOrg2XMWtfEtRK3oZN56SgDy8b8D+FS+Wln/HuTT47P1MJRU4yVwaYUfewouhnfdfSFt3X0CSbUb88C67FzhFGJcoIFqOWN3sJlqAGP431ATECuM4iTEmuyluwerd/FERFLXNk9JldSGDIZXOkg7tnNBeC1sX3xOIfxxis4fzkUYpnvoTmNPzuQGS90xzlJojcOcqOqSfDwW/sBVSYqG2G9zhU2xZMkOkzbdKK9JOUqP6VHHrHJVXAyu8hBwBeDtF1JnubMWSqpIu3tOCYImnvXPtxCZ6eqaadSSXY1Gz5RaUGzvECBv2TJb5B5OiZiCk/syFejEdUxJklBLea85RJVTRgIzVBcrdJYUv+F878bO5SGoZ6fgGr5vucQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djAveTJYNnNLdlk4RmZNdEFnaDZKZUpTQy9HNUxnTC82QWpYMTBmOGhGOTBU?=
+ =?utf-8?B?OWhmNVlvc29EUVNHdktzRFdmdEpHaTFtV3Q3Zm9US0pVOXNzaGM0OUZzU0dn?=
+ =?utf-8?B?aE5hSVAxSEhCR1Q2MzBINUxRVVhma0hkNHlzeWJEc3luWjI5Ky8zbURYVGF6?=
+ =?utf-8?B?MUdOWHM0bzlIcXc3T0xFZFNNRUdVcmM4eHBtbThCYlhIMFFHNlBIbnZDekhn?=
+ =?utf-8?B?NVgraW80ZUhEK1ZsMzZDNVFaWnZjcXhKclpNa3BINzVqT0VEL2tsblYwb2NJ?=
+ =?utf-8?B?MVRsYzN2MmlWcm1udHBQUnBPKytzSlRmMndBa0l6OGwrTnNzT3VKckxGMHhs?=
+ =?utf-8?B?dGhPL1ZrNWpBcHpabTFUdkdZcjFGZzJnWnR1RURzVGtEaVIzRnJyaHgzakVY?=
+ =?utf-8?B?bzR2dkJudVphT09HNzBuT1ZGcXJBZy9sVmtzbUo3Vlk3SDh0aVJHUDFwaDZk?=
+ =?utf-8?B?L0IyVGxEejBERGNPSXlEWnBQSEhsS3pjbU9LM3BCZUpzcUlHM0ZmTzNWcnhi?=
+ =?utf-8?B?cUtrcTRnV2xpalVubzlEVVBSUHBSWFVXV20xcDdWYTdJSERzYWx4aHgvSDNR?=
+ =?utf-8?B?eEtYNkt3d1J4U0l5VjJwNFlrR0UwUDNCM3pxRC9NU1UwWnRGdmV5Sy9GajM5?=
+ =?utf-8?B?RUdBdHY1UW9PNlNUUWp6SjlmeFRReTR6Yi8xUUZNTXF4TC9HY1NpKzFDVmV2?=
+ =?utf-8?B?ZFJoSTl2NHZHZ3hzaytHbDNTdXp1U0dzV09CR1loNU9aVjNQdk1FR2VkOUN4?=
+ =?utf-8?B?SUE0Ujg2SVZlVlN4UnpqYUV6emk3QW80b2kzWDNud1hVOTBpcGhsSkhtazdy?=
+ =?utf-8?B?dDdjalFsTlNadEZHWDhodTJyV0Q4UTJnVnVxTU1CcW5RTFJYM1JITzN5Z3Fj?=
+ =?utf-8?B?eHBYZUNKdlVDQWwvVVFyWnlXWUkvVmVSS1BDYW5LV0h3d2tvTE5sZlhTZ0tN?=
+ =?utf-8?B?bExpVVFZMlJhWUVkZEdRTHdUTERPV0NLSWUxNy9OWmxWYlRBcHpueEpLLzRK?=
+ =?utf-8?B?Uk5JVTVVVENNTU94bCtFbCtja1FUZ1VpbzhFbno5QXZuK1ZnZzFDMnVWQ3VX?=
+ =?utf-8?B?LzM2c2RqekJLTkRDZWtPNVF0QVBDRFV0QWd4ZFJ6YWZQd3hTT3ZZUHNDWWxm?=
+ =?utf-8?B?dUxFQUhLRDlGMEtlQVVXYWcwdGR4V0hGVXdDN01WaUR1TkIrUTk1N0Rha3Zo?=
+ =?utf-8?B?MXFUVXhTVzdtN05KSFB1SXVsUXA4dlUrSDBaSnZpT3RRd1lrYUtwbFhkT1BX?=
+ =?utf-8?B?cHdoNTJMYzNRdStpdVA3SjcyYlRyc1AzblAvVUNvTnRFNlVxRGxJZjNmWVFO?=
+ =?utf-8?B?Qm5PZ1NkRTQ1S0tuT0tWaS9oZ2NiVld2UVc0eGhFTERpbEdRcE05dWNGSktL?=
+ =?utf-8?B?VDFWc1hmWEU0WW1KVlJWemd3VGw3M3c5aGIrYkdDc0hyeW51enJDWDRybXJv?=
+ =?utf-8?B?NC9uNkZ0ZjBNcWw3Q0R6QTFjL3ZtYXRHbksyYVJRSDlVWm9mMW9BOGIwNzZT?=
+ =?utf-8?B?eTIwSWVoRkszR2FvZU4zem9WeG96cWRmdDkrVi9ZWk9xVEpZMDZiSWNiWDM2?=
+ =?utf-8?B?UkRreFJ2QVBpZ2Zsd2FLcERHUnIxamZpWTY5WVRWQUhNTm5yV2Z1Z0h2YS9y?=
+ =?utf-8?B?ZlJkSnhGejhnb3J3UjBTZkNOVFdEUFA0bkNRM0F3akNvckd1cm9GeXJiVnNx?=
+ =?utf-8?B?eUViUDJjcFU3RDNoSkJONkN3U0YzTHdSM0JIYUI2ZENHRmJZOXhlMnBJRytu?=
+ =?utf-8?B?eTV4MFdDZXNSb2E2ZWp4dWhUU3FxMUJUM001NkdSTlNYaCt5WUNIR3oxamNz?=
+ =?utf-8?B?d3JlamM5b3djWkltSmw4MVc2aVhCaE1zNmUyS3ByNTlIelErOHp4WDBpMktz?=
+ =?utf-8?B?NC9JaktjNnowSjE3dXpxNjU0UWptMVZaV2xYbU56TStsV3lGRzNtMjJvYjkz?=
+ =?utf-8?Q?wH8jj8c/PpM=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9e9feeb-9569-4263-a1cf-08da5001a5e1
+X-MS-Exchange-CrossTenant-AuthSource: TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 01:35:23.6125
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB1158
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+在 2022/6/16 22:56, Punit Agrawal 写道:
+> Hi Riwen,
+> 
+> Usually it's a good practice to Cc anybody who has commented on previous
+> versions. It makes it easier to follow your updates.
+Hi Punit,
 
-On Thu, 2022-06-16 at 17:17 -0700, Vinod Koul wrote:
-> On 20-05-22, 14:49, Jianjun Wang wrote:
-> > Add PCIe GEN3 PHY driver support on MediaTek chipsets.
-> > 
-> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > ---
-> >  drivers/phy/mediatek/Kconfig        |  11 ++
-> >  drivers/phy/mediatek/Makefile       |   1 +
-> >  drivers/phy/mediatek/phy-mtk-pcie.c | 267
-> > ++++++++++++++++++++++++++++
-> >  3 files changed, 279 insertions(+)
-> >  create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
-> > 
-> > diff --git a/drivers/phy/mediatek/Kconfig
-> > b/drivers/phy/mediatek/Kconfig
-> > index 55f8e6c048ab..387ed1b3f2cc 100644
-> > --- a/drivers/phy/mediatek/Kconfig
-> > +++ b/drivers/phy/mediatek/Kconfig
-> > @@ -55,3 +55,14 @@ config PHY_MTK_MIPI_DSI
-> >  	select GENERIC_PHY
-> >  	help
-> >  	  Support MIPI DSI for Mediatek SoCs.
-> > +
-> > +config PHY_MTK_PCIE
-> > +	tristate "MediaTek PCIe-PHY Driver"
-> > +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +	depends on OF
-> > +	select GENERIC_PHY
-> > +	help
-> > +	  Say 'Y' here to add support for MediaTek PCIe PHY driver.
-> > +	  This driver create the basic PHY instance and provides
-> > initialize
-> > +	  callback for PCIe GEN3 port, it supports software efuse
-> > +	  initialization.
-> > diff --git a/drivers/phy/mediatek/Makefile
-> > b/drivers/phy/mediatek/Makefile
-> > index ace660fbed3a..788c13147f63 100644
-> > --- a/drivers/phy/mediatek/Makefile
-> > +++ b/drivers/phy/mediatek/Makefile
-> > @@ -6,6 +6,7 @@
-> >  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
-> >  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
-> >  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> > +obj-$(CONFIG_PHY_MTK_PCIE)		+= phy-mtk-pcie.o
-> 
-> This and Kconfig is sorted in alphabetical order, pls do so here as
-> well
+Sorry. I wanted to Cc to you, but I forgot it. I'll make the patch a v3 
+version and Cc you.
 
-Thanks for your review, I'll send another version to fix this.
-
+Thanks!
 > 
-> >  
-> >  phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
-> >  phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt2701.o
-> > diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c
-> > b/drivers/phy/mediatek/phy-mtk-pcie.c
-> > new file mode 100644
-> > index 000000000000..7f29d43442bf
-> > --- /dev/null
-> > +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
-> > @@ -0,0 +1,267 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2022 MediaTek Inc.
-> > + * Author: Jianjun Wang <jianjun.wang@mediatek.com>
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/module.h>
-> > +#include <linux/nvmem-consumer.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/slab.h>
-> > +
-> > +#include "phy-mtk-io.h"
-> > +
-> > +#define PEXTP_ANA_GLB_00_REG		0x9000
-> > +/* Internal Resistor Selection of TX Bias Current */
-> > +#define EFUSE_GLB_INTR_SEL		GENMASK(28, 24)
-> > +
-> > +#define PEXTP_ANA_LN0_TRX_REG		0xa000
-> > +
-> > +#define PEXTP_ANA_TX_REG		0x04
-> > +/* TX PMOS impedance selection */
-> > +#define EFUSE_LN_TX_PMOS_SEL		GENMASK(5, 2)
-> > +/* TX NMOS impedance selection */
-> > +#define EFUSE_LN_TX_NMOS_SEL		GENMASK(11, 8)
-> > +
-> > +#define PEXTP_ANA_RX_REG		0x3c
-> > +/* RX impedance selection */
-> > +#define EFUSE_LN_RX_SEL			GENMASK(3, 0)
-> > +
-> > +#define PEXTP_ANA_LANE_OFFSET		0x100
-> > +
-> > +/**
-> > + * struct mtk_pcie_lane_efuse - eFuse data for each lane
-> > + * @tx_pmos: TX PMOS impedance selection data
-> > + * @tx_nmos: TX NMOS impedance selection data
-> > + * @rx_data: RX impedance selection data
-> > + * @lane_efuse_supported: software eFuse data is supported for
-> > this lane
-> > + */
-> > +struct mtk_pcie_lane_efuse {
-> > +	u32 tx_pmos;
-> > +	u32 tx_nmos;
-> > +	u32 rx_data;
-> > +	bool lane_efuse_supported;
-> > +};
-> > +
-> > +/**
-> > + * struct mtk_pcie_phy_data - phy data for each SoC
-> > + * @num_lanes: supported lane numbers
-> > + * @sw_efuse_supported: support software to load eFuse data
-> > + */
-> > +struct mtk_pcie_phy_data {
-> > +	int num_lanes;
-> > +	bool sw_efuse_supported;
-> > +};
-> > +
-> > +/**
-> > + * struct mtk_pcie_phy - PCIe phy driver main structure
-> > + * @dev: pointer to device
-> > + * @phy: pointer to generic phy
-> > + * @sif_base: IO mapped register base address of system interface
-> > + * @data: pointer to SoC dependent data
-> > + * @sw_efuse_en: software eFuse enable status
-> > + * @efuse_glb_intr: internal resistor selection of TX bias current
-> > data
-> > + * @efuse: pointer to eFuse data for each lane
-> > + */
-> > +struct mtk_pcie_phy {
-> > +	struct device *dev;
-> > +	struct phy *phy;
-> > +	void __iomem *sif_base;
-> > +	const struct mtk_pcie_phy_data *data;
-> > +
-> > +	bool sw_efuse_en;
-> > +	u32 efuse_glb_intr;
-> > +	struct mtk_pcie_lane_efuse *efuse;
-> > +};
-> > +
-> > +static void mtk_pcie_efuse_set_lane(struct mtk_pcie_phy *pcie_phy,
-> > +				    unsigned int lane)
-> > +{
-> > +	struct mtk_pcie_lane_efuse *data = &pcie_phy->efuse[lane];
-> > +	void __iomem *addr;
-> > +
-> > +	if (!data->lane_efuse_supported)
-> > +		return;
-> > +
-> > +	addr = pcie_phy->sif_base + PEXTP_ANA_LN0_TRX_REG +
-> > +	       lane * PEXTP_ANA_LANE_OFFSET;
-> > +
-> > +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_REG,
-> > EFUSE_LN_TX_PMOS_SEL,
-> > +			    FIELD_PREP(EFUSE_LN_TX_PMOS_SEL, data-
-> > >tx_pmos));
-> > +
-> > +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_REG,
-> > EFUSE_LN_TX_NMOS_SEL,
-> > +			    FIELD_PREP(EFUSE_LN_TX_NMOS_SEL, data-
-> > >tx_nmos));
-> > +
-> > +	mtk_phy_update_bits(addr + PEXTP_ANA_RX_REG, EFUSE_LN_RX_SEL,
-> > +			    FIELD_PREP(EFUSE_LN_RX_SEL, data-
-> > >rx_data));
-> > +}
-> > +
-> > +/**
-> > + * mtk_pcie_phy_init() - Initialize the phy
-> > + * @phy: the phy to be initialized
-> > + *
-> > + * Initialize the phy by setting the efuse data.
-> > + * The hardware settings will be reset during suspend, it should
-> > be
-> > + * reinitialized when the consumer calls phy_init() again on
-> > resume.
-> > + */
-> > +static int mtk_pcie_phy_init(struct phy *phy)
-> > +{
-> > +	struct mtk_pcie_phy *pcie_phy = phy_get_drvdata(phy);
-> > +	int i;
-> > +
-> > +	if (!pcie_phy->sw_efuse_en)
-> > +		return 0;
-> > +
-> > +	/* Set global data */
-> > +	mtk_phy_update_bits(pcie_phy->sif_base + PEXTP_ANA_GLB_00_REG,
-> > +			    EFUSE_GLB_INTR_SEL,
-> > +			    FIELD_PREP(EFUSE_GLB_INTR_SEL, pcie_phy-
-> > >efuse_glb_intr));
-> > +
-> > +	for (i = 0; i < pcie_phy->data->num_lanes; i++)
-> > +		mtk_pcie_efuse_set_lane(pcie_phy, i);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct phy_ops mtk_pcie_phy_ops = {
-> > +	.init	= mtk_pcie_phy_init,
-> > +	.owner	= THIS_MODULE,
-> > +};
-> > +
-> > +static int mtk_pcie_efuse_read_for_lane(struct mtk_pcie_phy
-> > *pcie_phy,
-> > +					unsigned int lane)
-> > +{
-> > +	struct mtk_pcie_lane_efuse *efuse = &pcie_phy->efuse[lane];
-> > +	struct device *dev = pcie_phy->dev;
-> > +	char efuse_id[16];
-> > +	int ret;
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_pmos", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse-
-> > >tx_pmos);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_nmos", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse-
-> > >tx_nmos);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "rx_ln%d", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse-
-> > >rx_data);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	if (!(efuse->tx_pmos || efuse->tx_nmos || efuse->rx_data))
-> > +		return dev_err_probe(dev, -EINVAL,
-> > +				     "No eFuse data found for lane%d,
-> > but dts enable it\n",
-> > +				     lane);
-> > +
-> > +	efuse->lane_efuse_supported = true;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
-> > +{
-> > +	struct device *dev = pcie_phy->dev;
-> > +	bool nvmem_enabled;
-> > +	int ret, i;
-> > +
-> > +	/* nvmem data is optional */
-> > +	nvmem_enabled = device_property_present(dev, "nvmem-cells");
-> > +	if (!nvmem_enabled)
-> > +		return 0;
-> > +
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, "glb_intr",
-> > +					      &pcie_phy-
-> > >efuse_glb_intr);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read
-> > glb_intr\n");
-> > +
-> > +	pcie_phy->sw_efuse_en = true;
-> > +
-> > +	pcie_phy->efuse = devm_kzalloc(dev, pcie_phy->data->num_lanes *
-> > +				       sizeof(*pcie_phy->efuse),
-> > GFP_KERNEL);
-> > +	if (!pcie_phy->efuse)
-> > +		return -ENOMEM;
-> > +
-> > +	for (i = 0; i < pcie_phy->data->num_lanes; i++) {
-> > +		ret = mtk_pcie_efuse_read_for_lane(pcie_phy, i);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_pcie_phy_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct phy_provider *provider;
-> > +	struct mtk_pcie_phy *pcie_phy;
-> > +	int ret;
-> > +
-> > +	pcie_phy = devm_kzalloc(dev, sizeof(*pcie_phy), GFP_KERNEL);
-> > +	if (!pcie_phy)
-> > +		return -ENOMEM;
-> > +
-> > +	pcie_phy->sif_base =
-> > devm_platform_ioremap_resource_byname(pdev, "sif");
-> > +	if (IS_ERR(pcie_phy->sif_base))
-> > +		return dev_err_probe(dev, PTR_ERR(pcie_phy->sif_base),
-> > +				     "Failed to map phy-sif base\n");
-> > +
-> > +	pcie_phy->phy = devm_phy_create(dev, dev->of_node,
-> > &mtk_pcie_phy_ops);
-> > +	if (IS_ERR(pcie_phy->phy))
-> > +		return dev_err_probe(dev, PTR_ERR(pcie_phy->phy),
-> > +				     "Failed to create PCIe phy\n");
-> > +
-> > +	pcie_phy->dev = dev;
-> > +	pcie_phy->data = of_device_get_match_data(dev);
-> > +	if (!pcie_phy->data)
-> > +		return dev_err_probe(dev, -EINVAL, "Failed to get phy
-> > data\n");
-> > +
-> > +	if (pcie_phy->data->sw_efuse_supported) {
-> > +		/*
-> > +		 * Failed to read the efuse data is not a fatal
-> > problem,
-> > +		 * ignore the failure and keep going.
-> > +		 */
-> > +		ret = mtk_pcie_read_efuse(pcie_phy);
-> > +		if (ret == -EPROBE_DEFER || ret == -ENOMEM)
-> > +			return ret;
-> > +	}
-> > +
-> > +	phy_set_drvdata(pcie_phy->phy, pcie_phy);
-> > +
-> > +	provider = devm_of_phy_provider_register(dev,
-> > of_phy_simple_xlate);
-> > +	if (IS_ERR(provider))
-> > +		return dev_err_probe(dev, PTR_ERR(provider),
-> > +				     "PCIe phy probe failed\n");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct mtk_pcie_phy_data mt8195_data = {
-> > +	.num_lanes = 2,
-> > +	.sw_efuse_supported = true,
-> > +};
-> > +
-> > +static const struct of_device_id mtk_pcie_phy_of_match[] = {
-> > +	{ .compatible = "mediatek,mt8195-pcie-phy", .data =
-> > &mt8195_data },
-> > +	{ },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, mtk_pcie_phy_of_match);
-> > +
-> > +static struct platform_driver mtk_pcie_phy_driver = {
-> > +	.probe	= mtk_pcie_phy_probe,
-> > +	.driver	= {
-> > +		.name = "mtk-pcie-phy",
-> > +		.of_match_table = mtk_pcie_phy_of_match,
-> > +	},
-> > +};
-> > +module_platform_driver(mtk_pcie_phy_driver);
-> > +
-> > +MODULE_DESCRIPTION("MediaTek PCIe PHY driver");
-> > +MODULE_AUTHOR("Jianjun Wang <jianjun.wang@mediatek.com>");
-> > +MODULE_LICENSE("GPL");
-> > -- 
-> > 2.18.0
+> A couple of comments below.
 > 
+> Riwen Lu <luriwen@hotmail.com> writes:
 > 
+>> From: Riwen Lu <luriwen@kylinos.cn>
+>>
+>> Commit 239708a3af44 ("ACPI: Split out ACPI PSS from ACPI Processor
+>> driver"), moves processor thermal registration to acpi_pss_perf_init(),
+>> which doesn't get executed if ACPI_CPU_FREQ_PSS is not enabled.
+>>
+>> As ARM64 supports P-states using CPPC, it should be possible to also
+>> support processor passive cooling even if PSS is not enabled. Split
+>> out the processor thermal cooling register from ACPI PSS to support
+>> this, and move it into a separate function in processor_thermal.c.
+>>
+>> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+>> ---
+>>   drivers/acpi/Kconfig             |  2 +-
+>>   drivers/acpi/Makefile            |  5 +--
+>>   drivers/acpi/processor_driver.c  | 72 ++++----------------------------
+>>   drivers/acpi/processor_thermal.c | 69 ++++++++++++++++++++++++++++++
+>>   include/acpi/processor.h         |  6 ++-
+>>   5 files changed, 84 insertions(+), 70 deletions(-)
+>>
+> 
+> [...]
+> 
+>> --- a/drivers/acpi/processor_driver.c
+>> +++ b/drivers/acpi/processor_driver.c
+> 
+> [...]
+> 
+>> @@ -239,7 +183,7 @@ static int __acpi_processor_start(struct acpi_device *device)
+>>   		return 0;
+>>   
+>>   	result = -ENODEV;
+>> -	acpi_pss_perf_exit(pr, device);
+>> +	acpi_processor_thermal_exit(pr);
+>>   
+>>   err_power_exit:
+>>   	acpi_processor_power_exit(pr);
+>> @@ -277,10 +221,10 @@ static int acpi_processor_stop(struct device *dev)
+>>   		return 0;
+>>   	acpi_processor_power_exit(pr);
+>>   
+>> -	acpi_pss_perf_exit(pr, device);
+>> -
+>>   	acpi_cppc_processor_exit(pr);
+>>   
+>> +	acpi_processor_thermal_exit(pr);
+>> +
+>>   	return 0;
+>>   }
+>>   
+>> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+>> index d8b2dfcd59b5..93928db2ae5f 100644
+>> --- a/drivers/acpi/processor_thermal.c
+>> +++ b/drivers/acpi/processor_thermal.c
+>> @@ -266,3 +266,72 @@ const struct thermal_cooling_device_ops processor_cooling_ops = {
+>>   	.get_cur_state = processor_get_cur_state,
+>>   	.set_cur_state = processor_set_cur_state,
+>>   };
+>> +
+>> +int acpi_processor_thermal_init(struct acpi_processor *pr)
+>> +{
+>> +	struct acpi_device *device;
+>> +	int result = 0;
+>> +
+>> +	if (!pr)
+>> +		return -ENODEV;
+> 
+> What's the reason for this check? When will "pr" be NULL in this code
+> path?
+> 
+I was thinking the function might be called somewhere else. It seems to 
+be meaningless.
+>> +
+>> +	device = acpi_fetch_acpi_dev(pr->handle);
+>> +	if (!device)
+>> +		return -ENODEV;
+> 
+> Wouldn't it be better to pass the acpi_device into the function as well?
+> The device is already available in the caller and it'll avoid having to
+> convert it back.
+> 
+The same reason as above, and I'll modify it.
+>> +
+>> +	pr->cdev = thermal_cooling_device_register("Processor", device,
+>> +						   &processor_cooling_ops);
+>> +	if (IS_ERR(pr->cdev)) {
+>> +		result = PTR_ERR(pr->cdev);
+>> +		return result;
+>> +	}
+>> +
+>> +	dev_dbg(&device->dev, "registered as cooling_device%d\n",
+>> +		pr->cdev->id);
+>> +
+>> +	result = sysfs_create_link(&device->dev.kobj,
+>> +				   &pr->cdev->device.kobj,
+>> +				   "thermal_cooling");
+>> +	if (result) {
+>> +		dev_err(&device->dev,
+>> +			"Failed to create sysfs link 'thermal_cooling'\n");
+>> +		goto err_thermal_unregister;
+>> +	}
+>> +
+>> +	result = sysfs_create_link(&pr->cdev->device.kobj,
+>> +				   &device->dev.kobj,
+>> +				   "device");
+>> +	if (result) {
+>> +		dev_err(&pr->cdev->device,
+>> +			"Failed to create sysfs link 'device'\n");
+>> +		goto err_remove_sysfs_thermal;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_remove_sysfs_thermal:
+>> +	sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+>> +err_thermal_unregister:
+>> +	thermal_cooling_device_unregister(pr->cdev);
+>> +
+>> +	return result;
+>> +}
+>> +
+>> +void acpi_processor_thermal_exit(struct acpi_processor *pr)
+>> +{
+>> +	struct acpi_device *device;
+>> +
+>> +	if (!pr)
+>> +		return;
+>> +
+>> +	device = acpi_fetch_acpi_dev(pr->handle);
+>> +	if (!device)
+>> +		return;
+> 
+> The same comment about passing the acpi_device structure applies here as
+> well.
+> 
+>> +
+>> +	if (pr->cdev) {
+>> +		sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+>> +		sysfs_remove_link(&pr->cdev->device.kobj, "device");
+>> +		thermal_cooling_device_unregister(pr->cdev);
+>> +		pr->cdev = NULL;
+>> +	}
+>> +}
+> 
+> [...]
 

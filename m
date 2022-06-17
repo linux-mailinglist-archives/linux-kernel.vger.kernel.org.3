@@ -2,75 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF6E54F9CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB9D54F9C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382998AbiFQPAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 11:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
+        id S1382942AbiFQPAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 11:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382973AbiFQPAL (ORCPT
+        with ESMTP id S1381652AbiFQPAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 11:00:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A13B552
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:00:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 17 Jun 2022 11:00:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C17B3B552
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655478039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ONdx8UrD/iFgfBJOk2FUQJlKyfF0Fn1r/7hliPk7HK0=;
+        b=KSGaJBw2XkfBG6L63aEoILl3XFFjEJfE3LQ1Oyi+Fir+QpPrHFJz9jHNf66WO89Pwe3HvU
+        SZgbpVOWkqTjINd+PsUqY7aQ0sVib5qEB49LmIjnT6e9yUkQYlaosQiC9/tCr+JMRZGrGW
+        TjqwmGmse+GYIS0DZGi2w8EjOf2RROk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-547-hVOxLB2yNgenoGphNrK42w-1; Fri, 17 Jun 2022 11:00:28 -0400
+X-MC-Unique: hVOxLB2yNgenoGphNrK42w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B640C61957
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 267F6C3411F;
-        Fri, 17 Jun 2022 15:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655478010;
-        bh=pDqenv8VUk/vdDyFDw6l/OhpPIT5yV0/LfCcOlcFws4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gBKiEQ3U0bk84RdBU5Wkyf3KOKx0vVZ7/KYo9C+HCG69poHpNLHB7nG7h8u+Cuy0U
-         umLmY2H9+iLJpZ6/kyKBgKmtdHWXpXkEoxVbzCOc9PvOCIG7XIZ5A7qLjCArIWv8tk
-         RzNntAWD7tXGux+hrdh8P2hwc40SWdAAYDgmvjTpCjIZsmUc/bRpk8Ojvo8qHunErm
-         qF+ZDsKsrauFEpqwS76i9lLh7r9ywyUSYuPB5YZj8JpP4CfUtMPk7sKEAq3n9aiW7E
-         LDWRpF8N1cDcIA23PYp6EEa1cqk28nHG+1lPUUcrvaS0bZQdTp+DueOmjdl4IIRsbU
-         Tro40h1NR+Mmw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E0FFE56ADF;
-        Fri, 17 Jun 2022 15:00:10 +0000 (UTC)
-Subject: Re: [GIT PULL] Char/Misc driver fixes 5.19-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
-References: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.19-rc3
-X-PR-Tracked-Commit-Id: 0a35780c755ccec097d15c6b4ff8b246a89f1689
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f0ec9c65a8d67e50a16745e62a336355ddf5d03e
-Message-Id: <165547801005.17120.16839643499305814924.pr-tracker-bot@kernel.org>
-Date:   Fri, 17 Jun 2022 15:00:10 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B8D93810D20;
+        Fri, 17 Jun 2022 15:00:28 +0000 (UTC)
+Received: from [10.22.18.98] (unknown [10.22.18.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D18FD40CFD0A;
+        Fri, 17 Jun 2022 15:00:27 +0000 (UTC)
+Message-ID: <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com>
+Date:   Fri, 17 Jun 2022 11:00:27 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] locking/rwlocks: do not starve writers
+Content-Language: en-US
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
+References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
+ <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net>
+ <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
+ <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 17 Jun 2022 10:15:34 +0200:
+On 6/17/22 10:57, Shakeel Butt wrote:
+> On Fri, Jun 17, 2022 at 7:43 AM Waiman Long <longman@redhat.com> wrote:
+>> On 6/17/22 08:07, Peter Zijlstra wrote:
+>>> On Fri, Jun 17, 2022 at 02:10:39AM -0700, Eric Dumazet wrote:
+>>>> --- a/kernel/locking/qrwlock.c
+>>>> +++ b/kernel/locking/qrwlock.c
+>>>> @@ -23,16 +23,6 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
+>>>>       /*
+>>>>        * Readers come here when they cannot get the lock without waiting
+>>>>        */
+>>>> -    if (unlikely(in_interrupt())) {
+>>>> -            /*
+>>>> -             * Readers in interrupt context will get the lock immediately
+>>>> -             * if the writer is just waiting (not holding the lock yet),
+>>>> -             * so spin with ACQUIRE semantics until the lock is available
+>>>> -             * without waiting in the queue.
+>>>> -             */
+>>>> -            atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
+>>>> -            return;
+>>>> -    }
+>>>>       atomic_sub(_QR_BIAS, &lock->cnts);
+>>>>
+>>>>       trace_contention_begin(lock, LCB_F_SPIN | LCB_F_READ);
+>>> This is known to break tasklist_lock.
+>>>
+>> We certainly can't break the current usage of tasklist_lock.
+>>
+>> I am aware of this problem with networking code and is thinking about
+>> either relaxing the check to exclude softirq or provide a
+>> read_lock_unfair() variant for networking use.
+> read_lock_unfair() for networking use or tasklist_lock use?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.19-rc3
+I mean to say read_lock_fair(), but it could also be the other way 
+around. Thanks for spotting that.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f0ec9c65a8d67e50a16745e62a336355ddf5d03e
+Cheers,
+Longman
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html

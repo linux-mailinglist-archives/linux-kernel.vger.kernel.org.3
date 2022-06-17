@@ -2,70 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CF354F11D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4C654F11F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379841AbiFQGjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S1380049AbiFQGkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiFQGjD (ORCPT
+        with ESMTP id S229696AbiFQGku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:39:03 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC6E56F9B;
-        Thu, 16 Jun 2022 23:39:01 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id d14so130089pjs.3;
-        Thu, 16 Jun 2022 23:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3nq0sEVdb/x1ukcdXtYcrvwvNzqDSLocc4o0m2aVSjk=;
-        b=dPPVfjCWxsXxpFGOHcqPC1fV/pXZ22W1hnFF4jLJBIkdlTzQPC4jQnXeALFShf5UXP
-         Viml177LUX8WdXFfPhqlGOweqgVY+2mDCh3j/jZP7z04R8pggPhjAPzX/OAgN7C/b3pV
-         9gnIUYYPygjp6S24Cz6oL6nJSlA56+fYY3chmnnx+GESAAlmIm2/hmCK6GPhfVN0lvvf
-         dAtTfPRfNrNu354w3i/JVwUoTGPir8GmZjw3dfyyu+ZyRr06kbfDTsnQ+6qgWuhXp+3l
-         l+Cy/WvN4ius6CCYO/Rx4ge0E9/RwEqrM3UTgzwhezMS6mFg4jm7Je/idEJKemYV9R7e
-         an0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3nq0sEVdb/x1ukcdXtYcrvwvNzqDSLocc4o0m2aVSjk=;
-        b=SHp5j6Q0Ya9OS4Q4XagsbIVzjN9BLas3RJqGj7e7SDv+R5OwKLBP+rpBOe1hXFVCll
-         lnTIkMPCZYX5ZEPfesE5MUzQVvrqsjLRbBQRRBabqS1eDQxkIA9wrOUCA/4OvMVomU1+
-         MJofTNuUXCasc5CEikr0Isyfv1Np4UCAda4h7MXSZMUfoQq1qQux3H9gidOgs5pGCPwO
-         wtJgDeXmSxkK7P/Vwkli0gqNm7+TfMuByoa18kmVoSZVtQAMGi2Kqp7Wn9j5kIW7Fu4g
-         AzdqFlzOajflc2Z9oJmx41mrTih5Sg1gVxWmSEQ0mrLF6hQZOSmidzCl7xM52rJYfxGw
-         i2pQ==
-X-Gm-Message-State: AJIora9t0gpumCxliMYMKUfbfnCNPSYvfTCEE5bFKbCUi8cKMTbirYMN
-        m3sbIGqARm9Bqali98t0/H0MYZey4BV3B4L2
-X-Google-Smtp-Source: AGRyM1ubEnpcjWuy2vE5xi70Fmbu5aLG0TLkWtOCP3AWGVcX09v8zJplUrZBh470nxoZgU1bVMBm3g==
-X-Received: by 2002:a17:902:aa0c:b0:168:faa0:50a1 with SMTP id be12-20020a170902aa0c00b00168faa050a1mr8271195plb.57.1655447941168;
-        Thu, 16 Jun 2022 23:39:01 -0700 (PDT)
-Received: from VM-155-146-centos.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id o1-20020a62f901000000b0052285857864sm2937781pfh.97.2022.06.16.23.38.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 23:39:00 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     dave.hansen@intel.com
-Cc:     bhe@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, kirill@shutemov.name, linux-kernel@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        stable@vger.kernel.org, tglx@linutronix.de, x86@kernel.org,
-        ytcoode@gmail.com
-Subject: Re: [PATCH] x86/mm: Fix possible index overflow when creating page table mapping
-Date:   Fri, 17 Jun 2022 14:38:55 +0800
-Message-Id: <20220617063855.1999092-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <8e2c9b2b-d8ad-5e9a-7aa6-23e0c599c2e9@intel.com>
-References: <8e2c9b2b-d8ad-5e9a-7aa6-23e0c599c2e9@intel.com>
+        Fri, 17 Jun 2022 02:40:50 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC37457144
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:40:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VGdrNNM_1655448044;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VGdrNNM_1655448044)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Jun 2022 14:40:45 +0800
+Subject: Re: [PATCH v3] RISC-V: Add fixup to support fast call of
+ crash_kexec()
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        philipp.tomsich@vrull.eu, ebiederm@xmission.com, heiko@sntech.de,
+        vitaly.wool@konsulko.com, tongtiangen@huawei.com, guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220606123750.2884245-1-xianting.tian@linux.alibaba.com>
+ <b2a45f97-0f97-6621-bb7e-11f51282c468@huawei.com>
+ <b1098514-d185-e649-6dea-3c2f01e97ea8@linux.alibaba.com>
+Message-ID: <9fa53c5b-361a-a044-a08b-57458d7fcab8@linux.alibaba.com>
+Date:   Fri, 17 Jun 2022 14:40:44 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <b1098514-d185-e649-6dea-3c2f01e97ea8@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,30 +48,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 07:20:40 -0700, Dave Hansen wrote:
-> On 6/16/22 07:15, Yuntao Wang wrote:
-> > On Thu, 16 Jun 2022 07:02:56 -0700, Dave Hansen wrote:
-> >> On 6/16/22 06:55, Yuntao Wang wrote:
-> >>> There are two issues in phys_p4d_init():
-> >>>
-> >>> - The __kernel_physical_mapping_init() does not do boundary-checking for
-> >>>   paddr_end and passes it directly to phys_p4d_init(), phys_p4d_init() does
-> >>>   not do bounds checking either, so if the physical memory to be mapped is
-> >>>   large enough, 'p4d_page + p4d_index(vaddr)' will wrap around to the
-> >>>   beginning entry of the P4D table and its data will be overwritten.
-> >>>
-> >>> - The for loop body will be executed only when 'vaddr < vaddr_end'
-> >>>   evaluates to true, but if that condition is true, 'paddr >= paddr_end'
-> >>>   will evaluate to false, thus the 'if (paddr >= paddr_end) {}' block will
-> >>>   never be executed and become dead code.
-> >> Could you explain a bit how you found this?  Was this encountered in
-> >> practice and debugged or was it found by inspection?
-> > I found it by inspection.
+Hi Palmer
+
+Will you apply this patch for 5.19?
+
+thanks
+
+在 2022/6/7 上午9:46, Xianting Tian 写道:
 >
-> Dare I ask how this was tested?
-
-Due to some limitations, I didn't test the changes thoroughly, I just built
-the kernel and booted it in QEMU.
-
-Considering that the patch was not fully tested, I spent a lot of time
-reviewing the code I changed and tried my best to make it correct.
+> 在 2022/6/7 上午9:21, Kefeng Wang 写道:
+>>
+>> On 2022/6/6 20:37, Xianting Tian wrote:
+>>> Currently, almost all archs (x86, arm64, mips...) support fast call
+>>> of crash_kexec() when "regs && kexec_should_crash()" is true. But
+>>> RISC-V not, it can only enter crash system via panic(). However panic()
+>>> doesn't pass the regs of the real accident scene to crash_kexec(),
+>>> it caused we can't get accurate backtrace via gdb,
+>>>     $ riscv64-linux-gnu-gdb vmlinux vmcore
+>>>     Reading symbols from vmlinux...
+>>>     [New LWP 95]
+>>>     #0  console_unlock () at kernel/printk/printk.c:2557
+>>>     2557                    if (do_cond_resched)
+>>>     (gdb) bt
+>>>     #0  console_unlock () at kernel/printk/printk.c:2557
+>>>     #1  0x0000000000000000 in ?? ()
+>>>
+>>> With the patch we can get the accurate backtrace,
+>>>     $ riscv64-linux-gnu-gdb vmlinux vmcore
+>>>     Reading symbols from vmlinux...
+>>>     [New LWP 95]
+>>>     #0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at 
+>>> drivers/test_crash.c:81
+>>>     81             *(int *)p = 0xdead;
+>>>     (gdb)
+>>>     (gdb) bt
+>>>     #0  0xffffffe00064d5c0 in test_thread (data=<optimized out>) at 
+>>> drivers/test_crash.c:81
+>>>     #1  0x0000000000000000 in ?? ()
+>>>
+>>> Test code to produce NULL address dereference in test_crash.c,
+>>>     void *p = NULL;
+>>>     *(int *)p = 0xdead;
+>>>
+>>> Fixes: 76d2a0493a17 ("RISC-V: Init and Halt Code")
+>>> Reviewed-by: Guo Ren <guoren@kernel.org>
+>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>> ---
+>>> Changes from v1:
+>>> - simplify the commit message
+>>> Changes from v2:
+>>> - add fixup in title
+>>> ---
+>>>   arch/riscv/kernel/traps.c | 4 ++++
+>>>   1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+>>> index b40426509244..39d0f8bba4b4 100644
+>>> --- a/arch/riscv/kernel/traps.c
+>>> +++ b/arch/riscv/kernel/traps.c
+>>> @@ -16,6 +16,7 @@
+>>>   #include <linux/mm.h>
+>>>   #include <linux/module.h>
+>>>   #include <linux/irq.h>
+>>> +#include <linux/kexec.h>
+>>>     #include <asm/asm-prototypes.h>
+>>>   #include <asm/bug.h>
+>>> @@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
+>>>         ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
+>>>   +    if (regs && kexec_should_crash(current))
+>>> +        crash_kexec(regs);
+>>> +
+>>
+>> It seems that the regs won't be null, right? except that,
+>
+> Autually both regs won't be null, But if it is triggered by panic() , 
+> the regs are got via riscv_crash_save_regs(), which are the regs of 
+> that moment, but not the real accident scene.
+>
+>>
+>> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>>
+>>>       bust_spinlocks(0);
+>>>       add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
+>>>       spin_unlock_irq(&die_lock);

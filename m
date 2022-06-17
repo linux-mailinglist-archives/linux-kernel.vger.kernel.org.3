@@ -2,110 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9287754F7C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9DD54F7C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 14:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234127AbiFQMoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 08:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S235399AbiFQMop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 08:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiFQMoN (ORCPT
+        with ESMTP id S234827AbiFQMon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 08:44:13 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AE71D302
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:44:10 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id es26so4342496edb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KdKMbRmYxGIRzFwzXCrDOD1Iihy0w1EPtro7jghx6ig=;
-        b=lWl/eEx1oi+iUvbfmPEtpnL6l1bDL5L+6kDYhaJrlridmjgcJgND+D6HpsPrGj0fOX
-         FC1hq48jQOsI0vbQ+ug0Y9gXytTIa1rB8fgt1TDdWRijQqB1B4BP1Vbx6jfm5skCg4pV
-         LUYjMsC9IhxZCJ13YQoBm7dpD0cccTJ6VmHuA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KdKMbRmYxGIRzFwzXCrDOD1Iihy0w1EPtro7jghx6ig=;
-        b=RGVnMob27Ry3H70Yf7a0q9vF2ajxmWhF2vjw03cqe4Xmlb2h1SCFhLcdhgk1qGWLEo
-         7hAZpL9QXBnKicv0ah4HKG89/sWZDNEFA6+KkhImqJAXZ3LiVkQZ57+yHN8imejSHqM3
-         16xk5yNjLV5DypAB9flrRL0d7SlWQYJvlFzHRTD/6Y4eALHm2idL5PzbRxlgZpVb0JP9
-         tmccT81a+S5LuZNQDkV96f0pZAdJTvK/dzJJoEsV+eTKzegCEkExHtiWUsxV9f5SBYZ8
-         VRMQhAye3ZBiZLOGVZNdJpwO1TOtlX6d/UXrG9HIGyxHtOgLFP+Nyr20x4l4D+ppMYqv
-         E0SA==
-X-Gm-Message-State: AJIora/Wima0VBzqOKBanMIpLTcT+LvxEBi2eoOTQJrk7a9zAcFwfnVK
-        PjGEWNGWQHGvrlaOuW8/i8qYuUf0fMlOSa1yJgYlHg==
-X-Google-Smtp-Source: AGRyM1sjXxR00gYNDLUChmtCCtOr/fIfRDGwnJkRu+woOOH5RsmXfvTSEoma/+gm453r0WqgfSMAIMR5R87rQIdxYb8=
-X-Received: by 2002:a05:6402:5212:b0:42e:2fa:41a7 with SMTP id
- s18-20020a056402521200b0042e02fa41a7mr12205874edd.22.1655469849402; Fri, 17
- Jun 2022 05:44:09 -0700 (PDT)
+        Fri, 17 Jun 2022 08:44:43 -0400
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25C472A240
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 05:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2fJZ2
+        0a6VvhGRdgHv4scyCqtsTzEA9f9VqrQ80NiF8M=; b=nw3fyBBebzHI46Cw6FFa/
+        f4OTZFxBJqPxPtarYgmG6lQSYx+JAVslGA+oHQFVXYWaSqrTzN1qUDWONUwSzeC1
+        MOJs8yKPKzlNQV7jYYDoOlSXqyJBfgDNeklyGhn885ucJcZCmlyD1+mOrmJttiqE
+        eFBE4kI4lP517IgVAsxoR0=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp1 (Coremail) with SMTP id C8mowAAH0DAwd6xi83EpEw--.31664S2;
+        Fri, 17 Jun 2022 20:44:32 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     chris@zankel.net, jcmvbkbc@gmail.com
+Cc:     windhl@126.com, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] xtensa: kernel: Fix refcount leak bug in time.c
+Date:   Fri, 17 Jun 2022 20:44:32 +0800
+Message-Id: <20220617124432.4049006-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220617071027.6569-1-dharamhans87@gmail.com> <20220617071027.6569-2-dharamhans87@gmail.com>
- <CAJfpegtRzDbcayn7MYKpgO1MBFeBihyfRB402JHtJkbXg1dvLg@mail.gmail.com> <08d11895-cc40-43da-0437-09d3a831b27b@fastmail.fm>
-In-Reply-To: <08d11895-cc40-43da-0437-09d3a831b27b@fastmail.fm>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 17 Jun 2022 14:43:58 +0200
-Message-ID: <CAJfpegvSK0VmU6cLx5kiuXJ=RyL0d4=gvGLFCWQ16FrBGKmhMQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] Allow non-extending parallel direct writes on the
- same file.
-To:     Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
-        Vivek Goyal <vgoyal@redhat.com>, linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Singh <dsingh@ddn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8mowAAH0DAwd6xi83EpEw--.31664S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF4UXry8JryrKryfGry8Krg_yoW3GFb_G3
+        Z7X34kCF4Yvws0vr9F9a1fWF1jv3sruF48Jw1vvF4xGw4UXr15Gw1DJr4Ykw15uFWrKrW7
+        AFZ5JrnIyF9rujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUsYFtUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hEjF1uwMOUZZgAAs+
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 at 11:25, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
->
-> Hi Miklos,
->
-> On 6/17/22 09:36, Miklos Szeredi wrote:
-> > On Fri, 17 Jun 2022 at 09:10, Dharmendra Singh <dharamhans87@gmail.com> wrote:
-> >
-> >> This patch relaxes the exclusive lock for direct non-extending writes
-> >> only. File size extending writes might not need the lock either,
-> >> but we are not entirely sure if there is a risk to introduce any
-> >> kind of regression. Furthermore, benchmarking with fio does not
-> >> show a difference between patch versions that take on file size
-> >> extension a) an exclusive lock and b) a shared lock.
-> >
-> > I'm okay with this, but ISTR Bernd noted a real-life scenario where
-> > this is not sufficient.  Maybe that should be mentioned in the patch
-> > header?
->
->
-> the above comment is actually directly from me.
->
-> We didn't check if fio extends the file before the runs, but even if it
-> would, my current thinking is that before we serialized n-threads, now
-> we have an alternation of
->         - "parallel n-1 threads running" + 1 waiting thread
->         - "blocked  n-1 threads" + 1 running
->
-> I think if we will come back anyway, if we should continue to see slow
-> IO with MPIIO. Right now we want to get our patches merged first and
-> then will create an updated module for RHEL8 (+derivatives) customers.
-> Our benchmark machines are also running plain RHEL8 kernels - without
-> back porting the modules first we don' know yet what we will be the
-> actual impact to things like io500.
->
-> Shall we still extend the commit message or are we good to go?
+In calibrate_ccount(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-Well, it would be nice to see the real workload on the backported
-patch.   Not just because it would tell us if this makes sense in the
-first place, but also to have additional testing.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/xtensa/kernel/time.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Miklos
+diff --git a/arch/xtensa/kernel/time.c b/arch/xtensa/kernel/time.c
+index e8ceb1528608..16b8a6273772 100644
+--- a/arch/xtensa/kernel/time.c
++++ b/arch/xtensa/kernel/time.c
+@@ -154,6 +154,7 @@ static void __init calibrate_ccount(void)
+ 	cpu = of_find_compatible_node(NULL, NULL, "cdns,xtensa-cpu");
+ 	if (cpu) {
+ 		clk = of_clk_get(cpu, 0);
++		of_node_put(cpu);
+ 		if (!IS_ERR(clk)) {
+ 			ccount_freq = clk_get_rate(clk);
+ 			return;
+-- 
+2.25.1
+

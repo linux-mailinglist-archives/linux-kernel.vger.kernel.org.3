@@ -2,58 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A9B54F2C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 10:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D73B54F41A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380882AbiFQIXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 04:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S1380572AbiFQJTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiFQIXU (ORCPT
+        with ESMTP id S1380369AbiFQJT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:23:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D71464BD2;
-        Fri, 17 Jun 2022 01:23:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDAFC61FA7;
-        Fri, 17 Jun 2022 08:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20996C3411F;
-        Fri, 17 Jun 2022 08:23:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655454198;
-        bh=ZG1PRw5VnASc89o/sYJOq7OiWVJgsMuC9yddKS4CDrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lT4Ro3kc+A+y+QX6qf1iKCZL6VGsTamd7TWyXJxZ2TgoTwfV5oSwsiZ05/Bq3z9IC
-         2uNbFIfQvVNRYjJkhVFsY2BWsYBvW3xuP9vMO9+85A0paewaFf0eXvtE+dLv59lF/i
-         KU3d1/XThv0zX0yeZ0/g47Y7eAIgVru13ITMzQYfhXy45s0giDW8i8MvMj8LAtTck+
-         cd3I++eF16H73f81p1ss27mLF6cf1fcCqRGxSsVhFVR/qZSO4fWgnjJsdhv0DVrOnE
-         iUIlBWlrsurY4mh7jG3/giMqgCMcoDTIoUsfJKtC9I7e0yzq2Cv+NACt0wYW3+LrpB
-         Fv6MAEBlZtZjA==
-Date:   Fri, 17 Jun 2022 09:23:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Owens <daowens01@gmail.com>
-Cc:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@bitmer.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Owens <dowens@precisionplanting.com>,
-        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ASoC: ti: omap-mcbsp: duplicate sysfs error
-Message-ID: <Yqw58Jt9Pky/mYdc@sirena.org.uk>
-References: <20220616202645.1645972-1-dowens@precisionplanting.com>
+        Fri, 17 Jun 2022 05:19:29 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF9B5AEDA
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:19:24 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id MHL00020;
+        Fri, 17 Jun 2022 17:19:20 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
+ 15.1.2308.27; Fri, 17 Jun 2022 17:19:19 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] drm/connector: Remove usage of the deprecated ida_simple_xxx API
+Date:   Fri, 17 Jun 2022 04:23:19 -0400
+Message-ID: <20220617082319.7599-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xbvFMKB/P2J9t+zG"
-Content-Disposition: inline
-In-Reply-To: <20220616202645.1645972-1-dowens@precisionplanting.com>
-X-Cookie: 98% lean.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   20226171719206e264a16480dc3f810127f676d9583a4
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,36 +47,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use ida_alloc_xxx()/ida_free() instead of
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
 
---xbvFMKB/P2J9t+zG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ drivers/gpu/drm/drm_connector.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-On Thu, Jun 16, 2022 at 03:26:45PM -0500, David Owens wrote:
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index 1c48d162c77e..cfba71724f84 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -250,7 +250,7 @@ int drm_connector_init(struct drm_device *dev,
+ 	connector->funcs = funcs;
+ 
+ 	/* connector index is used with 32bit bitmasks */
+-	ret = ida_simple_get(&config->connector_ida, 0, 32, GFP_KERNEL);
++	ret = ida_alloc_max(&config->connector_ida, 31, GFP_KERNEL);
+ 	if (ret < 0) {
+ 		DRM_DEBUG_KMS("Failed to allocate %s connector index: %d\n",
+ 			      drm_connector_enum_list[connector_type].name,
+@@ -262,7 +262,7 @@ int drm_connector_init(struct drm_device *dev,
+ 
+ 	connector->connector_type = connector_type;
+ 	connector->connector_type_id =
+-		ida_simple_get(connector_ida, 1, 0, GFP_KERNEL);
++		ida_alloc_min(connector_ida, 1, GFP_KERNEL);
+ 	if (connector->connector_type_id < 0) {
+ 		ret = connector->connector_type_id;
+ 		goto out_put_id;
+@@ -322,10 +322,10 @@ int drm_connector_init(struct drm_device *dev,
+ 	connector->debugfs_entry = NULL;
+ out_put_type_id:
+ 	if (ret)
+-		ida_simple_remove(connector_ida, connector->connector_type_id);
++		ida_free(connector_ida, connector->connector_type_id);
+ out_put_id:
+ 	if (ret)
+-		ida_simple_remove(&config->connector_ida, connector->index);
++		ida_free(&config->connector_ida, connector->index);
+ out_put:
+ 	if (ret)
+ 		drm_mode_object_unregister(dev, &connector->base);
+@@ -479,11 +479,10 @@ void drm_connector_cleanup(struct drm_connector *connector)
+ 	list_for_each_entry_safe(mode, t, &connector->modes, head)
+ 		drm_mode_remove(connector, mode);
+ 
+-	ida_simple_remove(&drm_connector_enum_list[connector->connector_type].ida,
++	ida_free(&drm_connector_enum_list[connector->connector_type].ida,
+ 			  connector->connector_type_id);
+ 
+-	ida_simple_remove(&dev->mode_config.connector_ida,
+-			  connector->index);
++	ida_free(&dev->mode_config.connector_ida, connector->index);
+ 
+ 	kfree(connector->display_info.bus_formats);
+ 	drm_mode_object_unregister(dev, &connector->base);
+-- 
+2.27.0
 
-> sysfs: cannot create duplicate filename '/devices/platform/68000000.ocp/4=
-9022000.mcbsp/max_tx_thres'
->=20
-> Signed-off-by: David Owens <dowens@precisionplanting.com>
-> ---
-
-Please carry forward tags like acks unless you make changes to the patch
-which would invalidate them.  No need to resend for this alone.
-
---xbvFMKB/P2J9t+zG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKsOfAACgkQJNaLcl1U
-h9AURwf/f6I/e2bDkIEEwNwEPBB1bwhn2Ume/aTTU7/TGFfAbhYa83++IgU/cF7B
-AQHpwlpoktSXH+1RkSCKAcyEyGUPqTZ1eCkvQKz+jWwY/SkVBkBCfDyol1nwkemY
-lLjSMOqiHyD3f1APtYct9T394Ds92LRQoobqwxB8cQoOjbjIIEpODoUCvexMGRMC
-YnQLl4E0CLydjipC3buAjqYF3oR7z2E4ntVVhYUGUID5pDgCqE+ELWluwwUf+tL1
-jCtSMlGORLrIojhA8G8+eYzFy6X0niIbWBRfHaD5XC1wkX1S5BqsbXLgoaSvOHpX
-hkIjUyYdMzPeGTUy3TNzBlGZ5hFqdA==
-=rwQu
------END PGP SIGNATURE-----
-
---xbvFMKB/P2J9t+zG--

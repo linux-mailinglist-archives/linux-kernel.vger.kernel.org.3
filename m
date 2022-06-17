@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC51E54F0F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B902E54F102
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 08:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380289AbiFQGMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 02:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
+        id S1380276AbiFQG1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 02:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380276AbiFQGMP (ORCPT
+        with ESMTP id S230307AbiFQG1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 02:12:15 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB055393E8;
-        Thu, 16 Jun 2022 23:12:14 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LPTFr51rxzDrFc;
-        Fri, 17 Jun 2022 14:11:44 +0800 (CST)
-Received: from dggpemm500011.china.huawei.com (7.185.36.110) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 14:12:12 +0800
-Received: from huawei.com (10.175.127.227) by dggpemm500011.china.huawei.com
- (7.185.36.110) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
- 2022 14:12:11 +0800
-From:   Li Lingfeng <lilingfeng3@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun2@huawei.com>, <lilingfeng3@huawei.com>
-Subject: [PATCH -next] ext4: recover csum seed of tmp_inode after migrating to extents
-Date:   Fri, 17 Jun 2022 14:25:15 +0800
-Message-ID: <20220617062515.2113438-1-lilingfeng3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 17 Jun 2022 02:27:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142B72A4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 23:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655447252; x=1686983252;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=740VTPWrUShQ8Brh8mDxlSFegDdp59K64YGFrcrtl6s=;
+  b=ME7UPtLHduSZ254R6dBXcifKu+SD/fl0MrIpqxO/mf9E6sUrpEcgG/vt
+   WuPSf9vL+sFFiJG84m2Fbgf9yecepmb+VE/m7m6iHwrzNcx1FkorzWVsN
+   21eKCThxKv/wm2NNz1vWprUI4cLR5O/A/WnhUDQG5GwBm2DO3B7E+6evJ
+   3Av/2eWqKDRQAnIXJnAFkpZL/QGRINs2BXp0WSX1XrRA5fy5N4qJlQUO6
+   BlDdrISU73cWcPrIXSUieUm6dpn4qAlXlsbYfwLsi8pO3MEssmYTnuKiy
+   E39hlx6sRtVfvnZs2wHNXRLzdSmqAqjwkhwaN6E9yO2n8fQRtuRoQuj8P
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268122020"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="268122020"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 23:27:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="713652152"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Jun 2022 23:27:30 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o25S5-000P9t-QE;
+        Fri, 17 Jun 2022 06:27:29 +0000
+Date:   Fri, 17 Jun 2022 14:27:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [cip:linux-4.19.y-cip-rt-rebase 2065/9999]
+ net/xfrm/xfrm_ipcomp.c:40:30: warning: 'ipcomp_scratches_lock' defined but
+ not used
+Message-ID: <202206171457.YUwoAiZH-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500011.china.huawei.com (7.185.36.110)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When migrating to extents, the checksum seed of temporary inode
-need to be replaced by inode's, otherwise the inode checksums
-will be incorrect when swapping the inodes data.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git linux-4.19.y-cip-rt-rebase
+head:   4784425d57541175db8c44ceef091a8fb42e5c6f
+commit: ad01e51437422285ac98eced7c7136b368bd2ffc [2065/9999] net: xfrm: fix compress vs decompress serialization
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220617/202206171457.YUwoAiZH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/commit/?id=ad01e51437422285ac98eced7c7136b368bd2ffc
+        git remote add cip https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git
+        git fetch --no-tags cip linux-4.19.y-cip-rt-rebase
+        git checkout ad01e51437422285ac98eced7c7136b368bd2ffc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/xfrm/
 
-However, the temporary inode can not match it's checksum to
-itself since it has lost it's own checksum seed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-mkfs.ext4 -F /dev/sdc
-mount /dev/sdc /mnt/sdc
-xfs_io -fc "pwrite 4k 4k" -c "fsync" /mnt/sdc/testfile
-chattr -e /mnt/sdc/testfile
-chattr +e /mnt/sdc/testfile
-umount /dev/sdc
-fsck -fn /dev/sdc
+All warnings (new ones prefixed by >>):
 
-========
-...
-Pass 1: Checking inodes, blocks, and sizes
-Inode 13 passes checks, but checksum does not match inode.  Fix? no
-...
-========
+   In file included from net/xfrm/xfrm_ipcomp.c:23:
+>> net/xfrm/xfrm_ipcomp.c:40:30: warning: 'ipcomp_scratches_lock' defined but not used [-Wunused-const-variable=]
+      40 | static DEFINE_LOCAL_IRQ_LOCK(ipcomp_scratches_lock);
+         |                              ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/locallock.h:244:71: note: in definition of macro 'DEFINE_LOCAL_IRQ_LOCK'
+     244 | #define DEFINE_LOCAL_IRQ_LOCK(lvar)             __typeof__(const int) lvar
+         |                                                                       ^~~~
 
-The fix is simple, save the checksum seed of temporary inode, and
-recover it after migrating to extents.
 
-Fixes: e81c9302a6c3 ("ext4: set csum seed in tmp inode while migrating to extents")
-Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
----
- fs/ext4/migrate.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+vim +/ipcomp_scratches_lock +40 net/xfrm/xfrm_ipcomp.c
 
-diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-index 49912814f3d8..04320715d61f 100644
---- a/fs/ext4/migrate.c
-+++ b/fs/ext4/migrate.c
-@@ -417,7 +417,7 @@ int ext4_ext_migrate(struct inode *inode)
- 	struct inode *tmp_inode = NULL;
- 	struct migrate_struct lb;
- 	unsigned long max_entries;
--	__u32 goal;
-+	__u32 goal, tmp_csum_seed;
- 	uid_t owner[2];
- 
- 	/*
-@@ -465,6 +465,7 @@ int ext4_ext_migrate(struct inode *inode)
- 	 * the migration.
- 	 */
- 	ei = EXT4_I(inode);
-+	tmp_csum_seed = EXT4_I(tmp_inode)->i_csum_seed;
- 	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
- 	i_size_write(tmp_inode, i_size_read(inode));
- 	/*
-@@ -575,6 +576,7 @@ int ext4_ext_migrate(struct inode *inode)
- 	 * the inode is not visible to user space.
- 	 */
- 	tmp_inode->i_blocks = 0;
-+	EXT4_I(tmp_inode)->i_csum_seed = tmp_csum_seed;
- 
- 	/* Reset the extent details */
- 	ext4_ext_tree_init(handle, tmp_inode);
+  > 23	#include <linux/locallock.h>
+    24	#include <linux/percpu.h>
+    25	#include <linux/slab.h>
+    26	#include <linux/smp.h>
+    27	#include <linux/vmalloc.h>
+    28	#include <net/ip.h>
+    29	#include <net/ipcomp.h>
+    30	#include <net/xfrm.h>
+    31	
+    32	struct ipcomp_tfms {
+    33		struct list_head list;
+    34		struct crypto_comp * __percpu *tfms;
+    35		int users;
+    36	};
+    37	
+    38	static DEFINE_MUTEX(ipcomp_resource_mutex);
+    39	static void * __percpu *ipcomp_scratches;
+  > 40	static DEFINE_LOCAL_IRQ_LOCK(ipcomp_scratches_lock);
+    41	static int ipcomp_scratch_users;
+    42	static LIST_HEAD(ipcomp_tfms_list);
+    43	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

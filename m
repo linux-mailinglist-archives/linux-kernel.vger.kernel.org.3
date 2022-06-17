@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C8A54FA2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918A354FA3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 17:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382608AbiFQPZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 11:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S1382817AbiFQP0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbiFQPZL (ORCPT
+        with ESMTP id S1382720AbiFQP0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 11:25:11 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951B727B3E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:25:10 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-317803b61e5so20285727b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 08:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gfVkrQT68IwynyaXCuoKWgqHSp1FfeiI6XkEqMD23bM=;
-        b=nEk2YJrN2Akb15H5R4cnd5Rd8Q1b8BYl3IbLCzb3eUDRRVJBJk71W4ETNadoAgE1Pf
-         /xS8Kz1dbGb22bByG9Df1TfSQyohEBouff2HgiFrbeQFj4+V+FLwTrR94kOg8V74zo9v
-         iMXJOsQ/XPDLGL859oozekljIAvKyuvpcsF9swJjuUdUhB6RgzH0U5VGgYO2cRvG2cL7
-         WU6HvfMOOOUjcmhXs+O7jaQQwCn550iRuTwQL+j20Tc+LAbwvpfja5CO1kJ7kf1e5rBS
-         IgW4uo3cknQrbgNvkCP785ou5OXGoYAycjITKdPt1FZRbffgNHSxwiJDCpzUpDIpXOxa
-         VoDA==
+        Fri, 17 Jun 2022 11:26:45 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4E42CDFD;
+        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id cu16so6304141qvb.7;
+        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gfVkrQT68IwynyaXCuoKWgqHSp1FfeiI6XkEqMD23bM=;
-        b=OIeFgFQTsgoZkSdQbl3TXJFlnqP21kG4jVphpc67o41h649codAtSv3o+2wEk9yNhX
-         ufHTuI7QpwOzTM/dGFqAgPO3uRzmyHnAqD1ymv1OHD6KHo+j5GxVKoQ1rjwKbpSwPR2p
-         0Qih742AcG2y4oZ+QR7KOO9qGd3fs8L/IOOTF1rPcZeSFISTOarv3o98pYawLO/lM8lo
-         WoqC602PYcgvLqiZyVHS5HtIvRalUy6I53yBY9Wc1pc3oGz7WmqO+SNVl5sDVDydqfLC
-         MUCQ5D/jVgq1mRrDjQ1VB5RHHV/EfwdAy4wArhcLyqSSdngX16DjwNURFWqy9XldKkM1
-         OFIQ==
-X-Gm-Message-State: AJIora8eMHwRuOvnoTbDaQZSReejYlEMjGGcLxcDwuqS7UulV/FVuST1
-        NxUkvfCB+dyiLy+kOf9WwPY/2iBxRkpftHkkyU9Sjw==
-X-Google-Smtp-Source: AGRyM1s8gvXIb+dRnkdQG9WhAV9ttR6MjIF44LS8OVWSCXTKPYrDNkHu22WD47ZjkiVYAA854IS31tTioB6cqOFjk8k=
-X-Received: by 2002:a81:e93:0:b0:317:8db7:aa8e with SMTP id
- 141-20020a810e93000000b003178db7aa8emr1676593ywo.55.1655479509457; Fri, 17
- Jun 2022 08:25:09 -0700 (PDT)
+        bh=nxeOkeINDpzy3OEEqm+X2I0MEyWZgikOx3MDeUuxZIA=;
+        b=x352egzjQ+bgWBPvIOmHwrWHqtJYzKs6aPO2F8bLrEH9JwpqkX/8NsU9XVQkI5fKwV
+         6ltnZCkL9bPTM/vaZYzpAuRgmNkrTuwem4mmLvu42R49EykYrgqHQDfD4WdKzop+Db51
+         xuYOVSO3jIMn16mYfmHh/GrkHReTvLUcD9zrC5hTqBVwG40E4ykj2L0gOQlsS7J+rzoj
+         1D/hAzkZ7UfSBzFb223OuZgruktaAftR32nSZwts7o4Wsccqp6B4ey5E5RbKdI/n/1rl
+         CTXDLH4J1RuCSY1/ysET+h5VPadAiCXvXei41bhvjpiumn4BmftMo0pVAQ6E8ajug0lt
+         Va4g==
+X-Gm-Message-State: AJIora/bHuAycwqoF7x7xcQ4vk/j3wsHR06DlCn9FXbTEyhjtOztZEsh
+        +s9zIUbqnxtCQbIoY2J9QJQiM/dZuJC8cQ==
+X-Google-Smtp-Source: AGRyM1sIcwLrFMLBTl9Zjr0d8MQNxHkWGqCz9qYTJ1djfdjakA8ISv2WHTFx3VpDrDScxXOd1IppdA==
+X-Received: by 2002:ac8:5d93:0:b0:305:2b38:af70 with SMTP id d19-20020ac85d93000000b003052b38af70mr8952987qtx.383.1655479604039;
+        Fri, 17 Jun 2022 08:26:44 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id v63-20020a372f42000000b006a6a5d1e240sm4298333qkh.34.2022.06.17.08.26.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 08:26:43 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id k2so7838468ybj.3;
+        Fri, 17 Jun 2022 08:26:42 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr11481017ybb.202.1655479602392; Fri, 17
+ Jun 2022 08:26:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
- <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net> <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
- <CALvZod5ijDz=coEE8G8v_haPaKuUa5jHYzEwKvLVxHGphixsFA@mail.gmail.com> <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com>
-In-Reply-To: <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 17 Jun 2022 17:24:58 +0200
-Message-ID: <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
-Subject: Re: [PATCH] locking/rwlocks: do not starve writers
-To:     Waiman Long <longman@redhat.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
+References: <20220616210518.125287-1-mike.kravetz@oracle.com>
+ <20220616210518.125287-2-mike.kravetz@oracle.com> <YqyMhmAjrQ4C+EyA@xz-m1.local>
+In-Reply-To: <YqyMhmAjrQ4C+EyA@xz-m1.local>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 17 Jun 2022 17:26:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU-qdNMqwtpm+PMixKoicYHPokAQqWAh-Vw-sjZz_z7xA@mail.gmail.com>
+Message-ID: <CAMuHMdU-qdNMqwtpm+PMixKoicYHPokAQqWAh-Vw-sjZz_z7xA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not present
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 5:00 PM Waiman Long <longman@redhat.com> wrote:
->
-> On 6/17/22 10:57, Shakeel Butt wrote:
-> > On Fri, Jun 17, 2022 at 7:43 AM Waiman Long <longman@redhat.com> wrote:
-> >> On 6/17/22 08:07, Peter Zijlstra wrote:
-> >>> On Fri, Jun 17, 2022 at 02:10:39AM -0700, Eric Dumazet wrote:
-> >>>> --- a/kernel/locking/qrwlock.c
-> >>>> +++ b/kernel/locking/qrwlock.c
-> >>>> @@ -23,16 +23,6 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
-> >>>>       /*
-> >>>>        * Readers come here when they cannot get the lock without waiting
-> >>>>        */
-> >>>> -    if (unlikely(in_interrupt())) {
-> >>>> -            /*
-> >>>> -             * Readers in interrupt context will get the lock immediately
-> >>>> -             * if the writer is just waiting (not holding the lock yet),
-> >>>> -             * so spin with ACQUIRE semantics until the lock is available
-> >>>> -             * without waiting in the queue.
-> >>>> -             */
-> >>>> -            atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
-> >>>> -            return;
-> >>>> -    }
-> >>>>       atomic_sub(_QR_BIAS, &lock->cnts);
-> >>>>
-> >>>>       trace_contention_begin(lock, LCB_F_SPIN | LCB_F_READ);
-> >>> This is known to break tasklist_lock.
-> >>>
-> >> We certainly can't break the current usage of tasklist_lock.
-> >>
-> >> I am aware of this problem with networking code and is thinking about
-> >> either relaxing the check to exclude softirq or provide a
-> >> read_lock_unfair() variant for networking use.
-> > read_lock_unfair() for networking use or tasklist_lock use?
->
-> I mean to say read_lock_fair(), but it could also be the other way
-> around. Thanks for spotting that.
->
+Hi Peter,
 
-If only tasklist_lock is problematic and needs the unfair variant,
-then changing a few read_lock() for tasklist_lock will be less
-invasive than ~1000 read_lock() elsewhere....
+On Fri, Jun 17, 2022 at 4:22 PM Peter Xu <peterx@redhat.com> wrote:
+> On Thu, Jun 16, 2022 at 02:05:15PM -0700, Mike Kravetz wrote:
+> > @@ -6877,6 +6896,39 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+> >       return (pte_t *)pmd;
+> >  }
+> >
+> > +/*
+> > + * Return a mask that can be used to update an address to the last huge
+> > + * page in a page table page mapping size.  Used to skip non-present
+> > + * page table entries when linearly scanning address ranges.  Architectures
+> > + * with unique huge page to page table relationships can define their own
+> > + * version of this routine.
+> > + */
+> > +unsigned long hugetlb_mask_last_page(struct hstate *h)
+> > +{
+> > +     unsigned long hp_size = huge_page_size(h);
+> > +
+> > +     switch (hp_size) {
+> > +     case P4D_SIZE:
+> > +             return PGDIR_SIZE - P4D_SIZE;
+> > +     case PUD_SIZE:
+> > +             return P4D_SIZE - PUD_SIZE;
+> > +     case PMD_SIZE:
+> > +             return PUD_SIZE - PMD_SIZE;
+> > +     default:
+>
+> Should we add a WARN_ON_ONCE() if it should never trigger?
+
+And with panic_on_warn, it'll panic only once ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

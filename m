@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE8F54F413
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A92D54F41C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235372AbiFQJSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 05:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S243818AbiFQJTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 05:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiFQJSE (ORCPT
+        with ESMTP id S235549AbiFQJTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 05:18:04 -0400
-Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A647B1F2F1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 02:17:59 -0700 (PDT)
-Received: from fedora33.wangsu.com (unknown [59.61.78.232])
-        by app2 (Coremail) with SMTP id SyJltAC3vuK9RqxiNskEAA--.8183S2;
-        Fri, 17 Jun 2022 17:17:55 +0800 (CST)
-From:   Lin Feng <linf@wangsu.com>
-To:     gregkh@linuxfoundation.org, tj@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linf@wangsu.com
-Subject: [PATCH] kernfs/file.c: remove redundant error return counter assignment
-Date:   Fri, 17 Jun 2022 17:17:46 +0800
-Message-Id: <20220617091746.206515-1-linf@wangsu.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 17 Jun 2022 05:19:12 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AF05AEF6;
+        Fri, 17 Jun 2022 02:19:10 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VGeEoR._1655457543;
+Received: from 30.240.100.35(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VGeEoR._1655457543)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Jun 2022 17:19:06 +0800
+Message-ID: <ea7d5934-01f4-bd2e-09d5-0916eb72e8d8@linux.alibaba.com>
+Date:   Fri, 17 Jun 2022 17:19:03 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: SyJltAC3vuK9RqxiNskEAA--.8183S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrGr4kCw1rCF1kurWrtry8AFb_yoWxGFX_JF
-        W8AryxCr4jvr1Iqr1kCw4Fvrn093Z3Zr1rK3y5tr1DKrn8X3yUGr9Yy3W5Ary5Jry3Gryk
-        AFs8ur4Y9w4UtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
-        II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7
-        xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28E
-        F7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F4
-        0EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_Gr0_Cr1lYx0E74AGY7Cv6cx2
-        6r48McIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0x
-        vY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4fMxAIw28IcxkI
-        7VAKI48JMxAIw28IcVCjz48v1sIEY20_Gr4l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UmzuAUUUUU=
-X-CM-SenderInfo: holqwq5zdqw23xof0z/
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH v4 0/2] pkcs7: support SM2/SM3 and EC-RDSA/streebog
+ algorithms
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+References: <20210918080737.17252-1-tianjia.zhang@linux.alibaba.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Elvira Khabirova <e.khabirova@omp.ru>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Pascal van Leeuwen <pvanleeuwen@rambus.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <20210918080737.17252-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,26 +56,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since previous 'rc = -EINVAL;', rc value doesn't change, so not
-necessary to re-assign it again.
+Hi Jarkko,
 
-Signed-off-by: Lin Feng <linf@wangsu.com>
----
- fs/kernfs/file.c | 1 -
- 1 file changed, 1 deletion(-)
+On 9/18/21 4:07 PM, Tianjia Zhang wrote:
+> This series of patches integrates the two patches sended separately,
+> resolves the conflict, and rebases on the latest code.
+> 
+> The two patches respectively support the SM2/SM3 and EC-RDSA/streebog
+> algorithm combinations for the pkcs7 parser.
+> 
+> Elvira Khabirova (1):
+>    pkcs7: support EC-RDSA/streebog in SignerInfo
+> 
+> Tianjia Zhang (1):
+>    pkcs7: parser support SM2 and SM3 algorithms combination
+> 
+>   crypto/asymmetric_keys/pkcs7_parser.c | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+> 
 
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index e3abfa843879..54b2a13ac9a2 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -484,7 +484,6 @@ static int kernfs_fop_mmap(struct file *file, struct vm_area_struct *vma)
- 	 * It is not possible to successfully wrap close.
- 	 * So error if someone is trying to use close.
- 	 */
--	rc = -EINVAL;
- 	if (vma->vm_ops && vma->vm_ops->close)
- 		goto out_put;
- 
--- 
-2.31.1
+No response from David, can you pick this?
 
+Best regards,
+Tianjia

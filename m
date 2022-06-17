@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B6254F935
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4408854F93C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382645AbiFQOdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S1382765AbiFQOem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbiFQOc4 (ORCPT
+        with ESMTP id S231490AbiFQOei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:32:56 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45779BCBC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:32:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id a17so2068613pls.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=+N/16cyFHOuLupQ+Fk4F91U88SFBJPVf6lD4I/mDTOc=;
-        b=V5KGDpPpLv4gKA2kex+nq5K86WkTiTIUPC09l4jO/cjP1ray0Y9Tr7B2ih/Eu/jpl2
-         LKuWx2XSlpztoIENI4/C9THP2gsEW8QKc3JDClcSL/kL4btjUNvOJBL9iAzeWXthdNLH
-         cDDhrJUtqfywTBaes+SYgeEm8et/TBg6dn1IccAZamdHRbyf4EnaChpBhwd3cBYR/uCm
-         dR0Mxuw7PIDS6k67D2uB0ScaaeDaZbRLh4a/CyRUvWy7TFCQLfUJrop1w9uI4H7/SMqR
-         /my/yQqVMu8QP2BWtGPmbAYUZIXyikuU3+Wi4Pr8too0nEhEWfoMlEH9Xhnu4QFzDXib
-         alrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+N/16cyFHOuLupQ+Fk4F91U88SFBJPVf6lD4I/mDTOc=;
-        b=RZuX4aKKGdlGeMiMfOaGU4zQnK71PDasMTjM63K+4MqTmFpWjMeeebLwVSGGUcvg6W
-         NCKtq7V1OlK8sB0x175DTnQdjPtAZRCR+599cZMpw8v+Wln9s+ksQTojUlrfGDT3G89E
-         b5XR9L5nRaMRwL6tbfU7UGO/j+u/6Q/op3oSYj2xmfL/Tu7upKfM01Uq40RIQ+lzKMD2
-         t3Xl+oMiseXt0d5pXBpF+wp0I8M+bb+IaQrUT/a0Hn00D0mAYMLxiy2OdN2RibPkChqU
-         yVCkGTgQa6lvfbfVXImAsjh3Rv+j/ZTBBcDqTr8566i668yoQ+4kcYFV2bIQM8R3tUgL
-         UppQ==
-X-Gm-Message-State: AJIora8SGNGTuEUljH6DlyzDpvjIGcWnmjS5Oz/kS5oWZJusLwC7oFYq
-        Z5JXOAGFW5SbNVYzXno38BE=
-X-Google-Smtp-Source: AGRyM1v6ZTA/PMfzY6SMN9+Ni8TVJCGyDlXFym+hzhe+n0abVIxkiAK6AA6TlqrqwQX+SuKqMSuWng==
-X-Received: by 2002:a17:902:d502:b0:168:faa0:50a0 with SMTP id b2-20020a170902d50200b00168faa050a0mr9964651plg.142.1655476374750;
-        Fri, 17 Jun 2022 07:32:54 -0700 (PDT)
-Received: from localhost.localdomain ([223.104.160.3])
-        by smtp.gmail.com with ESMTPSA id o4-20020a1709026b0400b00163de9e9342sm3684354plk.17.2022.06.17.07.32.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 Jun 2022 07:32:54 -0700 (PDT)
-From:   Binglei Wang <l3b2w1@gmail.com>
-X-Google-Original-From: Binglei Wang
-To:     mhiramat@kernel.org
-Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        l3b2w1 <l3b2w1@gmail.com>
-Subject: [PATCH] kprobes: check the prameter offset in _kprobe_addr()
-Date:   Fri, 17 Jun 2022 22:32:45 +0800
-Message-Id: <1655476365-21662-1-git-send-email-l3b2w1@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Fri, 17 Jun 2022 10:34:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DCB5000F;
+        Fri, 17 Jun 2022 07:34:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zCYLBNrpsWXnOqcC5wJ/hD9iA4hBnMBniae3jFnLY4g=; b=V9GiLKMHEe+HEZjsJZ2Pb5P6ea
+        d9D0pHgbo5JQRZoFL9HsbHI9Gdr4THYdrwvU9KtY2IcnhaclV//MKCurCrfsFBLpDYU+0XWi6zy00
+        CStKpcL2cDfbTxFxY0Tf8zjpQNcUymWJ+YlY+fvPV1PcHXf0aNed562ttdg9wfTK0LHPZcFN+moY9
+        tMgzajAbEMzya03pEkrkuFtIIygfEX8crLwpznvIEfcuhfXxChDJxrCJuIvuwz9tf/8Nlf/KxPo9t
+        V2t5D5TgWuKJjFc4BX7Pk7tMX90ySuSVuqT+pniMH+AdHEAlxqqdkTfsfegVm8+GJB4P0Y2RxckVb
+        hytS0s1Q==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2D2o-002tnV-Hz; Fri, 17 Jun 2022 14:33:54 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 065709816B5; Fri, 17 Jun 2022 16:33:54 +0200 (CEST)
+Date:   Fri, 17 Jun 2022 16:33:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, conghui.chen@intel.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        netdev <netdev@vger.kernel.org>, pankaj.gupta.linux@gmail.com,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        sudeep.holla@arm.com, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
+Message-ID: <YqyQ0bMF1EM8E6BW@worktop.programming.kicks-ass.net>
+References: <CACGkMEtAQck7Nr6SP_pD0MGT3njnwZSyT=xPyYzUU3c5GNNM_w@mail.gmail.com>
+ <CACGkMEvUFJkC=mnvL2PSH6-3RMcJUk84f-9X46JVcj2vTAr4SQ@mail.gmail.com>
+ <20220613052644-mutt-send-email-mst@kernel.org>
+ <CACGkMEstGvhETXThuwO+tLVBuRgQb8uC_6DdAM8ZxOi5UKBRbg@mail.gmail.com>
+ <20220614114839-mutt-send-email-mst@kernel.org>
+ <CACGkMEthExrqFNkOzLGwaffvHw=Tc3MXPtTTiRsnpFDGKPRP=A@mail.gmail.com>
+ <20220616130945-mutt-send-email-mst@kernel.org>
+ <CACGkMEuSX-wg-VQzVLRhE_9wmQVpCQo5cxQ-by3N6v7gaBNsrg@mail.gmail.com>
+ <20220617013147-mutt-send-email-mst@kernel.org>
+ <CACGkMEuaxpgGt38anCYfQfy_OOKf0HCmSonC7cBD9-jrgWQ+Ow@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEuaxpgGt38anCYfQfy_OOKf0HCmSonC7cBD9-jrgWQ+Ow@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,87 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: l3b2w1 <l3b2w1@gmail.com>
+On Fri, Jun 17, 2022 at 03:26:16PM +0800, Jason Wang wrote:
+> On Fri, Jun 17, 2022 at 1:36 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 09:24:57AM +0800, Jason Wang wrote:
+> > > On Fri, Jun 17, 2022 at 1:11 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Wed, Jun 15, 2022 at 09:38:18AM +0800, Jason Wang wrote:
+> > > > > On Tue, Jun 14, 2022 at 11:49 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jun 14, 2022 at 03:40:21PM +0800, Jason Wang wrote:
+> > > > > > > On Mon, Jun 13, 2022 at 5:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Jun 13, 2022 at 05:14:59PM +0800, Jason Wang wrote:
+> > > > > > > > > On Mon, Jun 13, 2022 at 5:08 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Mon, Jun 13, 2022 at 4:59 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On Mon, Jun 13, 2022 at 04:51:08PM +0800, Jason Wang wrote:
+> > > > > > > > > > > > On Mon, Jun 13, 2022 at 4:19 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On Mon, Jun 13, 2022 at 04:07:09PM +0800, Jason Wang wrote:
+> > > > > > > > > > > > > > On Mon, Jun 13, 2022 at 3:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > On Mon, Jun 13, 2022 at 01:26:59PM +0800, Jason Wang wrote:
+> > > > > > > > > > > > > > > > On Sat, Jun 11, 2022 at 1:12 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > On Fri, May 27, 2022 at 02:01:19PM +0800, Jason Wang wrote:
+> > > > > > > > > > > > > > > > > > This is a rework on the previous IRQ hardening that is done for
 
-I encounter a problem when using kprobe.
-There is no checkping about the parameter offset in _kprobe_address().
-
-a. execute command with a valid address, it succeed.
-echo 'p:km __kmalloc+4099' > kprobe_events
-In reality, __kmalloc+4099 points to free_debug_processing+579.
-
-so we end up with:
-p:kprobes/kp __kmalloc+4099
-
-b. execute command with an invalid address,
-   failing because of addr crossing instruction boundary
-echo 'p:km __kmalloc+4096' > kprobe_events
-In reality, __kmalloc+4096 points to free_debug_processing+576.
-
-Thus, if not checkping the offset, it could point to anywhere,
-may succeed with a valid addr, or fail with an invalid addr.
-that's not what we want already.
-
-When registering a kprobe to debug something,
-either supplied with a symbol name through the sysfs trace
-interface,
-or programming kp.addr with a specific value in a module,
-that means the target function to be probed by us is determined.
-
-With or whitout an offset(0 or !0),
-it should be limited to be whithin the function body.
-to avoid ending up with a different and unknown function.
-
-Maybe it's better to check it.
-
-Thank you to review this!
-
-Signed-off-by: l3b2w1 <l3b2w1@gmail.com>
----
- kernel/kprobes.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index f214f8c..d5b907a 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1449,6 +1449,9 @@ static kprobe_opcode_t *
- _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
- 	     unsigned long offset, bool *on_func_entry)
- {
-+	unsigned long addr_offset;
-+	unsigned long symbol_size;
-+
- 	if ((symbol_name && addr) || (!symbol_name && !addr))
- 		goto invalid;
- 
-@@ -1465,14 +1468,20 @@ _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
- 			return ERR_PTR(-ENOENT);
- 	}
- 
-+	if (!kallsyms_lookup_size_offset((unsigned long)addr,
-+				&symbol_size, &addr_offset))
-+		return ERR_PTR(-ENOENT);
-+
-+	/* Guarantee probed addr do not step over more than one function */
-+	if (offset >= symbol_size || offset >= symbol_size - addr_offset)
-+		goto invalid;
-+
- 	/*
--	 * So here we have @addr + @offset, displace it into a new
--	 * @addr' + @offset' where @addr' is the symbol start address.
-+	 * @addr is the symbol start address
-+	 * @offset is the real 'offset' relative to start address
- 	 */
--	addr = (void *)addr + offset;
--	if (!kallsyms_lookup_size_offset((unsigned long)addr, NULL, &offset))
--		return ERR_PTR(-ENOENT);
--	addr = (void *)addr - offset;
-+	addr -= addr_offset;
-+	offset += addr_offset;
- 
- 	/*
- 	 * Then ask the architecture to re-combine them, taking care of
--- 
-2.7.4
-
+Guys; have you heard about trimming emails on reply?

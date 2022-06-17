@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFD854FF6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392B054FF73
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 23:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbiFQVhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 17:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S235579AbiFQVnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 17:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiFQVhd (ORCPT
+        with ESMTP id S231818AbiFQVm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 17:37:33 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85801005
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:37:32 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id c21so7229761wrb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wGbMUWjxs8BkGkLUVDpfhH3mQEW003HHHcJjYYfU7v4=;
-        b=SLDzV2QIqEa40kiO6UHKNr4FOD7iSpRR4+KbKYh4OQ8FAYv+DyGH964zD+o8MLMqru
-         LAx0TEzv3qw2FW4OB1uGntlpn7DYZAdFJ6aOgFveGQt7ptcSFY66IxN00Nxx3LM60vTz
-         CKfj0YSixRUUYt3Y01puNxiX8KI4XHFGS4qM8ipQZU+P3o5rd9zf6fqoHr0wzw9xcMXq
-         2Jz3hLTHdfE3rhgPMk/nmt+3cUg1gu68UwhgJV4rO+d1jLEPv2ZkcSjPfnt3fVG5Z00j
-         3dEPcrutimdfF6gWpUEcuB8CmV2B0GmCUyBg6Tf3B/mOldFz+cPIyHKHDntg6vsRV8bf
-         PZxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wGbMUWjxs8BkGkLUVDpfhH3mQEW003HHHcJjYYfU7v4=;
-        b=4q/7hsNHEFvgCs32rJ3pJnwCwJ/1/wPPtLSn+wbPjJ2wmGQSAV9aLgSCmkwNmDwBBz
-         YIlB/JoTV2fFEaEQfayAVHav+FQMONhX4sATkrgNuRyAcRPQD5kfkmd55FehkcOCN68n
-         WJVumM1EYfjikVzu9D7AIex1TmB3MjN4FktDCK7S6Ygqx6BUFL6PUchlK5RAcC3/B5tt
-         Br7496085awVClyBhYyUEW1moC/HLHrD+svlHdvFSfyxUjn9qQiMpEX8ra5jb5KUKpXJ
-         q/bI5s6oUYzK6uP32q/kgGui07bmwozwFNiHvZVlJhoOWh2B1akrfPO7UTnS+sZEwIQ8
-         J0ng==
-X-Gm-Message-State: AJIora/MZbursSjZ/TGyXVXz1+6+kpmiOfwIbyb9i64WTBZmw3PwYG5j
-        ZqKXBXjWlHv4o/0kbTDUn5pLyAAOZmmIcWplhWI=
-X-Google-Smtp-Source: AGRyM1tr5HuJpzlTGlamBFC16nJpme8r8TCAQYFHnLloq5rkURi5r/W+JiMekrV08CqRLjwlrpNLEA==
-X-Received: by 2002:adf:f184:0:b0:21b:6c76:5b6e with SMTP id h4-20020adff184000000b0021b6c765b6emr4253788wro.126.1655501851181;
-        Fri, 17 Jun 2022 14:37:31 -0700 (PDT)
-Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d654e000000b00210288c55d0sm5623988wrv.52.2022.06.17.14.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 14:37:30 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH] dt-bindings: display: delete ilitek,ili9341.txt
-Date:   Fri, 17 Jun 2022 22:37:07 +0100
-Message-Id: <20220617213706.376730-1-mail@conchuod.ie>
-X-Mailer: git-send-email 2.36.1
+        Fri, 17 Jun 2022 17:42:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB41C4ECD1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 14:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655502178; x=1687038178;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tsC1UYTW6tqwJqLZjBUGPm4JXqGrmAf6pIOJLQbo394=;
+  b=JKZKx0yhtMjHSu4UWTHf7/J+Z0lMwiZEqDlkQdTMiP7qTUEsWvwzsb86
+   SCNKluag/JEAIv4yxf8giwh7xvYNMx/UK3pEj6Gp5aPI47dDuzEeFb9ps
+   CiDooFbVS17F/DdzqDg2OT87gwd8n0hH8RYFaF36U//KCshEaYCtoK8No
+   0MtAxek7YpDaxVwJl/XSXK5MhBJIiAYqw5JqY55eUuTWZMV7/ip7q767d
+   Kjbb5GahOjvXy2fCFq5ulndqmaSSEDqg5IvOXZYVm5N9DKZUKivnHNpa/
+   1oP5sEvDdlsVKMImGNuYxSBud36kYZyW1njEjS+B3zOEiqQQG+QLZ5YXK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341275751"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="341275751"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 14:42:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="590279401"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Jun 2022 14:42:56 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Jk0-000Pmt-8B;
+        Fri, 17 Jun 2022 21:42:56 +0000
+Date:   Sat, 18 Jun 2022 05:42:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.20/g12-dsi-wip 9/12]
+ drivers/gpu/drm/meson/meson_venc.c:1595:24: error: implicit declaration of
+ function 'FIELD_PREP'
+Message-ID: <202206180526.1HnD8Zji-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +62,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+tree:   https://github.com/superna9999/linux amlogic/v5.20/g12-dsi-wip
+head:   0e725ea0a5ab9f70fc54c2e76475b8d594b90c4e
+commit: 927953782b0c6c12a73654c526a12678e348f817 [9/12] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220618/202206180526.1HnD8Zji-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/superna9999/linux/commit/927953782b0c6c12a73654c526a12678e348f817
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.20/g12-dsi-wip
+        git checkout 927953782b0c6c12a73654c526a12678e348f817
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/meson/
 
-ilitek,ili9341.txt was replaced by ilitek,ili9341.yaml but the txt
-binding was not deleted. Do so.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../bindings/display/ilitek,ili9341.txt       | 27 -------------------
- 1 file changed, 27 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+All errors (new ones prefixed by >>):
 
-diff --git a/Documentation/devicetree/bindings/display/ilitek,ili9341.txt b/Documentation/devicetree/bindings/display/ilitek,ili9341.txt
-deleted file mode 100644
-index 169b32e4ee4e..000000000000
---- a/Documentation/devicetree/bindings/display/ilitek,ili9341.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Ilitek ILI9341 display panels
--
--This binding is for display panels using an Ilitek ILI9341 controller in SPI
--mode.
--
--Required properties:
--- compatible:	"adafruit,yx240qv29", "ilitek,ili9341"
--- dc-gpios:	D/C pin
--- reset-gpios:	Reset pin
--
--The node for this driver must be a child node of a SPI controller, hence
--all mandatory properties described in ../spi/spi-bus.txt must be specified.
--
--Optional properties:
--- rotation:	panel rotation in degrees counter clockwise (0,90,180,270)
--- backlight:	phandle of the backlight device attached to the panel
--
--Example:
--	display@0{
--		compatible = "adafruit,yx240qv29", "ilitek,ili9341";
--		reg = <0>;
--		spi-max-frequency = <32000000>;
--		dc-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
--		reset-gpios = <&gpio0 8 GPIO_ACTIVE_HIGH>;
--		rotation = <270>;
--		backlight = <&backlight>;
--	};
+   In file included from include/linux/byteorder/little_endian.h:5,
+                    from arch/arm/include/uapi/asm/byteorder.h:22,
+                    from include/asm-generic/bitops/le.h:6,
+                    from arch/arm/include/asm/bitops.h:267,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:22,
+                    from include/linux/iopoll.h:9,
+                    from drivers/gpu/drm/meson/meson_venc.c:9:
+   drivers/gpu/drm/meson/meson_venc.c: In function 'meson_encl_set_gamma_table':
+>> drivers/gpu/drm/meson/meson_venc.c:1595:24: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+    1595 |                        FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+         |                        ^~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: in definition of macro '__cpu_to_le32'
+      34 | #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+         |                                                   ^
+   drivers/gpu/drm/meson/meson_venc.c:1594:9: note: in expansion of macro 'writel_relaxed'
+    1594 |         writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+         |         ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_PREP +1595 drivers/gpu/drm/meson/meson_venc.c
+
+  1579	
+  1580	static void meson_encl_set_gamma_table(struct meson_drm *priv, u16 *data,
+  1581					       u32 rgb_mask)
+  1582	{
+  1583		int i, ret;
+  1584		u32 reg;
+  1585	
+  1586		writel_bits_relaxed(L_GAMMA_CNTL_PORT_EN, 0,
+  1587				    priv->io_base + _REG(L_GAMMA_CNTL_PORT));
+  1588	
+  1589		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1590						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1591		if (ret)
+  1592			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1593	
+  1594		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+> 1595			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+  1596			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1597	
+  1598		for (i = 0; i < 256; i++) {
+  1599			ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1600							 reg, reg & L_GAMMA_CNTL_PORT_WR_RDY,
+  1601							 10, 10000);
+  1602			if (ret)
+  1603				pr_warn_once("%s: GAMMA WR_RDY timeout\n", __func__);
+  1604	
+  1605			writel_relaxed(data[i], priv->io_base + _REG(L_GAMMA_DATA_PORT));
+  1606		}
+  1607	
+  1608		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1609						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1610		if (ret)
+  1611			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1612	
+  1613		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+  1614			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0x23),
+  1615			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1616	}
+  1617	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

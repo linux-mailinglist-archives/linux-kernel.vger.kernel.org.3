@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9329954EEE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 03:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9EB54EEE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 03:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379579AbiFQBl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Jun 2022 21:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S1379589AbiFQBl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Jun 2022 21:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiFQBlz (ORCPT
+        with ESMTP id S1379568AbiFQBl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Jun 2022 21:41:55 -0400
+        Thu, 16 Jun 2022 21:41:56 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92B7963BC9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 18:41:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8513163BCC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 18:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655430113;
+        s=mimecast20190719; t=1655430114;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/DD/JbIqyCltKPwmfzhCpkXevQRYLJ0ZJFcUAJ03F54=;
-        b=N8cuFGBcvKhKM8QMGhOn0sdq0k6ArxHGjmfN1wIIBImRNmNdu06Im3xYLEvnDQX87Jbfvd
-        aWXD15GVvKw9b0S5rt2+xaq+6J4K1iyJdrx0yEACiY+M6iqNv+VtZyPqX3xDdAiDfZDPf8
-        NgQFB8LgNPK0O2s0e+djdQstY2rEcn8=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gOKc2ikh4vL40/zpc4P3kwwtd9Sh2ixHRUheDMcVbAY=;
+        b=Re9DLprTMLucwg/CeomytiZGwA6+Cszo9q6YubTrIOGU+HSxht3tn7atElt5Zflk5xMlmN
+        TM+gIhSeoWsJd29BiRPlmxlGGh1ayUqReGrzfOmPUOjH5Ig6JBzQEBGiJjfP3Bpyfrq9gO
+        mU+5hp8Ah9ZsiH/N/y4EKq7nUKVgiKI=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-250-TVSti-rFPyazRZJ-JWuURw-1; Thu, 16 Jun 2022 21:41:51 -0400
-X-MC-Unique: TVSti-rFPyazRZJ-JWuURw-1
-Received: by mail-io1-f70.google.com with SMTP id r76-20020a6b2b4f000000b00669b75529e5so1747322ior.16
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 18:41:51 -0700 (PDT)
+ us-mta-444-mld2TfFAOk6Nn4bxeX-GGw-1; Thu, 16 Jun 2022 21:41:53 -0400
+X-MC-Unique: mld2TfFAOk6Nn4bxeX-GGw-1
+Received: by mail-il1-f199.google.com with SMTP id q15-20020a056e0220ef00b002d15dcd2750so1840453ilv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 18:41:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/DD/JbIqyCltKPwmfzhCpkXevQRYLJ0ZJFcUAJ03F54=;
-        b=sjv/re5Y0hJmVkoJQYpt1wNl0xsyxQ+PxxR1QYMtTYZT19zhT2c8nmo6b6gTyX4/FW
-         fdXhdABlH7gseIaPv/i1V1TMZdzNnbIzRHew+rXyT2GXZX1oTbOniF9EtrWPmzkNNulg
-         Tdwda+EmmfbHI0jj74yDjzYx3JbS1xNM1VYBIuoofKk2hOxdr6/sWyaZoEPXJD1o5Uqj
-         rhTjHyDdJowSDT9CB3sp2iq2+Y7W0cOP9iMSTeZVBf0w9RQH6I+7vf1/nWRFp0ZJDghb
-         RTq9nlkNZnB/aecPEiVvNcMFAdjutY4ID4ogpoBmo4BP4cdVYTb5gX3X1o279AKCK2V1
-         zB4Q==
-X-Gm-Message-State: AJIora/8msAjbGFtRyMVA1jA0gzMVmJvKi9jqGWxBpUPdpvRuZwX7K1r
-        Ua4x1n1iD+/k9FZX8VFNHTgAGoaYO4yRu7PESD8MpJDmD+MCUsQRjmUXSYhMfJ8jTeZe02oJ/V/
-        2cEPofTeCGRtHvEZB4rLe+7X7
-X-Received: by 2002:a05:6e02:f4f:b0:2d8:c9b1:d7b0 with SMTP id y15-20020a056e020f4f00b002d8c9b1d7b0mr4409629ilj.99.1655430111108;
-        Thu, 16 Jun 2022 18:41:51 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vtH1fB1CTBTIxUDTUJnGxdyhGmr8yEs3Uk7gUcYkCtiqMAyVuKyZ5em+h2G7ONgFzOt+7eaw==
-X-Received: by 2002:a05:6e02:f4f:b0:2d8:c9b1:d7b0 with SMTP id y15-20020a056e020f4f00b002d8c9b1d7b0mr4409616ilj.99.1655430110891;
-        Thu, 16 Jun 2022 18:41:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gOKc2ikh4vL40/zpc4P3kwwtd9Sh2ixHRUheDMcVbAY=;
+        b=pqUqQXZoKj6MLoMosrZFiUIZX5Nqonn3RzEZYDMtAhPtIRWxgW8sjHbwGU+YEWa8nd
+         rh2tt3XVmRUT6k3yVL31xCYYmwNYOxJzpPSfcER41amupHz+EJ9mx9iCI355W4LdZtI+
+         RyiImdMlynRlB7qXcRf1ahzRfYqurz/KiyKa2q6LCC6WSRtbXgKPGSYt//VlpT/GWSCB
+         7BfujLog8ULHylf0reWLpWO+tXHqs+Ug6eq9RvLkH13OX/8j2Qt++PTDuMi+6GC/TBaM
+         NqasU24zmfvJRANsoSIVPThLbfrj0l2JbHxA9wFhtYz1Im+XEGk++6/fiYn5lU8aOh/R
+         JONg==
+X-Gm-Message-State: AJIora+Jd6OTwqpK/SSOGUHEhLC2ZKkaePzfOgtvYV2Q/hHXx/epcpPG
+        uEaPYNZLE7iS2yBjZRA7UhpNWcYQWs8ETb0xsxLHllmzJbarnqm7QIT4WdqTJbn6lcCFQI+5Udw
+        nL/SpzDhfv6hLOR9HfURysAGn
+X-Received: by 2002:a05:6602:2e8c:b0:66a:4455:f47f with SMTP id m12-20020a0566022e8c00b0066a4455f47fmr3885644iow.117.1655430112627;
+        Thu, 16 Jun 2022 18:41:52 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s04pAPsDFQ2EsphsSIxc0HRk8pePN/EeNdFJuRy8R4vdX4O6YoQejClCtVPRC2WoSkD63FbA==
+X-Received: by 2002:a05:6602:2e8c:b0:66a:4455:f47f with SMTP id m12-20020a0566022e8c00b0066a4455f47fmr3885638iow.117.1655430112362;
+        Thu, 16 Jun 2022 18:41:52 -0700 (PDT)
 Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056e02140400b002d522958fb4sm1726538ilo.2.2022.06.16.18.41.49
+        by smtp.gmail.com with ESMTPSA id n4-20020a056e02140400b002d522958fb4sm1726538ilo.2.2022.06.16.18.41.51
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 16 Jun 2022 18:41:50 -0700 (PDT)
+        Thu, 16 Jun 2022 18:41:51 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
@@ -62,16 +63,18 @@ Cc:     "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com
-Subject: [PATCH RFC 0/4] kvm/mm: Allow GUP to respond to non fatal signals
-Date:   Thu, 16 Jun 2022 21:41:43 -0400
-Message-Id: <20220617014147.7299-1-peterx@redhat.com>
+Subject: [PATCH RFC 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Date:   Thu, 16 Jun 2022 21:41:44 -0400
+Message-Id: <20220617014147.7299-2-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220617014147.7299-1-peterx@redhat.com>
+References: <20220617014147.7299-1-peterx@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,68 +82,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Marked as RFC for now]
+We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
+issue with it is that not all GUP paths are able to handle signal delivers
+besides SIGKILL.
 
-One issue was reported that libvirt won't be able to stop the virtual
-machine using QMP command "stop" during a paused postcopy migration [1].
+That's not ideal for the GUP users who are actually able to handle these
+cases, like KVM.
 
-It won't work because "stop the VM" operation requires the hypervisor to
-kick all the vcpu threads out using SIG_IPI in QEMU (which is translated to
-a SIGUSR1).  However since during a paused postcopy, the vcpu threads are
-hang death at handle_userfault() so there're simply not responding to the
-kicks.  Further, the "stop" command will further hang the QMP channel.
+KVM uses GUP extensively on faulting guest pages, during which we've got
+existing infrastructures to retry a page fault at a later time.  Allowing
+the GUP to be interrupted by generic signals can make KVM related threads
+to be more responsive.  For examples:
 
-The mm has facility to process generic signal (FAULT_FLAG_INTERRUPTIBLE),
-however it's only used in the PF handlers only, not in GUP. Unluckily, KVM
-is a heavy GUP user on guest page faults.  It means we won't be able to
-interrupt a long page fault for KVM fetching guest pages with what we have
-right now.
+  (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
+      e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
+      generated to kick the vcpus out of kernel context immediately,
 
-I think it's reasonable for GUP to only listen to fatal signals, as most of
-the GUP users are not really ready to handle such case.  But actually KVM
-is not such an user, and KVM actually has rich infrastructure to handle
-even generic signals, and properly deliver the signal to the userspace.
-Then the page fault can be retried in the next KVM_RUN.
+  (2) SIGINT: which can be used with interactive hypervisor users to stop a
+      virtual machine with Ctrl-C without any delays/hangs,
 
-This patchset added FOLL_INTERRUPTIBLE to enable FAULT_FLAG_INTERRUPTIBLE,
-and let KVM be the first one to use it.
+  (3) SIGTRAP: which grants GDB capability even during page faults that are
+      stuck for a long time.
 
-Tests
-=====
+Normally hypervisor will be able to receive these signals properly, but not
+if we're stuck in a GUP for a long time for whatever reason.  It happens
+easily with a stucked postcopy migration when e.g. a network temp failure
+happens, then some vcpu threads can hang death waiting for the pages.  With
+the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
+enable the ability to trap these signals.
 
-I created a postcopy environment, pause the migration by shutting down the
-network to emulate a network failure (so the handle_userfault() will stuck
-for a long time), then I tried three things:
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ include/linux/mm.h |  1 +
+ mm/gup.c           | 33 +++++++++++++++++++++++++++++----
+ 2 files changed, 30 insertions(+), 4 deletions(-)
 
-  (1) Sending QMP command "stop" to QEMU monitor,
-  (2) Hitting Ctrl-C from QEMU cmdline,
-  (3) GDB attach to the dest QEMU process.
-
-Before this patchset, all three use case hang.  After the patchset, all
-work just like when there's not network failure at all.
-
-Please have a look, thanks.
-
-[1] https://gitlab.com/qemu-project/qemu/-/issues/1052
-
-Peter Xu (4):
-  mm/gup: Add FOLL_INTERRUPTIBLE
-  kvm: Merge "atomic" and "write" in __gfn_to_pfn_memslot()
-  kvm: Add new pfn error KVM_PFN_ERR_INTR
-  kvm/x86: Allow to respond to generic signals during slow page faults
-
- arch/arm64/kvm/mmu.c                   |  5 ++--
- arch/powerpc/kvm/book3s_64_mmu_hv.c    |  5 ++--
- arch/powerpc/kvm/book3s_64_mmu_radix.c |  5 ++--
- arch/x86/kvm/mmu/mmu.c                 | 19 ++++++++----
- include/linux/kvm_host.h               | 21 ++++++++++++-
- include/linux/mm.h                     |  1 +
- mm/gup.c                               | 33 ++++++++++++++++++---
- virt/kvm/kvm_main.c                    | 41 ++++++++++++++++----------
- virt/kvm/kvm_mm.h                      |  6 ++--
- virt/kvm/pfncache.c                    |  2 +-
- 10 files changed, 104 insertions(+), 34 deletions(-)
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index bc8f326be0ce..ebdf8a6b86c1 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2941,6 +2941,7 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+ #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
+ #define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
+ #define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
++#define FOLL_INTERRUPTIBLE  0x100000 /* allow interrupts from generic signals */
+ 
+ /*
+  * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
+diff --git a/mm/gup.c b/mm/gup.c
+index 551264407624..ad74b137d363 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -933,8 +933,17 @@ static int faultin_page(struct vm_area_struct *vma,
+ 		fault_flags |= FAULT_FLAG_WRITE;
+ 	if (*flags & FOLL_REMOTE)
+ 		fault_flags |= FAULT_FLAG_REMOTE;
+-	if (locked)
++	if (locked) {
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
++		/*
++		 * We should only grant FAULT_FLAG_INTERRUPTIBLE when we're
++		 * (at least) killable.  It also mostly means we're not
++		 * with NOWAIT.  Otherwise ignore FOLL_INTERRUPTIBLE since
++		 * it won't make a lot of sense to be used alone.
++		 */
++		if (*flags & FOLL_INTERRUPTIBLE)
++			fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
++	}
+ 	if (*flags & FOLL_NOWAIT)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_RETRY_NOWAIT;
+ 	if (*flags & FOLL_TRIED) {
+@@ -1322,6 +1331,22 @@ int fixup_user_fault(struct mm_struct *mm,
+ }
+ EXPORT_SYMBOL_GPL(fixup_user_fault);
+ 
++/*
++ * GUP always responds to fatal signals.  When FOLL_INTERRUPTIBLE is
++ * specified, it'll also respond to generic signals.  The caller of GUP
++ * that has FOLL_INTERRUPTIBLE should take care of the GUP interruption.
++ */
++static bool gup_signal_pending(unsigned int flags)
++{
++	if (fatal_signal_pending(current))
++		return true;
++
++	if (!(flags & FOLL_INTERRUPTIBLE))
++		return false;
++
++	return signal_pending(current);
++}
++
+ /*
+  * Please note that this function, unlike __get_user_pages will not
+  * return 0 for nr_pages > 0 without FOLL_NOWAIT
+@@ -1403,11 +1428,11 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+ 		 * Repeat on the address that fired VM_FAULT_RETRY
+ 		 * with both FAULT_FLAG_ALLOW_RETRY and
+ 		 * FAULT_FLAG_TRIED.  Note that GUP can be interrupted
+-		 * by fatal signals, so we need to check it before we
++		 * by fatal signals of even common signals, depending on
++		 * the caller's request. So we need to check it before we
+ 		 * start trying again otherwise it can loop forever.
+ 		 */
+-
+-		if (fatal_signal_pending(current)) {
++		if (gup_signal_pending(flags)) {
+ 			if (!pages_done)
+ 				pages_done = -EINTR;
+ 			break;
 -- 
 2.32.0
 

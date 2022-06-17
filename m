@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA56154FDB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5480854FDB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 21:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242341AbiFQTez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 15:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S240083AbiFQTf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 15:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiFQTew (ORCPT
+        with ESMTP id S230011AbiFQTfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:34:52 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C06F583BE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:34:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id gd1so4703177pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:34:52 -0700 (PDT)
+        Fri, 17 Jun 2022 15:35:21 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171FA45AC6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:35:20 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 25so7427795edw.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BisD5N5Oey4CH21DOLbixSSBEHfSu6Pz0cxd7oqB4tI=;
-        b=D5xG+liRbXbK7mctm5XQdwF1hnzDTTVGtQrtLEye1sxucuCY1fZ7400T/G3S8QDgMO
-         /app8NIRRFF28jGE5PXJchtd0iKbWu6l7HKMx/OsCZkDCjcZhFT29+ygAOIZvVwrkrYT
-         Mwjp5iMhRmqHfvNKasceMsLOf0kjatocgE7KAU8Vi3QBIqjXbL+Pz3L3kNVmXkWzbRfX
-         9T5whP1i9LcEfeqkhS3ciNmZnKEkeqGxInlLuM8jD2Cbp2i4zOkPS368170LMBA0nYA/
-         C9Ce2KlwFdbAFu0pTMMU721b6BXZMQrPAv6mVq0JEugssEZCCl1wtRJkCJS4VAy8HBsx
-         cRGw==
+        bh=GmMKIaHn/lJTjmCsykKCt9XT6H8Qsb3yGwN5zvVmoPo=;
+        b=KMDI/QIl3TzR4HQOzclvAzyn+GZoO4/UdB5GcWtbsstZxEclNwlGdNEmTLyh1D7Rcu
+         TRwVeQzr+7oaG+vdSYs12BHCacXglgTT1/gtthYzO1iNcOTicnf9uaouyc6ZS8FTZTSi
+         nRlrOSVVvk0son4VtLTZKXcxOIR/7WwTWAm0I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BisD5N5Oey4CH21DOLbixSSBEHfSu6Pz0cxd7oqB4tI=;
-        b=Jn/e6PQ3wchvhhuy8ZmRJ2tfHrI6pfHChIOb4moIxYwgi6XTA3WglMARO/JV1czbs8
-         it7DpNMLp/tUfe10GhYbBQMdGKxvyFpldrB1uIsqOPXAIG1CuLmD7ZPwWCo8ndcTWqun
-         0+fZaT25m13jOjs92jn7iEaw0uOaSlI+40NH3vdYi1VB0H+mBrASVOyoPI/0XeoAEBlA
-         ZRY5oqIWhBZH/V5kApYSclRXa0PA8j1/kdWdcvJ7kxwDMpsatskCoQSpIaggJLTTQpFq
-         Y6SFHajDJQtSPHp17xfBx5A/86CTFP6KS2+szGYd8d+SgbfVOqCQeiELuU6Ig3jVeMyn
-         GdzA==
-X-Gm-Message-State: AJIora9tJ0HmXYQxCCZqa9FYVinv3Pb8w7VEbbnM58WgZeezTy/oMJCo
-        cLr83a2I0kcwSvG3iTPhs1CCpiuJr5CuWglC++qo4A==
-X-Google-Smtp-Source: AGRyM1tCHqaeXUcNi7jyOkwzwiNLa0pSLKKCGa8pz82pIDmTfHgSgU4SEYmCPIIHAVFUt7pORqwIYXw+j3XVgfFLx30=
-X-Received: by 2002:a17:902:ba8d:b0:168:ff8f:c1f with SMTP id
- k13-20020a170902ba8d00b00168ff8f0c1fmr10823107pls.6.1655494491195; Fri, 17
- Jun 2022 12:34:51 -0700 (PDT)
+        bh=GmMKIaHn/lJTjmCsykKCt9XT6H8Qsb3yGwN5zvVmoPo=;
+        b=FooAYjf5EgKDhL18Bwsvv7yyv7G6NDsRafhMIy5KsBCOZVSnzdvfiFl6N0myzA8nm0
+         BdEj7abPdXQQfwCI2+HeVYVKEb29XHO2PxVFEnK7P26vlNMMMs2CDpKm8VwKFdBIT6YX
+         aReWnLrpnC6mAmJPpbV5E+PrpXUoCDdELgCH3rYKQHHcJg02/+fGAR+nj6Fu3fJDKgoz
+         9Db4H8zSH/lJxQdSm+bug9ls9tGPnOkIo3N5JIfyjuuBqBiN54xO9qAvFuoyqop+O/uJ
+         9YGQqMvf2H9Aym+6I/PcCX6ApdAt3fviE5UQH1VmNDn3BXAOe2NizF8u0QD3QaIyMJwm
+         LjHA==
+X-Gm-Message-State: AJIora/yrVCA+clpiP7Ha+3f5+UhWc9+Sox/ZAhwJq56Q1NH/Cq715p6
+        1m31f2K/nVIb5JKoBFotTU26botP2GlbnX4b
+X-Google-Smtp-Source: AGRyM1vzhc93TYPbsrd2p9dBysCXTz8pS6/3+21ChOvrt+wiWWcDlSZ6cFxfg7tY7ZZa1S95x3yjHg==
+X-Received: by 2002:a05:6402:3688:b0:42d:d3ba:4725 with SMTP id ej8-20020a056402368800b0042dd3ba4725mr14529823edb.212.1655494518374;
+        Fri, 17 Jun 2022 12:35:18 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id eq20-20020a056402299400b0042deea0e961sm4045562edb.67.2022.06.17.12.35.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 12:35:17 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id g4so6910927wrh.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 12:35:16 -0700 (PDT)
+X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
+ h4-20020a05600016c400b0020fcd5d4797mr10778300wrf.193.1655494516234; Fri, 17
+ Jun 2022 12:35:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
  <YqxufxqsnHjVfQOs@worktop.programming.kicks-ass.net> <2dd754f9-3a79-ed17-e423-6b411c3afb69@redhat.com>
@@ -52,76 +58,68 @@ References: <20220617091039.2257083-1-eric.dumazet@gmail.com>
  <2730b855-8f99-5a9e-707e-697d3bd9811d@redhat.com> <CANn89iJLWJMmNrLYQ0EU7_0Wri6c3Kn9vYMOiWu1Ds8Af2KOnw@mail.gmail.com>
  <7499dd05-30d1-669c-66b4-5cb06452b476@redhat.com> <CANn89iLxX_bqD8PvAkZXGWzKBKYxB3qaqQjxxdmoG91PfmvRnA@mail.gmail.com>
  <YqzQKER4JRoudTJE@hirez.programming.kicks-ass.net> <CANn89iKO1koPa5R_mvK0k2dkFaq+F0PgcbvpVt+JpzzR5xsu6g@mail.gmail.com>
- <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 17 Jun 2022 12:34:40 -0700
-Message-ID: <CALvZod4CTHV=M7SmzByNymLWAJKxXg2YNXg=7gFxOhs37UsSsA@mail.gmail.com>
+ <CAHk-=wjLOLWV2NvBPozUj0krF6fvWv6mrC4xpCBVXc=e2+dqPQ@mail.gmail.com> <CANn89i+wBM+ewcP9u+ZWDqv3zQeK7ovKB+YJf9S6Om5QkqhLHA@mail.gmail.com>
+In-Reply-To: <CANn89i+wBM+ewcP9u+ZWDqv3zQeK7ovKB+YJf9S6Om5QkqhLHA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Jun 2022 14:34:59 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com>
+Message-ID: <CAHk-=wi9ut1VkB=Ja_gYtH67DZ7cc5QBG-uJCPkOpU=MZDJSUw@mail.gmail.com>
 Subject: Re: [PATCH] locking/rwlocks: do not starve writers
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Waiman Long <longman@redhat.com>,
+        Shakeel Butt <shakeelb@google.com>,
         Eric Dumazet <eric.dumazet@gmail.com>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Will Deacon <will@kernel.org>, Roman Penyaev <rpenyaev@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 12:19 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Fri, Jun 17, 2022 at 2:25 PM Eric Dumazet <edumazet@google.com> wrote:
 >
-> On Fri, Jun 17, 2022 at 2:10 PM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > So I wonder why we replaced eventpoll spinlock with an rwlock.
+> Interesting...
 >
-> Yeah, usually we've actually gone the other way.
->
-> Spinning rwlocks are seldom a big win, unless you can get some
-> secondary indirect win out of them.
->
-> That secondary win is often:
->
->  (a) unfairness is usually very good for throughput (iow, the very
-> unfairness that you hit may *be* the reason why it looked good in some
-> benchmark, and people decided "ok, let's do this").
->
->  (b) the special case of "interrupts take the lock for reading only"
-> thing that allows other readers to not disable interrupts
->
-> IOW, the win of a spinning rwlock is not necessarily the "we allow
-> multiple concurrent readers" that you'd expect, because if you have
-> small sections of code you protect, that just isn't a big deal, and
-> the costs are in the lock bouncing etc.
->
-> It's also worth pointing out that rwlocks are only unfair *if* they
-> hit that "reader from (soft)interrupt" case. Which means that such
-> cases *really* had better either have very very short locked regions
-> (with interrupts disabled), or they really need that (b) part above.
->
-> And yes, the tasklist lock really needs the (b) part above. Disabling
-> interrupts for task traversal would be completely and entirely
-> unacceptable, because the traversal can actually be fairly expensive
-> (lots and lots of threads).
->
-> I suspect eventpoll just did the wrong thing.
->
+>  I think getrusage(RUSAGE_SELF) is blocking interrupts in the
+> possible long loop:
 
-In addition the commit log of commit a218cc491420 has this comment:
-"(I assume that write side of a rwlock does not starve, it seems
-qrwlock implementation has these guarantees)."
+Yeah, that looks bad.
 
-Since this assumption seems incorrect, is there any objection in
-reverting the commit a218cc491420? Or do we need more
-evidence/arguments/repro?
+It needs that interrupt disable due to sighand->siglock, but normally
+we would expect to *not* have a big loop inside the siglock.
+
+Nasty.
+
+I wonder if this is possibly a situation where we should actually make
+siglock be a rwlock.
+
+But considering that this RUSAGE_SELF is hopefully a special case,
+maybe we could write it differently.
+
+Instead of taking the sighand lock, we might be able to iterate just
+over the regular thread list (using the tasklist lock), and then do
+the "does sighand match" as a one-off check in
+accumulate_thread_rusage().
+
+It's not like we even really need that strict locking there, I suspect.
+
+Anyway, I should have noted in my previous email that my "rwlock is
+often not the win you'd think it is" that that is only true for this
+*spinning* rwlock.
+
+For the actual sleeping reader-writer lock (down_read/down_write and
+friends), the whole "you can have multiple readers" is often a *huge*
+deal and very central to using a rwlock. It's literally just the
+spinning one that is often better as a spinlock unless you have those
+magical reasons to use it.
+
+              Linus

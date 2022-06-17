@@ -2,69 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CB254F8DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB08D54F8E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382604AbiFQOEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S1382605AbiFQOFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbiFQOEg (ORCPT
+        with ESMTP id S233854AbiFQOFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:04:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FC513FAD;
-        Fri, 17 Jun 2022 07:04:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F55EB82A3F;
-        Fri, 17 Jun 2022 14:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC5EC3411B;
-        Fri, 17 Jun 2022 14:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655474673;
-        bh=Zf8c2aIaTSHv0y2u4YrMfalwNIOLPu62kHzTrv8BfLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D3goTISFFxCpOY5iYC/ordW7UlIOvY9urCbEEOprR/4LCahHN8jtoro6U4wZxqFTh
-         xcmONjiHAnx63AYv0LGZG16Q9xCD4r0OEWAC1H8A9kfD9xxF12uauuUi37HdTrOvMw
-         ByNhhPGLZt2Ju51CVoe1picmbdQBX0g642dtfZ0gYq65RDd0peNyx5zMCDEUYD/mxG
-         yZY/uzwTPCAVaBu7oLuDOZbDxrmqzl5UjKSmneFidmQ+zwPzEG4UrOnUha4apZ8OaW
-         LI9+gniXcaXMDLMP2iO0L5B/hZG049xzePxUSIlzoo3vAhvg7JJ2BuRemde0Xh76/S
-         94YDIMzRQNwKg==
-Date:   Fri, 17 Jun 2022 08:04:29 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     axboe@kernel.dk, ming.lei@redhat.com, jack@suse.cz,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH RFC -next] sbitmap: fix possible io hung due to lost
- wakeups
-Message-ID: <YqyJ7dwUB0z0puNc@kbusch-mbp.dhcp.thefacebook.com>
-References: <20220617141125.3024491-1-yukuai3@huawei.com>
+        Fri, 17 Jun 2022 10:05:33 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243E24C7B7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:05:24 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25HDuhhw013449;
+        Fri, 17 Jun 2022 14:04:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=cQ/SwfImF0iKXyQ+vRdYEwPl1VNj0ID776cob3LAmOE=;
+ b=aretrqeSZKp7wgWEOxg50nRj4FBz3vcj4gT3dTNu/bTdtDt/5hMETEBTP7QbfQ3ePjz4
+ 8tWTS9QCOeEz6SVkqGaN/+sPybp4WOxcvf4hvIOfEUgA3gHhkM253pMFZ8iU48Cz4MaD
+ N/ng8smAimVmFYhdmqelNxSfvBlsKDcJH4j3mrlEiee0nLEkygx3EFGAivB5s+K/SX1m
+ u6R1PqxNmwbNAF+PB3VRAdeb/EQTI6DSQX3GoT18q62kkck7yL8UqyMKodGZuWnMzt/P
+ /yJNwALFezrgSpPRqYuEkgrGl3FBgZ4DrZ84fnrHL3hocVovJUycZSzmNGWd2wtffcUM cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3grtxnr61r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 14:04:55 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25HDvHiV018747;
+        Fri, 17 Jun 2022 14:04:55 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3grtxnr614-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 14:04:55 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25HDov0X007041;
+        Fri, 17 Jun 2022 14:04:53 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3gmjp8xxrs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 14:04:53 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25HE4o4E19071304
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jun 2022 14:04:50 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A48B4C046;
+        Fri, 17 Jun 2022 14:04:50 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 327204C040;
+        Fri, 17 Jun 2022 14:04:50 +0000 (GMT)
+Received: from localhost (unknown [9.43.107.233])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Jun 2022 14:04:50 +0000 (GMT)
+Date:   Fri, 17 Jun 2022 19:34:48 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific
+ implementation
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+        <20220523175548.922671-5-sv@linux.ibm.com>
+        <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
+        <59170f18-1356-1140-70e3-30cb627f00bc@linux.vnet.ibm.com>
+        <578ec055-0d63-e579-0caa-ad57846b8995@csgroup.eu>
+        <f1decbb7-b441-a241-469a-4ba118e08212@csgroup.eu>
+        <c1e2cf35-2a8d-87e6-3a7e-7f144392db23@csgroup.eu>
+        <1655386289.uh0k7sgl1r.naveen@linux.ibm.com>
+        <30f3791c-0fdd-e635-4a85-ec457f990fae@csgroup.eu>
+        <Yqs235037JrOOhBA@hirez.programming.kicks-ass.net>
+        <d095fe9d-e713-def1-6096-540c0d0da298@csgroup.eu>
+In-Reply-To: <d095fe9d-e713-def1-6096-540c0d0da298@csgroup.eu>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1655474054.lvnbqfz64f.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _eAZPF0wTyF7jvfU_B1dMSxze1-sffUC
+X-Proofpoint-ORIG-GUID: MZdaLXiAsAdUOPu_g21V41VhfRtfUdST
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617141125.3024491-1-yukuai3@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-17_08,2022-06-17_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206170060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 10:11:25PM +0800, Yu Kuai wrote:
-> 
-> What's worse, io hung is possible in theory because wakeups might be
-> missed. For example, 2 * wake_batch tags are put, while only wake_batch
-> threads are worken:
+Christophe Leroy wrote:
+>=20
+>=20
+> Le 16/06/2022 =C3=A0 15:57, Peter Zijlstra a =C3=A9crit=C2=A0:
+>> On Thu, Jun 16, 2022 at 01:40:34PM +0000, Christophe Leroy wrote:
+>>> sizeof(u64) is always 8 by definition.
+>>>
+>>> So if size is 8 we are working on a binary file for a 64 bits target, if
+>>> not it means we are working for a 32 bits target.
+>>=20
+>> Cross-builds invalidate this I think. Best to look at something like:
+>>=20
+>>    elf->ehdr.e_ident[EI_CLASS] =3D=3D ELFCLASS32
+>>=20
+>>=20
+>=20
+> Yes that's what it does indirectly:
+>=20
+> 	int size =3D elf_class_size(elf);
+>=20
+>=20
+> With
+>=20
+> static inline int elf_class_size(struct elf *elf)
+> {
+> 	if (elf->ehdr.e_ident[EI_CLASS] =3D=3D ELFCLASS32)
+> 		return sizeof(u32);
+> 	else
+> 		return sizeof(u64);
+> }
 
-Not just in theory, io hanging sounds like the problem reported here:
+Ok, those come from the below patch:
+https://lore.kernel.org/all/c4b06b5b314183d85615765a5ce421a057674bd8.165339=
+8233.git.christophe.leroy@csgroup.eu/T/#u
 
-  https://bugzilla.kernel.org/show_bug.cgi?id=215679
+I guess it would have been clearer if 'size' was named differently:=20
+'addr_size' perhaps?
 
-I only knew that it had nothing to do with the nvme driver, though, but they
-closed the bug after it stopped happening with different hardware.
+
+- Naveen

@@ -2,77 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2FD54FE6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3660354FE59
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbiFQUcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
+        id S1349927AbiFQUdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiFQUcs (ORCPT
+        with ESMTP id S241902AbiFQUdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:32:48 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4599FFD;
-        Fri, 17 Jun 2022 13:32:46 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a2so8538806lfg.5;
-        Fri, 17 Jun 2022 13:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Nt7BK1f6cRFHz6pLGJSxHQltGnG9CIf3ikjX+Fr4Z0c=;
-        b=iZtZd6M+uTIfLBlp270F0Meh1CS3eDV5RHh0StqLHjHyXEXHs5Nppx1XK5u7JQFthi
-         6bh8XC05k/qvhk0wG/MNjGl26sOHWSZkJT9r3viYgvtqFKocHdHcXjJs9YxmmEDKLk4N
-         ckgItRtZ535KiqlH8Y6bqGMnl+H7fuUmybY/tSDexrXzIfK/gXy4EACP0okZ8LvyhqPL
-         x2ejyKULTvtaEhQaVdw5eB8D+x6W67SKT4KOkQ7vgVywnkMVIQSF+27bHGi6Huah2KAk
-         WfBK1m2EHbz576XCtxNaK0eyB1pB9OC5BSbPchGneuvh37HOPgnA19qJo50q6b0KHC0F
-         w+ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Nt7BK1f6cRFHz6pLGJSxHQltGnG9CIf3ikjX+Fr4Z0c=;
-        b=djYBwgIkRSXVB7Zx4ctToHH1hjhu1BODOVfDVw8iz8bqqvnnEAzHseevFsuhgQgB0y
-         s6hD0AhuFkjpKCc4NiqVY5VjiNHyc+LujxZw1OvvxI+UY8kng9VxRonCxXWagwDaEvzj
-         xFq/dnji3UtXZqEk/lIW/GbLA3ecgxaBi6GYlk/4JiOgP2sTNrsYI5IClg0FLT+gF4XF
-         sHl1/kkGSC+vBBhH7CDt5vrAvmLtI74wpKGnn26cIX5EAHDliOVaI0fmmf7UDos6AKKe
-         j3ZjqLxxN0kJlO9nxPsy9450HQDHXQOaqFZhKn4W6c+5h4m9Op995ckME79HTp49Zjcp
-         aAGQ==
-X-Gm-Message-State: AJIora+xRLvK1LG7/c2u06d2/4Dbr5PYbMgj3RhDa3WXuJ74fgH46Zp4
-        oyJJp24iwBB3zSat131/9/U=
-X-Google-Smtp-Source: AGRyM1vW2061WCMUWRb0OHVW1/LX+0Q11W4LRpcWpCFqKpxFHErX9s6W+TmseVwJHw2QzXUPIT2xog==
-X-Received: by 2002:a05:6512:2623:b0:47d:ace7:c804 with SMTP id bt35-20020a056512262300b0047dace7c804mr6470255lfb.647.1655497964702;
-        Fri, 17 Jun 2022 13:32:44 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id j10-20020a056512344a00b0047939239567sm752948lfr.240.2022.06.17.13.32.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 13:32:44 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 23:32:42 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 16/23] ata: ahci: Introduce firmware-specific caps
- initialization
-Message-ID: <20220617203242.3ujyknllrx2frzmq@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-17-Sergey.Semin@baikalelectronics.ru>
- <c1fa74f0-28d7-3394-6c43-5063c62db666@opensource.wdc.com>
- <20220615211134.2wxzizbpmfl2akjh@mobilestation>
- <eb65ccc8-1a59-5847-77c4-80420864eb17@opensource.wdc.com>
+        Fri, 17 Jun 2022 16:33:39 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2075.outbound.protection.outlook.com [40.107.22.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5986D4B41A;
+        Fri, 17 Jun 2022 13:33:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I67kdhRCv4UdsnYKO1HZbqWcFAhkjpDFHBsuX/JCctRwjBR0LVtV2cqWl3nZuCQ0IT5Bjhh/1HvdhbFvG90J1X2rutzc5KPaosm4cJD43vj7x7aPxahMHAR8Poj5RsgriEr0Lx5nRjVEg6/Mva3BdUCQq5nm3hMaQONOwoUsE1631KT8uqnEZAYFRp6EInbmjB0Fu54ECFL36S2KSvibHpkQ0G/20C8QUENt1DjbIYuvVW1s44Knk0qAgQatsAZy+17xaizIiPyP75odcmtFowXaM8uF7P1U00A5wd5Ku8y1BvVGXTqsFpLQa4fv/4fgYu4NNoOXnhs39aMMBdEAmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=exxPIDij8pQnXWicTtvmtpGREwxmq154pOsXwralCyg=;
+ b=RDykyiFHACh1ly4JLZ4BqFtSfzTvsBrNOPtulM2i0qxcXCn2Sigd8u2IqgfQR3R1HgXDuZRUoEdk4Xhmxq39FJSY8K09sz1T8YhDare35WZfWqk63BYkpFvsaZiYyZhMufAwm64NanCJ/w6wDtZ5xlAJh46v+Y/ETvwD47JTONSPeYg5Tc9lMd/YOpgOhZ2S3z4Zjvjf3ST92rBPEZATJinwlgbRHjV9wvp6ZE2l8/+3sksoJYmuIOTfKHM4No0iG2gBudDtG2aj/9eMYsyECFRHuMp6CF7cm3mRrdjkTltuDetyx8McIEPvltK6Ln6383mdKz0m0pk2AdpFx8R0kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=exxPIDij8pQnXWicTtvmtpGREwxmq154pOsXwralCyg=;
+ b=TfCfjenj3ootCgZrQ0ObhpXjz/gP5yQLO9c3jYf6SosUh+Uo5B3J3dHuMNsCq7LdODaKpjCuF/ZsEIl3yXSPQy/T9sKe1MZ4SR2JKwIOOMu4UC6umqfAB90vdrNgX1ltfmEsSvHGyeLPY++V9nyC1T9tgizR7xqd2G01QL8zRqLvYs5kytPFDSDG8BMu73tAe/7S8fJeLMgBw2d53FfOjKesFSkCvv/FNL1G2L3a6d+Oma9MyutloraLPheqptpDvaA7hpWAtKy3OoK8liHIkt98meVyBuZNNM+LNR9nuGuqE9xXq9s91daVFPV4Z44eBUDSeSBO4NDPaBEckgxDOA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from VI1PR03MB4973.eurprd03.prod.outlook.com (2603:10a6:803:c5::12)
+ by DBAPR03MB6438.eurprd03.prod.outlook.com (2603:10a6:10:19f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Fri, 17 Jun
+ 2022 20:33:33 +0000
+Received: from VI1PR03MB4973.eurprd03.prod.outlook.com
+ ([fe80::d18f:e481:f1fa:3e8d]) by VI1PR03MB4973.eurprd03.prod.outlook.com
+ ([fe80::d18f:e481:f1fa:3e8d%7]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
+ 20:33:33 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: [PATCH net-next 00/28] [RFC] net: dpaa: Convert to phylink
+Date:   Fri, 17 Jun 2022 16:32:44 -0400
+Message-Id: <20220617203312.3799646-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0384.namprd13.prod.outlook.com
+ (2603:10b6:208:2c0::29) To VI1PR03MB4973.eurprd03.prod.outlook.com
+ (2603:10a6:803:c5::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb65ccc8-1a59-5847-77c4-80420864eb17@opensource.wdc.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cef61822-ab56-4d9f-84fa-08da50a0a5d3
+X-MS-TrafficTypeDiagnostic: DBAPR03MB6438:EE_
+X-Microsoft-Antispam-PRVS: <DBAPR03MB6438A13B71F108822CE1A18C96AF9@DBAPR03MB6438.eurprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GALMvQso6jhkBZbALwDrUt0nHjeeXeIf6uuo4Ytdp91ANbLzIPAqurLHH0UqXdrZKq33URQN8VGwa1Zrw4R8P+gCtkU3ClURJYr8IZsWhxR9e1rhQiCTRNL1fJHV3MHHq4w/DHfsBgX5QJFAwqX2TBYbtlJlDR+aThwP4Ked1MTZ25eZEJ6uOaSYzOftskFxVuC+9pCOesP8iiQmLDnunNfXoQcwuPKTmfKYBbgkioSOV6Es6DzfJiYxFoU+YABHJWwdR0YMWnto8CPwfV9osxB4xw4kTf/FTNPX2RQrdFTVu9Dgzdwhw9VuGyFV0zpaZ4uXaF7Hz13izEU+ltmO4rDWaEb/M4SAlnUNj+63LlouZmUKNbWOF+Bxn9+Zeyru1axnJt1gEzkj4p7uimE0JMjDj6ZZ4zIXRPVTvKPyNNDET16y41VhgPDBK9ptnaPjj6BYifP+rbUrKfDPM8Si3wh45JWzKTV0zes6sIF4/5OhEoJJb+aloTO4tJzKSdOObU/lWkxd4q35vl4WYLIY3TdaRxoRE34QoevU7ZpVKHRzwDOa0i1faw/qgzTYQjjAUh//KoQsvcsqxVrYSAPueZY3pBj/yWmJPFFfQCON7B/oGCu2dBqfRE11LM/sw9sylR3YtarHoMTUVcnUTNfHqBrrOnnrWXxiR/lrISiQ0MKp6Dk5F4fzzZJwcJTyPkKn0FhiublXLBt3Yt+nZw9lXGZ1teyXIm4LddpixAL9Fo32uL79neP5lNc3by4GrUDHW18F6YdFbwQS4xbZ6s/aCB2FJYJ6GLT0781xDHJmhuc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB4973.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(44832011)(38350700002)(86362001)(7416002)(38100700002)(186003)(2616005)(5660300002)(6512007)(966005)(6486002)(52116002)(2906002)(6506007)(110136005)(8936002)(54906003)(498600001)(316002)(1076003)(66946007)(6666004)(36756003)(8676002)(26005)(83380400001)(4326008)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YgtOg/KlCT8MEbkhc09n61EbQ3EmluUbzb/fv4GP3SIxFWgiLn3LimE4YzKV?=
+ =?us-ascii?Q?CcPfZoHA+IHjuwVthE3v2627I6JUZ6zdPGPZbHU4yjfS8UCBPVd4/qPpCnKN?=
+ =?us-ascii?Q?HdPnjhqZGDbEia6y5FDarBIpOxTECRnhr9YODYmg6lpv0yeEit5262hNAQxP?=
+ =?us-ascii?Q?QNfnd9QC6LJy0Y2zeOeYrLijHeYjBQ4V2RF7HQ+fCIFcGHbvriI/n7PCPtIC?=
+ =?us-ascii?Q?g0198+C0GSJ1HdxWZNoWwMuihe4n6+sfbNtjuVlnU/jo1Ssw5K3Hfu8wwOF9?=
+ =?us-ascii?Q?cbUOaKT4ctsN2iqdilz4eDr4yEVONM7OIhju6nX1MdoRwd6auUe89OwegYNg?=
+ =?us-ascii?Q?KcaM+hORVduSej6S73WUSsx6tXWIWmwEoBWAOE+V6KbRx0NdyvgnerGl0GKn?=
+ =?us-ascii?Q?BSwri1/1KjXI+xf6zo9Hzt3WPHwMb8PVCtIhRFBqOFYZ1cxfIPevNkguepZF?=
+ =?us-ascii?Q?hdqCXMZktz2OdWv18pb760YzdwDrWqCqmTARmQmN/JREwsXYXMOop5+hHP4x?=
+ =?us-ascii?Q?VfF5LVxEpeTV9H54hG5rW/UDy8/EoPTTZdojfwJa2w3SRsA5sht1vriR9rtq?=
+ =?us-ascii?Q?RgMd8kIIt6n4y39u5mSoKgtEISIdi11Defpa49MqzAHC/0a+2s18NFbUgNvA?=
+ =?us-ascii?Q?3xCA85/sSk4u18AAzbmYMNQcJh9Gz/XJlPOtoeoVtxZcF2NOt187nkiBoMeM?=
+ =?us-ascii?Q?2w8vsqeH9Q6/4wa6lgUJlbMDesOQlfavSNCcicgXqY8QGwQxIZMtQ5YO35aH?=
+ =?us-ascii?Q?hgx3zCWXlej0dTKmPl6pIma1ocW+bZ2OWMG2vZG7+XjYjElBpY4WeSE3Wkba?=
+ =?us-ascii?Q?y669k4FJ7y/V01I5n9KIWw4E9pdiKUVNwgUT0XReGMsUAhK8OSWcQtvteXDv?=
+ =?us-ascii?Q?8yjXsE6D74lKZOk6K836uwiQVDhex0LGh7pxWHIFVA+kelnoqOY2puoZQBiX?=
+ =?us-ascii?Q?HaGodb5qZ8DOXeWCoU6i5dYzIPu5PaXgjNV/4lHhfiKVu6THwOxIRdORDTS9?=
+ =?us-ascii?Q?j1Vd88ljXuE2d/G986h7tWnhXGjUNF3tTe9X845A1jFAPd2qiCo2WlpYz6ql?=
+ =?us-ascii?Q?N32tKJbCvgYnSJop4KiMN7cpZ35iidbSFmXMkCpJ7bC9IhleB/0rIJ5UbNFQ?=
+ =?us-ascii?Q?DxwLMi9fhPANpDvzzzgHeI5vy94cUiSAHxT4eZgjAB8Bef2xzUlj/hLdGuu7?=
+ =?us-ascii?Q?iihec6ZjxeHJX3XMvsKJqZA7YX+Q0Rp4bFW5JG+rSDPHympeCJ19lfYHaWn9?=
+ =?us-ascii?Q?m+7CjBMV6mwxgvil44VtTUsnusx6zA+d/0amERC2BXOXkdSmNVu8eIEr4smW?=
+ =?us-ascii?Q?1oiTP1fLL1ooR4VZIPZGvKfWB1Mnwl21M8W7mDTSBGnNjPuj3NoBnHrCXXR/?=
+ =?us-ascii?Q?SbK95+Nl3oN7hDuBKugOpIorjEYMRfGrpAx/x2y87zMOs8B9Cy6MFBQzkUQq?=
+ =?us-ascii?Q?8kyVzgAOlOF7Yqz07kQaDRyeA3up6oAqwU65acK9osHqnnJYG5CatylCfWNH?=
+ =?us-ascii?Q?m/eulvUcH8c4Y+mmsZpMEjYte1+HpMlrJ8jf4x0uDI/jg/RQnuhIBVX9ou1X?=
+ =?us-ascii?Q?NlCSn2B7livxyRfHMd/Fo1SH9PKBeRtqbmVSqVYmgezZliMcByh82paw6/dS?=
+ =?us-ascii?Q?aJgwx1V5YWfzfDr931+XHX8qKMy3GZMUfCei1sGCnNmjaEN0hp8MGSgtwB/P?=
+ =?us-ascii?Q?kiK5CJjRTJkHZ3JrcS5it7capBkmDs8tKHFqssUac7ITfMOMPLuqxlP5dQeB?=
+ =?us-ascii?Q?IgHUrUFvq7Lt1KlPkS8PuLEH0sFa9cY=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cef61822-ab56-4d9f-84fa-08da50a0a5d3
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB4973.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 20:33:33.5469
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wEXk2mQN8GLiXYeMHEzk94FviE7Uqv6wW6q2pdlB4sDtn/YCq35lzfFjsRb8EAMsUXFz43RBqaB0wD53asTGKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR03MB6438
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,323 +127,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 09:29:50AM +0900, Damien Le Moal wrote:
-> On 2022/06/16 6:11, Serge Semin wrote:
-> > On Tue, Jun 14, 2022 at 05:42:35PM +0900, Damien Le Moal wrote:
-> >> On 6/10/22 17:17, Serge Semin wrote:
-> >>> There are systems with no BIOS or comprehensive embedded firmware which
-> >>> could be able to properly initialize the SATA AHCI controller
-> >>> platform-specific capabilities. In that case a good alternative to having
-> >>> a clever bootloader is to create a device tree node with the properties
-> >>> well describing all the AHCI-related platform specifics. All the settings
-> >>> which are normally detected and marked as available in the HBA and its
-> >>> ports capabilities fields [1] could be defined in the platform DTB by
-> >>> means of a set of the dedicated properties. Such approach perfectly fits
-> >>> to the DTB-philosophy - to provide hardware/platform description.
-> >>>
-> >>> So here we suggest to extend the SATA AHCI device tree bindings with two
-> >>> additional DT-properties:
-> >>> 1) "hba-cap" - HBA platform generic capabilities like:
-> >>>    - SSS - Staggered Spin-up support.
-> >>>    - SMPS - Mechanical Presence Switch support.
-> >>> 2) "hba-port-cap" - HBA platform port capabilities like:
-> >>>    - HPCP - Hot Plug Capable Port.
-> >>>    - MPSP - Mechanical Presence Switch Attached to Port.
-> >>>    - CPD - Cold Presence Detection.
-> >>>    - ESP - External SATA Port.
-> >>>    - FBSCP - FIS-based Switching Capable Port.
-> >>> All of these capabilities require to have a corresponding hardware
-> >>> configuration. Thus it's ok to have them defined in DTB.
-> >>>
-> >>> Even though the driver currently takes into account the state of the ESP
-> >>> and FBSCP flags state only, there is nothing wrong with having all of them
-> >>> supported by the generic AHCI library in order to have a complete OF-based
-> >>> platform-capabilities initialization procedure. These properties will be
-> >>> parsed in the ahci_platform_get_resources() method and their values will
-> >>> be stored in the saved_* fields of the ahci_host_priv structure, which in
-> >>> its turn then will be used to restore the H.CAP, H.PI and P#.CMD
-> >>> capability fields on device init and after HBA reset.
-> >>>
-> >>> Please note this modification concerns the HW-init HBA and its ports flags
-> >>> only, which are by specification [1] are supposed to be initialized by the
-> >>> BIOS/platform firmware/expansion ROM and which are normally declared in
-> >>> the one-time-writable-after-reset register fields. Even though these flags
-> >>> aren't supposed to be cleared after HBA reset some AHCI instances may
-> >>> violate that rule so we still need to perform the fields resetting after
-> >>> each reset. Luckily the corresponding functionality has already been
-> >>> partly implemented in the framework of the ahci_save_initial_config() and
-> >>> ahci_restore_initial_config() methods.
-> >>>
-> >>> [1] Serial ATA AHCI 1.3.1 Specification, p. 103
-> >>>
-> >>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> >>>
-> >>> ---
-> >>>
-> >>> Changelog v4:
-> >>> - Convert the boolean properties to the bitfield DT-properties. (@Rob)
-> >>> ---
-> >>>  drivers/ata/ahci.h             |  1 +
-> >>>  drivers/ata/libahci.c          | 51 ++++++++++++++++++++++++++++------
-> >>>  drivers/ata/libahci_platform.c | 41 +++++++++++++++++++++++++--
-> >>>  3 files changed, 82 insertions(+), 11 deletions(-)
-> >>>
-> >>> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-> >>> index 8b9826533ae5..0de221055961 100644
-> >>> --- a/drivers/ata/ahci.h
-> >>> +++ b/drivers/ata/ahci.h
-> >>> @@ -337,6 +337,7 @@ struct ahci_host_priv {
-> >>>  	u32			saved_cap;	/* saved initial cap */
-> >>>  	u32			saved_cap2;	/* saved initial cap2 */
-> >>>  	u32			saved_port_map;	/* saved initial port_map */
-> >>> +	u32			saved_port_cap[AHCI_MAX_PORTS]; /* saved port_cap */
-> >>>  	u32 			em_loc; /* enclosure management location */
-> >>>  	u32			em_buf_sz;	/* EM buffer size in byte */
-> >>>  	u32			em_msg_type;	/* EM message type */
-> >>> diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
-> >>> index 1ffaa5f5f21a..954386a2b500 100644
-> >>> --- a/drivers/ata/libahci.c
-> >>> +++ b/drivers/ata/libahci.c
-> >>> @@ -16,6 +16,7 @@
-> >>>   * http://www.intel.com/technology/serialata/pdf/rev1_1.pdf
-> >>>   */
-> >>>  
-> >>> +#include <linux/bitops.h>
-> >>>  #include <linux/kernel.h>
-> >>>  #include <linux/gfp.h>
-> >>>  #include <linux/module.h>
-> >>> @@ -443,16 +444,28 @@ static ssize_t ahci_show_em_supported(struct device *dev,
-> >>>  void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >>>  {
-> >>>  	void __iomem *mmio = hpriv->mmio;
-> >>> -	u32 cap, cap2, vers, port_map;
-> >>> +	void __iomem *port_mmio;
-> >>> +	unsigned long port_map;
-> >>> +	u32 cap, cap2, vers;
-> >>>  	int i;
-> >>>  
-> >>>  	/* make sure AHCI mode is enabled before accessing CAP */
-> >>>  	ahci_enable_ahci(mmio);
-> >>>  
-> >>> -	/* Values prefixed with saved_ are written back to host after
-> >>> -	 * reset.  Values without are used for driver operation.
-> >>> +	/*
-> >>> +	 * Values prefixed with saved_ are written back to the HBA and ports
-> >>> +	 * registers after reset. Values without are used for driver operation.
-> >>> +	 */
-> >>> +
-> >>> +	/*
-> >>> +	 * Override HW-init HBA capability fields with the platform-specific
-> >>> +	 * values. The rest of the HBA capabilities are defined as Read-only
-> >>> +	 * and can't be modified in CSR anyway.
-> >>>  	 */
-> >>> -	hpriv->saved_cap = cap = readl(mmio + HOST_CAP);
-> >>> +	cap = readl(mmio + HOST_CAP);
-> >>> +	if (hpriv->saved_cap)
-> >>> +		cap = (cap & ~(HOST_CAP_SSS | HOST_CAP_MPS)) | hpriv->saved_cap;
-> >>> +	hpriv->saved_cap = cap;
-> >>>  
-> >>>  	/* CAP2 register is only defined for AHCI 1.2 and later */
-> >>>  	vers = readl(mmio + HOST_VERSION);
-> >>> @@ -519,7 +532,7 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >>>  	/* Override the HBA ports mapping if the platform needs it */
-> >>>  	port_map = readl(mmio + HOST_PORTS_IMPL);
-> >>>  	if (hpriv->saved_port_map && port_map != hpriv->saved_port_map) {
-> >>> -		dev_info(dev, "forcing port_map 0x%x -> 0x%x\n",
-> >>> +		dev_info(dev, "forcing port_map 0x%lx -> 0x%x\n",
-> >>
-> > 
-> >> This change is not necessary.
-> > 
-> > It is. The port_map type has been changed.
-> 
-> Ignore. When I read the patches the other day, the mailer font had that "l" look
-> like a "1" :) My mistake.
+This series converts the DPAA driver to phylink. Additionally,
+it also adds a serdes driver to allow for dynamic reconfiguration
+between 1g and 10g interfaces (such as in an SFP+ slot). These changes
+are submitted together for this RFC, but they will eventually be
+submitted separately to the appropriate subsystem maintainers.
 
-Ok.)
+Only the mEMAC driver has gotten the phylink treatment for this RFC. I
+would appreciate any help towards converting/testing the 10GEC and dTSEC
+drivers. I don't have any boards with those MACs, so a large conversion
+like this has a high risk of breakage.
 
--Sergey
+I have tried to maintain backwards compatibility with existing device
+trees whereever possible. However, one area where I was unable to
+achieve this was with QSGMII. Please refer to patch 2 for details.
 
-> 
-> > 
-> >>
-> >>>  			 port_map, hpriv->saved_port_map);
-> >>>  		port_map = hpriv->saved_port_map;
-> >>>  	} else {
-> >>> @@ -527,7 +540,7 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >>>  	}
-> >>>  
-> >>>  	if (hpriv->mask_port_map) {
-> >>> -		dev_warn(dev, "masking port_map 0x%x -> 0x%x\n",
-> >>> +		dev_warn(dev, "masking port_map 0x%lx -> 0x%lx\n",
-> >>
-> >> Same.
-> > 
-> > ditto
-> > 
-> >>
-> >>>  			port_map,
-> >>>  			port_map & hpriv->mask_port_map);
-> >>>  		port_map &= hpriv->mask_port_map;
-> >>> @@ -546,7 +559,7 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >>>  		 */
-> >>>  		if (map_ports > ahci_nr_ports(cap)) {
-> >>>  			dev_warn(dev,
-> >>> -				 "implemented port map (0x%x) contains more ports than nr_ports (%u), using nr_ports\n",
-> >>> +				 "implemented port map (0x%lx) contains more ports than nr_ports (%u), using nr_ports\n",
-> >>
-> >> Same.
-> > 
-> > ditto.
-> > 
-> >>
-> >>>  				 port_map, ahci_nr_ports(cap));
-> >>>  			port_map = 0;
-> >>>  		}
-> >>> @@ -555,12 +568,26 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-> >>>  	/* fabricate port_map from cap.nr_ports for < AHCI 1.3 */
-> >>>  	if (!port_map && vers < 0x10300) {
-> >>>  		port_map = (1 << ahci_nr_ports(cap)) - 1;
-> >>> -		dev_warn(dev, "forcing PORTS_IMPL to 0x%x\n", port_map);
-> >>> +		dev_warn(dev, "forcing PORTS_IMPL to 0x%lx\n", port_map);
-> >>
-> >> And again not needed.
-> > 
-> > and ditto.
-> > 
-> >>
-> >>>  
-> >>>  		/* write the fixed up value to the PI register */
-> >>>  		hpriv->saved_port_map = port_map;
-> >>>  	}
-> >>>  
-> >>> +	/*
-> >>> +	 * Preserve the ports capabilities defined by the platform. Note there
-> >>> +	 * is no need in storing the rest of the P#.CMD fields since they are
-> >>> +	 * volatile.
-> >>> +	 */
-> >>> +	for_each_set_bit(i, &port_map, AHCI_MAX_PORTS) {
-> >>> +		if (hpriv->saved_port_cap[i])
-> >>> +			continue;
-> >>> +
-> >>> +		port_mmio = __ahci_port_base(hpriv, i);
-> >>> +		hpriv->saved_port_cap[i] =
-> >>> +			readl(port_mmio + PORT_CMD) & PORT_CMD_CAP;
-> >>> +	}
-> >>> +
-> >>>  	/* record values to use during operation */
-> >>>  	hpriv->cap = cap;
-> >>>  	hpriv->cap2 = cap2;
-> >>> @@ -590,13 +617,21 @@ EXPORT_SYMBOL_GPL(ahci_save_initial_config);
-> >>>  static void ahci_restore_initial_config(struct ata_host *host)
-> >>>  {
-> >>>  	struct ahci_host_priv *hpriv = host->private_data;
-> >>> +	unsigned long port_map = hpriv->port_map;
-> >>>  	void __iomem *mmio = hpriv->mmio;
-> >>> +	void __iomem *port_mmio;
-> >>> +	int i;
-> >>>  
-> >>>  	writel(hpriv->saved_cap, mmio + HOST_CAP);
-> >>>  	if (hpriv->saved_cap2)
-> >>>  		writel(hpriv->saved_cap2, mmio + HOST_CAP2);
-> >>>  	writel(hpriv->saved_port_map, mmio + HOST_PORTS_IMPL);
-> >>>  	(void) readl(mmio + HOST_PORTS_IMPL);	/* flush */
-> >>> +
-> >>> +	for_each_set_bit(i, &port_map, AHCI_MAX_PORTS) {
-> >>> +		port_mmio = __ahci_port_base(hpriv, i);
-> >>> +		writel(hpriv->saved_port_cap[i], port_mmio + PORT_CMD);
-> >>> +	}
-> >>>  }
-> >>>  
-> >>>  static unsigned ahci_scr_offset(struct ata_port *ap, unsigned int sc_reg)
-> >>> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-> >>> index efe640603f3f..8b542a8bc487 100644
-> >>> --- a/drivers/ata/libahci_platform.c
-> >>> +++ b/drivers/ata/libahci_platform.c
-> >>> @@ -23,6 +23,7 @@
-> >>>  #include <linux/pm_runtime.h>
-> >>>  #include <linux/of_platform.h>
-> >>>  #include <linux/reset.h>
-> >>> +
-> >>
-> >> white line change.
-> > 
-> > Ok. I'll drop it.
-> > 
-> > -Sergey
-> > 
-> >>
-> >>>  #include "ahci.h"
-> >>>  
-> >>>  static void ahci_host_stop(struct ata_host *host);
-> >>> @@ -383,6 +384,34 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
-> >>>  	return rc;
-> >>>  }
-> >>>  
-> >>> +static int ahci_platform_get_firmware(struct ahci_host_priv *hpriv,
-> >>> +				      struct device *dev)
-> >>> +{
-> >>> +	struct device_node *child;
-> >>> +	u32 port;
-> >>> +
-> >>> +	if (!of_property_read_u32(dev->of_node, "hba-cap", &hpriv->saved_cap))
-> >>> +		hpriv->saved_cap &= (HOST_CAP_SSS | HOST_CAP_MPS);
-> >>> +
-> >>> +	of_property_read_u32(dev->of_node,
-> >>> +			     "ports-implemented", &hpriv->saved_port_map);
-> >>> +
-> >>> +	for_each_child_of_node(dev->of_node, child) {
-> >>> +		if (!of_device_is_available(child))
-> >>> +			continue;
-> >>> +
-> >>> +		if (of_property_read_u32(child, "reg", &port)) {
-> >>> +			of_node_put(child);
-> >>> +			return -EINVAL;
-> >>> +		}
-> >>> +
-> >>> +		if (!of_property_read_u32(child, "hba-port-cap", &hpriv->saved_port_cap[port]))
-> >>> +			hpriv->saved_port_cap[port] &= PORT_CMD_CAP;
-> >>> +	}
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>>  /**
-> >>>   * ahci_platform_get_resources - Get platform resources
-> >>>   * @pdev: platform device to get resources for
-> >>> @@ -523,9 +552,6 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
-> >>>  		goto err_out;
-> >>>  	}
-> >>>  
-> >>> -	of_property_read_u32(dev->of_node,
-> >>> -			     "ports-implemented", &hpriv->saved_port_map);
-> >>> -
-> >>>  	if (child_nodes) {
-> >>>  		for_each_child_of_node(dev->of_node, child) {
-> >>>  			u32 port;
-> >>> @@ -590,6 +616,15 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
-> >>>  		if (rc == -EPROBE_DEFER)
-> >>>  			goto err_out;
-> >>>  	}
-> >>> +
-> >>> +	/*
-> >>> +	 * Retrieve firmware-specific flags which then will be used to set
-> >>> +	 * the HW-init fields of HBA and its ports
-> >>> +	 */
-> >>> +	rc = ahci_platform_get_firmware(hpriv, dev);
-> >>> +	if (rc)
-> >>> +		goto err_out;
-> >>> +
-> >>>  	pm_runtime_enable(dev);
-> >>>  	pm_runtime_get_sync(dev);
-> >>>  	hpriv->got_runtime_pm = true;
-> >>
-> >>
-> >> -- 
-> >> Damien Le Moal
-> >> Western Digital Research
-> 
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
+The serdes driver is mostly functional (but not quite, see patch 25).
+However, I am not quite sure about the implementation details. I have made
+a fairly extensive commentary on the driver in patch 1, so hopefully that
+can provide some context. This series only adds support for the
+LS1046ARDB SerDes, but it should be fairly straightforward to add
+support for other SoCs and boards. Patches 26-27 should show the typical
+steps.
+
+Most of this series can be applied as-is. In particular, patches 4-21
+are essentially cleanups which stand on their own merits.
+
+Patches 4-8 were first submitted as [1].
+
+[1] https://lore.kernel.org/netdev/20220531195851.1592220-1-sean.anderson@seco.com/
+
+
+Sean Anderson (28):
+  dt-bindings: phy: Add QorIQ SerDes binding
+  dt-bindings: net: fman: Add additional interface properties
+  phy: fsl: Add QorIQ SerDes driver
+  net: fman: Convert to SPDX identifiers
+  net: fman: Don't pass comm_mode to enable/disable
+  net: fman: Store en/disable in mac_device instead of mac_priv_s
+  net: fman: dtsec: Always gracefully stop/start
+  net: fman: Get PCS node in per-mac init
+  net: fman: Store initialization function in match data
+  net: fman: Move struct dev to mac_device
+  net: fman: Configure fixed link in memac_initialization
+  net: fman: Export/rename some common functions
+  net: fman: memac: Use params instead of priv for max_speed
+  net: fman: Move initialization to mac-specific files
+  net: fman: Mark mac methods static
+  net: fman: Inline several functions into initialization
+  net: fman: Remove internal_phy_node from params
+  net: fman: Map the base address once
+  net: fman: Pass params directly to mac init
+  net: fman: Use mac_dev for some params
+  net: fman: Clean up error handling
+  net: fman: memac: Add serdes support
+  net: fman: memac: Use lynx pcs driver
+  net: dpaa: Use mac_dev variable in dpaa_netdev_init
+  [RFC] net: dpaa: Convert to phylink
+  arm64: dts: ls1046ardb: Add serdes bindings
+  arm64: dts: ls1046a: Add SerDes bindings
+  arm64: dts: ls1046a: Specify which MACs support RGMII
+
+ .../devicetree/bindings/net/fsl-fman.txt      |   49 +-
+ .../bindings/phy/fsl,qoriq-serdes.yaml        |   78 +
+ Documentation/driver-api/phy/index.rst        |    1 +
+ Documentation/driver-api/phy/qoriq.rst        |   91 ++
+ MAINTAINERS                                   |    6 +
+ .../boot/dts/freescale/fsl-ls1046-post.dtsi   |    8 +
+ .../boot/dts/freescale/fsl-ls1046a-rdb.dts    |   32 +
+ .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |   12 +
+ drivers/net/ethernet/freescale/dpaa/Kconfig   |    4 +-
+ .../net/ethernet/freescale/dpaa/dpaa_eth.c    |  100 +-
+ .../ethernet/freescale/dpaa/dpaa_eth_sysfs.c  |    2 +-
+ .../ethernet/freescale/dpaa/dpaa_ethtool.c    |   82 +-
+ drivers/net/ethernet/freescale/fman/Makefile  |    3 +-
+ drivers/net/ethernet/freescale/fman/fman.c    |   31 +-
+ drivers/net/ethernet/freescale/fman/fman.h    |   31 +-
+ .../net/ethernet/freescale/fman/fman_dtsec.c  |  319 ++--
+ .../net/ethernet/freescale/fman/fman_dtsec.h  |   58 +-
+ .../net/ethernet/freescale/fman/fman_keygen.c |   29 +-
+ .../net/ethernet/freescale/fman/fman_keygen.h |   29 +-
+ .../net/ethernet/freescale/fman/fman_mac.h    |   29 -
+ .../net/ethernet/freescale/fman/fman_memac.c  |  864 +++++-----
+ .../net/ethernet/freescale/fman/fman_memac.h  |   57 +-
+ .../net/ethernet/freescale/fman/fman_muram.c  |   31 +-
+ .../net/ethernet/freescale/fman/fman_muram.h  |   32 +-
+ .../net/ethernet/freescale/fman/fman_port.c   |   29 +-
+ .../net/ethernet/freescale/fman/fman_port.h   |   29 +-
+ drivers/net/ethernet/freescale/fman/fman_sp.c |   29 +-
+ drivers/net/ethernet/freescale/fman/fman_sp.h |   28 +-
+ .../net/ethernet/freescale/fman/fman_tgec.c   |  155 +-
+ .../net/ethernet/freescale/fman/fman_tgec.h   |   54 +-
+ drivers/net/ethernet/freescale/fman/mac.c     |  645 +-------
+ drivers/net/ethernet/freescale/fman/mac.h     |   62 +-
+ drivers/phy/freescale/Kconfig                 |   19 +
+ drivers/phy/freescale/Makefile                |    1 +
+ drivers/phy/freescale/phy-qoriq.c             | 1441 +++++++++++++++++
+ 35 files changed, 2562 insertions(+), 1908 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
+ create mode 100644 Documentation/driver-api/phy/qoriq.rst
+ create mode 100644 drivers/phy/freescale/phy-qoriq.c
+
+-- 
+2.35.1.1320.gc452695387.dirty
+

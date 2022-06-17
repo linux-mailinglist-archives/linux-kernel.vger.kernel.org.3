@@ -2,131 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E68F54F062
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF9B54F069
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 07:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379944AbiFQE77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 00:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S1380052AbiFQFGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 01:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbiFQE76 (ORCPT
+        with ESMTP id S237181AbiFQFGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 00:59:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C468663CE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 21:59:56 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o245C-00045B-Mw; Fri, 17 Jun 2022 06:59:46 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o2459-000zh1-32; Fri, 17 Jun 2022 06:59:44 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o2459-00FBSf-RL; Fri, 17 Jun 2022 06:59:43 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 17 Jun 2022 01:06:00 -0400
+X-Greylist: delayed 1016 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Jun 2022 22:05:59 PDT
+Received: from mx0b-00256a01.pphosted.com (mx0b-00256a01.pphosted.com [67.231.153.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975E66AC1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 22:05:59 -0700 (PDT)
+Received: from pps.filterd (m0119692.ppops.net [127.0.0.1])
+        by mx0b-00256a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H4VHeF017372
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:05:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyu.edu; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding;
+ s=20180315; bh=3kogNl48Igq0sjUSHZ2cHxkX5GFxsC19iw2HB9fEgUg=;
+ b=OY/juXmnpHNv/r4NdIN0U6Grcc/7h/Qcne4sUSimbvAbcsruYLErq9FUEdyAP6xlzouK
+ QO23OZ2l7daDTbZupxoQctZ8f81pLXGCGAeCSGU/QebV72S/WLAs5+CYUbIaG4atng1W
+ YGdLQ1KgTrpnePJHrscHrUOqBMzH9PSWpl8S8PxeYN9dkCjjX0yUgUZ2n4mPr60v+i6+
+ 7GUnoKDypBEbR720z1cvgikW03dIx0M1fhXObryfN/YCTGDYuhb4/NcsSvSyXJJjFScF
+ Rfe5YSgjMHwPAIrBjoqMdAeOE8wuoi9ZbWPd9kOFyznEi0DN6eh6cq6TIw/Y+0Kv3kL6 1A== 
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+        by mx0b-00256a01.pphosted.com (PPS) with ESMTPS id 3grjnm88mn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 01:05:58 -0400
+Received: by mail-qk1-f197.google.com with SMTP id i10-20020a05620a404a00b006a7609f54c6so3931124qko.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Jun 2022 22:05:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3kogNl48Igq0sjUSHZ2cHxkX5GFxsC19iw2HB9fEgUg=;
+        b=EG3TaQiPmCZSHlh8/QZoCt5bNMCDU2jNK9vOpnPu27yoescqKuBRH+vTEOPIbPwpDO
+         qAvJLvr+WT7cgRiySWH+acaKHlytcsGmgKumjPJk4bav1mwWonBjG6iRQYOvS8j9xsoC
+         5NiMyE0byNzuP6u0v8cJtoJxfZ8p8+/rzWSoUYmvic5i1T+DV9cWBRTGnwmtlMtdqFtm
+         ZiG2dogAplc1xKrrCQ5n+EpdJXTW6hOv1mqlsLD2KfwCRy48qMafDyEgxOUFZN48FjAB
+         5MU5xzc1ESQ/35JrfLTsD4wZD+nfZEs0i1B2vERdWjvQ9APdn8PPU7PuumI1tpWBs7Ry
+         KEAQ==
+X-Gm-Message-State: AJIora+YyJw9ajhKnvFAEedGwMNFZB/gYyKRQCnL/hLuwFdVlhYXJfTj
+        O2ENvxucxGfuCHnpPMpyN4yjMnouPrKITZWFmBNDggeFmjP4yRUCGFNqBIm6UaH+KEE+t8xCW9r
+        5bsl83AWWqijgHYNI2p2aZH0=
+X-Received: by 2002:a05:6214:d0f:b0:46b:af12:e20b with SMTP id 15-20020a0562140d0f00b0046baf12e20bmr7039993qvh.104.1655442358174;
+        Thu, 16 Jun 2022 22:05:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sg8jFqi+Qebx+it8uDmKa1ceXVEsfXzuiBZhdtgpT5p68GMEjUwmDg3+v/NFZJQvLREOm+ZA==
+X-Received: by 2002:a05:6214:d0f:b0:46b:af12:e20b with SMTP id 15-20020a0562140d0f00b0046baf12e20bmr7039985qvh.104.1655442357941;
+        Thu, 16 Jun 2022 22:05:57 -0700 (PDT)
+Received: from localhost.localdomain (cpe-66-65-49-54.nyc.res.rr.com. [66.65.49.54])
+        by smtp.gmail.com with ESMTPSA id h22-20020ac85856000000b00304e95ec0fbsm3556530qth.89.2022.06.16.22.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 22:05:57 -0700 (PDT)
+From:   HighW4y2H3ll <huzh@nyu.edu>
+To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2 1/1] net: phy: at803x: fix NULL pointer dereference on AR9331 PHY
-Date:   Fri, 17 Jun 2022 06:59:43 +0200
-Message-Id: <20220617045943.3618608-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+Cc:     HighW4y2H3ll <huzh@nyu.edu>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] Fix buffer overflow in hinic_devlink.c:hinic_flash_fw
+Date:   Fri, 17 Jun 2022 01:01:02 -0400
+Message-Id: <20220617050101.37620-1-huzh@nyu.edu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: H2F68lZii1It7rK680HeFkfyb68Ztqe6
+X-Proofpoint-ORIG-GUID: H2F68lZii1It7rK680HeFkfyb68Ztqe6
+X-Orig-IP: 209.85.222.197
+X-Proofpoint-Spam-Details: rule=outbound_bp_notspam policy=outbound_bp score=0 phishscore=0
+ adultscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=917 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206170023
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Latest kernel will explode on the PHY interrupt config, since it depends
-now on allocated priv. So, run probe to allocate priv to fix it.
-
- ar9331_switch ethernet.1:10 lan0 (uninitialized): PHY [!ahb!ethernet@1a000000!mdio!switch@10:00] driver [Qualcomm Atheros AR9331 built-in PHY] (irq=13)
- CPU 0 Unable to handle kernel paging request at virtual address 0000000a, epc == 8050e8a8, ra == 80504b34
-         ...
- Call Trace:
- [<8050e8a8>] at803x_config_intr+0x5c/0xd0
- [<80504b34>] phy_request_interrupt+0xa8/0xd0
- [<8050289c>] phylink_bringup_phy+0x2d8/0x3ac
- [<80502b68>] phylink_fwnode_phy_connect+0x118/0x130
- [<8074d8ec>] dsa_slave_create+0x270/0x420
- [<80743b04>] dsa_port_setup+0x12c/0x148
- [<8074580c>] dsa_register_switch+0xaf0/0xcc0
- [<80511344>] ar9331_sw_probe+0x370/0x388
- [<8050cb78>] mdio_probe+0x44/0x70
- [<804df300>] really_probe+0x200/0x424
- [<804df7b4>] __driver_probe_device+0x290/0x298
- [<804df810>] driver_probe_device+0x54/0xe4
- [<804dfd50>] __device_attach_driver+0xe4/0x130
- [<804dcb00>] bus_for_each_drv+0xb4/0xd8
- [<804dfac4>] __device_attach+0x104/0x1a4
- [<804ddd24>] bus_probe_device+0x48/0xc4
- [<804deb44>] deferred_probe_work_func+0xf0/0x10c
- [<800a0ffc>] process_one_work+0x314/0x4d4
- [<800a17fc>] worker_thread+0x2a4/0x354
- [<800a9a54>] kthread+0x134/0x13c
- [<8006306c>] ret_from_kernel_thread+0x14/0x1c
-
-Same Issue would affect some other PHYs (QCA8081, QCA9561), so fix it
-too.
-
-Fixes: 3265f4218878 ("net: phy: at803x: add fiber support")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: zhenghao hu <huzh@nyu.edu>
 ---
-changes v2:
-- add fixes for QCA8081 and QCA9561
+ drivers/net/ethernet/huawei/hinic/hinic_port.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- drivers/net/phy/at803x.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 6a467e7817a6..59fe356942b5 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -2072,6 +2072,8 @@ static struct phy_driver at803x_driver[] = {
- 	/* ATHEROS AR9331 */
- 	PHY_ID_MATCH_EXACT(ATH9331_PHY_ID),
- 	.name			= "Qualcomm Atheros AR9331 built-in PHY",
-+	.probe			= at803x_probe,
-+	.remove			= at803x_remove,
- 	.suspend		= at803x_suspend,
- 	.resume			= at803x_resume,
- 	.flags			= PHY_POLL_CABLE_TEST,
-@@ -2087,6 +2089,8 @@ static struct phy_driver at803x_driver[] = {
- 	/* Qualcomm Atheros QCA9561 */
- 	PHY_ID_MATCH_EXACT(QCA9561_PHY_ID),
- 	.name			= "Qualcomm Atheros QCA9561 built-in PHY",
-+	.probe			= at803x_probe,
-+	.remove			= at803x_remove,
- 	.suspend		= at803x_suspend,
- 	.resume			= at803x_resume,
- 	.flags			= PHY_POLL_CABLE_TEST,
-@@ -2151,6 +2155,8 @@ static struct phy_driver at803x_driver[] = {
- 	PHY_ID_MATCH_EXACT(QCA8081_PHY_ID),
- 	.name			= "Qualcomm QCA8081",
- 	.flags			= PHY_POLL_CABLE_TEST,
-+	.probe			= at803x_probe,
-+	.remove			= at803x_remove,
- 	.config_intr		= at803x_config_intr,
- 	.handle_interrupt	= at803x_handle_interrupt,
- 	.get_tunable		= at803x_get_tunable,
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.h b/drivers/net/ethernet/huawei/hinic/hinic_port.h
+index c9ae3d4dc547..4a50e75a2424 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_port.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_port.h
+@@ -13,6 +13,7 @@
+ #include <linux/bitops.h>
+ 
+ #include "hinic_dev.h"
++#include "hinic_devlink.h"
+ 
+ #define HINIC_RSS_KEY_SIZE	40
+ #define HINIC_RSS_INDIR_SIZE	256
+@@ -751,7 +752,7 @@ struct hinic_cmd_update_fw {
+ 	u32 setion_total_len;
+ 	u32 fw_section_version;
+ 	u32 section_offset;
+-	u32 data[384];
++	u32 data[MAX_FW_FRAGMENT_LEN];
+ };
+ 
+ int hinic_port_add_mac(struct hinic_dev *nic_dev, const u8 *addr,
 -- 
-2.30.2
+2.35.1
 

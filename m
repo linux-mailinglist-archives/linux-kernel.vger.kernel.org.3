@@ -2,109 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15A154FB87
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CEB54FC47
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 19:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383059AbiFQQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S1382767AbiFQRgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 13:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382967AbiFQQvv (ORCPT
+        with ESMTP id S1382714AbiFQRgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:51:51 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7240753724
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:50:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0D50CE2964
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 16:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5784C3411C;
-        Fri, 17 Jun 2022 16:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655484621;
-        bh=prjUJrbVE5x0yiMzgyo3mK2A9LSWth8Gi1HX3PvfTp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OTyy4eLFepkJl5S9gSy7oHiErOL6sTJtIx0492eQEMH/6N5jsFc9onMCQ+ptZHGmw
-         Ns+rhHPxCW18IZjEWd90XlcKuHwxI7kp1eDtiQ5PF2onODY5sCAv0Nh5aZv19y9KQr
-         Rmqix7rw8rtse2JlJqBUsWFbnRAiFP0U1WcQID7E8Q3P9rT5xAeli9M+vxhV763Hgl
-         RtVqNk+mOUQkkNXyKLzimMxmucAX7hyQiFBRsX1TupL59AcFgL32YBJSyphHDLC6SS
-         iAQUj4s9I5siLd0uWA/VSE1FjopbL8opasJM2xSruv+jnGjzSN4PfztamyEuzKpIBR
-         /H9LsimG4/zxA==
-Date:   Fri, 17 Jun 2022 09:50:19 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] Char/Misc driver fixes 5.19-rc3
-Message-ID: <Yqywy+Md2AfGDu8v@dev-arch.thelio-3990X>
-References: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
+        Fri, 17 Jun 2022 13:36:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5900735249
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 10:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655487367; x=1687023367;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ojZXvlomwwAk5LBD57zzpFvYqmoQfWAuuImQZsSw1Hk=;
+  b=TwXM+jUHNYW0jvM/5FmKnoeh/XAK8mxHEEpxBdr+6A/Q/Mmn1Z7I8XvD
+   0JvfkTHMDS/0GjYrU+fEpDJVoq3rabqVUaW1Fry3+TjvSmftMtDTNi2t9
+   Ckb3JkzwGgZMPjKMCiv10TzGF2bHi8fGZiJezyQGChpZftEFqOgUdLmuG
+   ccvneUcmsZoWNh6jmFFN3ig7elbvAFBRYvT0frtm7CM1OwxcE4mKI0+6l
+   vgg/kTKnfJV85yUx1O8t9YtuzBr7mwKdKFthkopSYzmuCm19IUiAhk4MS
+   f3PfiLBk5RkQowowGETFZ/mHXsLHXQusC+H+T49CPYdNH8uYqyu7+dmBb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280264943"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280264943"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:50:25 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="613597090"
+Received: from schen9-mobl.amr.corp.intel.com ([10.212.204.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:50:24 -0700
+Message-ID: <b87ddfd7a8dd418edfcdbad22a4fc1e9ef03109a.camel@linux.intel.com>
+Subject: Re: [PATCH v4 1/2] sched: Add per_cpu cluster domain info and
+ cpus_share_resources API
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>, peterz@infradead.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, gautham.shenoy@amd.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, prime.zeng@huawei.com,
+        jonathan.cameron@huawei.com, ego@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com, linuxarm@huawei.com, 21cnbao@gmail.com,
+        guodong.xu@linaro.org, hesham.almatary@huawei.com,
+        john.garry@huawei.com, shenyang39@huawei.com, feng.tang@intel.com
+Date:   Fri, 17 Jun 2022 09:50:24 -0700
+In-Reply-To: <6bf4f032-7d07-d4a4-4f5a-28f3871131c0@amd.com>
+References: <20220609120622.47724-1-yangyicong@hisilicon.com>
+         <20220609120622.47724-2-yangyicong@hisilicon.com>
+         <e000b124-afd4-28e1-fde2-393b0e38ce19@amd.com>
+         <81fbcadb-a58d-2cef-9c05-154555ec1d68@huawei.com>
+         <6bf4f032-7d07-d4a4-4f5a-28f3871131c0@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, 2022-06-17 at 17:50 +0530, K Prateek Nayak wrote:
+> 
+> 
+> --
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index e9f3dc6dcbf4..97a3895416ab 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1750,12 +1750,12 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+>  	return sd;
+>  }
+>  
+> +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+> +DECLARE_PER_CPU(int, sd_share_id);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>  DECLARE_PER_CPU(int, sd_llc_size);
+>  DECLARE_PER_CPU(int, sd_llc_id);
+> -DECLARE_PER_CPU(int, sd_share_id);
+>  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+> -DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+> --
+> 
+> The System-map of each kernel is as follows:
+> 
+> - On "tip"
+> 
+> 0000000000020518 D sd_asym_cpucapacity
+> 0000000000020520 D sd_asym_packing
+> 0000000000020528 D sd_numa
+> 0000000000020530 D sd_llc_shared
+> 0000000000020538 D sd_llc_id
+> 000000000002053c D sd_llc_size
+> -------------------------------------------- 64B Cacheline Boundary
+> 0000000000020540 D sd_llc
+> 
+> - On "tip + Patch 1 only" and "tip + both patches"
+> 
+> 0000000000020518 D sd_asym_cpucapacity
+> 0000000000020520 D sd_asym_packing
+> 0000000000020528 D sd_numa
+> 0000000000020530 D sd_cluster     <-----
+> 0000000000020538 D sd_llc_shared
+> -------------------------------------------- 64B Cacheline Boundary
+> 0000000000020540 D sd_share_id    <-----
+> 0000000000020544 D sd_llc_id
+> 0000000000020548 D sd_llc_size
+> 0000000000020550 D sd_llc
+> 
+> 
+> - On "tip + both patches (Move declaration to top)"
+> 
+> 0000000000020518 D sd_asym_cpucapacity
+> 0000000000020520 D sd_asym_packing
+> 0000000000020528 D sd_numa
+> 0000000000020530 D sd_llc_shared
+> 0000000000020538 D sd_llc_id
+> 000000000002053c D sd_llc_size
+> -------------------------------------------- 64B Cacheline Boundary
+> 0000000000020540 D sd_llc
 
-On Fri, Jun 17, 2022 at 10:15:34AM +0200, Greg KH wrote:
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-> 
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.19-rc3
-> 
-> for you to fetch changes up to 0a35780c755ccec097d15c6b4ff8b246a89f1689:
-> 
->   eeprom: at25: Split reads into chunks and cap write size (2022-06-10 16:42:48 +0200)
-> 
-> ----------------------------------------------------------------
-> Char/Misc driver fixes for 5.19-rc3
-> 
-> Here are some small char/misc driver fixes for 5.19-rc3 that resolve
-> some reported issues.
-> 
-> They include:
-> 	- mei driver fixes
-> 	- comedi driver fix
-> 	- rtsx build warning fix
-> 	- fsl-mc-bus driver fix
-> 
-> All of these have been in linux-next for a while with no reported
-> issues.
-> 
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Wonder if it will help to try keep sd_llc and sd_llc_size into the same
+cache line.  They are both used in the wake up path. 
 
-I think you tagged the wrong branch (char-misc-next vs. char-misc-linus)?
-The commits below do not match the tag description above.
 
-Cheers,
-Nathan
+> 0000000000020548 D sd_share_id    <-----
+> 0000000000020550 D sd_cluster     <-----
+> 
+> > Or change the layout a bit to see if there's any difference,
+> > like:
+> > 
+> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+> >  DEFINE_PER_CPU(int, sd_llc_size);
+> >  DEFINE_PER_CPU(int, sd_llc_id);
+> >  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+> > +DEFINE_PER_CPU(int, sd_share_id);
+> > +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+> > 
+> > I need to further look into it and have some tests on a SMT machine. Would you mind to share
+> > the kernel config as well? I'd like to compare the config as well.
+> 
+> I've attached the kernel config used to build the test kernel
+> to this mail.
+> 
+> > Thanks,
+> > Yicong
+> 
+> We are trying to debug the issue using perf and find an optimal
+> arrangement of the per cpu declarations to get the relevant data
+> used in the wakeup path on the same 64B cache line.
 
-> ----------------------------------------------------------------
-> Brad Bishop (1):
->       eeprom: at25: Split reads into chunks and cap write size
+A check of perf c2c profile difference between tip and the move new declarations to
+the top case could be useful.  It may give some additional clues of possibel 
+false sharing issues.
+
+Tim
+
 > 
-> Miaoqian Lin (1):
->       misc: atmel-ssc: Fix IRQ check in ssc_probe
-> 
-> Shreenidhi Shedi (1):
->       char: lp: remove redundant initialization of err
-> 
->  drivers/char/lp.c          |  2 +-
->  drivers/misc/atmel-ssc.c   |  4 +-
->  drivers/misc/eeprom/at25.c | 93 ++++++++++++++++++++++++++--------------------
->  3 files changed, 56 insertions(+), 43 deletions(-)
-> 
+> We'll keep you posted of out finding. Let me know if you need
+> anything else in the meantime.
+> --
+> Thanks and Regards,
+> Prateek
+

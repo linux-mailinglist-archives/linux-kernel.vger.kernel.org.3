@@ -2,137 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F340A54FE15
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDD754FE17
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 22:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238735AbiFQUF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 16:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S1345946AbiFQUGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 16:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbiFQUF4 (ORCPT
+        with ESMTP id S233252AbiFQUGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:05:56 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202315B898
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:05:55 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eo8so7575511edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:05:55 -0700 (PDT)
+        Fri, 17 Jun 2022 16:06:00 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C3E5B898
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:05:58 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id u2so5027200pfc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:05:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=84H7ZXb1eHOGnR6hMHCvky7gquFVieaFdlbDiS5ZCm0=;
-        b=Q5DVApFrs0pH6BvUbcxI+mDXaiSweterCD+P4MWFO6Y93WD1AyRYi8Njqa/TN1jP7y
-         vD6XKCNPJM/JbkAi3C4Ej1RsWL+5nBBxbtqydo/DEMYUQZkO4q7IzOTn57uPmZRbruVr
-         1n5drP9oEQW34cnHA8A2UivmnHGlIdp3R05c4=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vVRxoQn7AiO7gd76vj7+dz8M6TQagl0KShpJJUpQGGI=;
+        b=QjF7kc43eYBmG0w8ifoYZTIss00kABg2PBjxvBFNwNGsG3PoOUuTdVrmbUbxXJ/Hxd
+         NttQU77Jb+buy+tG0Uq0kI/kTJVyr/TkcnlSv/RdpsvDtehLCa0qfgKXgnpnLIhx2BXJ
+         GzrIZ0ENJBiT4loorikudoKlk6C1cRg9ojPTI1KZ5N/NEgiqSHOQ4e94ElVEPiFVW2dF
+         k+pgTxOubFE0f6wB0CF6PU9Qr7SmQfvEuyXmoCcEoPkzyw780smdlx8ABkCyHFPcbYSe
+         hmoRs6lyFtHshpJpepRkaylYSD3iPY7Z1UnVxIlruBFKxTD38TevtKQn+haiwYuOVQ4K
+         EqPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=84H7ZXb1eHOGnR6hMHCvky7gquFVieaFdlbDiS5ZCm0=;
-        b=l+PTRny6kq8c0Yz2uMby/Q4vMEAnu1NuKSTLS01Xs3MbcOPNw/PZNzT4nMPehYnB/2
-         GSVRcVL0U2yMPKAl3L3veK7gJ/jYLgLbIF1BFxf7akXvSyp0y6eSJYClZHqW8sORfwhD
-         6WYMqI3tL5Zvi+nqR9srEri/eMawLcnR/ve/1ruIna+ayzuS+so3uRQiCT6X/W35xdpi
-         wspub55lIb26GGsLB65bi7YgN9BpBZLDpsBxk+MN6hf/ZvU0yUQOw1qKurPQXXRHTyig
-         GCTVy8n4bNaRVDQEBY5OGB1Cni5m6j1rf9rKWQGfZLO/UCEEE8jfZWAVWiwsgMFrzM5b
-         aaBA==
-X-Gm-Message-State: AJIora+V5UDJwnPUPQpAmlsgcjnJmjIbBc+Ai+R37jyV8ALFGvXI5KQl
-        ogrGjyWRmH5eB+rEfJJqdUdjXv6CjDVbTmzJ4ns=
-X-Google-Smtp-Source: AGRyM1sU0o0wkRq+CSMHJSvZK3xfaA4A9wYjw3H65lEBfhpZXJBvsGMgMVvIgK7rdfeH2lTAMUilaQ==
-X-Received: by 2002:a05:6402:294c:b0:435:2155:fbe8 with SMTP id ed12-20020a056402294c00b004352155fbe8mr14384991edb.256.1655496353470;
-        Fri, 17 Jun 2022 13:05:53 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id c18-20020a17090618b200b006f3ef214ddesm2561902ejf.68.2022.06.17.13.05.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 13:05:52 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id g4so6984834wrh.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 13:05:52 -0700 (PDT)
-X-Received: by 2002:a5d:5c08:0:b0:219:e5de:72af with SMTP id
- cc8-20020a5d5c08000000b00219e5de72afmr10604185wrb.513.1655496351987; Fri, 17
- Jun 2022 13:05:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vVRxoQn7AiO7gd76vj7+dz8M6TQagl0KShpJJUpQGGI=;
+        b=q6Mr1p6knSwsXELnbxo31o7EeEuVoVMn0scGIzRtOnubBRCM0b0G8mBCQUvGYyoafT
+         uHt3hduvtCyet7yTEoypz4Pn2ekLQfhuOvQOXBC3UhTKXwMe0O+G1DDX+Nk9TK7d6Izo
+         8/GuviCVhjLYKHFDPVMLAyei+ajlo05IXJrA4+DB7e2jwBJjQyNOLQugtCnbgQ2YBwlw
+         jnYywa29DBUxbo74eISg7ZlUamRMALQSNLT1K1McKxi1olxfeHTtT8SEKdKZjuD9ejJg
+         s2UOqE5av0Sja+pdhgquPBlkf9r8FsdwuPzeLFKNizjWbelhnf4CckRMh/WTvb/8Uxqi
+         bvRQ==
+X-Gm-Message-State: AJIora/TSN9egy1HCxtu58ptEeEU6Bjft342eV9JknTxxzhd0v1DFCiU
+        4g3epIjFherOKbSmc0q8c2azrA==
+X-Google-Smtp-Source: AGRyM1st2CG2AdmtntN9Jqu1IV3b6SNwk+wp9wcEH0NpBFa/YvSGrL4jwiO2gM2uS4gjE32LtiffRg==
+X-Received: by 2002:a63:91c2:0:b0:3fc:bcef:5681 with SMTP id l185-20020a6391c2000000b003fcbcef5681mr10853869pge.236.1655496357755;
+        Fri, 17 Jun 2022 13:05:57 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:3e97:dac1:ecec:f016])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902714b00b00162037fbb68sm3930796plm.215.2022.06.17.13.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 13:05:57 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 13:05:53 -0700
+From:   Fangrui Song <maskray@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Sedat Dilek <sedat.dilek@gmail.com>, Jiri Slaby <jslaby@suse.cz>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
+Message-ID: <20220617200553.kg7jmkvwdp7yqfkm@google.com>
+References: <20220616104541.16289-1-jslaby@suse.cz>
+ <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
+ <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
+ <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com>
+ <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
+ <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220617111021.v6.1.I9e299d3fa6fbf50df6fc7207050bf5c3a7bf4c61@changeid>
- <20220617111021.v6.6.I423a007e8c4451bd1d091fcb65d035e5dcfc9a9d@changeid>
-In-Reply-To: <20220617111021.v6.6.I423a007e8c4451bd1d091fcb65d035e5dcfc9a9d@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 17 Jun 2022 13:05:40 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VEukZVJY=EXxhGsjQ-_mVzU-qLfNmALd_ZDh1qVjo7Jg@mail.gmail.com>
-Message-ID: <CAD=FV=VEukZVJY=EXxhGsjQ-_mVzU-qLfNmALd_ZDh1qVjo7Jg@mail.gmail.com>
-Subject: Re: [PATCH v6 6/6] arm64: dts: qcom: Remove duplicate sc7180-trogdor
- include on lazor/homestar
-To:     "Joseph S. Barrera III" <joebar@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2022-06-18, Masahiro Yamada wrote:
+>(+LLVM list, Fangrui Song)
 
-On Fri, Jun 17, 2022 at 11:12 AM Joseph S. Barrera III
-<joebar@chromium.org> wrote:
->
-> From: Stephen Boyd <swboyd@chromium.org>
->
-> The sc7180-trogdor-{lazor,homestar}-*.dtsi files all include
-> sc7180-trogdor.dtsi and sc7180-trogdor-lazor.dtsi or
-> sc7180-trogdor-homestar.dtsi, so including it here in the
-> sc7180-trogdor-{lazor,homestar}.dtsi file means we have a duplicate
-> include after commit 19794489fa24 ("arm64: dts: qcom: Only include
-> sc7180.dtsi in sc7180-trogdor.dtsi"). We include the sc7180-trogdor.dtsi
-> file in a board like sc7180-trogdor-lazor-r1.dts so that we can include
-> the display bridge snippet (e.g. sc7180-trogdor-ti-sn65dsi86.dtsi)
-> instead of making ever increasing variants like
-> sc7180-trogdor-lazor-ti-sn65dsi86.dtsi.
->
-> Unfortunately, having the double include like this means the display
-> bridge's i2c bus is left disabled instead of enabled by the bridge
-> snippet. Any boards that use the i2c bus for the display bridge will
-> have the bus disabled when we include sc7180-trogdor.dtsi the second
-> time, which picks up the i2c status="disabled" line from sc7180.dtsi.
-> This leads to the display not turning on and black screens at boot on
-> lazor and homestar devices.
->
-> Fix this by dropping the include and making a note that the
-> sc7180-trogdor-{lazor,homestar}.dtsi file must be included after
-> sc7180-trogdor.dtsi
->
-> Reported-by: Douglas Anderson <dianders@chromium.org>
-> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Fixes: 19794489fa24 ("arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->
-> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
-> ---
->
-> Changes in v6:
->  - First inclusion of this patch.
->
->  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 2 +-
->  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi    | 8 ++++++--
->  2 files changed, 7 insertions(+), 3 deletions(-)
+Thanks for tagging me. I'll clarify some stuff.
 
-Ah, now I see that you did have this patch, but you put it last, not
-first. This is an important bugfix that we're hoping to land as soon
-as possible. It should be the first patch in the series. ...or just
-don't include it in your series and point to Stephen's patch.
+>On Fri, Jun 17, 2022 at 7:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>
+>> On Fri, Jun 17, 2022 at 12:35 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>> >
+>> > On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>> > >
+>> > > On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>> > > >
+>> > > > On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>> > > > >
+>> > > > > Until the link-vmlinux.sh split (cf. the commit below), the linker was
+>> > > > > run with jobserver set in MAKEFLAGS. After the split, the command in
+>> > > > > Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+>> > > > > is lost.
+>> > > > >
+>> > > > > Restore it as linkers working in parallel (esp. the LTO ones) make a use
+>> > > > > of i
+>
+>Hi Jiri,
+>
+>Please let me clarify first.
+>
+>Here, is it OK to assume you are talking about Clang LTO
+>instead of GCC LTO because the latter is not upstreamed ?
+>
+>
+>
+>
+>
+>I tested this patch but I did not see any performance change for Clang LTO.
+>
+>
+>[1] CONFIG_CLANG_LTO_FULL
+>
+>   lld always runs sequential.
+>   It never runs in parallel even if you pass -j option to Make
 
--Doug
+"lld always runs sequential" is not accurate. There are a number of
+parallel linker passes.  ld.lld --threads= defaults to
+llvm::hardware_concurrency (similar to
+https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency,
+but uses sched_getaffinity to compute the number of available cores).
+
+"lld always runs sequential" is only correct only when --threads=1 is
+specified or the system only provides one thread to the lld process.
+
+I think people may be more interested in LTO parallelism here.  Regular
+LTO (sometimes called full LTO when there is mixed-thin-and-regular LTO)
+supports limited parallelism which applies to code generation, but not
+IR-level optimization.  (IR-level optimization has many interprocedural
+optimizations passes.  Splitting will make LTO less effective. Code
+generation is per function, so parallelism does not regress
+optimization.)
+
+>
+>[2] CONFIG_CLANG_LTO_THIN
+>
+>   lld always runs in parallel even if you do not pass -j option
+>
+>   In my machine, lld always allocated 12 threads.
+>   This is irrespective of the Make parallelisms.
+>
+>
+>
+>
+>One more thing, if a program wants to participate in
+>Make's jobserver, it must parse MAKEFLAGS, and extract
+>file descriptors to be used to communicate to the jobserver.
+>
+>As a code example in the kernel tree,
+>scripts/jobserver-exec parses "MAKEFLAGS" and "--jobserver".
+>
+>
+>I grepped the lld source code, but it does not contain
+>"MAKEFLAGS" or "jobserver".
+
+>masahiro@oscar:~/ref/lld$ git remote  show origin
+>* remote origin
+>  Fetch URL: https://github.com/llvm-mirror/lld.git
+>  Push  URL: https://github.com/llvm-mirror/lld.git
+>  HEAD branch: master
+>  Remote branches:
+>    master     tracked
+>    release_36 tracked
+>    release_37 tracked
+>    release_38 tracked
+>    release_39 tracked
+>    release_40 tracked
+>    release_50 tracked
+>    release_60 tracked
+>    release_70 tracked
+>    release_80 tracked
+>    release_90 tracked
+>  Local branch configured for 'git pull':
+>    master merges with remote master
+>  Local ref configured for 'git push':
+>    master pushes to master (up to date)
+>masahiro@oscar:~/ref/lld$ git grep MAKEFLAGS
+>masahiro@oscar:~/ref/lld$ git grep jobserver
+>
+>
+>So, in my research, LLD does not seem to support the jobserver.
+
+
+Correct. lld does not support GNU make's jobserver.  On the other hand,
+I don't think the jobserver implementation supports flexible "give this
+target N hardware concurrency". A heavy link target does not necessarily
+get more resources than a quick target.
+
+If a make target knows how many hardware concurrency it gets, we can
+pass --threads= to lld. LTO easily takes 95+% link time, so LTO
+parallelism may needs a dedicated setting. lld has --thinlto-jobs=.
+
+>
+>
+>
+>If you are talking about GCC LTO, yes, the code
+>tries to parse "--jobserver-auth=" from the MAKEFLAGS
+>environment variable.  [1]
+>
+>[1]:  https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/lto-wrapper.cc#L1341
+>
+>
+>But, as you may know, GCC LTO works in a different way,
+>at least, we cannot do it before modpost.
+>
+>
+>-- 
+>Best Regards
+>Masahiro Yamada
+>

@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BD754FB04
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE92D54FB7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 18:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383111AbiFQQZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 12:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S1382150AbiFQQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 12:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiFQQZ1 (ORCPT
+        with ESMTP id S1379637AbiFQQuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 12:25:27 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633DD338B4;
-        Fri, 17 Jun 2022 09:25:26 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id f16so3326557pjj.1;
-        Fri, 17 Jun 2022 09:25:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qffc/qF45xQUUVX0iLvakRS+0SCnFCY/1DsKCxCMUk4=;
-        b=p6Luqnnjif7dM7tiFpvHnZDRHy4vfN3T7EjNUaBXKKxZ4iQN+PI5xS+Aov8+r2BDod
-         HfNmaU8PGs5CAFc/rpH4pyBYMIFrbA40iP1SnI9ddt9LxgJzo/0NRFZVurShJWjoh3fg
-         Wmt+cWydThX3eUieFFYVoVlcW8Hj/53z9E99MQ/dvjXeKkRmEZauVREz0REYCXzO6oUn
-         HPVqlyVvgbYi1xuTkCxHKU/WUKMtulZe7aHSxxB0NReTETXWcHfV/h6MDcwpiPARM4a6
-         PoYY7lmssBxz5Vd4edo5UEpngReKNhU5BuspY4nxHCVHzkherTk/7lwTYbxZqG1JUvsA
-         iYbw==
-X-Gm-Message-State: AJIora+M6P7NP6ojzH8mXN0lHA8DVyq1V3CwwPMIKIJrCBReCF2/vfQH
-        Jtp1tb56UExiAiO+bgsm81Y=
-X-Google-Smtp-Source: AGRyM1v0wKaWpD+fRkQWYGcTmSFjnZvqVDvDVjWy1Fw5laZHlNFrGY0kvjKc1A9gYn6s9UIarDHnZg==
-X-Received: by 2002:a17:90b:1b49:b0:1e6:a23:69c6 with SMTP id nv9-20020a17090b1b4900b001e60a2369c6mr11379208pjb.124.1655483125778;
-        Fri, 17 Jun 2022 09:25:25 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:5d24:3188:b21f:5671? ([2620:15c:211:201:5d24:3188:b21f:5671])
-        by smtp.gmail.com with ESMTPSA id h3-20020a170902680300b001637529493esm3804323plk.66.2022.06.17.09.25.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 09:25:24 -0700 (PDT)
-Message-ID: <f559b5d3-cba4-4dff-7db0-5dc24b4078b8@acm.org>
-Date:   Fri, 17 Jun 2022 09:25:22 -0700
+        Fri, 17 Jun 2022 12:50:25 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF3E5548A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 09:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655484579; x=1687020579;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=668uDU/sASSfAktCzQOI/YXPVgTX1rB+v9u1BzSgtFc=;
+  b=VDp++cESgqycfEcCgsChPC47s6kpVGJw9TS1qZ2YweBPCgBAh2qg+N1A
+   +zLr/dQST3Azf4EOmLx5S2IHJrxDP0RoJQcYBflAKi3fs3kNHXsLk4mq9
+   eGpPrid8EuMwKuN63udIRpOlEk850dWMQrJLd01Vny2CV+606mr8NtCDe
+   +GpnqhdmrGJbRacMaVBmFIE0BdBvSrzk7CEOvBmPYQ5L7gCg+GIVatjO5
+   sduS/fTnDEdGVZo9GVspeTHtU2Avn9WIORKkmeVOlKgx+HsEmK5p3+zei
+   EW1unTb5kNvgsmVhe33uPmNpSg84bPCtCzQVcPrDv1KKOi8hStKicx5yL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277062079"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="277062079"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:26:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="832077675"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 17 Jun 2022 09:26:49 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Eo4-000PbN-Ig;
+        Fri, 17 Jun 2022 16:26:48 +0000
+Date:   Sat, 18 Jun 2022 00:26:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.20/g12-dsi-wip 9/12]
+ drivers/gpu/drm/meson/meson_venc.c:1595:10: error: call to undeclared
+ function 'FIELD_PREP'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202206180004.GHjxyBau-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 1/5] scsi: core: Remove reserved request time-out handling
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com
-Cc:     linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nbd@other.debian.org
-References: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
- <1655463320-241202-2-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1655463320-241202-2-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,12 +64,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 03:55, John Garry wrote:
-> The SCSI code does not currently support reserved commands. As such,
-> requests which time-out would never be reserved, and scsi_timeout()
-> 'reserved' arg should never be set.
-> 
-> Remove handling for reserved requests and drop wrapper scsi_timeout() as
-> it now just calls scsi_times_out() always.
+tree:   https://github.com/superna9999/linux amlogic/v5.20/g12-dsi-wip
+head:   0e725ea0a5ab9f70fc54c2e76475b8d594b90c4e
+commit: 927953782b0c6c12a73654c526a12678e348f817 [9/12] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
+config: arm-randconfig-r014-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180004.GHjxyBau-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/superna9999/linux/commit/927953782b0c6c12a73654c526a12678e348f817
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.20/g12-dsi-wip
+        git checkout 927953782b0c6c12a73654c526a12678e348f817
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/meson/meson_venc.c:1595:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                          FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+                          ^
+   1 error generated.
+
+
+vim +/FIELD_PREP +1595 drivers/gpu/drm/meson/meson_venc.c
+
+  1579	
+  1580	static void meson_encl_set_gamma_table(struct meson_drm *priv, u16 *data,
+  1581					       u32 rgb_mask)
+  1582	{
+  1583		int i, ret;
+  1584		u32 reg;
+  1585	
+  1586		writel_bits_relaxed(L_GAMMA_CNTL_PORT_EN, 0,
+  1587				    priv->io_base + _REG(L_GAMMA_CNTL_PORT));
+  1588	
+  1589		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1590						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1591		if (ret)
+  1592			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1593	
+  1594		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+> 1595			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+  1596			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1597	
+  1598		for (i = 0; i < 256; i++) {
+  1599			ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1600							 reg, reg & L_GAMMA_CNTL_PORT_WR_RDY,
+  1601							 10, 10000);
+  1602			if (ret)
+  1603				pr_warn_once("%s: GAMMA WR_RDY timeout\n", __func__);
+  1604	
+  1605			writel_relaxed(data[i], priv->io_base + _REG(L_GAMMA_DATA_PORT));
+  1606		}
+  1607	
+  1608		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1609						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1610		if (ret)
+  1611			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1612	
+  1613		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+  1614			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0x23),
+  1615			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1616	}
+  1617	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

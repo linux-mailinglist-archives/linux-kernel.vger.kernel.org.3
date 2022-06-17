@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC13954FFAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178E654FFB1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 00:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350035AbiFQWD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 18:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S242080AbiFQWFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 18:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbiFQWDt (ORCPT
+        with ESMTP id S245202AbiFQWFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:03:49 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E43C2AC47;
-        Fri, 17 Jun 2022 15:03:49 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d13so4912230plh.13;
-        Fri, 17 Jun 2022 15:03:49 -0700 (PDT)
+        Fri, 17 Jun 2022 18:05:44 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D47590BC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:05:43 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id w2so9359124ybi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 15:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=feKpGkuywKAtf9xorq52WEpaYro1ySAtBsqG9zDe8uM=;
-        b=QeXajl5NvYHI3U7g071MCmzFwu/KGzTYNogwMcCRZed4XcN6UQOJR6rz1eXPIqvHxG
-         JPOqhmQx8Q4N2sRzfk2qqjHR81UabefWyfOcNNbubTfxJmwsN5M38eCfLu0kRUgGIKnj
-         QozJhsgwrnex9f9CKv/PEynGYiHkRedY9mEzjAif+dzslmXZrhR53PPzMJAf4G1mfHEC
-         ySbHrkTrr4gceW/+cHiesJSlqLZMvgmI81x4cDgu60Q7Bj95/Ig8M47cLfi7EX1x+140
-         g7Y2EFIo4/RxN7513Lun8a/3YVIUt9RJ0O8Drx6tCdiPaItj+y6ZhQ/7qzvdxf9oEjZG
-         Eufg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rHoG7dDbbfhrmS/H7yyWkxeJ8IoOLiAVzbc6Ovna8+k=;
+        b=R6fJeeiGDlD/+1wHzUVq4ENJyd1RnOML0OI/ctbcTHyebaauRByqLOBT0DUIvMpHEC
+         p+gjCqNGT1KuicvmkkPiQikpQJ7t31SNL3ISafSzGaoU74t6lHjq0QJB2NqnDadhFI22
+         C/3kvqRld8QD8XrcLlj0OHSEUOKviMJeE2FR5QhojpQJBb63FQSR7MZ/z9rot6kEkXwP
+         9HzP3v+4rTQr9G9p4/He/nV/643sWxqvFCz6pCoRGFc8wEE5+JKe8nZ+D6IyZN19s6wB
+         pY6uESe2yb8Gr4zy8mw/XWK4O6YJ8HbrPXhwL+8ZrI3Fs0clbvvYeYMC7cpE/lFIZOfl
+         i1Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=feKpGkuywKAtf9xorq52WEpaYro1ySAtBsqG9zDe8uM=;
-        b=MWmwHwX68QlEb+0qEFiUl4YNlOaf+NVYlhoo5FMmIDZBiPMxVB/YugWzo6eZjYLxDC
-         aY7b5QjjQABu5EGkqIgJ3qzoR6tUvQziP/BnqwcGK2GxlSZ+sMhFS0jTtubWIS7sGugr
-         lR+0kceZeM2K5xaeKkF0iHVE+mDm7v/1owkAEudkEMRMqytOLBnofHNuzE0BWY6ol1gN
-         pTENwUrt8sRYTHWC4vyqZWiqE+pxui5izz63NzLqcBwSBJO4wQOBRHgtUovXG4THgFC7
-         s3yD08KuvJ5dJzXojnVMemQ01N8luujesL0YkiM63Vk8ujSmHoyz5iheev3acAFiSoIX
-         posw==
-X-Gm-Message-State: AJIora/EMx2//1FidlJcEaBvAIN5x7ttQV8mbdOb8zYaBVTVtfKR8toc
-        rr+AM9ISHKp1lI5Rt6tT4BU=
-X-Google-Smtp-Source: AGRyM1vDU/fcRlB/iTrABf0ot4xnmqyivS7UPXjxpBsWmky43N1sA4WQP5qvWwsVllfTwWDQo9fNQg==
-X-Received: by 2002:a17:90b:4d90:b0:1e8:951b:40c8 with SMTP id oj16-20020a17090b4d9000b001e8951b40c8mr13001544pjb.130.1655503428866;
-        Fri, 17 Jun 2022 15:03:48 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id gp5-20020a17090adf0500b001ec84b0f199sm339080pjb.1.2022.06.17.15.03.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 15:03:48 -0700 (PDT)
-Message-ID: <edbbc05f-6aa5-be29-6cc3-2895851db717@gmail.com>
-Date:   Fri, 17 Jun 2022 15:03:44 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rHoG7dDbbfhrmS/H7yyWkxeJ8IoOLiAVzbc6Ovna8+k=;
+        b=FxFMTJ2sXyNStbRNlR5nVNHLSb7twL6t+k+59Z09M8SuDwkseFhfNdyWlDzpe7BLy8
+         miRYcIzhzQO9Jhc83sjVdZCDgowaT0iTSUBRN7cPxgjzDfW3HlvFVB3/lQwG6C/T2Nqh
+         uWHk7Cjv2JNGuiTHOMMkgPxRJfDaFYgI6W9GDilgiAI15qTCEILO1eq8xTQ1WC9yIAwD
+         LD5+lRnhtEsU6UM5V99t2Yl3DwhA2IjEQ24nuhsMKIUNfgrEFKYxyC4hZn+zqBdcXyF0
+         XzADTcrIbgnx8VDJq1X+gbwnhVsDAU4N1tYjqp2nxWbquKJGY23+8XlxQQvQ1leBeVI7
+         N4KQ==
+X-Gm-Message-State: AJIora9UAiJX85EXi0TS6AQbjgdsKhP0yzzzdENAYc8C+3JjxOR0ewUm
+        Dholk5Fnx91k/eE4XgMq9raF3QG7bw72D6aqX2a5iQ==
+X-Google-Smtp-Source: AGRyM1sF3bWOU6U0hUXlKsmL8i11lHkC9OJLeRChAOvOqYv4w5VGhzVZhfjNddIOWba2Ys5vztT2mAzvM7RJ57mBREs=
+X-Received: by 2002:a25:c5c4:0:b0:664:8e1c:2fcf with SMTP id
+ v187-20020a25c5c4000000b006648e1c2fcfmr13208362ybe.508.1655503542092; Fri, 17
+ Jun 2022 15:05:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [Patch net-next 06/11] net: dsa: microchip: move the port mirror
- to ksz_common
-Content-Language: en-US
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-References: <20220617084255.19376-1-arun.ramadoss@microchip.com>
- <20220617084255.19376-7-arun.ramadoss@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220617084255.19376-7-arun.ramadoss@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+ <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+ <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com> <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+In-Reply-To: <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+From:   Dylan Hatch <dylanbhatch@google.com>
+Date:   Fri, 17 Jun 2022 15:05:30 -0700
+Message-ID: <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,14 +69,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 01:42, Arun Ramadoss wrote:
-> This patch updates the common port mirror add/del dsa_switch_ops in
-> ksz_common.c. The individual switches implementation is executed based
-> on the ksz_dev_ops function pointers.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 6/17/22 12:45 PM, Dylan Hatch wrote:
+> > On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>
+> >> On 6/16/22 3:10 PM, Dylan Hatch wrote:
+> >>> This test would erroneously fail the /proc/$PID/maps case if
+> >>> vsyscall=xonly since the existing probe of the vsyscall page only
+> >>> succeeds if the process has read permissions. Fix this by checking for
+> >>> either no vsyscall mapping OR an execute-only vsyscall mapping in the
+> >>> case were probing the vsyscall page segfaults.
+> >>>
+> >>
+> >> Does this fix include skipping the test with a clear message that
+> >> says why test is skipped?
+> >>
+> >>> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+> >>> ---
+> >>>    tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
+> >>>    1 file changed, 15 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+> >>> index 28604c9f805c..5ca85520131f 100644
+> >>> --- a/tools/testing/selftests/proc/proc-pid-vm.c
+> >>> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
+> >>> @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
+> >>>
+> >>>    static bool g_vsyscall = false;
+> >>>
+> >>> -static const char str_vsyscall[] =
+> >>> +static const char str_vsyscall_rx[] =
+> >>>    "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
+> >>>
+> >>> +static const char str_vsyscall_x[] =
+> >>> +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
+> >>> +
+> >>>    #ifdef __x86_64__
+> >>>    static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+> >>>    {
+> >>> @@ -261,6 +264,7 @@ int main(void)
+> >>>        int exec_fd;
+> >>>
+> >>>        vsyscall();
+> >>> +     const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
+> >>>
+> >>>        atexit(ate);
+> >>>
+> >>> @@ -314,7 +318,8 @@ int main(void)
+> >>>
+> >>>        /* Test /proc/$PID/maps */
+> >>>        {
+> >>> -             const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
+> >>> +             const size_t len_buf0 = strlen(buf0);
+> >>> +             const size_t len_vsys = strlen(str_vsyscall);
+> >>>                char buf[256];
+> >>>                ssize_t rv;
+> >>>                int fd;
+> >>> @@ -325,11 +330,16 @@ int main(void)
+> >>>                        return 1;
+> >>>                }
+> >>>                rv = read(fd, buf, sizeof(buf));
+> >>> -             assert(rv == len);
+> >>> -             assert(memcmp(buf, buf0, strlen(buf0)) == 0);
+> >>>                if (g_vsyscall) {
+> >>> -                     assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
+> >>> +                     assert(rv == len_buf0 + len_vsys);
+> >>> +             } else {
+> >>> +                     /* If vsyscall isn't readable, it's either x-only or not mapped at all */
+> >>> +                     assert(rv == len_buf0 + len_vsys || rv == len_buf0);
+> >>>                }
+> >>> +             assert(memcmp(buf, buf0, len_buf0) == 0);
+> >>> +             /* Check for vsyscall mapping if buf is long enough */
+> >>> +             if (rv == len_buf0 + len_vsys)
+> >>> +                     assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
+> >>>        }
+> >>>
+> >>>        /* Test /proc/$PID/smaps */
+> >>>
+> >>
+> >> The change looks good to me. Doesn't look like it skips the test though?
+> >
+> > Instead of skipping the test, it changes the passing condition to
+> > accept both cases of an unmapped vsyscall page and an x-only vsyscall
+> > page. Differentiating between these two cases without relying on
+> > /proc/$PID/maps would involve both checking the kernel command line
+> > for vsyscall=xonly and having a special ifdef block for
+> > CONFIG_VSYSCALL_XONLY, so accepting both as passing conditions seems
+> > like a simpler solution.
+> >
+>
+> It depends on the goal of the test. Is the test looking to see if the
+> probe fails with insufficient permissions, then you are changing the
+> test to not check for that condition.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+The goal of the test is to validate the output of /proc/$PID/maps, and
+the memory probe is only needed as setup to determine what the
+expected output should be. This used to be sufficient, but now it can
+no longer fully disambiguate it with the introduction of
+vsyscall=xonly. The solution proposed here is to disambiguate it by
+also checking the length read from /proc/$PID/maps.
+
+>
+> I would say in this case, the right approach would be to leave the test
+> as is and report expected fail and add other cases.
+>
+> The goal being adding more coverage and not necessarily opt for a simple
+> solution.
+
+What does it mean to report a test as expected fail? Is this a
+mechanism unique to kselftest? I agree adding another test case would
+work, but I'm unsure how to do it within the framework of kselftest.
+Ideally, there would be separate test cases for vsyscall=none,
+vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
+both in the kernel config and on the kernel command line, meaning (to
+the best of my knowledge) these test cases would have to be built
+conditionally against the conflig options and also parse the command
+line for the 'vsyscall' option.
+
+Thanks,
+Dylan

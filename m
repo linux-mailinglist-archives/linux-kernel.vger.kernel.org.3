@@ -2,166 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A46E54F90A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C84D54F926
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Jun 2022 16:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382530AbiFQOUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 10:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
+        id S1382717AbiFQOZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 10:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbiFQOUP (ORCPT
+        with ESMTP id S1382476AbiFQOZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 10:20:15 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5658043EFB
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:20:14 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id o8so5983218wro.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 07:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3vOobyFVXymRVpn25jWFSnKeLAFJPxK2s0OnRHMF8AI=;
-        b=Q30wclNYpthRDofrENHk9nKy2Pnt14+N0JhXzAnqU/vw/wjQgC4HxGJewSwSXhNe9r
-         ZZbtcgKQlw9lojmioasAswJcZN55/pi/yVE+S3KslKTZPs3scqztumKtx9bjlt0vmE/4
-         fHC4lhZFoP85iuSbr2W/VjxlRUIe62B2SlIVnCG+2kn6UvaCGFXIMHiyTWIEFu7yccY0
-         TMNwBaSDI+FU3tDvrP2pjEPCj5bBwFNhmU9yRK98F8mrgO+1kPQoZGMkm+aXb15cOehV
-         KvozbvcGEQyGsM6ujq2hrKENVriON5KcmZBU18t+GPvZttiIUM7aO6gLYsMDq5UgWRfi
-         UFHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3vOobyFVXymRVpn25jWFSnKeLAFJPxK2s0OnRHMF8AI=;
-        b=YZnKgZjDRN9LS1PG9Q39tFhxxDvSnvfi9Us/9/mP6ZfU2QZszImId+6JTgWT7Iceas
-         42jgslYzofy9hPyJ82YgTYexrqT2bjnnHfrXbZLa6lFPjhJprKDBpyoXn27iFgt99Ioz
-         guKJsHkBm2Pvaw86fYZ7K93B9ygUEDsgy9xgAPq1YbUS++VG9P+LQ3cd3wWmOcjJ4L4i
-         G0r8weCAk3pZgpDAklq4aN/Yp8vFYzXvVajTXbUoV7yJsUibm5/xOuizKkmk5BOGQfo1
-         lLmlrgoookmwdF6FHlK5UXw8Ftv9a8Nm/tJzNqvYMFYISgiBtHc9qDQQzdNUymMELo9f
-         pKog==
-X-Gm-Message-State: AJIora+idpICl++nir/luDEaM5JyEZAaPBQbUxBslxOXucChtHnWMsmJ
-        rP+7eP1JVlj1LzspE4RV2U0=
-X-Google-Smtp-Source: AGRyM1tSFKuuZgKhZCminfQNyUROPCnyVZuRKnAJ/XwFsiDP7GyB2J+se02W0S3o38+Jv4Sjok+blw==
-X-Received: by 2002:a5d:47c9:0:b0:20f:e7da:6a48 with SMTP id o9-20020a5d47c9000000b0020fe7da6a48mr9593609wrc.315.1655475612766;
-        Fri, 17 Jun 2022 07:20:12 -0700 (PDT)
-Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
-        by smtp.gmail.com with ESMTPSA id d8-20020adfc088000000b00213ba0cab3asm4820839wrf.44.2022.06.17.07.20.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 07:20:11 -0700 (PDT)
-Message-ID: <c385ab55-bffc-8185-5d8b-f2fed1dd54a4@gmail.com>
-Date:   Fri, 17 Jun 2022 16:20:10 +0200
+        Fri, 17 Jun 2022 10:25:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0B515AC;
+        Fri, 17 Jun 2022 07:25:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6919B21E44;
+        Fri, 17 Jun 2022 14:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655475899;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a9HpK8AQFCPpZGHqOflUkPRS+AfBo7nezyoDwo5EOxw=;
+        b=wON5Z+a8PY3NERVTywme/dw6SGBNU5E2zNjD+c2ZeDbwICsTtnV4w3RAuhibm88j/JmuGV
+        g8S70bLRewWvY75g9gCfu0RHBB3T3Sf3WShC3IdZZkTlLGIayCG9St8vhwG72ocTa25VmL
+        58dVm1pmwlVNQvWdEfcu/8XDtCq1DVU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655475899;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a9HpK8AQFCPpZGHqOflUkPRS+AfBo7nezyoDwo5EOxw=;
+        b=Se/2b5X2lpR6pFkWpn6Hvd2pjIbTelvpE8uXqCZExx4u46Ub1zvNv6NMEnN8Wgx/B0w+D7
+        GeGj8iyXGisMmABA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08E481348E;
+        Fri, 17 Jun 2022 14:24:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +29EAbuOrGIdLgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Fri, 17 Jun 2022 14:24:59 +0000
+Date:   Fri, 17 Jun 2022 16:20:24 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 3/3] btrfs: Use kmap_local_page() on "in_page" in
+ zlib_compress_pages()
+Message-ID: <20220617142024.GL20633@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Qu Wenruo <quwenruo.btrfs@gmx.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220617120538.18091-1-fmdefrancesco@gmail.com>
+ <20220617120538.18091-4-fmdefrancesco@gmail.com>
+ <8cbfc1ff-f86d-f2cc-d37e-ef874f4600bc@gmx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/4] soc: mediatek: add support of MTK_SCPD_STRICT_BUSP
- cap
-Content-Language: en-US
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220530204214.913251-1-fparent@baylibre.com>
- <20220530204214.913251-3-fparent@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220530204214.913251-3-fparent@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8cbfc1ff-f86d-f2cc-d37e-ef874f4600bc@gmx.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30/05/2022 22:42, Fabien Parent wrote:
-> From: Alexandre Bailon <abailon@baylibre.com>
+On Fri, Jun 17, 2022 at 09:09:47PM +0800, Qu Wenruo wrote:
+> On 2022/6/17 20:05, Fabio M. De Francesco wrote:
+> > @@ -126,6 +128,8 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+> >   		ret = -ENOMEM;
+> >   		goto out;
+> >   	}
+> > +	mstack[sind] = 'A';
+> > +	sind++;
+> >   	cpage_out = kmap_local_page(out_page);
+> >   	pages[0] = out_page;
+> >   	nr_pages = 1;
+> > @@ -148,26 +152,32 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+> >   				int i;
+> >
+> >   				for (i = 0; i < in_buf_pages; i++) {
+> > -					if (in_page) {
+> > -						kunmap(in_page);
 > 
-> This adds support of MTK_SCPD_STRICT_BUSP cap.
-> This is required by the mt8365, for the MM power domain.
+> I don't think we really need to keep @in_page mapped for that long.
 > 
-
-Please explain better waht this flag is doing.
-
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
->   drivers/soc/mediatek/mtk-pm-domains.c | 37 ++++++++++++++++++++-------
->   drivers/soc/mediatek/mtk-pm-domains.h |  1 +
->   2 files changed, 29 insertions(+), 9 deletions(-)
+> We only need the input pages (pages from inode page cache) when we run
+> out of input.
 > 
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> index 90b91b3b19a8..beaa5785fda2 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> @@ -263,17 +263,36 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ISO_BIT);
->   	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
->   
-> -	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> -	if (ret)
-> -		goto err_pwr_ack;
+> So what we really need is just to map the input, copy the data to
+> buffer, unmap the page.
+> 
+> > +					if (data_in) {
+> > +						sind--;
+> > +						kunmap_local(data_in);
+> >   						put_page(in_page);
+> >   					}
+> >   					in_page = find_get_page(mapping,
+> >   								start >> PAGE_SHIFT);
+> > -					data_in = kmap(in_page);
+> > +					mstack[sind] = 'B';
+> > +					sind++;
+> > +					data_in = kmap_local_page(in_page);
+> >   					memcpy(workspace->buf + i * PAGE_SIZE,
+> >   					       data_in, PAGE_SIZE);
+> >   					start += PAGE_SIZE;
+> >   				}
+> >   				workspace->strm.next_in = workspace->buf;
+> >   			} else {
+> 
+> I think we can clean up the code.
+> 
+> In fact the for loop can handle both case, I didn't see any special
+> reason to do different handling, we can always use workspace->buf,
+> instead of manually dancing using different paths.
+> 
+> I believe with all these cleanup, it should be much simpler to convert
+> to kmap_local_page().
+> 
+> I'm pretty happy to provide help on this refactor if you don't feel
+> confident enough on this part of btrfs.
 
-I think it would help readability if we would enable the clocks only in the case 
-that MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUSP) is false. Then we would only need 
-to add the same if to the error path of err_disable_subsys_clks, correct?
-
-Regards,
-Matthias
-
-> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUSP)) {
-> +		/*
-> +		 * In few Mediatek platforms(e.g. MT6779), the bus protect
-> +		 * policy is stricter, which leads to bus protect release must
-> +		 * be prior to bus access.
-> +		 */
-> +		ret = scpsys_sram_enable(pd);
-> +		if (ret < 0)
-> +			goto err_pwr_ack;
->   
-> -	ret = scpsys_sram_enable(pd);
-> -	if (ret < 0)
-> -		goto err_disable_subsys_clks;
-> +		ret = scpsys_bus_protect_disable(pd);
-> +		if (ret < 0)
-> +			goto err_pwr_ack;
->   
-> -	ret = scpsys_bus_protect_disable(pd);
-> -	if (ret < 0)
-> -		goto err_disable_sram;
-> +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> +		if (ret < 0)
-> +			goto err_pwr_ack;
-> +	} else {
-> +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> +		if (ret)
-> +			goto err_pwr_ack;
-> +
-> +		ret = scpsys_sram_enable(pd);
-> +		if (ret < 0)
-> +			goto err_disable_subsys_clks;
-> +
-> +		ret = scpsys_bus_protect_disable(pd);
-> +		if (ret < 0)
-> +			goto err_disable_sram;
-> +	}
->   
->   	return 0;
->   
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-> index a3955d960233..5347471bc3c4 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.h
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.h
-> @@ -8,6 +8,7 @@
->   #define MTK_SCPD_SRAM_ISO		BIT(2)
->   #define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(3)
->   #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
-> +#define MTK_SCPD_STRICT_BUSP		BIT(5)
->   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
->   
->   #define SPM_VDE_PWR_CON			0x0210
+My first thought was "why to clean up zlib loop if we want to just
+replace kmap" but after seeing the whole stack and fiddling with the
+indexes I agree that a simplification should be done first.

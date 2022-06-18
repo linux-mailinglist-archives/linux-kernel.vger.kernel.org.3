@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5DF5504E4
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 14:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2765D5504DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 14:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbiFRMwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 08:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S235884AbiFRMs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 08:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236061AbiFRMwf (ORCPT
+        with ESMTP id S233683AbiFRMs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 08:52:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDDB417E23
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 05:52:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B43C5113E;
-        Sat, 18 Jun 2022 05:52:33 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.35.139])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F5253F792;
-        Sat, 18 Jun 2022 05:52:28 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 13:52:24 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: Re: [PATCH -next v5 6/8] arm64: add support for machine check error
- safe
-Message-ID: <Yq3KiDN87pd6mg+m@FVFF77S0Q05N>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-7-tongtiangen@huawei.com>
- <YqxBd9GfUHLWZWoh@FVFF77S0Q05N>
- <4aa8b109-c79b-8da0-db89-85ca128f1049@huawei.com>
+        Sat, 18 Jun 2022 08:48:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888721D1;
+        Sat, 18 Jun 2022 05:48:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23F2960B1F;
+        Sat, 18 Jun 2022 12:48:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5A9C3411A;
+        Sat, 18 Jun 2022 12:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655556534;
+        bh=cex7iYQQACfKhOLJ8XVWX6jRVF4mEBzs7Qu/iRF1V2s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Dz1RsUTOigl7wW6tRhiN2uHxcm7YhUtlYbJDhXeWqF7H38ogejBbdoloxKtHrIJKL
+         q8QdXQcH6rzPMD/UrPF7uAXT+DST2GkwKcW5B6n5rq3Dc6YsHZl/yyDfhEzPr3x1Qo
+         NbToNg6XAip9XiGbgSGDtsZEv4lww3vaqemAnMIXBwL47mLDYKw04fidQ4zmw4nR5m
+         wX3+26mh0e5QzvmqLWq7BkvzYGBduCj4YhkChVa7NpzKE6QmVkUMi0WDD7moEQz0xF
+         Q86Vl2l4w4DV5QDgq1jI9+dQSrZt1W6+39uJH2G1ouLVOz48TCfF4UQGLcswBlbLDH
+         ++JN4S+4qysRQ==
+Date:   Sat, 18 Jun 2022 13:58:10 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v14 02/10] mfd: qcom-spmi-pmic: expose the PMIC revid
+ information to clients
+Message-ID: <20220618135810.34f3df8f@jic23-huawei>
+In-Reply-To: <20220429220904.137297-3-caleb.connolly@linaro.org>
+References: <20220429220904.137297-1-caleb.connolly@linaro.org>
+        <20220429220904.137297-3-caleb.connolly@linaro.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4aa8b109-c79b-8da0-db89-85ca128f1049@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,96 +67,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 05:18:55PM +0800, Tong Tiangen wrote:
-> 在 2022/6/17 16:55, Mark Rutland 写道:
-> > On Sat, May 28, 2022 at 06:50:54AM +0000, Tong Tiangen wrote:
-> > > +static bool arm64_do_kernel_sea(unsigned long addr, unsigned int esr,
-> > > +				     struct pt_regs *regs, int sig, int code)
-> > > +{
-> > > +	if (!IS_ENABLED(CONFIG_ARCH_HAS_COPY_MC))
-> > > +		return false;
-> > > +
-> > > +	if (user_mode(regs) || !current->mm)
-> > > +		return false;
-> > 
-> > What's the `!current->mm` check for?
+On Fri, 29 Apr 2022 23:08:57 +0100
+Caleb Connolly <caleb.connolly@linaro.org> wrote:
+
+> Some PMIC functions such as the RRADC need to be aware of the PMIC
+> chip revision information to implement errata or otherwise adjust
+> behaviour, export the PMIC information to enable this.
 > 
-> At first, I considered that only user processes have the opportunity to
-> recover when they trigger memory error.
+> This is specifically required to enable the RRADC to adjust
+> coefficients based on which chip fab the PMIC was produced in,
+> this can vary per unique device and therefore has to be read at
+> runtime.
 > 
-> But it seems that this restriction is unreasonable. When the kernel thread
-> triggers memory error, it can also be recovered. for instance:
-> 
-> https://lore.kernel.org/linux-mm/20220527190731.322722-1-jiaqiyan@google.com/
-> 
-> And i think if(!current->mm) shoud be added below:
-> 
-> if(!current->mm) {
-> 	set_thread_esr(0, esr);
-> 	arm64_force_sig_fault(...);
-> }
-> return true;
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
 
-Why does 'current->mm' have anything to do with this, though?
 
-There can be kernel threads with `current->mm` set in unusual circumstances
-(and there's a lot of kernel code out there which handles that wrong), so if
-you want to treat user tasks differently, we should be doing something like
-checking PF_KTHREAD, or adding something like an is_user_task() helper.
+> +/**
+> + * qcom_pmic_get() - Get a pointer to the base PMIC device
+> + *
+> + * This function takes a struct device for a driver which is a child of a PMIC.
+> + * And locates the PMIC revision information for it.
+> + *
+> + * @dev: the pmic function device
+> + * @return: the struct qcom_spmi_pmic* pointer associated with the function device
+> + */
+> +inline const struct qcom_spmi_pmic *qcom_pmic_get(struct device *dev)
+Missed this in review, but build test of the rradc patch threw it up.
+this should defintely not be inline as it's exported.
+Same for the header definition.
 
-[...]
+I'm doing a quick test to see if I can apply this series with relevant
+tweaks. Will get rid of this inline as well.
 
-> > > +
-> > > +	if (apei_claim_sea(regs) < 0)
-> > > +		return false;
-> > > +
-> > > +	if (!fixup_exception_mc(regs))
-> > > +		return false;
-> > 
-> > I thought we still wanted to signal the task in this case? Or do you expect to
-> > add that into `fixup_exception_mc()` ?
-> 
-> Yeah, here return false and will signal to task in do_sea() ->
-> arm64_notify_die().
+Thanks,
 
-I mean when we do the fixup.
+Jonathan
 
-I thought the idea was to apply the fixup (to stop the kernel from crashing),
-but still to deliver a fatal signal to the user task since we can't do what the
-user task asked us to.
-
-> > > +
-> > > +	set_thread_esr(0, esr);
-> > 
-> > Why are we not setting the address? Is that deliberate, or an oversight?
-> 
-> Here set fault_address to 0, i refer to the logic of arm64_notify_die().
-> 
-> void arm64_notify_die(...)
-> {
->          if (user_mode(regs)) {
->                  WARN_ON(regs != current_pt_regs());
->                  current->thread.fault_address = 0;
->                  current->thread.fault_code = err;
-> 
->                  arm64_force_sig_fault(signo, sicode, far, str);
->          } else {
->                  die(str, regs, err);
->          }
-> }
-> 
-> I don't know exactly why and do you know why arm64_notify_die() did this? :)
-
-To be honest, I don't know, and that looks equally suspicious to me.
-
-Looking at the git history, that was added in commit:
-
-  9141300a5884b57c ("arm64: Provide read/write fault information in compat signal handlers")
-
-... so maybe Catalin recalls why.
-
-Perhaps the assumption is just that this will be fatal and so unimportant? ...
-but in that case the same logic would apply to the ESR value, so it's not clear
-to me.
-
-Mark.
+> +{
+> +	struct spmi_device *sdev;
+> +	struct qcom_spmi_dev *spmi;
+> +
+> +	/*
+> +	 * Make sure the device is actually a child of a PMIC
+> +	 */
+> +	if (!of_match_device(pmic_spmi_id_table, dev->parent))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	sdev = qcom_pmic_get_base_usid(dev->parent);
+>  
+> -	if (subtype == PM8110_SUBTYPE)
+> -		minor = rev2;
+> +	if (IS_ERR(sdev))
+> +		return ERR_CAST(sdev);
+>  
+> -	dev_dbg(dev, "%x: %s v%d.%d\n", subtype, name, major, minor);
+> +	spmi = (struct qcom_spmi_dev *)dev_get_drvdata(&sdev->dev);
+> +
+> +	return &spmi->pmic;
+>  }
+> +EXPORT_SYMBOL(qcom_pmic_get);

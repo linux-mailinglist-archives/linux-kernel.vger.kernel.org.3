@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4697855035D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3D6550350
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiFRH26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 03:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S232261AbiFRHJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 03:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbiFRH2u (ORCPT
+        with ESMTP id S229755AbiFRHJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 03:28:50 -0400
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FAAF27CC9
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=HY7SL
-        91Dp2dwcjkDk2PgKRD2uPG9gAKpA9WqpsRDXao=; b=notICbNhFCVNQJ0z2cl5e
-        XW1JCcxFY5dvE2TUNPIPc3h+HJQvvFtf+pSYLmv1lVca0tPxvvl+59QiNqwA81IL
-        6e4KMz2g/zyrN60htNL/J0sdx/eHTwGiXT9WnZWtZXBvHBwMdZ75sSARPZu0QpcU
-        59sDqQCn+z10Yes2yDW8gA=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgCH3HCVfq1iWx2cEw--.30404S2;
-        Sat, 18 Jun 2022 15:28:22 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     tglx@linutronix.de, maz@kernel.org
-Cc:     windhl@126.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] irqchip: Fix refcount leak bug in irq-ls-extirq.c
-Date:   Sat, 18 Jun 2022 15:28:20 +0800
-Message-Id: <20220618072820.4059291-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 18 Jun 2022 03:09:02 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE28A19F99;
+        Sat, 18 Jun 2022 00:09:00 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LQ6PY29KbzBsHg;
+        Sat, 18 Jun 2022 15:05:37 +0800 (CST)
+Received: from CHINA (10.175.102.38) by canpemm500009.china.huawei.com
+ (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 18 Jun
+ 2022 15:08:55 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     <weiyongjun1@huawei.com>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] irqchip/apple-aic: Make symbol 'use_fast_ipi' static
+Date:   Sat, 18 Jun 2022 07:28:24 +0000
+Message-ID: <20220618072824.562350-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgCH3HCVfq1iWx2cEw--.30404S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr15Kr17ZFy3try5CrWxZwb_yoW3Crg_Cr
-        4IgFsrJF10vrsxGrsrXr9xXFyqyrykursY9rnavF98Xa48Jw1DGr1Y93y5Gw4kWF4jyFWk
-        Cw4qvw18Aw13ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUS1vDUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hYkF1uwMOnVyAAAsQ
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.102.38]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ls_extirq_parse_map(), we need to keep refcount balance in the
-'while' loop. For each of_find_node_by_phandle(), we need a paired
-of_node_put().
+The sparse tool complains as follows:
 
-Signed-off-by: Liang He <windhl@126.com>
+drivers/irqchip/irq-apple-aic.c:231:1: warning:
+ symbol 'use_fast_ipi' was not declared. Should it be static?
+
+This symbol is not used outside of irq-apple-aic.c, so marks it static.
+
+Fixes: 2cf68211664a ("irqchip/apple-aic: Add Fast IPI support")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
- drivers/irqchip/irq-ls-extirq.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/irqchip/irq-apple-aic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-ls-extirq.c b/drivers/irqchip/irq-ls-extirq.c
-index 853b3972dbe7..82fffa37ee86 100644
---- a/drivers/irqchip/irq-ls-extirq.c
-+++ b/drivers/irqchip/irq-ls-extirq.c
-@@ -126,6 +126,7 @@ ls_extirq_parse_map(struct ls_extirq_data *priv, struct device_node *node)
- 			return -EINVAL;
- 		priv->map[hwirq].fwnode = &ipar->fwnode;
- 		ret = of_property_read_u32(ipar, "#interrupt-cells", &intsize);
-+		of_node_put(ipar);
- 		if (ret)
- 			return ret;
+diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+index 5ac83185ff47..1c2813ad8bbe 100644
+--- a/drivers/irqchip/irq-apple-aic.c
++++ b/drivers/irqchip/irq-apple-aic.c
+@@ -228,7 +228,7 @@
+ #define AIC_TMR_EL02_PHYS	AIC_TMR_GUEST_PHYS
+ #define AIC_TMR_EL02_VIRT	AIC_TMR_GUEST_VIRT
  
--- 
-2.25.1
+-DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
++static DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
+ 
+ struct aic_info {
+ 	int version;
 

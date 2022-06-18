@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33B855014B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2188655014D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383851AbiFRAXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 20:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S1383601AbiFRA1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 20:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383741AbiFRAXV (ORCPT
+        with ESMTP id S237031AbiFRA1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 20:23:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E99193EC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:23:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9092B82BC5
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D093C3411B;
-        Sat, 18 Jun 2022 00:23:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655511797;
-        bh=boOYcCWS4dikNpyUU4qRuS9iiJRGhxU9Epcn4+r8HHY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tMUqy2qF8GrCyvWIsrKoV++Je8osV39RUvp9XutD2Q6NrmK2mMSj7KypK+2gCWDA6
-         zyuQmID8ExnBce8qvhWt4YzdV8r0y4TEVOkZewgZXGwTo2vvNPH1hCy2yDpDmws9wC
-         gjKLe3zjGj2DeJjXbLExfT62s1jhOyK6W0oiuThE=
-Date:   Fri, 17 Jun 2022 17:23:16 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ying Huang <ying.huang@intel.com>, <peterx@redhat.com>,
-        <apopple@nvidia.com>, <osalvador@suse.de>,
-        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
-        <hch@lst.de>, <dhowells@redhat.com>, <cl@linux.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <naoya.horiguchi@nec.com>
-Subject: Re: [PATCH v4 1/4] mm: reduce the rcu lock duration
-Message-Id: <20220617172316.de2d41877e86be344052b9f5@linux-foundation.org>
-In-Reply-To: <a836d04a-d26b-3eea-3e0e-27af0d2d9651@huawei.com>
-References: <20220530113016.16663-1-linmiaohe@huawei.com>
-        <20220530113016.16663-2-linmiaohe@huawei.com>
-        <bbc060ca6e967790423e0a3ca940d1e700447554.camel@intel.com>
-        <b2ddcd64-2779-ede9-3615-ad5bc90a3bc1@huawei.com>
-        <87bkvdfzvm.fsf@email.froward.int.ebiederm.org>
-        <e10023d7-3d19-1edf-86af-4cb79071b78f@huawei.com>
-        <87y1yga1r2.fsf@email.froward.int.ebiederm.org>
-        <cb17bad6-dbfa-013c-f879-c1883575f72b@huawei.com>
-        <87ilph90dx.fsf@email.froward.int.ebiederm.org>
-        <a836d04a-d26b-3eea-3e0e-27af0d2d9651@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Fri, 17 Jun 2022 20:27:04 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711F43B013
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:27:02 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id w29so5303023pgl.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ei+HgXYmUs7VuH9SzfrkiDUXFHl2YpLCKGNXmwvOLnE=;
+        b=EWsGb7fKekXlYZrIKe4UPS69h8iiPXw/cnxRSMzwwldkX4FkEyUTUcvp7P5lfRPTNr
+         nDid7kyrMvZ3zddxkFLYpG7B7vsJROo7d73nGflocZyFwJBJpNdDBJJJSb5bAziRza3z
+         gcLjjTlxLWgJJ0+mlS6JJqIGvGEOQytfZm0PE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ei+HgXYmUs7VuH9SzfrkiDUXFHl2YpLCKGNXmwvOLnE=;
+        b=Ev01vY2hr5C2o6XtRHOibTGljc3DwQR+w5Cs0DW43Ugda7fHvJQrklNujW4SG2l3Gw
+         16JvV95Hb3KCRHj9N1wUAm9bG2Nqc/JFjHId1KfH5pNkegIu1xqraaFb2p0VHaKSNg9A
+         oDk3s2PYxDcKDndRf8CW7b+T2niwEqLUBu54wk1BFihtwk+RkUTchVMtiPDg5Q90ib9R
+         v1TwHnI7FQGaRd+wZfG7PU+feIPf7SfUeaC51a7UXEigsgzVgM0UvwiCaKKW/3L6GTnt
+         ENBv6CkE1KtoW+USBzfGTnpOgq3cIhlYyf5GuTUdIfnd0Jr6xbwKIbt99sys+XDbswt8
+         Ye3A==
+X-Gm-Message-State: AJIora+s5gDcNN7kTGEPS+F8WOtAJeMX0GAVQj/Ty/hZipEvWPiI9bwo
+        n5Y/4ptorgS+O7SG2eTTbkcf2SM8eg6eFA==
+X-Google-Smtp-Source: AGRyM1v/jglTlJSjuanGgPXZVW8dGNByT2BJv5Y9gHNgbkzDuTqe//AQccZr4N7r9rUR1So2ivva1A==
+X-Received: by 2002:a63:360b:0:b0:40c:2d81:9a86 with SMTP id d11-20020a63360b000000b0040c2d819a86mr8664644pga.60.1655512021857;
+        Fri, 17 Jun 2022 17:27:01 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6844:cedc:a28c:44b2])
+        by smtp.gmail.com with UTF8SMTPSA id p2-20020a62b802000000b00524fdb94c53sm66903pfe.132.2022.06.17.17.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 17:27:01 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] drm/rockchip: vop: Don't crash for invalid duplicate_state()
+Date:   Fri, 17 Jun 2022 17:26:52 -0700
+Message-Id: <20220617172623.1.I62db228170b1559ada60b8d3e1637e1688424926@changeid>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,24 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 17:19:53 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+It's possible for users to try to duplicate the CRTC state even when the
+state doesn't exist. drm_atomic_helper_crtc_duplicate_state() (and other
+users of __drm_atomic_helper_crtc_duplicate_state()) already guard this
+with a WARN_ON() instead of crashing, so let's do that here too.
 
-> > 
-> > 
-> > If the checks are not made to guarantee they are all checking against
-> > the same mm, the code needs a comment to say that there is a tiny race.
-> > The comment should say we don't care about the tiny race because
-> > the worst that can happen is that a page is migrated to a different
-> > numa node.  And so we don't care.
-> > 
-> > 
-> 
-> I tend to do this one. To make sure, is the below code change what you suggest?
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
 
-Eric went quiet.
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-As I understand it, any changes arising from this discussion can be
-done as a followup patch.  So I'm planning on moving this 4-patch
-series into the non-rebasing mm-stable branch late next week.
-
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index 74562d40f639..daf192881353 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -1570,6 +1570,9 @@ static struct drm_crtc_state *vop_crtc_duplicate_state(struct drm_crtc *crtc)
+ {
+ 	struct rockchip_crtc_state *rockchip_state;
+ 
++	if (WARN_ON(!crtc->state))
++		return NULL;
++
+ 	rockchip_state = kzalloc(sizeof(*rockchip_state), GFP_KERNEL);
+ 	if (!rockchip_state)
+ 		return NULL;
+-- 
+2.36.1.476.g0c4daa206d-goog
 

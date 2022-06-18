@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49795501F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178A05501F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbiFRCQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 22:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S1383848AbiFRCRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 22:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFRCQ2 (ORCPT
+        with ESMTP id S233656AbiFRCRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 22:16:28 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745AA6BFEC;
-        Fri, 17 Jun 2022 19:16:26 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I2GFMS127097;
-        Fri, 17 Jun 2022 21:16:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655518575;
-        bh=ABE9/FHrYFLhDb+PFoEd2RwQ/DvXSk/GXEvQj7xTXHo=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=VY853mk2KLWIgcY8lcJFqFHg4VA/ssM9YFToA5Y/Fh9EoZW5sAU8yaAUNs4q/mTcR
-         fnOIjTsRM4hT0ZN/upJj17bTfm4hMeY02k8+SyrqPZOUrU4eyi6TiWdJB5u8clyeIZ
-         kp7tOIYp+GDJIf5r22K2YXANQ4pZrO4K3pO60N+0=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I2GFSj049286
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jun 2022 21:16:15 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 21:16:15 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 21:16:14 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I2GFSV087434;
-        Fri, 17 Jun 2022 21:16:15 -0500
-Date:   Fri, 17 Jun 2022 21:16:14 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Rahul T R <r-ravikumar@ti.com>
-CC:     <robh+dt@kernel.org>, <vigneshr@ti.com>, <kishon@ti.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
-        <rogerq@kernel.org>, <devicetree@vger.kernel.org>,
-        <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>, <vijayp@ti.com>,
-        <jkridner@gmail.com>, <robertcnelson@gmail.com>
-Subject: Re: [PATCH v4 3/3] arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi
- Header
-Message-ID: <20220618021614.svhnzlsm2chn5jey@kahuna>
-References: <20220530101031.11357-1-r-ravikumar@ti.com>
- <20220530101031.11357-4-r-ravikumar@ti.com>
+        Fri, 17 Jun 2022 22:17:07 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBCD6BFFA
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:17:04 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso8439709pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JMI1LEXkNW8y4Ij7/pAVnRWBfFIajhln9mWym9qtdBk=;
+        b=aQztmLrHt2dZI0m3S9ZIj7LgfrGA9fkQjP6RpIpNbYdZONF/8bunfvMULxgX7lz1Jz
+         bGPOPLYBo3cQtv/Y//b6bNRAZEyHf6fejsuSIWtd0G+r6U0As7DAOTMx+QUw/714q9io
+         N1Yh/d8+TIC9sd6MCkdttGxne5uafq8HOTeC6bjLHMbfPkJt3R4A5TM8nPv4lW4F5cBK
+         lqeACve+y6w/y2FZpV8n/21VwIjdNOyJTMazCWBdQLW6s6ZGbjMgdumRdPjHHguSAj69
+         OUZJdZF6hAm3/gbGVmtW5Thi6nlFbXsdzj892Hf0gu9AYDe5aNJMWIDCvb0BUQF6eaQV
+         HjxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JMI1LEXkNW8y4Ij7/pAVnRWBfFIajhln9mWym9qtdBk=;
+        b=JGChyvqsb0MgOrBW/3bMAWmSubskILaJly9bgFT0FZlz2ETdd2p/gL8/IXC4NCQ2Y7
+         hYP8SGTMNB/BV2DbhpMqHRpBJJcUz/MUIj8r771Kn0SI2EBqytbWlGo8oLDQ4hLAMteN
+         B8TnojpOTeBLuRjtUAi4PKpUS1Q9Jb/kOv3uEzfKScYDxZGfUZHgdNnnMQ9+ZRID/AYa
+         oZdcnquLcePwozZnMBZQLGzbxXa799JJ0gBvqMR0fBUFYx4dwXVpVilxnB3lEI18GRcG
+         JDMIdw0bD6eHtw4+YDfNxFjgzIpTWVfAe+0ikgMg+gZHaMqBwXccb0B2xqqnxV4E9vt7
+         CLCw==
+X-Gm-Message-State: AJIora8JOzdCpkyU37h+zpnu1hbPZ9cNTu7KEea5VGnsYFg3e05WxMrf
+        Y4bmUSzNqULUaJ2XIdjtptjgyw==
+X-Google-Smtp-Source: AGRyM1s2R4p5Z+wXjDKBZyJZTtR9es+sqUpsVnnguraPXL+sRdJ03xv4un21pN3MjdQXcECp0OS3Tw==
+X-Received: by 2002:a17:90a:384f:b0:1ea:fa0b:3132 with SMTP id l15-20020a17090a384f00b001eafa0b3132mr10143859pjf.5.1655518624043;
+        Fri, 17 Jun 2022 19:17:04 -0700 (PDT)
+Received: from [172.31.235.92] ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id z63-20020a633342000000b0040c5c174b6esm1741857pgz.29.2022.06.17.19.17.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 19:17:03 -0700 (PDT)
+Message-ID: <4afdd1a2-6670-35aa-da70-7246ed96ef60@linaro.org>
+Date:   Fri, 17 Jun 2022 19:17:00 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220530101031.11357-4-r-ravikumar@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
+ related bindings
+Content-Language: en-US
+To:     Julius Werner <jwerner@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, Jian-Jia Su <jjsu@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Nikola Milosavljevic <mnidza@outlook.com>
+References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
+ <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,179 +82,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15:40-20220530, Rahul T R wrote:
-> From: Sinthu Raja <sinthu.raja@ti.com>
+On 14/06/2022 19:28, Julius Werner wrote:
+> Sorry, wrong email for Krzysztof.
+
+You need to base your upstream work on upstream tree. My email was
+changed like three months ago...
+
 > 
-> Add pinmux required to bring out
-> i2c5, ehrpwm 2 and 3 and gpios on
-> 40 pin RPi header on sk board
-> 
-> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> On Tue, Jun 14, 2022 at 7:25 PM Julius Werner <jwerner@chromium.org> wrote:
+>>
+>> We (Chromium OS) have been trying to find a way to pass LPDDR memory
+>> chip information that is available to the firmware through the FDT
+>> (mostly for userspace informational purposes, for now). We have been
+>> using and expanding the existing "jedec,lpddr2" and "jedec,lpddr3"
+>> bindings for this (e.g. [1]). The goal is to be able to identify the
+>> memory layout of the system (how the parts look like, how they're tied
+>> together, how much capacity there is in total) as accurately as
+>> possible from software-probed values.
+>>
+>> The existing bindings contain the fields "io-width" and "density",
+>> which is terminology directly matching what an LPDDR chip can report
+>> to firmware through the "Mode Register" interface, specifically MR8.
+>> (The LPDDR specs describing this are not public, but you can see the
+>> register definitions in most LPDDR chip datasheets that can be
+>> randomly found online, e.g. [2] page 37.) The code in
+>> drivers/memory/of_memory.c also suggests that these are supposed to
+>> directly correspond to the MR8 values read from the chip, since when
+>> of_lpddr2_get_info() copies the device tree values into struct
+>> lpddr2_info, it encodes them in a format that directly matches the
+>> mode register bit field patterns.
+>>
+>> The problem with this is that each individual LPDDR chip has its own
+>> set of mode registers (per rank) that only describe the density of
+>> that particular chip (rank). The host memory controller may have
+>> multiple channels (each of which is basically an entirely separate set
+>> of physical LPDDR pins on the board), a single channel may be
+>> connected to multiple LPDDR chips (e.g. if the memory controller has
+>> an outgoing 32-bit channel, that channel could be tied to two 16-bit
+>> LPDDR chips by tying the low 16 bits to one and the high 16 bits to
+>> the other), and then each of those chips may offer multiple
+>> independent ranks (which rank is being accessed at a given time is
+>> controlled by a separate chip select pin).
+>>
+>> So if we just have one "io-width" and one "density" field in the FDT,
+>> there's no way to figure out how much memory there's actually
+>> connected in total, because that only describes a single LPDDR chip.
 
 
-I was digging deeper at https://www.ti.com/lit/zip/sprr438
-(PROC112E2(001)_SCH.pdf - J3, Also looking at
-https://github.com/beagleboard/beaglebone-ai-64/blob/master/BeagleBone%20AI%20-64_SCH_V1.02_211119.pdf
-(P8, P9)
+Isn't the memory node used for that purpose - to identify how much
+memory you have in total?
 
-And comparing it to https://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/
-And considering potential use such as https://pypi.org/project/RPi.GPIO/
-variation,
+>> Worse, there may be chips where different ranks have different
+>> densities (e.g. a 6GB dual-rank chip with one 4GB and one 2GB rank),
+>> and different channels could theoretically be connected to chips of
+>> completely different manufacturers.
 
-Here is my suggestion (applies to other TI Boards that attempt to
-emulate RPI header)
-a) Default mux in board.dts should be GPIO except for the i2c used for
-   ID detection.
-b) Secondary functions should be a dt overlay. (These can easily enable
-   the pwms and other functions as needed)
-c) Maintain node names consistent to allow reuse of overlays across
-   platforms.
+>>
+>> We need to be able to report the information that's currently encoded
+>> in the "jedec,lpddr2" binding separately for each channel+rank
+>> combination, and we need to be able to tell how many LPDDR chips are
+>> combined under a single memory channel. For the former, I'd suggest
+>> creating a separate FDT node for each channel, and then creating
+>> subnodes under those for each rank that implement the binding. For the
+>> latter, I would suggest adding a new property "channel-io-width" which
 
-Usage: you can either use extlinux.conf OR uEnv.txt to apply the
-overlays as desired (ID detection from hats might help automate it based
-on the bootloader you'd want to use)
+No, because io-width is a standard property, so it should be used
+instead. It could be defined in channel node.
 
-Else, you have created a custom configuration here for 1 specific
-application, various hats that expect GPIO will end up croaking.
+I'll think later, although it would be easier if you just bounce the
+message to me, not forward. Much easier to read...
 
 
-I am open to discussions here.
-
-> ---
->  arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 89 ++++++++++++++++++++++----
->  1 file changed, 78 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> index 98a55778f3fe..b913b18ae133 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> @@ -400,6 +400,57 @@
->  			J721E_IOPAD(0x124, PIN_INPUT, 7) /* (Y24) PRG0_PRU1_GPO9.GPIO0_72 */
->  		>;
->  	};
-> +
-> +	main_i2c5_pins_default: main-i2c5-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x150, PIN_INPUT_PULLUP, 2) /* (Y26) PRG0_MDIO0_MDIO.I2C5_SCL */
-> +			J721E_IOPAD(0x154, PIN_INPUT_PULLUP, 2) /* (AA27) PRG0_MDIO0_MDC.I2C5_SDA */
-> +		>;
-> +	};
-> +
-> +	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x01c, PIN_INPUT, 7) /* (AD22) PRG1_PRU0_GPO6.GPIO0_7 */
-> +			J721E_IOPAD(0x120, PIN_INPUT, 7) /* (AA28) PRG0_PRU1_GPO8.GPIO0_71 */
-> +			J721E_IOPAD(0x14c, PIN_INPUT, 7) /* (AA29) PRG0_PRU1_GPO19.GPIO0_82 */
-> +			J721E_IOPAD(0x02c, PIN_INPUT, 7) /* (AD21) PRG1_PRU0_GPO10.GPIO0_11 */
-> +			J721E_IOPAD(0x198, PIN_INPUT, 7) /* (V25) RGMII6_TD1.GPIO0_101 */
-> +			J721E_IOPAD(0x1b0, PIN_INPUT, 7) /* (W24) RGMII6_RD1.GPIO0_107 */
-> +			J721E_IOPAD(0x1a0, PIN_INPUT, 7) /* (W29) RGMII6_TXC.GPIO0_103 */
-> +			J721E_IOPAD(0x008, PIN_INPUT, 7) /* (AG22) PRG1_PRU0_GPO1.GPIO0_2 */
-> +			J721E_IOPAD(0x1d0, PIN_INPUT, 7) /* (AA3) SPI0_D1.GPIO0_115 */
-> +			J721E_IOPAD(0x11c, PIN_INPUT, 7) /* (AA24) PRG0_PRU1_GPO7.GPIO0_70 */
-> +			J721E_IOPAD(0x148, PIN_INPUT, 7) /* (AA26) PRG0_PRU1_GPO18.GPIO0_81 */
-> +			J721E_IOPAD(0x004, PIN_INPUT, 7) /* (AC23) PRG1_PRU0_GPO0.GPIO0_1 */
-> +			J721E_IOPAD(0x014, PIN_INPUT, 7) /* (AH23) PRG1_PRU0_GPO4.GPIO0_5 */
-> +			J721E_IOPAD(0x020, PIN_INPUT, 7) /* (AE20) PRG1_PRU0_GPO7.GPIO0_8 */
-> +			J721E_IOPAD(0x19c, PIN_INPUT, 7) /* (W27) RGMII6_TD0.GPIO0_102 */
-> +			J721E_IOPAD(0x1b4, PIN_INPUT, 7) /* (W25) RGMII6_RD0.GPIO0_108 */
-> +			J721E_IOPAD(0x188, PIN_INPUT, 7) /* (Y28) RGMII6_TX_CTL.GPIO0_97 */
-> +			J721E_IOPAD(0x00c, PIN_INPUT, 7) /* (AF22) PRG1_PRU0_GPO2.GPIO0_3 */
-> +			J721E_IOPAD(0x010, PIN_INPUT, 7) /* (AJ23) PRG1_PRU0_GPO3.GPIO0_4 */
-> +		>;
-> +	};
-> +
-> +	rpi_header_gpio1_pins_default: rpi-header-gpio1-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x234, PIN_INPUT, 7) /* (U3) EXT_REFCLK1.GPIO1_12 */
-> +		>;
-> +	};
-> +
-> +	rpi_header_ehrpwm2_pins_default: rpi-header-ehrpwm2-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x178, PIN_INPUT, 6) /* (U27) RGMII5_RD3.EHRPWM2_A */
-> +			J721E_IOPAD(0x17c, PIN_INPUT, 6) /* (U24) RGMII5_RD2.EHRPWM2_B */
-> +		>;
-> +	};
-> +
-> +	rpi_header_ehrpwm3_pins_default: rpi-header-ehrpwm3-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x18c, PIN_INPUT, 6) /* (V23) RGMII6_RX_CTL.EHRPWM3_A */
-> +			J721E_IOPAD(0x190, PIN_INPUT, 6) /* (W23) RGMII6_TD3.EHRPWM3_B */
-> +		>;
-> +	};
->  };
->  
->  &wkup_pmx0 {
-> @@ -631,11 +682,6 @@
->  	status = "disabled";
->  };
->  
-> -&main_i2c5 {
-> -	/* Brought out on RPi Header */
-> -	status = "disabled";
-> -};
-> -
-
-Please don't relocate nodes in the same patch - kinda messes up the
-diffstat and makes review a bit harder.
-
->  &main_i2c6 {
->  	/* Unused */
->  	status = "disabled";
-> @@ -1138,18 +1184,39 @@
->  	status = "disabled";
->  };
->  
-> -&main_ehrpwm2 {
-> +&main_ehrpwm4 {
->  	status = "disabled";
->  };
->  
-> -&main_ehrpwm3 {
-> +&main_ehrpwm5 {
->  	status = "disabled";
->  };
->  
-> -&main_ehrpwm4 {
-> -	status = "disabled";
-> +&main_gpio0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
->  };
->  
-> -&main_ehrpwm5 {
-> -	status = "disabled";
-> +&main_gpio1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_gpio1_pins_default>;
-> +};
-> +
-> +&main_i2c5 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_i2c5_pins_default>;
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-
-Defaults in SoC.dtsi so far are "okay" - so adding that again is
-superfluous This happens when you are relocating nodes etc
-
-> +};
-> +
-> +&main_ehrpwm2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_ehrpwm2_pins_default>;
-> +	status = "okay";
-> +};
-> +
-> +&main_ehrpwm3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_ehrpwm3_pins_default>;
-> +	status = "okay";
->  };
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Best regards,
+Krzysztof

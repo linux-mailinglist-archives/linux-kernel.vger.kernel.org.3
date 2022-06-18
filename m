@@ -2,205 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4A255073E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F15550741
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiFRWNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 18:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S229549AbiFRWP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 18:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbiFRWNd (ORCPT
+        with ESMTP id S231506AbiFRWPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 18:13:33 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA083265E;
-        Sat, 18 Jun 2022 15:13:30 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 25IMD8iG007387;
-        Sun, 19 Jun 2022 07:13:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 25IMD8iG007387
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655590389;
-        bh=7jwbvyrhQLV+4aegmk22DRd9SYJoD6/Ana8x4b/1QLk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HMFT5yD4HPzN0/ok5qxydwtXHQ/zhALcx64F9y1ip3MY6bbwMhcN7cQZ7CNF9HYQp
-         od4k1EOCwEwtaYVr8vDt/jOKNXuujz4L2xAIz7rI8Cu+fHoC/86KZCa0YgO3F4iHWu
-         gt88uw2M1ibhIDrgPZlwHHNrx7BG6/iLMDcfhB13MjRX+t7Nq+WyHFL4TpnoYhvqKN
-         zLanyNywu11ddt+7IAuOb3DlNOi1E35e58XzTFcjzGek1DxCWghlBRruFIMtBS5rsm
-         b7139uVNXxh9zUjilp1WZAbXrwyCx3lb10aGD8HYcQMlp+MNQAExP0lmIpWhtSN7up
-         yy3tnTkOPmK5A==
-X-Nifty-SrcIP: [209.85.221.50]
-Received: by mail-wr1-f50.google.com with SMTP id g4so9839701wrh.11;
-        Sat, 18 Jun 2022 15:13:09 -0700 (PDT)
-X-Gm-Message-State: AJIora/S/9tmwtuJxPrjPXuWdl+K0GETTbwicPs3OWPAuFgvA6818z91
-        qa0mQ57gX3XHgFZVgVtHKWPSnoxVAI0lB/gQReQ=
-X-Google-Smtp-Source: AGRyM1sML4k/551cdhdkCWZlW1l3J3kC8wOqKO/VYoNqgy7eljBeD2d9mRgOZD6mP5Qa9NRBtiZhiYtiGyCKEx6860c=
-X-Received: by 2002:a5d:5e92:0:b0:21a:278c:b901 with SMTP id
- ck18-20020a5d5e92000000b0021a278cb901mr15492125wrb.461.1655590387823; Sat, 18
- Jun 2022 15:13:07 -0700 (PDT)
+        Sat, 18 Jun 2022 18:15:23 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98552E018
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:15:21 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id g11-20020a056e021e0b00b002d1b5e8389bso4956994ila.2
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:15:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=cExQdbV21IqFMasbKvZDPSAnWQDgKTx+CTrkWms6YdA=;
+        b=GnWtq5GI/Ya14JnFJfltFr3N9S/qndAT8k5wqhGMugycv/3YfTFQAEkWlwMZSRew7l
+         qDHrLR+q+u1v6a+zhgTJTR4qUkqx0/BhgKqbSQ+YTcIqRmm/9KnI6ztaeADPJZ+itlAC
+         oe3wadM6k67O6fq6RrLt+LWGKdSH2kWUfaLJR2ZivRjIAcHXsmWRC567iobkkgK0NdNm
+         /ODqNfNJDhHr7U37Hlc7KP9ar7h7ZwfY/C0A92n2dFYVNqqCNyIbB6lapOZUfAoLLgDo
+         y9dNDOzU+En9h0UH20JEDCi5Fm8ro6vwAT6Le+AG2D7MO0Zc+QxFQ8LggzdotER9sGgf
+         Gkng==
+X-Gm-Message-State: AJIora93eWuI02v02OaGdtqmkGtxL6bkZtUDTOkwm2S+dMziD0jAd2Jt
+        FJ5tpUAw6KquvUVIWrt6BZ+arw1HzikNlNtJJDZufLTqpi7v
+X-Google-Smtp-Source: AGRyM1sARy0g+5GkMm0W+suRvje6+JpWzSbPJ5cyjpiWIkQY8QW6Ni49id3SO+uMBASqQRfaDvMt/vImGE6pZaSeePhIv8+MtdPU
 MIME-Version: 1.0
-References: <20220611172233.1494073-1-masahiroy@kernel.org>
- <20220611172233.1494073-2-masahiroy@kernel.org> <58a20890-557e-f31c-ed59-7e256445a26c@digikod.net>
- <YqopiZgC8vNSKYPt@iki.fi>
-In-Reply-To: <YqopiZgC8vNSKYPt@iki.fi>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 19 Jun 2022 07:12:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARSYSupt1nL_JS2prLunRpOhMRG_pPhHfto7+K+QDVp2Q@mail.gmail.com>
-Message-ID: <CAK7LNARSYSupt1nL_JS2prLunRpOhMRG_pPhHfto7+K+QDVp2Q@mail.gmail.com>
-Subject: Re: [PATCH 2/4] certs: fix and refactor CONFIG_SYSTEM_BLACKLIST_HASH_LIST
- build
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
+X-Received: by 2002:a6b:c985:0:b0:66c:ce19:a5b6 with SMTP id
+ z127-20020a6bc985000000b0066cce19a5b6mr6874900iof.94.1655590520975; Sat, 18
+ Jun 2022 15:15:20 -0700 (PDT)
+Date:   Sat, 18 Jun 2022 15:15:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e57c2b05e1c03426@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in __vmalloc_node_range
+From:   syzbot <syzbot+b577bc624afda52c78de@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 3:51 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Mon, Jun 13, 2022 at 02:34:36PM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> >
-> >
-> > On 11/06/2022 19:22, Masahiro Yamada wrote:
-> > > Commit addf466389d9 ("certs: Check that builtin blacklist hashes are
-> > > valid") was applied 8 months after the submission.
-> > >
-> > > In the meantime, the base code had been removed by commit b8c96a6b466=
-c
-> > > ("certs: simplify $(srctree)/ handling and remove config_filename
-> > > macro").
-> > >
-> > > Fix the Makefile.
-> > >
-> > > Create a local copy of $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST). It is
-> > > included from certs/blacklist_hashes.c and also works as a timestamp.
-> > >
-> > > Send error messages from check-blacklist-hashes.awk to stderr instead
-> > > of stdout.
-> > >
-> > > Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are =
-valid")
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> >
-> > Reviewed-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> >
-> > As a side note, it may let an orphan certs/blacklist_hashes_checked fil=
-e but
-> > we can't really do something about that and it's OK.
-> >
-> > Thanks!
-> >
-> > > ---
-> > >
-> > >   certs/.gitignore         |  2 +-
-> > >   certs/Makefile           | 20 ++++++++++----------
-> > >   certs/blacklist_hashes.c |  2 +-
-> > >   3 files changed, 12 insertions(+), 12 deletions(-)
-> > >
-> > > diff --git a/certs/.gitignore b/certs/.gitignore
-> > > index 56637aceaf81..cec5465f31c1 100644
-> > > --- a/certs/.gitignore
-> > > +++ b/certs/.gitignore
-> > > @@ -1,5 +1,5 @@
-> > >   # SPDX-License-Identifier: GPL-2.0-only
-> > > -/blacklist_hashes_checked
-> > > +/blacklist_hash_list
-> > >   /extract-cert
-> > >   /x509_certificate_list
-> > >   /x509_revocation_list
-> > > diff --git a/certs/Makefile b/certs/Makefile
-> > > index cb1a9da3fc58..a8d628fd5f7b 100644
-> > > --- a/certs/Makefile
-> > > +++ b/certs/Makefile
-> > > @@ -7,22 +7,22 @@ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) +=3D system_ke=
-yring.o system_certificates.o c
-> > >   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist.o common.o
-> > >   obj-$(CONFIG_SYSTEM_REVOCATION_LIST) +=3D revocation_certificates.o
-> > >   ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
-> > > -quiet_cmd_check_blacklist_hashes =3D CHECK   $(patsubst "%",%,$(2))
-> > > -      cmd_check_blacklist_hashes =3D $(AWK) -f $(srctree)/scripts/ch=
-eck-blacklist-hashes.awk $(2); touch $@
-> > > -$(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
-> > > +$(obj)/blacklist_hashes.o: $(obj)/blacklist_hash_list
-> > > +CFLAGS_blacklist_hashes.o :=3D -I $(obj)
-> > > -$(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
-> > > +quiet_cmd_check_and_copy_blacklist_hash_list =3D GEN     $@
-> > > +      cmd_check_and_copy_blacklist_hash_list =3D \
-> > > +   $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(CONFIG_=
-SYSTEM_BLACKLIST_HASH_LIST) >&2; \
-> > > +   cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
-> > > -CFLAGS_blacklist_hashes.o +=3D -I$(srctree)
-> > > -
-> > > -targets +=3D blacklist_hashes_checked
-> > > -$(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPRE=
-FIX)$(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.a=
-wk FORCE
-> > > -   $(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_=
-LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
-> > > +$(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FOR=
-CE
-> > > +   $(call if_changed,check_and_copy_blacklist_hash_list)
-> > >   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_hashes.o
-> > >   else
-> > >   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_nohashes.o
-> > >   endif
-> > > +targets +=3D blacklist_hash_list
-> > >   quiet_cmd_extract_certs  =3D CERT    $@
-> > >         cmd_extract_certs  =3D $(obj)/extract-cert $(extract-cert-in)=
- $@
-> > > @@ -33,7 +33,7 @@ $(obj)/system_certificates.o: $(obj)/x509_certifica=
-te_list
-> > >   $(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/=
-extract-cert FORCE
-> > >     $(call if_changed,extract_certs)
-> > > -targets +=3D x509_certificate_list blacklist_hashes_checked
-> > > +targets +=3D x509_certificate_list
-> > >   # If module signing is requested, say by allyesconfig, but a key ha=
-s not been
-> > >   # supplied, then one will need to be generated to make sure the bui=
-ld does not
-> > > diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
-> > > index d5961aa3d338..86d66fe11348 100644
-> > > --- a/certs/blacklist_hashes.c
-> > > +++ b/certs/blacklist_hashes.c
-> > > @@ -2,6 +2,6 @@
-> > >   #include "blacklist.h"
-> > >   const char __initconst *const blacklist_hashes[] =3D {
-> > > -#include CONFIG_SYSTEM_BLACKLIST_HASH_LIST
-> > > +#include "blacklist_hash_list"
-> > >     , NULL
-> > >   };
->
-> I'll make a PR for 1/4 and 2/4 so that they get into 5.19.
->
-> BR, Jarkko
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    35d872b9ea5b Add linux-next specific files for 20220614
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=155b0d10080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d7bf2236c6bb2403
+dashboard link: https://syzkaller.appspot.com/bug?extid=b577bc624afda52c78de
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b577bc624afda52c78de@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at mm/vmalloc.c:2980
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 30561, name: syz-executor.0
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+no locks held by syz-executor.0/30561.
+Preemption disabled at:
+[<ffffffff81bc76f5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+[<ffffffff81bc76f5>] rmqueue mm/page_alloc.c:3858 [inline]
+[<ffffffff81bc76f5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+CPU: 1 PID: 30561 Comm: syz-executor.0 Not tainted 5.19.0-rc2-next-20220614-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+ vm_area_alloc_pages mm/vmalloc.c:2980 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3025 [inline]
+ __vmalloc_node_range+0x6a1/0x13b0 mm/vmalloc.c:3195
+ alloc_thread_stack_node kernel/fork.c:311 [inline]
+ dup_task_struct kernel/fork.c:971 [inline]
+ copy_process+0x1568/0x7080 kernel/fork.c:2065
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2649
+ __do_sys_clone+0xba/0x100 kernel/fork.c:2783
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fe727a8a531
+Code: 48 85 ff 74 3d 48 85 f6 74 38 48 83 ee 10 48 89 4e 08 48 89 3e 48 89 d7 4c 89 c2 4d 89 c8 4c 8b 54 24 08 b8 38 00 00 00 0f 05 <48> 85 c0 7c 13 74 01 c3 31 ed 58 5f ff d0 48 89 c7 b8 3c 00 00 00
+RSP: 002b:00007ffee47acde8 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007fe728cb3700 RCX: 00007fe727a8a531
+RDX: 00007fe728cb39d0 RSI: 00007fe728cb32f0 RDI: 00000000003d0f00
+RBP: 00007ffee47ad030 R08: 00007fe728cb3700 R09: 00007fe728cb3700
+R10: 00007fe728cb39d0 R11: 0000000000000206 R12: 00007ffee47ace9e
+R13: 00007ffee47ace9f R14: 00007fe728cb3300 R15: 0000000000022000
+ </TASK>
+BUG: scheduling while atomic: syz-executor.0/30561/0x00000002
+no locks held by syz-executor.0/30561.
+Modules linked in:
+Preemption disabled at:
+[<ffffffff81bc76f5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+[<ffffffff81bc76f5>] rmqueue mm/page_alloc.c:3858 [inline]
+[<ffffffff81bc76f5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
 
 
-Thank you!
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-What shall we do for 3/4 and 4/4?
-
-Do you have a plan to queue them up for the next MW?
-
-Or, shall I apply them to my kbuild tree with your reivewed-by?
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

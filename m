@@ -2,127 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052B155074A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27A6550750
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbiFRWWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 18:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
+        id S233905AbiFRWXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 18:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbiFRWWa (ORCPT
+        with ESMTP id S234766AbiFRWXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 18:22:30 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93110FFD;
-        Sat, 18 Jun 2022 15:22:26 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 25IMM0lH021854
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Jun 2022 18:22:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1655590923; bh=YrhDLwaCTlOrkF9IQHmzP4ZWIpSzEsV/ZK9FqdnlmMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=mRMGaJ66wKbsram2GYoiclVP8dJmHU8fr1LMeMO2Py7Uom+4zYY42vJjfsTEsO5tm
-         sTq0/8hBDWuA3MZMGnMv4HdEfgnu5iLkV5YRM+FXFyQhf7fTM6/Ay+PVkhrUBSeFIR
-         CtLqWwa3V+seP9fCFQXuzqC9ZV4y+fEq7QYFOXCU8xSYpqzLiGoQzNmDt+RUZgGSJ4
-         bLUFg6GfYMK1uHKOmcleK5DsovEZ/lJCaZlEDt1dT6VeCNSAkRBLSFCy8mMgwdcwCs
-         kADM6YvyNwwFGMVaL4D3oa+jClOjpuCirLmI+ILm0JLMkbp1KICkiknyOZwBiVxucE
-         Da3uBjz7ob3tQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id A6E3E15C430A; Sat, 18 Jun 2022 18:22:00 -0400 (EDT)
-Date:   Sat, 18 Jun 2022 18:22:00 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     adilger.kernel@dilger.ca,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: Re: [PATCH] ext4: change variable "count" to signed integer
-Message-ID: <Yq5QCJI7qC80AtxL@mit.edu>
-References: <20220530100047.537598-1-dingxiang@cmss.chinamobile.com>
- <165552108974.634564.2634497659089601268.b4-ty@mit.edu>
- <Yq2bzesQ5H+DrA47@kili>
+        Sat, 18 Jun 2022 18:23:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839CA10FFD
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655591016; x=1687127016;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BZjEnfzthlTSTBUS58K+MYmeqofVkjA92SKFMcEt/0k=;
+  b=SaqDfQsWfs9hhJIBZfmkRTgVTnpU+kTAX2XIqD3muUjdulAVrGObNcZL
+   XpUxF8MnSM2qMRNQY/JUixGohO9tYzeoQXP5OMFZ5NGABX8dLFkJrUnnu
+   NDiIJOOOz4Py8xuxEc8/N0ZLd6sTsQlVDE/bdm28BgzDpTNkx1Gew2ip8
+   On2Yz49pRb9dwskma1anf43NN0eos5pMwCT8rcc1meXRoBOND8Wu1GzF2
+   kuNNURxl4SYLyvfaFtSRBW6cXuTGbA8KdSLzt7iziAff2ys7wsiQJCfwT
+   IJsZAqqHb8rtwIuM3ugaM/YoGJLdm8tpxKaj0llCwyLgCURuiF72GWj8M
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280742892"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280742892"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 15:23:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="619665913"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2022 15:23:35 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2gqs-000Qe3-Bn;
+        Sat, 18 Jun 2022 22:23:34 +0000
+Date:   Sun, 19 Jun 2022 06:23:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: riscv64-linux-ld: ttm_bo_vm.c:undefined reference to
+ `vmf_insert_pfn_prot'
+Message-ID: <202206190651.smtms3Ay-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yq2bzesQ5H+DrA47@kili>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 12:33:01PM +0300, Dan Carpenter wrote:
-> On Fri, Jun 17, 2022 at 10:59:01PM -0400, Theodore Ts'o wrote:
-> > On Mon, 30 May 2022 18:00:47 +0800, Ding Xiang wrote:
-> > > Since dx_make_map() may return -EFSCORRUPTED now,
-> > > so change "count" to signed integer.
-> > > 
-> > > 
-> > 
-> > Applied, thanks!
-> > 
-> > [1/1] ext4: change variable "count" to signed integer
-> >       commit: fefb759df063599ad483422eb07ef8e14c612cc2
-> > 
-> 
-> There was some kind of process error here...
-> 
-> 1) That commit somehow never made it to linux-next.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+commit: 8bb31587820a6e04cb613b49238b1800d1a97223 drm/ttm: remove bo->moving
+date:   2 months ago
+config: riscv-buildonly-randconfig-r006-20220619 (https://download.01.org/0day-ci/archive/20220619/202206190651.smtms3Ay-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8bb31587820a6e04cb613b49238b1800d1a97223
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8bb31587820a6e04cb613b49238b1800d1a97223
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-That's I only pushed it out Friday night (US/Eastern), and Stephen
-Rothwell creates new linux-next release based on snapshots taken
-Monday through Friday in the Morning (AU/Canberra time).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Things have been crazy busy, so a last set of ext4 backports only
-happened Friday starting around 10pm localtime.  (Yes, I have no
-life.)
+All errors (new ones prefixed by >>):
 
+   riscv64-linux-ld: riscv64-linux-ld: DWARF error: could not find abbrev number 3991
+   drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L0 ':
+   ttm_bo_vm.c:(.text+0x656): undefined reference to `vmf_insert_pfn_prot'
+>> riscv64-linux-ld: ttm_bo_vm.c:(.text+0x7ce): undefined reference to `vmf_insert_pfn_prot'
 
-> 2) No Fixes tag.  Presumably Greg searches for Fixes tags before he back
-> ports patches.  The original commit 46c116b920eb ("ext4: verify dir
-> block before splitting it") has been back ported to stable already.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_TTM_HELPER && HAS_IOMEM && DRM
+   - DRM_HISI_HIBMC && HAS_IOMEM && DRM && PCI && (ARM64 || COMPILE_TEST
 
-I did add a Fixes tag in what is in the ext4 tree.  I don't always
-mention when I've rewritten since that requries manual editing of the
-"b4 ty" generated acknowledgement.
-
-In the ideal world when I rewrite the one-line snapshot, at the *very*
-least it should show up in the Applied/thanks.  Maybe something like
-this:
-
-[1/1] ext4: change variable "count" to signed integer
-      commit: fefb759df063599ad483422eb07ef8e14c612cc2
-      rewritten summary: ext4: make variable "count" signed
-
-... and if the commit description is rewritten, maybe the "b4 ty"
-e-mail should mention it.  (Very often I end up rewriting commit
-descriptions, especially when the original poster's first language is
-not English.)
-
-For the record, this is what is in the ext4 tree that I plan to push
-to Linus is:
-
-commit fefb759df063599ad483422eb07ef8e14c612cc2
-Author: Ding Xiang <dingxiang@cmss.chinamobile.com>
-Date:   Mon May 30 18:00:47 2022 +0800
-
-    ext4: make variable "count" signed
-    
-    Since dx_make_map() may return -EFSCORRUPTED now, so change "count" to
-    be a signed integer so we can correct check for an error code returned
-    by dx_make_map().
-    
-    Fixes: 46c116b920eb ("ext4: verify dir block before splitting it")
-    Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
-    Link: https://lore.kernel.org/r/20220530100047.537598-1-dingxiang@cmss.chinamobile.com
-    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-
-Cheers,
-
-					- Ted
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

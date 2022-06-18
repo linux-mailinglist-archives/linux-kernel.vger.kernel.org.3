@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27A6550750
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD80755075A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiFRWXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 18:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S232089AbiFRWjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 18:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234766AbiFRWXh (ORCPT
+        with ESMTP id S231506AbiFRWjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 18:23:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839CA10FFD
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655591016; x=1687127016;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BZjEnfzthlTSTBUS58K+MYmeqofVkjA92SKFMcEt/0k=;
-  b=SaqDfQsWfs9hhJIBZfmkRTgVTnpU+kTAX2XIqD3muUjdulAVrGObNcZL
-   XpUxF8MnSM2qMRNQY/JUixGohO9tYzeoQXP5OMFZ5NGABX8dLFkJrUnnu
-   NDiIJOOOz4Py8xuxEc8/N0ZLd6sTsQlVDE/bdm28BgzDpTNkx1Gew2ip8
-   On2Yz49pRb9dwskma1anf43NN0eos5pMwCT8rcc1meXRoBOND8Wu1GzF2
-   kuNNURxl4SYLyvfaFtSRBW6cXuTGbA8KdSLzt7iziAff2ys7wsiQJCfwT
-   IJsZAqqHb8rtwIuM3ugaM/YoGJLdm8tpxKaj0llCwyLgCURuiF72GWj8M
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280742892"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280742892"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 15:23:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="619665913"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2022 15:23:35 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2gqs-000Qe3-Bn;
-        Sat, 18 Jun 2022 22:23:34 +0000
-Date:   Sun, 19 Jun 2022 06:23:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: riscv64-linux-ld: ttm_bo_vm.c:undefined reference to
- `vmf_insert_pfn_prot'
-Message-ID: <202206190651.smtms3Ay-lkp@intel.com>
+        Sat, 18 Jun 2022 18:39:09 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6031B845;
+        Sat, 18 Jun 2022 15:39:06 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id c11so3547211vkn.5;
+        Sat, 18 Jun 2022 15:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=mWm3075zUyjZdm5Pr3I4IXYgBYEeEKabUfevN6De2+c=;
+        b=SeU09hxP6cWVa5NOL8KUaKNDu2/W3aC9MAFhCe53ZTzDl6O8eWQj7PjKf6j8Bc52dT
+         PoIpodjM7QxRTppxqUeTYN5yydJ7xw8YUQfaow2D5h6xxGP1V8ZqktTlXqqfLvdFhWuj
+         oHqeatWhsWRIZP2zfBQMZj2HhGMjVmcYq38dP4W6Zbz7ABXeSvjLzxXlZnces2xLADuB
+         7VOGJM9l+W+1NGlsCEcuhAu2UhYXxjKDFy8krXuRevA7LRJSIWxDeTBFJtmko/wkRB7b
+         KLloUysSm2ADs4Bzq6edvqIHxBqlgG+4HtdTKdL0kEVwF7AbZQQ66hAVU0qIQ3YvQYWi
+         470w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=mWm3075zUyjZdm5Pr3I4IXYgBYEeEKabUfevN6De2+c=;
+        b=PDTdweLd+EEqzvhrz9K9Py0z4l9EdaC5l1ZR52I06y5fH+mAUjDHYihDVueH8/Y/wH
+         mLfuQBZgVLqFS+u0LB6q2JlBM4CmIFy5vVjfDmnCmT5zQWzc934Q746ZtcdoHHNMDzrI
+         BgzcWDTlKN2o/cz1Lpx3+Ljcxf+SOc3eJvPH7LcUkpO1pWaXi2XKGdhRVp9VdSilUvPo
+         Z51UFrmVwzrosua4tqgYNklrQjtXK175XT6s0ueClU4t8/euh2JnyhPZEXjeSOwX0jKu
+         voF6voOiTuWMmm/LHiHnTrIuTQNNTPzCD9X0QgKL79nC6s29SkbFEX9fPQxIVZvn0uOC
+         VDeg==
+X-Gm-Message-State: AJIora/tdY0N7yi60C1odeGYEN69VxNr0+53fDSG4eYPsSJTqlrzvG6p
+        TAWl3D3QXXcl1pOzK0cyJla0kZSTuvfLNhYwZwrFe7n3DeM=
+X-Google-Smtp-Source: AGRyM1uCZJ225/VpReNjFcSZlrd2YXp/8Ij7WF2q0FMHRLjn5v41CMcCG1Jj/ozGFj3K14m+TEOrTUTfiNiFuO9Wxr4=
+X-Received: by 2002:a1f:6d04:0:b0:36c:125:2edf with SMTP id
+ i4-20020a1f6d04000000b0036c01252edfmr63817vkc.38.1655591945548; Sat, 18 Jun
+ 2022 15:39:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 18 Jun 2022 17:38:54 -0500
+Message-ID: <CAH2r5mtJnW8Uq2Dk2xjid4Au9rM=g9_oBJC5ojJMd-Qksne+6g@mail.gmail.com>
+Subject: [GIT PULL] SMB3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-commit: 8bb31587820a6e04cb613b49238b1800d1a97223 drm/ttm: remove bo->moving
-date:   2 months ago
-config: riscv-buildonly-randconfig-r006-20220619 (https://download.01.org/0day-ci/archive/20220619/202206190651.smtms3Ay-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8bb31587820a6e04cb613b49238b1800d1a97223
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8bb31587820a6e04cb613b49238b1800d1a97223
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Please pull the following changes since commit
+b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
 
-All errors (new ones prefixed by >>):
+are available in the Git repository at:
 
-   riscv64-linux-ld: riscv64-linux-ld: DWARF error: could not find abbrev number 3991
-   drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L0 ':
-   ttm_bo_vm.c:(.text+0x656): undefined reference to `vmf_insert_pfn_prot'
->> riscv64-linux-ld: ttm_bo_vm.c:(.text+0x7ce): undefined reference to `vmf_insert_pfn_prot'
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc2-smb3-client-fixes
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_TTM
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_TTM_HELPER && HAS_IOMEM && DRM
-   - DRM_HISI_HIBMC && HAS_IOMEM && DRM && PCI && (ARM64 || COMPILE_TEST
+for you to fetch changes up to 5d24968f5b7e00bae564b1646c3b9e0e3750aabe:
+
+  cifs: when a channel is not found for server, log its connection id
+(2022-06-18 14:55:06 -0500)
+
+----------------------------------------------------------------
+2 smb3 debugging improvements
+- one found to deal with debugging a multichannel problem and one for
+a recent fallocate issue
+
+Did not include the two larger multichannel reconnect (dynamically
+adjusting interfaces on reconnect) patches in this P/R, because
+recently found an additional problem with multichannel  to one server
+type that I want to include at the same time.
+----------------------------------------------------------------
+Shyam Prasad N (1):
+      cifs: when a channel is not found for server, log its connection id
+
+Steve French (1):
+      smb3: add trace point for SMB2_set_eof
+
+ fs/cifs/sess.c    |  3 +++
+ fs/cifs/smb2pdu.c |  2 ++
+ fs/cifs/trace.h   | 38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+Steve

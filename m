@@ -2,215 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABF95506B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 22:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910805506C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 23:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbiFRUpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 16:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S231215AbiFRVAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 17:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFRUpO (ORCPT
+        with ESMTP id S230395AbiFRVAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 16:45:14 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4530313DD8
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 13:45:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id r1so6565221plo.10
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 13:45:13 -0700 (PDT)
+        Sat, 18 Jun 2022 17:00:22 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F01B7F1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 14:00:20 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id u18so6599844plb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 14:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:sender:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=gKaVM+0QMGax/rhBtZVVyBor0BK65j3JTrJ7MKdrLpk=;
-        b=RPGhczN7etWK46U3ehU0iRJFtb/x2LggYWn7KPmol85I0Mwp0qk2VjDzFuWEBBmYUk
-         R+4nm9Vs++3/EVRAz9Y/4jgXnNu13bGmxWtIjrgGpvOxBXGyKzbzohrKZ+jNcMy3OMQW
-         W5HxNyO5JsOabU4prXYsSFHuX4B7DfmqEiPjNkMq1Qz/JGki9wrJacxfAcNRqQZkQP7c
-         xPk1TZs39GzVg644pSulLPeTtsxHZFQwFnsTjbugRepwzBgEoc4N1UMxGloPmb2V+nHU
-         Uz7m5Vea3gmER+MTG6ZPvkD+56MgKbLg5zdMN+4PINrDk5Av2yp10skIK3kIK9cCW7gG
-         OrOQ==
+        bh=xHkP1OXpqTGpMnl3S8KzBKz/x+0DBa4e/hpnPNs2B4Y=;
+        b=REVvzCGiKIEVvk4+cZWRokvy1sp2PWlN2ceSL4fnA3ARgMAMjDk6YIFO5NlstDRBWs
+         93+KsCOc3HNZHvcokJRwYgmixXWVczCgSDkGDK/5I+i9hZhcJh09hslFPx+6/tcH9Byy
+         WWIVI2LkOxpDyWA+4p7Qsd1vMbr+SsuKvl64sxu1eUvVROggUN5Ge1UzzJhIulPT6MQq
+         tX94sswVUlU1bhNZPjxEH76qwN+QJV4d7wWV+jHH9X3WGRLlZkA/uCdyMBue83hwR7EQ
+         Zdc6jCfx9nJEVqMB3kuqVrP9kbYSpyQj0wm/c4YcxZFjFYHyjLVfYDmS3uCBeeNSPY2X
+         wPxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gKaVM+0QMGax/rhBtZVVyBor0BK65j3JTrJ7MKdrLpk=;
-        b=qiYt50OFO6Tny3UoB8sVDFQ8UUzp1hrTa968n1pP8WWVzDAyDjSnFrIgmOMBOIu17N
-         6Yd3yUFWrgdubcxK+B3njyW9tU2SmxKfqPwF+6RvLXGIXGMC2Qcz0nWc0fPzMbkTmVKW
-         t9eftH2iBVstKuRdYO+z/ByYh6bWDC+Q12EzxZw1kMGde9k3Rd+GgoKG1dF3sdo1nKdQ
-         XeGh/NzDG55Yf6+02I8Eno2XKp6N8RnxzdmESq+4wcLdwD9X9nH+PqMlfHPkaPmEScFK
-         abW9fi4LZwtiy/o4bfba3pZ6cmxZDy8ep/JjA1QzYwtTgAY3kTelnQadQIwIpLsO5/2/
-         ykjA==
-X-Gm-Message-State: AJIora/JUBV8A8HNCVhrH838vp8aKA3ErDmUYt7E4/fIZlFHVnViV6kx
-        r4cfoh4Bc+DK9AzaAqMYv5Y=
-X-Google-Smtp-Source: AGRyM1sJil//Af9lvbnYSBnHWR4zmgT9Oxr23a9RzjK/ZAwFQ6haYB5TJtEe6lopkEr9r0lDVg7hhA==
-X-Received: by 2002:a17:90a:31cf:b0:1c9:f9b8:68c7 with SMTP id j15-20020a17090a31cf00b001c9f9b868c7mr29021287pjf.34.1655585112724;
-        Sat, 18 Jun 2022 13:45:12 -0700 (PDT)
-Received: from localhost (c-67-180-87-133.hsd1.ca.comcast.net. [67.180.87.133])
-        by smtp.gmail.com with ESMTPSA id e23-20020a170902ed9700b001678dcb4c5asm5798544plj.100.2022.06.18.13.45.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 13:45:12 -0700 (PDT)
-From:   Chang Yu <marcus.yu.56@gmail.com>
-To:     Larry.Finger@lwfinger.net
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Chang Yu <marcus.yu.56@gmail.com>
-Subject: [PATCH] Staging: r8188eu: core: rtw_xmit: Fixed a few coding style issues
-Date:   Sat, 18 Jun 2022 13:44:54 -0700
-Message-Id: <20220618204454.16071-1-marcus.yu.56@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=xHkP1OXpqTGpMnl3S8KzBKz/x+0DBa4e/hpnPNs2B4Y=;
+        b=HjlXtUtqxp2p0faX9p7HuLDymn8RscCkgP8N60INijA/Av9ILOp2kU0EwNwozhYTW3
+         eG4aPwWF8fPeUUpd3o9IWBqA/urTf8BPPe4GKnxXCRk1/ctOrT4sySgLnxhSlaZKNqC1
+         7YzxQKqRdQK+HB2RD80BFgQXBVI4Bb+7HaBS3L4aiFoALzbtjPR5olY8mSr+yCKsgHaz
+         PmYVvJKzfGYkrNtIFMTdeW/WtfYRcDso1/YZyH70uhTAGZjK9pK7ENOKtIQsgxyTWMPs
+         O7D9H+9+PE2GeKRdmWXpt7Mnq5hKwAgXKTcATtTek55CH7s4c3ce2CFp8lGF2cxsAY3a
+         KaoA==
+X-Gm-Message-State: AJIora8ZB7EgAibodLRE7t2HGs7D/fNkr1xGqyg6fdFF4y3+7Omwu8DZ
+        PnbjxmVPBETmtU2vRYG9xkLxnndn9lhBQ0czApw=
+X-Google-Smtp-Source: AGRyM1tGbsQAXCraSzNVrQ6U98rmnEHJGLyV+AeusIPpFG51xoKVeIPSPbxng+79YZx3Mj0gdIQqMHwZiK23Hi6R8+I=
+X-Received: by 2002:a17:902:c2d5:b0:16a:1263:9313 with SMTP id
+ c21-20020a170902c2d500b0016a12639313mr3541501pla.138.1655586019882; Sat, 18
+ Jun 2022 14:00:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: zaring.kkipkalya@gmail.com
+Received: by 2002:a05:7300:80c8:b0:66:6a95:2d24 with HTTP; Sat, 18 Jun 2022
+ 14:00:19 -0700 (PDT)
+From:   Jackie Grayson <jackiegrayson08@gmail.com>
+Date:   Sat, 18 Jun 2022 09:00:19 -1200
+X-Google-Sender-Auth: VXphVZ8y9pESXdodmwDx5hG2xhE
+Message-ID: <CANmOZ0wGzM2K=FdkrmnEpY9w9PgJh-FLez7OjsEH1=CTTjNa9Q@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a few coding style issues and spelling errors in the comments.
+Good Day Beloved
 
-Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_xmit.c | 28 ++++++++++---------------
- 1 file changed, 11 insertions(+), 17 deletions(-)
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs,Jackie
+Grayson, a widow suffering from a long time illness. I have some funds
+I inherited from my late husband, the sum of ($11,500,000.00,)my
+Doctor told me recently that I have serious sickness which is a cancer
+problem. What disturbs me most is my stroke sickness. Having known my
+condition, I decided to donate this fund to a good person that will
+utilize it the way I am going to instruct herein.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 3d8e9dea7651..943422141c8b 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -16,16 +16,13 @@ static u8 RFC1042_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0x00 };
- 
- static void _init_txservq(struct tx_servq *ptxservq)
- {
--
- 	INIT_LIST_HEAD(&ptxservq->tx_pending);
- 	rtw_init_queue(&ptxservq->sta_pending);
- 	ptxservq->qcnt = 0;
--
- }
- 
- void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
- {
--
- 	memset((unsigned char *)psta_xmitpriv, 0, sizeof(struct sta_xmit_priv));
- 	spin_lock_init(&psta_xmitpriv->lock);
- 	_init_txservq(&psta_xmitpriv->be_q);
-@@ -34,7 +31,6 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
- 	_init_txservq(&psta_xmitpriv->vo_q);
- 	INIT_LIST_HEAD(&psta_xmitpriv->legacy_dz);
- 	INIT_LIST_HEAD(&psta_xmitpriv->apsd);
--
- }
- 
- s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
-@@ -300,6 +296,7 @@ static void update_attrib_vcs_info(struct adapter *padapter, struct xmit_frame *
- 			/* check HT op mode */
- 			if (pattrib->ht_en) {
- 				u8 htopmode = pmlmeinfo->HT_protection;
-+
- 				if ((pmlmeext->cur_bwmode && (htopmode == 2 || htopmode == 3)) ||
- 				    (!pmlmeext->cur_bwmode && htopmode == 3)) {
- 					pattrib->vcs_mode = RTS_CTS;
-@@ -446,10 +443,11 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
- 
- 	pattrib->pktlen = pktfile.pkt_len;
- 
--	if (ETH_P_IP == pattrib->ether_type) {
-+	if (pattrib->ether_type == ETH_P_IP) {
- 		/*  The following is for DHCP and ARP packet, we use cck1M to tx these packets and let LPS awake some time */
- 		/*  to prevent DHCP protocol fail */
- 		u8 tmp[24];
-+
- 		_rtw_pktfile_read(&pktfile, &tmp[0], 24);
- 		pattrib->dhcp_pkt = 0;
- 		if (pktfile.pkt_len > 282) {/* MINIMUM_DHCP_PACKET_SIZE) { */
-@@ -628,7 +626,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
- 				if (pframe[1] & 2)  /* From Ds == 1 */
- 					rtw_secmicappend(&micdata, &pframe[24], 6);
- 				else
--				rtw_secmicappend(&micdata, &pframe[10], 6);
-+					rtw_secmicappend(&micdata, &pframe[10], 6);
- 			} else {	/* ToDS == 0 */
- 				rtw_secmicappend(&micdata, &pframe[4], 6);   /* DA */
- 				if (pframe[1] & 2)  /* From Ds == 1 */
-@@ -954,12 +952,11 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
- 			mpdu_len -= llc_sz;
- 		}
- 
--		if ((pattrib->icv_len > 0) && (pattrib->bswenc)) {
-+		if ((pattrib->icv_len > 0) && (pattrib->bswenc))
- 			mpdu_len -= pattrib->icv_len;
--		}
- 
- 		if (bmcst) {
--			/*  don't do fragment to broadcat/multicast packets */
-+			/*  don't do fragment to broadcast/multicast packets */
- 			mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
- 		} else {
- 			mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
-@@ -1069,7 +1066,6 @@ void rtw_update_protection(struct adapter *padapter, u8 *ie, uint ie_len)
- 		}
- 		break;
- 	}
--
- }
- 
- void rtw_count_tx_stats(struct adapter *padapter, struct xmit_frame *pxmitframe, int sz)
-@@ -1316,7 +1312,6 @@ void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, struct __queue *pfram
- 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
- 	}
- 	spin_unlock_bh(&pframequeue->lock);
--
- }
- 
- s32 rtw_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitframe)
-@@ -1515,7 +1510,6 @@ void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry)
- 
- 	for (i = 0; i < entry; i++, phwxmit++)
- 		phwxmit->accnt = 0;
--
- }
- 
- static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
-@@ -1742,7 +1736,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
- 	bool bmcst = is_multicast_ether_addr(pattrib->ra);
- 
- 	if (!check_fwstate(pmlmepriv, WIFI_AP_STATE))
--	    return ret;
-+		return ret;
- 
- 	if (pattrib->psta)
- 		psta = pattrib->psta;
-@@ -1770,8 +1764,8 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
- 
- 			pstapriv->tim_bitmap |= BIT(0);/*  */
- 			pstapriv->sta_dz_bitmap |= BIT(0);
--
--			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after upate bcn */
-+			/* tx bc/mc packets after update bcn */
-+			update_beacon(padapter, _TIM_IE_, NULL, false);
- 
- 			ret = true;
- 		}
-@@ -1821,7 +1815,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
- 				pstapriv->tim_bitmap |= BIT(psta->aid);
- 
- 				if (psta->sleepq_len == 1) {
--					/* upate BCN for TIM IE */
-+					/* update BCN for TIM IE */
- 					update_beacon(padapter, _TIM_IE_, NULL, false);
- 				}
- 			}
-@@ -2090,7 +2084,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
- 		if ((psta->sleepq_ac_len == 0) && (!psta->has_legacy_ac) && (wmmps_ac)) {
- 			pstapriv->tim_bitmap &= ~BIT(psta->aid);
- 
--			/* upate BCN for TIM IE */
-+			/* update BCN for TIM IE */
- 			update_beacon(padapter, _TIM_IE_, NULL, false);
- 		}
- 	}
--- 
-2.36.1
+I need a very honest and God fearing person who can claim this money
+and use it for Charity works, for orphanages and gives justice and
+help to the poor, needy and widows says The Lord." Jeremiah 22:15-16.=E2=80=
+=9C
+and also build schools for less privilege that will be named after my
+late husband if possible and to promote the word of god and the effort
+that the house of god is maintained. I do not want a situation where
+this money will be used in an ungodly manner. That's why I'm making
+this decision. I'm not afraid of death,so I know where I'm going. I
+accept this decision because I do not have any child who will inherit
+this money after I die. Please I want your sincere and urgent answer
+to know if you will be able to execute this project, and I will give
+you more information on how the fund will be transferred to your bank
+account. May the grace, peace, love and the truth in the Word of god
+be with you and all those that you love and  care for.
 
+I am waiting for your reply.
+May God Bless you,
+Mrs.Jackie Grayson,
+Written from the Hospital,

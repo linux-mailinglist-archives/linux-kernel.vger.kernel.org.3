@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B16955037C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0F2550381
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiFRIWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 04:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S231767AbiFRIZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 04:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiFRIWU (ORCPT
+        with ESMTP id S229448AbiFRIZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 04:22:20 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FC42E08F;
-        Sat, 18 Jun 2022 01:22:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SzEjeSGXZFEaqB9vXXzQNKk9zN7fQH9ukpLvS0OVS2M=; b=vA9STYCQoTjYq+AGGChv+hbWj0
-        PdygWIlFSBPOLYaALXcAleTGSGilqne+tGwXUbC924aYUZi6JM7z64hek4o1oG4HwV22H5DmD2VNi
-        6pKSqOq2cb91/DiSEWzQBm0tSqbVAKBOF7m8jcM8nx8RobrXs2D0YMX2E54LzI01Z+ufZfNBGTPtb
-        nx7NUaKDVyqhdi2eMeS465ROROJX61peARkfEDy6djRlig4q3thlgCCxMklhPWdjqTRff2oRWn8Xl
-        pxdd1ndlGanNQuYh2y2IwFxk6NPZMsBy4e1Le2AucZokH5LZ+CU5UXqXy/VT2wXTih1P7Xm6x0E0X
-        cZNvlHzQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32912)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o2Tib-00046R-KM; Sat, 18 Jun 2022 09:22:09 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o2TiX-0002ly-TU; Sat, 18 Jun 2022 09:22:05 +0100
-Date:   Sat, 18 Jun 2022 09:22:05 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 25/28] [RFC] net: dpaa: Convert to phylink
-Message-ID: <Yq2LLW5twHaHtRBY@shell.armlinux.org.uk>
-References: <20220617203312.3799646-1-sean.anderson@seco.com>
- <20220617203312.3799646-26-sean.anderson@seco.com>
- <Yqz5wHy9zAQL1ddg@shell.armlinux.org.uk>
- <dde1fcc4-4ee8-6426-4f1f-43277e88d406@seco.com>
+        Sat, 18 Jun 2022 04:25:29 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006BD1A3A6
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:25:27 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id h1so5645949plf.11
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CUqY0KQJSAqLYg1982TnxRNCeqrK/zdBJWWoYUnxhyQ=;
+        b=PtyWILc3Wk3qBPynLrNxXpvgXI1HCGX0Z0RIW5qLPSqeTbB3Vi4rCpBwCpKRHCd8mZ
+         M3xnFBaNBoYj2KfXoOR/KlU3Jmm0AWhI9dzZSp3WxstyuE47gkcuZyxo3un5omcgLrxR
+         kXViI9PWvVjcI80qHsm9oOCcIaHZxoXDp5HSOPD10FWjdSMt4vlSqhC43h2yQT4JwIPJ
+         HAzB8vi/t7/Vsd9CJuMKpQKWIOFz7Z17X0K1MILfgbXGLmHDQTzIS72nHoVSSySBYs+a
+         wNT2G1KALXWegFVWmfflKbm5wfAOm0kX7Ctg1x774uAgKN6amfC6qeQTzf0sM9MbwEAu
+         9KlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CUqY0KQJSAqLYg1982TnxRNCeqrK/zdBJWWoYUnxhyQ=;
+        b=eAVyF87vKU3+WB65xINNm0oAtnDynFf14cEGIO8gGcD/ozi0lVQwFFmsd3uApOgTgX
+         aR3ngWEukHHCAKJdMyGZLdnapPXupCuSGuuzmNpEvuehsHLZAPYfvRMa1rBLeY4QTwsm
+         3MSAeod8s93bdTCYMHeHsfsBAUscFMJ4xjPXsYL7VdG/7fpbXjWbeZvVF/ranT0YgK2n
+         PUhXsRCmDzYr+unbkwENIRMimsmd3j7OuPgA72IUbgwAtATryufIp4fLoQQjroa1J1R1
+         5xpm4wewTpwByIPlJ3Vi3eyVGfireqQPN58zI1rrwJ5dajCYq97KlN15X8gzGrOXrIXt
+         RAyw==
+X-Gm-Message-State: AJIora/2PkT9+VwJjuz3q3d8BWjE3fjCUaToYnyJ5+Viks9ylxL/Z3rA
+        vfMF/KSIjKqTQqrlyCNA6hB+8lSwDSA0IDc2
+X-Google-Smtp-Source: AGRyM1tSV4qKvA7HA5K553RN7QOgKX9vpuPJI022UzleZDyOATcziE6kFzEZZOJmM8ktQJw8RIZmXA==
+X-Received: by 2002:a17:90b:4b90:b0:1e8:48bd:453 with SMTP id lr16-20020a17090b4b9000b001e848bd0453mr25793990pjb.86.1655540727424;
+        Sat, 18 Jun 2022 01:25:27 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id n2-20020a170903110200b001679a4711e5sm1761545plh.108.2022.06.18.01.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 01:25:26 -0700 (PDT)
+From:   wuchi <wuchi.zero@gmail.com>
+To:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/lru_cache: Fix error free handing in lc_create.
+Date:   Sat, 18 Jun 2022 16:25:21 +0800
+Message-Id: <20220618082521.7082-1-wuchi.zero@gmail.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dde1fcc4-4ee8-6426-4f1f-43277e88d406@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 08:45:38PM -0400, Sean Anderson wrote:
-> Hi Russell,
-> 
-> Thanks for the quick response.
->...
-> Yes, I've been using the debug prints in phylink extensively as part of
-> debugging :)
-> 
-> In this case, I added a debug statement to phylink_resolve printing out
-> cur_link_state, link_state.link, and pl->phy_state.link. I could see that
-> the phy link state was up and the mac (pcs) state was down. By inspecting
-> the PCS's registers, I determined that this was because AN had not completed
-> (in particular, the link was up in BMSR). I believe that forcing in-band-status
-> (by setting ovr_an_inband) shouldn't be necessary, but I was unable to get a link
-> up on any interface without it. In particular, the pre-phylink implementation
-> disabled PCS AN only for fixed links (which you can see in patch 23).
+When kmem_cache_alloc in function lc_create returns null, we will
+free the memory already allocated. The loop of kmem_cache_free
+is wrong, especially:
+  i = 0  ==> do wrong loop
+  i > 0  ==> do not free element[0]
 
-I notice that prior to patch 23, the advertisment register was set to
-0x4001, but in phylink_mii_c22_pcs_encode_advertisement() we set it to
-0x0001 (bit 14 being the acknowledge bit from the PCS to the PHY, which
-is normally managed by hardware.
+Signed-off-by: wuchi <wuchi.zero@gmail.com>
+---
+ lib/lru_cache.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-It may be worth testing whether setting bit 14 changes the behaviour.
-
+diff --git a/lib/lru_cache.c b/lib/lru_cache.c
+index 52313acbfa62..dc35464216d3 100644
+--- a/lib/lru_cache.c
++++ b/lib/lru_cache.c
+@@ -147,8 +147,8 @@ struct lru_cache *lc_create(const char *name, struct kmem_cache *cache,
+ 		return lc;
+ 
+ 	/* else: could not allocate all elements, give up */
+-	for (i--; i; i--) {
+-		void *p = element[i];
++	while (i) {
++		void *p = element[--i];
+ 		kmem_cache_free(cache, p - e_off);
+ 	}
+ 	kfree(lc);
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.20.1
+

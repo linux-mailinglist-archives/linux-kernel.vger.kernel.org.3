@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4C65503C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCACA5503EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiFRJTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S229525AbiFRJTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiFRJTC (ORCPT
+        with ESMTP id S231927AbiFRJTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:19:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C5126110
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:19:00 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LQ9HY3JHWzBt0p;
-        Sat, 18 Jun 2022 17:15:37 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 17:18:58 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 17:18:56 +0800
-Message-ID: <4aa8b109-c79b-8da0-db89-85ca128f1049@huawei.com>
-Date:   Sat, 18 Jun 2022 17:18:55 +0800
+        Sat, 18 Jun 2022 05:19:09 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76902654B;
+        Sat, 18 Jun 2022 02:19:08 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id ej4so5042700edb.7;
+        Sat, 18 Jun 2022 02:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dnShuNCC7vJwyx79q/xFZV5Bswk3kI4OzmQoFoQnuVM=;
+        b=e/JcgF2akSWVnYgPWU/7toRYSXH0Ei2m6FY539tryc8COawWnTM5q1P5l3T4gWEHfd
+         vLRDXtG7XraEeEpTm9MGP8zzfmagqSTbwotmISuzb0DRhGaHQrCmK6n/IbX/QFl96dJL
+         TQiOo8Q+stPMK+jpgZv+Q/xp38EFksLxUos3jdudA1x5JVYQnLI0Yx1BT3BLW4wchsSv
+         N3dwe8/Lsu3oJvnpRKHsV4l4ixPZwmg9cN0hymnjkqLG7T1HyzVTBuXd2yArLYrN1ZUZ
+         UtNLosVgbL45q2t8zZ0cCQrntm9E2Aec6Xi5INR4+HtLOuNqfHUEJ1fryr9BGzzjz5cT
+         kG4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dnShuNCC7vJwyx79q/xFZV5Bswk3kI4OzmQoFoQnuVM=;
+        b=rm6E6QcwBk5UDfdCwJsr9NL6XkgZbevZ6lw9hOiEcSaTdXBdCGeeNWYy2Y+EzXhQQI
+         hAwiDPZ2/r0KQMEEST97euaMoB1koVeviZmatQW5JgeCPXH7j1+qKEhlYAdnMPrBS3yl
+         41pjt0yQEdfrPAtj/UjMEi/5ruf+gKbECc8cn8tLZ4lMNQo+kSgQCZmQEQl6A48uyqSS
+         gSOGOFzVU0Cu9nyIDd0+eFTT1RytI+NFYrwKXqyJbGYgOF82lYHTxGbmxl3Qlq+22Y3t
+         JShc/dRSscoIk4hP+gK0I7Y+mG1SUpN3Ubdfwn1HPHrI35pyfsJKnonOp4sKi3NnaUE7
+         byxg==
+X-Gm-Message-State: AJIora8sn322mrOEFlD/9sHt+k01LCsFZjy/6sN2bOc6d6ulpNeBAt9B
+        TNSeh9vWmhv2hpByKJuYHvI=
+X-Google-Smtp-Source: AGRyM1uMBcKH+3IxoQvCC6JZfyD0aPNjvWdfndC8vZU7LL7keZtOqzsWzqlAIaDaQGT6X0XXrJ7xDw==
+X-Received: by 2002:a05:6402:403:b0:434:eb49:218f with SMTP id q3-20020a056402040300b00434eb49218fmr17442869edv.426.1655543947288;
+        Sat, 18 Jun 2022 02:19:07 -0700 (PDT)
+Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id lb21-20020a170907785500b007219c20dcd8sm451956ejc.196.2022.06.18.02.19.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 02:19:06 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] btrfs: Convert zlib_decompress_bio() to use kmap_local_page()
+Date:   Sat, 18 Jun 2022 11:19:01 +0200
+Message-Id: <20220618091901.25034-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v5 6/8] arm64: add support for machine check error
- safe
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-7-tongtiangen@huawei.com>
- <YqxBd9GfUHLWZWoh@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <YqxBd9GfUHLWZWoh@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,196 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The use of kmap() is being deprecated in favor of kmap_local_page(). With
+kmap_local_page(), the mapping is per thread, CPU local and not globally
+visible.
 
+Therefore, use kmap_local_page() / kunmap_local() in zlib_decompress_bio()
+because in this function the mappings are per thread and are not visible
+in other contexts.
 
-在 2022/6/17 16:55, Mark Rutland 写道:
-> On Sat, May 28, 2022 at 06:50:54AM +0000, Tong Tiangen wrote:
->> During the processing of arm64 kernel hardware memory errors(do_sea()), if
->> the errors is consumed in the kernel, the current processing is panic.
->> However, it is not optimal.
->>
->> Take uaccess for example, if the uaccess operation fails due to memory
->> error, only the user process will be affected, kill the user process
->> and isolate the user page with hardware memory errors is a better choice.
->>
->> This patch only enable machine error check framework, it add exception
->> fixup before kernel panic in do_sea() and only limit the consumption of
->> hardware memory errors in kernel mode triggered by user mode processes.
->> If fixup successful, panic can be avoided.
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   arch/arm64/Kconfig               |  1 +
->>   arch/arm64/include/asm/extable.h |  1 +
->>   arch/arm64/mm/extable.c          | 17 +++++++++++++++++
->>   arch/arm64/mm/fault.c            | 27 ++++++++++++++++++++++++++-
->>   4 files changed, 45 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index aaeb70358979..a3b12ff0cd7f 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -19,6 +19,7 @@ config ARM64
->>   	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
->>   	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
->>   	select ARCH_HAS_CACHE_LINE_SIZE
->> +	select ARCH_HAS_COPY_MC if ACPI_APEI_GHES
->>   	select ARCH_HAS_CURRENT_STACK_POINTER
->>   	select ARCH_HAS_DEBUG_VIRTUAL
->>   	select ARCH_HAS_DEBUG_VM_PGTABLE
->> diff --git a/arch/arm64/include/asm/extable.h b/arch/arm64/include/asm/extable.h
->> index 72b0e71cc3de..f80ebd0addfd 100644
->> --- a/arch/arm64/include/asm/extable.h
->> +++ b/arch/arm64/include/asm/extable.h
->> @@ -46,4 +46,5 @@ bool ex_handler_bpf(const struct exception_table_entry *ex,
->>   #endif /* !CONFIG_BPF_JIT */
->>   
->>   bool fixup_exception(struct pt_regs *regs);
->> +bool fixup_exception_mc(struct pt_regs *regs);
->>   #endif
->> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
->> index 228d681a8715..c301dcf6335f 100644
->> --- a/arch/arm64/mm/extable.c
->> +++ b/arch/arm64/mm/extable.c
->> @@ -9,6 +9,7 @@
->>   
->>   #include <asm/asm-extable.h>
->>   #include <asm/ptrace.h>
->> +#include <asm/esr.h>
->>   
->>   static inline unsigned long
->>   get_ex_fixup(const struct exception_table_entry *ex)
->> @@ -76,3 +77,19 @@ bool fixup_exception(struct pt_regs *regs)
->>   
->>   	BUG();
->>   }
->> +
->> +bool fixup_exception_mc(struct pt_regs *regs)
->> +{
->> +	const struct exception_table_entry *ex;
->> +
->> +	ex = search_exception_tables(instruction_pointer(regs));
->> +	if (!ex)
->> +		return false;
->> +
->> +	/*
->> +	 * This is not complete, More Machine check safe extable type can
->> +	 * be processed here.
->> +	 */
->> +
->> +	return false;
->> +}
->> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
->> index c5e11768e5c1..b262bd282a89 100644
->> --- a/arch/arm64/mm/fault.c
->> +++ b/arch/arm64/mm/fault.c
->> @@ -696,6 +696,29 @@ static int do_bad(unsigned long far, unsigned long esr, struct pt_regs *regs)
->>   	return 1; /* "fault" */
->>   }
->>   
->> +static bool arm64_do_kernel_sea(unsigned long addr, unsigned int esr,
->> +				     struct pt_regs *regs, int sig, int code)
->> +{
->> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_COPY_MC))
->> +		return false;
->> +
->> +	if (user_mode(regs) || !current->mm)
->> +		return false;
-> 
-> What's the `!current->mm` check for?
+Tested with xfstests on QEMU + KVM 32-bits VM with 4GB of RAM and
+HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
 
-At first, I considered that only user processes have the opportunity to 
-recover when they trigger memory error.
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ fs/btrfs/zlib.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-But it seems that this restriction is unreasonable. When the kernel 
-thread triggers memory error, it can also be recovered. for instance:
+diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
+index 2cd4f6fb1537..966e17cea981 100644
+--- a/fs/btrfs/zlib.c
++++ b/fs/btrfs/zlib.c
+@@ -284,7 +284,7 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ 	unsigned long buf_start;
+ 	struct page **pages_in = cb->compressed_pages;
+ 
+-	data_in = kmap(pages_in[page_in_index]);
++	data_in = kmap_local_page(pages_in[page_in_index]);
+ 	workspace->strm.next_in = data_in;
+ 	workspace->strm.avail_in = min_t(size_t, srclen, PAGE_SIZE);
+ 	workspace->strm.total_in = 0;
+@@ -306,7 +306,7 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ 
+ 	if (Z_OK != zlib_inflateInit2(&workspace->strm, wbits)) {
+ 		pr_warn("BTRFS: inflateInit failed\n");
+-		kunmap(pages_in[page_in_index]);
++		kunmap_local(data_in);
+ 		return -EIO;
+ 	}
+ 	while (workspace->strm.total_in < srclen) {
+@@ -333,13 +333,13 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ 
+ 		if (workspace->strm.avail_in == 0) {
+ 			unsigned long tmp;
+-			kunmap(pages_in[page_in_index]);
++			kunmap_local(data_in);
+ 			page_in_index++;
+ 			if (page_in_index >= total_pages_in) {
+ 				data_in = NULL;
+ 				break;
+ 			}
+-			data_in = kmap(pages_in[page_in_index]);
++			data_in = kmap_local_page(pages_in[page_in_index]);
+ 			workspace->strm.next_in = data_in;
+ 			tmp = srclen - workspace->strm.total_in;
+ 			workspace->strm.avail_in = min(tmp, PAGE_SIZE);
+@@ -352,7 +352,7 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
+ done:
+ 	zlib_inflateEnd(&workspace->strm);
+ 	if (data_in)
+-		kunmap(pages_in[page_in_index]);
++		kunmap_local(data_in);
+ 	if (!ret)
+ 		zero_fill_bio(cb->orig_bio);
+ 	return ret;
+-- 
+2.36.1
 
-https://lore.kernel.org/linux-mm/20220527190731.322722-1-jiaqiyan@google.com/
-
-And i think if(!current->mm) shoud be added below:
-
-if(!current->mm) {
-	set_thread_esr(0, esr);
-	arm64_force_sig_fault(...);
-}
-return true;
-
-> 
->> +
->> +	if (apei_claim_sea(regs) < 0)
->> +		return false;
->> +
->> +	if (!fixup_exception_mc(regs))
->> +		return false;
-> 
-> I thought we still wanted to signal the task in this case? Or do you expect to
-> add that into `fixup_exception_mc()` ?
-
-Yeah, here return false and will signal to task in do_sea() -> 
-arm64_notify_die().
-
-> 
->> +
->> +	set_thread_esr(0, esr);
-> 
-> Why are we not setting the address? Is that deliberate, or an oversight?
-
-Here set fault_address to 0, i refer to the logic of arm64_notify_die().
-
-void arm64_notify_die(...)
-{
-          if (user_mode(regs)) {
-                  WARN_ON(regs != current_pt_regs());
-                  current->thread.fault_address = 0;
-                  current->thread.fault_code = err;
-
-                  arm64_force_sig_fault(signo, sicode, far, str);
-          } else {
-                  die(str, regs, err);
-          }
-}
-
-I don't know exactly why and do you know why arm64_notify_die() did this? :)
-
-> 
->> +
->> +	arm64_force_sig_fault(sig, code, addr,
->> +		"Uncorrected hardware memory error in kernel-access\n");
-> 
-> I think the wording here is misleading since we don't expect to recover from
-> accesses to kernel memory, and would be better as something like:
-> 
-> 	"Uncorrected memory error on access to user memory\n"
-
-OK, agreed.
-
-Thanks,
-Tong.
-
-> 
-> Thanks,
-> Mark.
-> 
->> +
->> +	return true;
->> +}
->> +
->>   static int do_sea(unsigned long far, unsigned long esr, struct pt_regs *regs)
->>   {
->>   	const struct fault_info *inf;
->> @@ -721,7 +744,9 @@ static int do_sea(unsigned long far, unsigned long esr, struct pt_regs *regs)
->>   		 */
->>   		siaddr  = untagged_addr(far);
->>   	}
->> -	arm64_notify_die(inf->name, regs, inf->sig, inf->code, siaddr, esr);
->> +
->> +	if (!arm64_do_kernel_sea(siaddr, esr, regs, inf->sig, inf->code))
->> +		arm64_notify_die(inf->name, regs, inf->sig, inf->code, siaddr, esr);
->>   
->>   	return 0;
->>   }
->> -- 
->> 2.25.1
->>
-> 
-> .

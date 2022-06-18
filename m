@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1247F55036B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B767550370
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235612AbiFRHvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 03:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S229961AbiFRIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 04:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235151AbiFRHvk (ORCPT
+        with ESMTP id S229523AbiFRIGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 03:51:40 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0D442ED7
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:51:39 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 2TF2oh1xTJXxR2TF2oTUFy; Sat, 18 Jun 2022 09:51:37 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 18 Jun 2022 09:51:37 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <38d31460-f3e0-1260-05c5-406a05d9fb37@wanadoo.fr>
-Date:   Sat, 18 Jun 2022 09:51:36 +0200
+        Sat, 18 Jun 2022 04:06:39 -0400
+Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0552726543
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=ziDry
+        BconZfbcDrkQjVtFWCm4II6YDZsPgZ8pg5lf4U=; b=jNf4loNn/WBLUTy1DgT37
+        f+68unl2kHORyj9TbymIOwtlh9/aw4s1BbC29lUZYYRaIwt5dOAv8qJVNK1QDr8h
+        XDlg+/u4Wl7wE/A+Y/mQRk49i1WCzednsQccYhAHh97hEudXV4kza1BkboBti2nE
+        GU2XakAgj5ysfnjwTXhrTQ=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
+ (Coremail) ; Sat, 18 Jun 2022 16:03:28 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Sat, 18 Jun 2022 16:03:28 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
+        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re:Re: [PATCH] powerpc: kernel: Change the order of of_node_put()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <a6a5e5b3-ffd1-904b-bba1-22baff5f7b67@csgroup.eu>
+References: <20220617112636.4041671-1-windhl@126.com>
+ <a6a5e5b3-ffd1-904b-bba1-22baff5f7b67@csgroup.eu>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: rtl8723bs: Allocate full pwep structure
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-staging@lists.linux.dev,
-        Michael Straube <straube.linux@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220608215512.1070847-1-keescook@chromium.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220608215512.1070847-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <61c85548.1a55.18175d69e21.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: MsqowADnPPHRhq1ide84AA--.58025W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhEkF18RPUWxtgAAsd
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 08/06/2022 à 23:55, Kees Cook a écrit :
-> The pwep allocation was always being allocated smaller than the true
-> structure size. Avoid this by always allocating the full structure.
-> Found with GCC 12 and -Warray-bounds:
-> 
-> ../drivers/staging/rtl8723bs/os_dep/ioctl_linux.c: In function 'rtw_set_encryption':
-> ../drivers/staging/rtl8723bs/os_dep/ioctl_linux.c:591:29: warning: array subscript 'struct ndis_802_11_wep[0]' is partly outside array bounds of 'void[25]' [-Warray-bounds]
->    591 |                         pwep->length = wep_total_len;
->        |                             ^~
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Fabio Aiuto <fabioaiuto83@gmail.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: linux-staging@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/staging/rtl8723bs/os_dep/ioctl_linux.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
-> index ece97e37ac91..30374a820496 100644
-> --- a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
-> +++ b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
-> @@ -90,7 +90,8 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param,
->   		if (wep_key_len > 0) {
->   			wep_key_len = wep_key_len <= 5 ? 5 : 13;
->   			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, key_material);
-> -			pwep = kzalloc(wep_total_len, GFP_KERNEL);
-> +			/* Allocate a full structure to avoid potentially running off the end. */
-> +			pwep = kzalloc(sizeof(*pwep), GFP_KERNEL);
->   			if (!pwep) {
->   				ret = -ENOMEM;
->   				goto exit;
-> @@ -582,7 +583,8 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param,
->   		if (wep_key_len > 0) {
->   			wep_key_len = wep_key_len <= 5 ? 5 : 13;
->   			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, key_material);
-> -			pwep = kzalloc(wep_total_len, GFP_KERNEL);
-> +			/* Allocate a full structure to avoid potentially running off the end. */
-> +			pwep = kzalloc(sizeof(*pwep), GFP_KERNEL);
->   			if (!pwep)
-
-Hi,
-
-while at it (and un-related tyo your patch), I think that 'ret' should 
-also be updated here, otherwise we return 0.
-
-CJ
-
->   				goto exit;
->   
-
+CgoKCgrlnKggMjAyMi0wNi0xOCAxNToxMzoxM++8jCJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0
+b3BoZS5sZXJveUBjc2dyb3VwLmV1PiDlhpnpgZPvvJoKPgo+Cj5MZSAxNy8wNi8yMDIyIMOgIDEz
+OjI2LCBMaWFuZyBIZSBhIMOpY3JpdMKgOgo+PiBJbiBhZGRfcGNzcGtyKCksIGl0IGlzIGJldHRl
+ciB0byBjYWxsIG9mX25vZGVfcHV0KCkgYWZ0ZXIgdGhlCj4+ICdpZighbnApJyBjaGVjay4KPgo+
+V2h5IGlzIGl0IGJldHRlciA/Cj4KPgo+Cj4vKioKPiAgKiBvZl9ub2RlX3B1dCgpIC0gRGVjcmVt
+ZW50IHJlZmNvdW50IG9mIGEgbm9kZQo+ICAqIEBub2RlOglOb2RlIHRvIGRlYyByZWZjb3VudCwg
+TlVMTCBpcyBzdXBwb3J0ZWQgdG8gc2ltcGxpZnkgd3JpdGluZyBvZgo+ICAqCQljYWxsZXJzCj4g
+ICovCj52b2lkIG9mX25vZGVfcHV0KHN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZSkKPnsKPglpZiAo
+bm9kZSkKPgkJa29iamVjdF9wdXQoJm5vZGUtPmtvYmopOwo+fQo+RVhQT1JUX1NZTUJPTChvZl9u
+b2RlX3B1dCk7Cj4KPgo+Cj5DaHJpc3RvcGhlCgpIaSwgQ2hyaXN0b3BoZS4KClRoYW5rcyBmb3Ig
+eW91ciByZXBseSBhbmQgSSB3YW50IHRvIGhhdmUgYSBkaXNjdXNzaW9uLgoKSW4gbXkgdGhvdWdo
+dCwgeHh4X3B1dChwb2ludGVyKSdzIHNlbWFudGljIHVzdWFsbHkgbWVhbnMgCnRoaXMgcmVmZXJl
+bmNlIGhhcyBiZWVuIHVzZWQgZG9uZSBhbmQgd2lsbCBub3QgYmUgdXNlZCAKYW55bW9yZS4gSXMg
+dGhpcyBzZW1hbnRpYyBtb3JlIHJlYXNvbmFibGUsIHJpZ2h0PwoKQmVzaWRlcywgaWYgdGhlIG5w
+IGlzIE5VTEwsIHdlIGNhbiBqdXN0IHJldHVybiBhbmQgc2F2ZSBhIGNwdSAKdGltZSBmb3IgdGhl
+IHh4eF9wdXQoKSBjYWxsLgoKT3RoZXJ3aXNlLCBJIHByZWZlciB0byBjYWxsIGl0ICd1c2UoY2hl
+Y2spLWFmdGVyLXB1dCcuICAKCkluIGZhY3QsIEkgaGF2ZSBtZWV0IG1hbnkgb3RoZXIgJ3VzZShj
+aGVjayktYWZ0ZXItcHV0JyBpbnN0YW5jZXMKYWZ0ZXIgSSBzZW5kIHRoaXMgcGF0Y2gtY29tbWl0
+LCBzbyBJIGFtIHdhaXRpbmcgZm9yIHRoaXMgCmRpc2N1c3Npb24uCgpUaGlzIGlzIGp1c3QgbXkg
+dGhvdWdodCwgaXQgbWF5IGJlIHdyb25nLgoKQW55d2F5LCB0aGFua3MgZm9yIHlvdXIgcmVwbHku
+CgpMaWFuZwoKPgo+Cj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5j
+b20+Cj4+IC0tLQo+PiAgIGFyY2gvcG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9uLmMgfCAyICst
+Cj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZXR1cC1jb21tb24uYyBiL2FyY2gv
+cG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9uLmMKPj4gaW5kZXggZWIwMDc3YjMwMmUyLi43NjE4
+MTdkMWY0ZGIgMTAwNjQ0Cj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9u
+LmMKPj4gKysrIGIvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZXR1cC1jb21tb24uYwo+PiBAQCAtNTYz
+LDkgKzU2Myw5IEBAIHN0YXRpYyBfX2luaXQgaW50IGFkZF9wY3Nwa3Iodm9pZCkKPj4gICAJaW50
+IHJldDsKPj4gICAKPj4gICAJbnAgPSBvZl9maW5kX2NvbXBhdGlibGVfbm9kZShOVUxMLCBOVUxM
+LCAicG5wUE5QLDEwMCIpOwo+PiAtCW9mX25vZGVfcHV0KG5wKTsKPj4gICAJaWYgKCFucCkKPj4g
+ICAJCXJldHVybiAtRU5PREVWOwo+PiArCW9mX25vZGVfcHV0KG5wKTsKPj4gICAKPj4gICAJcGQg
+PSBwbGF0Zm9ybV9kZXZpY2VfYWxsb2MoInBjc3BrciIsIC0xKTsKPj4gICAJaWYgKCFwZCkK

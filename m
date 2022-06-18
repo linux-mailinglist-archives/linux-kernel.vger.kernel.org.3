@@ -2,168 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042B35503DD
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8085503DF
 	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbiFRJ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S232913AbiFRJ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbiFRJ2A (ORCPT
+        with ESMTP id S233859AbiFRJ3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:28:00 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A42F598;
-        Sat, 18 Jun 2022 02:27:58 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id o10so9023754edi.1;
-        Sat, 18 Jun 2022 02:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zurrbWODzCL1ddkbl6NdnzpZxtPzyETq04wfptwh7DM=;
-        b=c4bHkLgZzc7iiVTDpB9d7SGvdmSsUTaqFyiLR1x9r4firz6ghgHY21dMIaDiVT+zCv
-         cpmnb+O9pdmSpf37NF1LNoia/nXzdhSZUxXgdXEVGHmK7Bk9Gz8vZj7fKTkn18GhwjYL
-         Ng1C1Y1pYDh2yuoENrTDHa8rX/JVEYoHznMtHqARyZU9lmZUvewuu11qCb2HelPxxKIF
-         i3pOMt8FRxRLNSsOzjaynnzZBLVxRzFHr1Feqei/KdPeY1OCA9/N2bj+8qa7dFVX6IO+
-         9RzvVt4oUgQFwWY6nrGgyc7tbI1lwoSmgq/mrKK+Z4SswfwotF9VhZo3KDMMFspJFve2
-         Cm3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zurrbWODzCL1ddkbl6NdnzpZxtPzyETq04wfptwh7DM=;
-        b=7DQjwUaIy93+FjOaeLkW2YjTlwV51TU6E05uyBucBHs6BgLh29FC8E3tYmZbDitHX3
-         pWthoakVr+ENZESVO8Y5yw3FBWFUWlFEJQEYH3/B0piEY7Tij1P81f3mdCdccKavFx3+
-         4CVh7j/hJUGszJmeTF2rJHRlb4yHkNnvhfl9Sro74NzsebH/NJ7gyXlyk4eQ5p0pOi1v
-         P9rWF7g9xqsTjUzHrE+mFQMEndBM3Desw8BKSTORjK31aayODBh6Sik/sAgMOKZ5rvYc
-         YJ3LA9lkHIgYm3GNxOAHDjvmzVhAGKPSR8dlC9WTC/ZuCiwhohFerHaD5yrE3YEFjuEQ
-         0NYA==
-X-Gm-Message-State: AJIora/f9fY8zabSGKqucIhM/jD1UzThu4r04tOMtI9mxDGzy/6CRujJ
-        mDSeqVhoHfPfiwvl/a5mxIs=
-X-Google-Smtp-Source: AGRyM1vaySoCUcHfejjo919kFDCLKXY44az72Sj+FUqoueEwqjp4bX1vsk623z5KlcTRl/T6TAQWnA==
-X-Received: by 2002:a05:6402:e87:b0:435:5dda:9428 with SMTP id h7-20020a0564020e8700b004355dda9428mr9285608eda.6.1655544476984;
-        Sat, 18 Jun 2022 02:27:56 -0700 (PDT)
-Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170906169200b00705976bcd01sm3132209ejd.206.2022.06.18.02.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 02:27:55 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] btrfs: Convert zlib_compress_pages() to use kmap_local_page()
-Date:   Sat, 18 Jun 2022 11:27:52 +0200
-Message-Id: <20220618092752.25153-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 18 Jun 2022 05:29:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E931EECF
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655544554; x=1687080554;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FZTpgPb5ZMmV97zM29tbzRVe1LRVIroAaiNLt081iXw=;
+  b=KioBvo+8cT3eYk1K9M03pd/AUa8n5GYQ8Nd1ZWYNth9+BO9mf7GJ7bbK
+   zcMg36f1JkBHUirokWQOT7rwf2IIAN46E9oWE5Y0jNu65ehkDYddZJBe1
+   prxVZB1TVLumPmvVcSJrUEMfxVEYGgnhbdbDYXg5gWiRWDpMjtbjvW9Oh
+   eMh9Pn1lo9vz2Q7iApCFdc/AtS/5/mX2Fve8P07nZrXYIjxG6WJMKOdfO
+   p8DbCQalBGWeDZcMJ2Z49rOvCRd8VuPYAttCDQJX2pPxgXc39KvWkIILt
+   Gaw29YyD28p++6rtZkRAbz4LuIpOtfYrQR5YltZGHvc1P+K1qBld+U3dC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260074980"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="260074980"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 02:29:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="560998187"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2022 02:29:11 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2UlT-000QCd-9q;
+        Sat, 18 Jun 2022 09:29:11 +0000
+Date:   Sat, 18 Jun 2022 17:28:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable
+ 'imx93_clk_of_match'
+Message-ID: <202206181724.AJ9MP0Jw-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page(). With
-kmap_local_page(), the mapping is per thread, CPU local and not globally
-visible.
+Hi Peng,
 
-Therefore, use kmap_local_page() / kunmap_local() in zlib_compress_pages()
-because in this function the mappings are per thread and are not visible
-in other contexts.
+FYI, the error/warning still remains.
 
-Tested with xfstests on QEMU + KVM 32-bit VM with 4GB of RAM and
-HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+commit: 24defbe194b650218680fcd9dec8cd103537b531 clk: imx: add i.MX93 clk
+date:   4 months ago
+config: hexagon-randconfig-r041-20220618 (https://download.01.org/0day-ci/archive/20220618/202206181724.AJ9MP0Jw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24defbe194b650218680fcd9dec8cd103537b531
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 24defbe194b650218680fcd9dec8cd103537b531
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
 
-Cc: Qu Wenruo <wqu@suse.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This patch builds only on top of
-"[PATCH] btrfs: zlib: refactor how we prepare the input buffer" by Qu Wenruo".
-https://lore.kernel.org/linux-btrfs/d0bfc791b5509df7b9ad44e41ada197d1b3149b3.1655519730.git.wqu@suse.com/
+All warnings (new ones prefixed by >>):
 
- fs/btrfs/zlib.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+>> drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable 'imx93_clk_of_match' [-Wunused-const-variable]
+   static const struct of_device_id imx93_clk_of_match[] = {
+                                    ^
+   1 warning generated.
 
-diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
-index 966e17cea981..4496dd30bd71 100644
---- a/fs/btrfs/zlib.c
-+++ b/fs/btrfs/zlib.c
-@@ -160,7 +160,7 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
- 		ret = -ENOMEM;
- 		goto out;
- 	}
--	cpage_out = kmap(out_page);
-+	cpage_out = kmap_local_page(out_page);
- 	pages[0] = out_page;
- 	nr_pages = 1;
- 
-@@ -198,9 +198,9 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
- 		 * the stream end if required
- 		 */
- 		if (workspace->strm.avail_out == 0) {
--			kunmap(out_page);
-+			kunmap_local(cpage_out);
- 			if (nr_pages == nr_dest_pages) {
--				out_page = NULL;
-+				cpage_out = NULL;
- 				ret = -E2BIG;
- 				goto out;
- 			}
-@@ -209,7 +209,7 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
- 				ret = -ENOMEM;
- 				goto out;
- 			}
--			cpage_out = kmap(out_page);
-+			cpage_out = kmap_local_page(out_page);
- 			pages[nr_pages] = out_page;
- 			nr_pages++;
- 			workspace->strm.avail_out = PAGE_SIZE;
-@@ -236,9 +236,9 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
- 			goto out;
- 		} else if (workspace->strm.avail_out == 0) {
- 			/* get another page for the stream end */
--			kunmap(out_page);
-+			kunmap_local(cpage_out);
- 			if (nr_pages == nr_dest_pages) {
--				out_page = NULL;
-+				cpage_out = NULL;
- 				ret = -E2BIG;
- 				goto out;
- 			}
-@@ -247,7 +247,7 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
- 				ret = -ENOMEM;
- 				goto out;
- 			}
--			cpage_out = kmap(out_page);
-+			cpage_out = kmap_local_page(out_page);
- 			pages[nr_pages] = out_page;
- 			nr_pages++;
- 			workspace->strm.avail_out = PAGE_SIZE;
-@@ -266,8 +266,8 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
- 	*total_in = workspace->strm.total_in;
- out:
- 	*out_pages = nr_pages;
--	if (out_page)
--		kunmap(out_page);
-+	if (cpage_out)
-+		kunmap_local(cpage_out);
- 	return ret;
- }
- 
+
+vim +/imx93_clk_of_match +324 drivers/clk/imx/clk-imx93.c
+
+   323	
+ > 324	static const struct of_device_id imx93_clk_of_match[] = {
+   325		{ .compatible = "fsl,imx93-ccm" },
+   326		{ /* Sentinel */ },
+   327	};
+   328	MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
+   329	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

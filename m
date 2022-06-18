@@ -2,56 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5B1550408
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 12:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD63550409
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 12:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiFRKet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 06:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S232126AbiFRKgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 06:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiFRKes (ORCPT
+        with ESMTP id S229721AbiFRKgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 06:34:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5B8DFE4;
-        Sat, 18 Jun 2022 03:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XDQYopvY+n0JyKPmW0NgGxfaIg7ptxNKbg5tiL90yf4=; b=f52cnHOzcNZsJ0dPtfJpa6RtMC
-        6cP9oGvpz505NKdQXmMUHHLJ5qHC+ZAmqtqiD5S65X3Kzi3/mNGc/vFA25eufTyu5/lbr8/mnhuAG
-        8h3kNgjkFHZLHFKCfYqXcuErKGMyyWJHdusPX6hD2v+ByRt0wAjOK+wnTIseQ1AniycFdoVOt5KmH
-        +0PcfgAQH5upv5nR+RmIKc9fTZR5QdFEjagK/l15tLu4Oo5mzHyt8253KvcK0M+c7Cun96AnmW/4S
-        HKOQWIlNWJpyr05ItQjfOxN7CAeEAM6ekhpvt8qa977OjiJ+ab+1NsKEehjbHHfnfsGRT6Zw21LWx
-        rFAKvIog==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o2Vmr-003d2E-4c; Sat, 18 Jun 2022 10:34:41 +0000
-Date:   Sat, 18 Jun 2022 11:34:41 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] filemap: obey mapping->invalidate_lock lock/unlock order
-Message-ID: <Yq2qQcHUZ2UjPk/M@casper.infradead.org>
-References: <20220618083820.35626-1-linmiaohe@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220618083820.35626-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 18 Jun 2022 06:36:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1A91AF0F
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 03:36:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE6AEB82194
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785CFC3411D;
+        Sat, 18 Jun 2022 10:36:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655548591;
+        bh=jnL6oKSDUAhkXgMC7u3AVp/Drth4t5BJesdziUNiXYI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LuWYYWkR5Xvr7Rw6y1YxLkv+Qbd6hrLyNv24aqbrqM/i1qXnnp2OTFM15Cw9ChhrE
+         vNee2fhfXDiup8TqrcRnkvY9WXzVwswTd1ADftYhSmxRxSLOHVC42i3c+72nbMrwXC
+         GILwJAWuWDrXFOGhwKUsc2QYo+tWDGEXMKOuHJuEZZY8IBsmln4gbnCbAtBzDwqxkn
+         43M8AHcBbTM6iRfz4U9a8xroK9pYqzWnFvSwYdor0d7xnbRgcX2qb39aBdPF07vU1Z
+         WUspGIwLunyG8X3fxUON53hDFnf+dr2Ac+YXcGLy7rPQz3M7AZ58eTxmuYrYHbj9gx
+         Z2PVDs2K//lgA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o2Vob-001Sok-7w;
+        Sat, 18 Jun 2022 11:36:29 +0100
+Date:   Sat, 18 Jun 2022 11:36:30 +0100
+Message-ID: <87fsk2p8b5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V12 01/10] APCI: irq: Add support for multiple GSI domains
+In-Reply-To: <0247b7d5-aca9-5db1-e712-4783ee672110@loongson.cn>
+References: <1655273250-23495-1-git-send-email-lvjianmin@loongson.cn>
+        <1655273250-23495-2-git-send-email-lvjianmin@loongson.cn>
+        <87k09ipfe2.wl-maz@kernel.org>
+        <0247b7d5-aca9-5db1-e712-4783ee672110@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 04:38:20PM +0800, Miaohe Lin wrote:
-> The invalidate_locks of two mappings should be unlocked in reverse order
-> relative to the locking order in filemap_invalidate_lock_two(). Modifying
+On Wed, 15 Jun 2022 10:28:47 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>=20
+>=20
+>=20
+> On 2022/6/15 =E4=B8=8B=E5=8D=883:14, Marc Zyngier wrote:
+> > On Wed, 15 Jun 2022 07:07:21 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>=20
+> >> From: Marc Zyngier <maz@kernel.org>
+> >>=20
+> >> In an unfortunate departure from the ACPI spec, the LoongArch
+> >> architecture split its GSI space across multiple interrupt
+> >> controllers.
+> >>=20
+> >> In order to be able to reuse sthe core code and prevent
+> >> architectures from reinventing an already square wheel, offer
+> >> the arch code the ability to register a dispatcher function
+> >> that will return the domain fwnode for a given GSI.
+> >>=20
+> >> The ARM GIC drivers are updated to support this (with a single
+> >> domain, as intended).
+> >>=20
+> >> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> >=20
+> > I don't think this tag is appropriate here.
+> >=20
+> >> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> >> Cc: Hanjun Guo <guohanjun@huawei.com>
+> >> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> >> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> >> ---
+> >>   drivers/acpi/irq.c           | 40 +++++++++++++++++++++++-----------=
+------
+> >>   drivers/irqchip/irq-gic-v3.c | 18 ++++++++++++------
+> >>   drivers/irqchip/irq-gic.c    | 18 ++++++++++++------
+> >>   include/linux/acpi.h         |  2 +-
+> >>   4 files changed, 48 insertions(+), 30 deletions(-)
+> >>=20
+> >> diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
+> >> index c68e694..b7460ab 100644
+> >> --- a/drivers/acpi/irq.c
+> >> +++ b/drivers/acpi/irq.c
+> >> @@ -12,7 +12,7 @@
+> >>     enum acpi_irq_model_id acpi_irq_model;
+> >>   -static struct fwnode_handle *acpi_gsi_domain_id;
+> >> +static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
+> >>     /**
+> >>    * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
+> >> @@ -26,10 +26,7 @@
+> >>    */
+> >>   int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+> >>   {
+> >> -	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_id,
+> >> -							DOMAIN_BUS_ANY);
+> >> -
+> >> -	*irq =3D irq_find_mapping(d, gsi);
+> >> +	*irq =3D acpi_register_gsi(NULL, gsi, -1, -1);
+> >=20
+> > What is this?
+> >=20
+> > - This wasn't part of my initial patch, and randomly changing patches
+> >    without mentioning it isn't acceptable
+> >=20
+> > - you *cannot* trigger a registration here, as this isn't what the API
+> >    advertises
+> >=20
+> > - what makes you think that passing random values (NULL, -1... )to
+> >    acpi_register_gsi() is an acceptable thing to do?
+> >=20
+> > The original patch had:
+> >=20
+> > @@ -26,8 +26,10 @@ static struct fwnode_handle *acpi_gsi_domain_id;
+> >     */
+> >    int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+> >    {
+> > -	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_id,
+> > -							DOMAIN_BUS_ANY);
+> > +	struct irq_domain *d;
+> > +
+> > +	d =3D irq_find_matching_fwnode(acpi_get_gsi_domain_id(gsi),
+> > +				     DOMAIN_BUS_ANY);
+> >      	*irq =3D irq_find_mapping(d, gsi);
+> >    	/*
+> >=20
+> > and I don't think it needs anything else. If something breaks, let's
+> > discuss it, but don't abuse the API nor the fact that I usually don't
+> > review my own patches to sneak things in...
+> >=20
+>=20
+> Sorry, Marc, I don't know how to communicate with you for my change
+> here before submitting the patch, maybe I should mention it in the
+> patch commit or code.
 
-Why?  It's perfectly valid to lock(A) lock(B) unlock(A) unlock(B).
-If it weren't we'd have lockdep check it and complain.
+It should at least be discussed first, like you are doing it here.
+
+> When I use the patch, I found that acpi_gsi_to_irq in driver/acpi/irq.c
+> only handle existed mapping and will return -EINVAL if mapping not
+> found. When I test on my machine, a calling stack is as following:
+>=20
+>=20
+> acpi_bus_init
+> ->acpi_enable_subsystem
+>   ->acpi_ev_install_xrupt_handlers
+>     ->acpi_ev_install_sci_handler
+>       ->acpi_os_install_interrupt_handler
+>         ->acpi_gsi_to_irq
+>=20
+>=20
+> the acpi_gsi_to_irq returned -EINVAL because of no mapping found. I
+> looked into acpi_gsi_to_irq of x86, acpi_register_gsi is called in it
+> so that new mapping for gsi is created if no mapping is found.
+
+So it looks like we have a discrepancy between the x86 and ARM on that
+front.
+
+Lorenzo, Hanjun, can you please have a look at this and shed some
+light on what the expected behaviour is? It looks like we never
+encountered an issue with this on arm64, which tends to indicate that
+we don't usually use the above path.
+
+> I looked into generic acpi_register_gsi, the existed mapping will be
+> checked first by calling irq_find_mapping, so I think calling
+> acpi_register_gsi in acpi_gsi_to_irq can address the problem.
+>
+> But you're right, I'm wrong that I passed random value of -1 to
+> acpi_register_gsi. I don't find a right way to address the problem
+> without changing acpi_gsi_to_irq. I'll continue to work for the
+> problem.
+
+At the very least, this should be indirected so that the existing
+behaviour isn't affected, no matter how badly broken arm64 may or may
+not be here. Please have a look at the patch below that should help
+you with this.
+
+Thanks,
+
+	M.
+
+=46rom 3e6b87ea49473d0eb384f42e76d584a1495a538c Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Sat, 18 Jun 2022 11:29:33 +0100
+Subject: [PATCH] ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific
+ fallback
+
+It appears that the generic version of acpi_gsi_to_irq() doesn't
+fallback to establishing a mapping if there is no pre-existing
+one while the x86 version does.
+
+While arm64 seems unaffected by it, LoongArch is relying on the x86
+behaviour. In an effort to prevent new architectures from reinventing
+the proverbial wheel, provide an optional callback that the arch code
+can set to restore the x86 behaviour.
+
+Hopefully we can eventually get rid of this in the future once
+the expected behaviour has been clarified.
+
+Reported-by: Jianmin Lv <lvjianmin@loongson.cn>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ drivers/acpi/irq.c   | 8 ++++++--
+ include/linux/acpi.h | 1 +
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
+index 6e1633ac1756..66c5f01995d0 100644
+--- a/drivers/acpi/irq.c
++++ b/drivers/acpi/irq.c
+@@ -13,6 +13,7 @@
+ enum acpi_irq_model_id acpi_irq_model;
+=20
+ static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
++static int (*acpi_gsi_to_irq_fallback)(u32 gsi);
+=20
+ /**
+  * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
+@@ -33,9 +34,12 @@ int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+=20
+ 	*irq =3D irq_find_mapping(d, gsi);
+ 	/*
+-	 * *irq =3D=3D 0 means no mapping, that should
+-	 * be reported as a failure
++	 * *irq =3D=3D 0 means no mapping, that should be reported as a
++	 * failure, unless there is an arch-specific fallback handler.
+ 	 */
++	if (!*irq && acpi_gsi_to_irq_fallback)
++		*irq =3D acpi_gsi_to_irq_fallback(gsi);
++
+ 	return (*irq > 0) ? 0 : -EINVAL;
+ }
+ EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 957e23f727ea..71d3719e3ec4 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -357,6 +357,7 @@ int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi);
+=20
+ void acpi_set_irq_model(enum acpi_irq_model_id model,
+ 			struct fwnode_handle *(*)(u32));
++void acpi_set_gsi_to_irq_fallback(int (*)(u32));
+=20
+ struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
+ 					     unsigned int size,
+--=20
+2.34.1
+
+
+--=20
+Without deviation from the norm, progress is not possible.

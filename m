@@ -2,193 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25145503E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AC35503CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbiFRJEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S232081AbiFRJFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiFRJD6 (ORCPT
+        with ESMTP id S233055AbiFRJEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:03:58 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB9332070
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:53 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id s10-20020a170902a50a00b00162359521c9so3722533plq.23
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:53 -0700 (PDT)
+        Sat, 18 Jun 2022 05:04:46 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C8533A2A;
+        Sat, 18 Jun 2022 02:04:45 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fd6so6216939edb.5;
+        Sat, 18 Jun 2022 02:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=myIlMYs7Kh5+xez48ocTcxFM1TIOp6h9g401FLEKFqU=;
-        b=IEaKO/iZsLdPyJZ1LpJt4u+iLPMLa/M2HCAGnsppDn3A9MBSKBCVvZkH89wA7XifFt
-         1yeZwF9Hq10m5fOKe63/QT58BXP03zeFTrKw4p9JhgTZg4In+OAHIAyVpgwcbULCBzST
-         M/1jBrC/A3e2hcPWIcVx2w4pA0YHNV6h71fmSZ3XCiZASlg13Zth0fH8YOBpTpv94PKE
-         QtxW4nGTlIVDFTryEGftNifeYuYFwUOm1NpslFOsMKptUqou0b5sA858ijDk7sR32+rj
-         Mty1Gy1+ge2JfBX2XdqstVojlDrq1BzN9RZcgEo0YyHajWndO946UT7fQUxblM36JnP7
-         /1rg==
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=Ui+mLR6kyF0wdfzo/EcLDO7dPFVHC367yFF81zcZVnY=;
+        b=XAuH02T5EIzLRo+0Emlpfbzofq9bEc3nwEmEHXtoMyhPmdUq3151bfVU2WDu4nEYSQ
+         htsj25WWdmJOAZ4SYEVDVCV8auPzn9wKR0b6SdmFi9X3YA2ZV3TqXuWpwyam2YWfNB+u
+         YVkwHR/UnRMvfpAiybtg6mkzTx2uOP28by+Driy4oO77l6OfBq8pWFCaSWBNS+xl2FT8
+         UXdtm9ifjZxCkPuhTBuIqJi9xPayl0pOE/o5vaDazBPpvWaqzLF5ON2gSW77gQqfmcrA
+         7JS4XKKzPhKxHJadVjt/QjSqtBk6w388kEElbMlRHplGJmsob+Flc8AMOPA1uUzn9vJX
+         qUtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=myIlMYs7Kh5+xez48ocTcxFM1TIOp6h9g401FLEKFqU=;
-        b=pksQ3kEms83seqmKcZQAh7uojY5qeMAR8FgNz0smNNygSVwXWFBwu44AhCBk7IA13t
-         3sWQ32QK0gcppQxJwo+6n5UK8JMjgAunMDGopmvVfmAI0LKVPQtW+dmmQcXmLmcOmic8
-         KAfYo/vWarvG1dNKMZ8Etis5xnRGR/HztjdSteU+DJrwndMJSvyy4igqJBbOG/bbpNMv
-         Nkq7i5aAnnG0EJmFOXnhlpMUQdMORyhybq0Kk7S/23IooFERULDRpn7uvWRVqq2bg3FX
-         O+3aZxOy0LIvpxNwmVqM9gNrW6i/ps9UV9GlTy7V2Mve7zuzsOuWu88FVt8UnwSTwF4B
-         GteA==
-X-Gm-Message-State: AJIora8Or5/Ga2ALtIXjhw39krV5+cs/ETAUaRDzMGMmAVgL81OG4zAz
-        aNalaBlAkGcna9obAwJqMLqP+0vX7PzrrQ==
-X-Google-Smtp-Source: AGRyM1t9gG0ITBwjDzCGfVnRzUa4o4t3RyG/S7Wdnx7K6hex62KCdZbIOx7EIntyed7oeD+RzX1j54h7Te2odg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90b:4c0e:b0:1e8:859c:6b56 with SMTP
- id na14-20020a17090b4c0e00b001e8859c6b56mr25861123pjb.121.1655543033024; Sat,
- 18 Jun 2022 02:03:53 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 17:03:10 +0800
-In-Reply-To: <20220618090310.1174932-1-davidgow@google.com>
-Message-Id: <20220618090310.1174932-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220618090310.1174932-1-davidgow@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ui+mLR6kyF0wdfzo/EcLDO7dPFVHC367yFF81zcZVnY=;
+        b=JPE1xqB78Ieg4e00PD+4yy4gOAWqrlFNgSkXJ5COfF/50JCm+IpFobwyeXa6QBJfOw
+         o5C7zWT2ice+aXcvScC2qXKNGMaOyQtf8MQ4CTFGd3ZGZQiuOAcfhhu9QCXMXYEqapco
+         tQaVVqVdkQzfZyJCUHcqnH6hztaUe8SH8xCxK9dsOrsYbLu0goJ6PGYesoKa/PLfCIk0
+         IgNSk6Njgn1JRjo5Zui0cbxeU9b5bZmZJzsyqi2K33d+8xCh8G+yd2eN19YkP6EPlj1a
+         EeEUo1ozLLOkfjLCRyP8aGkjyEzIBH40KdinO4XPXPJOZ5p06QhUcasOGJa2UW4o5t0l
+         Ug/A==
+X-Gm-Message-State: AJIora+sdJ2Y7UCOdgcMNYVCS8n/qQi65V5T00mAcx1gWFPRzNgCJdqs
+        /YFg3DmrkxL4J/adUNR967k=
+X-Google-Smtp-Source: AGRyM1vHof1f/pHCzJetgr+4SQaiNH0PuIx3ZwW5OBZY15U+SDAD1SQz9uAvNJZzVn/mNc7fWqHZKg==
+X-Received: by 2002:a05:6402:31f6:b0:435:5a08:d5e0 with SMTP id dy22-20020a05640231f600b004355a08d5e0mr11206339edb.308.1655543083854;
+        Sat, 18 Jun 2022 02:04:43 -0700 (PDT)
+Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id 27-20020a170906329b00b006fec3b2e4f3sm3146272ejw.205.2022.06.18.02.04.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 02:04:42 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: [RFC PATCH v2 3/3] btrfs: Use kmap_local_page() on "in_page" in zlib_compress_pages()
+Date:   Sat, 18 Jun 2022 11:04:41 +0200
+Message-ID: <2057523.KlZ2vcFHjT@opensuse>
+In-Reply-To: <94f8d618-ec7a-f68e-c302-2639ae3d7549@gmx.com>
+References: <20220617120538.18091-1-fmdefrancesco@gmail.com> <14654011.tv2OnDr8pf@opensuse> <94f8d618-ec7a-f68e-c302-2639ae3d7549@gmx.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kunit_test_suite() macro is no-longer incompatible with module_add,
-so its use can be reinstated.
+On sabato 18 giugno 2022 00:16:15 CEST Qu Wenruo wrote:
+> 
+> On 2022/6/18 02:13, Fabio M. De Francesco wrote:
 
-Since this fixes parsing with builtins and kunit_tool, also enable the
-test by default when KUNIT_ALL_TESTS is enabled.
+[snip]
 
-The test can now be run via kunit_tool with:
-	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-	--kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-	--kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-	--kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-	'sdhci-of-aspeed'
+> 
+> Thanks for pointing to the doc, and that doc is enough to answer my
+> question.
+> 
 
-(It may be worth adding a .kunitconfig at some point, as there are
-enough dependencies to make that command scarily long.)
+Well, this confirms that my changes were quite helpful :-)
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- drivers/mmc/host/Kconfig                |  5 +++--
- drivers/mmc/host/sdhci-of-aspeed-test.c |  8 +-------
- drivers/mmc/host/sdhci-of-aspeed.c      | 27 -------------------------
- 3 files changed, 4 insertions(+), 36 deletions(-)
+[snip]
 
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index d6144978e32d..10c563999d3d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -169,8 +169,9 @@ config MMC_SDHCI_OF_ASPEED
- 	  If unsure, say N.
- 
- config MMC_SDHCI_OF_ASPEED_TEST
--	bool "Tests for the ASPEED SDHCI driver"
--	depends on MMC_SDHCI_OF_ASPEED && KUNIT=y
-+	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
-+	depends on MMC_SDHCI_OF_ASPEED && KUNIT
-+	default KUNIT_ALL_TESTS
- 	help
- 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
- 	  option only if you will boot the kernel for the purpose of running
-diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
-index 1ed4f86291f2..ecb502606c53 100644
---- a/drivers/mmc/host/sdhci-of-aspeed-test.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
-@@ -96,10 +96,4 @@ static struct kunit_suite aspeed_sdhci_test_suite = {
- 	.test_cases = aspeed_sdhci_test_cases,
- };
- 
--static struct kunit_suite *aspeed_sdc_test_suite_array[] = {
--	&aspeed_sdhci_test_suite,
--	NULL,
--};
--
--static struct kunit_suite **aspeed_sdc_test_suites
--	__used __section(".kunit_test_suites") = aspeed_sdc_test_suite_array;
-+kunit_test_suite(aspeed_sdhci_test_suite);
-diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
-index 6e4e132903a6..c10367946bc7 100644
---- a/drivers/mmc/host/sdhci-of-aspeed.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed.c
-@@ -606,25 +606,6 @@ static struct platform_driver aspeed_sdc_driver = {
- 
- #if defined(CONFIG_MMC_SDHCI_OF_ASPEED_TEST)
- #include "sdhci-of-aspeed-test.c"
--
--static inline int aspeed_sdc_tests_init(void)
--{
--	return __kunit_test_suites_init(aspeed_sdc_test_suites);
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--	__kunit_test_suites_exit(aspeed_sdc_test_suites);
--}
--#else
--static inline int aspeed_sdc_tests_init(void)
--{
--	return 0;
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--}
- #endif
- 
- static int __init aspeed_sdc_init(void)
-@@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
- 	if (rc < 0)
- 		goto cleanup_sdhci;
- 
--	rc = aspeed_sdc_tests_init();
--	if (rc < 0) {
--		platform_driver_unregister(&aspeed_sdc_driver);
--		goto cleanup_sdhci;
--	}
--
- 	return 0;
- 
- cleanup_sdhci:
-@@ -656,8 +631,6 @@ module_init(aspeed_sdc_init);
- 
- static void __exit aspeed_sdc_exit(void)
- {
--	aspeed_sdc_tests_exit();
--
- 	platform_driver_unregister(&aspeed_sdc_driver);
- 	platform_driver_unregister(&aspeed_sdhci_driver);
- }
--- 
-2.36.1.476.g0c4daa206d-goog
+> > As I said in a recent email, I'm relatively new to kernel development,
+> > especially to Btrfs and other filesystems.
+> 
+> That's not a big deal, that's why we're here to provide help.
+> 
+> >
+> > However, I noted that this code does different handling depending 
+> > on how many "in_page" is going to map. I am not able to say why...
+> 
+> AFAIK the reason is optimization.
+> 
+> The idea is like this, if there are multiple pages left as input, we
+> copy the pages from page cache into the workspace buffer.
+> 
+> If there is no more than one page left, we use that page from page cache
+> directly.
+> 
+> I believe that's the problem causing the difficult in converting to
+> kmap_local_page().
+> 
+
+[snip]
+
+> 
+> I'll send out a cleanup for zlib_compress_pages(), mostly to make the
+> (strm.avail_in == 0) branch to call kmap() and kunmap() in pairs,
+> without holding @in_page mapped.
+> 
+> Would that make it easier?
+> 
+
+I was doubtful when you asked this question. However, when this morning I 
+saw your patch, I soon understood that it would make that task so easy that 
+a silly script could do a mechanical conversion.
+
+Thanks so much,
+
+Fabio
+
+
 

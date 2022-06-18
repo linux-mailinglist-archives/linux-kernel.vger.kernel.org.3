@@ -2,82 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDD0550233
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F15B550236
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbiFRC5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 22:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S234391AbiFRC6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 22:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiFRC5M (ORCPT
+        with ESMTP id S237911AbiFRC6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 22:57:12 -0400
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1AC26C0E0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Y2R0w
-        LWoS3MlLi/kilNMf914qQrU9POFF5jg8cOKHx0=; b=LYPCGa8upCP5Yy3flrbhF
-        D1nrL9Wfzi1wUM0sUooiKt8cwngQ0YCjUSOaiebuLI2yQPlmuXJ1+Z4CQe0lg0Et
-        cXx/kxJP24Y8kVwPKelIMPXCRMYLrMaPc0H/4Sy3hQrlyypsKEyO2CViDmDDn9iz
-        XhmCtObl+7tmlZplZNWdgI=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp2 (Coremail) with SMTP id DMmowAD3SATvPq1ifd5nDg--.23620S2;
-        Sat, 18 Jun 2022 10:56:48 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     deller@gmx.de, christophe.leroy@csgroup.eu
-Cc:     windhl@126.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] video: fbdev: Fix refcount leak bug in valkyriefb.c
-Date:   Sat, 18 Jun 2022 10:56:47 +0800
-Message-Id: <20220618025647.4057077-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 17 Jun 2022 22:58:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1917B38DA9;
+        Fri, 17 Jun 2022 19:58:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7A0661F5D;
+        Sat, 18 Jun 2022 02:58:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A81BCC3411B;
+        Sat, 18 Jun 2022 02:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655521098;
+        bh=te/1XpkUNmq6MV9BQThN7XRjwLAPokCR7ABtjmsHLyI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uZUuup+U1ZMaEej/wdCOMPftyUvTw9k+De0Cv1SbNdXgd7oNZpnBaEmvXcPjNsVxU
+         7URtzG1KUDLCsru2yB4oY+vYt32Sseg2s5qYAQGwuiOFdi9WdZVggcoq0JIo5nmNYk
+         ELL4c/0HBun5HmnrxCFHZmdNHkrRBAswUsxJXrpUDyILrXODC5DZrfiuc9uvMDrqgq
+         KHMU6onBxjlK9hOxkhrudZ/m9QL1jKP+Erzco3roJZM/07gdvFX6m/7oRgRRu19VIs
+         DKhXJFVJI+DmVHOnFkdVv+M9ApOg1+WPGo6S6tEf/Jy74XQtgtLpX3XLPJt7y3ZnG6
+         G98Nyh0ELTf5g==
+Date:   Fri, 17 Jun 2022 19:58:16 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Riccardo Paolo Bestetti" <pbl@bestov.io>
+Cc:     <davem@davemloft.net>, <cmllamas@google.com>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: Re: NEEDS FIXING - Was: Re: [PATCH v2] ipv4: ping: fix bind address
+ validity check
+Message-ID: <20220617195816.53a2f2cf@kernel.org>
+In-Reply-To: <CKSU5Q2M1IE3.39AS0HDHTZPN@enhorning>
+References: <20220617085435.193319-1-pbl@bestov.io>
+        <165546541315.12170.9716012665055247467.git-patchwork-notify@kernel.org>
+        <CKSU5Q2M1IE3.39AS0HDHTZPN@enhorning>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowAD3SATvPq1ifd5nDg--.23620S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jw4UJF17Jw1kWw1fCFyrCrg_yoW3Krb_uF
-        1kZrZrGryUtr10gw1vgr45uryYvFWxWF1xZFn7t393Cry7Zr15Xr1Ivr1Ik34DW348GF98
-        ZrnFgr10yw1S9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRtLvKUUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgEkF1-HZUnXDAAAsH
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In valkyriefb_init(), of_find_node_by_name() will return a node pointer
-with refcount incremented. We should use of_node_put() in fail path or
-when it is not used anymore.
+On Sat, 18 Jun 2022 02:32:55 +0200 Riccardo Paolo Bestetti wrote:
+> I receompiled the kernel from the net tree to do some more manual testing
+> on the patch and I have two things to disclose. Sorry for the caps in
+> the subject.
+> 
+> TL;DR: I noticed that one of the regressions tests is (correctly)
+> failing, but for the wrong reasons; and the patch I sent contains a
+> mistake, and unfortunately it has already been applied to the tree as
+> commit b4a028c4d0.
+> 
+> Long version below.
+> 
+> 1) If you run regression tests with -v, the (correct -- see below) ICMP
+> tests for broadcast and multicast binding do not fail with
+> EADDRNOTAVAIL, but with ACCES, but only when run through fcnal-test.sh.
+> This is also true for one of the additional (commented out) tests you
+> can find in my patch following this email. I'm not sure why this
+> happens; however I'm reasonably convinced it is a quirk or a consequence
+> of the testing methodology/setup. Can anyone offer any insights?
+> 
+> 2) My patch is faulty. I had a complete and tested patch, including code
+> fixing the regression. Instead of sending it, however, I decided to
+> adapt it to preserve Carlos Llamas' version of ping.c, since they posted
+> their patch first. In doing so I used a work branch which contained a
+> faulty version (wrong flags) of the regression tests. The resulting
+> faulty patch is, unfortunately, currently in the tree.
+> 
+> At this point, due to the unfortunate combination of (1) and (2), it
+> might be worth reverting the patch altogether and just applying the v1
+> (i.e. without the regression tests) to the tree and to the relevant LTS
+> versions.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/video/fbdev/valkyriefb.c | 3 +++
- 1 file changed, 3 insertions(+)
+IIUC only the test is faulty / unreliable, correct?
 
-diff --git a/drivers/video/fbdev/valkyriefb.c b/drivers/video/fbdev/valkyriefb.c
-index a6c9d4f26669..20d727a8069d 100644
---- a/drivers/video/fbdev/valkyriefb.c
-+++ b/drivers/video/fbdev/valkyriefb.c
-@@ -334,10 +334,13 @@ int __init valkyriefb_init(void)
- 			return 0;
- 
- 		if (of_address_to_resource(dp, 0, &r)) {
-+			of_node_put(dp);
- 			printk(KERN_ERR "can't find address for valkyrie\n");
- 			return 0;
- 		}
- 
-+		of_node_put(dp);
-+
- 		frame_buffer_phys = r.start;
- 		cmap_regs_phys = r.start + 0x304000;
- 	}
--- 
-2.25.1
+We have until Thursday before this patch hits Linus's tree so should 
+be plenty of time to figure the problem out and apply an incremental
+fix. I see you posted an RFC already, thanks!
+
+> After that, a more proper discussion can be had about (1), and the
+> regression tests can be fixed. I'm sending a demonstrative patch for
+> that as a response to this message.
 

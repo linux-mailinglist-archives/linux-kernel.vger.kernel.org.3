@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE2A5503C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC01A5503E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiFRJDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S232498AbiFRJDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbiFRJDc (ORCPT
+        with ESMTP id S232654AbiFRJDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:03:32 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E27A17072
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:31 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id y2-20020a655b42000000b0040014afa54cso3292483pgr.21
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:31 -0700 (PDT)
+        Sat, 18 Jun 2022 05:03:38 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356172F026
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:36 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id m5-20020a17090a4d8500b001e0cfe135c7so3391147pjh.3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ptVKPuGcbB2+la+8ZiODjieQiW7k/oxo/Oz/EdgWumA=;
-        b=UIxQ5FEc5KUGjUFI0jmR+pzVeOpPYkxsewDr7QpplKnl9i8FqbhtassrfzcyyW/VG4
-         q4zTZ1jlJegFa1PmQn4JCa7rgZpA9GXdHeGc7DZThZ3KQpZ5ijja2/D22gi939kN75as
-         w19ZMHfgy7cHjfLdCoqYjwhPvt3gyoPZQIRTlpXEuBVi1hRUi93DrwXHyRyr6uPntB+C
-         f5qLDoDNzx+/aL9DTUn2OsNZ3Fo0QayufVMnNZ/CwjjPTMgirdUroVvDRqUjhR2FhpvJ
-         nwHs/ieBLMWCoE89Zwm+PIiFZpaoTHinYCTLH2LFGLCAwEinnlsS9UG+rWKeGDt9sn12
-         wlLg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=xcKhd2ovDrzW4TN5oKPRjlu0BegYI/Ed8HUs8ET36D0=;
+        b=XAbzUsj91wrGwVolFVA6fl0C5dE56VX4gaU68QvHoo1q3J3md2ju8twxWO9ypQkCXo
+         YLVk/g/eJWGTIbdLeaj1iVfuXi4pFirKgvm3QQO+2adT3Zyn0WhtT3kF/y+YrRov5iCB
+         1IG+AzyTtkagpco0Pied13GoHBw6TtqSUqXnZFl/mxEC19JfwK45blxTEmq5HPbvm0yS
+         xMNmNyjXVVA+BDnILrP8sZc4XRNJysY9F32F83W41WgSeLJkkF15ABFdfUX2Vf1rzi9f
+         s7e484WAj9LMLHRcoD1EwraInpSjASQFFoaoaT2/p4CS9pfTdFvSQT/RLjYT7XoYKHaJ
+         lyaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ptVKPuGcbB2+la+8ZiODjieQiW7k/oxo/Oz/EdgWumA=;
-        b=6/GNvuraV2Ok/XRPCZ0CfTGhS3SagNep5OaaIKX2eo6xo3Kgp26ju1QKkbnv+Hge+V
-         ysYs/epFMeSzyhifXMaReKJ7X/VhGmYDXHspZJ3d557VNEHjJA67gqRXVX1Vvbrg4itQ
-         jHlVAanULLTtXBMo2HvXsfQRxbtECbCzZVbF9sfC+FJfAtj+uGjTZHfzpxt/50bJZkL4
-         7P2aYqHHyLJmHulzJH8QmEAa68w4Q8hUl+dFCmrRL5tibEa+Li7HBn0UhVQTzpnL++Ql
-         0VyQs8+IMTrhRrpDsEoEKq4MhIjqZW7+jgrg6a1E5J/gzQ1GATqeus52IvxSOpf/Yr9z
-         em1g==
-X-Gm-Message-State: AJIora/qUiJbQVeDeednKEd/pmNmhuBmUuAqInW/MXw5GVgB1vVNKPrW
-        byLkHeAziT0jk0Cf9b4834e1dzGcXOrbjw==
-X-Google-Smtp-Source: AGRyM1sH2PfcGj8ViDV0lllmFpU71ukSxzCtMA3vIatOWbHB6KvOeV6QomY8XXQV6nt0d4lCuh4I6QRng8JeMg==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=xcKhd2ovDrzW4TN5oKPRjlu0BegYI/Ed8HUs8ET36D0=;
+        b=MYv43bxrEBf3oQroSxo2ShPKCQQa3/X3AvWChEO0iUbBg8YnAMu8pIZxbWImGfbJIe
+         54+es6myxPr5Jcf08YkeL7SaVvIMzJHmesRbptu3DprsXy+K5yIhwBqnjyTVldvhy+Mw
+         yzxzR23DSr1OR+WOX8USV35MBszlI+vi7h++kqdiHwsE46rnyUvtUNcn/FzXrEAe3IfS
+         RvTdmpwo2SKbKgWF31ntJ0uNPya3Ywazx+2u2ZwrNEqzzOFbimoiL6RKsKrTcvHRzYdx
+         PqhhAcok+6CBKi4osgl5QeAdSdtrsuFOcLZqdgB6c3jOWWAo+rqbqBJRWMNAqSg23bVs
+         R7vA==
+X-Gm-Message-State: AJIora/FHpRr8+a7dkPyw85RwXRgMSThDnhR+wK+J3zUl1V5KD8TiYxR
+        ETQT+mij7vgJKr4+zuX5pnilDLAW1yeweA==
+X-Google-Smtp-Source: AGRyM1vDoXfonjmrvKRgfpNxP1jpWSSE8piUJc9c0Ybgfw+LPYyVsMqQgH5/9pfMsNlOGK3dDvBe5L4hQK9aAA==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:903:11cc:b0:168:eae:da4a with SMTP id
- q12-20020a17090311cc00b001680eaeda4amr13290211plh.21.1655543010775; Sat, 18
- Jun 2022 02:03:30 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 17:03:05 +0800
-Message-Id: <20220618090310.1174932-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a17:902:b610:b0:168:cd85:d7a2 with SMTP
+ id b16-20020a170902b61000b00168cd85d7a2mr14297035pls.125.1655543015440; Sat,
+ 18 Jun 2022 02:03:35 -0700 (PDT)
+Date:   Sat, 18 Jun 2022 17:03:06 +0800
+In-Reply-To: <20220618090310.1174932-1-davidgow@google.com>
+Message-Id: <20220618090310.1174932-2-davidgow@google.com>
 Mime-Version: 1.0
+References: <20220618090310.1174932-1-davidgow@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 0/5] Rework KUnit test execution in modules
+Subject: [PATCH 1/5] kunit: unify module and builtin suite definitions
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
@@ -59,86 +63,244 @@ To:     Brendan Higgins <brendanhiggins@google.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andra Paraschiv <andraprs@amazon.com>,
         Longpeng <longpeng2@huawei.com>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
         linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
         linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
+        Matt Johnston <matt@codeconstruct.com.au>,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series makes two changes to how KUnit test suites are stored
-and executed:
-- The .kunit_test_suites section is now used for tests in modules (in
-  lieu of a module_init funciton), as well as for built-in tests. The
-  module loader will now trigger test execution. This frees up the
-  module_init function for other uses.
-- Instead of storing an array of arrays of suites, have the
-  kunit_test_suite() and kunit_test_suites() macros append to one global
-  (or per-module) list of test suites. This removes a needless layer of
-  indirection.
+From: Jeremy Kerr <jk@codeconstruct.com.au>
 
-The upshot of this is that it should now be possible to use the
-kunit_test_suite() and kunit_test_suites() macros to register test
-suites even from within modules which otherwise had module_init
-functions. This was proving to be quite a common issue, resulting in
-several modules calling into KUnit's private suite execution functions
-to run their tests (often introducing incompatibilities with the KUnit
-tooling).
+Currently, KUnit runs built-in tests and tests loaded from modules
+differently. For built-in tests, the kunit_test_suite{,s}() macro adds a
+list of suites in the .kunit_test_suites linker section. However, for
+kernel modules, a module_init() function is used to run the test suites.
 
-This series also fixes the thunderbolt, nitro_enclaves, and
-sdhci-of-aspeed tests to use kunit_test_suite() now that it works.
+This causes problems if tests are included in a module which already
+defines module_init/exit_module functions, as they'll conflict with the
+kunit-provided ones.
 
-Huge thanks to Jeremy Kerr, who designed and implemented the module
-loader changes, and to Daniel Latypov for pushing the simplification of
-the nested arrays in .kunit_test_suites.
+This change removes the kunit-defined module inits, and instead parses
+the kunit tests from their own section in the module. After module init,
+we call __kunit_test_suites_init() on the contents of that section,
+which prepares and runs the suite.
 
-I've tested this series both with builtin tests, and with modules on
-x86_64, but there's always the possibility that there's something subtle
-and nasty on another architecture, so please test!
+This essentially unifies the module- and non-module kunit init formats.
 
-Cheers,
--- David
+Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Daniel Latypov (1):
-  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
+This is essentially the patch at:
+https://lore.kernel.org/linux-kselftest/101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au/
+I've basically just rebased it, tweaked some wording, and it made it
+still compile when CONFIG_MODULES is not set.
 
-David Gow (3):
-  thunderbolt: test: Use kunit_test_suite() macro
-  nitro_enclaves: test: Use kunit_test_suite() macro
-  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
 
-Jeremy Kerr (1):
-  kunit: unify module and builtin suite definitions
+ include/kunit/test.h   | 47 ++++----------------------------------
+ include/linux/module.h |  5 ++++
+ kernel/module/main.c   |  6 +++++
+ lib/kunit/test.c       | 52 +++++++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 67 insertions(+), 43 deletions(-)
 
- drivers/mmc/host/Kconfig                      |   5 +-
- drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
- drivers/mmc/host/sdhci-of-aspeed.c            |  27 ----
- drivers/thunderbolt/Kconfig                   |   5 +-
- drivers/thunderbolt/domain.c                  |   3 -
- drivers/thunderbolt/tb.h                      |   8 -
- drivers/thunderbolt/test.c                    |  12 +-
- drivers/virt/nitro_enclaves/Kconfig           |   5 +-
- drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
- .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
- include/kunit/test.h                          |  60 ++------
- include/linux/module.h                        |   5 +
- kernel/module/main.c                          |   6 +
- lib/kunit/executor.c                          | 117 ++++-----------
- lib/kunit/executor_test.c                     | 139 +++++-------------
- lib/kunit/test.c                              |  54 ++++++-
- 16 files changed, 152 insertions(+), 334 deletions(-)
-
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 8ffcd7de9607..54306271cfbf 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -250,41 +250,8 @@ static inline int kunit_run_all_tests(void)
+ }
+ #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+ 
+-#ifdef MODULE
+-/**
+- * kunit_test_suites_for_module() - used to register one or more
+- *			 &struct kunit_suite with KUnit.
+- *
+- * @__suites: a statically allocated list of &struct kunit_suite.
+- *
+- * Registers @__suites with the test framework. See &struct kunit_suite for
+- * more information.
+- *
+- * If a test suite is built-in, module_init() gets translated into
+- * an initcall which we don't want as the idea is that for builtins
+- * the executor will manage execution.  So ensure we do not define
+- * module_{init|exit} functions for the builtin case when registering
+- * suites via kunit_test_suites() below.
+- */
+-#define kunit_test_suites_for_module(__suites)				\
+-	static int __init kunit_test_suites_init(void)			\
+-	{								\
+-		return __kunit_test_suites_init(__suites);		\
+-	}								\
+-	module_init(kunit_test_suites_init);				\
+-									\
+-	static void __exit kunit_test_suites_exit(void)			\
+-	{								\
+-		return __kunit_test_suites_exit(__suites);		\
+-	}								\
+-	module_exit(kunit_test_suites_exit)
+-#else
+-#define kunit_test_suites_for_module(__suites)
+-#endif /* MODULE */
+-
+ #define __kunit_test_suites(unique_array, unique_suites, ...)		       \
+ 	static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
+-	kunit_test_suites_for_module(unique_array);			       \
+ 	static struct kunit_suite **unique_suites			       \
+ 	__used __section(".kunit_test_suites") = unique_array
+ 
+@@ -294,16 +261,12 @@ static inline int kunit_run_all_tests(void)
+  *
+  * @__suites: a statically allocated list of &struct kunit_suite.
+  *
+- * Registers @suites with the test framework. See &struct kunit_suite for
+- * more information.
+- *
+- * When builtin,  KUnit tests are all run via executor; this is done
+- * by placing the array of struct kunit_suite * in the .kunit_test_suites
+- * ELF section.
++ * Registers @suites with the test framework.
++ * This is done by placing the array of struct kunit_suite * in the
++ * .kunit_test_suites ELF section.
+  *
+- * An alternative is to build the tests as a module.  Because modules do not
+- * support multiple initcall()s, we need to initialize an array of suites for a
+- * module.
++ * When builtin, KUnit tests are all run via the executor at boot, and when
++ * built as a module, they run on module load.
+  *
+  */
+ #define kunit_test_suites(__suites...)						\
+diff --git a/include/linux/module.h b/include/linux/module.h
+index abd9fa916b7d..e3cd6c325794 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -505,6 +505,11 @@ struct module {
+ 	int num_static_call_sites;
+ 	struct static_call_site *static_call_sites;
+ #endif
++#ifdef CONFIG_KUNIT
++	int num_kunit_suites;
++	struct kunit_suite ***kunit_suites;
++#endif
++
+ 
+ #ifdef CONFIG_LIVEPATCH
+ 	bool klp; /* Is this a livepatch module? */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fed58d30725d..4542db7cdf54 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2087,6 +2087,12 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 					      sizeof(*mod->static_call_sites),
+ 					      &mod->num_static_call_sites);
+ #endif
++#ifdef CONFIG_KUNIT
++	mod->kunit_suites = section_objs(info, ".kunit_test_suites",
++					      sizeof(*mod->kunit_suites),
++					      &mod->num_kunit_suites);
++#endif
++
+ 	mod->extable = section_objs(info, "__ex_table",
+ 				    sizeof(*mod->extable), &mod->num_exentries);
+ 
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index a5053a07409f..3052526b9b89 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -10,6 +10,7 @@
+ #include <kunit/test.h>
+ #include <kunit/test-bug.h>
+ #include <linux/kernel.h>
++#include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched.h>
+@@ -609,6 +610,49 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
+ 
++#ifdef CONFIG_MODULES
++static void kunit_module_init(struct module *mod)
++{
++	unsigned int i;
++
++	for (i = 0; i < mod->num_kunit_suites; i++)
++		__kunit_test_suites_init(mod->kunit_suites[i]);
++}
++
++static void kunit_module_exit(struct module *mod)
++{
++	unsigned int i;
++
++	for (i = 0; i < mod->num_kunit_suites; i++)
++		__kunit_test_suites_exit(mod->kunit_suites[i]);
++}
++
++static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
++			       void *data)
++{
++	struct module *mod = data;
++
++	switch (val) {
++	case MODULE_STATE_LIVE:
++		kunit_module_init(mod);
++		break;
++	case MODULE_STATE_GOING:
++		kunit_module_exit(mod);
++		break;
++	case MODULE_STATE_COMING:
++	case MODULE_STATE_UNFORMED:
++		break;
++	}
++
++	return 0;
++}
++
++static struct notifier_block kunit_mod_nb = {
++	.notifier_call = kunit_module_notify,
++	.priority = 0,
++};
++#endif
++
+ struct kunit_kmalloc_array_params {
+ 	size_t n;
+ 	size_t size;
+@@ -703,13 +747,19 @@ EXPORT_SYMBOL_GPL(kunit_cleanup);
+ static int __init kunit_init(void)
+ {
+ 	kunit_debugfs_init();
+-
++#ifdef CONFIG_MODULES
++	return register_module_notifier(&kunit_mod_nb);
++#else
+ 	return 0;
++#endif
+ }
+ late_initcall(kunit_init);
+ 
+ static void __exit kunit_exit(void)
+ {
++#ifdef CONFIG_MODULES
++	unregister_module_notifier(&kunit_mod_nb);
++#endif
+ 	kunit_debugfs_cleanup();
+ }
+ module_exit(kunit_exit);
 -- 
 2.36.1.476.g0c4daa206d-goog
 

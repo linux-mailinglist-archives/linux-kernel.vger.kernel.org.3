@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8458E550177
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D88E550178
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383769AbiFRArE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 20:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S1383783AbiFRArl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 20:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbiFRArD (ORCPT
+        with ESMTP id S231921AbiFRArj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 20:47:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498A16A05C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655513222; x=1687049222;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Je1y5zy705KJpXaFtnelR3Wqabsngugmqr4TPqyDQ3o=;
-  b=awScRf2Mgdef9HeGFIehtSCdCL+DODKMAxBEZSYtzBQ+85Cu75o9PONj
-   mclvUDhwGcOGF7mS0MiT5R14v6fh3zFdVXyFQnRir6ZkY/ewZCvHizQ77
-   35nMMJ1ZbGaf5C15GW6YMPHIrgxMZUTp1XDvmGwVnzEAQY/QpthmQGLxG
-   +04T2fISnNMlTcbCCUVoLdw1IX7PVN+p/igB+C0O+mD5e885taqq6vEJy
-   /j5I7CyM9KcTx1aWX+G9O6tG/Bl9c46KxjwPOg6IIcXORz2OQzIbYHcwJ
-   v7zD26euwkJRBHqO8xdYFXkQa0K8WYz3BQspAZXvrefbOwB9y87Ha0Vc+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305044761"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="305044761"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 17:47:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="832248843"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Jun 2022 17:47:00 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2Mc7-000Ptd-Vt;
-        Sat, 18 Jun 2022 00:46:59 +0000
-Date:   Sat, 18 Jun 2022 08:46:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chris Redpath <chris.redpath@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.14-rebase 1457/9999]
- kernel/sched/fair.c:7171 find_energy_efficient_cpu() warn: inconsistent
- indenting
-Message-ID: <202206180854.FEljcJix-lkp@intel.com>
+        Fri, 17 Jun 2022 20:47:39 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1021C63C7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:47:39 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 193so2510474pgc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jAq1OWKefq6Uf6mnDfJMitLNgK+QPvN0uQDkkiwg9A4=;
+        b=dvsWPBgzkIabBMQ6PpwoFSIxmE/zGZQtcit2nkVuW6axlQ7nKKZUmp0jQtOJGsFsHf
+         xBBOj+zNYHsrgX2tHbnk7RjbOLpudzgg9h/AZ1So1LLxQBaieaCsWxAO9QCOAgXVL+Ur
+         WakgRDD5aY2+9pcT16hrGFHmBtcZ5bm6iFNLt6zyuxbe/Gg5zmedjy4RO9AISce3VnZ7
+         RRK8nruaRTYCd8M1G3cep9njj0bMyXi78Rf8SIHkwgDVf04X6hhdPzKrVRRENWtAMLFY
+         eU5ABXl4fWRbNOyBB7xkd1GKICGwTGiwLV+dkCYjlGk1JWZ38577zqXHvcbYvE9byj8i
+         ztXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jAq1OWKefq6Uf6mnDfJMitLNgK+QPvN0uQDkkiwg9A4=;
+        b=g7oVl8LGXXKjVt5bnzUGWQXyN999KyaBlmuDkKoLxCvbNFvm8JEdoQXpFKLMhV10Ma
+         jnYKPysk9aIczD5SeFTAtJS3qpqUOW0MiJKleooKc0Buv05hvnIZBoJ9Q8nOlX6YuUbo
+         mDo4/lmFyW7AmoAs89XacKsOU/I9HaKgLsDHfB0lZWZyUc1qG1Ip8pBuIr5ngSimMugR
+         OC4XceJRk9bnq7YaM5MaIWhGgBgZGP6q00IzSX9S0E2ejFQI2J41ZkJCWFTMDoSw55HN
+         qzzHWZ0Anwa3zF1BIzZGWKmd6tVgXRk9ESjFAD04S1q30fJP2Bqt2LPZEQ5KXmyErDHa
+         5sHw==
+X-Gm-Message-State: AJIora/p8uhr8GhvghnBBuIUdQsCf2Biy6vy+thf0TBbJBESc/qc88xq
+        MuJoTxv+x6izzRAajJXsVUg=
+X-Google-Smtp-Source: AGRyM1vGGwXGS75rbw/4GKiK2NGssYitd1RTX5wepPhPrBlPkhAMP3i/JqQSELQxTkHOUB0c5ItQyA==
+X-Received: by 2002:a63:914b:0:b0:3fc:f8b2:d947 with SMTP id l72-20020a63914b000000b003fcf8b2d947mr11239602pge.491.1655513258571;
+        Fri, 17 Jun 2022 17:47:38 -0700 (PDT)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id p48-20020a056a0026f000b0050dc7628184sm4376827pfw.94.2022.06.17.17.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 17:47:37 -0700 (PDT)
+From:   Yang Shi <shy828301@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [mm-unstable PATCH] mm: thp: fix hugepage_vma_check() for gate vma
+Date:   Fri, 17 Jun 2022 17:47:36 -0700
+Message-Id: <20220618004736.1235352-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,120 +68,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14-rebase
-head:   18a233f3f676a98dde00947535d99ab1a54da340
-commit: e56a97123c10e6d5ca2ce9a0f1329f02f79f2319 [1457/9999] ANDROID: Add find_best_target to minimise energy calculation overhead
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220618/202206180854.FEljcJix-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+The syzbot reported the below issue:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+BUG: KASAN: null-ptr-deref in hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+Read of size 8 at addr 00000000000005a8 by task syz-executor.5/21978
 
-smatch warnings:
-kernel/sched/fair.c:7171 find_energy_efficient_cpu() warn: inconsistent indenting
+CPU: 0 PID: 21978 Comm: syz-executor.5 Not tainted 5.19.0-rc2-next-20220616-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+ hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+ show_smap+0x1c6/0x470 fs/proc/task_mmu.c:866
+ traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
+ traverse fs/seq_file.c:101 [inline]
+ seq_read_iter+0x90f/0x1280 fs/seq_file.c:195
+ seq_read+0x337/0x4b0 fs/seq_file.c:162
+ do_loop_readv_writev fs/read_write.c:763 [inline]
+ do_loop_readv_writev fs/read_write.c:750 [inline]
+ do_iter_read+0x4f8/0x750 fs/read_write.c:805
+ vfs_readv+0xe5/0x150 fs/read_write.c:923
+ do_preadv fs/read_write.c:1015 [inline]
+ __do_sys_preadv fs/read_write.c:1065 [inline]
+ __se_sys_preadv fs/read_write.c:1060 [inline]
+ __x64_sys_preadv+0x22b/0x310 fs/read_write.c:1060
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f5c1d889109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5c1ea69168 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
+RAX: ffffffffffffffda RBX: 00007f5c1d99bf60 RCX: 00007f5c1d889109
+RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000005
+RBP: 00007f5c1d8e305d R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000fffffffe R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd8514b43f R14: 00007f5c1ea69300 R15: 0000000000022000
 
-vim +7171 kernel/sched/fair.c
+The mm of the vma returned by smaps is NULL.  But it seems impossible
+for normal vma since the mm is pinned before reaching hugepage_vma_check()
+unless the vma is gate vma.
 
-  7092	
-  7093	/*
-  7094	 * Needs to be called inside rcu_read_lock critical section.
-  7095	 * sd is a pointer to the sched domain we wish to use for an
-  7096	 * energy-aware placement option.
-  7097	 */
-  7098	static int find_energy_efficient_cpu(struct sched_domain *sd,
-  7099					     struct task_struct *p,
-  7100					     int cpu, int prev_cpu,
-  7101					     int sync)
-  7102	{
-  7103		int use_fbt = sched_feat(FIND_BEST_TARGET);
-  7104		int cpu_iter, eas_cpu_idx = EAS_CPU_NXT;
-  7105		int energy_cpu = prev_cpu;
-  7106		struct energy_env *eenv;
-  7107	
-  7108		if (sysctl_sched_sync_hint_enable && sync) {
-  7109			if (cpumask_test_cpu(cpu, &p->cpus_allowed)) {
-  7110				return cpu;
-  7111			}
-  7112		}
-  7113	
-  7114		/* take ownership of our per-cpu data structure */
-  7115		eenv = get_eenv(p, prev_cpu);
-  7116		if (eenv->max_cpu_count < 2)
-  7117			return energy_cpu;
-  7118	
-  7119		if(!use_fbt) {
-  7120			/*
-  7121			 * using this function outside wakeup balance will not supply
-  7122			 * an sd ptr. Instead, fetch the highest level with energy data.
-  7123			 */
-  7124			if (!sd)
-  7125				sd = rcu_dereference(per_cpu(sd_ea, prev_cpu));
-  7126	
-  7127			for_each_cpu_and(cpu_iter, &p->cpus_allowed, sched_domain_span(sd)) {
-  7128				unsigned long spare;
-  7129	
-  7130				/* prev_cpu already in list */
-  7131				if (cpu_iter == prev_cpu)
-  7132					continue;
-  7133	
-  7134				spare = capacity_spare_wake(cpu_iter, p);
-  7135	
-  7136				if (spare * 1024 < capacity_margin * task_util(p))
-  7137					continue;
-  7138	
-  7139				/* Add CPU candidate */
-  7140				eenv->cpu[eas_cpu_idx++].cpu_id = cpu_iter;
-  7141				eenv->max_cpu_count = eas_cpu_idx;
-  7142	
-  7143				/* stop adding CPUs if we have no space left */
-  7144				if (eas_cpu_idx >= eenv->eenv_cpu_count)
-  7145					break;
-  7146			}
-  7147		} else {
-  7148			int boosted = (schedtune_task_boost(p) > 0);
-  7149			int prefer_idle;
-  7150	
-  7151			/*
-  7152			 * give compiler a hint that if sched_features
-  7153			 * cannot be changed, it is safe to optimise out
-  7154			 * all if(prefer_idle) blocks.
-  7155			 */
-  7156			prefer_idle = sched_feat(EAS_PREFER_IDLE) ?
-  7157					(schedtune_prefer_idle(p) > 0) : 0;
-  7158	
-  7159			eenv->max_cpu_count = EAS_CPU_BKP+1;
-  7160	
-  7161			/* Find a cpu with sufficient capacity */
-  7162			eenv->cpu[EAS_CPU_NXT].cpu_id = find_best_target(p,
-  7163					&eenv->cpu[EAS_CPU_BKP].cpu_id,
-  7164					boosted, prefer_idle);
-  7165	
-  7166			/* take note if no backup was found */
-  7167			if (eenv->cpu[EAS_CPU_BKP].cpu_id < 0)
-  7168				eenv->max_cpu_count = EAS_CPU_BKP;
-  7169	
-  7170			/* take note if no target was found */
-> 7171			 if (eenv->cpu[EAS_CPU_NXT].cpu_id < 0)
-  7172				 eenv->max_cpu_count = EAS_CPU_NXT;
-  7173		}
-  7174	
-  7175		if (eenv->max_cpu_count == EAS_CPU_NXT) {
-  7176			/*
-  7177			 * we did not find any energy-awareness
-  7178			 * candidates beyond prev_cpu, so we will
-  7179			 * fall-back to the regular slow-path.
-  7180			 */
-  7181			return energy_cpu;
-  7182		}
-  7183	
-  7184		/* find most energy-efficient CPU */
-  7185		eas_cpu_idx = select_energy_cpu_idx(eenv);
-  7186		energy_cpu = eenv->cpu[eas_cpu_idx].cpu_id;
-  7187	
-  7188		return energy_cpu;
-  7189	}
-  7190	
+The gate vma doesn't have valid mm, but its size is PAGE_SIZE so the old
+code (checking vma size first) did return before dereferencing mm.  So
+move vma size check to the top to make sure it returns for gate vma
+before dereferencing mm.
 
+Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+ mm/huge_memory.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 2e2a8b5bc567..8e4ebd155ec6 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -73,6 +73,20 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
+ 			unsigned long vm_flags,
+ 			bool smaps, bool in_pf)
+ {
++	/*
++	 * Check alignment for file vma and size for both file and anon vma.
++	 *
++	 * Call this before touching mm since gate vma may be met by smaps,
++	 * which doesn't have valid mm. The size of gate vma is PAGE_SIZE so
++	 * it will just return here.
++	 *
++	 * Skip the check for page fault. Huge fault does the check in fault
++	 * handlers. And this check is not suitable for huge PUD fault.
++	 */
++	if (!in_pf &&
++	    !transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
++		return false;
++
+ 	/*
+ 	 * Explicitly disabled through madvise or prctl, or some
+ 	 * architectures may disable THP for some mappings, for
+@@ -99,16 +113,6 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
+ 	if (vm_flags & VM_NO_KHUGEPAGED)
+ 		return false;
+ 
+-	/*
+-	 * Check alignment for file vma and size for both file and anon vma.
+-	 *
+-	 * Skip the check for page fault. Huge fault does the check in fault
+-	 * handlers. And this check is not suitable for huge PUD fault.
+-	 */
+-	if (!in_pf &&
+-	    !transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
+-		return false;
+-
+ 	/*
+ 	 * Enabled via shmem mount options or sysfs settings.
+ 	 * Must be done before hugepage flags check since shmem has its
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.26.3
+

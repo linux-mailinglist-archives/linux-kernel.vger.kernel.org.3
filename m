@@ -2,125 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE0055027A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E1F55027D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384043AbiFRD2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 23:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S238309AbiFRDaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 23:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383842AbiFRD2D (ORCPT
+        with ESMTP id S230500AbiFRDaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 23:28:03 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948B011827;
-        Fri, 17 Jun 2022 20:27:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VGi1ydh_1655522870;
-Received: from 30.13.184.185(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VGi1ydh_1655522870)
-          by smtp.aliyun-inc.com;
-          Sat, 18 Jun 2022 11:27:51 +0800
-Message-ID: <e8cb00ab-f617-de14-9e5c-883f56da0b5f@linux.alibaba.com>
-Date:   Sat, 18 Jun 2022 11:27:59 +0800
+        Fri, 17 Jun 2022 23:30:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4D469CF9;
+        Fri, 17 Jun 2022 20:30:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A39BDB82D1F;
+        Sat, 18 Jun 2022 03:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A959C3411E;
+        Sat, 18 Jun 2022 03:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655523013;
+        bh=imZHSh61aXEmeSuzVYB46shMBkAiRz4LBhIdGDei7uw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CoLBeiqnMkQayAFQu3ZzfzaEuH3m4blvIILNipETVLBaypLpRYgn5evT9Mn8VMybd
+         J0UDkztCvcoSCnksOAZ85vDdscjGA58k24cE1KTGRPfUj8SfaY6OZ2gZsLcQ0yBKTH
+         9aAoNTR08droCSO5ITuR5pbSZQkWbDO+iU/5QNK+eqG8zFDHK2kbNKW9qLxzIpn03T
+         RhuRY8Ws65qljA/VaAEKxojWxKRByNmfN830YCiT4b/grpLYQBdM7WQdPjnfeo/IY8
+         z5fcabNRW3l54FzCIe9MhFA/XVXNfI5KN37rPm5kcXrWs/iyd3CCyx+wDgmNDmwZN6
+         gnzjVE/34hZNQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3CC99E7387A;
+        Sat, 18 Jun 2022 03:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] hugetlb: skip to end of PT page mapping when pte not
- present
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        catalin.marinas@arm.com, will@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220616210518.125287-1-mike.kravetz@oracle.com>
- <20220616210518.125287-2-mike.kravetz@oracle.com>
- <YqyMhmAjrQ4C+EyA@xz-m1.local> <Yqy3LZUOdH5GsZ9j@monkey>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <Yqy3LZUOdH5GsZ9j@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] ethtool: Fix get module eeprom fallback
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165552301324.7046.10386873519636092978.git-patchwork-notify@kernel.org>
+Date:   Sat, 18 Jun 2022 03:30:13 +0000
+References: <20220616160856.3623273-1-ivecera@redhat.com>
+In-Reply-To: <20220616160856.3623273-1-ivecera@redhat.com>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org, mkubecek@suse.cz, idosch@nvidia.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, vladyslavt@nvidia.com, andrew@lunn.ch,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 16 Jun 2022 18:08:55 +0200 you wrote:
+> Function fallback_set_params() checks if the module type returned
+> by a driver is ETH_MODULE_SFF_8079 and in this case it assumes
+> that buffer returns a concatenated content of page  A0h and A2h.
+> The check is wrong because the correct type is ETH_MODULE_SFF_8472.
+> 
+> Fixes: 96d971e307cc ("ethtool: Add fallback to get_module_eeprom from netlink command")
+> Cc: Ido Schimmel <idosch@nvidia.com>
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] ethtool: Fix get module eeprom fallback
+    https://git.kernel.org/netdev/net/c/a3bb7b63813f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 6/18/2022 1:17 AM, Mike Kravetz wrote:
-> On 06/17/22 10:15, Peter Xu wrote:
->> Hi, Mike,
->>
->> On Thu, Jun 16, 2022 at 02:05:15PM -0700, Mike Kravetz wrote:
->>> @@ -6877,6 +6896,39 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
->>>   	return (pte_t *)pmd;
->>>   }
->>>   
->>> +/*
->>> + * Return a mask that can be used to update an address to the last huge
->>> + * page in a page table page mapping size.  Used to skip non-present
->>> + * page table entries when linearly scanning address ranges.  Architectures
->>> + * with unique huge page to page table relationships can define their own
->>> + * version of this routine.
->>> + */
->>> +unsigned long hugetlb_mask_last_page(struct hstate *h)
->>> +{
->>> +	unsigned long hp_size = huge_page_size(h);
->>> +
->>> +	switch (hp_size) {
->>> +	case P4D_SIZE:
->>> +		return PGDIR_SIZE - P4D_SIZE;
->>> +	case PUD_SIZE:
->>> +		return P4D_SIZE - PUD_SIZE;
->>> +	case PMD_SIZE:
->>> +		return PUD_SIZE - PMD_SIZE;
->>> +	default:
->>
->> Should we add a WARN_ON_ONCE() if it should never trigger?
->>
-> 
-> Sure.  I will add this.
-> 
->>> +		break; /* Should never happen */
->>> +	}
->>> +
->>> +	return ~(0UL);
->>> +}
->>> +
->>> +#else
->>> +
->>> +/* See description above.  Architectures can provide their own version. */
->>> +__weak unsigned long hugetlb_mask_last_page(struct hstate *h)
->>> +{
->>> +	return ~(0UL);
->>
->> I'm wondering whether it's better to return 0 rather than ~0 by default.
->> Could an arch with !CONFIG_ARCH_WANT_GENERAL_HUGETLB wrongly skip some
->> valid address ranges with ~0, or perhaps I misread?
-> 
-> Thank you, thank you, thank you Peter!
-> 
-> Yes, the 'default' return for hugetlb_mask_last_page() should be 0.  If
-> there is no 'optimization', we do not want to modify the address so we
-> want to OR with 0 not ~0.  My bad, I must have been thinking AND instead
-> of OR.
-> 
-> I will change here as well as in Baolin's patch.
-
-Ah, I also overlooked this. Thanks Peter, and thanks Mike for updating.

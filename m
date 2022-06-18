@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C48D550647
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 19:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02B7550654
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 19:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235326AbiFRRLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 13:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S236273AbiFRRWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 13:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236137AbiFRRLm (ORCPT
+        with ESMTP id S231142AbiFRRWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 13:11:42 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AAB13DCA
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:11:37 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1014b2752c1so9140147fac.11
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B8CXs8G7SKCeidkQWd9kAuICsm7Sw1h76v8hv8CR6wQ=;
-        b=cuXb7N4G9pIbYvpYCa6o9PQHUD2DfcKP/+gFugpXKusIPZ8udyvtuH7DJPmo+JUAOL
-         8eagpNlDgynjnq8Gd81Y/eopVQYnjECp8OsqpfuRnKA9HNyn++ZH7HNNZ9TIjsRXeSeG
-         BvdjwgCJNtORrqw8bW9YNyv+ik/h87ruk6IhWF/Ulomb3roDpockEzXUsaUcJnWsLKey
-         JlqmKq38sV0x3yb+kEcSWDJ7IjC7ODgIlcJzGQ3llXc0MXXhANbar/PuhU229R0QH9qT
-         lz3fsVlqpE6nT/3L7c8FVrsr8AgyflhOszSQr4SlJOROtqKz5LZwEe2tkhcIJNa2UAy5
-         H5YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B8CXs8G7SKCeidkQWd9kAuICsm7Sw1h76v8hv8CR6wQ=;
-        b=fBFBeEXsjIKZBSbLu/Eg8ntmwnVeUNuOssaGdTHvBS04NQ0/0gOHaQj3Widk4hrz63
-         LOAPNr1bqYC3qrgecUZ42/PrMGPr0KVtexvH9OmKYIgnlBsAe3XWQXdUjRgl3k0okZd3
-         gbr+3U9XimIKXmQc/jYQzKsdt7sHd68u99rZ/0zNj6eREOJJ5XKR69N08VJeY7d230a4
-         aPQmxa3I6+Y1Z2NDXwJC1aJkRghG1nxhn5GLlm7WPWB9f3WZQrEUk4gDtHf0oj/a6ey2
-         D94FlyhvBMXpVEBhVY1INin1kO1rzwWbVSfCbwHtMSrBIJ7UM2ZfBulx7OlOmD99p5fa
-         ncQQ==
-X-Gm-Message-State: AJIora85aPUQ7spkN/zPKdikEwsBTVZZbbtIyAl/jKtkCf+/R8r03gNr
-        vngGRdGuz92H95QoAOi6yo4q3g==
-X-Google-Smtp-Source: AGRyM1tDVmXtipYu/LaRH32Cww8VlWl/7+4pR6EaOfqHWjwGaKiJnIATqU0fJ7tQTyGNrbOvR86wqw==
-X-Received: by 2002:a05:6870:538b:b0:101:17f2:d6e with SMTP id h11-20020a056870538b00b0010117f20d6emr13782917oan.200.1655572295844;
-        Sat, 18 Jun 2022 10:11:35 -0700 (PDT)
-Received: from ?IPV6:2804:14d:8084:84c6:fe26:c42d:aab9:fa8a? ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
-        by smtp.gmail.com with ESMTPSA id o5-20020a4a2c05000000b0035eb4e5a6b3sm4677268ooo.9.2022.06.18.10.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 10:11:35 -0700 (PDT)
-Message-ID: <3358b97e-021a-82b7-9ae2-2113aea2c2d9@usp.br>
-Date:   Sat, 18 Jun 2022 14:11:29 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/5] Rework KUnit test execution in modules
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-References: <20220618090310.1174932-1-davidgow@google.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-In-Reply-To: <20220618090310.1174932-1-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Sat, 18 Jun 2022 13:22:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8DD140CF
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:22:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CBBE5CE02C5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 17:22:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19120C3411A;
+        Sat, 18 Jun 2022 17:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655572928;
+        bh=jhTcRmVj6BvTv+laefnZT4jEHAzQmvt5bGfy9OB8ugg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AEbQM4oIogvyPY8KDUlGb7J+kpZOdzMHXN9laD3GgkC3Jx6xSplXnm7hgiDkNcLTE
+         DpW9IDv2oiQnsHmSANM328O0W5ObtBrxWhvmIOQqWxEZ38emSQMm5JhPm3ZId2m7Es
+         vi3INLOOSYF22/WT9ZuNlOf+6auTv53gZ26b9PnIh13DaYuRdsAv0hGFMcUcTWmRKq
+         jf5N2fw0QkPL1HG+tYhiqpnqo55djqgAcCdIvIzQqDizg2y1QI4FZygYNPJRlM0YNO
+         mLSSvJWo3KDjh7EqAclabWyV9Ez5Avlqfn6zIFoCq5twB8YIMJP2O8sju+kPUU/893
+         f6yMjOZvIrEVw==
+Received: from 82-132-215-29.dab.02.net ([82.132.215.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o2c97-001VtI-MU;
+        Sat, 18 Jun 2022 18:22:05 +0100
+Date:   Sat, 18 Jun 2022 18:22:03 +0100
+Message-ID: <877d5dga4k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V12 04/10] irqchip: create library file for LoongArch irqchip driver
+In-Reply-To: <1655273250-23495-5-git-send-email-lvjianmin@loongson.cn>
+References: <1655273250-23495-1-git-send-email-lvjianmin@loongson.cn>
+        <1655273250-23495-5-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.215.29
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,51 +70,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/22 06:03, David Gow wrote:
-> This patch series makes two changes to how KUnit test suites are stored
-> and executed:
-> - The .kunit_test_suites section is now used for tests in modules (in
->   lieu of a module_init funciton), as well as for built-in tests. The
->   module loader will now trigger test execution. This frees up the
->   module_init function for other uses.
-> - Instead of storing an array of arrays of suites, have the
->   kunit_test_suite() and kunit_test_suites() macros append to one global
->   (or per-module) list of test suites. This removes a needless layer of
->   indirection.
+On Wed, 15 Jun 2022 07:07:24 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
 > 
-> The upshot of this is that it should now be possible to use the
-> kunit_test_suite() and kunit_test_suites() macros to register test
-> suites even from within modules which otherwise had module_init
-> functions. This was proving to be quite a common issue, resulting in
-> several modules calling into KUnit's private suite execution functions
-> to run their tests (often introducing incompatibilities with the KUnit
-> tooling).
+> The library file contains following content:
+> - Implement acpi_get_gsi_domain_id callback.
+> - Implement initialization of vector group entries and APIs
+>   for building hierachy irqdomains.
 > 
-> This series also fixes the thunderbolt, nitro_enclaves, and
-> sdhci-of-aspeed tests to use kunit_test_suite() now that it works.
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/irqchip/Makefile                   |   2 +-
+>  drivers/irqchip/irq-loongarch-pic-common.c | 122 +++++++++++++++++++++++++++++
+>  drivers/irqchip/irq-loongarch-pic-common.h |  39 +++++++++
+>  3 files changed, 162 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/irqchip/irq-loongarch-pic-common.c
+>  create mode 100644 drivers/irqchip/irq-loongarch-pic-common.h
 > 
-> Huge thanks to Jeremy Kerr, who designed and implemented the module
-> loader changes, and to Daniel Latypov for pushing the simplification of
-> the nested arrays in .kunit_test_suites.
-> 
-> I've tested this series both with builtin tests, and with modules on
-> x86_64, but there's always the possibility that there's something subtle
-> and nasty on another architecture, so please test!
-> 
-> Cheers,
-> -- David
-> 
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index 6894a13..2d0d871 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -103,7 +103,7 @@ obj-$(CONFIG_LS1X_IRQ)			+= irq-ls1x.o
+>  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)	+= irq-ti-sci-intr.o
+>  obj-$(CONFIG_TI_SCI_INTA_IRQCHIP)	+= irq-ti-sci-inta.o
+>  obj-$(CONFIG_TI_PRUSS_INTC)		+= irq-pruss-intc.o
+> -obj-$(CONFIG_IRQ_LOONGARCH_CPU)		+= irq-loongarch-cpu.o
+> +obj-$(CONFIG_IRQ_LOONGARCH_CPU)		+= irq-loongarch-cpu.o irq-loongarch-pic-common.o
+>  obj-$(CONFIG_LOONGSON_LIOINTC)		+= irq-loongson-liointc.o
+>  obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
+>  obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
+> diff --git a/drivers/irqchip/irq-loongarch-pic-common.c b/drivers/irqchip/irq-loongarch-pic-common.c
+> new file mode 100644
+> index 0000000..2f75362
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-loongarch-pic-common.c
+> @@ -0,0 +1,122 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Loongson Limited, All Rights Reserved.
+> + */
+> +
+> +#include <linux/irq.h>
+> +#include <linux/pci.h>
+> +#include <linux/acpi.h>
+> +#include "irq-loongarch-pic-common.h"
+> +
+> +static struct acpi_vector_group vector_group[MAX_IO_PICS];
+> +
+> +struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
+> +
+> +struct fwnode_handle *liointc_handle;
+> +struct fwnode_handle *pch_lpc_handle;
+> +struct fwnode_handle *pch_msi_handle[MAX_IO_PICS];
+> +struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
 
-I've tested the modules on x86_64 machines, and everything looks fine.
-Also, I applied the AMDGPU KUnit tests [1] on top of these patches,
-tried out compiling as a module, and it runs pretty well!
+Why aren't these in individual drivers, and then have accessors to
+retrieve them?
 
-Great to see this feature on KUnit!
+> +
+> +static int find_pch_pic(u32 gsi)
+> +{
+> +	int i, start, end;
+> +
+> +	/* Find the PCH_PIC that manages this GSI. */
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		struct acpi_madt_bio_pic *irq_cfg = acpi_pchpic[i];
+> +
+> +		if (!irq_cfg)
+> +			return -1;
+> +
+> +		start = irq_cfg->gsi_base;
+> +		end   = irq_cfg->gsi_base + irq_cfg->size;
+> +		if (gsi >= start && gsi < end)
+> +			return i;
+> +	}
+> +
+> +	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
+> +	return -1;
+> +}
 
-Tested-by: Maíra Canal <maira.canal@usp.br>
+Same thing. This really should be in the PCH driver, and be called by
+lpic_get_gsi_domain().
 
-[1] https://lore.kernel.org/dri-devel/20220608010709.272962-1
-maira.canal@usp.br/
+> +
+> +struct fwnode_handle *lpic_get_gsi_domain_id(u32 gsi)
+> +{
+> +	int id;
+> +	struct fwnode_handle *domain_handle = NULL;
+> +
+> +	switch (gsi) {
+> +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> +		if (liointc_handle)
+> +			domain_handle = liointc_handle;
+> +		break;
+> +
+> +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> +		if (pch_lpc_handle)
+> +			domain_handle = pch_lpc_handle;
+> +		break;
+> +
+> +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> +		id = find_pch_pic(gsi);
+> +		if (id >= 0 && pch_pic_handle[id])
+> +			domain_handle = pch_pic_handle[id];
+> +
+> +		break;
+> +	}
+> +
+> +	return domain_handle;
+> +}
+> +
+> +static int pci_mcfg_parse(struct acpi_table_header *header)
+> +{
+> +	struct acpi_table_mcfg *mcfg;
+> +	struct acpi_mcfg_allocation *mptr;
+> +	int i, n;
+> +
+> +	if (header->length < sizeof(struct acpi_table_mcfg))
+> +		return -EINVAL;
+> +
+> +	n = (header->length - sizeof(struct acpi_table_mcfg)) /
+> +					sizeof(struct acpi_mcfg_allocation);
+> +	mcfg = (struct acpi_table_mcfg *)header;
+> +	mptr = (struct acpi_mcfg_allocation *) &mcfg[1];
+> +
+> +	for (i = 0; i < n; i++, mptr++)
+> +		vector_group[mptr->pci_segment].node = (mptr->address >> 44) & 0xf;
+> +
+> +	return 0;
+> +}
+> +
+> +void __init init_vector_parent_group(void)
+> +{
+> +	acpi_table_parse(ACPI_SIG_MCFG, pci_mcfg_parse);
+> +}
 
-Best Regards,
-- Maíra Canal
+I really don't think the PCI code should be anywhere near
+this. Frankly, this file looks like a dumping ground for totally
+unrelated stuff.
+
+> +
+> +void acpi_set_vector_parent(int node, struct irq_domain *parent)
+> +{
+> +	int i;
+> +
+> +	if (cpu_has_flatmode)
+> +		node = cpu_to_node(node * CORES_PER_EIO_NODE);
+> +
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		if (node == vector_group[i].node) {
+> +			vector_group[i].parent = parent;
+> +			return;
+> +		}
+> +	}
+> +}
+> +
+> +struct irq_domain *acpi_get_msi_parent(int index)
+> +{
+> +	return vector_group[index].parent;
+> +}
+> +
+> +struct irq_domain *acpi_get_pch_parent(int node)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		if (node == vector_group[i].node)
+> +			return vector_group[i].parent;
+> +	}
+> +	return NULL;
+> +}
+
+Same thing. There is nothing "common" here. All this should be split
+in the various drivers, where they belong.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,63 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F25550657
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 19:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE56550666
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 19:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236810AbiFRRZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 13:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S237283AbiFRRlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 13:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiFRRZ1 (ORCPT
+        with ESMTP id S229449AbiFRRlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 13:25:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CF915FCF;
-        Sat, 18 Jun 2022 10:25:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sat, 18 Jun 2022 13:41:50 -0400
+X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Jun 2022 10:41:49 PDT
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E5712740;
+        Sat, 18 Jun 2022 10:41:49 -0700 (PDT)
+Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E72B60B55;
-        Sat, 18 Jun 2022 17:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDFDC3411A;
-        Sat, 18 Jun 2022 17:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655573123;
-        bh=Q6g5uQ1LQChmHpAdw8ycq1g5nOknwEdMg8uvJ98h72Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZvzyXwrvKPXWSQe+/ZLoXnYYLU/AiMwKuFeit6PR33u7BeJ6L13LeNnhgryWe6FiT
-         pUMsFNXUUkjUFQvYCOHX+12uRfI8zD56F7t4W+Kq6kpq2fEctqGxnKuZF6sYnje5X5
-         Ngi/Ima8tTCiQ71eGWhUTybULz4xxFWh0p5Bd9nKA84oRc787Av4G+hc3BjgQ54Wq9
-         FPJHA6xJB3KLs+Y3kVMmo3lq6UViP+1NXs1NsnGqwyDhBd2OfiwCYONiCV/sLbVR8u
-         3TxOLHarcLim4y7mS8XHpb3Nmy/STL4WMeLgwR3Eg26QBb9jrTxlmfX8Kmq/dFWs4I
-         lnOVFJvEM6JEQ==
-Date:   Sat, 18 Jun 2022 18:34:40 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     ChiYuan Huang <u0084500@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        cy_huang <cy_huang@richtek.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: Add rtq6056 adc support
-Message-ID: <20220618183440.121365d7@jic23-huawei>
-In-Reply-To: <279cf4ef-8b41-5e92-73c3-416730038c56@linaro.org>
-References: <1655458375-30478-1-git-send-email-u0084500@gmail.com>
-        <1655458375-30478-2-git-send-email-u0084500@gmail.com>
-        <7a9d3354-164b-e5e5-936b-95de4c4338f9@linaro.org>
-        <CADiBU3_wyFLpoy3PU0a-EbGAKoQ9LZMprH5DWnzwo05-Gwa2=Q@mail.gmail.com>
-        <279cf4ef-8b41-5e92-73c3-416730038c56@linaro.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 909537A021E;
+        Sat, 18 Jun 2022 19:35:04 +0200 (CEST)
+From:   Ondrej Zary <linux@zary.sk>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Getting Backpack USB drives to work - looking for lost firmware
+Date:   Sat, 18 Jun 2022 19:35:01 +0200
+User-Agent: KMail/1.9.10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: Text/Plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202206181935.01392.linux@zary.sk>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USB_DRIVES autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +41,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Jun 2022 19:00:19 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Hello,
+I'm trying to get Micro Solutions Backpack USB CD-RW to work and maybe write a simple firmware loader module. It's based on Cypress EZ-USB FX2 so it should be easy (the loading code is already present in the kernel for other devices).
 
-> On 18/06/2022 08:50, ChiYuan Huang wrote:
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=
-=B9=B46=E6=9C=8818=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=889:45=E5=AF=
-=AB=E9=81=93=EF=BC=9A =20
-> >>
-> >> On 17/06/2022 02:32, cy_huang wrote: =20
-> >>> From: ChiYuan Huang <cy_huang@richtek.com>
-> >>>
-> >>> Add the documentation for Richtek RTQ6056.
-> >>>
-> >>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> >>> ---
-> >>>  .../bindings/iio/adc/richtek,rtq6056-adc.yaml      | 57 ++++++++++++=
-++++++++++
-> >>>  1 file changed, 57 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek=
-,rtq6056-adc.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/iio/adc/richtek,rtq605=
-6-adc.yaml b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.=
-yaml
-> >>> new file mode 100644
-> >>> index 00000000..6b4e0e0
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.y=
-aml
-> >>> @@ -0,0 +1,57 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/iio/adc/richtek,rtq6056-adc.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: RTQ6056 Bi-Directional Current and Power Monitor with 16-bit =
-ADC
-> >>> +
-> >>> +maintainers:
-> >>> +  - ChiYuan Huang <cy_huang@richtek.com>
-> >>> +
-> >>> +description: |
-> >>> +  The RTQ6056 is a high accuracy current-sense monitor with I2C and =
-SMBus
-> >>> +  interface, and the device provides full information for system by =
-reading
-> >>> +  out the loading current and power.
-> >>> +
-> >>> +  The device monitors both of the drops across sense resistor and th=
-e BUS
-> >>> +  voltage, converts into the current in amperes, and power in watts =
-through
-> >>> +  internal analog-to-digital converter ADC. The programmable calibra=
-tion,
-> >>> +  adjustable conversion time, and averaging function are also built =
-in for
-> >>> +  more design flexibility.
-> >>> +
-> >>> +  Datasheet is available at
-> >>> +  https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    const: richtek,rtq6056
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  "#io-channel-cells":
-> >>> +    const: 1
-> >>> +
-> >>> +  richtek,shunt-resistor-uohm: =20
-> >>
-> >> Use standard properties, so "-micro-ohms". Drop the unit from
-> >> description and drop the ref.
-> >> =20
-> > Use richtek.shunt-resistor-micro-ohms? =20
->=20
-> Yes.
->=20
-> > Or the prefix 'richtek,' can be removed? =20
->=20
-> No, the vendor prefix must stay.
+Micro Solutions released firmware and load scrips for Linux - it used to be called bpck-usb-firmware-1.1.tgz but seems to have vanished from the web, even archive.org does not have it. Frugalware distro used to include a package bpck-usb-firmware-1.1-1-i686.fpm until version 1.7 (it was removed in 1.8) but I was not able to find it anywhere (even tried Frugalware developers).
 
-It's a standard generic binding used in a bunch of IIO and hwmon
-drivers without vendor prefix.  Mind you I can't find a definition
-in any of the top level binding files.  Probably wants to be in
-adc.yaml for IIO.
+At least the load script can be found here:
+https://www.linuxquestions.org/questions/linux-hardware-18/external-usb-backpack-cd-rewriter-problem-212360/
+Firmware filenames extracted from the script:
+BP1SCAN.HEX, BP2SCAN.HEX (scan firmwares)
+BP1CD5.HEX, BP1CD6.HEX, BP1HD5.HEX, BP1HD6.HEX (for USB 1 chips)
+BP2CD5.HEX, BP2CD6.HEX, BP2HD5.HEX, BP2HD6.HEX (for USB 2 chips)
+BPINTCD.HEX, BPINTHD.HEX (for internal USB 2 chips)
 
-Jonathan
+So there seems to be two kinds of external USB adapters/cables - with FX (USB 1) and FX2 (USB 2) chips. First, a "scan" firmware is loaded that identifies the drive type and changes the ID appropriately. Then a final firmware is loaded, depending on the chip type, drive version (5 or 6) and drive type (CD or HDD).
+The latest devices have integrated USB support - no scanning is needed, just a CD or HDD firmware is loaded, depending on the ID.
 
-=20
->=20
-> Best regards,
-> Krzysztof
+My device (model 222011 with integrated USB) identifies as 0ac9:0010. Once the firmware is loaded, the identification changes to 0ac9:1234. I've tested it in Windows and extracted the firmware from usbsnoop dump. After loading using fxload, the ID changed but the device still reports vendor specific class. Probably the firmware for Windows is not the same as for Linux and is not fully USB mass storage compatible :( 
 
+lsusb output (before loading firmware):
+Bus 002 Device 002: ID 0ac9:0010 Micro Solutions, Inc. BACKPACK
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0ac9 Micro Solutions, Inc.
+  idProduct          0x0010 BACKPACK
+  bcdDevice            1.82
+  iManufacturer           1 Micro Solutions
+  iProduct                3 Micro Solutions BACKPACK
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0020
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
+
+After loading firmware, only idProduct changes to 0x1234. Everything else remains.
+
+-- 
+Ondrej Zary

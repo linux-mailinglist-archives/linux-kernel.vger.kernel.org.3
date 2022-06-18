@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB95B550201
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE91550202
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383748AbiFRCcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 22:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
+        id S1383869AbiFRCeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 22:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiFRCcN (ORCPT
+        with ESMTP id S231748AbiFRCeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 22:32:13 -0400
-Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 222E453A5D;
-        Fri, 17 Jun 2022 19:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=15/2m
-        5b9DkPoq5VMhf35vdAS3TadjnHl3Svk5O3dXF8=; b=km7q3X3h50p8WaXTao/pI
-        bWVtdWTOr7M4pswE4iN9mv+WuZNdomIOQ32ErGMx4vnd67pZy6siORu4FTUiQAFb
-        MOClRjyXXkdzeo7oibnFigcnXRNBoyPK2zg2YKAmSrEP2WdKap5jThG+C3w0Hmdp
-        aLNCzeKrRqXA/SP3pH4DO0=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp7 (Coremail) with SMTP id DsmowAC3hvIlOa1iDEugDg--.23192S2;
-        Sat, 18 Jun 2022 10:32:05 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     gregkh@linuxfoundation.org
-Cc:     windhl@126.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: renesas: Fix refcount leak bug
-Date:   Sat, 18 Jun 2022 10:32:05 +0800
-Message-Id: <20220618023205.4056548-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 17 Jun 2022 22:34:00 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476423C4BA
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:33:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VGhbwTR_1655519632;
+Received: from 192.168.31.179(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VGhbwTR_1655519632)
+          by smtp.aliyun-inc.com;
+          Sat, 18 Jun 2022 10:33:54 +0800
+Message-ID: <1b434d4c-2a19-9ac1-b2b9-b767b642ec0c@linux.alibaba.com>
+Date:   Sat, 18 Jun 2022 10:33:51 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsmowAC3hvIlOa1iDEugDg--.23192S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF4fWry3Gry7Cr4UZr15XFb_yoWfKFc_Ww
-        10grsrAr1UCan5Kr1DXrWSv39Fyan3ur1kZF1kKayfJa4YyrZrXrs8ury8Xw429FW2yFZ0
-        yws7A3s2kF1S9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUyrW3UUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2gYkF1uwMOiRSAAAsF
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+Content-Language: en-US
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     David Rientjes <rientjes@google.com>, songmuchun@bytedance.com,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        penberg@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+ <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
+ <ac9ba68f-9ee2-1611-9ff8-b486ed9c4df0@google.com>
+ <alpine.DEB.2.22.394.2206021712530.2924@gentwo.de>
+ <9794df4f-3ffe-4e99-0810-a1346b139ce8@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206071411460.375438@gentwo.de>
+ <29723aaa-5e28-51d3-7f87-9edf0f7b9c33@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206081417370.465021@gentwo.de>
+ <02298c0e-3293-9deb-f1ed-6d8862f7c349@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206131548420.295113@gentwo.de>
+ <5085437c-adc9-b6a3-dbd8-91dc0856cf19@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206171617560.638056@gentwo.de>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <alpine.DEB.2.22.394.2206171617560.638056@gentwo.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,30 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In usbhs_rza1_hardware_init(), of_find_node_by_name() will return
-a node pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/usb/renesas_usbhs/rza.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/renesas_usbhs/rza.c b/drivers/usb/renesas_usbhs/rza.c
-index 24de64edb674..2d77edefb4b3 100644
---- a/drivers/usb/renesas_usbhs/rza.c
-+++ b/drivers/usb/renesas_usbhs/rza.c
-@@ -23,6 +23,10 @@ static int usbhs_rza1_hardware_init(struct platform_device *pdev)
- 	extal_clk = of_find_node_by_name(NULL, "extal");
- 	of_property_read_u32(usb_x1_clk, "clock-frequency", &freq_usb);
- 	of_property_read_u32(extal_clk, "clock-frequency", &freq_extal);
-+
-+	of_node_put(usb_x1_clk);
-+	of_node_put(extal_clk);
-+
- 	if (freq_usb == 0) {
- 		if (freq_extal == 12000000) {
- 			/* Select 12MHz XTAL */
--- 
-2.25.1
+On 6/17/22 10:19 PM, Christoph Lameter wrote:
+> On Fri, 17 Jun 2022, Rongwei Wang wrote:
+> 
+>> Christoph, I refer [1] to test some data below. The slub_test case is same to
+>> your provided. And here you the result of its test (the baseline is the data
+>> of upstream kernel, and fix is results of patched kernel).
+> 
+> Ah good.
+>> Single thread testing
+>>
+>> 1. Kmalloc: Repeatedly allocate then free test
+>>
+>>                     before (baseline)        fix
+>>                     kmalloc      kfree       kmalloc      kfree
+>> 10000 times 8      7 cycles     8 cycles    5 cycles     7 cycles
+>> 10000 times 16     4 cycles     8 cycles    3 cycles     6 cycles
+>> 10000 times 32     4 cycles     8 cycles    3 cycles     6 cycles
+> 
+> Well the cycle reduction is strange. Tests are not done in the same
+> environment? Maybe good to not use NUMA or bind to the same cpu
+It's the same environment. I can sure. And there are four nodes (32G 
+per-node and 8 cores per-node) in my test environment. whether I need to 
+test in one node? If right, I can try.
+> 
+>> 10000 times 64     3 cycles     8 cycles    3 cycles     6 cycles
+>> 10000 times 128    3 cycles     8 cycles    3 cycles     6 cycles
+>> 10000 times 256    12 cycles    8 cycles    11 cycles    7 cycles
+>> 10000 times 512    27 cycles    10 cycles   23 cycles    11 cycles
+>> 10000 times 1024   18 cycles    9 cycles    20 cycles    10 cycles
+>> 10000 times 2048   54 cycles    12 cycles   54 cycles    12 cycles
+>> 10000 times 4096   105 cycles   20 cycles   105 cycles   25 cycles
+>> 10000 times 8192   210 cycles   35 cycles   212 cycles   39 cycles
+>> 10000 times 16384  133 cycles   45 cycles   119 cycles   46 cycles
+> 
+> 
+> Seems to be different environments.
+> 
+>> According to the above data, It seems that no significant performance
+>> degradation in patched kernel. Plus, in concurrent allocs test, likes Kmalloc
+>> N*alloc N*free(1024), the data of 'fix' column is better than baseline (it
+>> looks less is better, if I am wrong, please let me know). And if you have
+>> other suggestions, I can try to test more data.
+> 
+> Well can you explain the cycle reduction?
+Maybe because of four nodes in my system or only 8 cores (very small) in 
+each node? Thanks, you remind me that I need to increase core number of 
+each node or change node number to compere the results.
+
+Thanks!
+
 

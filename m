@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA30B550738
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70111550734
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbiFRWCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 18:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S234206AbiFRWCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 18:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiFRWCf (ORCPT
+        with ESMTP id S233387AbiFRWCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 18:02:35 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBDC12626
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:02:34 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id l4so6964576pgh.13
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cnu4b3CF1nM6tAT3DrHQF/VxxJxGGRTRzb4IiQ47yXE=;
-        b=NIDF2nVHmymvuH5AbZvqRSDSLOcMl4QowgO/aVmuWc6pXPVkmtyTv8IIVURSZqk2Ig
-         qfa0CuIi0+Cqo6AUwirCmMnk595ie5X9R64nFec1KSlVr0GV9rRCqD6seE2MZkzYWejO
-         wcmOEbtdh/Ditsh516gxodZkO/YwiE+CYXQihLvAABrabkL0bAEjmQFz6bMwanwxA5cL
-         gLTODjhHXfJQWXDlZM/yCfYt4AIysCXn3h5mvbg1zcUVJPeMC33BALUR2ZizE7gNGyul
-         5tN+oIA4bvtD/RrFX9Ps6MXSKdnXlcAw9d0TfC3TaspyiIB1WGRu9jnoIqMo6ZkINIhe
-         F7Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cnu4b3CF1nM6tAT3DrHQF/VxxJxGGRTRzb4IiQ47yXE=;
-        b=uYlIcjhfhLFxApFdTgOLGHyTbSUGBfUrKMVlE4pvVBChKRTdvaftEHb7YEuH+V5hmL
-         VA1PSjpxEdDAxVbMDOdEFJRCUwDE692VGFw/YLVIYYE1LAo0e3Pcmb8C1rhYmqvlMl13
-         dp3x2hCHv5uOVnfiHZEu+GdjhxxE+XPdGjIJymVDa6BWF6TfqaayLlnVu+iNZkegOUPt
-         WQ6EpDCTKXm0bRQauQ9suvaVMtM/uzUBYaCrnCrKgejrmaJ0o+UR5yVA6HSOZ2Hi6waK
-         vpd239WVfvdh1hdJV/HKF2erjhOzNwG43LsZ88IQUj3Mbl+CQSB4gCYkZYIT8fpZxBTc
-         +nWA==
-X-Gm-Message-State: AJIora+3rPkqlRudkaJfmIedrSHfAj6OYdNA0yA8SkqIv7HgNwpeHJzG
-        4TNhQHyjAWRzwW+r8b62a0GTQpOwJ2MDK6toTcg=
-X-Google-Smtp-Source: AGRyM1teNFNnBa0qxxBVj0fmrIcaFKogHQEbvhZY14rwR5kaaA6hsRTAronPebbeTP+T/JB+jzJWP4fIfZzvlO/TYIU=
-X-Received: by 2002:a05:6a00:170c:b0:51b:f057:85c2 with SMTP id
- h12-20020a056a00170c00b0051bf05785c2mr16785125pfc.18.1655589753826; Sat, 18
- Jun 2022 15:02:33 -0700 (PDT)
+        Sat, 18 Jun 2022 18:02:36 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1287C12745
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655589756; x=1687125756;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nL7hGF/w4V46xGj3hFkaE491CYtmqPU0oMH6e3JnYto=;
+  b=Oz4Kvq6tVen8r98+rsz6zEP6CkK/8tKFBUFEERL92ISzz8cSWysymY6n
+   zJ6OTAg0ZLe1A4U0JhGmctLC1F4EQCCaWW565tVFh9MvfhlnvuNfoWYRd
+   e4+Z7oV4Glt/yZjPt2cgTsOsH9Hke6zyLOA6u3aE6u+zx3G3QJtWSCr88
+   zsFHXr/g9M8PROnHDum9Enl/Bm6uxkkwVB25XyIxpy0PsHQ+BRET2Pw3p
+   IXI8jhl4BmSayhxfVNogs/LzLcL5cAUhmfzLAbwd+kSA8QA4/NbLngIbZ
+   DDPCVEMejcJQin7O8280y4e7NOnZTTTj82Cc3bG0Ozg52uVfrIHfhsNcv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262721410"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="262721410"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 15:02:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="688846051"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 15:02:34 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2gWX-000Qcr-KY;
+        Sat, 18 Jun 2022 22:02:33 +0000
+Date:   Sun, 19 Jun 2022 06:02:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: ttm_bo_vm.c:undefined reference to `vmf_insert_pfn_prot'
+Message-ID: <202206190523.0Ar6yQF7-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220617124432.4049006-1-windhl@126.com>
-In-Reply-To: <20220617124432.4049006-1-windhl@126.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Sat, 18 Jun 2022 15:02:25 -0700
-Message-ID: <CAMo8BfJ9N1JayakwAUxBQ5EyJ7PmoDKv=39D1pyxsaTroEpksQ@mail.gmail.com>
-Subject: Re: [PATCH] xtensa: kernel: Fix refcount leak bug in time.c
-To:     Liang He <windhl@126.com>
-Cc:     Chris Zankel <chris@zankel.net>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 5:44 AM Liang He <windhl@126.com> wrote:
->
-> In calibrate_ccount(), of_find_compatible_node() will return a node
-> pointer with refcount incremented. We should use of_node_put() when
-> it is not used anymore.
->
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  arch/xtensa/kernel/time.c | 1 +
->  1 file changed, 1 insertion(+)
+Hi Javier,
 
-Thanks. Applied to my xtensa tree.
+FYI, the error/warning still remains.
 
--- Max
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+commit: a0f25a6bb319aa05e04dcf51707c97c2881b4f47 drm/hisilicon/hibmc: Allow to be built if COMPILE_TEST is enabled
+date:   5 months ago
+config: riscv-buildonly-randconfig-r006-20220619 (https://download.01.org/0day-ci/archive/20220619/202206190523.0Ar6yQF7-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a0f25a6bb319aa05e04dcf51707c97c2881b4f47
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a0f25a6bb319aa05e04dcf51707c97c2881b4f47
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   riscv64-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L84':
+>> ttm_bo_vm.c:(.text+0x754): undefined reference to `vmf_insert_pfn_prot'
+   riscv64-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L0 ':
+   ttm_bo_vm.c:(.text+0x8cc): undefined reference to `vmf_insert_pfn_prot'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_TTM_HELPER && HAS_IOMEM && DRM
+   - DRM_HISI_HIBMC && HAS_IOMEM && DRM && PCI && (ARM64 || COMPILE_TEST
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

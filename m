@@ -2,171 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF785501B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F71F5501BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358481AbiFRBmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 21:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S1380637AbiFRBpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 21:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbiFRBmF (ORCPT
+        with ESMTP id S232202AbiFRBpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 21:42:05 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADD55A17C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:42:04 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso3120251wml.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:42:04 -0700 (PDT)
+        Fri, 17 Jun 2022 21:45:07 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD82666A1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:45:06 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id h1so5197000plf.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:45:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ImA2TsTKHG7+vdC/F5W3JR4P1g4uMzx7I/ft34Eowdw=;
-        b=seBZhPQDYCD66pKqf8TJgaCXBg+qa/mcq7pRIManL+VY0q/o8Mxp7h1OlpvqENcQuW
-         vQq4Azd4ZOXqml6SKFgsyAn+EvetF3YRRkwQjFMOybUFJvdctcWl2cSYLTUnxLqHCQlc
-         qGN6EsMmIkqQ3B7ujOe2rD/o8cPe1ypVvryJRvpejIkGqrU0lR4dtwUS0EwE86bGB9YG
-         76rrd+lQ0Z4NBO+K3v6biSTmZcldMjqhPIhCY9y1BrMYezpILwx9uMWdIXPqZ0wFyxVG
-         kNYNvEe2Rzpy3fwLb/RwU1jG1yAWkXcSlObhk3Zf2YCjjnK5MGxiBThf3LVIy9fqEumU
-         vfxQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MVVfG1ukpcWxNx9o6iSFBfRaMO1Vdtzlg+i0swD+fb4=;
+        b=q3BsEgoVvOfEqW1uqQ/h2RJoRA2KAVkCNjtFaZH6ciU4+b1sNXN3iCRnu2XCYBNH9q
+         H853Swy9HwpS7fGroR74zzwzeCMiADQiOL904RmSeAWkEHmOGYj6KAELIK9/2Wpk2ODb
+         HYuIf1TPlgIPga6t4XpZ7yWjNOYcBbyP6kGArJehExA0cPQecr8QJN0XoarWwQU7eE3o
+         GJy3SaxfCY/UXVHJN8Lvq5FJTidG1DswoSRfxwcWhFuz1u1Nkt/3+eOOi/MQqh8LiXE8
+         ayBueIF0F9dIb/6qCtV0l1HOo5loteHEVEbrUU5uFxokX3n86TI6zos1sknyef+TxN4f
+         D98A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ImA2TsTKHG7+vdC/F5W3JR4P1g4uMzx7I/ft34Eowdw=;
-        b=FPs9dIMjMMNdWLyVehZr4DXDg9HfyyDE4lWqWliJLikm5ccWSlmg1mXiuWUVf/Yp78
-         i8hW7AwNRxPnjciFZqYKxAtinfChyRp9xhRLrA58IX7+jZ18p5tr2mTFWK2E2lDassbs
-         ikEb/IAZePyl3exXrQYRd+S+ez0fhsGV33Qp8YeJliDXgkA1Gdd314NC1q0mZFteMl/2
-         OpNMieRkv8/knxUZYM2XnFqiCEuKKqYrvouztvVdtMww/UyKEiI/KOADtRejpOR/FxxO
-         POKlv5445X60urdzsxbwqPZxn5ebJmCRRbM8irwX0VSZKIqwLNjXGldn6TUE7wd2WT88
-         Ldbg==
-X-Gm-Message-State: AJIora8JuWsa+G70mkd53aSyvZX+DCoZAqUHMR16BdariAxiaXDxV69h
-        m0ZQZ5SQm6jtBZwLh/Ex8s6r/jGWWEb54uHuCTMFuQ==
-X-Google-Smtp-Source: AGRyM1uJAVgMC+FdPKXuDnS8BkERCAtpEBQ/QwnGY07QPhz0sSjWHadTqyyK+cNCrTlIFQ7Cy65OUeE2LA3WOcgamu4=
-X-Received: by 2002:a7b:cb58:0:b0:39e:f121:f7d4 with SMTP id
- v24-20020a7bcb58000000b0039ef121f7d4mr3161742wmj.174.1655516522408; Fri, 17
- Jun 2022 18:42:02 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MVVfG1ukpcWxNx9o6iSFBfRaMO1Vdtzlg+i0swD+fb4=;
+        b=cu+ewGKWm+c8gJBrEx1OhRT5GEy8tSSCpo8U/lqJWVys8gg9dfIS17C6cjexVTVsFt
+         kEqVUQqHp0/5UUoMz4whGZ2XVviU8C6HkmitF8hibzgBUYLqdAjj8XmtyMPYjmNH3Fvd
+         u2Yv1BGNYfOiOd+cqIJjQUj7WOrpK6BUGuqW/somQHt595pEqCLTHQ86nV6yN5IZ+Osg
+         FGuHBTnixO5iXdsaQvHKOyKNNlz5UaMM42ROgwgCiuTzQUTjLHP1Wm/RGNSVkkFehijY
+         FABYpklWQUowkDtBE4DUezFJQg17euEuplH/H77wAF/Mq748lAxx2gwKrkxPZA/BX1X6
+         ezhw==
+X-Gm-Message-State: AJIora88C1vr8gAMwKVIIu4LsiBDmDGE+Y43ILqg1i3deqMcRu9drW+I
+        jRT2auayo4rhlVKuysYTbEYXfg==
+X-Google-Smtp-Source: AGRyM1sPqWjdN+XA9tmr0a8NAAwk+Ph/AdPkD7bdRPhjSkxbh27BWLRZd5LO4X5I+QCm+cbu4DJ4Ow==
+X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr13610279pjg.84.1655516705705;
+        Fri, 17 Jun 2022 18:45:05 -0700 (PDT)
+Received: from [172.31.235.92] ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id i186-20020a62c1c3000000b00524c5c236a6sm4039656pfg.33.2022.06.17.18.45.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 18:45:05 -0700 (PDT)
+Message-ID: <7a9d3354-164b-e5e5-936b-95de4c4338f9@linaro.org>
+Date:   Fri, 17 Jun 2022 18:45:02 -0700
 MIME-Version: 1.0
-References: <20220618000907.433350-1-irogers@google.com> <d3b39b1c-7d2e-0acd-fa92-8e05a3bad1fb@linux.intel.com>
-In-Reply-To: <d3b39b1c-7d2e-0acd-fa92-8e05a3bad1fb@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 17 Jun 2022 18:41:50 -0700
-Message-ID: <CAP-5=fUVWsVz2WguxDgiAEqG=eVAmJ+qkKDndDcfancsd8V2+A@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] Rewrite jevents program in python
-To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Felix Fietkau <nbd@nbd.name>,
-        Qi Liu <liuqi115@huawei.com>, Like Xu <likexu@tencent.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: Add rtq6056 adc support
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, jic23@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     lars@metafoo.de, cy_huang@richtek.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <1655458375-30478-1-git-send-email-u0084500@gmail.com>
+ <1655458375-30478-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1655458375-30478-2-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 5:23 PM Xing Zhengjun
-<zhengjun.xing@linux.intel.com> wrote:
->
-> Hi Ian,
->
-> On 6/18/2022 8:09 AM, Ian Rogers wrote:
-> > New architectures bring new complexity, such as Intel's hybrid
-> > models. jevents provides an alternative to specifying events in the
-> > kernel and exposing them through sysfs, however, it is difficult to
-> > work with. For example, an error in the json input would yield an
-> > error message but no json file or location. It is also a challenge to
-> > update jsmn.c given its forked nature.
-> >
-> > The changes here switch from jevents.c to a rewrite in python called
-> > jevents.py. This means there is a build time dependency on python, but
-> > such a dependency already exists for asciidoc (used to generate perf's
-> > man pages). If the build detects that python isn't present or is older
-> > than version 3.6 (released Dec. 2016) then an empty file is
-> > substituted for the generated one.
-> >
-> > A challenge with this code is in avoiding regressions. For this reason
-> > the jevents.py produces identical output to jevents.c, validated with a
-> > test script and build target.
-> >
-> > v6. Fixes an annotation and use of removesuffix that aren't present in
-> >      Python 3.6. Linter issues are also fixed.The code was tested on
-> >      Python 3.6 and 3.8 with docker.
->
-> I just test it, now it can be built successfully with python 3.8.
+On 17/06/2022 02:32, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add the documentation for Richtek RTQ6056.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../bindings/iio/adc/richtek,rtq6056-adc.yaml      | 57 ++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml
+> new file mode 100644
+> index 00000000..6b4e0e0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/richtek,rtq6056-adc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: RTQ6056 Bi-Directional Current and Power Monitor with 16-bit ADC
+> +
+> +maintainers:
+> +  - ChiYuan Huang <cy_huang@richtek.com>
+> +
+> +description: |
+> +  The RTQ6056 is a high accuracy current-sense monitor with I2C and SMBus
+> +  interface, and the device provides full information for system by reading
+> +  out the loading current and power.
+> +
+> +  The device monitors both of the drops across sense resistor and the BUS
+> +  voltage, converts into the current in amperes, and power in watts through
+> +  internal analog-to-digital converter ADC. The programmable calibration,
+> +  adjustable conversion time, and averaging function are also built in for
+> +  more design flexibility.
+> +
+> +  Datasheet is available at
+> +  https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: richtek,rtq6056
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +  richtek,shunt-resistor-uohm:
 
-Great! Tested-by/Reviewed-by/Acked-by always welcome :-)
+Use standard properties, so "-micro-ohms". Drop the unit from
+description and drop the ref.
 
-Ian
+> +    description: Shunt IN+/IN- sensing node resistor in microohm.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#io-channel-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      rtq6056@40 {
 
-> > v5. Adds a 2>/dev/null as suggested by David Laight
-> >      <David.Laight@aculab.com>.
-> > v4. Fixes the build for systems with python2 installed by adding a
-> >      patch that makes python3 the preferred python (Reported-by: John
-> >      Garry <john.garry@huawei.com>). It also fixes a bash-ism in the
-> >      jevents-test.sh and fixes the handling of an empty string for a
-> >      metric BriefDescription as one was added for sapphirerapids in the
-> >      metric Execute.
-> > v3. Updates the patches for merged changes (on
-> >      acme/tmp.perf/core). Re-runs all comparisons to make sure the
-> >      generated pmu-events.c isn't altered at all by this change. Adds
-> >      the jevents.c ExtSel fix in:
-> >      https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
-> >      Bumps the python version from 3.5 to 3.6, as f-strings weren't
-> >      introduced until 3.6.
-> >
-> > v2. Fixes the build for architectures that don't have pmu-events json
-> >      (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
-> >      build for python not being present or too old (Suggested-by: Peter
-> >      Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
-> >
-> > Ian Rogers (4):
-> >    perf python: Prefer python3
-> >    perf jevents: Add python converter script
-> >    perf jevents: Switch build to use jevents.py
-> >    perf jevents: Remove jevents.c
-> >
-> >   tools/perf/Makefile.config               |   27 +-
-> >   tools/perf/Makefile.perf                 |   16 +-
-> >   tools/perf/pmu-events/Build              |   15 +-
-> >   tools/perf/pmu-events/empty-pmu-events.c |   21 +
-> >   tools/perf/pmu-events/jevents.c          | 1342 ----------------------
-> >   tools/perf/pmu-events/jevents.py         |  409 +++++++
-> >   tools/perf/pmu-events/jsmn.h             |   68 --
-> >   tools/perf/pmu-events/json.c             |  162 ---
-> >   tools/perf/pmu-events/json.h             |   39 -
-> >   9 files changed, 465 insertions(+), 1634 deletions(-)
-> >   create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
-> >   delete mode 100644 tools/perf/pmu-events/jevents.c
-> >   create mode 100755 tools/perf/pmu-events/jevents.py
-> >   delete mode 100644 tools/perf/pmu-events/jsmn.h
-> >   delete mode 100644 tools/perf/pmu-events/json.c
-> >   delete mode 100644 tools/perf/pmu-events/json.h
-> >
->
-> --
-> Zhengjun Xing
+Generic node name, so probably "adc" (or something else appropriate).
+
+> +        compatible = "richtek,rtq6056";
+> +        reg = <0x40>;
+> +        #io-channel-cells = <1>;
+> +      };
+> +    };
+
+
+Best regards,
+Krzysztof

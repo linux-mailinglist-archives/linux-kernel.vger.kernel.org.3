@@ -2,396 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70180550321
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 08:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A9255032A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 08:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiFRGNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 02:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S231576AbiFRGSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 02:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiFRGNq (ORCPT
+        with ESMTP id S229621AbiFRGSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 02:13:46 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4EF15A03;
-        Fri, 17 Jun 2022 23:13:45 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id y17so4252463ilj.11;
-        Fri, 17 Jun 2022 23:13:45 -0700 (PDT)
+        Sat, 18 Jun 2022 02:18:12 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3112898A;
+        Fri, 17 Jun 2022 23:18:11 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id s17so181769iob.7;
+        Fri, 17 Jun 2022 23:18:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=M+5r59ScfEhvfiC97lCYl7aI+Php1gnrduvWR/Ou2o8=;
-        b=Q4uFxh760lhCAoBKROAESV7y1ip8HUVyXSNA/bgMhwnWJqzglye4BIbHahJ9dfK7NT
-         c/1za53rJVWr+EMU9VJZ1zVhkzuLoXTv6m4WemLd8UFdzRz13ReMYmsB9pMTjethKUQk
-         nHtU0Etpoy6wNfYKEhQuNI67rfYilfRIVfZ/qRXtelHFhxRX1j3kUTx7Z1qGeIuY8Z5G
-         BO425Nnvbc8uW+4rToKQtTMuINU7lbRoBcDeanXyjDqPwpL0Vx8Wndt19oPRFvosRSjg
-         ixmAsBQbsmYAKay5yHV0lOsQ4JpUNaXUBtFCFSE0202N6DMCN47TuZiJh5TGribtRDN0
-         87tQ==
+        bh=xMtjrIrk8BS5wqeKcKO0JzC2MIwpQGHEwooQtdUMJP0=;
+        b=fSggctj+w+S9qijH2t/gteDnQ8kCdj+1+ebnDuCX2/7jJClwf+sp8rDK8vNG+S9Yxu
+         5vL7PFVvokMgyPrvoFpo7Sell78DbOWHBBlAba3M1SZ6EqUUWuUF1pOgj9coVjcFzTG5
+         pajugIOVy44kvBTKkeHTdVKhCT1F+g68ZmT8JqT45liRoJ29CZVwVT5Mo9MPlz3du60z
+         D7K4KrCVg9VuzNStb+MFX5Zusl9gr+3IW+KJsIprsbsGCUENJc93oL3DRdZ0/rjDfSnJ
+         PIbr++g6G7N7yRI/innXg+jsRkIGL9vpvk3OpJsd+eKqLAmzeY7uFxAXMI8DqmX8Qsry
+         D3MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=M+5r59ScfEhvfiC97lCYl7aI+Php1gnrduvWR/Ou2o8=;
-        b=nEqXS9aWrjlehgZqnH8TPIGyQsjpynpPYn6FRR7ePVj8f5qaxHxTCdyVYC2nXv1HDB
-         BBgUydwuj53tLo6Mf2GHx8hs6gA9D1A1hvOj8n8wx95jHMuGFMZI5ckxe5zSNWZon0iI
-         79s8Q3nNm3VHIY08IC4zbXQJpjq66JPuFSrooC+ZFz272lYvORMhwpZm2tJ9badO6wd9
-         qE0eMebID0GGow5MGWzqnfC0BtRmsj3sq+5qec92mZUTLLPJ9COyqdnI6JcSgjDEsE0m
-         gOMSpduO5bcvqIIyT7YbfPh7OGznblex6yQMW9TVqiRx2ovXht2aSklAn+mNCukeFMNe
-         3fIQ==
-X-Gm-Message-State: AJIora+RQGO6WmSRgg0Xcigzu4cFYiyqE3PG4jb5vd/JFpjIWMFuqxPk
-        oqFVKMjI2Phev24bl7U2CurMHJlIruKYbI8gu2M=
-X-Google-Smtp-Source: AGRyM1uDbAWBQeb9nwBQdjmNaVrXKN5zKQ+0wLBzFzx7dlmH2sWNlT/Arn8Q+K+kGz1LRpDCLZPzR2k2nYRoYqBfdEY=
-X-Received: by 2002:a05:6e02:16ce:b0:2d3:edec:17a5 with SMTP id
- 14-20020a056e0216ce00b002d3edec17a5mr7748167ilx.4.1655532824350; Fri, 17 Jun
- 2022 23:13:44 -0700 (PDT)
+        bh=xMtjrIrk8BS5wqeKcKO0JzC2MIwpQGHEwooQtdUMJP0=;
+        b=vjJTMxMpaVMXGNWRnTUPy7foirSkUAgQzI4I1n4EcwGXThPDRfH4qB7AK0CZqzpwB1
+         UA2jULWYblymAuhP3n8VSnjnHrMyPFWbxxBTKIoEq+TYoQYy1iDpYRmyem7l5EgLzR3g
+         eqB7SzYOy3wXEGRLv5P7yp3VoPNTBgBDSxnYXHfjfxpsMEIyoFnJuyINU1MsFpmSfNVc
+         OlFRnnGjT5+UAW6CofPGaV6E9Ql+WgMSF5cLhgkj+0VbP5FaXBPcUFYsElZtht93vC/R
+         qddzWynGMu1aqAYExOUXGcbnQUpElKKwBJzgv7Jc3IOUSIPTjaKoa/fUE4qkJWLUynYA
+         CBzA==
+X-Gm-Message-State: AJIora+evGLYvK7+Z6+5LGXvDAMZBMbfCGrMx56qVxEYQ1Cua/lYVu/w
+        i0jUIOobCj0lUS+JScPkd5NirjmZoBAxzM7GSa/fVeUuhITN6w==
+X-Google-Smtp-Source: AGRyM1vMr2a6mghVjHpnC5gj7peRn8gMxDHMeICe1heU7NZCdcaLnI+JYQGaHBhpG6F5hJqWbTyx/8cpg7CQLHgA05M=
+X-Received: by 2002:a05:6638:2188:b0:331:cf8b:af23 with SMTP id
+ s8-20020a056638218800b00331cf8baf23mr7888380jaj.80.1655533090879; Fri, 17 Jun
+ 2022 23:18:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220616104541.16289-1-jslaby@suse.cz> <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
- <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
- <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com>
- <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
- <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com> <20220617200553.kg7jmkvwdp7yqfkm@google.com>
-In-Reply-To: <20220617200553.kg7jmkvwdp7yqfkm@google.com>
+References: <20220616195759.3214538-1-samitolvanen@google.com> <CAKwvOd=KWfNsUFcW4Enq5i94t0zyi7+C9p1-+QUP8+SvoHs=NA@mail.gmail.com>
+In-Reply-To: <CAKwvOd=KWfNsUFcW4Enq5i94t0zyi7+C9p1-+QUP8+SvoHs=NA@mail.gmail.com>
 Reply-To: sedat.dilek@gmail.com
 From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 18 Jun 2022 08:13:07 +0200
-Message-ID: <CA+icZUXELAsCb2ya0CcC3CE5YQ_E4+Tb7K9OdTPbKSZd9JTSMw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
-To:     Fangrui Song <maskray@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Jiri Slaby <jslaby@suse.cz>,
+Date:   Sat, 18 Jun 2022 08:17:34 +0200
+Message-ID: <CA+icZUX2YWmG+CfH+V9s_C9kZMSAcMJ-AdFSfcz5zRsoSXi0NQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Ignore __this_module in gen_autoksyms.sh
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Steve Muckle <smuckle@google.com>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: multipart/mixed; boundary="000000000000e95e3905e1b2c54e"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000ccc74805e1b2d5f5"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000e95e3905e1b2c54e
+--000000000000ccc74805e1b2d5f5
 Content-Type: text/plain; charset="UTF-8"
 
-4
-
-On Fri, Jun 17, 2022 at 10:05 PM Fangrui Song <maskray@google.com> wrote:
+On Fri, Jun 17, 2022 at 7:28 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> On 2022-06-18, Masahiro Yamada wrote:
-> >(+LLVM list, Fangrui Song)
->
-> Thanks for tagging me. I'll clarify some stuff.
->
-> >On Fri, Jun 17, 2022 at 7:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >>
-> >> On Fri, Jun 17, 2022 at 12:35 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >> >
-> >> > On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >> > >
-> >> > > On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >> > > >
-> >> > > > On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
-> >> > > > >
-> >> > > > > Until the link-vmlinux.sh split (cf. the commit below), the linker was
-> >> > > > > run with jobserver set in MAKEFLAGS. After the split, the command in
-> >> > > > > Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
-> >> > > > > is lost.
-> >> > > > >
-> >> > > > > Restore it as linkers working in parallel (esp. the LTO ones) make a use
-> >> > > > > of i
-> >
-> >Hi Jiri,
-> >
-> >Please let me clarify first.
-> >
-> >Here, is it OK to assume you are talking about Clang LTO
-> >instead of GCC LTO because the latter is not upstreamed ?
-> >
-> >
-> >
-> >
-> >
-> >I tested this patch but I did not see any performance change for Clang LTO.
-> >
-> >
-> >[1] CONFIG_CLANG_LTO_FULL
-> >
-> >   lld always runs sequential.
-> >   It never runs in parallel even if you pass -j option to Make
->
-> "lld always runs sequential" is not accurate. There are a number of
-> parallel linker passes.  ld.lld --threads= defaults to
-> llvm::hardware_concurrency (similar to
-> https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency,
-> but uses sched_getaffinity to compute the number of available cores).
->
-> "lld always runs sequential" is only correct only when --threads=1 is
-> specified or the system only provides one thread to the lld process.
->
-> I think people may be more interested in LTO parallelism here.  Regular
-> LTO (sometimes called full LTO when there is mixed-thin-and-regular LTO)
-> supports limited parallelism which applies to code generation, but not
-> IR-level optimization.  (IR-level optimization has many interprocedural
-> optimizations passes.  Splitting will make LTO less effective. Code
-> generation is per function, so parallelism does not regress
-> optimization.)
->
-> >
-> >[2] CONFIG_CLANG_LTO_THIN
-> >
-> >   lld always runs in parallel even if you do not pass -j option
-> >
-> >   In my machine, lld always allocated 12 threads.
-> >   This is irrespective of the Make parallelisms.
-> >
-> >
-> >
-> >
-> >One more thing, if a program wants to participate in
-> >Make's jobserver, it must parse MAKEFLAGS, and extract
-> >file descriptors to be used to communicate to the jobserver.
-> >
-> >As a code example in the kernel tree,
-> >scripts/jobserver-exec parses "MAKEFLAGS" and "--jobserver".
-> >
-> >
-> >I grepped the lld source code, but it does not contain
-> >"MAKEFLAGS" or "jobserver".
->
-> >masahiro@oscar:~/ref/lld$ git remote  show origin
-> >* remote origin
-> >  Fetch URL: https://github.com/llvm-mirror/lld.git
-> >  Push  URL: https://github.com/llvm-mirror/lld.git
-> >  HEAD branch: master
-> >  Remote branches:
-> >    master     tracked
-> >    release_36 tracked
-> >    release_37 tracked
-> >    release_38 tracked
-> >    release_39 tracked
-> >    release_40 tracked
-> >    release_50 tracked
-> >    release_60 tracked
-> >    release_70 tracked
-> >    release_80 tracked
-> >    release_90 tracked
-> >  Local branch configured for 'git pull':
-> >    master merges with remote master
-> >  Local ref configured for 'git push':
-> >    master pushes to master (up to date)
-> >masahiro@oscar:~/ref/lld$ git grep MAKEFLAGS
-> >masahiro@oscar:~/ref/lld$ git grep jobserver
-> >
-> >
-> >So, in my research, LLD does not seem to support the jobserver.
->
->
-> Correct. lld does not support GNU make's jobserver.  On the other hand,
-> I don't think the jobserver implementation supports flexible "give this
-> target N hardware concurrency". A heavy link target does not necessarily
-> get more resources than a quick target.
->
-> If a make target knows how many hardware concurrency it gets, we can
-> pass --threads= to lld. LTO easily takes 95+% link time, so LTO
-> parallelism may needs a dedicated setting. lld has --thinlto-jobs=.
+> + Sedat
+> Re: https://lore.kernel.org/linux-kbuild/CAKwvOdmb5xdF70TzNp=4STCpzkGh16FnuKE1KbdzDhHt=OuRFA@mail.gmail.com/
+> In case this helps.
 >
 
-Hey Fangrui,
+Thanks Nick for CCing me and this patch.
 
-I played a bit with --thinlto-jobs=4 yesterday.
+Usually, I build with CONFIG_LTO_CLANG_THIN=y and have not seen any
+measurable build-time speedup.
+My kernel-config is attached.
 
-$ cat 0001-vmlinux-clang-thinlto-Add-thinlto-jobs-4-to-KBUILD_L.patch
-From f548c34abd49e01407de26c81f29ef89b3cae213 Mon Sep 17 00:00:00 2001
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 17 Jun 2022 13:24:50 +0200
-Subject: [PATCH] vmlinux: clang: thinlto: Add --thinlto-jobs=4 to
-KBUILD_LDFLAGS
+Feel free to add my...
 
----
-scripts/Makefile.vmlinux_o | 2 +-
-scripts/link-vmlinux.sh    | 2 +-
-2 files changed, 2 insertions(+), 2 deletions(-)
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 3c97a1564947..4c1991c91417 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -53,7 +53,7 @@ objtool_args := \
-
-quiet_cmd_ld_vmlinux.o = LD      $@
-      cmd_ld_vmlinux.o = \
--       $(LD) ${KBUILD_LDFLAGS} -r -o $@ \
-+       $(LD) ${KBUILD_LDFLAGS} --thinlto-jobs=4 -r -o $@ \
-       $(addprefix -T , $(initcalls-lds)) \
-       --whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
-       --start-group $(KBUILD_VMLINUX_LIBS) --end-group \
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index eecc1863e556..1624da57807b 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -83,7 +83,7 @@ vmlinux_link()
-       else
-               wl=
-               ld="${LD}"
--               ldflags="${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}"
-+               ldflags="${KBUILD_LDFLAGS} --thinlto-jobs=4 ${LDFLAGS_vmlinux}"
-               ldlibs=
-       fi
-
---
-2.36.1
-
-Hmm, not a significant performance gain - not measurable here.
-
-Unsure, if passing --thinlto-jobs=4 to KBUILD_LDFLAGS in top-level
-Makefile is too invasive.
-( UNTESTED... )
-
-$ cat 0001-clang-thinlto-Add-thinlto-jobs-4-to-KBUILD_LDFLAGS.patch
-From 0970e92867d11d12214ca198578364a17ef17bea Mon Sep 17 00:00:00 2001
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 17 Jun 2022 13:34:49 +0200
-Subject: [PATCH] clang: thinlto: Add --thinlto-jobs=4 to KBUILD_LDFLAGS
-
----
-Makefile | 1 +
-1 file changed, 1 insertion(+)
-
-diff --git a/Makefile b/Makefile
-index 1a6678d817bd..a7a7f12e2349 100644
---- a/Makefile
-+++ b/Makefile
-@@ -896,6 +896,7 @@ ifdef CONFIG_LTO_CLANG
-ifdef CONFIG_LTO_CLANG_THIN
-CC_FLAGS_LTO   := -flto=thin -fsplit-lto-unit
-KBUILD_LDFLAGS += --thinlto-cache-dir=$(extmod_prefix).thinlto-cache
-+KBUILD_LDFLAGS += --thinlto-jobs=4
-else
-CC_FLAGS_LTO   := -flto
-endif
---
-2.36.1
-
-In the case of building my LLVM toolchain I have a very conservative
-setting for link-jobs when building a ThinLTO + PGO (x86_64-kernel
-defconfig) optimized toolchain.
-
-$ cd /path/to/tc-build.git
-
-$ python3 ./build-llvm.py --no-update --build-type Release -p
-clang;lld -t X86;BPF --clang-vendor dileks -B
-/home/dileks/src/llvm-toolchain/build -I /opt/llvm-toolchain
---check-targets clang lld --lto thin --pgo kernel-defconfig -L
-/home/dileks/src/linux-kernel/git -D LLVM_PARALLEL_LINK_JOBS=1
---show-build-commands
-
-See: -D LLVM_PARALLEL_LINK_JOBS=1
-
-So, I guess the above patch might be counterproductive?
-
-My kernel make-line looks like this:
-
-/usr/bin/perf stat make V=1 -j4 LLVM=1 LLVM_IAS=1
-PAHOLE=/opt/pahole/bin/pahole LOCALVERSION=-4-amd64-clang14-lto K
-BUILD_BUILD_HOST=iniza KBUILD_BUILD_USER=sedat.dilek@gmail.com
-KBUILD_BUILD_TIMESTAMP=2022-06-17 bindeb-pkg
-KDEB_PKGVERSION=5.19.0~rc2-4~bookworm+dileks1
-
-Attaching 2 patches in case Gmail truncates the formatting and my
-latest kernel-config.
-
-Thanks.
-
-Regards,
 -Sedat-
 
+> + Ramji
+> Ramji, it sounds like you helped test this downstream? If that's the
+> case, mind supplying your tested-by tag for the record? Thanks for
+> help verifying this change. Thanks too, Steve!
+>
+> On Thu, Jun 16, 2022 at 12:58 PM Sami Tolvanen <samitolvanen@google.com> wrote:
 > >
+> > Module object files can contain an undefined reference to __this_module,
+> > which isn't resolved until we link the final .ko. The kernel doesn't
+> > export this symbol, so ignore it in gen_autoksyms.sh. This avoids an
+> > unnecessary vmlinux rebuild with UNUSED_KSYMS_WHITELIST when we have a
+> > symbol list that already contains all the module dependencies.
+>
+> Worth mentioning that this also fixes a significant build time
+> regression made more painful by CONFIG_LTO_CLANG_FULL when using
+> CONFIG_UNUSED_KSYMS_WHITELIST.
+>
+> Thanks for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
 > >
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > ---
+> >  scripts/gen_autoksyms.sh | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >
-> >If you are talking about GCC LTO, yes, the code
-> >tries to parse "--jobserver-auth=" from the MAKEFLAGS
-> >environment variable.  [1]
+> > diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
+> > index faacf7062122..653fadbad302 100755
+> > --- a/scripts/gen_autoksyms.sh
+> > +++ b/scripts/gen_autoksyms.sh
+> > @@ -56,4 +56,7 @@ EOT
+> >  # point addresses.
+> >  sed -e 's/^\.//' |
+> >  sort -u |
+> > +# Ignore __this_module. It's not an exported symbol, and will be resolved
+> > +# when the final .ko's are linked.
+> > +grep -v '^__this_module$' |
+> >  sed -e 's/\(.*\)/#define __KSYM_\1 1/' >> "$output_file"
+> > --
+> > 2.36.1.476.g0c4daa206d-goog
 > >
-> >[1]:  https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/lto-wrapper.cc#L1341
-> >
-> >
-> >But, as you may know, GCC LTO works in a different way,
-> >at least, we cannot do it before modpost.
-> >
-> >
-> >--
-> >Best Regards
-> >Masahiro Yamada
-> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
---000000000000e95e3905e1b2c54e
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-vmlinux-clang-thinlto-Add-thinlto-jobs-4-to-KBUILD_L.patch"
-Content-Disposition: attachment; 
-	filename="0001-vmlinux-clang-thinlto-Add-thinlto-jobs-4-to-KBUILD_L.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l4jha7gs0>
-X-Attachment-Id: f_l4jha7gs0
-
-RnJvbSBmNTQ4YzM0YWJkNDllMDE0MDdkZTI2YzgxZjI5ZWY4OWIzY2FlMjEzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTZWRhdCBEaWxlayA8c2VkYXQuZGlsZWtAZ21haWwuY29tPgpE
-YXRlOiBGcmksIDE3IEp1biAyMDIyIDEzOjI0OjUwICswMjAwClN1YmplY3Q6IFtQQVRDSF0gdm1s
-aW51eDogY2xhbmc6IHRoaW5sdG86IEFkZCAtLXRoaW5sdG8tam9icz00IHRvCiBLQlVJTERfTERG
-TEFHUwoKLS0tCiBzY3JpcHRzL01ha2VmaWxlLnZtbGludXhfbyB8IDIgKy0KIHNjcmlwdHMvbGlu
-ay12bWxpbnV4LnNoICAgIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
-IDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9NYWtlZmlsZS52bWxpbnV4X28g
-Yi9zY3JpcHRzL01ha2VmaWxlLnZtbGludXhfbwppbmRleCAzYzk3YTE1NjQ5NDcuLjRjMTk5MWM5
-MTQxNyAxMDA2NDQKLS0tIGEvc2NyaXB0cy9NYWtlZmlsZS52bWxpbnV4X28KKysrIGIvc2NyaXB0
-cy9NYWtlZmlsZS52bWxpbnV4X28KQEAgLTUzLDcgKzUzLDcgQEAgb2JqdG9vbF9hcmdzIDo9IFwK
-IAogcXVpZXRfY21kX2xkX3ZtbGludXgubyA9IExEICAgICAgJEAKICAgICAgIGNtZF9sZF92bWxp
-bnV4Lm8gPSBcCi0JJChMRCkgJHtLQlVJTERfTERGTEFHU30gLXIgLW8gJEAgXAorCSQoTEQpICR7
-S0JVSUxEX0xERkxBR1N9IC0tdGhpbmx0by1qb2JzPTQgLXIgLW8gJEAgXAogCSQoYWRkcHJlZml4
-IC1UICwgJChpbml0Y2FsbHMtbGRzKSkgXAogCS0td2hvbGUtYXJjaGl2ZSAkKEtCVUlMRF9WTUxJ
-TlVYX09CSlMpIC0tbm8td2hvbGUtYXJjaGl2ZSBcCiAJLS1zdGFydC1ncm91cCAkKEtCVUlMRF9W
-TUxJTlVYX0xJQlMpIC0tZW5kLWdyb3VwIFwKZGlmZiAtLWdpdCBhL3NjcmlwdHMvbGluay12bWxp
-bnV4LnNoIGIvc2NyaXB0cy9saW5rLXZtbGludXguc2gKaW5kZXggZWVjYzE4NjNlNTU2Li4xNjI0
-ZGE1NzgwN2IgMTAwNzU1Ci0tLSBhL3NjcmlwdHMvbGluay12bWxpbnV4LnNoCisrKyBiL3Njcmlw
-dHMvbGluay12bWxpbnV4LnNoCkBAIC04Myw3ICs4Myw3IEBAIHZtbGludXhfbGluaygpCiAJZWxz
-ZQogCQl3bD0KIAkJbGQ9IiR7TER9IgotCQlsZGZsYWdzPSIke0tCVUlMRF9MREZMQUdTfSAke0xE
-RkxBR1Nfdm1saW51eH0iCisJCWxkZmxhZ3M9IiR7S0JVSUxEX0xERkxBR1N9IC0tdGhpbmx0by1q
-b2JzPTQgJHtMREZMQUdTX3ZtbGludXh9IgogCQlsZGxpYnM9CiAJZmkKIAotLSAKMi4zNi4xCgo=
---000000000000e95e3905e1b2c54e
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-clang-thinlto-Add-thinlto-jobs-4-to-KBUILD_LDFLAGS.patch"
-Content-Disposition: attachment; 
-	filename="0001-clang-thinlto-Add-thinlto-jobs-4-to-KBUILD_LDFLAGS.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l4jhacfx1>
-X-Attachment-Id: f_l4jhacfx1
-
-RnJvbSAwOTcwZTkyODY3ZDExZDEyMjE0Y2ExOTg1NzgzNjRhMTdlZjE3YmVhIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTZWRhdCBEaWxlayA8c2VkYXQuZGlsZWtAZ21haWwuY29tPgpE
-YXRlOiBGcmksIDE3IEp1biAyMDIyIDEzOjM0OjQ5ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gY2xh
-bmc6IHRoaW5sdG86IEFkZCAtLXRoaW5sdG8tam9icz00IHRvIEtCVUlMRF9MREZMQUdTCgotLS0K
-IE1ha2VmaWxlIHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1n
-aXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCmluZGV4IDFhNjY3OGQ4MTdiZC4uYTdhN2YxMmUyMzQ5
-IDEwMDY0NAotLS0gYS9NYWtlZmlsZQorKysgYi9NYWtlZmlsZQpAQCAtODk2LDYgKzg5Niw3IEBA
-IGlmZGVmIENPTkZJR19MVE9fQ0xBTkcKIGlmZGVmIENPTkZJR19MVE9fQ0xBTkdfVEhJTgogQ0Nf
-RkxBR1NfTFRPCTo9IC1mbHRvPXRoaW4gLWZzcGxpdC1sdG8tdW5pdAogS0JVSUxEX0xERkxBR1MJ
-Kz0gLS10aGlubHRvLWNhY2hlLWRpcj0kKGV4dG1vZF9wcmVmaXgpLnRoaW5sdG8tY2FjaGUKK0tC
-VUlMRF9MREZMQUdTCSs9IC0tdGhpbmx0by1qb2JzPTQKIGVsc2UKIENDX0ZMQUdTX0xUTwk6PSAt
-Zmx0bwogZW5kaWYKLS0gCjIuMzYuMQoK
---000000000000e95e3905e1b2c54e
+--000000000000ccc74805e1b2d5f5
 Content-Type: application/octet-stream; 
 	name="config-5.19.0-rc2-4-amd64-clang14-lto"
 Content-Disposition: attachment; 
 	filename="config-5.19.0-rc2-4-amd64-clang14-lto"
 Content-Transfer-Encoding: base64
-Content-ID: <f_l4jhddu42>
-X-Attachment-Id: f_l4jhddu42
+Content-ID: <f_l4jhl97o0>
+X-Attachment-Id: f_l4jhl97o0
 
 IwojIEF1dG9tYXRpY2FsbHkgZ2VuZXJhdGVkIGZpbGU7IERPIE5PVCBFRElULgojIExpbnV4L3g4
 NiA1LjE5LjAtcmMyIEtlcm5lbCBDb25maWd1cmF0aW9uCiMKQ09ORklHX0NDX1ZFUlNJT05fVEVY
@@ -4874,4 +4633,4 @@ IGlzIG5vdCBzZXQKIyBDT05GSUdfVEVTVF9GUFUgaXMgbm90IHNldAojIENPTkZJR19URVNUX0NM
 T0NLU09VUkNFX1dBVENIRE9HIGlzIG5vdCBzZXQKQ09ORklHX0FSQ0hfVVNFX01FTVRFU1Q9eQpD
 T05GSUdfTUVNVEVTVD15CiMgQ09ORklHX0hZUEVSVl9URVNUSU5HIGlzIG5vdCBzZXQKIyBlbmQg
 b2YgS2VybmVsIFRlc3RpbmcgYW5kIENvdmVyYWdlCiMgZW5kIG9mIEtlcm5lbCBoYWNraW5nCg==
---000000000000e95e3905e1b2c54e--
+--000000000000ccc74805e1b2d5f5--

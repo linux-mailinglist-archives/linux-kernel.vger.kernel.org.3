@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310B15504F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 15:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E195B550502
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 15:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235997AbiFRNEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 09:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S229654AbiFRNKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 09:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbiFRNEV (ORCPT
+        with ESMTP id S229449AbiFRNKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 09:04:21 -0400
-Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1157BF41;
-        Sat, 18 Jun 2022 06:04:16 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1655557451tni8bcgo
+        Sat, 18 Jun 2022 09:10:47 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225E517048;
+        Sat, 18 Jun 2022 06:10:41 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1655557745taoefuin
 Received: from localhost.localdomain ( [125.70.163.206])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 18 Jun 2022 21:04:08 +0800 (CST)
+        id ; Sat, 18 Jun 2022 21:09:01 +0800 (CST)
 X-QQ-SSF: 01000000002000D0I000B00A0000000
-X-QQ-FEAT: Adk7n3szVYHr/pIy2iWGziYUhNJCOz7mKoVcCrT6mJ+1vssvxIO7m72Ao+mmQ
-        1ABJ5x6Dq3wzYZ0hXRm8JdFrrIEXCibTWDf0ZHHoniizK6p4XpcSwQKopolxuxmMS0odv0U
-        eWpWdr+EqtqfSPB39GCBOqvzeHog1fK1tdm2fQKdeFN83ijuwEr0e5ky3AbHJfgdBCxJTiq
-        i+AghExOyrWhXAlPj8iBfa3gbuZlm6F9RDRVexgwVicY7bd5wHaiTXH7OZOnwrd7Izp1tmT
-        qnKAwvAOsPfWod7AtM+Ed5DpOVIZBN6b0aGwQnuXUoWnhaapaAdImSwdFYerMTgxAU0dNS1
-        LnXIKvCMUr6VWe+0iA=
+X-QQ-FEAT: mp05QlZ6er31q1MrCHV1u0rzmqaMNdwuu85emdj4nemWnmenvIbukvyKp3Ayx
+        9vIsiLGSMyz+7BzxjsSRiTUW/uBTcKFOpJq0OuX6DowBSqayWbdP4mDNpsgh3H+tLNSbLt3
+        iN4JQsIc4fY62m5iaz8kvQ7MSXqtO6vAY9UqX6+gXa84X3RCRdzg+uiIoIK6RyPGooVW+56
+        W1hUJzI+tHBjlJRkYHLCnnJllUTcf5LFL9Ka0sICt8npjubbVMYjCHQJVZr/1zqjSuelemA
+        p+4T7MBBZETzvho73jWovfaGdeenUx7b6r0u8dXa0YzxeDpQxPoqPNytYodzgldmq12qGSi
+        xRC/O5G
 X-QQ-GoodBg: 0
 From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     vkoul@kernel.org
-Cc:     ludovic.desroches@microchip.com, tudor.ambarus@microchip.com,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+To:     andrew@aj.id.au
+Cc:     linus.walleij@linaro.org, joel@jms.id.au,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] dmaengine: at_xdmac: Fix typo in comment
-Date:   Sat, 18 Jun 2022 21:03:49 +0800
-Message-Id: <20220618130349.11507-1-wangxiang@cdjrlc.com>
+Subject: [PATCH] pinctrl: aspeed: Fix typo in comment
+Date:   Sat, 18 Jun 2022 21:08:54 +0800
+Message-Id: <20220618130854.12321-1-wangxiang@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+Delete the redundant word 'and'.
 
 Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 ---
- drivers/dma/at_xdmac.c | 2 +-
+ drivers/pinctrl/aspeed/pinmux-aspeed.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-index 3e9d726504e2..90cbff44f884 100644
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -649,7 +649,7 @@ static int at_xdmac_compute_chan_conf(struct dma_chan *chan,
- }
+diff --git a/drivers/pinctrl/aspeed/pinmux-aspeed.h b/drivers/pinctrl/aspeed/pinmux-aspeed.h
+index 4d7548686f39..aaa78a613196 100644
+--- a/drivers/pinctrl/aspeed/pinmux-aspeed.h
++++ b/drivers/pinctrl/aspeed/pinmux-aspeed.h
+@@ -632,7 +632,7 @@ struct aspeed_pin_desc {
+ 	SIG_EXPR_LIST_ALIAS(pin, sig, group)
  
- /*
-- * Only check that maxburst and addr width values are supported by the
-+ * Only check that maxburst and addr width values are supported by
-  * the controller but not that the configuration is good to perform the
-  * transfer since we don't know the direction at this stage.
-  */
+ /**
+- * Similar to the above, but for pins with a dual expressions (DE) and
++ * Similar to the above, but for pins with a dual expressions (DE)
+  * and a single group (SG) of pins.
+  *
+  * @pin: The pin the signal will be routed to
 -- 
 2.36.1
 

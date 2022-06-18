@@ -2,77 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E62550155
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C16A55015D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347609AbiFRAcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 20:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S1383712AbiFRAdE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Jun 2022 20:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237031AbiFRAcW (ORCPT
+        with ESMTP id S231921AbiFRAdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 20:32:22 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AECA5AEDD
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:32:21 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h192so5325403pgc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wVNpDYWpyZPJrYzzrQ5li1/Ptc6vTF4u416LkJD1v9s=;
-        b=qkE5xNfYDkCsPhFrXdQgXwtrEDw+GQHYRs8SU3FIyNb+VMtro48oMMW8v6on3syij2
-         stV9w6v7KzaGEqCIrvxaQbn8sPgHVTTPWio1YEvmnYYlnimeo2z78datsnkNY6atHSVi
-         gqf+FO/U3fZbekveGQ1Ewxoqog9rowJnDWzkFtqTrh2bq9ciYhl+yK0OiXwt8MoT8I1h
-         PYnmOSX8/pWFuNtvixKKtBKR+YOYfObcteHcZ4SqU9NDxvFBvUT26n1yUXxJC3Bzm64h
-         cp66v7y67qRGwR1cxuSMUPCYmp/h8ux0NxvxY7/huxt1qg2ZWy52ffX0183kekduIe91
-         Pd+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wVNpDYWpyZPJrYzzrQ5li1/Ptc6vTF4u416LkJD1v9s=;
-        b=vGNoLSYiAtlNx5ceFrmhJUI0MpWhy+EprgDu0WsJP7Rcn/5wvPWGOZOh3hX9NMSezr
-         l4H1ObS7Jd2h5YDCK+IZNYov+8/OLITryqFq76D4jvj72R+c5+yU5RW6vl9baHgA9I1c
-         ijQrpTbd77JAdWjIP0A7ldZyxfuso3a78+H7wqKvwvYk+Fkhnlbn1tACxU1zEgVid1lR
-         fPXMhrHFAp9HYhPyCNTEy2aIUBNVn0yotfm4uqKQ2b2Kd1YUZ1Qf4xBXPiMcvaHq0fKd
-         n921q5VOCB6+e8W6Trwwkx40ab0Jf1lsjemah/wS/8btUUQ3+Wc9z1ud9VbQ2TgZh+Y0
-         oU4Q==
-X-Gm-Message-State: AJIora/lmaoxjagEhQl6SRxDZJxswTqQCPAzl+DLMWd84lsFjr3u/2yO
-        AbvOtAVNvA8vmSBd5awB4PQpYQ==
-X-Google-Smtp-Source: AGRyM1szhd81aS/0lyO2FJLxO1IsTYStSnUgjmcZ4CVPZdrIlNLVjrXFjKKDlqqeJ4tIxZUzY+81Zg==
-X-Received: by 2002:a05:6a00:2148:b0:4fa:92f2:bae3 with SMTP id o8-20020a056a00214800b004fa92f2bae3mr12777140pfk.69.1655512341025;
-        Fri, 17 Jun 2022 17:32:21 -0700 (PDT)
-Received: from [172.31.235.92] ([216.9.110.6])
-        by smtp.gmail.com with ESMTPSA id g1-20020a1709026b4100b001635f7a54e8sm4126616plt.1.2022.06.17.17.32.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 17:32:20 -0700 (PDT)
-Message-ID: <a664b2a9-3cfa-9e8d-039a-bdd3b7448170@linaro.org>
-Date:   Fri, 17 Jun 2022 17:32:17 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v8 1/5] arm64: dts: qcom: sc7180: Add wormdingler dts
- files
-Content-Language: en-US
-To:     "Joseph S. Barrera III" <joebar@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220617164000.v8.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220617164000.v8.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
+        Fri, 17 Jun 2022 20:33:03 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91C821258;
+        Fri, 17 Jun 2022 17:33:01 -0700 (PDT)
+Received: (Authenticated sender: pbl@bestov.io)
+        by mail.gandi.net (Postfix) with ESMTPSA id A4F691C0006;
+        Sat, 18 Jun 2022 00:32:56 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Date:   Sat, 18 Jun 2022 02:32:55 +0200
+Message-Id: <CKSU5Q2M1IE3.39AS0HDHTZPN@enhorning>
+Cc:     <cmllamas@google.com>, <davem@davemloft.net>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: NEEDS FIXING - Was: Re: [PATCH v2] ipv4: ping: fix bind address
+ validity check
+From:   "Riccardo Paolo Bestetti" <pbl@bestov.io>
+To:     <davem@davemloft.net>
+X-Mailer: aerc 0.9.0
+References: <20220617085435.193319-1-pbl@bestov.io>
+ <165546541315.12170.9716012665055247467.git-patchwork-notify@kernel.org>
+In-Reply-To: <165546541315.12170.9716012665055247467.git-patchwork-notify@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,104 +45,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2022 16:40, Joseph S. Barrera III wrote:
-> Wormdingler is a trogdor-based board, shipping to customers as the
-> Lenovo IdeaPad Chromebook Duet 3. These dts files are copies from
-> the downstream Chrome OS 5.4 kernel, but with the camera
-> (sc7180-trogdor-mipi-camera.dtsi) #include removed.
-> 
-> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
-> 
-> ---
-> 
-> (no changes since v7)
-> 
-> Changes in v7:
-> - Incorporated changes from Stephen's "Simplify!" series.
-> 
-> Changes in v5:
-> - Replaced _ in node name with -
-> - Ordered nodes by name
-> 
-> Changes in v4:
-> - Cleaned up rt5682s files
-> - Restored camcc definition
-> - Added missing version history
-> 
-> Changes in v3:
-> - Removed camcc definition
-> 
-> Changes in v2:
-> - Word wrapped patch description.
-> - Removed "Author" from patch description.
-> - Fixed whitespace around "en_pp3300_dx_edp"
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |   6 +
->  .../sc7180-trogdor-wormdingler-rev0-boe.dts   |  22 +
->  .../sc7180-trogdor-wormdingler-rev0-inx.dts   |  22 +
->  .../qcom/sc7180-trogdor-wormdingler-rev0.dtsi |  53 +++
->  ...0-trogdor-wormdingler-rev1-boe-rt5682s.dts |  29 ++
->  .../sc7180-trogdor-wormdingler-rev1-boe.dts   |  28 ++
->  ...0-trogdor-wormdingler-rev1-inx-rt5682s.dts |  29 ++
->  .../sc7180-trogdor-wormdingler-rev1-inx.dts   |  22 +
->  .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  | 408 ++++++++++++++++++
->  9 files changed, 619 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 2f8aec2cc6db..e4114e22548a 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -81,6 +81,12 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3-lte.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-boe.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-inx.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
-> new file mode 100644
-> index 000000000000..d6ed7d0afe4a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
-> @@ -0,0 +1,22 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Wormdingler board device tree source
-> + *
-> + * Copyright 2021 Google LLC.
-> + *
-> + * SKU: 0x10 => 16
-> + *  - bits 7..4: Panel ID: 0x1 (BOE)
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sc7180-trogdor-wormdingler-rev0.dtsi"
-> +
-> +/ {
-> +	model = "Google Wormdingler rev0 BOE panel board";
-> +	compatible = "google,wormdingler-rev0-sku16", "qcom,sc7180";
+On Fri Jun 17, 2022 at 1:30 PM CEST,  wrote:
+> Hello:
+>
+> This patch was applied to netdev/net.git (master)
+> by David S. Miller <davem@davemloft.net>:
+>
+> On Fri, 17 Jun 2022 10:54:35 +0200 you wrote:
+> > Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+> > introduced a helper function to fold duplicated validity checks of bind
+> > addresses into inet_addr_valid_or_nonlocal(). However, this caused an
+> > unintended regression in ping_check_bind_addr(), which previously would
+> > reject binding to multicast and broadcast addresses, but now these are
+> > both incorrectly allowed as reported in [1].
+> > 
+> > [...]
+>
+> Here is the summary with links:
+>   - [v2] ipv4: ping: fix bind address validity check
+>     https://git.kernel.org/netdev/net/c/b4a028c4d031
+>
+I receompiled the kernel from the net tree to do some more manual testing
+on the patch and I have two things to disclose. Sorry for the caps in
+the subject.
 
-There was a v6 a second ago, now it is v8... It's confusing. Don't send
-too often, especially without incorporating actual review.
+TL;DR: I noticed that one of the regressions tests is (correctly)
+failing, but for the wrong reasons; and the patch I sent contains a
+mistake, and unfortunately it has already been applied to the tree as
+commit b4a028c4d0.
 
-You need to document the compatibles. Please base on Doug's patches
-adding the compatibles for existing boards.
+Long version below.
+
+1) If you run regression tests with -v, the (correct -- see below) ICMP
+tests for broadcast and multicast binding do not fail with
+EADDRNOTAVAIL, but with ACCES, but only when run through fcnal-test.sh.
+This is also true for one of the additional (commented out) tests you
+can find in my patch following this email. I'm not sure why this
+happens; however I'm reasonably convinced it is a quirk or a consequence
+of the testing methodology/setup. Can anyone offer any insights?
+
+2) My patch is faulty. I had a complete and tested patch, including code
+fixing the regression. Instead of sending it, however, I decided to
+adapt it to preserve Carlos Llamas' version of ping.c, since they posted
+their patch first. In doing so I used a work branch which contained a
+faulty version (wrong flags) of the regression tests. The resulting
+faulty patch is, unfortunately, currently in the tree.
+
+At this point, due to the unfortunate combination of (1) and (2), it
+might be worth reverting the patch altogether and just applying the v1
+(i.e. without the regression tests) to the tree and to the relevant LTS
+versions.
+
+After that, a more proper discussion can be had about (1), and the
+regression tests can be fixed. I'm sending a demonstrative patch for
+that as a response to this message.
+
+Riccardo P. Bestetti
 
 
-Best regards,
-Krzysztof
+
+> You are awesome, thank you!
+> -- 
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+

@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E1F55027D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57645550281
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238309AbiFRDaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 23:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S233295AbiFRDdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 23:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiFRDaQ (ORCPT
+        with ESMTP id S229600AbiFRDdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 23:30:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4D469CF9;
-        Fri, 17 Jun 2022 20:30:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A39BDB82D1F;
-        Sat, 18 Jun 2022 03:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A959C3411E;
-        Sat, 18 Jun 2022 03:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655523013;
-        bh=imZHSh61aXEmeSuzVYB46shMBkAiRz4LBhIdGDei7uw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CoLBeiqnMkQayAFQu3ZzfzaEuH3m4blvIILNipETVLBaypLpRYgn5evT9Mn8VMybd
-         J0UDkztCvcoSCnksOAZ85vDdscjGA58k24cE1KTGRPfUj8SfaY6OZ2gZsLcQ0yBKTH
-         9aAoNTR08droCSO5ITuR5pbSZQkWbDO+iU/5QNK+eqG8zFDHK2kbNKW9qLxzIpn03T
-         RhuRY8Ws65qljA/VaAEKxojWxKRByNmfN830YCiT4b/grpLYQBdM7WQdPjnfeo/IY8
-         z5fcabNRW3l54FzCIe9MhFA/XVXNfI5KN37rPm5kcXrWs/iyd3CCyx+wDgmNDmwZN6
-         gnzjVE/34hZNQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3CC99E7387A;
-        Sat, 18 Jun 2022 03:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Jun 2022 23:33:02 -0400
+Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03F1519FAB
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 20:32:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=YG6dR
+        e/hH640v9iwqegEl+qUfUjOQngoEiIIerWSUzc=; b=FIZb4tzAYeyqgHmXnBp45
+        ryDHiBl2oQ+0QIOePtw3m5xcmKG1Ga3zLzRw2jGmNNL00rQeVOFAdjaV2oHdatEF
+        D591kucTfAeUXr5TaQW4YjRuJl/jmgK0qflJiVhhFyBRyr4qAtARRaMU5NRivh2W
+        S8W0j4uECveZcRXTFqhil4=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp9 (Coremail) with SMTP id NeRpCgDnStM4R61iQDkAFA--.33191S2;
+        Sat, 18 Jun 2022 11:32:09 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     mpe@ellerman.id.au, paulus@samba.org, christophe.leroy@csgroup.eu,
+        nick.child@ibm.com, pali@kernel.org, npiggin@gmail.com
+Cc:     windhl@126.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: sysdev: Fix refcount leak bug in fsl_pci.c
+Date:   Sat, 18 Jun 2022 11:32:07 +0800
+Message-Id: <20220618033207.4057410-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] ethtool: Fix get module eeprom fallback
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165552301324.7046.10386873519636092978.git-patchwork-notify@kernel.org>
-Date:   Sat, 18 Jun 2022 03:30:13 +0000
-References: <20220616160856.3623273-1-ivecera@redhat.com>
-In-Reply-To: <20220616160856.3623273-1-ivecera@redhat.com>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, mkubecek@suse.cz, idosch@nvidia.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, vladyslavt@nvidia.com, andrew@lunn.ch,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: NeRpCgDnStM4R61iQDkAFA--.33191S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GF1kCryrtFyxJw43trW7CFg_yoWDJrg_Xw
+        1xu3WDZ395Ja1furs3Ca93t3sakw48WayqgFn2gay7Ja4Yg3y7Ja17Zr98XrW7ur4SyrWY
+        kr95XrWYka4IvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMxhLDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuBkkF2JVj6vE7wAAsq
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+In is_kdump(), we need a of_node_put() to dec the refcount which is
+incremented by of_find_node_by_type().
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/powerpc/sysdev/fsl_pci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-On Thu, 16 Jun 2022 18:08:55 +0200 you wrote:
-> Function fallback_set_params() checks if the module type returned
-> by a driver is ETH_MODULE_SFF_8079 and in this case it assumes
-> that buffer returns a concatenated content of page  A0h and A2h.
-> The check is wrong because the correct type is ETH_MODULE_SFF_8472.
-> 
-> Fixes: 96d971e307cc ("ethtool: Add fallback to get_module_eeprom from netlink command")
-> Cc: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] ethtool: Fix get module eeprom fallback
-    https://git.kernel.org/netdev/net/c/a3bb7b63813f
-
-You are awesome, thank you!
+diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
+index 1011cfea2e32..4c986c955951 100644
+--- a/arch/powerpc/sysdev/fsl_pci.c
++++ b/arch/powerpc/sysdev/fsl_pci.c
+@@ -180,6 +180,7 @@ static int setup_one_atmu(struct ccsr_pci __iomem *pci,
+ static bool is_kdump(void)
+ {
+ 	struct device_node *node;
++	bool ret;
+ 
+ 	node = of_find_node_by_type(NULL, "memory");
+ 	if (!node) {
+@@ -187,7 +188,10 @@ static bool is_kdump(void)
+ 		return false;
+ 	}
+ 
+-	return of_property_read_bool(node, "linux,usable-memory");
++	ret = of_property_read_bool(node, "linux,usable-memory");
++	of_node_put(node);
++
++	return ret;
+ }
+ 
+ /* atmu setup for fsl pci/pcie controller */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

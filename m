@@ -2,149 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431335506C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 23:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523F05506CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 23:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbiFRVPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 17:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S232571AbiFRVR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 17:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiFRVPA (ORCPT
+        with ESMTP id S232078AbiFRVR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 17:15:00 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD8D2672;
-        Sat, 18 Jun 2022 14:14:58 -0700 (PDT)
-Message-ID: <ac1f956bece0151a165afc18ec21898d00dacf31.camel@grimler.se>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1655586896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z2AOfaSlPHrMVPcO5Ts97JY6OWsmj+2hfSsC8UnVib4=;
-        b=Ve8XRXMAZq+qmbXnRkxh8sCqoflFuaV5TaGKrd9hOZq2ZGm4Dzma/LA4LLURkSHk4Bi6/0
-        XW3ElXe5XCtvaSU1N+DSFaymv+J8uF41tov/YsYXAsFnEHqOwEO1XUyS4tIS+Y3V9qeiyc
-        Na7EGUvDklSL6rXiXMHoAEPDw2Czlwc=
-Subject: Re: [PATCH 3/3] ARM: dts: exynos: add function and color to aat1290
- flash LED node in Galaxy S3
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     replicant@osuosl.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Simon Shields <simon@lineageos.org>,
-        Martin =?ISO-8859-1?Q?J=FCcker?= <martin.juecker@gmail.com>
-Date:   Sat, 18 Jun 2022 23:14:53 +0200
-In-Reply-To: <f1cc0f5a-12fb-28bc-7345-13ac2bf5b74d@linaro.org>
-References: <20220607085343.72414-1-krzysztof.kozlowski@linaro.org>
-         <20220607085343.72414-3-krzysztof.kozlowski@linaro.org>
-         <4a7f8ab6-c061-3861-5790-b6c0fbd7cad1@gmail.com>
-         <ef62a7bb-2217-2947-17dd-fc4a51acdea5@linaro.org>
-         <f1402a1d-a74d-f7b9-b9e2-fc3991781e64@gmail.com>
-         <f1cc0f5a-12fb-28bc-7345-13ac2bf5b74d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 18 Jun 2022 17:17:26 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D2626E1;
+        Sat, 18 Jun 2022 14:17:25 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id o8so9782467wro.3;
+        Sat, 18 Jun 2022 14:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F9zHQ5BDlESv+EJld7HTiBi3G93zCJ7miFrzqyCk/Ys=;
+        b=dfQzXNEvZ6jMhwDtZrRIQghsVUkY4XdSbUtJaOIebJgfW4IgNmRiLfaEhzJU4kvSkO
+         sFGsrmX//kn1dE9Bjik5X0Gqj4kkRtbgb909R3uFbLgYislj8kqwg8zHPtQObYDMBaQh
+         tKgbJy+nnhZRmDNFnc4nrztEwpSVWA5XwGknqDulxOnmSGVtZUKIbC3VY4K9kfpGR4Oo
+         hr+44L1/lMe/zAjrL+0z9zQ2OwpHYZez1rtyejk+mvoKuGsr6ik8ly6rJfCv5gF1e085
+         RVJCUbn83HPcmECcolCEoB062RAMl1yHgJ7JReOx/pSx9C+5gn9kW6CyyjdhCsXI/giA
+         CAWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F9zHQ5BDlESv+EJld7HTiBi3G93zCJ7miFrzqyCk/Ys=;
+        b=Px8v82h76Oau3FQiTQ3H9yRVcVtZv21iOTZB/dP5floUEVLHBHUpyRcqt+gQW5dIVN
+         r+J3KrKXY+gizGnjQEFxwDeO5cc6UtWLL7uClLwtocVByUmuSZmMQRvH/NKw3roJswGM
+         6oWS9MUU9IvET9xuhaUDaHMhmDFWafYAwV//D1x/ALJ0HLlJ3BztAUsLiM3tnpx7PLt/
+         /KEb5jqmaJ8QKf73HEvBeEQkH/LNEdF6EOAK9SlGSTS/HrkmJk0Fx0FlSy6yfoA7Ic0C
+         zvjV0oUa+WAbVG++xnT2N9wGOE/9RDJJQzDuuIRgbOTs5SzGfdso7odGVskLwihpALzh
+         qyEw==
+X-Gm-Message-State: AJIora9Oetw7gZlj40Xq1lCZrv/vA7hidmwrSOY5Eb3Nfv9P/hcOsYAK
+        vKKhqc0wYvF3gJO9JlDiOIvhxyyDH6fQOw==
+X-Google-Smtp-Source: AGRyM1t/JX5RywE/NQdTYsk48Ow61saXwVBAj7MztKbhguVyPqtnjprupf+48GYsrEubjrq1po0PwQ==
+X-Received: by 2002:adf:e648:0:b0:210:bac2:c6cf with SMTP id b8-20020adfe648000000b00210bac2c6cfmr15201246wrn.310.1655587043663;
+        Sat, 18 Jun 2022 14:17:23 -0700 (PDT)
+Received: from krava (94.113.247.30.static.b2b.upcbusiness.cz. [94.113.247.30])
+        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b0039c18d3fe27sm9921639wmq.19.2022.06.18.14.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 14:17:23 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sat, 18 Jun 2022 23:17:20 +0200
+To:     chuang <nashuiliang@gmail.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Jingren Zhou <zhoujingren@didiglobal.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] libbpf: Remove kprobe_event on failed kprobe_open_legacy
+Message-ID: <Yq5A4Cln4qeTaAeM@krava>
+References: <20220614084930.43276-1-nashuiliang@gmail.com>
+ <62ad50fa9d42d_24b34208d6@john.notmuch>
+ <CACueBy7NqRszA3tCOvLhfi1OraUrL_GD9YZ9XOPNHzbR1=+z7g@mail.gmail.com>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: grimler.se
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACueBy7NqRszA3tCOvLhfi1OraUrL_GD9YZ9XOPNHzbR1=+z7g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof and Jacek,
+On Sat, Jun 18, 2022 at 01:31:01PM +0800, chuang wrote:
+> Hi John,
+> 
+> On Sat, Jun 18, 2022 at 12:13 PM John Fastabend
+> <john.fastabend@gmail.com> wrote:
+> >
+> > Chuang W wrote:
+> > > In a scenario where livepatch and aggrprobe coexist, the creating
+> > > kprobe_event using tracefs API will succeed, a trace event (e.g.
+> > > /debugfs/tracing/events/kprobe/XX) will exist, but perf_event_open()
+> > > will return an error.
+> >
+> > This seems a bit strange from API side. I'm not really familiar with
+> > livepatch, but I guess this is UAPI now so fixing add_kprobe_event_legacy
+> > to fail is not an option?
+> >
+> 
+> The legacy kprobe API (i.e. tracefs API) has two steps:
+> 
+> 1) register_kprobe
+> $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
+> This will create a trace event of mykprobe and register a disable
+> kprobe that waits to be activated.
+> 
+> 2) enable_kprobe
+> 2.1) using syscall perf_event_open
+> as the following code, perf_event_kprobe_open_legacy (file:
+> tools/lib/bpf/libbpf.c):
+> ---
+> attr.type = PERF_TYPE_TRACEPOINT;
+> pfd = syscall(__NR_perf_event_open, &attr,
+>               pid < 0 ? -1 : pid, /* pid */
+>               pid == -1 ? 0 : -1, /* cpu */
+>               -1 /* group_fd */,  PERF_FLAG_FD_CLOEXEC);
+> ---
+> In the implementation code of perf_event_open, enable_kprobe() will be executed.
+> 2.2) using shell
+> $ echo 1 > /sys/kernel/debug/tracing/events/kprobes/mykprobe/enable
+> As with perf_event_open, enable_kprobe() will also be executed.
+> 
+> When using the same function XXX, kprobe and livepatch cannot coexist,
+> that is, step 2) will return an error (ref: arm_kprobe_ftrace()),
 
-On Sun, 2022-06-12 at 19:06 +0200, Krzysztof Kozlowski wrote:
-> On 12/06/2022 17:09, Jacek Anaszewski wrote:
-> > On 6/10/22 12:14, Krzysztof Kozlowski wrote:
-> > > On 09/06/2022 22:31, Jacek Anaszewski wrote:
-> > > > Hi Krzysztof,
-> > > >=20
-> > > > On 6/7/22 10:53, Krzysztof Kozlowski wrote:
-> > > > > Add common LED properties - the function and color - to
-> > > > > aat1290 flash
-> > > > > LED node in Galaxy S3.
-> > > > >=20
-> > > > > Signed-off-by: Krzysztof Kozlowski
-> > > > > <krzysztof.kozlowski@linaro.org>
-> > > > > ---
-> > > > > =C2=A0=C2=A0 arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi | 3 +++
-> > > > > =C2=A0=C2=A0 1 file changed, 3 insertions(+)
-> > > > >=20
-> > > > > diff --git a/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
-> > > > > b/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
-> > > > > index 72901772fcad..d76f3678dcab 100644
-> > > > > --- a/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
-> > > > > +++ b/arch/arm/boot/dts/exynos4412-galaxy-s3.dtsi
-> > > > > @@ -7,6 +7,7 @@
-> > > > > =C2=A0=C2=A0=C2=A0 */
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0 /dts-v1/;
-> > > > > +#include <dt-bindings/leds/common.h>
-> > > > > =C2=A0=C2=A0 #include "exynos4412-midas.dtsi"
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0 / {
-> > > > > @@ -27,6 +28,8 @@ led-controller {
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0led {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0label =3D "flash";
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-function =3D LED_FUNCTION_FLASH;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-color =3D <LED_COLOR_ID_WHITE>;
-> > > >=20
-> > > > Addition of these two properties will not change anything
-> > > > because
-> > > > the label has precedence. It is deprecated, but if you
-> > > > introduce
-> > > > function and color to the binding instead of the label, the
-> > > > resulting
-> > > > LED class device name will change.
-> > >=20
-> > > Which is not necessarily what we want, right? Adding these
-> > > properties is
-> > > a proper description of hardware, regardless whether current
-> > > Linux
-> > > implementation uses them or not.
-> >=20
-> > Actually I'd just drop label in addition to your change.
-> > I don't think it would break anybody seriously - not expecting it
-> > has
-> > any larger group of users and having uniformly constructed DTS
-> > files
-> > in the mainline has greater value.
-> >=20
->=20
-> What about some PostmarketOSos, LineageOS and other OSes?
->=20
-> Let me Cc here some folks - Simon, Martin, is the label in flash LED
-> node anyhow important for you? Can it be dropped and replaced with
-> function+color?
->=20
+just curious.. is that because of ipmodify flag on ftrace_ops?
+AFAICS that be a poblem just for kretprobes, cc-ing Masami
 
-As far as I know LineageOS does not use a mainline-based kernel for the
-S3. PostmarketOS and Replicant does though. For PostmarketOS it should
-be fine to drop the label, and it sounded like it should be fine for
-Replicant also in an IRC discussion, but adding their mailing list to
-CC just in case.
+thanks,
+jirka
 
 
-Best regards,
-Henrik Grimler
+> however, step 1) is ok!
+> However, the new kprobe API (i.e. perf kprobe API) aggregates
+> register_kprobe and enable_kprobe, internally fixes the issue on
+> failed enable_kprobe.
+> But above all, for the legacy kprobe API, I think it should remove
+> kprobe_event on failed add_kprobe_event_legacy() in
+> perf_event_kprobe_open_legacy (file: tools/lib/bpf/libbpf.c).

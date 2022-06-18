@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ADC550366
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B896550367
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234735AbiFRHiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 03:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S235118AbiFRHjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 03:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiFRHh6 (ORCPT
+        with ESMTP id S229799AbiFRHjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 03:37:58 -0400
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A987131DDC
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cwvrM
-        twwaf2eGhHlVdwPwEDf4EW4aPt9uaNxslFq5Iw=; b=AtTFpsS6NRsz6EmMRKouh
-        FFIeJbtaM85094GmIAs4K4+wMLl4w44kaU7Uf1oIeRPQUp8y1WCNVfoof1C9fTRm
-        RPquwtVvXxqDsL/qdXzjgjUV59S9ByVBUZ7/ARs05oUhRJZYVHSLcTgsAqG3LkM/
-        qwgqBoVnEBk2aMJ8W3FqiI=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgCH51vLgK1iiG+cEw--.30712S2;
-        Sat, 18 Jun 2022 15:37:47 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     davem@davemloft.net
-Cc:     windhl@126.com, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] sbus: char: Fix refcount leak bug in openrom.c
-Date:   Sat, 18 Jun 2022 15:37:46 +0800
-Message-Id: <20220618073746.4059541-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 18 Jun 2022 03:39:04 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790163C70B
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:39:02 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 2T2lok3Aj26JC2T2loC0bc; Sat, 18 Jun 2022 09:39:00 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 18 Jun 2022 09:39:00 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <fe306bbf-288d-8d8e-1aae-08ad7d8c870c@wanadoo.fr>
+Date:   Sat, 18 Jun 2022 09:38:54 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] powerpc: powernv: Fix refcount leak bug in opal-powercap
+Content-Language: en-US
+To:     Liang He <windhl@126.com>
+Cc:     nick.child@ibm.com, linux-kernel@vger.kernel.org, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <20220617042038.4003704-1-windhl@126.com>
+ <0ca5ee14-a382-0935-66be-820975501f45@wanadoo.fr>
+ <6a9bcf7d.3ab8.181702f264d.Coremail.windhl@126.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <6a9bcf7d.3ab8.181702f264d.Coremail.windhl@126.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgCH51vLgK1iiG+cEw--.30712S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZrW8Jr1fCF45WF1fCrW5trb_yoWxtrb_CF
-        1xXryxtr1ktFsxC3sFvws3uryFyF1FgrZYvFnIqa45t3WYqrWfWryjvr95WryUAFW8Jry7
-        A39rZFyrArnrtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUU3fH5UUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2gskF1uwMOngXAAAss
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,27 +48,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In opiocgetnext(), we need a of_node_put() to keep refcount balance
-for device_node pointer returned by of_find_node_by_phandle() or
-of_find_node_by_path().
+Le 17/06/2022 à 07:42, Liang He a écrit :
+> 
+> 
+> 
+> At 2022-06-17 13:01:27, "Christophe JAILLET" <christophe.jaillet@wanadoo.fr> wrote:
+>> Le 17/06/2022 à 06:20, Liang He a écrit :
+>>> In opal_powercap_init(), of_find_compatible_node() will return
+>>> a node pointer with refcount incremented. We should use of_node_put()
+>>> in fail path or when it is not used anymore.
+>>>
+>>> Besides, for_each_child_of_node() will automatically *inc* and *dec*
+>>> refcount during iteration. However, we should add the of_node_put()
+>>> if there is a break.
+>>
+>> Hi,
+>>
+>> I'm not sure that your patch is right here. Because of this *inc* and
+>> *dec* things, do we still need to of_node_put(powercap) once we have
+>> entered for_each_child_of_node?
+>>
+>> I think that this reference will be released on the first iteration of
+>> the loop.
+>>
+> 
+> Hi, CJ,
+> 
+> Thanks for your reply and I want have a discuss.
+> 
+> Based on my review on the src of 'of_get_next_child',  there is only
+> *inc* for next and *dec* for pre as follow.
+> 
+> (|node| == powercap)
+> ======__of_get_next_child( |node|, prev)======
+>       ...
+>          next = prev? prev->sibling:|node|->child;
+> 	of_node_get(next);
+> 	of_node_put(prev);
+>       ...
+> =========================
+> 
+> However, there is no any code to release the |node| (i.e., *powercap*).
+> 
+> Am I right?   If I am wrong, please correct me, thanks.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/sbus/char/openprom.c | 1 +
- 1 file changed, 1 insertion(+)
+You are right.
+I mis-read __of_get_next_child(().
 
-diff --git a/drivers/sbus/char/openprom.c b/drivers/sbus/char/openprom.c
-index 30b9751aad30..701978db0f0f 100644
---- a/drivers/sbus/char/openprom.c
-+++ b/drivers/sbus/char/openprom.c
-@@ -518,6 +518,7 @@ static int opiocgetnext(unsigned int cmd, void __user *argp)
- 	}
- 	if (dp)
- 		nd = dp->phandle;
-+	of_node_put(dp);
- 	if (copy_to_user(argp, &nd, sizeof(phandle)))
- 		return -EFAULT;
- 
--- 
-2.25.1
+CJ
+
+
+> 
+>>
+>> Maybe of_node_put(powercap) should be duplicated everywhere it is
+>> relevant and removed from the error handling path?
+>> Or an additional reference should be taken before the loop?
+>> Or adding a new label with "powercap = NULL" and branching there when
+>> needed?
+>>
+>> CJ
+> 
+> If my understanding is right, I think current patch is right.
+> 
+> Otherwise, I will make a new patch to handle that, Thanks.
+> 
+> Liang
+> 
+>>
+>>>
+>>> Signed-off-by: Liang He <windhl@126.com>
+>>> ---
+>>>    arch/powerpc/platforms/powernv/opal-powercap.c | 5 ++++-
+>>>    1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/powerpc/platforms/powernv/opal-powercap.c b/arch/powerpc/platforms/powernv/opal-powercap.c
+>>> index 64506b46e77b..b102477d3f95 100644
+>>> --- a/arch/powerpc/platforms/powernv/opal-powercap.c
+>>> +++ b/arch/powerpc/platforms/powernv/opal-powercap.c
+>>> @@ -153,7 +153,7 @@ void __init opal_powercap_init(void)
+>>>    	pcaps = kcalloc(of_get_child_count(powercap), sizeof(*pcaps),
+>>>    			GFP_KERNEL);
+>>>    	if (!pcaps)
+>>> -		return;
+>>> +		goto out_powercap;
+>>>    
+>>>    	powercap_kobj = kobject_create_and_add("powercap", opal_kobj);
+>>>    	if (!powercap_kobj) {
+>>> @@ -236,6 +236,9 @@ void __init opal_powercap_init(void)
+>>>    		kfree(pcaps[i].pg.name);
+>>>    	}
+>>>    	kobject_put(powercap_kobj);
+>>> +	of_node_put(node);
+>>>    out_pcaps:
+>>>    	kfree(pcaps);
+>>> +out_powercap:
+>>> +	of_node_put(powercap);
+>>>    }
 

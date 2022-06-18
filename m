@@ -2,110 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C24550212
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8725550213
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383892AbiFRCk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 22:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S1383895AbiFRClH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 22:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiFRCk4 (ORCPT
+        with ESMTP id S231748AbiFRClC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 22:40:56 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A982579AB
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:40:55 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I2emso008858;
-        Fri, 17 Jun 2022 21:40:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655520048;
-        bh=oXLqMye2VzEFwSwRHpDgWkr1vSMEoKi8gVzaBkQA9xA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ivX39e6m1HD2Ie1wZMEbzomCsgpi6GKSstZSBweUkSWhAjWo3gv/gYB/PDycsyCrf
-         nTINIqhQ86BhqWOXJiTTVHLnq/nOCxIxdpHwanfYajhB6Kkc02kp+B23at8Rcpc+Ll
-         9Zkuzk9C4pN0rWMfWpDz5s/DSJ9VjGyVNjzBLH1U=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I2emef060805
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jun 2022 21:40:48 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 21:40:48 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 21:40:48 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I2em3f006228;
-        Fri, 17 Jun 2022 21:40:48 -0500
-Date:   Fri, 17 Jun 2022 21:40:48 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Yihao Han <hanyihao@vivo.com>
-CC:     Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kernel@vivo.com>
-Subject: Re: [PATCH] soc: ti: wkup_m3_ipc: replace DEFINE_SIMPLE_ATTRIBUTE
- with DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <20220618024048.hr7hgphogmdaeq2x@kahuna>
-References: <20220505024833.8494-1-hanyihao@vivo.com>
+        Fri, 17 Jun 2022 22:41:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48747579AB;
+        Fri, 17 Jun 2022 19:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655520061; x=1687056061;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=69FVXhRcNi3XWbo8cR10pFMkzX2M6PFU7BLsMWAUkAA=;
+  b=D3DjQEKqmNHuIOQr64wpDZQZQsW0XtnZSk1nXX5/weV2AwyIw/bY1nf6
+   5XHDYN/E7CwBakZYpVnq/zDAIh74nEBWTsFu3xTwBhUmrgaq5MKyTB5nX
+   vou8C8qEQoTujJ73cwKfPcNUVYWsxeVVPdhlTtgiLDjBSQk8Zq10WXL3M
+   Skp8+LdSbEgirVOW/KigYKMsz3mswH9vSM3Na7P53it6IGhwEDxomre5k
+   iUNcy+UDJlfh6pFGnz1Frj/BFrzyZilhQPJp16ZPMWSkGELARRelZs0gO
+   R5rXMRSUn1PZbhYWyBS1R0/sBOnPUqCehFeI+OgKzw/Ot2VYyJE/HI5Ag
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268338733"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="268338733"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 19:41:00 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="590351625"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.249.173.113]) ([10.249.173.113])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 19:40:54 -0700
+Message-ID: <a1737a8c-4d8e-a868-35a3-224e12e8c42b@linux.intel.com>
+Date:   Sat, 18 Jun 2022 10:40:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220505024833.8494-1-hanyihao@vivo.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 0/4] Rewrite jevents program in python
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, Felix Fietkau <nbd@nbd.name>,
+        Qi Liu <liuqi115@huawei.com>, Like Xu <likexu@tencent.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
+        Stephane Eranian <eranian@google.com>
+References: <20220618000907.433350-1-irogers@google.com>
+ <d3b39b1c-7d2e-0acd-fa92-8e05a3bad1fb@linux.intel.com>
+ <CAP-5=fUVWsVz2WguxDgiAEqG=eVAmJ+qkKDndDcfancsd8V2+A@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAP-5=fUVWsVz2WguxDgiAEqG=eVAmJ+qkKDndDcfancsd8V2+A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19:48-20220504, Yihao Han wrote:
-> Fix the following coccicheck warning:
-> ./drivers/soc/ti/wkup_m3_ipc.c:198:0-23: WARNING: 
-> wkup_m3_ipc_option_fops should be defined with
-> DEFINE_DEBUGFS_ATTRIBUTE
-> 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
->  drivers/soc/ti/wkup_m3_ipc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-> index 0076d467ff6b..2142d8fb3f5c 100644
-> --- a/drivers/soc/ti/wkup_m3_ipc.c
-> +++ b/drivers/soc/ti/wkup_m3_ipc.c
-> @@ -195,7 +195,7 @@ static int option_set(void *data, u64 val)
->  	return 0;
->  }
->  
-> -DEFINE_SIMPLE_ATTRIBUTE(wkup_m3_ipc_option_fops, option_get, option_set,
-> +DEFINE_DEBUGFS_ATTRIBUTE(wkup_m3_ipc_option_fops, option_get, option_set,
->  			"%llu\n");
+Hi Ian,
 
-Please run ./scripts/checkpatch --strict patch
-+CHECK: Alignment should match open parenthesis
-+#29: FILE: drivers/soc/ti/wkup_m3_ipc.c:199:
-++DEFINE_DEBUGFS_ATTRIBUTE(wkup_m3_ipc_option_fops, option_get, option_set,
-+                       "%llu\n");
-+      mechanically convert to the typical style using --fix or --fix-inplace.
-+      them to the maintainer, see CHECKPATCH in MAINTAINERS.
-
-
-Could you fix and post a V2?
->  
->  static int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
-> -- 
-> 2.17.1
+On 6/18/2022 9:41 AM, Ian Rogers wrote:
+> On Fri, Jun 17, 2022 at 5:23 PM Xing Zhengjun
+> <zhengjun.xing@linux.intel.com> wrote:
+>>
+>> Hi Ian,
+>>
+>> On 6/18/2022 8:09 AM, Ian Rogers wrote:
+>>> New architectures bring new complexity, such as Intel's hybrid
+>>> models. jevents provides an alternative to specifying events in the
+>>> kernel and exposing them through sysfs, however, it is difficult to
+>>> work with. For example, an error in the json input would yield an
+>>> error message but no json file or location. It is also a challenge to
+>>> update jsmn.c given its forked nature.
+>>>
+>>> The changes here switch from jevents.c to a rewrite in python called
+>>> jevents.py. This means there is a build time dependency on python, but
+>>> such a dependency already exists for asciidoc (used to generate perf's
+>>> man pages). If the build detects that python isn't present or is older
+>>> than version 3.6 (released Dec. 2016) then an empty file is
+>>> substituted for the generated one.
+>>>
+>>> A challenge with this code is in avoiding regressions. For this reason
+>>> the jevents.py produces identical output to jevents.c, validated with a
+>>> test script and build target.
+>>>
+>>> v6. Fixes an annotation and use of removesuffix that aren't present in
+>>>       Python 3.6. Linter issues are also fixed.The code was tested on
+>>>       Python 3.6 and 3.8 with docker.
+>>
+>> I just test it, now it can be built successfully with python 3.8.
 > 
+> Great! Tested-by/Reviewed-by/Acked-by always welcome :-)
+
+I test python3.8 and python3.10, both can build successfully.
+I also check the "pmu-events.c" generated by both C and python code, 
+they are the same.
+
+Tested-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+
+> 
+> Ian
+> 
+>>> v5. Adds a 2>/dev/null as suggested by David Laight
+>>>       <David.Laight@aculab.com>.
+>>> v4. Fixes the build for systems with python2 installed by adding a
+>>>       patch that makes python3 the preferred python (Reported-by: John
+>>>       Garry <john.garry@huawei.com>). It also fixes a bash-ism in the
+>>>       jevents-test.sh and fixes the handling of an empty string for a
+>>>       metric BriefDescription as one was added for sapphirerapids in the
+>>>       metric Execute.
+>>> v3. Updates the patches for merged changes (on
+>>>       acme/tmp.perf/core). Re-runs all comparisons to make sure the
+>>>       generated pmu-events.c isn't altered at all by this change. Adds
+>>>       the jevents.c ExtSel fix in:
+>>>       https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
+>>>       Bumps the python version from 3.5 to 3.6, as f-strings weren't
+>>>       introduced until 3.6.
+>>>
+>>> v2. Fixes the build for architectures that don't have pmu-events json
+>>>       (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
+>>>       build for python not being present or too old (Suggested-by: Peter
+>>>       Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
+>>>
+>>> Ian Rogers (4):
+>>>     perf python: Prefer python3
+>>>     perf jevents: Add python converter script
+>>>     perf jevents: Switch build to use jevents.py
+>>>     perf jevents: Remove jevents.c
+>>>
+>>>    tools/perf/Makefile.config               |   27 +-
+>>>    tools/perf/Makefile.perf                 |   16 +-
+>>>    tools/perf/pmu-events/Build              |   15 +-
+>>>    tools/perf/pmu-events/empty-pmu-events.c |   21 +
+>>>    tools/perf/pmu-events/jevents.c          | 1342 ----------------------
+>>>    tools/perf/pmu-events/jevents.py         |  409 +++++++
+>>>    tools/perf/pmu-events/jsmn.h             |   68 --
+>>>    tools/perf/pmu-events/json.c             |  162 ---
+>>>    tools/perf/pmu-events/json.h             |   39 -
+>>>    9 files changed, 465 insertions(+), 1634 deletions(-)
+>>>    create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
+>>>    delete mode 100644 tools/perf/pmu-events/jevents.c
+>>>    create mode 100755 tools/perf/pmu-events/jevents.py
+>>>    delete mode 100644 tools/perf/pmu-events/jsmn.h
+>>>    delete mode 100644 tools/perf/pmu-events/json.c
+>>>    delete mode 100644 tools/perf/pmu-events/json.h
+>>>
+>>
+>> --
+>> Zhengjun Xing
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Zhengjun Xing

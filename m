@@ -2,378 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD42550256
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F009C550258
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiFRDJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 23:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S238128AbiFRDNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 23:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiFRDJe (ORCPT
+        with ESMTP id S234511AbiFRDNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 23:09:34 -0400
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EF76C573;
-        Fri, 17 Jun 2022 20:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1655521767;
-        bh=bG1eeuZLH9VOGYNAcZ6xXOEOqfH92fLqwPLvrxuoi3Q=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=dq1nQM11AW78masqyhu2axBpFkw7b2G8Qgw9wte0NMPE4XKlB5pZQqjGzFH4MtEE4
-         3J4P3UIKWNP1crUyQfJVHGkg4BuSNYk6LIjujFbHGYROdJjBB1s8f+HK3n1bOhLR+x
-         8Ll5OpvfGe9HFCcOHuq+TzLpfd8YM+QVNj1l1yoQ=
-Received: from [IPv6:240e:459:40a:a46f:f5bd:306c:4a54:c7d4] ([240e:459:40a:a46f:f5bd:306c:4a54:c7d4])
-        by newxmesmtplogicsvrszc10.qq.com (NewEsmtp) with SMTP
-        id 1EC3DAC1; Sat, 18 Jun 2022 11:07:44 +0800
-X-QQ-mid: xmsmtpt1655521664tqsi3fapq
-Message-ID: <tencent_B1290D581DF1837711F4DB176ACB4D4F6908@qq.com>
-X-QQ-XMAILINFO: M/NR0wiIuy70ZCWn9Bhg1gErhx1rRG20XkBYhfrCtHPNr8lZGUOm79F/tuqxx1
-         7pXR+OEaLoFSXWAGv5yPEGIVNTLcQE5wskIMRE9ICvqqZobWzXGpXvt/E1wOXN3ewELBErx9kiAn
-         js8nOnLDzgXBiwifQwLrgvxizvMw6CYJjWKIo2i+xHltnK+BcY9lT7jPzOK8jnmZo6YybBl1CaRr
-         tq/7pdYcTgvgGJ2areDYW6u81oogVaWJubWw8F055lYrGkU0kLhVdtFZPGwe6nc5NaCSPq/cqPCr
-         clbMXluOzX5JQCBW5jZ1/ywZeWbqeSh8oe1bfPlXCKEhZI4JQ7Cij0p0nJIIjoLt1bWKgJ6ftvS1
-         s3xPpasfQDukyXQiurkAUwBQqnqb/WQG7TK/sfqNxRv1vOgSqPiRrxra9BG2dsnzwurtBTWDSowr
-         kvwryLFDrAwpuK+4hskWplD6thP/fG9yNtlVpTpvM+yCtUcbNnManU71fM8iQdlmiK1v5wiZkzZE
-         oajMML8R8jrKLp/G/1yNau153MYqQDHVEWfjwRvLwMMq3/4DShC/4BR06u63Yl9yf5xWyS6poKbc
-         8c6q7ZNzBTNXFbjOq6Z/rGNvTQu2LshKftzbb4AFTiWNYr4IxXA71vtKfXEdo+B7oXB9ltSbtgZE
-         1iWO0EmsOrHAuvjZyAng9o/8tQeI4eckq84i1Gd064PAIRGpoNZys2Ud7XDHzRb4uUPk1RFEVaix
-         GULB71GJqapPT1wJedHqMHnf52l8S5qss2rXVdzhmXkQaNGHZU4Je1ht091QHCox118xo8FZ19Ke
-         UiSiU/FOdjQ2LLMw8irjZ0KMlNrGycX9Q3IVbo3pXUesK8v1RUbWO41bKmD2QjonCxvh0Zs6CRK9
-         HfUjYObAUq/Ji3W+NJKKhqTHP9dH2N/CmVlO+yXiqUCL/VO17OGgUgu2hQMGGcSmTkRJP5lMmpE1
-         vCAkY8cm1sY0xIvFoIJ6N5rDj9wfh1luqM702BnKGIbgIi0XFcoA==
-Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
- readers from consuming CPU) cause qemu boot slow
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, paulmck@kernel.org,
-        zhangfei <zhangfei.gao@linaro.org>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Fri, 17 Jun 2022 23:13:49 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365C06B66F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 20:13:46 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LQ1B64HmPzBrnm;
+        Sat, 18 Jun 2022 11:10:22 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 18 Jun 2022 11:13:42 +0800
+Subject: Re: [PATCH 7/7] mm/khugepaged: try to free transhuge swapcache when
+ possible
+To:     Yang Shi <shy828301@gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        Auger Eric <eric.auger@redhat.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
- <20220613035711.GY1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220613041652.GA3976000@paulmck-ThinkPad-P17-Gen-1>
- <tencent_F82250B6E3D51A9AC0D2BE1AE43A4E060909@qq.com>
- <20220613121831.GA1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_65C7D0A04984EDB6A79A5E5379DA7E835206@qq.com>
- <20220613145900.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <7b6c983b21d44119b61716a66de397ed@huawei.com>
- <f9684a69-5467-a440-abd1-7cf5ad3a81f7@quicinc.com>
- <tencent_8FD344DA7FC376C7D1204604DA7689DA4906@qq.com>
- <20220614141712.GR1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_DFF5A6C9352C76C00C7E46E06F2BA945350A@qq.com>
- <042142db-aab2-fc4a-c1a5-371223c80440@quicinc.com>
-From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-X-OQ-MSGID: <48318c5f-8ac4-6fe9-ae36-6cc015f07750@foxmail.com>
-Date:   Sat, 18 Jun 2022 11:07:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220611084731.55155-1-linmiaohe@huawei.com>
+ <20220611084731.55155-8-linmiaohe@huawei.com>
+ <CAHbLzkoYkN+QzdfSUkHbLMUYX=zkrgGCrqM6xRaVssFSJh9KqA@mail.gmail.com>
+ <87617483-7945-30e2-471e-578da4f4d9c7@huawei.com>
+ <CAHbLzkqAJK3C8svOm4mhCP_oP6od=NMKpeW9=oRcczDJ=FXPcw@mail.gmail.com>
+ <17d610f7-4d85-e9b4-6429-4ad89274cb48@huawei.com>
+ <CAHbLzkq+-XeFJYry8j80VUDbY6BY2dFNA5FT3u9eF-v5MckQTA@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ef4cb766-0974-c269-cf27-cfcc718ce9c2@huawei.com>
+Date:   Sat, 18 Jun 2022 11:13:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <042142db-aab2-fc4a-c1a5-371223c80440@quicinc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHbLzkq+-XeFJYry8j80VUDbY6BY2dFNA5FT3u9eF-v5MckQTA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/15 下午6:40, Neeraj Upadhyay wrote:
-> Hi,
->
-> On 6/15/2022 2:33 PM, zhangfei.gao@foxmail.com wrote:
+On 2022/6/18 0:35, Yang Shi wrote:
+> On Thu, Jun 16, 2022 at 7:27 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >>
->>
->> On 2022/6/14 下午10:17, Paul E. McKenney wrote:
->>> On Tue, Jun 14, 2022 at 10:03:35PM +0800, zhangfei.gao@foxmail.com 
->>> wrote:
+>> On 2022/6/16 23:53, Yang Shi wrote:
+>>> On Thu, Jun 16, 2022 at 12:42 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >>>>
->>>> On 2022/6/14 下午8:19, Neeraj Upadhyay wrote:
->>>>>> 5.18-rc4 based               ~8sec
+>>>> On 2022/6/16 7:58, Yang Shi wrote:
+>>>>> On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >>>>>>
->>>>>> 5.19-rc1                     ~2m43sec
->>>>>>
->>>>>> 5.19-rc1+fix1                 ~19sec
->>>>>>
->>>>>> 5.19-rc1-fix2                 ~19sec
->>>>>>
->>>>> If you try below diff on top of either 5.19-rc1+fix1 or 
->>>>> 5.19-rc1-fix2 ;
->>>>> does it show any difference in boot time?
+>>>>>> Transhuge swapcaches won't be freed in __collapse_huge_page_copy().
+>>>>>> It's because release_pte_page() is not called for these pages and
+>>>>>> thus free_page_and_swap_cache can't grab the page lock. These pages
+>>>>>> won't be freed from swap cache even if we are the only user until
+>>>>>> next time reclaim. It shouldn't hurt indeed, but we could try to
+>>>>>> free these pages to save more memory for system.
 >>>>>
->>>>> --- a/kernel/rcu/srcutree.c
->>>>> +++ b/kernel/rcu/srcutree.c
->>>>> @@ -706,7 +706,7 @@ static void srcu_schedule_cbs_snp(struct 
->>>>> srcu_struct
->>>>> *ssp, struct srcu_node *snp
->>>>>    */
->>>>>   static void srcu_gp_end(struct srcu_struct *ssp)
->>>>>   {
->>>>> -       unsigned long cbdelay;
->>>>> +       unsigned long cbdelay = 1;
->>>>>          bool cbs;
->>>>>          bool last_lvl;
->>>>>          int cpu;
->>>>> @@ -726,7 +726,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
->>>>>          spin_lock_irq_rcu_node(ssp);
->>>>>          idx = rcu_seq_state(ssp->srcu_gp_seq);
->>>>>          WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
->>>>> -       cbdelay = !!srcu_get_delay(ssp);
->>>>> +       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
->>>>> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
->>>>> +               cbdelay = 0;
->>>>> +
->>>>>          WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
->>> Thank you both for the testing and the proposed fix!
+>>>>>
+>>>>>>
+>>>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>>>> ---
+>>>>>>  include/linux/swap.h | 5 +++++
+>>>>>>  mm/khugepaged.c      | 1 +
+>>>>>>  mm/swap.h            | 5 -----
+>>>>>>  3 files changed, 6 insertions(+), 5 deletions(-)
+>>>>>>
+>>>>>> diff --git a/include/linux/swap.h b/include/linux/swap.h
+>>>>>> index 8672a7123ccd..ccb83b12b724 100644
+>>>>>> --- a/include/linux/swap.h
+>>>>>> +++ b/include/linux/swap.h
+>>>>>> @@ -456,6 +456,7 @@ static inline unsigned long total_swapcache_pages(void)
+>>>>>>         return global_node_page_state(NR_SWAPCACHE);
+>>>>>>  }
+>>>>>>
+>>>>>> +extern void free_swap_cache(struct page *page);
+>>>>>>  extern void free_page_and_swap_cache(struct page *);
+>>>>>>  extern void free_pages_and_swap_cache(struct page **, int);
+>>>>>>  /* linux/mm/swapfile.c */
+>>>>>> @@ -540,6 +541,10 @@ static inline void put_swap_device(struct swap_info_struct *si)
+>>>>>>  /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=0 */
+>>>>>>  #define free_swap_and_cache(e) is_pfn_swap_entry(e)
+>>>>>>
+>>>>>> +static inline void free_swap_cache(struct page *page)
+>>>>>> +{
+>>>>>> +}
+>>>>>> +
+>>>>>>  static inline int add_swap_count_continuation(swp_entry_t swp, gfp_t gfp_mask)
+>>>>>>  {
+>>>>>>         return 0;
+>>>>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>>>>>> index ee0a719c8be9..52109ad13f78 100644
+>>>>>> --- a/mm/khugepaged.c
+>>>>>> +++ b/mm/khugepaged.c
+>>>>>> @@ -756,6 +756,7 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
+>>>>>>         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
+>>>>>>                 list_del(&src_page->lru);
+>>>>>>                 release_pte_page(src_page);
+>>>>>> +               free_swap_cache(src_page);
+>>>>>
+>>>>> Will this really work? The free_swap_cache() will just dec refcounts
+>>>>> without putting the page back to buddy. So the hugepage is not
+>>>>> actually freed at all. Am I missing something?
+>>>>
+>>>> Thanks for catching this! If page is on percpu lru_pvecs cache, page will
+>>>> be released when lru_pvecs are drained. But if not, free_swap_cache() won't
+>>>> free the page as it assumes the caller has a reference on the page and thus
+>>>> only does page_ref_sub(). Does the below change looks sense for you?
 >>>
->>>> Test here:
->>>> qemu: https://github.com/qemu/qemu/tree/stable-6.1
->>>> kernel:
->>>> https://github.com/Linaro/linux-kernel-uadk/tree/uacce-devel-5.19-srcu-test 
->>>>
->>>> (in case test patch not clear, push in git tree)
->>>>
->>>> Hardware: aarch64
->>>>
->>>> 1. 5.18-rc6
->>>> real    0m8.402s
->>>> user    0m3.015s
->>>> sys     0m1.102s
->>>>
->>>> 2. 5.19-rc1
->>>> real    2m41.433s
->>>> user    0m3.097s
->>>> sys     0m1.177s
->>>>
->>>> 3. 5.19-rc1 + fix1 from Paul
->>>> real    2m43.404s
->>>> user    0m2.880s
->>>> sys     0m1.214s
->>>>
->>>> 4. 5.19-rc1 + fix2: fix1 + Remove "if (!jbase)" block
->>>> real    0m15.262s
->>>> user    0m3.003s
->>>> sys     0m1.033s
->>>>
->>>> When build kernel in the meantime, load time become longer.
->>>>
->>>> 5. 5.19-rc1 + fix3: fix1 + SRCU_MAX_NODELAY_PHASE 1000000
->>>> real    0m15.215s
->>>> user    0m2.942s
->>>> sys    0m1.172s
->>>>
->>>> 6. 5.19-rc1 + fix4: fix1 + Neeraj's change of srcu_gp_end　
->>>> real    1m23.936s
->>>> user    0m2.969s
->>>> sys    0m1.181s
->>> And thank you for the testing!
->>>
->>> Could you please try fix3 + Neeraj's change of srcu_gp_end?
->>>
->>> That is, fix1 + SRCU_MAX_NODELAY_PHASE 1000000 + Neeraj's change of
->>> srcu_gp_end.
->>>
->>> Also, at what value of SRCU_MAX_NODELAY_PHASE do the boot
->>> times start rising?  This is probably best done by starting with
->>> SRCU_MAX_NODELAY_PHASE=100000 and dividing by (say) ten on each run
->>> until boot time becomes slow, followed by a binary search between the
->>> last two values.  (The idea is to bias the search so that fast boot
->>> times are the common case.)
+>>> THP gets drained immediately so they won't stay in pagevecs.
 >>
->> SRCU_MAX_NODELAY_PHASE 100 becomes slower.
->>
->>
->> 8. 5.19-rc1 + fix6: fix4 + SRCU_MAX_NODELAY_PHASE 1000000
->>
->> real 0m11.154s ~12s
->>
->> user 0m2.919s
->>
->> sys 0m1.064s
->>
->>
->>
->> 9. 5.19-rc1 + fix7: fix4 + SRCU_MAX_NODELAY_PHASE 10000
->>
->> real 0m11.258s
->>
->> user 0m3.113s
->>
->> sys 0m1.073s
->>
->>
->>
->> 10. 5.19-rc1 + fix8: fix4 + SRCU_MAX_NODELAY_PHASE 100
->>
->> real 0m30.053s ~ 32s
->>
->> user 0m2.827s
->>
->> sys 0m1.161s
->>
->>
->>
->> By the way, if build kernel on the board in the meantime (using 
->> memory), time become much longer.
->>
->> real 1m2.763s
->>
->>
->>
->> 11. 5.19-rc1 + fix9: fix4 + SRCU_MAX_NODELAY_PHASE 1000
->>
->> real 0m11.443s
->>
->> user 0m3.022s
->>
->> sys 0m1.052s
->>
->>
->
-> This is useful data, thanks! Did you get chance to check between 100 
-> and 1000, to narrow down further, from which point (does need to be 
-> exact value) between 100 and 1000,  you start seeing degradation at, 
-> for ex. 250, 500 , ...?
->
-> Is it also possible to try experiment 10 and 11 with below diff.
-> What I have done in below diff is, call srcu_get_delay() only once
-> in try_check_zero() (and not for every loop iteration); also
-> retry with a different delay for the extra iteration which is done
-> when srcu_get_delay(ssp) returns 0.
->
-> Once we have this data, can you also try by changing 
-> SRCU_RETRY_CHECK_LONG_DELAY   to 100, on top of below diff.
->
-> #define SRCU_RETRY_CHECK_LONG_DELAY  100
->
-> -------------------------------------------------------------------------
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 6a354368ac1d..3aff2f3e99ab 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -620,6 +620,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
->   * we repeatedly block for 1-millisecond time periods.
->   */
->  #define SRCU_RETRY_CHECK_DELAY         5
-> +#define SRCU_RETRY_CHECK_LONG_DELAY            5
->
->  /*
->   * Start an SRCU grace period.
-> @@ -927,12 +928,17 @@ static void srcu_funnel_gp_start(struct 
-> srcu_struct *ssp, struct srcu_data *sdp,
->   */
->  static bool try_check_zero(struct srcu_struct *ssp, int idx, int 
-> trycount)
->  {
-> +       unsigned long curdelay;
-> +       curdelay = !srcu_get_delay(ssp);
->         for (;;) {
->                 if (srcu_readers_active_idx_check(ssp, idx))
->                         return true;
-> -               if (--trycount + !srcu_get_delay(ssp) <= 0)
-> +               if (--trycount + curdelay <= 0)
->                         return false;
-> -               udelay(SRCU_RETRY_CHECK_DELAY);
-> +               if (trycount)
-> +                       udelay(SRCU_RETRY_CHECK_DELAY);
-> +               else
-> +                       udelay(SRCU_RETRY_CHECK_LONG_DELAY);
->         }
->  }
->
-
-11. 5.19-rc1 + fix9: fix4 + SRCU_MAX_NODELAY_PHASE 1000
-  real    0m11.443
-s user    0m3.022
-s sys    0m1.052s
-
-fix10: fix4 + SRCU_MAX_NODELAY_PHASE 500
-
-real    0m11.401s
-user    0m2.798s
-sys     0m1.328s
-
-
-fix11: fix4 + SRCU_MAX_NODELAY_PHASE 250
-
-     real    0m15.748s
-     user    0m2.781s
-     sys     0m1.294s
-
-
-fix12: fix4 + SRCU_MAX_NODELAY_PHASE 200
-
-     real    0m20.704s  21
-     user    0m2.954s
-     sys     0m1.226s
-
-fix13: fix4 + SRCU_MAX_NODELAY_PHASE 150
-
-     real    0m25.151s
-     user    0m2.980s
-     sys     0m1.256s
-
-
-fix8: fix4 + SRCU_MAX_NODELAY_PHASE 100
-real    0m30.053s ~ 32s
-  user    0m2.827s
-  sys    0m1.161s
-
-
-fix14: fix4 + SRCU_MAX_NODELAY_PHASE 100 + SRCU_RETRY_CHECK_LONG_DELAY 5
-
-     real    0m19.263s
-     user    0m3.018s
-     sys     0m1.211s
-
-
-
-     fix15: fix4 + SRCU_MAX_NODELAY_PHASE 100 + 
-SRCU_RETRY_CHECK_LONG_DELAY 100
-
-     real    0m9.347s
-     user    0m3.132s
-     sys     0m1.041s
-
-
-And  Shameer suggests this method, to decrease region_add/del time from 
-6000+ to 200+, also works on 5.19-rc1
-
-Make the EFI flash image file
-$ dd if=/dev/zero of=flash0.img bs=1M count=64
-$ dd if=./QEMU_EFI-2022.fd of=flash0.img conv=notrunc
-$ dd if=/dev/zero of=flash1.img bs=1M count=64
-Include the below line instead of "-bios QEMU_EFI.fd" in Qemu cmd line.
--pflash flash0.img -pflash flash1.img \
-
-
-
-Thanks
-
->
-> Thanks
-> Neeraj
->
->> Thanks
+>> Yes, you're right. I missed this.
 >>
 >>>
->>>> More test details: https://docs.qq.com/doc/DRXdKalFPTVlUbFN5
->>> And thank you for these details.
+>>>>
+>>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>>>> index 52109ad13f78..b8c96e33591d 100644
+>>>> --- a/mm/khugepaged.c
+>>>> +++ b/mm/khugepaged.c
+>>>> @@ -755,8 +755,12 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
+>>>>
+>>>>         list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
+>>>>                 list_del(&src_page->lru);
+>>>> -               release_pte_page(src_page);
+>>>> +               mod_node_page_state(page_pgdat(src_page),
+>>>> +                                   NR_ISOLATED_ANON + page_is_file_lru(src_page),
+>>>> +                                   -compound_nr(src_page));
+>>>> +               unlock_page(src_page);
+>>>>                 free_swap_cache(src_page);
+>>>> +               putback_lru_page(src_page);
 >>>
->>>                             Thanx, Paul
+>>> I'm not sure if it is worth it or not for a rare corner case since THP
+>>> should not stay in swapcache unless try_to_unmap() in vmscan fails
 >>
+>> IIUC, even if try_to_unmap() in vmscan succeeds, THP might be still in the
+>> swapcache if shrink_page_list is not called for this THP again after writeback
+>> is done, e.g. when shrink_page_list is called from madvise, so there might be
+> 
+> I don't get, doesn't __remove_mapping() delete the page from swap cache?
+
+Sorry for making confusion. :(
+IIUC, __remove_mapping() is only called when page is clean and page writeback is done in
+shrink_page_list(). So for the first round of shrink_page_list(), the THP is under writeback
+and __remove_mapping() won't be called. THP will be removed from swapcache via __remove_mapping()
+in next round of shrink_page_list() if THP is clean and not under writeback. So THP should be in
+the swapcache until next round of shrink_page_list().
+
+And if shrink_page_list is called from madvise, the next round of shrink_page_list() for this
+THP won't arrive if there is no memory pressure because madvise can't shrink pages that are
+already in the swapcache (!pte_present case is ignored in madvise_cold_or_pageout_pte_range()).
+So the THP might stay in swapcache for a long time.
+
+Does this make sense for you?
+
+> 
+>> no memory pressure, or do_swap_page puts the THP into page table again. Also THP
+> 
+> do_swap_page() just swaps in base page, never THP.
+
+If the THP is not removed from swapcache, do_swap_cache can found it via lookup_swap_cache().
+So we "swap in" the THP.
+
+> 
+>> might not be splited when deferred_split_shrinker is not called, e.g. due to
+> 
+> I don't see how deferred split is related to this.
+
+What I mean is that if the THP is splitted, khugepaged won't found that THP. So deferred split
+should be considered?
+
+> 
+>> not lacking of memory. Even if there is memory pressure, the THP will stay in
+>> swapcache until next round page reclaim for this THP is done. So there should
+>> be a non-negligible window that THP will stay in the swapcache.
+>> Or am I miss something?
+> 
+> I guess you may misunderstand what I meant. This patch is trying to
+> optimize freeing THP in swapcache. But it should be very rare that
+> khugepaged sees THP from swap cache. The only case I could think of is
+> try_to_unmap() in vmscan fails. That might leave THP in swap cache so
+> that khugepaged could see it.
+
+I was trying to show you that how a THP can stay in the swapcache. If it's not
+removed from swapcache via __remove_mapping, not splitted or swapped in before
+it's removed, it will stay in the swapcache. Or am I miss something?
+
+I hope I make my point clear this time. ;)
+
+> 
+> 
+>>
+>>> IIUC. And it is not guaranteed that free_swap_cache() will get the
+>>> page lock.
+>>
+>> IMHO, we're not guaranteed that free_swap_cache() will get the page lock for the normal
+>> page anyway.
+>>
+>> Thanks!
+>>
+>>>
+>>>>         }
+>>>>  }
+>>>>
+>>>> Thanks!
+>>>>
+>>>>>
+>>>>>>         }
+>>>>>>  }
+>>>>>>
+>>>>>> diff --git a/mm/swap.h b/mm/swap.h
+>>>>>> index 0193797b0c92..863f6086c916 100644
+>>>>>> --- a/mm/swap.h
+>>>>>> +++ b/mm/swap.h
+>>>>>> @@ -41,7 +41,6 @@ void __delete_from_swap_cache(struct page *page,
+>>>>>>  void delete_from_swap_cache(struct page *page);
+>>>>>>  void clear_shadow_from_swap_cache(int type, unsigned long begin,
+>>>>>>                                   unsigned long end);
+>>>>>> -void free_swap_cache(struct page *page);
+>>>>>>  struct page *lookup_swap_cache(swp_entry_t entry,
+>>>>>>                                struct vm_area_struct *vma,
+>>>>>>                                unsigned long addr);
+>>>>>> @@ -81,10 +80,6 @@ static inline struct address_space *swap_address_space(swp_entry_t entry)
+>>>>>>         return NULL;
+>>>>>>  }
+>>>>>>
+>>>>>> -static inline void free_swap_cache(struct page *page)
+>>>>>> -{
+>>>>>> -}
+>>>>>> -
+>>>>>>  static inline void show_swap_cache_info(void)
+>>>>>>  {
+>>>>>>  }
+>>>>>> --
+>>>>>> 2.23.0
+>>>>>>
+>>>>>>
+>>>>> .
+>>>>>
+>>>>
+>>> .
+>>>
+>>
+> .
+> 
 

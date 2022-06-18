@@ -2,318 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C34E550218
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3164550221
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383914AbiFRCo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 22:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S1383960AbiFRCp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 22:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiFRCo4 (ORCPT
+        with ESMTP id S1383935AbiFRCpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 22:44:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4CF6A00E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:44:55 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LQ0bP2lY4zjXXr;
-        Sat, 18 Jun 2022 10:43:45 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+        Fri, 17 Jun 2022 22:45:19 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50C76A00E;
+        Fri, 17 Jun 2022 19:45:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eAUSmPFqgsxVnU2k7eUeRJLI7dkq2IkcNECu3YtAPsfUZn5hhW5eShkVg6zB/RRSYaLP2FTt/Pk2ke5FHSiaVpIh7W8F9iBrTgmuUiRTwRtqPiZE0yNSV0j7qmHYGLCF9YFrPZilQPQ1iK0wXtKs806xGep6UUL70QNMALpnu5A2dQtJkE7LkcUYKg64JdJsfSVgQFsTjf3g6vqX7+ZFINicEgLa4B2zFB67NFvyuVVBAQD96m8BvhvsfQf1dk7DDfk7hJiraClP8sOQ9kCBSOMoyZRf1doJDDUykMXktZyiiOjXueWLe+FT/fzcmGG5dOxSV+K26jtW7/idpQ8izw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZNenaDrZYEkFAQHcjYIh7L2D9Wouh6uO2jzRMK+XK/A=;
+ b=R+dmGjLG8lbBGCnHOyOQpV8Tz1VgxEx/2yRV7/l72gXUtXa+AnGwtLG15cm1N4UtywmysH2IwMZysCaWFbKUZ4D17BvPOGi7MR5CcwXTow1MLffWWmlmm1SVe9ZnpStXCu01FvEVvgFNVkBKRSEfWj6CzyQsIz+YW6QuVcLcemaUxNTUC1hX7lTij0LzDP8Lcw6CXTpsBeTII+9D7YIszxfWxQf4zId0RQNZLvAbkQtNLElLen8/JaQGaPR087x8pcAvCtiqu5i0iRfRVlzxWCqjr1c0+snUMZ4zarnDPvk05EA64GUQUkCZWGhqAtmnr3m8gVQIN+4jatHdmepYEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZNenaDrZYEkFAQHcjYIh7L2D9Wouh6uO2jzRMK+XK/A=;
+ b=VgmzpB3NQdsp2FWjxZt0xJbg+gTEw4FBaqW6G7Bh6Mj4BBvROgJ3Ofa8rywByezaORqsvXSkCOHADRexkJ/aDUHZ5doYG/j2uu69CqKb3VGc14mKMo4bSXqKsJXQXdik9hjGaFil0Us05D1EnyNJtTwTMiuB7QpFPBtL4NnCr10=
+Received: from BN7PR06CA0037.namprd06.prod.outlook.com (2603:10b6:408:34::14)
+ by BYAPR02MB4581.namprd02.prod.outlook.com (2603:10b6:a03:55::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Sat, 18 Jun
+ 2022 02:45:16 +0000
+Received: from BN1NAM02FT021.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::d8) by BN7PR06CA0037.outlook.office365.com
+ (2603:10b6:408:34::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13 via Frontend
+ Transport; Sat, 18 Jun 2022 02:45:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT021.mail.protection.outlook.com (10.13.2.73) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Sat, 18 Jun 2022 02:45:16 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 10:44:53 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 10:44:51 +0800
-Message-ID: <b899f2f8-946f-7886-64fb-2a18494218b4@huawei.com>
-Date:   Sat, 18 Jun 2022 10:44:50 +0800
+ 15.1.2176.14; Fri, 17 Jun 2022 19:45:13 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 17 Jun 2022 19:45:13 -0700
+Envelope-to: linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ lorenzo.pieralisi@arm.com,
+ bhelgaas@google.com,
+ robh@kernel.org
+Received: from [10.140.9.2] (port=44908 helo=xhdbharatku40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <bharat.kumar.gogada@xilinx.com>)
+        id 1o2OSN-000FZO-38; Fri, 17 Jun 2022 19:45:03 -0700
+From:   Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
+        <michals@xilinx.com>, <robh@kernel.org>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Subject: [PATCH v5 0/2] Add support for Xilinx Versal CPM5 Root Port
+Date:   Sat, 18 Jun 2022 08:14:57 +0530
+Message-ID: <20220618024459.7554-1-bharat.kumar.gogada@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v5 1/8] arm64: extable: add new extable type
- EX_TYPE_KACCESS_ERR_ZERO support
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-2-tongtiangen@huawei.com>
- <Yqw6Fh+b9hBx9VbB@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yqw6Fh+b9hBx9VbB@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fa8497b8-82e7-49e4-8e73-08da50d4935f
+X-MS-TrafficTypeDiagnostic: BYAPR02MB4581:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB45817DFA67789C0E2A4B3958A5AE9@BYAPR02MB4581.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BbYmFfhG871z9I+TvTar09SbaAje+2Er8pOJcmrAmHdSV30jrH48d3rI7VB+6VwoanT/CA0SzUAy9UR3pQGgGV0LUF801bNtCWvd36KDR7wVlJ4wdAyVu9A3TEwu7Qs1aXK9ikz1zlje6xEMm7wmPXWENjwiZPF9pAfHJGO9afncIimzIQ+DvgOg2HvW6hfh7HtrNoGFEmolV/4L758BCqGebJPx0JBKmrCFmtY5YDQjSVhzaboA1sKiicntFwlduPcq9d3UbpEa9ID8RsaAwunXZ+XNeQlsjiPhTzlDsvVJdakk8faLkUFHtAMv6YEeXUlwMF6RFeBl6HIXsRdg1pAPWUywjthA4xB9+T3IACO/WDQOvn0ehXogIhIaIuB0tmmXDyMQ7BM9sTNISSKjm7Zn3iuvY80LgNDFtaNLnCbI8P6huI52qnP3gyfXkHKvQyfj3A6fzKb5c1XvECwlf7b831GDTYYEWY0vbIkj3ajBAdTjMkrNNyORSvpvZ+gM3w70uuyP/3/9pQf7JZ3n/3dyyk+hmGCpKnYz/Nz+ZwIP5Vhkqar6qM/t1he5ViOD81Jr8jlzIfmICPEI2D5QBANhK0Ukactp4dNPABQ9gNpbRApZoHoETM+hOaPoBdVjmXgtbH3+rXGrvKVIbwemd43TZmv8YyUWt2RaexhlqhK55GlQed9y/nDXSm57W4yIVRmk3XXHgl+F9ZXou7aA5A==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(36840700001)(40470700004)(46966006)(47076005)(186003)(426003)(336012)(7696005)(36860700001)(1076003)(316002)(54906003)(40460700003)(110136005)(36756003)(70586007)(107886003)(8676002)(2616005)(70206006)(4326008)(103116003)(6666004)(2906002)(8936002)(5660300002)(9786002)(83380400001)(82310400005)(356005)(26005)(7636003)(498600001)(4744005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2022 02:45:16.0742
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa8497b8-82e7-49e4-8e73-08da50d4935f
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT021.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4581
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Xilinx Versal Premium series has CPM5 block which supports Root Port
+functioning at Gen5 speed.
+
+Xilinx Versal CPM5 has few changes with existing CPM block.
+- CPM5 has dedicated register space for control and status registers.
+- CPM5 legacy interrupt handling needs additonal register bit
+  to enable and handle legacy interrupts.
+
+Changes in v5:
+- Added of_device_get_match_data to identify CPM version.
 
 
-在 2022/6/17 16:23, Mark Rutland 写道:
-> On Sat, May 28, 2022 at 06:50:49AM +0000, Tong Tiangen wrote:
->> Currently, The extable type EX_TYPE_UACCESS_ERR_ZERO is used by
->> __get/put_kernel_nofault(), but those helpers are not uaccess type, so we
->> add a new extable type EX_TYPE_KACCESS_ERR_ZERO which can be used by
->> __get/put_kernel_no_fault().
->>
->> This is also to prepare for distinguishing the two types in machine check
->> safe process.
->>
->> Suggested-by: Mark Rutland <mark.rutland@arm.com>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> 
-> This looks good to me, so modulo one nit below:
-> 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> 
->> ---
->>   arch/arm64/include/asm/asm-extable.h | 13 ++++
->>   arch/arm64/include/asm/uaccess.h     | 94 ++++++++++++++--------------
->>   arch/arm64/mm/extable.c              |  1 +
->>   3 files changed, 61 insertions(+), 47 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
->> index c39f2437e08e..56ebe183e78b 100644
->> --- a/arch/arm64/include/asm/asm-extable.h
->> +++ b/arch/arm64/include/asm/asm-extable.h
->> @@ -7,6 +7,7 @@
->>   #define EX_TYPE_BPF			2
->>   #define EX_TYPE_UACCESS_ERR_ZERO	3
->>   #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
->> +#define EX_TYPE_KACCESS_ERR_ZERO	5
-> 
-> Could we please renumber this so the UACCESS and KACCESS definitions are next
-> to one another, i.e.
-> 
-> #define EX_TYPE_BPF			2
-> #define EX_TYPE_UACCESS_ERR_ZERO	3
-> #define EX_TYPE_KACCESS_ERR_ZERO	4
-> #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	5
-> 
-> Thanks,
-> Mark.
+Bharat Kumar Gogada (2):
+  dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
+  PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
 
-ok, It's cleaner.
+ .../bindings/pci/xilinx-versal-cpm.yaml       | 48 ++++++++++++--
+ drivers/pci/controller/pcie-xilinx-cpm.c      | 62 ++++++++++++++++++-
+ 2 files changed, 103 insertions(+), 7 deletions(-)
 
-Thanks,
-Tong.
+-- 
+2.17.1
 
-> 
->>   
->>   #ifdef __ASSEMBLY__
->>   
->> @@ -73,9 +74,21 @@
->>   			    EX_DATA_REG(ZERO, zero)			\
->>   			  ")")
->>   
->> +#define _ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, zero)		\
->> +	__DEFINE_ASM_GPR_NUMS						\
->> +	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
->> +			  __stringify(EX_TYPE_KACCESS_ERR_ZERO),	\
->> +			  "("						\
->> +			    EX_DATA_REG(ERR, err) " | "			\
->> +			    EX_DATA_REG(ZERO, zero)			\
->> +			  ")")
->> +
->>   #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)			\
->>   	_ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
->>   
->> +#define _ASM_EXTABLE_KACCESS_ERR(insn, fixup, err)			\
->> +	_ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, wzr)
->> +
->>   #define EX_DATA_REG_DATA_SHIFT	0
->>   #define EX_DATA_REG_DATA	GENMASK(4, 0)
->>   #define EX_DATA_REG_ADDR_SHIFT	5
->> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
->> index 63f9c828f1a7..2fc9f0861769 100644
->> --- a/arch/arm64/include/asm/uaccess.h
->> +++ b/arch/arm64/include/asm/uaccess.h
->> @@ -232,34 +232,34 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
->>    * The "__xxx_error" versions set the third argument to -EFAULT if an error
->>    * occurs, and leave it unchanged on success.
->>    */
->> -#define __get_mem_asm(load, reg, x, addr, err)				\
->> +#define __get_mem_asm(load, reg, x, addr, err, type)			\
->>   	asm volatile(							\
->>   	"1:	" load "	" reg "1, [%2]\n"			\
->>   	"2:\n"								\
->> -	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
->> +	_ASM_EXTABLE_##type##ACCESS_ERR_ZERO(1b, 2b, %w0, %w1)		\
->>   	: "+r" (err), "=&r" (x)						\
->>   	: "r" (addr))
->>   
->> -#define __raw_get_mem(ldr, x, ptr, err)					\
->> -do {									\
->> -	unsigned long __gu_val;						\
->> -	switch (sizeof(*(ptr))) {					\
->> -	case 1:								\
->> -		__get_mem_asm(ldr "b", "%w", __gu_val, (ptr), (err));	\
->> -		break;							\
->> -	case 2:								\
->> -		__get_mem_asm(ldr "h", "%w", __gu_val, (ptr), (err));	\
->> -		break;							\
->> -	case 4:								\
->> -		__get_mem_asm(ldr, "%w", __gu_val, (ptr), (err));	\
->> -		break;							\
->> -	case 8:								\
->> -		__get_mem_asm(ldr, "%x",  __gu_val, (ptr), (err));	\
->> -		break;							\
->> -	default:							\
->> -		BUILD_BUG();						\
->> -	}								\
->> -	(x) = (__force __typeof__(*(ptr)))__gu_val;			\
->> +#define __raw_get_mem(ldr, x, ptr, err, type)					\
->> +do {										\
->> +	unsigned long __gu_val;							\
->> +	switch (sizeof(*(ptr))) {						\
->> +	case 1:									\
->> +		__get_mem_asm(ldr "b", "%w", __gu_val, (ptr), (err), type);	\
->> +		break;								\
->> +	case 2:									\
->> +		__get_mem_asm(ldr "h", "%w", __gu_val, (ptr), (err), type);	\
->> +		break;								\
->> +	case 4:									\
->> +		__get_mem_asm(ldr, "%w", __gu_val, (ptr), (err), type);		\
->> +		break;								\
->> +	case 8:									\
->> +		__get_mem_asm(ldr, "%x",  __gu_val, (ptr), (err), type);	\
->> +		break;								\
->> +	default:								\
->> +		BUILD_BUG();							\
->> +	}									\
->> +	(x) = (__force __typeof__(*(ptr)))__gu_val;				\
->>   } while (0)
->>   
->>   /*
->> @@ -274,7 +274,7 @@ do {									\
->>   	__chk_user_ptr(ptr);						\
->>   									\
->>   	uaccess_ttbr0_enable();						\
->> -	__raw_get_mem("ldtr", __rgu_val, __rgu_ptr, err);		\
->> +	__raw_get_mem("ldtr", __rgu_val, __rgu_ptr, err, U);		\
->>   	uaccess_ttbr0_disable();					\
->>   									\
->>   	(x) = __rgu_val;						\
->> @@ -314,40 +314,40 @@ do {									\
->>   									\
->>   	__uaccess_enable_tco_async();					\
->>   	__raw_get_mem("ldr", *((type *)(__gkn_dst)),			\
->> -		      (__force type *)(__gkn_src), __gkn_err);		\
->> +		      (__force type *)(__gkn_src), __gkn_err, K);	\
->>   	__uaccess_disable_tco_async();					\
->>   									\
->>   	if (unlikely(__gkn_err))					\
->>   		goto err_label;						\
->>   } while (0)
->>   
->> -#define __put_mem_asm(store, reg, x, addr, err)				\
->> +#define __put_mem_asm(store, reg, x, addr, err, type)			\
->>   	asm volatile(							\
->>   	"1:	" store "	" reg "1, [%2]\n"			\
->>   	"2:\n"								\
->> -	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
->> +	_ASM_EXTABLE_##type##ACCESS_ERR(1b, 2b, %w0)			\
->>   	: "+r" (err)							\
->>   	: "r" (x), "r" (addr))
->>   
->> -#define __raw_put_mem(str, x, ptr, err)					\
->> -do {									\
->> -	__typeof__(*(ptr)) __pu_val = (x);				\
->> -	switch (sizeof(*(ptr))) {					\
->> -	case 1:								\
->> -		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err));	\
->> -		break;							\
->> -	case 2:								\
->> -		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err));	\
->> -		break;							\
->> -	case 4:								\
->> -		__put_mem_asm(str, "%w", __pu_val, (ptr), (err));	\
->> -		break;							\
->> -	case 8:								\
->> -		__put_mem_asm(str, "%x", __pu_val, (ptr), (err));	\
->> -		break;							\
->> -	default:							\
->> -		BUILD_BUG();						\
->> -	}								\
->> +#define __raw_put_mem(str, x, ptr, err, type)					\
->> +do {										\
->> +	__typeof__(*(ptr)) __pu_val = (x);					\
->> +	switch (sizeof(*(ptr))) {						\
->> +	case 1:									\
->> +		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err), type);	\
->> +		break;								\
->> +	case 2:									\
->> +		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err), type);	\
->> +		break;								\
->> +	case 4:									\
->> +		__put_mem_asm(str, "%w", __pu_val, (ptr), (err), type);		\
->> +		break;								\
->> +	case 8:									\
->> +		__put_mem_asm(str, "%x", __pu_val, (ptr), (err), type);		\
->> +		break;								\
->> +	default:								\
->> +		BUILD_BUG();							\
->> +	}									\
->>   } while (0)
->>   
->>   /*
->> @@ -362,7 +362,7 @@ do {									\
->>   	__chk_user_ptr(__rpu_ptr);					\
->>   									\
->>   	uaccess_ttbr0_enable();						\
->> -	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err);		\
->> +	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err, U);		\
->>   	uaccess_ttbr0_disable();					\
->>   } while (0)
->>   
->> @@ -400,7 +400,7 @@ do {									\
->>   									\
->>   	__uaccess_enable_tco_async();					\
->>   	__raw_put_mem("str", *((type *)(__pkn_src)),			\
->> -		      (__force type *)(__pkn_dst), __pkn_err);		\
->> +		      (__force type *)(__pkn_dst), __pkn_err, K);	\
->>   	__uaccess_disable_tco_async();					\
->>   									\
->>   	if (unlikely(__pkn_err))					\
->> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
->> index 489455309695..056591e5ca80 100644
->> --- a/arch/arm64/mm/extable.c
->> +++ b/arch/arm64/mm/extable.c
->> @@ -77,6 +77,7 @@ bool fixup_exception(struct pt_regs *regs)
->>   	case EX_TYPE_BPF:
->>   		return ex_handler_bpf(ex, regs);
->>   	case EX_TYPE_UACCESS_ERR_ZERO:
->> +	case EX_TYPE_KACCESS_ERR_ZERO:
->>   		return ex_handler_uaccess_err_zero(ex, regs);
->>   	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
->>   		return ex_handler_load_unaligned_zeropad(ex, regs);
->> -- 
->> 2.25.1
->>
-> 
-> .

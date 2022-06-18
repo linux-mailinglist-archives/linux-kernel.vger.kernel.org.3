@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AC35503CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB415503D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiFRJFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S232869AbiFRJFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiFRJEq (ORCPT
+        with ESMTP id S233087AbiFRJFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:04:46 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C8533A2A;
-        Sat, 18 Jun 2022 02:04:45 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id fd6so6216939edb.5;
-        Sat, 18 Jun 2022 02:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=Ui+mLR6kyF0wdfzo/EcLDO7dPFVHC367yFF81zcZVnY=;
-        b=XAuH02T5EIzLRo+0Emlpfbzofq9bEc3nwEmEHXtoMyhPmdUq3151bfVU2WDu4nEYSQ
-         htsj25WWdmJOAZ4SYEVDVCV8auPzn9wKR0b6SdmFi9X3YA2ZV3TqXuWpwyam2YWfNB+u
-         YVkwHR/UnRMvfpAiybtg6mkzTx2uOP28by+Driy4oO77l6OfBq8pWFCaSWBNS+xl2FT8
-         UXdtm9ifjZxCkPuhTBuIqJi9xPayl0pOE/o5vaDazBPpvWaqzLF5ON2gSW77gQqfmcrA
-         7JS4XKKzPhKxHJadVjt/QjSqtBk6w388kEElbMlRHplGJmsob+Flc8AMOPA1uUzn9vJX
-         qUtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ui+mLR6kyF0wdfzo/EcLDO7dPFVHC367yFF81zcZVnY=;
-        b=JPE1xqB78Ieg4e00PD+4yy4gOAWqrlFNgSkXJ5COfF/50JCm+IpFobwyeXa6QBJfOw
-         o5C7zWT2ice+aXcvScC2qXKNGMaOyQtf8MQ4CTFGd3ZGZQiuOAcfhhu9QCXMXYEqapco
-         tQaVVqVdkQzfZyJCUHcqnH6hztaUe8SH8xCxK9dsOrsYbLu0goJ6PGYesoKa/PLfCIk0
-         IgNSk6Njgn1JRjo5Zui0cbxeU9b5bZmZJzsyqi2K33d+8xCh8G+yd2eN19YkP6EPlj1a
-         EeEUo1ozLLOkfjLCRyP8aGkjyEzIBH40KdinO4XPXPJOZ5p06QhUcasOGJa2UW4o5t0l
-         Ug/A==
-X-Gm-Message-State: AJIora+sdJ2Y7UCOdgcMNYVCS8n/qQi65V5T00mAcx1gWFPRzNgCJdqs
-        /YFg3DmrkxL4J/adUNR967k=
-X-Google-Smtp-Source: AGRyM1vHof1f/pHCzJetgr+4SQaiNH0PuIx3ZwW5OBZY15U+SDAD1SQz9uAvNJZzVn/mNc7fWqHZKg==
-X-Received: by 2002:a05:6402:31f6:b0:435:5a08:d5e0 with SMTP id dy22-20020a05640231f600b004355a08d5e0mr11206339edb.308.1655543083854;
-        Sat, 18 Jun 2022 02:04:43 -0700 (PDT)
-Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id 27-20020a170906329b00b006fec3b2e4f3sm3146272ejw.205.2022.06.18.02.04.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 02:04:42 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [RFC PATCH v2 3/3] btrfs: Use kmap_local_page() on "in_page" in zlib_compress_pages()
-Date:   Sat, 18 Jun 2022 11:04:41 +0200
-Message-ID: <2057523.KlZ2vcFHjT@opensuse>
-In-Reply-To: <94f8d618-ec7a-f68e-c302-2639ae3d7549@gmx.com>
-References: <20220617120538.18091-1-fmdefrancesco@gmail.com> <14654011.tv2OnDr8pf@opensuse> <94f8d618-ec7a-f68e-c302-2639ae3d7549@gmx.com>
+        Sat, 18 Jun 2022 05:05:30 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F055F313BA
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:05:28 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LQ91R3zkmzhYWw;
+        Sat, 18 Jun 2022 17:03:23 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 18 Jun
+ 2022 17:05:25 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] mm/madvise: minor cleanup for swapin_walk_pmd_entry()
+Date:   Sat, 18 Jun 2022 17:05:27 +0800
+Message-ID: <20220618090527.37843-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sabato 18 giugno 2022 00:16:15 CEST Qu Wenruo wrote:
-> 
-> On 2022/6/18 02:13, Fabio M. De Francesco wrote:
+Passing index to pte_offset_map_lock() directly so the below calculation
+can be avoided. Rename orig_pte to ptep as it's not changed. Also use
+helper is_swap_pte() to improve the readability. No functional change
+intended.
 
-[snip]
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/madvise.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> 
-> Thanks for pointing to the doc, and that doc is enough to answer my
-> question.
-> 
-
-Well, this confirms that my changes were quite helpful :-)
-
-[snip]
-
-> > As I said in a recent email, I'm relatively new to kernel development,
-> > especially to Btrfs and other filesystems.
-> 
-> That's not a big deal, that's why we're here to provide help.
-> 
-> >
-> > However, I noted that this code does different handling depending 
-> > on how many "in_page" is going to map. I am not able to say why...
-> 
-> AFAIK the reason is optimization.
-> 
-> The idea is like this, if there are multiple pages left as input, we
-> copy the pages from page cache into the workspace buffer.
-> 
-> If there is no more than one page left, we use that page from page cache
-> directly.
-> 
-> I believe that's the problem causing the difficult in converting to
-> kmap_local_page().
-> 
-
-[snip]
-
-> 
-> I'll send out a cleanup for zlib_compress_pages(), mostly to make the
-> (strm.avail_in == 0) branch to call kmap() and kunmap() in pairs,
-> without holding @in_page mapped.
-> 
-> Would that make it easier?
-> 
-
-I was doubtful when you asked this question. However, when this morning I 
-saw your patch, I soon understood that it would make that task so easy that 
-a silly script could do a mechanical conversion.
-
-Thanks so much,
-
-Fabio
-
-
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 7a8af04069b3..cf49e123991c 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -195,7 +195,7 @@ static int madvise_update_vma(struct vm_area_struct *vma,
+ static int swapin_walk_pmd_entry(pmd_t *pmd, unsigned long start,
+ 	unsigned long end, struct mm_walk *walk)
+ {
+-	pte_t *orig_pte;
++	pte_t *ptep;
+ 	struct vm_area_struct *vma = walk->private;
+ 	unsigned long index;
+ 	struct swap_iocb *splug = NULL;
+@@ -209,11 +209,11 @@ static int swapin_walk_pmd_entry(pmd_t *pmd, unsigned long start,
+ 		struct page *page;
+ 		spinlock_t *ptl;
+ 
+-		orig_pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+-		pte = *(orig_pte + ((index - start) / PAGE_SIZE));
+-		pte_unmap_unlock(orig_pte, ptl);
++		ptep = pte_offset_map_lock(vma->vm_mm, pmd, index, &ptl);
++		pte = *ptep;
++		pte_unmap_unlock(ptep, ptl);
+ 
+-		if (pte_present(pte) || pte_none(pte))
++		if (!is_swap_pte(pte))
+ 			continue;
+ 		entry = pte_to_swp_entry(pte);
+ 		if (unlikely(non_swap_entry(entry)))
+-- 
+2.23.0
 

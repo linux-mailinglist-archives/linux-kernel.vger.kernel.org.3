@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7729550292
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4E9550294
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237550AbiFRDsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 23:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S237033AbiFRDxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 23:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiFRDsG (ORCPT
+        with ESMTP id S229624AbiFRDxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 23:48:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E6D100
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 20:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655524084; x=1687060084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c2/bChhlGUN/a5GslaOVRTsrbylKOy8WCyHjDcJAEA0=;
-  b=hwo30KZ211E9K6yRFI3u/wSeon6L9AbtleHAdYU7fnWQo9oOqBH+ZGtO
-   2le7Elx4+i03tl58GfVOOQ8hIdocNrQ7ZbTv9QRGdJ4y2EuP0fdNNixea
-   Z6AbmQZT1mBEKufyqNdtauGsCAxPa2FcaOQEK3bsvGYTsm8woZdlSx8yU
-   S1Ue+9eIJJPVuDaqnbN/wQXAqCgd1t/GfytTKvfZQij8GsY060QLDOWq3
-   KZHGT2ifTeWT3yYsuW/5qErg/U/r1DvWYskmE4VSzGu6PtbpYa8+SpF9/
-   N+VlcaNC6cpTmKU4iqiLPzsOun7rNYynOM4vhCUKDhN7xQZeMIj7cCkBf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279661379"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="279661379"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 20:48:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="653877644"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jun 2022 20:48:03 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2PRL-000PzP-13;
-        Sat, 18 Jun 2022 03:48:03 +0000
-Date:   Sat, 18 Jun 2022 11:47:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [alobakin:bitops 7/7] include/linux/compiler_types.h:352:45: error:
- call to '__compiletime_assert_190' declared with attribute error:
- BUILD_BUG_ON failed: !__builtin_constant_p(res)
-Message-ID: <202206181146.iHEyLl9X-lkp@intel.com>
+        Fri, 17 Jun 2022 23:53:06 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A25FA13F65
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 20:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=B5LgJ
+        wZ+mPjWqyMswOQulY2y3abQQoRCtFlG8faFEGc=; b=HciIVu+Ell31IepjGrn5u
+        YjpWgrElOwmr2apsZpgr2i8vWcESlPeufQOX5cTAQ5/Z4/dIKxLM7aFQpAddXgY3
+        M+mKcE718LFuHLklYMXdJLmciBlDnq3Jt+uCCp7sI3LuypnAm+LJoGA2cNxfsjVi
+        EnQir5HGUqpT83LeERjD5E=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp3 (Coremail) with SMTP id DcmowAA3R5_kS61isxLFDg--.40406S2;
+        Sat, 18 Jun 2022 11:52:06 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        christophe.leroy@csgroup.eu, nick.child@ibm.com, npiggin@gmail.com
+Cc:     windhl@126.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: embedded6xx: Fix refcount leak bug in holly.c
+Date:   Sat, 18 Jun 2022 11:52:04 +0800
+Message-Id: <20220618035204.4057698-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowAA3R5_kS61isxLFDg--.40406S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XFWruF43WryrCr13KrWDtwb_yoWfJrb_Xw
+        n7Aan7Cr4Fqa1DZr1DZ3W3XFW8A3s5Gr4xGrnYqa12v3WfJa13Wr45tFy8uay8WrWYy398
+        Ga1ktFWjkaySyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjksqtUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QckF1pEAOPbAAAAs-
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,74 +52,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alobakin/linux bitops
-head:   9bd39b17ce49d350eed93a031e0da6389067013e
-commit: 9bd39b17ce49d350eed93a031e0da6389067013e [7/7] lib: test_bitmap: add compile-time optimization/evaluations assertions
-config: arc-randconfig-r011-20220618 (https://download.01.org/0day-ci/archive/20220618/202206181146.iHEyLl9X-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/alobakin/linux/commit/9bd39b17ce49d350eed93a031e0da6389067013e
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin bitops
-        git checkout 9bd39b17ce49d350eed93a031e0da6389067013e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+In holly_init_pci(), of_find_node_by_type() will return a node
+pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/powerpc/platforms/embedded6xx/holly.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   lib/test_bitmap.c: In function 'test_bitmap_const_eval':
->> include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert_190' declared with attribute error: BUILD_BUG_ON failed: !__builtin_constant_p(res)
-     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:333:25: note: in definition of macro '__compiletime_assert'
-     333 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
-     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   lib/test_bitmap.c:904:9: note: in expansion of macro 'BUILD_BUG_ON'
-     904 |         BUILD_BUG_ON(!__builtin_constant_p(res));
-         |         ^~~~~~~~~~~~
-
-
-vim +/__compiletime_assert_190 +352 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  338  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  339  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  343   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  344   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  351  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @352  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  
-
-:::::: The code at line 352 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
+diff --git a/arch/powerpc/platforms/embedded6xx/holly.c b/arch/powerpc/platforms/embedded6xx/holly.c
+index 78f2378d9223..a4938505e89a 100644
+--- a/arch/powerpc/platforms/embedded6xx/holly.c
++++ b/arch/powerpc/platforms/embedded6xx/holly.c
+@@ -122,6 +122,7 @@ static void __init holly_init_pci(void)
+ 	np = of_find_node_by_type(NULL, "pci");
+ 	if (np)
+ 		tsi108_setup_pci(np, HOLLY_PCI_CFG_PHYS, 1);
++	of_node_put(np);
+ 
+ 	ppc_md.pci_exclude_device = holly_exclude_device;
+ 	if (ppc_md.progress)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

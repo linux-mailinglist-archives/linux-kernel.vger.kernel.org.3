@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297D55501CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B415501D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 04:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383658AbiFRCAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 22:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S1383776AbiFRCCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 22:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbiFRCAH (ORCPT
+        with ESMTP id S230301AbiFRCCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 22:00:07 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BB859966
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:00:05 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id s37so5533720pfg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 19:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9vWf7hBuaO9v1OHnPsprHq+uO23AnZheoUT3MIHR4+Q=;
-        b=J8vg2GyXWbL7qKgW3l1JGZ4K+sz5iYtw0a0FWcihzOdB39i2CuFQdhL0cILyMPD49D
-         EoNwTLKre6GKMd8w1Oar8Y33lGXeiVG1yDEZFpcr/CXcKJwUnP77I0TKV0XMKMFAolEt
-         gNr8tWC1U/indyKuJmb44tpBEEKNtlYLHZZsWPet86PqGthjXggY/Imt2Tkpkd4f6uvk
-         sHFGSs145gO9Aw/iXEx5bGFhITbLL1Dkw6cYJNzpZZ9KEqAwt3LCZbHhpSChlPU7C9oY
-         9LQo2a4PiZKZrl1t2qxPdeFcpS4d9m65U4rVram45fXIEbphNA9ewgn2qnFsX8iEU0Ip
-         O7dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9vWf7hBuaO9v1OHnPsprHq+uO23AnZheoUT3MIHR4+Q=;
-        b=kFmoUll3x72vIBLAiYPs2mNdihjbet6qeNMYkEbNPNvem0OFbjB6mcqGgUv9G03hco
-         HUM2P5ra8zRkLsG6I6yQ4oOg8HPH5YPRWZr6Ov5VuzOeGj2DgiunWcBp1HRiVyGWM7ml
-         8wqYQeCKOwJKRCuWiAjsjhxn0UAeF+dnzfjkQHiCAl92ZbcDK0pcUKFOMIFZiJid3mQE
-         1suQynh+k+glgX8rb9s4mIVBqkuM1Cqi/YxfVkZ1l38l+OeK2YUljSWfjV7tEVc8hfXc
-         bglhKZuLCEJX9f667Aj4f+lBij3PGGioKaA8CCyyNAkM4oYxwP/zP6MWkXK/LBevIMB6
-         Bvzw==
-X-Gm-Message-State: AJIora8qX2IRgINHJkPy/68fNg7o1AomiJApl+9mORe60lR9UsELxJ6Z
-        3tJ2AqmwHQwf0IXu1gyLUnzCRQ==
-X-Google-Smtp-Source: AGRyM1u576Di/I66uWDptW3RZT/Fxeg5xfKlrmxl63OcZKK2u1JgeWls8YZxU8G4w+MplCdpX/25gQ==
-X-Received: by 2002:a62:1dc7:0:b0:51b:a56e:35c3 with SMTP id d190-20020a621dc7000000b0051ba56e35c3mr13002085pfd.45.1655517605150;
-        Fri, 17 Jun 2022 19:00:05 -0700 (PDT)
-Received: from [172.31.235.92] ([216.9.110.6])
-        by smtp.gmail.com with ESMTPSA id x14-20020a62fb0e000000b0051bb1785286sm4270329pfm.167.2022.06.17.19.00.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 19:00:04 -0700 (PDT)
-Message-ID: <9bf584a1-bab9-33f3-02b6-6b10a7cfb043@linaro.org>
-Date:   Fri, 17 Jun 2022 19:00:01 -0700
+        Fri, 17 Jun 2022 22:02:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1722C6B7F6;
+        Fri, 17 Jun 2022 19:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655517725; x=1687053725;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F+kquDhQYU7e9qwmycTfeZfhwHMfyYFkHaYr7abKEPM=;
+  b=VLdlaQz2R+knU192d67y6qb5Ezj7j1b2dQf5C2ZNbQceMMBWqYDL9xMN
+   jhtaP+DezXbUhyH2eONqqBvdAj8QdSR3oYOx333EYP31eoGvpbqcils0+
+   F23amzVdgrAcwo3rhqUObX+2Yx8wXIbMWiNUZW5BGB6G9dGkZy5vXAaHc
+   D/f+I+/Ie5ZZjyKtGGmcdt1Ja81NQrTd9seBYvNcD+8CF9Wt4drFh7wIg
+   u28BpRQkoM5vfwVX1QyGrU8p7W1GLvEHmCDaiBK76dx90mpKgtpOF6KAj
+   FVRzJOgqyRCD0UV/l/vW/c+jyz9hd6qnlMZnVjxGgh0ep6SED2ba8jGV7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278393422"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="278393422"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 19:02:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="763453615"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jun 2022 19:02:01 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Nmi-000Pvf-W2;
+        Sat, 18 Jun 2022 02:02:00 +0000
+Date:   Sat, 18 Jun 2022 10:01:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [PATCH net-next 18/28] net: fman: Map the base address once
+Message-ID: <202206180959.mgYg6khw-lkp@intel.com>
+References: <20220617203312.3799646-19-sean.anderson@seco.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: starqltechn: add initial device tree
- for starqltechn
-Content-Language: en-US
-To:     Dzmitry Sankouski <dsankouski@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220617110130.2300438-1-dsankouski@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220617110130.2300438-1-dsankouski@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617203312.3799646-19-sean.anderson@seco.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,175 +71,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2022 04:01, Dzmitry Sankouski wrote:
-> New device support - Samsung S9 (SM-G9600) phone
-> What works:
-> - simple framebuffer
-> - storage (both main and sdcard)
-> - ramoops
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
-> Changes for v2:
-> - rebase on Linus's master branch
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../dts/qcom/sdm845-samsung-starqltechn.dts   |  45 ++
->  .../dts/qcom/sdm845-samsung-starqltechn.dtsi  | 448 ++++++++++++++++++
->  3 files changed, 494 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 2f8aec2cc6db..85140db507b6 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -103,6 +103,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-mtp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-enchilada.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-fajita.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-samsung-starqltechn.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-akari.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-akatsuki.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-apollo.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts b/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
-> new file mode 100644
-> index 000000000000..53bb2ebf0061
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
-> @@ -0,0 +1,45 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SDM845 Samsung S9 (SM-G9600) (starqltechn) specific device tree
-> + *
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include "sdm845-samsung-starqltechn.dtsi"
-> +
-> +/ {
-> +	model = "Samsung S9 SM-G9600";
-> +	compatible = "samsung,starqltechn", "qcom,sdm845";
+Hi Sean,
 
-Missing documentation. I guess you should rebase on my series adding
-compatibles for sdm845.
+I love your patch! Perhaps something to improve:
 
-Bjorn, can we get my series merged? It's really more and more DTs
-needing it.
+[auto build test WARNING on net-next/master]
 
-https://lore.kernel.org/all/20220521164550.91115-7-krzysztof.kozlowski@linaro.org/
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-dpaa-Convert-to-phylink/20220618-044003
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4875d94c69d5a4836c4225b51429d277c297aae8
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206180959.mgYg6khw-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/91ca730be8451e814e919382364039413db7e5bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sean-Anderson/net-dpaa-Convert-to-phylink/20220618-044003
+        git checkout 91ca730be8451e814e919382364039413db7e5bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/ethernet/freescale/fman/
 
-> +
-> +	chosen {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +		bootargs = "console=tty1 loglevel=15 clk_ignore_unused PMOS_NO_OUTPUT_REDIRECT";
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This should not be in DTS. Especially debugging stuff... console should
-be selected by stdout-path.
+All warnings (new ones prefixed by >>):
 
-> +		framebuffer: framebuffer@9D400000 {
-
-lowercase addresses everywhere
-
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0x9D400000 0 (2960 * 1440 * 4)>;//2400000
-> +			width = <1440>;
-> +			height = <2960>;
-> +			stride = <(1440 * 4)>;
-> +			format = "a8r8g8b8";
-> +		};
-> +	};
-> +
-> +
-
-Just one blank line.
-
-> +	reserved-memory {
-> +		framebuffer_region@9d400000 {
-> +			reg = <0x0 0x9d400000 0x0 0x02400000>;
-> +			no-map;
-> +		};
-> +
-> +		ramoops@A1300000 {
-
-lowercase hex. In entire file.
-
-> +			compatible = "ramoops";
-> +			reg = <0x0 0xa1300000 0x0 0x100000>;
-> +			record-size = <0x40000>;
-> +			console-size = <0x40000>;
-> +			ftrace-size = <0x40000>;
-> +			pmsg-size = <0x40000>;
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dtsi b/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dtsi
-> new file mode 100644
-> index 000000000000..1d640d88c61a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dtsi
-
-Why do you have DTSI for one DTS?
+   drivers/net/ethernet/freescale/fman/mac.c: In function 'mac_exception':
+   drivers/net/ethernet/freescale/fman/mac.c:48:34: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
+      48 |         struct mac_priv_s       *priv;
+         |                                  ^~~~
+   drivers/net/ethernet/freescale/fman/mac.c: In function 'mac_probe':
+>> drivers/net/ethernet/freescale/fman/mac.c:387:30: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     387 |         mac_dev->vaddr_end = (void *)res->end;
+         |                              ^
 
 
-> @@ -0,0 +1,448 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SDM845 Samsung S9 (SM-G9600) (starqltechn / star2qltechn) common device tree source
-> + *
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include "sdm845.dtsi"
-> +
-> +/ {
-> +	chassis-type = "handset";
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-min-microvolt = <3700000>;
-> +		regulator-max-microvolt = <3700000>;
-> +	};
-> +
-> +	/*
-> +	 * Apparently RPMh does not provide support for PM8998 S4 because it
-> +	 * is always-on; model it as a fixed regulator.
-> +	 */
-> +	vreg_s4a_1p8: pm8998-smps4 {
+vim +387 drivers/net/ethernet/freescale/fman/mac.c
 
-Consistent naming. Please apply all comments from your other patchset...
+   297	
+   298	static int mac_probe(struct platform_device *_of_dev)
+   299	{
+   300		int			 err, i, nph;
+   301		int (*init)(struct mac_device *mac_dev, struct device_node *mac_node);
+   302		struct device		*dev;
+   303		struct device_node	*mac_node, *dev_node;
+   304		struct mac_device	*mac_dev;
+   305		struct platform_device	*of_dev;
+   306		struct resource		*res;
+   307		struct mac_priv_s	*priv;
+   308		u32			 val;
+   309		u8			fman_id;
+   310		phy_interface_t          phy_if;
+   311	
+   312		dev = &_of_dev->dev;
+   313		mac_node = dev->of_node;
+   314		init = of_device_get_match_data(dev);
+   315	
+   316		mac_dev = devm_kzalloc(dev, sizeof(*mac_dev), GFP_KERNEL);
+   317		if (!mac_dev) {
+   318			err = -ENOMEM;
+   319			goto _return;
+   320		}
+   321		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+   322		if (!priv) {
+   323			err = -ENOMEM;
+   324			goto _return;
+   325		}
+   326	
+   327		/* Save private information */
+   328		mac_dev->priv = priv;
+   329		mac_dev->dev = dev;
+   330	
+   331		INIT_LIST_HEAD(&priv->mc_addr_list);
+   332	
+   333		/* Get the FM node */
+   334		dev_node = of_get_parent(mac_node);
+   335		if (!dev_node) {
+   336			dev_err(dev, "of_get_parent(%pOF) failed\n",
+   337				mac_node);
+   338			err = -EINVAL;
+   339			goto _return_of_node_put;
+   340		}
+   341	
+   342		of_dev = of_find_device_by_node(dev_node);
+   343		if (!of_dev) {
+   344			dev_err(dev, "of_find_device_by_node(%pOF) failed\n", dev_node);
+   345			err = -EINVAL;
+   346			goto _return_of_node_put;
+   347		}
+   348	
+   349		/* Get the FMan cell-index */
+   350		err = of_property_read_u32(dev_node, "cell-index", &val);
+   351		if (err) {
+   352			dev_err(dev, "failed to read cell-index for %pOF\n", dev_node);
+   353			err = -EINVAL;
+   354			goto _return_of_node_put;
+   355		}
+   356		/* cell-index 0 => FMan id 1 */
+   357		fman_id = (u8)(val + 1);
+   358	
+   359		priv->fman = fman_bind(&of_dev->dev);
+   360		if (!priv->fman) {
+   361			dev_err(dev, "fman_bind(%pOF) failed\n", dev_node);
+   362			err = -ENODEV;
+   363			goto _return_of_node_put;
+   364		}
+   365	
+   366		of_node_put(dev_node);
+   367	
+   368		/* Get the address of the memory mapped registers */
+   369		res = platform_get_mem_or_io(_of_dev, 0);
+   370		if (!res) {
+   371			dev_err(dev, "could not get registers\n");
+   372			return -EINVAL;
+   373		}
+   374	
+   375		err = devm_request_resource(dev, fman_get_mem_region(priv->fman), res);
+   376		if (err) {
+   377			dev_err_probe(dev, err, "could not request resource\n");
+   378			goto _return_of_node_put;
+   379		}
+   380	
+   381		mac_dev->vaddr = devm_ioremap(dev, res->start, resource_size(res));
+   382		if (!mac_dev->vaddr) {
+   383			dev_err(dev, "devm_ioremap() failed\n");
+   384			err = -EIO;
+   385			goto _return_of_node_put;
+   386		}
+ > 387		mac_dev->vaddr_end = (void *)res->end;
+   388	
+   389		if (!of_device_is_available(mac_node)) {
+   390			err = -ENODEV;
+   391			goto _return_of_node_put;
+   392		}
+   393	
+   394		/* Get the cell-index */
+   395		err = of_property_read_u32(mac_node, "cell-index", &val);
+   396		if (err) {
+   397			dev_err(dev, "failed to read cell-index for %pOF\n", mac_node);
+   398			err = -EINVAL;
+   399			goto _return_of_node_put;
+   400		}
+   401		priv->cell_index = (u8)val;
+   402	
+   403		/* Get the MAC address */
+   404		err = of_get_mac_address(mac_node, mac_dev->addr);
+   405		if (err)
+   406			dev_warn(dev, "of_get_mac_address(%pOF) failed\n", mac_node);
+   407	
+   408		/* Get the port handles */
+   409		nph = of_count_phandle_with_args(mac_node, "fsl,fman-ports", NULL);
+   410		if (unlikely(nph < 0)) {
+   411			dev_err(dev, "of_count_phandle_with_args(%pOF, fsl,fman-ports) failed\n",
+   412				mac_node);
+   413			err = nph;
+   414			goto _return_of_node_put;
+   415		}
+   416	
+   417		if (nph != ARRAY_SIZE(mac_dev->port)) {
+   418			dev_err(dev, "Not supported number of fman-ports handles of mac node %pOF from device tree\n",
+   419				mac_node);
+   420			err = -EINVAL;
+   421			goto _return_of_node_put;
+   422		}
+   423	
+   424		for (i = 0; i < ARRAY_SIZE(mac_dev->port); i++) {
+   425			/* Find the port node */
+   426			dev_node = of_parse_phandle(mac_node, "fsl,fman-ports", i);
+   427			if (!dev_node) {
+   428				dev_err(dev, "of_parse_phandle(%pOF, fsl,fman-ports) failed\n",
+   429					mac_node);
+   430				err = -EINVAL;
+   431				goto _return_of_node_put;
+   432			}
+   433	
+   434			of_dev = of_find_device_by_node(dev_node);
+   435			if (!of_dev) {
+   436				dev_err(dev, "of_find_device_by_node(%pOF) failed\n",
+   437					dev_node);
+   438				err = -EINVAL;
+   439				goto _return_of_node_put;
+   440			}
+   441	
+   442			mac_dev->port[i] = fman_port_bind(&of_dev->dev);
+   443			if (!mac_dev->port[i]) {
+   444				dev_err(dev, "dev_get_drvdata(%pOF) failed\n",
+   445					dev_node);
+   446				err = -EINVAL;
+   447				goto _return_of_node_put;
+   448			}
+   449			of_node_put(dev_node);
+   450		}
+   451	
+   452		/* Get the PHY connection type */
+   453		err = of_get_phy_mode(mac_node, &phy_if);
+   454		if (err) {
+   455			dev_warn(dev,
+   456				 "of_get_phy_mode() for %pOF failed. Defaulting to SGMII\n",
+   457				 mac_node);
+   458			phy_if = PHY_INTERFACE_MODE_SGMII;
+   459		}
+   460		mac_dev->phy_if = phy_if;
+   461	
+   462		priv->speed		= phy2speed[mac_dev->phy_if];
+   463		priv->max_speed		= priv->speed;
+   464		mac_dev->if_support	= DTSEC_SUPPORTED;
+   465		/* We don't support half-duplex in SGMII mode */
+   466		if (mac_dev->phy_if == PHY_INTERFACE_MODE_SGMII)
+   467			mac_dev->if_support &= ~(SUPPORTED_10baseT_Half |
+   468						SUPPORTED_100baseT_Half);
+   469	
+   470		/* Gigabit support (no half-duplex) */
+   471		if (priv->max_speed == 1000)
+   472			mac_dev->if_support |= SUPPORTED_1000baseT_Full;
+   473	
+   474		/* The 10G interface only supports one mode */
+   475		if (mac_dev->phy_if == PHY_INTERFACE_MODE_XGMII)
+   476			mac_dev->if_support = SUPPORTED_10000baseT_Full;
+   477	
+   478		/* Get the rest of the PHY information */
+   479		mac_dev->phy_node = of_parse_phandle(mac_node, "phy-handle", 0);
+   480	
+   481		err = init(mac_dev, mac_node);
+   482		if (err < 0) {
+   483			dev_err(dev, "mac_dev->init() = %d\n", err);
+   484			of_node_put(mac_dev->phy_node);
+   485			goto _return_of_node_put;
+   486		}
+   487	
+   488		/* pause frame autonegotiation enabled */
+   489		mac_dev->autoneg_pause = true;
+   490	
+   491		/* By intializing the values to false, force FMD to enable PAUSE frames
+   492		 * on RX and TX
+   493		 */
+   494		mac_dev->rx_pause_req = true;
+   495		mac_dev->tx_pause_req = true;
+   496		mac_dev->rx_pause_active = false;
+   497		mac_dev->tx_pause_active = false;
+   498		err = fman_set_mac_active_pause(mac_dev, true, true);
+   499		if (err < 0)
+   500			dev_err(dev, "fman_set_mac_active_pause() = %d\n", err);
+   501	
+   502		if (!is_zero_ether_addr(mac_dev->addr))
+   503			dev_info(dev, "FMan MAC address: %pM\n", mac_dev->addr);
+   504	
+   505		priv->eth_dev = dpaa_eth_add_device(fman_id, mac_dev);
+   506		if (IS_ERR(priv->eth_dev)) {
+   507			dev_err(dev, "failed to add Ethernet platform device for MAC %d\n",
+   508				priv->cell_index);
+   509			priv->eth_dev = NULL;
+   510		}
+   511	
+   512		goto _return;
+   513	
+   514	_return_of_node_put:
+   515		of_node_put(dev_node);
+   516	_return:
+   517		return err;
+   518	}
+   519	
 
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vreg_s4a_1p8";
-> +
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +
-> +		vin-supply = <&vph_pwr>;
-> +	};
-> +};
-> +
-> +
-
-One blank line.
-
-> +&apps_rsc {
-> +	pm8998-rpmh-regulators {
-> +		compatible = "qcom,pm8998-rpmh-regulators";
-> +		qcom,pmic-id = "a";
-> +
-
-
-
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

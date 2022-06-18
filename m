@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C995503C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042B35503DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbiFRJ1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S234005AbiFRJ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbiFRJ1v (ORCPT
+        with ESMTP id S233859AbiFRJ2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:27:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BACA20BCA
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:27:50 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LQ9XH59BYzYrnK;
-        Sat, 18 Jun 2022 17:26:39 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 17:27:47 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 17:27:46 +0800
-Message-ID: <a26c74eb-76c2-570a-2f82-503c812dc0f0@huawei.com>
-Date:   Sat, 18 Jun 2022 17:27:45 +0800
+        Sat, 18 Jun 2022 05:28:00 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A42F598;
+        Sat, 18 Jun 2022 02:27:58 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id o10so9023754edi.1;
+        Sat, 18 Jun 2022 02:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zurrbWODzCL1ddkbl6NdnzpZxtPzyETq04wfptwh7DM=;
+        b=c4bHkLgZzc7iiVTDpB9d7SGvdmSsUTaqFyiLR1x9r4firz6ghgHY21dMIaDiVT+zCv
+         cpmnb+O9pdmSpf37NF1LNoia/nXzdhSZUxXgdXEVGHmK7Bk9Gz8vZj7fKTkn18GhwjYL
+         Ng1C1Y1pYDh2yuoENrTDHa8rX/JVEYoHznMtHqARyZU9lmZUvewuu11qCb2HelPxxKIF
+         i3pOMt8FRxRLNSsOzjaynnzZBLVxRzFHr1Feqei/KdPeY1OCA9/N2bj+8qa7dFVX6IO+
+         9RzvVt4oUgQFwWY6nrGgyc7tbI1lwoSmgq/mrKK+Z4SswfwotF9VhZo3KDMMFspJFve2
+         Cm3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zurrbWODzCL1ddkbl6NdnzpZxtPzyETq04wfptwh7DM=;
+        b=7DQjwUaIy93+FjOaeLkW2YjTlwV51TU6E05uyBucBHs6BgLh29FC8E3tYmZbDitHX3
+         pWthoakVr+ENZESVO8Y5yw3FBWFUWlFEJQEYH3/B0piEY7Tij1P81f3mdCdccKavFx3+
+         4CVh7j/hJUGszJmeTF2rJHRlb4yHkNnvhfl9Sro74NzsebH/NJ7gyXlyk4eQ5p0pOi1v
+         P9rWF7g9xqsTjUzHrE+mFQMEndBM3Desw8BKSTORjK31aayODBh6Sik/sAgMOKZ5rvYc
+         YJ3LA9lkHIgYm3GNxOAHDjvmzVhAGKPSR8dlC9WTC/ZuCiwhohFerHaD5yrE3YEFjuEQ
+         0NYA==
+X-Gm-Message-State: AJIora/f9fY8zabSGKqucIhM/jD1UzThu4r04tOMtI9mxDGzy/6CRujJ
+        mDSeqVhoHfPfiwvl/a5mxIs=
+X-Google-Smtp-Source: AGRyM1vaySoCUcHfejjo919kFDCLKXY44az72Sj+FUqoueEwqjp4bX1vsk623z5KlcTRl/T6TAQWnA==
+X-Received: by 2002:a05:6402:e87:b0:435:5dda:9428 with SMTP id h7-20020a0564020e8700b004355dda9428mr9285608eda.6.1655544476984;
+        Sat, 18 Jun 2022 02:27:56 -0700 (PDT)
+Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170906169200b00705976bcd01sm3132209ejd.206.2022.06.18.02.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 02:27:55 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] btrfs: Convert zlib_compress_pages() to use kmap_local_page()
+Date:   Sat, 18 Jun 2022 11:27:52 +0200
+Message-Id: <20220618092752.25153-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v5 7/8] arm64: add uaccess to machine check safe
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-8-tongtiangen@huawei.com>
- <YqxELtYkqQNibHaX@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <YqxELtYkqQNibHaX@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,154 +75,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The use of kmap() is being deprecated in favor of kmap_local_page(). With
+kmap_local_page(), the mapping is per thread, CPU local and not globally
+visible.
 
+Therefore, use kmap_local_page() / kunmap_local() in zlib_compress_pages()
+because in this function the mappings are per thread and are not visible
+in other contexts.
 
-在 2022/6/17 17:06, Mark Rutland 写道:
-> On Sat, May 28, 2022 at 06:50:55AM +0000, Tong Tiangen wrote:
->> If user access fail due to hardware memory error, only the relevant
->> processes are affected, so killing the user process and isolate the
->> error page with hardware memory errors is a more reasonable choice
->> than kernel panic.
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> 
->> ---
->>   arch/arm64/lib/copy_from_user.S | 8 ++++----
->>   arch/arm64/lib/copy_to_user.S   | 8 ++++----
-> 
-> All of these changes are to the *kernel* accesses performed as part of copy
-> to/from user, and have nothing to do with userspace, so it does not make sense
-> to mark these as UACCESS.
+Tested with xfstests on QEMU + KVM 32-bit VM with 4GB of RAM and
+HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
 
-You have a point. so there is no need to modify copy_from/to_user.S in 
-this patch set.
+Cc: Qu Wenruo <wqu@suse.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-> 
-> Do we *actually* need to recover from failues on these accesses? Looking at
-> _copy_from_user(), the kernel will immediately follow this up with a memset()
-> to the same address which will be fatal anyway, so this is only punting the
-> failure for a few instructions.
+This patch builds only on top of
+"[PATCH] btrfs: zlib: refactor how we prepare the input buffer" by Qu Wenruo".
+https://lore.kernel.org/linux-btrfs/d0bfc791b5509df7b9ad44e41ada197d1b3149b3.1655519730.git.wqu@suse.com/
 
-If recovery success, The task will be killed and there will be no 
-subsequent memset().
+ fs/btrfs/zlib.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-> 
-> If we really need to recover from certain accesses to kernel memory we should
-> add a new EX_TYPE_KACCESS_ERR_ZERO_MC or similar, but we need a strong
-> rationale as to why that's useful. As things stand I do not beleive it makes
-> sense for copy to/from user specifically.
-> 
->>   arch/arm64/mm/extable.c         | 8 ++++----
->>   3 files changed, 12 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/arm64/lib/copy_from_user.S b/arch/arm64/lib/copy_from_user.S
->> index 34e317907524..402dd48a4f93 100644
->> --- a/arch/arm64/lib/copy_from_user.S
->> +++ b/arch/arm64/lib/copy_from_user.S
->> @@ -25,7 +25,7 @@
->>   	.endm
->>   
->>   	.macro strb1 reg, ptr, val
->> -	strb \reg, [\ptr], \val
->> +	USER(9998f, strb \reg, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro ldrh1 reg, ptr, val
->> @@ -33,7 +33,7 @@
->>   	.endm
->>   
->>   	.macro strh1 reg, ptr, val
->> -	strh \reg, [\ptr], \val
->> +	USER(9998f, strh \reg, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro ldr1 reg, ptr, val
->> @@ -41,7 +41,7 @@
->>   	.endm
->>   
->>   	.macro str1 reg, ptr, val
->> -	str \reg, [\ptr], \val
->> +	USER(9998f, str \reg, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro ldp1 reg1, reg2, ptr, val
->> @@ -49,7 +49,7 @@
->>   	.endm
->>   
->>   	.macro stp1 reg1, reg2, ptr, val
->> -	stp \reg1, \reg2, [\ptr], \val
->> +	USER(9998f, stp \reg1, \reg2, [\ptr], \val)
->>   	.endm
->>   
->>   end	.req	x5
->> diff --git a/arch/arm64/lib/copy_to_user.S b/arch/arm64/lib/copy_to_user.S
->> index 802231772608..4134bdb3a8b0 100644
->> --- a/arch/arm64/lib/copy_to_user.S
->> +++ b/arch/arm64/lib/copy_to_user.S
->> @@ -20,7 +20,7 @@
->>    *	x0 - bytes not copied
->>    */
->>   	.macro ldrb1 reg, ptr, val
->> -	ldrb  \reg, [\ptr], \val
->> +	USER(9998f, ldrb  \reg, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro strb1 reg, ptr, val
->> @@ -28,7 +28,7 @@
->>   	.endm
->>   
->>   	.macro ldrh1 reg, ptr, val
->> -	ldrh  \reg, [\ptr], \val
->> +	USER(9998f, ldrh  \reg, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro strh1 reg, ptr, val
->> @@ -36,7 +36,7 @@
->>   	.endm
->>   
->>   	.macro ldr1 reg, ptr, val
->> -	ldr \reg, [\ptr], \val
->> +	USER(9998f, ldr \reg, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro str1 reg, ptr, val
->> @@ -44,7 +44,7 @@
->>   	.endm
->>   
->>   	.macro ldp1 reg1, reg2, ptr, val
->> -	ldp \reg1, \reg2, [\ptr], \val
->> +	USER(9998f, ldp \reg1, \reg2, [\ptr], \val)
->>   	.endm
->>   
->>   	.macro stp1 reg1, reg2, ptr, val
->> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
->> index c301dcf6335f..8ca8d9639f9f 100644
->> --- a/arch/arm64/mm/extable.c
->> +++ b/arch/arm64/mm/extable.c
->> @@ -86,10 +86,10 @@ bool fixup_exception_mc(struct pt_regs *regs)
->>   	if (!ex)
->>   		return false;
->>   
->> -	/*
->> -	 * This is not complete, More Machine check safe extable type can
->> -	 * be processed here.
->> -	 */
->> +	switch (ex->type) {
->> +	case EX_TYPE_UACCESS_ERR_ZERO:
->> +		return ex_handler_uaccess_err_zero(ex, regs);
->> +	}
-> 
-> This addition specifically makes sense to me, so can you split this into a separate patch?
+diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
+index 966e17cea981..4496dd30bd71 100644
+--- a/fs/btrfs/zlib.c
++++ b/fs/btrfs/zlib.c
+@@ -160,7 +160,7 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+-	cpage_out = kmap(out_page);
++	cpage_out = kmap_local_page(out_page);
+ 	pages[0] = out_page;
+ 	nr_pages = 1;
+ 
+@@ -198,9 +198,9 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		 * the stream end if required
+ 		 */
+ 		if (workspace->strm.avail_out == 0) {
+-			kunmap(out_page);
++			kunmap_local(cpage_out);
+ 			if (nr_pages == nr_dest_pages) {
+-				out_page = NULL;
++				cpage_out = NULL;
+ 				ret = -E2BIG;
+ 				goto out;
+ 			}
+@@ -209,7 +209,7 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 				ret = -ENOMEM;
+ 				goto out;
+ 			}
+-			cpage_out = kmap(out_page);
++			cpage_out = kmap_local_page(out_page);
+ 			pages[nr_pages] = out_page;
+ 			nr_pages++;
+ 			workspace->strm.avail_out = PAGE_SIZE;
+@@ -236,9 +236,9 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 			goto out;
+ 		} else if (workspace->strm.avail_out == 0) {
+ 			/* get another page for the stream end */
+-			kunmap(out_page);
++			kunmap_local(cpage_out);
+ 			if (nr_pages == nr_dest_pages) {
+-				out_page = NULL;
++				cpage_out = NULL;
+ 				ret = -E2BIG;
+ 				goto out;
+ 			}
+@@ -247,7 +247,7 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 				ret = -ENOMEM;
+ 				goto out;
+ 			}
+-			cpage_out = kmap(out_page);
++			cpage_out = kmap_local_page(out_page);
+ 			pages[nr_pages] = out_page;
+ 			nr_pages++;
+ 			workspace->strm.avail_out = PAGE_SIZE;
+@@ -266,8 +266,8 @@ int zlib_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 	*total_in = workspace->strm.total_in;
+ out:
+ 	*out_pages = nr_pages;
+-	if (out_page)
+-		kunmap(out_page);
++	if (cpage_out)
++		kunmap_local(cpage_out);
+ 	return ret;
+ }
+ 
+-- 
+2.36.1
 
-According to my understanding of the above, only the modification of 
-extable.c is retained.
-
-So what do you mean which part is made into a separate patch?
-
-Thanks,
-Tong.
-> 
-> Thanks,
-> Mark.
-> 
-> .

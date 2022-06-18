@@ -2,78 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C738D550143
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0B2550146
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382433AbiFRARD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 20:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
+        id S1383655AbiFRARN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 20:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236705AbiFRARB (ORCPT
+        with ESMTP id S1383601AbiFRARH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 20:17:01 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED2853C69
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:16:59 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id y16so3953584ili.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tNaquVGK4MANQcU7YIAYS6nMk49CnRDX81BKkL8HJ+o=;
-        b=gfNJLvjT3OOqpTcyZcgjOAX1w1VjWNeZFeqIjJURUXH4jzfd9QnB47rg3YffaSILKZ
-         KYEMIcEE99bqsM/xZcho680yrlpU1NtjSb0WnW8HLbfwI3ksgEPlw+W9U5ClbVDp0sNN
-         PbQROK4lmPrdpupDhTTFhBWfIGg9u91NI9y1I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tNaquVGK4MANQcU7YIAYS6nMk49CnRDX81BKkL8HJ+o=;
-        b=dtCKA7igVK3Cr+7g3HI4dXxPijm0uMiZNIFr5T6p3dXIXCes8BEjai2ZQ9vpXYRAYn
-         QnNKyoWz5CKZsi8X8pd5OsluyiwAzH1i3DpWUI/vrLDjoNWi7IWfJ5wJF9i3h64+vOsN
-         SsIABkOpvfEpzEPo+xJsxlgzMjxWBHTIMstfIXgshiZGxSAIUFlh17Bu4mump4R8g3rh
-         mqrMp1AvPgeU5uAa1LbIpreN98r63G0k06lVXZELzFh3RFLTr49ayffyI2rbU/yWvrbk
-         6yA/vd9yCXEux02N96WBgRt58OAness3Q9wxwfuvByIXou026t97cNdIby3UKoyg/pe4
-         W0jg==
-X-Gm-Message-State: AJIora9Tc7iihtea9GhZFN8PXTD1b2OKfnpr/B+cwYDqhU8kPEGV1xzR
-        3L0yLMNmMjeHyOxo47pHAgjLv9jX3eCgnJWV6TQ=
-X-Google-Smtp-Source: AGRyM1udLa1U/XJ/0dp3P/RTUp3s6a99jY6G/i8nXtLRfQj9Z5zcVZFRu7a043ippur+Fyb0QxRmcg==
-X-Received: by 2002:a92:c242:0:b0:2d1:e04f:43c0 with SMTP id k2-20020a92c242000000b002d1e04f43c0mr6965366ilo.111.1655511419069;
-        Fri, 17 Jun 2022 17:16:59 -0700 (PDT)
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com. [209.85.166.41])
-        by smtp.gmail.com with ESMTPSA id q1-20020a027b01000000b00334748f85easm2832112jac.106.2022.06.17.17.16.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 17:16:58 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id d123so6024790iof.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:16:58 -0700 (PDT)
-X-Received: by 2002:a02:8665:0:b0:335:e259:e54d with SMTP id
- e92-20020a028665000000b00335e259e54dmr4122258jai.184.1655511417885; Fri, 17
- Jun 2022 17:16:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220617164000.v8.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
- <20220617164000.v8.5.Ib62291487a664a65066d18a3e83c5428a6d2cc6c@changeid>
-In-Reply-To: <20220617164000.v8.5.Ib62291487a664a65066d18a3e83c5428a6d2cc6c@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 17 Jun 2022 17:16:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VxO2a0kTXRc29GRpnDsDRqxttnfoTmRN=rttG3+Xn00Q@mail.gmail.com>
-Message-ID: <CAD=FV=VxO2a0kTXRc29GRpnDsDRqxttnfoTmRN=rttG3+Xn00Q@mail.gmail.com>
-Subject: Re: [PATCH v8 5/5] arm64: dts: qcom: sc7180: Add kingoftown dts files
-To:     "Joseph S. Barrera III" <joebar@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 17 Jun 2022 20:17:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4FF53B69
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 17:17:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D591B61E07
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C15C3411B;
+        Sat, 18 Jun 2022 00:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655511426;
+        bh=mQ6sCeUy6FOxrVE8mYNbTCeTuer33JTZLJebEZ49xK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b59T14ApR4yPmtESwEsMKV/lYIqzOfXArbuSQVeoJA1NNQyREWmZZGRGaeKC8iqPF
+         GKgUglCP64qgl3QTA6dcrJctv95VkB4SZvKJ5r+1ulsI0P6im2W2vniEQWQsQ0Rrih
+         w8W64k1K08SUumYzG/bNoh7K9dCnwFe2MVzOD6/4=
+Date:   Fri, 17 Jun 2022 17:17:05 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+0bce0ec817c084f98c56@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ __purge_vmap_area_lazy
+Message-Id: <20220617171705.d669e05c87081dc767191e23@linux-foundation.org>
+In-Reply-To: <000000000000da07e205e19e94cf@google.com>
+References: <000000000000da07e205e19e94cf@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +56,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 16 Jun 2022 23:08:21 -0700 syzbot <syzbot+0bce0ec817c084f98c56@syzkaller.appspotmail.com> wrote:
 
-On Fri, Jun 17, 2022 at 4:40 PM Joseph S. Barrera III
-<joebar@chromium.org> wrote:
->
-> Kingoftown is a trogdor-based board. These dts files are unchanged copies
-> from the downstream Chrome OS 5.4 kernel.
->
-> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    6012273897fe Add linux-next specific files for 20220615
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16d2f608080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b4154677977b1776
+> dashboard link: https://syzkaller.appspot.com/bug?extid=0bce0ec817c084f98c56
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+
+I don't get this.  __purge_vmap_area_lazy() seems to be doing
+everything right wrt its use of free_vmap_area_lock and the
+cond_resched_lock().
+
+It's a shame that the "Preemption disabled at:" thing isn't working. 
+Peter, Thomas: any ideas why this would happen?
+
+Thanks.
+
+
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+0bce0ec817c084f98c56@syzkaller.appspotmail.com
+> 
+> BUG: sleeping function called from invalid context at mm/vmalloc.c:1759
+> BUG: sleeping function called from invalid context at mm/vmalloc.c:1759
+> in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1795, name: kworker/1:2
+> preempt_count: 2, expected: 1
+> RCU nest depth: 0, expected: 0
+> 4 locks held by kworker/1:2/1795:
+>  #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>  #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>  #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+>  #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+>  #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+>  #0: ffff888011864d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+>  #1: ffffc90006c07da8 (drain_vmap_work){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+>  #2: ffffffff8bebb028 (vmap_purge_lock){+.+.}-{3:3}, at: drain_vmap_area_work+0x44/0xe0 mm/vmalloc.c:1781
+>  #3: ffffffff8bebb2f8 (free_vmap_area_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
+>  #3: ffffffff8bebb2f8 (free_vmap_area_lock){+.+.}-{2:2}, at: __cond_resched_lock+0xa6/0xe0 kernel/sched/core.c:8306
+> Preemption disabled at:
+> [<0000000000000000>] 0x0
+> CPU: 1 PID: 1795 Comm: kworker/1:2 Not tainted 5.19.0-rc2-next-20220615-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: events drain_vmap_area_work
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+>  __purge_vmap_area_lazy+0x95c/0x1c50 mm/vmalloc.c:1759
+>  drain_vmap_area_work+0x52/0xe0 mm/vmalloc.c:1782
+>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+>  </TASK>
+> BUG: workqueue leaked lock or atomic: kworker/1:2/0x00000001/1795
+>      last function: drain_vmap_area_work
+> no locks held by kworker/1:2/1795.
+> CPU: 1 PID: 1795 Comm: kworker/1:2 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: events drain_vmap_area_work
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  process_one_work.cold+0x96/0xb8 kernel/workqueue.c:2304
+>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+>  </TASK>
+> BUG: scheduling while atomic: kworker/1:2/1795/0x00000002
+> no locks held by kworker/1:2/1795.
+> Modules linked in:
+> Preemption disabled at:
+> [<0000000000000000>] 0x0
+> 
+> 
 > ---
->
-> (no changes since v7)
->
-> Changes in v7:
-> - Incorporated changes from Stephen's "Simplify!" series.
->
-> Changes in v4:
-> - Fixed description (no downstream bits removed).
-> - Added missing version history.
->
-> Changes in v2:
-> - First inclusion in series.
->
->  arch/arm64/boot/dts/qcom/Makefile             |   2 +
->  .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts |  44 ++++
->  .../dts/qcom/sc7180-trogdor-kingoftown-r1.dts |  17 ++
->  .../dts/qcom/sc7180-trogdor-kingoftown.dtsi   | 220 ++++++++++++++++++
->  4 files changed, 283 insertions(+)
-
-I'm not doing a detailed review, but many of the same comments from
-the pazquel review apply here as well.
-
--Doug
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

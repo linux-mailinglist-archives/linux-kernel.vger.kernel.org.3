@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186A7550343
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 08:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2A6550346
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 08:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbiFRGtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 02:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S231425AbiFRGwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 02:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbiFRGtP (ORCPT
+        with ESMTP id S229604AbiFRGwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 02:49:15 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F146657
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:49:15 -0700 (PDT)
+        Sat, 18 Jun 2022 02:52:36 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E6448313
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1655534954; x=1687070954;
+  t=1655535155; x=1687071155;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=cJlFcpIzoeKzPz93xqBfimQuZjPgKMexkzSIElG5stA=;
-  b=Tqj8powtgdmwW+KRj0zTOX590uQ25DTRtBgs2+Ap7rGBXW6BNLaIUgyD
-   XgOQm5Eh16ZScndtm4oZqyYQiVIV91CV68/p1qdvddYgPS3bCg+Hwi2iM
-   NdsdqnPyD03RH28Ii/QBxuJwSiJX+7I88NBGY2QgHm2GVZ7e1iYI8jwCz
-   MaGRwoDWjGwMSW7Dc2P1iaFhZNOTS8eDpkrMOFZUE31mXjJpMBNLeund1
-   IsHIcjyDARZXZz3T9CLhfbge3duOB7LeSSvs2rbMnTW2pld9d9BpLlFHm
-   6zBEZfo+Ac5dRu+MEbhM+LvZmFBlh/Azi/5R45wh5gWQDKoaWNGSBnCv4
-   w==;
+  bh=8uHQ9MiiAPuzcAYC2a1/X5+Fg5Ls+OxZmIChY7eTPTo=;
+  b=IeA4pbnPdM9in5Sty31gl+g86qDCziajXz6L8wmgPLjz5sUl5BD7+eQM
+   kDSxu8+Hroj8fRTKEGavIb17l79vQ4NAxbYg6wV6SrEWcz6vDMXXzppYG
+   w6vrtD0iEvQ2M2W0ah5MUbkrJSvIQxeCnzGe4WYA72SHdO9YmclT/G/Pa
+   g+Dm5YzLKk3NODQ1B3wE8DKSqwhvliyImVGJ/oB4MKiYhVeWcIWO7VX8/
+   nxy9xoEFUevYufAD2CRElYwomzOv8xK074AOgtgYO63x7Zj+IFxhBKBh9
+   /D6TJqJPADDArGIrFyI7GRu+JsYV81w+E0ViXsOXk3mK0wQYpEiPUA5BT
+   g==;
 X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
-   d="scan'208";a="208360278"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 18 Jun 2022 14:49:12 +0800
-IronPort-SDR: jNXlTByvqZv3nbK/iMjzsRMZxTrplGvT2eTyp1Q5/YOViO3xetGy31hUMkGThgOlGKT8z7r0O0
- 8Q/6TB5CTceydquVPUBwYS3eaecJo4R7HDXQve0IE62h5YcTnVLKL6ovTuROsSImhNeizMq1sA
- uBjBrUaZnAPUVeUA0G+wA1sERI5nNPtKQQCm3bEjuJE3tbuiNuPfs9dB5WI5Y/TrYRTAlYThZn
- 7KYti7MArSE+IfDYkb2VyRvUUPURQmQDUNGbtHcZ2JE8lp7PCmW5t3sFZWoUH5lZbF5WKzauwt
- NA1O4ZJjYhLmO4ITnFcJ4gAb
+   d="scan'208";a="204259541"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 18 Jun 2022 14:52:34 +0800
+IronPort-SDR: MYSFU5FmslppLimdMQk5NMyyBuI3BAs1awINqShTEP89umAH4srJtsrAY2vGHAriIRBxdbws+a
+ AX+jncSKmM6281B8nTWixl63ZawgjF+NYgM3YS99Bhbjd4EB95yknL/Z0N9an9FEkirG69gqo+
+ I6RnGbT7hqfPmzdkYi+eyQ23hFyzPf4xGdLkUyuDnIz6MX2znRzP1U3NuFd+1KA0jl1D2PKRWx
+ /KEpzmuSYriwLjLvVcQBE32vv2ddZYwFTdgnNOXCVLBjEqBJ+vD1CHWFXoGW7ixu6f6NavOMY6
+ 8RFASDcThgrWb04aEW2SNeL4
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Jun 2022 23:07:24 -0700
-IronPort-SDR: trc+H3vkRZmohYEy9D2t0kDWzRQVUdd7oT39bZzUmv1BsBp/5reP7uWGjL2CEi5LSrHaKDblKB
- aFVBTMOJ6IpnFpdzNtK6GdELBQyOW1fgDNzqBlsLxBhnVzcTB8S3tYFzkxovgzAOI0dbIZhfEa
- tHw1R/FWL8WvkjJ5CF+hPUx3rWzzaPvo/jmECkCLrneLbxqe5LwBLWgZITQIlmTZ+SzMItWpl/
- eXaSeujdh97TQrz6zLcBsyDTYYsZKO1PW8770JJfyZ/Fb6j75FHE5rlSCqcvK5wmYFThWaifQM
- eVk=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Jun 2022 23:15:07 -0700
+IronPort-SDR: pi4fgVJl1XcqeikW6TDWrVroUY+lhot7Eu/uMHEFa+6jNmJyhQUvfBy7hUhspPlvb769lLkTxV
+ OTYOomHnFkVUp/FD51qYt9fnc7eW0uQFydOsF1M0Cy6CK337UQXoIU9hg1dnAXjVNk8Gv2JJz8
+ w+AtP+iLpE93fGL+KvNPyzaMJmYs9Skp3cSaHS4ecIy28WUkmuvq1wwP3E6Byvl4LbQ5VPFx8Y
+ QopXfXxR16OAUwpx7p3U9GAxjHZk5Sq0ujj6XB4ZTWePpfz8SpRgDQuZblQchcIuNa0zMWyJ3q
+ 468=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Jun 2022 23:49:14 -0700
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Jun 2022 23:52:33 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LQ62c4wqgz1Rvlx
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:49:12 -0700 (PDT)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LQ66S2SMZz1SVp2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 23:52:32 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -57,28 +57,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1655534951; x=1658126952; bh=cJlFcpIzoeKzPz93xqBfimQuZjPgKMexkzS
-        IElG5stA=; b=OpXI24xkSEAwVND8bZRwnvkumDUdfGisI+1cKjvdhxiDVUM6Ad3
-        BWfpyrbG+drUIN0M7XqAzeifo2nQNuOeo2FWmYCFdqIB9ZTo1OEGWH/m+brrVPxC
-        YMAWcLkOiCs37xNte8Pb1Ocyq0UiPnKPA1OcvbvOP4y9Qg0LxJXQOP5sx2QqZkxL
-        YrfkdkAC/6tA94bheRzPC9sT6UgoaG8nuVlcuiwuPvU06dEki90yGnX5U2E2DXJm
-        CDMnIF3ASiBlQxgfWOUJwhIrUasektvh7FPwMpFp0/UB9uPKo9jo6XV1Teo8FpIr
-        MxPK9qvSU8VCs3UeqZKCFw/1eHIyq+ZumqQ==
+        1655535151; x=1658127152; bh=8uHQ9MiiAPuzcAYC2a1/X5+Fg5Ls+OxZmIC
+        hY7eTPTo=; b=TUpJ7+ebXL/gL11xJaFgaSyqdV1HX0y+gJhPQYh1RWrl/kfOvXD
+        X9ibxuxriilkY06CD6RvqsfDaU9baWmtRaLLutlL5Okvyhqqghh/il1Za4PYSzB2
+        oLDbJKOjPcWcd+eM/vIsmTPugdeDJTQnWlyGSHmLNlL6kzBsfrHuWdPTdfI87BbE
+        8KxQc3vBGATGLW1RmJ+0tPNOuaSZ8dOeFfoXguxKbnKX0QJlAeBZzKTdqYInrQjR
+        foSQI3moOeez0AhxAMYUnKTNdmxT8HvLOMYYhp2OAymPjrn5Ty6sm6ffs/kCwEnn
+        ZJZ6ICx1nhiQcNLL8WXg7pGG2rqK47o+U5g==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6Wijr2LoOlry for <linux-kernel@vger.kernel.org>;
-        Fri, 17 Jun 2022 23:49:11 -0700 (PDT)
+        with ESMTP id 5RvKU32f5pPJ for <linux-kernel@vger.kernel.org>;
+        Fri, 17 Jun 2022 23:52:31 -0700 (PDT)
 Received: from [10.225.163.84] (unknown [10.225.163.84])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LQ62Y4Pwwz1Rvlc;
-        Fri, 17 Jun 2022 23:49:09 -0700 (PDT)
-Message-ID: <c566c15c-0806-3b3f-5b68-071cd552eb33@opensource.wdc.com>
-Date:   Sat, 18 Jun 2022 15:49:08 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LQ66P39qWz1Rvlc;
+        Fri, 17 Jun 2022 23:52:29 -0700 (PDT)
+Message-ID: <f560ca8b-d921-d228-64f0-74e320f8af67@opensource.wdc.com>
+Date:   Sat, 18 Jun 2022 15:52:28 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v4 08/23] ata: libahci_platform: Sanity check the DT child
- nodes number
+Subject: Re: [PATCH v4 12/23] ata: libahci: Extend port-cmd flags set with
+ port capabilities
 Content-Language: en-US
 To:     Serge Semin <fancer.lancer@gmail.com>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -89,14 +89,14 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-9-Sergey.Semin@baikalelectronics.ru>
- <c388835e-3bc1-a69c-82a7-6036c7adec1b@opensource.wdc.com>
- <20220615205328.chwruabvksdbnaex@mobilestation>
- <6d16fe23-012d-39fb-21e5-39ce50f7b03a@opensource.wdc.com>
- <20220617201855.cf64vbhe6wk4hrcu@mobilestation>
+ <20220610081801.11854-13-Sergey.Semin@baikalelectronics.ru>
+ <d06e9910-527e-cfa2-f2df-737fb4799fe5@opensource.wdc.com>
+ <20220615205819.uiqptkqm5qfdvrbj@mobilestation>
+ <903e273a-9dc5-f0df-5391-e96e63318323@opensource.wdc.com>
+ <20220617203100.jg2o7ponolaenf6r@mobilestation>
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital Research
-In-Reply-To: <20220617201855.cf64vbhe6wk4hrcu@mobilestation>
+In-Reply-To: <20220617203100.jg2o7ponolaenf6r@mobilestation>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -109,120 +109,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/22 05:18, Serge Semin wrote:
-> On Thu, Jun 16, 2022 at 09:25:48AM +0900, Damien Le Moal wrote:
->> On 2022/06/16 5:53, Serge Semin wrote:
->>> On Tue, Jun 14, 2022 at 05:23:33PM +0900, Damien Le Moal wrote:
+On 6/18/22 05:31, Serge Semin wrote:
+> On Thu, Jun 16, 2022 at 09:28:18AM +0900, Damien Le Moal wrote:
+>> On 2022/06/16 5:58, Serge Semin wrote:
+>>> On Tue, Jun 14, 2022 at 05:32:41PM +0900, Damien Le Moal wrote:
 >>>> On 6/10/22 17:17, Serge Semin wrote:
->>>>> Having greater than AHCI_MAX_PORTS (32) ports detected isn't that critical
->>>>> from the further AHCI-platform initialization point of view since
->>>>> exceeding the ports upper limit will cause allocating more resources than
->>>>> will be used afterwards. But detecting too many child DT-nodes doesn't
->>>>> seem right since it's very unlikely to have it on an ordinary platform. In
->>>>> accordance with the AHCI specification there can't be more than 32 ports
->>>>> implemented at least due to having the CAP.NP field of 5 bits wide and the
->>>>> PI register of dword size. Thus if such situation is found the DTB must
->>>>> have been corrupted and the data read from it shouldn't be reliable. Let's
->>>>> consider that as an erroneous situation and halt further resources
->>>>> allocation.
+>>>>> Currently not all of the Port-specific capabilities listed in the
+>>>>
+>>>> s/listed/are listed
+>>>>
+>>>>> PORT_CMD-enumeration. Let's extend that set with the Cold Presence
+>>>>> Detection and Mechanical Presence Switch attached to the Port flags [1] so
+>>>>> to closeup the set of the platform-specific port-capabilities flags.  Note
+>>>>> these flags are supposed to be set by the platform firmware if there is
+>>>>> one. Alternatively as we are about to do they can be set by means of the
+>>>>> OF properties.
 >>>>>
->>>>> Note it's logically more correct to have the nports set only after the
->>>>> initialization value is checked for being sane. So while at it let's make
->>>>> sure nports is assigned with a correct value.
+>>>>> While at it replace PORT_IRQ_DEV_ILCK with PORT_IRQ_DMPS and fix the
+>>>>> comment there. In accordance with [2] that IRQ flag is supposed to
+>>>>> indicate the state of the signal coming from the Mechanical Presence
+>>>>> Switch.
+>>>>>
+>>>>> [1] Serial ATA AHCI 1.3.1 Specification, p.27
+>>>>> [2] Serial ATA AHCI 1.3.1 Specification, p.24, p.88
 >>>>>
 >>>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 >>>>> Reviewed-by: Hannes Reinecke <hare@suse.de>
 >>>>>
 >>>>> ---
 >>>>>
->>>>> Changelog v2:
->>>>> - Drop the else word from the child_nodes value checking if-else-if
->>>>>   statement (@Damien) and convert the after-else part into the ternary
->>>>>   operator-based statement.
->>>>>
 >>>>> Changelog v4:
->>>>> - Fix some logical mistakes in the patch log. (@Sergei Shtylyov)
+>>>>> - Fix the DMPS macros name in the patch log. (@Sergei Shtylyov)
 >>>>> ---
->>>>>  drivers/ata/libahci_platform.c | 13 ++++++++++---
->>>>>  1 file changed, 10 insertions(+), 3 deletions(-)
+>>>>>  drivers/ata/ahci.h | 7 ++++++-
+>>>>>  1 file changed, 6 insertions(+), 1 deletion(-)
 >>>>>
->>>>> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
->>>>> index 814804582d1d..8aed7b29c7ab 100644
->>>>> --- a/drivers/ata/libahci_platform.c
->>>>> +++ b/drivers/ata/libahci_platform.c
->>>>> @@ -451,15 +451,22 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
->>>>>  		}
->>>>>  	}
+>>>>> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+>>>>> index 7d834deefeb9..f501531bd1b3 100644
+>>>>> --- a/drivers/ata/ahci.h
+>>>>> +++ b/drivers/ata/ahci.h
+>>>>> @@ -138,7 +138,7 @@ enum {
+>>>>>  	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
 >>>>>  
->>>>> -	hpriv->nports = child_nodes = of_get_child_count(dev->of_node);
->>>>> +	/*
->>>>> +	 * Too many sub-nodes most likely means having something wrong with
->>>>> +	 * the firmware.
->>>>> +	 */
->>>>> +	child_nodes = of_get_child_count(dev->of_node);
->>>>> +	if (child_nodes > AHCI_MAX_PORTS) {
->>>>> +		rc = -EINVAL;
->>>>> +		goto err_out;
->>>>> +	}
+>>>>>  	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
+>>>>> -	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
+>>>>> +	PORT_IRQ_DMPS		= (1 << 7), /* mechanical presence status */
+>>>>>  	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
+>>>>>  	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
+>>>>>  	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
+>>>>> @@ -166,6 +166,8 @@ enum {
+>>>>>  	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
+>>>>>  	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
+>>>>>  	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
+>>>>> +	PORT_CMD_CPD		= (1 << 20), /* Cold Presence Detection */
+>>>>> +	PORT_CMD_MPSP		= (1 << 19), /* Mechanical Presence Switch */
+>>>>>  	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
+>>>>>  	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
+>>>>>  	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
+>>>>> @@ -181,6 +183,9 @@ enum {
+>>>>>  	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
+>>>>>  	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
 >>>>>  
->>>>>  	/*
->>>>>  	 * If no sub-node was found, we still need to set nports to
->>>>>  	 * one in order to be able to use the
->>>>>  	 * ahci_platform_[en|dis]able_[phys|regulators] functions.
->>>>>  	 */
->>>>> -	if (!child_nodes)
->>>>> -		hpriv->nports = 1;
->>>>> +	hpriv->nports = child_nodes ?: 1;
+>>>>> +	PORT_CMD_CAP		= PORT_CMD_HPCP | PORT_CMD_MPSP |
+>>>>> +				  PORT_CMD_CPD | PORT_CMD_ESP | PORT_CMD_FBSCP,
 >>>>
 >>>
->>>> This change is not necessary and makes the code far less easy to read.
+>>>> What is this one for ? A comment above it would be nice.
 >>>
->>> elaborate please. What change? What part of this change makes the code
->>> less easy to read?
+>>> Isn't it obviously inferrable from the definition and the item name?
 >>
 > 
->> You changed:
->>
->> 	if (!child_nodes)
->> 		hpriv->nports = 1;
->>
->> to:
->>
->> 	hpriv->nports = child_nodes ?: 1;
->>
->> That is the same. So the change is not needed in the first place, and worse,
->> makes the code way harder to read for no good reason.
+>> I am guessing from the name. Am I guessing OK ? A comment would still be nice.
+>> Why just these bits ? There are more cap/support indicator bits in that port cmd
+>> bitfield. So why this particular set of bits ? What do they mean all together ?
 > 
-> No, they aren't the same:
-> +	if (!child_nodes)
-> +		hpriv->nports = 1;
-> and
-> +	hpriv->nports = child_nodes ?: 1;
-> aren't equivalent. The equivalent implementation would be:
-> +	if (child_nodes)
-> +		hpriv->nports = child_nodes;
-> +	else
-> +		hpriv->nports = 1;
+> Normally the variable/constant name should be self-content (as the
+> kernel coding style doc states and what the common sense suggests). So
+> the reader could correctly guess its purpose/content/value. In this
+> case PORT_CMD_CAP - means PORT CMD capabilities mask. All of the
+> possible flags have been set in that mask. There are no more
+> capabilities in the PORT CMD register left undeclared. That's why the
+> name is selected the way it is and why I haven't added any comment in
+> here (what the kernel coding style says about the over-commenting the
+> code).
 
-Then use this code. That cryptic C code is hard to read.
+Yes, I understood from the name what it is. What I do NOT understand is
+why all the feature bits are not there. Why this subset only ? A comment
+about that would be nice so that the reason for it is not lost.
 
 > 
-> As I said in the patchlog, hpriv->nports is updated now only if
-> of_get_child_count() returns a valid number of the child nodes,
-> ports, which semantically is more correct. In the previous
-> implementation it was always set to the number of child nodes
-> no matter whether that value was correct or not.
+>>
+>> Sure I can go and read the specs to figure it out. But again, a comment would
+>> avoid readers of the code to have to decrypt all that.
 > 
-> Regarding the ternary operator with omitted operand. Well, it's not
-> that rare beast in the kernel:
-> $ grep -r "?:" kernel/ drivers/ mm/ fs/ block/ | wc -l
-> 699
-> But if you insist in it being not that readable, I can replace it with
-> more bulky if-else statement. Do you?
+> If you still insist on having an additional comment. I can add
+> something like "/* PORT_CMD capabilities mask */". Are you ok with it?
 
-Yes please, use the spelled out if/else. I prefer easy to read code rather
-than loosing time trying to understand that cryptic C syntax, which  I
-actually did not know about.
+That does not help on its own. The macro name says that already. I would
+like a note about why only these features are selected.
 
 > 
 > -Sergey
@@ -232,9 +216,10 @@ actually did not know about.
 >>> -Sergey
 >>>
 >>>>
->>>>>  
->>>>>  	hpriv->phys = devm_kcalloc(dev, hpriv->nports, sizeof(*hpriv->phys), GFP_KERNEL);
->>>>>  	if (!hpriv->phys) {
+>>>>> +
+>>>>>  	/* PORT_FBS bits */
+>>>>>  	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
+>>>>>  	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
 >>>>
 >>>>
 >>>> -- 

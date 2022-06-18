@@ -2,691 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D991550172
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE53550175
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 02:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383585AbiFRAnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 20:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S1383767AbiFRApw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 20:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbiFRAnt (ORCPT
+        with ESMTP id S234931AbiFRApt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 20:43:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5D2633BA;
-        Fri, 17 Jun 2022 17:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655513027; x=1687049027;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=MoNPO6BpePzWHiGLwthbjzetRaaZmzucGqE0OfbBBu0=;
-  b=N9t/bFWzAEZOB8r8c8w6MdTZXQ1ONqNVYVESeWU6klFxRZ7WIJudWl+7
-   mATA0S0NtAikAldkI5myZbdDu60Ge6zn8C+mnKBGCInBxG5rIc+a23qaS
-   B8/4qrTYdhW8G7wbaWaJArStbGtFcu1+RFvXkXCo2bqzorulfgX2wxNUs
-   lkkWcl6IJJHItynF+QzjltfeWqKkYoSTSBjna3HHF+Bi6lh6yJ66rVXkB
-   BGdAr2zo17kgIL0FEANWqqTOUaZB6DrOPO6Gp53NiG9MOrHAusDjnWq9o
-   yBSb9WW2/eE0Z4RN1o/cMVplzsGawLHcha8+sVOM3kv5RtA8xoKksDbhr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260045901"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260045901"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 17:43:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="832248334"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Jun 2022 17:43:46 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 17 Jun 2022 17:43:45 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 17 Jun 2022 17:43:45 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 17 Jun 2022 17:43:45 -0700
+        Fri, 17 Jun 2022 20:45:49 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60041.outbound.protection.outlook.com [40.107.6.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EAA6A065;
+        Fri, 17 Jun 2022 17:45:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dS6e+WvPav8KCCw1EPgKuPl6oX1U9MrUqXiasuNlvR7fC1RUuS0IogvY6L88LIZ+qJekHKCbclhkeD8Ye5dQChQ1LEN5EXsND/NfKfjLt/MmalTaQ9eYbXMMW6Onu007+scXDlWLUD7xwP3Tsi79GnbxJc3SZ7Y++U8+Cr4464vpr8VOR6g0cpuZBWo6ZLi75gSKupD++MsLXxnjroTJw621b+H/4U54a5kcr791Kses32VaYoZtXg82W5qn7x5GVTvbPmm7YBIzIhYARYZ9QJQcNhhkMHWISProyYCIbHT5nQYd8FDBUDRiJLELr5HTSPqn3gtbRPo7G2ErbO+mDQ==
+ b=Oh8ND/P/CLkgEMbfj4xljftkdTzDTaV7eApovdHjytdiL3+DgwKXDp3dlOewTLVjXYonTXkSvAmEjW54I3SGPhPF3FTjebTISbGqxbYpBkXETpxf1I/9yv33Zn9dmUDu7ArIGK+ZOusgy5TkzdR6KnXfjW6msMGNAB+c1FB1BP7lhU6+MW0psU2w9FIMR6PI5g0HT9xjxOgmnZUQDWofI4Q8Wne2Jgi2dAdq1+4huNNiUOy7GLEJEMsDlYuVwUDHeCaboZh7JQEJ4ro5gh+D74rUhOvf9loDuR/zGaaL5k1p7so1yf3p+gKgJA5RSiSP86OZib2dcvsFYIK1NdXW1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NFxKVc9iVjGOQp/9u0Ky5fw7X0g/lRSe11Gmx/mNv8U=;
- b=lPPD7e96y3DwI5c8zuHgBKQpNVTrF4jfygCDs9Ko4+oo3FlnklYD1yKcGId45tIbow8DKkzN1oLG4YB7ZcyZX/a2Hd3y0/UeEeFHvavNdvTlIkbdJJ+PYoWDeGb4V/ml3sRDWIisW8CSinapVwF7z5UF76v0FRjXDnvhNZxR9W+6FVvWQu509tC6cOsxnfAPI52ydULbGlJjNbR4odCPzf2OIMqPfGV9gydJCdcIIiQUkWeUiuEamqt62BGqSirHakQ+Mdg/8mrocMQurU+u9ROU1w1IorRCzZ8AbsmdszGunSf97YH0gFOqUZr09HIJR7f484c9OxKvycHt+NFpiw==
+ bh=2Aqe1YxCNeTJVh4q5W3y3JxePIBlNuF2765uUGh8Ww4=;
+ b=BXEbFdmNOKKMBgiswjIwRefHSE5+HGADFSE4u+USvMoTLQLHy/jsaalfAbkRmAocqijnMP2obBy8p+8Qz2kTtuV8sXzVVSzYOfz6SfqEOWVOKBDH7grzyMa2Jda8vpRRPR5S+xkfNWoA26BmGdl7dUYGxG920sza0uqvLdPYn2AGH7tM5rwTT1RTfaozaRuehz4LcyWC3b5H8sSYO7FLk3Mx5HalsaM1gWTdOK+8TjoW2DL82txtmEOSqoL8CzfXfQleXGkmnosdat+1HAB07LxgeTNupBEX1cGjw+93DAPDPdLkIj3vDmPAQJJTUGu2ICH/ISIRLaBa0afIBKzguQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Aqe1YxCNeTJVh4q5W3y3JxePIBlNuF2765uUGh8Ww4=;
+ b=qVlPwX7z+wGZlGXebaMfCHVb+AsTITPLZpRm5CpkfenQyetiE2eCXC5R798D/dpgNIr+t41CgjHbPRbsVPJDGyY0BM9ABIoiQMpZim4IQQF0XbqW1W+6ycYcRNJkorTbQUS9DFTnDFy4EEOV5oARDCm4ja81PdFIFZTzpI+SGtfKF2/13bixDpB1gSSeqbqDCUisl2UpMn4v88jmbC5uGViVLoXTFhmOPYAh5LLqoNmTotE183sKr+oXBLTc64ckaFHO9R3O2FtjEI95Dgpqv1vQAeSV2+32hVKq2UeUaoyqjEFtXh7VmgGQ7h+MamHZRg+UY2DFtmoU6mCSx4IE6w==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by MWHPR11MB1296.namprd11.prod.outlook.com
- (2603:10b6:300:1d::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Sat, 18 Jun
- 2022 00:43:43 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf%7]) with mapi id 15.20.5332.023; Sat, 18 Jun 2022
- 00:43:37 +0000
-Date:   Fri, 17 Jun 2022 17:43:34 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: RE: [PATCH V11 5/8] cxl/port: Read CDAT table
-Message-ID: <62ad1fb69d742_8920729490@dwillia2-xfh.notmuch>
-References: <20220610202259.3544623-1-ira.weiny@intel.com>
- <20220610202259.3544623-6-ira.weiny@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220610202259.3544623-6-ira.weiny@intel.com>
-X-ClientProxiedBy: MW4PR04CA0340.namprd04.prod.outlook.com
- (2603:10b6:303:8a::15) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AM6PR03MB4182.eurprd03.prod.outlook.com (2603:10a6:20b:9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Sat, 18 Jun
+ 2022 00:45:42 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5353.018; Sat, 18 Jun 2022
+ 00:45:42 +0000
+Subject: Re: [PATCH net-next 25/28] [RFC] net: dpaa: Convert to phylink
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+References: <20220617203312.3799646-1-sean.anderson@seco.com>
+ <20220617203312.3799646-26-sean.anderson@seco.com>
+ <Yqz5wHy9zAQL1ddg@shell.armlinux.org.uk>
+From:   Sean Anderson <sean.anderson@seco.com>
+Message-ID: <dde1fcc4-4ee8-6426-4f1f-43277e88d406@seco.com>
+Date:   Fri, 17 Jun 2022 20:45:38 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+In-Reply-To: <Yqz5wHy9zAQL1ddg@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR19CA0010.namprd19.prod.outlook.com
+ (2603:10b6:208:178::23) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9cb448cf-c330-46a4-29f2-08da50c394ea
-X-MS-TrafficTypeDiagnostic: MWHPR11MB1296:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <MWHPR11MB1296339C78F95187D39C57C0C6AE9@MWHPR11MB1296.namprd11.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 09f35af2-5ad1-4fa6-a7e9-08da50c3df3f
+X-MS-TrafficTypeDiagnostic: AM6PR03MB4182:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR03MB4182A2B8BD1C35EA0E85770296AE9@AM6PR03MB4182.eurprd03.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JFzI5POGhEsL92vmI1lP3Z2SXD4PSWH0FDHnVHXC55xEeik1vXiJxZq1ojRUexFMmmIs2Id50Lw6TdIQtDmNS1AReSdSNN8eTUH1G1XMek/xIGGv59DyD1BuNzE8wRNmT24d0KaIyYJYVlRG1C0ChiMciHQx5padJgVbxG5tEQF28CIxSUQ0XjwfXVR/nOsHIGy5UJqtxXiNTD8iEF1RhUwT+dnPUDOGTwWsgQO/3B+TpdlkhCF5wv5jQzxxpbSC6WrLRf40voNR/dC96+Hm/F0y1jLo9BFSV3+97bxtu4k+2L1G0nZS4gptORIoQHeS/qQ3FWYojrJiPLvdEGv4L3a3xRp6tS5o0cHOivK/FZ+JbbRBi6MN89vhSDmIcW/q0h8wqVO+kR0OtJQl87eLq2plybdKug61FTHsqaBKNPStSa/kD5jZQxyRCMOFjdg6HwMQnkjxDptGuliQaeeern0WYJ1Rou/V5njnMUJ3xA0/Tfvdo4E0RRjXmTSVKZ7FqVy4ptAMrwiXheCSc+tLJqQqYoMVusaHB5gX46fGS9zMY7isRgZTrqUG9SQV0i0sIRhM6mOJsTnTc/zejOQ6EdZFYX5OAfOh/aF21YbVjwmcdHKbJ7rsIMtzN0UnXh7NiHdv3CJTz94wEZg7NBg1jA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(86362001)(38100700002)(5660300002)(9686003)(26005)(6512007)(54906003)(83380400001)(110136005)(30864003)(498600001)(2906002)(8936002)(6666004)(66556008)(6486002)(186003)(6506007)(8676002)(4326008)(316002)(66946007)(82960400001)(66476007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: xfq7KPDdfLVqHBeYy7h1nihQ4ln9yuWzX5obBFL8/tgCOw0IwRrZ6wgUTdgjGHz+1D/reVLNztbYommvoziosD4ViwFuyVBSD/nU5ZRo8fKY/dSWOuMqdUyczkNrLp87Tv8dPGhx7eTdY90f5PncoNte8e2X5oyFjoLMrwt8zb/pb/DFJMFeN5ulOM+jJGCzan4wjEXFfWPfedJRL9gr0EwfhEwCFLun7y81Qs+At2Hn8aj5nN0hp00qBMs5D6wxQ/66dKVJn0hL+4OrKL2ZJHYVfxuL6xw6Yf9Wxd2c8ixc5aGflgXM98tehNJz7xUHKqGUIRtm5wmxGwPBcxyUlsbZJHELq92MV6opPSoYlaSeEZ9ZM48eZD1p6irEHaNG+CPbBXpvWZDKQI82zWUiChafXhU6HhdMcGOEYdcb+icXGAG2bUUmuUdaWG9EwmoWb684zdXbr0ttCX+LG4o+CtOM+7y9Qzz9zIjJFsnSjRJ8JXjXq+dSa4n0ichQv+gSer5dktdmpPi8/nqBv6LSRvupy5GE8b3CNWutSiQmr391rOujKDNISBZPZBkZ7tYa2AO+D/ddxF6h56Ssfkq0eWsrvKTqj2XLBwPYn3LEkHxMKU1D6noUNyd6eBeBQrN5pzuOrmTslJIA16GtKiWvBo5A35KPIBWHCdkBv+SG9kV241bDncBhZSXEhL46Q7fK4ZAk04PBh4/2oTWKqbmiWa8V9pfEHR27PRi2wiUY9UK76uR7Ak8dptgjiddq4rZSDoMrSnFVC3VgT0YpXMj/3Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(498600001)(316002)(26005)(86362001)(6486002)(6512007)(83380400001)(54906003)(6916009)(38350700002)(2906002)(31696002)(38100700002)(36756003)(2616005)(8936002)(66476007)(66556008)(66946007)(8676002)(52116002)(6506007)(44832011)(53546011)(4326008)(6666004)(31686004)(5660300002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PWAQZRICQQLNJIqvGS+VMNP47CA4dUiX+UY/rEj7hwfPOpg9g6wCXAlSwwvD?=
- =?us-ascii?Q?zIHXI/KfgdQeOHXckFWPS8LzVyatvwlqNd46dwgYtGH+4R9v0fsxJlvvnkwK?=
- =?us-ascii?Q?KDsbI4vWRlAmxvWH040ipqbzSbWYWSe3o4oo6L7QPASR6LJpFfNe5I8WXQnT?=
- =?us-ascii?Q?KRiwpvW+7DytZ0uj1uuVejBsOjXqznWGVkILqy2ogIP4LH0iswb23OBpm12R?=
- =?us-ascii?Q?hottAUECf/7HqcH87zuSW1vKUz7DfxmOGtlSV9/31BFmYIq49PdKyik//kjA?=
- =?us-ascii?Q?JNUbW/EloEUydiNs4dU5KQNCse/vBst8LIP+Wi/pDBlRCRpU8l589QE1RUgz?=
- =?us-ascii?Q?EAGkl6cAYoPJuW8adH+8bwyw8P8wG0/PpvamelKvplu8XRkErV4Fjakwq154?=
- =?us-ascii?Q?YBDOcGw0lqRG61uFsX9Tksi7/dbMuxTsBoAz67XM2l8ExJ1oU6q2pQdqsNW/?=
- =?us-ascii?Q?Ju+b36CPqcb9li16Wkg/i/rEpS4FsamGj6bt1Lhzyl9q6FMv+3WMP7NCYR7r?=
- =?us-ascii?Q?hM0ypSZmG4iziWOv1KQ7Vp53RXLVowdnvbX8ql1Wqhhgxf6JRwRxxdKkG9wU?=
- =?us-ascii?Q?KMTOa2O3Y8y2s7QKd5DV7alGGtcEBePYDqBA0MoyGrAiRF9nmqdIQTMbUnz2?=
- =?us-ascii?Q?TfAI+jm1Wpet1WmSBmhFZO2efq+qDtS7iTEgZQAJoC+w2xVCFbuteAMun3sg?=
- =?us-ascii?Q?FjlIZDPFD7Ar5kLRysjXXor3hkxTj/b3iv1kShOIXlu/EpssXSKq2YTHs46Z?=
- =?us-ascii?Q?u6XzwuX6y61qkYLWJRwx6XWGpJNsEAihfHCkLeh1XyguASxTT9M0vlpRCjiZ?=
- =?us-ascii?Q?m5CBMbhSA3ilolgOj5dAXc+XfvDk6vXP03VLYFp9e7Ogc/ty40buwCd8mSMV?=
- =?us-ascii?Q?af2NoEiAroABQpNO3bTPpPnT6ZTnwlGIGDioLNgh+st7CtD5t2+f5TrTSlxS?=
- =?us-ascii?Q?Oh9WCmEPNnHYob34JLUk5fFgmZKOTDEtahFcbuxsvsdKFtC4Syb03tNSq4aI?=
- =?us-ascii?Q?MGi15C4iFqtsLMDWryP62MJjXN1znMUuUtgFNgW3oT+9tA59uqH/3kXx7w2d?=
- =?us-ascii?Q?/fgqF/AmOnb+19ZjbHqii2dtKQQw5Hhssxy+g2zSyVROV+WFsdggZzcNwso7?=
- =?us-ascii?Q?BedSxTWizzXbx8hS6oE1TGzWb5PRaQoNIXHHce7OBzAe4z/2UVThu6qPLts6?=
- =?us-ascii?Q?mFtsMJEOSjgI89rqlYD/8wnB33FIpCLz6LJIQMvg8MJZkNselSAeIIdZZrvq?=
- =?us-ascii?Q?k2LNSD+Mt7l6HY7/kd2MH23jwGhusnjvAbwoqxOWPR28gXQ/T0R2H1aztGwA?=
- =?us-ascii?Q?8Ji7/+aIbRCUxH0k0o6zpm0XMMjhd1iYDErpjun5UcqtI71zxuZIWGMidpw+?=
- =?us-ascii?Q?l4F55QHmGqcSv1Rz3owqLOyKro+cDXosJdT8hTFwINMwlpbiyzhWJ2Q6hy1T?=
- =?us-ascii?Q?wGFz1S3b46G7/IMc3i6exxNSbWY+DohJbABFec/nogV6CqU1JJcQIGN4M5Mf?=
- =?us-ascii?Q?9SvOkSnXnYn8o8oNdqn7zg5uKmd3TvmjaD4ygHAZmKcQr1LzQ0plaLP7Vq1L?=
- =?us-ascii?Q?+FhhyEE3Z1hqu3RpnVt0htl6V0vvZ9JXh3Powmak8E+iiI0KaD0uFxM9OUcL?=
- =?us-ascii?Q?jZRs+WXZVeZgcgYZVdiveL3xTHrxs+62CrWhfhSaAR5+MCF0T4uTabBVfm8E?=
- =?us-ascii?Q?wLRt0beKI/2gHgtzvtmi3zYKPe0L4GYwUWWMoukM3QT1i5Iq5uJpbiIoUQA+?=
- =?us-ascii?Q?FWWwECp6MhnLeo6uRsBzoUhefxSRCt4=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cb448cf-c330-46a4-29f2-08da50c394ea
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1MvWnRtZm9RSUdmRDJPemFRa0RNVkxVYmRlSHBzTExNb3NFalR1K2d5bGZW?=
+ =?utf-8?B?cWhFUGwrbGFJalU4eW01dStjYlNNUjNSczhKeXA5YTUyNDd0MnBFZUJTOFBm?=
+ =?utf-8?B?ME12WUZvbjZoTW12RWM2cHdKeThnai8vQVdmb3JWQ1NqMkgwa0F3eEpWQWI0?=
+ =?utf-8?B?RXlrbFRqTEFHU3dRSXBkeHBYTzhLZTlzOW45WkN0NGxPcktHZStVRjFpRWUr?=
+ =?utf-8?B?THZPUmlQT2hQUDdBUms0cjdjd1J2MDhnZ0p1WExBZFBPTGZmZm5kNmFrTE1t?=
+ =?utf-8?B?U1l4WFcwNGViTG96amhZeDhqNGhGV2JMd3N2ZGp5ZzlzYXpPb0JXazh5d2ta?=
+ =?utf-8?B?SkdzY1VEaUZURjREcE9EbkY2VjljZkFSRkxKL3I0bC9lZzFMbi9MdXVQNGdJ?=
+ =?utf-8?B?K09vSFpLaHRTYnhJcDRmTjFkT1EyZlhUbUM3a09EK2lZU1dlNTF0cXJHN3Bo?=
+ =?utf-8?B?NWtPRnpvM2ExYmlWOGZYSUxBVkdvcGY5SFBYQ3p5RGl2L1ZEUHVKL2lTdTA3?=
+ =?utf-8?B?VGpvcmJSQkVBQURjb3BBOCtubi9zMmN4Z01XZGIrYzdxR1JUZExWS1YrQm5W?=
+ =?utf-8?B?dVFiR1orQW14MHRPczRLN0RXak9zcCsrQStsV2xvWDQ0WTdvSERreFNuRUV2?=
+ =?utf-8?B?V0Q1NFVodmFNaE5HSVd5NXgxK3RVa2Z5V1FGbVVFYkJuTU5PUGxlbHZSSkhD?=
+ =?utf-8?B?Zm9vMW1PT1JTMkx0eHJJeGM3WXRtQWFDMWJ5alBSSXQ3N2tsdFh4UzBSRmNk?=
+ =?utf-8?B?c0ZJQnRUN2FBdlZEeWlPTTRlSTRLK3o5NTdYbGFEaFdna0tVZHhzOW95ZUlD?=
+ =?utf-8?B?Y2tCaWIyK01IYWQ3aFA0bzhkdkJxVHVvYUhSSkhJaEhHTitwSnZPQWxjUnQx?=
+ =?utf-8?B?ZC9vNHJaY0RVWlFYbkRla2pXWnZVVVQ2WXp5MFFhb081MmNnT2lKSmJkZlZ0?=
+ =?utf-8?B?YlJwK1lWTmZHMEI3ZnZqeWNQRi9PWmtGQWtjWHNOYVgyKzZYNG5RajBMdCtP?=
+ =?utf-8?B?Sm5LSG9HeEE4L3RZSmh0WFo0RC8wUkVLVjNpKy8yNWJOY1BMSFYxaFh4elVi?=
+ =?utf-8?B?T0FhVlNJV0VzdXVtdTNXbjZ4NHZRb0dyYllKU09RS2NUMmxTODJXaE5kNFlJ?=
+ =?utf-8?B?Qk02TlFkWTBpUTRWVUVYa2dHMnRwa1dwbG8yRTMybnNhL09PWTBqbThkWHFX?=
+ =?utf-8?B?WHBJWDRsMWZ3SmoyUWVhYWdpa01kU3NxdG9PalBOL1N4NitHWVNkNGJCcFNG?=
+ =?utf-8?B?Z3ZiK0VyVkpqdHByN05hNVRaYWZ3MzFNbGJ6cm5ScVdqdlp4RVl2cWZsVDhW?=
+ =?utf-8?B?SVBaWFp5bmEzMEFZUkJBRXo0enc4SXhIYURqQ1NWVGxVT0E3dThoR0YyWWpM?=
+ =?utf-8?B?L2ZjYTNCOXREWEJzckVuWWFKZGg5NnFkbGw5RFpVUlRFR1p3cHQvanpHSkJO?=
+ =?utf-8?B?WEsrai91YTBqWE5LbWRpQy90UUJVRzBrdnhCQjFGTkZtUHJ4S2tIQWVCa2M0?=
+ =?utf-8?B?TFMwMG94V3l0b2w3RGNxU3k4NVRnSTAyTnZkUUs2MnhFWVZxL2FteEhYZ0RJ?=
+ =?utf-8?B?M21Ba3Z5Y0tjbEh0WTROZjg4bG9ZVmorRjN4bENrVWZzYmQ0SUFCV1lzc3BM?=
+ =?utf-8?B?SGpRSlo3L01PNkJMNW54OUIxUWEwcGtGbGNWQXBKYzF0UUJ3aG1DZ2xFMDNa?=
+ =?utf-8?B?aEdIeTUrWDFydW1rcWYzbmlMcjFoSGE3aGdUc2wrTGlKN2ZwOVBrRnFpM1ls?=
+ =?utf-8?B?SkNqRm5wWGlhU0EyLzFWZnZRSm81eTRuYloxallEdEZQdDdCb09yMCszQjFU?=
+ =?utf-8?B?TE1Sd2M1bjhWRWwxMm4yVFFGNlZ2Y04rc3pXNGdLTFNTbXE1c0Nrd2x1K0I1?=
+ =?utf-8?B?SHFmcnJPejE2L0hCV0JWSjFqWENtZDNKcE5yOGRGWHk5SVJXSVRGYXVvUVZu?=
+ =?utf-8?B?YmJJUXg0QkdlMWJjbFFNVDNITElQRkxHQlRBbmFNNjB2MGpOWWoyeFp6Nld2?=
+ =?utf-8?B?THRya0JlZzZEd09QY1VRRGFKcUhNKzNQLzVkMG1tclAydUZsV2pPcW84Yktm?=
+ =?utf-8?B?Z21kNkVMSS91Q01ERXM0Q0I0Qnc3cE40Yk9qNDc3ZlJSYVhvcllmMytBODJM?=
+ =?utf-8?B?Y2htTkpBa3JPU0tSVE0vQTd1WE9pWnhVYmRDWkR2Mzd6ZEM5UWtJMnNGU1Jk?=
+ =?utf-8?B?MzdKbCtsYnpiUzFrU0tjejFXbUNuWE5zMEt2UXFza25memdlVEpCK2QwM2Fi?=
+ =?utf-8?B?Uk1hcGhUOXZwWUNSb25pdGpXTk0zSmZnWTBIcS9qUVNEakt3MUZUSENTQW9H?=
+ =?utf-8?B?VjFiQXdjRjJUUnRTQzIzaGlVVDM3Nk8yK1l0N3BJSDY0MUxodnRickVYcXdJ?=
+ =?utf-8?Q?UWZq4w7Nb8Pi+NeU=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09f35af2-5ad1-4fa6-a7e9-08da50c3df3f
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2022 00:43:37.5127
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2022 00:45:42.2088
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0BomP1k7AH9e+ZDyb3swQLlc/Ya7GXotdK8OW3Oh79ho07u+eh3tviixhXBbgpkBzcon9nbsD8hKtgXiJLJxk97nZPspbbhfSpp96hLxoaw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1296
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: W1y/0Dh+CpdBFkiYBO6JQUJN6yvuBJIAdFO8HZ4HElAzFHrCKV+qGKV+X96LUUyefcmPTEAGTVFUgaRS31XS5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB4182
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ira.weiny@ wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> The OS will need CDAT data from CXL devices to properly set up
-> interleave sets.  Currently this is supported through a DOE mailbox
-> which supports CDAT.
-> 
-> Search the DOE mailboxes available, query CDAT data, and cache the data
-> for later parsing.
-> 
-> Provide a sysfs binary attribute to allow dumping of the CDAT.
-> 
-> Binary dumping is modeled on /sys/firmware/ACPI/tables/
-> 
-> The ability to dump this table will be very useful for emulation of real
-> devices once they become available as QEMU CXL type 3 device emulation will
-> be able to load this file in.
-> 
-> This does not support table updates at runtime. It will always provide
-> whatever was there when first cached. Handling of table updates can be
-> implemented later.
-> 
-> Finally create a complete list of CDAT defines within cdat.h for code
-> wishing to decode the CDAT table.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes from V10:
-> 	Ben Widawsky
-> 		Failure to find CDAT should be a debug message not error
-> 		Remove reference to cdat_mb from the port object
-> 	Dropped [PATCH V10 5/9] cxl/port: Find a DOE mailbox which supports
-> 		CDAT
-> 		Iterate the mailboxes for the CDAT one each time.
-> 	Define CXL_DOE_TABLE_ACCESS_LAST_ENTRY and add comment about
-> 		it's use.
-> 
-> Changes from V9:
-> 	Add debugging output
-> 	Jonathan Cameron
-> 		Move read_cdat to port probe by using dev_groups for the
-> 		sysfs attributes.  This avoids issues with using devm
-> 		before the driver is loaded while making sure the CDAT
-> 		binary is available.
-> 
-> Changes from V8:
-> 	Fix length print format
-> 	Incorporate feedback from Jonathan
-> 	Move all this to cxl_port which can help support switches when
-> 	the time comes.
-> 
-> Changes from V6:
-> 	Fix issue with devm use
-> 		Move cached cdat data to cxl_dev_state
-> 	Use new pci_doe_submit_task()
-> 	Ensure the aux driver is locked while processing tasks
-> 	Rebased on cxl-pending
-> 
-> Changes from V5:
-> 	Add proper guards around cdat.h
-> 	Split out finding the CDAT DOE mailbox
-> 	Use cxl_cdat to group CDAT data together
-> 	Adjust to use auxiliary_find_device() to find the DOE device
-> 		which supplies the CDAT protocol.
-> 	Rebased to latest
-> 	Remove dev_dbg(length)
-> 	Remove unneeded DOE Table access defines
-> 	Move CXL_DOE_PROTOCOL_TABLE_ACCESS define into this patch where
-> 		it is used
-> 
-> Changes from V4:
-> 	Split this into it's own patch
-> 	Rearchitect this such that the memdev driver calls into the DOE
-> 	driver via the cxl_mem state object.  This allows CDAT data to
-> 	come from any type of cxl_mem object not just PCI DOE.
-> 	Rebase on new struct cxl_dev_state
-> ---
->  drivers/cxl/cdat.h     | 100 ++++++++++++++++++++++++
->  drivers/cxl/core/pci.c | 172 +++++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h      |   3 +
->  drivers/cxl/cxlpci.h   |   1 +
->  drivers/cxl/port.c     |  51 ++++++++++++
->  5 files changed, 327 insertions(+)
->  create mode 100644 drivers/cxl/cdat.h
-> 
-> diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-> new file mode 100644
-> index 000000000000..c6a48ab326bf
-> --- /dev/null
-> +++ b/drivers/cxl/cdat.h
-> @@ -0,0 +1,100 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __CXL_CDAT_H__
-> +#define __CXL_CDAT_H__
-> +
-> +/*
-> + * Coherent Device Attribute table (CDAT)
-> + *
-> + * Specification available from UEFI.org
-> + *
-> + * Whilst CDAT is defined as a single table, the access via DOE maiboxes is
-> + * done one entry at a time, where the first entry is the header.
-> + */
-> +
-> +#define CXL_DOE_TABLE_ACCESS_REQ_CODE		0x000000ff
-> +#define   CXL_DOE_TABLE_ACCESS_REQ_CODE_READ	0
-> +#define CXL_DOE_TABLE_ACCESS_TABLE_TYPE		0x0000ff00
-> +#define   CXL_DOE_TABLE_ACCESS_TABLE_TYPE_CDATA	0
-> +#define CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE	0xffff0000
-> +#define CXL_DOE_TABLE_ACCESS_LAST_ENTRY		0xffff
-> +
-> +/*
-> + * CDAT entries are little endian and are read from PCI config space which
-> + * is also little endian.
-> + * As such, on a big endian system these will have been reversed.
-> + * This prevents us from making easy use of packed structures.
-> + * Style form pci_regs.h
-> + */
-> +
-> +#define CDAT_HEADER_LENGTH_DW 4
-> +#define CDAT_HEADER_LENGTH_BYTES (CDAT_HEADER_LENGTH_DW * sizeof(u32))
-> +#define CDAT_HEADER_DW0_LENGTH		0xffffffff
-> +#define CDAT_HEADER_DW1_REVISION	0x000000ff
-> +#define CDAT_HEADER_DW1_CHECKSUM	0x0000ff00
-> +/* CDAT_HEADER_DW2_RESERVED	*/
-> +#define CDAT_HEADER_DW3_SEQUENCE	0xffffffff
-> +
-> +/* All structures have a common first DW */
-> +#define CDAT_STRUCTURE_DW0_TYPE		0x000000ff
-> +#define   CDAT_STRUCTURE_DW0_TYPE_DSMAS 0
-> +#define   CDAT_STRUCTURE_DW0_TYPE_DSLBIS 1
-> +#define   CDAT_STRUCTURE_DW0_TYPE_DSMSCIS 2
-> +#define   CDAT_STRUCTURE_DW0_TYPE_DSIS 3
-> +#define   CDAT_STRUCTURE_DW0_TYPE_DSEMTS 4
-> +#define   CDAT_STRUCTURE_DW0_TYPE_SSLBIS 5
-> +
-> +#define CDAT_STRUCTURE_DW0_LENGTH	0xffff0000
-> +
-> +/* Device Scoped Memory Affinity Structure */
-> +#define CDAT_DSMAS_DW1_DSMAD_HANDLE	0x000000ff
-> +#define CDAT_DSMAS_DW1_FLAGS		0x0000ff00
-> +#define CDAT_DSMAS_DPA_OFFSET(entry) ((u64)((entry)[3]) << 32 | (entry)[2])
-> +#define CDAT_DSMAS_DPA_LEN(entry) ((u64)((entry)[5]) << 32 | (entry)[4])
-> +#define CDAT_DSMAS_NON_VOLATILE(flags)  ((flags & 0x04) >> 2)
-> +
-> +/* Device Scoped Latency and Bandwidth Information Structure */
-> +#define CDAT_DSLBIS_DW1_HANDLE		0x000000ff
-> +#define CDAT_DSLBIS_DW1_FLAGS		0x0000ff00
-> +#define CDAT_DSLBIS_DW1_DATA_TYPE	0x00ff0000
-> +#define CDAT_DSLBIS_BASE_UNIT(entry) ((u64)((entry)[3]) << 32 | (entry)[2])
-> +#define CDAT_DSLBIS_DW4_ENTRY_0		0x0000ffff
-> +#define CDAT_DSLBIS_DW4_ENTRY_1		0xffff0000
-> +#define CDAT_DSLBIS_DW5_ENTRY_2		0x0000ffff
-> +
-> +/* Device Scoped Memory Side Cache Information Structure */
-> +#define CDAT_DSMSCIS_DW1_HANDLE		0x000000ff
-> +#define CDAT_DSMSCIS_MEMORY_SIDE_CACHE_SIZE(entry) \
-> +	((u64)((entry)[3]) << 32 | (entry)[2])
-> +#define CDAT_DSMSCIS_DW4_MEMORY_SIDE_CACHE_ATTRS 0xffffffff
-> +
-> +/* Device Scoped Initiator Structure */
-> +#define CDAT_DSIS_DW1_FLAGS		0x000000ff
-> +#define CDAT_DSIS_DW1_HANDLE		0x0000ff00
-> +
-> +/* Device Scoped EFI Memory Type Structure */
-> +#define CDAT_DSEMTS_DW1_HANDLE		0x000000ff
-> +#define CDAT_DSEMTS_DW1_EFI_MEMORY_TYPE_ATTR	0x0000ff00
-> +#define CDAT_DSEMTS_DPA_OFFSET(entry)	((u64)((entry)[3]) << 32 | (entry)[2])
-> +#define CDAT_DSEMTS_DPA_LENGTH(entry)	((u64)((entry)[5]) << 32 | (entry)[4])
-> +
-> +/* Switch Scoped Latency and Bandwidth Information Structure */
-> +#define CDAT_SSLBIS_DW1_DATA_TYPE	0x000000ff
-> +#define CDAT_SSLBIS_BASE_UNIT(entry)	((u64)((entry)[3]) << 32 | (entry)[2])
-> +#define CDAT_SSLBIS_ENTRY_PORT_X(entry, i) ((entry)[4 + (i) * 2] & 0x0000ffff)
-> +#define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
-> +#define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
-> +
-> +#define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
-> +
-> +/**
-> + * struct cxl_cdat - CXL CDAT data
-> + *
-> + * @table: cache of CDAT table
-> + * @length: length of cached CDAT table
-> + */
-> +struct cxl_cdat {
-> +	void *table;
-> +	size_t length;
-> +};
-> +
-> +#endif /* !__CXL_CDAT_H__ */
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index c4c99ff7b55e..84dc82f7dff0 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -4,10 +4,12 @@
->  #include <linux/device.h>
->  #include <linux/delay.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-doe.h>
->  #include <cxlpci.h>
->  #include <cxlmem.h>
->  #include <cxl.h>
->  #include "core.h"
-> +#include "cdat.h"
->  
->  /**
->   * DOC: cxl core pci
-> @@ -458,3 +460,173 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm)
->  	return 0;
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, CXL);
-> +
-> +static struct pci_doe_mb *find_cdat_mb(struct device *uport)
-> +{
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	int i;
-> +
-> +	if (!is_cxl_memdev(uport))
-> +		return NULL;
-> +
-> +	cxlmd = to_cxl_memdev(uport);
-> +	cxlds = cxlmd->cxlds;
+Hi Russell,
 
-This feels stuck between 2 worlds. Either cxl_port_probe() needs to do
-the enumeration, or the attribute needs to move to be memdev relative.
-Given that CXL switches are going to also have CDAT data, then the
-former path needs to happen. Yes, cxl_pci still needs to do the vector
-allocation, but it does not need to do the PCI DOE probing.
+Thanks for the quick response.
 
-> +
-> +	for (i = 0; i < cxlds->num_mbs; i++) {
-> +		struct pci_doe_mb *cur = cxlds->doe_mbs[i];
-> +
-> +		if (pci_doe_supports_prot(cur, PCI_DVSEC_VENDOR_ID_CXL,
-> +					  CXL_DOE_PROTOCOL_TABLE_ACCESS))
-> +			return cur;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +#define CDAT_DOE_REQ(entry_handle)					\
-> +	(FIELD_PREP(CXL_DOE_TABLE_ACCESS_REQ_CODE,			\
-> +		    CXL_DOE_TABLE_ACCESS_REQ_CODE_READ) |		\
-> +	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_TABLE_TYPE,			\
-> +		    CXL_DOE_TABLE_ACCESS_TABLE_TYPE_CDATA) |		\
-> +	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE, (entry_handle)))
-> +
-> +static void cxl_doe_task_complete(struct pci_doe_task *task)
-> +{
-> +	complete(task->private);
-> +}
-> +
-> +static int cxl_cdat_get_length(struct device *dev,
-> +			       struct pci_doe_mb *cdat_mb,
-> +			       size_t *length)
-> +{
-> +	u32 cdat_request_pl = CDAT_DOE_REQ(0);
-> +	u32 cdat_response_pl[32];
-> +	DECLARE_COMPLETION_ONSTACK(c);
-> +	struct pci_doe_task task = {
-> +		.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,
-> +		.prot.type = CXL_DOE_PROTOCOL_TABLE_ACCESS,
-> +		.request_pl = &cdat_request_pl,
-> +		.request_pl_sz = sizeof(cdat_request_pl),
-> +		.response_pl = cdat_response_pl,
-> +		.response_pl_sz = sizeof(cdat_response_pl),
-> +		.complete = cxl_doe_task_complete,
-> +		.private = &c,
-> +	};
-> +	int rc = 0;
-> +
-> +	rc = pci_doe_submit_task(cdat_mb, &task);
-> +	if (rc < 0) {
-> +		dev_err(dev, "DOE submit failed: %d", rc);
-> +		return rc;
-> +	}
-> +	wait_for_completion(&c);
-> +
-> +	if (task.rv < 1)
-> +		return -EIO;
-> +
-> +	*length = cdat_response_pl[1];
-> +	dev_dbg(dev, "CDAT length %zu\n", *length);
-> +
-> +	return rc;
-> +}
-> +
-> +static int cxl_cdat_read_table(struct device *dev,
-> +			       struct pci_doe_mb *cdat_mb,
-> +			       struct cxl_cdat *cdat)
-> +{
-> +	size_t length = cdat->length;
-> +	u32 *data = cdat->table;
-> +	int entry_handle = 0;
-> +	int rc = 0;
-> +
-> +	do {
-> +		u32 cdat_request_pl = CDAT_DOE_REQ(entry_handle);
-> +		u32 cdat_response_pl[32];
-> +		DECLARE_COMPLETION_ONSTACK(c);
-> +		struct pci_doe_task task = {
-> +			.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,
-> +			.prot.type = CXL_DOE_PROTOCOL_TABLE_ACCESS,
-> +			.request_pl = &cdat_request_pl,
-> +			.request_pl_sz = sizeof(cdat_request_pl),
-> +			.response_pl = cdat_response_pl,
-> +			.response_pl_sz = sizeof(cdat_response_pl),
-> +			.complete = cxl_doe_task_complete,
-> +			.private = &c,
-> +		};
-> +		size_t entry_dw;
-> +		u32 *entry;
-> +
-> +		rc = pci_doe_submit_task(cdat_mb, &task);
-> +		if (rc < 0) {
-> +			dev_err(dev, "DOE submit failed: %d", rc);
-> +			return rc;
-> +		}
-> +		wait_for_completion(&c);
-> +
-> +		/* Get the CXL table access header entry handle */
-> +		entry_handle = FIELD_GET(CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE,
-> +					 cdat_response_pl[0]);
-> +		entry = cdat_response_pl + 1;
-> +		entry_dw = task.rv / sizeof(u32);
-> +		/* Skip Header */
-> +		entry_dw -= 1;
-> +		entry_dw = min(length / 4, entry_dw);
-> +		memcpy(data, entry, entry_dw * sizeof(u32));
-> +		length -= entry_dw * sizeof(u32);
-> +		data += entry_dw;
-> +
-> +	} while (entry_handle != CXL_DOE_TABLE_ACCESS_LAST_ENTRY);
-> +
-> +	return rc;
-> +}
-> +
-> +/**
-> + * read_cdat_data - Read the CDAT data on this port
-> + * @port: Port to read data from
-> + *
-> + * This call will sleep waiting for responses from the DOE mailbox.
-> + */
-> +void read_cdat_data(struct cxl_port *port)
-> +{
-> +	static struct pci_doe_mb *cdat_mb;
-> +	struct device *dev = &port->dev;
-> +	struct device *uport = port->uport;
-> +	size_t cdat_length;
-> +	int ret;
-> +
-> +	/*
-> +	 * Ensure a reference on the underlying uport device which has the
-> +	 * mailboxes in it
-> +	 */
-> +	get_device(uport);
+On 6/17/22 6:01 PM, Russell King (Oracle) wrote:
+> Hi,
+> 
+> On Fri, Jun 17, 2022 at 04:33:09PM -0400, Sean Anderson wrote:
+>> This converts DPAA to phylink. For the moment, only MEMAC is converted.
+>> This should work with no device tree modifications (including those made in
+>> this series), except for QSGMII (as noted previously).
+>>
+>> One area where I wasn't sure how to do things was regarding when to call
+>> phy_init and phy_power_on. Should that happen when selecting the PCS?
+> 
+> Is this a common serdes PHY that is shared amongst the various PCS? I
+> think from what I understand having read the other patches, it is.
 
-I had written up a long description grumbling about "just in case"
-acquistions of device references, but then I lost that draft.
+Each serdes has multiple lanes. There is a many-to-many relationship between
+lanes and MACs. That is,
 
-So I'll do the shorter response, but give you more homework in the
-process. How / Why is that get_device() needed? What are the guarantees that
-ensure you that the last reference has not been dropped just before that
-call? Hint: what context is this code running?
+- One lane can service multiple MACs (QSGMII)
+- One lane services a single MAC (SGMII, 10GBase-R, etc.)
+- Multiple lanes may be used together (XAUI, HiGig, etc.) (these are not
+   implemented (yet))
 
-> +
-> +	cdat_mb = find_cdat_mb(uport);
-> +	if (!cdat_mb) {
-> +		dev_dbg(dev, "No CDAT mailbox\n");
-> +		goto out;
-> +	}
-> +
-> +	if (cxl_cdat_get_length(dev, cdat_mb, &cdat_length)) {
-> +		dev_dbg(dev, "No CDAT length\n");
-> +		goto out;
-> +	}
-> +
-> +	port->cdat.table = devm_kzalloc(dev, cdat_length, GFP_KERNEL);
-> +	if (!port->cdat.table)
-> +		goto out;
-> +
-> +	port->cdat.length = cdat_length;
-> +	ret = cxl_cdat_read_table(dev, cdat_mb, &port->cdat);
-> +	if (ret) {
-> +		/* Don't leave table data allocated on error */
-> +		devm_kfree(dev, port->cdat.table);
-> +		port->cdat.table = NULL;
-> +		port->cdat.length = 0;
-> +		dev_err(dev, "CDAT data read error\n");
+Each "group" of lanes corresponds to a struct phy. So in each of the above
+scenarios, there would be one phy. Each PCS is a "protocol controller,"
+which also corresponds to a "group" of lanes. Protocol controllers are usually
+in a 1-to-many relationship with lanes (e.g. SGMIIA might be associated with
+Lane A, and QSGMII A might also be associated with Lane A). The only exception
+to this is the B4860 where there are some SGMII protocol controllers which can
+be selected by two lanes (but not at the same time).
 
-Rather than a chatty / ephemeral error message I think this wants some
-indication in userspace, likely the 0-length CDAT binary attribute, so
-that userspace can debug why the kernel is picking sub-optimal QTG ids
-for newly provisioned CXL regions.
+For Ethernet, protocol controller correspond to PCSs. Each MAC has a set of
+PCSs, and an MDIO bus. Traditionally, the address for all PCSs is set to 0.
+This would cause address collisions, so the serdes has to make sure to enable
+only one PCS at once. It does this in pcs_set_mode.
 
-> +	}
-> +
-> +out:
-> +	put_device(uport);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 140dc3278cde..f0f5c24789bc 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -8,6 +8,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/bitops.h>
->  #include <linux/io.h>
-> +#include "cdat.h"
->  
->  /**
->   * DOC: cxl objects
-> @@ -267,6 +268,7 @@ struct cxl_nvdimm {
->   * @component_reg_phys: component register capability base address (optional)
->   * @dead: last ep has been removed, force port re-creation
->   * @depth: How deep this port is relative to the root. depth 0 is the root.
-> + * @cdat: Cached CDAT data
->   */
->  struct cxl_port {
->  	struct device dev;
-> @@ -278,6 +280,7 @@ struct cxl_port {
->  	resource_size_t component_reg_phys;
->  	bool dead;
->  	unsigned int depth;
-> +	struct cxl_cdat cdat;
->  };
->  
->  /**
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index fce1c11729c2..eec597dbe763 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -74,4 +74,5 @@ static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
->  int devm_cxl_port_enumerate_dports(struct cxl_port *port);
->  struct cxl_dev_state;
->  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
-> +void read_cdat_data(struct cxl_port *port);
->  #endif /* __CXL_PCI_H__ */
-> diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
-> index 3cf308f114c4..7881ce66a5de 100644
-> --- a/drivers/cxl/port.c
-> +++ b/drivers/cxl/port.c
-> @@ -49,6 +49,9 @@ static int cxl_port_probe(struct device *dev)
->  	if (IS_ERR(cxlhdm))
->  		return PTR_ERR(cxlhdm);
->  
-> +	/* Cache the data early to ensure is_visible() works */
-> +	read_cdat_data(port);
-> +
->  	if (is_cxl_endpoint(port)) {
->  		struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
->  		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> @@ -78,10 +81,58 @@ static int cxl_port_probe(struct device *dev)
->  	return 0;
->  }
->  
-> +static ssize_t cdat_read(struct file *filp, struct kobject *kobj,
-> +			 struct bin_attribute *bin_attr, char *buf,
-> +			 loff_t offset, size_t count)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct cxl_port *port = to_cxl_port(dev);
-> +
-> +	if (!port->cdat.table)
-> +		return 0;
-> +
-> +	return memory_read_from_buffer(buf, count, &offset,
-> +				       port->cdat.table,
-> +				       port->cdat.length);
-> +}
-> +
-> +static BIN_ATTR_RO(cdat, 0);
+> In which case, initialising the PHY prior to calling phylink_start() and
+> powering down the PHY after phylink_stop() should be sufficient.
 
-This should be BIN_ATTR_ADMIN_RO(), see:
+OK, that sounds reasonable.
 
-3022c6a1b4b7 driver-core: Introduce DEVICE_ATTR_ADMIN_{RO,RW}
+>> Similarly, I wasn't sure where to reconfigure the thresholds in
+>> dpaa_eth_cgr_init. Should happen in link_up? If so, I think we will need
+>> some kind of callback.
+> 
+> Bear in mind that with 1000BASE-X, SGMII, etc, we need the link working
+> in order for the link to come up, so if the serdes PHY hasn't been
+> properly configured for the interface mode, then the link may not come
+> up.
+> 
+> How granular are these threshold configurations? Do they depend on
+> speed? (Note that SGMII operates at a constant speed irrespective of
+> the data rate due to symbol replication, so there shouldn't be a speed
+> component beyond that described by the interface mode, aka
+> phy_interface_t.)
 
-> +
-> +static umode_t cxl_port_bin_attr_is_visible(struct kobject *kobj,
-> +					      struct bin_attribute *attr, int i)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct cxl_port *port = to_cxl_port(dev);
-> +
-> +	if ((attr == &bin_attr_cdat) && port->cdat.table)
-> +		return 0400;
+I believe these thresholds are for e.g. queue depths. So it shouldn't (TM)
+matter what the depth is until the link comes up and we have to receive packets.
+So I guess link up is the place? TBH I'm not terribly familiar with the QMan/BMan
+half of the driver.
 
-Per above change you only need to manage visibility and not permissions,
-also per the comment about the error message in the CDAT table read case
-I think it makes sense to show an empty attribute. Only if the device
-does not claim to have a CDAT should the attribute not be visible.
+>> This has been tested on an LS1046ARDB. Without the serdes enabled,
+>> everything works. With the serdes enabled, everything works but eth3 (aka
+>> MAC6). On that interface, SGMII never completes AN for whatever reason. I
+>> haven't tested the counterfactual (serdes enabled but no phylink). With
+>> managed=phy (e.g. unspecified), I was unable to get the interfaces to come
+>> up at all.
+> 
+> I'm not sure of the level of accurate detail in the above statement,
+> so the following is just to cover all bases...
 
-> +
-> +	return 0;
-> +}
-> +
-> +static struct bin_attribute *cxl_cdat_bin_attributes[] = {
-> +	&bin_attr_cdat,
-> +	NULL,
-> +};
-> +
-> +static struct attribute_group cxl_cdat_attribute_group = {
-> +	.name = "CDAT",
-> +	.bin_attrs = cxl_cdat_bin_attributes,
-> +	.is_bin_visible = cxl_port_bin_attr_is_visible,
-> +};
-> +
-> +static const struct attribute_group *cxl_port_attribute_groups[] = {
-> +	&cxl_cdat_attribute_group,
-> +	NULL,
-> +};
-> +
->  static struct cxl_driver cxl_port_driver = {
->  	.name = "cxl_port",
->  	.probe = cxl_port_probe,
->  	.id = CXL_DEVICE_PORT,
-> +	.drv = {
-> +		.dev_groups = cxl_port_attribute_groups,
-> +	},
->  };
->  
->  module_cxl_driver(cxl_port_driver);
-> -- 
-> 2.35.1
+Just to clarify, I've tested
+
+- Without phylink or serdes (e.g. stop at patch 21 or 24) (works)
+- With phylink but no serdes (e.g. stop at patch 25) (works)
+- With both phylink and serdes (e.g. everything applied) (eth3 broken)
+
+But in this case I think it might be good to investigate e.g. patch 25 reverted.
+
+> It's worth enabling debug in phylink so you can see what's going on -
+> for example, whether the "MAC" (actually PCS today) is reporting that
+> the link came up (via its pcs_get_state() callback.) Also whether
+> phylib is reporting that the PHY is saying that the link is up. That
+> should allow you to identify which part of the system is not
+
+Yes, I've been using the debug prints in phylink extensively as part of
+debugging :)
+
+In this case, I added a debug statement to phylink_resolve printing out
+cur_link_state, link_state.link, and pl->phy_state.link. I could see that
+the phy link state was up and the mac (pcs) state was down. By inspecting
+the PCS's registers, I determined that this was because AN had not completed
+(in particular, the link was up in BMSR). I believe that forcing in-band-status
+(by setting ovr_an_inband) shouldn't be necessary, but I was unable to get a link
+up on any interface without it. In particular, the pre-phylink implementation
+disabled PCS AN only for fixed links (which you can see in patch 23).
+
+> Having looked through your phylink implementation, nothing obviously
+> wrong stands out horribly in terms of how you're using it.
+> 
+> The only issue I've noticed is in dpaa_ioctl(), where you only forward
+> one ioctl command to phylink, whereas there are actually three ioctls
+> for PHY access - SIOCGMIIPHY, SIOCGMIIREG and SIOCSMIIREG. Note that
+> phylink (and phylib) return -EOPNOTSUPP if the ioctl is not appropriate
+> for them to handle. However, note that phylib will handle
+> SIOCSHWTSTAMP.
 > 
 
+Ah, I'll make sure to fix that up.
 
+--Sean

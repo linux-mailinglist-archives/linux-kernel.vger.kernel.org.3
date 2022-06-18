@@ -2,166 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660CF55034D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F75550353
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiFRHBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 03:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S232484AbiFRHLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 03:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiFRHBK (ORCPT
+        with ESMTP id S229755AbiFRHLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 03:01:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB45249FA6
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655535669; x=1687071669;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a5KWv3E6CKzwzMbDpwTVKKaSpCmfaOdt+jeW0HaBjB4=;
-  b=d4K0OsUD6KkqxWRxbEC5fS0SEa5yyZJx3YLvnd99bdUQkRDH+0MrEfpz
-   en4gQxmPMd/MGXaQ1P80EOC0u62UFVkLoffsRHP4AZj0K83t9yFA8cPUF
-   3quHRQzMKlX0hB9RCfAVJvMXmxXi3OEvM6epwQcP6Z6okKKjsjteggeG5
-   KDRy4Yh6wsUC4dQ9fJdKZ5n84CTS5wPWDFb+WZfjTT9EwnP6PcQx1ZD1X
-   GvZ7UlCwyMJCLvcRVc8yB5496pmOd13gKRen9NYGY/aDNTpde2MoAtpSC
-   WzNUu8orJjtPrWgkm+O7eytk0qhEjENn9vkcJAL9xVvZ0EwIohaz+2Ttb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259458274"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="259458274"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 00:01:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="714014498"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jun 2022 00:01:08 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2SSB-000Q6p-C5;
-        Sat, 18 Jun 2022 07:01:07 +0000
-Date:   Sat, 18 Jun 2022 15:00:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 255/261] include/linux/mm.h:1556:29: error:
- conflicting types for 'page_to_section'; have 'long unsigned int(const
- struct page *)'
-Message-ID: <202206181437.AwvGIkuq-lkp@intel.com>
+        Sat, 18 Jun 2022 03:11:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 671E73EBBD
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655536259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3149uVzRocbxaxAqir48oOLcGTAbi4K048Ex/Bn/8OQ=;
+        b=JE2lBkrsRlEIrACpEFnLLo3YFAxPuFKOW4QpZT3uPZBsCLlbTEyXXvRbZLnVFLpKTPHAqI
+        XWudfjlAg3DxCwbic78Wx9SwN3GM6kPawoYZbtTWaLzWPp0nZKoqFNNDGEbctLh2B6nEYI
+        kK1Pwm9bbn1HVb8ObbteJpmUltzJPOs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-284-5RapYP48MsOZVEI3K5xVNQ-1; Sat, 18 Jun 2022 03:10:57 -0400
+X-MC-Unique: 5RapYP48MsOZVEI3K5xVNQ-1
+Received: by mail-wm1-f70.google.com with SMTP id m23-20020a05600c3b1700b0039c6e3c169aso3227803wms.2
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:10:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=3149uVzRocbxaxAqir48oOLcGTAbi4K048Ex/Bn/8OQ=;
+        b=vivu58qT2Pr7VkJ8kHuesz6C/ky7f/xnmGa2J1sP6n6sVDhR2u2rwvtycBQF5bewEB
+         iE6HxiGOrYZIHwGHdvIva6/o+zctwml7mmWR6LeweI+3FgWsJFpc8rpecLmKgGUL7Xkd
+         rEFqPiTzYPcxP6FH/QWqMpM2K/a9HdDqwyetJ2vIK8uonm/pnUbWxN7vopBQbDZm7Red
+         00ukutMXJleDVEowrF26xFjG6AyD8sKHuC9ekVU98wwpjNN4mGkiJmQ2InpR0EPOFUXq
+         //Iwe45pULMLRIYrgB+tlAV1ZX5S6iq1D8HcDnKxZqnmzpGCJpAAhSTJxHMkGtUGUj36
+         rvfg==
+X-Gm-Message-State: AJIora/GPlHV0vBAoWSbJp1sYP1LBdoxOwIl6/JKv3BnGw16JnfZDjDr
+        0pgjsP8RSEIahUXNoxTc0gNZq7oVuexkpUSbv9voYKPsvWUhql65VIzR3E/uqa8eG6KOhmApQ54
+        vG/1lWG2IzoHiBUweh8bu5IPA
+X-Received: by 2002:a05:6000:147:b0:214:7d6e:cb1d with SMTP id r7-20020a056000014700b002147d6ecb1dmr12393514wrx.650.1655536256661;
+        Sat, 18 Jun 2022 00:10:56 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vrRuJwSp8aqKDGBROF8vdma/TXYjyesDiLAmNqZAKXd3mH1xxa4KIbb0ZZ/KCt1NyfunNVBg==
+X-Received: by 2002:a05:6000:147:b0:214:7d6e:cb1d with SMTP id r7-20020a056000014700b002147d6ecb1dmr12393487wrx.650.1655536256366;
+        Sat, 18 Jun 2022 00:10:56 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c71e:5000:9bb2:aead:a175:9777? (p200300cbc71e50009bb2aeada1759777.dip0.t-ipconnect.de. [2003:cb:c71e:5000:9bb2:aead:a175:9777])
+        by smtp.gmail.com with ESMTPSA id bg26-20020a05600c3c9a00b0039c45fc58c4sm8022592wmb.21.2022.06.18.00.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Jun 2022 00:10:55 -0700 (PDT)
+Message-ID: <24fd3f78-f7e5-a1dc-cad0-15ff826744a9@redhat.com>
+Date:   Sat, 18 Jun 2022 09:10:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
+ work as expected
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+ <20220608144031.829-2-linmiaohe@huawei.com>
+ <76e468b4-c6ac-426c-7ec9-99c620e08cda@redhat.com>
+ <a4b6b2bd-f56c-4f28-6fcc-7ce2f741dd4a@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <a4b6b2bd-f56c-4f28-6fcc-7ce2f741dd4a@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   882be1ed6b1b5073fc88552181b99bd2b9c0031f
-commit: d3b90b76e1013bb7e201bcccf5f5433f322f2123 [255/261] mm: convert destroy_compound_page() to destroy_large_folio()
-config: parisc64-defconfig (https://download.01.org/0day-ci/archive/20220618/202206181437.AwvGIkuq-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=d3b90b76e1013bb7e201bcccf5f5433f322f2123
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout d3b90b76e1013bb7e201bcccf5f5433f322f2123
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc64 prepare
+On 18.06.22 04:43, Miaohe Lin wrote:
+> On 2022/6/17 15:33, David Hildenbrand wrote:
+>> On 08.06.22 16:40, Miaohe Lin wrote:
+>>> security_vm_enough_memory_mm() checks whether a process has enough memory
+>>> to allocate a new virtual mapping. And total_swap_pages is considered as
+>>> available memory while swapoff tries to make sure there's enough memory
+>>> that can hold the swapped out memory. But total_swap_pages contains the
+>>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
+>>> success even if there's no memory to hold the swapped out memory because
+>>
+>> s/success/succeed/
+> 
+> OK. Thanks.
+> 
+>>
+>>> total_swap_pages always greater than or equal to p->pages.
+>>>
+>>> In order to fix it, p->pages should be retracted from total_swap_pages
+>>
+>> s/retracted/subtracted/
+> 
+> OK. Thanks.
+> 
+>>
+>>> first and then check whether there's enough memory for inuse swap pages.
+>>>
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>>  mm/swapfile.c | 10 +++++++---
+>>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/mm/swapfile.c b/mm/swapfile.c
+>>> index ec4c1b276691..d2bead7b8b70 100644
+>>> --- a/mm/swapfile.c
+>>> +++ b/mm/swapfile.c
+>>> @@ -2398,6 +2398,7 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+>>>  	struct filename *pathname;
+>>>  	int err, found = 0;
+>>>  	unsigned int old_block_size;
+>>> +	unsigned int inuse_pages;
+>>>  
+>>>  	if (!capable(CAP_SYS_ADMIN))
+>>>  		return -EPERM;
+>>> @@ -2428,9 +2429,13 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+>>>  		spin_unlock(&swap_lock);
+>>>  		goto out_dput;
+>>>  	}
+>>> -	if (!security_vm_enough_memory_mm(current->mm, p->pages))
+>>> -		vm_unacct_memory(p->pages);
+>>> +
+>>> +	total_swap_pages -= p->pages;
+>>> +	inuse_pages = READ_ONCE(p->inuse_pages);
+>>> +	if (!security_vm_enough_memory_mm(current->mm, inuse_pages))
+>>> +		vm_unacct_memory(inuse_pages);
+>>>  	else {
+>>> +		total_swap_pages += p->pages;
+>>
+>> That implies that whenever we fail in security_vm_enough_memory_mm(),
+>> that other concurrent users might see a wrong total_swap_pages.
+>>
+>> Assume 4 GiB memory and 8 GiB swap. Let's assume 10 GiB are in use.
+>>
+>> Temporarily, we'd have
+>>
+>> CommitLimit    4 GiB
+>> Committed_AS  10 GiB
+> 
+> IIUC, even if without this change, the other concurrent users if come after vm_acct_memory()
+> is done in __vm_enough_memory(), they might see
+> 
+> CommitLimit   12 GiB (4 GiB memory + 8GiB total swap)
+> Committed_AS  18 GiB (10 GiB in use + 8GiB swap space to swapoff)
+> 
+> Or am I miss something?
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I think you are right!
 
-All errors (new ones prefixed by >>):
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-   In file included from arch/parisc/include/asm/page.h:185,
-                    from include/linux/shm.h:6,
-                    from include/linux/sched.h:16,
-                    from arch/parisc/kernel/asm-offsets.c:18:
-   include/linux/mm.h: In function 'destroy_large_folio':
->> include/asm-generic/memory_model.h:35:21: error: implicit declaration of function 'page_to_section'; did you mean 'present_section'? [-Werror=implicit-function-declaration]
-      35 |         int __sec = page_to_section(__pg);                      \
-         |                     ^~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
-      40 | ({      unsigned long __pfn = (pfn);                    \
-         |                                ^~~
-   include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
-      52 | #define page_to_pfn __page_to_pfn
-         |                     ^~~~~~~~~~~~~
-   include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
-     214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
-         |                                      ^~~~~~~~~~~
-   include/linux/page-flags.h:307:33: note: in expansion of macro 'nth_page'
-     307 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
-         |                                 ^~~~~~~~
-   include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
-     928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
-         |                                      ^~~~~~~~~~
-   In file included from include/linux/pid_namespace.h:7,
-                    from include/linux/ptrace.h:10,
-                    from arch/parisc/kernel/asm-offsets.c:20:
-   include/linux/mm.h: At top level:
->> include/linux/mm.h:1556:29: error: conflicting types for 'page_to_section'; have 'long unsigned int(const struct page *)'
-    1556 | static inline unsigned long page_to_section(const struct page *page)
-         |                             ^~~~~~~~~~~~~~~
-   In file included from arch/parisc/include/asm/page.h:185,
-                    from include/linux/shm.h:6,
-                    from include/linux/sched.h:16,
-                    from arch/parisc/kernel/asm-offsets.c:18:
-   include/asm-generic/memory_model.h:35:21: note: previous implicit declaration of 'page_to_section' with type 'int()'
-      35 |         int __sec = page_to_section(__pg);                      \
-         |                     ^~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
-      40 | ({      unsigned long __pfn = (pfn);                    \
-         |                                ^~~
-   include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
-      52 | #define page_to_pfn __page_to_pfn
-         |                     ^~~~~~~~~~~~~
-   include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
-     214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
-         |                                      ^~~~~~~~~~~
-   include/linux/page-flags.h:307:33: note: in expansion of macro 'nth_page'
-     307 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
-         |                                 ^~~~~~~~
-   include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
-     928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
-         |                                      ^~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:117: arch/parisc/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +1556 include/linux/mm.h
-
-bf4e8902ee5080 Daniel Kiper      2011-05-24  1555  
-aa462abe8aaf21 Ian Campbell      2011-08-17 @1556  static inline unsigned long page_to_section(const struct page *page)
-d41dee369bff3b Andy Whitcroft    2005-06-23  1557  {
-d41dee369bff3b Andy Whitcroft    2005-06-23  1558  	return (page->flags >> SECTIONS_PGSHIFT) & SECTIONS_MASK;
-d41dee369bff3b Andy Whitcroft    2005-06-23  1559  }
-308c05e35e3517 Christoph Lameter 2008-04-28  1560  #endif
-d41dee369bff3b Andy Whitcroft    2005-06-23  1561  
-
-:::::: The code at line 1556 was first introduced by commit
-:::::: aa462abe8aaf2198d6aef97da20c874ac694a39f mm: fix __page_to_pfn for a const struct page argument
-
-:::::: TO: Ian Campbell <ian.campbell@citrix.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

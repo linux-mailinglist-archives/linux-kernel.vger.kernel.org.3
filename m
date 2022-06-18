@@ -2,82 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F75550353
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E4A550354
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiFRHLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 03:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S233743AbiFRHNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 03:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiFRHLB (ORCPT
+        with ESMTP id S229755AbiFRHNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 03:11:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 671E73EBBD
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655536259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3149uVzRocbxaxAqir48oOLcGTAbi4K048Ex/Bn/8OQ=;
-        b=JE2lBkrsRlEIrACpEFnLLo3YFAxPuFKOW4QpZT3uPZBsCLlbTEyXXvRbZLnVFLpKTPHAqI
-        XWudfjlAg3DxCwbic78Wx9SwN3GM6kPawoYZbtTWaLzWPp0nZKoqFNNDGEbctLh2B6nEYI
-        kK1Pwm9bbn1HVb8ObbteJpmUltzJPOs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-284-5RapYP48MsOZVEI3K5xVNQ-1; Sat, 18 Jun 2022 03:10:57 -0400
-X-MC-Unique: 5RapYP48MsOZVEI3K5xVNQ-1
-Received: by mail-wm1-f70.google.com with SMTP id m23-20020a05600c3b1700b0039c6e3c169aso3227803wms.2
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:10:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=3149uVzRocbxaxAqir48oOLcGTAbi4K048Ex/Bn/8OQ=;
-        b=vivu58qT2Pr7VkJ8kHuesz6C/ky7f/xnmGa2J1sP6n6sVDhR2u2rwvtycBQF5bewEB
-         iE6HxiGOrYZIHwGHdvIva6/o+zctwml7mmWR6LeweI+3FgWsJFpc8rpecLmKgGUL7Xkd
-         rEFqPiTzYPcxP6FH/QWqMpM2K/a9HdDqwyetJ2vIK8uonm/pnUbWxN7vopBQbDZm7Red
-         00ukutMXJleDVEowrF26xFjG6AyD8sKHuC9ekVU98wwpjNN4mGkiJmQ2InpR0EPOFUXq
-         //Iwe45pULMLRIYrgB+tlAV1ZX5S6iq1D8HcDnKxZqnmzpGCJpAAhSTJxHMkGtUGUj36
-         rvfg==
-X-Gm-Message-State: AJIora/GPlHV0vBAoWSbJp1sYP1LBdoxOwIl6/JKv3BnGw16JnfZDjDr
-        0pgjsP8RSEIahUXNoxTc0gNZq7oVuexkpUSbv9voYKPsvWUhql65VIzR3E/uqa8eG6KOhmApQ54
-        vG/1lWG2IzoHiBUweh8bu5IPA
-X-Received: by 2002:a05:6000:147:b0:214:7d6e:cb1d with SMTP id r7-20020a056000014700b002147d6ecb1dmr12393514wrx.650.1655536256661;
-        Sat, 18 Jun 2022 00:10:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vrRuJwSp8aqKDGBROF8vdma/TXYjyesDiLAmNqZAKXd3mH1xxa4KIbb0ZZ/KCt1NyfunNVBg==
-X-Received: by 2002:a05:6000:147:b0:214:7d6e:cb1d with SMTP id r7-20020a056000014700b002147d6ecb1dmr12393487wrx.650.1655536256366;
-        Sat, 18 Jun 2022 00:10:56 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c71e:5000:9bb2:aead:a175:9777? (p200300cbc71e50009bb2aeada1759777.dip0.t-ipconnect.de. [2003:cb:c71e:5000:9bb2:aead:a175:9777])
-        by smtp.gmail.com with ESMTPSA id bg26-20020a05600c3c9a00b0039c45fc58c4sm8022592wmb.21.2022.06.18.00.10.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 00:10:55 -0700 (PDT)
-Message-ID: <24fd3f78-f7e5-a1dc-cad0-15ff826744a9@redhat.com>
-Date:   Sat, 18 Jun 2022 09:10:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
- work as expected
+        Sat, 18 Jun 2022 03:13:20 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120085.outbound.protection.outlook.com [40.107.12.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9193DDF7A
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:13:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z3HVCyabB2GaF+6rO0C414d7gVTbqWpdW3FKT57NrIoo5dAYKp5vqgm6pGovXN+id9MJIr8iPgQoPchV2UkU7ccbGFJvBkBt/prJS6XENYgUYo5JzAGxF/kUv1/MkY++66Gmz0DFsAVgoe/1ayraIRJRB7RhEUf5SR5O3Av1ixModPWHtJlvD1tnv/5MopWb8skLjRLiWsd3MQvSYwn2snm8Ps4S0qCFwDXV0Z1mcCktJbewIS/3CdKL0G9iqdmNqOPoClNUzssMmnDGCI6HEZCM9TXnwOjjjPgwED7w7J6WMVQ1QFD6gidGcnTjMYsWByPeaxaGSxLLUrwwtbUePQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wXRZT5cZXItPXYCqxR33GoLAeGmJZjJNmgqoVomdDEc=;
+ b=E6lo4HSmZFoPzCSDnl6oFAsJfKjZWhtST7xjIWAktopgEcF/V4bPVmkIWQk4gPyjEwzmyvgEnWC40kP+S8oD+V8E357+e/d/UX3Sl8iy1FZ94e08QxyEmhbe5Nb+o/QYT4AB2hPQtmBiIRimqHJ9Kyixh1WwFzV0ND3NhZZK9BGrZBU6oUWM1mxawQOqBBb8Q8c7gyxLWvktEVR1tph8L7ckHM6dLwYWlcUVR2ufr+5kWM38Pdo6KXihLWdOEzfvpB7ZoSyhz9XSrV158CgkDTYXJw9f8WbririvddCRq65plV2VyL/JC4gMRG3WElAl7LPjv+cMQCx1kRmi9KpVcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wXRZT5cZXItPXYCqxR33GoLAeGmJZjJNmgqoVomdDEc=;
+ b=h+wmqRoNVg8kB8ei49fjA4vHgSuy0258vn01NlJRRucpj9LkOtvwaHuV0fGLmCXgwG2dlkkbebclOYsQhbUDtGInrEhuvb6UZzo7EzjQtoVn6CdVZbKEDcpiISTwLhd0EMcVTt9vP61BimEDvd+qrVy5MpWgaax/TK9ki0X0+4Rqo2qarPc+p+blHrTCiJhRMKwcVSKlLFm+pzMgnWxCRWSyYYkOqt21qOHPHu0vvgg9UXV2KDti86GKfpYruYEjLcZ1NBx0PY0DrylbElcLNCU59Ge5m4WDHgBezVlSJjO6B0PzZ7TL7wrMAOZl848+NNysHtUfiJo+2DMWXsw0gg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB2355.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:34::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Sat, 18 Jun
+ 2022 07:13:14 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.018; Sat, 18 Jun 2022
+ 07:13:13 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Liang He <windhl@126.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
+        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: kernel: Change the order of of_node_put()
+Thread-Topic: [PATCH] powerpc: kernel: Change the order of of_node_put()
+Thread-Index: AQHYgj0/J/gVFBvFIEy9s1bkJo8Kdq1UwUMA
+Date:   Sat, 18 Jun 2022 07:13:13 +0000
+Message-ID: <a6a5e5b3-ffd1-904b-bba1-22baff5f7b67@csgroup.eu>
+References: <20220617112636.4041671-1-windhl@126.com>
+In-Reply-To: <20220617112636.4041671-1-windhl@126.com>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220608144031.829-1-linmiaohe@huawei.com>
- <20220608144031.829-2-linmiaohe@huawei.com>
- <76e468b4-c6ac-426c-7ec9-99c620e08cda@redhat.com>
- <a4b6b2bd-f56c-4f28-6fcc-7ce2f741dd4a@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <a4b6b2bd-f56c-4f28-6fcc-7ce2f741dd4a@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e4c2d1c3-f9b5-40d0-80e2-08da50fa0268
+x-ms-traffictypediagnostic: MR1P264MB2355:EE_
+x-microsoft-antispam-prvs: <MR1P264MB2355D62F033B3530822FA97BEDAE9@MR1P264MB2355.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5hrHRmeEBXIPdnc1ui4rjAD4jHpYp5o3DMGHSINfMY+h300ekafMQzhzU1dAU66xjxiUpP4wusY+cM8VL02h0yHvDdC/EgnMW+huXXQgjJRMgcV2kEZVZhlfRJSG05sXOSO+EIOZbPO+yHryXZOQvhYPIzB78GV5Sl9gmeWYt6FuOSeVxuohnh0/fr5/ROMl13mociOkBKo8yPQY0gfP/ijyjc/PaN+Am/S0IF+MonIjrlPKm5eZY2C3JvJhuivUfPCCdadw+13ssx+AkhnWpPw+ORjXf3ZqQ4/1ejz+8zT59xausA+/L7HPjSZQlEymwyuByRZP3oPdgTFxivrnGrSiO+3s02e7ArM4dZ3W9jP/gwPX0WtlrQv66s8foeCX1j5MdSvpP4uRHXXJMwltDtheNwhfBvEqBD5gbXfyXBPcyBV0xoXB8sXEhLWGSvEsehF89+G8jjpoXoi3EZ9+Qf8lPwYP3SRwzjS8mLBPmNphs/+B17aLL7b8sA0mDgEAg41PY28Pg+ui29iOS0fISKcbEUc9hH5bcXn9Q4OO/w6D14W6Qpjbtj3LPUzffd4AIvNUkBDrEAMyFBdPkl4rMQoQGxLNkRduiwmzwAVFLYe7+u324Aa4Qqjlf5O6X90P2Ng8LIyTBJ0/TNQDzLayd0n++N2hKGiw1AM+jOuotTV1/JmhoX0YXU1ncwTlxi+X8bi9PhVkwQAr1g3hfSDxCBfUgdCCezT986iACh8Jn4biLrkz4u5tlNRpNKG9pJccEPsOjKIio28nd7JiSh34zOxbbGVJuM8xJe7rJk1hiWk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(6486002)(38100700002)(8936002)(38070700005)(66446008)(498600001)(31686004)(6512007)(26005)(6506007)(186003)(316002)(2616005)(36756003)(110136005)(54906003)(66574015)(91956017)(86362001)(122000001)(31696002)(2906002)(921005)(76116006)(71200400001)(44832011)(4744005)(7416002)(8676002)(83380400001)(64756008)(5660300002)(66556008)(4326008)(66476007)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFo5UE1RL0ZMZlgwdTRVemJjY251N2hDOGYwZ0tXYmQxdmlUWDdPaEVwbTJl?=
+ =?utf-8?B?OWRkYlZNV0NEQlNwZXo5MGg5MFhJcFVDRmZHZ0IvZitlNGtPSWJRY0d6TUlm?=
+ =?utf-8?B?VDNoQzd2SjkrRkdKVjkxMU0zK3VWVjdyVFVsekJZWG4xd0ZpYlh6L1lnSVJh?=
+ =?utf-8?B?MHlHU041WWxZUFlqbHdzTUM3emZYUmVRNXorcUxrV2VTQ245T2Q2YWM0Y1Yw?=
+ =?utf-8?B?RlVDMWFtZW9uc3k0LzZaYTFYTVgzaEg5UWFIZUExNWJnN0FiWGxzZ2R1aWc5?=
+ =?utf-8?B?b2xHQ0FVQWtlbnZvdlhKZ281eGd3dTh5SERjaVFOZ2hmTzNGRG05bW5EbzRj?=
+ =?utf-8?B?anV6SnNrZStaaUlka1hGbEZWZ3dmbVBGVTAzS1J1MlJHYUtxUzNMZXdwbEtG?=
+ =?utf-8?B?Nkpscjh5VXZTQ01Jb0dCVkl1Y2FSek1XcWowSDZ6bGtYYTd2dEZEM0VxeHFW?=
+ =?utf-8?B?Q2xCUTk3eUU2TWYzZEM1T3JpTGFpRnVkODMyV0lHU3pmVTdmT0F0Q0lWOWJw?=
+ =?utf-8?B?SzY3QjhrZkpzeHJ4T2VZMktFRkJiUHZaVVJqcWJMYVNWQ1AxN0F0RVgycjhk?=
+ =?utf-8?B?UUlGcDlQdVBWa0Z1TDFadGFjTTc4QWxOeVhhVm9majVoNyt5b2ZUZGl6OXJm?=
+ =?utf-8?B?ZGVFTDNoVDc4aXAyZnlQSTR3V1N6L3JyeFMxMmdqbFArQ2JzZ3BKZVAzWW5X?=
+ =?utf-8?B?U21OQVgvS3JPVDhPRGNINnZLQ1Vxd0NqV2YybG11NnJEaytzcFRwakNCSG9v?=
+ =?utf-8?B?TWlLd3hjK1BTSm1nSmZuWWJoQWVxVTl1OHFFcFp1SThWTThpMnVuSUs4cFly?=
+ =?utf-8?B?S2llOFBKdW9vbnBOdjYxamVMNmpJaFlSWEVQeFVWQitxanVUQUwwSE1KWm5W?=
+ =?utf-8?B?RFNwdCtHUWQyNmJzSHVISXVMd0ZyNUVjdjRrMVlDaVY1eTB4cGV4b1hhMnYr?=
+ =?utf-8?B?aENYQTVSS3lnMFNjQmF6SVcxaW5HWDRPMkFVa1NlV0NFYkt5Mlc4ejVwUWJz?=
+ =?utf-8?B?dERSVW5yR2lFeG51bWdCSExFSittMXE4L1RDT3JLZ3Jya1hvS0g4Mm5xbFN6?=
+ =?utf-8?B?aURMNG0zREE4bDd5MHV1U1QwNDZoTVFoWmN3ZitITFRJcGdEbjdVQkovYkFL?=
+ =?utf-8?B?WXZVd2d1RXhaR0hycTMvNHY4d044cUlVbTVibFREZFZqUDdNMndpZzBaWmFJ?=
+ =?utf-8?B?S0F4bWt6VXl6N2dMMjYwdkpkKzRLWE1acVM3V0xmRnc1UVJQdWxNY3A0bVYz?=
+ =?utf-8?B?eDNQOGYyZ1c4R1hTWHJKZ2FpMjdpaU5xZjB3OUY5VXRUNHJyQy94R0pMdVBK?=
+ =?utf-8?B?cURFeE5udXV2Tm5iTnpsN2c3OW1Cd0ljM1BzSWRXK3ZOcjJQcUlpc0NGOXlr?=
+ =?utf-8?B?MWI2WDE4Q05MYTVWZkZNMWtNeFE4Wi9BN01WSE4rblgxQmJBR0VWUThVS1Vm?=
+ =?utf-8?B?U1VNbE9rUkFlczVodUd6MVMwNzdaWnFRakE1L1c1bHBiaEo2dzgxWVJwajBS?=
+ =?utf-8?B?Y3FDMnErWUZyeVY5RE02WHRYN0FSTzFjcXkwaUNPOWxhdy9pemFmeXRwN1B3?=
+ =?utf-8?B?dkQyTXpSNUU2VFlEU3FJQUZ3VHZQSTZzRU03YWZpVW1ZSHYwNEhtM01tK05k?=
+ =?utf-8?B?Y3YweGdXTjlYUVI4Mkc2d28xODB1bDRsT0k0YVJwbGRHOXRWNy9jU2xyUEk0?=
+ =?utf-8?B?TG9sek42b3dMRWQ5anhwNkgxeTRTaHlhUTF5T3RJRzNOMkIwcTRIRHhRRDQy?=
+ =?utf-8?B?Qy9rdmJnNCsvMHJYbk5YK25LWUZSWVczTFd3S3Z6VEhxTm9CdWRFVG45NEVZ?=
+ =?utf-8?B?cm1lU3Q4VzR1RG9MZkZod09TMVIzUnYzZXpVYXhub3FZSWRpM3ozbDhoNXJ1?=
+ =?utf-8?B?MWVjcmZrVzBaRWlzVXlEc25rYW5mTkJBRVdkZkg1Qlg5eUxaV0hBWmZ0Y0g4?=
+ =?utf-8?B?TEpIbURwRURCYkVrenhjLzVpUlpseG1raGVtdEd4WjJFYjFwdGx1RnlMK2sy?=
+ =?utf-8?B?c3dOU1orQTZTR1htOFVVblYzcmt2OEpjV25WbzhkOVp1TXBpWEY2S0hzbmd6?=
+ =?utf-8?B?WXAyd1VaNkNlZW5NN05CMStGbXJrdldwNGFETFpSVzlFN0ZXc3BqU1Bld2E2?=
+ =?utf-8?B?a2hkK2NxdVY0alVjK2s2N2NMWFcwbTd0U05uejM1em54RlNlRHBsb0JPZUZq?=
+ =?utf-8?B?eWtpYWp0SmxqMk1Yclp5Tk9odmlsS3VCRUxrMjVMZVdIcVBKWHdUU3pyVGhM?=
+ =?utf-8?B?YTlTeDhBTHJCMFNhVUtaV21iLzlDZ24yaDl3bklnczRyNVZyTWt3eHFiMFRJ?=
+ =?utf-8?B?MFZLcmFQbE1uZldqVjMyQzVOa0djSzdEdk9Nc3ozdnpSZVBZZmFBWU1tZFlY?=
+ =?utf-8?Q?fMN0+f0D3IXvXkXZptURcgvcgoUeUPRsWkgSi?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8BE79AD590928143BC3BB0923D7ECC40@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4c2d1c3-f9b5-40d0-80e2-08da50fa0268
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2022 07:13:13.8314
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 62QkSYzOjTbGyfg0fi4cONoVcdlcSLxaB3IGuf0oIaa6VYQs2KdNeKJvXKz3Wko19UD1PfJThbMGznt0tswtpXE/BZWXxoiwoS5m2LWBuAA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2355
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,89 +142,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.06.22 04:43, Miaohe Lin wrote:
-> On 2022/6/17 15:33, David Hildenbrand wrote:
->> On 08.06.22 16:40, Miaohe Lin wrote:
->>> security_vm_enough_memory_mm() checks whether a process has enough memory
->>> to allocate a new virtual mapping. And total_swap_pages is considered as
->>> available memory while swapoff tries to make sure there's enough memory
->>> that can hold the swapped out memory. But total_swap_pages contains the
->>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
->>> success even if there's no memory to hold the swapped out memory because
->>
->> s/success/succeed/
-> 
-> OK. Thanks.
-> 
->>
->>> total_swap_pages always greater than or equal to p->pages.
->>>
->>> In order to fix it, p->pages should be retracted from total_swap_pages
->>
->> s/retracted/subtracted/
-> 
-> OK. Thanks.
-> 
->>
->>> first and then check whether there's enough memory for inuse swap pages.
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>  mm/swapfile.c | 10 +++++++---
->>>  1 file changed, 7 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/mm/swapfile.c b/mm/swapfile.c
->>> index ec4c1b276691..d2bead7b8b70 100644
->>> --- a/mm/swapfile.c
->>> +++ b/mm/swapfile.c
->>> @@ -2398,6 +2398,7 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
->>>  	struct filename *pathname;
->>>  	int err, found = 0;
->>>  	unsigned int old_block_size;
->>> +	unsigned int inuse_pages;
->>>  
->>>  	if (!capable(CAP_SYS_ADMIN))
->>>  		return -EPERM;
->>> @@ -2428,9 +2429,13 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
->>>  		spin_unlock(&swap_lock);
->>>  		goto out_dput;
->>>  	}
->>> -	if (!security_vm_enough_memory_mm(current->mm, p->pages))
->>> -		vm_unacct_memory(p->pages);
->>> +
->>> +	total_swap_pages -= p->pages;
->>> +	inuse_pages = READ_ONCE(p->inuse_pages);
->>> +	if (!security_vm_enough_memory_mm(current->mm, inuse_pages))
->>> +		vm_unacct_memory(inuse_pages);
->>>  	else {
->>> +		total_swap_pages += p->pages;
->>
->> That implies that whenever we fail in security_vm_enough_memory_mm(),
->> that other concurrent users might see a wrong total_swap_pages.
->>
->> Assume 4 GiB memory and 8 GiB swap. Let's assume 10 GiB are in use.
->>
->> Temporarily, we'd have
->>
->> CommitLimit    4 GiB
->> Committed_AS  10 GiB
-> 
-> IIUC, even if without this change, the other concurrent users if come after vm_acct_memory()
-> is done in __vm_enough_memory(), they might see
-> 
-> CommitLimit   12 GiB (4 GiB memory + 8GiB total swap)
-> Committed_AS  18 GiB (10 GiB in use + 8GiB swap space to swapoff)
-> 
-> Or am I miss something?
-> 
-
-I think you are right!
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+DQoNCkxlIDE3LzA2LzIwMjIgw6AgMTM6MjYsIExpYW5nIEhlIGEgw6ljcml0wqA6DQo+IEluIGFk
+ZF9wY3Nwa3IoKSwgaXQgaXMgYmV0dGVyIHRvIGNhbGwgb2Zfbm9kZV9wdXQoKSBhZnRlciB0aGUN
+Cj4gJ2lmKCFucCknIGNoZWNrLg0KDQpXaHkgaXMgaXQgYmV0dGVyID8NCg0KDQoNCi8qKg0KICAq
+IG9mX25vZGVfcHV0KCkgLSBEZWNyZW1lbnQgcmVmY291bnQgb2YgYSBub2RlDQogICogQG5vZGU6
+CU5vZGUgdG8gZGVjIHJlZmNvdW50LCBOVUxMIGlzIHN1cHBvcnRlZCB0byBzaW1wbGlmeSB3cml0
+aW5nIG9mDQogICoJCWNhbGxlcnMNCiAgKi8NCnZvaWQgb2Zfbm9kZV9wdXQoc3RydWN0IGRldmlj
+ZV9ub2RlICpub2RlKQ0Kew0KCWlmIChub2RlKQ0KCQlrb2JqZWN0X3B1dCgmbm9kZS0+a29iaik7
+DQp9DQpFWFBPUlRfU1lNQk9MKG9mX25vZGVfcHV0KTsNCg0KDQoNCkNocmlzdG9waGUNCg0KDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+DQo+IC0tLQ0KPiAg
+IGFyY2gvcG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9uLmMgfCAyICstDQo+ICAgMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9wb3dlcnBjL2tlcm5lbC9zZXR1cC1jb21tb24uYyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwv
+c2V0dXAtY29tbW9uLmMNCj4gaW5kZXggZWIwMDc3YjMwMmUyLi43NjE4MTdkMWY0ZGIgMTAwNjQ0
+DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9uLmMNCj4gKysrIGIvYXJj
+aC9wb3dlcnBjL2tlcm5lbC9zZXR1cC1jb21tb24uYw0KPiBAQCAtNTYzLDkgKzU2Myw5IEBAIHN0
+YXRpYyBfX2luaXQgaW50IGFkZF9wY3Nwa3Iodm9pZCkNCj4gICAJaW50IHJldDsNCj4gICANCj4g
+ICAJbnAgPSBvZl9maW5kX2NvbXBhdGlibGVfbm9kZShOVUxMLCBOVUxMLCAicG5wUE5QLDEwMCIp
+Ow0KPiAtCW9mX25vZGVfcHV0KG5wKTsNCj4gICAJaWYgKCFucCkNCj4gICAJCXJldHVybiAtRU5P
+REVWOw0KPiArCW9mX25vZGVfcHV0KG5wKTsNCj4gICANCj4gICAJcGQgPSBwbGF0Zm9ybV9kZXZp
+Y2VfYWxsb2MoInBjc3BrciIsIC0xKTsNCj4gICAJaWYgKCFwZCk=

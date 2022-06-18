@@ -2,139 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523F05506CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 23:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A7D5506DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 23:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbiFRVR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 17:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S233191AbiFRVkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 17:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiFRVR0 (ORCPT
+        with ESMTP id S229680AbiFRVj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 17:17:26 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D2626E1;
-        Sat, 18 Jun 2022 14:17:25 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id o8so9782467wro.3;
-        Sat, 18 Jun 2022 14:17:25 -0700 (PDT)
+        Sat, 18 Jun 2022 17:39:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3AB7D6;
+        Sat, 18 Jun 2022 14:39:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z7so10318064edm.13;
+        Sat, 18 Jun 2022 14:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F9zHQ5BDlESv+EJld7HTiBi3G93zCJ7miFrzqyCk/Ys=;
-        b=dfQzXNEvZ6jMhwDtZrRIQghsVUkY4XdSbUtJaOIebJgfW4IgNmRiLfaEhzJU4kvSkO
-         sFGsrmX//kn1dE9Bjik5X0Gqj4kkRtbgb909R3uFbLgYislj8kqwg8zHPtQObYDMBaQh
-         tKgbJy+nnhZRmDNFnc4nrztEwpSVWA5XwGknqDulxOnmSGVtZUKIbC3VY4K9kfpGR4Oo
-         hr+44L1/lMe/zAjrL+0z9zQ2OwpHYZez1rtyejk+mvoKuGsr6ik8ly6rJfCv5gF1e085
-         RVJCUbn83HPcmECcolCEoB062RAMl1yHgJ7JReOx/pSx9C+5gn9kW6CyyjdhCsXI/giA
-         CAWw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hvr1nu2yN593GMlX8fO+Db7irapWGKQJ5Kq9iaHCuaM=;
+        b=jAFDSnYK8/BQsquv0b2CwSQCP6pOzp6zNH3EAQI51CFiGEPYjw/rwiI5BKWsbHcqLg
+         cetwkRIyIa6YDKHZcBbS1lkkIrI2MYRrqSTXv1v4IGJ2dsiwjGeDP70m89mgTOA1mID9
+         kmnfJhbjySezuuJZLjx3VNYjq5SzCty+BbWXel4rY03bjO8dBtB8+SkZL5rk85EkxJyV
+         lP2UbaIS/+lqSYikugVlqV/U4xArPCBX7tC/VLGFxTxg13/YThx8pYaqwRzKFQxD0Gh2
+         WO48/5g22Va/v8YcbP3VTr3GO5M177F68qBOjhpXvKJ/UG0k7EnRF0f8TcLeeVJ4YkbJ
+         2hxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F9zHQ5BDlESv+EJld7HTiBi3G93zCJ7miFrzqyCk/Ys=;
-        b=Px8v82h76Oau3FQiTQ3H9yRVcVtZv21iOTZB/dP5floUEVLHBHUpyRcqt+gQW5dIVN
-         r+J3KrKXY+gizGnjQEFxwDeO5cc6UtWLL7uClLwtocVByUmuSZmMQRvH/NKw3roJswGM
-         6oWS9MUU9IvET9xuhaUDaHMhmDFWafYAwV//D1x/ALJ0HLlJ3BztAUsLiM3tnpx7PLt/
-         /KEb5jqmaJ8QKf73HEvBeEQkH/LNEdF6EOAK9SlGSTS/HrkmJk0Fx0FlSy6yfoA7Ic0C
-         zvjV0oUa+WAbVG++xnT2N9wGOE/9RDJJQzDuuIRgbOTs5SzGfdso7odGVskLwihpALzh
-         qyEw==
-X-Gm-Message-State: AJIora9Oetw7gZlj40Xq1lCZrv/vA7hidmwrSOY5Eb3Nfv9P/hcOsYAK
-        vKKhqc0wYvF3gJO9JlDiOIvhxyyDH6fQOw==
-X-Google-Smtp-Source: AGRyM1t/JX5RywE/NQdTYsk48Ow61saXwVBAj7MztKbhguVyPqtnjprupf+48GYsrEubjrq1po0PwQ==
-X-Received: by 2002:adf:e648:0:b0:210:bac2:c6cf with SMTP id b8-20020adfe648000000b00210bac2c6cfmr15201246wrn.310.1655587043663;
-        Sat, 18 Jun 2022 14:17:23 -0700 (PDT)
-Received: from krava (94.113.247.30.static.b2b.upcbusiness.cz. [94.113.247.30])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b0039c18d3fe27sm9921639wmq.19.2022.06.18.14.17.22
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hvr1nu2yN593GMlX8fO+Db7irapWGKQJ5Kq9iaHCuaM=;
+        b=QoNm9SHXkTvioX9IDrM7ieCKF/5w0EiMocZnyELKon/JNg3NMRTIse3gcylyjuwyT2
+         e9H8qaSpfSDVHIbYYf+rUAVexFYdeZCv3U30iPxy/IuyQGuPYiCNmk1WBJpKI0SNN9dg
+         9Az4o7hygjLuLfz5wExTDo7rR3cjXnkOyWJssmNbG3q6y04qSbhP2/9odRg30yNk0IfF
+         MqNA3kvQOek6OrGb7/Y2CleJyGn9Q7hR8ooF07mNFVzv1i6bl7GUhQMrHsULE0D4k7VN
+         stzGrxqfzHu3U4TP9xhvNOPyDRyIKWJLea8P9I4XiPoDBQIBG6zqgtS0kOTTr1EsBWS6
+         0bqA==
+X-Gm-Message-State: AJIora/esjZ+clEyZngjNkD5KfzNlxg0DD6o3aCKXWUOF/6t1ZTxn5mS
+        dHvqHbWrFzrsHCEr+hUUbvCljT+CRvE=
+X-Google-Smtp-Source: AGRyM1tT1x47MeQd6Iylql9Nl6MNb7pG8YHh7zkmkAOKiZFR1Ga8iGYltb/wW4xPNBrnwRMFHI+rFA==
+X-Received: by 2002:a05:6402:1941:b0:435:5972:7811 with SMTP id f1-20020a056402194100b0043559727811mr14716285edz.234.1655588396494;
+        Sat, 18 Jun 2022 14:39:56 -0700 (PDT)
+Received: from localhost (92.40.169.177.threembb.co.uk. [92.40.169.177])
+        by smtp.gmail.com with ESMTPSA id k11-20020a17090632cb00b00705cdfec71esm3825355ejk.7.2022.06.18.14.39.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 14:17:23 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sat, 18 Jun 2022 23:17:20 +0200
-To:     chuang <nashuiliang@gmail.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Jingren Zhou <zhoujingren@didiglobal.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH] libbpf: Remove kprobe_event on failed kprobe_open_legacy
-Message-ID: <Yq5A4Cln4qeTaAeM@krava>
-References: <20220614084930.43276-1-nashuiliang@gmail.com>
- <62ad50fa9d42d_24b34208d6@john.notmuch>
- <CACueBy7NqRszA3tCOvLhfi1OraUrL_GD9YZ9XOPNHzbR1=+z7g@mail.gmail.com>
+        Sat, 18 Jun 2022 14:39:56 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com
+Cc:     lars@metafoo.de, rafael@kernel.org, quic_gurus@quicinc.com,
+        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
+        michael@walle.cc, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v3 00/16] Add support for AXP192 PMIC
+Date:   Sat, 18 Jun 2022 22:39:53 +0100
+Message-Id: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACueBy7NqRszA3tCOvLhfi1OraUrL_GD9YZ9XOPNHzbR1=+z7g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 01:31:01PM +0800, chuang wrote:
-> Hi John,
-> 
-> On Sat, Jun 18, 2022 at 12:13 PM John Fastabend
-> <john.fastabend@gmail.com> wrote:
-> >
-> > Chuang W wrote:
-> > > In a scenario where livepatch and aggrprobe coexist, the creating
-> > > kprobe_event using tracefs API will succeed, a trace event (e.g.
-> > > /debugfs/tracing/events/kprobe/XX) will exist, but perf_event_open()
-> > > will return an error.
-> >
-> > This seems a bit strange from API side. I'm not really familiar with
-> > livepatch, but I guess this is UAPI now so fixing add_kprobe_event_legacy
-> > to fail is not an option?
-> >
-> 
-> The legacy kprobe API (i.e. tracefs API) has two steps:
-> 
-> 1) register_kprobe
-> $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
-> This will create a trace event of mykprobe and register a disable
-> kprobe that waits to be activated.
-> 
-> 2) enable_kprobe
-> 2.1) using syscall perf_event_open
-> as the following code, perf_event_kprobe_open_legacy (file:
-> tools/lib/bpf/libbpf.c):
-> ---
-> attr.type = PERF_TYPE_TRACEPOINT;
-> pfd = syscall(__NR_perf_event_open, &attr,
->               pid < 0 ? -1 : pid, /* pid */
->               pid == -1 ? 0 : -1, /* cpu */
->               -1 /* group_fd */,  PERF_FLAG_FD_CLOEXEC);
-> ---
-> In the implementation code of perf_event_open, enable_kprobe() will be executed.
-> 2.2) using shell
-> $ echo 1 > /sys/kernel/debug/tracing/events/kprobes/mykprobe/enable
-> As with perf_event_open, enable_kprobe() will also be executed.
-> 
-> When using the same function XXX, kprobe and livepatch cannot coexist,
-> that is, step 2) will return an error (ref: arm_kprobe_ftrace()),
+Changes in v3:
 
-just curious.. is that because of ipmodify flag on ftrace_ops?
-AFAICS that be a poblem just for kretprobes, cc-ing Masami
+* Update pinctrl driver to address Andy Shevchenko's review comments
+  from v1, and fix a few other issues.
+* Add gpio-ranges property and example snippet to gpio DT bindings.
+* Update commit message of patch 01/16 to point out that all register
+  addresses are obtained using sub_irq_reg().
+* Document ccc_table in axp20x_battery. Also update commit message to
+  note a small fix that is part of that patch.
+* Drop axp20x_adc consolidation patch in favor of using separate adc_raw
+  functions. It's a minor code size optimization that may not be worth
+  the effort due to implementation complexity.
+* Use the FIELD_GET macro in axp20x_adc to further clarify intent.
+* Fix a typo in the regulator driver where an AXP20X regulator ID was
+  mistakenly used instead of an AXP192 regulator ID. Also carry over
+  an Acked-by: tag from v1. Hope that's okay.
+* Accumulate Acked-by: tags from v1 on DT patches.
+* Accumulate Acked-by: tags from v2.
 
-thanks,
-jirka
+Note that regmap maintainer Mark Brown has said the first two patches to
+regmap-irq aren't suitable for inclusion into the kernel in their current
+state. I'm including them for v3 so the series remains testable.
 
+Changes in v2:
 
-> however, step 1) is ok!
-> However, the new kprobe API (i.e. perf kprobe API) aggregates
-> register_kprobe and enable_kprobe, internally fixes the issue on
-> failed enable_kprobe.
-> But above all, for the legacy kprobe API, I think it should remove
-> kprobe_event on failed add_kprobe_event_legacy() in
-> perf_event_kprobe_open_legacy (file: tools/lib/bpf/libbpf.c).
+* Do a little cleanup of axp20x_adc suggested by Jonathan Cameron
+* Consolidate ADC read functions in axp20x_adc
+* Drop the axp192's read_label callback in axp20x_adc
+* Clean up the axp192-gpio dt bindings
+* Rewrite a problematic bit of code in axp20x_usb_power reported
+  by kernel test robot
+* Support AXP192 in axp20x_battery
+* Split up regmap-irq changes to two separate patches
+
+Cover letter from v1:
+
+Hi all,
+
+This patch series adds support for the X-Powers AXP192 PMIC to the
+AXP20x driver framework.
+
+The first patch is a small change to regmap-irq to support the AXP192's
+unusual IRQ register layout. It isn't possible to include all of the
+IRQ registers in one regmap-irq chip without this.
+
+The rest of the changes are pretty straightforward, I think the only
+notable parts are the axp20x_adc driver where there seems to be some
+opportunities for code reuse (the axp192 is nearly a duplicate of the
+axp20x) and the addition of a new pinctrl driver for the axp192, since
+the axp20x pinctrl driver was not very easy to adapt.
+
+Aidan MacDonald (16):
+  regmap-irq: Use sub_irq_reg() to calculate unmask register address
+  regmap-irq: Add get_irq_reg to support unusual register layouts
+  dt-bindings: mfd: add bindings for AXP192 MFD device
+  dt-bindings: iio: adc: axp209: Add AXP192 compatible
+  dt-bindings: power: supply: axp20x: Add AXP192 compatible
+  dt-bindings: gpio: Add AXP192 GPIO bindings
+  dt-bindings: power: axp20x-battery: Add AXP192 compatible
+  mfd: axp20x: Add support for AXP192
+  regulator: axp20x: Add support for AXP192
+  iio: adc: axp20x_adc: Minor code cleanups
+  iio: adc: axp20x_adc: Add support for AXP192
+  power: supply: axp20x_usb_power: Add support for AXP192
+  pinctrl: Add AXP192 pin control driver
+  power: axp20x_battery: Add constant charge current table
+  power: axp20x_battery: Support battery status without fuel gauge
+  power: axp20x_battery: Add support for AXP192
+
+ .../bindings/gpio/x-powers,axp192-gpio.yaml   |  68 +++
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
+ .../bindings/mfd/x-powers,axp152.yaml         |   1 +
+ .../x-powers,axp20x-battery-power-supply.yaml |   1 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+ drivers/base/regmap/regmap-irq.c              |  19 +-
+ drivers/iio/adc/axp20x_adc.c                  | 359 +++++++++--
+ drivers/mfd/axp20x-i2c.c                      |   2 +
+ drivers/mfd/axp20x.c                          | 153 +++++
+ drivers/pinctrl/Kconfig                       |  14 +
+ drivers/pinctrl/Makefile                      |   1 +
+ drivers/pinctrl/pinctrl-axp192.c              | 562 ++++++++++++++++++
+ drivers/power/supply/axp20x_battery.c         | 143 ++++-
+ drivers/power/supply/axp20x_usb_power.c       |  80 ++-
+ drivers/regulator/axp20x-regulator.c          | 101 +++-
+ include/linux/mfd/axp20x.h                    |  84 +++
+ include/linux/regmap.h                        |   5 +
+ 17 files changed, 1529 insertions(+), 83 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+ create mode 100644 drivers/pinctrl/pinctrl-axp192.c
+
+-- 
+2.35.1
+

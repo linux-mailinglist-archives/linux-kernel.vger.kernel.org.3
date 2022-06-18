@@ -2,103 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B03B550621
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 18:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C058550623
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 18:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236038AbiFRQje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 12:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S236573AbiFRQmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 12:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiFRQjd (ORCPT
+        with ESMTP id S231359AbiFRQmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 12:39:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D279FD05;
-        Sat, 18 Jun 2022 09:39:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E46F160F0C;
-        Sat, 18 Jun 2022 16:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D46C3411A;
-        Sat, 18 Jun 2022 16:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655570371;
-        bh=twtOJw4hn7qZLSBUAVevuQy1fZO2I0MokLlWvf+gzSk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=hMdaUPsw3/cbyiWgPOcGrS9hHTWIQ+Qn5AGuEpdDUp9Y5H9AIstV+rZNWuA0bgZNz
-         TRChA22h4bsD+HviGfmZIcdkXG6xxK+wTTHk/5gpLDhvhy/ew2WRdNx16QO3vnytvk
-         f7et/tC1OFuDP4TZdjiw0M9Lf74uP9ki0TN9KPv99sHZAWswaBvGdGURN69KwZUOBQ
-         HEWta4E2WVOA4WrwTEymBEXpTnj+GWKb2QmuLJuY0s4BZPX6t5OxQwBJskEOwz+a9H
-         xHsL6+lmq6gDB2vCc8qEBPDurdm0sEGjA8xnGQwm1kfRgArahopr2N0Z2wrywdjBtx
-         45IW84wnZ66sg==
-Date:   Sat, 18 Jun 2022 11:39:27 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V11 3/8] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220618163927.GA1235355@bhelgaas>
+        Sat, 18 Jun 2022 12:42:19 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBFD101D6
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 09:42:18 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so5768690wma.1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 09:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=NTFM/4VkpDM2qI5OcPL5gWkEDJT/oSyHrioA8LlzOIU=;
+        b=Y4QTo1plQ2N0ErlDd8u/c8W5nc/FlipwFRImoMWBlmOyHaRU0oH8YnnqEys+anTMuL
+         8JL0x0mJy9b/q7sQnu7g/JCjr6055DNk96FpJ/PAmjTRKfQwB/JSSD+yN3c+WRtOLcd/
+         k2r+Kmul2MWSFaTv9v2S3ZB3HEAArHb6M/uyOl74N1btvt1ykAzR7MbjP9z3qE4MPII9
+         o8HHPPyoOvlBtW+hjGJByNuTZtD8IMz8kVUxSIiZzXnViiSH860Zl6m+zPLXxvO8hQyd
+         0jpW9rkojAuGrWpSW6w9Leh17ZrwQUxcXuWsf4+C4a8MOSXXHrCAvmlqUMu4Z0RIdrOf
+         CT1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=NTFM/4VkpDM2qI5OcPL5gWkEDJT/oSyHrioA8LlzOIU=;
+        b=IRssbV8/PRNJ4C/mJFqf6hy8J4l6SBtx2Dfxu8HPOI/YiFQsy3iXYImpeyYg1R+Ayy
+         OL3Rks7AxHAf96VtMTIVOPk09rR4c25kXCbfIxSRLof9F1fMEKa8TSUGj2y4/pRkjiv5
+         Zkl3/UfAz8yhP3ehb8MvmYwvrdgrPf+9ZKA25bafW9JbTKFnJ6fXzFeo1VQ3pEqdfVoW
+         R7q8T+KiLCINR6CuUJ4/JW2c0szHxZ9M02z5O3lw5u41ybnNhaaOO0oZXYNCKKP222cl
+         7UD3DDW8ybXaUM6Dw0uSl68oQzeFUQFvOIAyLpF74F5xIdcgD35+W+cKrkGOlZ9eWcNF
+         KHoA==
+X-Gm-Message-State: AJIora/lJpPdfMF1/XwEv2TOAhqNicRIY2027k+Qq4vHMSKaxPgHky+c
+        UPm84HiXdOQ8AOaj9Sx3fKuWkfrSsJ2JPtx0pYs=
+X-Google-Smtp-Source: AGRyM1stQHvP/HnTb6LxtWIDpTxaD3mdATwE8K6XMxSGITVIjTemp99SDKby+zOPjbM1p7jWYsCTCNitPlJdjGRMCzY=
+X-Received: by 2002:a05:600c:3b0d:b0:39c:4ee8:f7f4 with SMTP id
+ m13-20020a05600c3b0d00b0039c4ee8f7f4mr16030054wms.129.1655570536644; Sat, 18
+ Jun 2022 09:42:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617224019.GA1208614@bhelgaas>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a5d:64cd:0:0:0:0:0 with HTTP; Sat, 18 Jun 2022 09:42:16
+ -0700 (PDT)
+From:   nnani nawafo <nnadinawafo11@gmail.com>
+Date:   Sat, 18 Jun 2022 16:42:16 +0000
+Message-ID: <CAPhDfr1SFMnupMKnTYr9yQ+TB7bYfwv77CTPFNcPORKsabyMDQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        MONEY_FORM,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:334 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5004]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nnadinawafo11[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nnadinawafo11[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  0.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.8 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 05:40:19PM -0500, Bjorn Helgaas wrote:
-> On Fri, Jun 10, 2022 at 01:22:54PM -0700, ira.weiny@intel.com wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > Introduced in a PCI r6.0, sec 6.30, DOE provides a config space based
-> > mailbox with standard protocol discovery.  Each mailbox is accessed
-> > through a DOE Extended Capability.
+Congratulations!
 
-> > + * pci_doe_get_irq_num() - Return the irq number for the mailbox at offset
-> > + *
-> > + * @pdev: The PCI device
-> > + * @offset: Offset of the DOE mailbox
-> > + *
-> > + * Returns: irq number on success
-> > + *	    -errno if irqs are not supported on this mailbox
-> > + */
-> > +int pci_doe_get_irq_num(struct pci_dev *pdev, int offset)
-> > +{
-> > +	u32 val;
-> > +
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_CAP, &val);
-> > +	if (!FIELD_GET(PCI_DOE_CAP_INT, val))
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	return FIELD_GET(PCI_DOE_CAP_IRQ, val);
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_doe_get_irq_num);
-> 
-> Confusing function name (and comment) since PCI_DOE_CAP_IRQ is an
-> Interrupt Message Number that has nothing to do with Linux IRQ
-> numbers.
-> 
-> I see we already have PCI_EXP_FLAGS_IRQ, PCI_ERR_ROOT_AER_IRQ,
-> PCI_EXP_DPC_IRQ, so I guess you're in good company.
+The United Nations has come into conclusion to endorse compensation
+fund payment of six million us dollars ($ 6,000,000.00 ) to lucky
+beneficiaries across the globe through the help of the newly elected
+president due to covid-19 ( coronavirus ) that has cause economic melt
+down in different countries and global hazard to so many lives.
 
-Should have been more clear about this: I think we should rename the
-new one to be PCI_DOE_CAP_INT_MSG_NUM or similar, and rename the
-function as well.  It's too confusing to use "irq" for both Linux IRQs
-and what the spec calls "Interupt Message Numbers".
+ The United Nations has instructed the swiss world bank to release
+compensation fund payment in collaboration with IBE bank in the United
+Kingdom.
 
-Bjorn
+The payment will be issue into atm visa card and send it to lucky
+beneficary who apply for it via IBE bank in United Kingdom through
+diplomatic courier service company close to the beneficiary country.
+
+This is the information United Kingdom management require to deliver
+compensation fund payment to beneficiary country door step.
+
+1. Your name:
+2. Home address:
+3. City:
+4. Country:
+5. Occupation:
+6. Sex:
+7. Marital status:
+8. Age:
+9. Passport / ID card/ Drivers lience
+10.Phone number:
+Contact our Agent email id:
+name solomo brandy
+
+EMIL ADDRESS (solomonbrandyfiveone@gmail.com ) for your payment without a delay,
+
+Best Regard
+Mrs Mary J Robertson.

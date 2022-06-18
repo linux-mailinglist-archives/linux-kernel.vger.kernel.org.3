@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314C655029D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 06:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208D95502A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 06:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiFRELi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 00:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S232391AbiFREN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 00:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiFRELg (ORCPT
+        with ESMTP id S229478AbiFREN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 00:11:36 -0400
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0C81606F2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 21:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=DhswK
-        TrmeUbKndG6IYc5Pec0+hrQzVcfBYcwy6754iY=; b=Kf5feUfvu5rP35R6M3Rn9
-        TimAtl8GS8lKAeozkpaEfRPFu+5pSlOFd6Bj030dvNZKE4ej9BuDJOvGvD/DQzMq
-        92prbAkEBxYAdvw8L3C+fRQOrFY6xc5FJfZBaVuGNqYI4zrkWkVayNXGl/iXCJ5j
-        XTXukdljFC2fZ2UM0BojnQ=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgD3RGlDUK1iKBiWEw--.28580S2;
-        Sat, 18 Jun 2022 12:10:44 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        christophe.leroy@csgroup.eu, npiggin@gmail.com, maz@kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH v2] powerpc: embedded6xx: Fix refcount leak bugs
-Date:   Sat, 18 Jun 2022 12:10:42 +0800
-Message-Id: <20220618041042.4058066-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgD3RGlDUK1iKBiWEw--.28580S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr1DAFy7WFyDGF1fGF4rKrg_yoW8KFykpr
-        yvkFs2yF48WFZ7ta4vyFZrZryxGFnYgrW3tw4jk3s7ZF1DurWIvFWUX3sxtrWkGrWUW3Wr
-        Zr4Ikw4Sqwn3W3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR5UUUUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AQkF1pEDvpQjAAAsd
+        Sat, 18 Jun 2022 00:13:56 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3860BB5;
+        Fri, 17 Jun 2022 21:13:55 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id c4so670978ilj.7;
+        Fri, 17 Jun 2022 21:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=y+vyOEdq3OiKKyr88imZLMREIzkAehWVmx3urHTS3LY=;
+        b=NRgIlefOqcke0tnkQ43EBWC8BvsQMCmT3cauYKD+OUINd3vZjoLfpBQPZkPMXneRir
+         iyhoMpwkzMvxd+rtXacu6cbc4kQt2zeAsygLQdwpAE2gD4UEhScrK4B2Gmk7/H8H8v36
+         aQSADm54eCHiqnPVbS4K4/VQ9UvbXgK+DzTPQhLKKsQt82aMHWBo0gV93s7IWt1QuRf7
+         APPduv+esD0gK7QcbMKsTdo/K6uKnCxQx+BMDWyhkNHR4DMc69fRfuZWubqaIVgBOX/0
+         Wrp3ZpaTUgEyL5BfB6zNt8C1HQGY55M2YF34ZUtRdju0VqyfMcaZh4gdO9h+OqT/1a4d
+         ZjoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=y+vyOEdq3OiKKyr88imZLMREIzkAehWVmx3urHTS3LY=;
+        b=n+1t9xJzF4Q8Y+vg1kWLfv5TwnpEEiL93Qn2OLPBdvyEWKYnMw82bJLzgDENR4YmUS
+         4JqANtXUUm7gLMFi75b9NYifgCD/+MRBXLs7CKQFWw9XpjRp9ffGoFqNyqk0CQVES69k
+         o8/f1WGwzKxPwFG0S8E/76aWxY+j4qHYijWXjNMYJMfUUlgWZ3bRiOzWIIECzJHv3oND
+         nLhsObla+/P5T/cr1iQVZ5TWj6hvMdiyMhHmrC8hCe0TWO3YpSiokFQC2q/hQWbEyDMk
+         Ry4294P+U5bpk0TO0pK3T44a0pdwBWQqGz1OlE/iiJYCWnahG+OZXWJPesoyW6AXLpTt
+         ajGA==
+X-Gm-Message-State: AJIora8+i8mGwghYGBU3EaZeFSVRywhKfCde8RRhBSjJ+yoF8d9JZxLR
+        ZCCxDl0btTx2VQs0BI2G+BY=
+X-Google-Smtp-Source: AGRyM1vjWfBtV27HJB5mj92weeZvqAKQEy/lwq28Tn9M4ISBXlArgR6oDZupkcobqYxlCv9lt3IT1w==
+X-Received: by 2002:a05:6e02:20c6:b0:2d8:e62f:349f with SMTP id 6-20020a056e0220c600b002d8e62f349fmr2921107ilq.160.1655525634503;
+        Fri, 17 Jun 2022 21:13:54 -0700 (PDT)
+Received: from localhost ([172.243.153.43])
+        by smtp.gmail.com with ESMTPSA id e62-20020a6bb541000000b00669384fcf88sm3505408iof.1.2022.06.17.21.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 21:13:54 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 21:13:46 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Chuang W <nashuiliang@gmail.com>
+Cc:     Chuang W <nashuiliang@gmail.com>,
+        Jingren Zhou <zhoujingren@didiglobal.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <62ad50fa9d42d_24b34208d6@john.notmuch>
+In-Reply-To: <20220614084930.43276-1-nashuiliang@gmail.com>
+References: <20220614084930.43276-1-nashuiliang@gmail.com>
+Subject: RE: [PATCH] libbpf: Remove kprobe_event on failed kprobe_open_legacy
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xx_init_xx(), of_find_node_by_type() will return a node pointer
-with refcount incremented. We should use of_node_put() when it is
-not used anymore.
+Chuang W wrote:
+> In a scenario where livepatch and aggrprobe coexist, the creating
+> kprobe_event using tracefs API will succeed, a trace event (e.g.
+> /debugfs/tracing/events/kprobe/XX) will exist, but perf_event_open()
+> will return an error.
 
-Signed-off-by: Liang He <windhl@126.com>
----
- v2: we merge all embedded6xx related bugs into one commit
- v1: we only report the bug in holly_init_pci() of holly.c
+This seems a bit strange from API side. I'm not really familiar with
+livepatch, but I guess this is UAPI now so fixing add_kprobe_event_legacy
+to fail is not an option?
 
- arch/powerpc/platforms/embedded6xx/holly.c        | 6 ++++++
- arch/powerpc/platforms/embedded6xx/mpc7448_hpc2.c | 3 +++
- 2 files changed, 9 insertions(+)
+> 
+> Signed-off-by: Chuang W <nashuiliang@gmail.com>
+> Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 0781fae58a06..d0a36350e22a 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -10809,10 +10809,11 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+>  	}
+>  	type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
+>  	if (type < 0) {
+> +		err = type;
+>  		pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
+>  			kfunc_name, offset,
+> -			libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
+> -		return type;
+> +			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> +		goto clear_kprobe_event;
+>  	}
+>  	attr.size = sizeof(attr);
+>  	attr.config = type;
+> @@ -10826,9 +10827,14 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+>  		err = -errno;
+>  		pr_warn("legacy kprobe perf_event_open() failed: %s\n",
+>  			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> -		return err;
+> +		goto clear_kprobe_event;
+>  	}
+>  	return pfd;
+> +
+> +clear_kprobe_event:
+> +	/* Clear the newly added kprobe_event */
+> +	remove_kprobe_event_legacy(probe_name, retprobe);
+> +	return err;
+>  }
+>  
+>  struct bpf_link *
+> -- 
+> 2.34.1
+> 
 
-diff --git a/arch/powerpc/platforms/embedded6xx/holly.c b/arch/powerpc/platforms/embedded6xx/holly.c
-index 78f2378d9223..bebc5a972694 100644
---- a/arch/powerpc/platforms/embedded6xx/holly.c
-+++ b/arch/powerpc/platforms/embedded6xx/holly.c
-@@ -123,6 +123,8 @@ static void __init holly_init_pci(void)
- 	if (np)
- 		tsi108_setup_pci(np, HOLLY_PCI_CFG_PHYS, 1);
- 
-+	of_node_put(np);
-+
- 	ppc_md.pci_exclude_device = holly_exclude_device;
- 	if (ppc_md.progress)
- 		ppc_md.progress("tsi108: resources set", 0x100);
-@@ -184,6 +186,9 @@ static void __init holly_init_IRQ(void)
- 	tsi108_pci_int_init(cascade_node);
- 	irq_set_handler_data(cascade_pci_irq, mpic);
- 	irq_set_chained_handler(cascade_pci_irq, tsi108_irq_cascade);
-+
-+	of_node_put(tsi_pci);
-+	of_node_put(cascade_node);
- #endif
- 	/* Configure MPIC outputs to CPU0 */
- 	tsi108_write_reg(TSI108_MPIC_OFFSET + 0x30c, 0);
-@@ -210,6 +215,7 @@ static void __noreturn holly_restart(char *cmd)
- 	if (bridge) {
- 		prop = of_get_property(bridge, "reg", &size);
- 		addr = of_translate_address(bridge, prop);
-+		of_node_put(bridge);
- 	}
- 	addr += (TSI108_PB_OFFSET + 0x414);
- 
-diff --git a/arch/powerpc/platforms/embedded6xx/mpc7448_hpc2.c b/arch/powerpc/platforms/embedded6xx/mpc7448_hpc2.c
-index 8b2b42210356..ddf0c652af80 100644
---- a/arch/powerpc/platforms/embedded6xx/mpc7448_hpc2.c
-+++ b/arch/powerpc/platforms/embedded6xx/mpc7448_hpc2.c
-@@ -135,6 +135,9 @@ static void __init mpc7448_hpc2_init_IRQ(void)
- 	tsi108_pci_int_init(cascade_node);
- 	irq_set_handler_data(cascade_pci_irq, mpic);
- 	irq_set_chained_handler(cascade_pci_irq, tsi108_irq_cascade);
-+
-+	of_node_put(tsi_pci);
-+	of_node_put(cascade_node);
- #endif
- 	/* Configure MPIC outputs to CPU0 */
- 	tsi108_write_reg(TSI108_MPIC_OFFSET + 0x30c, 0);
--- 
-2.25.1
 

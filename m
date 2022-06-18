@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4481B55019C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA875501A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383450AbiFRBQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 21:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S236843AbiFRBRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 21:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236705AbiFRBQK (ORCPT
+        with ESMTP id S235768AbiFRBRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 21:16:10 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3D46B00C;
-        Fri, 17 Jun 2022 18:16:09 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I1G3qx059839;
-        Fri, 17 Jun 2022 20:16:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655514963;
-        bh=TZkUnQ9TqsqujcPhfiQHiNqNBtGu9PjA71C9siFtD5Q=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Qk0Vj/8plzhXTs7pDQgB/Bt2mMV6LL7peYHEMDGR+efGSHWC2xZrIk5MLxUVJpEH6
-         JAwpz0BpPeaTGjHcKypKknIa7KoD9YZ6FrZ3ff0++eh/RqZiYSKTxDZdnhqwMqgGZ7
-         qRXDM/ueM2CzHsJhsCypuSI1QjLpmyMvIGzxPwH0=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I1G31k020924
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jun 2022 20:16:03 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 20:16:02 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 20:16:02 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I1G2vn061733;
-        Fri, 17 Jun 2022 20:16:02 -0500
-Date:   Fri, 17 Jun 2022 20:16:02 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Jai Luthra <j-luthra@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, Jayesh Choudhary <j-choudhary@ti.com>
-Subject: Re: [PATCH v3 1/2] arm64: dts: ti: k3-am62-main: Add McASP nodes
-Message-ID: <20220618011602.majukmcmrf4skzdn@kahuna>
-References: <20220427085053.14964-1-j-luthra@ti.com>
- <20220427085053.14964-2-j-luthra@ti.com>
+        Fri, 17 Jun 2022 21:17:01 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AEB6B01F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:17:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id f16so4191785pjj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YyLn6g7vHfOuSa6wUd32m7NoZ5cRQIcWpzzoXnE6kB0=;
+        b=qGiwuLye1ynOBURtscgbzmupalCPu2LwEEyvj1yDzFsGJMKFyXiPndg0CGyWgnIHqy
+         S7cww702kckx6jCqb1fTNVsp1ECceJTfzLWEXrILFzZS54owJ9Oq1piAGUPK31KFSJ2y
+         TbcCAV56ifzsAbBfkRBAhzEwuJ+7Ds9Ttqr0vzz4DhWedF6aeizA8m3aGpg02Sz/RY3C
+         IAnzSCV2xN6NUsSZcgLuu5EyKAAMktNbUpudAAWbpRYHuvxe8GowdB23ae9rs7Uyk84y
+         fMPuhCtoCZcbqoy3zGZZ3j9wvsZ85CQb7pJlbjgfK8xKhsDIMPdpRk8KUfkh6rIOBEBh
+         yT/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YyLn6g7vHfOuSa6wUd32m7NoZ5cRQIcWpzzoXnE6kB0=;
+        b=Wz2YUm+VlX/3WX4jj8RdHhHsXO8PJvvlyOMreuWoHdN7kZQHTp6IQSRlqyZ/sM9wHE
+         FdDpJoYIK/tER7rI43jaVhEZ/QdhiIYJJm3ezxGts3SeSsyP30kSvR7uQbEYFISkl5MH
+         praI4zxsoBkA7osuihFtxcMirT+/1lZea7hC3a2t1djAiNiV5SH1UXaJ+JR+09/QFXyY
+         lmnPRxhPtpux0lq+3mAJk+OdJXMJ7OS1LsS4sJiMx/ekG5P0WAMk8nnpqHoTEx97HPaV
+         KPx60p8J1Bfd6I4lMtWhF9m4BNLiEeppqZ5FQlskgHf7anV++f21fqYK0Ed1EB6v+4Qc
+         /WAw==
+X-Gm-Message-State: AJIora8mJYnAeir4AQv2tctbxqGTBxI/JfsW5o7muSXqldyVoKjMaE2f
+        5/UREk2qK6apCiR8NSFV8VJ1Tg==
+X-Google-Smtp-Source: AGRyM1ugD6Hqyw87IEKWEacxbwyqYAnd4hfXfTEMLg8mP1rVupaS3+8mM3vl4bqVy9+M26ewy9HwMg==
+X-Received: by 2002:a17:902:cec5:b0:166:3418:5260 with SMTP id d5-20020a170902cec500b0016634185260mr12357629plg.129.1655515019768;
+        Fri, 17 Jun 2022 18:16:59 -0700 (PDT)
+Received: from [172.31.235.92] ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id b9-20020a170902650900b00168ba5ac8adsm4155211plk.163.2022.06.17.18.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 18:16:59 -0700 (PDT)
+Message-ID: <d483da73-c5a1-2474-4992-f7ce9947d5ba@linaro.org>
+Date:   Fri, 17 Jun 2022 18:16:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220427085053.14964-2-j-luthra@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next 02/28] dt-bindings: net: fman: Add additional
+ interface properties
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20220617203312.3799646-1-sean.anderson@seco.com>
+ <20220617203312.3799646-3-sean.anderson@seco.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220617203312.3799646-3-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,100 +83,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14:20-20220427, Jai Luthra wrote:
-> From: Jayesh Choudhary <j-choudhary@ti.com>
+On 17/06/2022 13:32, Sean Anderson wrote:
+> At the moment, MEMACs are configured almost completely based on the
+> phy-connection-type. That is, if the phy interface is RGMII, it assumed
+> that RGMII is supported. For some interfaces, it is assumed that the
+> RCW/bootloader has set up the SerDes properly. The actual link state is
+> never reported.
 > 
-> Add the nodes for McASP 0-2.
+> To address these shortcomings, the driver will need additional
+> information. First, it needs to know how to access the PCS/PMAs (in
+> order to configure them and get the link status). The SGMII PCS/PMA is
+> the only currently-described PCS/PMA. Add the XFI and QSGMII PCS/PMAs as
+> well. The XFI (and 1GBase-KR) PCS/PMA is a c45 "phy" which sits on the
+> same MDIO bus as SGMII PCS/PMA. By default they will have conflicting
+> addresses, but they are also not enabled at the same time by default.
+> Therefore, we can let the default address for the XFI PCS/PMA be the
+> same as for SGMII. This will allow for backwards-compatibility.
 > 
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> Signed-off-by: Jai Luthra <j-luthra@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 51 ++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
+> QSGMII, however, cannot work with the current binding. This is because
+> the QSGMII PCS/PMAs are only present on one MAC's MDIO bus. At the
+> moment this is worked around by having every MAC write to the PCS/PMA
+> addresses (without checking if they are present). This only works if
+> each MAC has the same configuration, and only if we don't need to know
+> the status. Because the QSGMII PCS/PMA will typically be located on a
+> different MDIO bus than the MAC's SGMII PCS/PMA, there is no fallback
+> for the QSGMII PCS/PMA.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> index eec8dae65e7c..942e00f34bfa 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> @@ -530,4 +530,55 @@
->  		ti,mbox-num-users = <4>;
->  		ti,mbox-num-fifos = <16>;
->  	};
-> +
-> +	mcasp0: mcasp@2b00000 {
-> +		compatible = "ti,am33xx-mcasp-audio";
-> +		reg = <0x00 0x02b00000 0x00 0x2000>,
-> +		      <0x00 0x02b08000 0x00 0x400>;
-> +		reg-names = "mpu","dat";
-> +		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names = "tx", "rx";
-> +
-> +		dmas = <&main_bcdma 0 0xc500 0>, <&main_bcdma 0 0x4500 0>;
-> +		dma-names = "tx", "rx";
-> +
-> +		clocks = <&k3_clks 190 0>;
-> +		clock-names = "fck";
-
-
-McASP functional clock defaults to a non-audio friendly 100MHz
-main_2_hsdivout8_clk clock source. Instead, switch to using a 96MHz
-main_1_hsdivout6_clk.
-
-Please add:
-assigned-clocks = <&k3_clks 190 0>;
-assigned-clock-parents = <&k3_clks 190 2>;
-
-
-> +		power-domains = <&k3_pds 190 TI_SCI_PD_EXCLUSIVE>;
-> +	};
-> +
-> +	mcasp1: mcasp@2b10000 {
-> +		compatible = "ti,am33xx-mcasp-audio";
-> +		reg = <0x00 0x02b10000 0x00 0x2000>,
-> +		      <0x00 0x02b18000 0x00 0x400>;
-> +		reg-names = "mpu","dat";
-> +		interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names = "tx", "rx";
-> +
-> +		dmas = <&main_bcdma 0 0xc501 0>, <&main_bcdma 0 0x4501 0>;
-> +		dma-names = "tx", "rx";
-> +
-> +		clocks = <&k3_clks 191 0>;
-> +		clock-names = "fck";
-
-assigned-clocks = <&k3_clks 191 0>;
-assigned-clock-parents = <&k3_clks 191 2>;
-
-> +		power-domains = <&k3_pds 191 TI_SCI_PD_EXCLUSIVE>;
-> +	};
-> +
-> +	mcasp2: mcasp@2b20000 {
-> +		compatible = "ti,am33xx-mcasp-audio";
-> +		reg = <0x00 0x02b20000 0x00 0x2000>,
-> +		      <0x00 0x02b28000 0x00 0x400>;
-> +		reg-names = "mpu","dat";
-> +		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names = "tx", "rx";
-> +
-> +		dmas = <&main_bcdma 0 0xc502 0>, <&main_bcdma 0 0x4502 0>;
-> +		dma-names = "tx", "rx";
-> +
-> +		clocks = <&k3_clks 192 0>;
-> +		clock-names = "fck";
-assigned-clocks = <&k3_clks 192 0>;
-assigned-clock-parents = <&k3_clks 192 2>;
-
-> +		power-domains = <&k3_pds 192 TI_SCI_PD_EXCLUSIVE>;
-> +	};
->  };
-> -- 
-> 2.17.1
+> MEMACs (across all SoCs) support the following protocols:
 > 
+> - MII
+> - RGMII
+> - SGMII, 1000Base-X, and 1000Base-KX
+> - 2500Base-X (aka 2.5G SGMII)
+> - QSGMII
+> - 10GBase-R (aka XFI) and 10GBase-KR
+> - XAUI and HiGig
+> 
+> Each line documents a set of orthogonal protocols (e.g. XAUI is
+> supported if and only if HiGig is supported). Additionally,
+> 
+> - XAUI implies support for 10GBase-R
+> - 10GBase-R is supported if and only if RGMII is not supported
+> - 2500Base-X implies support for 1000Base-X
+> - MII implies support for RGMII
+> 
+> To switch between different protocols, we must reconfigure the SerDes.
+> This is done by using the standard phys property. We can also use it to
+> validate whether different protocols are supported (e.g. using
+> phy_validate). This will work for serial protocols, but not RGMII or
+> MII. Additionally, we still need to be compatible when there is no
+> SerDes.
+> 
+> While we can detect 10G support by examining the port speed (as set by
+> fsl,fman-10g-port), we cannot determine support for any of the other
+> protocols based on the existing binding. In fact, the binding works
+> against us in some respects, because pcsphy-handle is required even if
+> there is no possible PCS/PMA for that MAC. To allow for backwards-
+> compatibility, we use a boolean-style property for RGMII (instead of
+> presence/absence-style). When the property for RGMII is missing, we will
+> assume that it is supported. The exception is MII, since no existing
+> device trees use it (as far as I could tell).
+> 
+> Unfortunately, QSGMII support will be broken for old device trees. There
+> is nothing we can do about this because of the PCS/PMA situation (as
+> described above).
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Thanks for the patch but you add too many new properties. The file
+should be converted to YAML/DT schema first.
+
+
+Best regards,
+Krzysztof

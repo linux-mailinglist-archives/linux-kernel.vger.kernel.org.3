@@ -2,145 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0318E5505E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 17:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A37550562
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 16:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbiFRPwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 11:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
+        id S236812AbiFRODF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 10:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiFRPwR (ORCPT
+        with ESMTP id S240717AbiFRNzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 11:52:17 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8245413D10;
-        Sat, 18 Jun 2022 08:52:16 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id o16so9199053wra.4;
-        Sat, 18 Jun 2022 08:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TAka2U091hq1pTYLfbpSkbHxbEYvHoamK2SIJoLud0w=;
-        b=dpUtiHtnGLH0sRA+TkOb7TH5iShPD74gkMF4kZ5N9g4gW4bPawc1KU98fC2i4vKT2E
-         0saMbZ5pEh/7QCGHYCW868w9Nnrrp5yNJJHdifUXLAqO18+AQANWcT/djpfc+yOkzym+
-         r899LsQvd5P+stvcHjPiXrapVufqGesRbVLBElXX1p6Rw4+cdWd7NL1Jm/q+CK+14xcG
-         mOLOLp2KZbYofTMnxW4cv4QXJDQiy4vWXjip7GSLzVnZi785B9O1HBKN4n6ZxKJwgEg8
-         EF37uJyTaCFAkoWjMk4zLLmkzoBUkLJN0AaqXh3nG1CfWR4sDAxqQ9wsqHKZJiRk9nIw
-         kGug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TAka2U091hq1pTYLfbpSkbHxbEYvHoamK2SIJoLud0w=;
-        b=VCzn2xE3HoiYCKRRQadarKoPmxBimvp0b4Qy6R8QTDwdHsQtow686v7d7OT2rsEV+s
-         mkZx/ROeJUe3113ZN59MSCAPpc8UX2Yx1QTYuxjw7mL3rVY26U1gm4kNZZhwmyA7zjd3
-         OP8tnBPeuZpafp9OQvJFiKvzLRVvtaJDlo23oKJpzZvYj2gF8oEsM+m63G1TN826UK7E
-         F3o8QEQJNKZUZV0pN8fJwssjcCBPMUKOeq7e9B0WB2yMaTzaEGCywbHb6bgTx9biQQmf
-         7r9Sl69rdt5LwIoagLSmfvHt/DvNXHiJoNqgztXvcdem6MGX+YAIqvfXtB46C+sxdy+U
-         edew==
-X-Gm-Message-State: AJIora/vr9DGVsQXDRMNskmr2Fy125MR4gYEbB9Gun1pLYgbcTgdUZUk
-        +MRNRBXP3gDWXWYeGDumvJc=
-X-Google-Smtp-Source: AGRyM1va7j3EnoWku6+iPBrLG3zW8WN2GupDj5eVgKdIfXnz1Q+Aww42ksJ2o1+DqQk2eeFLFbh7cg==
-X-Received: by 2002:a05:6000:1ac7:b0:219:e95e:706b with SMTP id i7-20020a0560001ac700b00219e95e706bmr14516251wry.198.1655567535033;
-        Sat, 18 Jun 2022 08:52:15 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id a8-20020adfed08000000b0020d106c0386sm1952188wro.89.2022.06.18.08.52.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 08:52:14 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan McDowell <noodles@earth.li>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [RESEND net-next PATCH 3/3] net: dsa: qca8k: reset cpu port on MTU change
-Date:   Sat, 18 Jun 2022 09:26:50 +0200
-Message-Id: <20220618072650.3502-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220618072650.3502-1-ansuelsmth@gmail.com>
-References: <20220618072650.3502-1-ansuelsmth@gmail.com>
+        Sat, 18 Jun 2022 09:55:50 -0400
+Received: from mail.boiledscript.com (unknown [192.151.158.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A1AE6B;
+        Sat, 18 Jun 2022 06:55:48 -0700 (PDT)
+Date:   Sat, 18 Jun 2022 21:51:24 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
+        s=dkim; t=1655560545;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Kv5mC6jQ5gTh6n1bufpeX0V6kjPD+1etBWuVflNyfk=;
+        b=bnkkphdtYtVlXd+hDZKYOaxkpj17lDM+3nS4y49ALbXsVLb/LGd+ayIFXcSWD5UF06vpz2
+        YqfQU6G3MhQGQQrlo3+9rh5CKktamrPOkhvDtyLmg8Q26bLRBF64859g73GJvdz/oxkZUh
+        znRLLZeI0JoenhC7g4E1urxvn+eJmhqoXPO/SkS8Hz9/i6c5W0tPR23+0aKRdXBFiFRHhI
+        mX0krbeDYp8u1YCsrlP+9WkwvSmgm58nOpe9sAuOHnSZ3Czt69MYk42lKXhUFTSWhqOTVl
+        +jDgtQmOJV+YpbbyiNRbX23CUVoxOavw+cBsQf8PnnzgMVAngqrDE6q80fEpIA==
+From:   Hilton Chain <hako@ultrarare.space>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Bryan Cain <bryancain3@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH v6] HID: apple: Properly handle function keys on non-Apple 
+ keyboard
+Message-ID: <20220618214603.24bf8828@dorphine>
+In-Reply-To: <nycvar.YFH.7.76.2206081154160.10851@cbobk.fhfr.pm>
+References: <20220529182036.10226-1-jose.exposito89@gmail.com>
+ <20220530083752.1973a905@ultrarare.space>
+ <20220530061812.GA10391@elementary>
+ <20220531221102.7bd7da7d@ultrarare.space>
+ <20220531223330.3d63e2fe@ultrarare.space>
+ <20220531172053.GA10651@elementary>
+ <CAPnXWxG8gbe1arQK9kBtwM1Xcta+wreTN742kgtBBr1v0ewKug@mail.gmail.com>
+ <7f67ac07b8bd37d5817cd151674cc6b0@ultrarare.space>
+ <20220601072651.242ce08a@ultrarare.space>
+ <20220601121737.1226ffea@ultrarare.space>
+ <20220601174956.GA10418@elementary>
+ <20220602161219.152be32d@ultrarare.space>
+ <nycvar.YFH.7.76.2206081154160.10851@cbobk.fhfr.pm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Bar: +
+Authentication-Results: mail.boiledscript.com;
+        auth=pass smtp.mailfrom=hako@ultrarare.space
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was discovered that the Documentation lacks of a fundamental detail
-on how to correctly change the MAX_FRAME_SIZE of the switch.
+This commit extends fa33382c7f74 ("HID: apple: Properly handle function
+keys on Keychron keyboards") by adding an array of known non-Apple
+keyboards' device names, and the function apple_is_non_apple_keyboard()
+to identify and create exception for them.
 
-In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
-switch panics and cease to send any packet. This cause the mgmt ethernet
-system to not receive any packet (the slow fallback still works) and
-makes the device not reachable. To recover from this a switch reset is
-required.
-
-To correctly handle this, turn off the cpu ports before changing the
-MAX_FRAME_SIZE and turn on again after the value is applied.
-
-Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Hilton Chain <hako@ultrarare.space>
 ---
- drivers/net/dsa/qca8k.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index eaaf80f96fa9..0b92b9d5954a 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -2334,6 +2334,7 @@ static int
- qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+V5 -> V6: Add "GANSS" to the exception list.
+
+I just found out my keyboard would use another name in bluetooth mode, as I
+forgot to test this scenario... Sorry for the inconvenience!
+
+
+drivers/hid/hid-apple.c | 35 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 42a568902f492..3cf8eafe00b7b 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -36,7 +36,7 @@
+ #define APPLE_NUMLOCK_EMULATION	BIT(8)
+ #define APPLE_RDESC_BATTERY	BIT(9)
+ #define APPLE_BACKLIGHT_CTL	BIT(10)
+-#define APPLE_IS_KEYCHRON	BIT(11)
++#define APPLE_IS_NON_APPLE	BIT(11)
+
+ #define APPLE_FLAG_FKEY		0x01
+
+@@ -65,6 +65,10 @@ MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
+ 		"(For people who want to keep PC keyboard muscle memory. "
+ 		"[0] = as-is, Mac layout, 1 = swapped, PC layout)");
+
++struct apple_non_apple_keyboard {
++	char *name;
++};
++
+ struct apple_sc_backlight {
+ 	struct led_classdev cdev;
+ 	struct hid_device *hdev;
+@@ -313,6 +317,27 @@ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
+ 	{ }
+ };
+
++static const struct apple_non_apple_keyboard non_apple_keyboards[] = {
++	{ "SONiX USB DEVICE" },
++	{ "GANSS" },
++	{ "Keychron" },
++	{ "AONE" }
++};
++
++static bool apple_is_non_apple_keyboard(struct hid_device *hdev)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(non_apple_keyboards); i++) {
++		char *non_apple = non_apple_keyboards[i].name;
++
++		if (strncmp(hdev->name, non_apple, strlen(non_apple)) == 0)
++			return true;
++	}
++
++	return false;
++}
++
+ static inline void apple_setup_key_translation(struct input_dev *input,
+ 		const struct apple_key_translation *table)
  {
- 	struct qca8k_priv *priv = ds->priv;
-+	int ret;
- 
- 	/* We have only have a general MTU setting.
- 	 * DSA always set the CPU port's MTU to the largest MTU of the slave
-@@ -2344,10 +2345,29 @@ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
- 	if (!dsa_is_cpu_port(ds, port))
- 		return 0;
- 
-+	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
-+	 * the switch panics.
-+	 * Turn off both cpu ports before applying the new value to prevent
-+	 * this.
-+	 */
-+	if (priv->port_enabled_map & BIT(0))
-+		qca8k_port_set_status(priv, 0, 0);
-+
-+	if (priv->port_enabled_map & BIT(6))
-+		qca8k_port_set_status(priv, 6, 0);
-+
- 	/* Include L2 header / FCS length */
--	return regmap_update_bits(priv->regmap, QCA8K_MAX_FRAME_SIZE_REG,
--				  QCA8K_MAX_FRAME_SIZE_MASK,
--				  new_mtu + ETH_HLEN + ETH_FCS_LEN);
-+	ret = regmap_update_bits(priv->regmap, QCA8K_MAX_FRAME_SIZE_REG,
-+				 QCA8K_MAX_FRAME_SIZE_MASK,
-+				 new_mtu + ETH_HLEN + ETH_FCS_LEN);
-+
-+	if (priv->port_enabled_map & BIT(0))
-+		qca8k_port_set_status(priv, 0, 1);
-+
-+	if (priv->port_enabled_map & BIT(6))
-+		qca8k_port_set_status(priv, 6, 1);
-+
-+	return ret;
- }
- 
- static int
--- 
-2.36.1
+@@ -363,7 +388,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	}
 
+ 	if (fnmode == 3) {
+-		real_fnmode = (asc->quirks & APPLE_IS_KEYCHRON) ? 2 : 1;
++		real_fnmode = (asc->quirks & APPLE_IS_NON_APPLE) ? 2 : 1;
+ 	} else {
+ 		real_fnmode = fnmode;
+ 	}
+@@ -669,9 +694,9 @@ static int apple_input_configured(struct hid_device *hdev,
+ 		asc->quirks &= ~APPLE_HAS_FN;
+ 	}
+
+-	if (strncmp(hdev->name, "Keychron", 8) == 0) {
+-		hid_info(hdev, "Keychron keyboard detected; function keys will default to fnmode=2 behavior\n");
+-		asc->quirks |= APPLE_IS_KEYCHRON;
++	if (apple_is_non_apple_keyboard(hdev)) {
++		hid_info(hdev, "Non-apple keyboard detected; function keys will default to fnmode=2 behavior\n");
++		asc->quirks |= APPLE_IS_NON_APPLE;
+ 	}
+
+ 	return 0;
+
+base-commit: 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+--
+2.36.1

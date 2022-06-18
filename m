@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F422550244
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DF555024B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 05:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383979AbiFRDDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 23:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S1384004AbiFRDDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 23:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbiFRDDI (ORCPT
+        with ESMTP id S1383900AbiFRDDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 23:03:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDA16C578;
-        Fri, 17 Jun 2022 20:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655521387; x=1687057387;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u1YpkbtOcUOCaYwksF0M3zdyzUGActOf3AeMErr9Tsk=;
-  b=ArW/IIczv2XGxlozAANxXDL6PPCNB+oCYKzP2HIj7WmSiAlvn/2nHlOP
-   4th71OUf4JvIE6RfkHT6yFYkHDk0MfGDaysKJMBI6s+BR1STCdfgB0Dfj
-   7JJqKaDustYyItQPn0IkHAjQnK7xYVSI/cWx+TK65n4HtTkvojVmETNtm
-   oTMJi2IMjnSWWfXIieFyZ4UrZaJ8yBI/IMbzrWDGPJ8prhUWmumXwU3lp
-   KaX+7P+noG7tUupOkuMALsFjx8oUVWNautvkchNmtFWWt91G98Sn3gpOa
-   hyWKk/+Q8ouI9k3Br5aW2stc1UXReW0Hh/anfKh846DiPNZV16bcjDdLq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343615138"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="343615138"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 20:03:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="653869079"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jun 2022 20:03:03 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2Ojm-000PyF-Bw;
-        Sat, 18 Jun 2022 03:03:02 +0000
-Date:   Sat, 18 Jun 2022 11:02:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH net-next 03/28] phy: fsl: Add QorIQ SerDes driver
-Message-ID: <202206181015.BLEIZObf-lkp@intel.com>
-References: <20220617203312.3799646-4-sean.anderson@seco.com>
+        Fri, 17 Jun 2022 23:03:41 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520BA6CAA7;
+        Fri, 17 Jun 2022 20:03:40 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I32Nt4004650;
+        Fri, 17 Jun 2022 22:02:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1655521343;
+        bh=v9iLe16OQzDjus8PgEyzt81ju785zygpn75Qb7cPKDk=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=ubm9+IAhGGTk3kdTt5x7vdcv21zn8SduavN1QPsDFtatpMEQLnnpq14kmxzjhSdoM
+         EhSYzwprF+3qoaWgxqEa7tkCA7AfNzT0CIUyyPN2V1vMiSYZKDtU+T7Pvq2yIkEfs4
+         7jCtmDUFYShPMx+ispwTz24Ou/91SMS8cN3blxkI=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I32NTI008896
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Jun 2022 22:02:23 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
+ Jun 2022 22:02:22 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 17 Jun 2022 22:02:22 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I32MBg024730;
+        Fri, 17 Jun 2022 22:02:22 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     <krzysztof.kozlowski@linaro.org>, <olof@lixom.net>,
+        <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, <arm@kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, <linux-input@vger.kernel.org>,
+        <khuong@os.amperecomputing.com>, <heiko@sntech.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <jonathanh@nvidia.com>, <sebastian.hesselbarth@gmail.com>,
+        <agross@kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <tony@atomide.com>,
+        <nicolas.ferre@microchip.com>, <joel@jms.id.au>,
+        <linux-arm-msm@vger.kernel.org>, <robh+dt@kernel.org>,
+        <bcousson@baylibre.com>, <thierry.reding@gmail.com>,
+        <claudiu.beznea@microchip.com>, <vigneshr@ti.com>,
+        <bjorn.andersson@linaro.org>, <openbmc@lists.ozlabs.org>,
+        <peda@axentia.se>, <andrew@lunn.ch>,
+        <linux-aspeed@lists.ozlabs.org>, <linus.walleij@linaro.org>,
+        <festevam@gmail.com>, <xuwei5@hisilicon.com>,
+        <alexandre.belloni@bootlin.com>, <leoyang.li@nxp.com>,
+        <michal.simek@xilinx.com>, <andrew@aj.id.au>, <kristo@kernel.org>,
+        <linux-imx@nxp.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <j.neuschaefer@gmx.net>, <gregory.clement@bootlin.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>, <linux@armlinux.org.uk>,
+        <kernel@pengutronix.de>, <dmitry.torokhov@gmail.com>,
+        <linux-tegra@vger.kernel.org>
+Subject: Re: (subset) [PATCH v3 00/40] dt-bindings: input: gpio-keys: rework matching children
+Date:   Fri, 17 Jun 2022 22:02:21 -0500
+Message-ID: <165552126299.28422.3856100388848453087.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617203312.3799646-4-sean.anderson@seco.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +87,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Hi Krzysztof Kozlowski,
 
-I love your patch! Perhaps something to improve:
+On Wed, 15 Jun 2022 17:52:24 -0700, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> 1. dt-bindings: rebased on top of Rob's:
+>    https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
+> 
+> 2. DTS patches are independent. They can be picked up directly by sub-arch
+>    maintainers, by Arnd or Olof, or eventually by me (if you wish).
+> 
+> [...]
 
-[auto build test WARNING on net-next/master]
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-dpaa-Convert-to-phylink/20220618-044003
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4875d94c69d5a4836c4225b51429d277c297aae8
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220618/202206181015.BLEIZObf-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d9c7b1e909ace0c4229445647587ae1f64cf52c0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Anderson/net-dpaa-Convert-to-phylink/20220618-044003
-        git checkout d9c7b1e909ace0c4229445647587ae1f64cf52c0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/ethernet/freescale/fman/ drivers/phy/freescale/ net/ipv6/
+[29/40] arm64: dts: ti: align gpio-key node names with dtschema
+        commit: 85423386c9763fb20159892631eccc481a2d9b71
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-All warnings (new ones prefixed by >>):
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
->> drivers/phy/freescale/phy-qoriq.c:382:16: warning: no previous prototype for 'qs_clk_hw_to_priv' [-Wmissing-prototypes]
-     382 | struct qs_clk *qs_clk_hw_to_priv(struct clk_hw *hw)
-         |                ^~~~~~~~~~~~~~~~~
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-vim +/qs_clk_hw_to_priv +382 drivers/phy/freescale/phy-qoriq.c
-
-   381	
- > 382	struct qs_clk *qs_clk_hw_to_priv(struct clk_hw *hw)
-   383	{
-   384		return container_of(hw, struct qs_clk, hw);
-   385	}
-   386	
-
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+

@@ -2,144 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED54D550413
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 12:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D045550418
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 13:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiFRKte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 06:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S233079AbiFRK7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 06:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiFRKtb (ORCPT
+        with ESMTP id S233369AbiFRK7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 06:49:31 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2595617585;
-        Sat, 18 Jun 2022 03:49:29 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 2526A1C0B8F; Sat, 18 Jun 2022 12:49:26 +0200 (CEST)
-Date:   Sat, 18 Jun 2022 12:49:25 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>, baijiaju1990@gmail.com,
-        oslab@tsinghua.edu.cn, colyli@suse.de, axboe@kernel.dk
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-Message-ID: <20220618104925.GA3644@duo.ucw.cz>
-References: <20220607164948.980838585@linuxfoundation.org>
- <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
- <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Sat, 18 Jun 2022 06:59:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D01837E
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 03:59:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 263E3CE1795
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391A3C3411A;
+        Sat, 18 Jun 2022 10:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655549973;
+        bh=4uyqZyMJF1Bu5df4KwTP7qqSfBeHSjp9u8ETaVpF/ho=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r3s8iTPibIJQW2Yr0EEsXan9i12jWGxR+D30WkoWyIJKx0CN0oVkYVqll4gTklOOd
+         +DSLUAjYs4z6+Iewwqve/C6pvd6r3C/LO/2W9EZKHK9Ta7sKGyh+z49tD7+swlEpsP
+         cjRCHlL/V7TVnZpOcPfA+oKEGl88V9Pi6wNFgERWpOK/gESCs8/egQLVma4B1elAri
+         hL4QtgTdcjDLNW1xQ1f6YTVrSTGQ/fmNh1JRwIL+kz12yM2Ik/GbpxcU0HBForJU36
+         GQJuRhymYJpxTRAU60WD29nOD/zfMwaCosC9A+uAZNhaLIgOc+LQIGrflhIsHUC+sD
+         B9tdvD824U3bQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o2WAs-001SvI-Vo;
+        Sat, 18 Jun 2022 11:59:31 +0100
+Date:   Sat, 18 Jun 2022 11:59:32 +0100
+Message-ID: <87czf6p78r.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V12 03/10] irqchip: Add LoongArch CPU interrupt controller support
+In-Reply-To: <1655273250-23495-4-git-send-email-lvjianmin@loongson.cn>
+References: <1655273250-23495-1-git-send-email-lvjianmin@loongson.cn>
+        <1655273250-23495-4-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 15 Jun 2022 07:07:23 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> From: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> LoongArch CPUINTC stands for CSR.ECFG/CSR.ESTAT and related interrupt
+> controller that described in Section 7.4 of "LoongArch Reference Manual,
+> Vol 1". For more information please refer Documentation/loongarch/irq-
+> chip-model.rst.
+> 
+> LoongArch CPUINTC has 13 interrupt sources: SWI0~1, HWI0~7, IPI, TI
+> (Timer) and PCOV (PMC). IRQ mappings of HWI0~7 are configurable (can be
+> created from DT/ACPI), but IPI, TI (Timer) and PCOV (PMC) are hardcoded
+> bits, so we define get_xxx_irq() for them.
+> 
+> Change-Id: I53fb0be768daeeecc90d0ccc0bb0becd3d4e6984
 
---fdj2RfSjLxBAspz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please drop this Change-Id. The upstream kernel doesn't use Gerrit.
 
-Hi!
-> > >
-> > > This is the start of the stable review cycle for the 5.17.14 release.
-> > > There are 772 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >
-> > > Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/pa=
-tch-5.17.14-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able-rc.git linux-5.17.y
-> > > and the diffstat can be found below.
-> > >
-=2E..
-> > We will bisect and let you know more details about this reported proble=
-m.
->=20
-> The bisect script pointed me to this commit and  reverted and tested and
-> confirmed.
+> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  drivers/acpi/bus.c                  |   3 +
+>  drivers/irqchip/Kconfig             |  10 +++
+>  drivers/irqchip/Makefile            |   1 +
+>  drivers/irqchip/irq-loongarch-cpu.c | 134 ++++++++++++++++++++++++++++++++++++
+>  include/linux/acpi.h                |   1 +
+>  5 files changed, 149 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+> 
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 86fa61a..63fbf00 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -1145,6 +1145,9 @@ static int __init acpi_bus_init_irq(void)
+>  	case ACPI_IRQ_MODEL_PLATFORM:
+>  		message = "platform specific model";
+>  		break;
+> +	case ACPI_IRQ_MODEL_LPIC:
+> +		message = "LPIC";
+> +		break;
 
-Can you add some printks into that? Because I'm pretty sure this patch
-does not break anything. (It should not fix much, either.)
+This should be part of the patch that deals with the ACPI-specific
+part of the architecture, which is the following patch.
 
-> commit 1883088ed4a0d5cc9cea500ca4e89a354ab32c11
-> Author: Jia-Ju Bai <baijiaju1990@gmail.com>
-
->     md: bcache: check the return value of kzalloc() in detached_dev_do_re=
-quest()
->=20
->     commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
->=20
->     The function kzalloc() in detached_dev_do_request() can fail, so its
->     return value should be checked.
->=20
->     Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached
-=2E..
-
-> +++ b/drivers/md/bcache/request.c
-> @@ -1107,6 +1107,12 @@ static void detached_dev_do_request(struct
-> bcache_device *d, struct bio *bio,
->          * which would call closure_get(&dc->disk.cl)
->          */
->         ddip =3D kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO=
-);
-> +       if (!ddip) {
-> +               bio->bi_status =3D BLK_STS_RESOURCE;
-> +               bio->bi_end_io(bio);
-> +               return;
-> +       }
+>  	default:
+>  		pr_info("Unknown interrupt routing model\n");
+>  		return -ENODEV;
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 4ab1038..4126b1c 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -546,6 +546,16 @@ config EXYNOS_IRQ_COMBINER
+>  	  Say yes here to add support for the IRQ combiner devices embedded
+>  	  in Samsung Exynos chips.
+>  
+> +config IRQ_LOONGARCH_CPU
+> +	bool
+> +	select GENERIC_IRQ_CHIP
+> +	select IRQ_DOMAIN
+> +	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> +	help
+> +	  Support for the LoongArch CPU Interrupt Controller. For details of
+> +	  irq chip hierarchy on LoongArch platforms please read the document
+> +	  Documentation/loongarch/irq-chip-model.rst.
 > +
->         ddip->d =3D d;
->         /* Count on the bcache device */
->         ddip->orig_bdev =3D orig_bdev;
->=20
+>  config LOONGSON_LIOINTC
+>  	bool "Loongson Local I/O Interrupt Controller"
+>  	depends on MACH_LOONGSON64
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index 5b67450..6894a13 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -103,6 +103,7 @@ obj-$(CONFIG_LS1X_IRQ)			+= irq-ls1x.o
+>  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)	+= irq-ti-sci-intr.o
+>  obj-$(CONFIG_TI_SCI_INTA_IRQCHIP)	+= irq-ti-sci-inta.o
+>  obj-$(CONFIG_TI_PRUSS_INTC)		+= irq-pruss-intc.o
+> +obj-$(CONFIG_IRQ_LOONGARCH_CPU)		+= irq-loongarch-cpu.o
+>  obj-$(CONFIG_LOONGSON_LIOINTC)		+= irq-loongson-liointc.o
+>  obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
+>  obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
+> diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
+> new file mode 100644
+> index 0000000..c382bd9
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-loongarch-cpu.c
+> @@ -0,0 +1,134 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +
+> +#include <asm/loongarch.h>
+> +#include <asm/setup.h>
+> +#include "irq-loongarch-pic-common.h"
+> +
+> +static struct irq_domain *irq_domain;
+> +
+> +static void mask_loongarch_irq(struct irq_data *d)
+> +{
+> +	clear_csr_ecfg(ECFGF(d->hwirq));
+> +}
+> +
+> +static void unmask_loongarch_irq(struct irq_data *d)
+> +{
+> +	set_csr_ecfg(ECFGF(d->hwirq));
+> +}
+> +
+> +static struct irq_chip cpu_irq_controller = {
+> +	.name		= "LoongArch",
 
-So... for patch to make any difference, memory allocation has to fail
-and ddip has to be NULL.
+Why is it "LoongArch" and not "CPUINTC", which would make a lot more
+sense?
 
-Before the patch, it would oops in "ddip->d =3D d;". With the patch, you
-do some kind of error handling. Even if it is buggy, it should not do
-more harm than immediate oops.
+> +	.irq_mask	= mask_loongarch_irq,
+> +	.irq_unmask	= unmask_loongarch_irq,
+> +};
+> +
+> +static void handle_cpu_irq(struct pt_regs *regs)
+> +{
+> +	int hwirq;
+> +	unsigned int estat = read_csr_estat() & CSR_ESTAT_IS;
+> +
+> +	while ((hwirq = ffs(estat))) {
+> +		estat &= ~BIT(hwirq - 1);
+> +		generic_handle_domain_irq(irq_domain, hwirq - 1);
+> +	}
+> +}
+> +
+> +int get_ipi_irq(void)
+> +{
+> +	return irq_create_mapping(irq_domain, EXCCODE_IPI - EXCCODE_INT_START);
+> +}
+> +
+> +int get_pmc_irq(void)
+> +{
+> +	return irq_create_mapping(irq_domain, EXCCODE_PMC - EXCCODE_INT_START);
+> +}
+> +
+> +int get_timer_irq(void)
+> +{
+> +	return irq_create_mapping(irq_domain, EXCCODE_TIMER - EXCCODE_INT_START);
+> +}
+> +
+> +static int loongarch_cpu_intc_map(struct irq_domain *d, unsigned int irq,
+> +			     irq_hw_number_t hwirq)
+> +{
+> +	irq_set_noprobe(irq);
+> +	irq_set_chip_and_handler(irq, &cpu_irq_controller, handle_percpu_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
+> +	.map = loongarch_cpu_intc_map,
+> +	.xlate = irq_domain_xlate_onecell,
+> +};
+> +
+> +struct irq_domain * __init loongarch_cpu_irq_init(void)
+> +{
+> +	struct fwnode_handle *domain_handle;
+> +
+> +	/* Mask interrupts. */
+> +	clear_csr_ecfg(ECFG0_IM);
+> +	clear_csr_estat(ESTATF_IP);
+> +
+> +	domain_handle = irq_domain_alloc_fwnode(NULL);
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Please don't use NULL here, as this is supposed to be a physical
+address. If you don't have any physical address at hand (because this
+driver isn't using MMIO), use irq_domain_alloc_named_fwnode() instead.
 
---fdj2RfSjLxBAspz7
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	irq_domain = irq_domain_create_linear(domain_handle, EXCCODE_INT_NUM,
+> +					&loongarch_cpu_intc_irq_domain_ops, NULL);
+> +
+> +	if (!irq_domain)
+> +		panic("Failed to add irqdomain for LoongArch CPU");
+> +
+> +	set_handle_irq(&handle_cpu_irq);
+> +	acpi_set_irq_model(ACPI_IRQ_MODEL_LPIC, lpic_get_gsi_domain_id);
 
------BEGIN PGP SIGNATURE-----
+lpic_get_gsi_domain_id only gets defined in the following patch, so
+the series cannot be bisected. Please fix this (the series should
+compile every step of the way).
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYq2ttQAKCRAw5/Bqldv6
-8oHGAJ9pEIvr/YXimrgyUF20plQSfIVzMwCZAVwuSN3MVMeBOt0SNNBc4rygDCc=
-=l+d7
------END PGP SIGNATURE-----
+> +
+> +	return irq_domain;
+> +}
+> +
+> +static int __init
+> +liointc_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_lio_pic *liointc_entry = (struct acpi_madt_lio_pic *)header;
+> +
+> +	return liointc_acpi_init(irq_domain, liointc_entry);
+> +}
+> +
+> +static int __init
+> +eiointc_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_eio_pic *eiointc_entry = (struct acpi_madt_eio_pic *)header;
+> +
+> +	return eiointc_acpi_init(irq_domain, eiointc_entry);
+> +}
+> +static int __init acpi_cascade_irqdomain_init(void)
+> +{
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC,
+> +			      liointc_parse_madt, 0);
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC,
+> +			      eiointc_parse_madt, 0);
+> +	return 0;
+> +}
+> +static int __init coreintc_acpi_init_v1(union acpi_subtable_headers *header,
+> +				   const unsigned long end)
+> +{
+> +	if (irq_domain)
+> +		return 0;
+> +
+> +	init_vector_parent_group();
+> +	loongarch_cpu_irq_init();
+> +	acpi_cascade_irqdomain_init();
+> +	return 0;
+> +}
+> +IRQCHIP_ACPI_DECLARE(coreintc_v1, ACPI_MADT_TYPE_CORE_PIC,
+> +		NULL, ACPI_MADT_CORE_PIC_VERSION_V1,
+> +		coreintc_acpi_init_v1);
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 957e23f..d2f5108 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -105,6 +105,7 @@ enum acpi_irq_model_id {
+>  	ACPI_IRQ_MODEL_IOSAPIC,
+>  	ACPI_IRQ_MODEL_PLATFORM,
+>  	ACPI_IRQ_MODEL_GIC,
+> +	ACPI_IRQ_MODEL_LPIC,
 
---fdj2RfSjLxBAspz7--
+This hunk should be moved to the patch that introduces
+lpic_get_gsi_domain_id.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

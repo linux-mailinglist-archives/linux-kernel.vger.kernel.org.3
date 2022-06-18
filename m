@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDE85501AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C045501AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383235AbiFRBaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 21:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S1383431AbiFRBgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 21:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234451AbiFRBaU (ORCPT
+        with ESMTP id S234451AbiFRBgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 21:30:20 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0018E6B038
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:30:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id f16so4206600pjj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kccO1sMt4IVQr6gw8NGeYzykFCi2kqGNpB812cIxBxQ=;
-        b=Ioe5DkyWJUeiwfoMr7ODaDKGOesLncavP6wtKSksJhHVKrDVOXesQ0nqm3M2VNRMTX
-         HCzrQOQHFlgjq9HVLmGOcyH8Ofc5weCssmQqWl3CvELT8LuSt6N3O/a48rBLHG1l+Q1V
-         rRHG+2hYR5g+QlL2bCVnFPVsWVNTUAs40w6Edon0+xyj/NfoMbnSvNYUeqLEifMUySa8
-         u4c6DSZBK76Vxw8Vcj7Hp1ucf4yVYNl5JQQopScaE8cB8cxp13rMev5/L2vH/1B64sMa
-         l5boefw0GopANX4I/3v8I4Vb+9wmJAtL1BXYvIumfUZVCmKzZ4AKqYSaqiNgxj2KYr8h
-         2WxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kccO1sMt4IVQr6gw8NGeYzykFCi2kqGNpB812cIxBxQ=;
-        b=NkZmjmCaJkXr0cQmiRpRztdyrAzFUgyj4NfpeNaWV7FnwkeZXZSSRhaxg7ZkoSNEqZ
-         CNRGUXZ7LZoP5qpWyP8Hqi1mrvn+yeGcmH5DF+2SliZbMQcQQehgWkPzMcg67nFO5f0t
-         kAofnK8TMCNNbBbztbonpyuIYDVjCbF1/UnyXVbPmvBR5isAICFxdKq5Cap8tu5eK8lb
-         msO05HFJahwOPenFXaeKtisqmHRF4svpZ7/VYlW5mftrv6Sxhm3K+rNc08Zl4WdVcXtE
-         gE9nlJU0otMat+CZbb0UbJ1D5knTOCw+zFI4Rry9OrpM6s+Un5/g3qoYLs4I/xm80TSC
-         Afkg==
-X-Gm-Message-State: AJIora8eDT330hCQnV7sLsNFQevt+ThPwPiKUkxxFuLUzeNn/7V/ybUU
-        qwhY1dQwyxg+6GNzLGwTJ6VDqQ==
-X-Google-Smtp-Source: AGRyM1sBVJ08gwwl+dJAYTd5lGbcy+Oefegkj+zaP8dzefkur/3JBpSgRNNzTpRceEfMuwaL/ag7og==
-X-Received: by 2002:a17:90a:17a6:b0:1ec:74e4:d7a3 with SMTP id q35-20020a17090a17a600b001ec74e4d7a3mr6495840pja.115.1655515819514;
-        Fri, 17 Jun 2022 18:30:19 -0700 (PDT)
-Received: from [172.31.235.92] ([216.9.110.6])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170903024300b0016378bfeb90sm4157527plh.227.2022.06.17.18.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 18:30:19 -0700 (PDT)
-Message-ID: <8959f1ae-22e4-7a21-2fe3-4b668d83ee97@linaro.org>
-Date:   Fri, 17 Jun 2022 18:30:15 -0700
+        Fri, 17 Jun 2022 21:36:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25D52EA20;
+        Fri, 17 Jun 2022 18:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655516172; x=1687052172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=onY+nCZRWkua/63LAwmpFnBbwjRkTru5ODMAf4ATfe8=;
+  b=PaZ+53fzYRSrj+WqI/RVaAFxTvABL/URCyjVgCn/cgxuiKsTBHzKkxe8
+   WrR6oqFb3PaRlpW/f7BPgLNOaHASzG5z6NhYTX4jKHZKVzh/ttkQx6vGV
+   UAfYbyH8H6dBQwpAFSbsBP3ehDZdXD4px59J8jZJAD/6XyM5lyO00etRR
+   lEZStxmlOnPsoLfp+V2MWaPVkF1bqXWiGR7jXff7NjTULQnH0UahiBmzB
+   IF4S1ufz0X/MjTu6qx8OjA3ilAdi9qTbWgFosKwTK1qrUJ9fIje6opzG+
+   S/8rYsp6HiEDWUkvy1k8PC5PYcLotGCze3B4Ypy9A/oF52qu24loOLdNX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365943806"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="365943806"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 18:36:12 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="590337607"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 18:36:12 -0700
+Date:   Fri, 17 Jun 2022 18:35:49 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     "Williams, Dan J" <dan.j.williams@intel.com>
+Cc:     "Weiny, Ira" <ira.weiny@intel.com>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] cxl/core: Add sysfs attribute get_poison for list
+ retrieval
+Message-ID: <20220618013549.GA1534210@alison-desk>
+References: <cover.1655250669.git.alison.schofield@intel.com>
+ <57644934bb7af8e1c692735f53c2c415a1ba16d1.1655250669.git.alison.schofield@intel.com>
+ <62accb0345de2_81c5e29454@dwillia2-xfh.notmuch>
+ <20220618002121.GA1533961@alison-desk>
+ <62ad25a4146fd_899b32948c@dwillia2-xfh.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: usb: mtk-xhci: Allow wakeup
- interrupt-names to be optional
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-References: <20220617222916.2435618-1-nfraprado@collabora.com>
- <20220617222916.2435618-2-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220617222916.2435618-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62ad25a4146fd_899b32948c@dwillia2-xfh.notmuch>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,18 +69,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
-> Add missing "minItems: 1" to the interrupt-names property to allow the
-> second interrupt-names, "wakeup", to be optional.
+On Fri, Jun 17, 2022 at 06:08:52PM -0700, Dan Williams wrote:
+> Alison Schofield wrote:
+> > On Fri, Jun 17, 2022 at 11:42:11AM -0700, Dan Williams wrote:
+> > > alison.schofield@ wrote:
+> > > > From: Alison Schofield <alison.schofield@intel.com>
+> > > > 
+> > > > The sysfs attribute, get_poison, allows user space to request the
+> > > > retrieval of a CXL devices poison list for its persistent memory.
+> > > 
+> > > If the device supports get poison list for volatile memory, just grab
+> > > that too. With the "to be released soon" region patches userspace can
+> > > trivially translate DPA addresses to media type.
+> > > 
+> > 
+> > Dan,
+> > 
+> > The only way I know to discover if the device supports poison list for
+> > volatile is to do the get_poison_list on the volatile range and see
+> > what happens. Am I missing a capability setting somewhere?
 > 
-> Fixes: fe8e488058c4 ("dt-bindings: usb: mtk-xhci: add wakeup interrupt")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> If someone executes "echo 1 > trace_poison_list" I expect that the
+> driver does:
 > 
-> ---
+> get_poison_list(volatile_range);
+> get_poison_list(pmem_range);
+> 
+> ...and if scanning the volatile partition ends in error then that just
+> means no error records appear. When the error is "Invalid Physical
+> Address" the driver can just remember that's a permanent error and never
+> try again. So it's more like:
+> 
+> if (volatile_range_valid) {
+> 	if (get_poison_list(volatile_range) == INVALID_PHYS_ADDR)
+> 		volatile_range_valid = false;
+> }
+> get_poison_list(pmem_range);
+> 
+> ...but that's probably overkill since get_poison_list() is cheap. Just
+> treat it like the zero error records case.
+
+Got it!
+
+> 
+> In the to be released region provisioning patches there is a DPA
+> resource tree partitioned by DPA mode type, so the poison list code
+> probably wants to do something like:
+> 
+> down_read(&cxl_dpa_rwsem);
+> for (p = cxlds->dpa_res.child; p; p = p->sibling)
+> 	get_poison_list(p->start, resource_size(p));
+> up_read(&cxl_dpa_rwsem);
+
+Great ending to the week! This is going to make collecting the
+poison per region much simpler than I was imagining :)
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-
-Best regards,
-Krzysztof

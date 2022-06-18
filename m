@@ -2,251 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72885550376
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F288C55037A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiFRILH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 04:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S230457AbiFRIRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 04:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiFRILC (ORCPT
+        with ESMTP id S229499AbiFRIRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 04:11:02 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279D92B193;
-        Sat, 18 Jun 2022 01:11:00 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id b7so6909916ljr.6;
-        Sat, 18 Jun 2022 01:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Cgt8r4SWxYEShXV42BthEwq1nWQW0QY6gFYNlkR9jIA=;
-        b=WvEQLsiqGkVo54RbG2r1VqNFqkfE+4JCxUE7T5vKrUFZ31O9eMrux2q1XItBJZ729Y
-         ktZK6rY5aIr+YAYZ6ym1mbK2aXkSGMg0+KcAPgZOcD8dcrpAM5fMAJ/7GASAVN67DMqF
-         qvoxB3SX7ttCHllE90Bz2mMBRl+lKutM6HJKOMiSZpaJ4YXBjYWtt8tlFfTXx2sOLACh
-         kcbWCDPUqgxwsCh634pf64OurQKBrBvjPbF6kJVnuhtJu7RRct8zHiAKGzGhq4VN9m4T
-         1LrKpAG+MgBVoMLFDKQfkkzb4jtddZl5Pu/PnThj/lNaroF/TKmN5jMisoB9m+dmy5BR
-         SBaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Cgt8r4SWxYEShXV42BthEwq1nWQW0QY6gFYNlkR9jIA=;
-        b=5cKjLo9jN5Gp89fUtQAq8Mu0bgTfaxHAYiZBTMQmt6UN5AonUMYFqHG9ZBqusdQuK+
-         jIlx6jM0tPPEY0poxBqaqShZ3INpxVJmx524nd3sV2JJp/lG58XDX4zk2V8W+GWqhUq5
-         P1UDUgObWBI94K0UMkttl7Szw0+AlEUNKd0eAc9pb/Ewd4IwH/CPRXaUkwBuV4EnOL7t
-         xHF7O+1nFmMkTz16HLSaYv/SYqCuenjWiETs5cL2g29yQ1V+LCUsmypTyV+pFKmuiY/y
-         A7kzrBInAkR2cuiBQxCkQszxaUaFZu6Ty6G4aijMxiQNHoRPlQ7P1Sm9F9/omRvEcOxD
-         hyDw==
-X-Gm-Message-State: AJIora9OqnTQK9WBE301t+6TdbdY3OpfyQZxQhEUG4Jgrrxj2Ng89VKM
-        8/kEkUzeegKNWtmGnfld+RhP5yK1T0O4g2z4
-X-Google-Smtp-Source: AGRyM1til4vYja08UaNonR/BsUxCOZoV3Rbhj5CwEAeRzcemMJIDW5thjfdsb91pJKouQKfYt4GIgg==
-X-Received: by 2002:a05:651c:b24:b0:25a:45d7:4bb8 with SMTP id b36-20020a05651c0b2400b0025a45d74bb8mr6671159ljr.361.1655539857976;
-        Sat, 18 Jun 2022 01:10:57 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id y23-20020a196417000000b004791b687235sm910895lfb.119.2022.06.18.01.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 01:10:57 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 11:10:55 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 12/23] ata: libahci: Extend port-cmd flags set with
- port capabilities
-Message-ID: <20220618081055.grsrjxa5gqiuhy2i@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-13-Sergey.Semin@baikalelectronics.ru>
- <d06e9910-527e-cfa2-f2df-737fb4799fe5@opensource.wdc.com>
- <20220615205819.uiqptkqm5qfdvrbj@mobilestation>
- <903e273a-9dc5-f0df-5391-e96e63318323@opensource.wdc.com>
- <20220617203100.jg2o7ponolaenf6r@mobilestation>
- <f560ca8b-d921-d228-64f0-74e320f8af67@opensource.wdc.com>
+        Sat, 18 Jun 2022 04:17:13 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7B15F8F
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:17:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655540232; x=1687076232;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=loNvwNLk3aAAZlD5birYA6nAQLL7AUhBg/Y8RvgLrz4=;
+  b=k1eoaALsqRVwEPidRPm4VSZFNLU5F3XAEI1Va/+bX9fXhgQpiXtIEG4f
+   NSpNxbgKxp6cxfZi1J2+S1eQvxpHj6Vc+SpuxpqivT1HXTFVWHWapjlhD
+   x9hqEICLxEk4M9/r/99c+J9yvVgG4Z5vU/IZYX22BWKHnEYJDSxQ/DYny
+   TtHYEpfCX/Hyf1aWysV+LLpHiLhRFAVm2RGZS12QrSXR18/u0TBKKdH/M
+   QXbLXl2+wNDFWaG96TlNAyOvCzSg9psnbFfdSJ6Tgjgm8shtGxubCvYOR
+   e87DQ7bUnWVKsHcchS9U6XDzukojMLNf9jMRstAjJdRAGhaXL60BUml+t
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279678096"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="279678096"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 01:17:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="613804850"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 18 Jun 2022 01:17:09 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Tdk-000Q9N-TH;
+        Sat, 18 Jun 2022 08:17:08 +0000
+Date:   Sat, 18 Jun 2022 16:16:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Latypov <dlatypov@google.com>, mark.rutland@arm.com,
+        boqun.feng@gmail.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, peterz@infradead.org,
+        Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
+Message-ID: <202206181607.somVaD8p-lkp@intel.com>
+References: <20220616180430.930721-1-dlatypov@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f560ca8b-d921-d228-64f0-74e320f8af67@opensource.wdc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220616180430.930721-1-dlatypov@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 03:52:28PM +0900, Damien Le Moal wrote:
-> On 6/18/22 05:31, Serge Semin wrote:
-> > On Thu, Jun 16, 2022 at 09:28:18AM +0900, Damien Le Moal wrote:
-> >> On 2022/06/16 5:58, Serge Semin wrote:
-> >>> On Tue, Jun 14, 2022 at 05:32:41PM +0900, Damien Le Moal wrote:
-> >>>> On 6/10/22 17:17, Serge Semin wrote:
-> >>>>> Currently not all of the Port-specific capabilities listed in the
-> >>>>
-> >>>> s/listed/are listed
-> >>>>
-> >>>>> PORT_CMD-enumeration. Let's extend that set with the Cold Presence
-> >>>>> Detection and Mechanical Presence Switch attached to the Port flags [1] so
-> >>>>> to closeup the set of the platform-specific port-capabilities flags.  Note
-> >>>>> these flags are supposed to be set by the platform firmware if there is
-> >>>>> one. Alternatively as we are about to do they can be set by means of the
-> >>>>> OF properties.
-> >>>>>
-> >>>>> While at it replace PORT_IRQ_DEV_ILCK with PORT_IRQ_DMPS and fix the
-> >>>>> comment there. In accordance with [2] that IRQ flag is supposed to
-> >>>>> indicate the state of the signal coming from the Mechanical Presence
-> >>>>> Switch.
-> >>>>>
-> >>>>> [1] Serial ATA AHCI 1.3.1 Specification, p.27
-> >>>>> [2] Serial ATA AHCI 1.3.1 Specification, p.24, p.88
-> >>>>>
-> >>>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> >>>>> Reviewed-by: Hannes Reinecke <hare@suse.de>
-> >>>>>
-> >>>>> ---
-> >>>>>
-> >>>>> Changelog v4:
-> >>>>> - Fix the DMPS macros name in the patch log. (@Sergei Shtylyov)
-> >>>>> ---
-> >>>>>  drivers/ata/ahci.h | 7 ++++++-
-> >>>>>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >>>>>
-> >>>>> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-> >>>>> index 7d834deefeb9..f501531bd1b3 100644
-> >>>>> --- a/drivers/ata/ahci.h
-> >>>>> +++ b/drivers/ata/ahci.h
-> >>>>> @@ -138,7 +138,7 @@ enum {
-> >>>>>  	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
-> >>>>>  
-> >>>>>  	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
-> >>>>> -	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
-> >>>>> +	PORT_IRQ_DMPS		= (1 << 7), /* mechanical presence status */
-> >>>>>  	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
-> >>>>>  	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
-> >>>>>  	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
-> >>>>> @@ -166,6 +166,8 @@ enum {
-> >>>>>  	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
-> >>>>>  	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
-> >>>>>  	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
-> >>>>> +	PORT_CMD_CPD		= (1 << 20), /* Cold Presence Detection */
-> >>>>> +	PORT_CMD_MPSP		= (1 << 19), /* Mechanical Presence Switch */
-> >>>>>  	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
-> >>>>>  	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
-> >>>>>  	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
-> >>>>> @@ -181,6 +183,9 @@ enum {
-> >>>>>  	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
-> >>>>>  	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
-> >>>>>  
-> >>>>> +	PORT_CMD_CAP		= PORT_CMD_HPCP | PORT_CMD_MPSP |
-> >>>>> +				  PORT_CMD_CPD | PORT_CMD_ESP | PORT_CMD_FBSCP,
-> >>>>
-> >>>
-> >>>> What is this one for ? A comment above it would be nice.
-> >>>
-> >>> Isn't it obviously inferrable from the definition and the item name?
-> >>
-> > 
-> >> I am guessing from the name. Am I guessing OK ? A comment would still be nice.
-> >> Why just these bits ? There are more cap/support indicator bits in that port cmd
-> >> bitfield. So why this particular set of bits ? What do they mean all together ?
-> > 
-> > Normally the variable/constant name should be self-content (as the
-> > kernel coding style doc states and what the common sense suggests). So
-> > the reader could correctly guess its purpose/content/value. In this
-> > case PORT_CMD_CAP - means PORT CMD capabilities mask. All of the
-> > possible flags have been set in that mask. There are no more
-> > capabilities in the PORT CMD register left undeclared. That's why the
-> > name is selected the way it is and why I haven't added any comment in
-> > here (what the kernel coding style says about the over-commenting the
-> > code).
-> 
+Hi Daniel,
 
-> Yes, I understood from the name what it is. What I do NOT understand is
-> why all the feature bits are not there. Why this subset only ? A comment
-> about that would be nice so that the reason for it is not lost.
+Thank you for the patch! Perhaps something to improve:
 
-Well, because it's indeed "PORT_CMD capabilities mask", and not features,
-not setups, not settings, not status flags, etc. As I said all the port
-Capabilities have been listed in that mask:
-PORT_CMD_FBSCP	BIT(22) - FIS-based Switching Capable Port
-PORT_CMD_ESP	BIT(21) - External SATA Port
-PORT_CMD_CPD	BIT(20) - Cold Presence Detect
-PORT_CMD_MPSP	BIT(19) - Mechanical Presence Switch Attached to Port
-PORT_CMD_HPCP	BIT(18) - Hot Plug Capable Port
-I've or'ed-them-up in a single mask => PORT_CMD_CAP in order to work
-with them independently from the rest of the PORT_CMD CSR fields.
+[auto build test WARNING on 8ab2afa23bd197df47819a87f0265c0ac95c5b6a]
 
-Unlike the generic controller CAP/CAP2 registers, which consists of the
-device capabilities only, PORT_CMD contains various R/W settings (PM, LED
-driver, etc), RO status flags (CMD-list running, FIS recv running, etc)
-and amongst other the RO/Wo !port-specific capabilities!. The later ones
-indicate the platform-specific device features. Since the register
-contains flags with the intermixed nature, I need to have a mask to at
-least get the capabilities and preserve them between the device
-resets. That's why the PORT_CMD_CAP has been introduced in the
-framework of this patch. Its name was chosen with a reference to the
-CAP registers, see:
-HOST_CAP, HOST_CAP2, and finally my PORT_CMD_CAP.
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Latypov/lib-atomic64_test-c-convert-to-use-KUnit/20220617-020546
+base:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206181607.somVaD8p-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/acffbe860bc2206b4cef16408809b9f558a24465
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Latypov/lib-atomic64_test-c-convert-to-use-KUnit/20220617-020546
+        git checkout acffbe860bc2206b4cef16408809b9f558a24465
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-> 
-> > 
-> >>
-> >> Sure I can go and read the specs to figure it out. But again, a comment would
-> >> avoid readers of the code to have to decrypt all that.
-> > 
-> > If you still insist on having an additional comment. I can add
-> > something like "/* PORT_CMD capabilities mask */". Are you ok with it?
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> That does not help on its own. The macro name says that already. I would
-> like a note about why only these features are selected.
+All warnings (new ones prefixed by >>):
 
-Please see the explanation above. I don't see what else to say about
-that mask, because in short what I said above really means "PORT_CMD
-capabilities mask". So should you have some more clever text, which
-would be more suitable here, please tell me and I'll add it to the
-patch.
+   lib/atomic64_test.c: In function 'test_atomic64':
+>> lib/atomic64_test.c:241:1: warning: the frame size of 3920 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+     241 | }
+         | ^
+   lib/atomic64_test.c: In function 'test_atomic':
+   lib/atomic64_test.c:138:1: warning: the frame size of 3520 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+     138 | }
+         | ^
 
-Regarding what you said earlier. In order to fully understand the
-AHCI driver a hacker would always need to read the specs. There is
-just no way to do that effectively enough without the controller
-manual at hands. And the PORT_CMD capabilities isn't the most
-complicated part of the device.
 
--Sergey
+vim +241 lib/atomic64_test.c
 
-> 
-> > 
-> > -Sergey
-> > 
-> >>
-> >>>
-> >>> -Sergey
-> >>>
-> >>>>
-> >>>>> +
-> >>>>>  	/* PORT_FBS bits */
-> >>>>>  	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
-> >>>>>  	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
-> >>>>
-> >>>>
-> >>>> -- 
-> >>>> Damien Le Moal
-> >>>> Western Digital Research
-> >>
-> >>
-> >> -- 
-> >> Damien Le Moal
-> >> Western Digital Research
-> 
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  139  
+86a8938078a8bb Luca Barbieri    2010-02-24  140  #define INIT(c) do { atomic64_set(&v, c); r = c; } while (0)
+acffbe860bc220 Daniel Latypov   2022-06-16  141  static void test_atomic64(struct kunit *test)
+86a8938078a8bb Luca Barbieri    2010-02-24  142  {
+86a8938078a8bb Luca Barbieri    2010-02-24  143  	long long v0 = 0xaaa31337c001d00dLL;
+86a8938078a8bb Luca Barbieri    2010-02-24  144  	long long v1 = 0xdeadbeefdeafcafeLL;
+86a8938078a8bb Luca Barbieri    2010-02-24  145  	long long v2 = 0xfaceabadf00df001LL;
+ffba19ccae8d98 Michael Ellerman 2017-07-14  146  	long long v3 = 0x8000000000000000LL;
+86a8938078a8bb Luca Barbieri    2010-02-24  147  	long long onestwos = 0x1111111122222222LL;
+86a8938078a8bb Luca Barbieri    2010-02-24  148  	long long one = 1LL;
+ffba19ccae8d98 Michael Ellerman 2017-07-14  149  	int r_int;
+86a8938078a8bb Luca Barbieri    2010-02-24  150  
+86a8938078a8bb Luca Barbieri    2010-02-24  151  	atomic64_t v = ATOMIC64_INIT(v0);
+86a8938078a8bb Luca Barbieri    2010-02-24  152  	long long r = v0;
+acffbe860bc220 Daniel Latypov   2022-06-16  153  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  154  
+86a8938078a8bb Luca Barbieri    2010-02-24  155  	atomic64_set(&v, v1);
+86a8938078a8bb Luca Barbieri    2010-02-24  156  	r = v1;
+acffbe860bc220 Daniel Latypov   2022-06-16  157  	KUNIT_ASSERT_EQ(test, v.counter, r);
+acffbe860bc220 Daniel Latypov   2022-06-16  158  	KUNIT_ASSERT_EQ(test, atomic64_read(&v), r);
+86a8938078a8bb Luca Barbieri    2010-02-24  159  
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  160  	TEST(64, add, +=, onestwos);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  161  	TEST(64, add, +=, -one);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  162  	TEST(64, sub, -=, onestwos);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  163  	TEST(64, sub, -=, -one);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  164  	TEST(64, or, |=, v1);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  165  	TEST(64, and, &=, v1);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  166  	TEST(64, xor, ^=, v1);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  167  	TEST(64, andnot, &= ~, v1);
+86a8938078a8bb Luca Barbieri    2010-02-24  168  
+978e5a3692c3b6 Boqun Feng       2015-11-04  169  	RETURN_FAMILY_TEST(64, add_return, +=, onestwos);
+978e5a3692c3b6 Boqun Feng       2015-11-04  170  	RETURN_FAMILY_TEST(64, add_return, +=, -one);
+978e5a3692c3b6 Boqun Feng       2015-11-04  171  	RETURN_FAMILY_TEST(64, sub_return, -=, onestwos);
+978e5a3692c3b6 Boqun Feng       2015-11-04  172  	RETURN_FAMILY_TEST(64, sub_return, -=, -one);
+86a8938078a8bb Luca Barbieri    2010-02-24  173  
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  174  	FETCH_FAMILY_TEST(64, fetch_add, +=, onestwos);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  175  	FETCH_FAMILY_TEST(64, fetch_add, +=, -one);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  176  	FETCH_FAMILY_TEST(64, fetch_sub, -=, onestwos);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  177  	FETCH_FAMILY_TEST(64, fetch_sub, -=, -one);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  178  
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  179  	FETCH_FAMILY_TEST(64, fetch_or,  |=, v1);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  180  	FETCH_FAMILY_TEST(64, fetch_and, &=, v1);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  181  	FETCH_FAMILY_TEST(64, fetch_andnot, &= ~, v1);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  182  	FETCH_FAMILY_TEST(64, fetch_xor, ^=, v1);
+28aa2bda2211f4 Peter Zijlstra   2016-04-18  183  
+86a8938078a8bb Luca Barbieri    2010-02-24  184  	INIT(v0);
+86a8938078a8bb Luca Barbieri    2010-02-24  185  	atomic64_inc(&v);
+86a8938078a8bb Luca Barbieri    2010-02-24  186  	r += one;
+acffbe860bc220 Daniel Latypov   2022-06-16  187  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  188  
+86a8938078a8bb Luca Barbieri    2010-02-24  189  	INIT(v0);
+86a8938078a8bb Luca Barbieri    2010-02-24  190  	atomic64_dec(&v);
+86a8938078a8bb Luca Barbieri    2010-02-24  191  	r -= one;
+acffbe860bc220 Daniel Latypov   2022-06-16  192  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  193  
+978e5a3692c3b6 Boqun Feng       2015-11-04  194  	INC_RETURN_FAMILY_TEST(64, v0);
+978e5a3692c3b6 Boqun Feng       2015-11-04  195  	DEC_RETURN_FAMILY_TEST(64, v0);
+86a8938078a8bb Luca Barbieri    2010-02-24  196  
+978e5a3692c3b6 Boqun Feng       2015-11-04  197  	XCHG_FAMILY_TEST(64, v0, v1);
+978e5a3692c3b6 Boqun Feng       2015-11-04  198  	CMPXCHG_FAMILY_TEST(64, v0, v1, v2);
+86a8938078a8bb Luca Barbieri    2010-02-24  199  
+86a8938078a8bb Luca Barbieri    2010-02-24  200  	INIT(v0);
+acffbe860bc220 Daniel Latypov   2022-06-16  201  	KUNIT_ASSERT_FALSE(test, atomic64_add_unless(&v, one, v0));
+acffbe860bc220 Daniel Latypov   2022-06-16  202  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  203  
+86a8938078a8bb Luca Barbieri    2010-02-24  204  	INIT(v0);
+acffbe860bc220 Daniel Latypov   2022-06-16  205  	KUNIT_ASSERT_TRUE(test, atomic64_add_unless(&v, one, v1));
+86a8938078a8bb Luca Barbieri    2010-02-24  206  	r += one;
+acffbe860bc220 Daniel Latypov   2022-06-16  207  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  208  
+86a8938078a8bb Luca Barbieri    2010-02-24  209  	INIT(onestwos);
+acffbe860bc220 Daniel Latypov   2022-06-16  210  	KUNIT_ASSERT_EQ(test, atomic64_dec_if_positive(&v), (onestwos - 1));
+86a8938078a8bb Luca Barbieri    2010-02-24  211  	r -= one;
+acffbe860bc220 Daniel Latypov   2022-06-16  212  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  213  
+86a8938078a8bb Luca Barbieri    2010-02-24  214  	INIT(0);
+acffbe860bc220 Daniel Latypov   2022-06-16  215  	KUNIT_ASSERT_EQ(test, atomic64_dec_if_positive(&v), -one);
+acffbe860bc220 Daniel Latypov   2022-06-16  216  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  217  
+86a8938078a8bb Luca Barbieri    2010-02-24  218  	INIT(-one);
+acffbe860bc220 Daniel Latypov   2022-06-16  219  	KUNIT_ASSERT_EQ(test, atomic64_dec_if_positive(&v), (-one - one));
+acffbe860bc220 Daniel Latypov   2022-06-16  220  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  221  
+86a8938078a8bb Luca Barbieri    2010-02-24  222  	INIT(onestwos);
+acffbe860bc220 Daniel Latypov   2022-06-16  223  	KUNIT_ASSERT_TRUE(test, atomic64_inc_not_zero(&v));
+86a8938078a8bb Luca Barbieri    2010-02-24  224  	r += one;
+acffbe860bc220 Daniel Latypov   2022-06-16  225  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  226  
+86a8938078a8bb Luca Barbieri    2010-02-24  227  	INIT(0);
+acffbe860bc220 Daniel Latypov   2022-06-16  228  	KUNIT_ASSERT_FALSE(test, atomic64_inc_not_zero(&v));
+acffbe860bc220 Daniel Latypov   2022-06-16  229  	KUNIT_ASSERT_EQ(test, v.counter, r);
+86a8938078a8bb Luca Barbieri    2010-02-24  230  
+86a8938078a8bb Luca Barbieri    2010-02-24  231  	INIT(-one);
+acffbe860bc220 Daniel Latypov   2022-06-16  232  	KUNIT_ASSERT_TRUE(test, atomic64_inc_not_zero(&v));
+86a8938078a8bb Luca Barbieri    2010-02-24  233  	r += one;
+acffbe860bc220 Daniel Latypov   2022-06-16  234  	KUNIT_ASSERT_EQ(test, v.counter, r);
+ffba19ccae8d98 Michael Ellerman 2017-07-14  235  
+ffba19ccae8d98 Michael Ellerman 2017-07-14  236  	/* Confirm the return value fits in an int, even if the value doesn't */
+ffba19ccae8d98 Michael Ellerman 2017-07-14  237  	INIT(v3);
+acffbe860bc220 Daniel Latypov   2022-06-16  238  
+ffba19ccae8d98 Michael Ellerman 2017-07-14  239  	r_int = atomic64_inc_not_zero(&v);
+acffbe860bc220 Daniel Latypov   2022-06-16  240  	KUNIT_ASSERT_NE(test, r_int, 0);
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13 @241  }
+41b9e9fcc1c44b Peter Zijlstra   2015-07-13  242  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

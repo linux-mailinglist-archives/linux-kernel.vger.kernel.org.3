@@ -2,80 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0454355075C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5240C550760
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 00:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiFRWqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 18:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S233006AbiFRWtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 18:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiFRWqP (ORCPT
+        with ESMTP id S229504AbiFRWtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 18:46:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5424BC31;
-        Sat, 18 Jun 2022 15:46:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F10A1CE0861;
-        Sat, 18 Jun 2022 22:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A14C3411A;
-        Sat, 18 Jun 2022 22:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655592369;
-        bh=V7chkL2A5m6qQLgPvjeycpUuzNA+cLG9L2qrqHYLUSg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F29zOKh+AdueVTj4VXMYrX/smopNogx5c75t0KuMKQ1eaBz2c5o0eD+vjXtb9XN2j
-         VKlbYcFrjCrt0+ML7E8sRmaflzz27K1dWapfGzQhzLwIVbt4tWiXFUuCPBz3RniR9Q
-         ySQu2lNEEwlut7osVxn7csDmMLqZa1gKsjalUC6WPvKHWVv3F2W+YHjIocuf5gPmJl
-         UVwmWG8Q5Y2iOzTqRAwNsB/K5claNV7Rk1TnLjwO0ORYhoRrR/5aX20lds/zcIUDXd
-         D1XECy9bF4vihzSxa4QSzLerg7NFbHcCqxZN2TtaNSP1/2g92FXIP1Uu2FO4r13IbC
-         Og7SnABFnTDFg==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] f2fs: do not count ENOENT for error case
-Date:   Sat, 18 Jun 2022 15:46:06 -0700
-Message-Id: <20220618224606.1554706-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        Sat, 18 Jun 2022 18:49:45 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A171CE0BC
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 15:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :Cc:Subject:From:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=9uVMbhApZ0Mp+uHyuGaV5a384mogiHoFmbvbVDjUQR4=; b=jgnwz6ic5j3QKWJvttvfVbZbe0
+        +Pd3auhSnl9cDI6Z8D2ITvZ8QlwcXo+SII4YxFayFDZE4480VKlCW8ZjMkkE6Wefug1UOimdcWKnd
+        i24+5ukj7T/ZcxKjBpBWihZUEBm2zuWNaw0QzjjNwX7JFx6bY0H4Uw4Ziw3GW1AledMCWSWgb0C7P
+        vWZCed46kdE7UEsjY1ZPcN4/QNiy4+YFVWoqnb3MNCO9pY36IWWNKbGuZp6l33w+nXAZnEGG27Xy/
+        Rgr1ZDjqje5grFmRecYtgmUusNtKm3dSEM7vBMl3rD/RPtHvbIK0xPaD8ictJlcKc13dVmbhJ3ZO+
+        t+o+GPpA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2hG6-00930S-Jf; Sat, 18 Jun 2022 22:49:39 +0000
+Message-ID: <9a0ed0bb-34c7-bacb-16a8-fdb158535ab2@infradead.org>
+Date:   Sat, 18 Jun 2022 15:49:31 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [DRM/hisilicon/hibmc] kernel robot reports build errors, patch(es)
+ available but not merged
+Cc:     RongrongZou <zourongrong@huawei.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        John Stultz <jstultz@google.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Chen Feng <puck.chen@hisilicon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise, we can get a wrong cp_error mark.
 
-Cc: <stable@vger.kernel.org>
-Fixes: a7b8618aa2f0 ("f2fs: avoid infinite loop to flush node pages")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/node.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+kernel robot reports today:
 
-diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-index 4181d03a7ef7..095a634436e3 100644
---- a/fs/f2fs/node.c
-+++ b/fs/f2fs/node.c
-@@ -1450,7 +1450,9 @@ static struct page *__get_node_page(struct f2fs_sb_info *sbi, pgoff_t nid,
- out_err:
- 	ClearPageUptodate(page);
- out_put_err:
--	f2fs_handle_page_eio(sbi, page->index, NODE);
-+	/* ENOENT comes from read_node_page which is not an error. */
-+	if (err != -ENOENT)
-+		f2fs_handle_page_eio(sbi, page->index, NODE);
- 	f2fs_put_page(page, 1);
- 	return ERR_PTR(err);
- }
+* riscv64-linux-ld: ttm_bo_vm.c:undefined reference to `vmf_insert_pfn_prot'
+  https://lore.kernel.org/lkml/202206190651.smtms3Ay-lkp@intel.com/T/#u
+
+* ttm_bo_vm.c:undefined reference to `vmf_insert_pfn_prot'
+  https://lore.kernel.org/lkml/202206190523.0Ar6yQF7-lkp@intel.com/T/#u
+
+
+and earlier:
+
+* ld.lld: error: undefined symbol: vmf_insert_pfn_prot
+https://lore.kernel.org/lkml/202203281125.Jp08egXu-lkp@intel.com/
+
+* ttm_bo_vm.c:undefined reference to `vmf_insert_pfn_prot'
+https://lore.kernel.org/lkml/202204081648.gV63Gt0t-lkp@intel.com/
+
+
+I sent a patch for this on 2022-04-08 and again on 2022-05-30 (UTC).
+
+https://lore.kernel.org/all/20220409030504.16089-1-rdunlap@infradead.org/
+https://lore.kernel.org/all/20220531025557.29593-1-rdunlap@infradead.org/
+
+Neither one has been applied or even had a comment.  :(
+
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+~Randy

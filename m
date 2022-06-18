@@ -2,148 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066CD55063B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 19:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330E755062F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 19:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237081AbiFRRF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 13:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
+        id S236720AbiFRRA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 13:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbiFRRFw (ORCPT
+        with ESMTP id S235146AbiFRRA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 13:05:52 -0400
-X-Greylist: delayed 474 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Jun 2022 10:05:50 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9F313CC9;
-        Sat, 18 Jun 2022 10:05:50 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id 2A0382B04FE1;
-        Sat, 18 Jun 2022 12:58:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 18 Jun 2022 12:58:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1655571487; x=1655578687; bh=9L
-        3nOLIP2wnDF3yh647i8HoUyhJh7T1SGaF8cyhW3i8=; b=kMqhbG5O1YT1vNLiKN
-        CpFINUOZyyk7c9rud9wThSXauKdGW6DZELCKi4Sy2ed3/ZHamjfc8PU3OWQCNMAJ
-        rvlBSathSYJUFqGzNOI2zK7ulWHNWbQD6DmVS/VO+ztYddSXlYyen4hKd+GH3r9S
-        qlEWqbkGi8fy518cWlZKwdOwrgXBnSs0nlJz3fkXDBcM/t7fz0z0dHhExoowZ58/
-        kYMaBcvgUY61zI0GleKSIyeOeL/TbahGMhtSLxjpoGvFqiPUS1GSKnOyHo+JcRcs
-        Y4A8uypIY8fl7Aod2XyALVTolW89V67/6HjvGM53N/Tvpu6V4pdhwuKHPx9BXDt6
-        bmnA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1655571487; x=1655578687; bh=9L3nOLIP2wnDF
-        3yh647i8HoUyhJh7T1SGaF8cyhW3i8=; b=WvYschwOCfWwxaRI9poMPaD+j9R06
-        MhASiBhUshkqdhiV2vnRaIjymIpYlHV81STpE7szNEiqjRLMCab4fxWATkS0RBsH
-        9jnR9S6wllMRcqEl1yI00rRm+FFcCXFDSn7js4qN73ul9kg9nVXP0fZoGVXtkQXE
-        ELInEw5AMQ9xc/PZ5TPo5IUIPIRv/s7MFYpkKd3TGvZPitB2lw9JSOMzr+TwVoZA
-        uaH85opmiGoCfvNEX9opvENDq2EH9kH+jqS+UmuzOkI/Wt1t73gAj1xFS/2zvBwo
-        O78/tqkA7wEaFQAJdEtAcw7WGGSem9+VdqUch6FFD+gIG4VhJZ+RwSNvg==
-X-ME-Sender: <xms:HwSuYigJzljSkhvMzExB-cNiscsC3CXUcMoHRHrc9wpFiPsIIbqltg>
-    <xme:HwSuYjDyyVQC247nlS7O0HwyxwguDQl4Lztu4WTMGluLUmHImOwqyNUNE7W6bFw4Y
-    Xa9MMPYtPLrGE6VHg>
-X-ME-Received: <xmr:HwSuYqGWM2WM1Y4wlfT9OxhHavBHA96rn-9C4lfDtom2aaVDPisw-8NaSFpF9nUkgcACfTE_9B7s_eW6m2r9U7bbI0WC0kqtjLrM8pxl6Eq8vRpKdS3DfAgStd0e4TmUZeO8Nw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvjedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:HwSuYrQ0my8Ri9IhWZMPIpBH_M0cC5kfKnMb02jyu61OpAVQjf4frw>
-    <xmx:HwSuYvzsoqC7LrnxLfDPLqBGcDttWcAzgbvhhT5MWp8UC02Kw0dWxg>
-    <xmx:HwSuYp7rf0cyXz1yLlfoDYtK7CkJttWV-bC1W6CM8SD11k3byoXGGA>
-    <xmx:HwSuYgER_ARs0fjcJ_Zrya0-b_3IBtzlZo5RdA3bJ7qYWx63aBHtk-Je9wc>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 18 Jun 2022 12:58:06 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Ondrej Jirman <x@xff.cz>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Colin Ian King <colin.king@intel.com>,
-        David Gow <davidgow@google.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        "fengping.yu" <fengping.yu@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v4 4/4] [DO NOT MERGE] arm64: dts: allwinner: pinephone: Add keyboard
-Date:   Sat, 18 Jun 2022 11:57:47 -0500
-Message-Id: <20220618165747.55709-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220618165747.55709-1-samuel@sholland.org>
-References: <20220618165747.55709-1-samuel@sholland.org>
+        Sat, 18 Jun 2022 13:00:27 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763EA12D03
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:00:23 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id gl15so13954018ejb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 10:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Qo+XVZATD7QvafJGYNsBnvzlaXlfHOgJMqIMb8gJ68I=;
+        b=X2qWk44P4TSsmjCHzHruBJB3JXlcqcj+1A7VBhLQLmyWGJEYrzo6zSx/p3/xEsVQWG
+         WbBKM9iHasQQrHEC+N5Se9AK72b0KMQDF/nOORGPr2GLq5F05iG3j9EMbPzqBXYjYFIN
+         ttG17/+j2bTOL8G6Fpo7AyPSHFkD9X5jK+pt0ybo3an5HBbIf1mZV7VPZclOJHhfdH4g
+         sS7YyhFiIcjCoiiaQo+gxkq1r5pX3p7v3P3rEMInsSrPtg+ghu1BOTlEud3m9VQle5FY
+         kJI9znu9F4cO2R3YMEzgRBOuNP0U0a791jySrdInn6/olG5aXhhyDcJUC4gJ6a6n2CKi
+         Pt/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qo+XVZATD7QvafJGYNsBnvzlaXlfHOgJMqIMb8gJ68I=;
+        b=w5EoIfN89IbVqbPXTS/hta4CfuORnugnyw9gBd3O6kQ2Cef6rPU8hDjdpqqdRKZWBq
+         /oW+QEM2f1Cggdt2OdsVBdbJsSH8vVZXBs/68nFhTnYJ1oxR1JXmLlhHrxRESXY9JYGk
+         4tE3qJospdt6hfSEk4qBYBFw3vUNPoE6TSGrGyR9xGjk17keUM5j+aMZqP1vl2nBkmF6
+         NIDgwHUXYKVe7FbApx8I9p4wk6gb+mDSkILNJ5ApgHm3VVGV+Hpc3e0njHuDvl6qfyrF
+         LuCmUP4vpaMCh7bzfpQk3Qw2/IC8nWWpeIU77w7RIkAF/AOzGA2NI4CnZxLdkHwnskPC
+         XzNA==
+X-Gm-Message-State: AJIora/Lst48HvxHHp3GW1MZNHxnT//+dBZjNr9oy/ourVRAIXJHTFaM
+        0D2qGGhUKtqTBoE1hNRkyxtOPQ==
+X-Google-Smtp-Source: AGRyM1u4CVew7K3LxjmXZseIbBAUDExxTq6WbzYmeYgVp/qnZPQHgFK1WAIuvASEueoknrZsutAr/Q==
+X-Received: by 2002:a17:906:649b:b0:712:24cd:6102 with SMTP id e27-20020a170906649b00b0071224cd6102mr14417111ejm.664.1655571621875;
+        Sat, 18 Jun 2022 10:00:21 -0700 (PDT)
+Received: from [192.168.0.205] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f23-20020a170906825700b0070ad296e4b0sm3559455ejx.186.2022.06.18.10.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Jun 2022 10:00:21 -0700 (PDT)
+Message-ID: <279cf4ef-8b41-5e92-73c3-416730038c56@linaro.org>
+Date:   Sat, 18 Jun 2022 19:00:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: Add rtq6056 adc support
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <1655458375-30478-1-git-send-email-u0084500@gmail.com>
+ <1655458375-30478-2-git-send-email-u0084500@gmail.com>
+ <7a9d3354-164b-e5e5-936b-95de4c4338f9@linaro.org>
+ <CADiBU3_wyFLpoy3PU0a-EbGAKoQ9LZMprH5DWnzwo05-Gwa2=Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CADiBU3_wyFLpoy3PU0a-EbGAKoQ9LZMprH5DWnzwo05-Gwa2=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The official PinePhone keyboard accessory connects to the phone's POGO
-pins for I2C and interrupts. It has an Injoinic IP5209 power bank IC
-connected to the keyboard's internal I2C bus.
+On 18/06/2022 08:50, ChiYuan Huang wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年6月18日 週六 上午9:45寫道：
+>>
+>> On 17/06/2022 02:32, cy_huang wrote:
+>>> From: ChiYuan Huang <cy_huang@richtek.com>
+>>>
+>>> Add the documentation for Richtek RTQ6056.
+>>>
+>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+>>> ---
+>>>  .../bindings/iio/adc/richtek,rtq6056-adc.yaml      | 57 ++++++++++++++++++++++
+>>>  1 file changed, 57 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml
+>>> new file mode 100644
+>>> index 00000000..6b4e0e0
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056-adc.yaml
+>>> @@ -0,0 +1,57 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/iio/adc/richtek,rtq6056-adc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: RTQ6056 Bi-Directional Current and Power Monitor with 16-bit ADC
+>>> +
+>>> +maintainers:
+>>> +  - ChiYuan Huang <cy_huang@richtek.com>
+>>> +
+>>> +description: |
+>>> +  The RTQ6056 is a high accuracy current-sense monitor with I2C and SMBus
+>>> +  interface, and the device provides full information for system by reading
+>>> +  out the loading current and power.
+>>> +
+>>> +  The device monitors both of the drops across sense resistor and the BUS
+>>> +  voltage, converts into the current in amperes, and power in watts through
+>>> +  internal analog-to-digital converter ADC. The programmable calibration,
+>>> +  adjustable conversion time, and averaging function are also built in for
+>>> +  more design flexibility.
+>>> +
+>>> +  Datasheet is available at
+>>> +  https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: richtek,rtq6056
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  "#io-channel-cells":
+>>> +    const: 1
+>>> +
+>>> +  richtek,shunt-resistor-uohm:
+>>
+>> Use standard properties, so "-micro-ohms". Drop the unit from
+>> description and drop the ref.
+>>
+> Use richtek.shunt-resistor-micro-ohms?
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Yes.
 
-(no changes since v3)
+> Or the prefix 'richtek,' can be removed?
 
-Changes in v3:
- - Rename i2c-bus to i2c
+No, the vendor prefix must stay.
 
- .../dts/allwinner/sun50i-a64-pinephone.dtsi    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-index 87847116ab6d..1d757cce246a 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-@@ -208,6 +208,24 @@ accelerometer@68 {
- /* Connected to pogo pins (external spring based pinheader for user addons) */
- &i2c2 {
- 	status = "okay";
-+
-+	keyboard@15 {
-+		compatible = "pine64,pinephone-keyboard";
-+		reg = <0x15>;
-+		interrupt-parent = <&r_pio>;
-+		interrupts = <0 12 IRQ_TYPE_EDGE_FALLING>; /* PL12 */
-+		wakeup-source;
-+
-+		i2c {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			charger@75 {
-+				compatible = "injoinic,ip5209";
-+				reg = <0x75>;
-+			};
-+		};
-+	};
- };
- 
- &lradc {
--- 
-2.35.1
-
+Best regards,
+Krzysztof

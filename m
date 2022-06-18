@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBC4550197
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B51D550199
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 03:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382985AbiFRBLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Jun 2022 21:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S1383489AbiFRBPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Jun 2022 21:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiFRBLo (ORCPT
+        with ESMTP id S229778AbiFRBPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Jun 2022 21:11:44 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53756AA76;
-        Fri, 17 Jun 2022 18:11:43 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I1Bbks115437;
-        Fri, 17 Jun 2022 20:11:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655514697;
-        bh=qefky0L0/tfRDIoNIl7XHtyx0o2Vnqk7WTUmHifBdzM=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=B4SMRerNjvLtbIEep3a1FF+q567dzP2Gnq2P0+wJ2Od7sRzOl7QFB3sdvijdgGMBN
-         8+XudCWtEYBQqxtTgMgzK3x2oaehKZeVzCVzAqSa/5fVLqoGUsSvwDTRbADYBJBFV2
-         8K1bJo/DjqDja7TzgzQgdGb/lPYs0KItqT70pIgY=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I1BbmX016741
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jun 2022 20:11:37 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 20:11:37 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 20:11:37 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I1BbI9067999;
-        Fri, 17 Jun 2022 20:11:37 -0500
-Date:   Fri, 17 Jun 2022 20:11:37 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Rahul T R <r-ravikumar@ti.com>
-Subject: Re: [PATCH v2 1/4] arm64: dts: ti: k3-am62-main: Add node for
- Display SubSystem
-Message-ID: <20220618011137.vg6rqzsujwwjli22@kahuna>
-References: <20220505134303.23208-1-a-bhatia1@ti.com>
- <20220505134303.23208-2-a-bhatia1@ti.com>
+        Fri, 17 Jun 2022 21:15:52 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F30B60D81
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:15:51 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 184so5364454pga.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Jun 2022 18:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2Wicin66A5Ecw5eOHjSRw3gMf1e/v5xlB1s6rjFamVc=;
+        b=rYxYQNnXCvLE4VkDuRntdBWtvRSy9Js0aFg2p7PC8AoRXwLqSP/VcXnFUB041aQM+Z
+         Cr32BoNciIvWFGPNqDnK7+dLMMiii0j195J6SfzP5gqj+Th7Syj3gV9xjSTrjk4+j52R
+         BuE485MDS3716u/H6iFT3/P7PmXu6SrRQOU/y23CI6AVDiBqO7tAzKdifXQehVcLPo+I
+         4m/+uEHjUP4jyYxWVeBvHRwSxbGmHC3qJFDf0ZZfqCzJfPIXbdMlri+ZiC+3s3gMOG/U
+         LrKqhRMR6EBTErEj1BmuWVGdvRiyLkpO4q/mbpMCGH5UY1Zl5qKSfMEGbolQniYIOl/9
+         5+pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2Wicin66A5Ecw5eOHjSRw3gMf1e/v5xlB1s6rjFamVc=;
+        b=R6+NPMSqC2ReCclr29SWo1yLxqj2s77R32/sEZ3bN/URLahB7V6Nbxv0tIrMGGVpmF
+         HL3Wch3Vxr+OzDf9bXehRzlnjsQAZJGgov49n6pFClssR/3l4YTubdz8T+DUliBn3Ymk
+         WsbsPfDp984SvUBDbE0G/nK70VB54ffuGryEuPvi32Fs5GtBCcBtr+vZQyaN2Wpv3DY7
+         bkPJ0UD29Ekok4xFlO1HHEDndEAWoZByCvoaif8PFwpqGzypQ3hCQMQJBdle5lJrKPJh
+         xVDMrinXVmTnpQC591125XUkeQPcCanMR4Fgbfaf6ZV3UI0HKDokeHNYFIFuFv8iwpQ9
+         5EWQ==
+X-Gm-Message-State: AJIora8zKsRC66Jy1rIU2tzCdJMDZ9ub+d8H6++hSsnqooN+qaVIdFNL
+        2vAsojit59rUvhfXTTk69RHyNw==
+X-Google-Smtp-Source: AGRyM1u5MsCZ5unrFNNSkRvF2SL6LwoHOZByCaW9oeRdELC6PITpnSRHbGHN4xDSAWSCZtviQKdPpg==
+X-Received: by 2002:a63:6c42:0:b0:3fe:465:7a71 with SMTP id h63-20020a636c42000000b003fe04657a71mr11328301pgc.101.1655514950870;
+        Fri, 17 Jun 2022 18:15:50 -0700 (PDT)
+Received: from [172.31.235.92] ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id o1-20020a62f901000000b0052285857864sm4410468pfh.97.2022.06.17.18.15.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 18:15:50 -0700 (PDT)
+Message-ID: <110c4a4b-8007-1826-ee27-02eaedd22d8f@linaro.org>
+Date:   Fri, 17 Jun 2022 18:15:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220505134303.23208-2-a-bhatia1@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next 01/28] dt-bindings: phy: Add QorIQ SerDes binding
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <20220617203312.3799646-1-sean.anderson@seco.com>
+ <20220617203312.3799646-2-sean.anderson@seco.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220617203312.3799646-2-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,47 +85,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19:13-20220505, Aradhya Bhatia wrote:
-> Add DT node for the Display SubSystem on the am62x soc in cbass_main.
-> The DSS IP on this soc is compatible with the one on the am65x soc.
+On 17/06/2022 13:32, Sean Anderson wrote:
+> This adds a binding for the SerDes module found on QorIQ processors. The
+> phy reference has two cells, one for the first lane and one for the
+> last. This should allow for good support of multi-lane protocols when
+> (if) they are added. There is no protocol option, because the driver is
+> designed to be able to completely reconfigure lanes at runtime.
+> Generally, the phy consumer can select the appropriate protocol using
+> set_mode. For the most part there is only one protocol controller
+> (consumer) per lane/protocol combination. The exception to this is the
+> B4860 processor, which has some lanes which can be connected to
+> multiple MACs. For that processor, I anticipate the easiest way to
+> resolve this will be to add an additional cell with a "protocol
+> controller instance" property.
 > 
-> The DSS supports one each of video pipeline (vid) and video-lite
-> pipeline (vidl1). It outputs OLDI signals on one video port (vp1) and
-> DPI signals on another (vp2). The video ports are connected to the
-> pipelines via 2 identical overlay managers (ovr1 and ovr2).
+> Each serdes has a unique set of supported protocols (and lanes). The
+> support matrix is stored in the driver and is selected based on the
+> compatible string. It is anticipated that a new compatible string will
+> need to be added for each serdes on each SoC that drivers support is
+> added for.
 > 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> Reviewed-by: Rahul T R <r-ravikumar@ti.com>
+> There are two PLLs, each of which can be used as the master clock for
+> each lane. Each PLL has its own reference. For the moment they are
+> required, because it simplifies the driver implementation. Absent
+> reference clocks can be modeled by a fixed-clock with a rate of 0.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 30 ++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> index eec8dae65e7c..ff21efa4ffad 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> @@ -515,6 +515,36 @@ cpts@3d000 {
->  		};
->  	};
->  
-> +	dss: dss@30200000 {
-> +		compatible = "ti,am65x-dss";
+>  .../bindings/phy/fsl,qoriq-serdes.yaml        | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml b/Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
+> new file mode 100644
+> index 000000000000..4b9c1fcdab10
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/fsl,qoriq-serdes.yaml#
+
+File name: fsl,ls1046a-serdes.yaml
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP QorIQ SerDes Device Tree Bindings
+
+s/Device Tree Bindings//
+
+> +
+> +maintainers:
+> +  - Sean Anderson <sean.anderson@seco.com>
+> +
+> +description: |
+> +  This binding describes the SerDes devices found in NXP's QorIQ line of
+
+Describe the device, not the binding, so wording "This binding" is not
+appropriate.
+
+> +  processors. The SerDes provides up to eight lanes. Each lane may be
+> +  configured individually, or may be combined with adjacent lanes for a
+> +  multi-lane protocol. The SerDes supports a variety of protocols, including up
+> +  to 10G Ethernet, PCIe, SATA, and others. The specific protocols supported for
+> +  each lane depend on the particular SoC.
+> +
+> +properties:
+
+Compatible goes first.
+
+> +  "#phy-cells":
+> +    const: 2
+> +    description: |
+> +      The cells contain the following arguments.
+> +
+> +      - description: |
+
+Not a correct schema. What is this "- description" attached to? There is
+no items here...
+
+> +          The first lane in the group. Lanes are numbered based on the register
+> +          offsets, not the I/O ports. This corresponds to the letter-based
+> +          ("Lane A") naming scheme, and not the number-based ("Lane 0") naming
+> +          scheme. On most SoCs, "Lane A" is "Lane 0", but not always.
+> +        minimum: 0
+> +        maximum: 7
+> +      - description: |
+> +          Last lane. For single-lane protocols, this should be the same as the
+> +          first lane.
+> +        minimum: 0
+> +        maximum: 7
+> +
+> +  compatible:
+> +    enum:
+> +      - fsl,ls1046a-serdes-1
+> +      - fsl,ls1046a-serdes-2
+
+Does not look like proper compatible and your explanation from commit
+msg did not help me. What "1" and "2" stand for? Usually compatibles
+cannot have some arbitrary properties encoded.
+
+> +
+> +  clocks:
+> +    minItems: 2
+
+No need for minItems.
+
+> +    maxItems: 2
+> +    description: |
+> +      Clock for each PLL reference clock input.
+> +
+> +  clock-names:
+> +    minItems: 2
+> +    maxItems: 2
+> +    items:
+> +      pattern: "^ref[0-1]$"
+
+No, instead describe actual items with "const". See other examples.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - "#phy-cells"
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    serdes1: phy@1ea0000 {
+> +      #phy-cells = <2>;
+> +      compatible = "fsl,ls1046a-serdes-1";
+> +      reg = <0x0 0x1ea0000 0x0 0x2000>;
+> +      clocks = <&clk_100mhz>, <&clk_156mhz>;
+> +      clock-names = "ref0", "ref1";
+> +    };
+> +
+> +...
 
 
-After looking closer at DSS last few days, the OLDI is unfortunately
-different on AM62x.
-
-Even though DPI interface works fine, OLDI TX integration needs a
-separate compatible.
-
-I suggest sending a patch introducing ti,am625-dss compatible.
-
-I will need to drop the entire series - if we can get the compatible
-integrated to master, i can pick the dts updates in the rc1 after.
-
-[...]
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Best regards,
+Krzysztof

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853875503E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C1E5503C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 11:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiFRJD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 05:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S230117AbiFRJEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 05:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiFRJDq (ORCPT
+        with ESMTP id S232119AbiFRJD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 05:03:46 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8B72F3A0
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:44 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id y132-20020a62648a000000b0052515367fc9so13369pfb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:44 -0700 (PDT)
+        Sat, 18 Jun 2022 05:03:56 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489FA3151C
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:49 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id b1-20020a631b41000000b003fd9e4765f4so3311131pgm.10
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 02:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=l/ttLvz0OHvUwNpHYrnOtuxKB7kHcTFDOJ9+1t28w8k=;
-        b=jYR2WCgcWlBbR92OxuHz4xPPf3H5cRhEsyQjcbj9V1I5XXaNNs0Fhei3lLFii/xO+2
-         icLjO5uDyyPQYEWFkJlCN/2vsjYiE3P4Fu+it/i7IxMElAFmvlNfTwAh4LH2U6T/CfW0
-         gzaewJRDivkUjDGDRBrDy1+sc38rLFWpXaBNRl7GylXCcfVJyBcTa0PiNgJIgBAj9AN3
-         lyA9wwT+K9oDn3Iv4dCdbE3bKbgqIygUvNbLkQNNvSKrcnTRkdjnqO6LcRsHnVxQ+Ogn
-         VlBkB+UtjdSJBVCFdrKI+qk376LralvkGo1wYmlJvuNbTDQIY/eMhrfJvGSVxav7rch/
-         e2/Q==
+        bh=LMIQNnZEwwqGiSeXz8z/8RKfV/iWOQOCuFlB8bYEhsE=;
+        b=Phpa+fx39/Nb7dSVBjcwGd88U21xdp1E3aulagrvdP4DYKWTek3bM15WKB6xgv72wX
+         a9rfRLI0tk0hhMl3FQHPWCb7CK5kfbUeyK41fYYM91FwzBz1aRnY7y1wNdei0fwUtGeI
+         Y3P3T8SYRo2OiftnpYJaZzfkfCaAgw+Gm4zXoV5BZ8ujPhjXF+vJ7PHNXTFjt5kzxSUU
+         QtVklWuHQKH0PylESH86mof6JR2T1eu18CSDJ2dX/uhV/RffzXzEsftvVWvj2Yi1YQMm
+         5w65IJ0WhFpZtb7N9Mbszfpcxd1myHfvhxktyQRa1rXthwrfQjG3Rkk5hB/ReuFf+Tf2
+         wO5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=l/ttLvz0OHvUwNpHYrnOtuxKB7kHcTFDOJ9+1t28w8k=;
-        b=FFyRUIK2A76RPipQ3xkUPtrtJgb9SV0qZMgZ225RvdC+9n0O2FPuaIqr4Z23TEgjpq
-         6VqoAtN21uj8V0ucPXB568dpA/Opwwn2sM/PrWppQFkhogN7ykML8pysC2LkyLggmcwH
-         ZyjMArWCej1L0XwF4vWkE/Xoc+x43/yrSWjkbG34B5ZXHxEbss1k0XbWijpN2yqWq3Sn
-         xhofWu7+zrqUbU6JIzPh9uTcE/SX8Ts+gcRPYnLLeVAHjCn75QPgHw9Kb0KNQWbAczGP
-         ZtRTcp6u96fsYNDVU9rLQQrRl8kDiAehB3y1xpqdSQpGSKghFihWLZmgbTii0JesgfHa
-         38JQ==
-X-Gm-Message-State: AJIora9/T/iJzaysgVuw7QXjswcblRr9UMlrlP2A//VIf41oe7AFgRn2
-        GkgY1GxFqWxnXswPrMYi7FYrwcVm8MRBew==
-X-Google-Smtp-Source: AGRyM1tqU8NQ1EwMjJIqa8XBUDMxnxZOkI3Tj286IoY6j4ByRRBGB8CD1fTsDOMYy71AgVNF1WNNkNKjzpGplA==
+        bh=LMIQNnZEwwqGiSeXz8z/8RKfV/iWOQOCuFlB8bYEhsE=;
+        b=zuyd83gGxtCkbvKmU8vdxX3TeTgrBPpx9fxbfYcji9HEY1ki9BT6uXe+TH+0O2S9ZO
+         UA5F6CFcKxurNWmahgf/5b57JO1aHeht3WbYU8yaMUMGKoglHeqsJE5xPAb9Dxw4vy10
+         GK1OEU9qKeGxZJ4746ubHLTOr1cyB/6oXFiGGIQ2nb5ngFEMWyy5WujJmS80fMLigg0e
+         r4JrdEY4DaoMXCmOP4L9QrJxPcCjgDhFn1BYdJRSShhTlJXE6gQbP39a71rbdIRR0zQR
+         O6uxklylLhXpRm3TWjGYKS3UMwga8Qjb+t4rhLBhvVcvaFEBZcvIHvUGKv4khG3OMkKy
+         pNlw==
+X-Gm-Message-State: AJIora8f+Lelo6dN+//wtdR6OaGljDMTuQgTOmcB/ZzVeRBF/lc2ncrS
+        1YkXHF69mA8GjYZ5xikW58hP5tlMqTMoBA==
+X-Google-Smtp-Source: AGRyM1uHmQxNnvKsRYmQgfAR+LylxXOrPWxsvi5RkRWzjMVI7YEH1yKl6XQnHFmjJ8zObEZziHkt0BPy1E0UGw==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:7806:b0:168:d336:dda9 with SMTP
- id p6-20020a170902780600b00168d336dda9mr13505513pll.83.1655543024232; Sat, 18
- Jun 2022 02:03:44 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 17:03:08 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6a00:21c8:b0:4c4:4bd:dc17 with SMTP
+ id t8-20020a056a0021c800b004c404bddc17mr14303884pfj.57.1655543028691; Sat, 18
+ Jun 2022 02:03:48 -0700 (PDT)
+Date:   Sat, 18 Jun 2022 17:03:09 +0800
 In-Reply-To: <20220618090310.1174932-1-davidgow@google.com>
-Message-Id: <20220618090310.1174932-4-davidgow@google.com>
+Message-Id: <20220618090310.1174932-5-davidgow@google.com>
 Mime-Version: 1.0
 References: <20220618090310.1174932-1-davidgow@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 3/5] thunderbolt: test: Use kunit_test_suite() macro
+Subject: [PATCH 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
@@ -81,88 +81,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new implementation of kunit_test_suite() for modules no longer
-conflicts with module_init, so can now be used by the thunderbolt tests.
+The kunit_test_suite() macro previously conflicted with module_init,
+making it unsuitable for use in the nitro_enclaves test. Now that it's
+fixed, we can use it instead of a custom call into internal KUnit
+functions to run the test.
 
-Also update the Kconfig entry to enable the test when KUNIT_ALL_TESTS is
-enabled.
+As a side-effect, this means that the test results are properly included
+with other suites when built-in. To celebrate, enable the test by
+default when KUNIT_ALL_TESTS is set (and NITRO_ENCLAVES enabled).
 
-This means that kunit_tool can now successfully run and parse the test
-results with, for example:
+The nitro_enclave tests can now be run via kunit_tool with:
 	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_USB4=y \
-	'thunderbolt'
+	--kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_SMP=y \
+	--kconfig_add CONFIG_HOTPLUG_CPU=y \
+	--kconfig_add CONFIG_VIRT_DRIVERS=y \
+	--kconfig_add CONFIG_NITRO_ENCLAVES=y \
+	'ne_misc_dev_test'
+
+(This is a pretty long command, so it may be worth adding a .kunitconfig
+file at some point, instead.)
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- drivers/thunderbolt/domain.c |  3 ---
- drivers/thunderbolt/tb.h     |  8 --------
- drivers/thunderbolt/test.c   | 12 +-----------
- 3 files changed, 1 insertion(+), 22 deletions(-)
+ drivers/thunderbolt/Kconfig                   |  5 ++--
+ drivers/virt/nitro_enclaves/Kconfig           |  5 ++--
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     | 27 -------------------
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |  5 +---
+ 4 files changed, 7 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index 2889a214dadc..99211f35a5cd 100644
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -872,7 +872,6 @@ int tb_domain_init(void)
- {
- 	int ret;
+diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
+index 4bfec8a28064..2a063d344b94 100644
+--- a/drivers/thunderbolt/Kconfig
++++ b/drivers/thunderbolt/Kconfig
+@@ -28,8 +28,9 @@ config USB4_DEBUGFS_WRITE
+ 	  this for production systems or distro kernels.
  
--	tb_test_init();
- 	tb_debugfs_init();
- 	tb_acpi_init();
+ config USB4_KUNIT_TEST
+-	bool "KUnit tests"
+-	depends on KUNIT=y
++	bool "KUnit tests" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
  
-@@ -890,7 +889,6 @@ int tb_domain_init(void)
- err_acpi:
- 	tb_acpi_exit();
- 	tb_debugfs_exit();
--	tb_test_exit();
+ config USB4_DMA_TEST
+ 	tristate "DMA traffic test driver"
+diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
+index 2d3d98158121..ce91add81401 100644
+--- a/drivers/virt/nitro_enclaves/Kconfig
++++ b/drivers/virt/nitro_enclaves/Kconfig
+@@ -16,8 +16,9 @@ config NITRO_ENCLAVES
+ 	  The module will be called nitro_enclaves.
  
- 	return ret;
- }
-@@ -903,5 +901,4 @@ void tb_domain_exit(void)
- 	tb_xdomain_exit();
- 	tb_acpi_exit();
- 	tb_debugfs_exit();
--	tb_test_exit();
- }
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 4602c69913fa..a831faa50f65 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1271,12 +1271,4 @@ static inline void tb_service_debugfs_init(struct tb_service *svc) { }
- static inline void tb_service_debugfs_remove(struct tb_service *svc) { }
- #endif
+ config NITRO_ENCLAVES_MISC_DEV_TEST
+-	bool "Tests for the misc device functionality of the Nitro Enclaves"
+-	depends on NITRO_ENCLAVES && KUNIT=y
++	bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
++	depends on NITRO_ENCLAVES && KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable KUnit tests for the misc device functionality of the Nitro
+ 	  Enclaves. Select this option only if you will boot the kernel for
+diff --git a/drivers/virt/nitro_enclaves/ne_misc_dev.c b/drivers/virt/nitro_enclaves/ne_misc_dev.c
+index 20c881b6a4b6..241b94f62e56 100644
+--- a/drivers/virt/nitro_enclaves/ne_misc_dev.c
++++ b/drivers/virt/nitro_enclaves/ne_misc_dev.c
+@@ -1759,35 +1759,10 @@ static long ne_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
  
--#ifdef CONFIG_USB4_KUNIT_TEST
--int tb_test_init(void);
--void tb_test_exit(void);
--#else
--static inline int tb_test_init(void) { return 0; }
--static inline void tb_test_exit(void) { }
--#endif
+ #if defined(CONFIG_NITRO_ENCLAVES_MISC_DEV_TEST)
+ #include "ne_misc_dev_test.c"
 -
+-static inline int ne_misc_dev_test_init(void)
+-{
+-	return __kunit_test_suites_init(ne_misc_dev_test_suites);
+-}
+-
+-static inline void ne_misc_dev_test_exit(void)
+-{
+-	__kunit_test_suites_exit(ne_misc_dev_test_suites);
+-}
+-#else
+-static inline int ne_misc_dev_test_init(void)
+-{
+-	return 0;
+-}
+-
+-static inline void ne_misc_dev_test_exit(void)
+-{
+-}
  #endif
-diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-index ee37f8b58f50..24c06e7354cd 100644
---- a/drivers/thunderbolt/test.c
-+++ b/drivers/thunderbolt/test.c
-@@ -2817,14 +2817,4 @@ static struct kunit_suite tb_test_suite = {
- 	.test_cases = tb_test_cases,
+ 
+ static int __init ne_init(void)
+ {
+-	int rc = 0;
+-
+-	rc = ne_misc_dev_test_init();
+-	if (rc < 0)
+-		return rc;
+-
+ 	mutex_init(&ne_cpu_pool.mutex);
+ 
+ 	return pci_register_driver(&ne_pci_driver);
+@@ -1798,8 +1773,6 @@ static void __exit ne_exit(void)
+ 	pci_unregister_driver(&ne_pci_driver);
+ 
+ 	ne_teardown_cpu_pool();
+-
+-	ne_misc_dev_test_exit();
+ }
+ 
+ module_init(ne_init);
+diff --git a/drivers/virt/nitro_enclaves/ne_misc_dev_test.c b/drivers/virt/nitro_enclaves/ne_misc_dev_test.c
+index 265797bed0ea..74df43b925be 100644
+--- a/drivers/virt/nitro_enclaves/ne_misc_dev_test.c
++++ b/drivers/virt/nitro_enclaves/ne_misc_dev_test.c
+@@ -151,7 +151,4 @@ static struct kunit_suite ne_misc_dev_test_suite = {
+ 	.test_cases = ne_misc_dev_test_cases,
  };
  
--static struct kunit_suite *tb_test_suites[] = { &tb_test_suite, NULL };
--
--int tb_test_init(void)
--{
--	return __kunit_test_suites_init(tb_test_suites);
--}
--
--void tb_test_exit(void)
--{
--	return __kunit_test_suites_exit(tb_test_suites);
--}
-+kunit_test_suite(tb_test_suite);
+-static struct kunit_suite *ne_misc_dev_test_suites[] = {
+-	&ne_misc_dev_test_suite,
+-	NULL
+-};
++kunit_test_suite(ne_misc_dev_test_suite);
 -- 
 2.36.1.476.g0c4daa206d-goog
 

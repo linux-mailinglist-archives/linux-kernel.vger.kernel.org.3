@@ -2,96 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598BF550387
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B111550389
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbiFRIjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 04:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S231130AbiFRImN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 04:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiFRIjP (ORCPT
+        with ESMTP id S229437AbiFRImM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 04:39:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3174522522
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:39:14 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx398wj61iX35KAA--.15929S2;
-        Sat, 18 Jun 2022 16:39:12 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Make compute_return_era() return void
-Date:   Sat, 18 Jun 2022 16:39:11 +0800
-Message-Id: <1655541551-3997-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx398wj61iX35KAA--.15929S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr4kuFWxCr15GrykWFyfJFb_yoW8GryfpF
-        nrAFyDJrWrWF95CFyDtr4kurW3Jrs3G3y293ZFgas5CF42qr1UXr10gr9FvF18t3yFgr4F
-        qFWrtw1Yva15XwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUjxR65UUUU
-        U==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 18 Jun 2022 04:42:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1A22B0E
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:42:10 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LQ8Wd01gMzYXPC;
+        Sat, 18 Jun 2022 16:41:01 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 18 Jun 2022 16:42:09 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 18 Jun 2022 16:42:07 +0800
+Message-ID: <0da734f3-5743-3df3-3f90-d92e5bd585ce@huawei.com>
+Date:   Sat, 18 Jun 2022 16:42:06 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v5 2/8] arm64: extable: make uaaccess helper use
+ extable type EX_TYPE_UACCESS_ERR_ZERO
+From:   Tong Tiangen <tongtiangen@huawei.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220528065056.1034168-1-tongtiangen@huawei.com>
+ <20220528065056.1034168-3-tongtiangen@huawei.com>
+ <Yqw6TP3MhEqnQ+2o@FVFF77S0Q05N>
+ <4371a7c9-8766-9fee-2558-e6f43f06ad19@huawei.com>
+In-Reply-To: <4371a7c9-8766-9fee-2558-e6f43f06ad19@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-compute_return_era() always returns 0, make it return void,
-and then no need to check its return value for its callers.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/branch.h | 3 +--
- arch/loongarch/kernel/traps.c       | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/branch.h b/arch/loongarch/include/asm/branch.h
-index 3f33c89..9a133e4 100644
---- a/arch/loongarch/include/asm/branch.h
-+++ b/arch/loongarch/include/asm/branch.h
-@@ -12,10 +12,9 @@ static inline unsigned long exception_era(struct pt_regs *regs)
- 	return regs->csr_era;
- }
- 
--static inline int compute_return_era(struct pt_regs *regs)
-+static inline void compute_return_era(struct pt_regs *regs)
- {
- 	regs->csr_era += 4;
--	return 0;
- }
- 
- #endif /* _ASM_BRANCH_H */
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index e4060f8..1bf58c6 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -475,8 +475,7 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
- 
- 	die_if_kernel("Reserved instruction in kernel code", regs);
- 
--	if (unlikely(compute_return_era(regs) < 0))
--		goto out;
-+	compute_return_era(regs);
- 
- 	if (unlikely(get_user(opcode, era) < 0)) {
- 		status = SIGSEGV;
--- 
-2.1.0
+在 2022/6/18 11:26, Tong Tiangen 写道:
+> 
+> 
+> 在 2022/6/17 16:24, Mark Rutland 写道:
+>> On Sat, May 28, 2022 at 06:50:50AM +0000, Tong Tiangen wrote:
+>>> Currnetly, the extable type used by __arch_copy_from/to_user() is
+>>> EX_TYPE_FIXUP. In fact, It is more clearly to use meaningful
+>>> EX_TYPE_UACCESS_*.
+>>>
+>>> Suggested-by: Mark Rutland <mark.rutland@arm.com>
+>>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+>>> ---
+>>>   arch/arm64/include/asm/asm-extable.h |  8 ++++++++
+>>>   arch/arm64/include/asm/asm-uaccess.h | 12 ++++++------
+>>>   2 files changed, 14 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/include/asm/asm-extable.h 
+>>> b/arch/arm64/include/asm/asm-extable.h
+>>> index 56ebe183e78b..9c94ac1f082c 100644
+>>> --- a/arch/arm64/include/asm/asm-extable.h
+>>> +++ b/arch/arm64/include/asm/asm-extable.h
+>>> @@ -28,6 +28,14 @@
+>>>       __ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
+>>>       .endm
+>>> +/*
+>>> + * Create an exception table entry for uaccess `insn`, which will 
+>>> branch to `fixup`
+>>> + * when an unhandled fault is taken.
+>>> + * ex->data = ~0 means both reg_err and reg_zero is set to wzr(x31).
+>>> + */
+>>> +    .macro          _asm_extable_uaccess, insn, fixup
+>>> +    __ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_ERR_ZERO, ~0)
+>>> +    .endm
+>>
+>> I'm not too keen on using `~0` here, since that also sets other bits 
+>> in the
+>> data field, and its somewhat opaque.
+>>
+>> How painful is it to generate the data fields as with the C version of 
+>> this
+>> macro, so that we can pass in wzr explciitly for the two sub-fields?
+>>
+>> Other than that, this looks good to me.
+>>
+>> Thanks,
+>> Mark.
+> 
+> ok, will fix next version.
+> 
+> Thanks,
+> Tong.
 
+I tried to using data filelds as with C version, but here assembly code 
+we can not using operator such as << and |, if we use lsl and orr 
+instructions, the gpr will be occupied.
+
+So how about using 0x3ff directly here? it means err register and zero 
+register both set to x31.
+
+Thanks,
+Tong.
+
+> 
+>>
+>>>   /*
+>>>    * Create an exception table entry for `insn` if `fixup` is 
+>>> provided. Otherwise
+>>>    * do nothing.
+>>> diff --git a/arch/arm64/include/asm/asm-uaccess.h 
+>>> b/arch/arm64/include/asm/asm-uaccess.h
+>>> index 0557af834e03..75b211c98dea 100644
+>>> --- a/arch/arm64/include/asm/asm-uaccess.h
+>>> +++ b/arch/arm64/include/asm/asm-uaccess.h
+>>> @@ -61,7 +61,7 @@ alternative_else_nop_endif
+>>>   #define USER(l, x...)                \
+>>>   9999:    x;                    \
+>>> -    _asm_extable    9999b, l
+>>> +    _asm_extable_uaccess    9999b, l
+>>>   /*
+>>>    * Generate the assembly for LDTR/STTR with exception table entries.
+>>> @@ -73,8 +73,8 @@ alternative_else_nop_endif
+>>>   8889:        ldtr    \reg2, [\addr, #8];
+>>>           add    \addr, \addr, \post_inc;
+>>> -        _asm_extable    8888b,\l;
+>>> -        _asm_extable    8889b,\l;
+>>> +        _asm_extable_uaccess    8888b, \l;
+>>> +        _asm_extable_uaccess    8889b, \l;
+>>>       .endm
+>>>       .macro user_stp l, reg1, reg2, addr, post_inc
+>>> @@ -82,14 +82,14 @@ alternative_else_nop_endif
+>>>   8889:        sttr    \reg2, [\addr, #8];
+>>>           add    \addr, \addr, \post_inc;
+>>> -        _asm_extable    8888b,\l;
+>>> -        _asm_extable    8889b,\l;
+>>> +        _asm_extable_uaccess    8888b,\l;
+>>> +        _asm_extable_uaccess    8889b,\l;
+>>>       .endm
+>>>       .macro user_ldst l, inst, reg, addr, post_inc
+>>>   8888:        \inst        \reg, [\addr];
+>>>           add        \addr, \addr, \post_inc;
+>>> -        _asm_extable    8888b,\l;
+>>> +        _asm_extable_uaccess    8888b, \l;
+>>>       .endm
+>>>   #endif
+>>> -- 
+>>> 2.25.1
+>>>
+>> .
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

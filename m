@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4A3550361
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171C7550362
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 09:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiFRH3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 03:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S234276AbiFRHb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 03:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbiFRH3r (ORCPT
+        with ESMTP id S230250AbiFRHb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 03:29:47 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793B128E1D;
-        Sat, 18 Jun 2022 00:29:42 -0700 (PDT)
-X-UUID: 16e10fa87bcd43128c7520044efe22a3-20220618
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:d0bb85f2-a5d7-49cd-86c3-f168342688c9,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:90
-X-CID-INFO: VERSION:1.1.6,REQID:d0bb85f2-a5d7-49cd-86c3-f168342688c9,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:90
-X-CID-META: VersionHash:b14ad71,CLOUDID:e99cfc48-4c92-421c-ad91-b806c0f58b2a,C
-        OID:b3d8fe10dc9c,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 16e10fa87bcd43128c7520044efe22a3-20220618
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1221594928; Sat, 18 Jun 2022 15:29:34 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 18 Jun 2022 15:29:32 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 18 Jun 2022 15:29:30 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH] media: mediatek: vcodec: Initialize decoder parameters after getting dec_capability
-Date:   Sat, 18 Jun 2022 15:29:29 +0800
-Message-ID: <20220618072929.28783-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 18 Jun 2022 03:31:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3EC29806
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 00:31:20 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LQ6vJ1T85zBsWl;
+        Sat, 18 Jun 2022 15:27:56 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 18 Jun 2022 15:31:16 +0800
+Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
+ work as expected
+To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+ <20220608144031.829-2-linmiaohe@huawei.com>
+ <76e468b4-c6ac-426c-7ec9-99c620e08cda@redhat.com>
+ <a4b6b2bd-f56c-4f28-6fcc-7ce2f741dd4a@huawei.com>
+ <24fd3f78-f7e5-a1dc-cad0-15ff826744a9@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ca8dac22-197f-c824-6806-132fc077722c@huawei.com>
+Date:   Sat, 18 Jun 2022 15:31:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <24fd3f78-f7e5-a1dc-cad0-15ff826744a9@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Need to get dec_capability from scp first, then initialize decoder
-supported format and other parameters according to dec_capability value.
+On 2022/6/18 15:10, David Hildenbrand wrote:
+> On 18.06.22 04:43, Miaohe Lin wrote:
+>> On 2022/6/17 15:33, David Hildenbrand wrote:
+>>> On 08.06.22 16:40, Miaohe Lin wrote:
+>>>> security_vm_enough_memory_mm() checks whether a process has enough memory
+>>>> to allocate a new virtual mapping. And total_swap_pages is considered as
+>>>> available memory while swapoff tries to make sure there's enough memory
+>>>> that can hold the swapped out memory. But total_swap_pages contains the
+>>>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
+>>>> success even if there's no memory to hold the swapped out memory because
+>>>
+>>> s/success/succeed/
+>>
+>> OK. Thanks.
+>>
+>>>
+>>>> total_swap_pages always greater than or equal to p->pages.
+>>>>
+>>>> In order to fix it, p->pages should be retracted from total_swap_pages
+>>>
+>>> s/retracted/subtracted/
+>>
+>> OK. Thanks.
+>>
+>>>
+>>>> first and then check whether there's enough memory for inuse swap pages.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/swapfile.c | 10 +++++++---
+>>>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/mm/swapfile.c b/mm/swapfile.c
+>>>> index ec4c1b276691..d2bead7b8b70 100644
+>>>> --- a/mm/swapfile.c
+>>>> +++ b/mm/swapfile.c
+>>>> @@ -2398,6 +2398,7 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+>>>>  	struct filename *pathname;
+>>>>  	int err, found = 0;
+>>>>  	unsigned int old_block_size;
+>>>> +	unsigned int inuse_pages;
+>>>>  
+>>>>  	if (!capable(CAP_SYS_ADMIN))
+>>>>  		return -EPERM;
+>>>> @@ -2428,9 +2429,13 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+>>>>  		spin_unlock(&swap_lock);
+>>>>  		goto out_dput;
+>>>>  	}
+>>>> -	if (!security_vm_enough_memory_mm(current->mm, p->pages))
+>>>> -		vm_unacct_memory(p->pages);
+>>>> +
+>>>> +	total_swap_pages -= p->pages;
+>>>> +	inuse_pages = READ_ONCE(p->inuse_pages);
+>>>> +	if (!security_vm_enough_memory_mm(current->mm, inuse_pages))
+>>>> +		vm_unacct_memory(inuse_pages);
+>>>>  	else {
+>>>> +		total_swap_pages += p->pages;
+>>>
+>>> That implies that whenever we fail in security_vm_enough_memory_mm(),
+>>> that other concurrent users might see a wrong total_swap_pages.
+>>>
+>>> Assume 4 GiB memory and 8 GiB swap. Let's assume 10 GiB are in use.
+>>>
+>>> Temporarily, we'd have
+>>>
+>>> CommitLimit    4 GiB
+>>> Committed_AS  10 GiB
+>>
+>> IIUC, even if without this change, the other concurrent users if come after vm_acct_memory()
+>> is done in __vm_enough_memory(), they might see
+>>
+>> CommitLimit   12 GiB (4 GiB memory + 8GiB total swap)
+>> Committed_AS  18 GiB (10 GiB in use + 8GiB swap space to swapoff)
+>>
+>> Or am I miss something?
+>>
+> 
+> I think you are right!
+> 
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c     | 2 --
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks a lot!
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 1465ddff1c6b..41589470da32 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -112,8 +112,6 @@ void mtk_vcodec_dec_set_default_params(struct mtk_vcodec_ctx *ctx)
- {
- 	struct mtk_q_data *q_data;
- 
--	ctx->dev->vdec_pdata->init_vdec_params(ctx);
--
- 	ctx->m2m_ctx->q_lock = &ctx->dev->dev_mutex;
- 	ctx->fh.m2m_ctx = ctx->m2m_ctx;
- 	ctx->fh.ctrl_handler = &ctx->ctrl_hdl;
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index 4103d7c1b638..99d7b15f2b9d 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -208,6 +208,8 @@ static int fops_vcodec_open(struct file *file)
- 
- 		dev->dec_capability =
- 			mtk_vcodec_fw_get_vdec_capa(dev->fw_handler);
-+		ctx->dev->vdec_pdata->init_vdec_params(ctx);
-+
- 		mtk_v4l2_debug(0, "decoder capability %x", dev->dec_capability);
- 	}
- 
--- 
-2.18.0
+> 
+> 
 

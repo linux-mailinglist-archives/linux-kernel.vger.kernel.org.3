@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B767550370
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B382550374
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 10:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiFRIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 04:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S230260AbiFRIKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 04:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiFRIGj (ORCPT
+        with ESMTP id S229523AbiFRIKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 04:06:39 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0552726543
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=ziDry
-        BconZfbcDrkQjVtFWCm4II6YDZsPgZ8pg5lf4U=; b=jNf4loNn/WBLUTy1DgT37
-        f+68unl2kHORyj9TbymIOwtlh9/aw4s1BbC29lUZYYRaIwt5dOAv8qJVNK1QDr8h
-        XDlg+/u4Wl7wE/A+Y/mQRk49i1WCzednsQccYhAHh97hEudXV4kza1BkboBti2nE
-        GU2XakAgj5ysfnjwTXhrTQ=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Sat, 18 Jun 2022 16:03:28 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Sat, 18 Jun 2022 16:03:28 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
-Cc:     "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re:Re: [PATCH] powerpc: kernel: Change the order of of_node_put()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <a6a5e5b3-ffd1-904b-bba1-22baff5f7b67@csgroup.eu>
-References: <20220617112636.4041671-1-windhl@126.com>
- <a6a5e5b3-ffd1-904b-bba1-22baff5f7b67@csgroup.eu>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sat, 18 Jun 2022 04:10:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8CC2AE0E
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:10:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7478060C51
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 08:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CF1C341C4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 08:10:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655539834;
+        bh=8HqkVwJIXaewnnCfLQg07r1yOIW+/2JIykG8STwS1DU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=otucdKci5Ir2QEgy7iQEmH9Uz5ug9sBcixhkEtYnpDS2T0x2bAOKRDR1/YlBRG33N
+         oLmdLWte8hCKuMtd3HHC/PjNz82pYC2aCE6Tboo62xE2sP6ownXNtgca5xi/5s4rGE
+         PyWAjYsJrhVamQFVv29wVD4c2NkzAYyD51yiTlsufA33Yd3Tb8LTn6rATQ3NL0e0G5
+         Dfb1dQ8F0zKIH8+puIjwinAkX6JQH4xNIKHM8T6G6DMIKAZPSjRZJvduKdLlTH7vL2
+         V+3FVF3KP24lM03X6B/WGAQGWFUovwpuVVAukfhhpgEVhbnH2qJlHMn20I+YVHtQZ0
+         oLn4Fw3BkZvOg==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1016409cf0bso8137485fac.12
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 01:10:34 -0700 (PDT)
+X-Gm-Message-State: AJIora8P+Bm0b+sCRrSjafAnDhQWJGMV8UdRXaXw/FzJiNV9/2VYPBq1
+        wwBhRCj3x98tAny+902YHYgz0G6qp7rvlL7R/pU=
+X-Google-Smtp-Source: AGRyM1u/fZ43nB2flF69eJ2ExNQUGoqGkZ7hUnNh1tG2x3KvlRgGYs3FGIfGvbqNNYErEB6/VDqOE4TWYiN8YuaPWKo=
+X-Received: by 2002:a05:6870:1d4:b0:101:b0d6:8613 with SMTP id
+ n20-20020a05687001d400b00101b0d68613mr3111306oad.126.1655539833758; Sat, 18
+ Jun 2022 01:10:33 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <61c85548.1a55.18175d69e21.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowADnPPHRhq1ide84AA--.58025W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhEkF18RPUWxtgAAsd
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <202206180532.mOqwM8Wu-lkp@intel.com>
+In-Reply-To: <202206180532.mOqwM8Wu-lkp@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 18 Jun 2022 10:10:23 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHjzwYfoF0ut+7SzToAd35hRnTF0ppODvL0fPUyVQimDQ@mail.gmail.com>
+Message-ID: <CAMj1kXHjzwYfoF0ut+7SzToAd35hRnTF0ppODvL0fPUyVQimDQ@mail.gmail.com>
+Subject: Re: [peterz-queue:locking/core 2/4] ld.lld: error: undefined symbol: jump_label_apply_nops
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgrlnKggMjAyMi0wNi0xOCAxNToxMzoxM++8jCJDaHJpc3RvcGhlIExlcm95IiA8Y2hyaXN0
-b3BoZS5sZXJveUBjc2dyb3VwLmV1PiDlhpnpgZPvvJoKPgo+Cj5MZSAxNy8wNi8yMDIyIMOgIDEz
-OjI2LCBMaWFuZyBIZSBhIMOpY3JpdMKgOgo+PiBJbiBhZGRfcGNzcGtyKCksIGl0IGlzIGJldHRl
-ciB0byBjYWxsIG9mX25vZGVfcHV0KCkgYWZ0ZXIgdGhlCj4+ICdpZighbnApJyBjaGVjay4KPgo+
-V2h5IGlzIGl0IGJldHRlciA/Cj4KPgo+Cj4vKioKPiAgKiBvZl9ub2RlX3B1dCgpIC0gRGVjcmVt
-ZW50IHJlZmNvdW50IG9mIGEgbm9kZQo+ICAqIEBub2RlOglOb2RlIHRvIGRlYyByZWZjb3VudCwg
-TlVMTCBpcyBzdXBwb3J0ZWQgdG8gc2ltcGxpZnkgd3JpdGluZyBvZgo+ICAqCQljYWxsZXJzCj4g
-ICovCj52b2lkIG9mX25vZGVfcHV0KHN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZSkKPnsKPglpZiAo
-bm9kZSkKPgkJa29iamVjdF9wdXQoJm5vZGUtPmtvYmopOwo+fQo+RVhQT1JUX1NZTUJPTChvZl9u
-b2RlX3B1dCk7Cj4KPgo+Cj5DaHJpc3RvcGhlCgpIaSwgQ2hyaXN0b3BoZS4KClRoYW5rcyBmb3Ig
-eW91ciByZXBseSBhbmQgSSB3YW50IHRvIGhhdmUgYSBkaXNjdXNzaW9uLgoKSW4gbXkgdGhvdWdo
-dCwgeHh4X3B1dChwb2ludGVyKSdzIHNlbWFudGljIHVzdWFsbHkgbWVhbnMgCnRoaXMgcmVmZXJl
-bmNlIGhhcyBiZWVuIHVzZWQgZG9uZSBhbmQgd2lsbCBub3QgYmUgdXNlZCAKYW55bW9yZS4gSXMg
-dGhpcyBzZW1hbnRpYyBtb3JlIHJlYXNvbmFibGUsIHJpZ2h0PwoKQmVzaWRlcywgaWYgdGhlIG5w
-IGlzIE5VTEwsIHdlIGNhbiBqdXN0IHJldHVybiBhbmQgc2F2ZSBhIGNwdSAKdGltZSBmb3IgdGhl
-IHh4eF9wdXQoKSBjYWxsLgoKT3RoZXJ3aXNlLCBJIHByZWZlciB0byBjYWxsIGl0ICd1c2UoY2hl
-Y2spLWFmdGVyLXB1dCcuICAKCkluIGZhY3QsIEkgaGF2ZSBtZWV0IG1hbnkgb3RoZXIgJ3VzZShj
-aGVjayktYWZ0ZXItcHV0JyBpbnN0YW5jZXMKYWZ0ZXIgSSBzZW5kIHRoaXMgcGF0Y2gtY29tbWl0
-LCBzbyBJIGFtIHdhaXRpbmcgZm9yIHRoaXMgCmRpc2N1c3Npb24uCgpUaGlzIGlzIGp1c3QgbXkg
-dGhvdWdodCwgaXQgbWF5IGJlIHdyb25nLgoKQW55d2F5LCB0aGFua3MgZm9yIHlvdXIgcmVwbHku
-CgpMaWFuZwoKPgo+Cj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5j
-b20+Cj4+IC0tLQo+PiAgIGFyY2gvcG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9uLmMgfCAyICst
-Cj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZXR1cC1jb21tb24uYyBiL2FyY2gv
-cG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9uLmMKPj4gaW5kZXggZWIwMDc3YjMwMmUyLi43NjE4
-MTdkMWY0ZGIgMTAwNjQ0Cj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvc2V0dXAtY29tbW9u
-LmMKPj4gKysrIGIvYXJjaC9wb3dlcnBjL2tlcm5lbC9zZXR1cC1jb21tb24uYwo+PiBAQCAtNTYz
-LDkgKzU2Myw5IEBAIHN0YXRpYyBfX2luaXQgaW50IGFkZF9wY3Nwa3Iodm9pZCkKPj4gICAJaW50
-IHJldDsKPj4gICAKPj4gICAJbnAgPSBvZl9maW5kX2NvbXBhdGlibGVfbm9kZShOVUxMLCBOVUxM
-LCAicG5wUE5QLDEwMCIpOwo+PiAtCW9mX25vZGVfcHV0KG5wKTsKPj4gICAJaWYgKCFucCkKPj4g
-ICAJCXJldHVybiAtRU5PREVWOwo+PiArCW9mX25vZGVfcHV0KG5wKTsKPj4gICAKPj4gICAJcGQg
-PSBwbGF0Zm9ybV9kZXZpY2VfYWxsb2MoInBjc3BrciIsIC0xKTsKPj4gICAJaWYgKCFwZCkK
+On Fri, 17 Jun 2022 at 23:54, kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+> head:   c4e2db802ebbc639960404b97c9b8a6284634428
+> commit: 74c632a2a5738bd18864610e34f6b6d2db664bb7 [2/4] jump_label: mips: move module NOP patching into arch code
+> config: mips-randconfig-r026-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180532.mOqwM8Wu-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mipsel-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=74c632a2a5738bd18864610e34f6b6d2db664bb7
+>         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+>         git fetch --no-tags peterz-queue locking/core
+>         git checkout 74c632a2a5738bd18864610e34f6b6d2db664bb7
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: undefined symbol: jump_label_apply_nops
+>    >>> referenced by module.c
+>    >>>               kernel/module.o:(module_finalize) in archive arch/mips/built-in.a
+>
+
+Aargh.
+
+--- a/arch/mips/kernel/jump_label.c
++++ b/arch/mips/kernel/jump_label.c
+@@ -89,7 +89,7 @@ void arch_jump_label_transform(struct jump_entry *e,
+        mutex_unlock(&text_mutex);
+ }
+
+-#ifdef CONFIG_MODULE
++#ifdef CONFIG_MODULES
+ void jump_label_apply_nops(struct module *mod)
+ {
+        struct jump_entry *iter_start = mod->jump_entries;
+
+Sorry about that.

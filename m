@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F50550451
+	by mail.lfdr.de (Postfix) with ESMTP id ACB4D550452
 	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 13:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiFRLf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 07:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S233613AbiFRLhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 07:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiFRLfz (ORCPT
+        with ESMTP id S233195AbiFRLhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 07:35:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02B4D19FA8
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 04:35:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0510113E;
-        Sat, 18 Jun 2022 04:35:53 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E864F3F7D8;
-        Sat, 18 Jun 2022 04:35:49 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 12:35:35 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: Re: [PATCH -next v5 7/8] arm64: add uaccess to machine check safe
-Message-ID: <Yq24TSpZK+3/86Pj@FVFF77S0Q05N>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-8-tongtiangen@huawei.com>
- <YqxELtYkqQNibHaX@FVFF77S0Q05N>
- <a26c74eb-76c2-570a-2f82-503c812dc0f0@huawei.com>
+        Sat, 18 Jun 2022 07:37:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EC11A386
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 04:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655552238; x=1687088238;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aOYo46dpjPADJUZif/M9VCCs/cdqw1jhFQJdCWKAs90=;
+  b=jYplqyboqo4PaY+z4EyMbHo3ywZBfxQlwrr8Lz5VXK53Adc6Cer6p/Ay
+   qLcRnfCQr2+cdCXn/a+RgeAODSWbJlmNxs7G03ASrYcMbYL/GIp41wPxG
+   1tGGAm8Fw1F2yFv/4Gaun3m+AksvzCDkO5iiZfc4PfIG5EjAQ2lrqgPaJ
+   NrfV7ckNn3BXPzzpqi5eA2RuIrXYiYvSECI7zbFnYAUxp+G34Nz1mISFU
+   bRYp5g0HIRLTXIw45Bf2l0URF1eUiZpwxKoDkylnkLmleUq9mnVEuSpXq
+   CgtrTJ67RjyFt4O41tJijTOyGHJmtItUlRcrNSrUDD3UxR4zp+SpK/K0T
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278422459"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="278422459"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 04:37:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="763557267"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2022 04:37:16 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2WlP-000QHx-DQ;
+        Sat, 18 Jun 2022 11:37:15 +0000
+Date:   Sat, 18 Jun 2022 19:36:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liang He <windhl@126.com>, linux@armlinux.org.uk
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, windhl@126.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm: mm: (cache-feroceon-l2) Add missing of_node_put()
+Message-ID: <202206181916.KzyEh57x-lkp@intel.com>
+References: <20220616030232.3974254-1-windhl@126.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a26c74eb-76c2-570a-2f82-503c812dc0f0@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220616030232.3974254-1-windhl@126.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,91 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 05:27:45PM +0800, Tong Tiangen wrote:
-> 
-> 
-> 在 2022/6/17 17:06, Mark Rutland 写道:
-> > On Sat, May 28, 2022 at 06:50:55AM +0000, Tong Tiangen wrote:
-> > > If user access fail due to hardware memory error, only the relevant
-> > > processes are affected, so killing the user process and isolate the
-> > > error page with hardware memory errors is a more reasonable choice
-> > > than kernel panic.
-> > > 
-> > > Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> > 
-> > > ---
-> > >   arch/arm64/lib/copy_from_user.S | 8 ++++----
-> > >   arch/arm64/lib/copy_to_user.S   | 8 ++++----
-> > 
-> > All of these changes are to the *kernel* accesses performed as part of copy
-> > to/from user, and have nothing to do with userspace, so it does not make sense
-> > to mark these as UACCESS.
-> 
-> You have a point. so there is no need to modify copy_from/to_user.S in this
-> patch set.
+Hi Liang,
 
-Cool, thanks. If this patch just has the extable change, that's fine by me.
+Thank you for the patch! Yet something to improve:
 
-> > Do we *actually* need to recover from failues on these accesses? Looking at
-> > _copy_from_user(), the kernel will immediately follow this up with a memset()
-> > to the same address which will be fatal anyway, so this is only punting the
-> > failure for a few instructions.
-> 
-> If recovery success, The task will be killed and there will be no subsequent
-> memset().
+[auto build test ERROR on arm/for-next]
+[also build test ERROR on arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master keystone/next v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I don't think that's true.
+url:    https://github.com/intel-lab-lkp/linux/commits/Liang-He/arm-mm-cache-feroceon-l2-Add-missing-of_node_put/20220616-110418
+base:   git://git.armlinux.org.uk/~rmk/linux-arm.git for-next
+config: arm-mv78xx0_defconfig (https://download.01.org/0day-ci/archive/20220618/202206181916.KzyEh57x-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/bfe3f64dcc525721223aeb2d18594832ac9273c5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liang-He/arm-mm-cache-feroceon-l2-Add-missing-of_node_put/20220616-110418
+        git checkout bfe3f64dcc525721223aeb2d18594832ac9273c5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-IIUC per the last patch, in the exception handler we'll apply the fixup then
-force a signal. That doesn't kill the task immediately, and we'll return from
-the exception handler back into the original context (with the fixup applied).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The structure of copy_from_user() is 
+All errors (new ones prefixed by >>):
 
-	copy_from_user(to, from, n) {
-		_copy_from_user(to, from, n) {
-			res = n;
-			res = raw_copy_from_user(to, from, n);
-			if (res) 
-				memset(to + (n - res), 0, res);
-		}
-	}
+>> arch/arm/mm/cache-feroceon-l2.c:382:9: error: use of undeclared label 'out_put'
+                           goto out_put;
+                                ^
+   1 error generated.
 
-So when the fixup is applied and res indicates that the copy terminated early,
-there is an unconditinal memset() before the fatal signal is handled in the
-return to userspace path.
 
-> > If we really need to recover from certain accesses to kernel memory we should
-> > add a new EX_TYPE_KACCESS_ERR_ZERO_MC or similar, but we need a strong
-> > rationale as to why that's useful. As things stand I do not beleive it makes
-> > sense for copy to/from user specifically.
+vim +/out_put +382 arch/arm/mm/cache-feroceon-l2.c
 
-[...]
+   376	
+   377		node = of_find_matching_node(NULL, feroceon_ids);
+   378		if (node && of_device_is_compatible(node, "marvell,kirkwood-cache")) {
+   379			base = of_iomap(node, 0);
+   380			if (!base) {
+   381				ret = -ENOMEM;
+ > 382				goto out_put;
 
-> > > diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-> > > index c301dcf6335f..8ca8d9639f9f 100644
-> > > --- a/arch/arm64/mm/extable.c
-> > > +++ b/arch/arm64/mm/extable.c
-> > > @@ -86,10 +86,10 @@ bool fixup_exception_mc(struct pt_regs *regs)
-> > >   	if (!ex)
-> > >   		return false;
-> > > -	/*
-> > > -	 * This is not complete, More Machine check safe extable type can
-> > > -	 * be processed here.
-> > > -	 */
-> > > +	switch (ex->type) {
-> > > +	case EX_TYPE_UACCESS_ERR_ZERO:
-> > > +		return ex_handler_uaccess_err_zero(ex, regs);
-> > > +	}
-> > 
-> > This addition specifically makes sense to me, so can you split this into a separate patch?
-> 
-> According to my understanding of the above, only the modification of
-> extable.c is retained.
-> 
-> So what do you mean which part is made into a separate patch?
-
-As above, if you just retain the extable.c changes, that's fine by me.
-
-Thanks,
-Mark.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

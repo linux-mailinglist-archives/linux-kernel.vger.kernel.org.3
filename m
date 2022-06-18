@@ -2,319 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605F25505FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 18:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1695505FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 18:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236226AbiFRQAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 12:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S236309AbiFRQEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 12:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFRQAR (ORCPT
+        with ESMTP id S229449AbiFRQEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 12:00:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB9513E1D;
-        Sat, 18 Jun 2022 09:00:16 -0700 (PDT)
+        Sat, 18 Jun 2022 12:04:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EB713D69;
+        Sat, 18 Jun 2022 09:04:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EEB4B80A73;
-        Sat, 18 Jun 2022 16:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA5FC3411A;
-        Sat, 18 Jun 2022 16:00:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 509BFB801B9;
+        Sat, 18 Jun 2022 16:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C323CC3411A;
+        Sat, 18 Jun 2022 16:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655568013;
-        bh=f6eQqkMCCy7JOBuFzU98SzHbuGXhiTTDh0qo1FD3rRc=;
+        s=k20201202; t=1655568284;
+        bh=193OIz2GmZWacmY9R/GZImowBfEqpE8RpzGJ1S9iFxQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nKhv/oCvo3IgnfaeaZgect0mhgeASAg7V/biFCDZ7m2FENFdb4TigTTut6YEXBGs6
-         dDrKDA86QOwfXUbLLOGy4pgpjp/WBrfuWbVtmUPe5Nyjq8wpkN0HSyZ3ld0kgx898T
-         SdjW3VVBfmxzx7xdCAklxYwgNp9yVmeApzGHfAJ5GuQ5nB1faOwCwdmWvitNQHyyG/
-         h7qEyk5P9Hyuw5xwOlpLGDkDT/sdkPdRhx428zzaRWJ2ZMnpfrfbUYlaUvml8vyL/5
-         z6vgOjg4hqUHo6ZghCJRW0AfelETIteBBPG+80xjuu2aNJa3+9/p0FJ2wwiHPldVZ9
-         xX7Jh3cum/qLg==
-Date:   Sat, 18 Jun 2022 17:09:26 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: Re: [PATCH v2 11/15] iio: adc: mt6370: Add Mediatek MT6370 support
-Message-ID: <20220618170926.678dc05f@jic23-huawei>
-In-Reply-To: <20220613111146.25221-12-peterwu.pub@gmail.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
-        <20220613111146.25221-12-peterwu.pub@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        b=YkF8GlT/H8y8gscuCVG/0uII3JqbVk9zi1oBgvq9n2b0Ub9JRjNANmrIZINsto6l0
+         SSSyidgS3FEGpAHu4mMahwWQf/Vjj5OVqz+D4JwxjGQQ6Kcee2vUseVopjWmjhJtYb
+         2m5jbrzBuwem5wIJm0FdjhU4MphCRZUtkjo8yJYKPKddW/n8oxBznem58uShp4wYZD
+         hwSIagGjDfsJbSP27KTJ76VG2uE88UyLct4XP3hMvutUS3tPclEc4IrIYkGUM3Xy1E
+         YcX8MUTz0uXW18HGbsGqxtcSGGzmx4l+0OoPYFktr84RR11yP8dSWAHsSlSv9q0MJV
+         Mdf2t6FfqdWVQ==
+Date:   Sun, 19 Jun 2022 01:04:40 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     chuang <nashuiliang@gmail.com>
+Cc:     stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Rollback post_handler on failed arm_kprobe()
+Message-Id: <20220619010440.57fe2f296b555df666108559@kernel.org>
+In-Reply-To: <CACueBy7Q6TenVFGau7Y+8nuo9ZLqruC1Pijw1YuMgyOUhjULMA@mail.gmail.com>
+References: <20220614090633.43832-1-nashuiliang@gmail.com>
+        <20220615093424.961cfa58eae0a8ce601e7af6@kernel.org>
+        <CACueBy7Q6TenVFGau7Y+8nuo9ZLqruC1Pijw1YuMgyOUhjULMA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 19:11:42 +0800
-ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+On Wed, 15 Jun 2022 11:09:16 +0800
+chuang <nashuiliang@gmail.com> wrote:
 
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> On Wed, Jun 15, 2022 at 8:34 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Hi Chuang,
+> >
+> > On Tue, 14 Jun 2022 17:06:33 +0800
+> > Chuang W <nashuiliang@gmail.com> wrote:
+> >
+> > > In a scenario where livepatch and aggrprobe coexist, if arm_kprobe()
+> > > returns an error, ap.post_handler, while has been modified to
+> > > p.post_handler, is not rolled back.
+> >
+> > Would you mean 'coexist' on the same function?
 > 
-> Add Mediatek MT6370 ADC support.
+> Yes, It's the same function.
 > 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-
-Hi ChiaEn Wu,
-
-A few comments inline, but mostly looks good to me
-with the exception of the scales which look far too large.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/adc/Kconfig      |   9 ++
->  drivers/iio/adc/Makefile     |   1 +
->  drivers/iio/adc/mt6370-adc.c | 262 +++++++++++++++++++++++++++++++++++
->  3 files changed, 272 insertions(+)
->  create mode 100644 drivers/iio/adc/mt6370-adc.c
+> >
+> > >
+> > > When ap.post_handler is not NULL (not rolled back), the caller (e.g.
+> > > register_kprobe/enable_kprobe) of arm_kprobe_ftrace() will always fail.
+> >
+> > It seems this explanation and the actual code does not
+> > match. Can you tell me what actually you observed?
+> >
+> > Thank you,
+> >
 > 
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index 71ab0a06aa82..09576fb478ad 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -737,6 +737,15 @@ config MEDIATEK_MT6360_ADC
->  	  is used in smartphones and tablets and supports a 11 channel
->  	  general purpose ADC.
->  
-> +config MEDIATEK_MT6370_ADC
-> +	tristate "Mediatek MT6370 ADC driver"
-> +	depends on MFD_MT6370
-> +	help
-> +	  Say Y here to enable MT6370 ADC support.
-> +
-> +	  Integrated for System Monitoring includes is used in smartphones
-> +	  and tablets and supports a 9 channel general purpose ADC.
-> +
->  config MEDIATEK_MT6577_AUXADC
->  	tristate "MediaTek AUXADC driver"
->  	depends on ARCH_MEDIATEK || COMPILE_TEST
-> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-> index 39d806f6d457..0ce285c7e2d0 100644
-> --- a/drivers/iio/adc/Makefile
-> +++ b/drivers/iio/adc/Makefile
-> @@ -68,6 +68,7 @@ obj-$(CONFIG_MCP320X) += mcp320x.o
->  obj-$(CONFIG_MCP3422) += mcp3422.o
->  obj-$(CONFIG_MCP3911) += mcp3911.o
->  obj-$(CONFIG_MEDIATEK_MT6360_ADC) += mt6360-adc.o
-> +obj-$(CONFIG_MEDIATEK_MT6370_ADC) += mt6370-adc.o
->  obj-$(CONFIG_MEDIATEK_MT6577_AUXADC) += mt6577_auxadc.o
->  obj-$(CONFIG_MEN_Z188_ADC) += men_z188_adc.o
->  obj-$(CONFIG_MESON_SARADC) += meson_saradc.o
-> diff --git a/drivers/iio/adc/mt6370-adc.c b/drivers/iio/adc/mt6370-adc.c
-> new file mode 100644
-> index 000000000000..c30e1290973a
-> --- /dev/null
-> +++ b/drivers/iio/adc/mt6370-adc.c
-> @@ -0,0 +1,262 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
-> +#include <linux/bits.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
+> I briefly describe the steps involved, a patch (kprobes: Rollback
+> kprobe flags on failed arm_kprobe,
+> https://lore.kernel.org/all/20220612213156.1323776351ee1be3cabc7fcc@kernel.org/T/)
+> must be added, otherwise it will panic:
+> 
+> 1) add a livepatch
+> 
+> $ insmod livepatch-XXX.ko
+> 
+> 2) add a kprobe using tracefs API
+> 
+> $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
+> 
+> At this time, XXX is a simple kprobe, kprobe->post_handler = NULL.
+> 
+> 3) add a second kprobe using raw kprobe API (i.e. register_kprobe),
+> the new kprobe->post_handler != NULL
+> 
+> $ insmod kprobe_XXX.ko
+> $ insmod: ERROR: could not insert module kprobe_XXX.ko: Device or resource busy
 
-#include <linux/mod_devicetable.h>
-rather than relying on indirect include for
-struct of_device_id
+Ah, OK. In this case, "p->post_handler != NULL" indicates this
+kprobe will modify regs->ip. Thus the ftrace will conflict
+with livepatch. In this case, if ap->post_handler is not
+rolled back, the ap will never be enabled.
 
-We've just removed such an include path from IIO and had
-to fix up a lot of drivers that falsely assumed that would
-available.
+Can you update the patch description something like below?
 
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define MT6370_REG_CHG_CTRL3		0x113 /* AICR */
-> +#define MT6370_REG_CHG_CTRL7		0x117 /* ICHG */
-> +#define MT6370_REG_CHG_ADC		0x121
-> +#define MT6370_REG_ADC_DATA_H		0x14C
-> +
-> +#define MT6370_ADC_START_MASK		BIT(0)
-> +#define MT6370_ADC_IN_SEL_MASK		GENMASK(7, 4)
-> +#define MT6370_AICR_ICHG_MASK		GENMASK(7, 2)
-> +
-> +#define MT6370_AICR_400MA		0x6
-> +#define MT6370_ICHG_500MA		0x4
-> +#define MT6370_ICHG_900MA		0x8
-> +
-> +#define ADC_CONV_TIME_US		35000
-> +#define ADC_CONV_POLLING_TIME		1000
-> +
-> +struct mt6370_adc_data {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	struct mutex adc_lock;
-Please document scope of the lock.  I think it's to synchronize
-access to the device state concerned with channel reads, but there
-should be a comment here to say something about that.
-> +};
-> +
-> +static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
-> +				   unsigned long addr, int *val)
-> +{
-> +	__be16 be_val;
-> +	unsigned int reg_val;
-> +	int ret;
-> +
-> +	mutex_lock(&priv->adc_lock);
-> +
-> +	reg_val = MT6370_ADC_START_MASK |
-> +		  FIELD_PREP(MT6370_ADC_IN_SEL_MASK, addr);
-> +	ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, reg_val);
-> +	if (ret)
-> +		goto adc_unlock;
-> +
-> +	msleep(ADC_CONV_TIME_US / 1000);
-> +
-> +	ret = regmap_read_poll_timeout(priv->regmap,
-> +				       MT6370_REG_CHG_ADC, reg_val,
-> +				       !(reg_val & MT6370_ADC_START_MASK),
-> +				       ADC_CONV_POLLING_TIME,
-> +				       ADC_CONV_TIME_US * 3);
-> +	if (ret) {
-> +		if (ret == -ETIMEDOUT)
-> +			dev_err(priv->dev, "Failed to wait adc conversion\n");
-Why are any other error here not worth reporting?  I'd print a message for
-all return values.
+-----
+In a scenario where livepatch and a aggrprobe coexist on the same
+function entry, and if the aggrprobe has a post_handler, the
+arm_kprobe() always fail because both of livepatch and the aggrprobe
+with post_handler will use FTRACE_OPS_FL_IPMODIFY. This flag is not
+allowed to be used by the different ftrace user on the same function
+entry.
+Since the register_aggr_kprobe() doesn't roll back the post_handler
+when the arm_kprobe() is failed, this aggrprobe will not be available
+from now on even if all kprobes on the aggrprobe don't have the
+post_handler.
 
-> +		goto adc_unlock;
-> +	}
-> +
-> +	ret = regmap_raw_read(priv->regmap, MT6370_REG_ADC_DATA_H,
-> +			      &be_val, sizeof(be_val));
-> +	if (ret)
-> +		goto adc_unlock;
-> +
-> +	*val = be16_to_cpu(be_val);
-> +	ret = IIO_VAL_INT;
-> +
-> +adc_unlock:
-> +	mutex_unlock(&priv->adc_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
-> +				 int chan, int *val1, int *val2)
-> +{
-> +	unsigned int reg_val;
-> +	int ret;
-> +
-> +	switch (chan) {
-> +	case MT6370_CHAN_VBAT:
-> +	case MT6370_CHAN_VSYS:
-> +	case MT6370_CHAN_CHG_VDDP:
-> +		*val1 = 5;
-> +		return IIO_VAL_INT;
-> +	case MT6370_CHAN_IBUS:
-> +		ret = regmap_read(priv->regmap, MT6370_REG_CHG_CTRL3, &reg_val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		reg_val = FIELD_GET(MT6370_AICR_ICHG_MASK, reg_val);
-> +		if (reg_val < MT6370_AICR_400MA)
-> +			*val1 = 33500;
+Fix to roll back the post_handler of the aggrprobe for this case.
+With this fix, if the kprobe which has the post_handler is removed
+from the aggrprobe (since arm_kprobe() failed), it will be available
+again. 
+-----
 
-As (scale * raw) must give a value in milliamps, this seems very large as
-each ADC reading currently represents 33Amps. That would make an impressive
-PMIC!)
+This will explains the technical background, what will happen
+with current code, how it is fixed and what is the corrected
+behavior.
 
-Same for the various entries below.  Note that scale is often
-not an integer value (or even as large as 1) Hence the many different precisions
-of data type that IIO provides and the useful types like IIO_VAL_FRACTIONAL;
+Thank you,
+
+> 
+> This will fail (as expected). However, XXX is modified to an
+> aggrprobe. agKprobe->post_handler = aggr_post_handler, it's not rolled
+> back on failed arm_kprobe().
+> 
+> 4) add a third kprobe using bpftrace/bcc tool
+> 
+> $ bpftrace -e 'kprobe:XXX {printf("%s", kstack());}'
+> Attaching 1 probe...
+> perf_event_open(/sys/kernel/debug/tracing/events/kprobes/p_XXX_0_1_bcc_440/id):
+> Device or resource busy
+> Error attaching probe: 'kprobe:blkcg_destroy_blkgs'
+> $ bpftrace -e 'kprobe:XXX {printf("%s", kstack());}'
+> Attaching 1 probe...
+> perf_event_open(/sys/kernel/debug/tracing/events/kprobes/p_XXX_0_1_bcc_440/id):
+> Device or resource busy
+> Error attaching probe: 'kprobe:blkcg_destroy_blkgs'
+> 
+> This will always fail (not as expected).
+> 
+> > >
+> > > Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
+> > > Signed-off-by: Chuang W <nashuiliang@gmail.com>
+> > > Cc: <stable@vger.kernel.org>
+> > > ---
+> > >  kernel/kprobes.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > > index f214f8c088ed..0610b02a3a05 100644
+> > > --- a/kernel/kprobes.c
+> > > +++ b/kernel/kprobes.c
+> > > @@ -1300,6 +1300,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+> > >  {
+> > >       int ret = 0;
+> > >       struct kprobe *ap = orig_p;
+> > > +     kprobe_post_handler_t old_post_handler = NULL;
+> > >
+> > >       cpus_read_lock();
+> > >
+> > > @@ -1351,6 +1352,9 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+> > >
+> > >       /* Copy the insn slot of 'p' to 'ap'. */
+> > >       copy_kprobe(ap, p);
+> > > +
+> > > +     /* save the old post_handler */
+> > > +     old_post_handler = ap->post_handler;
+> > >       ret = add_new_kprobe(ap, p);
+> > >
+> > >  out:
+> > > @@ -1365,6 +1369,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+> > >                       ret = arm_kprobe(ap);
+> > >                       if (ret) {
+> > >                               ap->flags |= KPROBE_FLAG_DISABLED;
+> > > +                             ap->post_handler = old_post_handler;
+> > >                               list_del_rcu(&p->list);
+> > >                               synchronize_rcu();
+> > >                       }
+> > > --
+> > > 2.34.1
+> > >
+> >
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
 
-> +		else
-> +			*val1 = 50000;
-> +
-> +		return IIO_VAL_INT;
-> +	case MT6370_CHAN_IBAT:
-> +		ret = regmap_read(priv->regmap, MT6370_REG_CHG_CTRL7, &reg_val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		reg_val = FIELD_GET(MT6370_AICR_ICHG_MASK, reg_val);
-> +		if (reg_val < MT6370_ICHG_500MA)
-> +			*val1 = 23750;
-> +		else if (reg_val >= MT6370_ICHG_500MA &&
-> +			 reg_val < MT6370_ICHG_900MA)
-> +			*val1 = 26800;
-> +		else
-> +			*val1 = 50000;
-> +
-> +		return IIO_VAL_INT;
-> +	case MT6370_CHAN_VBUSDIV5:
-> +		*val1 = 25000;
-> +		return IIO_VAL_INT;
-> +	case MT6370_CHAN_VBUSDIV2:
-> +		*val1 = 50000;
-> +		return IIO_VAL_INT;
-> +	case MT6370_CHAN_TS_BAT:
-> +		*val1 = 25;
-> +		*val2 = 10000;
-> +		return IIO_VAL_FRACTIONAL;
-> +	case MT6370_CHAN_TEMP_JC:
-> +		*val1 = 2;
-> +		return IIO_VAL_INT;
-> +	}
-> +
-> +	return -EINVAL;
-As below, I'd prefer this as a default: in the switch statement.
-
-> +}
-> +
-
-...
-
-> +
-> +static int mt6370_adc_read_raw(struct iio_dev *iio_dev,
-> +			       const struct iio_chan_spec *chan,
-> +			       int *val, int *val2, long mask)
-> +{
-> +	struct mt6370_adc_data *priv = iio_priv(iio_dev);
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		return mt6370_adc_read_channel(priv, chan->channel,
-> +					       chan->address, val);
-> +	case IIO_CHAN_INFO_SCALE:
-> +		return mt6370_adc_read_scale(priv, chan->channel, val, val2);
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		return mt6370_adc_read_offset(priv, chan->channel, val);
-> +	}
-> +
-> +	return -EINVAL;
-Add a default to the switch statement and return -EINVAL in there.
-That makes it explicit that you are handling all the cases you
-care about.
-
-Sure, right now it's obvious that is the case, but it might not be so
-obvious if more code happens to get added here in future.
-
-> +}
-> +
->
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

@@ -2,113 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC0F550765
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 01:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04203550772
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 01:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbiFRXAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 19:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S231966AbiFRXVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 19:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFRXAw (ORCPT
+        with ESMTP id S229837AbiFRXVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 19:00:52 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2255FD3C;
-        Sat, 18 Jun 2022 16:00:51 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 25IN0U4M020802;
-        Sun, 19 Jun 2022 08:00:31 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 25IN0U4M020802
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655593232;
-        bh=OPafFCN8j6/Th3TYQPVTAZ/0OBtsya/p0tqu/GJE6Tw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wfj8c0Xv4Vypn9wH5hNN3yxI1i14Gphn2bb7EZtURjTNwc2bOjjPwtfwf0Q9RBye0
-         iqTfMUs0+kvrBeGlZAbkyJoMc84j60Q5XMu5UeF/BZ3jwL8Gk/b4LcQIzGMH750z9r
-         1yn7L/7Pt+CYOGrX3yxQ5I2jowbvmPnNtliCKivei0w9staXod7zDbkbuzsku7JOeR
-         iAHz/XpA/rWEi0AQBxUJk1fvl1gMOdQoj7shN6Nsm+vAZ+2Roc8ojKTKKzB6iR+End
-         SlS0RvWHeL6KNHjwCdTv9wev47W0dzcl1ngJuFkgorBmIE2+G4kJ7ypwo6g6mZ0NsV
-         A3lpkKJMK8Psg==
-X-Nifty-SrcIP: [209.85.221.42]
-Received: by mail-wr1-f42.google.com with SMTP id g27so3277041wrb.10;
-        Sat, 18 Jun 2022 16:00:31 -0700 (PDT)
-X-Gm-Message-State: AJIora8rEA5XUv4vNTTyBZ1z8vv26fkLMih2rv2Sl3fufnRFXXMMKtf5
-        e7ResmPfLHRye+yijRZ75Y7mdM1stksSzM3VuxE=
-X-Google-Smtp-Source: AGRyM1uhD22NFFPkUhQ5XGaigVBR/j7MXgiMhah0d2kWo210TD4RGX89dnUFCNeCcwmUk8oFnRzZb1Epvf+P9tdoqbE=
-X-Received: by 2002:a5d:638b:0:b0:218:54a2:71ec with SMTP id
- p11-20020a5d638b000000b0021854a271ecmr15449262wru.477.1655593230127; Sat, 18
- Jun 2022 16:00:30 -0700 (PDT)
+        Sat, 18 Jun 2022 19:21:34 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2102FDFE8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 16:21:34 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 541DB84287;
+        Sun, 19 Jun 2022 01:21:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1655594492;
+        bh=ECixVEIXYDf/N355Xq804C3+wlcxnnlAleX9d7xrpJ4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZpVxtyUH9SpnmIBt6Sqc+j7sOeAEEdGbJbl3VY1/aohByJsDj695TLvTzlrcoA6Fj
+         WsOHLYZjtQpOxYRSZXGzoHauISLD+Csybz+ge0N83MMizHX2nBjXwqghdLVQSkpQmB
+         75U3E24Ub0iwt7TdSQrX9zgZfJ+CrZScktiV10V+ANKJiykPh40PIuAIet7C6L46qg
+         qHep6DaZgQzobnUtbZnIAZ2b3GW5r37J4+Ui1iKeutMMPylR1LfkcvsUdUfMiRIO8c
+         054C9NXUiFgfl68wPlnhBQj84PE+yJKeztC7MTkG3A1trqMF4DwXG40JFi1mH/nhmd
+         PukxOAxHV0/KA==
+Message-ID: <5b6e5103-8ca8-87d6-27fc-243b4a6d5689@denx.de>
+Date:   Sun, 19 Jun 2022 01:02:03 +0200
 MIME-Version: 1.0
-References: <20220616195759.3214538-1-samitolvanen@google.com>
-In-Reply-To: <20220616195759.3214538-1-samitolvanen@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 19 Jun 2022 07:59:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARAAdWPxaMWawQf5Y4kYJ065OMtvrnUaHkjCquL_BZYYQ@mail.gmail.com>
-Message-ID: <CAK7LNARAAdWPxaMWawQf5Y4kYJ065OMtvrnUaHkjCquL_BZYYQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Ignore __this_module in gen_autoksyms.sh
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nicolas Schier <nicolas@fjasle.eu>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/3] regmap: Wire up regmap_config provided bulk write in
+ missed functions
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220616073435.1988219-1-javierm@redhat.com>
+ <20220616073435.1988219-4-javierm@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220616073435.1988219-4-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 4:58 AM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> Module object files can contain an undefined reference to __this_module,
-> which isn't resolved until we link the final .ko. The kernel doesn't
-> export this symbol, so ignore it in gen_autoksyms.sh.
+On 6/16/22 09:34, Javier Martinez Canillas wrote:
+> There are some functions that were missed by commit d77e74561368 ("regmap:
+> Add bulk read/write callbacks into regmap_config") when support to define
+> bulk read/write callbacks in regmap_config was introduced.
+> 
+> The regmap_bulk_write() and regmap_noinc_write() functions weren't changed
+> to use the added map->write instead of the map->bus->write handler.
+> 
+> Also, the regmap_can_raw_write() was not modified to take map->write into
+> account. So will only return true if a bus with a .write callback is set.
+> 
+> Fixes: d77e74561368 ("regmap: Add bulk read/write callbacks into regmap_config")
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-OK, I understand these two sentences.
-
-> This avoids an
-> unnecessary vmlinux rebuild with UNUSED_KSYMS_WHITELIST when we have a
-> symbol list that already contains all the module dependencies.
->
-
-I do not understand how this can happen.
-
-
-Can you provide me steps to reproduce it?
-
-
-
-
-
-
-
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  scripts/gen_autoksyms.sh | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-> index faacf7062122..653fadbad302 100755
-> --- a/scripts/gen_autoksyms.sh
-> +++ b/scripts/gen_autoksyms.sh
-> @@ -56,4 +56,7 @@ EOT
->  # point addresses.
->  sed -e 's/^\.//' |
->  sort -u |
-> +# Ignore __this_module. It's not an exported symbol, and will be resolved
-> +# when the final .ko's are linked.
-> +grep -v '^__this_module$' |
->  sed -e 's/\(.*\)/#define __KSYM_\1 1/' >> "$output_file"
-> --
-> 2.36.1.476.g0c4daa206d-goog
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+Reviewed-by: Marek Vasut <marex@denx.de>

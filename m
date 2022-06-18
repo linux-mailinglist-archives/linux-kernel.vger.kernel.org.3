@@ -2,162 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E703E55050C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 15:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF702550522
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 15:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiFRNRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 09:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S233708AbiFRNh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 09:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiFRNRv (ORCPT
+        with ESMTP id S229449AbiFRNhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 09:17:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF4DDEAD;
-        Sat, 18 Jun 2022 06:17:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84AD2B808C4;
-        Sat, 18 Jun 2022 13:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8485C3411A;
-        Sat, 18 Jun 2022 13:17:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655558266;
-        bh=nmSfIhwdXVYqsSz7pkv5v/OV6Q1kNMZACzI7k2REBNE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X9WZ5W+ZW7pwMHbImv9vGPOaNO35V2FJwW4oKyGykyl8Bl5XhD9EmSb1Qb3w24IGD
-         2s066vZSBfUpdj9V1Pal35iYmJ2a5w2E6CxxwhtXOfuj7B6inP2AFGwpwrqZwqZmV1
-         ddhFfP/ws8ryZA3Y2AHqCfoIK4KBhBDulkWCiM65y/B9BGJ2VW77j4ot/06wjGOt4G
-         JndllYTvwkukXxp39k235DibSxYOUYwSOaDRNkTN+oradidKhmGd07CJjli/6kGGT5
-         0avyy31vvmneyE3bchsEemIT4bu9pj3M7R+jaBKHT0yYRFKz1yVhZUOs2ezV9vTW14
-         TzTQJGkw2V0mQ==
-Date:   Sat, 18 Jun 2022 14:27:03 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rockosov@gmail.com" <rockosov@gmail.com>
-Subject: Re: [PATCH v3] iio: trigger: warn about non-registered iio trigger
- getting attempt
-Message-ID: <20220618142703.75025659@jic23-huawei>
-In-Reply-To: <20220616091308.miwqkdfc77mm72hz@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220607183907.20017-1-ddrokosov@sberdevices.ru>
-        <20220616091308.miwqkdfc77mm72hz@CAB-WSD-L081021.sigma.sbrf.ru>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 18 Jun 2022 09:37:24 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AD217ABC;
+        Sat, 18 Jun 2022 06:37:23 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id t2so6045846pld.4;
+        Sat, 18 Jun 2022 06:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wGZn6FgCwazjQXz0vpa56+s306nfaS2CZ0bzi8dbZZg=;
+        b=IW9icgEbNXH5VLqNWoTl2VsDFsxe4egTcAoSDRsgkjuMUMxlwMBC+YpYnp7ilhT/IL
+         Mj8IcOf2beu1xe6PFC1D7OrBh4g3HKLrvlPIS1hkQfq27xl0gUuWv990ciET5hhDxzG7
+         athbbbEOd90RUDX0XYVzBFLMSkcOFKKBQBnrFUI/iWxJiphyPrRUYqpBNCVUY0Eyq8+V
+         eCKCdmJPTVx7rzNlGF73k0qquMWdBOGYphCsOrMJb60tmah51TIbz/328sbsfaTHxbKu
+         cEEmEqWyCRzTt46wZCuOwtgPwPLZXnIjsahpNnmKOH3l1rvfXZ2TPACT3ahAc5tqn/G6
+         CzUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wGZn6FgCwazjQXz0vpa56+s306nfaS2CZ0bzi8dbZZg=;
+        b=O52Yb0LHB+VMfd0ZgEeyqwxDwP5PPCkdwBSa4tXjZFLmzEXJUqWUq5YztyvS+jy45J
+         pTlvpXVWQzNJG9n+WdRh0EC6MCSCKXV6r018dbqbyxJf6if8qyouDJYErOyyL98J9la6
+         tPD6NYizPr8frGYskIN30GhF+EFW/ctjBGXTUbO22N7PLOev+WmJaPwIMpoTs+SSDkVb
+         XAvwNQHdSYhaxyy8Ev5JD8tQz8yYdpHc58rEZMpXHYOxrC9UwiHA5rlk8VicL+2cH8uP
+         XDfKW8iru5r5jwY4ZWcZIOgtyxJRo76qLO6RasdQTeqnNuUfQ9LwfEGlIqIm3pkqgBst
+         q0Ng==
+X-Gm-Message-State: AJIora+kmpZASfL6gtIjRsVjCOjUbUOc0P1/p/e8OcMAgX0x6AvuKUXa
+        TIa6CtT79symudT+2pM1Ugh1JMv2m/z2zw==
+X-Google-Smtp-Source: AGRyM1vK8OYzov2v6wh9nIzlwQWTPyJlW91AXhZwHliy5cnNHSvekMY8hxCtR6SByGlPk7N+IACMTA==
+X-Received: by 2002:a17:902:cccf:b0:168:e13c:5cd9 with SMTP id z15-20020a170902cccf00b00168e13c5cd9mr14702567ple.53.1655559442595;
+        Sat, 18 Jun 2022 06:37:22 -0700 (PDT)
+Received: from guoguo-omen.lan ([2401:c080:1400:4da2:b701:47d5:9291:4cf9])
+        by smtp.gmail.com with ESMTPSA id t29-20020a62d15d000000b0050dc7628150sm5668258pfl.42.2022.06.18.06.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 06:37:21 -0700 (PDT)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     Chuanhong Guo <gch981213@gmail.com>, stable@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] ACPI: skip IRQ1 override on Lenovo ThinkBook 14G4+ ARA
+Date:   Sat, 18 Jun 2022 21:37:12 +0800
+Message-Id: <20220618133712.8788-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 09:13:00 +0000
-Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+The IRQ is described as (Edge, ActiveLow, Shared, ) in ACPI DSDT and
+it's correct. The override makes the keyboard interrupt polarity
+inverted, resulting in non-functional keyboard.
+Add an entry for skipping the override.
 
-> Hello Jonathan,
-> 
-> I notice the patchset from 
-> https://lore.kernel.org/all/20220524181150.9240-1-ddrokosov@sberdevices.ru/
-> is not merged to stable yet.
-> I think if this WARN() patch is okay for you, maybe it's better to merge
-> it together with the previous one. It will notify developers about this
-> problem as you suggested before, and the previous patchset resolves the issue
-> in the all IIO drivers.
-> 
-> What do you think about it?
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+---
+It seems that this issue present on several other Ryzen 6000 laptops.
+The dmi table is named genericly because I'm expecting this list to
+get filled with laptops from other vendors.
 
-It would be a stretch to take a defensive measure like this into stable,
-so I'll just queue this up for the next merge window.  We might have
-some exciting intermediate times where anyone actually using the togreg
-branch directly will get drivers that will spit out the warning.
-That should only be people active on the list though who will find
-this quickly enough and understand what is gong on.
+ drivers/acpi/resource.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-I'm fine with this and it's been on list long enough for anyone else to comment.
-It'll be in a branch I'm happy to rebase for at few days anyway if there
-are any last minute comments or tags.
-
-Applied to the togreg branch of iio.git and pushed out as testing.
-
-Hopefully I'll get a pull request out for the fixes-togreg branch
-sometime this weekend.
-
-Thanks for adding this protection btw.
-
-Jonathan
-
-
-> 
-> On Tue, Jun 07, 2022 at 06:39:18PM +0000, Dmitry Rokosov wrote:
-> > As a part of patch series about wrong trigger register() and get()
-> > calls order in the some IIO drivers trigger initialization path:
-> > 
-> > https://lore.kernel.org/all/20220524181150.9240-1-ddrokosov@sberdevices.ru/
-> > 
-> > runtime WARN_ONCE() is added to alarm IIO driver authors who make such
-> > a mistake.
-> > 
-> > When an IIO driver allocates a new IIO trigger, it should register it
-> > before calling the get() operation. In other words, each IIO driver
-> > must abide by IIO trigger alloc()/register()/get() calls order.
-> > 
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > ---
-> > Changes:
-> > v1 -> v2: totally reworked the patch, used trig->list entry instead of
-> >           trig->owner as driver registration indicator.
-> >           It works perfectly for both builtin and built as a module
-> >           drivers.
-> > 
-> > v2 -> v3: changed WARN() call to WARN_ONCE() to avoid warn spamming
-> >           during deferred probe() as Andy suggested.
-> > ---
-> >  drivers/iio/industrialio-trigger.c | 2 ++
-> >  include/linux/iio/trigger.h        | 5 +++++
-> >  2 files changed, 7 insertions(+)
-> > 
-> > diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-> > index f504ed351b3e..d6277e72d515 100644
-> > --- a/drivers/iio/industrialio-trigger.c
-> > +++ b/drivers/iio/industrialio-trigger.c
-> > @@ -581,6 +581,8 @@ struct iio_trigger *viio_trigger_alloc(struct device *parent,
-> >  	if (trig->name == NULL)
-> >  		goto free_descs;
-> >  
-> > +	INIT_LIST_HEAD(&trig->list);
-> > +
-> >  	trig->subirq_chip.name = trig->name;
-> >  	trig->subirq_chip.irq_mask = &iio_trig_subirqmask;
-> >  	trig->subirq_chip.irq_unmask = &iio_trig_subirqunmask;
-> > diff --git a/include/linux/iio/trigger.h b/include/linux/iio/trigger.h
-> > index 4c69b144677b..03b1d6863436 100644
-> > --- a/include/linux/iio/trigger.h
-> > +++ b/include/linux/iio/trigger.h
-> > @@ -93,6 +93,11 @@ static inline void iio_trigger_put(struct iio_trigger *trig)
-> >  static inline struct iio_trigger *iio_trigger_get(struct iio_trigger *trig)
-> >  {
-> >  	get_device(&trig->dev);
-> > +
-> > +	WARN_ONCE(list_empty(&trig->list),
-> > +		  "Getting non-registered iio trigger %s is prohibited\n",
-> > +		  trig->name);
-> > +
-> >  	__module_get(trig->owner);
-> >  
-> >  	return trig;
-> > -- 
-> > 2.36.0  
-> 
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index c2d494784425..3f6a290a1060 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -399,6 +399,17 @@ static const struct dmi_system_id medion_laptop[] = {
+ 	{ }
+ };
+ 
++static const struct dmi_system_id irq1_edge_low_shared[] = {
++	{
++		.ident = "Lenovo ThinkBook 14 G4+ ARA",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_BOARD_NAME, "LNVNB161216"),
++		},
++	},
++	{ }
++};
++
+ struct irq_override_cmp {
+ 	const struct dmi_system_id *system;
+ 	unsigned char irq;
+@@ -409,6 +420,7 @@ struct irq_override_cmp {
+ 
+ static const struct irq_override_cmp skip_override_table[] = {
+ 	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0 },
++	{ irq1_edge_low_shared, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1 },
+ };
+ 
+ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+-- 
+2.36.1
 

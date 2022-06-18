@@ -2,131 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FC655057A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 16:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C6F550594
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Jun 2022 16:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbiFROTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 10:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S234268AbiFROth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 10:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbiFROSL (ORCPT
+        with ESMTP id S229449AbiFROte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 10:18:11 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A62DF19;
-        Sat, 18 Jun 2022 07:18:08 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id f65so6396013pgc.7;
-        Sat, 18 Jun 2022 07:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=QiBFbh7JSAwKD6sJ1nf5U4eu547oJ+ADx+EKgoymxCI=;
-        b=ViprWoK4uqnklWzTQk+fvnLaUqne0Zd90H9MixB7tRue3RXJ8Lq9n5syAfKrS3dKEA
-         HT9z787Xt3UAxhy1S57GgN8644M/bc8r4HbbCn0alGy0UzCj3DFJA1T/Ib9R/pOANPpD
-         JEsZ9EU88xvA6ikZqDoFXIXdh9FSFoCuW2IvlKMA3sH/8/OtpizRHSwwmGCZD40FJel+
-         yPC0/gi37K8AK2vvZ9a4XDCnlRfqukBCue2IC14lDDNquYrNeKvjLkY6IeQ6lZRcNUCn
-         kBjUOoESkgxJ2s2k7cHQTPgYxvOaK1XAtlHrK415aY/0iBlK8oX853OJJXj/Judkpbfd
-         yk3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QiBFbh7JSAwKD6sJ1nf5U4eu547oJ+ADx+EKgoymxCI=;
-        b=VRHAsyu8zMJ0vr1+F+smH2ZCaiiSFd6siwTQrapNIA9cXkqAAORULsYyveg1FHvcew
-         RTkW/kYftnheI/u1OU4wH7RLJBvyVWUdOZ9ykCjRZzr5m8fH9NEfscvA8BvxbpFNhmzY
-         oCkIkpiwZgRpwySWM/uW29X5Y6HFnAvpuM1EhIqOToWiE1CuJ9t/MCFrDmU0XQ+mDHgt
-         hjqLHmqlqCD89ppCMRTDVjOz0AoaP8BUED5bGzjXJ8avffsMdQfp7Mfe/COtla/cKHSj
-         J+R0Xf1NWaNGoaEZCERgOOvYXKlu/6kjWfYN3JvlTo6u2d7k1VwPVZCqiOviXlaz60sY
-         wQCQ==
-X-Gm-Message-State: AJIora+2v3Mn2xnnHCedznRn9kqC4neNwKLrdZrqOF0CRwxndssRacOi
-        AeDQ984hWP0m6Yv4Wq5riZE=
-X-Google-Smtp-Source: AGRyM1u2mGmi1JJfkT6ExmYQ2dFty+U+or8nDWjHbWZLfPVYWKM8Lx0xSixycdUe6IskWv1L1zV22Q==
-X-Received: by 2002:a05:6a00:7d3:b0:51e:740f:8d10 with SMTP id n19-20020a056a0007d300b0051e740f8d10mr15348069pfu.4.1655561887511;
-        Sat, 18 Jun 2022 07:18:07 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902650900b00168ba5ac8adsm5425678plk.163.2022.06.18.07.18.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 07:18:07 -0700 (PDT)
-Message-ID: <7bffaa3c-dda8-44f5-8190-9fb5142925bc@gmail.com>
-Date:   Sat, 18 Jun 2022 23:18:02 +0900
+        Sat, 18 Jun 2022 10:49:34 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E900D17AA5;
+        Sat, 18 Jun 2022 07:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655563774; x=1687099774;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w5tzZ7RrqHkJr3FpjfrwlqfOP6Ec32jd0b8PId2bAqg=;
+  b=fsbrNLt0H+zjiBlcIhoypCJQYu2Pt1QEdgXVxDk11ZihhHWxwAQZSFig
+   BSfgRdMHhuE2kAZJT37KRHNY21C9Rej0bG6gMEqr/aY0Q3MUj5d2At8ae
+   naIuAf9so67I5paw2h75iq1F0etN35jqiYm2XpS0sH5uRzLTsdFsW1nDD
+   qiRZ62RzxKBH1q/ZvyZgvt9CgbfGgUMykxpvaLz5CR45Lz3iRZQ/WZl+R
+   wuytPK94fnDuVMzXM0QU/cvdqVk885AVmcIEm9gPep4NRocpHCbsT6dQ7
+   Mj/cFESYpL4pvIp2Y1aumXcRHTqAIccuU8YnxfFLe7nfuOMwXlYCwSHWD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365985672"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="365985672"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 07:49:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="688737041"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 07:49:20 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2ZlG-000QNA-KA;
+        Sat, 18 Jun 2022 14:49:18 +0000
+Date:   Sat, 18 Jun 2022 22:49:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>
+Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        David Gow <davidgow@google.com>
+Subject: Re: [PATCH 2/5] kunit: flatten kunit_suite*** to kunit_suite** in
+ .kunit_test_suites
+Message-ID: <202206182258.EahbTrAv-lkp@intel.com>
+References: <20220618090310.1174932-3-davidgow@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] devfreq: exynos-ppmu: Fix refcount leak in
- of_get_devfreq_events
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220526082856.37594-1-linmq006@gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220526082856.37594-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618090310.1174932-3-davidgow@google.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 5. 26. 17:28, Miaoqian Lin wrote:
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> This function only calls of_node_put() in normal path,
-> missing it in error paths.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: f262f28c1470 ("PM / devfreq: event: Add devfreq_event class")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/devfreq/event/exynos-ppmu.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-> index 9b849d781116..a443e7c42daf 100644
-> --- a/drivers/devfreq/event/exynos-ppmu.c
-> +++ b/drivers/devfreq/event/exynos-ppmu.c
-> @@ -519,15 +519,19 @@ static int of_get_devfreq_events(struct device_node *np,
->  
->  	count = of_get_child_count(events_np);
->  	desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
-> -	if (!desc)
-> +	if (!desc) {
-> +		of_node_put(events_np);
->  		return -ENOMEM;
-> +	}
->  	info->num_events = count;
->  
->  	of_id = of_match_device(exynos_ppmu_id_match, dev);
->  	if (of_id)
->  		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
-> -	else
-> +	else {
-> +		of_node_put(events_np);
->  		return -EINVAL;
-> +	}
->  
->  	j = 0;
->  	for_each_child_of_node(events_np, node) {
+Hi David,
 
-I edited the patch title with 'PM / ' prefix 
-in order to keep the consistent style of title as following:
+Thank you for the patch! Yet something to improve:
 
-PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc2 next-20220617]
+[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206182258.EahbTrAv-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c2386c54cc9fd471e5353f375ff71734214ed3c6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+        git checkout c2386c54cc9fd471e5353f375ff71734214ed3c6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: the linux-review/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653 HEAD fddb3ea0ed5627098eabc542fdba5a8b4b769066 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   drivers/thunderbolt/test.c: In function 'tb_test_init':
+>> drivers/thunderbolt/test.c:2824:16: error: too few arguments to function '__kunit_test_suites_init'
+    2824 |         return __kunit_test_suites_init(tb_test_suites);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/thunderbolt/test.c:9:
+   include/kunit/test.h:240:5: note: declared here
+     240 | int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/test.c: In function 'tb_test_exit':
+>> drivers/thunderbolt/test.c:2829:16: error: too few arguments to function '__kunit_test_suites_exit'
+    2829 |         return __kunit_test_suites_exit(tb_test_suites);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/thunderbolt/test.c:9:
+   include/kunit/test.h:242:6: note: declared here
+     242 | void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/test.c:2829:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+    2829 |         return __kunit_test_suites_exit(tb_test_suites);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/test.c:2827:6: note: declared here
+    2827 | void tb_test_exit(void)
+         |      ^~~~~~~~~~~~
+   drivers/thunderbolt/test.c: In function 'tb_test_init':
+   drivers/thunderbolt/test.c:2825:1: error: control reaches end of non-void function [-Werror=return-type]
+    2825 | }
+         | ^
+   cc1: some warnings being treated as errors
+
+
+vim +/__kunit_test_suites_init +2824 drivers/thunderbolt/test.c
+
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2821  
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2822  int tb_test_init(void)
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2823  {
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2824  	return __kunit_test_suites_init(tb_test_suites);
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2825  }
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2826  
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2827  void tb_test_exit(void)
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2828  {
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2829  	return __kunit_test_suites_exit(tb_test_suites);
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+0-DAY CI Kernel Test Service
+https://01.org/lkp

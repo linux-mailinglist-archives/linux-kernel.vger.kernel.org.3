@@ -2,163 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398FE5508E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 08:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D725508F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 08:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiFSGYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 02:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S232583AbiFSGgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 02:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFSGYK (ORCPT
+        with ESMTP id S229673AbiFSGgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 02:24:10 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2044.outbound.protection.outlook.com [40.92.15.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F83BE25;
-        Sat, 18 Jun 2022 23:24:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RNm0UCzbvoLyzGOgejMfwQyLFemNsxNVIzd7lme6lDCIW2MSZic+M2fWejlf0vgLN7ghRxmjL4D0uxv0gLn8MKMIgpc1UmCZI4U6uCoXuOvJUtPxdw42D0Gf4Z6ixByufNDVg80+6Ypu/N9mj6VWlxWhfNVVRqgSWxkeMJ4kI/VL00LvJAzd7RnbfJb8OHFt1TVvR8o8ih3uqyC8MOb5aiuBg3+qIpN+zXb5/z58Kprv2wtu7jH0pfpm3xvA79vGfrwE6fiGNvKNLIHC9Qs/PMnODGy+xUZiHQVI716TLnea51HsY7axBebRkebSdhmI7zoUC6RF1jrkx5o+eN8s4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D5gggBZYFNSf9gu66MSdBgBznJD3MDk7O0RxMh4e06I=;
- b=RviafhYColY5b16po+1G/htX35qhcvFjmgMhpEw+A6Ca7Y6NtGcHH5y0SECFf7F2/xuS4UgN2TbGONhOVL5KxhvqbsHj9x4aIC3NBA+Y+o8LynN9GeQcB9eGSQSTI/PPmGtd3ph6eNN6myW6mLZdBC80LX5J0Md4qO/jerB/t5j5AUGfEKHCnlJQ51d3h809SvUVJBSUNSt/AfY5P2LlQ+amGmbly0/E46WE0kEA8VSso4O0qvMhCrbnm5PW857EQlv6Sb82mYdb7D8SnJcfrDz89UYsqjLQxHJkNOR/BZuDMfjjtc1kQBZs7vsb5I6Or9GvzcflzYt48Uflb4l51w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D5gggBZYFNSf9gu66MSdBgBznJD3MDk7O0RxMh4e06I=;
- b=SKlskVhDlLlVdmtVpw8izvoA462+3j/IbJjc7UlmoDIUcG3Z1hYSF/oGPbFg80M2bQgTm5gmwJN2ZhYyihDdOQ/Yr+gqzz4zaVOjkznQ7D8s+eUuy1Jfo96MYP0qnLx8kCmCvFy3+DjR6Q/kPIqEhuTPCehSwLYE5AZoAe4G7TMIl3lYIe++LoGinIo638avNboPKF1XUfqBZO3tYYWvkPi1KMmQbaqfV5xMgVCPuB4DTKHxrSBVKriByTEd4mCyHVYbQJ0BsDfz3bQGdFfQf6kh2L89T62cbg+vLFgcizvKK+Vr9CBL4Q3WW2dcs6AK2gc1NEbxzr2BNeSHQ+VCkQ==
-Received: from BY3PR18MB4579.namprd18.prod.outlook.com (2603:10b6:a03:3c2::23)
- by BN6PR1801MB1988.namprd18.prod.outlook.com (2603:10b6:405:68::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.20; Sun, 19 Jun
- 2022 06:24:06 +0000
-Received: from BY3PR18MB4579.namprd18.prod.outlook.com
- ([fe80::a152:9965:ced5:192d]) by BY3PR18MB4579.namprd18.prod.outlook.com
- ([fe80::a152:9965:ced5:192d%2]) with mapi id 15.20.5353.020; Sun, 19 Jun 2022
- 06:24:06 +0000
-From:   <wentao_liang_g@163.com>
-To:     "kuba@kernel.org" <kuba@kernel.org>
-CC:     "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drivers/net/ethernet/neterion/vxge: Fix a use-after-free
- bug in vxge-main.c
-Thread-Topic: [PATCH] drivers/net/ethernet/neterion/vxge: Fix a use-after-free
- bug in vxge-main.c
-Thread-Index: AQHYg5fan0WA3s/kGEu4h2ZIbP7riw==
-Sender: Liang Wentao <Wentao_Liang_o@outlook.com>
-Date:   Sun, 19 Jun 2022 06:24:06 +0000
-Message-ID: <BY3PR18MB4579167AD36EC86A9152EBB5D8B19@BY3PR18MB4579.namprd18.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 2
-x-tmn:  [JwGdfw4vfqHx2mwU4PsfMbD5OyK/TtYc]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1bd9aa54-b525-4f5f-cf41-08da51bc5044
-x-ms-traffictypediagnostic: BN6PR1801MB1988:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oM4XsSc2yT8QisNQxa8EMXwIm1BcIkSCuMn7Pn9DVm0PHi4BakQST5TghYGKN1NQosM6rDTLvBujlBZStDw6VmefnO8HWxpVWc8squN+vU7/dd02fw9me7VEJOjA/Zh7iGZfIB2P5lYQmpY1vbedkeuvWUHOIj2YAv+KzRs+dARgaRQlB2xWqD1aQFjDXWtn/3AA1uSQsuum7cGcyoxF/YH+bRRUAD6/I8FrAloZ9aR5oUJtF/GNRZuXXKeMItdzEPu67F0z0LfoAMRSg9Wy4/RtB+x40SovPTpXC35/is/F/KnMnQvzUr5rI6LZvEAZvCkbXrhH1Mn1rYDr4jTMKFH8tWh2QNempvdGIZPxABB+AoN2mJ5PrElW2mC3LQfd6irS3SRy4Xz3GZv/RPiEYbwCV+yL4fPa2DrjK0THkNgpFLitfyIX7yEH5dEFa2yJy2d0rZyioFDvG5IpZUZ0Bp/0RdIrVVplA0XjZMP/Mpcwsb4Iq0SoaFkqEvsznxtg/5FkTxSQ04NOsHy/cBSvZ6MQq1IWIpT3rfTco5i3SFyp+VJOxoBDHwCSV6Z8xfWGL4j9er1IF4MqOeCAYTAk/g==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?VsxkGM0fWYNsFgLXg7U6Lfs7GXmvmTKHlBAsASgbr2dMQuA6m8Qvv/rIEI?=
- =?iso-8859-1?Q?WJDnesIKql33s+5TAl6XP8uCgBc+MB5nKwf6NLqt015PQzl/+FBxJK1Udc?=
- =?iso-8859-1?Q?7kTrkqmsmqbc8SxnDuZGyKL9B6AqJLnrIKrofcb3LjtsHmVlcM/Ny+OBG+?=
- =?iso-8859-1?Q?5U1P8ohdAM6SCfPq47YmXwXOqlcOTuXZGcWptRhvQuNdkthyMS8O1QnBsC?=
- =?iso-8859-1?Q?6O4JJhqx7LsD8BcWMZoAkhxKcIvtBRL5oMrpQgfqT3on9PmXjhxubafs5Y?=
- =?iso-8859-1?Q?uiEugII1wP54NJMBQ/MVkf1NKoKJkvIO78Cx/o6cWceJJE/NOVVUhNVzID?=
- =?iso-8859-1?Q?ro/+GZfh0zEgdN0E3vT4Rqvw38kOhcLjCj+PZG+J4u5wn2+mAsYN6iHNNW?=
- =?iso-8859-1?Q?uXexd8Q0t3LRhNa8FuOipf4OKiNB/tGg8IumSpp22DmdihWW5PfZ0/DMzO?=
- =?iso-8859-1?Q?3L7fIUNX49KzqNf9/4W7WY1jxdtnWLmmXKrgnf6BOuIySh2b2jv1NSkHGE?=
- =?iso-8859-1?Q?L65ng50AnnjuJh9maLjy/plSOTDFnr9Y26xwEXc55+CETtD4TXzgAB/0mt?=
- =?iso-8859-1?Q?DkzadoMHqzwzLbROizUCV07K44PCJbFzxy3Zq2oYbGF0rqz0BQHutEYSHh?=
- =?iso-8859-1?Q?i+ejF2bTgN6eM9cL62987ND8yWnzRgYCfjbUrnpXJSKyLwTQMjpcejmr45?=
- =?iso-8859-1?Q?U7pQ8Jxq0BWcTND+N4qqPlxRL0e9F+4Gy5wiBT+snxcKhnjHS0yqw0kzsI?=
- =?iso-8859-1?Q?RLYL69/nEM/VM4LRmYMxDL+93J92wQ8UCABB4K8TknDs44sitXObnOgH05?=
- =?iso-8859-1?Q?1jiOsg6RM5xQxhVenRQo7iGHIvt7jr2E52SxhXhApRAM91CwLPv9fKgqz1?=
- =?iso-8859-1?Q?fNy/oXuG/KiVO5ghtY3wd/Shl4AAZpOLZnnjSReScaQHx0TBJtRURCtbNC?=
- =?iso-8859-1?Q?pm8/K1ScQOJMLdmAv/BDC8jejv150ucmsqw2bP8Am6HdzXVtDN86xhRcsM?=
- =?iso-8859-1?Q?Yyo2xTUDLsvQVQDwVZysp0jRtQtkAqz9dWjo12byZPnRdnO5I6qK9jX9tD?=
- =?iso-8859-1?Q?Z774rCtqhbMRB6AU9CCKo4mJVmAp7A1wQ1Xn1ANJUPSLW0ZNy3ke1Oc2I5?=
- =?iso-8859-1?Q?7z2oC4GzeKAzLNLgqk/UKpkvcTib58zmgMv1Dugw2u79MaKoWCOmocLOUZ?=
- =?iso-8859-1?Q?padsxgfGoP71HN7lKEzCi4sd52YkTKPpJzER+IRzGwdo/Y2qGbLslBCERd?=
- =?iso-8859-1?Q?NkXygppfofzu9GiroY7SQ1qU1rfkDAEX6MbByUmYT7fo8YhmPxIVeduntU?=
- =?iso-8859-1?Q?fk4StDHpl4iSD52wLES0UbtfBSiM2gXPCumaPRuaaENVtUADlR2gX1BJlz?=
- =?iso-8859-1?Q?/NJrcvfprtIjYYO3p/qQ7OqJk5gPbhItNIEzGl3AlZF5tc1jo1vuQxjNkf?=
- =?iso-8859-1?Q?p3ZAyogW6gh8uTw+hwG0nFSfkLhl8eyp56Db92vJvRE2gUe7b9q7TlltZz?=
- =?iso-8859-1?Q?Y=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 19 Jun 2022 02:36:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9D75F69
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 23:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655620608; x=1687156608;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yNPXkNrQ39aVeyfK6a4n71ndujwklD+5/8trDPKy6j8=;
+  b=jpLeoKHQhbVSDRc8DvM+gBsWRBAxCfq1zUGFK7efQ4WfnuZzpJj8Uqlf
+   HHn7Owi0ff1IrgIZwfLhUFPJEa/sTOD6I9fw62l0sN1fScU4FThddM8n2
+   4XdvZG2Q8IQHwrK79XNV9V9ICzF5qoD01bVBmnLec9QG2Q7yWbn8dgm3q
+   boNCTpnZvaISMrSfuF2e4+g+AR6iIpAyzoSlIBgwlfFHUyqxG8Xk4kbQo
+   PMIIKuUn5UXXXUaZfXlX4GfKoUM1Qr6i8KxOmRLr5N1/nqs7TwWkTjKkd
+   NcVRe00MwS5le7/l9EBEABsseZwZWqgNFfOFkIQCskCEH1UGpSYCJVpwj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305138619"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="305138619"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 23:36:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="688964754"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 23:36:47 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2oYA-000Qvd-Pi;
+        Sun, 19 Jun 2022 06:36:46 +0000
+Date:   Sun, 19 Jun 2022 14:36:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org
+Subject: [cilium:pr/meta4 2/2] net/core/dev.c:3968:44: sparse: sparse:
+ incorrect type in argument 1 (different address spaces)
+Message-ID: <202206191401.lhKuX4Q0-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR18MB4579.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bd9aa54-b525-4f5f-cf41-08da51bc5044
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jun 2022 06:24:06.8578
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1801MB1988
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,=0A=
-=0A=
-I have replied your mail and answered your questions about my =0A=
-patch a few days ago as follow. Do you have any more question? =0A=
-I have already renewed the patch with the correct subject and tag.=0A=
-=0A=
-I am looking forward to the patch being accepted and merged.=0A=
-=A0=0A=
-Thanks=0A=
-=A0=0A=
-Wentao=0A=
-=A0=0A=
-=A0=0A=
->No errors happening during a test is not a sufficient proof of=0A=
->correctness. You need to analyze the driver and figure out what bar0 =0A=
->is used for.=0A=
-=A0=0A=
-Bar0 is a Base=A0Address=A0Register=A0(BAR)=A0in=A0PCIe devices. It points=
-=0A=
- to the memory space of the device. When the device is removed, =0A=
-we need to iounmap it. We check the related code and do not find =0A=
-bar0 is reference in the remaining part of vxge_remove(). We believe =0A=
-move the iounmap to the front of vxge_device_unregister is properly.=0A=
-=A0=0A=
-=A0=0A=
->Alternatively just save the address of bar0 to a local variable, let=0A=
->the netdev unregister happen, and then call *unmap() on the local=0A=
->variable. That won't move the unmap and avoid the UAF.=0A=
-=A0=0A=
-This is not a right way to patch the bug. The UAF is not triggered=0A=
- by accessing the address itself but accessing the memory pointed =0A=
-by bar0. Even if the address is saved, the memory is still freed. =0A=
-Accessing the memory in iounmap will result in UAF as well. The =0A=
-experiment also proved it.=0A=
-=A0=0A=
->But please LMK how you use these cards first.=0A=
-=A0=0A=
-In order to trigger the vulnerability, a vxge device is required. =0A=
-We use QEMU to emulate the device.=0A=
-=A0=0A=
-Besides, I want to point out that the UAF bug does is in the remove =0A=
-routine of the device. There is not any operation to a removed device. =0A=
-If the device can be removed safely in the patched kernel, we do not =0A=
-have to warry about anything else.=
+tree:   https://github.com/cilium/linux.git pr/meta4
+head:   dcea837b60f0d9f8f3cdae284680659042f560d1
+commit: dcea837b60f0d9f8f3cdae284680659042f560d1 [2/2] bpf: Add fd-based API to attach tc BPF programs
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220619/202206191401.lhKuX4Q0-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-30-g92122700-dirty
+        # https://github.com/cilium/linux/commit/dcea837b60f0d9f8f3cdae284680659042f560d1
+        git remote add cilium https://github.com/cilium/linux.git
+        git fetch --no-tags cilium pr/meta4
+        git checkout dcea837b60f0d9f8f3cdae284680659042f560d1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/core/ net/sched/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   net/core/dev.c:3323:23: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int @@
+   net/core/dev.c:3323:23: sparse:     expected restricted __wsum [usertype] csum
+   net/core/dev.c:3323:23: sparse:     got unsigned int
+   net/core/dev.c:3323:23: sparse: sparse: cast from restricted __wsum
+>> net/core/dev.c:3968:44: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sch_entry *entry @@     got struct sch_entry [noderef] __rcu *sch_ingress @@
+   net/core/dev.c:3968:44: sparse:     expected struct sch_entry *entry
+   net/core/dev.c:3968:44: sparse:     got struct sch_entry [noderef] __rcu *sch_ingress
+>> net/core/dev.c:4008:44: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sch_entry *entry @@     got struct sch_entry [noderef] __rcu *sch_egress @@
+   net/core/dev.c:4008:44: sparse:     expected struct sch_entry *entry
+   net/core/dev.c:4008:44: sparse:     got struct sch_entry [noderef] __rcu *sch_egress
+   net/core/dev.c:3827:17: sparse: sparse: context imbalance in '__dev_queue_xmit' - different lock contexts for basic block
+   net/core/dev.c:5199:17: sparse: sparse: context imbalance in 'net_tx_action' - different lock contexts for basic block
+--
+>> net/sched/sch_ingress.c:91:66: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct mini_Qdisc [noderef] __rcu **p_miniq @@     got struct mini_Qdisc ** @@
+   net/sched/sch_ingress.c:91:66: sparse:     expected struct mini_Qdisc [noderef] __rcu **p_miniq
+   net/sched/sch_ingress.c:91:66: sparse:     got struct mini_Qdisc **
+   net/sched/sch_ingress.c:241:74: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct mini_Qdisc [noderef] __rcu **p_miniq @@     got struct mini_Qdisc ** @@
+   net/sched/sch_ingress.c:241:74: sparse:     expected struct mini_Qdisc [noderef] __rcu **p_miniq
+   net/sched/sch_ingress.c:241:74: sparse:     got struct mini_Qdisc **
+   net/sched/sch_ingress.c:261:73: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct mini_Qdisc [noderef] __rcu **p_miniq @@     got struct mini_Qdisc ** @@
+   net/sched/sch_ingress.c:261:73: sparse:     expected struct mini_Qdisc [noderef] __rcu **p_miniq
+   net/sched/sch_ingress.c:261:73: sparse:     got struct mini_Qdisc **
+
+vim +3968 net/core/dev.c
+
+  3955	
+  3956	#ifdef CONFIG_NET_XGRESS
+  3957	#ifdef CONFIG_NET_CLS_ACT
+  3958	unsigned int sch_cls_ingress(const void *pskb, const struct bpf_insn *null)
+  3959	{
+  3960		struct sk_buff *skb = (void *)pskb;
+  3961		struct mini_Qdisc *miniq;
+  3962		struct tcf_result res;
+  3963		int ret;
+  3964	
+  3965		tc_skb_cb(skb)->mru = 0;
+  3966		tc_skb_cb(skb)->post_ct = false;
+  3967	
+> 3968		miniq = dev_sch_entry_pair(skb->dev->sch_ingress)->miniq;
+  3969		if (!miniq)
+  3970			return TC_ACT_UNSPEC;
+  3971		mini_qdisc_bstats_cpu_update(miniq, skb);
+  3972		__skb_pull(skb, skb->mac_len);
+  3973		ret = tcf_classify(skb, miniq->block, miniq->filter_list, &res, false);
+  3974		__skb_push(skb, skb->mac_len);
+  3975		/* Only tcf related quirks below. */
+  3976		switch (ret) {
+  3977		case TC_ACT_SHOT:
+  3978			mini_qdisc_qstats_cpu_drop(miniq);
+  3979			break;
+  3980		case TC_ACT_OK:
+  3981		case TC_ACT_RECLASSIFY:
+  3982			skb->tc_index = TC_H_MIN(res.classid);
+  3983			ret = TC_ACT_OK;
+  3984			break;
+  3985		case TC_ACT_STOLEN:
+  3986		case TC_ACT_QUEUED:
+  3987		case TC_ACT_TRAP:
+  3988			ret = TC_ACT_CONSUMED;
+  3989			break;
+  3990		case TC_ACT_CONSUMED:
+  3991			/* Bump refcount given skb is now in use elsewhere. */
+  3992			skb_get(skb);
+  3993			break;
+  3994		}
+  3995		return ret;
+  3996	}
+  3997	
+  3998	unsigned int sch_cls_egress(const void *pskb, const struct bpf_insn *null)
+  3999	{
+  4000		struct sk_buff *skb = (void *)pskb;
+  4001		struct mini_Qdisc *miniq;
+  4002		struct tcf_result res;
+  4003		int ret;
+  4004	
+  4005		tc_skb_cb(skb)->mru = 0;
+  4006		tc_skb_cb(skb)->post_ct = false;
+  4007	
+> 4008		miniq = dev_sch_entry_pair(skb->dev->sch_egress)->miniq;
+  4009		if (!miniq)
+  4010			return TC_ACT_UNSPEC;
+  4011		mini_qdisc_bstats_cpu_update(miniq, skb);
+  4012		ret = tcf_classify(skb, miniq->block, miniq->filter_list, &res, false);
+  4013		/* Only tcf related quirks below. */
+  4014		switch (ret) {
+  4015		case TC_ACT_SHOT:
+  4016			mini_qdisc_qstats_cpu_drop(miniq);
+  4017			break;
+  4018		case TC_ACT_OK:
+  4019		case TC_ACT_RECLASSIFY:
+  4020			skb->tc_index = TC_H_MIN(res.classid);
+  4021			ret = TC_ACT_OK;
+  4022			break;
+  4023		case TC_ACT_STOLEN:
+  4024		case TC_ACT_QUEUED:
+  4025		case TC_ACT_TRAP:
+  4026			ret = TC_ACT_CONSUMED;
+  4027			break;
+  4028		case TC_ACT_CONSUMED:
+  4029			/* Bump refcount given skb is now in use elsewhere. */
+  4030			skb_get(skb);
+  4031			break;
+  4032		}
+  4033		return ret;
+  4034	}
+  4035	#endif /* CONFIG_NET_CLS_ACT */
+  4036	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

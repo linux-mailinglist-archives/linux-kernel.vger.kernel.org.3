@@ -2,112 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A19B55095E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA059550960
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiFSIcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 04:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S234400AbiFSIcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 04:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiFSIcF (ORCPT
+        with ESMTP id S233655AbiFSIcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 04:32:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8268311465
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 01:32:04 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2qLi-0001fL-SW; Sun, 19 Jun 2022 10:32:02 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2qLg-001Pfh-76; Sun, 19 Jun 2022 10:32:01 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o2qLg-00HL6m-QJ; Sun, 19 Jun 2022 10:32:00 +0200
-Date:   Sun, 19 Jun 2022 10:32:00 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Daniel Mack <daniel@zonque.org>, kernel@pengutronix.de,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/4] mfd: tc6387xb: Drop disable callback that is never
- called
-Message-ID: <20220619083200.gx3ardiogbarlvzs@pengutronix.de>
-References: <20220530192430.2108217-1-u.kleine-koenig@pengutronix.de>
- <20220530192430.2108217-4-u.kleine-koenig@pengutronix.de>
- <YqpJ+GDjsMsILL4P@google.com>
+        Sun, 19 Jun 2022 04:32:18 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1461181B;
+        Sun, 19 Jun 2022 01:32:16 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id u37so7717723pfg.3;
+        Sun, 19 Jun 2022 01:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SBTUv4o8XV3U+5AHPeniUbupyDLFCaEm7X67rKDOZUI=;
+        b=J5XFxhrsgGEkx8zin0vpEAl/LJ1cTtO70iW+/LBitKblSb1rT/po8hVwLE7pFHg4KG
+         UsbW2TGLgThNmF2GsECc3EPc2uvDupjIf7RfJavDSRLGxdH7ayLxFHoLZ2BDgE7OpDE8
+         M3s1XB73pWossWXwGfR1sAxPPsdRe5dsmmsLPxNdPVZCKhAI0kFf1iPEGmqzna3nXftr
+         ZXq70wziuB2GYwH0IugqjaFFGtR9nexorOLosZ9JuUN9pRhFiK0FDgoQxYW0AVYW4C+z
+         vzbJPftP5ptjXiTQWZ6ulSFmCEqcs/ISJD3hr5g3xjnDCNkJ1KwUgPwRvRJkaqBGxGOh
+         vbWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SBTUv4o8XV3U+5AHPeniUbupyDLFCaEm7X67rKDOZUI=;
+        b=1vjhNhIMk9BbDFCHEXhv3qg6Q9baXikycLEP/c3HHVr3VFwhWrciCnmotw61GQ/GJd
+         X6afnOdaskJ8tVOyrwULsR7yJDjC/gMVdHTJRY3y7WT53OmV1Bptb43pNb1/EDp8xaFA
+         Mr7VHervpKcmtnGR3AnfW88PzVmvZT1jOlqP5pVoQTJD0KTCJ5di9HWA3j26cHQojzQo
+         RKB26bfVWIt8fBfBthusxyzW+T4kHW5LtONTqfobBgR6olHh1UdXQWawscGvSX3ypAPw
+         TW+LjHiObb8pDAQL+7ETlbDfP1zzEwq0PM9ym7rzxFpN5mX+InIQr13WQtKFrZmVO2Tc
+         2mbQ==
+X-Gm-Message-State: AJIora/jmMzaKv1RLZ3FMs4RF9ypE8PelsPOeQ3XXI8sLnX7qrH08me/
+        4wnrnazuV0595Y0qVsrUaaM=
+X-Google-Smtp-Source: AGRyM1sOWfZKJgKybRGzpExEbxpCy3FcGK8vLF0W5sannEVQsx620HnqhVvinbu31iX6TA+hJeh3Og==
+X-Received: by 2002:aa7:900a:0:b0:525:1e54:e64e with SMTP id m10-20020aa7900a000000b005251e54e64emr1354797pfo.35.1655627535697;
+        Sun, 19 Jun 2022 01:32:15 -0700 (PDT)
+Received: from LAPTOP-706CEGJT.localdomain ([113.116.119.185])
+        by smtp.gmail.com with ESMTPSA id bd15-20020a056a00278f00b0050dc7628182sm6704543pfb.92.2022.06.19.01.32.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 01:32:15 -0700 (PDT)
+From:   root <lijessen2016@gmail.com>
+X-Google-Original-From: root <root@LAPTOP-706CEGJT.localdomain>
+To:     wsa@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        root <root@LAPTOP-706CEGJT.localdomain>
+Subject: [PATCH] Print some info into ring-buffer during loading
+Date:   Sun, 19 Jun 2022 16:32:07 +0800
+Message-Id: <20220619083207.749-1-root@LAPTOP-706CEGJT.localdomain>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qbf2y2k4xo46jin6"
-Content-Disposition: inline
-In-Reply-To: <YqpJ+GDjsMsILL4P@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+---
+ drivers/i2c/i2c-core-base.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---qbf2y2k4xo46jin6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index d43db2c3876e..8e127ff3e32e 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -469,6 +469,8 @@ static int i2c_device_probe(struct device *dev)
+ 	struct i2c_driver	*driver;
+ 	int status;
+ 
++	pr_info("I have changed i2c device driver\n");
++
+ 	if (!client)
+ 		return 0;
+ 
+@@ -1829,6 +1831,7 @@ int i2c_for_each_dev(void *data, int (*fn)(struct device *dev, void *data))
+ 	int res;
+ 
+ 	mutex_lock(&core_lock);
++	pr_info("i2c_for_each_dev: before bus_for_each_dev\n");
+ 	res = bus_for_each_dev(&i2c_bus_type, NULL, data, fn);
+ 	mutex_unlock(&core_lock);
+ 
+@@ -1838,8 +1841,10 @@ EXPORT_SYMBOL_GPL(i2c_for_each_dev);
+ 
+ static int __process_new_driver(struct device *dev, void *data)
+ {
++	pr_info("Enter process_new_driver\n");
+ 	if (dev->type != &i2c_adapter_type)
+ 		return 0;
++	pr_info("__process_new_driver, before i2c_do_add_adapter\n");
+ 	return i2c_do_add_adapter(data, to_i2c_adapter(dev));
+ }
+ 
+@@ -1860,13 +1865,16 @@ int i2c_register_driver(struct module *owner, struct i2c_driver *driver)
+ 	driver->driver.owner = owner;
+ 	driver->driver.bus = &i2c_bus_type;
+ 	INIT_LIST_HEAD(&driver->clients);
+-
++	pr_info("i2c driver name is [%s] before driver_register\n", driver->driver.name);
+ 	/* When registration returns, the driver core
+ 	 * will have called probe() for all matching-but-unbound devices.
+ 	 */
+ 	res = driver_register(&driver->driver);
+-	if (res)
++	if (res){
++		pr_info("i2c driver name is [%s], res is [%d]\n", driver->driver.name, res);
+ 		return res;
++	}
++	pr_info("i2c driver name is [%s], after driver_register\n", driver->driver.name);
+ 
+ 	pr_debug("driver [%s] registered\n", driver->driver.name);
+ 
+@@ -1933,7 +1941,7 @@ EXPORT_SYMBOL(i2c_clients_command);
+ static int __init i2c_init(void)
+ {
+ 	int retval;
+-
++	pr_info("Jason-Lee: Entering i2c_init\n");
+ 	retval = of_alias_get_highest_id("i2c");
+ 
+ 	down_write(&__i2c_board_lock);
+-- 
+2.25.1
 
-Hello Lee,
-
-On Wed, Jun 15, 2022 at 10:07:04PM +0100, Lee Jones wrote:
-> On Mon, 30 May 2022, Uwe Kleine-K=F6nig wrote:
->=20
-> > The driver never calls the disable callback, so drop the member from
-> > the platform struct and all callbacks from the actual platform datas.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  arch/arm/mach-pxa/eseries.c  | 1 -
-> >  include/linux/mfd/tc6387xb.h | 1 -
-> >  2 files changed, 2 deletions(-)
->=20
-> Applied, thanks.
-
-Are these already in a public tree? They are not in next and
-git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git#for-mfd-next
-doesn't contain commits that are not in v5.19-rc1.
-
-I assume they are still in an internal tree and I just need some
-patience until they are pushed out?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---qbf2y2k4xo46jin6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKu3v4ACgkQwfwUeK3K
-7AkmDwf7B0pRWMi6VQcMNKDL37XlQANm6JrKCdqRYKoefy3p8fZD+GisVMqV4wto
-/gD11/TMrMiG6s5TiMDyI7amZGnxcl31kA44QLilPWb1wqNQjvY+giApdSSUqbMB
-BPhnLJkB8nZROTXFocE+vBPSh35rgiWkJuoeppoeQbfi5kAdL2MUErRhYnUV4hfi
-QHQ1zKqLg1VHHQZoYvzWl3Rnc4oxrUxnft358phTarQbUt0yuo1iI/zGqRBmcXHl
-l8Gb39fwMLPZehQOe3Q3kwWYJRd6krCUGTEX2JzLYtNoFvnuBh8espBHCmtJBeUK
-JRulX1JVd3W7FDiCcVHhSCEr1WDQSg==
-=rM+S
------END PGP SIGNATURE-----
-
---qbf2y2k4xo46jin6--

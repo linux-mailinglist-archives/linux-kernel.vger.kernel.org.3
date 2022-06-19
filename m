@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E705A550D8E
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8C9550D8C
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 01:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiFSXSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 19:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S235826AbiFSXS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 19:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234119AbiFSXSs (ORCPT
+        with ESMTP id S235192AbiFSXSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 19:18:48 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3986D6418
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:18:48 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id m14so8268688plg.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:18:48 -0700 (PDT)
+        Sun, 19 Jun 2022 19:18:49 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A30F6348
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:18:49 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id g8so8265867plt.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PJnRSYwFFbA1z5RItbH0NQEdcdfXyAPGLJWjJYDa8ik=;
-        b=PRPcKBAVLRg6b5DqsLtdYa5C6MnAQGCLVwiIdenw7M+JxCHY0i/TSi4SSzQ4NsIjhC
-         7vnNZNTdqgvNpXB0vi/Zzk+8ehX+f172iFvgFXi/mVEERpdx1ymFv9O7vhhrycPXkyRr
-         DmYAbc5hm7ZTgAAC5HzaKBG9iApK3//2MS9temQCL4BmM0UfOP/otMpb0wLWvZzPHxLy
-         Fq3SA6KGVfvugX5L2sCpmuoaez7xuc8nL5KidRdeVtQRV6wmaaWezDiv5BO4K0K15KyN
-         QjVG2KIwYRccfmgmbtltozukiB2m6skKxf5H+6VfQaakbTqCjDemb9Gg16IS3clIaFrE
-         LEjA==
+        bh=fadevf1bs6VDcGLyy4O2HyRnez9ZhabTrz+0CTUd5+A=;
+        b=RVh2It62abuvi1QAK4VY+OT83dWwyDjBvthZC3rPAeOeNpXRT2oND/R4N2KgCTUcON
+         NlH7ECuk5UnDu2zy+CSjXILBN0V9e0UwTdiJvuDKAAA1Hcx5LVAmQ+rEbNUjqWDqlh5Z
+         ZDzCYLKmP49WlLc9kABGVwuKCwMzkcSIoeRvIhUcg3+LC04fm7P7u670FLRbRW8q3Dai
+         WAWbjhswFtTA1rMusAMpBBtVcuMmH1FxMsQUaBYPMXBJtoAZhXWQYpPQw4PYr4QMud/d
+         UDjWdOc4DxVyFXvkxsJro/ztk8gZEq9g4zmroc7kQolAbDG7J3KOCVxZbhLt681whBG1
+         3/Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PJnRSYwFFbA1z5RItbH0NQEdcdfXyAPGLJWjJYDa8ik=;
-        b=ubgMzA5oN6JxqlH7qyZjv5+okLMTfdoGu2hRjFR3NFyJ++hO0L7I29xaZEQ9b9V3cF
-         fHVLi7CZpWE9PWRsvcJg5wz8G4w9ELQH5ZWwMWAsbffOym+QNxNHgK7aVx0RFPxaSuso
-         Pc+9YhotOzGX3AZ/DjWW/ulAKKmV4mcpUq2iC1gfn68pz5dbhPklzQha5bJE9tkA1clf
-         TJZ9/5L79G1byNbT/HT7TL/JF6Id/Yi5Dq9wDKkorjWeDcmhwDHxrLP/cs8Ccugqh6gy
-         aPTInVjnTiXHN2cAc+c6Yf/aU0H8uoI9fdDCr654OyugzEekjrnMfksXfIwWBwL6Gj+s
-         a5pA==
-X-Gm-Message-State: AJIora9UW9ZI3Hi+KB52Q1eHkR7QQTtTPaPcE4h/YTHH+AYr5pnJ0Sy8
-        kEO2gac0s59Uxa7wJlKjLa8=
-X-Google-Smtp-Source: AGRyM1s0BtZp4+k5tlBq3BmazcM0zNeairHrbKwFmoo8IUMgcvX/DMNXayKzmVcOEv/6KdxEuw4gGg==
-X-Received: by 2002:a17:90b:350d:b0:1e6:7780:6c92 with SMTP id ls13-20020a17090b350d00b001e677806c92mr34649739pjb.46.1655680727806;
-        Sun, 19 Jun 2022 16:18:47 -0700 (PDT)
+        bh=fadevf1bs6VDcGLyy4O2HyRnez9ZhabTrz+0CTUd5+A=;
+        b=e0261EPX2BDfaJWlPA9on/fKLXSBt2zLbJS23HKjGA6N0B2zoOsQ4ZUgsuUZA1RW4P
+         OrDgPlW7mO8NxL09s85Mab9HRrQTceWmgqbP5JLyiul+1y2LLFEcGwYbOVH9trMJAFes
+         PXYvY6IbOoWgGHvtSvbXRTTPx8R5VHCEPTQkxE7o+qJTFP2P4TXUqQzw141dYhxIwCHJ
+         UK3ib9UF1AlwvMZJZjw+AdrWzvLFFJdV18EJ1/tLyGQN7LTT2K/lSuPIznVAk1HNUJCC
+         ZKAm1RtzSLxmtqRrNun33UwDqWRyYwhjifMisfm4u479ix1tzBVTtfWW6nzy1B0t7/1r
+         j47A==
+X-Gm-Message-State: AJIora9zIATTdQc6j5/uCgEgC5I8CHL3YSp4W9/kUNSpnCiDy3GXTevR
+        Ny2sZrCWGLGC23lXP5MwiAc=
+X-Google-Smtp-Source: AGRyM1tVfuIGugmSTqK3Mtr3o9pqcsb6GFqQuog7nFCKKXzWtgEdArBlE0zEMGotjXrwpxOuq1ljfQ==
+X-Received: by 2002:a17:902:d4c4:b0:16a:2a8c:c4aa with SMTP id o4-20020a170902d4c400b0016a2a8cc4aamr488183plg.138.1655680728548;
+        Sun, 19 Jun 2022 16:18:48 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:c443:f10c:f501:dd9f])
         by smtp.gmail.com with ESMTPSA id b9-20020a17090aa58900b001e2f6c7b6f6sm6807016pjq.10.2022.06.19.16.18.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 16:18:47 -0700 (PDT)
+        Sun, 19 Jun 2022 16:18:48 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Frederic Weisbecker <frederic@kernel.org>,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 1/2] xtensa: rename context_tracking_user_{enter,exit}
-Date:   Sun, 19 Jun 2022 16:18:36 -0700
-Message-Id: <20220619231837.1150499-2-jcmvbkbc@gmail.com>
+Subject: [PATCH 2/2] xtensa: rename CONTEXT_TRACKING to CONTEXT_TRACKING_USER
+Date:   Sun, 19 Jun 2022 16:18:37 -0700
+Message-Id: <20220619231837.1150499-3-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220619231837.1150499-1-jcmvbkbc@gmail.com>
 References: <20220619231837.1150499-1-jcmvbkbc@gmail.com>
@@ -72,43 +72,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the following build error in the linux-next:
+CONFIG_CONTEXT_TRACKING is renamed to CONFIG_CONTEXT_TRACKING_USER, do
+it for the xtensa architecture.
 
-  arch/xtensa/kernel/entry.o:(.text+0x4): undefined reference to `context_tracking_user_exit'
-  arch/xtensa/kernel/entry.o: In function `common_exception':
-  (.text+0x1ac): undefined reference to `context_tracking_user_exit'
-  arch/xtensa/kernel/entry.o:(.text+0x14): undefined reference to `context_tracking_user_enter'
-  arch/xtensa/kernel/entry.o: In function `common_exception_return':
-  (.text+0x20d): undefined reference to `context_tracking_user_enter'
-
-Fixes: 29765ae224e4 ("context_tracking: Rename context_tracking_user_enter/exit() to user_enter/exit_callable()")
+Fixes: 2ad9b4c81ea4 ("context_tracking: Split user tracking Kconfig")
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
+ arch/xtensa/Kconfig        | 2 +-
  arch/xtensa/kernel/entry.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 0b0f0172cced..7927fed7bc83 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -33,7 +33,7 @@ config XTENSA
+ 	select HAVE_ARCH_KCSAN
+ 	select HAVE_ARCH_SECCOMP_FILTER
+ 	select HAVE_ARCH_TRACEHOOK
+-	select HAVE_CONTEXT_TRACKING
++	select HAVE_CONTEXT_TRACKING_USER
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DMA_CONTIGUOUS
+ 	select HAVE_EXIT_THREAD
 diff --git a/arch/xtensa/kernel/entry.S b/arch/xtensa/kernel/entry.S
-index e3eae648ba2e..d72bcafae90c 100644
+index d72bcafae90c..fb67d85116e4 100644
 --- a/arch/xtensa/kernel/entry.S
 +++ b/arch/xtensa/kernel/entry.S
-@@ -458,7 +458,7 @@ KABI_W	or	a3, a3, a2
- #ifdef CONFIG_CONTEXT_TRACKING
- 	l32i		abi_tmp0, a1, PT_PS
- 	bbci.l		abi_tmp0, PS_UM_BIT, 1f
--	abi_call	context_tracking_user_exit
-+	abi_call	user_exit_callable
+@@ -455,7 +455,7 @@ KABI_W	or	a3, a3, a2
+ 	abi_call	trace_hardirqs_off
  1:
  #endif
- 
-@@ -545,7 +545,7 @@ common_exception_return:
+-#ifdef CONFIG_CONTEXT_TRACKING
++#ifdef CONFIG_CONTEXT_TRACKING_USER
+ 	l32i		abi_tmp0, a1, PT_PS
+ 	bbci.l		abi_tmp0, PS_UM_BIT, 1f
+ 	abi_call	user_exit_callable
+@@ -544,7 +544,7 @@ common_exception_return:
+ 	j		.Lrestore_state
  
  .Lexit_tif_loop_user:
- #ifdef CONFIG_CONTEXT_TRACKING
--	abi_call	context_tracking_user_enter
-+	abi_call	user_enter_callable
+-#ifdef CONFIG_CONTEXT_TRACKING
++#ifdef CONFIG_CONTEXT_TRACKING_USER
+ 	abi_call	user_enter_callable
  #endif
  #ifdef CONFIG_HAVE_HW_BREAKPOINT
- 	_bbci.l		abi_saved0, TIF_DB_DISABLED, 1f
 -- 
 2.30.2
 

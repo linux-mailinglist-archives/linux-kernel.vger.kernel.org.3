@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29CC55091F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B88550922
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbiFSHYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 03:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
+        id S234515AbiFSHaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 03:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiFSHY3 (ORCPT
+        with ESMTP id S230124AbiFSHaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 03:24:29 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B734A6430
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=NF568
-        0tDdMiZ6LPuk7ol+HY0gthMgl2QF1lEjUWZXaY=; b=FcLMt2dEtXKwvITan3REv
-        SslneB6F17NBGWNf3hBLpln6Hoyqy50x5Y8YkzSNdRvOmCQZiZqlDBzXkOjG8iVJ
-        xgRINTW/+d77WNJdkfRK+p+mfmacyT2frFZ5tb8V14h/LIMcXy2ZSRGkZDfKiP1n
-        MeAuKGARkdK2SA49/Wxsa0=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgB3xnL4zq5ikhTbFw--.650S2;
-        Sun, 19 Jun 2022 15:23:37 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     jk@ozlabs.org, arnd@arndb.de, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org
-Cc:     windhl@126.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc/cell: Fix refcount leak bugs
-Date:   Sun, 19 Jun 2022 15:23:35 +0800
-Message-Id: <20220619072335.4067728-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 19 Jun 2022 03:30:03 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B429865C8;
+        Sun, 19 Jun 2022 00:30:02 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id l4so7572137pgh.13;
+        Sun, 19 Jun 2022 00:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T0Zq2sYSbf3nMISBHuZKmX2FWCO+JFM7UHxrKNRM8l4=;
+        b=dxxKD1IIOw/UKep65Yl2KZVU8SjzPt9hxjuqZgqBYI45aLQUYyqZQ448QkezxmCvbC
+         egrUNykFdjpdxPMfABGIEGvjVD1JU1kkWMg/xcGAjyMUvpvwr+NjGawplPiR9ud3Kuc+
+         XPO0Rxqa0B9QRwNRu3Zduu3tg6jPaHttKvg5539KS/Om3ml+hlOOWjtRIUcIomNTxkRc
+         HW8CeNwyIghLYAVT6Oe0vePiqQJtlDAEsZjYdr09XXwEQ472QG1S+iuQa/wB8FDhe25J
+         HI6f7dGSLgIeaBGqW9ffGNIX8V6sQSyY8g9aijW9E8wb7ptphNe7hWnL6zVNoRrCYMop
+         654w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T0Zq2sYSbf3nMISBHuZKmX2FWCO+JFM7UHxrKNRM8l4=;
+        b=zw2CSeH6mbRPQUzccWwXElX/SsnK/20W3Wm6lu6MPSEi9BFvU8lWJNKFvTQfE6+GBy
+         +bc8aai1nsMwNN4zTSaG32X03YFS/hLSCeCJMkE0zdQvl/iUqO/G7PneYg3yLNi6v7KZ
+         2+XgGXfn5U7N4jInVX+JjVy9GynrrjNSmMiEBAF85RUtNQJsdKvol8v8QfOB89I5N6/d
+         L/BMj2EaHy6Plw3F+iy5RsNqGNz2zIaD6uTKDV9YlhAWMu0BB3SiQq6W2sXcwTHke2mh
+         pLzz3KS8C9E+ydR4/X2Y9m2ozqsgDyoiPi0/6GNJQ7gHgHCj7oDX3u8L+xbgzgvv59Qq
+         ezwA==
+X-Gm-Message-State: AJIora8ehmTNiXmueLBq97cAPFKTqyKWgueSWI4Ex3i0JUiFDYZeJdV5
+        VCeAow/aM/fL24ei7G2BrPnPYxqYipg=
+X-Google-Smtp-Source: AGRyM1vO/efRhjdO+72XdR9PXMipaaDp8WzocoemKoakQ1UjHnv6cZ3qoJH5VU0st1L98/7W44jE7A==
+X-Received: by 2002:a63:ae4a:0:b0:40c:2d48:5fda with SMTP id e10-20020a63ae4a000000b0040c2d485fdamr14003202pgp.434.1655623801856;
+        Sun, 19 Jun 2022 00:30:01 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-74.three.co.id. [180.214.233.74])
+        by smtp.gmail.com with ESMTPSA id l2-20020a17090af8c200b001e02073474csm8166168pjd.36.2022.06.19.00.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 00:30:01 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Wang Jianjian <wangjianjian3@huawei.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: ext4: fix cell spacing of table heading on blockmap table
+Date:   Sun, 19 Jun 2022 14:29:39 +0700
+Message-Id: <20220619072938.7334-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgB3xnL4zq5ikhTbFw--.650S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CrWfJrW3ZF17CFykuF1Utrb_yoW8AFWrpF
-        1qkFZ7Cr10gr4vya4Iv3WDur4ayFnYqrW8Jw47A3srAwn3Xr97Xr4rAF1xCrs7Jr48Gayr
-        Zr43Ka1SvFs3ua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UI385UUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3BklF1pEDwJK0wAAs9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should use of_node_put() for of_find_node_by_path() and
-of_find_node_by_phandle() to keep refcount balance.
+Commit 3103084afcf234 ("ext4, doc: remove unnecessary escaping") removes
+redundant underscore escaping, however the cell spacing in heading row of
+blockmap table became not aligned anymore, hence triggers malformed table
+warning:
 
-Signed-off-by: Liang He <windhl@126.com>
+Documentation/filesystems/ext4/blockmap.rst:3: WARNING: Malformed table.
+
++---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| i.i_block Offset   | Where It Points                                                                                                                                                                                                              |
+<snipped>...
+
+The warning caused the table not being loaded.
+
+Realign the heading row cell by adding missing space at the first cell
+to fix the warning.
+
+Fixes: 3103084afcf234 ("ext4, doc: remove unnecessary escaping")
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Wang Jianjian <wangjianjian3@huawei.com>
+Cc: linux-ext4@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- arch/powerpc/platforms/cell/setup.c       | 2 ++
- arch/powerpc/platforms/cell/spu_manage.c  | 2 ++
- arch/powerpc/platforms/cell/spufs/inode.c | 1 +
- 3 files changed, 5 insertions(+)
+ Documentation/filesystems/ext4/blockmap.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/cell/setup.c b/arch/powerpc/platforms/cell/setup.c
-index 52de014983c9..47eaf75349f2 100644
---- a/arch/powerpc/platforms/cell/setup.c
-+++ b/arch/powerpc/platforms/cell/setup.c
-@@ -167,6 +167,8 @@ static int __init cell_publish_devices(void)
- 		of_platform_device_create(np, NULL, NULL);
- 	}
+diff --git a/Documentation/filesystems/ext4/blockmap.rst b/Documentation/filesystems/ext4/blockmap.rst
+index 2bd990402a5c49..cc596541ce7921 100644
+--- a/Documentation/filesystems/ext4/blockmap.rst
++++ b/Documentation/filesystems/ext4/blockmap.rst
+@@ -1,7 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
-+	of_node_put(root);
-+
- 	/* There is no device for the MIC memory controller, thus we create
- 	 * a platform device for it to attach the EDAC driver to.
- 	 */
-diff --git a/arch/powerpc/platforms/cell/spu_manage.c b/arch/powerpc/platforms/cell/spu_manage.c
-index ae09c5a91b40..f1ac4c742069 100644
---- a/arch/powerpc/platforms/cell/spu_manage.c
-+++ b/arch/powerpc/platforms/cell/spu_manage.c
-@@ -488,6 +488,8 @@ static void __init init_affinity_node(int cbe)
- 				avoid_ph = vic_dn->phandle;
- 			}
- 
-+			of_node_put(vic_dn);
-+
- 			list_add_tail(&spu->aff_list, &last_spu->aff_list);
- 			last_spu = spu;
- 			break;
-diff --git a/arch/powerpc/platforms/cell/spufs/inode.c b/arch/powerpc/platforms/cell/spufs/inode.c
-index 34334c32b7f5..320008528edd 100644
---- a/arch/powerpc/platforms/cell/spufs/inode.c
-+++ b/arch/powerpc/platforms/cell/spufs/inode.c
-@@ -660,6 +660,7 @@ spufs_init_isolated_loader(void)
- 		return;
- 
- 	loader = of_get_property(dn, "loader", &size);
-+	of_node_put(dn);
- 	if (!loader)
- 		return;
- 
+ +---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+-| i.i_block Offset   | Where It Points                                                                                                                                                                                                              |
++| i.i_block Offset    | Where It Points                                                                                                                                                                                                              |
+ +=====================+==============================================================================================================================================================================================================================+
+ | 0 to 11             | Direct map to file blocks 0 to 11.                                                                                                                                                                                           |
+ +---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+base-commit: 354c6e071be986a44b956f7b57f1884244431048
 -- 
-2.25.1
+An old man doll... just what I always wanted! - Clara
 

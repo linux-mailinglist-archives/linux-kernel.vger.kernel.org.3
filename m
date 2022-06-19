@@ -2,133 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC12550BFF
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 17:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AFF550C18
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 18:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiFSP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 11:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S233736AbiFSQh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 12:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiFSP73 (ORCPT
+        with ESMTP id S229490AbiFSQhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 11:59:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BD7D38B5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655654366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SQ4C7bvrcai4wOcpyWK/twNUPMvOE02koNViKd9P4bU=;
-        b=V00+i++sFRzP2AMhTrM7iWp749/Cxr+MEVNwaoEi70a0H0F0O786h+kPt+pvF+1BEeJ7o0
-        BDKi7kxEmxXLxPzmIQRonRGM/8SSDmkKLv0FuXjqPKvcyGSZt6zZ1jCmZZTDdgRLyceCR2
-        nXNpKkS29tP0tjoEWLvQc/FtoKvv+kg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-155--QX2MYMlOFmKt3xQmSdv8A-1; Sun, 19 Jun 2022 11:59:23 -0400
-X-MC-Unique: -QX2MYMlOFmKt3xQmSdv8A-1
-Received: by mail-wm1-f71.google.com with SMTP id m22-20020a7bcb96000000b0039c4f6ade4dso2588532wmi.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:59:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SQ4C7bvrcai4wOcpyWK/twNUPMvOE02koNViKd9P4bU=;
-        b=lyugrdPeXENkpxZDZ9+VdhQdsrB4Zrgxlue6JtxVSwaxB+mhylnZ86THYTFFibIZF0
-         nXS4ngKi2QSEtQ42bSJn0fhfU7XcGv5SrTHnGTq2UIQty7lQONy3h6kAjAVX0LKUuQHy
-         uF6Oh0IvFi0mQmvVGNPEiNQBVeg33EwZSGCHRmTGwyXSPQonMSpHWfWgVKtWfvhIgyZQ
-         UcKkALT6irycbq27EiSLmr0dzeR3ca86N+VJ/dE6Q8DNPqjLU9K3BSxHr9kBuGwp0wAU
-         WZI9jXpoX0M6E9mFw2qI4QBNPFLxZZwYgArRaDx+2oeLsxQkEFVz+xk5hxBLtP2JtQ6Z
-         PnTw==
-X-Gm-Message-State: AJIora+fkVlc/aeRRcMUTdMHiVMgY0W4gYagBLsxe/Xfgwddkwis39dS
-        +80m05upqKPLSidxG/SCIH8tHx3gmCuNVdCy8n01yKxkbrKAZQaTOdWcrAOSfyzldWE73UatjRf
-        rhL0pvxre+KySKZbzBRIMmBrv
-X-Received: by 2002:a05:600c:190d:b0:39c:8216:f53d with SMTP id j13-20020a05600c190d00b0039c8216f53dmr20682665wmq.108.1655654362759;
-        Sun, 19 Jun 2022 08:59:22 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t7KYu8EAAMHOVKHSApDdBOi/nHxErh1PxbJBNA814HIL5oy8rQzRb8d6zW6pNuhY6QznisjQ==
-X-Received: by 2002:a05:600c:190d:b0:39c:8216:f53d with SMTP id j13-20020a05600c190d00b0039c8216f53dmr20682652wmq.108.1655654362554;
-        Sun, 19 Jun 2022 08:59:22 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id y14-20020a5d614e000000b0020d09f0b766sm10556568wrt.71.2022.06.19.08.59.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 08:59:22 -0700 (PDT)
-Message-ID: <11f8d1b7-f193-170e-08ac-9edcd556cf0b@redhat.com>
-Date:   Sun, 19 Jun 2022 17:59:20 +0200
+        Sun, 19 Jun 2022 12:37:19 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBE9B491;
+        Sun, 19 Jun 2022 09:37:17 -0700 (PDT)
+Received: (Authenticated sender: pbl@bestov.io)
+        by mail.gandi.net (Postfix) with ESMTPSA id 959DE240005;
+        Sun, 19 Jun 2022 16:37:13 +0000 (UTC)
+From:   Riccardo Paolo Bestetti <pbl@bestov.io>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Riccardo Paolo Bestetti <pbl@bestov.io>,
+        Carlos Llamas <cmllamas@google.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net] ipv4: fix bind address validity regression tests
+Date:   Sun, 19 Jun 2022 18:27:35 +0200
+Message-Id: <20220619162734.113340-1-pbl@bestov.io>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] drm: panel-orientation-quirks: Add quirk for Aya Neo
- Next
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Maccraft123 <maccraft123mc@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220619111952.8487-1-maccraft123mc@gmail.com>
- <cea478bf-ac29-dbdc-e156-5291da4f0318@redhat.com>
- <9c6cbae0-b890-96a9-1652-529d3b3be91c@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <9c6cbae0-b890-96a9-1652-529d3b3be91c@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Hans,
+Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+introduces support for binding to nonlocal addresses, as well as some
+basic test coverage for some of the related cases.
 
-On 6/19/22 16:57, Hans de Goede wrote:
-> Hi,
-> 
-> On 6/19/22 13:46, Javier Martinez Canillas wrote:
->> Hello Maya,
->>
->> On 6/19/22 13:19, Maccraft123 wrote:
->>> From: Maya Matuszczyk <maccraft123mc@gmail.com>
->>>
->>> The device is identified by "NEXT" in board name, however there are
->>> different versions of it, "Next Advance" and "Next Pro", that have
->>> different DMI board names.
->>> Due to a production error a batch or two have their board names prefixed
->>> by "AYANEO", this makes it 6 different DMI board names. To save some
->>> space in final kernel image DMI_MATCH is used instead of
->>> DMI_EXACT_MATCH.
->>>
->>> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
->>>
->>
->> Patch looks good to me.
->>
->> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> New version looks good to me too:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> I've some upcoming travel, so it would be good if someone
-> else can push this to drm-misc-fixes.
-> 
+Commit b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+fixes a regression which incorrectly removed some checks for bind
+address validation. In addition, it introduces regression tests for
+those specific checks. However, those regression tests are defective, in
+that they perform the tests using an incorrect combination of bind
+flags. As a result, those tests fail when they should succeed.
 
-Sure, I've pushed to drm-misc-fixes now. Thanks!
+This commit introduces additional regression tests for nonlocal binding
+and fixes the defective regression tests. It also introduces new
+set_sysctl calls for the ipv4_bind test group, as to perform the ICMP
+binding tests it is necessary to allow ICMP socket creation by setting
+the net.ipv4.ping_group_range knob.
 
+Fixes: b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+Reported-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+---
+This has been tested on the net tree (@ b4a028c4d031) w/ the following:
+$ cd $KERNEL_TREE/tools/testing/selftests/net
+$ make nettest
+# PATH=$PATH:./ ./fcnal-test.sh -t ipv4_bind -v
+
+All tests, including the previously broken ones and the new tests, pass
+with the expected results.
+
+ tools/testing/selftests/net/fcnal-test.sh | 36 +++++++++++++++++------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 75223b63e3c8..03b586760164 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -1800,24 +1800,32 @@ ipv4_addr_bind_novrf()
+ 	done
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
+-	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after device bind"
++	run_cmd nettest -s -R -f -l ${a} -b
++	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -f -l ${a} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -D -P icmp -f -l ${a} -b
++	log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address"
+ 
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address"
+ 
+ 	#
+@@ -1870,24 +1878,32 @@ ipv4_addr_bind_vrf()
+ 	log_test_addr ${a} $? 1 "Raw socket bind to out of scope address after VRF bind"
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -R -f -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
+ 
++	log_start
++	run_cmd nettest -s -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address after VRF bind"
++
++	log_start
++	run_cmd nettest -s -D -P icmp -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address after VRF bind"
++
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address after VRF bind"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address after VRF bind"
+ 
+ 	#
+@@ -1922,10 +1938,12 @@ ipv4_addr_bind()
+ 
+ 	log_subsection "No VRF"
+ 	setup
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
+ 	ipv4_addr_bind_novrf
+ 
+ 	log_subsection "With VRF"
+ 	setup "yes"
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
+ 	ipv4_addr_bind_vrf
+ }
+ 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.36.1
 

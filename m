@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0D6550A2D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2404550A3A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbiFSLZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 07:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S236488AbiFSLac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 07:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiFSLZm (ORCPT
+        with ESMTP id S233282AbiFSLaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 07:25:42 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFE55F67;
-        Sun, 19 Jun 2022 04:25:41 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id cf14so1759371edb.8;
-        Sun, 19 Jun 2022 04:25:41 -0700 (PDT)
+        Sun, 19 Jun 2022 07:30:30 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6837E6153;
+        Sun, 19 Jun 2022 04:30:29 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b8so11504044edj.11;
+        Sun, 19 Jun 2022 04:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MfTpm336cuBYZzkP2acrVbBvCS8+4Y29Ne3uwgFeW9Y=;
-        b=l++D45ijPavfLV7Ac80KJhVk9aQUSLHhd02xSe6sdWF9tkBNYWKP2kEOgtPBuFGhab
-         9r71F1CAtF89cCvZ+F4SIaRS9Cd355wrtF/OKvK9QHWygOqkSqhq4e5dsAweENKCqIli
-         2UUypJF0NtbO5dUGLidFFnA+BSF827Q+GqHbc2PcsZAfMIjHx64qrSYPf+Fes2cwrLUp
-         MNU4/tUkxGUhnI5UnI/WY0WUY8BPfZV6RwcsVNuo/2xn3JTYgFpFOaRAdP+aTZZml6Qr
-         sNMPW6224LkgS9grlukrKOjr4fQEdFSJuL4A6MaoKUBm5VKK1Q3tt/tKd+gdsNqPMw/n
-         /m3Q==
+        bh=dii8VuYLfhheu24I0H2mSS/JbdyBYyJrhuHrjEWNep8=;
+        b=H73WJ5wS/lcH7ESxBi9N6v0fuq/imzTT243AhNEWbotV+kDycqp4amFwqxVGWPgrEM
+         mfVge7TEHyEOTmFtB26nQkyyGsBe3M2dST4La+SYhuIxfRopySqhZB8tLTQdh4fC0oQr
+         ubNBezbWf3L581nUvkDuv/j8WdvmkmkDzW5bR7EaaaJWHA7hrgI/tcQT2hpZ2l1TOcv4
+         Kala75ia0q4xpBopGv1xYG9EwogOpWgZIY/Cdt5KP5wpcTqypPiom/w5jkKcqT0LzIz9
+         SXoHX7rI+eNCdbZVojAgnX4Aq8Ftoy4DG0X0NA8OaRvqDnEdoEVdkiSZF2AWY/ZqjTl/
+         MMug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MfTpm336cuBYZzkP2acrVbBvCS8+4Y29Ne3uwgFeW9Y=;
-        b=igIrPtR9RaalD90yrExo56VnhG3hJZSxYecb91GCHHMxfRQYGDkPmG3DypccmaO+4o
-         eW3uKebTbPDK7cIODQDda6YOT4JpDq4n9/9sD+JQJC/90n2wA17sbwzr8lhTZLIStw79
-         5+GjXa5XT9ivborGm1QCGyN85gIaCloSF5w3fYK9dKa+rtNc7w9lQcLnVCMvXuUdZb/a
-         eD0VYRtqFQqNfNxNN6AMZ1DcdHg/wEEUyIWzWoqWWM18ukfslpGveqUZrOZ43pm9e7me
-         0JyUZ5CUi/fLt6xOfflKCJbCBNvjNVS6cU10HK8X3dTjH5IyMbjUT+p4EM8DNHWEuOsd
-         rltg==
-X-Gm-Message-State: AJIora/7XKiEM3/Bg5/wdYHTHooJ945YJ8vWpsDvatxhAFC0pC+ZzPt9
-        qAjzIrtlm5M0guG5yA/Ys7ZWtlRw9T1uPXc2rQQ=
-X-Google-Smtp-Source: AGRyM1scR1dtdrWUkmjTKGJYOzbyqOwL3eFG13scvMMW2OI/ATbWuCB000TMCAlXRVUNgzgyxqrENnGS6Ef2pgwqwkg=
-X-Received: by 2002:a05:6402:249e:b0:42d:bb88:865b with SMTP id
- q30-20020a056402249e00b0042dbb88865bmr22727590eda.141.1655637939780; Sun, 19
- Jun 2022 04:25:39 -0700 (PDT)
+        bh=dii8VuYLfhheu24I0H2mSS/JbdyBYyJrhuHrjEWNep8=;
+        b=jdK01oSusDBJYu9b9a7zClMmgZSdm13/MicFwTOpxzW+K8rKeTL8GrrcyQQbdTMISi
+         FuCMw7xZR+/DWdL4aO/8MOOgWXIB+c8W8XDzou/6tHysSjA02tPnP29cRHu/oUnPxL6g
+         jgCnQxb22gDt4BZijziP/dDd4efRlM3a4Us7bv9BAQ3+DLhSI64wE1JSXx6tZpMCcQoE
+         2qSPzrfCHrU2Zu11kyBMc1gpMQ+j76U3ey9iISLa6j1sQCH1luqsCAKLrIY2uQoWA8KC
+         fC/Ma8V90Hg1dBD3gQ2UDimqa2sHxkHamxjnjC/9yUXNYu8N25xCCw3YBPsBWhu0anEt
+         2jMg==
+X-Gm-Message-State: AJIora9dhvpwGbGy+Vuax1xaxLH/DKvXC7lriXB94u/lcJEMyDVHUIBQ
+        5Nlj3aGA6tDrMMDcnTlMff09IjuC/PigmDOTTvc=
+X-Google-Smtp-Source: AGRyM1tmCPFLldxcHibE0j0SJ2ekIyeJvZqio2SLPBqgBP6Z9t1TIuL93zuILFdc1FEXNfnQrLKTO/klpl+Lyo7EkCo=
+X-Received: by 2002:aa7:d29a:0:b0:435:705f:1319 with SMTP id
+ w26-20020aa7d29a000000b00435705f1319mr7652411edq.54.1655638227941; Sun, 19
+ Jun 2022 04:30:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
- <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com> <CAHp75Vev77nG-Ui9cp9Bz8KPcq67E3htCTYnu4NNMV0_UP9=rw@mail.gmail.com>
-In-Reply-To: <CAHp75Vev77nG-Ui9cp9Bz8KPcq67E3htCTYnu4NNMV0_UP9=rw@mail.gmail.com>
+References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-15-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220618214009.2178567-15-aidanmacdonald.0x0@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 19 Jun 2022 13:25:03 +0200
-Message-ID: <CAHp75VdTFF0r8oiYxavoGVo9ShLLaveU1p2BNzzqVgu2eKCBaw@mail.gmail.com>
-Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
+Date:   Sun, 19 Jun 2022 13:29:51 +0200
+Message-ID: <CAHp75Veftw80qGh69CMDTCniwJwN_-_2k_7xBACdAPa8ZJ4MGg@mail.gmail.com>
+Subject: Re: [PATCH v3 14/16] power: axp20x_battery: Add constant charge
+ current table
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -85,139 +85,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 1:20 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Sat, Jun 18, 2022 at 11:40 PM Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> wrote:
-
-Hit 'Send' accidentally, here is the rest of the review, including
-previous comments.
-
-...
-
-> > +config PINCTRL_AXP192
-> > +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
-> > +       depends on MFD_AXP20X
+On Sat, Jun 18, 2022 at 11:40 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
 >
+> Add a table-based lookup method for constant charge current,
+> which is necessary when the setting cannot be represented as
+> a linear range.
 >
-> > +       depends on OF
->
-> Why?
->
-> > +       select PINMUX
-> > +       select GENERIC_PINCONF
-> > +       select GPIOLIB
->
-> ...
->
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
->
-> Why?
-
-Perhaps you missed mod_devicetable.h.
-
-> ...
->
-> > +struct axp192_pctl_function {
-> > +       const char              *name;
-> > +       /* Mux value written to the control register to select the function (-1 if unsupported) */
->
-> Comment is misleading. -1 can't be a value of unsigned type.
->
-> > +       const u8                *muxvals;
-> > +       const char * const      *groups;
-> > +       unsigned int            ngroups;
-> > +};
->
-> ...
->
-> > +struct axp192_pctl_desc {
-> > +       unsigned int                            npins;
-> > +       const struct pinctrl_pin_desc           *pins;
-> > +       /* Description of the function control register for each pin */
-> > +       const struct axp192_pctl_reg_info       *ctrl_regs;
-> > +       /* Description of the output signal register for each pin */
-> > +       const struct axp192_pctl_reg_info       *out_regs;
-> > +       /* Description of the input signal register for each pin */
-> > +       const struct axp192_pctl_reg_info       *in_regs;
-> > +       /* Description of the pull down resistor config register for each pin */
->
-> Can you just convert these comments to a kernel-doc?
->
-> > +       const struct axp192_pctl_reg_info       *pull_down_regs;
-> > +
-> > +       unsigned int                            nfunctions;
-> > +       const struct axp192_pctl_function       *functions;
-> > +};
->
-> ...
->
-> > +
-> > +
->
-> One blank line is enough.
->
-> ...
->
-> > +       switch (param) {
-> > +       case PIN_CONFIG_BIAS_DISABLE:
-> > +               ret = axp192_pinconf_get_pull_down(pctldev, pin);
-> > +               if (ret < 0)
-> > +                       return ret;
->
-> > +               else if (ret != 0)
->
-> 1. Redundant 'else'
-> 2. if (ret > 0)
->
-> > +                       return -EINVAL;
-> > +               break;
-> > +
-> > +       case PIN_CONFIG_BIAS_PULL_DOWN:
-> > +               ret = axp192_pinconf_get_pull_down(pctldev, pin);
-> > +               if (ret < 0)
-> > +                       return ret;
-> > +               else if (ret == 0)
->
-> Ditto.
->
-> Looking at this I would rather expect the function to return something
-> defined, than 0, non-0.
->
-> > +                       return -EINVAL;
-> > +               break;
->
-> > +       default:
-> > +               return -ENOTSUPP;
-> > +       }
->
-> ...
->
-> > +       for (cfg = 0; cfg < num_configs; ++cfg) {
->
-> cfg++ will work the same way and easier to read.
+> This also replaces the hard-coded 300 mA default ccc setting
+> if the DT-specified value is unsupported; the minimum value
+> for the device is now set exactly instead of relying on the
+> value being rounded down to a supported value.
 
 ...
 
-You may make some lines shorter by introducing here
+> +static int axp20x_get_constant_charge_current_sel(struct axp20x_batt_ps *axp_batt,
+> +                                                 int charge_current)
+> +{
+> +       int i;
+> +
+> +       if (axp_batt->data->ccc_table) {
+> +               for (i = AXP20X_CHRG_CTRL1_TGT_CURR; i >= 0; --i) {
 
-  struct device *dev = &pdev->dev;
+i-- should give the same result.
 
-> > +       struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
+> +                       if (axp_batt->data->ccc_table[i] <= charge_current)
+> +                               return i;
+> +               }
+> +
+> +               return -EINVAL;
+> +       }
 
-dev->parent
+> +       i = (charge_current - axp_batt->data->ccc_offset) / axp_batt->data->ccc_scale;
 
-and so on...
+> +
 
-...
+No need to have a blank line here.
 
-> > +       pctl->pctl_dev = devm_pinctrl_register(&pdev->dev, pctrl_desc, pctl);
-> > +       if (IS_ERR(pctl->pctl_dev))
-> > +               dev_err_probe(&pdev->dev, PTR_ERR(pctl->pctl_dev),
-> > +                             "couldn't register pinctrl driver\n");
-
-With the above it probably fits one line.
+> +       if (i > AXP20X_CHRG_CTRL1_TGT_CURR || i < 0)
+> +               return -EINVAL;
+> +
+> +       return i;
+> +}
 
 -- 
 With Best Regards,

@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627A25508C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 07:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849005508C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 07:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbiFSFaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 01:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S233792AbiFSFoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 01:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiFSFaD (ORCPT
+        with ESMTP id S229611AbiFSFoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 01:30:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A203273B;
-        Sat, 18 Jun 2022 22:30:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AAD57CE0A3C;
-        Sun, 19 Jun 2022 05:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA7BC34114;
-        Sun, 19 Jun 2022 05:29:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655616598;
-        bh=u85QCkMqTAZlfYMUqpuwqvH1SbaUwXaSYiU4TrvwZRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ISrbO0ZxjnOvCwgoNmEFzfhaVjmy2/WukJFBKTb38pdYcuTWokqNqKA2rH+mB2WP6
-         HgSueSURUTew+rcYVWjF8Y7nERisl1+tmkOkd2ewrE4XsmEGuha8x9b/yHarnmQwBD
-         hkrrWWNBfK28nMKSOEPPWzAWQII+ubvfZe4ibfXpE26iZCNpRThhvn96xatjJT57Md
-         frUc3VS33rex9x/8CHFF4s1OTLpilWZpep/KDIa9Ivz/DdfaE3w77ZZBqFb63BbllG
-         d12rH3LU4NEbVYlQsi8SyJ7VsEn4874xTZbr5kzC4tVhbbEClBFLMtq3T5Oxwh5Q/7
-         G922AqV8IQuRA==
-Date:   Sun, 19 Jun 2022 13:29:52 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: freescale: imx8qxp: Fix thermal zone name
- for cpu0
-Message-ID: <20220619052952.GD254723@dragon>
-References: <20220607105255.1811769-1-abel.vesa@nxp.com>
+        Sun, 19 Jun 2022 01:44:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85166B843
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 22:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=cgaYumtYbqc1jS524wk3xxBH4a5y3RzjEQYyweJst40=; b=S3KI0WkL83yv/Z7AU7TAN/Xf+l
+        PZUVpOK0EFc6yWVCaZ5WUD8cGKimi/PGRnHBHEWd97mb6WFid496ZgMzrnoXh3JGLIkP04N+bJy+T
+        NMdU3r0tk9BR8bI5jxr1lqjOEXh90Sp7AUJt1ClO+Q/7adsSo+88yy5Qz3mXqKTx6TanRvET9qcC+
+        /FlHLc0rcT8GhhctAwGq6/pNrmDDDeCl4Y66snxd8GNfM0rxM0cGOrcKW/VrpzYaDjkLFnT4R2XUz
+        a2XKOMezfCvP+R+yxYzYHxBKGBGIBz+cyIc03wSHaPkH23y4twsr0hfXRipOKHHEKw4Mz2gkp3rIF
+        eGRcZ8VA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2niE-0049NX-MD; Sun, 19 Jun 2022 05:43:06 +0000
+Message-ID: <48034eb1-3f37-f4fd-24b3-0eb7e517b35e@infradead.org>
+Date:   Sat, 18 Jun 2022 22:42:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607105255.1811769-1-abel.vesa@nxp.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] powerpc/interrupt: Put braces around empty body in an
+ 'if' statement
+Content-Language: en-US
+To:     Souptick Joarder <jrdr.linux@gmail.com>, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        mark.rutland@arm.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Kernel test robot <lkp@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <20220619031114.92060-1-jrdr.linux@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220619031114.92060-1-jrdr.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,9 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 01:52:55PM +0300, Abel Vesa wrote:
-> The proper name is cpu0-thermal, not cpu-thermal0, so change it to that.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 
-Applied, thanks!
+
+On 6/18/22 20:11, Souptick Joarder wrote:
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+> 
+> Kernel test robot throws warning ->
+> 
+> arch/powerpc/kernel/interrupt.c:
+> In function 'interrupt_exit_kernel_prepare':
+> 
+>>> arch/powerpc/kernel/interrupt.c:542:55: warning: suggest
+> braces around empty body in an 'if' statement [-Wempty-body]
+>      542 |                 CT_WARN_ON(ct_state() == CONTEXT_USER);
+
+That must be when CONFIG_CONTEXT_TRACKING_USER is not set/enabled.
+Can you confirm that?
+
+Then the preferable fix would be in <linux/context_tracking.h>:
+
+change
+#define CT_WARN_ON(cond)
+
+to either an empty do-while loop or a static inline function.
+
+(adding Frederic to Cc:)
+
+> 
+> Fix it by adding braces.
+> 
+> Reported-by: Kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+> ---
+>  arch/powerpc/kernel/interrupt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
+> index 784ea3289c84..b8a918bab48f 100644
+> --- a/arch/powerpc/kernel/interrupt.c
+> +++ b/arch/powerpc/kernel/interrupt.c
+> @@ -538,8 +538,9 @@ notrace unsigned long interrupt_exit_kernel_prepare(struct pt_regs *regs)
+>  	 * CT_WARN_ON comes here via program_check_exception,
+>  	 * so avoid recursion.
+>  	 */
+> -	if (TRAP(regs) != INTERRUPT_PROGRAM)
+> +	if (TRAP(regs) != INTERRUPT_PROGRAM) {
+>  		CT_WARN_ON(ct_state() == CONTEXT_USER);
+> +	}
+>  
+>  	kuap = kuap_get_and_assert_locked();
+>  
+
+-- 
+~Randy

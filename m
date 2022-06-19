@@ -2,236 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC147550A80
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 14:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636FD550A82
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 14:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbiFSMF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 08:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S235158AbiFSMFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 08:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237039AbiFSMFt (ORCPT
+        with ESMTP id S236997AbiFSMFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 08:05:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A62B10551
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 05:05:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d5so7467465plo.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 05:05:48 -0700 (PDT)
+        Sun, 19 Jun 2022 08:05:35 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4548712612
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 05:05:34 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id o10so11619514edi.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 05:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+tYnIeZJWwfBV2OdXoru1uz9kc7tGLTiZrbrM31DT9w=;
-        b=zz0YNR0kHLVcdHcsz7c+G/zgiaXIK9NENFPDKvqJVrHMxUNaKZob3UQvE6G63Xr4jk
-         TQXkhLe+zkVKJwzUMP1iuRcjymmOtNHW65H9ub1/uqHR74jFVAvlrrwv+0V9RR2qFGJP
-         WMO+rpqP5ZQMkKSTBM3+4AfvpW2sWtlswvlX674poDNGEGGL2B3nPQfYHXHmkYyWyxml
-         aJ/Tv0btRYAWSLRH4ZaVasze1TNNAmmHvbuDP/OUQ964zxXLO0ufRC95a8WO52kAH1Mt
-         GhfkOiS2SpfgA15bzNVWCXa6RA2t6SHluNw9D2iUtbv7SYbJp4b0qlJy4vQE4dch/P44
-         7nGA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jakXNefXr+d4XHXk3yMQZ4OQ2nmGeDzmNhlPkvj1/X4=;
+        b=D58WLVKUXyi+dx4Z2fQfDcotvsZXCiAWSQWbsXluKMHKlXC6jSVQM+0nw+Sdn9K6XF
+         rTjtQGmVXuQyIQHrFGrwUojJHyTCDl5nxMHbA8cGs2aZVFWVFeJnwJXC5Ffr8pbiH+Jr
+         JResf2C3FcIn/SNNowXrLlVKeprt7jHqsyiJsOIbawrR7MzGbgFqkCbfrFvdAR57vC6R
+         R9rotoR4f0NPXh5/1HZoWVgPYWqB+lin1Nv+sHnQWY6Ex5AibOj2dpTzaepVk2XXAjeX
+         R+AAhW+DbWMclZiMvAsPoUNTLW+MFB78voLjhmewSuXZpfdxoiMuMfOhCKmptP35fzqR
+         740Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+tYnIeZJWwfBV2OdXoru1uz9kc7tGLTiZrbrM31DT9w=;
-        b=3KY9YGX1Nb6xS51pUYTz9XU0iO6moh6cMoXP7g6jow5AxLwEMF9u5Vuna/ML13+OaY
-         iPx88NGxN2t2t5gfYWCuDngdt/LIhmQRfeV4BiTAgKQWQYXBeqlI9P56TuofwGgotQVA
-         tLVO8hNxwC7Lk9ubhLGXanNsjJVLOCunjK85rGPcDSXAxy+N31jj8WR756pxYf8uE9HN
-         88+d1sU0DbmiK5fqvzT1YBdNO4ep8YKQXOEVETLac6hjxHup71IbWDEbOSiS5ErNQO6H
-         +lHKchfVtAobNjYlt5otEtoSNKsq82KgBzJgXfe11AMRjv0+dhqskN3/kaIOCB1Q5OL1
-         XQdg==
-X-Gm-Message-State: AJIora895vTgI8RCAgfIwNpRYOGjbbqSGR1lupXL0Tv1yPdE7sWX/0jP
-        lXmjaEcbU4kPR8eIuN2fCzEYmQ==
-X-Google-Smtp-Source: AGRyM1tL9hQNdrxHQ5K+PYHfIingbVHE/xnUbn2a4/fVgszrya38ZRqC074wXYdur6PtIJwbDwcESQ==
-X-Received: by 2002:a17:902:e804:b0:164:466:e488 with SMTP id u4-20020a170902e80400b001640466e488mr18749522plg.161.1655640347466;
-        Sun, 19 Jun 2022 05:05:47 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id cp16-20020a170902e79000b0015e8d4eb1d5sm1594038plb.31.2022.06.19.05.05.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 Jun 2022 05:05:47 -0700 (PDT)
-From:   Abel Wu <wuyun.abel@bytedance.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH v4 7/7] sched/fair: de-entropy for SIS filter
-Date:   Sun, 19 Jun 2022 20:04:51 +0800
-Message-Id: <20220619120451.95251-8-wuyun.abel@bytedance.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220619120451.95251-1-wuyun.abel@bytedance.com>
-References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jakXNefXr+d4XHXk3yMQZ4OQ2nmGeDzmNhlPkvj1/X4=;
+        b=Tz203ePAznwTL25IiAhH0G6d1l4yjfcl0fT0UzC62wB8rRUSMxgcbQwJqb+JM2Q0e5
+         qUXSWbEOhFRxwRYKFCfhYH4WiU6nnMuHiJRZmy3fJfTWyu2reiwRAPefDY43zVocd7F0
+         qOpWBp7CdigGsmC3zY6ppWPI/bYAChL9NxcwFy7BmISTd86jxkEf/TNfxAi0JDtkj6AZ
+         A4lofLBBdGtcbKGXE46lZgtT6ezdVGCC30QLFAI1/wffMbdb6GwW8MDp+DJ+LShOKKhb
+         WKsVhMiRtsrjLFh4YT1DbOIVcOwO3hPdRXbeuKozLo6mmp9JVeRRAIUiuV9+x4vr4PK0
+         vVDw==
+X-Gm-Message-State: AJIora/stsBQAROySfclzbuWwtgxoImhr00l/QUJX9T1L7QN2WtoOWgF
+        gSU2Jfs6yskCGwRgxsdnqYerfg==
+X-Google-Smtp-Source: AGRyM1ubMh4MAcbm8HuB4hANaOoImVAB4pUW4EYnaEi/EHV0T9LSSNyaYUlQlOGQLgoD6UW/FDUnnw==
+X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id b14-20020a056402350e00b0042fb2c19393mr23592753edd.11.1655640332791;
+        Sun, 19 Jun 2022 05:05:32 -0700 (PDT)
+Received: from [192.168.0.206] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o16-20020a50fd90000000b0042617ba63basm7708329edt.68.2022.06.19.05.05.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Jun 2022 05:05:32 -0700 (PDT)
+Message-ID: <bc5458fe-083c-d679-9fcb-95810a290da8@linaro.org>
+Date:   Sun, 19 Jun 2022 14:05:30 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
+ clocks to be missing
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
+References: <20220617222916.2435618-1-nfraprado@collabora.com>
+ <20220617222916.2435618-3-nfraprado@collabora.com>
+ <8639e64d-c659-7090-2d0a-078fd96cfbd4@linaro.org>
+ <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now when updating core state, there are two main problems that could
-pollute the SIS filter:
+On 19/06/2022 09:46, Chunfeng Yun wrote:
+> On Fri, 2022-06-17 at 18:25 -0700, Krzysztof Kozlowski wrote:
+>> On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
+>>> The current clock list in the binding doesn't allow for one of the
+>>> optional clocks to be missing and a subsequent clock to be present.
+>>> An
+>>> example where this is an issue is in mt8192.dtsi, which has
+>>> "sys_ck",
+>>> "ref_ck", "xhci_ck" and would cause dtbs_check warnings.
+>>>
+>>> Change the clock list in a way that allows the middle optional
+>>> clocks to
+>>> be missing, while still guaranteeing a fixed order. The "ref_ck" is
+>>> kept
+>>> as a const even though it is optional for simplicity, since it is
+>>> present in all current dts files.
+>>>
+>>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>> ---
+>>>
+>>>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml       | 9
+>>> +++++++--
+>>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+>>> xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+>>> xhci.yaml
+>>> index 63cbc2b62d18..99a1b233ec90 100644
+>>> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+>>> @@ -80,8 +80,13 @@ properties:
+>>>      items:
+>>>        - const: sys_ck  # required, the following ones are optional
+>>>        - const: ref_ck
+>>> -      - const: mcu_ck
+>>> -      - const: dma_ck
+>>> +      - enum:
+>>> +          - mcu_ck
+>>> +          - dma_ck
+>>> +          - xhci_ck
+>>> +      - enum:
+>>> +          - dma_ck
+>>> +          - xhci_ck
+>>>        - const: xhci_ck
+>>
+>> You allow now almost any order here, including incorrect like
+>> sys,ref,xhci,xhci,xhci.
+>>
+>> The order of clocks has to be fixed and we cannot allow flexibility.
+>> Are
+>> you sure that these clocks are actually optional (not wired to the
+>> device)?
+> In fact, these optional clocks are fixed, due to no gates are provided,
+> SW can't control them by CCF;
+> In this case, I usually use a fixed clock, or ignore it.
 
-  - The updating is before task migration, so if dst_cpu is
-    selected to be propagated which might be fed with tasks
-    soon, the efforts we paid is no more than setting a busy
-    cpu into the SIS filter. While on the other hand it is
-    important that we update as early as possible to keep the
-    filter fresh, so it's not wise to delay the update to the
-    end of load balancing.
+But in some versions these clocks are controllable or not?
 
-  - False negative propagation hurts performance since some
-    idle cpus could be out of reach. So in general we will
-    aggressively propagate idle cpus but allow false positive
-    continue to exist for a while, which may lead to filter
-    being fully polluted.
-
-Pains can be relieved by a force correction when false positive
-continuously detected.
-
-Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
----
- include/linux/sched/topology.h |  7 +++++
- kernel/sched/fair.c            | 51 ++++++++++++++++++++++++++++++++--
- 2 files changed, 55 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index b93edf587d84..e3552ce192a9 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -91,6 +91,12 @@ struct sched_group;
-  *	search, and is also used as a fallback state of the other
-  *	states.
-  *
-+ * - sd_may_idle
-+ *	This state implies the unstableness of the SIS filter, and
-+ *	some bits of it may out of date. This state is only used in
-+ *	SMT domains as an intermediate state between sd_has_icpus
-+ *	and sd_is_busy.
-+ *
-  * - sd_is_busy
-  *	This state indicates there are no unoccupied cpus in this
-  *	domain. So for LLC domains, it gives the hint on whether
-@@ -111,6 +117,7 @@ struct sched_group;
- enum sd_state {
- 	sd_has_icores,
- 	sd_has_icpus,
-+	sd_may_idle,
- 	sd_is_busy
- };
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d55fdcedf2c0..9713d183d35e 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8768,6 +8768,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
- 
- 	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
- 		struct rq *rq = cpu_rq(i);
-+		bool update = update_core && (env->dst_cpu != i);
- 
- 		sgs->group_load += cpu_load(rq);
- 		sgs->group_util += cpu_util_cfs(i);
-@@ -8777,7 +8778,11 @@ static inline void update_sg_lb_stats(struct lb_env *env,
- 		nr_running = rq->nr_running;
- 		sgs->sum_nr_running += nr_running;
- 
--		if (update_core)
-+		/*
-+		 * The dst_cpu is not preferred since it might
-+		 * be fed with tasks soon.
-+		 */
-+		if (update)
- 			sd_classify(sds, rq, i);
- 
- 		if (nr_running > 1)
-@@ -8801,7 +8806,8 @@ static inline void update_sg_lb_stats(struct lb_env *env,
- 			 * and fed with tasks, so we'd better choose
- 			 * a candidate in an opposite way.
- 			 */
--			sds->idle_cpu = i;
-+			if (update)
-+				sds->idle_cpu = i;
- 			sgs->idle_cpus++;
- 
- 			/* Idle cpu can't have misfit task */
-@@ -9321,7 +9327,7 @@ static void sd_update_state(struct lb_env *env, struct sd_lb_stats *sds)
- {
- 	struct sched_domain_shared *sd_smt_shared = env->sd->shared;
- 	enum sd_state new = sds->sd_state;
--	int this = env->dst_cpu;
-+	int icpu = sds->idle_cpu, this = env->dst_cpu;
- 
- 	/*
- 	 * Parallel updating can hardly contribute accuracy to
-@@ -9331,6 +9337,22 @@ static void sd_update_state(struct lb_env *env, struct sd_lb_stats *sds)
- 	if (cmpxchg(&sd_smt_shared->updating, 0, 1))
- 		return;
- 
-+	/*
-+	 * The dst_cpu is likely to be fed with tasks soon.
-+	 * If it is the only unoccupied cpu in this domain,
-+	 * we still handle it the same way as as_has_icpus
-+	 * but turn the SMT into the unstable state, rather
-+	 * than waiting to the end of load balancing since
-+	 * it's also important that update the filter as
-+	 * early as possible to keep it fresh.
-+	 */
-+	if (new == sd_is_busy) {
-+		if (idle_cpu(this) || sched_idle_cpu(this)) {
-+			new = sd_may_idle;
-+			icpu = this;
-+		}
-+	}
-+
- 	/*
- 	 * There is at least one unoccupied cpu available, so
- 	 * propagate it to the filter to avoid false negative
-@@ -9338,6 +9360,12 @@ static void sd_update_state(struct lb_env *env, struct sd_lb_stats *sds)
- 	 * idle cpus thus throughupt downgraded.
- 	 */
- 	if (new != sd_is_busy) {
-+		/*
-+		 * The sd_may_idle state is taken into
-+		 * consideration as well because from
-+		 * here we couldn't actually know task
-+		 * migrations would happen or not.
-+		 */
- 		if (!test_idle_cpus(this))
- 			set_idle_cpus(this, true);
- 	} else {
-@@ -9347,9 +9375,26 @@ static void sd_update_state(struct lb_env *env, struct sd_lb_stats *sds)
- 		 */
- 		if (sd_smt_shared->state == sd_is_busy)
- 			goto out;
-+
-+		/*
-+		 * Allow false positive to exist for some time
-+		 * to make a tradeoff of accuracy of the filter
-+		 * for relieving cache traffic.
-+		 */
-+		if (sd_smt_shared->state == sd_has_icpus) {
-+			new = sd_may_idle;
-+			goto update;
-+		}
-+
-+		/*
-+		 * If the false positive issue has already been
-+		 * there for a while, a correction of the filter
-+		 * is needed.
-+		 */
- 	}
- 
- 	sd_update_icpus(this, sds->idle_cpu);
-+update:
- 	sd_smt_shared->state = new;
- out:
- 	xchg(&sd_smt_shared->updating, 0);
--- 
-2.31.1
-
+Best regards,
+Krzysztof

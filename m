@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF3D55090B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 08:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FE255090F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbiFSGzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 02:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        id S234131AbiFSHAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 03:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFSGzW (ORCPT
+        with ESMTP id S229791AbiFSHAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 02:55:22 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46031B1EF
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 23:55:20 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LQk793fp7z9tqD;
-        Sun, 19 Jun 2022 08:55:17 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wCXGlb6dWBvg; Sun, 19 Jun 2022 08:55:17 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LQk792Yslz9tlb;
-        Sun, 19 Jun 2022 08:55:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4519E8B766;
-        Sun, 19 Jun 2022 08:55:17 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id LZIrJToxkgNZ; Sun, 19 Jun 2022 08:55:17 +0200 (CEST)
-Received: from [192.168.232.18] (unknown [192.168.232.18])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DEE728B763;
-        Sun, 19 Jun 2022 08:55:16 +0200 (CEST)
-Message-ID: <90a002a5-52b0-a028-b729-33a072c077c1@csgroup.eu>
-Date:   Sun, 19 Jun 2022 08:55:16 +0200
+        Sun, 19 Jun 2022 03:00:47 -0400
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E6ACDFC7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xEvCU
+        fDCDVBkY6E6w4t7hfvJ26KTGyPP8KXafpD2R6A=; b=FV1Gk31Y6tUlQFnR3s2QD
+        3jTGbZeq54u0Lev8/fBq57KTM92sO6MwVxjuonsGH2JISRaiuf8P8idCTkRrGZ4E
+        3L+m3yOyOenQoxEim39UEJsOY6kgjK1XKWDzbFJtQDMgD8e1wmB4Yjlrwfk88Y26
+        F6uBOCwNfG1XLEPiYxf/TU=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp2 (Coremail) with SMTP id DMmowACnDPldya5izSCMDg--.28541S2;
+        Sun, 19 Jun 2022 14:59:42 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk, ardb@kernel.org,
+        linus.walleij@linaro.org, arnd@arndb.de, rostedt@goodmis.org,
+        ebiederm@xmission.com
+Cc:     windhl@126.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm/kernel: Fix refcount leak bugs
+Date:   Sun, 19 Jun 2022 14:59:41 +0800
+Message-Id: <20220619065941.4066920-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] powerpc/prom_init: Add memset as valid external symbol if
- CONFIG_KASAN=y
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        ul Mackerras <paulus@samba.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Daniel Axtens <dja@axtens.net>
-References: <20220619035246.2633538-1-linux@roeck-us.net>
- <9b2952c9-d6d7-b4c2-f5d6-cec8722decc8@csgroup.eu>
-In-Reply-To: <9b2952c9-d6d7-b4c2-f5d6-cec8722decc8@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DMmowACnDPldya5izSCMDg--.28541S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tFWkZrW7ur15Gw13ZFy7KFg_yoW8Xr4Up3
+        4jkr9xtF4Yka9rJ3yFy3s5ur4Yy3Wvgw4Sg3yj93yfArs0yry8XrsY9asI9ry7XF4Fgw4F
+        ga10kF4Sq3W8WaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUPEhUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgclF1-HZVICbQAAsv
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In arm_dt_init_cpu_maps() and init_machine_late(), we need of_node_put()
+to keep refcount balance.
 
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/arm/kernel/devtree.c | 4 ++++
+ arch/arm/kernel/setup.c   | 1 +
+ 2 files changed, 5 insertions(+)
 
-Le 19/06/2022 à 08:45, Christophe Leroy a écrit :
-> 
-> 
-> Le 19/06/2022 à 05:52, Guenter Roeck a écrit :
->> If CONFIG_KASAN=y, powerpc:allmodconfig fails to build with the following
->> error.
->>
->> Error: External symbol 'memset' referenced from prom_init.c
->>
->> The problem was introduced with commit 41b7a347bf14 ("powerpc: Book3S
->> 64-bit outline-only KASAN support"). So far, with CONFIG_KASAN=y, only
->> __memset was accepted as valid external symbol in prom_init_check.sh.
->> Add memset as well to fix the problem.
-> 
-> No way. It is way too early to use the instrumented version of memset().
+diff --git a/arch/arm/kernel/devtree.c b/arch/arm/kernel/devtree.c
+index 02839d8b6202..d4dbc9eb382d 100644
+--- a/arch/arm/kernel/devtree.c
++++ b/arch/arm/kernel/devtree.c
+@@ -94,6 +94,7 @@ void __init arm_dt_init_cpu_maps(void)
+ 		 */
+ 		if (hwid & ~MPIDR_HWID_BITMASK) {
+ 			of_node_put(cpu);
++			of_node_put(cpus);
+ 			return;
+ 		}
+ 
+@@ -108,6 +109,7 @@ void __init arm_dt_init_cpu_maps(void)
+ 			if (WARN(tmp_map[j] == hwid,
+ 				 "Duplicate /cpu reg properties in the DT\n")) {
+ 				of_node_put(cpu);
++				of_node_put(cpus);
+ 				return;
+ 			}
+ 
+@@ -148,6 +150,8 @@ void __init arm_dt_init_cpu_maps(void)
+ 	if (!found_method)
+ 		set_smp_ops_by_method(cpus);
+ 
++	of_node_put(cpus);
++
+ 	if (!bootcpu_valid) {
+ 		pr_warn("DT missing boot CPU MPIDR[23:0], fall back to default cpu_logical_map\n");
+ 		return;
+diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
+index 1e8a50a97edf..43ec8d78c219 100644
+--- a/arch/arm/kernel/setup.c
++++ b/arch/arm/kernel/setup.c
+@@ -960,6 +960,7 @@ static int __init init_machine_late(void)
+ 	if (root) {
+ 		ret = of_property_read_string(root, "serial-number",
+ 					      &system_serial);
++		of_node_put(root);
+ 		if (ret)
+ 			system_serial = NULL;
+ 	}
+-- 
+2.25.1
 
-See commit 26deb04342e3 ("powerpc: prepare string/mem functions for 
-KASAN") for more details
-
-> 
-> Did you try with the patch I sent ?
-> 
-> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/3802811f7cf94f730be44688539c01bba3a3b5c0.1654875808.git.christophe.leroy@csgroup.eu/
-> 
-> Thanks
-> Christophe
-> 
->>
->> Fixes: 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN support")
->> Cc: Michael Ellerman <mpe@ellerman.id.au>
->> Cc: Daniel Axtens <dja@axtens.net>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>    arch/powerpc/kernel/prom_init_check.sh | 2 +-
->>    1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/powerpc/kernel/prom_init_check.sh b/arch/powerpc/kernel/prom_init_check.sh
->> index b183ab9c5107..787142b5dd26 100644
->> --- a/arch/powerpc/kernel/prom_init_check.sh
->> +++ b/arch/powerpc/kernel/prom_init_check.sh
->> @@ -16,7 +16,7 @@
->>    grep "^CONFIG_KASAN=y$" .config >/dev/null
->>    if [ $? -eq 0 ]
->>    then
->> -	MEM_FUNCS="__memcpy __memset"
->> +	MEM_FUNCS="__memcpy __memset memset"
->>    else
->>    	MEM_FUNCS="memcpy memset"
->>    fi

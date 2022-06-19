@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BB6550C55
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 19:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85306550C5B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 19:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237050AbiFSRUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 13:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
+        id S236906AbiFSRnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 13:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiFSRUT (ORCPT
+        with ESMTP id S237170AbiFSRna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 13:20:19 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B2F63D6;
-        Sun, 19 Jun 2022 10:20:18 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id l81so11157157oif.9;
-        Sun, 19 Jun 2022 10:20:18 -0700 (PDT)
+        Sun, 19 Jun 2022 13:43:30 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D9AA47D;
+        Sun, 19 Jun 2022 10:43:29 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id w17so11740611wrg.7;
+        Sun, 19 Jun 2022 10:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x1GJBDNs5yTZIr20ZTfGmqGw+VA/IHMmm9RzUdjuSNI=;
+        b=PG5S7vpop0zKsTwPwuiVBzt8o6QGR0G3K1zaG1+m9V6EpGo2DnAXpwGEL7/9aePkRY
+         ykcPv/vVovpHppy0K+P+x7pbEQ7O6gIxvyGHXQB/kV+x3dUL4Ab5IzPwP3nEyeoqchIh
+         z96qtY5Qftnlu9ldYsuPpbBcDA/h6SRJ5b405iMtl+O3fRNFvd+NSdZCymukQeYuQTu5
+         P0fXS12b+b4m4vK+rKBYb9v7RY/ghVHmOyhm2ehRKGEswqdNLn9MbrJyTmW87JovsW4E
+         f4F/F5wXTLaN0XgCwKuoOjiu6NWll/q6LMQsALCXwt8k6BAQRUwxv1rW2Tgq078JZoCl
+         soUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=cvcofqYVEQjCaj+AkeCKgXWxJh7cQwGp0V6JPFxdw0U=;
-        b=66Fz+hARvPXMT0IOaeECggjPZf/Af5tP3K4r72OwzL6rvWm0wl/jjIZor0YGrTTMLp
-         or8Yh9VOlb29FM/iIrErRFSoS0e46buzojXU7zqjy0i5TdsEJJc/dzTzdZESCLxkBpFb
-         ONtjRwdE8aMIHN5OqopWEHYWYsplak4YIMoFeXuilWQQNrVI8CCNnpanDCTqmcYJGOOx
-         d3xP/Jf1COY/AGrLXcaFa+fy7yOyUic5EDqRw3pLad/bnUia0a633kOH2MVWKAg+BwzT
-         vSzcOFX3xQBwmSZWuYt1bgEXti37hAAYgUJXzv9fRnttejdbBoHeBs1tSz2xHJrlGec8
-         0mkQ==
-X-Gm-Message-State: AJIora+d6EpsYmbPXiEWX/hooBcMExlK1AViHZhl8+LDMXd46S5wAzMn
-        YnC3TYu46ksrOYK8VRXplkLgCLWTpQ==
-X-Google-Smtp-Source: AGRyM1t4tv/5kd90UFjFUm8xqek2f0yIoId8FFpWPvSKMDeM5k+UARzGxxo+/61ii0CM8eNGdjOrJA==
-X-Received: by 2002:a05:6808:14c5:b0:32e:f7b9:99a2 with SMTP id f5-20020a05680814c500b0032ef7b999a2mr9751321oiw.174.1655659217362;
-        Sun, 19 Jun 2022 10:20:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id d1-20020a056870540100b000f342119f41sm5899475oan.42.2022.06.19.10.20.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x1GJBDNs5yTZIr20ZTfGmqGw+VA/IHMmm9RzUdjuSNI=;
+        b=wxQ5WaZNOtJAvI1WcJ2oX1m2A3w28i8Fe2THgw8lUbq6DrqbuxIrvASLPHs9vXfBDh
+         AdcMv+McMoubTBT3L/MH3d+F/IVTVBjqSScsflfaN6fTPYG8WU1hjY8d+wNKish6UlyG
+         6GjGh95cv95SEID2sDm2DFoDeMsuRv3CWeTM33mMWbDrWDkseOj6IW3o9QyRINDubtLY
+         fjoygFYDNdKdPnn5IFv4wQCqWT4bNEPw+gZ47Ra1sytmHAC/edz0ulOBbu5nPAYRPU5g
+         iU4aql5ttTrvG25vMpO/oroRi9r0eLCkqujU+6yqGIB/PqNTfaLnNHjoSaroxvEu7c3F
+         FegQ==
+X-Gm-Message-State: AJIora/MH205p9L02tzUgiSoq5haXo1ea83FwQlYL57NdxKL+5JfVcI0
+        ydlKBLkyNjtKevXDWSHBRJSD5yPq+lE=
+X-Google-Smtp-Source: AGRyM1vucVEffRRfE76cbwwLXOQ0fR1dQ9uVprKeoEuImGpyxHBGqnRFG4RTx0Fw5jxnWiE5J5rDvw==
+X-Received: by 2002:adf:e988:0:b0:21b:8c9d:6ba3 with SMTP id h8-20020adfe988000000b0021b8c9d6ba3mr3124199wrm.10.1655660607563;
+        Sun, 19 Jun 2022 10:43:27 -0700 (PDT)
+Received: from localhost (226.100-195-80.static.virginmediabusiness.co.uk. [80.195.100.226])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c1c1300b0039c5645c60fsm24347607wms.3.2022.06.19.10.43.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 10:20:16 -0700 (PDT)
-Received: (nullmailer pid 1922480 invoked by uid 1000);
-        Sun, 19 Jun 2022 17:20:15 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Cc:     devicetree@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        michals@xilinx.com, linux-pci@vger.kernel.org
-In-Reply-To: <20220618024459.7554-2-bharat.kumar.gogada@xilinx.com>
-References: <20220618024459.7554-1-bharat.kumar.gogada@xilinx.com> <20220618024459.7554-2-bharat.kumar.gogada@xilinx.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
-Date:   Sun, 19 Jun 2022 11:20:15 -0600
-Message-Id: <1655659215.212817.1922479.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Sun, 19 Jun 2022 10:43:27 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: PCI: Remove leading space in info message
+Date:   Sun, 19 Jun 2022 18:43:26 +0100
+Message-Id: <20220619174326.28743-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Jun 2022 08:14:58 +0530, Bharat Kumar Gogada wrote:
-> Xilinx Versal Premium series has CPM5 block which supports Root Port
-> functionality at Gen5 speed.
-> 
-> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
-> 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> ---
->  .../bindings/pci/xilinx-versal-cpm.yaml       | 38 ++++++++++++++++++-
->  1 file changed, 37 insertions(+), 1 deletion(-)
-> 
+There is an info message with an extraneous leading space. Remove it.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ arch/mips/pci/fixup-lemote2f.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml:17:7: [warning] wrong indentation: expected 4 but found 6 (indentation)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/arch/mips/pci/fixup-lemote2f.c b/arch/mips/pci/fixup-lemote2f.c
+index 632ff2daa338..790d674cd80a 100644
+--- a/arch/mips/pci/fixup-lemote2f.c
++++ b/arch/mips/pci/fixup-lemote2f.c
+@@ -80,7 +80,7 @@ int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+ 		}
+ 		return dev->irq;
+ 	} else {
+-		printk(KERN_INFO " strange pci slot number.\n");
++		printk(KERN_INFO "strange pci slot number.\n");
+ 		return 0;
+ 	}
+ }
+-- 
+2.35.3
 

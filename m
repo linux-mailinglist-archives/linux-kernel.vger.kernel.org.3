@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08ED550CC4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE5E550CC5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiFSTcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 15:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S232008AbiFSTfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 15:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiFSTcw (ORCPT
+        with ESMTP id S229780AbiFSTfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 15:32:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC8DCE9;
-        Sun, 19 Jun 2022 12:32:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC1DCB80DDB;
-        Sun, 19 Jun 2022 19:32:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048CEC34114;
-        Sun, 19 Jun 2022 19:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655667168;
-        bh=KzY1R7EXRN08xnUMYOeVuTknO1SngU7AjYDwY4X55n4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qOf/eb/bL+pWg+lLLA/B9fAdMEQS/nGdyHWsmPgprvA2Vt7q/KaJemuDD9F7WJfeB
-         DBAiGfCB5GKohy40Ag8/bL5O+XUid2w2vTMkY+Luc69x1VWXlGz4yh2nobU5l3SjoF
-         oxr5bDuwl4R+MckZzRo/Jwflj7T8eWJwmOPyp2GL7D1aJIdxdxvMGJpcpcbNvAYC/m
-         fUb60gsJ6acZpDOL28dFaFr5OCLF4GZGld5JdI2WI2ZrkCvW1/Qt6qqvU5GrE9m56O
-         lO/K/rxIBD6vpVqmCqY/508vpYcDxnrZb3uJEeaA4mxNF4D98ahrS9w08xrUPKkjwP
-         wZJK+LDdj2DRA==
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ali Saidi <alisaidi@amazon.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [GIT PULL] perf tools fixes for v5.19: 1st batch
-Date:   Sun, 19 Jun 2022 16:32:40 -0300
-Message-Id: <20220619193240.802856-1-acme@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Sun, 19 Jun 2022 15:35:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8028B31
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 12:35:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o30hv-0004rB-Bu; Sun, 19 Jun 2022 21:35:39 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o30hk-001VMw-FN; Sun, 19 Jun 2022 21:35:29 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o30hl-00HR4H-4a; Sun, 19 Jun 2022 21:35:29 +0200
+Date:   Sun, 19 Jun 2022 21:35:26 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>, kernel@pengutronix.de,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] mfd: tc6393xb: Make disable callback return void
+Message-ID: <20220619193526.hyihizoxmaxlowrt@pengutronix.de>
+References: <20220619082655.53728-1-u.kleine-koenig@pengutronix.de>
+ <202206200102.cUbYiyCL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pmzf5n3f43nr53dh"
+Content-Disposition: inline
+In-Reply-To: <202206200102.cUbYiyCL-lkp@intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,92 +57,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-	Please consider pulling, there are some more header sync
-activity for next week, still recovering the french no-mask bonanza and
-the brazilian omicron crash (maybe related?) (yeah, me+wife+kid
-infected), sigh.
+--pmzf5n3f43nr53dh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
+Hello,
 
-- Arnaldo
+On Mon, Jun 20, 2022 at 02:20:57AM +0800, kernel test robot wrote:
+> Hi "Uwe,
+>=20
+> I love your patch! Yet something to improve:
+>=20
+> [auto build test ERROR on f2906aa863381afb0015a9eb7fefad885d4e5a56]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/m=
+fd-tc6393xb-Make-disable-callback-return-void/20220619-162855
+> base:   f2906aa863381afb0015a9eb7fefad885d4e5a56
+> config: arm-pxa_defconfig (https://download.01.org/0day-ci/archive/202206=
+20/202206200102.cUbYiyCL-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/e2b80b7c107cdbbff=
+99189431a614f791435ebfd
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Uwe-Kleine-K-nig/mfd-tc6393xb-Ma=
+ke-disable-callback-return-void/20220619-162855
+>         git checkout e2b80b7c107cdbbff99189431a614f791435ebfd
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.3.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Darm SHELL=3D/bin/bash
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    arch/arm/mach-pxa/eseries.c:47:13: warning: no previous prototype for =
+'eseries_fixup' [-Wmissing-prototypes]
+>       47 | void __init eseries_fixup(struct tag *tags, char **cmdline)
+>          |             ^~~~~~~~~~~~~
+>    arch/arm/mach-pxa/eseries.c:76:5: warning: no previous prototype for '=
+eseries_tmio_enable' [-Wmissing-prototypes]
+>       76 | int eseries_tmio_enable(struct platform_device *dev)
+>          |     ^~~~~~~~~~~~~~~~~~~
+>    arch/arm/mach-pxa/eseries.c:89:6: warning: no previous prototype for '=
+eseries_tmio_disable' [-Wmissing-prototypes]
+>       89 | void eseries_tmio_disable(struct platform_device *dev)
+>          |      ^~~~~~~~~~~~~~~~~~~~
+>    arch/arm/mach-pxa/eseries.c:95:5: warning: no previous prototype for '=
+eseries_tmio_suspend' [-Wmissing-prototypes]
+>       95 | int eseries_tmio_suspend(struct platform_device *dev)
+>          |     ^~~~~~~~~~~~~~~~~~~~
+>    arch/arm/mach-pxa/eseries.c:101:5: warning: no previous prototype for =
+'eseries_tmio_resume' [-Wmissing-prototypes]
+>      101 | int eseries_tmio_resume(struct platform_device *dev)
+>          |     ^~~~~~~~~~~~~~~~~~~
+>    arch/arm/mach-pxa/eseries.c:108:6: warning: no previous prototype for =
+'eseries_get_tmio_gpios' [-Wmissing-prototypes]
+>      108 | void eseries_get_tmio_gpios(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~
+> >> arch/arm/mach-pxa/eseries.c:141:21: error: initialization of 'int (*)(=
+struct platform_device *)' from incompatible pointer type 'void (*)(struct =
+platform_device *)' [-Werror=3Dincompatible-pointer-types]
+>      141 |         .disable  =3D &eseries_tmio_disable,
+>          |                     ^
+>    arch/arm/mach-pxa/eseries.c:141:21: note: (near initialization for 'e3=
+30_tc6387xb_info.disable')
+>    cc1: some warnings being treated as errors
+>=20
+>=20
+> vim +141 arch/arm/mach-pxa/eseries.c
+>=20
+> e478fe4cd50b86 Eric Miao 2010-06-20  138 =20
+> e478fe4cd50b86 Eric Miao 2010-06-20  139  static struct tc6387xb_platform=
+_data e330_tc6387xb_info =3D {
+> e478fe4cd50b86 Eric Miao 2010-06-20  140  	.enable   =3D &eseries_tmio_en=
+able,
+> e478fe4cd50b86 Eric Miao 2010-06-20 @141  	.disable  =3D &eseries_tmio_di=
+sable,
+> e478fe4cd50b86 Eric Miao 2010-06-20  142  	.suspend  =3D &eseries_tmio_su=
+spend,
+> e478fe4cd50b86 Eric Miao 2010-06-20  143  	.resume   =3D &eseries_tmio_re=
+sume,
+> e478fe4cd50b86 Eric Miao 2010-06-20  144  };
+> e478fe4cd50b86 Eric Miao 2010-06-20  145 =20
 
-The following changes since commit 354c6e071be986a44b956f7b57f1884244431048:
+Oh, indeed. I forgot that this patch depends on
 
-  Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4 (2022-06-18 21:51:12 -0500)
+	https://lore.kernel.org/all/20220530192430.2108217-4-u.kleine-koenig@pengu=
+tronix.de
 
-are available in the Git repository at:
+that Lee already claimed to have applied. This patch removes line 141
+and the problem is gone.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.19-2022-06-19
+Best regards
+Uwe
 
-for you to fetch changes up to 140cd9ec8fdddc0e2d1684e6b69bcd05efbc9549:
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-  tools headers UAPI: Sync linux/prctl.h with the kernel sources (2022-06-19 11:42:25 -0300)
+--pmzf5n3f43nr53dh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-perf tool fixes for v5.19, 1st batch:
+-----BEGIN PGP SIGNATURE-----
 
-- Don't set data source if it's not a memory operation in ARM SPE (Statistical
-  Profiling Extensions).
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKvensACgkQwfwUeK3K
+7An82Af/VbnrOfVBah3nqCQxuAtM9MNBqEtnq39L5tHy+A8arHXkS3ye5E92KYJW
+umIk7JLV+a3RdFAlMDsuwsbdJNNhCOBT6zlF2zrw0xzMaP4rtskUh5AUXWy3olM5
+K7Koce9GteGlGHQaWRwS86ayehoXxTPRFflq1FVRzXK4W478CH2Bn8/iKgoewgpr
+iZp4I/Z4+BBYdqP//sww0AhoT65o3d4UpaYzmI+3IvljDNfTnGT76VAzmjkRmlwM
+D92bH9KrUNdtrqmUItTdOJZg1EjkSkG9YmkUe5OwEruA7+Va9stqRJQesKulAfvK
+ffbMdkH6hBYVNUzXVHTr2T2dnNT28A==
+=sC2Z
+-----END PGP SIGNATURE-----
 
-- Fix handling of exponent floating point values in perf stat expressions.
-
-- Don't leak fd on failure on libperf open.
-
-- Fix 'perf test' CPU topology test for PPC guest systems.
-
-- Fix undefined behaviour on breakpoint account 'perf test' entry.
-
-- Record only user callchains on the "Check ARM64 callgraphs are complete in FP
-  mode" 'perf test' entry.
-
-- Fix "perf stat CSV output linter" test on s390.
-
-- Sync batch of kernel headers with tools/perf/.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-----------------------------------------------------------------
-Arnaldo Carvalho de Melo (4):
-      perf beauty: Update copy of linux/socket.h with the kernel sources
-      tools headers UAPI: Sync x86's asm/kvm.h with the kernel sources
-      tools headers arm64: Sync arm64's cputype.h with the kernel sources
-      tools headers UAPI: Sync linux/prctl.h with the kernel sources
-
-Athira Rajeev (1):
-      perf test topology: Use !strncmp(right platform) to fix guest PPC comparision check
-
-Ian Rogers (5):
-      perf unwind: Fix uninitialized variable
-      libperf evsel: Open shouldn't leak fd on failure
-      perf test: Fix variable length array undefined behavior in bp_account
-      perf expr: Allow exponents on floating point values
-      perf metrics: Ensure at least 1 id per metric
-
-Leo Yan (1):
-      perf arm-spe: Don't set data source if it's not a memory operation
-
-Michael Petlan (1):
-      perf test: Record only user callchains on the "Check Arm64 callgraphs are complete in fp mode" test
-
-Thomas Richter (1):
-      perf test: Fix "perf stat CSV output linter" test on s390
-
- tools/arch/arm64/include/asm/cputype.h             | 12 +++-
- tools/arch/x86/include/uapi/asm/kvm.h              | 11 ++--
- tools/include/uapi/linux/prctl.h                   |  9 +++
- tools/lib/perf/evsel.c                             | 17 ++++--
- tools/perf/tests/bp_account.c                      | 16 ++++-
- tools/perf/tests/expr.c                            |  2 +
- tools/perf/tests/shell/lib/perf_csv_output_lint.py | 48 ---------------
- tools/perf/tests/shell/stat+csv_output.sh          | 69 ++++++++++++++--------
- tools/perf/tests/shell/test_arm_callgraph_fp.sh    |  2 +-
- tools/perf/tests/topology.c                        |  2 +-
- tools/perf/trace/beauty/include/linux/socket.h     |  7 ++-
- tools/perf/util/arm-spe.c                          | 22 +++----
- tools/perf/util/expr.l                             |  2 +-
- tools/perf/util/metricgroup.c                      |  9 +++
- tools/perf/util/unwind-libunwind-local.c           |  2 +-
- 15 files changed, 125 insertions(+), 105 deletions(-)
- delete mode 100644 tools/perf/tests/shell/lib/perf_csv_output_lint.py
+--pmzf5n3f43nr53dh--

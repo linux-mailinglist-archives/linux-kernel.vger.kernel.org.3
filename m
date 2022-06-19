@@ -2,212 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB0E550956
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163E555095C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbiFSI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S235050AbiFSI1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 04:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234859AbiFSI0Y (ORCPT
+        with ESMTP id S234859AbiFSI1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 04:26:24 -0400
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5280DEE08;
-        Sun, 19 Jun 2022 01:26:22 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout4.routing.net (Postfix) with ESMTP id DF7061012A5;
-        Sun, 19 Jun 2022 08:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1655627180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A4lLwqC5/vPLfeHiAQTc4w8YOcpo0bpEwa4ZlWnmejQ=;
-        b=VCwlF8wqUvMe2MZ9cmqa+1oZZ/GWrSh6uVAa6wnUXsXxFSbj/Z/UIbJ1xxkYiy6ZxJ2SO4
-        j8rhwqDjWVM1EepH5lHUohfe39XDnoAMG7SiseVfX1WC0Ui7yBxdvAwma5eFWgeasI5Djl
-        SYUIQ6NJYjHiJITuY0Ei8CW0qpJFzrY=
-Received: from frank-G5.. (fttx-pool-157.180.227.195.bambit.de [157.180.227.195])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id EA529100622;
-        Sun, 19 Jun 2022 08:26:19 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Liang Chen <cl@rock-chips.com>, Simon Xue <xxm@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] arm64: dts: rockchip: Add PCIe v3 nodes to BPI-R2-Pro
-Date:   Sun, 19 Jun 2022 10:26:05 +0200
-Message-Id: <20220619082605.7935-6-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220619082605.7935-1-linux@fw-web.de>
-References: <20220619082605.7935-1-linux@fw-web.de>
+        Sun, 19 Jun 2022 04:27:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F12101D5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 01:27:05 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o2qGq-0000vI-27; Sun, 19 Jun 2022 10:27:00 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o2qGm-001Pei-Pj; Sun, 19 Jun 2022 10:26:58 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o2qGn-00HL5i-CB; Sun, 19 Jun 2022 10:26:57 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee.jones@linaro.org>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH v2] mfd: tc6393xb: Make disable callback return void
+Date:   Sun, 19 Jun 2022 10:26:55 +0200
+Message-Id: <20220619082655.53728-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3352; h=from:subject; bh=QcG/lGXnOjIWCwX7NwPpX+wFhZqNqAPKZqwjF3eG2jg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBirt3MF4sDfnzfsCZA316+4ajoIIYxY1O0vKvMFgj0 MyCYCUqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYq7dzAAKCRDB/BR4rcrsCSizB/ 0eGA2TFnxdfWkGCNuM85iSHuCz0/26gTA+ST7wYmGmCZRKxx1xPgpDAyz+h2jVLm2pBRFu/q1P+Txk 7i+094Em9VyITMTUdvf6sn0AChu5nj4WUlRYxFP6Xd6n/Fd7RjfUQZk32rQnhLXQ5amTQ7hIN1TuHl eV4GTp1MyoKgy2tu4xI3Mk/urdos/TPqrQn+ZFtIBYUOFtr4Re/gs/vKTs8xZ3+SVxGxdpUPgCG40j 720VKHwH72gkc+ZQWwmXdgdaxO15Gtzey4tKDIA5XZCd5Gmh15KvyWNeC4wFq24pxz9UjMvDyfN8PU 0w2qdrlAr5niNF22Icpbq7uig6BDlq
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 260ea333-eed3-421e-8eba-414050f769c4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+All implementations return 0, so simplify accordingly.
 
-Add Nodes to Bananapi-R2-Pro board to support PCIe v3 and
-set PCIe related regulators to always on.
+This is a preparation for making platform remove callbacks return void.
 
-Suggested-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
-v4:
-- change u8 lane-map to u32 data-lanes
+Hello,
 
-v3:
-- squash lane-map over bifurcation property
-- add comment which slot is M2 and which one if mPCIe
-- fixes from Peter:
-  - drop regulator-always-on/regulator-boot-on from regulators
-  - increase startup-delay-us for regulators
-  - set phy-mode on PCIe3-phy
-  - add num-lanes to PCIe overrides
-  - add usb node for to PCIe/m2
-  - move lane-map from PCIe controller to PCIe-phy
+compared to (implicit) v1
+(https://lore.kernel.org/r/20220530192430.2108217-5-u.kleine-koenig@pengutronix.de)
+this is rebased to v5.19-rc1. Up to now there is only a single patch in
+next (next-20220617) since -rc1 touching one of the files:
 
-v2:
-- underscores in nodenames
-- rockchip,bifurcation to vendor unspecific bifurcation
-- fix trailing space
----
- .../boot/dts/rockchip/rk3568-bpi-r2-pro.dts   | 90 +++++++++++++++++++
- 1 file changed, 90 insertions(+)
+	0fdebc5ec2ca ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)")
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-index 40cf2236c0b6..dd688019ca49 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-@@ -74,6 +74,62 @@ vcc5v0_sys: vcc5v0-sys {
- 		vin-supply = <&dc_12v>;
- 	};
+I don't expect any conflicts that need manual intervention.
+
+Best regards
+Uwe
+
+ arch/arm/mach-pxa/eseries.c  | 3 +--
+ arch/arm/mach-pxa/tosa.c     | 4 +---
+ drivers/mfd/tc6393xb.c       | 5 ++---
+ include/linux/mfd/tc6393xb.h | 2 +-
+ 4 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/mach-pxa/eseries.c b/arch/arm/mach-pxa/eseries.c
+index 08f8737aa8fd..114f0baf087f 100644
+--- a/arch/arm/mach-pxa/eseries.c
++++ b/arch/arm/mach-pxa/eseries.c
+@@ -86,11 +86,10 @@ int eseries_tmio_enable(struct platform_device *dev)
+ 	return 0;
+ }
  
-+	pcie30_avdd0v9: pcie30-avdd0v9 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pcie30_avdd0v9";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <900000>;
-+		regulator-max-microvolt = <900000>;
-+		vin-supply = <&vcc3v3_sys>;
-+	};
-+
-+	pcie30_avdd1v8: pcie30-avdd1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pcie30_avdd1v8";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc3v3_sys>;
-+	};
-+
-+	/* pi6c pcie clock generator feeds both ports */
-+	vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_pcie";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		enable-active-high;
-+		gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <200000>;
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
-+	/* actually fed by vcc3v3_sys, dependent on pi6c clock generator */
-+	vcc3v3_minipcie: vcc3v3-minipcie-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_minipcie";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <50000>;
-+		vin-supply = <&vcc3v3_pi6c_05>;
-+	};
-+
-+	/* actually fed by vcc3v3_sys, dependent on pi6c clock generator */
-+	vcc3v3_ngff: vcc3v3-ngff-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_ngff";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		enable-active-high;
-+		gpio = <&gpio4 RK_PC1 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <50000>;
-+		vin-supply = <&vcc3v3_pi6c_05>;
-+	};
-+
- 	vcc5v0_usb: vcc5v0_usb {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc5v0_usb";
-@@ -401,6 +457,27 @@ rgmii_phy1: ethernet-phy@0 {
- 	};
- };
+-int eseries_tmio_disable(struct platform_device *dev)
++void eseries_tmio_disable(struct platform_device *dev)
+ {
+ 	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 0);
+ 	gpio_set_value(GPIO_ESERIES_TMIO_PCLR, 0);
+-	return 0;
+ }
  
-+&pcie30phy {
-+	data-lanes = <1 2>;
-+	status = "okay";
-+};
-+
-+&pcie3x1 {
-+	/* M.2 slot */
-+	num-lanes = <1>;
-+	reset-gpios = <&gpio3 RK_PA1 GPIO_ACTIVE_HIGH>;
-+	vpcie3v3-supply = <&vcc3v3_ngff>;
-+	status = "okay";
-+};
-+
-+&pcie3x2 {
-+	/* mPCIe slot */
-+	num-lanes = <1>;
-+	reset-gpios = <&gpio2 RK_PD6 GPIO_ACTIVE_HIGH>;
-+	vpcie3v3-supply = <&vcc3v3_minipcie>;
-+	status = "okay";
-+};
-+
- &pinctrl {
- 	leds {
- 		blue_led_pin: blue-led-pin {
-@@ -587,3 +664,16 @@ &usb2phy0_otg {
- 	phy-supply = <&vcc5v0_usb_otg>;
- 	status = "okay";
- };
-+
-+&usb2phy1 {
-+	/* USB for PCIe/M2 */
-+	status = "okay";
-+};
-+
-+&usb2phy1_host {
-+	status = "okay";
-+};
-+
-+&usb2phy1_otg {
-+	status = "okay";
-+};
+ int eseries_tmio_suspend(struct platform_device *dev)
+diff --git a/arch/arm/mach-pxa/tosa.c b/arch/arm/mach-pxa/tosa.c
+index 6af8bc404825..d41641d6cfcd 100644
+--- a/arch/arm/mach-pxa/tosa.c
++++ b/arch/arm/mach-pxa/tosa.c
+@@ -678,13 +678,11 @@ static int tosa_tc6393xb_enable(struct platform_device *dev)
+ 	return rc;
+ }
+ 
+-static int tosa_tc6393xb_disable(struct platform_device *dev)
++static void tosa_tc6393xb_disable(struct platform_device *dev)
+ {
+ 	gpio_free(TOSA_GPIO_TC6393XB_L3V_ON);
+ 	gpio_free(TOSA_GPIO_TC6393XB_SUSPEND);
+ 	gpio_free(TOSA_GPIO_TC6393XB_REST_IN);
+-
+-	return 0;
+ }
+ 
+ static int tosa_tc6393xb_resume(struct platform_device *dev)
+diff --git a/drivers/mfd/tc6393xb.c b/drivers/mfd/tc6393xb.c
+index 0be5731685b4..aa903a31dd43 100644
+--- a/drivers/mfd/tc6393xb.c
++++ b/drivers/mfd/tc6393xb.c
+@@ -798,20 +798,19 @@ static int tc6393xb_remove(struct platform_device *dev)
+ {
+ 	struct tc6393xb_platform_data *tcpd = dev_get_platdata(&dev->dev);
+ 	struct tc6393xb *tc6393xb = platform_get_drvdata(dev);
+-	int ret;
+ 
+ 	mfd_remove_devices(&dev->dev);
+ 
+ 	tc6393xb_detach_irq(dev);
+ 
+-	ret = tcpd->disable(dev);
++	tcpd->disable(dev);
+ 	clk_disable_unprepare(tc6393xb->clk);
+ 	iounmap(tc6393xb->scr);
+ 	release_resource(&tc6393xb->rscr);
+ 	clk_put(tc6393xb->clk);
+ 	kfree(tc6393xb);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ #ifdef CONFIG_PM
+diff --git a/include/linux/mfd/tc6393xb.h b/include/linux/mfd/tc6393xb.h
+index d336c541b7df..d17807f2d0c9 100644
+--- a/include/linux/mfd/tc6393xb.h
++++ b/include/linux/mfd/tc6393xb.h
+@@ -22,7 +22,7 @@ struct tc6393xb_platform_data {
+ 	u16	scr_gper;	/* GP Enable */
+ 
+ 	int	(*enable)(struct platform_device *dev);
+-	int	(*disable)(struct platform_device *dev);
++	void	(*disable)(struct platform_device *dev);
+ 	int	(*suspend)(struct platform_device *dev);
+ 	int	(*resume)(struct platform_device *dev);
+ 
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-2.34.1
+2.36.1
 

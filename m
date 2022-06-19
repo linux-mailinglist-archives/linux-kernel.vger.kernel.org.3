@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56868550B65
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 17:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC26F550B6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 17:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiFSPKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 11:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S231723AbiFSPLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 11:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiFSPKG (ORCPT
+        with ESMTP id S229909AbiFSPLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 11:10:06 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D9B260C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:10:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VGmrGPz_1655651382;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VGmrGPz_1655651382)
-          by smtp.aliyun-inc.com;
-          Sun, 19 Jun 2022 23:09:57 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH] erofs: get rid of the leftover PAGE_SIZE in dir.c
-Date:   Sun, 19 Jun 2022 23:09:40 +0800
-Message-Id: <20220619150940.121005-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
+        Sun, 19 Jun 2022 11:11:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CC4AE50;
+        Sun, 19 Jun 2022 08:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=GpbBghc2KUTT+YonqGGQ/ud3qNGpEps0gpZxehyGdwc=; b=vbFQO/gLXhdG8+OLUzl+HNpsd4
+        f67IaNDMpjESyWpvAxSSZc8EO960nphUATLBGwXVx+lbSpHhlaiw2UUIX6qa/K4YRSCdleJC3Blj6
+        Wx2ngsULRRTJy0XksSSu5gNxw6E4vyC37vGefDuFY5Sf7H3FW6RDBdxYjzuPYj+xLoE9+3GfWJW3U
+        X5pNdAM0JNSx7D1+Z6sdItZpmFvFNUf7QIRmAkIHlfQrUwLlWdKrsqtn888s+IwhsXmKNp5Nqp9yw
+        p31WJVVs4+747C0BFwT4IlZwZljIGDA/cUXMytgPLnS7vgrLE6dKMUpgHP1zw2o2PLeaZ1SMM3gT7
+        1QmY1fCw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2waZ-004QOo-0t; Sun, 19 Jun 2022 15:11:47 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Fixes for 5.19b
+Date:   Sun, 19 Jun 2022 16:11:40 +0100
+Message-Id: <20220619151143.1054746-1-willy@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the last hardcoded PAGE_SIZEs of uncompressed cases.
+I intend to send these three fixes for 5.19 during the next week.
+They're also at the top of the for-next branch.  I'll fold in any
+reviewed-by tags I get by Tuesday.
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/dir.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Matthew Wilcox (Oracle) (3):
+  filemap: Correct the conditions for marking a folio as accessed
+  filemap: Handle sibling entries in filemap_get_read_batch()
+  mm: Clear page->private when splitting or migrating a page
 
-diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
-index 18e59821c597..723f5223a4fa 100644
---- a/fs/erofs/dir.c
-+++ b/fs/erofs/dir.c
-@@ -90,7 +90,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
- 
- 		nameoff = le16_to_cpu(de->nameoff);
- 		if (nameoff < sizeof(struct erofs_dirent) ||
--		    nameoff >= PAGE_SIZE) {
-+		    nameoff >= EROFS_BLKSIZ) {
- 			erofs_err(dir->i_sb,
- 				  "invalid de[0].nameoff %u @ nid %llu",
- 				  nameoff, EROFS_I(dir)->nid);
-@@ -99,7 +99,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
- 		}
- 
- 		maxsize = min_t(unsigned int,
--				dirsize - ctx->pos + ofs, PAGE_SIZE);
-+				dirsize - ctx->pos + ofs, EROFS_BLKSIZ);
- 
- 		/* search dirents at the arbitrary position */
- 		if (initial) {
+ mm/filemap.c     | 15 ++++++++++++---
+ mm/huge_memory.c |  1 +
+ mm/migrate.c     |  1 +
+ 3 files changed, 14 insertions(+), 3 deletions(-)
+
 -- 
-2.24.4
+2.35.1
 

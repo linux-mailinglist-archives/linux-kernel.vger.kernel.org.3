@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B03550D99
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 01:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E774550D9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 01:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbiFSXdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 19:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S235582AbiFSXei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 19:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbiFSXdx (ORCPT
+        with ESMTP id S231539AbiFSXeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 19:33:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C24F65B5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:33:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 19 Jun 2022 19:34:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B1165B9;
+        Sun, 19 Jun 2022 16:34:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AF1BB80BA9
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2D8C34114;
-        Sun, 19 Jun 2022 23:33:49 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WN9mEEbA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655681627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lG5RMNB0R0p4pD+TpKqoURyMeGyNH2/uAPQxoeQaA+g=;
-        b=WN9mEEbAfk7wwF2ZPcE3YYVoIp5wr5nJ4wuzj0kaketFT8of9AA8h2KtU2zYcncOkztdnr
-        EzEBhvwQMZ/e75IWz0IW9b2ZxpCEU/HQZbOFbz8KYQmi9c7hUkewLvhMJLuMZcKZMNMVSX
-        yQSjqtmU8whA27egtLw5qfjM5BPwIJg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3fdf6f38 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 19 Jun 2022 23:33:47 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>, Marco Elver <elver@google.com>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v3] printk: allow direct console printing to be enabled always
-Date:   Mon, 20 Jun 2022 01:33:02 +0200
-Message-Id: <20220619233302.601092-1-Jason@zx2c4.com>
-In-Reply-To: <Yq+xGcBO06ILMUFy@zx2c4.com>
-References: <Yq+xGcBO06ILMUFy@zx2c4.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LR8J25MDpz4xD3;
+        Mon, 20 Jun 2022 09:34:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655681667;
+        bh=XCmoHAJGKCFrPOl+19AKGJEOmMMNLQ7mtdF3GYoctpc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LrAXmYNMKJQFE6xc/ROjRyS2fEKsVGVfQn1Ww90Fj9MoDIq9bqjbYJOkfNY2xounT
+         wqiQySykp675Y66viCFq7OgjRUCVhTcqUAKCdwxXfQSaSFUO6a4jRPSI18pFpxg9SP
+         6dMfJObonep3pQo+RBb09NYg+EC7GEhamdKTszRm4FgEhYTEkbjNffB6YiUcxdDAp2
+         gq/9J88gm3osvH7HLSC6Us5hsOw08QEXfP6WOsxV3G/w5bbJfErrtkoSArVGmiHbIh
+         QLUue1cTwZEut61Q78nF8av9Cs4kleGh4dLRWZFH/c/2W3MariC22yN3oNKyOB+2Aw
+         AL6LpOEFrJa9w==
+Date:   Mon, 20 Jun 2022 09:34:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220620093424.0615a374@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/4DCfUCSlQH8GtJ8aX_cx.qX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,144 +52,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 5.19, there are some changes in printk message ordering /
-interleaving which leads to confusion. The most obvious (and benign)
-example appears on system boot, in which the "Run /init as init process"
-message gets intermixed with the messages that init actually writes() to
-stdout. For example, here's a snippet from build.wireguard.com:
+--Sig_/4DCfUCSlQH8GtJ8aX_cx.qX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-    [    0.469732] Freeing unused kernel image (initmem) memory: 4576K
-    [    0.469738] Write protecting the kernel read-only data: 10240k
-    [    0.473823] Freeing unused kernel image (text/rodata gap) memory: 2044K
-    [    0.475228] Freeing unused kernel image (rodata/data gap) memory: 1136K
-    [    0.475236] Run /init as init process
+Hi all,
 
-        WireGuard Test Suite on Linux 5.19.0-rc2+ x86_64
+After merging the net-next tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-    [+] Mounting filesystems...
-    [+] Module self-tests:
-     *  allowedips self-tests: pass
-     *  nonce counter self-tests: pass
-     *  ratelimiter self-tests: pass
-    [+] Enabling logging...
-    [+] Launching tests...
-    [    0.475237]   with arguments:
-    [    0.475238]     /init
-    [    0.475238]   with environment:
-    [    0.475239]     HOME=/
-    [    0.475240]     TERM=linux
-    [+] ip netns add wg-test-46-0
-    [+] ip netns add wg-test-46-1
+net/ipv4/raw.c: In function 'raw_icmp_error':
+net/ipv4/raw.c:266:9: error: ISO C90 forbids mixed declarations and code [-=
+Werror=3Ddeclaration-after-statement]
+  266 |         struct hlist_nulls_head *hlist;
+      |         ^~~~~~
+cc1: all warnings being treated as errors
 
-Before the "with arguments:" and such would print prior to the
-"wireguard test suite on linux 5.19" banner. Now it shows after.
+Introduced by commit
 
-I see the same thing with "Freeing unused kernel image (text/rodata gap)
-memory" printing interwoven into the console of my initramfs on my
-laptop. And so forth.
+  ba44f8182ec2 ("raw: use more conventional iterators")
 
-But the bigger issue for me is that it makes it very confusing to
-interpret CI results later on. Prior, I would nice a nice correlation
-of:
+I have applied the following patch for today.
 
-[+] some userspace command
-[    1.2345 ] some kernel log output
-[+] some userspace command
-[    1.2346 ] some kernel log output
-[+] some userspace command
-[    1.2347 ] some kernel log output
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 20 Jun 2022 09:21:01 +1000
+Subject: [PATCH] raw: fix build error
 
-Now, the kernel log outputs are all over the place and out of order with
-the sequence of commands. This makes debugging issues somewhat tricky,
-because post hoc ergo propter hoc winds up being a good intuition to
-follow when tracking down bugs, and now the post hoc part is muddled.
+The linux-next x86_64 allmodconfig build produced this error:
 
-This is caused by threaded printk. In order to restore this in debugging
-sessions and in CI, this commit adds the ability to always use direct
-printk, either set by default at compile time, or overridden with a
-runtime command line switch.
+net/ipv4/raw.c: In function 'raw_icmp_error':
+net/ipv4/raw.c:266:9: error: ISO C90 forbids mixed declarations and code [-=
+Werror=3Ddeclaration-after-statement]
+  266 |         struct hlist_nulls_head *hlist;
+      |         ^~~~~~
+cc1: all warnings being treated as errors
 
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Marco Elver <elver@google.com>
-Fixes: 09c5ba0aa2fc ("printk: add kthread console printers")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: ba44f8182ec2 ("raw: use more conventional iterators")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  7 +++++++
- kernel/printk/printk.c                          | 11 +++++++++++
- lib/Kconfig.debug                               | 12 ++++++++++++
- 3 files changed, 30 insertions(+)
+ net/ipv4/raw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 2522b11e593f..04cec66802d1 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4424,6 +4424,13 @@
- 	printk.time=	Show timing data prefixed to each printk message line
- 			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
- 
-+	printk.direct=	Rather than using kthreads for printk output, always
-+			attempt to write to the console immediately. This has
-+			performance implications, but will result in a more
-+			faithful ordering and interleaving with other
-+			processes writing to the console.
-+			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
-+
- 	processor.max_cstate=	[HW,ACPI]
- 			Limit processor to maximum C-state
- 			max_cstate=9 overrides any DMI blacklist limit.
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index b095fb5f5f61..b7f8f2904f2c 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -178,6 +178,14 @@ static int __init control_devkmsg(char *str)
- }
- __setup("printk.devkmsg=", control_devkmsg);
- 
-+static bool printk_direct_only __initdata = IS_ENABLED(CONFIG_PRINTK_DIRECT);
-+
-+static int __init control_printk_direct_only(char *str)
-+{
-+	return kstrtobool(str, &printk_direct_only);
-+}
-+__setup("printk.direct=", control_printk_direct_only);
-+
- char devkmsg_log_str[DEVKMSG_STR_MAX_SIZE] = "ratelimit";
- #if defined(CONFIG_PRINTK) && defined(CONFIG_SYSCTL)
- int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
-@@ -3605,6 +3613,9 @@ static int __init printk_activate_kthreads(void)
+diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
+index d28bf0b901a2..b3b255db9021 100644
+--- a/net/ipv4/raw.c
++++ b/net/ipv4/raw.c
+@@ -262,7 +262,7 @@ static void raw_err(struct sock *sk, struct sk_buff *sk=
+b, u32 info)
+=20
+ void raw_icmp_error(struct sk_buff *skb, int protocol, u32 info)
  {
- 	struct console *con;
- 
-+	if (printk_direct_only)
-+		return 0;
-+
- 	console_lock();
- 	printk_kthreads_available = true;
- 	for_each_console(con)
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2e24db4bff19..1acfb4971ec7 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -35,6 +35,18 @@ config PRINTK_CALLER
- 	  no option to enable/disable at the kernel command line parameter or
- 	  sysfs interface.
- 
-+config PRINTK_DIRECT
-+	bool "Attempt to flush printk output immediately"
-+	depends on PRINTK
-+	help
-+	  Rather than using kthreads for printk output, always attempt to write
-+	  to the console immediately. This has performance implications, but
-+	  will result in a more faithful ordering and interleaving with other
-+	  processes writing to the console.
-+
-+	  Say N here unless you really need this. This may also be controlled
-+	  at boot time with printk.direct=0/1.
-+
- config STACKTRACE_BUILD_ID
- 	bool "Show build ID information in stacktraces"
- 	depends on PRINTK
--- 
+-	struct net *net =3D dev_net(skb->dev);;
++	struct net *net =3D dev_net(skb->dev);
+ 	struct hlist_nulls_head *hlist;
+ 	struct hlist_nulls_node *hnode;
+ 	int dif =3D skb->dev->ifindex;
+--=20
 2.35.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4DCfUCSlQH8GtJ8aX_cx.qX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKvsoAACgkQAVBC80lX
+0GwhXQgAgW6VnNxSLdSjFSsZxN2oozgsu0RTviMHE7u2sKOO72cj8BOOiSen6QyO
+UF9a0iHDjIJoJ9QuhPiqeUfsVdQge4HlzKdIkOOI9/lkbDPscZowD23UEKnjhmP6
++nlOSGQ1kusToP+RfGh+ust+0Jza9B5BWYaNoaCSpnXE6V12nfXt43rhvdRV9FE4
+SqUztSK+YZuwRGUg/axsFbsxaPWjyEQyZ0eHFD/4r2koWhbtFPSrU+uWKCE9CDfo
+pf/EtnvwK90mMStRjx5Q9Ko4kwzDpQ7CvNP0D2g1X7k3SvjE5KSJ504s92KFqdEb
+InH/tFb8SzNKNr/Ss/24xSW43ajZUQ==
+=Whmj
+-----END PGP SIGNATURE-----
+
+--Sig_/4DCfUCSlQH8GtJ8aX_cx.qX--

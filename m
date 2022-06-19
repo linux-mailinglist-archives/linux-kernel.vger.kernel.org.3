@@ -2,57 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE460550A95
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 14:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42515550A98
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 14:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbiFSMW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 08:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S236401AbiFSMZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 08:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiFSMW1 (ORCPT
+        with ESMTP id S230290AbiFSMZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 08:22:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2885FB1D9;
-        Sun, 19 Jun 2022 05:22:27 -0700 (PDT)
+        Sun, 19 Jun 2022 08:25:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4C7BC80;
+        Sun, 19 Jun 2022 05:25:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9A6B61113;
-        Sun, 19 Jun 2022 12:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F19C34114;
-        Sun, 19 Jun 2022 12:22:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B236EB80BA0;
+        Sun, 19 Jun 2022 12:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA1DC34114;
+        Sun, 19 Jun 2022 12:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655641346;
-        bh=XexKeqGKbOcIcayyiYj0FU6hI92MPPV90YNRd2iQPio=;
+        s=k20201202; t=1655641499;
+        bh=d2hzVNI9CHhwrX4ZalJ07kLK722DFdhax7bWmTW0wWU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=E0dKY1kMPBxrCMIV43OjxtbxY1/iMm59gH1HdpLa/+APMQahR8Zd93OCNjhrOjpQn
-         RkjmGwZLHRPcjbBKb4p4NxmbaBmx+Gap63q6Jo5JiNYV918lri+ocA1xuz49anLITt
-         JO2Dn9UwI1wuqRzhgYWpM0EEBjbmscX/OdrMtRaQdZRfxCn86AnYNtb/qbMj+L3+lm
-         ihdavmB/PsDcxx9m9EsiWt8/N8LLktTaH15r1ENi8sRhNCTlQaXuHdJA3vdj84zpOB
-         GWBxWeqSFNdhz5PMY11Qw26ekKnxsBMvx7RdXTaXhYavPXUGM9qmVW1a6lR5NjyZcS
-         VjLuxmnB6Gehg==
-Date:   Sun, 19 Jun 2022 13:31:42 +0100
+        b=EOPICYTrUU+8viPQIoVbfXPDdit26tyqz2JqFHp5k4hodzeE9SCn6xSaAL2TJ5TqD
+         UIcrQglb1LAKB5acU1tDByyNeRH9B5yt0LrnUibxwcXcPj60Oqy6RC+LTzaGiV5Tyf
+         yC150H7OfJdVGFk3vsso5IDRChLqdkUVZxiR3Ya681ihVozimss76x7bkwbrX0Iuor
+         bWVrHNjkO8B5UmHu/dO+Y1i+Aqoe38qP7iCXRAwA8IfF27NTTEeBR8pfOw6aFv5Epp
+         AptRHTPoz1T3t8RjU9vKMOZys/X20yjRppW1WDG/lMkqs5Q/u4HNRWg8UHrM2mDyzG
+         2hmn0pYIVFYBQ==
+Date:   Sun, 19 Jun 2022 13:34:15 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Message-ID: <20220619133142.0ca36d2e@jic23-huawei>
-In-Reply-To: <20220616170218.dihjli46spimozeg@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220616104211.9257-1-ddrokosov@sberdevices.ru>
-        <20220616104211.9257-3-ddrokosov@sberdevices.ru>
-        <CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4koNShFRG3kP8b6w@mail.gmail.com>
-        <20220616170218.dihjli46spimozeg@CAB-WSD-L081021.sigma.sbrf.ru>
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
+        krisman@collabora.com, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, alvaro.soliverez@collabora.com,
+        andy.shevchenko@gmail.com, digetx@gmail.com
+Subject: Re: [PATCH v6 1/2] dt-bindings: Document ltrf216a light sensor
+ bindings
+Message-ID: <20220619133415.5b3762d3@jic23-huawei>
+In-Reply-To: <20220615135130.227236-2-shreeya.patel@collabora.com>
+References: <20220615135130.227236-1-shreeya.patel@collabora.com>
+        <20220615135130.227236-2-shreeya.patel@collabora.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -67,40 +60,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 17:02:08 +0000
-Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+On Wed, 15 Jun 2022 19:21:29 +0530
+Shreeya Patel <shreeya.patel@collabora.com> wrote:
 
-
-
-> > > +       err = -EINVAL;
-> > > +       mutex_lock(&msa311->lock);
-> > > +       for (odr = 0; odr < ARRAY_SIZE(msa311_odr_table); ++odr)
-> > > +               if (val == msa311_odr_table[odr].val &&
-> > > +                   val2 == msa311_odr_table[odr].val2) {
-> > > +                       err = msa311_set_odr(msa311, odr);  
-> >   
-> > > +                       if (err) {
-> > > +                               dev_err(dev, "cannot update freq (%d)\n", err);
-> > > +                               goto failed;
-> > > +                       }  
-> > 
-> > Why is this inside the loop and more important under lock? Also you
-> > may cover the initial error code by this message when moving it out of
-> > the loop and lock.
-> > 
-> > Ditto for other code snippets in other function(s) where applicable.
-> >   
+> Add devicetree bindings for ltrf216a ambient light sensor.
 > 
-> Yes, I can move dev_err() outside of loop. But all ODR search loop
-> should be under lock fully, because other msa311 operations should not
-> be executed when we search proper ODR place.
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> ---
+> Changes in v5
+>   - Remove deprecated string 'ltr' from the bindings.
+> 
+> Changes in v3
+>   - Fix indentation in the example section
+> 
+> Changes in v2
+>   - Take over the maintainership for the bindings
+>   - Add interrupt and power supply property in DT bindings
+> 
+>  .../bindings/iio/light/liteon,ltrf216a.yaml   | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+> new file mode 100644
+> index 000000000000..f256ff2e744c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/light/liteon,ltrf216a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LTRF216A Ambient Light Sensor
+> +
+> +maintainers:
+> +  - Shreeya Patel <shreeya.patel@collabora.com>
+> +
+> +description:
+> +  Ambient light sensing with an i2c interface.
+> +
+> +properties:
+> +  compatible:
+> +    const:
+> +      - liteon,ltrf216a
+I assume you figured this out from the build bot error.
 
-I don't see why?  The search itself is for a match of the input to const data.
-That can occur before taking the lock to do the actual write.
+	const: liteon,ltrf216a
 
-I don't see any additional race beyond the one that is always there of
-a thread updating ODR whilst another is accessing the device.  Which order
-those events happen in is not controlled by the driver, but the output
-will be consistent with one or other order of those two accesses.
+Please make sure to do what that message from Rob's bot says and test your bindings
+before sending v7.
 
-Jonathan
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vdd-supply:
+> +    description: Regulator that provides power to the sensor.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        light-sensor@53 {
+> +            compatible = "liteon,ltrf216a";
+> +            reg = <0x53>;
+> +            vdd-supply = <&vdd_regulator>;
+> +            interrupt-parent = <&gpio0>;
+> +            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
+> +        };
+> +    };
+

@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7552A550827
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D056055082A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiFSDrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 23:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S232525AbiFSDwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 23:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiFSDrK (ORCPT
+        with ESMTP id S229639AbiFSDwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 23:47:10 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E57DFD2B
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 20:47:08 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id s6-20020a056e021a0600b002d8fcba296aso1440556ild.20
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 20:47:08 -0700 (PDT)
+        Sat, 18 Jun 2022 23:52:51 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C84E5FC4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 20:52:50 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id g8so7005853plt.8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 20:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SRxgMBh3LSx0X9ElKOeiQdXyG/+f/q7PqwVZVLdt1m0=;
+        b=I6IwHlaJ092r96q7USBHlHlm2vIu7/Jr2LrIZEasm2TYLKSTXqrm/0O+dFOZGYO7mc
+         BJokeBGKOR3LCtfc7gp1HKkFGMPHHpngWwcZZdZiM05KBYKE3Hv6Fqh7S/tl7EIRx2Ds
+         XXr++LMoRW7FcNXRQIw4yicUE+4NAEnRTBXlmzm0gslkKFQGaMt245ebmEuW9Occ7A0H
+         A4DChitU6yG7zBbbYnEaQMBwAi7QhIcnQRuyB+Cc6HA/KfU2oGW9vWd20u+gM+PxhC/R
+         AyS77OTZgIG5yJNog+4R+e0T4K3Vvlkv2tNRsTKFDO0Ibv2SBAs13pQ/UOxi7vhggQTQ
+         TmAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=WXySugZ8bUiz8VWb5l+slcpwKki8VnN88v/Exthe2M8=;
-        b=ClB9cRDqHfKTvylzNj3sdrQlhHJU3LIwgzQv+DBDYOScc0LX6p6oMwVIIasfrL+Oqt
-         MKvNL9rlK+UEO+5tlYCrKQqEgJzEV3L1W+uKf27XNO2FZrKdpGALHbsk+sMp7pYXZc8O
-         +FRBqVw8G3KAMk1ExVUu0AIwcYVX/UOB2E3t27Rrfr6KCPPPsHDkR+zEAvtDeQFZSize
-         3ld5t5GaRXZQcojWsrqcZSgFKgWUInIXuJLdss5qnlUfUVx4r1DT1kldrguy9ogky1Ll
-         fRgvRHC5i7ACRJzRoXUa4pKPPEz3Un/ckFje+xf1MTdjFDeXOYFwzZ1Tn1aMJmwBKiI6
-         CVbA==
-X-Gm-Message-State: AJIora+ZBK6gbmzTWNIZKrm77DwV8TZSG0VzG/AZO8DfSZ5FscQ0O1a+
-        XPcETIWShKP2aICVyQNADfan/tc7Hv3DiE7pUT9WIKR3GRbi
-X-Google-Smtp-Source: AGRyM1t+Vl2HiKNCL/Jahe4Vlo8/OPk3csvuXoOU/rlUZehfYW5eNneB/So0j7A31bDK+uZvv0nYPoG1WLJbsfgPgSJLHUtGPS5i
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=SRxgMBh3LSx0X9ElKOeiQdXyG/+f/q7PqwVZVLdt1m0=;
+        b=8O62rAyth4A/Z2NGXT0umY75o0SoP4Fmb/VOUoHZLsfAAGdjhAuu9u8ON0Z4dtImp/
+         gTibHzWDBYa3K04+vwcVJ0Cp/u8AuR+yj1sHGs/yRvQsqpBR+ejqtcnmsX36SVz/s9xG
+         ysWeWep6EFuACg9J5Q2nuAqIWAmzdBjX0q1N/Zc010ehic9QZFcpFcZrfsh4y7v91DzA
+         TxiGIHvqN7YFUbo5wrokpIJbDPydN17gNpdauVHbH5L87+CzZ9tZ3AolIYLnUW/fBC7C
+         L4nOajpEI73b5BUHz6AnFHM9PzdBminCwFWuyh2r8G6uZOhOm7eMfaWK8n5CyLGWcLuy
+         Ooeg==
+X-Gm-Message-State: AJIora9W8PJC0WKy3TCqZQDMnPd12htvwT0QNzsmv5i/WPyGjfjpwaJv
+        2mHEwZUSVXGptIb5Xcj/78k=
+X-Google-Smtp-Source: AGRyM1vBaXk4a3Ta4H1IaR/y5S8r1+FFtUvL86KgPWpSb4+k6+CE+LKFJRmxLwojDmh2TcKg8Tgj3A==
+X-Received: by 2002:a17:90a:4503:b0:1ea:4718:829f with SMTP id u3-20020a17090a450300b001ea4718829fmr19037191pjg.103.1655610769450;
+        Sat, 18 Jun 2022 20:52:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jd11-20020a170903260b00b0016a0d350b78sm2803112plb.58.2022.06.18.20.52.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 20:52:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        ul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Daniel Axtens <dja@axtens.net>
+Subject: [PATCH] powerpc/prom_init: Add memset as valid external symbol if CONFIG_KASAN=y
+Date:   Sat, 18 Jun 2022 20:52:46 -0700
+Message-Id: <20220619035246.2633538-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:198c:b0:2d8:e8bd:d8ff with SMTP id
- g12-20020a056e02198c00b002d8e8bdd8ffmr5413244ilf.66.1655610427936; Sat, 18
- Jun 2022 20:47:07 -0700 (PDT)
-Date:   Sat, 18 Jun 2022 20:47:07 -0700
-In-Reply-To: <0000000000007ba8cd05d0c1c3b0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000071951f05e1c4d7c8@google.com>
-Subject: Re: [syzbot] possible deadlock in console_lock_spinning_enable (2)
-From:   syzbot <syzbot+3cc1054e15babd5f4cd2@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, glider@google.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        john.ogness@linutronix.de, linux-kernel@vger.kernel.org,
-        npiggin@gmail.com, pmladek@suse.com, rdunlap@infradead.org,
-        rostedt@goodmis.org, senozhatsky@chromium.org, swboyd@chromium.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+If CONFIG_KASAN=y, powerpc:allmodconfig fails to build with the following
+error.
 
-commit faebd693c59387b7b765fab64b543855e15a91b4
-Author: John Ogness <john.ogness@linutronix.de>
-Date:   Thu Apr 21 21:22:36 2022 +0000
+Error: External symbol 'memset' referenced from prom_init.c
 
-    printk: rename cpulock functions
+The problem was introduced with commit 41b7a347bf14 ("powerpc: Book3S
+64-bit outline-only KASAN support"). So far, with CONFIG_KASAN=y, only
+__memset was accepted as valid external symbol in prom_init_check.sh.
+Add memset as well to fix the problem.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17d0607bf00000
-start commit:   bc403203d65a Merge tag 'powerpc-5.18-5' of git://git.kerne..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=78013caa620443d6
-dashboard link: https://syzkaller.appspot.com/bug?extid=3cc1054e15babd5f4cd2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14c08966f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108132e9f00000
+Fixes: 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN support")
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Daniel Axtens <dja@axtens.net>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ arch/powerpc/kernel/prom_init_check.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If the result looks correct, please mark the issue as fixed by replying with:
+diff --git a/arch/powerpc/kernel/prom_init_check.sh b/arch/powerpc/kernel/prom_init_check.sh
+index b183ab9c5107..787142b5dd26 100644
+--- a/arch/powerpc/kernel/prom_init_check.sh
++++ b/arch/powerpc/kernel/prom_init_check.sh
+@@ -16,7 +16,7 @@
+ grep "^CONFIG_KASAN=y$" .config >/dev/null
+ if [ $? -eq 0 ]
+ then
+-	MEM_FUNCS="__memcpy __memset"
++	MEM_FUNCS="__memcpy __memset memset"
+ else
+ 	MEM_FUNCS="memcpy memset"
+ fi
+-- 
+2.35.1
 
-#syz fix: printk: rename cpulock functions
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection

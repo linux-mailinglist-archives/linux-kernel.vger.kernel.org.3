@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24EC550BCA
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 17:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292E5550BE3
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 17:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbiFSPOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 11:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S231481AbiFSPlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 11:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236527AbiFSPMy (ORCPT
+        with ESMTP id S229757AbiFSPlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 11:12:54 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1164BAE5C;
-        Sun, 19 Jun 2022 08:12:53 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 44FCD1C8123D;
-        Sun, 19 Jun 2022 23:12:30 +0800 (CST)
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Sun, 19 Jun
- 2022 23:12:30 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Sun, 19 Jun 2022 23:12:29 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id E9D3063A54; Sun, 19 Jun 2022 18:12:27 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
-        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
-        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
-        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v3 18/18] arm64: defconfig: Add Nuvoton NPCM family support
-Date:   Sun, 19 Jun 2022 18:12:25 +0300
-Message-ID: <20220619151225.209029-19-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220619151225.209029-1-tmaimon77@gmail.com>
-References: <20220619151225.209029-1-tmaimon77@gmail.com>
+        Sun, 19 Jun 2022 11:41:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8916E646B;
+        Sun, 19 Jun 2022 08:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655653268; x=1687189268;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=OagA+1S5NVI9Ja8/jPij45wYg6CoVWVppDPjbSk9qus=;
+  b=GBdhA2L2koc966Q9SEy4yKmkSYNCIr1hGPCR6W0VHyvPNkAlZPBF9K1t
+   uStDiBrckkWx7cUxsMRkzmZEqZKtU6EnDdC+OEfgLM8CrTAwb502AaNxs
+   K2hD0IvXIJDeD+ymq5xckT5LlJPsQmyFgeIVSfTYgVdkclSzdifP/U/HY
+   2RKYz2JoqXGNRbZUKlZ3fQ1KC16+nUBSPWwmUny1t4c4pIz2nmJiyW+jV
+   fF7Xvv716JZCXKvsoCNcCVOwA4s/+6KVPMAwATU9jJmBtV3YIbkj92WUV
+   NwpR5FJ3v4O/q1R+Hl0h+f7jFDbaOgqa3LNYUX1PqLBgSPA3Or6igAfkp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278512916"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="278512916"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 08:41:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="642751666"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jun 2022 08:41:02 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2x2r-000RKV-SK;
+        Sun, 19 Jun 2022 15:41:01 +0000
+Date:   Sun, 19 Jun 2022 23:40:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kbuild-all@lists.01.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/10] drm: selftest: convert drm_framebuffer selftest to
+ KUnit
+Message-ID: <202206192329.jxlyMOhN-lkp@intel.com>
+References: <20220615135824.15522-9-maira.canal@usp.br>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220615135824.15522-9-maira.canal@usp.br>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +82,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable basic drivers for NPCM8XX booting up support: Architecture, Clock,
-and WD.
+Hi "Maíra,
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+Thank you for the patch! Yet something to improve:
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d1105343bc2..c4a237a84efa 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -49,6 +49,7 @@ CONFIG_ARCH_MEDIATEK=y
- CONFIG_ARCH_MESON=y
- CONFIG_ARCH_MVEBU=y
- CONFIG_ARCH_MXC=y
-+CONFIG_ARCH_NPCM=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
-@@ -627,6 +628,7 @@ CONFIG_RENESAS_RZG2LWDT=y
- CONFIG_UNIPHIER_WATCHDOG=y
- CONFIG_PM8916_WATCHDOG=m
- CONFIG_BCM2835_WDT=y
-+CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_MFD_ALTERA_SYSMGR=y
- CONFIG_MFD_BD9571MWV=y
- CONFIG_MFD_AXP20X_I2C=y
-@@ -1021,6 +1023,7 @@ CONFIG_COMMON_CLK_FSL_SAI=y
- CONFIG_COMMON_CLK_S2MPS11=y
- CONFIG_COMMON_CLK_PWM=y
- CONFIG_COMMON_CLK_VC5=y
-+CONFIG_COMMON_CLK_NPCM8XX=y
- CONFIG_COMMON_CLK_BD718XX=m
- CONFIG_CLK_RASPBERRYPI=m
- CONFIG_CLK_IMX8MM=y
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on linus/master v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-ra-Canal/drm-selftest-Convert-to-KUnit/20220615-220404
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220619/202206192329.jxlyMOhN-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5109526a34e7196931f36b5537031eaa601de997
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ma-ra-Canal/drm-selftest-Convert-to-KUnit/20220615-220404
+        git checkout 5109526a34e7196931f36b5537031eaa601de997
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/tests/test-drm_plane_helper.o
+ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/tests/test-drm_dp_mst_helper.o
+ERROR: modpost: "drm_dp_encode_sideband_req" [drivers/gpu/drm/tests/test-drm_dp_mst_helper.ko] undefined!
+ERROR: modpost: "drm_dp_decode_sideband_req" [drivers/gpu/drm/tests/test-drm_dp_mst_helper.ko] undefined!
+ERROR: modpost: "drm_dp_dump_sideband_msg_req_body" [drivers/gpu/drm/tests/test-drm_dp_mst_helper.ko] undefined!
+>> ERROR: modpost: "drm_internal_framebuffer_create" [drivers/gpu/drm/tests/test-drm_framebuffer.ko] undefined!
+
 -- 
-2.33.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

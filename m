@@ -2,80 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA82550CEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 22:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AEE550CF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 22:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236491AbiFSUc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 16:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S237174AbiFSUco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 16:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiFSUcZ (ORCPT
+        with ESMTP id S235930AbiFSUch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 16:32:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7F3BCD;
-        Sun, 19 Jun 2022 13:32:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F12EDB80BA9;
-        Sun, 19 Jun 2022 20:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366BCC34114;
-        Sun, 19 Jun 2022 20:32:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GqC6I5Te"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655670738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E43yYKQ93Nj8ZBsO2wdXwId/ptjpjzHFd5icsbHgVck=;
-        b=GqC6I5TerNfh9l2Mcco256Fmef6HflorZBDQ0NDeoojcq/i8GEPcoS17TNYd8LL4kkFkzf
-        slNAYwQY65wwc87Bo4QEkItaLLXchOLYKbatW4DhYm7Pgf7V5QpaqVZBRBQBdwYknSDYMa
-        HCM2mSVrkR2dXiW7PMnwjZ5HaAN6mJ8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4987202e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 19 Jun 2022 20:32:18 +0000 (UTC)
-Received: by mail-yb1-f182.google.com with SMTP id 23so15721938ybe.8;
-        Sun, 19 Jun 2022 13:32:18 -0700 (PDT)
-X-Gm-Message-State: AJIora/altS9MnBUhy/sTxD1kVibwQQktDhbDIViVtCOHrFf5FTCEqi5
-        pFa2rRA7KY9hTWUCJF5KySukIUy+4ws5ozeXHRI=
-X-Google-Smtp-Source: AGRyM1tZ32bZ28frjHDR0YYsFFJW4/YL3Si9ca7cVn+cWmRP8nzQzoDRZHpvCijN6G+esDqpLb1Q0ccATdsA4PgL8nU=
-X-Received: by 2002:a5b:dcf:0:b0:64a:6923:bbba with SMTP id
- t15-20020a5b0dcf000000b0064a6923bbbamr22761168ybr.398.1655670737153; Sun, 19
- Jun 2022 13:32:17 -0700 (PDT)
+        Sun, 19 Jun 2022 16:32:37 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F86B7FE;
+        Sun, 19 Jun 2022 13:32:34 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o31am-0000EW-MI; Sun, 19 Jun 2022 22:32:20 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, rdunlap@infradead.org,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v4 0/4] riscv: implement Zicbom-based CMO instructions + the t-head variant
+Date:   Sun, 19 Jun 2022 22:32:08 +0200
+Message-Id: <20220619203212.3604485-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220611151015.548325-1-Jason@zx2c4.com> <20220611151015.548325-3-Jason@zx2c4.com>
- <87czf4c1q1.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87czf4c1q1.fsf@mpe.ellerman.id.au>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 19 Jun 2022 22:32:06 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rWkvDDYHPi-TJR-ATts6pLPY6D8LUaYDJ-=7w7qsFCvg@mail.gmail.com>
-Message-ID: <CAHmME9rWkvDDYHPi-TJR-ATts6pLPY6D8LUaYDJ-=7w7qsFCvg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] powerpc/powernv: wire up rng during setup_arch
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+This series is based on the alternatives changes done in my svpbmt series
+and thus also depends on Atish's isa-extension parsing series.
 
-On Sun, Jun 19, 2022 at 1:49 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> This crashes on power8 because it's too early to call kzalloc() in
-> rng_create(), and it's also too early to setup the percpu variables in
-> there.
->
-> I'll rework it and post a v4.
+It implements using the cache-management instructions from the  Zicbom-
+extension to handle cache flush, etc actions on platforms needing them.
 
-Oh, darn. Sorry about that. Thanks for reworking it.
+SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+different set of cache instructions. But while they are different,
+instructions they provide the same functionality, so a variant can
+easly hook into the existing alternatives mechanism on those.
 
-Jason
+
+An ongoing discussion is about the currently used pre-coded
+instructions. Palmer's current thinking is that we should wait
+until the relevant instructions have landed in binutils.
+
+The main Zicbom instructions are in toolchains now and at least
+Debian also carries a binutils snapshot with it, but the T-Head
+variant still uses pre-coded instructions for now.
+
+The series sits on top of my svpbmt fixup series, which
+for example includes the conversion away from function pointers
+for the check-functions. And also uses my nops-series.
+
+
+Hopefully I caught all the review-comments from v3.
+
+
+changes in v4:
+- modify of_dma_is_coherent() also handle coherent system
+  with maybe noncoherent devices
+- move Zicbom to use real instructions
+- split off the actual dma-noncoherent code from the Zicbom
+  extension
+- Don't assumes devices are non-coherent, instead default to
+  coherent and require the non-coherent ones to be marked
+- CPUFEATURE_ZICBOM instead of CPUFEATURE_CMO
+- fix used cache addresses
+- drop some unused headers from dma-noncoherent.c
+- move unsigned long cast when calling ALT_CMO_OP
+- remove unneeded memset-0
+- define ARCH_DMA_MINALIGN
+- use flush instead of inval in arch_sync_dma_for_cpu()
+- depend on !XIP_KERNEL
+- trim some line lengths
+- improve Kconfig description
+
+changes in v3:
+- rebase onto 5.19-rc1 + svpbmt-fixup-series
+- adapt wording for block-size binding
+- include asm/cacheflush.h into dma-noncoherent to fix the
+  no-prototype error clang seems to generate
+- use __nops macro for readability
+- add some received tags
+- add a0 to the clobber list
+
+changes in v2:
+- cbom-block-size is hardware-specific and comes from firmware
+- update Kconfig name to use the ISA extension name
+- select the ALTERNATIVES symbol when enabled
+- shorten the line lengths of the errata-assembly
+
+Heiko Stuebner (4):
+  of: also handle dma-noncoherent in of_dma_is_coherent()
+  dt-bindings: riscv: document cbom-block-size
+  riscv: Implement Zicbom-based cache management operations
+  riscv: implement cache-management errata for T-Head SoCs
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  5 +
+ arch/riscv/Kconfig                            | 31 ++++++
+ arch/riscv/Kconfig.erratas                    | 11 +++
+ arch/riscv/Makefile                           |  4 +
+ arch/riscv/errata/thead/errata.c              | 15 +++
+ arch/riscv/include/asm/cache.h                |  4 +
+ arch/riscv/include/asm/cacheflush.h           |  6 ++
+ arch/riscv/include/asm/errata_list.h          | 59 +++++++++++-
+ arch/riscv/include/asm/hwcap.h                |  1 +
+ arch/riscv/kernel/cpu.c                       |  1 +
+ arch/riscv/kernel/cpufeature.c                | 18 ++++
+ arch/riscv/kernel/setup.c                     |  2 +
+ arch/riscv/mm/Makefile                        |  1 +
+ arch/riscv/mm/dma-noncoherent.c               | 96 +++++++++++++++++++
+ drivers/of/address.c                          | 16 +++-
+ 15 files changed, 263 insertions(+), 7 deletions(-)
+ create mode 100644 arch/riscv/mm/dma-noncoherent.c
+
+-- 
+2.35.1
+

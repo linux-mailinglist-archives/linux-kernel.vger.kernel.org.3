@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C92550AFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 15:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E34C550AF0
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 15:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbiFSNhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 09:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
+        id S236968AbiFSNhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 09:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236703AbiFSNhl (ORCPT
+        with ESMTP id S236830AbiFSNhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 09:37:41 -0400
+        Sun, 19 Jun 2022 09:37:46 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDF16319
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:37:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8102FC5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655645860; x=1687181860;
+  t=1655645865; x=1687181865;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hK7yiUXp498V4zt6tzB6Sd6pGY/AmK3IGLLegWnAMsM=;
-  b=gGr4WYIFIq9ocxvFcds7Z+GZuct52En74bG7A3kE2QRl2VdjNp0UbAT3
-   IlqHyPZS2aDm9ZzXKDd/naX8rHFC6A/YadLi00HTZ8cPymx9Eixv4DatB
-   sBnUN48VCyLBjUvz/yQkoTCnMh6Dxq/XtAX/GI4ch5moLYRx9l7RD/933
-   PoPxqUTnqMq6duaB4cEbBVUhLytAYDSrmMH9GNiPanqQyzFmBrpqRWVpn
-   l6Q+5eR7KHHOXD/ABhvhKEwxhbBiqadVWmWA/XewRkI0kpbDU4QHdqraV
-   neJDvqUMyySpCoomuzFRWSPm/DzKfftq+1TIOUDzxnXOlrKcZ8Z/1j0da
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305164672"
+  bh=WIOdvRXs3F6Uqx0OZDzS9V+TAi03ig5lUw0omN1iKg0=;
+  b=djTf1jPJcSrX9ohBg+g5iLrEIQVEs+A+Wn/n2XiDo+J5cwo+N5ZXSNDd
+   ygVAxdghonkbHUu715D9IuEsbYUzPFBHfKnwjPUBS14YG5EddqX8mpZTx
+   V4fv/U9caZUJx8XVBfjL1b5Rutg9zreJtabk0zUXyZf5R89KduV0ErUdL
+   1kYlUNDWsWymgHyfV29Nw/xDFodsJ+R+G66ugFSl1c6uya9BOTXc6Wzyk
+   j23O/gEAfXJFk3kBhGSSIBgJD9aK/sRqi0JROCf1TRFmjJ7QDFFt0ZM9w
+   vofCq/1tnanRisikOtwWvH16rs8CTXsPLclmca5rwHF3Us224GQrDAcll
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305164678"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="305164672"
+   d="scan'208";a="305164678"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:37:40 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:37:45 -0700
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="676158473"
+   d="scan'208";a="676158491"
 Received: from sannilnx.jer.intel.com ([10.12.26.157])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:37:37 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:37:41 -0700
 From:   Alexander Usyskin <alexander.usyskin@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -50,9 +50,9 @@ Cc:     Tomas Winkler <tomas.winkler@intel.com>,
         Vitaly Lubart <vitaly.lubart@intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: [PATCH v3 02/14] drm/i915/gsc: skip irq initialization if using polling
-Date:   Sun, 19 Jun 2022 16:37:09 +0300
-Message-Id: <20220619133721.523546-3-alexander.usyskin@intel.com>
+Subject: [PATCH v3 03/14] drm/i915/gsc: add slow_fw flag to the mei auxiliary device
+Date:   Sun, 19 Jun 2022 16:37:10 +0300
+Message-Id: <20220619133721.523546-4-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220619133721.523546-1-alexander.usyskin@intel.com>
 References: <20220619133721.523546-1-alexander.usyskin@intel.com>
@@ -68,63 +68,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Lubart <vitaly.lubart@intel.com>
+Add slow_fw flag to the mei auxiliary device info
+to inform the mei driver about slow underlying firmware.
+Such firmware will require to use larger operation timeouts.
 
-Some platforms require the host to poll on the
-GSC registers instead of relaying on the interrupts.
-For those platforms, irq initialization should be skipped
-
-Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 ---
- drivers/gpu/drm/i915/gt/intel_gsc.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ include/linux/mei_aux.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-index 0e494028b81d..e0236ff1d072 100644
---- a/drivers/gpu/drm/i915/gt/intel_gsc.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-@@ -40,6 +40,7 @@ struct gsc_def {
- 	const char *name;
- 	unsigned long bar;
- 	size_t bar_size;
-+	bool use_polling;
+diff --git a/include/linux/mei_aux.h b/include/linux/mei_aux.h
+index 587f25128848..a29f4064b9c0 100644
+--- a/include/linux/mei_aux.h
++++ b/include/linux/mei_aux.h
+@@ -11,6 +11,7 @@ struct mei_aux_device {
+ 	struct auxiliary_device aux_dev;
+ 	int irq;
+ 	struct resource bar;
++	bool slow_fw;
  };
  
- /* gsc resources and definitions (HECI1 and HECI2) */
-@@ -117,6 +118,10 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 		return;
- 	}
- 
-+	/* skip irq initialization */
-+	if (def->use_polling)
-+		goto add_device;
-+
- 	intf->irq = irq_alloc_desc(0);
- 	if (intf->irq < 0) {
- 		drm_err(&i915->drm, "gsc irq error %d\n", intf->irq);
-@@ -129,6 +134,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 		goto fail;
- 	}
- 
-+add_device:
- 	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
- 	if (!adev)
- 		goto fail;
-@@ -182,10 +188,8 @@ static void gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
- 		return;
- 	}
- 
--	if (gt->gsc.intf[intf_id].irq < 0) {
--		drm_err_ratelimited(&gt->i915->drm, "GSC irq: irq not set");
-+	if (gt->gsc.intf[intf_id].irq < 0)
- 		return;
--	}
- 
- 	ret = generic_handle_irq(gt->gsc.intf[intf_id].irq);
- 	if (ret)
+ #define auxiliary_dev_to_mei_aux_dev(auxiliary_dev) \
 -- 
 2.32.0
 

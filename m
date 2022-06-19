@@ -2,158 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3945C550D32
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 23:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B349550D4E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 23:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237204AbiFSV1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 17:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S232738AbiFSVas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 17:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbiFSV1N (ORCPT
+        with ESMTP id S229530AbiFSVap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 17:27:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B337AE4E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 14:27:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655674032; x=1687210032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x2Fosbh2K2030b5HTjWGhL/dARfSy6FmGL22NukHdMc=;
-  b=XwbhzRD4BX5XV/xsEAKTzZXz1GFs/7G0iBUGUw9Q2LTDKnMtASbN+fwc
-   8NPDnpr6VqqKC4k1kL4qWzOqhB6K5Hs7se6bb59owz0mUKFfvnv77r7vn
-   b0LNhDzWfQfkhY2m3NWjggEpSB1hmHtYm0fnaBRVTuGUWbIfJIu/TbYoV
-   GB0Rk2bmGJfe8jgTe2SS/twPcZrgK8+Z5j1kD3wSeyxRtPUFgDoQVtrhB
-   zB7xVovhHJ3o3049KF+LuoD061N9iWHmjvQjfGQKsUo+OXmD2231Ex9b8
-   3p6dsHm0n8OsrZkn6Bwl2fZ9oH8YVZR9ZzOEME85c4WCldVynsAAIJk7g
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278535934"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278535934"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 14:27:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="689156646"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Jun 2022 14:27:11 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o32Rq-000RYl-KX;
-        Sun, 19 Jun 2022 21:27:10 +0000
-Date:   Mon, 20 Jun 2022 05:27:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bvanassche:block-bitwise-opf 15/15]
- drivers/block/pktcdvd.c:1232:18: sparse: sparse: incorrect type in argument
- 5 (different base types)
-Message-ID: <202206200524.TTdzNLDl-lkp@intel.com>
+        Sun, 19 Jun 2022 17:30:45 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C752F2AD
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 14:30:44 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id h8so9395477iof.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 14:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=6BUqBhQ0Hi1/ig7PGzf6FbFjSTx12z1sbwmg7yholYI=;
+        b=IEO2iAVEQfy8SAHYX7/CXY/6N1SK9fH4rpRw3x0LVYev2jZLiwyQSkbXwVcCUEPOjm
+         JHgYJRvvd0nHBABLmazvuNgwYtlXY9u/up7SRBEtUyMs4XYMP1iHr6VeSGTOrUsY+fLc
+         3izuVtcKmBHGLy2PyasHiHYPEi5ko77VAWu5OHLcMvXg2hdmV7/BDaTZqyeFZGs6RHg/
+         S+RY06xcsaFGsSHuHLx1VNXY3R/a4xykPh8sZ3EV15z5qa4XGO2vSjJwG6ak1RKOrFqk
+         01tprY95Yg5wpLKKhlzq/zc+dr+q2++Vj51Dz2P6QZRb68UPcW6l8+R7zihOLbCXSPYb
+         cEyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=6BUqBhQ0Hi1/ig7PGzf6FbFjSTx12z1sbwmg7yholYI=;
+        b=eDV1/cKlr7CBOa+CmecLw0yCzNTdRTVnJRYb2QjJOBNj9iGjhzH7R+zQQjy4kE5e5P
+         wlP3qTaFXqpnAgVnf94KMBAK0rdjcFokdrAytArFKFRJH/EFw2ATWXjcD/m8fcGn7Hyz
+         squGrwLhGbLRxAkVzx45Ti56SKuVH0mkSKIjf82IK0ydZVC3/NuqwnBI139Iz/CWD6T9
+         cZsIQ8cg08whk67+pTpGyZgsOAA0BUjYz45dGx8sR8VI976rgT54VBrEWWu+lpEvo7P2
+         tjiQo/3iw8sgZSitw6EPw5oeN9jXUWcmK0foycsXzJuHefox5/3Y0gdDYn5ck3UqUCpk
+         Aqqg==
+X-Gm-Message-State: AJIora/kbfdYu1erw2Sh7p50drkViUTORzr5DHRTj1w13K6h+uQ1oYVa
+        Hdc4r0bMD2UdtVHg10S5V10nKhAEEp0DFZdGsoY=
+X-Google-Smtp-Source: AGRyM1uHj/iwFypHVo3ccT1Xw5dUG8glLAP4Kgg8u4WuV8WGX0g32Fqxxn1+bzh7YDAaU2ybOHZDvvF0uqM+BLnhewM=
+X-Received: by 2002:a05:6638:4687:b0:332:1af5:b43c with SMTP id
+ bq7-20020a056638468700b003321af5b43cmr11730690jab.289.1655674243818; Sun, 19
+ Jun 2022 14:30:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: kaboreusman943@gmail.com
+Received: by 2002:a4f:be10:0:0:0:0:0 with HTTP; Sun, 19 Jun 2022 14:30:43
+ -0700 (PDT)
+From:   MUSA AHMED <ma7304719@gmail.com>
+Date:   Sun, 19 Jun 2022 23:30:43 +0200
+X-Google-Sender-Auth: YbJheGoRx57tHi9xj_HnOJetQuQ
+Message-ID: <CAL6vAAXviZ00Wp6fRa1pUC7G=kpVa-+zs-XcaDPeZ+ez6Gi5Ug@mail.gmail.com>
+Subject: ATTENTION PLEASE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_99,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,SUBJ_ATTENTION,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d42 listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9923]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [kaboreusman943[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ma7304719[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.5 SUBJ_ATTENTION ATTENTION in Subject
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux block-bitwise-opf
-head:   031ccdd616b11c4e774e56aa7eae906188ab24cc
-commit: 031ccdd616b11c4e774e56aa7eae906188ab24cc [15/15] block: Introduce the type blk_mq_opf_t
-config: riscv-randconfig-s031-20220619 (https://download.01.org/0day-ci/archive/20220620/202206200524.TTdzNLDl-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://github.com/bvanassche/linux/commit/031ccdd616b11c4e774e56aa7eae906188ab24cc
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche block-bitwise-opf
-        git checkout 031ccdd616b11c4e774e56aa7eae906188ab24cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/block/
+Greetings,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I am Mr. Musa Ahmed, a banker by profession from Burkina Faso. I have
+a very confidential business proposition involving transfer of $
+18,500,000.00 United State Dollars that will be of great benefit to
+both of us. Contact me via my private email below for more details.
 
+Email: ma7304719@gmail.com
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/block/pktcdvd.c:1232:18: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted blk_mq_opf_t [usertype] opf @@     got int @@
-   drivers/block/pktcdvd.c:1232:18: sparse:     expected restricted blk_mq_opf_t [usertype] opf
-   drivers/block/pktcdvd.c:1232:18: sparse:     got int
---
->> drivers/block/zram/zram_drv.c:749:41: sparse: sparse: restricted blk_mq_opf_t degrades to integer
->> drivers/block/zram/zram_drv.c:749:39: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted blk_mq_opf_t [usertype] opf @@     got unsigned int @@
-   drivers/block/zram/zram_drv.c:749:39: sparse:     expected restricted blk_mq_opf_t [usertype] opf
-   drivers/block/zram/zram_drv.c:749:39: sparse:     got unsigned int
-   drivers/block/zram/zram_drv.c: note: in included file (through include/linux/list_bl.h, include/linux/rculist_bl.h, include/linux/dcache.h, ...):
-   include/linux/bit_spinlock.h:41:19: sparse: sparse: context imbalance in 'zram_slot_trylock' - different lock contexts for basic block
-   include/linux/bit_spinlock.h:35:9: sparse: sparse: context imbalance in 'zram_slot_lock' - wrong count at exit
-   include/linux/bit_spinlock.h:63:25: sparse: sparse: context imbalance in 'zram_slot_unlock' - unexpected unlock
-
-vim +1232 drivers/block/pktcdvd.c
-
-5f03414d4098b5 Christoph Hellwig 2021-04-12  1222  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1223  /*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1224   * Assemble a bio to write one packet and queue the bio for processing
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1225   * by the underlying block device.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1226   */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1227  static void pkt_start_write(struct pktcdvd_device *pd, struct packet_data *pkt)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1228  {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1229  	int f;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1230  
-852ad96cb03621 Christoph Hellwig 2022-04-06  1231  	bio_init(pkt->w_bio, pd->bdev, pkt->w_bio->bi_inline_vecs, pkt->frames,
-852ad96cb03621 Christoph Hellwig 2022-04-06 @1232  		 REQ_OP_WRITE);
-4f024f3797c43c Kent Overstreet   2013-10-11  1233  	pkt->w_bio->bi_iter.bi_sector = pkt->sector;
-ffb25dc60ff14f Kent Overstreet   2012-09-04  1234  	pkt->w_bio->bi_end_io = pkt_end_io_packet_write;
-ffb25dc60ff14f Kent Overstreet   2012-09-04  1235  	pkt->w_bio->bi_private = pkt;
-ffb25dc60ff14f Kent Overstreet   2012-09-04  1236  
-ffb25dc60ff14f Kent Overstreet   2012-09-04  1237  	/* XXX: locking? */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1238  	for (f = 0; f < pkt->frames; f++) {
-feebd568725775 Christoph Hellwig 2016-10-27  1239  		struct page *page = pkt->pages[(f * CD_FRAMESIZE) / PAGE_SIZE];
-feebd568725775 Christoph Hellwig 2016-10-27  1240  		unsigned offset = (f * CD_FRAMESIZE) % PAGE_SIZE;
-feebd568725775 Christoph Hellwig 2016-10-27  1241  
-feebd568725775 Christoph Hellwig 2016-10-27  1242  		if (!bio_add_page(pkt->w_bio, page, CD_FRAMESIZE, offset))
-ffb25dc60ff14f Kent Overstreet   2012-09-04  1243  			BUG();
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1244  	}
-844aa7974395df Joe Perches       2013-09-11  1245  	pkt_dbg(2, pd, "vcnt=%d\n", pkt->w_bio->bi_vcnt);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1246  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1247  	/*
-72772323746805 Peter Osterlund   2006-02-14  1248  	 * Fill-in bvec with data from orig_bios.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1249  	 */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1250  	spin_lock(&pkt->lock);
-45db54d58de0b7 Kent Overstreet   2018-05-08  1251  	bio_list_copy_data(pkt->w_bio, pkt->orig_bios.head);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1252  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1253  	pkt_set_state(pkt, PACKET_WRITE_WAIT_STATE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1254  	spin_unlock(&pkt->lock);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1255  
-844aa7974395df Joe Perches       2013-09-11  1256  	pkt_dbg(2, pd, "Writing %d frames for zone %llx\n",
-ffb25dc60ff14f Kent Overstreet   2012-09-04  1257  		pkt->write_size, (unsigned long long)pkt->sector);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1258  
-feebd568725775 Christoph Hellwig 2016-10-27  1259  	if (test_bit(PACKET_MERGE_SEGS, &pd->flags) || (pkt->write_size < pkt->frames))
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1260  		pkt->cache_valid = 1;
-feebd568725775 Christoph Hellwig 2016-10-27  1261  	else
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1262  		pkt->cache_valid = 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1263  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1264  	/* Start the write request */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1265  	atomic_set(&pkt->io_wait, 1);
-46c271bedd2c84 Peter Osterlund   2005-06-23  1266  	pkt_queue_bio(pd, pkt->w_bio);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1267  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1268  
-
-:::::: The code at line 1232 was first introduced by commit
-:::::: 852ad96cb03621f7995764b4b31cbff9801d8bcd pktcdvd: stop using bio_reset
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Musa Ahmed.

@@ -2,97 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E51B55083A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 06:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F515508AE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 06:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbiFSEO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 00:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S231129AbiFSEuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 00:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiFSEOZ (ORCPT
+        with ESMTP id S229639AbiFSEus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 00:14:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136D064EE;
-        Sat, 18 Jun 2022 21:14:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 786EB60F54;
-        Sun, 19 Jun 2022 04:14:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE5FC34114;
-        Sun, 19 Jun 2022 04:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655612061;
-        bh=8swXHtNtUIz24MU/iY0uao3YyLZF/bZ9wAlFbPV4RuM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m4+JP5b57zGUQMLnlvBtWuCVqRlR32plZm9J5zxFcEJizx2m/Lk7UyruibZ71bVqR
-         hhez7SE55eiUt8vpqfnh92gw81Zfb31HjY9FiuuSeS21lyhNz6JRR1t10h1MwGUMJC
-         cr3J+1IklelyDm3fxXj6r7vWPDul292Lq82JSumvi0G8VolF4Dl6l8f+kkaEKnpEK4
-         S8L6/pHzdayligFG1NcfZXz9NxNqRCe+VTmnag3zXm8MlR6IaWYcNdG7SKRa/4ycap
-         coBO6v/Ml1dDCzm3xHBeH3X84W2zanc+gqTXnbHPNzb2LBuV4ai3AcBOeILwJ5QMh0
-         aOdSmnj6K9A9w==
-Date:   Sat, 18 Jun 2022 21:14:21 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        david@fromorbit.com, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, hch@lst.de, fstests <fstests@vger.kernel.org>
-Subject: [GIT PULL] xfs: bug fixes for 5.19-rc3
-Message-ID: <Yq6inbC6Y6YT0uGJ@magnolia>
+        Sun, 19 Jun 2022 00:50:48 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871C7E0EB;
+        Sat, 18 Jun 2022 21:50:46 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so7438626pjz.1;
+        Sat, 18 Jun 2022 21:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sX9KInSnfsNdA1A/VXjX4rbpXLJ3ZyJ1BBGX0VMOA7U=;
+        b=kuqNVli+ZIlaqlnbd4ILqzWsND4ax1rK1DdWJF2tL5DW8bqUEIvy03sDu3+h19jZLv
+         b0PxugaVqPzlie0pkVZWqKuwVXrLF8OYyFe1NHBkmGBViGBhwe2hCggf19c7nBEosSsY
+         VNoLsFSB8UGmYHQrR4Rhhm2zzE7TMBt8eHrHZbnGI3AzYE19m1T+g2o77aDO3w2oNjMC
+         Hbt07PstnDLDoKHBPI9mW3WWdELMvHqdCQCu4EYtIBXrw2nUA8J4q5Pu2twgE7XJx4xF
+         FFz/Gcln4LCAJ683YdYgaJhFqqFrmGtN4sLATyAEZnfI6gcjHdNRxFHDJ/bntKGXVOnT
+         tzZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sX9KInSnfsNdA1A/VXjX4rbpXLJ3ZyJ1BBGX0VMOA7U=;
+        b=gA4U0zGqgsuRqxIS9nOQa2DbwKQJ04EFnDwv7FgpHV5prcnUkQFfQ4rY8B7nGAFiLZ
+         NXv5Ws+peuPpfbaGzjIKH8kcHiVb4v0L231T3SB2ozsAsXhcAKOEUEsLvqS4J1p44xMF
+         Nulk8CCTQ3v+K02VmkMMVwlSfuYUBunBPl1HNQhDiGGRYYu6Ziv76Z7qnLvOh3Fhea7d
+         K1AQbvxWCXfUWx9qcHSIwP5/v6R3eDOSQgGmFInaX7Yd2SW/7DMb2hHdjhmBF+v9K9el
+         5W7K6udIgS6WwpJCc4nPmo/OmXdq+b0mlXcniETJXNQL89bF8J0CWTrM0nL6seIHOz9I
+         bHLA==
+X-Gm-Message-State: AJIora8eFhOFk/uLGKhhXqkFOJfk+2wMI1xeC/qEQ9daljbP3rsAkYmc
+        rwVUadvoX5Yk25hKx0ZUgng=
+X-Google-Smtp-Source: AGRyM1uPe4zkRUTRAu+NcCg/5lAIeQYm3PQntNL37t6ky6xkSyIjaBU7ggSBirYd9Jj0o/7NcAVglw==
+X-Received: by 2002:a17:90b:4b02:b0:1e2:ff51:272a with SMTP id lx2-20020a17090b4b0200b001e2ff51272amr19473918pjb.56.1655614245936;
+        Sat, 18 Jun 2022 21:50:45 -0700 (PDT)
+Received: from localhost.localdomain ([47.242.114.172])
+        by smtp.gmail.com with ESMTPSA id c200-20020a624ed1000000b005251b1fde90sm502757pfb.219.2022.06.18.21.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 21:50:45 -0700 (PDT)
+From:   Chuang W <nashuiliang@gmail.com>
+Cc:     Chuang W <nashuiliang@gmail.com>, stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kprobes: Rollback the aggrprobe post_handler on failed arm_kprobe()
+Date:   Sun, 19 Jun 2022 12:50:27 +0800
+Message-Id: <20220619045028.50619-1-nashuiliang@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+In a scenario where livepatch and aggrprobe coexist on the same function
+entry, and if this aggrprobe has a post_handler, arm_kprobe() always
+fails as both livepatch and aggrprobe with post_handler will use
+FTRACE_OPS_FL_IPMODIFY.
+Since register_aggr_kprobe() doesn't roll back the post_handler on
+failed arm_kprobe(), this aggrprobe will no longer be available even if
+all kprobes on this aggrprobe don't have the post_handler.
 
-Please pull this branch containing bug fixes for XFS for 5.19-rc3.
-There's not a whole lot this time around (I'm still on vacation) but
-here are some important fixes for new features merged in -rc1.
+Fix to roll back the aggrprobe post_handler for this case.
+With this patch, if a kprobe that has the post_handler is removed from
+this aggrprobe (since arm_kprobe() failed), it will be available again.
 
-As usual, I did a test-merge with upstream master as of a few minutes
-ago, and it completed flawlessly.  Please let me know if you encounter
-any problems.
+Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
+Signed-off-by: Chuang W <nashuiliang@gmail.com>
+Cc: <stable@vger.kernel.org>
+---
+v1 -> v2:
+- Add commit details
 
---D
+ kernel/kprobes.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index f214f8c088ed..0610b02a3a05 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1300,6 +1300,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+ {
+ 	int ret = 0;
+ 	struct kprobe *ap = orig_p;
++	kprobe_post_handler_t old_post_handler = NULL;
+ 
+ 	cpus_read_lock();
+ 
+@@ -1351,6 +1352,9 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+ 
+ 	/* Copy the insn slot of 'p' to 'ap'. */
+ 	copy_kprobe(ap, p);
++
++	/* save the old post_handler */
++	old_post_handler = ap->post_handler;
+ 	ret = add_new_kprobe(ap, p);
+ 
+ out:
+@@ -1365,6 +1369,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+ 			ret = arm_kprobe(ap);
+ 			if (ret) {
+ 				ap->flags |= KPROBE_FLAG_DISABLED;
++				ap->post_handler = old_post_handler;
+ 				list_del_rcu(&p->list);
+ 				synchronize_rcu();
+ 			}
+-- 
+2.34.1
 
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-fixes-1
-
-for you to fetch changes up to e89ab76d7e2564c65986add3d634cc5cf5bacf14:
-
-  xfs: preserve DIFLAG2_NREXT64 when setting other inode attributes (2022-06-15 23:13:33 -0700)
-
-----------------------------------------------------------------
-Fixes for 5.19-rc3:
- - Fix a bug where inode flag changes would accidentally drop nrext64.
- - Fix a race condition when toggling LARP mode.
-
-----------------------------------------------------------------
-Darrick J. Wong (3):
-      xfs: fix TOCTOU race involving the new logged xattrs control knob
-      xfs: fix variable state usage
-      xfs: preserve DIFLAG2_NREXT64 when setting other inode attributes
-
- fs/xfs/libxfs/xfs_attr.c      |  9 +++++----
- fs/xfs/libxfs/xfs_attr.h      | 12 +-----------
- fs/xfs/libxfs/xfs_attr_leaf.c |  2 +-
- fs/xfs/libxfs/xfs_da_btree.h  |  4 +++-
- fs/xfs/xfs_attr_item.c        | 15 +++++++++------
- fs/xfs/xfs_ioctl.c            |  3 ++-
- fs/xfs/xfs_xattr.c            | 17 ++++++++++++++++-
- 7 files changed, 37 insertions(+), 25 deletions(-)

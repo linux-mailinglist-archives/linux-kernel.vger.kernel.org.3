@@ -2,110 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531085508B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 06:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0924A5508B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 07:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiFSEyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 00:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S232050AbiFSFAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 01:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiFSEys (ORCPT
+        with ESMTP id S229639AbiFSFAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 00:54:48 -0400
-Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DDB2F5B4;
-        Sat, 18 Jun 2022 21:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Z9bpe
-        gj2PLCMxSrP9Wmvpb4Z13yyZp3UPvP7FlEHtbg=; b=RyXw7Aldjg2gSNAakGJjp
-        kebNmGK0xU7ZM8CVex3uriI0AYPZUPg1BLfLMwVQE4C59UTsqDw5Mk81++cT8kax
-        LaSACtSflhG9OOBZgA0jf5uARmWO9uibmLbUU3F4mp7g/OiLNjDryNgxrPbRG/oR
-        AbmxH8lKZoCEqjRYQHAAQs=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp7 (Coremail) with SMTP id DsmowAAna_oFrK5ik2fCDg--.45446S2;
-        Sun, 19 Jun 2022 12:54:31 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     tsbogend@alpha.franken.de, yangtiezhu@loongson.cn
-Cc:     windhl@126.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mips/pic32/pic32mzda: Fix refcount leak bugs
-Date:   Sun, 19 Jun 2022 12:54:27 +0800
-Message-Id: <20220619045427.4064946-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 19 Jun 2022 01:00:08 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E62269
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 22:00:04 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id e4so1016298ybq.7
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 22:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
+        b=ksMB9PCymabvNoHvMuQJCll8pMJCdoRsg3uXtHJoFBWx37YDWTi6erEjvT3Uo2ERR8
+         mkcrFGJEA53kVDFpSFJmSMu9cgrgIe+j1dBZVn8hwOAL7ahVn/XHpgO8LoCDUTuXTCb+
+         v+pt+K11dBit3JDVQKR5J8oBYp2Z8m708AcKDG8BqNDSC4j5Jy9hXMqRKUg6CT24rv57
+         sZ09BOPkiYczVFe0K/n9/1f5p4SF43A2MxkHF2UrSia4XfE1klpQpukmpPj1hNfUwd1F
+         /bHu7ggvdUZKDgUGKPtQJ/f6lfcYTB8crzL6MKwvkW1UgyNIXqUi80wKKNme4A/fLSKa
+         R2aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
+        b=VahB+YXBrtPP7wKulPhxl2l/5CwOm9BH40F6TS6YIyt1vnoD5uu7jjRrwTwhUmWFrh
+         cCCVbriwfpDOOZS730xYF0dBOQqkAh2XK3qnd4vIDytXGIzoKsQqLyDtVbjId+6xSorM
+         CBW8DeKDQWYpsAo1T++vTZ3+DFEWRMnSN+W2Qqo37pJX/C1E3LzgK787MrFPg54xrc6p
+         jIsXnuAd+sfiaEVTBdwhOmK2cxLOS2HP2bMbFkmsknnScfNu2CVj1wylhD7EbyD/aYkW
+         lLUyGhgMpmI7ELVgdJ2UMdWI5VtWPYtYmNYhH8G8GTKTmAIx6XBAqjmKmqVCtk6eqv3p
+         pLLw==
+X-Gm-Message-State: AJIora+MHdgYfCfvkVm4z5oiKHtdNsuGdypBx3dWFJlQ2o6nfy1J0bwU
+        YlhLmW41RI77blSlwjM+KwwCv4atFWeJZ+Q+jAs=
+X-Google-Smtp-Source: AGRyM1vO1v2JdvUmfn8anHHJI5Ay3oTPfYueV5YJ+wsUIApymLvekSAKWiFufWEjxxgz3vSH2qo8BFUsE3U/feMFNdI=
+X-Received: by 2002:a5b:ccc:0:b0:664:8c0c:f6c5 with SMTP id
+ e12-20020a5b0ccc000000b006648c0cf6c5mr18514555ybr.537.1655614803088; Sat, 18
+ Jun 2022 22:00:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsmowAAna_oFrK5ik2fCDg--.45446S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WrWUKF4DZFy7Zr4UtFW5Wrg_yoW8WFyDp3
-        y5CFyfJFy8ur17tF9ayFyDXrs0qFykXrWUZay0kFy3A3WDXFn5Zr4xtrn8J3WDAFWfW3Wr
-        Xr4FvFW5WF4vya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi4CJdUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgclF18RPUvQFQAAsG
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: ailenn.samih8@gmail.com
+Received: by 2002:a05:7000:35cc:0:0:0:0 with HTTP; Sat, 18 Jun 2022 22:00:02
+ -0700 (PDT)
+From:   Juliette Morgan <juliettemorgan21@gmail.com>
+Date:   Sun, 19 Jun 2022 07:00:02 +0200
+X-Google-Sender-Auth: X_oHnhlfYRi45SrvHvQ4HMYplhM
+Message-ID: <CAKCxh+rN9iesEx=78dXrxDeoY7zr20yTv-CT_vJG9mm5w+vAMQ@mail.gmail.com>
+Subject: READ AND REPLY URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_99,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9981]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ailenn.samih8[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ailenn.samih8[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b41 listed in]
+        [list.dnswl.org]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node(), of_find_compatible_node() and
-of_find_node_by_path() will return node pointers with refcout
-incremented. We should call of_node_put() when they are not
-used anymore.
+Hello Dear God,s Select Good Day,
 
-Signed-off-by: Liang He <windhl@126.com>
----
- changelog: 
- 
- v2: (1) merge pic32/pic32mzda bugs into one patch
-     (2) fix leak bug related to of_find_node_by_path.
- v1: use two patch for intit.c and time.c
+I apologized, If this mail find's you disturbing, It might not be the
+best way to approach you as we have not met before, but due to the
+urgency of my present situation i decided  to communicate this way, so
+please pardon my manna, I am writing this mail to you with heavy tears
+In my eyes and great sorrow in my heart, My Name is Mrs.Juliette
+Morgan, and I am contacting you from my country Norway, I want to tell
+you this because I don't have any other option than to tell you as I
+was touched to open up to you,
 
- arch/mips/pic32/pic32mzda/init.c | 7 ++++++-
- arch/mips/pic32/pic32mzda/time.c | 3 +++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+I married to Mr.sami Morgan. Who worked with Norway embassy in Burkina
+Faso for nine years before he died in the year 2020.We were married
+for eleven years without a child He died after a brief illness that
+lasted for only five days. Since his death I decided not to remarry,
+When my late husband was alive he deposited the sum of =E2=82=AC 8.5 Millio=
+n
+Euro (Eight million, Five hundred thousand Euros) in a bank in
+Ouagadougou the capital city of Burkina Faso in west Africa Presently
+this money is still in bank. He made this money available for
+exportation of Gold from Burkina Faso mining.
 
-diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
-index 129915616763..d9c8c4e46aff 100644
---- a/arch/mips/pic32/pic32mzda/init.c
-+++ b/arch/mips/pic32/pic32mzda/init.c
-@@ -98,13 +98,18 @@ static int __init pic32_of_prepare_platform_data(struct of_dev_auxdata *lookup)
- 		np = of_find_compatible_node(NULL, NULL, lookup->compatible);
- 		if (np) {
- 			lookup->name = (char *)np->name;
--			if (lookup->phys_addr)
-+			if (lookup->phys_addr) {
-+				of_node_put(np);
- 				continue;
-+			}
- 			if (!of_address_to_resource(np, 0, &res))
- 				lookup->phys_addr = res.start;
-+			of_node_put(np);
- 		}
- 	}
- 
-+	of_node_put(root);
-+
- 	return 0;
- }
- 
-diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
-index 7174e9abbb1b..777b515c52c8 100644
---- a/arch/mips/pic32/pic32mzda/time.c
-+++ b/arch/mips/pic32/pic32mzda/time.c
-@@ -32,6 +32,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
- 		goto default_map;
- 
- 	irq = irq_of_parse_and_map(node, 0);
-+
-+	of_node_put(node);
-+
- 	if (!irq)
- 		goto default_map;
- 
--- 
-2.25.1
+Recently, My Doctor told me that I would not last for the period of
+seven months due to cancer problem. The one that disturbs me most is
+my stroke sickness.Having known my condition I decided to hand you
+over this money to take care of the less-privileged people, you will
+utilize this money the way I am going to instruct herein.
 
+I want you to take 30 Percent of the total money for your personal use
+While 70% of the money will go to charity, people in the street and
+helping the orphanage. I grew up as an Orphan and I don't have any
+body as my family member, just to endeavour that the house of God is
+maintained. Am doing this so that God will forgive my sins and accept
+my soul because these sicknesses have suffered me so much.
+
+As soon as I receive your reply I shall give you the contact of the
+bank in Burkina Faso and I will also instruct the Bank Manager to
+issue you an authority letter that will prove you the present
+beneficiary of the money in the bank that is if you assure me that you
+will act accordingly as I Stated herein.
+
+Always reply to my alternative for security purposes
+
+Hoping to receive your reply:
+From Mrs.Juliette Morgan,

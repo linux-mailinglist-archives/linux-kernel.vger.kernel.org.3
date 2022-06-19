@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849005508C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 07:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726005508E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 08:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbiFSFoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 01:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S234112AbiFSGSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 02:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiFSFoF (ORCPT
+        with ESMTP id S231810AbiFSGS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 01:44:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85166B843
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 22:44:03 -0700 (PDT)
+        Sun, 19 Jun 2022 02:18:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4874BA444;
+        Sat, 18 Jun 2022 23:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=cgaYumtYbqc1jS524wk3xxBH4a5y3RzjEQYyweJst40=; b=S3KI0WkL83yv/Z7AU7TAN/Xf+l
-        PZUVpOK0EFc6yWVCaZ5WUD8cGKimi/PGRnHBHEWd97mb6WFid496ZgMzrnoXh3JGLIkP04N+bJy+T
-        NMdU3r0tk9BR8bI5jxr1lqjOEXh90Sp7AUJt1ClO+Q/7adsSo+88yy5Qz3mXqKTx6TanRvET9qcC+
-        /FlHLc0rcT8GhhctAwGq6/pNrmDDDeCl4Y66snxd8GNfM0rxM0cGOrcKW/VrpzYaDjkLFnT4R2XUz
-        a2XKOMezfCvP+R+yxYzYHxBKGBGIBz+cyIc03wSHaPkH23y4twsr0hfXRipOKHHEKw4Mz2gkp3rIF
-        eGRcZ8VA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o2niE-0049NX-MD; Sun, 19 Jun 2022 05:43:06 +0000
-Message-ID: <48034eb1-3f37-f4fd-24b3-0eb7e517b35e@infradead.org>
-Date:   Sat, 18 Jun 2022 22:42:59 -0700
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j/JBNwa/VyqAIaEnsFXpkXodHo6vqnGAI1xYD1tiqZo=; b=jLy3lF1kmifcevO6HwuwLb2bFh
+        cICoOWdEb52iimiuzsyFdgSGbDfBBC787zRztZfYBUzRkU3DbiisicNQha2BbgsLDASZAqlpbDqX+
+        CayphOqce8z+TfP2HkVcrHrm2hHTIy8TWjnWp29vlBJQCVPNbRwYvTisXiVrym+4d8fsSzlTNF8jG
+        7w53PIyh2fuPAL/nVK5V2AB0RS2rivSUMvoExuxG5X4NfK3QTjdT3ES8S5RwQ+x+hewyZrG6fZzsL
+        FfoWD4w/eycsn6U0AMNoWXmZphF8mWTSvbeuLBmDvLOr81ZFwgR3gAHlhSrhrZyPWZinA3hRHEMd4
+        Eklp6K+Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2oGH-00DL70-A1; Sun, 19 Jun 2022 06:18:17 +0000
+Date:   Sat, 18 Jun 2022 23:18:17 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, kwankhede@nvidia.com,
+        corbet@lwn.net, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, jchrist@linux.ibm.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFT][PATCH v1 6/6] vfio: Replace phys_pfn with phys_page for
+ vfio_pin_pages()
+Message-ID: <Yq6/qS+AE1LfO+/q@infradead.org>
+References: <20220616235212.15185-1-nicolinc@nvidia.com>
+ <20220616235212.15185-7-nicolinc@nvidia.com>
+ <YqxBLbu8yPJiwK6Z@infradead.org>
+ <Yqz64VK1IQ0QzXEe@Asurada-Nvidia>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] powerpc/interrupt: Put braces around empty body in an
- 'if' statement
-Content-Language: en-US
-To:     Souptick Joarder <jrdr.linux@gmail.com>, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        mark.rutland@arm.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Kernel test robot <lkp@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <20220619031114.92060-1-jrdr.linux@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220619031114.92060-1-jrdr.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqz64VK1IQ0QzXEe@Asurada-Nvidia>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,56 +67,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/18/22 20:11, Souptick Joarder wrote:
-> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+On Fri, Jun 17, 2022 at 03:06:25PM -0700, Nicolin Chen wrote:
+> On Fri, Jun 17, 2022 at 01:54:05AM -0700, Christoph Hellwig wrote:
+> > There is a bunch of code an comments in the iommu type1 code that
+> > suggest we can pin memory that is not page backed.  
 > 
-> Kernel test robot throws warning ->
-> 
-> arch/powerpc/kernel/interrupt.c:
-> In function 'interrupt_exit_kernel_prepare':
-> 
->>> arch/powerpc/kernel/interrupt.c:542:55: warning: suggest
-> braces around empty body in an 'if' statement [-Wempty-body]
->      542 |                 CT_WARN_ON(ct_state() == CONTEXT_USER);
+> Would you mind explaining the use case for pinning memory that
+> isn't page backed? And do we have such use case so far?
 
-That must be when CONFIG_CONTEXT_TRACKING_USER is not set/enabled.
-Can you confirm that?
+Sorry, I should have deleted that sentence.  I wrote it before spending
+some more time to dig through the code and all the locked memory has
+page backing.  There just seem to be a lot of checks left inbetween
+if a pfn is page backed, mostly due to the pfn based calling convetions.
 
-Then the preferable fix would be in <linux/context_tracking.h>:
+> I can do that. I tried once, but there were just too much changes
+> inside type1 code that felt like a chain reaction. If we plan to
+> eventually replace with IOMMUFD implementations, these changes in
+> type1 might not be necessary, I thought.
 
-change
-#define CT_WARN_ON(cond)
-
-to either an empty do-while loop or a static inline function.
-
-(adding Frederic to Cc:)
-
-> 
-> Fix it by adding braces.
-> 
-> Reported-by: Kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> ---
->  arch/powerpc/kernel/interrupt.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
-> index 784ea3289c84..b8a918bab48f 100644
-> --- a/arch/powerpc/kernel/interrupt.c
-> +++ b/arch/powerpc/kernel/interrupt.c
-> @@ -538,8 +538,9 @@ notrace unsigned long interrupt_exit_kernel_prepare(struct pt_regs *regs)
->  	 * CT_WARN_ON comes here via program_check_exception,
->  	 * so avoid recursion.
->  	 */
-> -	if (TRAP(regs) != INTERRUPT_PROGRAM)
-> +	if (TRAP(regs) != INTERRUPT_PROGRAM) {
->  		CT_WARN_ON(ct_state() == CONTEXT_USER);
-> +	}
->  
->  	kuap = kuap_get_and_assert_locked();
->  
-
--- 
-~Randy
+To make sure we keep full compatibility I suspect the final iommufd
+implementation has to be gradutally created from the existing code
+anyway.

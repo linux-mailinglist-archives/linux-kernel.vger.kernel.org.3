@@ -2,42 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134CA550AAA
+	by mail.lfdr.de (Postfix) with ESMTP id AA603550AAC
 	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 14:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236076AbiFSMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 08:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S234746AbiFSMfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 08:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiFSMhm (ORCPT
+        with ESMTP id S229472AbiFSMfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 08:37:42 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FE162EE;
-        Sun, 19 Jun 2022 05:37:41 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o2uBQ-0005Md-E4; Sun, 19 Jun 2022 14:37:40 +0200
-Message-ID: <2c6bd8f9-e466-50d0-0d24-0ec334db37cb@leemhuis.info>
-Date:   Sun, 19 Jun 2022 14:37:40 +0200
+        Sun, 19 Jun 2022 08:35:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F44D62DF;
+        Sun, 19 Jun 2022 05:35:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B175B80CAA;
+        Sun, 19 Jun 2022 12:35:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 437C1C341D1;
+        Sun, 19 Jun 2022 12:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655642128;
+        bh=q6lkeo/SrEPWQ+2brReD5ukp5cS1BU9o1wOUu1pRlN8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ub9RWeLV6l+SAYChJ8kHMkq9JWcH1okn3+XjllXUvnylITVeaEUpE8zWiOzwCP0/K
+         4eUHLrfxcYEAbhSo7oA6aKL2BfWtfSzSJrJQ0JlYVd8yT+Eltlwh5SV9uJUJiMzeHz
+         kE+diiOmDVNTHQhgdMnrTF+yxhvEJZ+HWRP5tRwDk5BaWSXmmvBFHpFaALJ/H2uT1h
+         tZcWrXHrNiY+1+0axtDYoZ130v1TwoKYroJHqeBWnC+3RTg7ju1gfxzNsZuL+WiIgj
+         SxBAxIW302hGzNkUadrjewhT//N1xTu3JQxAfldic3g7M/+L1vyCZehIZ01ZllMaf9
+         /es6eeG9kShcA==
+Date:   Sun, 19 Jun 2022 13:44:43 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, Zhigang.Shi@liteon.com,
+        krisman@collabora.com, linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        alvaro.soliverez@collabora.com, Dmitry Osipenko <digetx@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 2/2] iio: light: Add support for ltrf216a sensor
+Message-ID: <20220619134443.23874255@jic23-huawei>
+In-Reply-To: <CAHp75VeU9oSJmMdyT_0BZDuG5WMiuJiCPv5So4DWG05EEDKrhw@mail.gmail.com>
+References: <20220615135130.227236-1-shreeya.patel@collabora.com>
+        <20220615135130.227236-3-shreeya.patel@collabora.com>
+        <CAHp75VeU9oSJmMdyT_0BZDuG5WMiuJiCPv5So4DWG05EEDKrhw@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [bugzilla-daemon@kernel.org: [Bug 216109] New: Steam Deck fails
- to boot when E820 entries clipped out of _CRS] #forregzbot
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <20220609224339.GA543225@bhelgaas>
- <d4ea2dd2-2e89-d3a2-ee5c-f64bb1b8f576@leemhuis.info>
-In-Reply-To: <d4ea2dd2-2e89-d3a2-ee5c-f64bb1b8f576@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1655642261;3cec31bc;
-X-HE-SMSGID: 1o2uBQ-0005Md-E4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,24 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-On 12.06.22 13:11, Thorsten Leemhuis wrote:
 
->> Subject: [Bug 216109] New: Steam Deck fails to boot when E820 entries clipped
->> 	out of _CRS
->>
->> https://bugzilla.kernel.org/show_bug.cgi?id=216109
+> 
+> > +       /* reset sensor, chip fails to respond to this, so ignore any errors */
+> > +       ltrf216a_reset(indio_dev);
+> > +
+> > +       ret = pm_runtime_set_active(&client->dev);
+> > +       if (ret)
+> > +               goto error_power_down;  
+> 
+> Why do you need to power down here?
+> 
+> > +       pm_runtime_enable(&client->dev);
 
-#regzbot fixed-by: a2b36ffbf5b6
+We now have devm_pm_runtime_enable() which will also deal
+with disabling use_autosuspend for you and should help you
+sort out some of the ordering.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+> > +       pm_runtime_set_autosuspend_delay(&client->dev, 5000);
+> > +       pm_runtime_use_autosuspend(&client->dev);
+> > +
+> > +       ltrf216a_set_power_state(data, true);  
+> 
+> The below code suggests that you are mixing badly devm_ with non-devm_
+> APIs, don't do this. You have to group devm_ first followed by
+> non-devm_ calls.
+> 
+> ...
+> 
+> > +static int ltrf216a_remove(struct i2c_client *client)
+> > +{
+> > +       struct iio_dev *indio_dev = i2c_get_clientdata(client);
+> > +
+> > +       iio_device_unregister(indio_dev);
+> > +       pm_runtime_disable(&client->dev);
+> > +       pm_runtime_set_suspended(&client->dev);
+> > +       ltrf216a_disable(indio_dev);
+> > +
+> > +       return 0;  
+> 
+> I believe the ordering of freeing resources and reverting state is not
+> in reverse. See above why.
+
+In particular you are calling disable there which is already handled
+by devm_ unwinding.
+> 
+> > +}  
+> 
 
 

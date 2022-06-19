@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9580C550815
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFD955081B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiFSDef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 23:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S233770AbiFSDfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 23:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiFSDeb (ORCPT
+        with ESMTP id S229733AbiFSDfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 23:34:31 -0400
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D989E0A9;
-        Sat, 18 Jun 2022 20:34:28 -0700 (PDT)
-Received: by mail-vs1-f51.google.com with SMTP id f13so7590809vsp.1;
-        Sat, 18 Jun 2022 20:34:28 -0700 (PDT)
+        Sat, 18 Jun 2022 23:35:10 -0400
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95754E0AA;
+        Sat, 18 Jun 2022 20:35:09 -0700 (PDT)
+Received: by mail-vk1-f175.google.com with SMTP id b5so424877vkp.4;
+        Sat, 18 Jun 2022 20:35:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=Kj9SPpug8cBKX+2BDdHQYhBwqfhkn6CkZ2XqJP7yndg=;
-        b=nidaR0AdRMuMe9Dz9HbhxQh0sGZIcWG4MQFOUuoXR0d3uRWXRKM/DQRuLM1n/MskPX
-         0z9rm3omaD51vdiTky0dysKixRwhMMxIMH8gm0tPQ89u9SRRuDxn9KHh0HkuBVSSk9Fb
-         uj2uV4zaTrO1kGfhwCdGuEAu2UBJN3XDAfDElMK+RDO01h4qYAD/mL14jRWdzHHtaC3i
-         N3x2toB73xXHfLYlVXiL5IwVmnTw3cgCmAjlA90dbOrMQIBog0mjPLVgS4YOE/DfQb7a
-         rDYjtthgqu/SbyPzLyzUX6qMZr5xDmGvPgmL9SpmzyOU93QjChh7Zm8zjTtiiHanKCBt
-         r73A==
-X-Gm-Message-State: AJIora9UWoZANKriFnh7PioD+vR9poSYG0o80I8bMMfT0lTFz0M2hwJS
-        qSYRsnEyfX50kN6xJe/kAqZja1829Mryrg==
-X-Google-Smtp-Source: AGRyM1tu+9vPM7yvEVVAfewk4BP3Dx5byjjbG0CcO/SHyoglSze9Ihtm2YB29N5E94fOXh5cyui45w==
-X-Received: by 2002:a67:c405:0:b0:34b:a23d:68ff with SMTP id c5-20020a67c405000000b0034ba23d68ffmr7254446vsk.80.1655609666902;
-        Sat, 18 Jun 2022 20:34:26 -0700 (PDT)
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
-        by smtp.gmail.com with ESMTPSA id s25-20020a67df19000000b003519349c5b8sm1522205vsk.32.2022.06.18.20.34.26
+        bh=PYdi3RN1EFrd9W5OnYRhUPpSnzGMgBN8JOB8wfBDroI=;
+        b=rz7qQWHyrbqjyTlEefLBPqbAqatDXLfnisjHYIMedkUqC3js7ZnyeYGsYQle/APKDU
+         Tj2A12YoNqg7t54lqrT4k+Ot2pKnhPxpLicGfS12Rnq3DdJIwFIfIuS4B0OY148lrgno
+         61pyR4IkjmEr/PG3NCMCg3qShJ/p6FPrzNZMGe8pfCzO0WxWvdMgEykqwUIoLLShYxUe
+         0JZrLba2oG5P0tb8c70SqdjrZiosah9nz+eAkHuYwvXrzNrnyiH+Ibih5GNmhUfk/Od5
+         BSZbgVVQ8zqLT5n5MWP0sf+he7b73Y6B8LrFoRCAHDUpFgaGRhn7GSf+5IxRj5ul/kYK
+         8wew==
+X-Gm-Message-State: AJIora9NVS2wDp3WKpiJWwYFJRNr0rNsasxBwdbwrJ8QVq7de0yTIcBO
+        5JITOt+/Iuxr9B4wOWUo8IfuiKxsZjrY+g==
+X-Google-Smtp-Source: AGRyM1tUqzTITQHEg4LfU/KCr4BmsIjdWYQx7TpAihFjAP/XjXdmF5yUUzbGF5mUReRJVeOYwlKpjw==
+X-Received: by 2002:a05:6122:1990:b0:36b:f70c:ba55 with SMTP id bv16-20020a056122199000b0036bf70cba55mr1223702vkb.12.1655609708486;
+        Sat, 18 Jun 2022 20:35:08 -0700 (PDT)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id r21-20020a056122015500b0035cf844fdf6sm1313728vko.53.2022.06.18.20.35.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 20:34:26 -0700 (PDT)
-Received: by mail-vs1-f44.google.com with SMTP id n4so7581531vsm.6;
-        Sat, 18 Jun 2022 20:34:26 -0700 (PDT)
-X-Received: by 2002:a05:6102:54ac:b0:34b:b502:f5e7 with SMTP id
- bk44-20020a05610254ac00b0034bb502f5e7mr7341066vsb.58.1655609665965; Sat, 18
- Jun 2022 20:34:25 -0700 (PDT)
+        Sat, 18 Jun 2022 20:35:08 -0700 (PDT)
+Received: by mail-ua1-f43.google.com with SMTP id l9so2851359uac.4;
+        Sat, 18 Jun 2022 20:35:07 -0700 (PDT)
+X-Received: by 2002:ab0:2705:0:b0:379:7378:3c75 with SMTP id
+ s5-20020ab02705000000b0037973783c75mr6476337uao.77.1655609707538; Sat, 18 Jun
+ 2022 20:35:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-13-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220618214009.2178567-13-aidanmacdonald.0x0@gmail.com>
+References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-6-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220618214009.2178567-6-aidanmacdonald.0x0@gmail.com>
 Reply-To: wens@csie.org
 From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sun, 19 Jun 2022 11:34:14 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65dhKvRGYwCa+s2h_T9WdfkfX1JJqJg1yTFJ2OZs7rtBQ@mail.gmail.com>
-Message-ID: <CAGb2v65dhKvRGYwCa+s2h_T9WdfkfX1JJqJg1yTFJ2OZs7rtBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 12/16] power: supply: axp20x_usb_power: Add support for AXP192
+Date:   Sun, 19 Jun 2022 11:34:56 +0800
+X-Gmail-Original-Message-ID: <CAGb2v6455AN7BGoUoOigvVvJ0nrrp1HvA4tsNs4AkaOKJ-mxfA@mail.gmail.com>
+Message-ID: <CAGb2v6455AN7BGoUoOigvVvJ0nrrp1HvA4tsNs4AkaOKJ-mxfA@mail.gmail.com>
+Subject: Re: [PATCH v3 05/16] dt-bindings: power: supply: axp20x: Add AXP192 compatible
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -70,7 +70,8 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         devicetree <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-iio@vger.kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -86,91 +87,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sun, Jun 19, 2022 at 5:40 AM Aidan MacDonald
 <aidanmacdonald.0x0@gmail.com> wrote:
 >
-> The AXP192 is mostly the same as the AXP202 but has a different
-> current limit.
+> The AXP192's USB power supply is similar to the AXP202 but it has
+> different USB current limits.
+
+Should also mention the different register offset for VBUS status.
+
+ChenYu
+
 >
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  drivers/power/supply/axp20x_usb_power.c | 80 +++++++++++++++++++++----
->  1 file changed, 69 insertions(+), 11 deletions(-)
+>  .../bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml  | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-> index a1e6d1d44808..03145374ae72 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
-> @@ -48,6 +48,9 @@
->  #define AXP813_VBUS_CLIMIT_2000mA      2
->  #define AXP813_VBUS_CLIMIT_2500mA      3
+> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+> index 0c371b55c9e1..e800b3b97f0d 100644
+> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+> @@ -22,6 +22,7 @@ properties:
+>    compatible:
+>      oneOf:
+>        - enum:
+> +          - x-powers,axp192-usb-power-supply
+>            - x-powers,axp202-usb-power-supply
+>            - x-powers,axp221-usb-power-supply
+>            - x-powers,axp223-usb-power-supply
+> --
+> 2.35.1
 >
-> +#define AXP192_VBUS_CLIMIT_EN          BIT(1)
-> +#define AXP192_VBUS_CLIMIT_100mA       BIT(0)
-> +
->  #define AXP20X_ADC_EN1_VBUS_CURR       BIT(2)
->  #define AXP20X_ADC_EN1_VBUS_VOLT       BIT(3)
->
-> @@ -121,6 +124,24 @@ static void axp20x_usb_power_poll_vbus(struct work_struct *work)
->                 mod_delayed_work(system_power_efficient_wq, &power->vbus_detect, DEBOUNCE_TIME);
->  }
->
-> +static int axp192_get_current_max(struct axp20x_usb_power *power, int *val)
-> +{
-> +       unsigned int v;
-> +       int ret = regmap_read(power->regmap, AXP20X_VBUS_IPSOUT_MGMT, &v);
-> +
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (!(v & AXP192_VBUS_CLIMIT_EN))
-> +               *val = -1;
-> +       else if (v & AXP192_VBUS_CLIMIT_100mA)
-> +               *val = 100000;
-> +       else
-> +               *val = 500000;
-> +
-> +       return 0;
-> +}
-> +
->  static int axp20x_get_current_max(struct axp20x_usb_power *power, int *val)
->  {
->         unsigned int v;
-> @@ -179,7 +200,7 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->         enum power_supply_property psp, union power_supply_propval *val)
->  {
->         struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
-> -       unsigned int input, v;
-> +       unsigned int input, v, reg;
->         int ret;
->
->         switch (psp) {
-> @@ -215,6 +236,8 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->         case POWER_SUPPLY_PROP_CURRENT_MAX:
->                 if (power->axp20x_id == AXP813_ID)
->                         return axp813_get_current_max(power, &val->intval);
-> +               else if (power->axp20x_id == AXP192_ID)
-> +                       return axp192_get_current_max(power, &val->intval);
->                 return axp20x_get_current_max(power, &val->intval);
->         case POWER_SUPPLY_PROP_CURRENT_NOW:
->                 if (IS_ENABLED(CONFIG_AXP20X_ADC)) {
-> @@ -256,16 +279,20 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->
->                 val->intval = POWER_SUPPLY_HEALTH_GOOD;
->
-> -               if (power->axp20x_id == AXP202_ID) {
-> -                       ret = regmap_read(power->regmap,
-> -                                         AXP20X_USB_OTG_STATUS, &v);
-> -                       if (ret)
-> -                               return ret;
-> +               if (power->axp20x_id == AXP192_ID)
-> +                       reg = AXP192_USB_OTG_STATUS;
-> +               else if (power->axp20x_id == AXP202_ID)
-> +                       reg = AXP20X_USB_OTG_STATUS;
-> +               else
-> +                       /* Other chips do not have an OTG status register */
-> +                       break;
-
-Nit: put the comment on the same line as the break, trailing it.
-
-Otherwise,
-
-Reviewed-by: Chen-Yu Tsai <wens@csie.org>

@@ -2,119 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B88550922
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62518550923
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234515AbiFSHaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 03:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S234594AbiFSHaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 03:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiFSHaD (ORCPT
+        with ESMTP id S234566AbiFSHaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 03:30:03 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B429865C8;
-        Sun, 19 Jun 2022 00:30:02 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id l4so7572137pgh.13;
-        Sun, 19 Jun 2022 00:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T0Zq2sYSbf3nMISBHuZKmX2FWCO+JFM7UHxrKNRM8l4=;
-        b=dxxKD1IIOw/UKep65Yl2KZVU8SjzPt9hxjuqZgqBYI45aLQUYyqZQ448QkezxmCvbC
-         egrUNykFdjpdxPMfABGIEGvjVD1JU1kkWMg/xcGAjyMUvpvwr+NjGawplPiR9ud3Kuc+
-         XPO0Rxqa0B9QRwNRu3Zduu3tg6jPaHttKvg5539KS/Om3ml+hlOOWjtRIUcIomNTxkRc
-         HW8CeNwyIghLYAVT6Oe0vePiqQJtlDAEsZjYdr09XXwEQ472QG1S+iuQa/wB8FDhe25J
-         HI6f7dGSLgIeaBGqW9ffGNIX8V6sQSyY8g9aijW9E8wb7ptphNe7hWnL6zVNoRrCYMop
-         654w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T0Zq2sYSbf3nMISBHuZKmX2FWCO+JFM7UHxrKNRM8l4=;
-        b=zw2CSeH6mbRPQUzccWwXElX/SsnK/20W3Wm6lu6MPSEi9BFvU8lWJNKFvTQfE6+GBy
-         +bc8aai1nsMwNN4zTSaG32X03YFS/hLSCeCJMkE0zdQvl/iUqO/G7PneYg3yLNi6v7KZ
-         2+XgGXfn5U7N4jInVX+JjVy9GynrrjNSmMiEBAF85RUtNQJsdKvol8v8QfOB89I5N6/d
-         L/BMj2EaHy6Plw3F+iy5RsNqGNz2zIaD6uTKDV9YlhAWMu0BB3SiQq6W2sXcwTHke2mh
-         pLzz3KS8C9E+ydR4/X2Y9m2ozqsgDyoiPi0/6GNJQ7gHgHCj7oDX3u8L+xbgzgvv59Qq
-         ezwA==
-X-Gm-Message-State: AJIora8ehmTNiXmueLBq97cAPFKTqyKWgueSWI4Ex3i0JUiFDYZeJdV5
-        VCeAow/aM/fL24ei7G2BrPnPYxqYipg=
-X-Google-Smtp-Source: AGRyM1vO/efRhjdO+72XdR9PXMipaaDp8WzocoemKoakQ1UjHnv6cZ3qoJH5VU0st1L98/7W44jE7A==
-X-Received: by 2002:a63:ae4a:0:b0:40c:2d48:5fda with SMTP id e10-20020a63ae4a000000b0040c2d485fdamr14003202pgp.434.1655623801856;
-        Sun, 19 Jun 2022 00:30:01 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-74.three.co.id. [180.214.233.74])
-        by smtp.gmail.com with ESMTPSA id l2-20020a17090af8c200b001e02073474csm8166168pjd.36.2022.06.19.00.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 00:30:01 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Wang Jianjian <wangjianjian3@huawei.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: ext4: fix cell spacing of table heading on blockmap table
-Date:   Sun, 19 Jun 2022 14:29:39 +0700
-Message-Id: <20220619072938.7334-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Sun, 19 Jun 2022 03:30:17 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A63565CE
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:30:11 -0700 (PDT)
+X-UUID: 467df242ed2e434197a67fd43fc07c74-20220619
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:00889421-7991-4d22-a604-bd46a60722b6,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:50
+X-CID-INFO: VERSION:1.1.6,REQID:00889421-7991-4d22-a604-bd46a60722b6,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:50
+X-CID-META: VersionHash:b14ad71,CLOUDID:f0070e49-4c92-421c-ad91-b806c0f58b2a,C
+        OID:1f6750c707f5,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 467df242ed2e434197a67fd43fc07c74-20220619
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1385577186; Sun, 19 Jun 2022 15:30:04 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sun, 19 Jun 2022 15:30:03 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 19 Jun 2022 15:30:02 +0800
+Message-ID: <fbcafb3c519c4d6a914254d8958633a922267cf6.camel@mediatek.com>
+Subject: Re: [PATCH v4] soc: mediatek: Add support always on flag
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Min Guo <min.guo@mediatek.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Date:   Sun, 19 Jun 2022 15:30:02 +0800
+In-Reply-To: <eb498209-3d5f-b60a-b596-4d3f46b5f9b1@gmail.com>
+References: <20220617095841.23031-1-chunfeng.yun@mediatek.com>
+         <eb498209-3d5f-b60a-b596-4d3f46b5f9b1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3103084afcf234 ("ext4, doc: remove unnecessary escaping") removes
-redundant underscore escaping, however the cell spacing in heading row of
-blockmap table became not aligned anymore, hence triggers malformed table
-warning:
+On Fri, 2022-06-17 at 13:52 +0200, Matthias Brugger wrote:
+> 
+> On 17/06/2022 11:58, Chunfeng Yun wrote:
+> > There is a t-phy shared by PCIe and USB3 on mt8195, if the t-phy is
+> > used by PCIe, when power off its mtcmos, need software reset it
+> > (workaround way, usually hardware do it, but has an issue on
+> > mt8195),
+> > but it has side effect to USB2 phy(works with USB3 phy to support
+> > USB3.2 Gen1), so add support GENPD_FLAG_ALWAYS_ON flag, and make
+> > its
+> > power always on;
+> > Another reason is that USB3.2 Gen1/2 need keep power always on when
+> > support runtime-pm due to hardware limitation until now;
+> > 
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> 
+> I changed the subject line to add pm-domains to it. Also Reviewed-by
+> tags come 
+> under the patch author Signed-off-by tag.
+> 
+> For the next time, please try to get a better commit message. It's
+> difficult to 
+> understand when reading the first time.
+Got it, thanks a lot
 
-Documentation/filesystems/ext4/blockmap.rst:3: WARNING: Malformed table.
-
-+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| i.i_block Offset   | Where It Points                                                                                                                                                                                                              |
-<snipped>...
-
-The warning caused the table not being loaded.
-
-Realign the heading row cell by adding missing space at the first cell
-to fix the warning.
-
-Fixes: 3103084afcf234 ("ext4, doc: remove unnecessary escaping")
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Andreas Dilger <adilger.kernel@dilger.ca>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Wang Jianjian <wangjianjian3@huawei.com>
-Cc: linux-ext4@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/filesystems/ext4/blockmap.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/filesystems/ext4/blockmap.rst b/Documentation/filesystems/ext4/blockmap.rst
-index 2bd990402a5c49..cc596541ce7921 100644
---- a/Documentation/filesystems/ext4/blockmap.rst
-+++ b/Documentation/filesystems/ext4/blockmap.rst
-@@ -1,7 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
- +---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
--| i.i_block Offset   | Where It Points                                                                                                                                                                                                              |
-+| i.i_block Offset    | Where It Points                                                                                                                                                                                                              |
- +=====================+==============================================================================================================================================================================================================================+
- | 0 to 11             | Direct map to file blocks 0 to 11.                                                                                                                                                                                           |
- +---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-base-commit: 354c6e071be986a44b956f7b57f1884244431048
--- 
-An old man doll... just what I always wanted! - Clara
+> 
+> Applied, thanks!
+> 
+> > ---
+> > v4: add reviewed-by AngeloGioacchino
+> > 
+> > v3: make always-on flag exclusive with defualt-off flag
+> > 
+> > v2: keep active_wakeup flag for mt8195
+> > ---
+> >   drivers/soc/mediatek/mt8195-pm-domains.h | 2 +-
+> >   drivers/soc/mediatek/mtk-pm-domains.c    | 3 +++
+> >   drivers/soc/mediatek/mtk-pm-domains.h    | 2 ++
+> >   3 files changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mt8195-pm-domains.h
+> > b/drivers/soc/mediatek/mt8195-pm-domains.h
+> > index 938f4d51f5ae..0529d130b675 100644
+> > --- a/drivers/soc/mediatek/mt8195-pm-domains.h
+> > +++ b/drivers/soc/mediatek/mt8195-pm-domains.h
+> > @@ -67,7 +67,7 @@ static const struct scpsys_domain_data
+> > scpsys_domain_data_mt8195[] = {
+> >   		.ctl_offs = 0x334,
+> >   		.pwr_sta_offs = 0x174,
+> >   		.pwr_sta2nd_offs = 0x178,
+> > -		.caps = MTK_SCPD_ACTIVE_WAKEUP,
+> > +		.caps = MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_ALWAYS_ON,
+> >   	},
+> >   	[MT8195_POWER_DOMAIN_CSI_RX_TOP] = {
+> >   		.name = "csi_rx_top",
+> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.c
+> > b/drivers/soc/mediatek/mtk-pm-domains.c
+> > index 5ced254b082b..a3dae391a38a 100644
+> > --- a/drivers/soc/mediatek/mtk-pm-domains.c
+> > +++ b/drivers/soc/mediatek/mtk-pm-domains.c
+> > @@ -428,6 +428,9 @@ generic_pm_domain *scpsys_add_one_domain(struct
+> > scpsys *scpsys, struct device_no
+> >   			dev_err(scpsys->dev, "%pOF: failed to power on
+> > domain: %d\n", node, ret);
+> >   			goto err_put_subsys_clocks;
+> >   		}
+> > +
+> > +		if (MTK_SCPD_CAPS(pd, MTK_SCPD_ALWAYS_ON))
+> > +			pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
+> >   	}
+> >   
+> >   	if (scpsys->domains[id]) {
+> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.h
+> > b/drivers/soc/mediatek/mtk-pm-domains.h
+> > index daa24e890dd4..7d3c0c36316c 100644
+> > --- a/drivers/soc/mediatek/mtk-pm-domains.h
+> > +++ b/drivers/soc/mediatek/mtk-pm-domains.h
+> > @@ -8,6 +8,8 @@
+> >   #define MTK_SCPD_SRAM_ISO		BIT(2)
+> >   #define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(3)
+> >   #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
+> > +/* can't set MTK_SCPD_KEEP_DEFAULT_OFF at the same time */
+> > +#define MTK_SCPD_ALWAYS_ON		BIT(5)
+> >   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
+> >   
+> >   #define SPM_VDE_PWR_CON			0x0210
 

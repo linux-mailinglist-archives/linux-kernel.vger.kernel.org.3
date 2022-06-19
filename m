@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79653550ADB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 15:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC66550AFB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 15:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbiFSN12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 09:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S236192AbiFSNhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 09:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiFSN11 (ORCPT
+        with ESMTP id S232806AbiFSNhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 09:27:27 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72238A1A1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:27:24 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id g12so3191839ljk.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=USwIgojHd+4gk/AHbWFfWMNbK7HorsIidQTsMQSbCVU=;
-        b=Q/hemLjSDMFkO9Tg2NsP1VHpDtRMriHHdj38JIvhf5xuu2VMIEranCy3wePWG/sOwL
-         g2ipGRj5Q0JlVqylTQuFi0DqLS2hhbkikTIR7XdWkuSsI+a3dwVSNgDxdvo1N6K1V/qN
-         Lp6d0mKXIdday0bhE4F+C3tGVeu/fel5UujWfGf8p4bU23F7xBV1FYGwOMj4/pqdN9Zn
-         aJe844J0GEwbElzCJ4fypWgjAqWuLH9QpXDveA7IarAw4aTFj22h9jb2kdC7SHpIpUEV
-         xe/jmnXzFAcVUToTNmklLXjQ4a5XUP5HybuECVzsYV+sAD3qwxxr7OIgTS5ivumn81lX
-         FQHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=USwIgojHd+4gk/AHbWFfWMNbK7HorsIidQTsMQSbCVU=;
-        b=oROa8xSxFYAtNxZNHTwIID9a8CwZpUBKKdzgLAbnuZOdk2GIM9q5ub5l00Bb9bVIqz
-         bfNv8JzABChv6hOimNdgoInslkxNaneeOZTqQ4Gkca/N6+0CHbxl2Vs0cSE2VR9PxkDL
-         wZFRCcPBH49nWODgjTqW4fHeb+rWlxvsa71rOBQJrrg+nH97YwWdNHHe7LJAb2E4mh8a
-         ucOBTj3wvSEYLK3+0jxzLK5E3sv6s1qeUXnl+29Egt4TBAk+/s9D+zlx4r5XjCZqJdto
-         CJu9w8qmXhNq3UX0zCSkIFre/nwP5RXbs5Mxj81py5QtdZM2uY0w5MRjAgp0y115X+J6
-         eYTQ==
-X-Gm-Message-State: AJIora/WtGfq4D9etc9StPuGjS7IiuNufo4Dy6vnh4DWlmGxd+p6uegH
-        HL0bFZm/k94XrSi/0VdK3ftJUs/IWzZaig==
-X-Google-Smtp-Source: AGRyM1u0JcyUxScgBS8laLu9CqwZlVR9LIrBtuS8pvs986OuPSuedixO1Df3jfGCZsSe8Y02oyijgA==
-X-Received: by 2002:a2e:b0c6:0:b0:255:7c46:16b7 with SMTP id g6-20020a2eb0c6000000b002557c4616b7mr9577251ljl.383.1655645242642;
-        Sun, 19 Jun 2022 06:27:22 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.229.27])
-        by smtp.gmail.com with ESMTPSA id d18-20020a193852000000b0047f5f292485sm594946lfj.68.2022.06.19.06.27.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 06:27:22 -0700 (PDT)
-Message-ID: <91c9a0de-76f8-37fb-31b4-4401a6e35d48@gmail.com>
-Date:   Sun, 19 Jun 2022 16:27:21 +0300
+        Sun, 19 Jun 2022 09:37:34 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C328117E
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655645854; x=1687181854;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+ou3an6gEc0Lbtr4nWBTrEfpo+PKHFa7ZrN7AXhOvYQ=;
+  b=EvLLee5wb59rSrOx0w7hVaVmanM/5MJy7puiECOEVpNkSie/v8U+NxLO
+   rFTvrQZm4TYfN4REVAtai+Kt5Ib8V5QXvrH4UHz1gnErbGKIndYpJZkuc
+   ugynMIlsrkvrdvNsdDjb19Fc+zD2SxGcCE8PB1iVRAjxqV+yn3KlpRkbd
+   NY7SYGuHT1h3U/Ps9z8PYcvAgrXAtBf1qZrI7j5fgJAy/D4In6e5zreq6
+   yR+tH2pGPsK3SDwGvM4s8vvljTv8mULCx0KIX41UJMp0t/B8qjgp0R9ys
+   frCvAslMF+T/9OglCyQTBN8c6Q5uFklF9aJWmNGu7I2CPJNq9JAezMNzI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305164659"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="305164659"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:37:34 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="676158454"
+Received: from sannilnx.jer.intel.com ([10.12.26.157])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:37:31 -0700
+From:   Alexander Usyskin <alexander.usyskin@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/14] GSC support for XeHP SDV and DG2 platforms
+Date:   Sun, 19 Jun 2022 16:37:07 +0300
+Message-Id: <20220619133721.523546-1-alexander.usyskin@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Staging: r8188eu: core: rtw_xmit: Fixed a few coding
- style issues
-Content-Language: en-US
-To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220618204454.16071-1-marcus.yu.56@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220618204454.16071-1-marcus.yu.56@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chang,
+Add GSC support for XeHP SDV and DG2 platforms.
 
-On 6/18/22 23:44, Chang Yu wrote:
-> Fixed a few coding style issues and spelling errors in the comments.
-> 
-> Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
-> ---
+The series includes changes for the mei driver:
+- add ability to use polling instead of interrupts
+- add ability to use extended timeouts
+- setup extended operational memory for GSC
 
-You are doing a lot of different changes in one patch. Please, separate 
-each clean up into its own patch
+The series includes changes for the i915 driver:
+- allocate extended operational memory for GSC
+- GSC on XeHP SDV offsets and definitions
 
+Greg KH, please review and ACK the MEI patches.
+We are pushing these patches through gfx tree as
+the auxiliary device belongs there.
 
+V2: rebase over merged DG1 series and DG2 enablement patch,
+    fix commit messages
 
+V3: rebase over latest tip
 
-Thanks,
---Pavel Skripkin
+Alexander Usyskin (5):
+  drm/i915/gsc: add slow_fw flag to the mei auxiliary device
+  drm/i915/gsc: add slow_fw flag to the gsc device definition
+  drm/i915/gsc: add GSC XeHP SDV platform definition
+  mei: gsc: wait for reset thread on stop
+  mei: extend timeouts on slow devices.
+
+Daniele Ceraolo Spurio (1):
+  HAX: drm/i915: force INTEL_MEI_GSC on for CI
+
+Tomas Winkler (5):
+  mei: gsc: use polling instead of interrupts
+  mei: mkhi: add memory ready command
+  mei: gsc: setup gsc extended operational memory
+  mei: debugfs: add pxp mode to devstate in debugfs
+  drm/i915/gsc: allocate extended operational memory in LMEM
+
+Vitaly Lubart (3):
+  drm/i915/gsc: skip irq initialization if using polling
+  mei: bus: export common mkhi definitions into a separate header
+  mei: gsc: add transition to PXP mode in resume flow
+
+ drivers/gpu/drm/i915/Kconfig.debug  |   1 +
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 119 +++++++++++++++++++++++++---
+ drivers/gpu/drm/i915/gt/intel_gsc.h |   3 +
+ drivers/misc/mei/bus-fixup.c        | 105 ++++++++++++++++--------
+ drivers/misc/mei/client.c           |  14 ++--
+ drivers/misc/mei/debugfs.c          |  17 ++++
+ drivers/misc/mei/gsc-me.c           |  77 +++++++++++++++---
+ drivers/misc/mei/hbm.c              |  12 +--
+ drivers/misc/mei/hw-me-regs.h       |   7 ++
+ drivers/misc/mei/hw-me.c            | 116 ++++++++++++++++++++++-----
+ drivers/misc/mei/hw-me.h            |  14 +++-
+ drivers/misc/mei/hw-txe.c           |   2 +-
+ drivers/misc/mei/hw.h               |   5 ++
+ drivers/misc/mei/init.c             |  21 ++++-
+ drivers/misc/mei/main.c             |   2 +-
+ drivers/misc/mei/mei_dev.h          |  26 ++++++
+ drivers/misc/mei/mkhi.h             |  57 +++++++++++++
+ drivers/misc/mei/pci-me.c           |   2 +-
+ include/linux/mei_aux.h             |   2 +
+ 19 files changed, 511 insertions(+), 91 deletions(-)
+ create mode 100644 drivers/misc/mei/mkhi.h
+
+-- 
+2.32.0
+

@@ -2,624 +2,770 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694CF550CFE
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 22:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2231550D01
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 22:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236981AbiFSUiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 16:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S236245AbiFSUjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 16:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiFSUir (ORCPT
+        with ESMTP id S229706AbiFSUjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 16:38:47 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBF6E78
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:38:45 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id fd6so9773859edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:38:45 -0700 (PDT)
+        Sun, 19 Jun 2022 16:39:11 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76ABE7A;
+        Sun, 19 Jun 2022 13:39:08 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id j21so1193198lfe.1;
+        Sun, 19 Jun 2022 13:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=XYibrci/JEMWZz3n6gUSBndL5rbGxA/V+jY5Ny+Yzgo=;
-        b=IM1fMNUokfj/mL09l5nKPF43V27sWPfBXTDP2kxU70E0Oa9XRNmhG6iCGEi34BU8vV
-         72p1O1evvrth0bpzwXHEIlnNgwgCl/OiZMDwggHCH6CTNJeqgr6Bw07GCPZTfZQg+tQm
-         1q6lcQHn2zxXoGO0Llcr+CdatNbYTom6v/9Bo=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pY9i4eb5+PAgZ4Li5fJmHqNCfyRwM6dkdhuLmclnYMc=;
+        b=dWCkS937p+TLwe9HhbezPoad0/OZB/sE/sVAtqGHQVo7/NYs9bTMkPsi8ynLI9UM/g
+         kyxlh/SJRulcEKvAGi7uQL/R1/jb2rLCX44o3zw+gEXRMIY6QBZutaM4F42TEs45oEm3
+         IQIAd+PD/Xe6On+KHjU3z8iBQqrAOOrr8yx5furU6RqN6zvw2UpdtzvfqoK1jHbau0ch
+         sdtcRLDxYS6Vi9uwGMyvweKzPdvB/rK5t0HG+sKeZcGkHA3f4k2sH4h8tj3V3GGlljXN
+         qHEu/sPBlz3T56GYsWQgDJUtKcI7C54a4bOzm4/mBAF7RcfwEB92s3ePU2zVkvQegYsA
+         FVMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=XYibrci/JEMWZz3n6gUSBndL5rbGxA/V+jY5Ny+Yzgo=;
-        b=GS8DW/KDyS2aHJryYz6sWcxJBsXTMmaizcj07yA1X4gw5ub/ZzO7W0q4w3q93ubqFU
-         R3XPaSLbxSVXUFcFZLjfTZ2v5rjSSlhWubRwBDTZNzovDuUxeSXUm8nNmPEh6UytFgRM
-         +67vFblEcCuD7bXBeg3dS+OwGh6lWlw8SDlaj+7rT0p6KL5nYH+AT8Vc/b6fbetYo9Xm
-         kBt07G1/rTSsLf65DCmbROS4R69I2LscH40mvNPFPcuncMuAjIZE4ERcoKArk32dETie
-         gkq6+I/C2lMTuaa0hY/0h3jWYyoYH2rug+9D26gsizAuXMEuyJjVoEMrxBAFhuuWclVg
-         bwgQ==
-X-Gm-Message-State: AJIora8LhEhoyyW8wBAFmGJG7OY4yH9Oeqj7AVukrpsY/PVcHf1KmDlW
-        Nxo4OIVjNKN4/YGfvX1DgeYmo/GWViOcMdp5
-X-Google-Smtp-Source: AGRyM1tOM5J/RFiodADCopqKAEy/EcFbfnCesm2Qj90AtZbtWiPVYkNTC2MLxikEElcNuCof1XQDUg==
-X-Received: by 2002:a05:6402:3490:b0:42f:b592:f364 with SMTP id v16-20020a056402349000b0042fb592f364mr25822664edc.66.1655671123927;
-        Sun, 19 Jun 2022 13:38:43 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id kv14-20020a17090778ce00b006fe8b3d8cb6sm4940063ejc.62.2022.06.19.13.38.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 13:38:43 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id g4so12056388wrh.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:38:43 -0700 (PDT)
-X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id
- j17-20020a056000125100b0021aefae6cbemr13056064wrx.281.1655671122800; Sun, 19
- Jun 2022 13:38:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pY9i4eb5+PAgZ4Li5fJmHqNCfyRwM6dkdhuLmclnYMc=;
+        b=JH/WyFm2hwEJ7Ziu183nPe+LLByZOhTt1+ig08O3awDXl/GtT2oKSVQW0ID7frl48v
+         8mQUtrupMOSKd9TL6uNiL4T6d/pXtwUa636PQKTw7ZaSINr1lGoCPYDLXxs6vrEBikUF
+         T7W+qBbrHwhrOudJDFOHnBRyRf+Wejx0AlOWNTpKPVdXCkxZ9BrURIrNXVMV64YsxE1M
+         1/bq2CiN2QnAFOjRk32JjTF34kOuPxC9PoeVEf6JQaeKrDsMwKzCZ8bNJjObgtryG6GZ
+         8+JQ3fDtWe41+7mEk4L9XgGtZLkimRj+uPS2xCLlTxXjUuvyWyLb5M7XijXd+jE0bbqx
+         fSMg==
+X-Gm-Message-State: AJIora8e/AZFv7T4AU6kwEGJn1o7ko/LTeQuJkueqBUkCIblLxHSM+8n
+        sjn2/pDGhQBEoxU7wUUPE9E=
+X-Google-Smtp-Source: AGRyM1t4Oo7Z4/dPKejCnxWQfEzyj9wSHW4ZmEOjfAirL+CIB8J9MU4KhuqLEkGf1wRpcI+hbk1RRw==
+X-Received: by 2002:ac2:4c54:0:b0:479:55a9:2dbf with SMTP id o20-20020ac24c54000000b0047955a92dbfmr12004580lfk.683.1655671147063;
+        Sun, 19 Jun 2022 13:39:07 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id z4-20020a056512370400b00478bc12ccaasm1482947lfr.296.2022.06.19.13.39.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 13:39:06 -0700 (PDT)
+Date:   Sun, 19 Jun 2022 23:39:04 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 17/17] PCI: dwc: Add Baikal-T1 PCIe controller support
+Message-ID: <20220619203904.h7q2eb7e4ctsujsk@mobilestation>
+References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610085706.15741-18-Sergey.Semin@baikalelectronics.ru>
+ <20220615171045.GD1413880-robh@kernel.org>
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 19 Jun 2022 15:38:26 -0500
-X-Gmail-Original-Message-ID: <CAHk-=wgErDgDFbU9astx+NTUu_KNi-jgzfF6RGup=cVee6+U=g@mail.gmail.com>
-Message-ID: <CAHk-=wgErDgDFbU9astx+NTUu_KNi-jgzfF6RGup=cVee6+U=g@mail.gmail.com>
-Subject: Linux 5.19-rc3
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615171045.GD1413880-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's Sunday afternoon, which means it's time for another rc release.
-
-5.19-rc3 is fairly small, and just looking at the diffstat, a lot of
-it ends up being in the documentation subdirectory. With another chunk
-in selftests.
-
-But we do have real code changes too, fairly evenly split between
-drivers, architecture fixes, and "other code". That other code is
-mostly filesystem fixes, but also some core kernel and networking.
-
-Full shortlog appended for your enjoyment, but so far everything looks
-fine. Knock wood,
-
-                   Linus
-
----
-
-Alan Previn (1):
-      drm/i915/reset: Fix error_state_read ptr + offset use
-
-Aleksandr Loktionov (1):
-      i40e: Fix call trace in setup_tx_descriptors
-
-Alexander Usyskin (3):
-      mei: me: set internal pg flag to off on hardware reset
-      mei: hbm: drop capability response on early shutdown
-      mei: me: add raptor lake point S DID
-
-Andy Chiu (2):
-      net: axienet: make the 64b addresable DMA depends on 64b archectures
-      net: axienet: Use iowrite64 to write all 64b descriptor pointers
-
-Andy Shevchenko (1):
-      MAINTAINERS: Update Synopsys DesignWare I2C to Supported
-
-Ashutosh Dixit (1):
-      drm/i915/gt: Fix memory leaks in per-gt sysfs
-
-Baokun Li (2):
-      ext4: fix bug_on ext4_mb_use_inode_pa
-      ext4: correct the judgment of BUG in ext4_mb_normalize_request
-
-Bart Van Assche (2):
-      block: Fix handling of offline queues in blk_mq_alloc_request_hctx()
-      block/bfq: Enable I/O statistics
-
-Benjamin Marzinski (1):
-      dm: fix race in dm_start_io_acct
-
-Brad Bishop (1):
-      eeprom: at25: Split reads into chunks and cap write size
-
-Catalin Marinas (1):
-      Revert "arm64: Initialize jump labels before setup_machine_fdt()"
-
-Christian Brauner (1):
-      fs: account for group membership
-
-Christian G=C3=B6ttsche (2):
-      audit: free module name
-      selinux: free contexts previously transferred in selinux_add_opt()
-
-Christian K=C3=B6nig (2):
-      drm/ttm: fix missing NULL check in ttm_device_swapout
-      drm/ttm: fix bulk move handling v2
-
-Christophe JAILLET (2):
-      i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
-      net: bgmac: Fix an erroneous kfree() in bgmac_remove()
-
-Conor Dooley (1):
-      riscv: dts: microchip: re-add pdma to mpfs device tree
-
-Dan Carpenter (1):
-      drm/exynos: fix IS_ERR() vs NULL check in probe
-
-Darrick J. Wong (3):
-      xfs: fix TOCTOU race involving the new logged xattrs control knob
-      xfs: fix variable state usage
-      xfs: preserve DIFLAG2_NREXT64 when setting other inode attributes
-
-Dave Wysochanski (1):
-      NFSv4: Add FMODE_CAN_ODIRECT after successful open of a NFS4.x file
-
-David Matlack (11):
-      KVM: selftests: Replace x86_page_size with PG_LEVEL_XX
-      KVM: selftests: Add option to create 2M and 1G EPT mappings
-      KVM: selftests: Drop stale function parameter comment for nested_map(=
-)
-      KVM: selftests: Refactor nested_map() to specify target level
-      KVM: selftests: Move VMX_EPT_VPID_CAP_AD_BITS to vmx.h
-      KVM: selftests: Add a helper to check EPT/VPID capabilities
-      KVM: selftests: Drop unnecessary rule for STATIC_LIBS
-      KVM: selftests: Link selftests directly with lib object files
-      KVM: selftests: Clean up LIBKVM files in Makefile
-      KVM: selftests: Add option to run dirty_log_perf_test vCPUs in L2
-      KVM: selftests: Restrict test region to 48-bit physical
-addresses when using nested
-
-David S. Miller (1):
-      xilinx:  Fix build on x86.
-
-Ding Xiang (1):
-      ext4: make variable "count" signed
-
-Duoming Zhou (1):
-      net: ax25: Fix deadlock caused by skb_recv_datagram in ax25_recvmsg
-
-Dylan Yudaken (4):
-      io_uring: fix index calculation
-      io_uring: fix types in provided buffer ring
-      io_uring: limit size of provided buffer ring
-      io_uring: do not use prio task_work_add in uring_cmd
-
-Eddie James (1):
-      hwmon: (occ) Lock mutex in shutdown to prevent race with occ_active
-
-Eric Biggers (1):
-      ext4: fix up test_dummy_encryption handling for new mount API
-
-GONG, Ruiqi (1):
-      drm/atomic: fix warning of unused variable
-
-Grzegorz Szczurek (2):
-      i40e: Fix adding ADQ filter to TC0
-      i40e: Fix calculating the number of queue pairs
-
-Guangbin Huang (3):
-      net: hns3: set port base vlan tbl_sta to false before removing old vl=
-an
-      net: hns3: restore tm priority/qset to default settings when tc disab=
-led
-      net: hns3: fix tm port shapping of fibre port is incorrect after
-driver initialization
-
-Guenter Roeck (1):
-      watchdog: gxp: Add missing MODULE_LICENSE
-
-Guoqing Jiang (1):
-      Revert "md: don't unregister sync_thread with reconfig_mutex held"
-
-Hans de Goede (1):
-      x86/PCI: Revert "x86/PCI: Clip only host bridge windows for E820 regi=
-ons"
-
-Hao Xu (2):
-      io_uring: openclose: fix bug of closing wrong fixed file
-      io_uring: kbuf: fix bug of not consuming ring buffer in partial io ca=
-se
-
-Heiko Stuebner (3):
-      riscv: fix dependency for t-head errata
-      riscv: drop cpufeature_apply_feature tracking variable
-      riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol
-
-Ian Abbott (1):
-      comedi: vmk80xx: fix expression for tx buffer size
-
-Ilpo J=C3=A4rvinen (1):
-      serial: 8250: Store to lsr_save_flags after lsr read
-
-Jamie Iles (1):
-      irqchip/xilinx: Remove microblaze+zynq dependency
-
-Jan Kara (2):
-      init: Initialize noop_backing_dev_info early
-      ext4: improve write performance with disabled delalloc
-
-Jani Nikula (1):
-      drm/i915/uc: remove accidental static from a local variable
-
-Jason A. Donenfeld (1):
-      crypto: memneq - move into lib/
-
-Javier Martinez Canillas (1):
-      staging: olpc_dcon: mark driver as broken
-
-Jean-Philippe Brucker (1):
-      amd-xgbe: Use platform_irq_count()
-
-Jens Axboe (2):
-      io_uring: commit non-pollable provided mapped buffers upfront
-      io_uring: recycle provided buffer if we punt to io-wq
-
-Jian Shen (1):
-      net: hns3: don't push link state to VF if unalive
-
-Jiasheng Jiang (1):
-      i2c: npcm7xx: Add check for platform_driver_register
-
-Jiaxun Yang (1):
-      irqchip/loongson-liointc: Use architecture register to get coreid
-
-Jie Wang (2):
-      net: hns3: modify the ring param print info
-      net: hns3: fix PF rss size initialization bug
-
-Jing Leng (1):
-      usb: cdnsp: Fixed setting last_trb incorrectly
-
-Joanne Koong (1):
-      Revert "net: Add a second bind table hashed by port and address"
-
-Jonathan Neusch=C3=A4fer (1):
-      docs: networking: phy: Fix a typo
-
-Jose Alonso (1):
-      net: usb: ax88179_178a needs FLAG_SEND_ZLP
-
-Josh Poimboeuf (5):
-      x86/speculation/mmio: Print SMT warning
-      objtool: Fix obsolete reference to CONFIG_X86_SMAP
-      faddr2line: Fix overlapping text section failures, the sequel
-      x86/ftrace: Remove OBJECT_FILES_NON_STANDARD usage
-      x86/mm: Fix RESERVE_BRK() for older binutils
-
-Julia Lawall (1):
-      RISC-V: KVM: fix typos in comments
-
-Kees Cook (1):
-      staging: rtl8723bs: Allocate full pwep structure
-
-Keith Busch (5):
-      nvme: add bug report info for global duplicate id
-      nvme-pci: add trouble shooting steps for timeouts
-      nvme-pci: phison e12 has bogus namespace ids
-      nvme-pci: smi has bogus namespace ids
-      nvme-pci: sk hynix p31 has bogus namespace ids
-
-Kirill A. Shutemov (3):
-      x86/tdx: Fix early #VE handling
-      x86/tdx: Clarify RIP adjustments in #VE handler
-      x86/tdx: Handle load_unaligned_zeropad() page-cross to a shared page
-
-Kunihiko Hayashi (2):
-      dt-bindings: interrupt-controller/uniphier-aidet: Add bindings for NX=
-1 SoC
-      irqchip/uniphier-aidet: Add compatible string for NX1 SoC
-
-Larry Finger (1):
-      staging: r8188eu: Fix warning of array overflow in ioctl_linux.c
-
-Linus Torvalds (2):
-      netfs: fix up netfs_inode_init() docbook comment
-      Linux 5.19-rc3
-
-Linyu Yuan (2):
-      usb: gadget: f_fs: change ep->status safe in ffs_epfile_io()
-      usb: gadget: f_fs: change ep->ep safe in ffs_epfile_io()
-
-Logan Gunthorpe (1):
-      md/raid5-ppl: Fix argument order in bio_alloc_bioset()
-
-Lukas Bulwahn (3):
-      MAINTAINERS: Limit KVM RISC-V entry to existing selftests
-      MAINTAINERS: add include/dt-bindings/i2c to I2C SUBSYSTEM HOST DRIVER=
-S
-      MAINTAINERS: add include/dt-bindings/net to NETWORKING DRIVERS
-
-Marc Zyngier (8):
-      KVM: arm64: Always start with clearing SVE flag on load
-      KVM: arm64: Always start with clearing SME flag on load
-      KVM: arm64: Don't read a HW interrupt pending state in user context
-      KVM: arm64: Replace vgic_v3_uaccess_read_pending with
-vgic_uaccess_read_pending
-      KVM: arm64: Warn if accessing timer pending state outside of vcpu con=
-text
-      KVM: arm64: Handle all ID registers trapped for a protected VM
-      KVM: arm64: Drop stale comment
-      genirq: PM: Use runtime PM for chained interrupts
-
-Marek Szyprowski (1):
-      drm/exynos: mic: Rework initialization
-
-Marian Postevca (1):
-      usb: gadget: u_ether: fix regression in setting fixed MAC address
-
-Mark Brown (1):
-      arm64/cpufeature: Unexport set_cpu_feature()
-
-Mark Rutland (3):
-      arm64: ftrace: fix branch range checks
-      arm64: ftrace: consistently handle PLTs.
-      arm64: ftrace: remove redundant label
-
-Masahiro Yamada (3):
-      clocksource: hyper-v: unexport __init-annotated hv_init_clocksource()
-      certs/blacklist_hashes.c: fix const confusion in certs blacklist
-      certs: fix and refactor CONFIG_SYSTEM_BLACKLIST_HASH_LIST build
-
-Mathias Nyman (1):
-      xhci: Fix null pointer dereference in resume if xhci has only one roo=
-thub
-
-Matthew Wilcox (Oracle) (3):
-      usercopy: Handle vm_map_ram() areas
-      usercopy: Cast pointer to an integer once
-      usercopy: Make usercopy resilient against ridiculously large copies
-
-Maxim Levitsky (7):
-      KVM: x86: document AVIC/APICv inhibit reasons
-      KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base
-      KVM: x86: SVM: remove avic's broken code that updated APIC ID
-      KVM: x86: SVM: fix avic_kick_target_vcpus_fast
-      KVM: x86: disable preemption while updating apicv inhibition
-      KVM: x86: disable preemption around the call to
-kvm_arch_vcpu_{un|}blocking
-      KVM: x86: SVM: drop preempt-safe wrappers for avic_vcpu_load/put
-
-Miaoqian Lin (9):
-      irqchip/gic/realview: Fix refcount leak in realview_gic_of_init
-      irqchip/apple-aic: Fix refcount leak in build_fiq_affinity
-      irqchip/apple-aic: Fix refcount leak in aic_of_ic_init
-      irqchip/gic-v3: Fix error handling in gic_populate_ppi_partitions
-      irqchip/gic-v3: Fix refcount leak in gic_populate_ppi_partitions
-      irqchip/realtek-rtl: Fix refcount leak in map_interrupts
-      usb: dwc2: Fix memory leak in dwc2_hcd_init
-      usb: gadget: lpc32xx_udc: Fix refcount leak in lpc32xx_udc_probe
-      misc: atmel-ssc: Fix IRQ check in ssc_probe
-
-Michael Carns (1):
-      hwmon: (asus-ec-sensors) add missing comma in board name list.
-
-Michael Kelley (1):
-      HID: hyperv: Correctly access fields declared as __le16
-
-Michal Michalik (1):
-      ice: Fix PTP TX timestamp offset calculation
-
-Michal Wilczynski (1):
-      iavf: Fix issue with MAC address of VF shown as zero
-
-Michel D=C3=A4nzer (1):
-      drm/amdgpu: Fix GTT size reporting in amdgpu_ioctl
-
-Mikulas Patocka (3):
-      dm: fix use-after-free in dm_put_live_table_bio
-      dm: fix narrow race for REQ_NOWAIT bios being issued despite no suppo=
-rt
-      dm mirror log: round up region bitmap size to BITS_PER_LONG
-
-Ming Lei (3):
-      blk-mq: protect q->elevator by ->sysfs_lock in blk_mq_elv_switch_none
-      blk-mq: avoid to touch q->elevator without any protection
-      blk-mq: don't clear flush_rq from tags->rqs[]
-
-Nathan Chancellor (1):
-      misc: rtsx: Fix clang -Wsometimes-uninitialized in rts5261_init_from_=
-hw()
-
-Ning Wang (1):
-      nvme-pci: avoid the deepest sleep state on ZHITAI TiPro7000 SSDs
-
-Nirmoy Das (1):
-      drm/i915: Individualize fences before adding to dma_resv obj
-
-Oleksij Rempel (1):
-      ARM: dts: at91: ksz9477_evb: fix port/phy validation
-
-Paolo Bonzini (1):
-      KVM: x86: SVM: fix nested PAUSE filtering when L0 intercepts PAUSE
-
-Pavel Begunkov (13):
-      io_uring: fix races with file table unregister
-      io_uring: fix races with buffer table unregister
-      io_uring: fix not locked access to fixed buf table
-      io_uring: fix double unlock for pbuf select
-      Revert "io_uring: support CQE32 for nop operation"
-      Revert "io_uring: add buffer selection support to IORING_OP_NOP"
-      io_uring: remove IORING_CLOSE_FD_AND_FILE_SLOT
-      io_uring: get rid of __io_fill_cqe{32}_req()
-      io_uring: unite fill_cqe and the 32B version
-      io_uring: fill extra big cqe fields from req
-      io_uring: fix ->extra{1,2} misuse
-      io_uring: remove __io_fill_cqe() helper
-      io_uring: make io_fill_cqe_aux honour CQE32
-
-Pawan Gupta (10):
-      Documentation: Add documentation for Processor MMIO Stale Data
-      x86/speculation/mmio: Enumerate Processor MMIO Stale Data bug
-      x86/speculation: Add a common function for MD_CLEAR mitigation update
-      x86/speculation/mmio: Add mitigation for Processor MMIO Stale Data
-      x86/bugs: Group MDS, TAA & Processor MMIO Stale Data mitigations
-      x86/speculation/mmio: Enable CPU Fill buffer clearing on idle
-      x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Da=
-ta
-      x86/speculation/srbds: Update SRBDS mitigation selection
-      x86/speculation/mmio: Reuse SRBDS mitigation for SBDS
-      KVM: x86/speculation: Disable Fill buffer clear within guests
-
-Peter Robinson (1):
-      staging: Also remove the Unisys visorbus.h
-
-Peter Zijlstra (1):
-      sched: Fix balance_push() vs __sched_setscheduler()
-
-Petr Machata (1):
-      mlxsw: spectrum_cnt: Reorder counter pools
-
-Petr Mladek (2):
-      printk: Block console kthreads when direct printing will be required
-      printk: Wait for the global console lock when the system is going dow=
-n
-
-Phillip Potter (1):
-      staging: r8188eu: fix rtw_alloc_hwxmits error detection for now
-
-Przemyslaw Patynowski (2):
-      ice: Fix queue config fail handling
-      ice: Fix memory corruption in VF driver
-
-Rob Herring (1):
-      dt-bindings: hwmon: ti,tmp401: Drop 'items' from 'ti,n-factor' proper=
-ty
-
-Robert Eckelmann (1):
-      USB: serial: io_ti: add Agilent E5805A support
-
-Roman Li (1):
-      drm/amd/display: Cap OLED brightness per max frame-average luminance
-
-Roman Storozhenko (1):
-      ice: Sync VLAN filtering features for DVM
-
-Sami Tolvanen (1):
-      cfi: Fix __cfi_slowpath_diag RCU usage with cpuidle
-
-Saurabh Sengar (2):
-      Drivers: hv: vmbus: Don't assign VMbus channel interrupts to isolated=
- CPUs
-      Drivers: hv: vmbus: Release cpu lock in error case
-
-Scott Mayhew (1):
-      sunrpc: set cl_max_connect when cloning an rpc_clnt
-
-Sebastian Andrzej Siewior (1):
-      locking/lockdep: Use sched_clock() for random numbers
-
-Serge Semin (1):
-      i2c: designware: Use standard optional ref clock implementation
-
-Shin'ichiro Kawasaki (1):
-      bus: fsl-mc-bus: fix KASAN use-after-free in fsl_mc_bus_remove()
-
-Shreenidhi Shedi (1):
-      char: lp: remove redundant initialization of err
-
-Shuqi Zhang (1):
-      ext4: use kmemdup() to replace kmalloc + memcpy
-
-Shyam Prasad N (1):
-      cifs: when a channel is not found for server, log its connection id
-
-Slark Xiao (1):
-      USB: serial: option: add support for Cinterion MV31 with new baseline
-
-Stefan Reiter (1):
-      nvme-pci: add NVME_QUIRK_BOGUS_NID for ADATA XPG GAMMIX S50
-
-Stephan Gerhold (1):
-      usb: dwc3: pci: Restore line lost in merge conflict resolution
-
-Stephen Rothwell (1):
-      USB: fixup for merge issue with "usb: dwc3: Don't switch OTG ->
-peripheral if extcon is present"
-
-Steve French (1):
-      smb3: add trace point for SMB2_set_eof
-
-Suman Ghosh (1):
-      octeontx2-vf: Add support for adaptive interrupt coalescing
-
-Thomas Wei=C3=9Fschuh (1):
-      nvme: add device name to warning in uuid_show()
-
-Tianyu Lan (1):
-      x86/Hyper-V: Add SEV negotiate protocol support in Isolation VM
-
-Tony Lindgren (1):
-      tty: n_gsm: Debug output allocation must use GFP_ATOMIC
-
-Trond Myklebust (2):
-      pNFS: Don't keep retrying if the server replied NFS4ERR_LAYOUTUNAVAIL=
-ABLE
-      pNFS: Avoid a live lock condition in pnfs_update_layout()
-
-Vijaya Krishna Nivarthi (2):
-      serial: core: Introduce callback for start_rx and do stop_rx in
-suspend only if this callback implementation is present.
-      tty: serial: qcom-geni-serial: Implement start_rx callback
-
-Vincent Whitchurch (1):
-      tty: goldfish: Fix free_irq() on remove
-
-Wang Jianjian (2):
-      ext4: fix incorrect comment in ext4_bio_write_page()
-      ext4, doc: remove unnecessary escaping
-
-Wesley Cheng (1):
-      usb: dwc3: gadget: Fix IN endpoint max packet size allocation
-
-Will Deacon (5):
-      KVM: arm64: Return error from kvm_arch_init_vm() on allocation failur=
-e
-      KVM: arm64: Ignore 'kvm-arm.mode=3Dprotected' when using VHE
-      KVM: arm64: Extend comment in has_vhe()
-      KVM: arm64: Remove redundant hyp_assert_lock_held() assertions
-      arm64: mm: Don't invalidate FROM_DEVICE buffers at start of DMA trans=
-fer
-
-Wolfram Sang (1):
-      MAINTAINERS: core DT include belongs to core
-
-Xiang wangx (2):
-      Drivers: hv: Fix syntax errors in comments
-      ext4: fix a doubled word "need" in a comment
-
-Xin Long (3):
-      Documentation: add description for net.sctp.reconf_enable
-      Documentation: add description for net.sctp.intl_enable
-      Documentation: add description for net.sctp.ecn_enable
-
-Yang Li (1):
-      fs: fix jbd2_journal_try_to_free_buffers() kernel-doc comment
-
-Yang Yingliang (1):
-      net: axienet: add missing error return code in axienet_probe()
-
-Yanteng Si (2):
-      docs/LoongArch: Fix notes rendering by using reST directives
-      docs/zh_CN/LoongArch: Fix notes rendering by using reST directives
-
-Ye Bin (2):
-      ext2: fix fs corruption when trying to remove a non-empty
-directory with IO error
-      ext4: fix super block checksum incorrect after mount
-
-Youling Tang (1):
-      LoongArch: vmlinux.lds.S: Add missing ELF_DETAILS
-
-Yuan Yao (1):
-      KVM: x86/mmu: Set memory encryption "value", not "mask", in shadow PD=
-PTRs
-
-Zhang Yi (2):
-      ext4: fix warning when submitting superblock in ext4_commit_super()
-      ext4: add reserved GDT blocks check
-
-rasheed.hsueh (1):
-      nvme-pci: disable write zeros support on UMIC and Samsung SSDs
-
-sunliming (1):
-      KVM: arm64: Fix inconsistent indenting
+On Wed, Jun 15, 2022 at 11:10:45AM -0600, Rob Herring wrote:
+> On Fri, Jun 10, 2022 at 11:57:05AM +0300, Serge Semin wrote:
+> > Baikal-T1 SoC is equipped with DWC PCIe v4.60a host controller. It can be
+> > trained to work up to Gen.3 speed over up to x4 lanes. The host controller
+> > is attached to the DW PCIe 3.0 PCS via the PIPE-4 interface, which in its
+> > turn is connected to the DWC 10G PHY. The whole system is supposed to be
+> > fed up with four clock sources: DBI peripheral clock, AXI application
+> > clocks and external PHY/core reference clock generating the 100MHz signal.
+> > In addition to that the platform provide a way to reset each part of the
+> > controller: sticky/non-sticky bits, host controller core, PIPE interface,
+> > PCS/PHY and Hot/Power reset signal. The driver also provides a way to
+> > handle the GPIO-based PERST# signal.
+> > 
+> > Note due to the Baikal-T1 MMIO peculiarity we have to implement the DBI
+> > interface accessors which make sure the IO operations are dword-aligned.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Changelog v2:
+> > - Rename 'syscon' property to 'baikal,bt1-syscon'.
+> > 
+> > Changelog v3:
+> > - Use the clocks/resets handlers defined in the DW PCIe core descriptor.
+> >   (@Rob)
+> > - Redefine PCI host bridge config space accessors with the generic
+> >   pci_generic_config_read32() and pci_generic_config_write32() methods.
+> >   (@Rob)
+> > ---
+> >  drivers/pci/controller/dwc/Kconfig    |   9 +
+> >  drivers/pci/controller/dwc/Makefile   |   1 +
+> >  drivers/pci/controller/dwc/pcie-bt1.c | 649 ++++++++++++++++++++++++++
+> >  3 files changed, 659 insertions(+)
+> >  create mode 100644 drivers/pci/controller/dwc/pcie-bt1.c
+> > 
+> > diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> > index 62ce3abf0f19..771b8b146623 100644
+> > --- a/drivers/pci/controller/dwc/Kconfig
+> > +++ b/drivers/pci/controller/dwc/Kconfig
+> > @@ -222,6 +222,15 @@ config PCIE_ARTPEC6_EP
+> >  	  Enables support for the PCIe controller in the ARTPEC-6 SoC to work in
+> >  	  endpoint mode. This uses the DesignWare core.
+> >  
+> > +config PCIE_BT1
+> > +	tristate "Baikal-T1 PCIe controller"
+> > +	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
+> > +	depends on PCI_MSI_IRQ_DOMAIN
+> > +	select PCIE_DW_HOST
+> > +	help
+> > +	  Enables support for the PCIe controller in the Baikal-T1 SoC to work
+> > +	  in host mode. It's based on the Synopsys DWC PCIe v4.60a IP-core.
+> > +
+> >  config PCIE_ROCKCHIP_DW_HOST
+> >  	bool "Rockchip DesignWare PCIe controller"
+> >  	select PCIE_DW
+> > diff --git a/drivers/pci/controller/dwc/Makefile b/drivers/pci/controller/dwc/Makefile
+> > index 8ba7b67f5e50..bf5c311875a1 100644
+> > --- a/drivers/pci/controller/dwc/Makefile
+> > +++ b/drivers/pci/controller/dwc/Makefile
+> > @@ -3,6 +3,7 @@ obj-$(CONFIG_PCIE_DW) += pcie-designware.o
+> >  obj-$(CONFIG_PCIE_DW_HOST) += pcie-designware-host.o
+> >  obj-$(CONFIG_PCIE_DW_EP) += pcie-designware-ep.o
+> >  obj-$(CONFIG_PCIE_DW_PLAT) += pcie-designware-plat.o
+> > +obj-$(CONFIG_PCIE_BT1) += pcie-bt1.o
+> >  obj-$(CONFIG_PCI_DRA7XX) += pci-dra7xx.o
+> >  obj-$(CONFIG_PCI_EXYNOS) += pci-exynos.o
+> >  obj-$(CONFIG_PCIE_FU740) += pcie-fu740.o
+> > diff --git a/drivers/pci/controller/dwc/pcie-bt1.c b/drivers/pci/controller/dwc/pcie-bt1.c
+> > new file mode 100644
+> > index 000000000000..03f035743b78
+> > --- /dev/null
+> > +++ b/drivers/pci/controller/dwc/pcie-bt1.c
+> > @@ -0,0 +1,649 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
+> > + *
+> > + * Authors:
+> > + *   Vadim Vlasov <Vadim.Vlasov@baikalelectronics.ru>
+> > + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > + *
+> > + * Baikal-T1 PCIe controller driver
+> > + */
+> > +
+> > +#include <linux/bitfield.h>
+> > +#include <linux/bits.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/gpio/consumer.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/mfd/syscon.h>
+> > +#include <linux/module.h>
+> > +#include <linux/pci.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/reset.h>
+> > +#include <linux/types.h>
+> > +
+> > +#include "pcie-designware.h"
+> > +
+> > +/* Baikal-T1 System CCU control registers */
+> > +#define BT1_CCU_PCIE_CLKC			0x140
+> > +#define BT1_CCU_PCIE_REQ_PCS_CLK		BIT(16)
+> > +#define BT1_CCU_PCIE_REQ_MAC_CLK		BIT(17)
+> > +#define BT1_CCU_PCIE_REQ_PIPE_CLK		BIT(18)
+> > +
+> > +#define BT1_CCU_PCIE_RSTC			0x144
+> > +#define BT1_CCU_PCIE_REQ_LINK_RST		BIT(13)
+> > +#define BT1_CCU_PCIE_REQ_SMLH_RST		BIT(14)
+> > +#define BT1_CCU_PCIE_REQ_PHY_RST		BIT(16)
+> > +#define BT1_CCU_PCIE_REQ_CORE_RST		BIT(24)
+> > +#define BT1_CCU_PCIE_REQ_STICKY_RST		BIT(26)
+> > +#define BT1_CCU_PCIE_REQ_NSTICKY_RST		BIT(27)
+> > +
+> > +#define BT1_CCU_PCIE_PMSC			0x148
+> > +#define BT1_CCU_PCIE_LTSSM_STATE_MASK		GENMASK(5, 0)
+> > +#define BT1_CCU_PCIE_LTSSM_DET_QUIET		0x00
+> > +#define BT1_CCU_PCIE_LTSSM_DET_ACT		0x01
+> > +#define BT1_CCU_PCIE_LTSSM_POLL_ACT		0x02
+> > +#define BT1_CCU_PCIE_LTSSM_POLL_COMP		0x03
+> > +#define BT1_CCU_PCIE_LTSSM_POLL_CONF		0x04
+> > +#define BT1_CCU_PCIE_LTSSM_PRE_DET_QUIET	0x05
+> > +#define BT1_CCU_PCIE_LTSSM_DET_WAIT		0x06
+> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNKWD_START	0x07
+> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNKWD_ACEPT	0x08
+> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNNUM_WAIT	0x09
+> > +#define BT1_CCU_PCIE_LTSSM_CFG_LNNUM_ACEPT	0x0a
+> > +#define BT1_CCU_PCIE_LTSSM_CFG_COMPLETE		0x0b
+> > +#define BT1_CCU_PCIE_LTSSM_CFG_IDLE		0x0c
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_LOCK		0x0d
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_SPEED		0x0e
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_RCVRCFG		0x0f
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_IDLE		0x10
+> > +#define BT1_CCU_PCIE_LTSSM_L0			0x11
+> > +#define BT1_CCU_PCIE_LTSSM_L0S			0x12
+> > +#define BT1_CCU_PCIE_LTSSM_L123_SEND_IDLE	0x13
+> > +#define BT1_CCU_PCIE_LTSSM_L1_IDLE		0x14
+> > +#define BT1_CCU_PCIE_LTSSM_L2_IDLE		0x15
+> > +#define BT1_CCU_PCIE_LTSSM_L2_WAKE		0x16
+> > +#define BT1_CCU_PCIE_LTSSM_DIS_ENTRY		0x17
+> > +#define BT1_CCU_PCIE_LTSSM_DIS_IDLE		0x18
+> > +#define BT1_CCU_PCIE_LTSSM_DISABLE		0x19
+> > +#define BT1_CCU_PCIE_LTSSM_LPBK_ENTRY		0x1a
+> > +#define BT1_CCU_PCIE_LTSSM_LPBK_ACTIVE		0x1b
+> > +#define BT1_CCU_PCIE_LTSSM_LPBK_EXIT		0x1c
+> > +#define BT1_CCU_PCIE_LTSSM_LPBK_EXIT_TOUT	0x1d
+> > +#define BT1_CCU_PCIE_LTSSM_HOT_RST_ENTRY	0x1e
+> > +#define BT1_CCU_PCIE_LTSSM_HOT_RST		0x1f
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ0		0x20
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ1		0x21
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ2		0x22
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ3		0x23
+> > +#define BT1_CCU_PCIE_SMLH_LINKUP		BIT(6)
+> > +#define BT1_CCU_PCIE_RDLH_LINKUP		BIT(7)
+> > +#define BT1_CCU_PCIE_PM_LINKSTATE_L0S		BIT(8)
+> > +#define BT1_CCU_PCIE_PM_LINKSTATE_L1		BIT(9)
+> > +#define BT1_CCU_PCIE_PM_LINKSTATE_L2		BIT(10)
+> > +#define BT1_CCU_PCIE_L1_PENDING			BIT(12)
+> > +#define BT1_CCU_PCIE_REQ_EXIT_L1		BIT(14)
+> > +#define BT1_CCU_PCIE_LTSSM_RCVR_EQ		BIT(15)
+> > +#define BT1_CCU_PCIE_PM_DSTAT_MASK		GENMASK(18, 16)
+> > +#define BT1_CCU_PCIE_PM_PME_EN			BIT(20)
+> > +#define BT1_CCU_PCIE_PM_PME_STATUS		BIT(21)
+> > +#define BT1_CCU_PCIE_AUX_PM_EN			BIT(22)
+> > +#define BT1_CCU_PCIE_AUX_PWR_DET		BIT(23)
+> > +#define BT1_CCU_PCIE_WAKE_DET			BIT(24)
+> > +#define BT1_CCU_PCIE_TURNOFF_REQ		BIT(30)
+> > +#define BT1_CCU_PCIE_TURNOFF_ACK		BIT(31)
+> > +
+> > +#define BT1_CCU_PCIE_GENC			0x14c
+> > +#define BT1_CCU_PCIE_LTSSM_EN			BIT(1)
+> > +#define BT1_CCU_PCIE_DBI2_MODE			BIT(2)
+> > +#define BT1_CCU_PCIE_MGMT_EN			BIT(3)
+> > +#define BT1_CCU_PCIE_RXLANE_FLIP_EN		BIT(16)
+> > +#define BT1_CCU_PCIE_TXLANE_FLIP_EN		BIT(17)
+> > +#define BT1_CCU_PCIE_SLV_XFER_PEND		BIT(24)
+> > +#define BT1_CCU_PCIE_RCV_XFER_PEND		BIT(25)
+> > +#define BT1_CCU_PCIE_DBI_XFER_PEND		BIT(26)
+> > +#define BT1_CCU_PCIE_DMA_XFER_PEND		BIT(27)
+> > +
+> > +#define BT1_CCU_PCIE_LTSSM_LINKUP(_pmsc) \
+> > +({ \
+> > +	int __state = FIELD_GET(BT1_CCU_PCIE_LTSSM_STATE_MASK, _pmsc); \
+> > +	__state >= BT1_CCU_PCIE_LTSSM_L0 && __state <= BT1_CCU_PCIE_LTSSM_L2_WAKE; \
+> > +})
+> > +
+> > +/* Baikal-T1 PCIe specific control registers */
+> > +#define BT1_PCIE_AXI2MGM_LANENUM		0xd04
+> > +#define BT1_PCIE_AXI2MGM_LANESEL_MASK		GENMASK(3, 0)
+> > +
+> > +#define BT1_PCIE_AXI2MGM_ADDRCTL		0xd08
+> > +#define BT1_PCIE_AXI2MGM_PHYREG_ADDR_MASK	GENMASK(20, 0)
+> > +#define BT1_PCIE_AXI2MGM_READ_FLAG		BIT(29)
+> > +#define BT1_PCIE_AXI2MGM_DONE			BIT(30)
+> > +#define BT1_PCIE_AXI2MGM_BUSY			BIT(31)
+> > +
+> > +#define BT1_PCIE_AXI2MGM_WRITEDATA		0xd0c
+> > +#define BT1_PCIE_AXI2MGM_WDATA			GENMASK(15, 0)
+> > +
+> > +#define BT1_PCIE_AXI2MGM_READDATA		0xd10
+> > +#define BT1_PCIE_AXI2MGM_RDATA			GENMASK(15, 0)
+> > +
+> > +/* Generic Baikal-T1 PCIe interface resources */
+> > +#define BT1_PCIE_NUM_APP_CLKS			ARRAY_SIZE(bt1_pcie_app_clks)
+> > +#define BT1_PCIE_NUM_CORE_CLKS			ARRAY_SIZE(bt1_pcie_core_clks)
+> > +#define BT1_PCIE_NUM_APP_RSTS			ARRAY_SIZE(bt1_pcie_app_rsts)
+> > +#define BT1_PCIE_NUM_CORE_RSTS			ARRAY_SIZE(bt1_pcie_core_rsts)
+> > +
+> > +static const enum dw_pcie_app_clk bt1_pcie_app_clks[] = {
+> > +	DW_PCIE_DBI_CLK, DW_PCIE_MSTR_CLK, DW_PCIE_SLV_CLK,
+> > +};
+> > +
+> > +static const enum dw_pcie_core_clk bt1_pcie_core_clks[] = {
+> > +	DW_PCIE_REF_CLK,
+> > +};
+> > +
+> > +static const enum dw_pcie_app_rst bt1_pcie_app_rsts[] = {
+> > +	DW_PCIE_MSTR_RST, DW_PCIE_SLV_RST,
+> > +};
+> > +
+> > +static const enum dw_pcie_core_rst bt1_pcie_core_rsts[] = {
+> > +	DW_PCIE_NON_STICKY_RST, DW_PCIE_STICKY_RST, DW_PCIE_CORE_RST,
+> > +	DW_PCIE_PIPE_RST, DW_PCIE_PHY_RST, DW_PCIE_HOT_RST, DW_PCIE_PWR_RST,
+> > +};
+> > +
+> > +struct bt1_pcie {
+> > +	struct dw_pcie dw;
+> > +	struct platform_device *pdev;
+> > +	struct regmap *sys_regs;
+> > +};
+> > +#define to_bt1_pcie(_dw) container_of(_dw, struct bt1_pcie, dw)
+> > +
+> > +/*
+> > + * Baikal-T1 MMIO space must be read/written by the dword-aligned
+> > + * instructions. Note the methods are optimized to have the dword operations
+> > + * performed with minimum overhead as the most frequently used ones.
+> > + */
+> > +static int bt1_pcie_read_mmio(void __iomem *addr, int size, u32 *val)
+> > +{
+> > +	unsigned int ofs = (uintptr_t)addr & 0x3;
+> > +
+> > +	if (!IS_ALIGNED((uintptr_t)addr, size))
+> > +		return PCIBIOS_BAD_REGISTER_NUMBER;
+> 
+
+> This isn't for PCI config space accessors, don't use PCIBIOS_*. We 
+> really want to get rid of those.
+
+Ok. I'll drop the PCIBIOS_* macros usage from here.
+
+> 
+> You are in control of all the accesses, so the error conditions should 
+> never happen, don't need to be checked, and don't need to be returned.
+
+not entirely. I'd prefer to keep the error-condition check here because the
+methods are the core of the callbacks called from the generic part of the
+DW PCIe driver which if get to regress in making the unsupported IO
+accesses will be easier to debug should the sanity check is performed.
+
+> 
+> > +
+> > +	*val = readl(addr - ofs) >> ofs * BITS_PER_BYTE;
+> > +	if (size == 4) {
+> > +		return PCIBIOS_SUCCESSFUL;
+> > +	} else if (size == 2) {
+> > +		*val &= 0xffff;
+> > +		return PCIBIOS_SUCCESSFUL;
+> > +	} else if (size == 1) {
+> > +		*val &= 0xff;
+> > +		return PCIBIOS_SUCCESSFUL;
+> > +	}
+> > +
+> > +	return PCIBIOS_BAD_REGISTER_NUMBER;
+> > +}
+> > +
+> > +static int bt1_pcie_write_mmio(void __iomem *addr, int size, u32 val)
+> > +{
+> > +	unsigned int ofs = (uintptr_t)addr & 0x3;
+> > +	u32 tmp, mask;
+> > +
+> > +	if (!IS_ALIGNED((uintptr_t)addr, size))
+> > +		return PCIBIOS_BAD_REGISTER_NUMBER;
+> > +
+> > +	if (size == 4) {
+> > +		writel(val, addr);
+> > +		return PCIBIOS_SUCCESSFUL;
+> > +	} else if (size == 2 || size == 1) {
+> > +		mask = GENMASK(size * BITS_PER_BYTE - 1, 0);
+> > +		tmp = readl(addr - ofs) & ~(mask << ofs * BITS_PER_BYTE);
+> > +		tmp |= (val & mask) << ofs * BITS_PER_BYTE;
+> > +		writel(tmp, addr - ofs);
+> > +		return PCIBIOS_SUCCESSFUL;
+> > +	}
+> > +
+> > +	return PCIBIOS_BAD_REGISTER_NUMBER;
+> > +}
+> > +
+> > +static u32 bt1_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base, u32 reg,
+> > +			     size_t size)
+> > +{
+> > +	int ret;
+> > +	u32 val;
+> > +
+> > +	ret = bt1_pcie_read_mmio(base + reg, size, &val);
+> > +	if (ret != PCIBIOS_SUCCESSFUL) {
+> > +		dev_err(pci->dev, "Read DBI address failed\n");
+> > +		return ~0U;
+> > +	}
+> > +
+> > +	return val;
+> > +}
+> > +
+> > +static void bt1_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base, u32 reg,
+> > +			       size_t size, u32 val)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = bt1_pcie_write_mmio(base + reg, size, val);
+> > +	if (ret != PCIBIOS_SUCCESSFUL)
+> > +		dev_err(pci->dev, "Write DBI address failed\n");
+> > +}
+> > +
+> > +static void bt1_pcie_write_dbi2(struct dw_pcie *pci, void __iomem *base, u32 reg,
+> > +				size_t size, u32 val)
+> > +{
+> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
+> > +	int ret;
+> > +
+> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
+> > +			   BT1_CCU_PCIE_DBI2_MODE, BT1_CCU_PCIE_DBI2_MODE);
+> > +
+> > +	ret = bt1_pcie_write_mmio(base + reg, size, val);
+> > +	if (ret != PCIBIOS_SUCCESSFUL)
+> > +		dev_err(pci->dev, "Write DBI2 address failed\n");
+> > +
+> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
+> > +			   BT1_CCU_PCIE_DBI2_MODE, 0);
+> > +}
+> > +
+> > +static int bt1_pcie_start_ltssm(struct dw_pcie *pci)
+> > +{
+> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	/*
+> > +	 * Enable LTSSM and make sure it was able to establish both PHY and
+> > +	 * data links. This procedure shall work fine to reach 2.5 GT/s speed.
+> > +	 */
+> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
+> > +			   BT1_CCU_PCIE_LTSSM_EN, BT1_CCU_PCIE_LTSSM_EN);
+> > +
+> > +	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_PMSC, val,
+> > +				       (val & BT1_CCU_PCIE_SMLH_LINKUP),
+> > +				       1000, 1000000);
+> > +	if (ret) {
+> > +		dev_err(pci->dev, "LTSSM failed to set PHY link up\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_PMSC, val,
+> > +				       (val & BT1_CCU_PCIE_RDLH_LINKUP),
+> > +				       1000, 1000000);
+> > +	if (ret) {
+> > +		dev_err(pci->dev, "LTSSM failed to set data link up\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	/*
+> > +	 * Activate direct speed change after the link is established in an
+> > +	 * attempt to reach a higher bus performance (up to Gen.3 - 8.0 GT/s).
+> > +	 * This is required at least to get 8.0 GT/s speed.
+> > +	 */
+> > +	val = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
+> > +	val |= PORT_LOGIC_SPEED_CHANGE;
+> > +	dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
+> > +
+> > +	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_PMSC, val,
+> > +				       BT1_CCU_PCIE_LTSSM_LINKUP(val),
+> > +				       1000, 1000000);
+> > +	if (ret)
+> > +		dev_err(pci->dev, "LTSSM failed to get into L0 state\n");
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void bt1_pcie_stop_ltssm(struct dw_pcie *pci)
+> > +{
+> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
+> > +
+> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
+> > +			   BT1_CCU_PCIE_LTSSM_EN, 0);
+> > +}
+> > +
+> > +struct dw_pcie_ops bt1_pcie_dw_ops = {
+> > +	.read_dbi = bt1_pcie_read_dbi,
+> > +	.write_dbi = bt1_pcie_write_dbi,
+> > +	.write_dbi2 = bt1_pcie_write_dbi2,
+> > +	.start_link = bt1_pcie_start_ltssm,
+> > +	.stop_link = bt1_pcie_stop_ltssm,
+> > +};
+> > +
+> > +static struct pci_ops bt1_pcie_ops = {
+> > +	.map_bus = dw_pcie_own_conf_map_bus,
+> > +	.read = pci_generic_config_read32,
+> > +	.write = pci_generic_config_write32,
+> > +};
+> > +
+> > +static int bt1_pcie_get_res(struct bt1_pcie *btpci)
+> > +{
+> > +	struct device *dev = btpci->dw.dev;
+> > +	int i, ret;
+> > +
+> > +	/* DBI access is supposed to be performed by the dword-aligned IOs */
+> > +	btpci->dw.pp.bridge->ops = &bt1_pcie_ops;
+> > +
+> > +	/* AXI-interface is configured with 64-bit address bus width */
+> > +	ret = dma_coerce_mask_and_coherent(&btpci->dw.pp.bridge->dev,
+> > +					   DMA_BIT_MASK(64));
+> > +	if (ret) {
+> > +		ret = dma_set_mask_and_coherent(&btpci->dw.pp.bridge->dev,
+> > +						DMA_BIT_MASK(32));
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	/* These CSRs are in MMIO so we won't check the regmap-methods status */
+> > +	btpci->sys_regs =
+> > +		syscon_regmap_lookup_by_phandle(dev->of_node, "baikal,bt1-syscon");
+> > +	if (IS_ERR(btpci->sys_regs))
+> > +		return dev_err_probe(dev, PTR_ERR(btpci->sys_regs),
+> > +				     "Failed to get syscon\n");
+> > +
+> > +	/* Make sure all the required resources have been specified */
+> > +	for (i = 0; i < BT1_PCIE_NUM_APP_CLKS; i++) {
+> > +		if (!btpci->dw.app_clks[bt1_pcie_app_clks[i]].clk) {
+> > +			dev_err(dev, "App clocks set is incomplete\n");
+> > +			return -ENOENT;
+> > +		}
+> > +	}
+> > +
+> > +	for (i = 0; i < BT1_PCIE_NUM_CORE_CLKS; i++) {
+> > +		if (!btpci->dw.core_clks[bt1_pcie_core_clks[i]].clk) {
+> > +			dev_err(dev, "Core clocks set is incomplete\n");
+> > +			return -ENOENT;
+> > +		}
+> > +	}
+> > +
+> > +	for (i = 0; i < BT1_PCIE_NUM_APP_RSTS; i++) {
+> > +		if (!btpci->dw.app_rsts[bt1_pcie_app_rsts[i]].rstc) {
+> > +			dev_err(dev, "App resets set is incomplete\n");
+> > +			return -ENOENT;
+> > +		}
+> > +	}
+> > +
+> > +	for (i = 0; i < BT1_PCIE_NUM_CORE_RSTS; i++) {
+> > +		if (!btpci->dw.core_rsts[bt1_pcie_core_rsts[i]].rstc) {
+> > +			dev_err(dev, "Core resets set is incomplete\n");
+> > +			return -ENOENT;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void bt1_pcie_full_stop_bus(struct bt1_pcie *btpci, bool init)
+> > +{
+> > +	struct device *dev = btpci->dw.dev;
+> > +	struct dw_pcie *pci = &btpci->dw;
+> > +	int ret;
+> > +
+> > +	/* Disable LTSSM for sure */
+> > +	regmap_update_bits(btpci->sys_regs, BT1_CCU_PCIE_GENC,
+> > +			   BT1_CCU_PCIE_LTSSM_EN, 0);
+> > +
+> > +	/*
+> > +	 * Application reset controls are trigger-based so de-assert the core
+> > +	 * resets only.
+> > +	 */
+> > +	ret = reset_control_bulk_assert(DW_PCIE_NUM_CORE_RSTS, pci->core_rsts);
+> > +	if (ret)
+> > +		dev_err(dev, "Failed to assert core resets\n");
+> > +
+> > +	/*
+> > +	 * Clocks are disabled by default at least in accordance with the clk
+> > +	 * enable counter value on init stage.
+> > +	 */
+> > +	if (!init) {
+> > +		clk_bulk_disable_unprepare(DW_PCIE_NUM_CORE_CLKS, pci->core_clks);
+> > +
+> > +		clk_bulk_disable_unprepare(DW_PCIE_NUM_APP_CLKS, pci->app_clks);
+> > +	}
+> > +
+> > +	/* The peripheral devices are unavailable anyway so reset them too */
+> > +	gpiod_set_value_cansleep(pci->pe_rst, 1);
+> > +
+> > +	/* Make sure the reset is settled */
+> > +	usleep_range(1, 10);
+> > +}
+> > +
+> > +/*
+> > + * Implements the cold reset procedure in accordance with the reference manual
+> > + * and available PM signals.
+> > + */
+> > +static int bt1_pcie_cold_start_bus(struct bt1_pcie *btpci)
+> > +{
+> > +	struct device *dev = btpci->dw.dev;
+> > +	struct dw_pcie *pci = &btpci->dw;
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	/* First get out of the Power/Hot reset state */
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_PWR_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert PHY reset\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_HOT_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert hot reset\n");
+> > +		goto err_assert_pwr_rst;
+> > +	}
+> > +
+> > +	/* Wait for the PM-core to stop requesting the PHY reset */
+> > +	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_RSTC, val,
+> > +				       !(val & BT1_CCU_PCIE_REQ_PHY_RST), 1, 1000);
+> > +	if (ret) {
+> > +		dev_err(dev, "Timed out waiting for PM to stop PHY resetting\n");
+> > +		goto err_assert_hot_rst;
+> > +	}
+> > +
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_PHY_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert PHY reset\n");
+> > +		goto err_assert_hot_rst;
+> > +	}
+> > +
+> > +	/* Clocks can be now enabled, but the ref one is crucial at this stage */
+> > +	ret = clk_bulk_prepare_enable(DW_PCIE_NUM_APP_CLKS, pci->app_clks);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to enable app clocks\n");
+> > +		goto err_assert_phy_rst;
+> > +	}
+> > +
+> > +	ret = clk_bulk_prepare_enable(DW_PCIE_NUM_CORE_CLKS, pci->core_clks);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to enable ref clocks\n");
+> > +		goto err_disable_app_clk;
+> > +	}
+> > +
+> > +	/* Wait for the PM to stop requesting the controller core reset */
+> > +	ret = regmap_read_poll_timeout(btpci->sys_regs, BT1_CCU_PCIE_RSTC, val,
+> > +				       !(val & BT1_CCU_PCIE_REQ_CORE_RST), 1, 1000);
+> > +	if (ret) {
+> > +		dev_err(dev, "Timed out waiting for PM to stop core resetting\n");
+> > +		goto err_disable_core_clk;
+> > +	}
+> > +
+> > +	/* PCS-PIPE interface and controller core can be now activated */
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_PIPE_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert PIPE reset\n");
+> > +		goto err_disable_core_clk;
+> > +	}
+> > +
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_CORE_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert core reset\n");
+> > +		goto err_assert_pipe_rst;
+> > +	}
+> > +
+> > +	/* It's recommended to reset the core and application logic together */
+> > +	ret = reset_control_bulk_reset(DW_PCIE_NUM_APP_RSTS, pci->app_rsts);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to reset app domain\n");
+> > +		goto err_assert_core_rst;
+> > +	}
+> > +
+> > +	/* Sticky/Non-sticky CSR flags can be now unreset too */
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_STICKY_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert sticky reset\n");
+> > +		goto err_assert_core_rst;
+> > +	}
+> > +
+> > +	ret = reset_control_deassert(pci->core_rsts[DW_PCIE_NON_STICKY_RST].rstc);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to deassert non-sticky reset\n");
+> > +		goto err_assert_sticky_rst;
+> > +	}
+> > +
+> > +	/* Activate the PCIe bus peripheral devices */
+> > +	gpiod_set_value_cansleep(pci->pe_rst, 0);
+> > +
+> > +	/* Make sure the state is settled (LTSSM is still disabled though) */
+> > +	usleep_range(1, 10);
+> > +
+> > +	return 0;
+> > +
+> > +err_assert_sticky_rst:
+> > +	reset_control_assert(pci->core_rsts[DW_PCIE_STICKY_RST].rstc);
+> > +
+> > +err_assert_core_rst:
+> > +	reset_control_assert(pci->core_rsts[DW_PCIE_CORE_RST].rstc);
+> > +
+> > +err_assert_pipe_rst:
+> > +	reset_control_assert(pci->core_rsts[DW_PCIE_PIPE_RST].rstc);
+> > +
+> > +err_disable_core_clk:
+> > +	clk_bulk_disable_unprepare(DW_PCIE_NUM_CORE_CLKS, pci->core_clks);
+> > +
+> > +err_disable_app_clk:
+> > +	clk_bulk_disable_unprepare(DW_PCIE_NUM_APP_CLKS, pci->app_clks);
+> > +
+> > +err_assert_phy_rst:
+> > +	reset_control_assert(pci->core_rsts[DW_PCIE_PHY_RST].rstc);
+> > +
+> > +err_assert_hot_rst:
+> > +	reset_control_assert(pci->core_rsts[DW_PCIE_HOT_RST].rstc);
+> > +
+> > +err_assert_pwr_rst:
+> > +	reset_control_assert(pci->core_rsts[DW_PCIE_PWR_RST].rstc);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int bt1_pcie_host_init(struct dw_pcie_rp *pp)
+> > +{
+> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
+> > +	int ret;
+> > +
+> > +	ret = bt1_pcie_get_res(btpci);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	bt1_pcie_full_stop_bus(btpci, true);
+> > +
+> > +	return bt1_pcie_cold_start_bus(btpci);
+> > +}
+> > +
+> > +static void bt1_pcie_host_deinit(struct dw_pcie_rp *pp)
+> > +{
+> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > +	struct bt1_pcie *btpci = to_bt1_pcie(pci);
+> > +
+> > +	bt1_pcie_full_stop_bus(btpci, false);
+> > +}
+> > +
+> > +struct dw_pcie_host_ops bt1_pcie_host_ops = {
+> > +	.host_init = bt1_pcie_host_init,
+> > +	.host_deinit = bt1_pcie_host_deinit,
+> > +};
+> > +
+> > +static struct bt1_pcie *bt1_pcie_create_data(struct platform_device *pdev)
+> > +{
+> > +	struct bt1_pcie *btpci;
+> > +
+> > +	btpci = devm_kzalloc(&pdev->dev, sizeof(*btpci), GFP_KERNEL);
+> > +	if (!btpci)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	btpci->pdev = pdev;
+> > +
+> > +	platform_set_drvdata(pdev, btpci);
+> > +
+> > +	return btpci;
+> > +}
+> > +
+> > +static int bt1_pcie_add_dw_port(struct bt1_pcie *btpci)
+> > +{
+> > +	struct device *dev = &btpci->pdev->dev;
+> > +	int ret;
+> > +
+> > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> 
+
+> Didn't you do this elsewhere...
+
+No. The core DW PCIe driver doesn't do that.
+
+-Sergey
+
+> 
+> Rob

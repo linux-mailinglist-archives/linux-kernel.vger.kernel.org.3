@@ -2,165 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93956550DA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 01:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E572A550D9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 01:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbiFSXjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 19:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
+        id S235649AbiFSXiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 19:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbiFSXjB (ORCPT
+        with ESMTP id S231539AbiFSXiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 19:39:01 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCD695AF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:39:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1655681941; x=1687217941;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+r2le/0cYQHWtPMNeCxIXB43Y8pcNDHfGVPeVoKPk1w=;
-  b=ODvQIvsj4/inldhW2r1OICP7j5m22R0DDYoHUC0D4cr3lHjciYU6Zbkl
-   vDGymfV380l91uJmDkp/jwY4ykNtAoYC8vt5nyv10KJmQhDaWkx8j7l0j
-   Lup1N8BU/pifgZbDy1t9rNBF50Pj99+s00pyHEcBf2Ul4Bd/kTeJTS076
-   X43SyyQIsQtid5/fl0SSZ3MJ5nqcjNMfitL1cE9fka3QS0mpYJdgTbg0J
-   5n2Zt0nXfe2C/BscIILk9ivuwcV1EiQmvLkaW4Fe1C5mttdlZ5SyEuNq0
-   JKzidrVF8wxSjVXGk30GWMPjvqtYYgsGUDCFR0dOq/7ausjdEGeazQkE6
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
-   d="scan'208";a="204332795"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Jun 2022 07:39:00 +0800
-IronPort-SDR: QCYeH+A9l/cmivQLMKSU7mg+dpvCr6PDKSW4Wp3EtMtNxvcXCoLFzFH40quorTaz1bxHVJc0tS
- q6gmNRArajJTv6Gv+PfXfaxpF/gKl1h3S2guEB9AjX6orEt9qEvh0EB5kDyWajevMFG8lTgenS
- 1opvIcOZjU/PNvze/YhPDB5KVIgU03W21u3O2Gfgdn8qzPqpw5HLfNct1Icts6uyreALcCYruX
- RxQpy2MZEuEzXQqdCI95aX1hJh5IjQ/oC59KgKzqqv8i847BLIKhpi+MQ3aF+n2epry92pSnX1
- ngGa++p+MokkTkukJcFwupDj
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jun 2022 16:01:31 -0700
-IronPort-SDR: bP9EGVddfuEE8MJWuVne+3EV8rSpPRS5kb0q9ncodyK6RO6jyvYf41BvWCTKFqSl9jNyZ6GFC2
- 3aLq8IqkEZEmY5w9o2H6lIXydetVROp1IvlHRrd8NuEsI1KJJ+ZXZo81LjtzvA9UpF38J60lIq
- yjeyAr3PG9ZExiXgVOpXwYoSKcmNMtb0glOt1pB7aujSmAh0o2cwWGeVsMYbFCY8QeyBu2K+ji
- KTETqqcvJRpxS3daZ9W2HaNBlDXAAeGDoUCqXuS/fLAOhSeNS/nb1wlRRme8185oQ4LOc9Sx1m
- tA0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jun 2022 16:38:59 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LR8PG6rcSz1Rvlx
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:38:58 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1655681938; x=1658273939; bh=+r2le/0cYQHWtPMNeCxIXB43Y8pcNDHfGVP
-        eVoKPk1w=; b=N/n66b6ClqCR6Od52OpL/EjMQwa7gGRAGjE1Ujgk9H7xtwRIW25
-        EZRWVGhphTf0s9eYUdMH0D7THn1PazXSs6q2M/FS5hiPVHp3V1G2l/aQ2rfqc//u
-        wKPEmQvqQwcU4CICmUM9WSF730D03I82SE1u/8QwSsguDWkjwYt4EdQR7MJGR8He
-        kYe7+a259CQJSHTSSRoNNZdV7b7cnCdwVJe19lwMoFXtlVUFjge0fMpLIXsn2unv
-        iBw8XBXi7i+yunFeX7USJpxA8MUtNICuwAOR6EbBSo5onKDz/7XlWDr5D+0QNafI
-        XAaH0chJm4oPHzPOs9sKI97+WCZ54PG+37Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wxmyRtyww3SR for <linux-kernel@vger.kernel.org>;
-        Sun, 19 Jun 2022 16:38:58 -0700 (PDT)
-Received: from [10.225.163.87] (unknown [10.225.163.87])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LR8P82TBvz1Rvlc;
-        Sun, 19 Jun 2022 16:38:52 -0700 (PDT)
-Message-ID: <9cd60b3b-44fe-62ac-9874-80ae2223d078@opensource.wdc.com>
-Date:   Mon, 20 Jun 2022 08:38:50 +0900
+        Sun, 19 Jun 2022 19:38:21 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32E42635
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:38:19 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id w9so1103044lji.4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 16:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5wbxuLf0qXQzSxMY2PUkol4aa/X/GJBgeigo9VpDstk=;
+        b=V6VYfk+wZY/WdtyFDvQGT+uCsNvT25Ac7QoIU62efffylc24tJrjFQWL/7KlTFeKtM
+         VvWs2+c6CVUiq6V6zvNtNRJQ+WXY7ltdlNe7gAspvm62mG+RZVOwSxgL1bg7H23MkRcE
+         NrVjkBGoVC4LeGBgLKeDuRnN8NLXFr0lcLKtHm/KiFBhtew0/IXJXz2AVJr7zAUl1vHU
+         Q60UUj+4lZz6oMlDq/+es8PUXhh0TqCY0gF+ud/ZL8o++HjIrL9A97TEmc+aaWZnr/ng
+         5wdS4DoqGBUyqASoMw5FgWpSV80xp4mMRZsTVxOpzCXaReYkm0BFfwfEF2kSycXMTAP0
+         LwKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5wbxuLf0qXQzSxMY2PUkol4aa/X/GJBgeigo9VpDstk=;
+        b=rWHn2qGHx1uC1eA0pPl2eARabA30oaZX1xL0/oDxdQuHkS2ZC/8IBjYnJAhmtqjRzk
+         yWdQlHpjTsG3WvOMrvQ7zkSgs+dmUrDCUE4Blkn7tbTCjcwIdhzdCTY817rVTFi4LD0O
+         1JdHfAjQjJpp8xH0cyBadCepw6ExBipTvnayuxlXpDg/TR568tWsN5Fq6NkFwzvnnHeB
+         wUlfJgvhLRqFVyEbylJ84gwxSdQZgl88zoc7MBlqqXm1SirAb1iYiu6VNgqan9n1iSGL
+         LD87bXYacfs2MIuYmwliuhSZbUR4SBqAgvipbK09jpRyIbAs/+Es4Y8NhQQWw6YwjbMU
+         jltQ==
+X-Gm-Message-State: AJIora9mtdwoC9SfSeaGUJf/Jav7d4QflIPAGsslSDq7fww1hDl7wpNL
+        ldjSDrM4Txuseg1pPyMetfwOMA==
+X-Google-Smtp-Source: AGRyM1vFaOZ4Zgxq+10xBD3dM5r/wv1lezKMOYgUJVmLzU+ORJIC9B7O/RcxcdgF/Zn/FWwFO6oYXg==
+X-Received: by 2002:a2e:a807:0:b0:25a:673b:5ae8 with SMTP id l7-20020a2ea807000000b0025a673b5ae8mr3263062ljq.68.1655681897980;
+        Sun, 19 Jun 2022 16:38:17 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id m3-20020a05651202e300b0047f647414eesm624555lfq.229.2022.06.19.16.38.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 16:38:16 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id CA5F61036C1; Mon, 20 Jun 2022 02:40:27 +0300 (+03)
+Date:   Mon, 20 Jun 2022 02:40:27 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220619234027.4irpbqxcygauvrso@box.shutemov.name>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
+ <YqdM8ZIi0/35IhzF@dhcp22.suse.cz>
+ <20220616170510.gpm5pjd4yzk7hfsx@black.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 07/14] riscv: dts: canaan: fix the k210's memory node
-Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Heng Sia <jee.heng.sia@intel.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-8-mail@conchuod.ie>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220618123035.563070-8-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616170510.gpm5pjd4yzk7hfsx@black.fi.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/22 21:30, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Jun 16, 2022 at 08:05:10PM +0300, Kirill A. Shutemov wrote:
+> On Mon, Jun 13, 2022 at 04:42:57PM +0200, Michal Hocko wrote:
+> > On Fri 10-06-22 17:35:25, Kirill A. Shutemov wrote:
+> > [...]
+> > > diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+> > > index 1962008fe743..93c8eba1a66d 100644
+> > > --- a/arch/x86/kernel/process_64.c
+> > > +++ b/arch/x86/kernel/process_64.c
+> > > @@ -742,6 +742,32 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+> > >  }
+> > >  #endif
+> > >  
+> > > +static int prctl_enable_tagged_addr(unsigned long nr_bits)
+> > > +{
+> > > +	struct mm_struct *mm = current->mm;
+> > > +
+> > > +	/* Already enabled? */
+> > > +	if (mm->context.lam_cr3_mask)
+> > > +		return -EBUSY;
+> > > +
+> > > +	/* LAM has to be enabled before spawning threads */
+> > > +	if (get_nr_threads(current) > 1)
+> > > +		return -EBUSY;
+> > 
+> > This will not be sufficient in general. You can have mm shared with a
+> > process without CLONE_THREAD. So you would also need to check also
+> > MMF_MULTIPROCESS. But I do remember that general get_nr_threads is quite
+> > tricky to use properly. Make sure to CC Oleg Nesterov for more details.
+> > 
+> > Also how does this work when the mm is shared with a kernel thread?
 > 
-> The k210 memory node has a compatible string that does not match with
-> any driver or dt-binding & has several non standard properties.
-> Replace the reg names with a comment and delete the rest.
+> It seems we need to check mm_count to exclude kernel threads that use the
+> mm. But I expect it to produce bunch of false-positives.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> ---
->  arch/riscv/boot/dts/canaan/k210.dtsi | 6 ------
->  1 file changed, 6 deletions(-)
+> Or we can make all CPUs to do
 > 
-> diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
-> index 44d338514761..287ea6eebe47 100644
-> --- a/arch/riscv/boot/dts/canaan/k210.dtsi
-> +++ b/arch/riscv/boot/dts/canaan/k210.dtsi
-> @@ -69,15 +69,9 @@ cpu1_intc: interrupt-controller {
->  
->  	sram: memory@80000000 {
->  		device_type = "memory";
-> -		compatible = "canaan,k210-sram";
->  		reg = <0x80000000 0x400000>,
->  		      <0x80400000 0x200000>,
->  		      <0x80600000 0x200000>;
-> -		reg-names = "sram0", "sram1", "aisram";
-> -		clocks = <&sysclk K210_CLK_SRAM0>,
-> -			 <&sysclk K210_CLK_SRAM1>,
-> -			 <&sysclk K210_CLK_AI>;
-> -		clock-names = "sram0", "sram1", "aisram";
->  	};
+> 	switch_mm(current->mm, current->mm, current);
+> 
+> and get LAM bits updated regardless what mm it runs. It would also remove
+> limitation that LAM can only be enabled when there's no threads.
+> 
+> But I feel that is a bad idea, but I have no clue why. :P
 
-These are used by u-boot to setup the memory clocks and initialize the
-aisram. Sure the kernel actually does not use this, but to be in sync with
-u-boot DT, I would prefer keeping this as is. Right now, u-boot *and* the
-kernel work fine with both u-boot internal DT and the kernel DT.
+Below is what I meant. Maybe it's not that bad. I donno.
 
+Any opinions?
+
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 56822d313b96..69e6b11efa62 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -752,6 +752,16 @@ static bool lam_u48_allowed(void)
+ 	return find_vma(mm, DEFAULT_MAP_WINDOW) == NULL;
+ }
+ 
++static void enable_lam_func(void *mm)
++{
++	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
++
++	if (loaded_mm != mm)
++		return;
++
++	switch_mm(loaded_mm, loaded_mm, current);
++}
++
+ static int prctl_enable_tagged_addr(unsigned long nr_bits)
+ {
+ 	struct mm_struct *mm = current->mm;
+@@ -760,10 +770,6 @@ static int prctl_enable_tagged_addr(unsigned long nr_bits)
+ 	if (mm->context.lam_cr3_mask)
+ 		return -EBUSY;
+ 
+-	/* LAM has to be enabled before spawning threads */
+-	if (get_nr_threads(current) > 1)
+-		return -EBUSY;
+-
+ 	if (!nr_bits) {
+ 		return -EINVAL;
+ 	} else if (nr_bits <= 6) {
+@@ -785,8 +791,8 @@ static int prctl_enable_tagged_addr(unsigned long nr_bits)
+ 		return -EINVAL;
+ 	}
+ 
+-	/* Update CR3 to get LAM active */
+-	switch_mm(current->mm, current->mm, current);
++	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
++
+ 	return 0;
+ }
+ 
 -- 
-Damien Le Moal
-Western Digital Research
+ Kirill A. Shutemov

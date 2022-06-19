@@ -2,411 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D510B550A1F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EA7550A21
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbiFSLU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 07:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S236394AbiFSLVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 07:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233799AbiFSLU4 (ORCPT
+        with ESMTP id S233799AbiFSLVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 07:20:56 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F969617A;
-        Sun, 19 Jun 2022 04:20:55 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id hj18so15592545ejb.0;
-        Sun, 19 Jun 2022 04:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=btc6MXZhlyojWTDihSijhm+Q441CgyvD6fYM+EfFunw=;
-        b=GXdMSKnOw/4FAHb0hst8jYeTTuAkof8mytDAKFlhezLILOMSfr9uKo7/Misws4eDfn
-         YS9UgOCqIjtp0qOzjfB0aRkl3/7KvTbvwC3YWpgaRE15ga0Gm5se518RJSswCWeI5Yq1
-         NLnGjTNRi3PMCA9OcN2H27et3yUm7HIMGI4nIMzLu33F9NH9WQHjd8XaHAc+J9FpY2So
-         cXBuCVneChgUstg8Tiz2AHucS4a2JmNMn7iaMPrh5IpMceJT7RAEzo3U7jLkgHlYRS8B
-         cgLum/j9xftxpNs7KwjDGemB7urx3cMNj/KdFx5WcVzb2Y8SvETlWRwbptGMyER48XbK
-         IjqQ==
+        Sun, 19 Jun 2022 07:21:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E21811174
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655637666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ua3Ce0UiwO9CYupYNLzjnGgQoqCOGhVi5u239CGdNHo=;
+        b=SL25sXjccihY3cXqwAS9qzNTtSu9ivVRM0ttMj6JQ3ohTodlHv1hCu36QBlqNKRVTyLTqP
+        /bPgR6GAQRnuFABUJRnZyQpYmYPAF4naFWfQDscy+txwaxts5ljVs+A2mX3xF+EOK05Ziw
+        2NZ3LCtds9+tzbe+C0DDlkU7uszMgWk=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-vjxfnwjQMJeGiHhLcEFWDw-1; Sun, 19 Jun 2022 07:21:04 -0400
+X-MC-Unique: vjxfnwjQMJeGiHhLcEFWDw-1
+Received: by mail-ej1-f69.google.com with SMTP id q5-20020a17090676c500b00704ffb95131so2795065ejn.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:21:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=btc6MXZhlyojWTDihSijhm+Q441CgyvD6fYM+EfFunw=;
-        b=30idxoMCCLTDuGdzyf16AT0lqYqHf4ngjuPkjmyE54He8PW9/3KheNWvUNJExfWFfR
-         t/ir1z6UQA9gy9e3dfbb+ODMXepk4gfSUwdp0UkP2F+5BL1rG0sTCWDlZeBg6kImcJl5
-         nTxNYi3HZxfoRizEFaOkeHURiSI0c9Ok/+wwD4BV6Pteunmw9mxFSsCOLu1YKiyLPWWQ
-         5ijbSvGO+yD88Sr4XYNpuNwqjfv2iRTQHQjHc8wruKLVbYbw3h+/6J8Auo1nUA0lMGnC
-         F5eJcvkpgOCQ34cC18bZi5oEGfYnKC+4PoTtoB2lTrM9yDHHSv9WeKPid3beNlp4z3nj
-         f6qw==
-X-Gm-Message-State: AJIora8GvscGnrnHAa+FipGievCj58oIUaOt3pMp9khVRhxFcd64kOah
-        fQB5+2zLd4vejz/A1kOnX1fuN3WcsTzgHPhtMdY=
-X-Google-Smtp-Source: AGRyM1vRDs4b0DmyMmlI7Kp5Hnc/HCHpZMI8j/okNewGXTikOc7OES4Dg2/VBxDVS18rUgEWBv0KD0aBAs7YqcNIAnA=
-X-Received: by 2002:a17:906:1193:b0:70d:cf39:a4db with SMTP id
- n19-20020a170906119300b0070dcf39a4dbmr16805100eja.44.1655637653799; Sun, 19
- Jun 2022 04:20:53 -0700 (PDT)
+        bh=ua3Ce0UiwO9CYupYNLzjnGgQoqCOGhVi5u239CGdNHo=;
+        b=qH53BAZm353dXH8SEegQTHgILr0BQxe3H2I6cDNDEs7zbMQG13/Qm2l9/D8DYO9BiY
+         D9nUoV/Hyxe/Wc2jBgp2AvQIWUvwWsnpbSQFqcM85kzYYNp2LjX1Bzpu7j8F36aHycUy
+         xJM8enT0yKGZmnUSLil7CSfvNO0e0S21eZpl+YNutDKtjMt/rUkXmYrqhHBxv5wKfXLT
+         OQFNrwiWhL1WRtgAGqf9KG2YqUTNPZLVv+ajXG+QG6k3OGJ25fSMcR6ps8UkixPzQ7Yf
+         MkLdTjQi6wza+jnhiyeO/i0zYEgP1O94AmrLdxcX6oV9HhNMJk3ZaL6yIEupYbpW6XnV
+         ou9g==
+X-Gm-Message-State: AJIora+O7vQg+O25ibH/MsQQPzDZXBwU4UpuV3fA8srO+KE8ES/dzGHD
+        ZmISR1ZiMw0L4Ig+c9sjdFEUFWE9s4a+wrkhV++8gr1gPczYTheOY+NoPv2QICwc0NvJ6o5LhcD
+        PgIYPwK3QrjTZRF4fN0fDlBAOI96WqW4NQArIGMWb
+X-Received: by 2002:a05:6402:1509:b0:435:6e97:2e51 with SMTP id f9-20020a056402150900b004356e972e51mr8012073edw.354.1655637663515;
+        Sun, 19 Jun 2022 04:21:03 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uZpO8Q6GRS8ArTE9iT4l2vbajKofBwEp5gyt8gQ5Q2M8PEVKk/BWB7sWh4rwMyoE4L/P1P2XNGMw1FbSKm7tw=
+X-Received: by 2002:a05:6402:1509:b0:435:6e97:2e51 with SMTP id
+ f9-20020a056402150900b004356e972e51mr8012048edw.354.1655637663234; Sun, 19
+ Jun 2022 04:21:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 19 Jun 2022 13:20:17 +0200
-Message-ID: <CAHp75Vev77nG-Ui9cp9Bz8KPcq67E3htCTYnu4NNMV0_UP9=rw@mail.gmail.com>
-Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220610002046.3243874-1-jsavitz@redhat.com>
+In-Reply-To: <20220610002046.3243874-1-jsavitz@redhat.com>
+From:   Nico Pache <npache@redhat.com>
+Date:   Sun, 19 Jun 2022 07:20:36 -0400
+Message-ID: <CAA1CXcDJChvO+7XUPyf==yvHU-E3GDs8Q7+_ZQRdyjqm+XwjZw@mail.gmail.com>
+Subject: Re: [RFC PATCH] selftests/vm: enable running select groups of tests
+To:     Joel Savitz <jsavitz@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 11:40 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
+Hey Joel,
+
+good work on this! I dont see anything wrong with this and the added
+functionality is very nice.
+
+I reviewed the code changes and everything seems to be correct.
+
+I also ran the code with a few examples, including correct and
+incorrect examples, and was not able to break it.
+
+Cheers,
+-- Nico
+
+Tested-by: Nico Pache <npache@redhat.com>
+Acked-by: Nico Pache <npache@redhat.com>
+
+
+On Thu, Jun 9, 2022 at 8:20 PM Joel Savitz <jsavitz@redhat.com> wrote:
 >
-> The AXP192 PMIC's GPIO registers are much different from the GPIO
-> registers of the AXP20x and AXP813 PMICs supported by the existing
-> pinctrl-axp209 driver. It makes more sense to add a new driver for
-> the AXP192, rather than add support in the existing axp20x driver.
+> Add the ability to run one or more groups of vm tests (specified
+> by the environment variable TEST_ITEMS). Preserve existing default
+> behavior of running all tests when TEST_ITEMS is empty or "default".
 >
-> The pinctrl-axp192 driver is considerably more flexible in terms of
-> register layout and should be able to support other X-Powers PMICs.
-> Interrupts and pull down resistor configuration are supported too.
-
-...
-
-> +config PINCTRL_AXP192
-> +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
-> +       depends on MFD_AXP20X
-
-
-> +       depends on OF
-
-Why?
-
-> +       select PINMUX
-> +       select GENERIC_PINCONF
-> +       select GPIOLIB
-
-...
-
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-
-Why?
-
-...
-
-> +struct axp192_pctl_function {
-> +       const char              *name;
-> +       /* Mux value written to the control register to select the function (-1 if unsupported) */
-
-Comment is misleading. -1 can't be a value of unsigned type.
-
-> +       const u8                *muxvals;
-> +       const char * const      *groups;
-> +       unsigned int            ngroups;
-> +};
-
-...
-
-> +struct axp192_pctl_desc {
-> +       unsigned int                            npins;
-> +       const struct pinctrl_pin_desc           *pins;
-> +       /* Description of the function control register for each pin */
-> +       const struct axp192_pctl_reg_info       *ctrl_regs;
-> +       /* Description of the output signal register for each pin */
-> +       const struct axp192_pctl_reg_info       *out_regs;
-> +       /* Description of the input signal register for each pin */
-> +       const struct axp192_pctl_reg_info       *in_regs;
-> +       /* Description of the pull down resistor config register for each pin */
-
-Can you just convert these comments to a kernel-doc?
-
-> +       const struct axp192_pctl_reg_info       *pull_down_regs;
+> Documentation of test groups is included in the patch as follows:
+>
+>     # ./run_vmtests.sh [ -h || --help ]
+>
+>     usage: ./tools/testing/selftests/vm/run_vmtests.sh [ -h ]
+>       -h: display this message
+>
+>     The default behavior is to run all tests.
+>
+>     Alternatively, specific groups tests can be run by defining
+>     the TEST_ITEMS shell variable with a space-separated string
+>     of one or more of the following:
+>     - mmap
+>             tests for mmap(2)
+>     - gup_test
+>             tests for gup using gup_test interface
+>     - userfaultfd
+>             tests for  userfaultfd(2)
+>     - compaction
+>             a test for the patch "Allow compaction of unevictable pages"
+>     - mlock
+>             tests for mlock(2)
+>     - mremap
+>             tests for mremap(2)
+>     - hugevm
+>             tests for very large virtual address space
+>     - vmalloc
+>             vmalloc smoke tests
+>     - hmm
+>             hmm smoke tests
+>     - madv_populate
+>             test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+>     - memfd_secret
+>             test memfd_secret(2)
+>     - process_mrelease
+>             test process_mrelease(2)
+>     - ksm
+>             ksm tests that do not require >=2 NUMA nodes
+>     - ksm_numa
+>             ksm tests that require >=2 NUMA nodes
+>     example: TEST_ITEMS="hmm mmap ksm" ./run_vmtests.sh
+>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> ---
+>  tools/testing/selftests/vm/run_vmtests.sh | 224 +++++++++++++++-------
+>  1 file changed, 150 insertions(+), 74 deletions(-)
+>
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index 41fce8bea929..d31fc66205f8 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -1,22 +1,74 @@
+>  #!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+> -#please run as root
+> +# Please run as root
+>
+>  # Kselftest framework requirement - SKIP code is 4.
+>  ksft_skip=4
+>
+>  mnt=./huge
+>  exitcode=0
+> -
+> -#get huge pagesize and freepages from /proc/meminfo
+> -while read -r name size unit; do
+> -       if [ "$name" = "HugePages_Free:" ]; then
+> -               freepgs="$size"
+> -       fi
+> -       if [ "$name" = "Hugepagesize:" ]; then
+> -               hpgsize_KB="$size"
+> +nr_tests_ran=0
 > +
-> +       unsigned int                            nfunctions;
-> +       const struct axp192_pctl_function       *functions;
-> +};
-
-...
-
+> +if [ ${1:-0} == "-h" ] || [ ${1:-0} == "--help" ]
+> +then
+> +       cat <<EOF
+> +usage: ${BASH_SOURCE[0]:-$0} [ -h ]
+> +  -h: display this message
 > +
+> +The default behavior is to run all tests.
 > +
-
-One blank line is enough.
-
-...
-
-> +       switch (param) {
-> +       case PIN_CONFIG_BIAS_DISABLE:
-> +               ret = axp192_pinconf_get_pull_down(pctldev, pin);
-> +               if (ret < 0)
-> +                       return ret;
-
-> +               else if (ret != 0)
-
-1. Redundant 'else'
-2. if (ret > 0)
-
-> +                       return -EINVAL;
-> +               break;
+> +Alternatively, specific groups tests can be run by defining
+> +the TEST_ITEMS shell variable with a space-separated string
+> +of one or more of the following:
+> +- mmap
+> +       tests for mmap(2)
+> +- gup_test
+> +       tests for gup using gup_test interface
+> +- userfaultfd
+> +       tests for  userfaultfd(2)
+> +- compaction
+> +       a test for the patch "Allow compaction of unevictable pages"
+> +- mlock
+> +       tests for mlock(2)
+> +- mremap
+> +       tests for mremap(2)
+> +- hugevm
+> +       tests for very large virtual address space
+> +- vmalloc
+> +       vmalloc smoke tests
+> +- hmm
+> +       hmm smoke tests
+> +- madv_populate
+> +       test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+> +- memfd_secret
+> +       test memfd_secret(2)
+> +- process_mrelease
+> +       test process_mrelease(2)
+> +- ksm
+> +       ksm tests that do not require >=2 NUMA nodes
+> +- ksm_numa
+> +       ksm tests that require >=2 NUMA nodes
+> +example: TEST_ITEMS="hmm mmap ksm" ./run_vmtests.sh
+> +EOF
+> +       exit 0
+> +fi # $1 == -h || $1 == --help
 > +
-> +       case PIN_CONFIG_BIAS_PULL_DOWN:
-> +               ret = axp192_pinconf_get_pull_down(pctldev, pin);
-> +               if (ret < 0)
-> +                       return ret;
-> +               else if (ret == 0)
-
-Ditto.
-
-Looking at this I would rather expect the function to return something
-defined, than 0, non-0.
-
-> +                       return -EINVAL;
-> +               break;
-
-> +       default:
-> +               return -ENOTSUPP;
-> +       }
-
-...
-
-> +       for (cfg = 0; cfg < num_configs; ++cfg) {
-
-cfg++ will work the same way and easier to read.
-
-> +               switch (pinconf_to_config_param(configs[cfg])) {
-> +               case PIN_CONFIG_BIAS_DISABLE:
-> +                       ret = axp192_pinconf_set_pull_down(pctldev, pin, 0);
-> +                       if (ret)
-> +                               return ret;
-> +                       break;
+> +# default behavior: run all tests
+> +TEST_ITEMS=${TEST_ITEMS:-default}
 > +
-> +               case PIN_CONFIG_BIAS_PULL_DOWN:
-> +                       ret = axp192_pinconf_set_pull_down(pctldev, pin, 1);
-> +                       if (ret)
-> +                               return ret;
-> +                       break;
+> +echo "Selected test items: ${TEST_ITEMS}"
 > +
-> +               default:
-> +                       return -ENOTSUPP;
-> +               }
-> +       }
-> +
-> +       return 0;
+> +test_selected() {
+> +       if [ "$TEST_ITEMS" == "default" ]; then
+> +               # If no TEST_ITEMS are specified, run all tests
+> +               return 0
+>         fi
+> -done < /proc/meminfo
+> +       echo ${TEST_ITEMS} | grep ${1} 2>&1 >/dev/null
+> +       return ${?}
 > +}
 > +
-> +static const struct pinconf_ops axp192_conf_ops = {
-> +       .is_generic = true,
-> +       .pin_config_get = axp192_pinconf_get,
-> +       .pin_config_set = axp192_pinconf_set,
-> +       .pin_config_group_get = axp192_pinconf_get,
-> +       .pin_config_group_set = axp192_pinconf_set,
-> +};
+> +# Hugepage setup only needed for hugetlb tests
+> +if test_selected "hugetlb"; then
+>
+>  # Simple hugetlbfs tests have a hardcoded minimum requirement of
+>  # huge pages totaling 256MB (262144KB) in size.  The userfaultfd
+> @@ -28,7 +80,17 @@ hpgsize_MB=$((hpgsize_KB / 1024))
+>  half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
+>  needmem_KB=$((half_ufd_size_MB * 2 * 1024))
+>
+> -#set proper nr_hugepages
+> +# get huge pagesize and freepages from /proc/meminfo
+> +while read -r name size unit; do
+> +       if [ "$name" = "HugePages_Free:" ]; then
+> +               freepgs="$size"
+> +       fi
+> +       if [ "$name" = "Hugepagesize:" ]; then
+> +               hpgsize_KB="$size"
+> +       fi
+> +done < /proc/meminfo
 > +
-> +static int axp192_pmx_set(struct pinctrl_dev *pctldev, unsigned int offset, u8 config)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +       const struct axp192_pctl_reg_info *reginfo = &pctl->desc->ctrl_regs[offset];
-> +       unsigned int regval = config << (ffs(reginfo->mask) - 1);
+> +# set proper nr_hugepages
+>  if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+>         nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
+>         needpgs=$((needmem_KB / hpgsize_KB))
+> @@ -57,126 +119,140 @@ else
+>         exit 1
+>  fi
+>
+> -#filter 64bit architectures
+> +fi # test_selected "hugetlb"
 > +
-> +       return regmap_update_bits(pctl->regmap, reginfo->reg, reginfo->mask, regval);
-> +}
+> +# filter 64bit architectures
+>  ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
+>  if [ -z "$ARCH" ]; then
+>         ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
+>  fi
+>  VADDR64=0
+> -echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
+> +echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
+>
+>  # Usage: run_test [test binary] [arbitrary test arguments...]
+>  run_test() {
+> -       local title="running $*"
+> -       local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+> -       printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
+> -
+> -       "$@"
+> -       local ret=$?
+> -       if [ $ret -eq 0 ]; then
+> -               echo "[PASS]"
+> -       elif [ $ret -eq $ksft_skip ]; then
+> -               echo "[SKIP]"
+> -               exitcode=$ksft_skip
+> -       else
+> -               echo "[FAIL]"
+> -               exitcode=1
+> -       fi
+> +       if test_selected ${CATEGORY}; then
+> +               local title="running $*"
+> +               local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+> +               printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
 > +
-> +static int axp192_pmx_func_cnt(struct pinctrl_dev *pctldev)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> +               "$@"
+> +               local ret=$?
+> +               if [ $ret -eq 0 ]; then
+> +                       echo "[PASS]"
+> +               elif [ $ret -eq $ksft_skip ]; then
+> +                       echo "[SKIP]"
+> +                       exitcode=$ksft_skip
+> +               else
+> +                       echo "[FAIL]"
+> +                       exitcode=1
+> +               fi
+> +               nr_tests_ran=$((nr_tests_ran + 1))
+> +       fi # test_selected
+>  }
+>
+> -mkdir "$mnt"
+> -mount -t hugetlbfs none "$mnt"
+> +# setup only needed for hugetlb tests
+> +if test_selected "hugetlb"; then
+> +       mkdir "$mnt"
+> +       mount -t hugetlbfs none "$mnt"
+> +fi
+>
+> -run_test ./hugepage-mmap
+> +CATEGORY="hugetlb" run_test ./hugepage-mmap
+>
+>  shmmax=$(cat /proc/sys/kernel/shmmax)
+>  shmall=$(cat /proc/sys/kernel/shmall)
+>  echo 268435456 > /proc/sys/kernel/shmmax
+>  echo 4194304 > /proc/sys/kernel/shmall
+> -run_test ./hugepage-shm
+> +CATEGORY="hugetlb" run_test ./hugepage-shm
+>  echo "$shmmax" > /proc/sys/kernel/shmmax
+>  echo "$shmall" > /proc/sys/kernel/shmall
+>
+> -run_test ./map_hugetlb
+> +CATEGORY="hugetlb" run_test ./map_hugetlb
+>
+> -run_test ./hugepage-mremap "$mnt"/huge_mremap
+> -rm -f "$mnt"/huge_mremap
+> +CATEGORY="hugetlb" run_test ./hugepage-mremap "$mnt"/huge_mremap
+> +test_selected "hugetlb" && rm -f "$mnt"/huge_mremap
+>
+> -run_test ./hugepage-vmemmap
+> +CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>
+> -run_test ./hugetlb-madvise "$mnt"/madvise-test
+> -rm -f "$mnt"/madvise-test
+> +CATEGORY="hugetlb" run_test ./hugetlb-madvise "$mnt"/madvise-test
+> +test_selected "hugetlb" && rm -f "$mnt"/madvise-test
+>
+> -echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
+> -echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+> -echo "      hugetlb regression testing."
+> +if test_selected "hugetlb"; then
+> +       echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
+> +       echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+> +       echo "      hugetlb regression testing."
+> +fi
+>
+> -run_test ./map_fixed_noreplace
+> +CATEGORY="mmap" run_test ./map_fixed_noreplace
+>
+>  # get_user_pages_fast() benchmark
+> -run_test ./gup_test -u
+> +CATEGORY="gup_test" run_test ./gup_test -u
+>  # pin_user_pages_fast() benchmark
+> -run_test ./gup_test -a
+> +CATEGORY="gup_test" run_test ./gup_test -a
+>  # Dump pages 0, 19, and 4096, using pin_user_pages:
+> -run_test ./gup_test -ct -F 0x1 0 19 0x1000
+> +CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
+>
+> -run_test ./userfaultfd anon 20 16
+> +CATEGORY="userfaultfd" run_test ./userfaultfd anon 20 16
+>  # Test requires source and destination huge pages.  Size of source
+>  # (half_ufd_size_MB) is passed as argument to test.
+> -run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+> -run_test ./userfaultfd shmem 20 16
+> -
+> -#cleanup
+> -umount "$mnt"
+> -rm -rf "$mnt"
+> -echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+> +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+> +CATEGORY="userfaultfd" run_test ./userfaultfd shmem 20 16
 > +
-> +       return pctl->desc->nfunctions;
-> +}
+> +# cleanup (only needed when running hugetlb tests)
+> +if test_selected "hugetlb"; then
+> +       umount "$mnt"
+> +       rm -rf "$mnt"
+> +       echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+> +fi
+>
+> -run_test ./compaction_test
+> +CATEGORY="compaction" run_test ./compaction_test
+>
+> -run_test sudo -u nobody ./on-fault-limit
+> +CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
+>
+> -run_test ./map_populate
+> +CATEGORY="mmap" run_test ./map_populate
+>
+> -run_test ./mlock-random-test
+> +CATEGORY="mlock" run_test ./mlock-random-test
+>
+> -run_test ./mlock2-tests
+> +CATEGORY="mlock" run_test ./mlock2-tests
+>
+> -run_test ./mrelease_test
+> +CATEGORY="process_mrelease" run_test ./mrelease_test
+>
+> -run_test ./mremap_test
+> +CATEGORY="mremap" run_test ./mremap_test
+>
+> -run_test ./thuge-gen
+> +CATEGORY="hugetlb" run_test ./thuge-gen
+>
+>  if [ $VADDR64 -ne 0 ]; then
+> -       run_test ./virtual_address_range
+> +       CATEGORY="hugevm" run_test ./virtual_address_range
+>
+>         # virtual address 128TB switch test
+> -       run_test ./va_128TBswitch
+> +       CATEGORY="hugevm" run_test ./va_128TBswitch
+>  fi # VADDR64
+>
+>  # vmalloc stability smoke test
+> -run_test ./test_vmalloc.sh smoke
+> +CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
+>
+> -run_test ./mremap_dontunmap
+> +CATEGORY="mremap" run_test ./mremap_dontunmap
+>
+> -run_test ./test_hmm.sh smoke
+> +CATEGORY="hmm" run_test ./test_hmm.sh smoke
+>
+>  # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+> -run_test ./madv_populate
+> +CATEGORY="madv_populate" run_test ./madv_populate
+>
+> -run_test ./memfd_secret
+> +CATEGORY="memfd_secret" run_test ./memfd_secret
+>
+>  # KSM MADV_MERGEABLE test with 10 identical pages
+> -run_test ./ksm_tests -M -p 10
+> +CATEGORY="ksm" run_test ./ksm_tests -M -p 10
+>  # KSM unmerge test
+> -run_test ./ksm_tests -U
+> +CATEGORY="ksm" run_test ./ksm_tests -U
+>  # KSM test with 10 zero pages and use_zero_pages = 0
+> -run_test ./ksm_tests -Z -p 10 -z 0
+> +CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 0
+>  # KSM test with 10 zero pages and use_zero_pages = 1
+> -run_test ./ksm_tests -Z -p 10 -z 1
+> +CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 1
+>  # KSM test with 2 NUMA nodes and merge_across_nodes = 1
+> -run_test ./ksm_tests -N -m 1
+> +CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+>  # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+> -run_test ./ksm_tests -N -m 0
+> +CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
 > +
-> +static const char *axp192_pmx_func_name(struct pinctrl_dev *pctldev, unsigned int selector)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +       return pctl->desc->functions[selector].name;
-> +}
-> +
-> +static int axp192_pmx_func_groups(struct pinctrl_dev *pctldev, unsigned int selector,
-> +                                 const char * const **groups, unsigned int *num_groups)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +       *groups = pctl->desc->functions[selector].groups;
-> +       *num_groups = pctl->desc->functions[selector].ngroups;
-> +
-> +       return 0;
-> +}
-> +
-> +static int axp192_pmx_set_mux(struct pinctrl_dev *pctldev,
-> +                             unsigned int function, unsigned int group)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +       const u8 *muxvals = pctl->desc->functions[function].muxvals;
-> +
-> +       if (muxvals[group] == U8_MAX)
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * Switching to LDO or PWM function will enable LDO/PWM output, so it's
-> +        * better to ignore these requests and let the regulator or PWM drivers
-> +        * handle muxing to avoid interfering with them.
-> +        */
-> +       if (function == AXP192_FUNC_LDO || function == AXP192_FUNC_PWM)
-> +               return 0;
-> +
-> +       return axp192_pmx_set(pctldev, group, muxvals[group]);
-> +}
-> +
-> +static int axp192_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
-> +                                        struct pinctrl_gpio_range *range,
-> +                                        unsigned int offset, bool input)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +       const u8 *muxvals = input ? pctl->desc->functions[AXP192_FUNC_INPUT].muxvals
-> +                                 : pctl->desc->functions[AXP192_FUNC_OUTPUT].muxvals;
-> +
-> +       return axp192_pmx_set(pctldev, offset, muxvals[offset]);
-> +}
-> +
-> +static const struct pinmux_ops axp192_pmx_ops = {
-> +       .get_functions_count    = axp192_pmx_func_cnt,
-> +       .get_function_name      = axp192_pmx_func_name,
-> +       .get_function_groups    = axp192_pmx_func_groups,
-> +       .set_mux                = axp192_pmx_set_mux,
-> +       .gpio_set_direction     = axp192_pmx_gpio_set_direction,
-> +       .strict                 = true,
-> +};
-> +
-> +static int axp192_groups_cnt(struct pinctrl_dev *pctldev)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +       return pctl->desc->npins;
-> +}
-> +
-> +static const char *axp192_group_name(struct pinctrl_dev *pctldev, unsigned int selector)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +       return pctl->desc->pins[selector].name;
-> +}
-> +
-> +static int axp192_group_pins(struct pinctrl_dev *pctldev, unsigned int selector,
-> +                            const unsigned int **pins, unsigned int *num_pins)
-> +{
-> +       struct axp192_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +       *pins = &pctl->desc->pins[selector].number;
-> +       *num_pins = 1;
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct pinctrl_ops axp192_pctrl_ops = {
-> +       .dt_node_to_map         = pinconf_generic_dt_node_to_map_group,
-> +       .dt_free_map            = pinconf_generic_dt_free_map,
-> +       .get_groups_count       = axp192_groups_cnt,
-> +       .get_group_name         = axp192_group_name,
-> +       .get_group_pins         = axp192_group_pins,
-> +};
-> +
-> +static int axp192_pctl_probe(struct platform_device *pdev)
-> +{
-> +       struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
-> +       struct axp192_pctl *pctl;
-> +       struct pinctrl_desc *pctrl_desc;
-> +       int ret, i;
-> +
-> +       pctl = devm_kzalloc(&pdev->dev, sizeof(*pctl), GFP_KERNEL);
-> +       if (!pctl)
-> +               return -ENOMEM;
-> +
-> +       pctl->desc = device_get_match_data(&pdev->dev);
-> +       pctl->regmap = axp20x->regmap;
-> +       pctl->regmap_irqc = axp20x->regmap_irqc;
-> +       pctl->dev = &pdev->dev;
-> +
-> +       pctl->chip.base                 = -1;
-> +       pctl->chip.can_sleep            = true;
-> +       pctl->chip.request              = gpiochip_generic_request;
-> +       pctl->chip.free                 = gpiochip_generic_free;
-> +       pctl->chip.parent               = &pdev->dev;
-> +       pctl->chip.label                = dev_name(&pdev->dev);
-> +       pctl->chip.owner                = THIS_MODULE;
-> +       pctl->chip.get                  = axp192_gpio_get;
-> +       pctl->chip.get_direction        = axp192_gpio_get_direction;
-> +       pctl->chip.set                  = axp192_gpio_set;
-> +       pctl->chip.direction_input      = axp192_gpio_direction_input;
-> +       pctl->chip.direction_output     = axp192_gpio_direction_output;
-> +       pctl->chip.to_irq               = axp192_gpio_to_irq;
-> +       pctl->chip.ngpio                = pctl->desc->npins;
-> +
-> +       pctl->irqs = devm_kcalloc(&pdev->dev, pctl->desc->npins, sizeof(int), GFP_KERNEL);
-> +       if (!pctl->irqs)
-> +               return -ENOMEM;
-> +
-> +       for (i = 0; i < pctl->desc->npins; ++i) {
-> +               ret = platform_get_irq_byname_optional(pdev, pctl->desc->pins[i].name);
-> +               if (ret > 0)
-> +                       pctl->irqs[i] = ret;
-> +       }
-> +
-> +       platform_set_drvdata(pdev, pctl);
-> +
-> +       pctrl_desc = devm_kzalloc(&pdev->dev, sizeof(*pctrl_desc), GFP_KERNEL);
-> +       if (!pctrl_desc)
-> +               return -ENOMEM;
-> +
-> +       pctrl_desc->name = dev_name(&pdev->dev);
-> +       pctrl_desc->owner = THIS_MODULE;
-> +       pctrl_desc->pins = pctl->desc->pins;
-> +       pctrl_desc->npins = pctl->desc->npins;
-> +       pctrl_desc->pctlops = &axp192_pctrl_ops;
-> +       pctrl_desc->pmxops = &axp192_pmx_ops;
-> +       pctrl_desc->confops = &axp192_conf_ops;
-> +
-> +       pctl->pctl_dev = devm_pinctrl_register(&pdev->dev, pctrl_desc, pctl);
-> +       if (IS_ERR(pctl->pctl_dev))
-> +               dev_err_probe(&pdev->dev, PTR_ERR(pctl->pctl_dev),
-> +                             "couldn't register pinctrl driver\n");
-> +
-> +       ret = devm_gpiochip_add_data(&pdev->dev, &pctl->chip, pctl);
-> +       if (ret)
-> +               dev_err_probe(&pdev->dev, ret, "Failed to register GPIO chip\n");
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id axp192_pctl_match[] = {
-> +       { .compatible = "x-powers,axp192-gpio", .data = &axp192_data, },
-> +       { }
-> +};
+> +echo "Ran $nr_tests_ran tests"
+>
+>  exit $exitcode
+> --
+> 2.31.1
+>
 
--- 
-With Best Regards,
-Andy Shevchenko

@@ -2,107 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FE255090F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC18550910
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbiFSHAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 03:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S233991AbiFSHDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 03:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFSHAr (ORCPT
+        with ESMTP id S229791AbiFSHDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 03:00:47 -0400
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E6ACDFC7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:00:44 -0700 (PDT)
+        Sun, 19 Jun 2022 03:03:35 -0400
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6586DFFE
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xEvCU
-        fDCDVBkY6E6w4t7hfvJ26KTGyPP8KXafpD2R6A=; b=FV1Gk31Y6tUlQFnR3s2QD
-        3jTGbZeq54u0Lev8/fBq57KTM92sO6MwVxjuonsGH2JISRaiuf8P8idCTkRrGZ4E
-        3L+m3yOyOenQoxEim39UEJsOY6kgjK1XKWDzbFJtQDMgD8e1wmB4Yjlrwfk88Y26
-        F6uBOCwNfG1XLEPiYxf/TU=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dTAU6
+        mTEjt6l5zqq/41qP0DP8KBBlAM0uLigIY0i9p8=; b=WS25MfutzsoGDDh6btDjK
+        4xy49amCnVYNJn9dn/MXLglf3XrexwyTkWClVAuNADw8jV6E2ks9i7A83xw/pFge
+        B7GuzUs7jwndJcquv7GZUd6z3VyTLFhIjs8DLWSNSI9oaVY1QQc+NRJklY9Gd+B3
+        y7jMOzL6sDeIVGNGV2RCqI=
 Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp2 (Coremail) with SMTP id DMmowACnDPldya5izSCMDg--.28541S2;
-        Sun, 19 Jun 2022 14:59:42 +0800 (CST)
+        by smtp10 (Coremail) with SMTP id NuRpCgB3ym4iyq5i43vMEw--.47634S2;
+        Sun, 19 Jun 2022 15:02:58 +0800 (CST)
 From:   Liang He <windhl@126.com>
-To:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk, ardb@kernel.org,
-        linus.walleij@linaro.org, arnd@arndb.de, rostedt@goodmis.org,
-        ebiederm@xmission.com
-Cc:     windhl@126.com, linux-arm-kernel@lists.infradead.org,
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     windhl@126.com, linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] arm/kernel: Fix refcount leak bugs
-Date:   Sun, 19 Jun 2022 14:59:41 +0800
-Message-Id: <20220619065941.4066920-1-windhl@126.com>
+Subject: [PATCH] can: Remove extra of_node_get in grcan
+Date:   Sun, 19 Jun 2022 15:02:57 +0800
+Message-Id: <20220619070257.4067022-1-windhl@126.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowACnDPldya5izSCMDg--.28541S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tFWkZrW7ur15Gw13ZFy7KFg_yoW8Xr4Up3
-        4jkr9xtF4Yka9rJ3yFy3s5ur4Yy3Wvgw4Sg3yj93yfArs0yry8XrsY9asI9ry7XF4Fgw4F
-        ga10kF4Sq3W8WaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUPEhUUUUU=
+X-CM-TRANSID: NuRpCgB3ym4iyq5i43vMEw--.47634S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW7tw47CrWfGw1rGry7Awb_yoWfXFX_G3
+        s7ZF4xXr15Wr4Dt3WI93yavrW2yrW5Zrykurs0yFW3Aa13Zr1UJrs2vF93twn5W3ykZF9I
+        krnIya48C3yYqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRiUGYtUUUUU==
 X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgclF1-HZVICbQAAsv
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgolF1-HZVIHkQAAsb
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In arm_dt_init_cpu_maps() and init_machine_late(), we need of_node_put()
-to keep refcount balance.
+In grcan_probe(), of_find_node_by_path() has increased the refcount.
+There is no need to call of_node_get() again.
+
+Fixes: 1e93ed26acf0 (can: grcan: grcan_probe(): fix broken system id check for errata workaround needs)
 
 Signed-off-by: Liang He <windhl@126.com>
 ---
- arch/arm/kernel/devtree.c | 4 ++++
- arch/arm/kernel/setup.c   | 1 +
- 2 files changed, 5 insertions(+)
+ drivers/net/can/grcan.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/kernel/devtree.c b/arch/arm/kernel/devtree.c
-index 02839d8b6202..d4dbc9eb382d 100644
---- a/arch/arm/kernel/devtree.c
-+++ b/arch/arm/kernel/devtree.c
-@@ -94,6 +94,7 @@ void __init arm_dt_init_cpu_maps(void)
- 		 */
- 		if (hwid & ~MPIDR_HWID_BITMASK) {
- 			of_node_put(cpu);
-+			of_node_put(cpus);
- 			return;
- 		}
- 
-@@ -108,6 +109,7 @@ void __init arm_dt_init_cpu_maps(void)
- 			if (WARN(tmp_map[j] == hwid,
- 				 "Duplicate /cpu reg properties in the DT\n")) {
- 				of_node_put(cpu);
-+				of_node_put(cpus);
- 				return;
- 			}
- 
-@@ -148,6 +150,8 @@ void __init arm_dt_init_cpu_maps(void)
- 	if (!found_method)
- 		set_smp_ops_by_method(cpus);
- 
-+	of_node_put(cpus);
-+
- 	if (!bootcpu_valid) {
- 		pr_warn("DT missing boot CPU MPIDR[23:0], fall back to default cpu_logical_map\n");
- 		return;
-diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-index 1e8a50a97edf..43ec8d78c219 100644
---- a/arch/arm/kernel/setup.c
-+++ b/arch/arm/kernel/setup.c
-@@ -960,6 +960,7 @@ static int __init init_machine_late(void)
- 	if (root) {
- 		ret = of_property_read_string(root, "serial-number",
- 					      &system_serial);
-+		of_node_put(root);
- 		if (ret)
- 			system_serial = NULL;
- 	}
+diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+index 76df4807d366..4c47c1055eff 100644
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1646,7 +1646,6 @@ static int grcan_probe(struct platform_device *ofdev)
+ 	 */
+ 	sysid_parent = of_find_node_by_path("/ambapp0");
+ 	if (sysid_parent) {
+-		of_node_get(sysid_parent);
+ 		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
+ 		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
+ 			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
 -- 
 2.25.1
 

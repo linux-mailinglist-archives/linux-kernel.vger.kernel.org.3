@@ -2,273 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1267A550A28
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0D6550A2D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbiFSLYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 07:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
+        id S236442AbiFSLZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 07:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiFSLYs (ORCPT
+        with ESMTP id S229853AbiFSLZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 07:24:48 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730F72728
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:24:47 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z11so5375042edp.9
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:24:47 -0700 (PDT)
+        Sun, 19 Jun 2022 07:25:42 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFE55F67;
+        Sun, 19 Jun 2022 04:25:41 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id cf14so1759371edb.8;
+        Sun, 19 Jun 2022 04:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=G9AtLmFO1Q7zUjUcmfK78M/O6m/Nuz1KuycFWUuvq/I=;
-        b=O3lMIEQfq5DCFApEzGRIUFMQfQ3a1G8SI1P9xeNf9OoLh/j+orfgq6AY7sVvuOtVbH
-         mDltZoFpRnwfmW4o5iHSenyizSZCbt5NxqYnsgj5xZZErwi4HMkjMO5iLI95T62DGxXt
-         o5SdFt7pNYjN+hCLnRJmvXsw46uD2mWDvo9pRXG8qNpDkQ3MQpYUmD+BykMt4MeGmBVj
-         QU+ES8E+hWJyOIwNuV8vGTRFrTugECFNjnz3drt/9tg3IjG+C6jMEMsJ84E4uhm4Vta0
-         izxp317u4/Dnl4eNVV8aO6RGLb5ejaspcPgwTyzbmi+QXa5ZpDyo9cERtQuvYgNm54hf
-         FY8Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MfTpm336cuBYZzkP2acrVbBvCS8+4Y29Ne3uwgFeW9Y=;
+        b=l++D45ijPavfLV7Ac80KJhVk9aQUSLHhd02xSe6sdWF9tkBNYWKP2kEOgtPBuFGhab
+         9r71F1CAtF89cCvZ+F4SIaRS9Cd355wrtF/OKvK9QHWygOqkSqhq4e5dsAweENKCqIli
+         2UUypJF0NtbO5dUGLidFFnA+BSF827Q+GqHbc2PcsZAfMIjHx64qrSYPf+Fes2cwrLUp
+         MNU4/tUkxGUhnI5UnI/WY0WUY8BPfZV6RwcsVNuo/2xn3JTYgFpFOaRAdP+aTZZml6Qr
+         sNMPW6224LkgS9grlukrKOjr4fQEdFSJuL4A6MaoKUBm5VKK1Q3tt/tKd+gdsNqPMw/n
+         /m3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G9AtLmFO1Q7zUjUcmfK78M/O6m/Nuz1KuycFWUuvq/I=;
-        b=em3Vh/AamYo1bsp5IPXy90H36xlsJWYr5rXJIUOxXl/sRBRRYl150vCf3npfzq6htL
-         3IKAo0Rzj8AHn6r7HAoOfDgallWHFjpLYIUROdDISS3kMaO881VBBgum/MXGEgxjX853
-         D2QOYRXtpzV1PFrQRVrQQNlmo5/p4EHekHEeYRxor1FTlSzdvLXezPFpqAk6W/sO2xd6
-         tLMp9BU00A6t1srQ+CXi+4aW6ZI0vkt/zo9MkIySatV3ld2jtyDFbSwmmsPzlJifHlK8
-         99zleoa+4Vwl0DnLE0wyMNmy8fghh4KUefLkdes8DL80mg50e7f2Uh1331TTlM8AcORQ
-         AmTA==
-X-Gm-Message-State: AJIora87kWPFRqPeqYt3poHcLmzWHJ51kByoLRNa44lvqSJGSGZf4xok
-        bZK8idnGOCQm6+4lh1QtaP1T9g==
-X-Google-Smtp-Source: AGRyM1vAtUjyt4xVHzND3Aw/WtRYqkX65iSIWe7BeNIpO+IWkZs5qF6SmoI/b40MHD3xsv73xib21w==
-X-Received: by 2002:a05:6402:1c09:b0:435:6562:e70d with SMTP id ck9-20020a0564021c0900b004356562e70dmr12979868edb.203.1655637885978;
-        Sun, 19 Jun 2022 04:24:45 -0700 (PDT)
-Received: from [192.168.0.206] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170906304500b0070f7d1c5a18sm4460333ejd.55.2022.06.19.04.24.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 04:24:45 -0700 (PDT)
-Message-ID: <d79239ce-3959-15f8-7121-478fc6d432e4@linaro.org>
-Date:   Sun, 19 Jun 2022 13:24:43 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MfTpm336cuBYZzkP2acrVbBvCS8+4Y29Ne3uwgFeW9Y=;
+        b=igIrPtR9RaalD90yrExo56VnhG3hJZSxYecb91GCHHMxfRQYGDkPmG3DypccmaO+4o
+         eW3uKebTbPDK7cIODQDda6YOT4JpDq4n9/9sD+JQJC/90n2wA17sbwzr8lhTZLIStw79
+         5+GjXa5XT9ivborGm1QCGyN85gIaCloSF5w3fYK9dKa+rtNc7w9lQcLnVCMvXuUdZb/a
+         eD0VYRtqFQqNfNxNN6AMZ1DcdHg/wEEUyIWzWoqWWM18ukfslpGveqUZrOZ43pm9e7me
+         0JyUZ5CUi/fLt6xOfflKCJbCBNvjNVS6cU10HK8X3dTjH5IyMbjUT+p4EM8DNHWEuOsd
+         rltg==
+X-Gm-Message-State: AJIora/7XKiEM3/Bg5/wdYHTHooJ945YJ8vWpsDvatxhAFC0pC+ZzPt9
+        qAjzIrtlm5M0guG5yA/Ys7ZWtlRw9T1uPXc2rQQ=
+X-Google-Smtp-Source: AGRyM1scR1dtdrWUkmjTKGJYOzbyqOwL3eFG13scvMMW2OI/ATbWuCB000TMCAlXRVUNgzgyxqrENnGS6Ef2pgwqwkg=
+X-Received: by 2002:a05:6402:249e:b0:42d:bb88:865b with SMTP id
+ q30-20020a056402249e00b0042dbb88865bmr22727590eda.141.1655637939780; Sun, 19
+ Jun 2022 04:25:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next 01/28] dt-bindings: phy: Add QorIQ SerDes binding
-Content-Language: en-US
-To:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
+ <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com> <CAHp75Vev77nG-Ui9cp9Bz8KPcq67E3htCTYnu4NNMV0_UP9=rw@mail.gmail.com>
+In-Reply-To: <CAHp75Vev77nG-Ui9cp9Bz8KPcq67E3htCTYnu4NNMV0_UP9=rw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 19 Jun 2022 13:25:03 +0200
+Message-ID: <CAHp75VdTFF0r8oiYxavoGVo9ShLLaveU1p2BNzzqVgu2eKCBaw@mail.gmail.com>
+Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220617203312.3799646-1-sean.anderson@seco.com>
- <20220617203312.3799646-2-sean.anderson@seco.com>
- <110c4a4b-8007-1826-ee27-02eaedd22d8f@linaro.org>
- <535a0389-6c97-523d-382f-e54d69d3907e@seco.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <535a0389-6c97-523d-382f-e54d69d3907e@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/06/2022 05:38, Sean Anderson wrote:
-> Hi Krzysztof,
-> 
-> On 6/17/22 9:15 PM, Krzysztof Kozlowski wrote:
->> On 17/06/2022 13:32, Sean Anderson wrote:
->>> This adds a binding for the SerDes module found on QorIQ processors. The
->>> phy reference has two cells, one for the first lane and one for the
->>> last. This should allow for good support of multi-lane protocols when
->>> (if) they are added. There is no protocol option, because the driver is
->>> designed to be able to completely reconfigure lanes at runtime.
->>> Generally, the phy consumer can select the appropriate protocol using
->>> set_mode. For the most part there is only one protocol controller
->>> (consumer) per lane/protocol combination. The exception to this is the
->>> B4860 processor, which has some lanes which can be connected to
->>> multiple MACs. For that processor, I anticipate the easiest way to
->>> resolve this will be to add an additional cell with a "protocol
->>> controller instance" property.
->>>
->>> Each serdes has a unique set of supported protocols (and lanes). The
->>> support matrix is stored in the driver and is selected based on the
->>> compatible string. It is anticipated that a new compatible string will
->>> need to be added for each serdes on each SoC that drivers support is
->>> added for.
->>>
->>> There are two PLLs, each of which can be used as the master clock for
->>> each lane. Each PLL has its own reference. For the moment they are
->>> required, because it simplifies the driver implementation. Absent
->>> reference clocks can be modeled by a fixed-clock with a rate of 0.
->>>
->>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->>> ---
->>>
->>>   .../bindings/phy/fsl,qoriq-serdes.yaml        | 78 +++++++++++++++++++
->>>   1 file changed, 78 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml b/Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
->>> new file mode 100644
->>> index 000000000000..4b9c1fcdab10
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/phy/fsl,qoriq-serdes.yaml
->>> @@ -0,0 +1,78 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/phy/fsl,qoriq-serdes.yaml#
->>
->> File name: fsl,ls1046a-serdes.yaml
-> 
-> This is not appropriate, since this binding will be used for many QorIQ
-> devices, not just LS1046A.
+On Sun, Jun 19, 2022 at 1:20 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Sat, Jun 18, 2022 at 11:40 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
 
-This is the DT bindings convention and naming style, so why do you say
-it is not appropriate? If the new SoC at some point requires different
-binding what filename do you use? fsl,qoriq-serdes2.yaml? And then again
-fsl,qoriq-serdes3.yaml?
+Hit 'Send' accidentally, here is the rest of the review, including
+previous comments.
 
-Please follow DT bindings convention and name it after first compatible
-in the bindings.
+...
 
-> The LS1046A is not even an "ur" device (first
-> model, etc.) but simply the one I have access to.
+> > +config PINCTRL_AXP192
+> > +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
+> > +       depends on MFD_AXP20X
+>
+>
+> > +       depends on OF
+>
+> Why?
+>
+> > +       select PINMUX
+> > +       select GENERIC_PINCONF
+> > +       select GPIOLIB
+>
+> ...
+>
+> > +#include <linux/of.h>
+> > +#include <linux/of_device.h>
+>
+> Why?
 
-It does not matter that much if it is first in total. Use the first one
-from the documented compatibles.
+Perhaps you missed mod_devicetable.h.
 
-> 
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: NXP QorIQ SerDes Device Tree Bindings
->>
->> s/Device Tree Bindings//
-> 
-> OK
-> 
->>> +
->>> +maintainers:
->>> +  - Sean Anderson <sean.anderson@seco.com>
->>> +
->>> +description: |
->>> +  This binding describes the SerDes devices found in NXP's QorIQ line of
->>
->> Describe the device, not the binding, so wording "This binding" is not
->> appropriate.
-> 
-> OK
-> 
->>> +  processors. The SerDes provides up to eight lanes. Each lane may be
->>> +  configured individually, or may be combined with adjacent lanes for a
->>> +  multi-lane protocol. The SerDes supports a variety of protocols, including up
->>> +  to 10G Ethernet, PCIe, SATA, and others. The specific protocols supported for
->>> +  each lane depend on the particular SoC.
->>> +
->>> +properties:
->>
->> Compatible goes first.
->>
->>> +  "#phy-cells":
->>> +    const: 2
->>> +    description: |
->>> +      The cells contain the following arguments.
->>> +
->>> +      - description: |
->>
->> Not a correct schema. What is this "- description" attached to? There is
->> no items here...
-> 
-> This is the same format as used by
-> Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
+> ...
+>
+> > +struct axp192_pctl_function {
+> > +       const char              *name;
+> > +       /* Mux value written to the control register to select the function (-1 if unsupported) */
+>
+> Comment is misleading. -1 can't be a value of unsigned type.
+>
+> > +       const u8                *muxvals;
+> > +       const char * const      *groups;
+> > +       unsigned int            ngroups;
+> > +};
+>
+> ...
+>
+> > +struct axp192_pctl_desc {
+> > +       unsigned int                            npins;
+> > +       const struct pinctrl_pin_desc           *pins;
+> > +       /* Description of the function control register for each pin */
+> > +       const struct axp192_pctl_reg_info       *ctrl_regs;
+> > +       /* Description of the output signal register for each pin */
+> > +       const struct axp192_pctl_reg_info       *out_regs;
+> > +       /* Description of the input signal register for each pin */
+> > +       const struct axp192_pctl_reg_info       *in_regs;
+> > +       /* Description of the pull down resistor config register for each pin */
+>
+> Can you just convert these comments to a kernel-doc?
+>
+> > +       const struct axp192_pctl_reg_info       *pull_down_regs;
+> > +
+> > +       unsigned int                            nfunctions;
+> > +       const struct axp192_pctl_function       *functions;
+> > +};
+>
+> ...
+>
+> > +
+> > +
+>
+> One blank line is enough.
+>
+> ...
+>
+> > +       switch (param) {
+> > +       case PIN_CONFIG_BIAS_DISABLE:
+> > +               ret = axp192_pinconf_get_pull_down(pctldev, pin);
+> > +               if (ret < 0)
+> > +                       return ret;
+>
+> > +               else if (ret != 0)
+>
+> 1. Redundant 'else'
+> 2. if (ret > 0)
+>
+> > +                       return -EINVAL;
+> > +               break;
+> > +
+> > +       case PIN_CONFIG_BIAS_PULL_DOWN:
+> > +               ret = axp192_pinconf_get_pull_down(pctldev, pin);
+> > +               if (ret < 0)
+> > +                       return ret;
+> > +               else if (ret == 0)
+>
+> Ditto.
+>
+> Looking at this I would rather expect the function to return something
+> defined, than 0, non-0.
+>
+> > +                       return -EINVAL;
+> > +               break;
+>
+> > +       default:
+> > +               return -ENOTSUPP;
+> > +       }
+>
+> ...
+>
+> > +       for (cfg = 0; cfg < num_configs; ++cfg) {
+>
+> cfg++ will work the same way and easier to read.
 
-I'll fix it.
+...
 
-> 
-> How should the cells be documented?
+You may make some lines shorter by introducing here
 
-Could be something like that:
-Documentation/devicetree/bindings/phy/microchip,lan966x-serdes.yaml
+  struct device *dev = &pdev->dev;
 
-> 
->>> +          The first lane in the group. Lanes are numbered based on the register
->>> +          offsets, not the I/O ports. This corresponds to the letter-based
->>> +          ("Lane A") naming scheme, and not the number-based ("Lane 0") naming
->>> +          scheme. On most SoCs, "Lane A" is "Lane 0", but not always.
->>> +        minimum: 0
->>> +        maximum: 7
->>> +      - description: |
->>> +          Last lane. For single-lane protocols, this should be the same as the
->>> +          first lane.
->>> +        minimum: 0
->>> +        maximum: 7
->>> +
->>> +  compatible:
->>> +    enum:
->>> +      - fsl,ls1046a-serdes-1
->>> +      - fsl,ls1046a-serdes-2
->>
->> Does not look like proper compatible and your explanation from commit
->> msg did not help me. What "1" and "2" stand for? Usually compatibles
->> cannot have some arbitrary properties encoded.
-> 
-> Each serdes has a different set of supported protocols for each lane. This is encoded
-> in the driver data associated with the compatible
+> > +       struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
 
-Implementation does not matter.
+dev->parent
 
-> , along with the appropriate values
-> to plug into the protocol control registers. Because each serdes has a different set
-> of supported protocols 
+and so on...
 
-Another way is to express it with a property.
+...
 
-> and register configuration, 
+> > +       pctl->pctl_dev = devm_pinctrl_register(&pdev->dev, pctrl_desc, pctl);
+> > +       if (IS_ERR(pctl->pctl_dev))
+> > +               dev_err_probe(&pdev->dev, PTR_ERR(pctl->pctl_dev),
+> > +                             "couldn't register pinctrl driver\n");
 
-What does it mean exactly? The same protocols have different programming
-model on the instances?
+With the above it probably fits one line.
 
-> adding support for a new SoC will
-> require adding the appropriate configuration to the driver, and adding a new compatible
-> string. Although most of the driver is generic, this critical portion is shared only
-> between closely-related SoCs (such as variants with differing numbers of cores).
-> 
-
-Again implementation - we do not talk here about driver, but the bindings.
-
-> The 1 and 2 stand for the number of the SerDes on that SoC. e.g. the documentation will
-> refer to SerDes1 and SerDes2.
->   
-> So e.g. other compatibles might be
-> 
-> - fsl,ls1043a-serdes-1 # There's only one serdes on this SoC
-> - fsl,t4042-serdes-1 # This SoC has four serdes
-> - fsl,t4042-serdes-2
-> - fsl,t4042-serdes-3
-> - fsl,t4042-serdes-4
-
-If the devices are really different - there is no common parts in the
-programming model (registers) - then please find some descriptive
-compatible. However if the programming model of common part is
-consistent and the differences are only for different protocols (kind of
-expected), this should be rather a property describing which protocols
-are supported.
-
-
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko

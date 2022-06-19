@@ -2,144 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF19550B09
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 15:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A02550B0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 15:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiFSNyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 09:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S233559AbiFSNzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 09:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiFSNyP (ORCPT
+        with ESMTP id S230495AbiFSNzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 09:54:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D9C6586
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:54:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22DBB6115D
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:54:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699B9C34114;
-        Sun, 19 Jun 2022 13:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655646853;
-        bh=NnpI+ZCgGJFEgEK/8QJ7nN1VaISd9SxAU0YXZ8LzRYA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Be2izO3IAI3IbRUhOZYKI1E7aFMikCvQ++9eKec3inllgOIxYwTOCZ2KE7MX5F2xo
-         Nm08RkXojxXcGIZA3C+x1mPX9gOK8+4rNACglZuOQAijmNG6nvEmqAxTk5tUE2+0uj
-         93G46SAx7RxU815GO/jtZ1H1Xt13+mPAtVETO00yERMgdiY9dKBK8VoQuV3ZHpuJ8T
-         oIWN7jMfzTVGd9RAuW6t/0YxycIHJvW4TjLv/CABvNLDS/nOLpJaSIkVMk97MhK6AR
-         Re7E1+O0cYglg25Bxavj5kKL+GRZ3KgtpHQBPt+UWbmZMNstvs7nzHTdc44sfIcfoZ
-         HUwHeaSpXGUBQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8A49E4096F; Sun, 19 Jun 2022 10:54:10 -0300 (-03)
-Date:   Sun, 19 Jun 2022 10:54:10 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Oliver Upton <oupton@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1 FYI] tools headers UAPI: Sync x86's asm/kvm.h with the
- kernel sources
-Message-ID: <Yq8qgiMwRcl9ds+f@kernel.org>
+        Sun, 19 Jun 2022 09:55:02 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54CA658C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 06:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655646901; x=1687182901;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N5l7NMyC97RfHbYVj/MJwUW/QzLVaeXo2mpCIkMbH6Q=;
+  b=Vx8UXlqvKBr+3mDmA83KM6Z1Bkg/4NZGpOJ8rWXR+V/Phl+sNEWAn9Q+
+   EDLEus2qkPQV+93ELsoZ0TeiEGwM6m6xiqzUM7WpzGHSpNZMGUSQ+RSm4
+   Ft3EModcw8tAxT/xTTl+bDTb2ZOVsURVQGg2Cth1/eCBTrvTu5/oT1THY
+   +px7CYHvvmdbLD8JWeafbfyGQGUrsRLrfOIssBohK4DcwHYB3f0V0CfpG
+   EFrIsvhQpgx0FqUZvtPvDhWXv3Ej1FwXGL+yrUv8SLWvwnpHgbCmjjR6m
+   v3MN8w1Dl15Z2DbydmekPXxeA/l5ga+hjTZDVA9tVwyyGoSr1IqYxN7IG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262770732"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="262770732"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 06:55:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="689058860"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jun 2022 06:54:59 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2vOF-000RGT-8A;
+        Sun, 19 Jun 2022 13:54:59 +0000
+Date:   Sun, 19 Jun 2022 21:54:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [bvanassche:block-bitwise-opf 15/15]
+ drivers/block/paride/pd.c:487:10: warning: 12 enumeration values not handled
+ in switch: 'REQ_OP_FLUSH', 'REQ_OP_DISCARD', 'REQ_OP_SECURE_ERASE'...
+Message-ID: <202206192107.iLLORMOz-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+tree:   https://github.com/bvanassche/linux block-bitwise-opf
+head:   031ccdd616b11c4e774e56aa7eae906188ab24cc
+commit: 031ccdd616b11c4e774e56aa7eae906188ab24cc [15/15] block: Introduce the type blk_mq_opf_t
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220619/202206192107.iLLORMOz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/bvanassche/linux/commit/031ccdd616b11c4e774e56aa7eae906188ab24cc
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche block-bitwise-opf
+        git checkout 031ccdd616b11c4e774e56aa7eae906188ab24cc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Full explanation:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-There used not to be copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+All warnings (new ones prefixed by >>):
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+>> drivers/block/paride/pd.c:487:10: warning: 12 enumeration values not handled in switch: 'REQ_OP_FLUSH', 'REQ_OP_DISCARD', 'REQ_OP_SECURE_ERASE'... [-Wswitch]
+           switch (req_op(pd_req)) {
+                   ^~~~~~~~~~~~~~
+   include/linux/blk-mq.h:200:21: note: expanded from macro 'req_op'
+   #define req_op(req) (__force enum req_op)((req)->cmd_flags & REQ_OP_MASK)
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-There are sometimes used scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
 
-E.g.:
+vim +487 drivers/block/paride/pd.c
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
+^1da177e4c3f41 Linus Torvalds    2005-04-16  484  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  485  static enum action do_pd_io_start(void)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  486  {
+aebf526b53aea1 Christoph Hellwig 2017-01-31 @487  	switch (req_op(pd_req)) {
+aebf526b53aea1 Christoph Hellwig 2017-01-31  488  	case REQ_OP_DRV_IN:
+^1da177e4c3f41 Linus Torvalds    2005-04-16  489  		phase = pd_special;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  490  		return pd_special();
+aebf526b53aea1 Christoph Hellwig 2017-01-31  491  	case REQ_OP_READ:
+aebf526b53aea1 Christoph Hellwig 2017-01-31  492  	case REQ_OP_WRITE:
+83096ebf1263b2 Tejun Heo         2009-05-07  493  		pd_block = blk_rq_pos(pd_req);
+83096ebf1263b2 Tejun Heo         2009-05-07  494  		pd_count = blk_rq_cur_sectors(pd_req);
+f3fa33acca9f00 Christoph Hellwig 2021-11-26  495  		if (pd_block + pd_count > get_capacity(pd_req->q->disk))
+^1da177e4c3f41 Linus Torvalds    2005-04-16  496  			return Fail;
+83096ebf1263b2 Tejun Heo         2009-05-07  497  		pd_run = blk_rq_sectors(pd_req);
+b4f42e2831ff9b Jens Axboe        2014-04-10  498  		pd_buf = bio_data(pd_req->bio);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  499  		pd_retries = 0;
+aebf526b53aea1 Christoph Hellwig 2017-01-31  500  		if (req_op(pd_req) == REQ_OP_READ)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  501  			return do_pd_read_start();
+^1da177e4c3f41 Linus Torvalds    2005-04-16  502  		else
+^1da177e4c3f41 Linus Torvalds    2005-04-16  503  			return do_pd_write_start();
+^1da177e4c3f41 Linus Torvalds    2005-04-16  504  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  505  	return Fail;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  506  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  507  
 
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
+:::::: The code at line 487 was first introduced by commit
+:::::: aebf526b53aea164508730427597d45f3e06b376 block: fold cmd_type into the REQ_OP_ space
 
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@fb.com>
 
----
-
-To pick the changes in:
-
-  f1a9761fbb00639c ("KVM: x86: Allow userspace to opt out of hypercall patching")
-
-That just rebuilds kvm-stat.c on x86, no change in functionality.
-
-This silences these perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/uapi/asm/kvm.h' differs from latest version at 'arch/x86/include/uapi/asm/kvm.h'
-  diff -u tools/arch/x86/include/uapi/asm/kvm.h arch/x86/include/uapi/asm/kvm.h
-
-Cc: Oliver Upton <oupton@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/uapi/asm/kvm.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
-index bf6e96011dfed4e2..21614807a2cbb359 100644
---- a/tools/arch/x86/include/uapi/asm/kvm.h
-+++ b/tools/arch/x86/include/uapi/asm/kvm.h
-@@ -428,11 +428,12 @@ struct kvm_sync_regs {
- 	struct kvm_vcpu_events events;
- };
- 
--#define KVM_X86_QUIRK_LINT0_REENABLED	   (1 << 0)
--#define KVM_X86_QUIRK_CD_NW_CLEARED	   (1 << 1)
--#define KVM_X86_QUIRK_LAPIC_MMIO_HOLE	   (1 << 2)
--#define KVM_X86_QUIRK_OUT_7E_INC_RIP	   (1 << 3)
--#define KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT (1 << 4)
-+#define KVM_X86_QUIRK_LINT0_REENABLED		(1 << 0)
-+#define KVM_X86_QUIRK_CD_NW_CLEARED		(1 << 1)
-+#define KVM_X86_QUIRK_LAPIC_MMIO_HOLE		(1 << 2)
-+#define KVM_X86_QUIRK_OUT_7E_INC_RIP		(1 << 3)
-+#define KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT	(1 << 4)
-+#define KVM_X86_QUIRK_FIX_HYPERCALL_INSN	(1 << 5)
- 
- #define KVM_STATE_NESTED_FORMAT_VMX	0
- #define KVM_STATE_NESTED_FORMAT_SVM	1
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

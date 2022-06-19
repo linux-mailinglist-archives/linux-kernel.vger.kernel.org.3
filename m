@@ -2,164 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C129550B28
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 16:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5019550B29
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 16:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbiFSOVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 10:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S229637AbiFSOYg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Jun 2022 10:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiFSOVi (ORCPT
+        with ESMTP id S229447AbiFSOYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 10:21:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01738DEA7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 07:21:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 967C56113E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 14:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6477C34114;
-        Sun, 19 Jun 2022 14:21:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655648497;
-        bh=Deh2yz+RdHe0bqejh7KLmvRo/vKvIicrQJmRCKRGvsU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MuO6AqR6O2PHSXUq9xhbLarWG6lm2RVjk7/3PgQQcdjd7tIU07pdQON2XN+qvG6mA
-         clZZo1aKwek/WbI5bHNXgJhlJM7oLNrcg714pc9qaP9ItumTUS/ypyGXE/H6hCUWdx
-         7KMC3u2oF2uuh81PC0Wb2FWU+7s8Crn67gq2QV4mE/ti7B1D5ZogtJZESq56tApNlj
-         UP1ELwG/Eht0zdX+7lsvuhi2DGjoxK8jMmsPWu8xDA5JZhEKu5WIo7JAT+XdQsgR29
-         EmSAX629Hc4CrHt4/o0/zSy9LeYzWUL/Qfg7I8u97bod0r84J6MTSsyj9biCveknHK
-         Uq5xeTqOduTeA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5DD594096F; Sun, 19 Jun 2022 11:21:34 -0300 (-03)
-Date:   Sun, 19 Jun 2022 11:21:34 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1 FYI] tools headers arm64: Sync arm64's cputype.h with the
- kernel sources
-Message-ID: <Yq8w7p4omYKNwOij@kernel.org>
+        Sun, 19 Jun 2022 10:24:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81C1FDF02
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 07:24:32 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-11-98e9s7oFPYiyl8nRTBgdtA-1; Sun, 19 Jun 2022 15:24:28 +0100
+X-MC-Unique: 98e9s7oFPYiyl8nRTBgdtA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Sun, 19 Jun 2022 15:24:26 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Sun, 19 Jun 2022 15:24:26 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'John Ogness' <john.ogness@linutronix.de>,
+        'Petr Mladek' <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     Marco Elver <elver@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: 5.19 printk breaks message ordering
+Thread-Topic: 5.19 printk breaks message ordering
+Thread-Index: AQHYglWHYY5jQBSQoEy5fw0dudLMr61Tr9rQgAKkOoCAAHL1EA==
+Date:   Sun, 19 Jun 2022 14:24:26 +0000
+Message-ID: <f7b4b14ab186464488cb52a5c425751a@AcuMS.aculab.com>
+References: <YqyANveL50uxupfQ@zx2c4.com> <YqyN20jpRw1SaaTw@alley>
+ <a35dc47eb9924d56bb6dca7868c34c94@AcuMS.aculab.com>
+ <87edzlrrva.fsf@jogness.linutronix.de>
+In-Reply-To: <87edzlrrva.fsf@jogness.linutronix.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+From: John Ogness
+> Sent: 19 June 2022 09:16
+> 
+> On 2022-06-17, David Laight <David.Laight@ACULAB.COM> wrote:
+> > What priority do these kthreads run at?
+> 
+> 120 (SCHED_OTHER, nice=0)
+> 
+> > I'd have thought they ought to run at a high priority?
+> > That should tend to give kernel messages priority over user ones.
+> >
+> > Quite how high is another matter.
+> > Probably a bit below the RT/FIFO:50 of threaded ISR.
+> 
+> As a default value, I recommend keeping to the SCHED_OTHER policy as a
+> default. Perhaps a nice value of -20? There are quite a few kernel
+> threads using that as their default:
 
-- Arnaldo
+That doesn't mean it is a sensible priority :-)
 
-Full explanation:
+Running at (SCHED_OTHER, nice=0) is almost certainly worse.
+There is little guarantee they'll run if the system is busy
+and has non-default priority user threads.
 
-There used not to be copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+I know there is the NIBY style 'my process is more important than yours'
+But processes that don't run for very long, or have to run
+in order to keep the system working properly, almost certainly
+need to be higher priority than the lowest RT one.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+I've been fighting system thread priorities on a system that
+is doing a lot of real time audio over UDP (ie RTP).
+The application threads processing the RTP need to run in preference
+to all other application threads (nothing else is that time critical).
+Processor affinities don't help - they can only really be used to
+move things away from some cpu, and I need to use the idle time.
+Running the RTP threads at a RT priority works reasonably well
+except that some system threads (like the softint ones napi uses)
+get blocked - causing lost packets.
+Threaded napi helps - but only if I run the threads under the RT
+scheduler.
 
-There are sometimes used scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+	David
 
-E.g.:
+> 
+> # ps -Leo ni,command | grep ^-20 | sort
+> -20 [acpi_thermal_pm]
+> -20 [ata_sff]
+> -20 [blkcg_punt_bio]
+> -20 [cfg80211]
+> -20 [inet_frag_wq]
+> -20 [ipv6_addrconf]
+> -20 [kblockd]
+> -20 [kworker/0:0H-events_highpri]
+> -20 [kworker/0:1H-events_highpri]
+> -20 [md]
+> -20 [mld]
+> -20 [mm_percpu_wq]
+> -20 [netns]
+> -20 [nfsiod]
+> -20 [rcu_gp]
+> -20 [rcu_par_gp]
+> -20 [rpciod]
+> -20 [scsi_tmf_0]
+> -20 [scsi_tmf_1]
+> -20 [writeback]
+> -20 [xprtiod]
+> 
+> John Ogness
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To get the changes in:
-
-  cae889302ebf5a9b ("KVM: arm64: vgic-v3: List M1 Pro/Max as requiring the SEIS workaround")
-
-That addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' differs from latest version at 'arch/arm64/include/asm/cputype.h'
-  diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
-
-Cc: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/arm64/include/asm/cputype.h | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/arm64/include/asm/cputype.h b/tools/arch/arm64/include/asm/cputype.h
-index e09d6908a21d36b1..8aa0d276a63628f5 100644
---- a/tools/arch/arm64/include/asm/cputype.h
-+++ b/tools/arch/arm64/include/asm/cputype.h
-@@ -36,7 +36,7 @@
- #define MIDR_VARIANT(midr)	\
- 	(((midr) & MIDR_VARIANT_MASK) >> MIDR_VARIANT_SHIFT)
- #define MIDR_IMPLEMENTOR_SHIFT	24
--#define MIDR_IMPLEMENTOR_MASK	(0xff << MIDR_IMPLEMENTOR_SHIFT)
-+#define MIDR_IMPLEMENTOR_MASK	(0xffU << MIDR_IMPLEMENTOR_SHIFT)
- #define MIDR_IMPLEMENTOR(midr)	\
- 	(((midr) & MIDR_IMPLEMENTOR_MASK) >> MIDR_IMPLEMENTOR_SHIFT)
- 
-@@ -118,6 +118,10 @@
- 
- #define APPLE_CPU_PART_M1_ICESTORM	0x022
- #define APPLE_CPU_PART_M1_FIRESTORM	0x023
-+#define APPLE_CPU_PART_M1_ICESTORM_PRO	0x024
-+#define APPLE_CPU_PART_M1_FIRESTORM_PRO	0x025
-+#define APPLE_CPU_PART_M1_ICESTORM_MAX	0x028
-+#define APPLE_CPU_PART_M1_FIRESTORM_MAX	0x029
- 
- #define MIDR_CORTEX_A53 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A53)
- #define MIDR_CORTEX_A57 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A57)
-@@ -164,6 +168,10 @@
- #define MIDR_HISI_TSV110 MIDR_CPU_MODEL(ARM_CPU_IMP_HISI, HISI_CPU_PART_TSV110)
- #define MIDR_APPLE_M1_ICESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM)
- #define MIDR_APPLE_M1_FIRESTORM MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM)
-+#define MIDR_APPLE_M1_ICESTORM_PRO MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM_PRO)
-+#define MIDR_APPLE_M1_FIRESTORM_PRO MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_PRO)
-+#define MIDR_APPLE_M1_ICESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM_MAX)
-+#define MIDR_APPLE_M1_FIRESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_MAX)
- 
- /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
- #define MIDR_FUJITSU_ERRATUM_010001		MIDR_FUJITSU_A64FX
-@@ -172,7 +180,7 @@
- 
- #ifndef __ASSEMBLY__
- 
--#include "sysreg.h"
-+#include <asm/sysreg.h>
- 
- #define read_cpuid(reg)			read_sysreg_s(SYS_ ## reg)
- 
--- 
-2.36.1
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

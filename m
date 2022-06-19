@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3831D5508B9
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 07:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588EB5508BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 07:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbiFSFOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 01:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S233150AbiFSFS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 01:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiFSFOh (ORCPT
+        with ESMTP id S229611AbiFSFS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 01:14:37 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB0011A37;
-        Sat, 18 Jun 2022 22:14:36 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-fe023ab520so10291019fac.10;
-        Sat, 18 Jun 2022 22:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+Gt78r/GydQGVOlcadXM6q5AeGPQsy5JksHaVTuKE88=;
-        b=ihvm+pVhyu6P3ch/ijF15Co3z9/PM41RZSqhgFYQ2D9xc4RPC2yIZfqYQar+4XW/uH
-         c2HomqVml092DqDr0+EfkBsu5fHJ+ZMMr0W16vOQ9PXaomwp7cDyIx9UTplPbeqxZOod
-         3dzKyLYtGSn3A8I2lLYWES4nxHr5tjJ+ZfJvvV0lW+2ZqNhs+GbJEYyhr36Ei6PjiY2K
-         AuyNZ4mpr0JJiD9hnlj2iFMRm5WChTthpASfvX2pRsbVZCqxDavqm3fxpTKmXEaBzOea
-         7c7N++NhX8uX1sRF/uRfQqeevIqlc4d+UdhdYscWL+jfxgOw6A6BIscJjdw8EHZVuwRc
-         nZlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+Gt78r/GydQGVOlcadXM6q5AeGPQsy5JksHaVTuKE88=;
-        b=r4qv2gzExnlF1xpsJPVAGNHJ1188Sr5BZfWj+JELQd3mLXHVJrgG4YGVZkEhBXVAzo
-         gUesDJviPEuifsmuzK7moYNHd/+12/frpU6gRuTfXO2AxVG6JNxF9tzXC256ElkqO06V
-         pezFAt9/dGs4G+Ya0T1718LB21a3RNXdQBCnmPI1RkhwqADZ4UPduhbJDzwTPgrIhigd
-         zkuK6bXtLzpMQ1bEcXOknQFswg90++3F20ykKaswtyG+6GDWmb0Hn3MESoIdwJ5gpwsy
-         esM2hHxB5ns9KCCJSO74h87lsiadYY0McFB92a550l+6qhLdyJlohwwPbyFtYqr9CzJZ
-         tFpA==
-X-Gm-Message-State: AJIora8NPbVoxYhnIYc9V8ZTC5LtIwwvi9atZ8Jc0+IZWfgeTmEyy5Bb
-        Qw70T3IKzxiTGEyaanlbB9DklHbQZ/oM9vDaJAoNzRk0Fk4=
-X-Google-Smtp-Source: AGRyM1vF68WYGspU6W6nP3tHqxysPEZHPol5yAGhcwq5qx+2FM3QTeu6q+fZUoyS3En/AgM+sjI3OH6eVcS2SzFKqL0=
-X-Received: by 2002:a05:6870:3309:b0:f5:d369:d126 with SMTP id
- x9-20020a056870330900b000f5d369d126mr15023131oae.98.1655615676125; Sat, 18
- Jun 2022 22:14:36 -0700 (PDT)
+        Sun, 19 Jun 2022 01:18:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE011C01;
+        Sat, 18 Jun 2022 22:18:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F31B8B80B1B;
+        Sun, 19 Jun 2022 05:18:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36ADC341C4;
+        Sun, 19 Jun 2022 05:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655615932;
+        bh=62G/054S0TgUBwgFzMUpfznmu/hhrrxiiqBp08t4wcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jcdCp5/tEkdQIxhJ4maT+1DpAbyQasGoyoHfaMHBsSESYyERHOB90JlciZczEqMzu
+         VVOQn+J+kfegnAh1pfJz6dzZcgH1ZNtS+8D7NBvmohfPGewlcBnDYHsMwFjCyhXLqL
+         i81rk4QkrO4kHbh1RtzIpnMNIJnlekUJp6zRkvQ0FMVFHDFRpsegHJZXd8qON0tfPF
+         SW+jX2OgdwO4xFppgWa/1d4AwRjfKo18l7jquuQhIC27zKsJ8R8wC0VkU1HpDW9NsP
+         N0UM0cVLVfGvMV/Sav/xcWVdsQYWY71lWuHXSIObPbGeICKcnCpZrw1HzMqXoWZFsb
+         zGuYzSlDp0RkQ==
+Date:   Sun, 19 Jun 2022 13:18:46 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: imx6sl-tolino-shine2hd: fix led node name.
+Message-ID: <20220619051846.GB254723@dragon>
+References: <20220604155705.574071-1-andreas@kemnade.info>
 MIME-Version: 1.0
-References: <20220618133712.8788-1-gch981213@gmail.com>
-In-Reply-To: <20220618133712.8788-1-gch981213@gmail.com>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Sun, 19 Jun 2022 13:14:24 +0800
-Message-ID: <CAJsYDVKy8xaWEq6u=JqtFJwrtNyQYdDW-fhTRWUj04fD9c56ug@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: skip IRQ1 override on Lenovo ThinkBook 14G4+ ARA
-To:     linux-acpi@vger.kernel.org
-Cc:     stable@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220604155705.574071-1-andreas@kemnade.info>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Sat, Jun 04, 2022 at 05:57:05PM +0200, Andreas Kemnade wrote:
+> Node name is supposed to be led or led-x
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 
-On Sat, Jun 18, 2022 at 9:37 PM Chuanhong Guo <gch981213@gmail.com> wrote:
-> +static const struct dmi_system_id irq1_edge_low_shared[] = {
-> +       {
-> +               .ident = "Lenovo ThinkBook 14 G4+ ARA",
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +                       DMI_MATCH(DMI_BOARD_NAME, "LNVNB161216"),
-
-This is a terrible match. Lenovo uses this board name everywhere.
-I should match DMI_PRODUCT_NAME = 21D0 instead.
-I'll send a v2 later.
--- 
-Regards,
-Chuanhong Guo
+Applied, thanks!

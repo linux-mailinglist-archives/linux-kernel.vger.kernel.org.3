@@ -2,150 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8E9550799
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 01:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3F355079C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 02:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiFRX4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 19:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S231668AbiFSABo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 20:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFRX4v (ORCPT
+        with ESMTP id S229446AbiFSABm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 19:56:51 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27C6BC28
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 16:56:50 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id 75so1114138uav.9
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 16:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DktNzGr4hLAHLea/Akk85nuaRW7tmhBUHk0N3bJRtQQ=;
-        b=iq9x9lClD1Lpd4sd0HrV1AWSlucBGYJGKMC8xIQ13Y1rrHiYGG84jvVuBGj8lCZLVY
-         A/GB+oBt85XHJrr3AvFNkEhV9aitU6UL6Lvm4JPuhzTbO2NzBWiYZmpLESx0iqjp0znJ
-         sHO/IYUv4+etaAmgLhszP8n5J8UuI2k7Kk8xZXDys0fwRsqC763hirGkdDIX1tvEVBS1
-         ahdgXxVOFOyoeNquZ8JJUCx/NGtit9+Ua33+67pcDq0BQOn7XpDBLUTGa3VKa+ld2NS1
-         TT66dvoYdbV1UbHVEMwW27M6ABx1S9WtxgeKHv92QopfRXzklow0qmcKl/ykE8VWErzS
-         W6Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=DktNzGr4hLAHLea/Akk85nuaRW7tmhBUHk0N3bJRtQQ=;
-        b=RhvvVeOAsuUWU0Lb/jRmNY45V6c7tEArBaughD2bV5squUtecW27Z407NoVKhUzdsT
-         Bnr4GhlWijWuycbg5TaOiT8cHO3baSZgOJDpkAKumTpG0xkIDuhBP4z1LV8Y+kt1F5di
-         gIk+cvxCle3mscKl5iMyDMiIf80wCi5KsYaig/gRolKUAPap1bENkKC4YYbnj7S82cy5
-         0q+d4Htup8AIS6HEr5KdF0ULMlxW0Zc/T0vk0NoD8fFZWvYzqV5P/TqwP4h/w+vejLB6
-         1tL2lmS6rzbab+W8UJ5SYyaeNc1M3pCyaN93HkKtmOcDFO3GKaSQlIJsoS21yaueuZBb
-         MAbA==
-X-Gm-Message-State: AJIora/1Q7ek9MlSSAD/JmnO79t4eW5/uEhN7YxYJF4C5bCp3tvnHgfv
-        Cw798j98vRMh4zK0D0rFFvHK9hWcKGP3KXhvimudDxapRUQ=
-X-Google-Smtp-Source: AGRyM1uuqVh1fVF51G7RSJ1/MKSqCiBszsnSi6r+pTP1TxrFFBs5y1uVVXIeIDU7BsAsCNH0vwyJU8CkcXEsS1jAVrk=
-X-Received: by 2002:a81:415:0:b0:317:7938:e2b1 with SMTP id
- 21-20020a810415000000b003177938e2b1mr15037304ywe.444.1655596229013; Sat, 18
- Jun 2022 16:50:29 -0700 (PDT)
+        Sat, 18 Jun 2022 20:01:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D4FE0B4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 17:01:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 018EA60C60
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A07DC3411A;
+        Sun, 19 Jun 2022 00:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655596900;
+        bh=4uZ3w8KpztyoIhhdswu8fmZ99307UAhVHd/s9nQ5sTc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mJ8C++Oe0oYGN98XUZKsOzfHXGIpjQ9j3VfnHrTBFtNpc5BS0E19tvzrnHlMthMaK
+         ImqrSPz26HO51t4EcIumlZEREkSBgD6dRvIdexi7T81LywdhFTMwEW/PyyRxMRqUzo
+         rpkP1d6Yros64AKvKQOhrqYXa4f6UDiU0l2YIe3qtldfWOQpn94Th19EdrH4tE2KqE
+         dPYlPQpplEMlkR9acN3++b1zB0vm4INDJVSBCbrak+h7G2CWHc2+I5GxMS2n9e+/cx
+         /ssvU3wRxWnkIhslWG1w4mLlCAh85vMjdxipXhAATBaldl1ldAGKAXvYYRJZIGRVlY
+         PVlEra9Ye/qjQ==
+Message-ID: <5627a654-d605-6840-a133-e583c804aadd@kernel.org>
+Date:   Sun, 19 Jun 2022 08:01:38 +0800
 MIME-Version: 1.0
-Reply-To: mcb_213@aol.com
-Sender: robertlarrs@gmail.com
-Received: by 2002:a05:7000:3f0b:0:0:0:0 with HTTP; Sat, 18 Jun 2022 16:50:28
- -0700 (PDT)
-From:   Roman <rm2568590@gmail.com>
-Date:   Sun, 19 Jun 2022 01:50:28 +0200
-X-Google-Sender-Auth: bjA1_J2kIL_TiQ6yEtggHmx2IaM
-Message-ID: <CAPvPBJF2T_6F4CiEDVi6FY6Q+oWU7FVu8534y8UjmWWK3w4r=Q@mail.gmail.com>
-Subject: I Need Your Assistance
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:930 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7257]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mcb_213[at]aol.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [rm2568590[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.3 RISK_FREE No risk!
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  0.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] resize.f2fs: add option to manually specify new
+ overprovision
+Content-Language: en-US
+To:     qixiaoyu1 <qxy65535@gmail.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, liuchao12 <liuchao12@xiaomi.com>
+References: <20220614114929.6897-1-qixiaoyu1@xiaomi.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220614114929.6897-1-qixiaoyu1@xiaomi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- My Good Friend,
+On 2022/6/14 19:49, qixiaoyu1 wrote:
+> From: liuchao12 <liuchao12@xiaomi.com>
+> 
+> Make.f2fs supports manually specifying overprovision, and we expect
+> resize.f2fs to support it as well.
+> 
+> This change add a new '-o' option to manually specify overprovision.
+> 
+> Signed-off-by: liuchao12 <liuchao12@xiaomi.com>
+> ---
+>   fsck/main.c   |  8 ++++++--
+>   fsck/resize.c | 12 ++++++++++--
+>   2 files changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fsck/main.c b/fsck/main.c
+> index aef797e..3b4da0f 100644
+> --- a/fsck/main.c
+> +++ b/fsck/main.c
+> @@ -121,7 +121,8 @@ void resize_usage()
+>   	MSG(0, "[options]:\n");
+>   	MSG(0, "  -d debug level [default:0]\n");
+>   	MSG(0, "  -i extended node bitmap, node ratio is 20%% by default\n");
+> -	MSG(0, "  -s safe resize (Does not resize metadata)");
+> +	MSG(0, "  -o overprovision percentage [default:auto]\n");
 
- Before I introduce myself, I wish to inform you that this mail is not
-a hoax mail and I urge you to treat it seriously. This mail must come
-to you as a big surprise, but I believe it is only a day that people
-meet and become great friends and business partners. Please I want you
-to read this mail very carefully and I must apologize for barging this
-message into your mail box without any formal introduction due to the
-urgency and confidentiality of this business and I know that this
-message will come to you as a surprise. Please this is not a joke and
-I will not like you to joke with it ok, with due respect to your
-person and much sincerity of purpose, I make this contact with you as
-I believe that you can be of great assistance to me. My name is Mr.
-Roman Arkadyevich Abramovich (born 24 October 1966)I am  a billionaire
-Russian oligarch and politician. I hold joint Israeli and Portuguese
-citizenships. Please see this as a confidential message and do not
-reveal it to another person and let me know whether you can be of
-assistance regarding my proposal below because it is top secret.
+Should update manual as well?
 
+> +	MSG(0, "  -s safe resize (Does not resize metadata)\n");
+>   	MSG(0, "  -t target sectors [default: device size]\n");
+>   	MSG(0, "  -V print the version number and exit\n");
+>   	exit(1);
+> @@ -527,7 +528,7 @@ void f2fs_parse_options(int argc, char *argv[])
+>   #endif
+>   	} else if (!strcmp("resize.f2fs", prog)) {
+>   #ifdef WITH_RESIZE
+> -		const char *option_string = "d:fst:iV";
+> +		const char *option_string = "d:fst:io:V";
+>   
+>   		c.func = RESIZE;
+>   		while ((option = getopt(argc, argv, option_string)) != EOF) {
+> @@ -561,6 +562,9 @@ void f2fs_parse_options(int argc, char *argv[])
+>   			case 'i':
+>   				c.large_nat_bitmap = 1;
+>   				break;
+> +			case 'o':
+> +				c.new_overprovision = atof(optarg);
+> +				break;
+>   			case 'V':
+>   				show_version(prog);
+>   				exit(0);
+> diff --git a/fsck/resize.c b/fsck/resize.c
+> index f1b7701..d19c6fa 100644
+> --- a/fsck/resize.c
+> +++ b/fsck/resize.c
+> @@ -146,12 +146,15 @@ safe_resize:
+>   						get_sb(segs_per_sec));
+>   
+>   	/* Let's determine the best reserved and overprovisioned space */
+> -	c.new_overprovision = get_best_overprovision(sb);
+> +	if (c.new_overprovision == 0)
+> +		c.new_overprovision = get_best_overprovision(sb);
+> +
+>   	c.new_reserved_segments =
+>   		(2 * (100 / c.new_overprovision + 1) + 6) *
+>   						get_sb(segs_per_sec);
+>   
+> -	if ((get_sb(segment_count_main) - 2) < c.new_reserved_segments ||
+> +	if (c.new_overprovision == 0 ||
 
- I am  one of seven oligarchs sanctioned by the UK government over the
-2022 Russian invasion of Ukraine which i never supported, including
-asset freezes and travel bans. But now as all my acounts and valuable
-assets have been frozen and conphisicated. There is this very account
-i opened without my identity and now i cannot claim it with my name
-and identity because it  was opened in an escrow account  in a bank in
-Africa when i was scouting for good african players to play for my
-club Chelsea,the funds in the bank is (=C2=A3250,000,000 million British
-Pounds)two hundred and fiffty million British pounds.This is where you
-come in now as the beneficiary of the said fund because i left the
-space of the beneficiary open for me to claim the funds back through a
-trusted beneficiary like you.
+Should never be zero here? Otherwise above "100 / c.new_overprovision"
+calculation will cause arithmetic exception.
 
- Please if you can stand and transfer this fund to your designated
-account  as the beneficiary i will back you up with the neccessary
-information that you will need. I want you to know that this is a
-hundrd percent risk free transaction if you follow my instructions
-there will be no mistakes.Once the fund is transferred into your
-account please take only (=C2=A350,000,000 million Pounds) and keep the
-rest (=C2=A3200,000,000 million Pounds) for me. i will inform you in my
-next mail on how to invest the money in your own country.
+Thanks,
 
- If you are willing to assist me on this i will feed you with more details.
-
-
-regards,
-Mr.R.Abramovich.
+> +		(get_sb(segment_count_main) - 2) < c.new_reserved_segments ||
+>   		get_sb(segment_count_main) * blks_per_seg >
+>   						get_sb(block_count)) {
+>   		MSG(0, "\tError: Device size is not sufficient for F2FS volume, "
+> @@ -476,6 +479,11 @@ static void rebuild_checkpoint(struct f2fs_sb_info *sbi,
+>   	set_cp(overprov_segment_count, get_cp(overprov_segment_count) +
+>   						get_cp(rsvd_segment_count));
+>   
+> +	DBG(0, "Info: Overprovision ratio = %.3lf%%\n", c.new_overprovision);
+> +	DBG(0, "Info: Overprovision segments = %u (GC reserved = %u)\n",
+> +					get_cp(overprov_segment_count),
+> +					c.new_reserved_segments);
+> +
+>   	free_segment_count = get_free_segments(sbi);
+>   	new_segment_count = get_newsb(segment_count_main) -
+>   					get_sb(segment_count_main);

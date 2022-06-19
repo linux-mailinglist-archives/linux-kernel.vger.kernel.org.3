@@ -2,116 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6A0550A46
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766AA550A48
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 13:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbiFSLdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 07:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        id S236623AbiFSLdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 07:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235421AbiFSLc7 (ORCPT
+        with ESMTP id S234542AbiFSLdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 07:32:59 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C0D6436
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:32:58 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CFF535C0053;
-        Sun, 19 Jun 2022 07:32:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 19 Jun 2022 07:32:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1655638375; x=1655724775; bh=yN3e7rKx5D
-        9uS9dPcZntcA1m4Ds21bYlPqY3EuFSszs=; b=ql3H+SBUPccgSTrGx0Uasw0CgD
-        V/jmSipLZUYK9SCyLH3q9C0qKF+R0smjp0FbEIg8GR/DUHzPTZuKJSZ8j+/643QD
-        YW0lNIhreCVFnFqj3y66Iq2quSRKhPwpnGyrzNk1RdQiaeLCJPDRKW9yhLRPddd9
-        856ZljDWvbIZ+yZhhS2dw7ytYCJaNT9DaZQ7aSpkgcZ41jEzvcrTm7sU1LwUAkLI
-        5r/B/e/9aAGyVgawRUnArdBGkwZb8+5MTejduiPFFlcEaR1W7M1ejnmM1RRrTA0J
-        4GH0IkEcileb1n9M1dfbw+Cj3zyAi7WeFrxrUR7VILOxuECoDVXhMO2v9PcA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1655638375; x=1655724775; bh=yN3e7rKx5D9uS9dPcZntcA1m4Ds2
-        1bYlPqY3EuFSszs=; b=IYWqvkOhwN5gX/zOo/zVPqwQw2mch9LTGm0tXGIBAG28
-        FE/Z9b4nV7yDYs7xnvJsa2SWJMSV3Hq8xSBEM9dmO8lYIxt1vJKJbkZxSgB+pWG5
-        u+qmLx71aRg8jZpCFcQqq3T+nE/XMnHjVXr81r0iHDYPOPEi5YVKLu79rfR5UbEu
-        co21eM0CKDAHNEQl6VyuliX+XXGtu37HN1sSxuMKfJD9xaeWY84t7xZ2mm6dKMHE
-        mQqECGX+cbPmkoeTOOehF1yFI7rYYzqLS5a768Ck1DRhMjwoGft2GHa+mCYFHulJ
-        RdPD3K4emNcPWP42aLmM1HlamMZzlc6fRSC/27QwyA==
-X-ME-Sender: <xms:ZwmvYv_hxRranQEqgdXX1JtzXCOdZd79DVKaHvoPQltM6nWOVd7Dvw>
-    <xme:ZwmvYrtvVvCCpRWWbIu0fqLIsqdQsn6BO5vOwyLXUlEw80Nw7E-B1ao8tDsHxPanY
-    DNakmBhBUxq1A>
-X-ME-Received: <xmr:ZwmvYtDs8x7k6QawWGqKZ2cNKGGx_r2BvMrMPudhYfRZexqfKkFdvhSB9Zt8UXfKPRCVCAwZEq19zxev9zXq2f9AkwPCXWIq>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvledggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmqdfjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuvd
-    evgeefueegfefgvddvjeejjefgffdvvdffffduueeltdeludelveeuleekfeenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ZwmvYrcgQkkDh0x7oVD3M8IqNJW278Ebv2uIPQ4W83rPlHpKQvpiYw>
-    <xmx:ZwmvYkMchLHTZrBuFLKBHdNXb2tY5t92Gi01Ak49S6VxON3rJJjs_A>
-    <xmx:ZwmvYtnWTu-PwaDGw9mRYQHYzCTYTi_HPlNQlaSEuaWG-sHw0Zsyfg>
-    <xmx:ZwmvYlipt0k-lwKspKiM_WuwwvCP3zvRX7KtwLeceA_b6Qyx-Q9LTQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 19 Jun 2022 07:32:54 -0400 (EDT)
-Date:   Sun, 19 Jun 2022 13:32:52 +0200
-From:   Greg K-H <greg@kroah.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] Char/Misc driver fixes 5.19-rc3
-Message-ID: <Yq8JZMQiUqdmfqx+@kroah.com>
-References: <Yqw4Jujzz5ZzZ2Wg@kroah.com>
- <Yqywy+Md2AfGDu8v@dev-arch.thelio-3990X>
- <CAHk-=wh59Decy5ksYBW1kD2pmcgo8T0JdKa37iaeaEO5LUN62g@mail.gmail.com>
- <CE205655-557F-486C-AF6A-099749208327@kroah.com>
+        Sun, 19 Jun 2022 07:33:43 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA6211A1F
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:33:42 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id gl15so16228332ejb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 04:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gzwSi26kgANkAlEKRYap+NCAHJ4FDv7RKV3gyml+oZ4=;
+        b=N9NJrcZmpbNRtbzmrOSzC1g43nYZgHUHXO56Y++wJZFbMETQIcwn5PETLkGyKacdd/
+         lP1ZhkybqL9/QbWtrPGH2yfuAych0rl/ZawKiN5b4NFcynGLUfXRFYTk/uyJKGcaHNiS
+         rZ3ROqtYVCDXd4Lrfy0QvHYKibbJR/alnubrTin0m0wLPZPF583hjS5pvzUKe+wF55Nv
+         XjTt5HR1IBEhs5gSs2EsGSvJDddP5mGrV5jlunrE9O1VD5xQKCE43Yoe264bSt1qz6zB
+         nfohJrrxpgc0i/NdaJRVNCQfCQjaknKDNRMtFWRA9gHZpxZWbqN1o1dUVV9VXgUyd6Ll
+         Msow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gzwSi26kgANkAlEKRYap+NCAHJ4FDv7RKV3gyml+oZ4=;
+        b=ZGg2NG2Sbk/eVJ5O3OH8VOoBOVGG70xJsN8INRRNNEDhxjFG5zN9kXpPb9Wg/5gphB
+         uGjhnAxX5KZzlVF4JNnC94Swj99lXAr6OhXbWB7EgXpbBEz/ApywVgQ41ABZKYNttc1s
+         IaZZGnNO5TPmy8gbx3j9TUpCMzy7OBex0rHLOyV5fMVyJ8O6zbxVaqa1KFszA4K+bFM9
+         /Dtidr3NvWYCg0OsFlrnyzw2GrMvElF+nHY5L+FxZTnjUM+UdBzj/X+bI+S69L2y/vnC
+         J8IOipmIl2u+GmBejXMb/S0TOPKju8E9IxumUyuKQQcSMpH/dr+gbaU4OvjF6BcGaoDc
+         VAFw==
+X-Gm-Message-State: AJIora+nS8GtR70UXc9CgyLshlaXYTzUv4tvPyocrW7nzo5f0nO4wJLj
+        iD/kolqeJ21R8R0/E98/QQnDZA==
+X-Google-Smtp-Source: AGRyM1tWBL6BXlRJ8aXxuhVL2aUBW7hRs6lbszHJQK6AclrQOieohBjws/JXHuhaxFHX/fk3lbHu2g==
+X-Received: by 2002:a17:907:1b20:b0:6da:649b:d99e with SMTP id mp32-20020a1709071b2000b006da649bd99emr16482762ejc.712.1655638420564;
+        Sun, 19 Jun 2022 04:33:40 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id m10-20020a056402430a00b0042cf43e1937sm7949927edc.75.2022.06.19.04.33.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 04:33:39 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: phy: make phy-cells description a text
+Date:   Sun, 19 Jun 2022 13:33:25 +0200
+Message-Id: <20220619113325.21396-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CE205655-557F-486C-AF6A-099749208327@kroah.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 07:43:26PM +0200, Greg K-H wrote:
-> 
-> 
-> On June 17, 2022 6:59:50 PM GMT+02:00, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> >On Fri, Jun 17, 2022 at 9:50 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >>
-> >> I think you tagged the wrong branch (char-misc-next vs. char-misc-linus)?
-> >> The commits below do not match the tag description above.
-> >
-> >Good catch. I verified the diffstat etc, but yeah, the actual
-> >explanation in the tag doesn't match the contents.
-> >
-> >It's pulled now, and the code changes look fairly harmless, but I
-> >suspect Greg will want to send a real pull for the changes that were
-> >intended to come in here..
-> >
-> >                   Linus
-> 
-> 
-> Crap, i messed that up. I'm away from my laptop until Monday so I'll
-> verify it then. The one time i go out of town for the weekend...
+The description field is a string, so using YAML inside phy-cells
+description is not actually helpful.  Make it a proper text.
 
-Heat drove us home a day early so I've now created a new tag, on the
-correct branch and sent the pull request.  Sorry about the mess, all
-should be good now.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/phy/mediatek,tphy.yaml           | 14 ++++----
+ .../bindings/phy/mediatek,xsphy.yaml          | 10 +++---
+ .../bindings/phy/xlnx,zynqmp-psgtr.yaml       | 32 ++++++++-----------
+ 3 files changed, 23 insertions(+), 33 deletions(-)
 
-greg k-h
+diff --git a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+index 4b638c1d4221..bd0e4c4915ed 100644
+--- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
++++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+@@ -154,14 +154,12 @@ patternProperties:
+       "#phy-cells":
+         const: 1
+         description: |
+-          The cells contain the following arguments.
+-
+-          - description: The PHY type
+-              enum:
+-                - PHY_TYPE_USB2
+-                - PHY_TYPE_USB3
+-                - PHY_TYPE_PCIE
+-                - PHY_TYPE_SATA
++          The cells contain the following arguments::
++            - The PHY type::
++              - PHY_TYPE_USB2
++              - PHY_TYPE_USB3
++              - PHY_TYPE_PCIE
++              - PHY_TYPE_SATA
+ 
+       nvmem-cells:
+         items:
+diff --git a/Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml b/Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml
+index 598fd2b95c29..7262b8e184e2 100644
+--- a/Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml
++++ b/Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml
+@@ -100,12 +100,10 @@ patternProperties:
+       "#phy-cells":
+         const: 1
+         description: |
+-          The cells contain the following arguments.
+-
+-          - description: The PHY type
+-              enum:
+-                - PHY_TYPE_USB2
+-                - PHY_TYPE_USB3
++          The cells contain the following arguments::
++            - The PHY type::
++              - PHY_TYPE_USB2
++              - PHY_TYPE_USB3
+ 
+       # The following optional vendor properties are only for debug or HQA test
+       mediatek,eye-src:
+diff --git a/Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml b/Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
+index 79906519c652..7083eddb467c 100644
+--- a/Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
++++ b/Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
+@@ -18,25 +18,19 @@ properties:
+   "#phy-cells":
+     const: 4
+     description: |
+-      The cells contain the following arguments.
+-
+-      - description: The GTR lane
+-        minimum: 0
+-        maximum: 3
+-      - description: The PHY type
+-        enum:
+-          - PHY_TYPE_DP
+-          - PHY_TYPE_PCIE
+-          - PHY_TYPE_SATA
+-          - PHY_TYPE_SGMII
+-          - PHY_TYPE_USB3
+-      - description: The PHY instance
+-        minimum: 0
+-        maximum: 1 # for DP, SATA or USB
+-        maximum: 3 # for PCIE or SGMII
+-      - description: The reference clock number
+-        minimum: 0
+-        maximum: 3
++      The cells contain the following arguments::
++        - The GTR lane (minimum:: 0, maximum:: 3)
++        - The PHY type::
++            - PHY_TYPE_DP
++            - PHY_TYPE_PCIE
++            - PHY_TYPE_SATA
++            - PHY_TYPE_SGMII
++            - PHY_TYPE_USB3
++      - The PHY instance::
++          minimum:: 0
++          maximum:: 1 # for DP, SATA or USB
++          maximum:: 3 # for PCIE or SGMII
++      - The reference clock number (minimum:: 0, maximum:: 3)
+ 
+   compatible:
+     enum:
+-- 
+2.34.1
+

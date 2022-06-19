@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6994B55098B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 11:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B6155098E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 11:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiFSJt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 05:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S233522AbiFSJxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 05:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiFSJty (ORCPT
+        with ESMTP id S229809AbiFSJxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 05:49:54 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B2BAE7C;
-        Sun, 19 Jun 2022 02:49:52 -0700 (PDT)
-Received: from mail-yw1-f169.google.com ([209.85.128.169]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MvaSG-1njPnk1Lxm-00sbKj; Sun, 19 Jun 2022 11:49:50 +0200
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3178ea840easo37691157b3.13;
-        Sun, 19 Jun 2022 02:49:50 -0700 (PDT)
-X-Gm-Message-State: AJIora+yPInBDqprwK6WMNmb0SjJD964UiOdApSHuiPJ+7TCsWoX/RUC
-        atyXIVrgjQbLJtShWQKRB13s2kKcKKI/MUkHQC4=
-X-Google-Smtp-Source: AGRyM1t9ul1TMDLrnODbrtmpbMg/VmZyXRzI7rCNUKvT9jPCzauqo8TpsRO1mbG6wZCDJNE0X4tcOtmgDYFJdLII69Y=
-X-Received: by 2002:a0d:ca0f:0:b0:317:a2cc:aa2 with SMTP id
- m15-20020a0dca0f000000b00317a2cc0aa2mr5711993ywd.347.1655632189019; Sun, 19
- Jun 2022 02:49:49 -0700 (PDT)
+        Sun, 19 Jun 2022 05:53:33 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1975DB874
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 02:53:32 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso8228933pjg.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 02:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kR0nPmihBKg/JVQtdlu4B3iD3y1xFJeR/L3hKnfirkg=;
+        b=Ujfw05oCO6CQHlxIt9U1/Vw2jZz2wiVAu2MidO2JcQLF7s5nkeLtX+pXVg0r+JG7Rq
+         bspYGi4fxvj/xaZ96AGR+/2wKEL8/NTtY2c8USzvxw8l9fcUpS41zrHtRVsNA/M50cgw
+         jGn6RF4QAyzCyK8+RxV6AHBAabXA7pT2Kp29w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kR0nPmihBKg/JVQtdlu4B3iD3y1xFJeR/L3hKnfirkg=;
+        b=Tx8LugoZ3tRsaXXeUdF/bbgcHeIKht3vj+SXqQ0q9Wx9set33E59dxSGdf3UEV3eAQ
+         O/a1fRop/L3+5tYY3DHe6tHABnubxwcgnWHpfy49+VhBw+F7Plyj9IejeoAA0HPTUqE8
+         GX4L7Xqb8Gonr624Dp86kvJ5b9ZpC76aAGl6yImeOmqWWx2ERnV1FaVFBdEOlvxrWeFi
+         REdaP3S6xov9n+l0FZcJxLyGzBUC9eBc6nD7az8cdM55Hz3aavUv5JWa9H47v5HAoZFV
+         jvalXWXDqLq/G/7XIXz65tv1XVv+b+pheia4HssbS6r9635TYZ9eONzOkPdRCHn2NCGF
+         Ln0A==
+X-Gm-Message-State: AJIora8kLnIv3nyJh8uMzrU0Hws0jF0pUgByeOzbQjTKeahkl+XW+J+h
+        jvvTcmTvyy9+K2avDvcT+NvkYw==
+X-Google-Smtp-Source: AGRyM1v7zPmyGbZPOSnbb98hniYzON8YpxLeYV5xLE/gaU76OD8LpMvcKXf8EiPwhBviJK2jxy4o0Q==
+X-Received: by 2002:a17:90a:e418:b0:1ec:9908:d5f0 with SMTP id hv24-20020a17090ae41800b001ec9908d5f0mr3170210pjb.7.1655632411623;
+        Sun, 19 Jun 2022 02:53:31 -0700 (PDT)
+Received: from judyhsiao0523.c.googlers.com.com (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
+        by smtp.gmail.com with ESMTPSA id 135-20020a62178d000000b0050dc762817esm6799971pfx.88.2022.06.19.02.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 02:53:30 -0700 (PDT)
+From:   Judy Hsiao <judyhsiao@chromium.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Chen-Yu Tsai <wenst@chromium.org>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Judy Hsiao <judyhsiao@chromium.org>
+Subject: [PATCH v4 0/3] ASoC: rockchip: i2s: switch BCLK to GPIO
+Date:   Sun, 19 Jun 2022 09:53:21 +0000
+Message-Id: <20220619095324.492678-1-judyhsiao@chromium.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-References: <20220616221554.22040-1-ansuelsmth@gmail.com>
-In-Reply-To: <20220616221554.22040-1-ansuelsmth@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 19 Jun 2022 11:49:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a103rO9GV+L8cctYJcQBwGDUTVBcn3ii266R-Wa1mGDuw@mail.gmail.com>
-Message-ID: <CAK8P3a103rO9GV+L8cctYJcQBwGDUTVBcn3ii266R-Wa1mGDuw@mail.gmail.com>
-Subject: Re: [net-next PATCH] net: ethernet: stmmac: remove select
- QCOM_SOCINFO and make it optional
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Networking <netdev@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:TYqcAKglN1J7k5XSogp0KgIay1+Andt3ZdIz3jS0f57xGHLBodJ
- H7KQecuUyj/CCD+BIniIVv2Id0Wbk4FiLsq1SN296A0mxTzxWf3P+u5lfrBxvTcbLh5zV8B
- Kx7rEpG7cb/doCfPrLFny1Jo6FjMaBFkqpLjMroyet4Ry0CawzLQvJc5wZ9yDxymILYwo0Z
- jSo8lYX3QJbtcNWdduV6A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YsJC5F1d6EQ=:CmFdCdFrOMuSTAkfmNekxV
- u2h6w8Vt+mJMv/n5g5VZEHfsctv69NeD8UgQGE5OztKQWlpLgdOn654rRTBFJrxKaQq/QJYXB
- fXsFb//K0mvuT+ntKAXVueXs8AKBTrQTzCWzwVrGOE19op+RVn8F+T6ZpLYXb/hYQ7cRWC7Ws
- vaui+j59s7cpbkCC683knDuaeKrCQph2fV1Wj6ETH47d6CdZhhOoDCoG/1RFL7gzKWENCN0jF
- mN2z/l8rkoZAdX7B5Qtwdg0F7kw8sbuytRKvjRa+CsyRD1eQn2QaSi2HCT3NnEbNTVnCp9q0I
- A2kyIx4LUff9rJZc2eQWDh7Hgmac1IM7tWZ7FZYG5yxTtfVDd0ZgtOnQxSBmwIQVwp+nvDP7s
- 8j8FL6ufl3W9u0zIP9WBq6595kN5ZzR7mRbAMaQ5KA0UC0GN1g8KyHquvwx38Ops2Y9iISDN7
- prrbc9pjqV3cgW5uruTJXXheZN3P0h1fVPcyH99iZDFo84qhilSkIXoJV50Ld22m/0axoyy8g
- qMfHRe+k2p1ocKgSpImQTqna8QN4k5LRiVxnQTk9AolYN1epEO9/IKM5RPLfDXEhNiAor/fw7
- MKckrvI2JqEAYDdRzkKXoZJb9MbwDDpf/7m1cO7WviUbHwgEe5CwrLllCr/9oMRUh+ApeJUUy
- EDg3CGMoia0wVCxCm7kMEpHgmJLZvpfHsdm2fbmKJQcTJoFRBKZNtI+xWtu5JsWcHN74fQgwL
- IYfwnneKzkDZiSXGISvX4gQbmCqSOMOPNFhDrQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 12:15 AM Christian Marangi <ansuelsmth@gmail.com> wrote:
->
-> QCOM_SOCINFO depends on QCOM_SMEM but is not selected, this cause some
-> problems with QCOM_SOCINFO getting selected with the dependency of
-> QCOM_SMEM not met.
-> To fix this remove the select in Kconfig and add additional info in the
-> DWMAC_IPQ806X config description.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 9ec092d2feb6 ("net: ethernet: stmmac: add missing sgmii configure for ipq806x")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/net/ethernet/stmicro/stmmac/Kconfig | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> index c4bca16dae57..31ff35174034 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> @@ -83,7 +83,6 @@ config DWMAC_IPQ806X
->         default ARCH_QCOM
->         depends on OF && (ARCH_QCOM || COMPILE_TEST)
->         select MFD_SYSCON
-> -       select QCOM_SOCINFO
->         help
->           Support for QCA IPQ806X DWMAC Ethernet.
->
-> @@ -92,6 +91,9 @@ config DWMAC_IPQ806X
->           acceleration features available on this SoC. Network devices
->           will behave like standard non-accelerated ethernet interfaces.
->
-> +         Select the QCOM_SOCINFO config flag to enable specific dwmac
-> +         fixup based on the ipq806x SoC revision.
+The patches series is to fix the unexpected large DC output
+voltage of Max98357a that burns the speakers on the rockchip
+platform when BCLK and SD_MODE are ON but LRCLK is OFF.
 
-I think the correct way would have been to use
+Changes Since V4:
+    -- Fix indentation in the driver. (Align parameters with the parenthesis
+       placement.)
+    -- Fix incorrect return type of rockchip_snd_rxctrl.
+Changes Since V3:
+    -- Fix indentation in the documentation.
+    -- Put pinctrl-1 right after pinctrl-0 in dtsi.
+    -- Fix indentation in the driver.
+    -- Remove unnecessary dev_dbg() in the driver.
+Changes Since V2:
+    -- Add documents of i2s pinctrl-names.
+    -- Fix dtsi syntax error.
+    -- Include the dtsi change and the driver change in the same series.
+    -- Ensure that driver gets both bclk_on and bclk_off states before using them.
 
-     depends on QCOM_SOCINFO || COMPILE_TEST
+Judy Hsiao (3):
+  ASoC: rockchip: i2s: switch BCLK to GPIO
+  arm64: dts: rk3399: i2s: switch BCLK to GPIO
+  ASoC: dt-bindings: rockchip: Document pinctrl-names for i2s
 
-here.
+ .../bindings/sound/rockchip-i2s.yaml          |   7 +
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  10 +
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |  25 ++-
+ sound/soc/rockchip/rockchip_i2s.c             | 171 +++++++++++++-----
+ 4 files changed, 165 insertions(+), 48 deletions(-)
 
-        Arnd
+-- 
+2.36.1.476.g0c4daa206d-goog
+

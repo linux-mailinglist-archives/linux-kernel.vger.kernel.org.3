@@ -2,207 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73573550CC2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08ED550CC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbiFST3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 15:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S231270AbiFSTcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 15:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiFST3b (ORCPT
+        with ESMTP id S229780AbiFSTcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 15:29:31 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D259426E3;
-        Sun, 19 Jun 2022 12:29:30 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-317803b61e5so56627397b3.1;
-        Sun, 19 Jun 2022 12:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eebabUglYhWenSeh6jBsHcmLWqDqLl0MvlBz4MnYypk=;
-        b=dLUGCSFZG2ntKjOKrusxKZ62u3wQQEgFcArn1QDBE5zIe5v/2xX4xBzHq80Td1TwSF
-         eYzJJv74r0f/Ky9kivLkJyMqN1UGYHSFwupdHzUYYaw3XL5R0SQv0F8bFotPwA6lG2qt
-         sd6GUEj9kIz7JtFJ2IGimuXKva+QqaHrA4fCK6GOmtUUlYT5U5wIITAq/jVXHpe+qvFr
-         zfZ6ruQxQ2o1BE7WZhFFh27NGWxgXUvtQSwUrA+SUeP1d4/Tmp6yXCRc4nyM1vaYy7Py
-         eAy4jH1JyJiyH4fBVWuKTieEWF6jG79D21stYqTv4px4k0EZdFgP9OqfYajuyaLj/SqS
-         O6wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eebabUglYhWenSeh6jBsHcmLWqDqLl0MvlBz4MnYypk=;
-        b=b8R/XcTWMWlAVG+P25T9I3jZ3icaM2PghvU/E+JHXixJXs9j9Hh9RUkvjalxdxafY2
-         1ONtMiJMorroInwD3trk0zE8lOjZyQy38mwXl+QBc/iorjJ89Uboq+ytdLdGvekD4mng
-         22dXUFpIdtDhP0Kp5HUHfDOVoRkCxPyJqedGrjLUIdEOlGJe13Xx+y2og+wK632kyikv
-         yQr2p1W7cXertUZ99nIdSJyb8+45nwKYIixUpbycF5ni022pDOvOdI7KMunNSn4lRn1W
-         LV0PCk3IO+GUW17C2IQxC/gWf2XWtAmOyl7FwoFiR2392M6PnhMVMXEYKdHSr7c3h1GY
-         v5Yg==
-X-Gm-Message-State: AJIora+j4h+cFytF568Rso7sdAMmj3Hbz8awKpIbtjrQMffoDYy6A98h
-        xbrzZ2qSGSoH2EdRb2xklqYtvoaHdNW3KljSM1o=
-X-Google-Smtp-Source: AGRyM1tRZsOJhXLrAR8V+9hOvPJwyigsJUTx2ANfoGep/h/g20lguEe51ep8yEZC4DXig4eoxoUN89k+su01PMRaeCQ=
-X-Received: by 2002:a81:6e02:0:b0:317:b68d:3870 with SMTP id
- j2-20020a816e02000000b00317b68d3870mr4767307ywc.222.1655666970029; Sun, 19
- Jun 2022 12:29:30 -0700 (PDT)
+        Sun, 19 Jun 2022 15:32:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC8DCE9;
+        Sun, 19 Jun 2022 12:32:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC1DCB80DDB;
+        Sun, 19 Jun 2022 19:32:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048CEC34114;
+        Sun, 19 Jun 2022 19:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655667168;
+        bh=KzY1R7EXRN08xnUMYOeVuTknO1SngU7AjYDwY4X55n4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qOf/eb/bL+pWg+lLLA/B9fAdMEQS/nGdyHWsmPgprvA2Vt7q/KaJemuDD9F7WJfeB
+         DBAiGfCB5GKohy40Ag8/bL5O+XUid2w2vTMkY+Luc69x1VWXlGz4yh2nobU5l3SjoF
+         oxr5bDuwl4R+MckZzRo/Jwflj7T8eWJwmOPyp2GL7D1aJIdxdxvMGJpcpcbNvAYC/m
+         fUb60gsJ6acZpDOL28dFaFr5OCLF4GZGld5JdI2WI2ZrkCvW1/Qt6qqvU5GrE9m56O
+         lO/K/rxIBD6vpVqmCqY/508vpYcDxnrZb3uJEeaA4mxNF4D98ahrS9w08xrUPKkjwP
+         wZJK+LDdj2DRA==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools fixes for v5.19: 1st batch
+Date:   Sun, 19 Jun 2022 16:32:40 -0300
+Message-Id: <20220619193240.802856-1-acme@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sun, 19 Jun 2022 20:29:02 +0100
-Message-ID: <CA+V-a8v4QEOtzPeOvoRQtT7Rvj3ZxzmhQtn6v4U+1toTUbh-Zw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/5] Renesas RZ/G2L IRQC support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc
+Hi Linus,
 
-On Mon, May 23, 2022 at 6:42 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Hi All,
->
-> The RZ/G2L Interrupt Controller is a front-end for the GIC found on
-> Renesas RZ/G2L SoC's with below pins:
-> - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
->   interrupts
-> - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
->   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
-> - NMI edge select.
->
->                                                              _____________
->                                                              |    GIC     |
->                                                              |  ________  |
->                                       ____________           | |        | |
-> NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
->              _______                  |          |------------>|        | |
->              |      |                 |          |  PPI16-31 | |        | |
->              |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
-> P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
->              |      |GPIOINT0-122     |          |           |            |
->              |      |---------------->| TINT0-31 |           |            |
->              |______|                 |__________|           |____________|
->
-> The proposed patches add hierarchical IRQ domain, one in IRQC driver and
-> another in pinctrl driver. Upon interrupt requests map the interrupt to
-> GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
-> handled by the pinctrl and IRQC driver.
->
-> Cheers,
-> Prabhakar
->
-> Changes for v4->v5:
-> * Updated commit message for patch 3/5
-> * Dropped interrupt-parent from and included RB tag from Geert for patch 4/5
-> * Implemented init_valid_mask() callback
-> * Dropped ngirq patch from previous series
-> * Dropped patches 4/7 and 5/7 from previous patch series will handle it separately.
->
-> Changes for v3->v4:
-> * Updated description for interrupts-cells property in patch #1
-> * Dropped the patch which overriding free callback in gpiolib
-> * Used devm helpers in patch#2
-> * Patch #4, #5 and #6 are newly added
-> * In patch #7 dropped using gpio offset as hwirq
-> * Implemented immutable GPIO in patch #7
-> * Implemented child_offset_to_irq() callback in patch #7
->
-> Changes for v2->v3:
-> * Updated description for interrupts-cells property in patch #1
-> * Included RB tag from Geert for binding patch
-> * Fixed review comments pointed by Geert, Biju and Sergei.
->
-> Changes for v1->v2:
-> * Included RB tag from Rob
-> * Fixed review comments pointed by Geert
-> * included GPIO driver changes
->
-> Changes for RFCV4 -> V1:
-> * Used unevaluatedProperties.
-> * Altered the sequence of reg property
-> * Set the parent type
-> * Used raw_spin_lock() instead of raw_spin_lock_irqsave()
-> * Simplified parsing IRQ map.
-> * Will send the GPIO and pinctrl changes as part of separate series
->
-> Changes for RFC v4:
-> * Used locking while RMW
-> * Now using interrupts property instead of interrupt-map
-> * Patch series depends on [0]
-> * Updated binding doc
-> * Fixed comments pointed by Andy
->
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-> 20220316200633.28974-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
->
-> Changes for RFC v3:
-> -> Re-structured the driver as a hierarchical irq domain instead of chained
-> -> made use of IRQCHIP_* macros
-> -> dropped locking
-> -> Added support for IRQ0-7 interrupts
-> -> Introduced 2 new patches for GPIOLIB
-> -> Switched to using GPIOLIB for irqdomains in pinctrl
->
-> RFC v2: https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-> 20210921193028.13099-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
->
-> RFC v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-> 20210803175109.1729-1-prabhakar.mahadev-lad.rj@xxxxxxxxxxxxxx/
->
-> Lad Prabhakar (5):
->   dt-bindings: interrupt-controller: Add Renesas RZ/G2L Interrupt
->     Controller
->   irqchip: Add RZ/G2L IA55 Interrupt Controller driver
->   gpio: gpiolib: Allow free() callback to be overridden
->   dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Document the properties
->     to handle GPIO IRQ
->   pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to handle GPIO
->     interrupt
->
->  .../renesas,rzg2l-irqc.yaml                   | 133 ++++++
->  .../pinctrl/renesas,rzg2l-pinctrl.yaml        |  15 +
->  drivers/gpio/gpiolib.c                        |   9 +-
->  drivers/irqchip/Kconfig                       |   8 +
->  drivers/irqchip/Makefile                      |   1 +
->  drivers/irqchip/irq-renesas-rzg2l.c           | 425 ++++++++++++++++++
->  drivers/pinctrl/renesas/pinctrl-rzg2l.c       | 236 ++++++++++
->  7 files changed, 824 insertions(+), 3 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
->  create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
->
-Gentle ping.
+	Please consider pulling, there are some more header sync
+activity for next week, still recovering the french no-mask bonanza and
+the brazilian omicron crash (maybe related?) (yeah, me+wife+kid
+infected), sigh.
 
-Are you happy with this series?
+Best regards,
 
-Cheers,
-Prabhakar
+- Arnaldo
+
+The following changes since commit 354c6e071be986a44b956f7b57f1884244431048:
+
+  Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4 (2022-06-18 21:51:12 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.19-2022-06-19
+
+for you to fetch changes up to 140cd9ec8fdddc0e2d1684e6b69bcd05efbc9549:
+
+  tools headers UAPI: Sync linux/prctl.h with the kernel sources (2022-06-19 11:42:25 -0300)
+
+----------------------------------------------------------------
+perf tool fixes for v5.19, 1st batch:
+
+- Don't set data source if it's not a memory operation in ARM SPE (Statistical
+  Profiling Extensions).
+
+- Fix handling of exponent floating point values in perf stat expressions.
+
+- Don't leak fd on failure on libperf open.
+
+- Fix 'perf test' CPU topology test for PPC guest systems.
+
+- Fix undefined behaviour on breakpoint account 'perf test' entry.
+
+- Record only user callchains on the "Check ARM64 callgraphs are complete in FP
+  mode" 'perf test' entry.
+
+- Fix "perf stat CSV output linter" test on s390.
+
+- Sync batch of kernel headers with tools/perf/.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+----------------------------------------------------------------
+Arnaldo Carvalho de Melo (4):
+      perf beauty: Update copy of linux/socket.h with the kernel sources
+      tools headers UAPI: Sync x86's asm/kvm.h with the kernel sources
+      tools headers arm64: Sync arm64's cputype.h with the kernel sources
+      tools headers UAPI: Sync linux/prctl.h with the kernel sources
+
+Athira Rajeev (1):
+      perf test topology: Use !strncmp(right platform) to fix guest PPC comparision check
+
+Ian Rogers (5):
+      perf unwind: Fix uninitialized variable
+      libperf evsel: Open shouldn't leak fd on failure
+      perf test: Fix variable length array undefined behavior in bp_account
+      perf expr: Allow exponents on floating point values
+      perf metrics: Ensure at least 1 id per metric
+
+Leo Yan (1):
+      perf arm-spe: Don't set data source if it's not a memory operation
+
+Michael Petlan (1):
+      perf test: Record only user callchains on the "Check Arm64 callgraphs are complete in fp mode" test
+
+Thomas Richter (1):
+      perf test: Fix "perf stat CSV output linter" test on s390
+
+ tools/arch/arm64/include/asm/cputype.h             | 12 +++-
+ tools/arch/x86/include/uapi/asm/kvm.h              | 11 ++--
+ tools/include/uapi/linux/prctl.h                   |  9 +++
+ tools/lib/perf/evsel.c                             | 17 ++++--
+ tools/perf/tests/bp_account.c                      | 16 ++++-
+ tools/perf/tests/expr.c                            |  2 +
+ tools/perf/tests/shell/lib/perf_csv_output_lint.py | 48 ---------------
+ tools/perf/tests/shell/stat+csv_output.sh          | 69 ++++++++++++++--------
+ tools/perf/tests/shell/test_arm_callgraph_fp.sh    |  2 +-
+ tools/perf/tests/topology.c                        |  2 +-
+ tools/perf/trace/beauty/include/linux/socket.h     |  7 ++-
+ tools/perf/util/arm-spe.c                          | 22 +++----
+ tools/perf/util/expr.l                             |  2 +-
+ tools/perf/util/metricgroup.c                      |  9 +++
+ tools/perf/util/unwind-libunwind-local.c           |  2 +-
+ 15 files changed, 125 insertions(+), 105 deletions(-)
+ delete mode 100644 tools/perf/tests/shell/lib/perf_csv_output_lint.py

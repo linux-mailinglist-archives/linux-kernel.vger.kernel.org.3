@@ -2,255 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F706550C15
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 18:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32976550C1A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 18:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiFSQeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 12:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S234406AbiFSQhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 12:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiFSQeR (ORCPT
+        with ESMTP id S233966AbiFSQhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 12:34:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C7CAB491
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 09:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655656453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EEwP5F/yZNS5SDjHR1K72rrfM43XmiN8C3zogcgKGeI=;
-        b=QsJsx6bi31NVtZ37sBt5EGJax6BRLEPtFiWfpB84tBBFUhfl8M5OOAPSsv+pqrVZdw2TyQ
-        1iYXzwnt9Te7cCraJ2la/FAJH0iCdB4qOPaRzfc6T/L4EhD5GlnFNBPKMqbdDesoaytp7z
-        gDGxo/o77B4zAd4OGvaKJldRMuOYN7A=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-XarOpjspPWW0ZglYqlO5vA-1; Sun, 19 Jun 2022 12:34:08 -0400
-X-MC-Unique: XarOpjspPWW0ZglYqlO5vA-1
-Received: by mail-qv1-f72.google.com with SMTP id b18-20020a0ccd12000000b004703d1b04e8so2541844qvm.13
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 09:34:08 -0700 (PDT)
+        Sun, 19 Jun 2022 12:37:33 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F5DB4A3;
+        Sun, 19 Jun 2022 09:37:31 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id s21so3253604lfs.13;
+        Sun, 19 Jun 2022 09:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=odh7tFNN9h+kMaDniZw9BzrlxqHODsbiZDuJOq46zcg=;
+        b=K4Tib2K3v6FO3igxHxwSQZpIyVPHxDwrgXtJEKq38AlYWBWPxWwhVL0k7URbp1Q+x1
+         ps/zKZqli3ozmyag/n4AL2K0CvaTo7ulfFg/M5lkN4SlppEQQ02N1S+GcKRPBFUghWsQ
+         abKm3YWyNdBRya73aY56tFJGP49d1XOo4dqb/YD4ZC/4Uy48oqdTFC8586vUoInmLM6i
+         Sl69YvOcL37+EeLz/VPslydKTl++YvhPSxA8jT2aY8zRzvdyttQcyZw2/E2JIzoX/800
+         Y4Xx+HK+6VDQxugfvr9KN2vpEtlPzvV5jesdXkTodI8uh9QdLrlluObVY3S1JrGM4tPU
+         Fkcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EEwP5F/yZNS5SDjHR1K72rrfM43XmiN8C3zogcgKGeI=;
-        b=QSDRausEwCUyZgJtxrL0I/cw7ImlmSQ9559vcVS1BvxM9mmX6OOYzcXQ+RyIFJm8k0
-         JtuQeOLf/t7C1ftoA8mrIN69ZFhUFVNmAe/9Nvxbltiopg078A/QHjHU5LpN8XhmzEnG
-         q0XcfVOmCUu9ja3qFPCre22Tcu1zLuUnJEUWJHehkIbj8LXVtFd8sYga9nvP00/kG0jK
-         SRlP/A7q2QzLYHmAk3U/HQHkAMdR00qcloOtmD40UBN0fSuc14pXohd28OdBZpHIvIgv
-         0L1eG032GwnTWIM/6H0tSZ1pOcCiaJqwiNRKZ/CR7EdbWqWD42aALlQJFbOae0vk/SQu
-         mhYw==
-X-Gm-Message-State: AJIora/g6g6Nar1sDE0kOJ+4mSeV8LoyRJqZP/MBBtxptQfYarrEJiAJ
-        lrfrA8xWsuGoewX2fdxBCk7bZlaRhzN3ZQGNLIw3cZxgOIJbjWPA3MefC4zxZ6fAYXO4IFWWVk5
-        6FLpz15b/YqGz69bysoB1gn912wnMNalAbi4HchPl
-X-Received: by 2002:a05:6214:19ec:b0:464:6aaa:8e98 with SMTP id q12-20020a05621419ec00b004646aaa8e98mr15939590qvc.45.1655656448241;
-        Sun, 19 Jun 2022 09:34:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u6V8FMVvqVd7z3tP25z2jyKBYSAMEBUv+zDsaekGEN1rkmAwLWNFIjj1sFUtvL1NXkAVxVTHX2Zf18W1SzvBU=
-X-Received: by 2002:a05:6214:19ec:b0:464:6aaa:8e98 with SMTP id
- q12-20020a05621419ec00b004646aaa8e98mr15939580qvc.45.1655656447982; Sun, 19
- Jun 2022 09:34:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=odh7tFNN9h+kMaDniZw9BzrlxqHODsbiZDuJOq46zcg=;
+        b=U6HfYMyEVzj3abDwjGEBbW6tUFMCP4kU9w3D5pyYYZN0N6U/QTckmMrriQPVXHSLG+
+         SxxW0MVUP4m2EmHEnU3D8Rjh+H8HqGgWGDNb2El/z8sazshpCNXeC+1tSSA2JudxpAOF
+         0j8wYjO3BDGbYT/A/iHQ43NkE6UlVud7DMMzsLw4gifPMZcYmssivYiguicZ0IR0ahvd
+         AptZ0Z0BsSu+Ovr94pgLF7R2Y4FFvgGYgJzfsUzqaKWLrPiSN249F8rO2bsRvxkizaT2
+         jN23TPBTruWoPHz+Xj3RGnMQUGGfARFXzY1iEUb2nFNip4HQ8mXd15QtYOb5JV9278/J
+         DFQg==
+X-Gm-Message-State: AJIora9eTRLVN1BW4cExcPc6Uzdk4a2cLet0fUM3wvbAJnve9uY60ZR8
+        dwJ0U7DOZ9peVcAhK3Wlyp8=
+X-Google-Smtp-Source: AGRyM1uWsrYmrfDnF7hx4xhC1Phgufh8+7+INxAfRV1yfkXSx89eIe5xfsQ0wiLL5zof6iS2FYNa3w==
+X-Received: by 2002:ac2:5c48:0:b0:478:fad6:a8b1 with SMTP id s8-20020ac25c48000000b00478fad6a8b1mr11025222lfp.273.1655656649854;
+        Sun, 19 Jun 2022 09:37:29 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id y14-20020a056512044e00b0047f705e37aasm42499lfk.65.2022.06.19.09.37.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 09:37:29 -0700 (PDT)
+Date:   Sun, 19 Jun 2022 19:37:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/17] dt-bindings: PCI: dwc: Add
+ interrupts/interrupt-names common properties
+Message-ID: <20220619163727.xjdlx2jf565uhids@mobilestation>
+References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610085706.15741-8-Sergey.Semin@baikalelectronics.ru>
+ <20220615153201.GB1069883-robh@kernel.org>
 MIME-Version: 1.0
-References: <20220616132725.50599-1-elic@nvidia.com> <20220616132725.50599-2-elic@nvidia.com>
-In-Reply-To: <20220616132725.50599-2-elic@nvidia.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Sun, 19 Jun 2022 18:33:31 +0200
-Message-ID: <CAJaqyWehxTW_ie=3rPygSGc9JvZuMMj6FGfXaQkYCGYvMf-hag@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     Jason Wang <jasowang@redhat.com>, Michael Tsirkin <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615153201.GB1069883-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 3:27 PM Eli Cohen <elic@nvidia.com> wrote:
->
-> Implement the suspend callback allowing to suspend the virtqueues so
-> they stop processing descriptors. This is required to allow the shadow
-> virtqueue to kick in.
->
+On Wed, Jun 15, 2022 at 09:32:01AM -0600, Rob Herring wrote:
+> On Fri, Jun 10, 2022 at 11:56:55AM +0300, Serge Semin wrote:
+> > Currently the 'interrupts' and 'interrupt-names' are defined being too
+> > generic to really describe any actual IRQ interface. Moreover the DW PCIe
+> > End-point devices are left with no IRQ signals. All of that can be fixed
+> > by adding the IRQ-related properties to the common DW PCIe DT-schema and
+> > defining a common and device-specific set of the IRQ names in accordance
+> > with the hardware reference manual. Seeing there are common and dedicated
+> > IRQ signals for DW PCIe Root Port and End-point controllers we suggest to
+> > split the IRQ names up into two sets: common definitions available in the
+> > snps,dw-pcie-common.yaml schema and Root Port specific names defined in
+> > the snps,dw-pcie.yaml schema. The former one will be applied to both DW
+> > PCIe RP and EP controllers, while the later one - for the RP only.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Changelog v3:
+> > - This is a new patch unpinned from the next one:
+> >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+> >   by the Rob' request. (@Rob)
+> > ---
+> >  .../bindings/pci/snps,dw-pcie-common.yaml     | 51 +++++++++++++++
+> >  .../bindings/pci/snps,dw-pcie-ep.yaml         | 17 +++++
+> >  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 63 ++++++++++++++++++-
+> >  3 files changed, 128 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> > index b2fbe886981b..0a524e916a9f 100644
+> > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> > @@ -17,6 +17,25 @@ description:
+> >  select: false
+> >  
+> >  properties:
+> > +  interrupts:
+> > +    description:
+> > +      There are two main sub-blocks which are normally capable of
+> > +      generating interrupts. It's System Information Interface and MSI
+> > +      interface. While the former one has some common for the Host and
+> > +      Endpoint controllers IRQ-signals, the later interface is obviously
+> > +      Root Complex specific since it's responsible for the incoming MSI
+> > +      messages signalling. The System Information IRQ signals are mainly
+> > +      responsible for reporting the generic PCIe hierarchy and Root
+> > +      Complex events like VPD IO request, general AER, PME, Hot-plug, link
+> > +      bandwidth change, link equalization request, INTx asserted/deasserted
+> > +      Message detection, embedded DMA Tx/Rx/Error.
+> > +    minItems: 1
+> > +    maxItems: 26
+> > +
+> > +  interrupt-names:
+> > +    minItems: 1
+> > +    maxItems: 26
+> > +
+> >    phys:
+> >      description:
+> >        There can be up to the number of possible lanes PHYs specified.
+> > @@ -91,4 +110,36 @@ properties:
+> >  
+> >  additionalProperties: true
+> >  
+> > +definitions:
+> 
 
-Maybe a more general description is "To get a meaningful virtqueue
-state in live migration, trusting the device will not modify it from
-the moment it is suspended"?
+> $defs:
+> 
+> But I suppose this is the applying fixups or not issue. That's certainly 
+> not behavior we should rely on. If we need a way to specify applying 
+> fixups or not, we should do that. But really I'd prefer not to need 
+> that.
 
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
-> ---
->  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 68 +++++++++++++++++++++++++++++-
->  include/linux/mlx5/mlx5_ifc_vdpa.h |  8 ++++
->  2 files changed, 75 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index fb0b23e71383..ea4bc8a0cd25 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -895,6 +895,7 @@ static int create_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
->         if (err)
->                 goto err_cmd;
->
-> +       mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_STATE_INIT;
->         kfree(in);
->         mvq->virtq_id = MLX5_GET(general_obj_out_cmd_hdr, out, obj_id);
->
-> @@ -922,6 +923,7 @@ static void destroy_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtq
->                 mlx5_vdpa_warn(&ndev->mvdev, "destroy virtqueue 0x%x\n", mvq->virtq_id);
->                 return;
->         }
-> +       mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_NONE;
->         umems_destroy(ndev, mvq);
->  }
->
-> @@ -1121,6 +1123,20 @@ static int query_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueu
->         return err;
->  }
->
-> +static bool is_valid_state_change(int oldstate, int newstate)
-> +{
-> +       switch (oldstate) {
-> +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_INIT:
-> +               return newstate == MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY;
-> +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY:
-> +               return newstate == MLX5_VIRTIO_NET_Q_OBJECT_STATE_SUSPEND;
-> +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_SUSPEND:
-> +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_ERR:
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
->  static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq, int state)
->  {
->         int inlen = MLX5_ST_SZ_BYTES(modify_virtio_net_q_in);
-> @@ -1130,6 +1146,12 @@ static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
->         void *in;
->         int err;
->
-> +       if (mvq->fw_state == MLX5_VIRTIO_NET_Q_OBJECT_NONE)
-> +               return 0;
-> +
-> +       if (!is_valid_state_change(mvq->fw_state, state))
-> +               return -EINVAL;
-> +
->         in = kzalloc(inlen, GFP_KERNEL);
->         if (!in)
->                 return -ENOMEM;
-> @@ -1991,6 +2013,7 @@ static void mlx5_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx, bool ready
->         struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
->         struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
->         struct mlx5_vdpa_virtqueue *mvq;
-> +       int err;
->
->         if (!mvdev->actual_features)
->                 return;
-> @@ -2004,8 +2027,16 @@ static void mlx5_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx, bool ready
->         }
->
->         mvq = &ndev->vqs[idx];
-> -       if (!ready)
-> +       if (!ready) {
->                 suspend_vq(ndev, mvq);
-> +       } else {
-> +               err = modify_virtqueue(ndev, mvq, MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY);
-> +               if (err) {
-> +                       mlx5_vdpa_warn(mvdev, "modify VQ %d to ready failed (%d)\n", idx, err);
-> +                       ready = false;
-> +               }
-> +       }
-> +
->
->         mvq->ready = ready;
->  }
-> @@ -2732,6 +2763,39 @@ static int mlx5_vdpa_get_vendor_vq_stats(struct vdpa_device *vdev, u16 idx,
->         return err;
->  }
->
-> +static void mlx5_vdpa_cvq_suspend(struct mlx5_vdpa_dev *mvdev, bool suspend)
-> +{
-> +       struct mlx5_control_vq *cvq;
-> +
-> +       if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
-> +               return;
-> +
-> +       cvq = &mvdev->cvq;
-> +       cvq->ready = !suspend;
-> +}
-> +
-> +static int mlx5_vdpa_suspend(struct vdpa_device *vdev, bool suspend)
-> +{
-> +       struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
-> +       struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
-> +       struct mlx5_vdpa_virtqueue *mvq;
-> +       int i;
-> +
-> +       if (!suspend) {
-> +               mlx5_vdpa_warn(mvdev, "Resume of virtqueues is not supported\n");
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-> +       down_write(&ndev->reslock);
-> +       for (i = 0; i < ndev->cur_num_vqs; i++) {
-> +               mvq = &ndev->vqs[i];
-> +               suspend_vq(ndev, mvq);
-> +       }
-> +       mlx5_vdpa_cvq_suspend(mvdev, suspend);
-> +       up_write(&ndev->reslock);
-> +       return 0;
-> +}
-> +
->  static const struct vdpa_config_ops mlx5_vdpa_ops = {
->         .set_vq_address = mlx5_vdpa_set_vq_address,
->         .set_vq_num = mlx5_vdpa_set_vq_num,
-> @@ -2762,6 +2826,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
->         .get_generation = mlx5_vdpa_get_generation,
->         .set_map = mlx5_vdpa_set_map,
->         .free = mlx5_vdpa_free,
-> +       .suspend = mlx5_vdpa_suspend,
->  };
->
->  static int query_mtu(struct mlx5_core_dev *mdev, u16 *mtu)
-> @@ -2827,6 +2892,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
->                 mvq->index = i;
->                 mvq->ndev = ndev;
->                 mvq->fwqp.fw = true;
-> +               mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_NONE;
->         }
->         for (; i < ndev->mvdev.max_vqs; i++) {
->                 mvq = &ndev->vqs[i];
-> diff --git a/include/linux/mlx5/mlx5_ifc_vdpa.h b/include/linux/mlx5/mlx5_ifc_vdpa.h
-> index 4414ed5b6ed2..423562f39d3c 100644
-> --- a/include/linux/mlx5/mlx5_ifc_vdpa.h
-> +++ b/include/linux/mlx5/mlx5_ifc_vdpa.h
-> @@ -150,6 +150,14 @@ enum {
->         MLX5_VIRTIO_NET_Q_OBJECT_STATE_ERR      = 0x3,
->  };
->
-> +/* This indicates that the object was not created or has alreadyi
-> + * been desroyed. It is very safe to assume that this object will never
+$defs doesn't work in this case. Please see the patchlog to the v2
+of this patch:
+https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
 
-Small typos: "already been destroyed".
+Anyway see my next comment. Let's settle the next issue first, then
+get back to the implementation details.
 
-> + * have so many states
-> + */
-> +enum {
-> +       MLX5_VIRTIO_NET_Q_OBJECT_NONE = 0xffffffff
-> +};
-> +
->  enum {
->         MLX5_RQTC_LIST_Q_TYPE_RQ            = 0x0,
->         MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q  = 0x1,
-> --
-> 2.35.1
+> 
+> > +  interrupt-names:
+> > +    description:
+> > +      IRQ signal names common for the DWC PCIe Root Port and Endpoint
+> > +      controllers.
+> > +    oneOf:
+> > +      - description:
+> > +          Controller request to read or write virtual product data
+> > +          from/to the VPD capability registers.
+> > +        const: vpd
+> > +      - description:
+> > +          Link Equalization Request flag is set in the Link Status 2
+> > +          register (applicable if the corresponding IRQ is enabled in
+> > +          the Link Control 3 register).
+> > +        const: l_eq
+> > +      - description:
+> > +          Indicates that the eDMA Tx/Rx transfer is complete or that an
+> > +          error has occurred on the corresponding channel. eDMA can have
+> > +          eight Tx (Write) and Rx (Read) eDMA channels thus supporting up
+> > +          to 16 IRQ signals all together. Write eDMA channels shall go
+> > +          first in the ordered row as per default edma_int[*] bus setup.
+> > +        pattern: '^dma([0-9]|1[0-5])?$'
+> > +      - description:
+> > +          PCIe protocol correctable error or a Data Path protection
+> > +          correctable error is detected by the automotive/safety
+> > +          feature.
+> > +        const: sft_ce
+> > +      - description:
+> > +          Indicates that the internal safety mechanism detected and
+> > +          uncorrectable error.
+> > +        const: sft_ue
+> 
+> I still don't really like this pattern. My first read of it makes me 
+> think only 1 interrupt is supported, and I have to go look that this is 
+> referenced from 'items'.
+> 
+> Could we do a lot more with json-schema like you have? Yes, but the 
+> schemas are optimized for simplicity and a relatively fixed pattern of 
+> what's allowed as json-schema is new to most folks. It's also easy to 
+> create things that simply don't work (silently). Just reviewing this 
+> series is hard.
+> 
+
+> This series is trying to do lots of things. Refactoring, adding 
+> constraints, and adding a new binding. I would split it up if you want 
+> to make progress.
+
+This series has been refactored three times already! First I created
+it as the legacy bindings conversion to the yaml schema. I missed just
+a few weeks, but someone has already submitted the converted bindings.
+So I had to rebase my work on top of the already performed conversion.
+After that you asked me to split it up into the series of patches.
+Now you want the patchset to be refactored again and to be split up
+again. Each such action takes a lot of my time which I've already
+spent too much on this update taking into account the time spent on
+looking for a way to implement the extendable array property pattern.
+And there is no guaranty you won't refuse the suggested update should
+I re-submit the separate patchset. So please don't ask me to split it
+up again especially seeing there are only eleven DT-related patches
+here. I just can't afford it, but am still very much eager to get the
+work merged in in a suitable for you and me form.
+
+Let's finally settle the main issue here so I could re-submit the
+series what you'd be ok with. On each iteration you said you didn't
+like the pattern I've used here. It looks like this:
+
+1) The most common schema:
+pci/snps,dw-pcie-common.yaml:
+> definitions:
+>   interrupt-names:
+>     oneOf:
+>       - const: i1
+>       - const: i2
+
+2) Generic Dw PCIe Root Port schema:
+pci/snps,dw-pcie.yaml:
+> properties:
+>   interrupt-names:
+>     items:
+>       anyOf:
+>         - $ref: /schemas/pci/snps,dw-pcie-common.yaml#/definitions/interrupt-names
+>         - $ref: '#/definitions/interrupt-names'
+> definitions:
+>   interrupt-names:
+>     oneOf:
+>       - const: i3
+>       - const: i4
+
+3) Generic Dw PCIe Endpoint schema:
+pci/snps,dw-pcie-ep.yaml:
+> properties:
+>   interrupt-names:
+>     items:
+>       anyOf:
+>         - $ref: /schemas/pci/snps,dw-pcie-common.yaml#/definitions/interrupt-names
+>         - $ref: '#/definitions/interrupt-names'
+> definitions:
+>   interrupt-names:
+>     oneOf:
+>       - const: i5
+>       - const: i6
+
+I am not that much happy with it either, but first I didn't find any
+alternative, and second by using it I've solved several complex
+problems persistent in the currently implemented DW PCIe bindings:
+1) Drop the duplicated properties defined in the Root Port and Endpoint
+schemas and create a common DT bindings for both of these devices
+seeing in accordance with the ref. manual they are very much alike.
+2) Create the generic DW PCIe Root Port and Endpoint DT-schemas with
+more restrictive constraints so to stop the new drivers from creating
+their own regs/clocks/resets/interrupts bindings implementation.
+3) Fix the already defined DW PCIe vendor-specific DT-bindings to use
+either 1) or 2) schema depending on what is applicable for them.
+
+So to speak I was willing to bring some order to the already
+implemented DT-schemas and to make sure the new bindings wouldn't
+define the new names to the already known resources. As a result the
+next schemas hierarchy has been provided:
+                       1. Common DW PCIe schema
+                       snps,dw-pcie-common.yaml
+                                  |
+          +-----------------------+----------------------+
+          |                       |                      |
+          v                       v                      V
+ 2.DW PCIe Root Port     3. DW PCIe Endpoint   4. DW PCIe Vendor-spec
+  snps,dw-pcie.yaml     snps,dw-pcie-ep.yaml             |
+          |                       |                      |
+          v                       v                      V
+ baikal,bt1-pcie.yaml                         hisilicon,kirin-pcie.yaml
+  intel-gw-pcie.yaml                            sifive,fu740-pcie.yaml
+                                              toshiba,visconti-pcie.yaml
+                                            socionext,uniphier-pcie-ep.yaml
+                                                 fsl,imx6q-pcie.yaml
+
+As you can see the suggested in this patchset approach is very flexible
+and permits using the common DW PCIe schema in the particular device
+bindings while still have the vendor-specific constraints defined in
+the particular schemas. So the new devices drivers are supposed to use
+the schemas (2) and (3), while the already added drivers can
+following the path (4), apply the schema (1), but still use the names
+"definitions" added to (1), (2) and (3).
+
+You keep saying that what I've done here is misleading since what was
+created under the "definitions" property is perceived as the "only 1
+interrupt/clock/reg/reset is supported, and you have to go look that
+this is referenced from 'items'". If so then what alternative to this
+solution can you suggest? Do you know a schema pattern which would be
+more suitable? If there is none, then what? Do you suggest to drop
+trying to solve the problems I've listed above? Please answer to these
+questions (or go on on this comment for a possible but IMO less
+suitable alternative solution).
+
+Anyway in my opinion the currently implemented approach of the names
+array properties:
+>   reg-names:
+>     items:
+>       enum: [dbi, dbi2, config, atu, addr_space, link, atu_dma, appl]
+isn't much more descriptive, since it doesn't provide much info
+regarding the resources but just lists all the common and
+vendor-specific names to the same resources.
+
+As IMO a much less suitable, but "definitions"-less alternative to my
+approach we can use the next pattern:
+
+1) The most common schema:
+pci/snps,dw-pcie-common.yaml:
+> properties:
+>   interrupt-names:
+>     anyOf:
+>       - const: i1
+>       - const: i2
+>       - true
+
+2) Generic Dw PCIe Root Port schema:
+pci/snps,dw-pcie.yaml:
+> allOf:
+>   - $ref: /schemas/pci/snps,dw-pcie-common.yaml#
 >
+> properties:
+>   interrupt-names:
+>     items:
+>       anyOf:
+>         - const: i3
+>         - const: i4
+>         - true
 
+3) etc
+
+It will give us a more generic and less restrictive bindings. Thus due
+to using the "true" schema in there we won't be able to automatically
+deny the new resource names adding. But it won't have any
+"definitions" or "$defs" utilized as you seem do not like.
+
+-Sergey
+
+> 
+> Rob

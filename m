@@ -2,107 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7334550CDD
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 22:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434EF550CE4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 22:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbiFSUFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 16:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S236723AbiFSUOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 16:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235196AbiFSUFp (ORCPT
+        with ESMTP id S235196AbiFSUOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 16:05:45 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E865A18F
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:05:44 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id cf14so2696364edb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zt19NQISpOb+BzcHD03LYz1ZgRQNfJH/euUE9l640Mw=;
-        b=YwlRSLHzOtRrpd2In0ezIB3k1jBosGYMZdU4texM86AzTKS9pMwdeAC0C84wKYzFdo
-         sFxB84jg8b4fEufvYxxYgctOC0AkIWAp81rEooLQv0b1z1pWTA/9XWVE0I/r+qeM//ut
-         1B47dfsi56vOjBDnVRI6vdX8CCRnDszEUTnkY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zt19NQISpOb+BzcHD03LYz1ZgRQNfJH/euUE9l640Mw=;
-        b=0YHhU+7f60MZqqxuqx7Pe4Aj7E4WcDm7S01gqKU0GWuoq+0UJOZ0dT1l6hkDQhbuCi
-         irAOD44e7Oy1c6WvT3S9IScCxx1qaPs0Y0yke9x6nh03PY1J1Cj1KcMM/xg6OPUZiRI8
-         rDokS/nJfLZUG4Mg8VTEkfT7WVU5Z77Kaey49XXFj5EndAu+jBt/+UK50gisYcNiJ0o4
-         uLnEwt/fq7SVfAI9FK1/wXjkozU1PxhQ3KlRggygGwWSwqLgSWBsy8VKRBU2COlmRTSb
-         tQ7OA9UJ3oPITC1iG07ukhoY4OTQpy+yJj4MU53AKQLsj0PBF2qKwd+QwSulVtofAWj4
-         /Gwg==
-X-Gm-Message-State: AJIora9FbWXLUd38QAPVi8EgUnveh5Jzog2lqq7JjryCQg3I4/ltBOzN
-        5TY4WqRRT+J2aoxzvcApXQl+ZgAc38yHFXLx
-X-Google-Smtp-Source: AGRyM1uxFPvQNqV6KB1bBCMyvW1Q31R7NWO/YUUtmhoYXViyw46OdCCNn/4+G6xVLc2KkASqYD59OQ==
-X-Received: by 2002:a05:6402:538d:b0:435:7ca6:a136 with SMTP id ew13-20020a056402538d00b004357ca6a136mr4861107edb.268.1655669142425;
-        Sun, 19 Jun 2022 13:05:42 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id la24-20020a170907781800b0071c9ef22418sm4293879ejc.193.2022.06.19.13.05.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 13:05:41 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id n1so11771996wrg.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:05:40 -0700 (PDT)
-X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id
- j17-20020a056000125100b0021aefae6cbemr12958608wrx.281.1655669140264; Sun, 19
- Jun 2022 13:05:40 -0700 (PDT)
+        Sun, 19 Jun 2022 16:14:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0A3B4BD
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 13:14:09 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o31Iy-0000nr-Id; Sun, 19 Jun 2022 22:13:56 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o31Iq-001Voq-F1; Sun, 19 Jun 2022 22:13:49 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o31Ir-00HRYt-34; Sun, 19 Jun 2022 22:13:49 +0200
+Date:   Sun, 19 Jun 2022 22:13:41 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com,
+        lee.jones@linaro.org, andrew@lunn.ch,
+        thomas.petazzoni@free-electrons.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] dt-bindings: gpio: gpio-mvebu: document offset
+ and marvell,pwm-offset
+Message-ID: <20220619201341.yus35sjz7z3gedal@pengutronix.de>
+References: <20220526012946.3862776-1-chris.packham@alliedtelesis.co.nz>
+ <20220526012946.3862776-4-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <165564429738.1413209.17302088152547038708.tglx@xen13>
- <165564429887.1413209.8729918730024457105.tglx@xen13> <CAHk-=wgfrUdWBXA-Jx7ZC1x3wwsomou0L6niGgpRS2Hd5rQxyg@mail.gmail.com>
- <Yq9Q84H6HIfkJpoR@zx2c4.com>
-In-Reply-To: <Yq9Q84H6HIfkJpoR@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 19 Jun 2022 15:05:23 -0500
-X-Gmail-Original-Message-ID: <CAHk-=whTg=MCBYCO_+KQ10qKYhZXKXQ=mdgLc=e2gxHwDwRBxQ@mail.gmail.com>
-Message-ID: <CAHk-=whTg=MCBYCO_+KQ10qKYhZXKXQ=mdgLc=e2gxHwDwRBxQ@mail.gmail.com>
-Subject: Re: [GIT pull] locking/urgent for 5.19-rc3
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xvuxeb3qoohuploo"
+Content-Disposition: inline
+In-Reply-To: <20220526012946.3862776-4-chris.packham@alliedtelesis.co.nz>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 11:38 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> This was initially my concern too, which I expressed to Sebastian, but
-> he made the point that this area here is rather "special". Actually,
-> randomness isn't really required here.
 
-That wasn't really my point.
+--xvuxeb3qoohuploo
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My point was that there are a lot of uses of prandom_u32() and friends
-in random places. Just grepping for it, there's lots of different
-drivers that use it. Who knows what locking they have.
+On Thu, May 26, 2022 at 01:29:46PM +1200, Chris Packham wrote:
+> The offset and marvell,pwm-offset properties weren't in the old binding.
+> Add them based on the existing usage in the driver and board DTS when
+> the marvell,armada-8k-gpio compatible is used.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>=20
+> Notes:
+>     Changes in v4:
+>     - Reword commit message slightly
+>     - Add review from Krzysztof
+>     Changes in v3:
+>     - Split off from 1:1 conversion patch
+>=20
+>  Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml b/Doc=
+umentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> index 459ec35864fe..f1bd1e6b2e1f 100644
+> --- a/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> @@ -45,6 +45,10 @@ properties:
+>        - const: pwm
+>      minItems: 1
+> =20
+> +  offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Offset in the register map for the gpio registers (in b=
+ytes)
+> +
+>    interrupts:
+>      description: |
+>        The list of interrupts that are used for all the pins managed by t=
+his
+> @@ -68,6 +72,10 @@ properties:
+>    "#gpio-cells":
+>      const: 2
+> =20
+> +  marvell,pwm-offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Offset in the register map for the pwm registers (in by=
+tes)
+> +
 
-Clearly nobody *thought* about it. This one issue is purely about RT
-correctness, but how about all the uses that just want a pseudo-random
-number and may have performance issues, or may be calling things so
-much that a lock is just bad.
+Seems to match reality (in the driver and some dtsi files).
 
-The thing is, that prandom code used to be FAST. Not just "no locks",
-but also "fairly simple siphash round because its a PSEUDO random
-thing and shouldn't be anything more".
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-The whole "make it use the same randomness" may just have been a huge
-and fundamental mistake.
+Best regards
+Uwe
 
-We've seen one actual outright bug because of it already. That was
-easy to fix by avoiding the new thing that now was a mistake. What
-about all the other uses with lock bouncing or whatever subtler issues
-that aren't pointed out by outright correctness tests?
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-                  Linus
+--xvuxeb3qoohuploo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKvg3IACgkQwfwUeK3K
+7Alwwgf8CsCHCQGSAfBc8+GQ/QiAhiN6VxkHg/K1L/Ag+Zc3gYNy9xeWMkir7ikv
+EhbI3u/MIgvI+xjlomD0cNyuUBhOtglusOp3wpiOcBvvVQn8FwzjZOX0Jnrm1Ke7
+xzx29+lyclz/Jr/mBGUYc3+q+6+4yX3vk9BXrIMG8y87V80Go4pXonXl3AZJFinR
+YpljwaxgrZ8Sl1DyTQrvIKbV7Y4NHhLf23p4qcbyXscaqwvilDtxDpCo4/auqrQN
+Otkbgv7gyJazK9tRbEwD/w8F8eQSjpG6gjJvNZ3JMMmAQWYEWnEbcXgJ2jeHnlKL
+f2myqmeDNVra+gKvUZBF5a+ckLbQbg==
+=J8FS
+-----END PGP SIGNATURE-----
+
+--xvuxeb3qoohuploo--

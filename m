@@ -2,188 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B610C550B34
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 16:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C6A550B25
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 16:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235358AbiFSO1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 10:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S232087AbiFSOSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 10:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbiFSO12 (ORCPT
+        with ESMTP id S229447AbiFSOSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 10:27:28 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29671DF17;
-        Sun, 19 Jun 2022 07:27:25 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id v8so9340320ljj.8;
-        Sun, 19 Jun 2022 07:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+rnapiqQ/iNhoZEw55mrOqXhsrJQeJukdJJz0YdF52c=;
-        b=btKsqxMh0C40YDCkv13jMTT4tBeyKqRThJOTgDQidjmj+Nd4TApTLf2W2CXI76gFAe
-         Tmfr7IccdErVC7/+QZnqX6TjGwTKonEns0jc4qv3tbx/TUP5ZkzqwkWN/jCp4pjMItaO
-         pdwZpZ+bH7+dsrVND+NXSURDWmQfI0eQS/4jdrASI50naDuv92TEZ5ns48PkLl7UmUmp
-         9usp5zCcdT+ThHj5SXlrucXXm7HOui6GbHnkVln3pwmlCVOHGrBoY/XPiKghn6mshsh8
-         q/bhbanGwa+RUs8iK8yXENyE3KQ8+Ni8d0YgJF3I+U8IRWZeLk1KNuP2llslcQkZ8nWN
-         nT8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+rnapiqQ/iNhoZEw55mrOqXhsrJQeJukdJJz0YdF52c=;
-        b=s8JY24xWWWekammRwx7o8h0SrN+PIgE/1955KzaeSlOERvYezB7du3+Y56XoPQQFZf
-         WogDLx+YINqA82ghhEUSyuQ4UogJ/Fur6E15kjhwG0xXPouiFLQMVTQ1aJ+nokt/x17P
-         uEhWxcn9gg/E6/VEkUiIUBql3BidFQ7z3gx113BwJjbkeDrsQ/MgtonWrBuKZ12Y6exG
-         BsYd/6TD5ky3FXVImzMbPDFJpvFUyyLuD4/9NHFEOocaP8El05+SUSWpwO0kQaaKlwVS
-         BeAgu8ej9eVL7GtncDmWgZMVpshc7zj1Nl2CzsAADR22/Kz1J4YjJh2XX9t/gwPGUKYG
-         QqiQ==
-X-Gm-Message-State: AJIora/9pfzkDFvWumf3TEJwwU3Nlu8QKdRTStB6mxQujOB6Jg4n/22U
-        IlyiimrdSYRYwyu+FfQF3zw=
-X-Google-Smtp-Source: AGRyM1tS56MaWKOZQKyi2yt2tECPxHpi/mLAFtv3cpnx9pQl0v21LfZtSjWdshpNpIp13f6e825Pzw==
-X-Received: by 2002:a2e:9893:0:b0:255:951f:9694 with SMTP id b19-20020a2e9893000000b00255951f9694mr9599779ljj.283.1655648843142;
-        Sun, 19 Jun 2022 07:27:23 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id s19-20020a056512315300b00479353215b3sm549381lfi.139.2022.06.19.07.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 07:27:22 -0700 (PDT)
-Date:   Sun, 19 Jun 2022 17:27:20 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/17] dt-bindings: PCI: dwc: Add max-link-speed
- common property
-Message-ID: <20220619142720.tzfgefunvf3kirul@mobilestation>
-References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
- <20220610085706.15741-5-Sergey.Semin@baikalelectronics.ru>
- <20220615145550.GA1069883-robh@kernel.org>
+        Sun, 19 Jun 2022 10:18:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2452635;
+        Sun, 19 Jun 2022 07:18:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 171C460F61;
+        Sun, 19 Jun 2022 14:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA72AC34114;
+        Sun, 19 Jun 2022 14:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655648288;
+        bh=m0J4H+mG6jDWlaC62PywH35uXmKJtmGHeOSShrPjBiE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pYQ2xPcyrIjVRdaQPCb4PCqqJ9XqOmXUpA3hCZUTzpYEI5hq/Osu+vdTEUP3ggRQZ
+         ru1z16PnKsOPDPcwVjbF5fB1g/dlynShf3dSK8g4nrHXOB2It/pWB1MmsurEXPIQHD
+         zhiOGApzzX95VjMi62LaG6UfqUc2lBYauP13FQcqIFhT3lr458vzY85dGNzt7BVJA7
+         2cJ23ND/w5wPTkzFpxdPU7BcK0nF7ewQXpTv5h3VF2xFvcv25NPsL+wsuluDpnStJg
+         5U7Zy0sgiUKGFdjOWRIhBCPDkc6AtPpibEktTz8T9gw4cSxwS5odYTftaJXKIMedvV
+         4ByORBrXUpCjA==
+Date:   Sun, 19 Jun 2022 15:27:26 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: Re: [PATCH] iio: accel: mxc4005: report orientation of
+ accelerometer
+Message-ID: <20220619152726.030f8e27@jic23-huawei>
+In-Reply-To: <20220615110240.684744-1-foss+kernel@0leil.net>
+References: <20220615110240.684744-1-foss+kernel@0leil.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615145550.GA1069883-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 08:55:50AM -0600, Rob Herring wrote:
-> On Fri, Jun 10, 2022 at 11:56:52AM +0300, Serge Semin wrote:
-> > In accordance with [1] DW PCIe controllers support up to Gen5 link speed.
-> > Let's add the max-link-speed property upper bound to 5 then. The DT
-> > bindings of the particular devices are expected to setup more strict
-> > constraint on that parameter.
-> > 
-> > [1] Synopsys DesignWare Cores PCI Express Controller Databook, Version
-> > 5.40a, March 2019, p. 27
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v3:
-> > - This is a new patch unpinned from the next one:
-> >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
-> >   by the Rob' request. (@Rob)
-> > ---
-> >  Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml | 3 +++
-> >  Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml     | 2 ++
-> >  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml        | 1 +
-> >  3 files changed, 6 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > index 627a5d6625ba..b2fbe886981b 100644
-> > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > @@ -45,6 +45,9 @@ properties:
-> >        the peripheral devices available on the PCIe bus.
-> >      maxItems: 1
-> >  
-> > +  max-link-speed:
-> > +    maximum: 5
-> 
+On Wed, 15 Jun 2022 13:02:40 +0200
+Quentin Schulz <foss+kernel@0leil.net> wrote:
 
-> Unless the default is less than the max, shouldn't the max here be 1 
-> less than the h/w max?
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>=20
+Hi Quentin,
 
-Why? AFAIU max-link-speed semantics it works as less-than-or-equal
-operator isn't it? The modern DW PCIe Root ports and Endpoints
-IP-cores support up to Gen5 PCIe speed including the Gen5 mode (see
-the CX_MAX_PCIE_SPEED IP-core synthesize paramter). It's reasonable to
-set the max-link-speed here to be in coherency with the IP-core
-reference manual.
+Interesting / horribly ill defined little feature ;)
 
-> 
-> > +
-> >    num-lanes:
-> >      description:
-> >        Number of PCIe link lanes to use. Can be omitted should the already
-> > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-> > index dcd521aed213..fc3b5d4ac245 100644
-> > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-> > @@ -55,4 +55,6 @@ examples:
-> >  
-> >        phys = <&pcie_phy0>, <&pcie_phy1>, <&pcie_phy2>, <&pcie_phy3>;
-> >        phy-names = "pcie0", "pcie1", "pcie2", "pcie3";
-> > +
-> > +      max-link-speed = <3>;
-> >      };
-> > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > index 4a5c8b933b52..01cedf51e0f8 100644
-> > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > @@ -74,4 +74,5 @@ examples:
-> >        phy-names = "pcie";
-> >  
-> >        num-lanes = <1>;
-> > +      max-link-speed = <3>;
-> 
+> The accelerometer can report precise values for x, y and z accelerations
+> but it can also simply report its orientation on XY plane and Z axis.
+>=20
+> Since the orientation of the device may be enough information for
+> userspace and allows to avoid expensive fusion algorithms, let's add
+> support for it.
+>=20
+> The orientation register stores a 2b value for XY plane orientation:
+> between 225=C2=B0 and 315=C2=B0, returns 0, between 315=C2=B0 and 45=C2=
+=B0, 1, between 45=C2=B0
+> and 135=C2=B0, 2 and between 135=C2=B0 and 225=C2=B0, 3. We "round" those=
+ to 270=C2=B0,
+> 0=C2=B0, 90=C2=B0 and 180=C2=B0 degrees.
 
-> This should give you an error because pci-bus.yaml only goes up to 4. 
+Wow. The datasheet description of this very confusing...
+One key thing is we need to be careful of is that tilt (x/y is
+not always available - but rather shows the last, and probably
+now garbage, value)
+>=20
+> For Z axis, the register bit returns 0 if facing the user, 1 otherwise,
+> which the driver translates to 0=C2=B0 and 180=C2=B0 respectively.
 
-I've set max-link-speed to "3" here. So no error will be caused neither
-by this schema nor by the pci-bus.yaml bindings.
+I assume facing up vs facing down?  User might be lying on their
+back in which case this description doesn't work.  The datasheet
+also talks about the case where g lies near the XY plane and hence
+the z axis is horizontal.
 
-* Though these examples won't be evaluated because the generic DW PCIe
-RP and EP schemas have been marked as "select: false".
 
-> 
-> I'm not really sure that limiting it in the common schema is too useful. 
-> We're going to be updating it one step at a time. Limiting it is really 
-> only helpful for specific implementations.
-> 
+>=20
+> Those values are proper if the accelerometer is mounted such that the
+> XYZ axes are as follows when the device is facing the user in portrait
+> mode (respecting the right-hand rule):
+>=20
+>      y
+>      ^
+>      |
+>      |
+>      |
+>      +----------> x
+>     /
+>    /
+>   /
+>  L
+> z
+>=20
+> Since this information is very basic, imprecise (only 4 values for XY
+> plane and 2 for Z axis) and can be extrapolated from the actual,
+> precise, x, y and z acceleration values, it is not made available
+> through buffers.
+>=20
+> A change in XY plane or Z axis orientation can also trigger an interrupt
+> but this feature is not added in this commit.
+>=20
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>  drivers/iio/accel/mxc4005.c | 39 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>=20
+> diff --git a/drivers/iio/accel/mxc4005.c b/drivers/iio/accel/mxc4005.c
+> index b3afbf064915..61f24058d239 100644
+> --- a/drivers/iio/accel/mxc4005.c
+> +++ b/drivers/iio/accel/mxc4005.c
+> @@ -20,6 +20,11 @@
+>  #define MXC4005_IRQ_NAME		"mxc4005_event"
+>  #define MXC4005_REGMAP_NAME		"mxc4005_regmap"
+> =20
+> +#define MXC4005_REG_TILT_ORIENT		0x01
+> +#define MXC4005_REG_TILT_ORIENT_Z_MASK		BIT(6)
 
-I disagree. As I said above the max PCIe speed limit set here has been
-taken from the HW reference manual so it describes the modern DW PCIe
-controllers capability. No mater what value is set by the pci-bus.yaml
-schema (eventually we'll get to have it increased to Gen5 too) we can
-use the DW PCIe-specific limitation here as a known upper capabilities
-bound.
+I think you need to deal with BIT(7) as well.
 
-> Patch 1 didn't apply for me, so none of the checks ran.
+> +#define MXC4005_REG_TILT_ORIENT_XY_MASK		GENMASK(5, 4)
+> +#define MXC4005_REG_TILT_ORIENT_XY_SHIFT	4
 
-I see. The series will be re-based onto 5.19-rc1 in the next patchset
-revision.
+Don't define the shift, you can use FIELD_GET(MASK, val)
 
--Sergey
+> +
+>  #define MXC4005_REG_XOUT_UPPER		0x03
+>  #define MXC4005_REG_XOUT_LOWER		0x04
+>  #define MXC4005_REG_YOUT_UPPER		0x05
+> @@ -96,6 +101,7 @@ static const struct attribute_group mxc4005_attrs_grou=
+p =3D {
+>  static bool mxc4005_is_readable_reg(struct device *dev, unsigned int reg)
+>  {
+>  	switch (reg) {
+> +	case MXC4005_REG_TILT_ORIENT:
+>  	case MXC4005_REG_XOUT_UPPER:
+>  	case MXC4005_REG_XOUT_LOWER:
+>  	case MXC4005_REG_YOUT_UPPER:
+> @@ -214,6 +220,28 @@ static int mxc4005_read_raw(struct iio_dev *indio_de=
+v,
+>  	int ret;
+> =20
+>  	switch (mask) {
+> +	case IIO_CHAN_INFO_PROCESSED:
+> +		switch (chan->type) {
+> +		case IIO_ROT:
+> +			ret =3D regmap_read(data->regmap, chan->address, val);
+> +			if (ret < 0) {
+> +				dev_err(data->dev, "failed to read rotation\n");
+> +				return ret;
+> +			}
+> +
+> +			if (chan->channel2 =3D=3D IIO_MOD_X_AND_Y) {
+> +				*val &=3D MXC4005_REG_TILT_ORIENT_XY_MASK;
+> +				*val >>=3D MXC4005_REG_TILT_ORIENT_XY_SHIFT;
+FIELD_GET()
 
-> 
-> Rob
+> +				/* 00 =3D 270=C2=B0; 01 =3D 0=C2=B0; 10 =3D 90=C2=B0; 11 =3D 180=C2=
+=B0 */
+> +				*val =3D (360 + (*val - 1) * 90) % 360;
+
+In event of tilt not being set (BIT (7)) I think you should return an error
+code here.  -EBUSY perhaps? To reflect the fact we don't have valid data.
+
+> +			} else {
+> +				*val &=3D MXC4005_REG_TILT_ORIENT_Z_MASK;
+> +				*val =3D *val ? 180 : 0;
+Documentation for this is really confusing, as it refers to a circumstance
+when it can be assumed to be horizontal, but then doesn't define it.
+
+It might be a simple as tilt being set and thus indicating significant
+acceleration due to gravity in the xy plane.
+However, the Z orientation is still updated in that case...
+
+> +			}
+> +			return IIO_VAL_INT;
+> +		default:
+> +			return -EINVAL;
+> +		}
+>  	case IIO_CHAN_INFO_RAW:
+>  		switch (chan->type) {
+>  		case IIO_ACCEL:
+> @@ -287,11 +315,22 @@ static const unsigned long mxc4005_scan_masks[] =3D=
+ {
+>  	},							\
+>  }
+> =20
+> +#define MXC4005_CHANNEL_ORIENTATION(_axis) {			\
+> +	.type =3D IIO_ROT,					\
+
+Hmm.  Should this be rotation or inclination (so referenced
+to gravity).  Inclination is not particularly tightly defined but the
+point is that it is relative to gravity - kind of a special case of
+rot.
+
+For the adis16209 we handled inclination and rotation.  I think rotation
+in that device corresponds to XY here. (though it's oddly defined for
+X axis, whereas I'm fairly sure it should be Z - as rotation 'about'
+z axis). The Z one here should I think be an inclination because it's not
+about any particular axis.
+
+We also have angle to confuse matters. In that case intent was 'between'
+two things. Arguably all the uses of rot are as well, just that one of those
+things is gravity or magnetic north.  With hindsight I think we could have
+gotten away with one of them, but hard to tidy up now.
+
+In conclusion, what you have here I think is best described as
+IIO_ROT about Z axis (the XY one)
+and IIO_INCL for the Z axis (the Z one).
+
+> +	.modified =3D 1,						\
+> +	.channel2 =3D IIO_MOD_##_axis,				\
+> +	.address =3D MXC4005_REG_TILT_ORIENT,			\
+> +	.info_mask_separate =3D BIT(IIO_CHAN_INFO_PROCESSED),	\
+> +	.scan_index =3D -1,					\
+> +}
+> +
+>  static const struct iio_chan_spec mxc4005_channels[] =3D {
+>  	MXC4005_CHANNEL(X, MXC4005_REG_XOUT_UPPER),
+>  	MXC4005_CHANNEL(Y, MXC4005_REG_YOUT_UPPER),
+>  	MXC4005_CHANNEL(Z, MXC4005_REG_ZOUT_UPPER),
+>  	IIO_CHAN_SOFT_TIMESTAMP(3),
+> +	MXC4005_CHANNEL_ORIENTATION(X_AND_Y),
+> +	MXC4005_CHANNEL_ORIENTATION(Z),
+>  };
+> =20
+>  static irqreturn_t mxc4005_trigger_handler(int irq, void *private)
+

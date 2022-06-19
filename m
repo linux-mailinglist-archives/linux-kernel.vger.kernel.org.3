@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC9D5509E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 12:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFECC5509EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 12:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbiFSKwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 06:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        id S235591AbiFSK4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 06:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbiFSKwE (ORCPT
+        with ESMTP id S231238AbiFSK4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 06:52:04 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C805710575;
-        Sun, 19 Jun 2022 03:52:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id o7so16153686eja.1;
-        Sun, 19 Jun 2022 03:52:03 -0700 (PDT)
+        Sun, 19 Jun 2022 06:56:21 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527A69594;
+        Sun, 19 Jun 2022 03:56:19 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id fd6so8724204edb.5;
+        Sun, 19 Jun 2022 03:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ebd6qW1bmr9UXQKliJw9JMCXnaRgcpZYnpj8vzueGKs=;
-        b=XDbkHZRn044zzJnQOw/jpQIuTiBqWAsb7n6Bk0FYupham0OnCZ89dhObPmdRWwEWxd
-         FtAmz4TYfqDr36tP/dE2fNcDBqAEij2JVPDLxG8dVkm7gAsqTbM/xzmifxG1KTt8sDuy
-         OINMBX4xqBZPpjnjeTK+iVu/Xg9Bn7UvkUhDdWPDgbh5k/q4EXDTDbM8/l4RWc/ULx/1
-         bqvlfUtAZ1nih/ZmFgjsKe9NjlheTKtnVymRFlejuivzvOBRBhwVzN0yt3kikL8SYaIh
-         Go3c0K5KvKGEz6Bb7xkOqqhdhYBjDxkJHXXNsst8qA5+yt1lImgBMhOnGH05v3H/LpOM
-         9eAw==
+        bh=m0ywi20rvMwf+A69ukm4ilfE8YyNyi5FpOBHrhUncaw=;
+        b=GgDe22l8dWchMEZivxKCfNnrK3RMHQzpIOUH/cLZX99uGyOuj9FedzgCkDKtnzCAgL
+         PPIpPLnjvAjJjF5tXNw70id9LeCLdDuJgovbQ9c8/FhEdFgda4ca+CjuqXFgaMlQLVEc
+         t8zW3pdf8llLHbVepVISWOJrgYY8/LWQa69pyu3Z0ja78Khz7AtV4te8thHdld7xfa9U
+         DOxG0WyksvGVrqDWi7LP55yTbAXi0oTEuc79yCfT9Nmnu2EZe3cdXMWN/DcbGplCWmWS
+         LVpmYK6NJdiM27S23BwdzKpMrwNmgCBWSUaCxaOxFKwIJztxgw6kSBuyZCmHE3/C4JOu
+         oaLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ebd6qW1bmr9UXQKliJw9JMCXnaRgcpZYnpj8vzueGKs=;
-        b=wBO9+D9Nd2eYreT/wmzaArnIRWBUY2MicSQy2DCyqY4eQcO3CikH69zmnQ5lnvkvub
-         W+XuS2bWpaYF4uczF7S9/6r0EqNYW4sxJe2Sbv8mCAEkAOQylA0y4ZnNopFFY8B/kXfN
-         fzTCG8WZ8dU1BpjJYohPsNJJy+Vl/dejtwg+8ZnEfOxz7guEz+PSMBjVTw/9wgvT/Cn3
-         oUdJOxHNDU/GmUbVQ8Uio3Wd7jpzzumVZ/OKFD0wcJq8xUiMQ4oPXf5vTqz98yt1g/ji
-         itlpYaSSHcS5CmU+YhV4z2tKvOMFQHcQPmAitaz026X0kS5BqVxDVNSUQRpL+QtaYBch
-         uxgQ==
-X-Gm-Message-State: AJIora8RvL+87faGkr3hgCd7DCZt2hm8EgAR3GkAvC4ILnkIuhgdaA9u
-        Cxqw30wihxo8Vuf5SbP4CRTSBo4jS6BiKSDDs0s=
-X-Google-Smtp-Source: AGRyM1uNsTXG8QbLjgaH2Otr2hEazBEbSS6akba0cYFAJ6VMblAbmj1H7bX0ZGOcPh7DPTHCaO7E0ia/Kz/pISCfI0U=
-X-Received: by 2002:a17:906:434f:b0:711:eb76:c320 with SMTP id
- z15-20020a170906434f00b00711eb76c320mr16565501ejm.636.1655635922377; Sun, 19
- Jun 2022 03:52:02 -0700 (PDT)
+        bh=m0ywi20rvMwf+A69ukm4ilfE8YyNyi5FpOBHrhUncaw=;
+        b=JcnavkxbAHHFac7EMECKvcDAWIwdL2ImbzlOQgpFanBezI7vMKaazhK3aEBNk5QllS
+         vgebwnGFHkL/ErteJ8IwrZIYY3BCNxRb5bvc49v7JsiENIiIRNjk8sQPEhRwOjDa3qCP
+         n4CkXCQLpBDXBq6zoa2wnW6PScZCUVPNlQ7In9q61Zy8FfS8xokoRknn0EZTYugdu0iw
+         QwhAsH0jG/g+h5yoYV2b1+fTzpoohwy3LGfKl5HzkwI0sM5o0TdboD/bpcRB1hw0zy5I
+         l1R1PullBafkBhQvrWcActxoy6KaImdb3//hgOieqx1i/NJ5gkBo4+IS2iFnQBa0broy
+         /QWw==
+X-Gm-Message-State: AJIora8IveTRoxvlAPgRznP52Y922Svzx+rvndMOXXRVpveYg+CHD1da
+        RjQyMQkk250ZPr7boH4i8ATsln1Yrtt69hrDFRY=
+X-Google-Smtp-Source: AGRyM1vCcmOfOZAgJE26JBD8dmE46Cj5ydNVR6OxyHO+aHgXjsRm1kFNmffTCwGvPKiUW6RcSC4gi6npztthWeg2oB8=
+X-Received: by 2002:a05:6402:11d2:b0:42d:e68a:eae0 with SMTP id
+ j18-20020a05640211d200b0042de68aeae0mr23095268edw.111.1655636177910; Sun, 19
+ Jun 2022 03:56:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-11-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220618214009.2178567-11-aidanmacdonald.0x0@gmail.com>
+References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-12-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220618214009.2178567-12-aidanmacdonald.0x0@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 19 Jun 2022 12:51:26 +0200
-Message-ID: <CAHp75Vdfc=V8uBBF4m3pDtpjsrhqq06q=5fEBPCOiUmYQdSkGA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/16] iio: adc: axp20x_adc: Minor code cleanups
+Date:   Sun, 19 Jun 2022 12:55:41 +0200
+Message-ID: <CAHp75VcMRAijXYGwVx8OPzMeafjT4Xa8rx_pRqRTs66Puw8qMA@mail.gmail.com>
+Subject: Re: [PATCH v3 11/16] iio: adc: axp20x_adc: Add support for AXP192
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -87,55 +87,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sat, Jun 18, 2022 at 11:40 PM Aidan MacDonald
 <aidanmacdonald.0x0@gmail.com> wrote:
 >
-> The code may be clearer if parameters are not re-purposed to hold
-> temporary results like register values, so introduce local variables
-> as necessary to avoid that. Also, use the common FIELD_PREP macro
-
-FIELD_PREP()
-
-> instead of a hand-rolled version.
+> The AXP192 is identical to the AXP20x, except for the addition of
+> two more GPIO ADC channels.
 
 ...
 
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
-> +#include <linux/bitfield.h>
+> +static int axp192_write_raw(struct iio_dev *indio_dev,
+> +                           struct iio_chan_spec const *chan, int val, int val2,
+> +                           long mask)
+> +{
+> +       struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> +       unsigned int regmask, regval;
+> +
+> +       /*
+> +        * The AXP192 PMIC allows the user to choose between 0V and 0.7V offsets
+> +        * for (independently) GPIO0-3 when in ADC mode.
+> +        */
+> +       if (mask != IIO_CHAN_INFO_OFFSET)
+> +               return -EINVAL;
+> +
+> +       if (val != 0 && val != 700000)
+> +               return -EINVAL;
 
-Keep it sorted?
-
-...
-
-> -       val = val ? 1 : 0;
 > +       regval = val ? 1 : 0;
->
+> +
 
-I think you may drop these two lines (including blank line) and...
+As per comment against the previous patch use !!val directly?
 
->         switch (chan->channel) {
->         case AXP20X_GPIO0_V:
-> -               reg = AXP20X_GPIO10_IN_RANGE_GPIO0;
-> -               regval = AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(val);
-> +               regmask = AXP20X_GPIO10_IN_RANGE_GPIO0;
-> +               regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO0, regval);
-
-...use !!val as an argument here...
-
->                 break;
->
->         case AXP20X_GPIO1_V:
-> -               reg = AXP20X_GPIO10_IN_RANGE_GPIO1;
-> -               regval = AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(val);
-> +               regmask = AXP20X_GPIO10_IN_RANGE_GPIO1;
-> +               regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO1, regval);
-
-...and here.
-
->                 break;
->
->         default:
->                 return -EINVAL;
->         }
+> +       switch (chan->channel) {
+> +       case AXP192_GPIO0_V:
+> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO0;
+> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO0, regval);
+> +               break;
+> +
+> +       case AXP192_GPIO1_V:
+> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO1;
+> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO1, regval);
+> +               break;
+> +
+> +       case AXP192_GPIO2_V:
+> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO2;
+> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO2, regval);
+> +               break;
+> +
+> +       case AXP192_GPIO3_V:
+> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO3;
+> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO3, regval);
+> +               break;
+> +
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return regmap_update_bits(info->regmap, AXP192_GPIO30_IN_RANGE, regmask, regval);
+> +}
 
 -- 
 With Best Regards,

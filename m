@@ -2,180 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE5E550CC5
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC7F550CC7
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiFSTfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 15:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S233331AbiFSTho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 15:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiFSTfu (ORCPT
+        with ESMTP id S229780AbiFSThm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 15:35:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8028B31
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 12:35:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o30hv-0004rB-Bu; Sun, 19 Jun 2022 21:35:39 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o30hk-001VMw-FN; Sun, 19 Jun 2022 21:35:29 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o30hl-00HR4H-4a; Sun, 19 Jun 2022 21:35:29 +0200
-Date:   Sun, 19 Jun 2022 21:35:26 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>, kernel@pengutronix.de,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] mfd: tc6393xb: Make disable callback return void
-Message-ID: <20220619193526.hyihizoxmaxlowrt@pengutronix.de>
-References: <20220619082655.53728-1-u.kleine-koenig@pengutronix.de>
- <202206200102.cUbYiyCL-lkp@intel.com>
+        Sun, 19 Jun 2022 15:37:42 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E063B31;
+        Sun, 19 Jun 2022 12:37:40 -0700 (PDT)
+Date:   Sun, 19 Jun 2022 12:37:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1655667458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YC8yB2PG4+G4xynDd4qhQyEPOAofxKVrbu3RRitWED4=;
+        b=qD+Mvbj8IaI6qDNJWPeluOnJwp3jOJoDFAlyYvn3hpSvpPHCy2u9O7pXCmd/wKVQaa191Z
+        BL+H+G8SckXSSX4/zrN40egc6e0GXplsUqbnw5+JYBugq02IQYc5TAljDysQhZNjUYe+lb
+        /lPOYR+3IUzs8PTIkjMG8AUO96ECJrU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, longman@redhat.com
+Subject: Re: [PATCH v5 07/11] mm: memcontrol: make all the callers of
+ {folio,page}_memcg() safe
+Message-ID: <Yq96/NEanbbUUUIW@castle>
+References: <20220530074919.46352-1-songmuchun@bytedance.com>
+ <20220530074919.46352-8-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pmzf5n3f43nr53dh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202206200102.cUbYiyCL-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220530074919.46352-8-songmuchun@bytedance.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 30, 2022 at 03:49:15PM +0800, Muchun Song wrote:
+> When we use objcg APIs to charge the LRU pages, the page will not hold
+> a reference to the memcg associated with the page. So the caller of the
+> {folio,page}_memcg() should hold an rcu read lock or obtain a reference
+> to the memcg associated with the page to protect memcg from being
+> released. So introduce get_mem_cgroup_from_{page,folio}() to obtain a
+> reference to the memory cgroup associated with the page.
+> 
+> In this patch, make all the callers hold an rcu read lock or obtain a
+> reference to the memcg to protect memcg from being released when the LRU
+> pages reparented.
+> 
+> We do not need to adjust the callers of {folio,page}_memcg() during
+> the whole process of mem_cgroup_move_task(). Because the cgroup migration
+> and memory cgroup offlining are serialized by @cgroup_mutex. In this
+> routine, the LRU pages cannot be reparented to its parent memory cgroup.
+> So {folio,page}_memcg() is stable and cannot be released.
+> 
+> This is a preparation for reparenting the LRU pages.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 
---pmzf5n3f43nr53dh
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Hello,
+The locking seems to be correct. I'm slightly worried about a potential
+perf degradation, especially on dying cgroups, where css_get() is relatively
+expensive. I hope getting it into mm-unstable will help to determine
+whether it's actually a problem.
 
-On Mon, Jun 20, 2022 at 02:20:57AM +0800, kernel test robot wrote:
-> Hi "Uwe,
->=20
-> I love your patch! Yet something to improve:
->=20
-> [auto build test ERROR on f2906aa863381afb0015a9eb7fefad885d4e5a56]
->=20
-> url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/m=
-fd-tc6393xb-Make-disable-callback-return-void/20220619-162855
-> base:   f2906aa863381afb0015a9eb7fefad885d4e5a56
-> config: arm-pxa_defconfig (https://download.01.org/0day-ci/archive/202206=
-20/202206200102.cUbYiyCL-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/e2b80b7c107cdbbff=
-99189431a614f791435ebfd
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Uwe-Kleine-K-nig/mfd-tc6393xb-Ma=
-ke-disable-callback-return-void/20220619-162855
->         git checkout e2b80b7c107cdbbff99189431a614f791435ebfd
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.3.0 make.cro=
-ss W=3D1 O=3Dbuild_dir ARCH=3Darm SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->    arch/arm/mach-pxa/eseries.c:47:13: warning: no previous prototype for =
-'eseries_fixup' [-Wmissing-prototypes]
->       47 | void __init eseries_fixup(struct tag *tags, char **cmdline)
->          |             ^~~~~~~~~~~~~
->    arch/arm/mach-pxa/eseries.c:76:5: warning: no previous prototype for '=
-eseries_tmio_enable' [-Wmissing-prototypes]
->       76 | int eseries_tmio_enable(struct platform_device *dev)
->          |     ^~~~~~~~~~~~~~~~~~~
->    arch/arm/mach-pxa/eseries.c:89:6: warning: no previous prototype for '=
-eseries_tmio_disable' [-Wmissing-prototypes]
->       89 | void eseries_tmio_disable(struct platform_device *dev)
->          |      ^~~~~~~~~~~~~~~~~~~~
->    arch/arm/mach-pxa/eseries.c:95:5: warning: no previous prototype for '=
-eseries_tmio_suspend' [-Wmissing-prototypes]
->       95 | int eseries_tmio_suspend(struct platform_device *dev)
->          |     ^~~~~~~~~~~~~~~~~~~~
->    arch/arm/mach-pxa/eseries.c:101:5: warning: no previous prototype for =
-'eseries_tmio_resume' [-Wmissing-prototypes]
->      101 | int eseries_tmio_resume(struct platform_device *dev)
->          |     ^~~~~~~~~~~~~~~~~~~
->    arch/arm/mach-pxa/eseries.c:108:6: warning: no previous prototype for =
-'eseries_get_tmio_gpios' [-Wmissing-prototypes]
->      108 | void eseries_get_tmio_gpios(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~~
-> >> arch/arm/mach-pxa/eseries.c:141:21: error: initialization of 'int (*)(=
-struct platform_device *)' from incompatible pointer type 'void (*)(struct =
-platform_device *)' [-Werror=3Dincompatible-pointer-types]
->      141 |         .disable  =3D &eseries_tmio_disable,
->          |                     ^
->    arch/arm/mach-pxa/eseries.c:141:21: note: (near initialization for 'e3=
-30_tc6387xb_info.disable')
->    cc1: some warnings being treated as errors
->=20
->=20
-> vim +141 arch/arm/mach-pxa/eseries.c
->=20
-> e478fe4cd50b86 Eric Miao 2010-06-20  138 =20
-> e478fe4cd50b86 Eric Miao 2010-06-20  139  static struct tc6387xb_platform=
-_data e330_tc6387xb_info =3D {
-> e478fe4cd50b86 Eric Miao 2010-06-20  140  	.enable   =3D &eseries_tmio_en=
-able,
-> e478fe4cd50b86 Eric Miao 2010-06-20 @141  	.disable  =3D &eseries_tmio_di=
-sable,
-> e478fe4cd50b86 Eric Miao 2010-06-20  142  	.suspend  =3D &eseries_tmio_su=
-spend,
-> e478fe4cd50b86 Eric Miao 2010-06-20  143  	.resume   =3D &eseries_tmio_re=
-sume,
-> e478fe4cd50b86 Eric Miao 2010-06-20  144  };
-> e478fe4cd50b86 Eric Miao 2010-06-20  145 =20
-
-Oh, indeed. I forgot that this patch depends on
-
-	https://lore.kernel.org/all/20220530192430.2108217-4-u.kleine-koenig@pengu=
-tronix.de
-
-that Lee already claimed to have applied. This patch removes line 141
-and the problem is gone.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---pmzf5n3f43nr53dh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKvensACgkQwfwUeK3K
-7An82Af/VbnrOfVBah3nqCQxuAtM9MNBqEtnq39L5tHy+A8arHXkS3ye5E92KYJW
-umIk7JLV+a3RdFAlMDsuwsbdJNNhCOBT6zlF2zrw0xzMaP4rtskUh5AUXWy3olM5
-K7Koce9GteGlGHQaWRwS86ayehoXxTPRFflq1FVRzXK4W478CH2Bn8/iKgoewgpr
-iZp4I/Z4+BBYdqP//sww0AhoT65o3d4UpaYzmI+3IvljDNfTnGT76VAzmjkRmlwM
-D92bH9KrUNdtrqmUItTdOJZg1EjkSkG9YmkUe5OwEruA7+Va9stqRJQesKulAfvK
-ffbMdkH6hBYVNUzXVHTr2T2dnNT28A==
-=sC2Z
------END PGP SIGNATURE-----
-
---pmzf5n3f43nr53dh--
+Thanks!

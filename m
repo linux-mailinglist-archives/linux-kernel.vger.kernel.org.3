@@ -2,102 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA80550962
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F6D550965
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234476AbiFSIhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 04:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S234595AbiFSIk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 04:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiFSIhr (ORCPT
+        with ESMTP id S229777AbiFSIk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 04:37:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685C1D71
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 01:37:46 -0700 (PDT)
+        Sun, 19 Jun 2022 04:40:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D163A2;
+        Sun, 19 Jun 2022 01:40:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1F2CB80BA5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:37:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6A0C341C5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:37:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZNCLmUaf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655627859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=teucPwLMI11e8vQBIMGAL5FV6pDQTFgjgjHA80hD2jo=;
-        b=ZNCLmUaf0Sz18yVQMEt1MpVUqD4jZiq+ShnWcdhI0oHWp1JrqqG7ZDLrlf/5NtuI3VOKYR
-        tiX1EzfLj/vK/F1+NTQCZAnlYCBwGstFM1vgQO9v8/ONInisYQdJ56brjIwLhtMEOu01jF
-        Eygn3N5PB6Mq/oEUmDtuMeJao6rPlG4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3546516b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Sun, 19 Jun 2022 08:37:39 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3178acf2a92so41051177b3.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 01:37:39 -0700 (PDT)
-X-Gm-Message-State: AJIora9ioOkXHa0pQw8s0O0gllcNgLaP5g2ZDXNZSY4Vmn29HLMxcxCl
-        q8gTdA8taSQVe0wRAik6D1E8Rqss5H1t3Rvtzmw=
-X-Google-Smtp-Source: AGRyM1tReRqCuxX4GpYbFTVqgup0UQ4L4NMW6UqxPCMM3qDulB5wU2AzGdZ/R5YjxJmi38IaHt/M49ATSgPcDqSg5gA=
-X-Received: by 2002:a0d:e0c6:0:b0:317:9602:55d1 with SMTP id
- j189-20020a0de0c6000000b00317960255d1mr6618030ywe.2.1655627857621; Sun, 19
- Jun 2022 01:37:37 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C805960FD0;
+        Sun, 19 Jun 2022 08:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697C1C34114;
+        Sun, 19 Jun 2022 08:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655628056;
+        bh=QmXFtycrCbfBmrXZnhK+ptOa35gEtx2Chm9E61iE/+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pKrFv5GZQtyVgeiWSIf1cgP+k6JgWXS+77ZuT3UlnrhLPajxSfBZje/ZWYBb7pz5f
+         LiMlvofwXC8j9QYAmNkNHckysMbnbK28bjqw4LMu108aeeEMEMhKjwIPUK0R2gxZYI
+         fzwBSibPPhpEXZqTNxeuSFOnJYWytbBGhYFrjTpjsjuTKfchulxUClrh5NoO1Wskid
+         DDtlblnDal1dX95L/fRJwP1a4pCVlq6I7NlcohTE2FxR6lF9EitTXzPBwAZ7BGMogv
+         PmD2u+5KedKqmLHmyfyNZxr9YUaJVb64FSVrPAr6mY4kedb3q1b0HNgVOvlKbOERur
+         piaskGUCHi1Og==
+Date:   Sun, 19 Jun 2022 10:40:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-5.19-rc3
+Message-ID: <Yq7hDqjsFlxifNIl@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6407:b0:181:6914:78f6 with HTTP; Sun, 19 Jun 2022
- 01:37:36 -0700 (PDT)
-In-Reply-To: <f1eb20d1-6762-dc82-058a-cf27936bc0c6@infradead.org>
-References: <YqyDqMAPHIxjA/xZ@zx2c4.com> <20220617133847.27517-1-Jason@zx2c4.com>
- <f1eb20d1-6762-dc82-058a-cf27936bc0c6@infradead.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 19 Jun 2022 10:37:36 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qH8BfTk26awzEGqn992jZDBXfNCpM7LwRv5GP3kLeeaw@mail.gmail.com>
-Message-ID: <CAHmME9qH8BfTk26awzEGqn992jZDBXfNCpM7LwRv5GP3kLeeaw@mail.gmail.com>
-Subject: Re: [PATCH] printk: allow direct console printing to be enabled always
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>, Marco Elver <elver@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZiReLyznSM3ThwxX"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/22, Randy Dunlap <rdunlap@infradead.org> wrote:
->
->
-> On 6/17/22 06:38, Jason A. Donenfeld wrote:
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt
->> b/Documentation/admin-guide/kernel-parameters.txt
->> index 8090130b544b..a960c47a2002 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -4389,6 +4389,14 @@
->>  	printk.time=	Show timing data prefixed to each printk message line
->>  			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
->>
->> +	printk.always_direct=
->> +			Rather than using kthreads for printk output, always
->> +			write to the console immediately. This has performance
->> +			implications, but will result in a more faithful
->> +			ordering and interleaving with other processes writing
->> +			to the console.
->> +			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
->
-> or:
->
-> +			Format: <bool>  (1/Y/y/T/t/on=enable, 0/N/n/F/f/off=disable)
->
 
-This is the same as the lines above and below. So I think you'd be
-better off sending an independent patch that fixes all of these in one
-fell swoop, rather than introducing an inconsistency in this one.
+--ZiReLyznSM3ThwxX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Jason
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-5.19-rc3
+
+for you to fetch changes up to de87b603b0919e31578c8fa312a3541f1fb37e1c:
+
+  i2c: mediatek: Fix an error handling path in mtk_i2c_probe() (2022-06-14 22:11:54 +0200)
+
+----------------------------------------------------------------
+MAINTAINERS rectifications and a few minor driver fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      MAINTAINERS: Update Synopsys DesignWare I2C to Supported
+
+Christophe JAILLET (1):
+      i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+
+Jiasheng Jiang (1):
+      i2c: npcm7xx: Add check for platform_driver_register
+
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/i2c to I2C SUBSYSTEM HOST DRIVERS
+
+Serge Semin (1):
+      i2c: designware: Use standard optional ref clock implementation
+
+Wolfram Sang (1):
+      MAINTAINERS: core DT include belongs to core
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) i2c: designware: Use standard optional ref clock implementation
+
+AngeloGioacchino Del Regno (1):
+      (Rev.) i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+
+Qii Wang (1):
+      (Rev.) i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+
+ MAINTAINERS                                 |  4 +++-
+ drivers/i2c/busses/i2c-designware-common.c  |  3 ---
+ drivers/i2c/busses/i2c-designware-platdrv.c | 13 +++++++++++--
+ drivers/i2c/busses/i2c-mt65xx.c             |  9 +++++++--
+ drivers/i2c/busses/i2c-npcm7xx.c            |  3 +--
+ 5 files changed, 22 insertions(+), 10 deletions(-)
+
+--ZiReLyznSM3ThwxX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKu4Q4ACgkQFA3kzBSg
+KbZ+HBAAsF1TnjkQkfNkhbkx1TUdmrQbPD2bAywZHORtjnthhAvdPVPaOe7266we
++We6rtvBk8VW5jftlnOfykpqXrl7fE7KkQukbiTEMRAq5o65emXmoDQ3yWvmR3Rx
+8q2iDvjezn+zfHs3CGTO6CxM9JXapjMpuD1pgnXEP622s8pPG5UA0NwhqolMceV3
+wMp6o9q+qzIQEP9VwzN0F8MJVyoRkA/RYEEk3A5V2reyCuaXeJr/r5OM0GpQAwJK
+Jizm2SZzuOlIDTeve4HNuj32vMO7l/e2BotrRatGQXF0Sf2GtgWkeEQnSGHxLtaK
+oBQIn+Nhr4mjDK0FNfnu2cJm3SVwlFpGTJGAOwz1d1VYYxl4kpfpi5raK7PQwkCc
+9PlOZ5NzUQtgCPreQ3MK0XLmDfRX9hm09aZoqzScnoszOBgcWfldYcYD/RcHHZPs
+Z3Lpi3wV450nDk1wKBKJU0XTQuly/LcauNX1gVRke23QvOf39mAiVAebz5ofi5e5
+ue7gVmTpW7Uu79oZQf+vz3eWowTpGbQEecQDC9zF876uSL+JOZZg6/lqDLhbpf6c
+I2WQ8czzxvc+RYoN3MRpVJSkV4sIbZYh0rO/T4Gt/hty6QBAdcKFMy3wgSXZ4TvB
+3VU8B2rcFwNdi3bjgUyi/ICd7I//iiDIEq1f4B48PfN1zlKa1UI=
+=Knx9
+-----END PGP SIGNATURE-----
+
+--ZiReLyznSM3ThwxX--

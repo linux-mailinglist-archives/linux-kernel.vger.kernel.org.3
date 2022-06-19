@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA059550960
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA80550962
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 10:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbiFSIcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 04:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S234476AbiFSIhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 04:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbiFSIcS (ORCPT
+        with ESMTP id S229777AbiFSIhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 04:32:18 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1461181B;
-        Sun, 19 Jun 2022 01:32:16 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id u37so7717723pfg.3;
-        Sun, 19 Jun 2022 01:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBTUv4o8XV3U+5AHPeniUbupyDLFCaEm7X67rKDOZUI=;
-        b=J5XFxhrsgGEkx8zin0vpEAl/LJ1cTtO70iW+/LBitKblSb1rT/po8hVwLE7pFHg4KG
-         UsbW2TGLgThNmF2GsECc3EPc2uvDupjIf7RfJavDSRLGxdH7ayLxFHoLZ2BDgE7OpDE8
-         M3s1XB73pWossWXwGfR1sAxPPsdRe5dsmmsLPxNdPVZCKhAI0kFf1iPEGmqzna3nXftr
-         ZXq70wziuB2GYwH0IugqjaFFGtR9nexorOLosZ9JuUN9pRhFiK0FDgoQxYW0AVYW4C+z
-         vzbJPftP5ptjXiTQWZ6ulSFmCEqcs/ISJD3hr5g3xjnDCNkJ1KwUgPwRvRJkaqBGxGOh
-         vbWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBTUv4o8XV3U+5AHPeniUbupyDLFCaEm7X67rKDOZUI=;
-        b=1vjhNhIMk9BbDFCHEXhv3qg6Q9baXikycLEP/c3HHVr3VFwhWrciCnmotw61GQ/GJd
-         X6afnOdaskJ8tVOyrwULsR7yJDjC/gMVdHTJRY3y7WT53OmV1Bptb43pNb1/EDp8xaFA
-         Mr7VHervpKcmtnGR3AnfW88PzVmvZT1jOlqP5pVoQTJD0KTCJ5di9HWA3j26cHQojzQo
-         RKB26bfVWIt8fBfBthusxyzW+T4kHW5LtONTqfobBgR6olHh1UdXQWawscGvSX3ypAPw
-         TW+LjHiObb8pDAQL+7ETlbDfP1zzEwq0PM9ym7rzxFpN5mX+InIQr13WQtKFrZmVO2Tc
-         2mbQ==
-X-Gm-Message-State: AJIora/jmMzaKv1RLZ3FMs4RF9ypE8PelsPOeQ3XXI8sLnX7qrH08me/
-        4wnrnazuV0595Y0qVsrUaaM=
-X-Google-Smtp-Source: AGRyM1sOWfZKJgKybRGzpExEbxpCy3FcGK8vLF0W5sannEVQsx620HnqhVvinbu31iX6TA+hJeh3Og==
-X-Received: by 2002:aa7:900a:0:b0:525:1e54:e64e with SMTP id m10-20020aa7900a000000b005251e54e64emr1354797pfo.35.1655627535697;
-        Sun, 19 Jun 2022 01:32:15 -0700 (PDT)
-Received: from LAPTOP-706CEGJT.localdomain ([113.116.119.185])
-        by smtp.gmail.com with ESMTPSA id bd15-20020a056a00278f00b0050dc7628182sm6704543pfb.92.2022.06.19.01.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 01:32:15 -0700 (PDT)
-From:   root <lijessen2016@gmail.com>
-X-Google-Original-From: root <root@LAPTOP-706CEGJT.localdomain>
-To:     wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        root <root@LAPTOP-706CEGJT.localdomain>
-Subject: [PATCH] Print some info into ring-buffer during loading
-Date:   Sun, 19 Jun 2022 16:32:07 +0800
-Message-Id: <20220619083207.749-1-root@LAPTOP-706CEGJT.localdomain>
-X-Mailer: git-send-email 2.25.1
+        Sun, 19 Jun 2022 04:37:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685C1D71
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 01:37:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1F2CB80BA5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:37:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6A0C341C5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 08:37:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZNCLmUaf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1655627859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=teucPwLMI11e8vQBIMGAL5FV6pDQTFgjgjHA80hD2jo=;
+        b=ZNCLmUaf0Sz18yVQMEt1MpVUqD4jZiq+ShnWcdhI0oHWp1JrqqG7ZDLrlf/5NtuI3VOKYR
+        tiX1EzfLj/vK/F1+NTQCZAnlYCBwGstFM1vgQO9v8/ONInisYQdJ56brjIwLhtMEOu01jF
+        Eygn3N5PB6Mq/oEUmDtuMeJao6rPlG4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3546516b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sun, 19 Jun 2022 08:37:39 +0000 (UTC)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3178acf2a92so41051177b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 01:37:39 -0700 (PDT)
+X-Gm-Message-State: AJIora9ioOkXHa0pQw8s0O0gllcNgLaP5g2ZDXNZSY4Vmn29HLMxcxCl
+        q8gTdA8taSQVe0wRAik6D1E8Rqss5H1t3Rvtzmw=
+X-Google-Smtp-Source: AGRyM1tReRqCuxX4GpYbFTVqgup0UQ4L4NMW6UqxPCMM3qDulB5wU2AzGdZ/R5YjxJmi38IaHt/M49ATSgPcDqSg5gA=
+X-Received: by 2002:a0d:e0c6:0:b0:317:9602:55d1 with SMTP id
+ j189-20020a0de0c6000000b00317960255d1mr6618030ywe.2.1655627857621; Sun, 19
+ Jun 2022 01:37:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:6407:b0:181:6914:78f6 with HTTP; Sun, 19 Jun 2022
+ 01:37:36 -0700 (PDT)
+In-Reply-To: <f1eb20d1-6762-dc82-058a-cf27936bc0c6@infradead.org>
+References: <YqyDqMAPHIxjA/xZ@zx2c4.com> <20220617133847.27517-1-Jason@zx2c4.com>
+ <f1eb20d1-6762-dc82-058a-cf27936bc0c6@infradead.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sun, 19 Jun 2022 10:37:36 +0200
+X-Gmail-Original-Message-ID: <CAHmME9qH8BfTk26awzEGqn992jZDBXfNCpM7LwRv5GP3kLeeaw@mail.gmail.com>
+Message-ID: <CAHmME9qH8BfTk26awzEGqn992jZDBXfNCpM7LwRv5GP3kLeeaw@mail.gmail.com>
+Subject: Re: [PATCH] printk: allow direct console printing to be enabled always
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Marco Elver <elver@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
- drivers/i2c/i2c-core-base.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+On 6/19/22, Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+>
+> On 6/17/22 06:38, Jason A. Donenfeld wrote:
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt
+>> b/Documentation/admin-guide/kernel-parameters.txt
+>> index 8090130b544b..a960c47a2002 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -4389,6 +4389,14 @@
+>>  	printk.time=	Show timing data prefixed to each printk message line
+>>  			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
+>>
+>> +	printk.always_direct=
+>> +			Rather than using kthreads for printk output, always
+>> +			write to the console immediately. This has performance
+>> +			implications, but will result in a more faithful
+>> +			ordering and interleaving with other processes writing
+>> +			to the console.
+>> +			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
+>
+> or:
+>
+> +			Format: <bool>  (1/Y/y/T/t/on=enable, 0/N/n/F/f/off=disable)
+>
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c3876e..8e127ff3e32e 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -469,6 +469,8 @@ static int i2c_device_probe(struct device *dev)
- 	struct i2c_driver	*driver;
- 	int status;
- 
-+	pr_info("I have changed i2c device driver\n");
-+
- 	if (!client)
- 		return 0;
- 
-@@ -1829,6 +1831,7 @@ int i2c_for_each_dev(void *data, int (*fn)(struct device *dev, void *data))
- 	int res;
- 
- 	mutex_lock(&core_lock);
-+	pr_info("i2c_for_each_dev: before bus_for_each_dev\n");
- 	res = bus_for_each_dev(&i2c_bus_type, NULL, data, fn);
- 	mutex_unlock(&core_lock);
- 
-@@ -1838,8 +1841,10 @@ EXPORT_SYMBOL_GPL(i2c_for_each_dev);
- 
- static int __process_new_driver(struct device *dev, void *data)
- {
-+	pr_info("Enter process_new_driver\n");
- 	if (dev->type != &i2c_adapter_type)
- 		return 0;
-+	pr_info("__process_new_driver, before i2c_do_add_adapter\n");
- 	return i2c_do_add_adapter(data, to_i2c_adapter(dev));
- }
- 
-@@ -1860,13 +1865,16 @@ int i2c_register_driver(struct module *owner, struct i2c_driver *driver)
- 	driver->driver.owner = owner;
- 	driver->driver.bus = &i2c_bus_type;
- 	INIT_LIST_HEAD(&driver->clients);
--
-+	pr_info("i2c driver name is [%s] before driver_register\n", driver->driver.name);
- 	/* When registration returns, the driver core
- 	 * will have called probe() for all matching-but-unbound devices.
- 	 */
- 	res = driver_register(&driver->driver);
--	if (res)
-+	if (res){
-+		pr_info("i2c driver name is [%s], res is [%d]\n", driver->driver.name, res);
- 		return res;
-+	}
-+	pr_info("i2c driver name is [%s], after driver_register\n", driver->driver.name);
- 
- 	pr_debug("driver [%s] registered\n", driver->driver.name);
- 
-@@ -1933,7 +1941,7 @@ EXPORT_SYMBOL(i2c_clients_command);
- static int __init i2c_init(void)
- {
- 	int retval;
--
-+	pr_info("Jason-Lee: Entering i2c_init\n");
- 	retval = of_alias_get_highest_id("i2c");
- 
- 	down_write(&__i2c_board_lock);
--- 
-2.25.1
+This is the same as the lines above and below. So I think you'd be
+better off sending an independent patch that fixes all of these in one
+fell swoop, rather than introducing an inconsistency in this one.
 
+Jason

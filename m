@@ -2,138 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F1B550940
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 09:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6735508DB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 08:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbiFSHuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 03:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S234056AbiFSGQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 02:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbiFSHuR (ORCPT
+        with ESMTP id S230137AbiFSGQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 03:50:17 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731A2DFFF;
-        Sun, 19 Jun 2022 00:50:14 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LQlJ91cFTz1K95r;
-        Sun, 19 Jun 2022 15:48:09 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 19 Jun 2022 15:50:12 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 19 Jun
- 2022 15:50:11 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <axboe@kernel.dk>, <osandov@fb.com>, <asml.silence@gmail.com>,
-        <ming.lei@redhat.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH RFC v2 2/2] sbitmap: fix possible io hung due to lost wakeups
-Date:   Sun, 19 Jun 2022 16:03:09 +0800
-Message-ID: <20220619080309.1630027-3-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220619080309.1630027-1-yukuai3@huawei.com>
-References: <20220619080309.1630027-1-yukuai3@huawei.com>
+        Sun, 19 Jun 2022 02:16:20 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99528B7FF;
+        Sat, 18 Jun 2022 23:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tBft+
+        6OhZ/b2Qz4O56w3YCLVWjSYnEQHApx3Jpz4vhU=; b=eLoLrXhfGF/cBC8N151fQ
+        53rH1aV4aeNyDEAXu3vAwBsmMvq4SX6RNBvXeXdrWE1Uh5KHoxvxZLDoCs8qnvLj
+        REidQXoLwLKsyb8UFMgVSGOFn1r/ap/YNYBf4BspOoASYX/Lu0JzBwtMCeq+LmKU
+        mqpboG/wOaHnFomRNnWAoQ=
+Received: from localhost.localdomain (unknown [113.200.174.72])
+        by smtp12 (Coremail) with SMTP id EMCowACHEVTovq5iaELZBA--.44288S4;
+        Sun, 19 Jun 2022 14:15:32 +0800 (CST)
+From:   Wentao_Liang <Wentao_Liang_g@163.com>
+To:     jdmason@kudzu.us, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wentao_Liang <Wentao_Liang_g@163.com>
+Subject: [PATCH] drivers/net/ethernet/neterion/vxge: Fix a use-after-free bug in vxge-main.c
+Date:   Sun, 19 Jun 2022 22:14:54 +0800
+Message-Id: <20220619141454.3881-1-Wentao_Liang_g@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowACHEVTovq5iaELZBA--.44288S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gry3ZF4kWF1xXrykGF1rJFb_yoWxArW7pr
+        yktFyxW3y8tryUJr18Arn8ZFs8tryDua1DJrn7Gr15JF15Cw1Utr1UJryDXr98CrWjyF43
+        Jrn5Xw4Fvr1UJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zROeOdUUUUU=
+X-Originating-IP: [113.200.174.72]
+X-CM-SenderInfo: xzhq3t5rboxtpqjbwqqrwthudrp/xtbB0QUlL1zIBch9OQAAsD
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For example, 2 * wake_batch tags are put, while only wake_batch threads
-are woken:
+The pointer vdev points to a memory region adjacent to a net_device
+structure ndev, which is a field of hldev. At line 4740, the invocation
+to vxge_device_unregister unregisters device hldev, and it also releases
+the memory region pointed by vdev->bar0. At line 4743, the freed memory
+region is referenced (i.e., iounmap(vdev->bar0)), resulting in a
+use-after-free vulnerability. We can fix the bug by calling iounmap
+before vxge_device_unregister.
 
-__sbq_wake_up
- atomic_cmpxchg -> reset wait_cnt
-			__sbq_wake_up -> decrease wait_cnt
-			...
-			__sbq_wake_up -> wait_cnt is decreased to 0 again
-			 atomic_cmpxchg
-			 sbq_index_atomic_inc -> increase wake_index
-			 wake_up_nr -> wake up and waitqueue might be empty
- sbq_index_atomic_inc -> increase again, one waitqueue is skipped
- wake_up_nr -> invalid wake up because old wakequeue might be empty
+4721.      static void vxge_remove(struct pci_dev *pdev)
+4722.      {
+4723.             struct __vxge_hw_device *hldev;
+4724.             struct vxgedev *vdev;
+…
+4731.             vdev = netdev_priv(hldev->ndev);
+…
+4740.             vxge_device_unregister(hldev);
+4741.             /* Do not call pci_disable_sriov here, as it
+						will break child devices */
+4742.             vxge_hw_device_terminate(hldev);
+4743.             iounmap(vdev->bar0);
+…
+4749              vxge_debug_init(vdev->level_trace, "%s:%d
+								Device unregistered",
+4750                            __func__, __LINE__);
+4751              vxge_debug_entryexit(vdev->level_trace, "%s:%d
+								Exiting...", __func__,
+4752                          __LINE__);
+4753.      }
 
-To fix the problem, increasing 'wake_index' before resetting 'wait_cnt'.
+This is the screenshot when the vulnerability is triggered by using
+KASAN. We can see that there is a use-after-free reported by KASAN.
 
-Fixes: 88459642cba4 ("blk-mq: abstract tag allocation out into sbitmap library")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+/***************************start**************************/
+
+root@kernel:~# echo 1 > /sys/bus/pci/devices/0000:00:03.0/remove
+[  178.296316] vxge_remove
+[  182.057081]
+ ==================================================================
+[  182.057548] BUG: KASAN: use-after-free in vxge_remove+0xe0/0x15c
+[  182.057760] Read of size 8 at addr ffff888006c76598 by task bash/119
+[  182.057983]
+[  182.058747] CPU: 0 PID: 119 Comm: bash Not tainted 5.18.0 #5
+[  182.058919] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
+rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
+[  182.059463] Call Trace:
+[  182.059726]  <TASK>
+[  182.060017]  dump_stack_lvl+0x34/0x44
+[  182.060316]  print_report.cold+0xb2/0x6b7
+[  182.060401]  ? kfree+0x89/0x290
+[  182.060478]  ? vxge_remove+0xe0/0x15c
+[  182.060545]  kasan_report+0xa9/0x120
+[  182.060629]  ? vxge_remove+0xe0/0x15c
+[  182.060706]  vxge_remove+0xe0/0x15c
+[  182.060793]  pci_device_remove+0x5d/0xe0
+[  182.060968]  device_release_driver_internal+0xf1/0x180
+[  182.061063]  pci_stop_bus_device+0xae/0xe0
+[  182.061150]  pci_stop_and_remove_bus_device_locked+0x11/0x20
+[  182.061236]  remove_store+0xc6/0xe0
+[  182.061297]  ? subordinate_bus_number_show+0xc0/0xc0
+[  182.061359]  ? __mutex_lock_slowpath+0x10/0x10
+[  182.061438]  ? sysfs_kf_write+0x6d/0xa0
+[  182.061525]  kernfs_fop_write_iter+0x1b0/0x260
+[  182.061610]  ? sysfs_kf_bin_read+0xf0/0xf0
+[  182.061695]  new_sync_write+0x209/0x310
+[  182.061789]  ? new_sync_read+0x310/0x310
+[  182.061865]  ? cgroup_rstat_updated+0x5c/0x170
+[  182.061937]  ? preempt_count_sub+0xf/0xb0
+[  182.061995]  ? pick_next_entity+0x13a/0x220
+[  182.062063]  ? __inode_security_revalidate+0x44/0x80
+[  182.062155]  ? security_file_permission+0x46/0x2a0
+[  182.062230]  vfs_write+0x33f/0x3e0
+[  182.062303]  ksys_write+0xb4/0x150
+[  182.062369]  ? __ia32_sys_read+0x40/0x40
+[  182.062451]  do_syscall_64+0x3b/0x90
+[  182.062531]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[  182.062894] RIP: 0033:0x7f3f37d17274
+[  182.063558] Code: 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b3 0f 1f
+80 00 00 00 00 48 8d 05 89 54 0d 00 8b 00 85 c0 75 13 b8 01 00 00 00 0f
+05 <48> 3d 00 f0 ff ff 77 54 c3 0f 1f 00 41 54 49 89 d4 55 48 89 f5 53
+[  182.063797] RSP: 002b:00007ffd5ba9e178 EFLAGS: 00000246
+ORIG_RAX: 0000000000000001
+[  182.064117] RAX: ffffffffffffffda RBX: 0000000000000002
+RCX: 00007f3f37d17274
+[  182.064219] RDX: 0000000000000002 RSI: 000055bbec327180
+RDI: 0000000000000001
+[  182.064315] RBP: 000055bbec327180 R08: 000000000000000a
+R09: 00007f3f37de7cf0
+[  182.064414] R10: 000000000000000a R11: 0000000000000246
+R12: 00007f3f37de8760
+[  182.064513] R13: 0000000000000002 R14: 00007f3f37de3760
+R15: 0000000000000002
+[  182.064691]  </TASK>
+[  182.064916]
+[  182.065224] The buggy address belongs to the physical page:
+[  182.065804] page:00000000ef31e4f4 refcount:0 mapcount:0
+mapping:0000000000000000 index:0x0 pfn:0x6c76
+[  182.067419] flags: 0x100000000000000(node=0|zone=1)
+[  182.068997] raw: 0100000000000000 0000000000000000
+ffffea00001b1d88 0000000000000000
+[  182.069118] raw: 0000000000000000 0000000000000000
+00000000ffffffff 0000000000000000
+[  182.069294] page dumped because: kasan: bad access detected
+[  182.069331]
+[  182.069360] Memory state around the buggy address:
+[  182.070006]  ffff888006c76480: ff ff ff ff ff ff ff ff ff ff ff
+ ff ff ff ff ff
+[  182.070136]  ffff888006c76500: ff ff ff ff ff ff ff ff ff ff ff
+ ff ff ff ff ff
+[  182.070230] >ffff888006c76580: ff ff ff ff ff ff ff ff ff ff ff
+ ff ff ff ff ff
+[  182.070305]                             ^
+[  182.070456]  ffff888006c76600: ff ff ff ff ff ff ff ff ff ff ff
+ ff ff ff ff ff
+[  182.070505]  ffff888006c76680: ff ff ff ff ff ff ff ff ff ff ff
+ ff ff ff ff ff
+[  182.070606]
+==================================================================
+[  182.071374] Disabling lock debugging due to kernel taint
+
+/*****************************end*****************************/
+
+After fixing the bug as done in the patch, we can find KASAN do not report
+ the bug and the device(00:03.0) has been successfully removed.
+
+/*****************************start***************************/
+
+root@kernel:~# echo 1 > /sys/bus/pci/devices/0000:00:03.0/remove
+root@kernel:~#
+
+/******************************end****************************/
+
+Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
 ---
- lib/sbitmap.c | 43 ++++++++++++++++++++-----------------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+ drivers/net/ethernet/neterion/vxge/vxge-main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 4a230e5baacf..00ddb6593eff 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -615,34 +615,31 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
- 		return false;
+diff --git a/drivers/net/ethernet/neterion/vxge/vxge-main.c b/drivers/net/ethernet/neterion/vxge/vxge-main.c
+index fa5d4ddf429b..092fd0ae5831 100644
+--- a/drivers/net/ethernet/neterion/vxge/vxge-main.c
++++ b/drivers/net/ethernet/neterion/vxge/vxge-main.c
+@@ -4736,10 +4736,10 @@ static void vxge_remove(struct pci_dev *pdev)
+ 	for (i = 0; i < vdev->no_of_vpath; i++)
+ 		vxge_free_mac_add_list(&vdev->vpaths[i]);
  
- 	wait_cnt = atomic_dec_return(&ws->wait_cnt);
--	if (wait_cnt <= 0) {
--		int ret;
-+	if (wait_cnt > 0)
-+		return false;
- 
--		wake_batch = READ_ONCE(sbq->wake_batch);
-+	/*
-+	 * For concurrent callers of this, callers should call this function
-+	 * again to wakeup a new batch on a different 'ws'.
-+	 */
-+	if (wait_cnt < 0)
-+		return true;
- 
--		/*
--		 * Pairs with the memory barrier in sbitmap_queue_resize() to
--		 * ensure that we see the batch size update before the wait
--		 * count is reset.
--		 */
--		smp_mb__before_atomic();
-+	wake_batch = READ_ONCE(sbq->wake_batch);
- 
--		/*
--		 * For concurrent callers of this, the one that failed the
--		 * atomic_cmpxhcg() race should call this function again
--		 * to wakeup a new batch on a different 'ws'.
--		 */
--		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
--		if (ret == wait_cnt) {
--			sbq_index_atomic_inc(&sbq->wake_index);
--			wake_up_nr(&ws->wait, wake_batch);
--			return false;
--		}
-+	/*
-+	 * Pairs with the memory barrier in sbitmap_queue_resize() to
-+	 * ensure that we see the batch size update before the wait
-+	 * count is reset.
-+	 */
-+	smp_mb__before_atomic();
- 
--		return true;
--	}
-+	/* increase wake_index first to prevent possible lost wakeups */
-+	sbq_index_atomic_inc(&sbq->wake_index);
-+	atomic_set(&ws->wait_cnt, wake_batch);
-+	wake_up_nr(&ws->wait, wake_batch);
- 
--	return false;
-+	return true;
- }
- 
- void sbitmap_queue_wake_up(struct sbitmap_queue *sbq)
++	iounmap(vdev->bar0);
+ 	vxge_device_unregister(hldev);
+ 	/* Do not call pci_disable_sriov here, as it will break child devices */
+ 	vxge_hw_device_terminate(hldev);
+-	iounmap(vdev->bar0);
+ 	pci_release_region(pdev, 0);
+ 	pci_disable_device(pdev);
+ 	driver_config->config_dev_cnt--;
 -- 
-2.31.1
+2.25.1
 

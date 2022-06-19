@@ -2,153 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0F35507C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 02:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD8A5507C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 02:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiFSAjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 20:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S232876AbiFSAlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 20:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFSAjk (ORCPT
+        with ESMTP id S229446AbiFSAlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 20:39:40 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05171056D;
-        Sat, 18 Jun 2022 17:39:37 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 01BD420003;
-        Sun, 19 Jun 2022 00:39:33 +0000 (UTC)
-From:   Ilya Maximets <i.maximets@ovn.org>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>,
-        Ilya Maximets <i.maximets@ovn.org>
-Subject: [PATCH net] net: ensure all external references are released in deferred skbuffs
-Date:   Sun, 19 Jun 2022 02:39:19 +0200
-Message-Id: <20220619003919.394622-1-i.maximets@ovn.org>
-X-Mailer: git-send-email 2.34.3
+        Sat, 18 Jun 2022 20:41:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077810FE3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 17:41:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F0E360E09
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A67C3411A;
+        Sun, 19 Jun 2022 00:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655599264;
+        bh=7Szk84PluvaE/i1H0i4KYSWKHR6uBovmNJ8fRYEiXLc=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=YBMwtlCeRySE4VibIAG6yjvMtWZkW9ctVw5Lnilbe6p3hE3iKLqMQI+0gamwKyTss
+         UGUe/fWmg7FCvJWFqi3GMTz30n0aT2po0Z+kejU+2Hm6OqIs/dU/ffF0HRNb8CY3ZD
+         gHxOgPmFEy+D9QSsaoQvalSY8wqYR+mIaCnp1oU6tcDgp3JHGCACbkTDJnC3fWCTnX
+         PXwUjesZe6cE+v26+M5rLz+xNah82WquuDr/A9by6JO827HcCh4pOBbfW+N+TqbVVg
+         ISoedBHDOUd9uHJodPvOp3rs+qzA2fKGvKBbmyeyrbr/fBP3Xpl+q9ZvkMDEGa39Q1
+         tilfzGpNccYnA==
+Message-ID: <c45a9c8b-c73a-76bc-6725-5d7e48e7a3f2@kernel.org>
+Date:   Sun, 19 Jun 2022 08:41:02 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [f2fs-dev] [PATCH 2/3] f2fs: run GCs synchronously given user
+ requests
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220617223106.3517374-1-jaegeuk@kernel.org>
+ <20220617223106.3517374-2-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220617223106.3517374-2-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Open vSwitch system test suite is broken due to inability to
-load/unload netfilter modules.  kworker thread is getting trapped
-in the infinite loop while running a net cleanup inside the
-nf_conntrack_cleanup_net_list, because deferred skbuffs are still
-holding nfct references and not being freed by their CPU cores.
+On 2022/6/18 6:31, Jaegeuk Kim wrote:
+> When users set GC_URGENT or GC_MID, they expected to do GCs right away.
+> But, there's a condition to bypass it. Let's indicate we need to do now
+> in the thread.
 
-In general, the idea that we will have an rx interrupt on every
-CPU core at some point in a near future doesn't seem correct.
-Devices are getting created and destroyed, interrupts are getting
-re-scheduled, CPUs are going online and offline dynamically.
-Any of these events may leave packets stuck in defer list for a
-long time.  It might be OK, if they are just a piece of memory,
-but we can't afford them holding references to any other resources.
+.should_migrate_blocks is used to force migrating blocks in full
+section, so what is the condition here? GC should not never select
+a full section, right?
 
-In case of OVS, nfct reference keeps the kernel thread in busy loop
-while holding a 'pernet_ops_rwsem' semaphore.  That blocks the
-later modprobe request from user space:
+Thanks,
 
-  # ps
-   299 root  R  99.3  200:25.89 kworker/u96:4+
-
-  # journalctl
-  INFO: task modprobe:11787 blocked for more than 1228 seconds.
-        Not tainted 5.19.0-rc2 #8
-  task:modprobe     state:D
-  Call Trace:
-   <TASK>
-   __schedule+0x8aa/0x21d0
-   schedule+0xcc/0x200
-   rwsem_down_write_slowpath+0x8e4/0x1580
-   down_write+0xfc/0x140
-   register_pernet_subsys+0x15/0x40
-   nf_nat_init+0xb6/0x1000 [nf_nat]
-   do_one_initcall+0xbb/0x410
-   do_init_module+0x1b4/0x640
-   load_module+0x4c1b/0x58d0
-   __do_sys_init_module+0x1d7/0x220
-   do_syscall_64+0x3a/0x80
-   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-At this point OVS testsuite is unresponsive and never recover,
-because these skbuffs are never freed.
-
-Solution is to make sure no external references attached to skb
-before pushing it to the defer list.  Using skb_release_head_state()
-for that purpose.  The function modified to be re-enterable, as it
-will be called again during the defer list flush.
-
-Another approach that can fix the OVS use-case, is to kick all
-cores while waiting for references to be released during the net
-cleanup.  But that sounds more like a workaround for a current
-issue rather than a proper solution and will not cover possible
-issues in other parts of the code.
-
-Additionally checking for skb_zcopy() while deferring.  This might
-not be necessary, as I'm not sure if we can actually have zero copy
-packets on this path, but seems worth having for completeness as we
-should never defer such packets regardless.
-
-CC: Eric Dumazet <edumazet@google.com>
-Fixes: 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lists")
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
----
- net/core/skbuff.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 5b3559cb1d82..5660250e795f 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -726,11 +726,9 @@ void skb_release_head_state(struct sk_buff *skb)
- 	skb_dst_drop(skb);
- 	if (skb->destructor) {
- 		WARN_ON(in_hardirq());
--		skb->destructor(skb);
-+		skb_orphan(skb);
- 	}
--#if IS_ENABLED(CONFIG_NF_CONNTRACK)
--	nf_conntrack_put(skb_nfct(skb));
--#endif
-+	nf_reset_ct(skb);
- 	skb_ext_put(skb);
- }
- 
-@@ -6502,7 +6500,8 @@ void skb_attempt_defer_free(struct sk_buff *skb)
- 
- 	if (WARN_ON_ONCE(cpu >= nr_cpu_ids) ||
- 	    !cpu_online(cpu) ||
--	    cpu == raw_smp_processor_id()) {
-+	    cpu == raw_smp_processor_id() ||
-+	    skb_zcopy(skb)) {
- nodefer:	__kfree_skb(skb);
- 		return;
- 	}
-@@ -6512,6 +6511,13 @@ nodefer:	__kfree_skb(skb);
- 	if (READ_ONCE(sd->defer_count) >= defer_max)
- 		goto nodefer;
- 
-+	/* skb can contain all kinds of external references that
-+	 * will prevent module unloading or destruction of other
-+	 * resources.  Need to release them now, since skb can
-+	 * stay on a defer list indefinitely.
-+	 */
-+	skb_release_head_state(skb);
-+
- 	spin_lock_irqsave(&sd->defer_lock, flags);
- 	/* Send an IPI every time queue reaches half capacity. */
- 	kick = sd->defer_count == (defer_max >> 1);
--- 
-2.34.3
-
+> 
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+>   fs/f2fs/gc.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index d5fb426e0747..f4aa3c88118b 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -37,7 +37,6 @@ static int gc_thread_func(void *data)
+>   	unsigned int wait_ms;
+>   	struct f2fs_gc_control gc_control = {
+>   		.victim_segno = NULL_SEGNO,
+> -		.should_migrate_blocks = false,
+>   		.err_gc_skipped = false };
+>   
+>   	wait_ms = gc_th->min_sleep_time;
+> @@ -113,7 +112,10 @@ static int gc_thread_func(void *data)
+>   				sbi->gc_mode == GC_URGENT_MID) {
+>   			wait_ms = gc_th->urgent_sleep_time;
+>   			f2fs_down_write(&sbi->gc_lock);
+> +			gc_control.should_migrate_blocks = true;
+>   			goto do_gc;
+> +		} else {
+> +			gc_control.should_migrate_blocks = false;
+>   		}
+>   
+>   		if (foreground) {
+> @@ -139,7 +141,9 @@ static int gc_thread_func(void *data)
+>   		if (!foreground)
+>   			stat_inc_bggc_count(sbi->stat_info);
+>   
+> -		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC;
+> +		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC ||
+> +				sbi->gc_mode == GC_URGENT_HIGH ||
+> +				sbi->gc_mode == GC_URGENT_MID;
+>   
+>   		/* foreground GC was been triggered via f2fs_balance_fs() */
+>   		if (foreground)

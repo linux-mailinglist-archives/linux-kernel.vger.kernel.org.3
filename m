@@ -2,80 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DA3550831
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E51B55083A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 06:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiFSD5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 23:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S234045AbiFSEO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 00:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiFSD5K (ORCPT
+        with ESMTP id S229639AbiFSEOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 23:57:10 -0400
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A76911C01;
-        Sat, 18 Jun 2022 20:57:09 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id d39so7594267vsv.7;
-        Sat, 18 Jun 2022 20:57:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=GbS9TDOHV4jf2htfhwIeIm8TpA0asWaDoPdyofcHL38=;
-        b=N7ZoypqMi1X63sj47YYzSqMlx18uwKWNrZZKoTFBfrqRA5Z8n9VIm+O+bB7WyRBzy9
-         ZbsS6jtzS6hufj6HZIUvgiseKETZSjywPqOsInvgF38FvnlsTdhUiWLaMZDDuKS2xAyg
-         Z81u0R+yDvsKCxkjdOKDKotE9B9No6gJgVYjqicBV+pqBUzMkFD/EUdNRQlRmuWuoSyX
-         8q1SSHpTGTzRkftVSxPDe01aX4+HiLqeCPVsVqvBuIOycWjdWA/GlmAvWyWzq+GpKR5e
-         +f5rIQkUkFD87nnCiVIoIswT41JVmtsbml89P8Q1vUW+VRyqDVOOxp0F7ZjSWIMN/sDp
-         XEew==
-X-Gm-Message-State: AJIora8Gn/TdOPDm2AWbY9+4m2P7qb+bnIJ4Wn1slinwrUNGUrUJ3OyZ
-        6Qnf7hUs/9iiMFnIWoKH9SPdmYOmOvSTcg==
-X-Google-Smtp-Source: AGRyM1uSfh6aSI/zfFzk668qTBuf6A1RkVJ3RCGLtrFnuGhW+BYOq1ahRenUh+Jg1zsvvrZ3yPWFbg==
-X-Received: by 2002:a05:6102:32c8:b0:34c:2358:1824 with SMTP id o8-20020a05610232c800b0034c23581824mr8083413vss.65.1655611028583;
-        Sat, 18 Jun 2022 20:57:08 -0700 (PDT)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id k26-20020ab0715a000000b0037f029bcf0bsm809913uao.21.2022.06.18.20.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 20:57:08 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id r15so2852271uaf.13;
-        Sat, 18 Jun 2022 20:57:08 -0700 (PDT)
-X-Received: by 2002:a9f:37a2:0:b0:379:2023:a630 with SMTP id
- q31-20020a9f37a2000000b003792023a630mr6647474uaq.73.1655611028267; Sat, 18
- Jun 2022 20:57:08 -0700 (PDT)
+        Sun, 19 Jun 2022 00:14:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136D064EE;
+        Sat, 18 Jun 2022 21:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 786EB60F54;
+        Sun, 19 Jun 2022 04:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE5FC34114;
+        Sun, 19 Jun 2022 04:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655612061;
+        bh=8swXHtNtUIz24MU/iY0uao3YyLZF/bZ9wAlFbPV4RuM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=m4+JP5b57zGUQMLnlvBtWuCVqRlR32plZm9J5zxFcEJizx2m/Lk7UyruibZ71bVqR
+         hhez7SE55eiUt8vpqfnh92gw81Zfb31HjY9FiuuSeS21lyhNz6JRR1t10h1MwGUMJC
+         cr3J+1IklelyDm3fxXj6r7vWPDul292Lq82JSumvi0G8VolF4Dl6l8f+kkaEKnpEK4
+         S8L6/pHzdayligFG1NcfZXz9NxNqRCe+VTmnag3zXm8MlR6IaWYcNdG7SKRa/4ycap
+         coBO6v/Ml1dDCzm3xHBeH3X84W2zanc+gqTXnbHPNzb2LBuV4ai3AcBOeILwJ5QMh0
+         aOdSmnj6K9A9w==
+Date:   Sat, 18 Jun 2022 21:14:21 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de, fstests <fstests@vger.kernel.org>
+Subject: [GIT PULL] xfs: bug fixes for 5.19-rc3
+Message-ID: <Yq6inbC6Y6YT0uGJ@magnolia>
 MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-11-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220618214009.2178567-11-aidanmacdonald.0x0@gmail.com>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sun, 19 Jun 2022 11:56:56 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65PLTcy53zjHA83qAaNq4y-Mmxfv4xvSuwqRLGBiwgjDQ@mail.gmail.com>
-Message-ID: <CAGb2v65PLTcy53zjHA83qAaNq4y-Mmxfv4xvSuwqRLGBiwgjDQ@mail.gmail.com>
-Subject: Re: [PATCH v3 10/16] iio: adc: axp20x_adc: Minor code cleanups
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>, michael@walle.cc,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,61 +53,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 5:40 AM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> The code may be clearer if parameters are not re-purposed to hold
-> temporary results like register values, so introduce local variables
-> as necessary to avoid that. Also, use the common FIELD_PREP macro
-> instead of a hand-rolled version.
->
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  drivers/iio/adc/axp20x_adc.c | 61 +++++++++++++++++++-----------------
->  1 file changed, 33 insertions(+), 28 deletions(-)
->
-> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
-> index 53bf7d4899d2..041511280e1e 100644
-> --- a/drivers/iio/adc/axp20x_adc.c
-> +++ b/drivers/iio/adc/axp20x_adc.c
-> @@ -15,6 +15,7 @@
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
-> +#include <linux/bitfield.h>
+Hi Linus,
 
-Sort this group of headers alphabetically please.
+Please pull this branch containing bug fixes for XFS for 5.19-rc3.
+There's not a whole lot this time around (I'm still on vacation) but
+here are some important fixes for new features merged in -rc1.
 
->
->  #include <linux/iio/iio.h>
->  #include <linux/iio/driver.h>
-> @@ -22,20 +23,20 @@
->  #include <linux/mfd/axp20x.h>
->
->  #define AXP20X_ADC_EN1_MASK                    GENMASK(7, 0)
-> -
->  #define AXP20X_ADC_EN2_MASK                    (GENMASK(3, 2) | BIT(7))
-> +
->  #define AXP22X_ADC_EN1_MASK                    (GENMASK(7, 5) | BIT(0))
->
->  #define AXP20X_GPIO10_IN_RANGE_GPIO0           BIT(0)
->  #define AXP20X_GPIO10_IN_RANGE_GPIO1           BIT(1)
-> -#define AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(x)    ((x) & BIT(0))
-> -#define AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(x)    (((x) & BIT(0)) << 1)
->
->  #define AXP20X_ADC_RATE_MASK                   GENMASK(7, 6)
-> -#define AXP813_V_I_ADC_RATE_MASK               GENMASK(5, 4)
-> -#define AXP813_ADC_RATE_MASK                   (AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
->  #define AXP20X_ADC_RATE_HZ(x)                  ((ilog2((x) / 25) << 6) & AXP20X_ADC_RATE_MASK)
-> +
->  #define AXP22X_ADC_RATE_HZ(x)                  ((ilog2((x) / 100) << 6) & AXP20X_ADC_RATE_MASK)
-> +
-> +#define AXP813_V_I_ADC_RATE_MASK               GENMASK(5, 4)
-> +#define AXP813_ADC_RATE_MASK                   (AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
+As usual, I did a test-merge with upstream master as of a few minutes
+ago, and it completed flawlessly.  Please let me know if you encounter
+any problems.
 
-Please also mention "grouping macros based on chip type" in the commit log.
+--D
 
-Otherwise,
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
 
-Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.19-fixes-1
+
+for you to fetch changes up to e89ab76d7e2564c65986add3d634cc5cf5bacf14:
+
+  xfs: preserve DIFLAG2_NREXT64 when setting other inode attributes (2022-06-15 23:13:33 -0700)
+
+----------------------------------------------------------------
+Fixes for 5.19-rc3:
+ - Fix a bug where inode flag changes would accidentally drop nrext64.
+ - Fix a race condition when toggling LARP mode.
+
+----------------------------------------------------------------
+Darrick J. Wong (3):
+      xfs: fix TOCTOU race involving the new logged xattrs control knob
+      xfs: fix variable state usage
+      xfs: preserve DIFLAG2_NREXT64 when setting other inode attributes
+
+ fs/xfs/libxfs/xfs_attr.c      |  9 +++++----
+ fs/xfs/libxfs/xfs_attr.h      | 12 +-----------
+ fs/xfs/libxfs/xfs_attr_leaf.c |  2 +-
+ fs/xfs/libxfs/xfs_da_btree.h  |  4 +++-
+ fs/xfs/xfs_attr_item.c        | 15 +++++++++------
+ fs/xfs/xfs_ioctl.c            |  3 ++-
+ fs/xfs/xfs_xattr.c            | 17 ++++++++++++++++-
+ 7 files changed, 37 insertions(+), 25 deletions(-)

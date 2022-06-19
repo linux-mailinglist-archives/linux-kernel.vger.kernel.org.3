@@ -2,81 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFD955081B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28363550820
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 05:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbiFSDfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 23:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S232043AbiFSDkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 23:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiFSDfK (ORCPT
+        with ESMTP id S229733AbiFSDk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 23:35:10 -0400
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95754E0AA;
-        Sat, 18 Jun 2022 20:35:09 -0700 (PDT)
-Received: by mail-vk1-f175.google.com with SMTP id b5so424877vkp.4;
-        Sat, 18 Jun 2022 20:35:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=PYdi3RN1EFrd9W5OnYRhUPpSnzGMgBN8JOB8wfBDroI=;
-        b=rz7qQWHyrbqjyTlEefLBPqbAqatDXLfnisjHYIMedkUqC3js7ZnyeYGsYQle/APKDU
-         Tj2A12YoNqg7t54lqrT4k+Ot2pKnhPxpLicGfS12Rnq3DdJIwFIfIuS4B0OY148lrgno
-         61pyR4IkjmEr/PG3NCMCg3qShJ/p6FPrzNZMGe8pfCzO0WxWvdMgEykqwUIoLLShYxUe
-         0JZrLba2oG5P0tb8c70SqdjrZiosah9nz+eAkHuYwvXrzNrnyiH+Ibih5GNmhUfk/Od5
-         BSZbgVVQ8zqLT5n5MWP0sf+he7b73Y6B8LrFoRCAHDUpFgaGRhn7GSf+5IxRj5ul/kYK
-         8wew==
-X-Gm-Message-State: AJIora9NVS2wDp3WKpiJWwYFJRNr0rNsasxBwdbwrJ8QVq7de0yTIcBO
-        5JITOt+/Iuxr9B4wOWUo8IfuiKxsZjrY+g==
-X-Google-Smtp-Source: AGRyM1tUqzTITQHEg4LfU/KCr4BmsIjdWYQx7TpAihFjAP/XjXdmF5yUUzbGF5mUReRJVeOYwlKpjw==
-X-Received: by 2002:a05:6122:1990:b0:36b:f70c:ba55 with SMTP id bv16-20020a056122199000b0036bf70cba55mr1223702vkb.12.1655609708486;
-        Sat, 18 Jun 2022 20:35:08 -0700 (PDT)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id r21-20020a056122015500b0035cf844fdf6sm1313728vko.53.2022.06.18.20.35.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 20:35:08 -0700 (PDT)
-Received: by mail-ua1-f43.google.com with SMTP id l9so2851359uac.4;
-        Sat, 18 Jun 2022 20:35:07 -0700 (PDT)
-X-Received: by 2002:ab0:2705:0:b0:379:7378:3c75 with SMTP id
- s5-20020ab02705000000b0037973783c75mr6476337uao.77.1655609707538; Sat, 18 Jun
- 2022 20:35:07 -0700 (PDT)
+        Sat, 18 Jun 2022 23:40:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86995EE0A;
+        Sat, 18 Jun 2022 20:40:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C77F60F31;
+        Sun, 19 Jun 2022 03:40:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A747C341C5;
+        Sun, 19 Jun 2022 03:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655610027;
+        bh=xIBW4zY8o0dIMBDkNL+vL5e593wLZH72rGNycDvq6g0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=quIGM6FY6UkXU19LL3wVxd5wenzFHp7sT0yVHQpeIIYKU7jqHpt5kUHpFCMwZuAr4
+         3fxK1Uay2polsUlUJQp2V77TrNxL0SchGbEg/p4dstxx6GdyN7NDHmZ5BYWySmF8WI
+         gMRN+PVgJqSJl+n5R4BKdBsLwVeulQyUACVyP/WVUEYjb/kKaTmGAy7GVpQBRelX+W
+         ClA/30ko6DxZf5AZj0E6AN9A3dPjxw/a0dxLXlm9ZEiPXxQH+vWlZrzMRSJ7GHo9A0
+         cuP0MFlaRxY15efHZgIVkAlgnnGYT9o5LsxKCWN95Q+cZS/17FkSTOfltU7699FLzi
+         Qzar2hWbwpINw==
+Date:   Sun, 19 Jun 2022 11:40:22 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ARM: imx25: support silicon revision 1.2
+Message-ID: <20220619034022.GZ254723@dragon>
+References: <20220602080344.208702-1-martin@kaiser.cx>
+ <20220602080344.208702-2-martin@kaiser.cx>
 MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-6-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220618214009.2178567-6-aidanmacdonald.0x0@gmail.com>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sun, 19 Jun 2022 11:34:56 +0800
-X-Gmail-Original-Message-ID: <CAGb2v6455AN7BGoUoOigvVvJ0nrrp1HvA4tsNs4AkaOKJ-mxfA@mail.gmail.com>
-Message-ID: <CAGb2v6455AN7BGoUoOigvVvJ0nrrp1HvA4tsNs4AkaOKJ-mxfA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/16] dt-bindings: power: supply: axp20x: Add AXP192 compatible
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>, michael@walle.cc,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602080344.208702-2-martin@kaiser.cx>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,35 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 5:40 AM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> The AXP192's USB power supply is similar to the AXP202 but it has
-> different USB current limits.
+On Thu, Jun 02, 2022 at 10:03:42AM +0200, Martin Kaiser wrote:
+> Update the mx25_read_cpu_rev function to recognize silicon revision 1.2
+> for imx25 chipsets.
+> 
+> Silicon revision 1.2 is mentioned in the errata document at
+> https://www.nxp.com/docs/en/errata/IMX25CE.pdf. The imx25 chips on my
+> test boards show revision 1.2 as well.
+> 
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 
-Should also mention the different register offset for VBUS status.
-
-ChenYu
-
->
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  .../bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml  | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
-> index 0c371b55c9e1..e800b3b97f0d 100644
-> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
-> @@ -22,6 +22,7 @@ properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - x-powers,axp192-usb-power-supply
->            - x-powers,axp202-usb-power-supply
->            - x-powers,axp221-usb-power-supply
->            - x-powers,axp223-usb-power-supply
-> --
-> 2.35.1
->
+Applied this one, thanks!

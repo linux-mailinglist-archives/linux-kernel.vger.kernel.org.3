@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB5E5507A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 02:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680475507AB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 02:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiFSALA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Jun 2022 20:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S232069AbiFSATd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Jun 2022 20:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFSAK7 (ORCPT
+        with ESMTP id S229446AbiFSATc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Jun 2022 20:10:59 -0400
+        Sat, 18 Jun 2022 20:19:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF7EFD26
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 17:10:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D2F1261A
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Jun 2022 17:19:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 309B1B80B43
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1FAC3411A;
-        Sun, 19 Jun 2022 00:10:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFF34B80B47
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 00:19:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C371BC3411A;
+        Sun, 19 Jun 2022 00:19:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655597454;
-        bh=pJavzBOpBup2L2XFujyF+W4cOF5r98O8lnH39scpEWM=;
+        s=k20201202; t=1655597967;
+        bh=O+ZM0Cqi3Uuf67Id2quo+Fg1yOGML3ldASAxDhGo5Rc=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PyhtF9Wwm/fzM9VqL4TSKYSYMr/ZpGzFqS8u1mazEehsHuuuOTISzzWLBeXibwTrd
-         cMv2p9TdV7k5UUOnxyBnhfVzMuX0UuERo/UrTaPJ9mpGd0Er+KDeMeEpdRTzrU7WI1
-         6X5qFY5P0dULAPEnlBU+kBtsu6DV+Lu0/zYaqN97GiNL5dzaelMLTW0MY8NW8CwWH1
-         yLrP+R+0sCQAHLAME/C/E1OxBj33bdL5gcNyp5UACwWxoLkqctZ6xozqgO0r1M/7R3
-         WXdM+Ait16ErrahcTmz3+jrEbrdNeVRTRXtI1FTDItaR3kcx9AxYUfLp2zHJPorAbi
-         DSiStkGAIsYuw==
-Message-ID: <f3fd41e1-ea76-a7d7-4890-ff66ea87b7ab@kernel.org>
-Date:   Sun, 19 Jun 2022 08:10:52 +0800
+        b=lpwSoKfTLpwYlyWtUcBvaxcEx57QevVx86/RiKuwR1uZKMNsxCAmAL29HhlNP9N2G
+         VsI9bWwIRCOmgKYr8uYXIUI5Q0HDTlkPCoDN9w4XTW1NrMqTWk8NA24g1y1ymIuq0Z
+         x5L8FGe6Hb5qmNrbOXcBbSXGCKbsT2ElamEty7/wsSt9aQKWahwwDQsUiJH1l4z+AI
+         zgmTyaEdqkrkhmBO3I2nsXteph/IDSj4BErcMC4VArtJryvHB30fPWEAhQtQ4kbhCW
+         ioyyLa8xOHr5GzkIEdEk9zjtYJ87uePMP6zNtNbbS78MGNmeChQxU/ub2dwixVCBdi
+         Sy+FUECcrDfSw==
+Message-ID: <0c139517-e976-5017-8e7a-d34c38f0f6bb@kernel.org>
+Date:   Sun, 19 Jun 2022 08:19:25 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] f2fs-tools: fix to check free space before grow
+Subject: Re: [PATCH v2] erofs: update ctx->pos for every emitted dirent
 Content-Language: en-US
-To:     qixiaoyu1 <qxy65535@gmail.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, qixiaoyu1 <qixiaoyu1@xiaomi.com>
-References: <20220614114929.6897-1-qixiaoyu1@xiaomi.com>
- <20220614114929.6897-2-qixiaoyu1@xiaomi.com>
+To:     Hongnan Li <hongnan.li@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org, xiang@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
+ <20220609034006.76649-1-hongnan.li@linux.alibaba.com>
 From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220614114929.6897-2-qixiaoyu1@xiaomi.com>
+In-Reply-To: <20220609034006.76649-1-hongnan.li@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,93 +58,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 19:49, qixiaoyu1 wrote:
-> Otherwise, after grow, kernel may report below error message
-> when we mount the image if -o parameter is specified during resize:
+On 2022/6/9 11:40, Hongnan Li wrote:
+> erofs_readdir update ctx->pos after filling a batch of dentries
+> and it may cause dir/files duplication for NFS readdirplus which
+> depends on ctx->pos to fill dir correctly. So update ctx->pos for
+> every emitted dirent in erofs_fill_dentries to fix it.
 > 
-> F2FS-fs (loop0): invalid crc_offset: 0
-> F2FS-fs (loop0): Wrong valid_user_blocks: 16404, user_block_count: 13312
-> F2FS-fs (loop0): Failed to get valid F2FS checkpoint
-> mount(2) system call failed: Structure needs cleaning.
+> Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
+> Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
+> ---
+>   fs/erofs/dir.c | 20 ++++++++++----------
+>   1 file changed, 10 insertions(+), 10 deletions(-)
 > 
-> Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+> diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
+> index 18e59821c597..94ef5287237a 100644
+> --- a/fs/erofs/dir.c
+> +++ b/fs/erofs/dir.c
+> @@ -22,10 +22,9 @@ static void debug_one_dentry(unsigned char d_type, const char *de_name,
+>   }
+>   
+>   static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
+> -			       void *dentry_blk, unsigned int *ofs,
+> +			       void *dentry_blk, struct erofs_dirent *de,
+>   			       unsigned int nameoff, unsigned int maxsize)
+>   {
+> -	struct erofs_dirent *de = dentry_blk + *ofs;
+>   	const struct erofs_dirent *end = dentry_blk + nameoff;
+>   
+>   	while (de < end) {
+> @@ -59,9 +58,8 @@ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
+>   			/* stopped by some reason */
+>   			return 1;
+>   		++de;
+> -		*ofs += sizeof(struct erofs_dirent);
+> +		ctx->pos += sizeof(struct erofs_dirent);
+>   	}
+> -	*ofs = maxsize;
+>   	return 0;
+>   }
+>   
+> @@ -95,7 +93,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+>   				  "invalid de[0].nameoff %u @ nid %llu",
+>   				  nameoff, EROFS_I(dir)->nid);
+>   			err = -EFSCORRUPTED;
+> -			goto skip_this;
+> +			break;
+>   		}
+>   
+>   		maxsize = min_t(unsigned int,
+> @@ -106,17 +104,19 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+>   			initial = false;
+>   
+>   			ofs = roundup(ofs, sizeof(struct erofs_dirent));
+> -			if (ofs >= nameoff)
+> +			if (ofs >= nameoff) {
+> +				ctx->pos = blknr_to_addr(i) + ofs;
+>   				goto skip_this;
+> +			}
+>   		}
+>   
+> -		err = erofs_fill_dentries(dir, ctx, de, &ofs,
+> -					  nameoff, maxsize);
+> -skip_this:
+>   		ctx->pos = blknr_to_addr(i) + ofs;
 
-It looks this patch should be merged into previous one, otherwise
--o option support is broken for resize.f2fs.
+Why updating ctx->pos before erofs_fill_dentries()?
 
 Thanks,
 
-> ---
->   fsck/resize.c | 36 ++++++++++++++++++++++++------------
->   1 file changed, 24 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fsck/resize.c b/fsck/resize.c
-> index d19c6fa..e135b66 100644
-> --- a/fsck/resize.c
-> +++ b/fsck/resize.c
-> @@ -599,6 +599,26 @@ static void rebuild_checkpoint(struct f2fs_sb_info *sbi,
->   	DBG(0, "Info: Done to rebuild checkpoint blocks\n");
->   }
->   
-> +static int f2fs_resize_check(struct f2fs_sb_info *sbi, struct f2fs_super_block *new_sb)
-> +{
-> +	struct f2fs_checkpoint *cp = F2FS_CKPT(sbi);
-> +	block_t user_block_count;
-> +	unsigned int overprov_segment_count;
-> +
-> +	overprov_segment_count = (get_newsb(segment_count_main) -
-> +			c.new_reserved_segments) *
-> +			c.new_overprovision / 100;
-> +	overprov_segment_count += c.new_reserved_segments;
-> +
-> +	user_block_count = (get_newsb(segment_count_main) -
-> +			overprov_segment_count) * c.blks_per_seg;
-> +
-> +	if (get_cp(valid_block_count) > user_block_count)
-> +		return -1;
-> +
-> +	return 0;
-> +}
-> +
->   static int f2fs_resize_grow(struct f2fs_sb_info *sbi)
->   {
->   	struct f2fs_super_block *sb = F2FS_RAW_SUPER(sbi);
-> @@ -616,6 +636,9 @@ static int f2fs_resize_grow(struct f2fs_sb_info *sbi)
->   	if (get_new_sb(new_sb))
->   		return -1;
->   
-> +	if (f2fs_resize_check(sbi, new_sb) < 0)
-> +		return -1;
-> +
->   	/* check nat availability */
->   	if (get_sb(segment_count_nat) > get_newsb(segment_count_nat)) {
->   		err = shrink_nats(sbi, new_sb);
-> @@ -659,11 +682,8 @@ static int f2fs_resize_shrink(struct f2fs_sb_info *sbi)
->   	struct f2fs_super_block *sb = F2FS_RAW_SUPER(sbi);
->   	struct f2fs_super_block new_sb_raw;
->   	struct f2fs_super_block *new_sb = &new_sb_raw;
-> -	struct f2fs_checkpoint *cp = F2FS_CKPT(sbi);
->   	block_t old_end_blkaddr, old_main_blkaddr;
->   	block_t new_end_blkaddr, new_main_blkaddr, tmp_end_blkaddr;
-> -	block_t user_block_count;
-> -	unsigned int overprov_segment_count;
->   	unsigned int offset;
->   	int err = -1;
->   
-> @@ -674,15 +694,7 @@ static int f2fs_resize_shrink(struct f2fs_sb_info *sbi)
->   	if (get_new_sb(new_sb))
->   		return -1;
->   
-> -	overprov_segment_count = (get_newsb(segment_count_main) -
-> -			c.new_reserved_segments) *
-> -			c.new_overprovision / 100;
-> -	overprov_segment_count += c.new_reserved_segments;
 > -
-> -	user_block_count = (get_newsb(segment_count_main) -
-> -			overprov_segment_count) * c.blks_per_seg;
-> -
-> -	if (get_cp(valid_block_count) > user_block_count)
-> +	if (f2fs_resize_check(sbi, new_sb) < 0)
->   		return -1;
->   
->   	/* check nat availability */
+> +		err = erofs_fill_dentries(dir, ctx, de, (void *)de + ofs,
+> +					  nameoff, maxsize);
+>   		if (err)
+>   			break;
+> +		ctx->pos = blknr_to_addr(i) + maxsize;
+> +skip_this:
+>   		++i;
+>   		ofs = 0;
+>   	}

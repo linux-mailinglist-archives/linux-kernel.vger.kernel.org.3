@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C32550C56
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 19:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BB6550C55
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 19:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237200AbiFSRU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 13:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235826AbiFSRUV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S237050AbiFSRUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 19 Jun 2022 13:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231955AbiFSRUT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Jun 2022 13:20:19 -0400
 Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A6D63BC;
-        Sun, 19 Jun 2022 10:20:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B2F63D6;
+        Sun, 19 Jun 2022 10:20:18 -0700 (PDT)
 Received: by mail-oi1-f170.google.com with SMTP id l81so11157157oif.9;
-        Sun, 19 Jun 2022 10:20:20 -0700 (PDT)
+        Sun, 19 Jun 2022 10:20:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=xkwVv8V4b5np7XYTkDScjgOmxgXLUCZhN9zsm7qCOtI=;
-        b=5UpWJNWh/v7ZIjvFoeV7I3V8Sdi22ZnpkpNubUuvuJtljZMr/xusKCHZQ3IcDyFqBy
-         yHBofFVTnjqDi1Z1gQSUGigtJAJDJ43pw+It9sXeTJ4NbOlPRMCNN9mLFJLnl0/HUQyd
-         uv5yUPKC/Xl5rAH+0DmJCZomMcvhI6OoR8gWeMsMfWfWtHGyCnTZAsbjrGpluYtnqa2x
-         Ii1qr1nH63xegZpwor4mGkvWiG0ND+KWbXXrcpBJJHVqK9lFyUP8oy3LJBFlBhAf0D67
-         lRFKm+NfUInGlA2EC+TMdLFws6DY5/HX5o7/qsw7I4hJU7SKODNvOFAMI/rqPG+30+br
-         OHaA==
-X-Gm-Message-State: AOAM531ywOQIIUbwDzGxmE4w7aTWfVPqODtRvqvUnohp2RVr0C9XFgPd
-        TpJdc/Zxj+FrtZHorR3jqg==
-X-Google-Smtp-Source: ABdhPJxrsYzSMBA8xa42ADd8FzzuHAkNGJSKJk3lpF+uEUMxnXDyXZICiwp2ff0TOwQGSpLF5Qd2uA==
-X-Received: by 2002:a05:6808:1204:b0:325:7ce2:77f6 with SMTP id a4-20020a056808120400b003257ce277f6mr15063203oil.165.1655659220507;
-        Sun, 19 Jun 2022 10:20:20 -0700 (PDT)
+        bh=cvcofqYVEQjCaj+AkeCKgXWxJh7cQwGp0V6JPFxdw0U=;
+        b=66Fz+hARvPXMT0IOaeECggjPZf/Af5tP3K4r72OwzL6rvWm0wl/jjIZor0YGrTTMLp
+         or8Yh9VOlb29FM/iIrErRFSoS0e46buzojXU7zqjy0i5TdsEJJc/dzTzdZESCLxkBpFb
+         ONtjRwdE8aMIHN5OqopWEHYWYsplak4YIMoFeXuilWQQNrVI8CCNnpanDCTqmcYJGOOx
+         d3xP/Jf1COY/AGrLXcaFa+fy7yOyUic5EDqRw3pLad/bnUia0a633kOH2MVWKAg+BwzT
+         vSzcOFX3xQBwmSZWuYt1bgEXti37hAAYgUJXzv9fRnttejdbBoHeBs1tSz2xHJrlGec8
+         0mkQ==
+X-Gm-Message-State: AJIora+d6EpsYmbPXiEWX/hooBcMExlK1AViHZhl8+LDMXd46S5wAzMn
+        YnC3TYu46ksrOYK8VRXplkLgCLWTpQ==
+X-Google-Smtp-Source: AGRyM1t4tv/5kd90UFjFUm8xqek2f0yIoId8FFpWPvSKMDeM5k+UARzGxxo+/61ii0CM8eNGdjOrJA==
+X-Received: by 2002:a05:6808:14c5:b0:32e:f7b9:99a2 with SMTP id f5-20020a05680814c500b0032ef7b999a2mr9751321oiw.174.1655659217362;
+        Sun, 19 Jun 2022 10:20:17 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id bj11-20020a056808198b00b00325cda1ffb4sm5978865oib.51.2022.06.19.10.20.18
+        by smtp.gmail.com with ESMTPSA id d1-20020a056870540100b000f342119f41sm5899475oan.42.2022.06.19.10.20.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 10:20:20 -0700 (PDT)
-Received: (nullmailer pid 1922483 invoked by uid 1000);
+        Sun, 19 Jun 2022 10:20:16 -0700 (PDT)
+Received: (nullmailer pid 1922480 invoked by uid 1000);
         Sun, 19 Jun 2022 17:20:15 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     broonie@kernel.org, brgl@bgdev.pl, rafael@kernel.org,
-        wens@csie.org, sebastian.reichel@collabora.com,
-        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
-        quic_gurus@quicinc.com, michael@walle.cc, sre@kernel.org,
-        lee.jones@linaro.org, lars@metafoo.de, jic23@kernel.org,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, lgirdwood@gmail.com,
-        linux-iio@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-gpio@vger.kernel.org
-In-Reply-To: <20220618214009.2178567-7-aidanmacdonald.0x0@gmail.com>
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-7-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [PATCH v3 06/16] dt-bindings: gpio: Add AXP192 GPIO bindings
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc:     devicetree@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        michals@xilinx.com, linux-pci@vger.kernel.org
+In-Reply-To: <20220618024459.7554-2-bharat.kumar.gogada@xilinx.com>
+References: <20220618024459.7554-1-bharat.kumar.gogada@xilinx.com> <20220618024459.7554-2-bharat.kumar.gogada@xilinx.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
 Date:   Sun, 19 Jun 2022 11:20:15 -0600
-Message-Id: <1655659215.223742.1922482.nullmailer@robh.at.kernel.org>
+Message-Id: <1655659215.212817.1922479.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -67,25 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Jun 2022 22:39:59 +0100, Aidan MacDonald wrote:
-> The AXP192 PMIC is different enough from the PMICs supported by
-> the AXP20x GPIO driver to warrant a separate driver. The AXP192
-> driver also supports interrupts and pinconf settings.
+On Sat, 18 Jun 2022 08:14:58 +0530, Bharat Kumar Gogada wrote:
+> Xilinx Versal Premium series has CPM5 block which supports Root Port
+> functionality at Gen5 speed.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
+> 
+> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
 > ---
->  .../bindings/gpio/x-powers,axp192-gpio.yaml   | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+>  .../bindings/pci/xilinx-versal-cpm.yaml       | 38 ++++++++++++++++++-
+>  1 file changed, 37 insertions(+), 1 deletion(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml:17:7: [warning] wrong indentation: expected 4 but found 6 (indentation)
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.example.dts:18.26-23.11: Warning (unit_address_vs_reg): /example-0/gpio@0: node has a unit name, but no reg or ranges property
 
 doc reference errors (make refcheckdocs):
 

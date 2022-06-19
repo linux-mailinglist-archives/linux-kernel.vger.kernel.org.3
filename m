@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC7F550CC7
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1801E550CCA
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Jun 2022 21:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbiFSTho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 15:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S234036AbiFSTmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 15:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiFSThm (ORCPT
+        with ESMTP id S232258AbiFSTmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 15:37:42 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E063B31;
-        Sun, 19 Jun 2022 12:37:40 -0700 (PDT)
-Date:   Sun, 19 Jun 2022 12:37:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1655667458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YC8yB2PG4+G4xynDd4qhQyEPOAofxKVrbu3RRitWED4=;
-        b=qD+Mvbj8IaI6qDNJWPeluOnJwp3jOJoDFAlyYvn3hpSvpPHCy2u9O7pXCmd/wKVQaa191Z
-        BL+H+G8SckXSSX4/zrN40egc6e0GXplsUqbnw5+JYBugq02IQYc5TAljDysQhZNjUYe+lb
-        /lPOYR+3IUzs8PTIkjMG8AUO96ECJrU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, longman@redhat.com
-Subject: Re: [PATCH v5 07/11] mm: memcontrol: make all the callers of
- {folio,page}_memcg() safe
-Message-ID: <Yq96/NEanbbUUUIW@castle>
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
- <20220530074919.46352-8-songmuchun@bytedance.com>
+        Sun, 19 Jun 2022 15:42:53 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28792189
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 12:42:50 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso8437617pjk.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 12:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nCs87Dk/aKCfwCETT4OMFZvnQ0qo0jo5IYu3+Wptn0s=;
+        b=fwYlDqRSLxTMl5+ku1DyMIQBOAuUnuVibTqYnRU3/vT2MIXjw2jzjVP+CG8tOerlZm
+         DAS9S4Ze26zFEPbEE02guXPqS3OsObT3HuUe9UuTC4NScQ5ErHgIBikdhyWO5rBpHV8R
+         BFzI6ygy7/JmFitOivznMsErlWTuXlNKLmUWLMZbFCfjpMziwTa8xwxpMuWtZdwVaETK
+         RKX/Kt+xOoh/GMk6UpROcB7652pvOydb7MnWMN+jWCZNcub++mY/6O2+Dh4iipfP2YN+
+         A7o7OV4cspXKvytT7VnliUtOt0WTh1pxrDZ3vglyTCPQRs4Tcp8qeP3/BUJ3umOUUFJF
+         feqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nCs87Dk/aKCfwCETT4OMFZvnQ0qo0jo5IYu3+Wptn0s=;
+        b=jklGLy0ZYhLB6OV8pi0FFkq8a1nbjnSd75P9wHfl5krQ21VfhtWBd1cdCvdRclqDk/
+         51sU+ebqS3/W6Ck/RShneqHVw02RBUq9sLfAWMkhUOPTquAdkgkVxrzGiWAm0ERX7/0r
+         vdgyYZXWzh21g4WFy3TLgxEEfBgyQZIdgOHAiE2myTLYJftxOw9m6RX9Rwla8Q2qTZzO
+         70cOhFGr7gdBnW9jxpL6j28qdtL1vr6HjYmRX2V/jHf3fe80cIWhpGLKDJsVGfKpbxzx
+         41ZJBMxFqVJQ45ryRSbYbwb5lvW9bEA5WlXX5CKca/7CQcEk0nhtbxJsr+e574eTS4DI
+         U0ZA==
+X-Gm-Message-State: AJIora/w03IC93NKT9LebwOvD1WPmwmYSa2OyjIGPsWGCK9eKIylBher
+        tB8zD+IydpbgRVIc7WSizoM=
+X-Google-Smtp-Source: AGRyM1segxxj5LTL7p0h4ydvGeT/uE/ijZCyoz+pBMMGd4fYW0IoeUCmajONVnjUqJviS7CNCvt60g==
+X-Received: by 2002:a17:902:a405:b0:167:97e4:6038 with SMTP id p5-20020a170902a40500b0016797e46038mr20419475plq.144.1655667770304;
+        Sun, 19 Jun 2022 12:42:50 -0700 (PDT)
+Received: from localhost (c-67-180-87-133.hsd1.ca.comcast.net. [67.180.87.133])
+        by smtp.gmail.com with ESMTPSA id j16-20020a17090a7e9000b001e2afd35791sm6732389pjl.18.2022.06.19.12.42.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 12:42:49 -0700 (PDT)
+From:   Chang Yu <marcus.yu.56@gmail.com>
+To:     Larry.Finger@lwfinger.net, paskripkin@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Chang Yu <marcus.yu.56@gmail.com>
+Subject: [PATCH v2 0/5] Fixed some coding style issues and spelling
+Date:   Sun, 19 Jun 2022 12:42:26 -0700
+Message-Id: <cover.1655666628.git.marcus.yu.56@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220618204454.16071-1-marcus.yu.56@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530074919.46352-8-songmuchun@bytedance.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 03:49:15PM +0800, Muchun Song wrote:
-> When we use objcg APIs to charge the LRU pages, the page will not hold
-> a reference to the memcg associated with the page. So the caller of the
-> {folio,page}_memcg() should hold an rcu read lock or obtain a reference
-> to the memcg associated with the page to protect memcg from being
-> released. So introduce get_mem_cgroup_from_{page,folio}() to obtain a
-> reference to the memory cgroup associated with the page.
-> 
-> In this patch, make all the callers hold an rcu read lock or obtain a
-> reference to the memcg to protect memcg from being released when the LRU
-> pages reparented.
-> 
-> We do not need to adjust the callers of {folio,page}_memcg() during
-> the whole process of mem_cgroup_move_task(). Because the cgroup migration
-> and memory cgroup offlining are serialized by @cgroup_mutex. In this
-> routine, the LRU pages cannot be reparented to its parent memory cgroup.
-> So {folio,page}_memcg() is stable and cannot be released.
-> 
-> This is a preparation for reparenting the LRU pages.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Fixed a few coding style issues and some spelling errors in the
+comments.
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Changes in v2:
+Separated the original big patch into 5 smaller patches so that each
+clean up is in its own patch.
 
-The locking seems to be correct. I'm slightly worried about a potential
-perf degradation, especially on dying cgroups, where css_get() is relatively
-expensive. I hope getting it into mm-unstable will help to determine
-whether it's actually a problem.
+Chang Yu (5):
+  Staging: r8188eu: core: rtw_xmit: Fixed some whitespace coding style
+    issues
+  Staging: r8188eu: core: rtw_xmit: Fixed two indentation coding style
+    issues.
+  Staging: r8188eu: core: rtw_xmit: Fixed some spelling errors in the
+    comments
+  Staging: r8188eu: core: rtw_xmit: Fixed a brace coding style issue
+  Staging: r8188eu: core: rtw_xmit: Fixed a coding style issue
 
-Thanks!
+ drivers/staging/r8188eu/core/rtw_xmit.c | 28 ++++++++++---------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
+
+-- 
+2.36.1
+

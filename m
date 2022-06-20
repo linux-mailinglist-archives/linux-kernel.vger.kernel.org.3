@@ -2,381 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E71C552809
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2284A5527E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347229AbiFTXQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 19:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S1347041AbiFTXNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 19:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347120AbiFTXMG (ORCPT
+        with ESMTP id S1345657AbiFTXMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 19:12:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9638222A5;
-        Mon, 20 Jun 2022 16:10:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90C7561515;
-        Mon, 20 Jun 2022 23:10:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D7AC341EF;
-        Mon, 20 Jun 2022 23:10:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655766632;
-        bh=xl4Qv/D8eO08gmDd70pGOWhnlkzRN6HwvsTr8ErlRVs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PeJnwQLjb2yr4ZKchVmSDjcE/5bVBREF2ju+diiQNUrbqfyWJJYCOScGoWeCatTlA
-         +p50b69yLyT9aVH0DCMwVi4A00NrVzILftBP23XTuRorgdNKQLMDyMWOUvjwLyE9uW
-         cG6nuvxpSYN0FdUsvkXBAB1xqzp7Ppy4jFO7IOL7hDD/5clVvVfEnt3YLjjmULdLIG
-         yNTQIcStxJspHy9+66VYx3rAkLvhlKAcA6WFg3MtuJ2qbw8bRA5ZPlwYsqcu0VEXLa
-         qtVKzOE5U1/FuitQavSKjnlIJ6Zh0tQc2CZXpOAqDgr6qHZHVrlkYo3akrVS+2JBgB
-         g/hhMMvXl1YnQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 71F0A5C11DB; Mon, 20 Jun 2022 16:10:31 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Frederic Weisbecker <frederic@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Yu Liao <liaoyu15@huawei.com>, Phil Auld <pauld@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Alex Belits <abelits@marvell.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 19/23] rcu/context-tracking: Remove unused and/or unecessary middle functions
-Date:   Mon, 20 Jun 2022 16:10:25 -0700
-Message-Id: <20220620231029.3844583-19-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220620231027.GA3844372@paulmck-ThinkPad-P17-Gen-1>
-References: <20220620231027.GA3844372@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 20 Jun 2022 19:12:03 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2069.outbound.protection.outlook.com [40.107.92.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561DB2656B;
+        Mon, 20 Jun 2022 16:10:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hWVSNR/V6XvJTAR1uyLyoTEMLGCb7xbku7zL9xTXqKaqE1g4nVeirMAIq6CDd6p/pGbwHqnfZqXFgstSaaM3Qeb25SvKkffJaO7d1wxfaLRiyi7pGRNz69TZdi/M5iIO9z0X7VpsB8zSmnqGmznYS/WP+pjgLS7AiArjnrln6GQomCTJWJx6jbIdk6SvRwNWJcV+RGVwZXo6ImHYWCYGsaxhssnG75A5tbLrXD0AdqHj70AB1E++6I8wGu7V7gfZljO+FxVOzd1VC4fH5r7SrrKnfkdFoNYnxgDrb4EAWvPW86BPujZnJgVQfbr3vUAqjYpUN0+Bw7Wpj11BUlOsMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4JMLgkVDvhzMk7w43N7Ul4IJDstTk91YQUuH7g0xi1A=;
+ b=NGt/nKPxz9aoghB7GGIBFIDNNgNSR0oSd6/z0BODxdFMd7+QYKLTNCaUCBNhygFWCVQIpNDu5sHFJgZza4+6o4H7DL5x/kdlxTNMBFCU4/ak2CuChpBXg5jahjE9AzR3O4kDSSXbRZIgAtPDFR9rS1C/WLZZ6h12kdAtxZOxidT9ihBZ7ixJru0B/eOlNHnQHdb8LCRema+GwbBRUtNNdERr/SsnK2Jmjv8d/hlKuRILhCXcvUn/ZTd9yLBFto+a1fKbEWZT6VEIlO5sx53UKI4LzBHct+c/Z0mylhIEZwxvHfDB0t1BOamTXpcEfHlI5tiTP3zMzgikZORbgCoVvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4JMLgkVDvhzMk7w43N7Ul4IJDstTk91YQUuH7g0xi1A=;
+ b=OHLs2+nP6m0DLt1SDuWdeemHeGHHbWVOIzGYODqbKUIP9peYHLH9WJ6uOm6Fyh5Oj0WNdT+ulWiK4ft8ZR8O7vEkFJ7Uf3x5ZnFI1eHTiVkCMZcm6Us59tOk6Ds5bwXZ8nm/WnQom1KRcZi+vK0tSxjpH+3b0y3cznA2J7fKmPg=
+Received: from DS7PR03CA0105.namprd03.prod.outlook.com (2603:10b6:5:3b7::20)
+ by BN8PR12MB3380.namprd12.prod.outlook.com (2603:10b6:408:43::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Mon, 20 Jun
+ 2022 23:10:38 +0000
+Received: from DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b7:cafe::ae) by DS7PR03CA0105.outlook.office365.com
+ (2603:10b6:5:3b7::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
+ Transport; Mon, 20 Jun 2022 23:10:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT051.mail.protection.outlook.com (10.13.172.243) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Mon, 20 Jun 2022 23:10:38 +0000
+Received: from ashkalraubuntuserver.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 20 Jun 2022 18:10:35 -0500
+From:   Ashish Kalra <Ashish.Kalra@amd.com>
+To:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
+        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <michael.roth@amd.com>, <vbabka@suse.cz>, <kirill@shutemov.name>,
+        <ak@linux.intel.com>, <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>
+Subject: [PATCH Part2 v6 34/49] KVM: SVM: Do not use long-lived GHCB map while setting scratch area
+Date:   Mon, 20 Jun 2022 23:10:26 +0000
+Message-ID: <c5125b9135bfbb0ddd113bdf4a1efd74e8c91c59.1655761627.git.ashish.kalra@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1655761627.git.ashish.kalra@amd.com>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 08acb551-e3b5-411a-1edf-08da5312170e
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3380:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB33805418BC3557781746BDEB8EB09@BN8PR12MB3380.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dXh+Uj4QoD+bereIe9VZH4MUltN/lzUaxh3YqNXbXM8tTbVb+Gah3pY/mKt2GC6vLhBSGPqlAaRxnBZxL8N5zTLqyO/t/LoUBU5l7VgpJYN5fFyeFxSGx8Rv+EfJ/p7hQKMQD3gIBS2MyKS489KVIfL5GwjJUYtuxfNrQj5ySnHJOhAKYtIZxQYwKrmoBcjGQrE3qZoQZG/UvakVup4aV2MZdgfQfJPTmwYOILtIBJ/45MaUQsTKBNwgwu8vm2J3jMtAiUOKn2vmuAzDqcWbn0fxUuf5n4cpwHjLMzQzjfveubgP+ylVbMThGOi/Hf88jRL2XGNcpmBf3y2yi37duhNZS7OR6KNLjvxqy5ryyoeqzSi29SxhYC/lWsmum101dNGi8yzq8yVt7JgFnLjU+LHxN6NSGVKO6yDmn3SLIHTTnDkIKhCt5heRcf3TowhpgCdYwrYDYOLSKBdfPQ1fO8ah4QujkgVEb73XLJUwadaZZ/z5XXEiiMJ8HmdainGt/+ZnpVPmicnVMWIWf5ttxtlsXKtQTa8AbS56vdl6uxzCtX4jHPF/MJvFbKtAZGJdnSrFwIBNq18H1CuNbXW8NimNTwEkZuQiJo3noxoyidrZD8qGzCR7Zx5jb+ZTLTlORsQWZmgUq5NR5X+dX1p0Mrwhz0WnzXXFB0LdXdlXMxpqCF6K4vkSdWlLWSAmsCwsFARTfTtltdPggqmLc8ugINPjIxadA/3SWHxqEabZmf6q4OuzhcZJyBkTQHZhkLCgvoNKv0QF0SFqxag8o+j7tA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(376002)(346002)(36840700001)(46966006)(40470700004)(186003)(41300700001)(26005)(36860700001)(2906002)(6666004)(40460700003)(36756003)(7696005)(478600001)(81166007)(82310400005)(8676002)(110136005)(54906003)(316002)(5660300002)(8936002)(7406005)(7416002)(47076005)(70206006)(40480700001)(70586007)(4326008)(356005)(16526019)(82740400003)(336012)(86362001)(83380400001)(2616005)(426003)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 23:10:38.6727
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08acb551-e3b5-411a-1edf-08da5312170e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3380
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+From: Brijesh Singh <brijesh.singh@amd.com>
 
-Some eqs functions are now only used internally by context tracking, so
-their public declarations can be removed.
+The setup_vmgexit_scratch() function may rely on a long-lived GHCB
+mapping if the GHCB shared buffer area was used for the scratch area.
+In preparation for eliminating the long-lived GHCB mapping, always
+allocate a buffer for the scratch area so it can be accessed without
+the GHCB mapping.
 
-Also middle functions such as rcu_user_*() and rcu_idle_*()
-which now directly call to rcu_eqs_enter() and rcu_eqs_exit() can be
-wiped out as well.
-
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc: Marcelo Tosatti <mtosatti@redhat.com>
-Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc: Yu Liao <liaoyu15@huawei.com>
-Cc: Phil Auld <pauld@redhat.com>
-Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
-Cc: Alex Belits <abelits@marvell.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 ---
- Documentation/RCU/stallwarn.rst |  2 +-
- include/linux/hardirq.h         |  8 ---
- include/linux/rcupdate.h        |  8 ---
- include/linux/rcutiny.h         |  2 -
- include/linux/rcutree.h         |  2 -
- kernel/context_tracking.c       | 98 +++++++++------------------------
- 6 files changed, 28 insertions(+), 92 deletions(-)
+ arch/x86/kvm/svm/sev.c | 74 +++++++++++++++++++-----------------------
+ arch/x86/kvm/svm/svm.h |  3 +-
+ 2 files changed, 36 insertions(+), 41 deletions(-)
 
-diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-index ce1f58a9d954b..e38c587067fc8 100644
---- a/Documentation/RCU/stallwarn.rst
-+++ b/Documentation/RCU/stallwarn.rst
-@@ -97,7 +97,7 @@ warnings:
- 	which will include additional debugging information.
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 91d3d24e60d2..01ea257e17d6 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2820,8 +2820,7 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+ 	__free_page(virt_to_page(svm->sev_es.vmsa));
  
- -	A low-level kernel issue that either fails to invoke one of the
--	variants of rcu_user_enter(), rcu_user_exit(), ct_idle_enter(),
-+	variants of rcu_eqs_enter(true), rcu_eqs_exit(true), ct_idle_enter(),
- 	ct_idle_exit(), ct_irq_enter(), or ct_irq_exit() on the one
- 	hand, or that invokes one of them too many times on the other.
- 	Historically, the most frequent issue has been an omission
-diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
-index 345cdbe9c1b70..d57cab4d4c06f 100644
---- a/include/linux/hardirq.h
-+++ b/include/linux/hardirq.h
-@@ -92,14 +92,6 @@ void irq_exit_rcu(void);
- #define arch_nmi_exit()		do { } while (0)
- #endif
- 
--#ifdef CONFIG_TINY_RCU
--static inline void rcu_nmi_enter(void) { }
--static inline void rcu_nmi_exit(void) { }
--#else
--extern void rcu_nmi_enter(void);
--extern void rcu_nmi_exit(void);
--#endif
--
- /*
-  * NMI vs Tracing
-  * --------------
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 3717cad983a67..434da1eb88cd9 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -104,14 +104,6 @@ static inline void rcu_sysrq_start(void) { }
- static inline void rcu_sysrq_end(void) { }
- #endif /* #else #ifdef CONFIG_RCU_STALL_COMMON */
- 
--#ifdef CONFIG_NO_HZ_FULL
--void rcu_user_enter(void);
--void rcu_user_exit(void);
--#else
--static inline void rcu_user_enter(void) { }
--static inline void rcu_user_exit(void) { }
--#endif /* CONFIG_NO_HZ_FULL */
--
- #if defined(CONFIG_NO_HZ_FULL) && (!defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK))
- void rcu_irq_work_resched(void);
- #else
-diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-index 591119413cf1d..900ba35c3582d 100644
---- a/include/linux/rcutiny.h
-+++ b/include/linux/rcutiny.h
-@@ -76,8 +76,6 @@ static inline int rcu_needs_cpu(void)
- static inline void rcu_virt_note_context_switch(int cpu) { }
- static inline void rcu_cpu_stall_reset(void) { }
- static inline int rcu_jiffies_till_stall_check(void) { return 21 * HZ; }
--static inline void rcu_idle_enter(void) { }
--static inline void rcu_idle_exit(void) { }
- static inline void rcu_irq_exit_check_preempt(void) { }
- #define rcu_is_idle_cpu(cpu) \
- 	(is_idle_task(current) && !in_nmi() && !in_hardirq() && !in_serving_softirq())
-diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
-index 24db1e41695c8..9cca00ed9bc9f 100644
---- a/include/linux/rcutree.h
-+++ b/include/linux/rcutree.h
-@@ -45,8 +45,6 @@ unsigned long start_poll_synchronize_rcu(void);
- bool poll_state_synchronize_rcu(unsigned long oldstate);
- void cond_synchronize_rcu(unsigned long oldstate);
- 
--void rcu_idle_enter(void);
--void rcu_idle_exit(void);
- bool rcu_is_idle_cpu(int cpu);
- 
- #ifdef CONFIG_PROVE_RCU
-diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-index f3e92705e0a89..8b0979412f755 100644
---- a/kernel/context_tracking.c
-+++ b/kernel/context_tracking.c
-@@ -189,17 +189,17 @@ static void noinstr rcu_eqs_exit(bool user)
+ skip_vmsa_free:
+-	if (svm->sev_es.ghcb_sa_free)
+-		kvfree(svm->sev_es.ghcb_sa);
++	kvfree(svm->sev_es.ghcb_sa);
  }
  
- /**
-- * rcu_nmi_exit - inform RCU of exit from NMI context
-+ * ct_nmi_exit - inform RCU of exit from NMI context
-  *
-  * If we are returning from the outermost NMI handler that interrupted an
-  * RCU-idle period, update ct->dynticks and ct->dynticks_nmi_nesting
-  * to let the RCU grace-period handling know that the CPU is back to
-  * being RCU-idle.
-  *
-- * If you add or remove a call to rcu_nmi_exit(), be sure to test
-+ * If you add or remove a call to ct_nmi_exit(), be sure to test
-  * with CONFIG_RCU_EQS_DEBUG=y.
-  */
--void noinstr rcu_nmi_exit(void)
-+void noinstr ct_nmi_exit(void)
- {
- 	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+ static void dump_ghcb(struct vcpu_svm *svm)
+@@ -2909,6 +2908,9 @@ static void sev_es_sync_from_ghcb(struct vcpu_svm *svm)
+ 	control->exit_info_1 = ghcb_get_sw_exit_info_1(ghcb);
+ 	control->exit_info_2 = ghcb_get_sw_exit_info_2(ghcb);
  
-@@ -242,7 +242,7 @@ void noinstr rcu_nmi_exit(void)
++	/* Copy the GHCB scratch area GPA */
++	svm->sev_es.ghcb_sa_gpa = ghcb_get_sw_scratch(ghcb);
++
+ 	/* Clear the valid entries fields */
+ 	memset(ghcb->save.valid_bitmap, 0, sizeof(ghcb->save.valid_bitmap));
  }
+@@ -3054,23 +3056,12 @@ void sev_es_unmap_ghcb(struct vcpu_svm *svm)
+ 	if (!svm->sev_es.ghcb)
+ 		return;
  
- /**
-- * rcu_nmi_enter - inform RCU of entry to NMI context
-+ * ct_nmi_enter - inform RCU of entry to NMI context
-  *
-  * If the CPU was idle from RCU's viewpoint, update ct->dynticks and
-  * ct->dynticks_nmi_nesting to let the RCU grace-period handling know
-@@ -250,10 +250,10 @@ void noinstr rcu_nmi_exit(void)
-  * long as the nesting level does not overflow an int.  (You will probably
-  * run out of stack space first.)
-  *
-- * If you add or remove a call to rcu_nmi_enter(), be sure to test
-+ * If you add or remove a call to ct_nmi_enter(), be sure to test
-  * with CONFIG_RCU_EQS_DEBUG=y.
-  */
--void noinstr rcu_nmi_enter(void)
-+void noinstr ct_nmi_enter(void)
- {
- 	long incby = 2;
- 	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
-@@ -302,32 +302,33 @@ void noinstr rcu_nmi_enter(void)
- }
- 
- /**
-- * rcu_idle_enter - inform RCU that current CPU is entering idle
-+ * ct_idle_enter - inform RCU that current CPU is entering idle
-  *
-  * Enter idle mode, in other words, -leave- the mode in which RCU
-  * read-side critical sections can occur.  (Though RCU read-side
-  * critical sections can occur in irq handlers in idle, a possibility
-  * handled by irq_enter() and irq_exit().)
-  *
-- * If you add or remove a call to rcu_idle_enter(), be sure to test with
-+ * If you add or remove a call to ct_idle_enter(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void noinstr rcu_idle_enter(void)
-+void noinstr ct_idle_enter(void)
- {
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
- 	rcu_eqs_enter(false);
- }
-+EXPORT_SYMBOL_GPL(ct_idle_enter);
- 
- /**
-- * rcu_idle_exit - inform RCU that current CPU is leaving idle
-+ * ct_idle_exit - inform RCU that current CPU is leaving idle
-  *
-  * Exit idle mode, in other words, -enter- the mode in which RCU
-  * read-side critical sections can occur.
-  *
-- * If you add or remove a call to rcu_idle_exit(), be sure to test with
-+ * If you add or remove a call to ct_idle_exit(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void noinstr rcu_idle_exit(void)
-+void noinstr ct_idle_exit(void)
- {
- 	unsigned long flags;
- 
-@@ -335,18 +336,6 @@ void noinstr rcu_idle_exit(void)
- 	rcu_eqs_exit(false);
- 	raw_local_irq_restore(flags);
- }
--EXPORT_SYMBOL_GPL(rcu_idle_exit);
+-	if (svm->sev_es.ghcb_sa_free) {
+-		/*
+-		 * The scratch area lives outside the GHCB, so there is a
+-		 * buffer that, depending on the operation performed, may
+-		 * need to be synced, then freed.
+-		 */
+-		if (svm->sev_es.ghcb_sa_sync) {
+-			kvm_write_guest(svm->vcpu.kvm,
+-					ghcb_get_sw_scratch(svm->sev_es.ghcb),
+-					svm->sev_es.ghcb_sa,
+-					svm->sev_es.ghcb_sa_len);
+-			svm->sev_es.ghcb_sa_sync = false;
+-		}
 -
--noinstr void ct_idle_enter(void)
--{
--	rcu_idle_enter();
--}
--EXPORT_SYMBOL_GPL(ct_idle_enter);
--
--void ct_idle_exit(void)
--{
--	rcu_idle_exit();
--}
- EXPORT_SYMBOL_GPL(ct_idle_exit);
+-		kvfree(svm->sev_es.ghcb_sa);
+-		svm->sev_es.ghcb_sa = NULL;
+-		svm->sev_es.ghcb_sa_free = false;
++	 /* Sync the scratch buffer area. */
++	if (svm->sev_es.ghcb_sa_sync) {
++		kvm_write_guest(svm->vcpu.kvm,
++				ghcb_get_sw_scratch(svm->sev_es.ghcb),
++				svm->sev_es.ghcb_sa, svm->sev_es.ghcb_sa_len);
++		svm->sev_es.ghcb_sa_sync = false;
+ 	}
  
- /**
-@@ -431,50 +420,11 @@ void ct_irq_exit_irqson(void)
- 	ct_irq_exit();
- 	local_irq_restore(flags);
- }
--
--noinstr void ct_nmi_enter(void)
--{
--	rcu_nmi_enter();
--}
--
--noinstr void ct_nmi_exit(void)
--{
--	rcu_nmi_exit();
--}
-+#else
-+static __always_inline void rcu_eqs_enter(bool user) { }
-+static __always_inline void rcu_eqs_exit(bool user) { }
- #endif /* #ifdef CONFIG_CONTEXT_TRACKING_IDLE */
+ 	trace_kvm_vmgexit_exit(svm->vcpu.vcpu_id, svm->sev_es.ghcb);
+@@ -3111,9 +3102,8 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 	struct ghcb *ghcb = svm->sev_es.ghcb;
+ 	u64 ghcb_scratch_beg, ghcb_scratch_end;
+ 	u64 scratch_gpa_beg, scratch_gpa_end;
+-	void *scratch_va;
  
--#ifdef CONFIG_NO_HZ_FULL
--/**
-- * rcu_user_enter - inform RCU that we are resuming userspace.
-- *
-- * Enter RCU idle mode right before resuming userspace.  No use of RCU
-- * is permitted between this call and rcu_user_exit(). This way the
-- * CPU doesn't need to maintain the tick for RCU maintenance purposes
-- * when the CPU runs in userspace.
-- *
-- * If you add or remove a call to rcu_user_enter(), be sure to test with
-- * CONFIG_RCU_EQS_DEBUG=y.
-- */
--noinstr void rcu_user_enter(void)
--{
--	rcu_eqs_enter(true);
--}
--
--/**
-- * rcu_user_exit - inform RCU that we are exiting userspace.
-- *
-- * Exit RCU idle mode while entering the kernel because it can
-- * run a RCU read side critical section anytime.
-- *
-- * If you add or remove a call to rcu_user_exit(), be sure to test with
-- * CONFIG_RCU_EQS_DEBUG=y.
-- */
--void noinstr rcu_user_exit(void)
--{
--	rcu_eqs_exit(true);
--}
--#endif /* #ifdef CONFIG_NO_HZ_FULL */
--
- #ifdef CONFIG_CONTEXT_TRACKING_USER
- 
- #define CREATE_TRACE_POINTS
-@@ -542,7 +492,13 @@ void noinstr __ct_user_enter(enum ctx_state state)
- 			 * that will fire and reschedule once we resume in user/guest mode.
- 			 */
- 			rcu_irq_work_resched();
--			rcu_user_enter();
-+			/*
-+			 * Enter RCU idle mode right before resuming userspace.  No use of RCU
-+			 * is permitted between this call and rcu_eqs_exit(). This way the
-+			 * CPU doesn't need to maintain the tick for RCU maintenance purposes
-+			 * when the CPU runs in userspace.
-+			 */
-+			rcu_eqs_enter(true);
+-	scratch_gpa_beg = ghcb_get_sw_scratch(ghcb);
++	scratch_gpa_beg = svm->sev_es.ghcb_sa_gpa;
+ 	if (!scratch_gpa_beg) {
+ 		pr_err("vmgexit: scratch gpa not provided\n");
+ 		goto e_scratch;
+@@ -3143,9 +3133,6 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 			       scratch_gpa_beg, scratch_gpa_end);
+ 			goto e_scratch;
  		}
+-
+-		scratch_va = (void *)svm->sev_es.ghcb;
+-		scratch_va += (scratch_gpa_beg - control->ghcb_gpa);
+ 	} else {
  		/*
- 		 * Even if context tracking is disabled on this CPU, because it's outside
-@@ -579,7 +535,7 @@ void ct_user_enter(enum ctx_state state)
- 	/*
- 	 * Some contexts may involve an exception occuring in an irq,
- 	 * leading to that nesting:
--	 * ct_irq_enter() rcu_user_exit() rcu_user_exit() ct_irq_exit()
-+	 * ct_irq_enter() rcu_eqs_exit(true) rcu_eqs_enter(true) ct_irq_exit()
- 	 * This would mess up the dyntick_nesting count though. And rcu_irq_*()
- 	 * helpers are enough to protect RCU uses inside the exception. So
- 	 * just return immediately if we detect we are in an IRQ.
-@@ -631,10 +587,10 @@ void noinstr __ct_user_exit(enum ctx_state state)
- 	if (__this_cpu_read(context_tracking.state) == state) {
- 		if (__this_cpu_read(context_tracking.active)) {
- 			/*
--			 * We are going to run code that may use RCU. Inform
--			 * RCU core about that (ie: we may need the tick again).
-+			 * Exit RCU idle mode while entering the kernel because it can
-+			 * run a RCU read side critical section anytime.
- 			 */
--			rcu_user_exit();
-+			rcu_eqs_exit(true);
- 			if (state == CONTEXT_USER) {
- 				instrumentation_begin();
- 				vtime_user_exit(current);
+ 		 * The guest memory must be read into a kernel buffer, so
+@@ -3156,29 +3143,36 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 			       len, GHCB_SCRATCH_AREA_LIMIT);
+ 			goto e_scratch;
+ 		}
+-		scratch_va = kvzalloc(len, GFP_KERNEL_ACCOUNT);
+-		if (!scratch_va)
+-			return -ENOMEM;
++	}
+ 
+-		if (kvm_read_guest(svm->vcpu.kvm, scratch_gpa_beg, scratch_va, len)) {
+-			/* Unable to copy scratch area from guest */
+-			pr_err("vmgexit: kvm_read_guest for scratch area failed\n");
++	if (svm->sev_es.ghcb_sa_alloc_len < len) {
++		void *scratch_va = kvzalloc(len, GFP_KERNEL_ACCOUNT);
+ 
+-			kvfree(scratch_va);
+-			return -EFAULT;
+-		}
++		if (!scratch_va)
++			return -ENOMEM;
+ 
+ 		/*
+-		 * The scratch area is outside the GHCB. The operation will
+-		 * dictate whether the buffer needs to be synced before running
+-		 * the vCPU next time (i.e. a read was requested so the data
+-		 * must be written back to the guest memory).
++		 * Free the old scratch area and switch to using newly
++		 * allocated.
+ 		 */
+-		svm->sev_es.ghcb_sa_sync = sync;
+-		svm->sev_es.ghcb_sa_free = true;
++		kvfree(svm->sev_es.ghcb_sa);
++
++		svm->sev_es.ghcb_sa_alloc_len = len;
++		svm->sev_es.ghcb_sa = scratch_va;
+ 	}
+ 
+-	svm->sev_es.ghcb_sa = scratch_va;
++	if (kvm_read_guest(svm->vcpu.kvm, scratch_gpa_beg, svm->sev_es.ghcb_sa, len)) {
++		/* Unable to copy scratch area from guest */
++		pr_err("vmgexit: kvm_read_guest for scratch area failed\n");
++		return -EFAULT;
++	}
++
++	/*
++	 * The operation will dictate whether the buffer needs to be synced
++	 * before running the vCPU next time (i.e. a read was requested so
++	 * the data must be written back to the guest memory).
++	 */
++	svm->sev_es.ghcb_sa_sync = sync;
+ 	svm->sev_es.ghcb_sa_len = len;
+ 
+ 	return 0;
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 7782312a1cda..bd0db4d4a61e 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -197,8 +197,9 @@ struct vcpu_sev_es_state {
+ 	/* SEV-ES scratch area support */
+ 	void *ghcb_sa;
+ 	u32 ghcb_sa_len;
++	u64 ghcb_sa_gpa;
++	u32 ghcb_sa_alloc_len;
+ 	bool ghcb_sa_sync;
+-	bool ghcb_sa_free;
+ };
+ 
+ struct vcpu_svm {
 -- 
-2.31.1.189.g2e36527f23
+2.25.1
 

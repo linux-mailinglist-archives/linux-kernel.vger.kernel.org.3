@@ -2,250 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02684552397
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413F5552398
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245021AbiFTSKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S245035AbiFTSKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238101AbiFTSKk (ORCPT
+        with ESMTP id S238101AbiFTSKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:10:40 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0691018;
-        Mon, 20 Jun 2022 11:10:38 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id o7so22694967eja.1;
-        Mon, 20 Jun 2022 11:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=zsLJ/2OoZMKtOlqDazkQ5jelDfz0Teu3KTFolSw+PAc=;
-        b=nsiYVaDmS1GrdJE6qWzsoK5WRSuZjGa7VNkhWxNDNp0re8+zob4t/hTb1sS8ZyxEd5
-         VKVEY/kr1SQzq5w/C17en3Ab/uCwuSrBQl4p/swSDC+5KBi/SjG8MaCgocUEmyRK1qNT
-         ZhKv9ww4OyGzumrj8XzFnbvd25jq75kYaIVkmmY7x28oc5g6xM2aYXPj9obAgvyIwvJ9
-         Cv29joFmFDqRe3gdo/q2VUcXmpyaX4q+bMp6N5Bl5GFurAODnUHoYeE+pv4OIJ70yX02
-         AXscFri//pwc1a0+cSh2Pi7Ja3A6RrkZy3tcTxHuqvJ0bRgtSeM1IcipQVqByd81PI2d
-         mcQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=zsLJ/2OoZMKtOlqDazkQ5jelDfz0Teu3KTFolSw+PAc=;
-        b=6mBOxMsEjnP4kJCQ5gCz6vO9N/IMm8e+/SYp8azxlMmby8LlttClKyU6u2vE9Ju73f
-         tYYP0tmOBgcVrjhYAKOI79bxczgk3Y/hA4jmgaw1JVvS/pcjl1VawhDkwxwqWcZRlIgY
-         fmPNypynejjL8cf/A5HoDiZ282Hkfhhwy/EuE+TCPHCUi52cZvqd+fjsuGfO4qj1ou/i
-         H0QlfdN5ah5/kg9iG3I2luN6DbrcURod/ShIktNf03nZysXPqFbRNFXLjhqynl3O/OS9
-         GzxnCQ+2oP+RhckThoGRZLewFYZaV1KPCkKZu/u8un8UKdulra9buFEnTEFJJaQpCdwM
-         gERw==
-X-Gm-Message-State: AJIora+k4w4+pQwY9xze4S99M4dYIj737LTMUe22ZCxTd2H17VfzyAPr
-        QaK+TCMgdn7M/Vet9mX7zNQ=
-X-Google-Smtp-Source: AGRyM1vmz3kSE1eCVEjy41bGig0wxFGvIXK7h3CRJ8lAxAvTmf4MdErDbKVNBKLetxB/p8679AKBTQ==
-X-Received: by 2002:a17:907:8a1f:b0:711:da32:8410 with SMTP id sc31-20020a1709078a1f00b00711da328410mr23054767ejc.298.1655748637320;
-        Mon, 20 Jun 2022 11:10:37 -0700 (PDT)
-Received: from [192.168.200.12] (p3ee2b637.dip0.t-ipconnect.de. [62.226.182.55])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa7d415000000b0043566884333sm7696337edq.63.2022.06.20.11.10.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 11:10:36 -0700 (PDT)
-Message-ID: <ad0e83af-b704-53b8-3963-b4dd53853f2b@message-id.googlemail.com>
-Date:   Mon, 20 Jun 2022 20:10:36 +0200
+        Mon, 20 Jun 2022 14:10:49 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C351A384
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:10:47 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 52C9F3CE49A;
+        Mon, 20 Jun 2022 14:10:46 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id oc0BcvKIYAnY; Mon, 20 Jun 2022 14:10:45 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 57FDE3CE297;
+        Mon, 20 Jun 2022 14:10:45 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 57FDE3CE297
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1655748645;
+        bh=7RkjAJHH14LaDH5ne1pcjfolggbCqKjqHqQqr6OCNF8=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=cJV6Pcln0WAq7Kb0IBGuhvyLJF0BUx4S9LMmcjIUrPTXT1f61tCX8a5UDgNVKjW2p
+         hG25qpUhBkpygCK2tKWl4193s/NogeoeFW6jHqPq63LpXh7cHnxwBwk7XAc8jD59mD
+         mmz5Y6umqPf3FOswCdMJE3FIQyVkgWrgiSJWs5UY6lg002/jrbmjJbJhM3JOQf8oVj
+         IPYhf4g6TZLWTb1gR4J8jhwmGupUtwSoFZZLHzxPTZZsm3DNA/WdBxi8SrW7ZNhbTW
+         g+0oENydyVy0h0iOEiyLLXJ0zfplzKgX0xvYFAycLtoXM++bMrC3Mbsbi0SwXA1ZRk
+         cXbaXX0TAZCuA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2nxXJeJpvzQt; Mon, 20 Jun 2022 14:10:45 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 2BBBC3CDCED;
+        Mon, 20 Jun 2022 14:10:45 -0400 (EDT)
+Date:   Mon, 20 Jun 2022 14:10:45 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Simon Marchi <simon.marchi@efficios.com>,
+        Peter Oskolkov <posk@posk.io>,
+        Chris Kennelly <ckennelly@google.com>,
+        Kevin Malachowski <chowski@google.com>,
+        Pedro Alves <palves@redhat.com>
+Cc:     Bui Quang Minh <minhquangbui99@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>
+Message-ID: <648712158.13199.1655748645141.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAJqdLroJ6eTD02dAi8Nnb63Sog5x9Pwt9CDwXaUeBQe1Sn2EBg@mail.gmail.com>
+References: <20220618182515.95831-1-minhquangbui99@gmail.com> <258546133.12151.1655739550814.JavaMail.zimbra@efficios.com> <CAJqdLroJ6eTD02dAi8Nnb63Sog5x9Pwt9CDwXaUeBQe1Sn2EBg@mail.gmail.com>
+Subject: Re: [PATCH] rseq: x86: Fix rseq_cs get cleared when returning from
+ signal handler
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Kenneth Chan <kenneth.t.chan@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stefan Seyfried <seife+kernel@b1-systems.com>,
-        Stefan Seyfried <seife+kernel@b1-systems.com>
-References: <20200821181433.17653-8-kenneth.t.chan@gmail.com>
- <20220612090507.20648-1-stefan.seyfried@googlemail.com>
- <20220612090507.20648-3-stefan.seyfried@googlemail.com>
- <CAHp75Ve+vrfSu6pD+AKe-eCVA2pC5o520y4gVwLNg9Dtk0U5bw@mail.gmail.com>
- <CAHp75VdFPUHTeDBY5ukFgVqJJn7BbTHxrxKUGOLB6P1UX-utAg@mail.gmail.com>
- <d80789bc-a8fc-de5f-164a-75adf7097311@message-id.googlemail.com>
- <6969ca0e-4a4c-c995-02a2-6645f875338c@redhat.com>
- <CAPqSeKu9csK_u0S6MiRay_mvfYejUhKbb=wvJO7F_Z-JL6F7DA@mail.gmail.com>
- <5f03f5b9-87bb-e27d-ce51-9c1572221f21@redhat.com>
- <89398c05-92c6-120d-ed51-ab62f1f404eb@message-id.googlemail.com>
- <19e590f1-e865-ad19-e9e4-df1f9274663c@redhat.com>
-From:   Stefan Seyfried <stefan.seyfried@googlemail.com>
-Subject: Re: [PATCH 2/2] platform/x86: panasonic-laptop: allow to use all
- hotkeys
-In-Reply-To: <19e590f1-e865-ad19-e9e4-df1f9274663c@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
+Thread-Topic: rseq: x86: Fix rseq_cs get cleared when returning from signal handler
+Thread-Index: jPQ8y5dBGIRhvQHRYh+bpExDAeaVOg==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+----- On Jun 20, 2022, at 11:46 AM, Alexander Mikhalitsyn alexander@mihalicyn.com wrote:
 
-On 20.06.22 17:08, Hans de Goede wrote:
-> Hi,
+> Hi Mathieu!
 > 
-> Thank you for the quick testing.
+> It comes from CRIU ;)
 > 
-> On 6/17/22 15:07, Stefan Seyfried wrote:
->> Hi Hans,
->>
->> On 17.06.22 13:07, Hans de Goede wrote:
->>
->>> Thank you for providing this info. Can you please give
->>> the attached patch series a try, this includes Stefan's 1/2 patch
->>> and replaces Stefan's 2/2 patch.
->>>
->>> This will hopefully fix the double key-presses for you, while
->>> also keeping everything working for Stefan without requiring
->>> a module option or DMI quirks.
->>>
->>> Stefan can you also give this series a try please?
->>
->> Works for me, almost out of the box.
->> I need to enable "report_key_events=1" in the video module, then the panasonic-acpi module starts reporting brightness up/down keys.
+> We have seen periodic failures of our ZDTM test (rseq02):
+> zdtm: add rseq02 transition test with NO_RESTART CS flag
+> https://github.com/checkpoint-restore/criu/commit/db9ec13616625f98db95b00438a370f8a660bfee
+> zdtm: temporary disable rseq02 test
+> https://github.com/checkpoint-restore/criu/commit/ead227994b4918422496e06d3f3802188c091a7a
 > 
-> Ok, so you need another module option that is not really helpful.
+> Bui Quang Minh wanted to investigate this problem and come up with
+> this kernel patch.
 
-Well, I looked into the acpi_video.c module and that one is to blame.
-By default, it assumes that both "OUTPUT_KEY_EVENTS" and 
-"BRIGHTNESS_KEY_EVENTS" should be handled by this module.
-But on the CF-51, this does not happen. "Video Bus" does not generate 
-any key events (I'm not sure about output, but plugging in a VGA monitor 
-and enabling/disabling it with xrandr or tapping the "display" fn-f3 
-hotkey does not get anything from "Video Bus" input device.
+OK, so from the CRIU point of view, the only use of those flags is to set them
+again when they are observed in a process which is the target of a checkpoint-restore,
+right ?
 
-> The idea behind the acpi_video_handles_brightness_key_presses() check
-> is that if the ACPI video bus device is present it is expected to
-> already report brightness up/down keypresses and we want to avoid
-> duplicates.
+I'm just tying to figure out whether there are valid real-world use-cases for this flag.
 
-Yes, but the check apparently returns true in my case, because:
+Initially, for RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT (not SIGNAL) rseq_cs flag, one use-case I
+had in mind was for a critical section for which it's only important that it stays on the same
+CPU, but can be preempted without abort. But I think the importance of not being restarted on
+preemption is limited, given that it is an optimization for a rare situation.
 
-         return have_video_busses &&
-                (report_key_events & REPORT_BRIGHTNESS_KEY_EVENTS);
+For all 3 of no-restart on preempt/migrate/signal rseq flags, another use-case I had envisioned
+was to allow debuggers to single-step through rseq critical sections by taking control of
+the scheduling of all threads belonging to a process. I wonder how realistic it is to
+expect debuggers to implement this kind of feature, especially given that rseq could
+be used with data structures shared across processes over shared memory. AFAIK none of the
+debuggers implement this today, and I don't expect debuggers nor DynamoRIO (https://dynamorio.org/page_rseq.html)
+to implement this.
 
-apparently i have a video_bus ;-) and report_key_events (== -1) & 2 is true.
+The alternative way that debuggers can handle rseq critical sections is to skip over them
+using the entry/exit points defined within rseq entry/exit points array sections, in a fashion
+not completely unlike the handling of ll/sc "atomic" code by architecture-specific heuristics.
+It does not allow single-stepping through the rseq c.s. assembly, but it does prevent retrying
+forever when trying to single-step through an rseq c.s.
 
-This check is totally fine, it's just that *the acpi_video.c* code is 
-missing a DMI match for my machine telling it that it handles nothing at 
-all.
+I'm adding a few people concerned by those topics in CC. Feedback is very welcome.
 
-> Can you check with evtest or evemu-record that the brightness
-> events are not already being delivered by the "Video Bus"
-> input device ?
+The key question here is: who would be sad to see the following flags be deprecated ?
 
-I did, nothing at all gets delivered by Video Bus.
+RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE
+RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT
+RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL
 
->> Volume and mute keys work without manual changes.
+Thanks,
+
+Mathieu
+
 > 
-> Good.
->   
->> (I tested against 5.18.2 because that's what was already prepared. That old machine takes quite some time, even to just compile the platform/x86 subdirectory ;-) but I don't think this is relevant. If you think it is, I can also test against latest 5.19-rc code)
+> Regards,
+> Alex
 > 
-> Testing against 5.18 is fine .
-> 
->>> Looking at this has also brought up an unrelated backlight question:
->>>
->>> Kenneth, since you have acpi-video reporting keypresses you will
->>> likely also have an acpi_video (or perhaps a native intel) backlight
->>> under /sys/class/backlight and I noticed that panasonic-laptop
->>> uncondirionally registers its backlight so you may very well end
->>> up with 2 backlight controls under /sys/class/backlight, which
->>> we generally try to avoid (so that userspace does not have to
->>> guess which one to use).
->>>
->>> Can you do:
->>> ls /sys/class/backlight
+> On Mon, Jun 20, 2022 at 6:39 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
 >>
->> toughbook:~ # ls -l /sys/class/backlight/
->> total 0
->> lrwxrwxrwx 1 root root 0 Jun 17 14:45 intel_backlight -> ../../devices/pci0000:00/0000:00:02.0/drm/card0/card0-LVDS-1/intel_backlight
->> lrwxrwxrwx 1 root root 0 Jun 17 14:49 panasonic -> ../../devices/virtual/backlight/panasonic
+>> ----- On Jun 18, 2022, at 2:25 PM, Bui Quang Minh minhquangbui99@gmail.com
+>> wrote:
 >>
->>> and let me know the output?
->>>
->>> Also if there are 2 backlights there then please do:
->>> cat /sys/class/backlight/<name>/max_brightness
->>> to find out the range (0-value)
+>> > rseq.rseq_cs is not expected to be cleared when we are still in critical
+>> > section. When using rseq with RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL, if the
+>> > signal is delivered, we don't restart to the abort ip but go to signal
+>> > handler then return and continue the critical section execution. While in
+>> > signal handler, if a preemption, migration or another signal is delivered,
+>> > we will fall into rseq_ip_fixup again. At that moment, the IP is in signal
+>> > handler not in critical section so the rseq.rseq_cs is cleared. Later, when
+>> > we return back to critical section from signal handlers, we get the
+>> > rseq.rseq_cs incorrectly cleared.
+>> >
+>> > Another scenario is when a preemption or migration happens, then a signal
+>> > is delivered. When preparing to return to user mode, in
+>> > exit_to_user_mode_loop, we first handle the signal and set return IP to
+>> > signal handler. After that, rseq_handle_notify_resume is called to handle
+>> > the preemption/migration, sees the IP is the address of signal handler not
+>> > in critical section and clear rseq.rseq_cs.
+>> >
+>> > To handle this case, a RSEQ_CS_FLAG_IN_SIGNAL_HANDLER is added. This flag
+>> > is set in rseq.flags (it is easier to read and update rseq.flags than
+>> > rseq.rseq_cs.flags) by the kernel when rseq does not restart on signal.
+>> > When this flag is set, we don't clear rseq.rseq_cs when the IP is outside
+>> > of critical section. The flag is unset in sigreturn path when the last
+>> > signal handler returns back to the critical section.
 >>
->> toughbook:/sys/class/backlight # grep . */max_brightness
->> intel_backlight/max_brightness:19531
->> panasonic/max_brightness:255
+>> Hi,
 >>
->>> and then try if they both work by doing:
->>>
->>> echo $number > /sys/class/backlight/<name>/brightness
->>>
->>> with different $number values in the range and see
->>> if this actually changes the brightness.
+>> You raise valid points.
 >>
->> intel_backlight: does not work
->> panasonic: does work
-> 
-> Ok, so that suggests that the ACPI video bus on your
-> device is defunct, so I guess it also does not report
-> key-presses (see above) ?
-
-Yes, it looks like ACPI video driver is totally useless on that machine.
-
-> This will also need some work then because we want to move
-> to there only being 1 (actually working) backlight-class
-> device. Rather then having multiple and let userspace
-> guess which one it needs to use.
-
-Well, the non-working backlight is coming from the i915 driver, but as 
-this is a very old Chipset (i855 GM) I'd rather be happy it works at all 
-instead of complaining ;-)
-(I have another machine of similar age, hp nc6000 with ati graphics, and 
-there is no way getting it to work somewhat reliably at all)
-
->>> While we are at it, Stefan can you do the same please?
+>> May I first ask what is your use-case for RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL ?
 >>
->> See above.
->> But hey, this is an i855GM graphics chip, I'm happy if it is still working *at all* (for example I need to avoid the xf86-intel driver and use the modesetting driver instead to get a usable sytstem)
+>> Considering the added per-arch complexity, I think we should consider whether
+>> it's worthwhile to keep supporting this flag, and whether there are actual users
+>> of it out there, or if we should handle this by deprecating this flag.
 >>
->> And I'm totally happy if all I have to do in the future is a
+>> Thanks,
 >>
->> option video report_key_events=1
+>> Mathieu
 >>
->> modprobe.conf file ;-)
-> 
-> We really don't want people to have to specify module-options just
-> to have things working.
+>> >
+>> > Reviewed-by: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+>> > Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
+>> > ---
+>> > arch/x86/kernel/signal.c  |  7 ++++
+>> > include/linux/sched.h     |  5 +++
+>> > include/uapi/linux/rseq.h |  8 +++-
+>> > kernel/rseq.c             | 80 ++++++++++++++++++++++++++++++++++++---
+>> > 4 files changed, 94 insertions(+), 6 deletions(-)
+>> >
+>> > diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+>> > index 9c7265b524c7..7aadf69d6849 100644
+>> > --- a/arch/x86/kernel/signal.c
+>> > +++ b/arch/x86/kernel/signal.c
+>> > @@ -646,6 +646,10 @@ SYSCALL_DEFINE0(sigreturn)
+>> >        */
+>> >       if (!restore_sigcontext(regs, &frame->sc, 0))
+>> >               goto badframe;
+>> > +
+>> > +     if (rseq_sigreturn(regs))
+>> > +             goto badframe;
+>> > +
+>> >       return regs->ax;
+>> >
+>> > badframe:
+>> > @@ -678,6 +682,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>> >       if (restore_altstack(&frame->uc.uc_stack))
+>> >               goto badframe;
+>> >
+>> > +     if (rseq_sigreturn(regs))
+>> > +             goto badframe;
+>> > +
+>> >       return regs->ax;
+>> >
+>> > badframe:
+>> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+>> > index c46f3a63b758..656b03232d0a 100644
+>> > --- a/include/linux/sched.h
+>> > +++ b/include/linux/sched.h
+>> > @@ -2340,6 +2340,8 @@ static inline void rseq_execve(struct task_struct *t)
+>> >       t->rseq_event_mask = 0;
+>> > }
+>> >
+>> > +int rseq_sigreturn(struct pt_regs *regs);
+>> > +
+>> > #else
+>> >
+>> > static inline void rseq_set_notify_resume(struct task_struct *t)
+>> > @@ -2365,6 +2367,9 @@ static inline void rseq_fork(struct task_struct *t,
+>> > unsigned long clone_flags)
+>> > static inline void rseq_execve(struct task_struct *t)
+>> > {
+>> > }
+>> > +static inline int rseq_sigreturn(struct pt_regs *regs)
+>> > +{
+>> > +}
+>> >
+>> > #endif
+>> >
+>> > diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+>> > index 77ee207623a9..f946af8e21e6 100644
+>> > --- a/include/uapi/linux/rseq.h
+>> > +++ b/include/uapi/linux/rseq.h
+>> > @@ -26,6 +26,7 @@ enum rseq_cs_flags_bit {
+>> >       RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT  = 0,
+>> >       RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT   = 1,
+>> >       RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT  = 2,
+>> > +     RSEQ_CS_FLAG_IN_SIGNAL_HANDLER_BIT      = 3,
+>> > };
+>> >
+>> > enum rseq_cs_flags {
+>> > @@ -35,6 +36,8 @@ enum rseq_cs_flags {
+>> >               (1U << RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
+>> >       RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE      =
+>> >               (1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
+>> > +     RSEQ_CS_FLAG_IN_SIGNAL_HANDLER          =
+>> > +             (1U << RSEQ_CS_FLAG_IN_SIGNAL_HANDLER_BIT),
+>> > };
+>> >
+>> > /*
+>> > @@ -115,7 +118,7 @@ struct rseq {
+>> >        * Restartable sequences flags field.
+>> >        *
+>> >        * This field should only be updated by the thread which
+>> > -      * registered this data structure. Read by the kernel.
+>> > +      * registered this data structure. Read and set by the kernel.
+>> >        * Mainly used for single-stepping through rseq critical sections
+>> >        * with debuggers.
+>> >        *
+>> > @@ -128,6 +131,9 @@ struct rseq {
+>> >        * - RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE
+>> >        *     Inhibit instruction sequence block restart on migration for
+>> >        *     this thread.
+>> > +      * - RSEQ_CS_FLAG_IN_SIGNAL_HANDLER
+>> > +      *     Mark that this thread is in critical section but currently in
+>> > +      *     signal handlers, so don't clear the rseq_cs field.
+>> >        */
+>> >       __u32 flags;
+>> > } __attribute__((aligned(4 * sizeof(__u64))));
+>> > diff --git a/kernel/rseq.c b/kernel/rseq.c
+>> > index 97ac20b4f738..a4aca612724b 100644
+>> > --- a/kernel/rseq.c
+>> > +++ b/kernel/rseq.c
+>> > @@ -172,14 +172,16 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct
+>> > rseq_cs *rseq_cs)
+>> >
+>> > static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+>> > {
+>> > -     u32 flags, event_mask;
+>> > +     u32 old_flags, flags, event_mask;
+>> >       int ret;
+>> >
+>> >       /* Get thread flags. */
+>> > -     ret = get_user(flags, &t->rseq->flags);
+>> > +     ret = get_user(old_flags, &t->rseq->flags);
+>> >       if (ret)
+>> >               return ret;
+>> >
+>> > +     flags = old_flags;
+>> > +
+>> >       /* Take critical section flags into account. */
+>> >       flags |= cs_flags;
+>> >
+>> > @@ -203,6 +205,21 @@ static int rseq_need_restart(struct task_struct *t, u32
+>> > cs_flags)
+>> >       t->rseq_event_mask = 0;
+>> >       preempt_enable();
+>> >
+>> > +     /*
+>> > +      * If we don't restart on signal event, set the
+>> > +      * RSEQ_CS_FLAG_IN_SIGNAL_HANDLER flag so that later rseq_ip_fixup
+>> > +      * doesn't clear rseq_cs pointer as the IP is outside of critical
+>> > +      * section.
+>> > +      */
+>> > +     if ((flags & RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL) &&
+>> > +         (event_mask & RSEQ_EVENT_SIGNAL) &&
+>> > +         !(old_flags & RSEQ_CS_FLAG_IN_SIGNAL_HANDLER)) {
+>> > +             old_flags |= RSEQ_CS_FLAG_IN_SIGNAL_HANDLER;
+>> > +             ret = put_user(old_flags, &t->rseq->flags);
+>> > +             if (ret)
+>> > +                     return ret;
+>> > +     }
+>> > +
+>> >       return !!(event_mask & ~flags);
+>> > }
+>> >
+>> > @@ -248,10 +265,23 @@ static int rseq_ip_fixup(struct pt_regs *regs)
+>> >       /*
+>> >        * Handle potentially not being within a critical section.
+>> >        * If not nested over a rseq critical section, restart is useless.
+>> > -      * Clear the rseq_cs pointer and return.
+>> > +      * In case the RSEQ_CS_FLAG_IN_SIGNAL_HANDLER is set, we are in
+>> > +      * signal handlers and later return to critical section so don't
+>> > +      * clear rseq_cs pointer.
+>> > +      * Otherwise, clear the rseq_cs pointer and return.
+>> >        */
+>> > -     if (!in_rseq_cs(ip, &rseq_cs))
+>> > -             return clear_rseq_cs(t);
+>> > +     if (!in_rseq_cs(ip, &rseq_cs)) {
+>> > +             u32 flags;
+>> > +
+>> > +             ret = get_user(flags, &t->rseq->flags);
+>> > +             if (ret)
+>> > +                     return ret;
+>> > +             if (flags & RSEQ_CS_FLAG_IN_SIGNAL_HANDLER)
+>> > +                     return 0;
+>> > +             else
+>> > +                     return clear_rseq_cs(t);
+>> > +     }
+>> > +
+>> >       ret = rseq_need_restart(t, rseq_cs.flags);
+>> >       if (ret <= 0)
+>> >               return ret;
+>> > @@ -322,6 +352,46 @@ void rseq_syscall(struct pt_regs *regs)
+>> >
+>> > #endif
+>> >
+>> > +#ifdef CONFIG_RSEQ
+>> > +
+>> > +int rseq_sigreturn(struct pt_regs *regs)
+>> > +{
+>> > +     int ret;
+>> > +     struct rseq_cs rseq_cs;
+>> > +     struct task_struct *t = current;
+>> > +
+>> > +     if (t->rseq) {
+>> > +             u32 flags;
+>> > +
+>> > +             ret = get_user(flags, &t->rseq->flags);
+>> > +             if (ret)
+>> > +                     return ret;
+>> > +
+>> > +             if (flags & RSEQ_CS_FLAG_IN_SIGNAL_HANDLER) {
+>> > +                     ret = rseq_get_rseq_cs(t, &rseq_cs);
+>> > +                     if (ret)
+>> > +                             return ret;
+>> > +
+>> > +                     /*
+>> > +                      * If the returned IP is in critical section, it
+>> > +                      * means we handle all the possible nested signal,
+>> > +                      * so unset the RSEQ_CS_FLAG_IN_SIGNAL_HANDLER.
+>> > +                      */
+>> > +                     if (in_rseq_cs(regs->ip, &rseq_cs)) {
+>> > +                             flags &= ~RSEQ_CS_FLAG_IN_SIGNAL_HANDLER;
+>> > +
+>> > +                             ret = put_user(flags, &t->rseq->flags);
+>> > +                             if (ret)
+>> > +                                     return ret;
+>> > +                     }
+>> > +             }
+>> > +     }
+>> > +
+>> > +     return 0;
+>> > +}
+>> > +
+>> > +#endif
+>> > +
+>> > /*
+>> >  * sys_rseq - setup restartable sequences for caller thread.
+>> >  */
+>> > --
+>> > 2.25.1
+>>
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+> > http://www.efficios.com
 
-I understand, but then it's my job to get that DMI match to set this 
-parameter into acpi_video.c ;-)
-
-> Stefam, at least for the backlight class-device issue we will need a DMI
-> quirk, so can you run:
-> 
-> sudo dmidecode > dmidecode.txt
-> 
-> and then attach the output to your next email, or send me a copy
-> privately ?
-
-I'll send it privately as it is pretty big, but I think
-
-DMI_BOARD_VENDOR, "Matsushita Electric Industrial Co.,Ltd."
-DMI_BOARD_NAME, "CF51-1L"
-
-(Similar to the CF51-2L in acpi/sleep.c) will do.
-
-Best regards,
-
-	Stefan
 -- 
-Stefan Seyfried
-
-"For a successful technology, reality must take precedence over
-  public relations, for nature cannot be fooled." -- Richard Feynman
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

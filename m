@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DE25517DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62B65517DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241984AbiFTL4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S239620AbiFTL5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiFTL4h (ORCPT
+        with ESMTP id S241536AbiFTL4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:56:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2865617E03;
-        Mon, 20 Jun 2022 04:56:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DA00A21B73;
-        Mon, 20 Jun 2022 11:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655726195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+wkpLj1K+yPjMRJxi8utxl0ln69LqNl6bk/oJMw1gi4=;
-        b=g5wKTYdSVahRen1Xx4ZVdANCmeFmjoi1EBy2+EXhQj5rhUeouBHw0KBx+D3YR3oHBfcIyj
-        28t+BypWrSMddQIJPVhLC3xnTIm/70iAMX4vIpK2Lc6JiiGwBE/wWM8fGcKY6LOUIe1RrX
-        26nadAcchEElh1vnT54ytH/5QTS8iZo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655726195;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+wkpLj1K+yPjMRJxi8utxl0ln69LqNl6bk/oJMw1gi4=;
-        b=8OP+PeX7Ag28Hlzm51S2jXkO8equavYlE3ZtDEYXl+ptjPVEPWhEB31PHL8TPGL1WXTi0Z
-        PjfrpXODVaW6/RDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C7FD7134CA;
-        Mon, 20 Jun 2022 11:56:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0lWkMHNgsGIKEQAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 20 Jun 2022 11:56:35 +0000
-Message-ID: <22bedb25-63ee-3106-f37d-b4ef19ac9e6f@suse.de>
-Date:   Mon, 20 Jun 2022 13:56:34 +0200
+        Mon, 20 Jun 2022 07:56:55 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D0D17E1C;
+        Mon, 20 Jun 2022 04:56:54 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B41865C0181;
+        Mon, 20 Jun 2022 07:56:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 20 Jun 2022 07:56:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1655726213; x=1655812613; bh=DF7IXatyZc
+        fmlzK8+a+MhGWDcx/oKyhm00O2IupG+FQ=; b=mlrVNjTCvYnNl5CCKcdeL0DydB
+        Q1lav+HH1xUKrcd06uN0JAVYiLwnWsYL3/zm8jKqEki+oatveBtvR4nlQOHb6wJm
+        cgXxfiNiME7dVy2rmplDAYaluH6H0JI/Pcfnw8G05UxalQ1e/EYIbM6IlKCpFWAJ
+        3ycjWSZ9fLJRWDqvC7hzm3aVMbduqhY8Si1I8gsbd4ZLSqKaJVwUwPmW2Ct3feHY
+        xtu95HhZ+OVIfJpT1ZJHfPv63mRkaY9s4tIWkqK5KL2zfcJhNFrPh3t2ly9hRO/x
+        aJIZeyi3WsHO/WHQ9kBVzGRFPv+p4dBHwm5X436S4UpzT6RG5gE13kHV6glA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1655726213; x=1655812613; bh=DF7IXatyZcfmlzK8+a+MhGWDcx/o
+        Kyhm00O2IupG+FQ=; b=t7pOi2FrxrrbySpK9wvrKZ9gV4es2g90+BcCCHXz6ohL
+        xOOTuHFxP406cFJfRGFzE0CMt+jb4Y4p+NogFfrHN4yvzigsJCnE9GDkf1KsU44b
+        swH4tMykh3rOQtqC3drKZVrl6AkEIgHPRdH5H6bKicfElmQE+UbNwSgCQJdi+XiB
+        G3/XWYbKuExEN/ZCRJbF6DxE98MdeAFP+YXhtjYZA3Zc1+wXYst/EPX+rUfzZP+c
+        NP/cy6AsbdySTuuulFB28nJzXK4kb2bVBDxSuQFZpKGyB3nQQOtOFBD/WaPle1/H
+        xe8QNtRfqYv9Z5SLRl3WgT33wDd7vfiq5jx1g3pRaw==
+X-ME-Sender: <xms:hWCwYi6yRozq7t28nEGdeGNL6NTynW3PhKHKEVA-AXZoGqNR8ZCdIQ>
+    <xme:hWCwYr5Njaw0b3GlVvBQtKQRXHkCN_cMIaiNIq-cCSsBFuZAFVtjGQbK3yTXjFrA5
+    5xzGCwG_Ag1uw>
+X-ME-Received: <xmr:hWCwYhcmi9I_ma96ShKpyRnvcikwNHtuymKGUudKMUMtGfJDJd3nNlH9Cgyu8Y8FQsulDdrZvW69vCOpZkg2Y4SSFqVBs7Iz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefuddggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:hWCwYvJNj_1p_P2QbV4aPY3zg9DiGJ1O38fJQTRIP_WNE9FjTuVwNg>
+    <xmx:hWCwYmJgZ6mSQ9rvKWfSr4NS22sERINb4jx98QBGLK2GQ2Gx3xJYlg>
+    <xmx:hWCwYgyy2ljnWMDT61hpo3lGxDJJqCHx12O5PVZ2t-T9ei_la9jzuw>
+    <xmx:hWCwYoCVsVP48WXwNmhPCrDUF0ti7DyxG6d839kRi7AJmjg4fTDUcw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Jun 2022 07:56:53 -0400 (EDT)
+Date:   Mon, 20 Jun 2022 13:56:51 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Meng Tang <tangmeng@uniontech.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: Re: [PATCH 5.10 2/2] commit 1b5d73fb8624 ("igc: Enable PCIe PTM")
+Message-ID: <YrBggx8tmeM9Be+4@kroah.com>
+References: <20220614011528.32118-1-tangmeng@uniontech.com>
+ <20220614011528.32118-2-tangmeng@uniontech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     John Garry <john.garry@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
-        linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        chenxiang66@hisilicon.com
-References: <1654770559-101375-4-git-send-email-john.garry@huawei.com>
- <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
- <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
- <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
- <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
- <c702f06e-b7da-92be-3c4f-5dd405600235@opensource.wdc.com>
- <ecfb0694-21b8-55b4-c9b8-5e738f59ce8d@huawei.com>
- <98fa010d-3555-a82b-e960-f47aeeb38151@opensource.wdc.com>
- <7b046321-fdb3-33f0-94a0-78a25cbbe02e@suse.de>
- <9de5ed1b-e874-28ac-0532-cd5420892064@opensource.wdc.com>
- <20220620090543.GA13643@lst.de>
- <41fa0f12-cdcf-f2c4-7366-1abd04312f1f@opensource.wdc.com>
-From:   Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
- handling
-In-Reply-To: <41fa0f12-cdcf-f2c4-7366-1abd04312f1f@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614011528.32118-2-tangmeng@uniontech.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 13:24, Damien Le Moal wrote:
-> On 6/20/22 18:05, Christoph Hellwig wrote:
->> On Mon, Jun 20, 2022 at 06:02:30PM +0900, Damien Le Moal wrote:
->>> So reserving a tag/req to be able to do NCQ at the cost of max qd being 31
->>> works for that. We could keep max qd at 32 by creating one more "fake" tag
->>> and having a request for it, that is, having the fake tag visible to the
->>> block layer as a reserved tag, as John's series is doing, but for the
->>> reserved tags, we actually need to use an effective tag (qc->hw_tag) when
->>> issuing the commands. And for that, we can reuse the tag of one of the
->>> failed commands.
->>
->> Take a look at the magic flush request in blk-flush.c, which is
->> preallocated but borrows a tag from the request that wants a pre- or
->> post-flush.  The logic is rather ugly, but maybe it might actually
->> become cleaner by generalizing it a bit.
+On Tue, Jun 14, 2022 at 09:15:28AM +0800, Meng Tang wrote:
+> In the 5.10 kernel version, even to the latest confirmed version,
+> the following error will still be reported when I225-V network card
+> is used.
 > 
-> Thanks. Will check.
-> I am also looking at scsi_unjam_host() and scsi_eh_get_sense(). These
-> reuse a scsi command to do eh operations. So I could use that too, modulo
-> making it work outside of eh context to keep the command flow intact.
+> kernel: [    1.031581] igc: probe of 0000:01:00.0 failed with error -2
+> kernel: [    1.066574] igc: probe of 0000:02:00.0 failed with error -2
+> kernel: [    1.096152] igc: probe of 0000:03:00.0 failed with error -2
+> kernel: [    1.127251] igc: probe of 0000:04:00.0 failed with error -2
 > 
+> Even though I confirmed that 7c496de538eebd8212dc2a3c9a468386b2640d4
+> and 47bca7de6a4fb8dcb564c7ca4d885c91ed19e03 have been merged into the
+> kernel 5.10, but bug still occurred, and this patch can fixes it.
+> 
+> Enables PCIe PTM (Precision Time Measurement) support in the igc
+> driver. Notifies the PCI devices that PCIe PTM should be enabled.
+> 
+> PCIe PTM is similar protocol to PTP (Precision Time Protocol) running
+> in the PCIe fabric, it allows devices to report time measurements from
+> their internal clocks and the correlation with the PCIe root clock.
+> 
+> The i225 NIC exposes some registers that expose those time
+> measurements, those registers will be used, in later patches, to
+> implement the PTP_SYS_OFFSET_PRECISE ioctl().
+> 
+> Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+> Tested-by: Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
+> Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> ---
+>  drivers/net/ethernet/intel/igc/igc_main.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Tsk. I was hoping to be able to remove it (especially 
-scsi_eh_get_sense()), but looks as if we actually do need it.
-But it might be not a bad idea to have scsi_eh_get_sense() to run 
-independent on the SCSI EH stuff; returning with a sense code is not 
-necessary an error, so there are reasons for not always invoking SCSI EH.
+Both now queued up, thanks.
 
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+greg k-h

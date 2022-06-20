@@ -2,103 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4775518A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6950C5518A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239503AbiFTMR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S242242AbiFTMTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235801AbiFTMRZ (ORCPT
+        with ESMTP id S242752AbiFTMSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:17:25 -0400
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2162.outbound.protection.outlook.com [40.92.63.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ECC279;
-        Mon, 20 Jun 2022 05:17:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mVmq5+6aniqweuOy5q65tiT8S7NlvoVNkbuWVKKB2yLVc+Kyed8J8rZMFtAe3oLB4MK2fsxhU59Ds5izM8+Y/qpiS0OVBNUlZfeqoNiuSy34x9igl/p02S77/mME5C9h7G+KOo6txTt7i6EjSvqyyQiD3qVr5q3G5h4kT6L7axxVd2WU15ZnZJTaGLlsadGWndQIoQcX3WdXIJiMxR6k8FTidcPVkOuiFNJfguXJnYmHi+ghxpxuLRAr2nLMkwi9eAE/7lSA4zRu9KhmA/8SGYPr0DJY4jkJEZeIG/7wjL7bzE1MAUg4XFd8LJPLK67WKV9tzdL3UR/CL3tZxp03Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vb5hl86nNl32BhatN9qcLKaPuf3LJgoWDGiKFCLCZSk=;
- b=eNxYtdZrj6zr+s5ixAmxdAnOgz7VMedk2qnVd1G26rR0AUGLu1tN/3CiqjPktVT1prB7ZiDVAdwuFOt0vnQPfKNy3VGF8bz+1zwtwN1QtEQ8FZbG039USpmViEQ/EJ6ro1wTfy3IbQjFt6T7THRPxxZAcQ1FZ6v5hHKWnxFb6qQwMOhBb2UyWbbwNKnL7QbtSVhDbx5g8KOfRjSDKBtt9cp+9JPYukA8Enx9sb4BZW4HofZMA/TW3WrAU72AJRtwoOUuoiWX87OdP4QMFzx6Rjakz7Rzrc+AWaJ+uyyXq6NisXX1CclR17JKBpNTG24oXYK1bwKAn9WGTqGd8nej+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vb5hl86nNl32BhatN9qcLKaPuf3LJgoWDGiKFCLCZSk=;
- b=VEW/3sC+fJUwQAEYt8cVLjUhvD3+pKu6FwcvH5eaJvXoNMitkRXQwOX1FqeW4W2pTfF7BrND+RPtaf8zSAl51rDLGUOt5wh68tWmidM73DtvjRNwHBszTiMSZvz5GfbmpqMu+uYNxaCsE9N9H7A6ZPQkcXrLYLzM0uNpGtdzQJEqAb/TgY8TAAWQfz2DlG3nolyklvuHemdqprbVm+Qi+FW8bOf5XQsCIjEL6H4fkwt1ch6zGLZamXCdIl2TJDGhJtL9LpyGhwR79xT2TR4LTNoDz6BuX4RNubAMsmE8TbDtDvnhfwatmQivjvawuUZPDGPIQLKFK16Eak2IIOXNXA==
-Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:113::14)
- by SY4P282MB0795.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:ae::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.13; Mon, 20 Jun
- 2022 12:17:20 +0000
-Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- ([fe80::702a:73df:6a57:6a00]) by MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- ([fe80::702a:73df:6a57:6a00%8]) with mapi id 15.20.5353.021; Mon, 20 Jun 2022
- 12:17:20 +0000
-From:   Yonglin Tan <yonglin.tan@outlook.com>
-To:     johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yonglin Tan <yonglin.tan@outlook.com>
-Subject: [PATCH] USB: serial: option: add Quectel EM05-G modem
-Date:   Mon, 20 Jun 2022 20:16:53 +0800
-Message-ID: <MEYP282MB23740858061FFA19E97E5C0FFDB09@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-TMN:  [F9SUNYf5bu4TMlto2ujTsmECwLaSxhIW]
-X-ClientProxiedBy: TYXPR01CA0051.jpnprd01.prod.outlook.com
- (2603:1096:403:a::21) To MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:220:113::14)
-X-Microsoft-Original-Message-ID: <1655727413-3322-1-git-send-email-yonglin.tan@outlook.com>
+        Mon, 20 Jun 2022 08:18:46 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD8B273F;
+        Mon, 20 Jun 2022 05:18:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VGxWMOb_1655727520;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VGxWMOb_1655727520)
+          by smtp.aliyun-inc.com;
+          Mon, 20 Jun 2022 20:18:41 +0800
+Subject: Re: [PATCH 5.15] mm: validate buddy page before using
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     akpm@linux-foundation.org, ziy@nvidia.com, stable@vger.kernel.org,
+        guoren@kernel.org, huanyi.xj@alibaba-inc.com, guohanjun@huawei.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220616161746.3565225-1-xianting.tian@linux.alibaba.com>
+ <20220616161746.3565225-6-xianting.tian@linux.alibaba.com>
+ <YrBJVAZWOzmDyUN3@kroah.com>
+ <35bd7396-f5aa-e154-9495-0a36fc6f6a33@linux.alibaba.com>
+ <YrBdKwFHfy9Lr14c@kroah.com>
+ <8b16a502-5ad5-1efb-0d84-ed0a8ae63c0e@linux.alibaba.com>
+ <YrBi1evI1/BF/WLV@kroah.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <d52e17da-a382-0028-2b16-105ab7053028@linux.alibaba.com>
+Date:   Mon, 20 Jun 2022 20:18:40 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6a1fde60-d6b8-4db6-599c-08da52b6d315
-X-MS-Exchange-SLBlob-MailProps: citmFLqyTFT1iUgGxM6bdkskiZ+QeoDmM+qUDtCfWGMC8ynKHUVelk932xPPmuDVyy9BQrFrW/uJWrfQDMoErZs9o6KGmV1fUhnMQd53Z0C4JtcinZRObh58si2zwkt0cnJVPN9A0CXyjjjP75dsMKDXWG3+d4SUW4EdU/GisPTebpElaOVvl3Lg8kYg9HxrXcXgUb02DZuL5zbSHuWcKrsKTdr5ss2P62NUxYEDNHi8o7UxMMKlaJQCjoQVPldCT0nhNrF+874AmArlgDRR6rFwEin5XIFKIVRskaEhVF+3FI6xONsPoTTuYz087zhNafgITZ+UWBkdK2mCAu1P2Qld6UcPiqUHBVvKV5K/605UylkYD4tW6dnFgpYh89pWpVd53Wb1SeqVZL1jcMEl9tlU7IKXYbTE0Ge5lcM6uITZqFxTKWgotTWq6IJC7B7vAO1gtznwwTFgzN6KTO++e9OahBOWdkWs0xb/NvtscLyneGaeTzMB78jhMONgj86wNj7NrO4mfFjrRYArfmbFBxRNXX6+Qfpk1f5IyF0siMon+SSgcNxXmkTsANCsxdffiZqaIYxVqpyDLpMLfYpx4ecMnBCkAZWDmjnvEAGojWHrEcSgU2xCzxiHM3fHMof2ZhierQtVhMxyrcWEoblgPLt2Jw12w/8oZAvq5RB+vauV1Mz1eeZSj/c8SIkA5Op45iX4+hyhA45AuG654FPt0vqAGLiamC1uFkfZFzGYVkOZ341YWgsfUtY/bHXH6H1p/+XqGK0kHpWla6gBCdodVQT6jIbX7lWJFRtfQnB7ujQ=
-X-MS-TrafficTypeDiagnostic: SY4P282MB0795:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sMWbr+9fJWw3v8gTgx5T0fuquDEKwM+h63upziDqGw+OIDCEscNWpPJi9qgjMelozu5PC8YbufouZRbx3+BqtCoiL1siLtGndavnAAJdjd8WqgqQb15yOvgq0W+0izpDWYxzm4aQ3X35SnI+t3DumZrlIlMYw5qnhFk9j6mOROtKMgk5FsScNGbjl8FTS/macx7HQEuo0p41OBv2sDTJhizVMptiwa0Ufj4SU9oCZ0QTQD5KKEDDAbk0FHd/zjal5ULijz1I8fi1Iq6zIFNF86YSSRRM+lIMW8rCdpcXMruFj2ar2YKjBk7Aqa49yeamuIjxzMXRJ9QVxXO/jOjpDqOolfly696nFfgy6lZE/CikwYO6A6mhDnKHShkXwhuQUMlvwPKNR178feLXFEQ3lU4GAsLjJAAJY2SrhQTGge8FdEasFTq58uR1N+FGQ2gVZCF4RbnbJyQOp3XPVGDJXUjf+lbAdrKFZ2zftAoNyoyEh7GOiRjZFgCr8wwdavV648zsadYmURP/PJfbtQVWBYe0In97Rxhx5+D+vDKe3OTlEQ0FA+AYFh/zX44pDgX0quG9bmmG68eU7YLlgomvvg==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fIziFUsXMup7kLg7G2QeFDJY8sK4igVXEVLyIKSom9cupUxgA+M59v2TdaOO?=
- =?us-ascii?Q?RKXyvUd7/g4sIbdrojqyN1XOOfmoulDHOkUzZRFKLB5IPMrY4TXT8P3SAWvB?=
- =?us-ascii?Q?2X/IyZ+7gt0dBR+EoM0s1PVrZRWdxec2Dpdcl45jWmO97o1C8r6Mhb4vFpAi?=
- =?us-ascii?Q?553qt1s9dZD/h+H2C6I8BIqqkffjXoFXTe3q1OP0MlSn01uHXvRBJY/J2Hde?=
- =?us-ascii?Q?bEaa2rHm8cAbQ/ht4SQlStnToxyOO4LMKIUGX6ClJIz2a9DwErpJ1OlQL0Xo?=
- =?us-ascii?Q?6gZqt8dJDIjcvjhkRJKivx2IaXnvoiM26gJLC7FMDSFt48cBHLW0qioWWyWP?=
- =?us-ascii?Q?Vm/P5TJu6P3NBL08kk5+gMN14Vuf5YoUak/M/aypM99De287TO3xkHTd4uad?=
- =?us-ascii?Q?zoqSDQ+ZAWsMaQH+WzIxwodZTcn65+EyOkv7ReLXNDjGPqZKkLySme6j5E55?=
- =?us-ascii?Q?QT+La0U7oxzn6UBWsOqzJINLrTEiTWXC2rv3EZRtgE374BzOoSJVtEuHHKrs?=
- =?us-ascii?Q?lQdfZLsZXOnUBEY9+y6t/HpZy+X5QvipFWrhoc+X5pPepA3eL0zzb9WrNd6y?=
- =?us-ascii?Q?Eq6K1JidMaq14yWEpYtGh6sUZxmCA/hJHAeklwZXZO824XXWwIiJyV8pQ1hW?=
- =?us-ascii?Q?BR5KCMMePggsZ7SceEjRf7YWJXcJ2qn2AfC+Sn5GRvQVxDCPxeJVG7xEFh29?=
- =?us-ascii?Q?Pq2xIdHwM8F2BgitMIwaxIVfJL90dDr0dJ1nv4vpDEVLvqYxINuRdtQIdInf?=
- =?us-ascii?Q?zUu1MPpNGphOMaaxYVHiApunJdHcO23jEfYMb7mYkmMF9gNlbHYBiwsAUxsw?=
- =?us-ascii?Q?cb5Vj8fC+Pd9QWLjAkH0tspDlPln14WwGdLJBH41B8v6rqfS697xbX+RiWow?=
- =?us-ascii?Q?fiL/36S8jYwMfmhp7Jm2+J7eok3Ze96zWOPkzSp356J//CVZqejn7jfaDIAo?=
- =?us-ascii?Q?c2APoqHhHUeOVtlPedvXP4RuglBPcLMHnGl1NR0i+5BSWy2aYI9r+xMVqA8y?=
- =?us-ascii?Q?g+AYnp9tKpXhAmyNQxX9vI8/jUnZSD0o1Dzb8FQv+pa4nB4f5TtuM08tnFUF?=
- =?us-ascii?Q?Ol3PWcF2lKNpDdvyDK/r9RU8Hj6YqjNa/akrFXLOrBLZHAgE83kg6RpIeNCz?=
- =?us-ascii?Q?QW7RrotfcaIPDaZdxa7++CeKZ5zUk1DHmbDS/iZGcX0dMHPdGTZCTK4tKlQ/?=
- =?us-ascii?Q?YFKLJNs/YnFv0prkCW/hlQcpnjttUwupwFG5VC3GFSsBNUHmxmQAMufo/FaJ?=
- =?us-ascii?Q?JJLpsWY5+hJ8Rz22bW83tplr3T4EAjbGNhodwCQVIebkeiDSe7T+XcNm8OO7?=
- =?us-ascii?Q?gKRoYYaBeArbjpW1XcA84dloHJFe+GuVND8bbu/44yF1iOfRgI/sU9qtpChi?=
- =?us-ascii?Q?wZkPsjXfIBH66yCxb0nADH8KG/YEzuvOBeUFxiq8uBOylxy8iaps9oVCq9eI?=
- =?us-ascii?Q?iUk+2t9Ug0w=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a1fde60-d6b8-4db6-599c-08da52b6d315
-X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 12:17:20.8388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4P282MB0795
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YrBi1evI1/BF/WLV@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,58 +51,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a device-id entry for the Quectel EM05-G module.
 
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=030a Rev= 3.18
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM05-G
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+在 2022/6/20 下午8:06, Greg KH 写道:
+> On Mon, Jun 20, 2022 at 07:57:05PM +0800, Xianting Tian wrote:
+>> 在 2022/6/20 下午7:42, Greg KH 写道:
+>>> On Mon, Jun 20, 2022 at 06:54:44PM +0800, Xianting Tian wrote:
+>>>> 在 2022/6/20 下午6:17, Greg KH 写道:
+>>>>> On Fri, Jun 17, 2022 at 12:17:45AM +0800, Xianting Tian wrote:
+>>>>>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
+>>>>>> fixes a bug in 1dd214b8f21c and there is a similar bug in d9dddbf55667 that
+>>>>>> can be fixed in a similar way too.
+>>>>>>
+>>>>>> In unset_migratetype_isolate(), we also need the fix, so move page_is_buddy()
+>>>>>> from mm/page_alloc.c to mm/internal.h
+>>>>>>
+>>>>>> In addition, for RISC-V arch the first 2MB RAM could be reserved for opensbi,
+>>>>>> so it would have pfn_base=512 and mem_map began with 512th PFN when
+>>>>>> CONFIG_FLATMEM=y.
+>>>>>> But __find_buddy_pfn algorithm thinks the start pfn 0, it could get 0 pfn or
+>>>>>> less than the pfn_base value. We need page_is_buddy() to verify the buddy to
+>>>>>> prevent accessing an invalid buddy.
+>>>>>>
+>>>>>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
+>>>>>> Cc: stable@vger.kernel.org
+>>>>>> Reported-by: zjb194813@alibaba-inc.com
+>>>>>> Reported-by: tianhu.hh@alibaba-inc.com
+>>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>>>>> ---
+>>>>>>     mm/internal.h       | 34 ++++++++++++++++++++++++++++++++++
+>>>>>>     mm/page_alloc.c     | 37 +++----------------------------------
+>>>>>>     mm/page_isolation.c |  3 ++-
+>>>>>>     3 files changed, 39 insertions(+), 35 deletions(-)
+>>>>> What is the commit id of this in Linus's tree?
+>>>> It is also this one，
+>>>>
+>>>> commit 787af64d05cd528aac9ad16752d11bb1c6061bb9
+>>>> Author: Zi Yan <ziy@nvidia.com>
+>>>> Date:   Wed Mar 30 15:45:43 2022 -0700
+>>>>
+>>>>       mm: page_alloc: validate buddy before check its migratetype.
+>>>>
+>>>>       Whenever a buddy page is found, page_is_buddy() should be called to
+>>>>       check its validity.  Add the missing check during pageblock merge check.
+>>>>
+>>>>       Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
+>>>> pageblocks with others")
+>>>>       Link:
+>>>> https://lore.kernel.org/all/20220330154208.71aca532@gandalf.local.home/
+>>>>       Reported-and-tested-by: Steven Rostedt <rostedt@goodmis.org>
+>>>>       Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>>>       Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+>>> This commit looks nothing like what you posted here.
+>>>
+>>> Why the vast difference with no explaination as to why these are so
+>>> different from the other backports you provided here?  Also why is the
+>>> subject lines changed?
+>> Yes, the changes of 5.15 are not same with others branches, because we need
+>> additional fix for 5.15,
+>>
+>> You can check it in the thread:
+>>
+>> https://lore.kernel.org/linux-mm/435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com/ <https://lore.kernel.org/linux-mm/435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com/>
+>>
+>> Right. But pfn_valid_within() was removed since 5.15. So your fix is
+>> required for kernels between 5.15 and 5.17 (inclusive).
+> What is "your fix" here?
+>
+> This change differs a lot from what is in Linus's tree now, so this all
+> needs to be resend and fixed up as I mention above if we are going to be
+> able to take this.  As-is, it's all not correct so are dropped.
 
-Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
- mode change 100644 => 100755 drivers/usb/serial/option.c
+I think, for branches except 5.15,  you can just backport Zi Yan's 
+commit 787af64d05cd in Linus tree. I won't send more patches further,
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-old mode 100644
-new mode 100755
-index ed1e50d..05fc322
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1147,6 +1147,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = ZLP },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-+	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x030a, 0xff),
-+	  .driver_info = RSVD(6) | ZLP }, /* EM05-G */
- 
- 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
- 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
--- 
-2.7.4
+For 5.15, because it need additional fix except commit 787af64d05cd,  I 
+will send a new patch as your comments.
 
+Is it ok for you?
+
+>
+> thanks,
+>
+> greg k-h

@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EAD5522CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 19:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E745522D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 19:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243267AbiFTRjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 13:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S241320AbiFTRlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 13:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243005AbiFTRi7 (ORCPT
+        with ESMTP id S239358AbiFTRls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 13:38:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766BBB1C8;
-        Mon, 20 Jun 2022 10:38:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35B13B812AA;
-        Mon, 20 Jun 2022 17:38:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FF1C3411B;
-        Mon, 20 Jun 2022 17:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655746734;
-        bh=jCwwSbElt83m1PQ7z2IHVu8qIm0sTyIZfWwdyaDXEQY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a2q2bkioPo6HKogBWHFyliQxaUyYq4YadB4+we/O/kmjDp2ubf8jEByZzv2C1QZeg
-         hrO8b1Tzg74CpGc68N9s8iDq6ieZyCQT1QkyAMjcBQZ4Y3DAKcu7akqiN6I+fn/U86
-         NTHNCRCwRQwl8V9dLT2oQ0VoUib8vhdriDganxqrsl10KvsvypFY4QO1+j1AurQ62U
-         56raSyAcpfFlQk4E7TbEJSGMydpmzHHI68czU4V/IoOWkyuupgdgnBVNShYSda2idy
-         Gqum8+7O+1hv8lzELpb3UQQ+2fMw9sWBn0h5KgZEnHECBVoIldbeAxre/5y3xmJKUu
-         OrcId64AICnaw==
-Date:   Mon, 20 Jun 2022 18:38:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierluigi Passaro <pierluigi.p@variscite.com>
-Cc:     Alifer Willians de Moraes <alifer.m@variscite.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Eran Matityahu <eran.m@variscite.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shengjiu.wang@gmail.com" <shengjiu.wang@gmail.com>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "Xiubo.Lee@gmail.com" <Xiubo.Lee@gmail.com>
-Subject: Re: [PATCH 4/4] ASoC: wm8904: add DMIC support
-Message-ID: <YrCwqKeHQJe/Tzzi@sirena.org.uk>
-References: <AM6PR08MB437600972B26E3A56E1190C0FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
+        Mon, 20 Jun 2022 13:41:48 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73D5101C5;
+        Mon, 20 Jun 2022 10:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655746907; x=1687282907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e4K1fpgjFY/51Bjrme/wco0XD9Y7NXWZJctwZ6N44ak=;
+  b=DdYJTEIwSQ2ZDLIeI+qZ52RSn9mfSrApUxkTVSQYXllWXnSzGWbg9/76
+   f3+LZhjY14uWh/WLo2Yo71/LyZnIl8rX0ws6rHyYdnsSISOUnPz3Qhc7v
+   tNaEeXumWnuLhIXxxUiCaBtfCbfsrfssTOOeDybxBCNN2qdGt5WV2BpwY
+   MrAIl5VI1onsEX/Ru3giOxy9TPKhSB1m35mBRatnc4l4joJUYvdo/bWml
+   JUc+2zoAIG6/PV08G8XmNqYPtKCmWH0YwAufyalBHJr4L0XuzX8FFFuH/
+   cbRPpnlH1ox5zdHMN8p7K/n6A08BgqMWa33AntTdSXTfTzQvLtN7KQbaR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="262981045"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="262981045"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 10:41:46 -0700
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="676625277"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 10:41:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3LP7-000kZb-DN;
+        Mon, 20 Jun 2022 20:41:37 +0300
+Date:   Mon, 20 Jun 2022 20:41:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        hkallweit1@gmail.com, gjb@semihalf.com, jaz@semihalf.com,
+        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 03/12] net: dsa: switch to device_/fwnode_ APIs
+Message-ID: <YrCxUfTDmvm9zLXq@smile.fi.intel.com>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-4-mw@semihalf.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fom1qi4IkRF41iWN"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM6PR08MB437600972B26E3A56E1190C0FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
-X-Cookie: Good day to avoid cops.  Crawl to work.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220620150225.1307946-4-mw@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 20, 2022 at 05:02:16PM +0200, Marcin Wojtas wrote:
+> In order to support both ACPI and DT, modify the generic
+> DSA code to use device_/fwnode_ equivalent routines.
+> No functional change is introduced by this patch.
 
---fom1qi4IkRF41iWN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Mon, Jun 20, 2022 at 03:30:45PM +0000, Pierluigi Passaro wrote:
+>  	struct device_node	*dn;
 
-> Just for my understanding, are you suggesting to set a device tree property to force a fixed behavior in the driver ?
+What prevents us from removing this?
 
-Yes.
+> +	struct fwnode_handle    *fwnode;
 
-> WM8904 allows using both a DMIC and LINEIN, switching between one or the other and this is how we currently use it.
-> Why the user should not be allowed to switch between DMIC and LINEIN ?
+...
 
-The device shares pins between the line inputs and the DMIC inputs so at
-least some of the configuration is going to be determinted at system
-design time, that will fix the usable values of at least one of the
-controls which ought to be reflected in the runtime behaviour.
+> -		dn = of_get_child_by_name(ds->dev->of_node, "mdio");
+> +		fwnode = fwnode_get_named_child_node(ds->dev->fwnode, "mdio");
 
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
+The rule of thumb is avoid dereferencing fwnode from struct device. So
+dev_fwnode(), but here it would be achieved by device_get_named_child_node().
 
---fom1qi4IkRF41iWN
-Content-Type: application/pgp-signature; name="signature.asc"
+...
 
------BEGIN PGP SIGNATURE-----
+> -static int dsa_switch_parse_of(struct dsa_switch *ds, struct device_node *dn)
+> +static int dsa_switch_parse_of(struct dsa_switch *ds, struct fwnode_handle *fwnode)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKwsKcACgkQJNaLcl1U
-h9CUdwf+JtglBbVYwWNdDwBJD3f6LDH+Nl/J2ZnnHyJ6UdOmqtk7L+sj0nDb4Q/U
-2syrbcHJ/dHoJMRrdT/UXGhbeWCeZ4eQIbkY8hR8cRZQUteNZI73B9ccXbhMDAhf
-GHiJAE4dQWqj0ziFIGLbR9uhsOL26AYd65dgKRDOnSvA1kyWM6f+UwvGH3Xs2Rfd
-I8Ni+NwD2VBKJCzINFsEFqecPl7885vtD95jTnqu2eeDysBbEQ/Iuyh8h2G407gv
-gSy6lMRRQUAHu8lX5vOOWKgAXi/5rv9jy+gI89b8iehRkMreEZ78kBHtIU6FnCMf
-RPkRUcBSL7sTTTErsDGRhSUDVJmYBw==
-=1FAH
------END PGP SIGNATURE-----
+Shouldn't _of suffix be replaced by, let's say, _fw?
 
---fom1qi4IkRF41iWN--
+...
+
+> -	return dsa_switch_parse_ports_of(ds, dn);
+> +	return dsa_switch_parse_ports_of(ds, fwnode);
+
+Ditto.
+
+...
+
+> +	fwnode = ds->dev->fwnode;
+
+dev_fwnode() or corresponding device_property_ API.
+
+...
+
+>  	slave_dev->dev.of_node = port->dn;
+> +	slave_dev->dev.fwnode = port->fwnode;
+
+device_set_node()
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

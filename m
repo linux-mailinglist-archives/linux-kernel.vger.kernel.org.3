@@ -2,111 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D345523D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA375523DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245350AbiFTSZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S244557AbiFTS30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238810AbiFTSZm (ORCPT
+        with ESMTP id S245390AbiFTS2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:25:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDEC1D309;
-        Mon, 20 Jun 2022 11:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655749531;
-        bh=g1DrBhSApPqCrOkx7rqvIZlJ4nA4K9qZgEmyWNfkG1g=;
-        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-        b=LPWXOKns/sUNNC5ie4zr1SOVSbuwDE5MHA4y1LWq1ClUNfjzu/jkVDj9J5g7QtgyT
-         plHhrs50yQa2W43qxlv4/9yPAUMT10DMrVLNNeU61hBajUYj1uwaxvF2himdCquBWs
-         RVHFc7GHX9CUBTII1SabztPKQ38kCeGgMxQUSbmo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.174.149]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRCK6-1oHi6o3aiq-00N6Bo; Mon, 20
- Jun 2022 20:25:30 +0200
-Message-ID: <f7e75426-035b-bf0a-b565-bc816b4eeb23@gmx.de>
-Date:   Mon, 20 Jun 2022 20:25:09 +0200
+        Mon, 20 Jun 2022 14:28:22 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303711402C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:28:21 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id 19so11938347iou.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=NTFM/4VkpDM2qI5OcPL5gWkEDJT/oSyHrioA8LlzOIU=;
+        b=aSKVtffmz3QNrbI6AfMjpHOi7dR22/XMjkwuUa1rUdiyZHhHDH5IhQDv2zrCwAS3Rd
+         Ut7gGihbDQFKwEV/RrNE2BDxuwumRPQHV1ZkGAKBnlQUXBPyWL0vtV3U/rw+rjsrBpIp
+         gMEAorP2KJLq7IYrUV8lE0aEdnjmTD0hA2UMGjpPfHUBFfo4m7SHvn+127HlZjrM6tZT
+         i1atnOT4dJOE/a1qlYzwOSVf25tZ7n/PO59+TKw0VCuvJGnJsENPd8Mnh4y4AjDGa2Tp
+         zOC5YTMd85CofMH+p6BK+CTFfsSJHyXZDHsJRkPB5GOeUZtldpBiin0sSRGcW/hBFWo8
+         DwIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=NTFM/4VkpDM2qI5OcPL5gWkEDJT/oSyHrioA8LlzOIU=;
+        b=hadV07/zEokE9dzHJt8PxBrr54M3twB8I1s6M8OuUH22ztjTa1HtZVGNSmwoUOYK7G
+         Eq5NVkG/NBS6ziHhL5uzDuIuJsgqc+NFqVjJ2uIHy0pQ0QQ/7/4jhfFh0LSZmSu1yRuX
+         w8ryEgFT+OXwRgqglV5hn/mYN8JjuWBBcdV1mUQK2SCH2XwxqMm8CqT3FVOxPLIYMdw3
+         RESOtYkEUCaXT8/+iigoBGKFUD+XeruZ6gz0MXsfSECcHKi/oLI5yVQPx+szI2dSabFU
+         geI3CFcBEpqBmzZcyLESMEw10QiE7X2T1OrgydbAlBgLA4s6pB7guHUinGe/Edf+r5X4
+         0Qsg==
+X-Gm-Message-State: AJIora/6U2H/Q8f3UTEdBFMd+YDdjvhQjFathSl4EYKEWqGBIrc/NfYx
+        vRuWHTBHKkjeCx9Ce9f5gTh58RsuGHGkqMC5rgg=
+X-Google-Smtp-Source: AGRyM1uy/OVi8SRBztp8LPRbt9VW7FRsFaCHo5j/ZaDG/8ULmt9RXkLPCq1kC6AhX0OKW62sWx3X6XLqZ0NJH9fzzI8=
+X-Received: by 2002:a02:bb85:0:b0:331:7a13:201b with SMTP id
+ g5-20020a02bb85000000b003317a13201bmr14417922jan.41.1655749700418; Mon, 20
+ Jun 2022 11:28:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] fbdev: simplefb: Check before clk_put() not needed
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, Yihao Han <hanyihao@vivo.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220602094219.13024-1-hanyihao@vivo.com>
- <84aa3225-d514-4c08-f6d3-ed8f0423e513@redhat.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <84aa3225-d514-4c08-f6d3-ed8f0423e513@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:F7AmgmvffE840tXWVRq7mb8PATQeMnhx+HwH9ip+oSIRJIYMOEI
- Mc4HXrcX+QKZJ7V/nkhoiI/Dxz+zY6IAx3ijx43pkPQZKPCJSwQyek/li3OkJffXzUQHSMx
- u0kbgcV9SZbD9lvK/ukwKjRRCbZqtDwbv8uEGtIL+xk3wGPn9+4fFavnmtGUl9XIh5yDwDU
- TuLtJe+WcWTqk+tXZqJ5g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TzJKf2LyMVk=:n70VceyDlP3L499n504Lja
- DRe5F+1r2lDAW5JEM99pCAWctF0QSTjJzHeJXUXT/CvIxu37uD7Oejws3klX1K+kTSPuQoxiI
- 60nkDosVueRU7HvGfEYvsT0wipD0Buxk0ofEyln3T3K78eGcWPjnY7AeuBRnE05wOqn7k84Zz
- nfbQ0AOvWzLOhI+0zdLX65WqwHaWUBhacEmzdXRcCxOJ7vnL/+Pw/8Jo3XplFfxbkT5snqXXz
- KsURX4dxbVI9+963ErTxz0vIZpmBeCaU8pxtiaq7F557gehOhK0AcwQvyRdGwEMDH0MpI9azG
- 9KM9+PHnZdx3Dhd4Ws5vKulMBGyJ4Eg0XUm5WgsLPpAeuTt+fByF0dJZn+mXbYwSEfSPRVuIN
- 61bcoe0rcUQcDpUdC2ofeitx8Qeq4H/A+Q1IP4449RjGXNHU1H+B50eG4g2jFGrvfOE2/uMOU
- rDJ8Yt3C0CK2i8ChYJudqcps+ga3TGcwW813dJ6BDYmBnQdDLB6zEGElMH/IJPe5GOWhInuum
- s05E4wHRt4l2Ks+oTwY+Gr6mFqtotn4U2KWaAc9R3KXUTr55hTTgqrGCOfZ2B/yWLg1T0C5fb
- Y5Yniuq4q7XyA83z4jQ9/ptVKSr2G3djKbkQyTliFy+lJOlJF/zi3UeYkCFiBWLNMuIRZmHg5
- oFdWFc4fcVi7WUeGTMe7/7kcyujwndi9OXJvc42OlURg/VvBCWDm0Hv/ZauD/ZDterl/rv7ej
- ljZjA79OLXikhmzpYGTryj1q88l95FZYmo7cvL9OJHpSfO0ySP/iMrfDpb1rpBCLMIA/FQhLd
- 0J0fqmk9NlpAyQaUYcJhzAxkaMViYwK+fhD2Bq6LL28IiRTm64z+5hQ3xa2uMuX7G7mRWqXPf
- mKUqgDNmaXtyT45cVHPKJSwRoJ9V8x8LMqKAYLqH958sUVtWpoJwJmU70+k/qBQrDJhQ0YgBt
- h5smT0eRUPvK+VUglNgsQ2/dQkSQQ17BeMHKU21vKmI+NGoYTrZX79eLPngkn+mvveI5CrVfM
- AxRZmRCVVCma1oY9+dMQe9oivXEOfxWatKZ9WPW2+248RgWiyckDyp1BfEy+xiXo4FRdTdH79
- t1aJnD3B5PrXkP+rz0eSt1cJgFk2fXrKCS57FwWN5OCL1SY3ED9l2UvoA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6602:164c:0:0:0:0 with HTTP; Mon, 20 Jun 2022 11:28:19
+ -0700 (PDT)
+From:   robert anderson <robertandersongood2@gmail.com>
+Date:   Mon, 20 Jun 2022 18:28:19 +0000
+Message-ID: <CAPOVD_g06OVV+4x3vna8wLNP9O6m=_JmD_DqJJ3Maz8yOvnMtA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        MONEY_FORM,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d44 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [robertandersongood2[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [robertandersongood2[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.1 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 12:50, Hans de Goede wrote:
-> Hi,
->
-> On 6/2/22 11:42, Yihao Han wrote:
->> clk_put() already checks the clk ptr using !clk and IS_ERR()
->> so there is no need to check it again before calling it.
->>
->> Signed-off-by: Yihao Han <hanyihao@vivo.com>
->> ---
->>  drivers/video/fbdev/simplefb.c | 3 +--
->>  1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simpl=
-efb.c
->> index 2c198561c338..f96ce8801be4 100644
->> --- a/drivers/video/fbdev/simplefb.c
->> +++ b/drivers/video/fbdev/simplefb.c
->> @@ -237,8 +237,7 @@ static int simplefb_clocks_get(struct simplefb_par =
-*par,
->>  		if (IS_ERR(clock)) {
->>  			if (PTR_ERR(clock) =3D=3D -EPROBE_DEFER) {
->>  				while (--i >=3D 0) {
->> -					if (par->clks[i])
->> -						clk_put(par->clks[i]);
->> +					clk_put(par->clks[i]);
->>  				}
->>  				kfree(par->clks);
->>  				return -EPROBE_DEFER;
->
-> Thanks, patch looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Congratulations!
 
-applied to fbdev tree.
+The United Nations has come into conclusion to endorse compensation
+fund payment of six million us dollars ($ 6,000,000.00 ) to lucky
+beneficiaries across the globe through the help of the newly elected
+president due to covid-19 ( coronavirus ) that has cause economic melt
+down in different countries and global hazard to so many lives.
 
-Thanks!
-Helge
+ The United Nations has instructed the swiss world bank to release
+compensation fund payment in collaboration with IBE bank in the United
+Kingdom.
+
+The payment will be issue into atm visa card and send it to lucky
+beneficary who apply for it via IBE bank in United Kingdom through
+diplomatic courier service company close to the beneficiary country.
+
+This is the information United Kingdom management require to deliver
+compensation fund payment to beneficiary country door step.
+
+1. Your name:
+2. Home address:
+3. City:
+4. Country:
+5. Occupation:
+6. Sex:
+7. Marital status:
+8. Age:
+9. Passport / ID card/ Drivers lience
+10.Phone number:
+Contact our Agent email id:
+name solomo brandy
+
+EMIL ADDRESS (solomonbrandyfiveone@gmail.com ) for your payment without a delay,
+
+Best Regard
+Mrs Mary J Robertson.

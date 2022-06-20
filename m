@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917DC552502
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC76F5524FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245039AbiFTUGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S245312AbiFTUG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244759AbiFTUGS (ORCPT
+        with ESMTP id S244837AbiFTUGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:06:18 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E147A2AF8;
-        Mon, 20 Jun 2022 13:06:17 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w17so16063400wrg.7;
-        Mon, 20 Jun 2022 13:06:17 -0700 (PDT)
+        Mon, 20 Jun 2022 16:06:20 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB32AF8;
+        Mon, 20 Jun 2022 13:06:19 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id c21so16099365wrb.1;
+        Mon, 20 Jun 2022 13:06:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8yaggp5fpGj18LvMF3HyT2CJ/UUMH+aDaQflQSqacJg=;
-        b=paYIdrfsy1HcKjFG3USjGArwLlnXJ403FKBZEPKprh1PE/RRI93VAPiwepWUj+Ro7c
-         ENC61PGASfcrY+pgOAuseMs4lQ6AScSKlCWwru9Ljvgf7pC4KMSA0bK4eGu3OCxV7qm5
-         wgVWfAf3vE7WG0I2f3RsPT0dXYiyX6GqnUHQvuabUHTfmg5nJMNWCtH5ZMzBwNs25wX4
-         t9E8oLF5DpWG+D3DpftCIf9mTSQJxDqoYaVCZhTgCuJRmMfUgjPLjlE/ERIuOv1UJLCy
-         WClaj8RTIGJTGfmnGr90xpS3FB0zska6QllBOTUIBV7q3LzA4TCoQEqAIklVfUSlFkfB
-         OuMA==
+        bh=UMBZF982Sgxs/kqKw98NXLNKJY18JDApVwptU4z2w/4=;
+        b=G6wwdsUb0o0KkrQXWK3doZef7L8BgtwmGkyRy70p/dnnUdSeIm80U4/sQB+DU/UyBu
+         lq+G3r2iFyKxiw8S2yrwvMIXSzdaqaSlzGS4cckrZH7OKT1FjnzDeBIuWam1Ix15Gcur
+         CfuLb/IeNTNq7XCpjpezZA1RortUasUbT6SbqO7vsRpKBd8y8QVrNVDKk8S2BlgA83Qo
+         sumJyldJr7QMcNLyzlmXUF+xt5g+wsclm5yeaMm9sxF+W/l0sViSgbIphnns4qWzmkfQ
+         TOnbQAZGAYQPI0jnJ4I4pX8zAZqQjOgq7SNmFg/7Q/XM7k1OPTgUVNx0dMxnLUJdn+hU
+         Ziwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8yaggp5fpGj18LvMF3HyT2CJ/UUMH+aDaQflQSqacJg=;
-        b=tpk4a6vp/CE4RpA4+2xty0aNfKvhRYVl1WnBBcUbUBXhJEFHsYM/XIOGHp716CReC1
-         R9c724hZnsiThSufC5DZ7ZvSUmfzJjxexBXMcopwvyeRH7YNfOdBkVS4SHTgUgoM7qTC
-         yXcJ2oo8Ppjm2GiZa8nuGJXyQJx/lRc7cl2g5WQAP8BECF34b13I/iCwmlPWNGiupzYa
-         baRGznpDpnHl3DLWs31Gn6gQQ5ZFS8AGglO0AAdXkurM6yhXdtnUvDIGAm9P8b0beHzV
-         gkoB84iRe/Zh+D3+zNJtzTJh8Lu7yK8xpMxjUMNJ5M7ax1L7wqXHDAoBKdpkXEvOLGzo
-         EQkg==
-X-Gm-Message-State: AJIora880CiHE1tOuq+JPyb2gP94sSIBVdiwAm8LXbvkxc0QghIIE55z
-        S17PA5X0Usv32C7+oOZJcLk=
-X-Google-Smtp-Source: AGRyM1tqaOvSQ7Sb2fsCdfhlkOWzq8CIvRvGO9y9U1DjiSWuL/0J+/imI8fVxdWC8klmC3T0EKcKBg==
-X-Received: by 2002:adf:fec2:0:b0:21a:6cff:a4f1 with SMTP id q2-20020adffec2000000b0021a6cffa4f1mr18314590wrs.139.1655755576525;
-        Mon, 20 Jun 2022 13:06:16 -0700 (PDT)
+        bh=UMBZF982Sgxs/kqKw98NXLNKJY18JDApVwptU4z2w/4=;
+        b=3AS8wc+BOr2M/QcpX/i3BK1t7cM5DGh13lAtd9MCaOIdGI6ISgXIPQkJh/ukz5BLGM
+         vSRnxMhgOR1DMGjWJEZ14CUVljnM/t9YO03eiOhmtckfTsjXnbeNIHTQVGPUQ1/fmNzT
+         RR7frBZdSWes5kqByw0JJ/rc5jxbp7VjUmwmkS1LEf5IYlRASL5LN7czHUzTOiZM7z3a
+         Z5BGpmQ6P3fnrEnl/gdD6GfhsX7ULNeeuMZEtVKVnsR1spyX8RNQvDlSA2j3Ft4zJzm8
+         xLsJDiPinSEW0hQXOYFPXAUvZ4h2Hhn8SfJJYXTKULO5ypb8+MoxKuK9hGWScTW5GW6y
+         wlzQ==
+X-Gm-Message-State: AJIora/FJfUXMIFH6VWPCJ9WGy4zcIDsOvW8IoMgoftZxr2Dpw6EXEn/
+        ssz+bAvogddIC7+Fs27Xv1w=
+X-Google-Smtp-Source: AGRyM1t4d4cjIVC7sSPWoVSQarvyp90HMRRx6FeW4tX3bvpi8rs+MlYEB74yzJdHRG+/yBrQgYJfeg==
+X-Received: by 2002:a05:6000:1e1c:b0:21b:8a12:acba with SMTP id bj28-20020a0560001e1c00b0021b8a12acbamr10398783wrb.710.1655755578056;
+        Mon, 20 Jun 2022 13:06:18 -0700 (PDT)
 Received: from localhost (92.40.169.68.threembb.co.uk. [92.40.169.68])
-        by smtp.gmail.com with ESMTPSA id p14-20020a5d48ce000000b0021020517639sm14093823wrs.102.2022.06.20.13.06.15
+        by smtp.gmail.com with ESMTPSA id n4-20020a05600c4f8400b003971fc23185sm20679416wmq.20.2022.06.20.13.06.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:06:16 -0700 (PDT)
+        Mon, 20 Jun 2022 13:06:17 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 01/49] regmap-irq: Fix a bug in regmap_irq_enable() for type_in_mask chips
-Date:   Mon, 20 Jun 2022 21:05:56 +0100
-Message-Id: <20220620200644.1961936-2-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 02/49] regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
+Date:   Mon, 20 Jun 2022 21:05:57 +0100
+Message-Id: <20220620200644.1961936-3-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,46 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When enabling a type_in_mask irq, the type_buf contents must be
-AND'd with the mask of the IRQ we're enabling to avoid enabling
-other IRQs by accident, which can happen if several type_in_mask
-irqs share a mask register.
+We need to divide the sub-irq status register offset by register
+stride to get an index for the status buffer to avoid an out of
+bounds write when the register stride is greater than 1.
 
-Fixes: bc998a730367 ("regmap: irq: handle HW using separate rising/falling edge interrupts")
+Fixes: a2d21848d921 ("regmap: regmap-irq: Add main status register support")
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 400c7412a7dc..4f785bc7981c 100644
+index 4f785bc7981c..a6db605707b0 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -252,6 +252,7 @@ static void regmap_irq_enable(struct irq_data *data)
- 	struct regmap_irq_chip_data *d = irq_data_get_irq_chip_data(data);
- 	struct regmap *map = d->map;
- 	const struct regmap_irq *irq_data = irq_to_regmap_irq(d, data->hwirq);
-+	unsigned int reg = irq_data->reg_offset / map->reg_stride;
- 	unsigned int mask, type;
+@@ -387,6 +387,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 		subreg = &chip->sub_reg_offsets[b];
+ 		for (i = 0; i < subreg->num_regs; i++) {
+ 			unsigned int offset = subreg->offset[i];
++			unsigned int index = offset / map->reg_stride;
  
- 	type = irq_data->type.type_falling_val | irq_data->type.type_rising_val;
-@@ -268,14 +269,14 @@ static void regmap_irq_enable(struct irq_data *data)
- 	 * at the corresponding offset in regmap_irq_set_type().
- 	 */
- 	if (d->chip->type_in_mask && type)
--		mask = d->type_buf[irq_data->reg_offset / map->reg_stride];
-+		mask = d->type_buf[reg] & irq_data->mask;
- 	else
- 		mask = irq_data->mask;
+ 			if (chip->not_fixed_stride)
+ 				ret = regmap_read(map,
+@@ -395,7 +396,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 			else
+ 				ret = regmap_read(map,
+ 						chip->status_base + offset,
+-						&data->status_buf[offset]);
++						&data->status_buf[index]);
  
- 	if (d->chip->clear_on_unmask)
- 		d->clear_status = true;
- 
--	d->mask_buf[irq_data->reg_offset / map->reg_stride] &= ~mask;
-+	d->mask_buf[reg] &= ~mask;
- }
- 
- static void regmap_irq_disable(struct irq_data *data)
+ 			if (ret)
+ 				break;
 -- 
 2.35.1
 

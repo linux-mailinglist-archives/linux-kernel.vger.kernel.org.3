@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90948550E25
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E14550E17
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237439AbiFTAn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S237716AbiFTAn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237816AbiFTAnL (ORCPT
+        with ESMTP id S237720AbiFTAnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Jun 2022 20:43:11 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69880B4B4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:58 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id p31so13998603qvp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:58 -0700 (PDT)
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADFEB7D2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:01 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id c144so6864144qkg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4+doRSndIqb/FisTLPVe5Bh/ofBw5aQUkb0tO+s0zbQ=;
-        b=WRsAgh5sLiSXnUWsFWUdKfv3snQ371BnO978e4fY372IVVti8PHQr4mdmPcHCoZIfl
-         cWczSiCcC50anmfaWm5q+8+IS6sHDTgs3xufm0GoK1c6bn3oMXlKLNMszpjs0bDm7H9b
-         VJm2O7Ylezs9ZcWjgYT74IdKN+FJ+ItstRUT58jSjskNJXfCspOSSunzLuskncp+UTom
-         ETzU9mOWaaMZ0IN7+jLeqWPNOuFYTit5m4dagIJPviypEkq0hnRkrDJ4tK9AgOtHougZ
-         o2L9q/1OmXm/Y7ZyrFN6uDiZMnY883rXN8+npJm2rHrMai7cWfip3CRSNksw6aBnugVH
-         J6wg==
+        bh=87vr5hheCjxa+C+zJDx+UhCXUzg+Bvxner7x63Be5z0=;
+        b=ocbtVxqlFRKBq2hJSLkb1jSAZI+z+3QG9/JSVg+4RFJ1C/ow58U8dZhOK82LCCUPOB
+         3HRqKTj9Vp+ypkb2xtG+NnDyZobOOfEob5du36/KgfSpRRen4GXLuTwz7CXEUpsCaCrA
+         +L5PUA1xlnrN0JSOja7JY9f+NodUqwMC92vxSt0iM9vHyNyEzklb13A3yLvzlmrcjC/k
+         yFACZSug+zUrJkcC+DiHt70wi+qd6LAArh2Zp4szCWvuqY92HgZqwFeQjeT5rcl99DMp
+         ml+k7YYcbgaj5BXOB3em38kBqjfsUY3OzwQ5+dsgnScr1TBqSN+Un3SRuBO3CY3ws5wt
+         k3JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4+doRSndIqb/FisTLPVe5Bh/ofBw5aQUkb0tO+s0zbQ=;
-        b=u4k/HewOLoewD/82d+CP7BMxlOunqfQi8GAi/xjRK/gA/uxs8u71Lvu3aofnjkMnNL
-         e9uXIfV7V0Dn9cVJizoXo50kTznVYS/dqIa8yI7QEfMBJ61uCTfHZA+iuxLOKocX0BrY
-         NqDqUnPt1Ohwv4ZuVHE48/KL7Say8O2Zyqw/ysv0OY8Qi4ufFp0FAM5qypbtqruR2lpQ
-         BPbHqRyArJTcqKUseVwFRA0wKppw/Sv/XsEfzQZQvXpNTaRcHR40sI+XXD+4SjfAHfHP
-         OPpk/q1v9S2AbbHLUmLV/8G5wdK3hT4N6SJubTVoLHUkAn0QR6EXuwSrNubxP+VfBwyi
-         zhPA==
-X-Gm-Message-State: AJIora/1i1qlXlaryHKk09+5vCrun/HmV69VKHhQFjWQhHHYz9TjRZ2W
-        Xe6NXH/T/n3Roe3/0LysD61MiqzXk745HAY=
-X-Google-Smtp-Source: AGRyM1vA0V9RjbIKZsYA7zZoD0L520hpVBmC/QV5Y4Fl5nCasrnrNz3TXtyGGqCBHjwmSFxKxKwLGQ==
-X-Received: by 2002:a05:6214:c82:b0:46a:b677:e284 with SMTP id r2-20020a0562140c8200b0046ab677e284mr16988331qvr.28.1655685777230;
-        Sun, 19 Jun 2022 17:42:57 -0700 (PDT)
+        bh=87vr5hheCjxa+C+zJDx+UhCXUzg+Bvxner7x63Be5z0=;
+        b=yi3R5sO9WZARY1Tec2QDZjLrv4WNy6EmiaN2+Q7e4S+moG0Rrx3+wNlV9D/AMibkRh
+         6sHLrxgyfqSelY6aQKgUEkyBky7hgzuCZbjK+rWfknRJP3DbCYGpRXEtnKTgtcU86fYG
+         Ly52WqS4fO+jXQFcJGczT9ErT7F56LPxexMUXVe4olnWMziPQSzYoiE7zYV3sBMWpugk
+         WJaX5rAxlo/KFXdesolCzEk9vllvInqxDRsXDN516MQHeKYhhW6khZwukEzST7T+AwIV
+         OiIbCugVsmZ1A7Uo0k1EQ8kJuJABpR1h4QquZJ7qGEMrnKEf//VqlxBNqwUcXjTCfSXD
+         13OQ==
+X-Gm-Message-State: AJIora8thd86yyqU4DR/leezdBurucX3RgrstSbYPT0+o7kD7C8E7Q4U
+        DjHG+TYqpp70eKTvJW7vTevL1Mp95Fy7gW8=
+X-Google-Smtp-Source: AGRyM1vHltOnT6lZQxwYcHcDmIe/iCQZuLx8M068VFsShpd1IhADyohd3Ftmhz+guiDL0E8AM8B5gQ==
+X-Received: by 2002:a37:ad09:0:b0:6a6:ae2b:9d54 with SMTP id f9-20020a37ad09000000b006a6ae2b9d54mr14777059qkm.424.1655685780208;
+        Sun, 19 Jun 2022 17:43:00 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id l16-20020a05620a28d000b006a6cadd89efsm11521487qkp.82.2022.06.19.17.42.55
+        by smtp.gmail.com with ESMTPSA id y26-20020ac87c9a000000b00304ecf35b50sm9055654qtv.97.2022.06.19.17.42.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:42:55 -0700 (PDT)
+        Sun, 19 Jun 2022 17:42:59 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 11/34] vsprintf: Improve number()
-Date:   Sun, 19 Jun 2022 20:42:10 -0400
-Message-Id: <20220620004233.3805-12-kent.overstreet@gmail.com>
+Subject: [PATCH v4 12/34] vsprintf: prt_u64_minwidth(), prt_u64()
+Date:   Sun, 19 Jun 2022 20:42:11 -0400
+Message-Id: <20220620004233.3805-13-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,154 +71,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch refactors number() to make it a bit clearer, and it also
-changes it to call printbuf_make_room() only once at the start, instead
-of in the printbuf output helpers.
+This adds two new-style printbuf helpers for printing simple u64s, and
+converts num_to_str() to be a simple wrapper around prt_u64_minwidth().
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- lib/vsprintf.c | 83 +++++++++++++++++++++++++-------------------------
- 1 file changed, 41 insertions(+), 42 deletions(-)
+ include/linux/kernel.h |  4 +-
+ lib/vsprintf.c         | 94 ++++++++++++++++++++----------------------
+ 2 files changed, 48 insertions(+), 50 deletions(-)
 
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 1906861ece..9ba5a53c6a 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -202,12 +202,14 @@ static inline void might_fault(void) { }
+ 
+ void do_exit(long error_code) __noreturn;
+ 
++struct printbuf;
++extern void prt_u64_minwidth(struct printbuf *out, u64 num, unsigned width);
++extern void prt_u64(struct printbuf *out, u64 num);
+ extern int num_to_str(char *buf, int size,
+ 		      unsigned long long num, unsigned int width);
+ 
+ /* lib/printf utilities */
+ 
+-struct printbuf;
+ extern __printf(2, 3) void prt_printf(struct printbuf *out, const char *fmt, ...);
+ extern __printf(2, 0) void prt_vprintf(struct printbuf *out, const char *fmt, va_list);
+ 
 diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 5afa74dda5..7d20406deb 100644
+index 7d20406deb..e65115f90f 100644
 --- a/lib/vsprintf.c
 +++ b/lib/vsprintf.c
-@@ -458,93 +458,92 @@ void number(struct printbuf *out, unsigned long long num,
+@@ -368,41 +368,51 @@ char *put_dec(char *buf, unsigned long long n)
+ 
+ #endif
+ 
+-/*
+- * Convert passed number to decimal string.
+- * Returns the length of string.  On buffer overflow, returns 0.
+- *
+- * If speed is not important, use snprintf(). It's easy to read the code.
++/**
++ * prt_u64_minwidth - print a u64, in decimal, with zero padding
++ * @out: printbuf to output to
++ * @num: u64 to print
++ * @width: minimum width
+  */
+-int num_to_str(char *buf, int size, unsigned long long num, unsigned int width)
++void prt_u64_minwidth(struct printbuf *out, u64 num, unsigned width)
  {
  	/* put_dec requires 2-byte alignment of the buffer. */
- 	char tmp[3 * sizeof(num)] __aligned(2);
--	char sign;
--	char locase;
-+	char sign = 0;
-+	/* locase = 0 or 0x20. ORing digits or letters with 'locase'
-+	 * produces same digits or (maybe lowercased) letters */
-+	char locase = (spec.flags & SMALL);
- 	int need_pfx = ((spec.flags & SPECIAL) && spec.base != 10);
--	int i;
- 	bool is_zero = num == 0LL;
- 	int field_width = spec.field_width;
- 	int precision = spec.precision;
-+	int nr_digits = 0;
-+	int output_bytes = 0;
+ 	char tmp[sizeof(num) * 3] __aligned(2);
+-	int idx, len;
++	unsigned len = put_dec(tmp, num) - tmp;
  
--	/* locase = 0 or 0x20. ORing digits or letters with 'locase'
--	 * produces same digits or (maybe lowercased) letters */
--	locase = (spec.flags & SMALL);
- 	if (spec.flags & LEFT)
- 		spec.flags &= ~ZEROPAD;
--	sign = 0;
- 	if (spec.flags & SIGN) {
- 		if ((signed long long)num < 0) {
- 			sign = '-';
- 			num = -(signed long long)num;
--			field_width--;
-+			output_bytes++;
- 		} else if (spec.flags & PLUS) {
- 			sign = '+';
--			field_width--;
-+			output_bytes++;
- 		} else if (spec.flags & SPACE) {
- 			sign = ' ';
--			field_width--;
-+			output_bytes++;
- 		}
- 	}
- 	if (need_pfx) {
- 		if (spec.base == 16)
--			field_width -= 2;
-+			output_bytes += 2;
- 		else if (!is_zero)
--			field_width--;
-+			output_bytes++;
- 	}
- 
- 	/* generate full string in tmp[], in reverse order */
--	i = 0;
--	if (num < spec.base)
--		tmp[i++] = hex_asc_upper[num] | locase;
--	else if (spec.base != 10) { /* 8 or 16 */
-+	if (spec.base == 10) {
-+		nr_digits = put_dec(tmp, num) - tmp;
-+	} else { /* 8 or 16 */
- 		int mask = spec.base - 1;
--		int shift = 3;
-+		int shift = ilog2((unsigned) spec.base);
- 
--		if (spec.base == 16)
--			shift = 4;
- 		do {
--			tmp[i++] = (hex_asc_upper[((unsigned char)num) & mask] | locase);
-+			tmp[nr_digits++] = (hex_asc_upper[((unsigned char)num) & mask] | locase);
- 			num >>= shift;
- 		} while (num);
--	} else { /* base 10 */
--		i = put_dec(tmp, num) - tmp;
- 	}
- 
- 	/* printing 100 using %2d gives "100", not "00" */
--	if (i > precision)
--		precision = i;
-+	precision = max(nr_digits, precision);
-+	output_bytes += precision;
-+	field_width = max(0, field_width - output_bytes);
-+
-+	printbuf_make_room(out, field_width + output_bytes);
-+
- 	/* leading space padding */
--	field_width = max(0, field_width - precision);
- 	if (!(spec.flags & (ZEROPAD | LEFT)) && field_width) {
--		__prt_chars(out, ' ', field_width);
-+		__prt_chars_reserved(out, ' ', field_width);
- 		field_width = 0;
- 	}
-+
- 	/* sign */
- 	if (sign)
--		__prt_char(out, sign);
-+		__prt_char_reserved(out, sign);
-+
- 	/* "0x" / "0" prefix */
- 	if (need_pfx) {
- 		if (spec.base == 16 || !is_zero)
--			__prt_char(out, '0');
-+			__prt_char_reserved(out, '0');
- 		if (spec.base == 16)
--			__prt_char(out, 'X' | locase);
-+			__prt_char_reserved(out, 'X' | locase);
- 	}
--	/* zero or space padding */
--	if (!(spec.flags & LEFT) && field_width) {
--		char c = ' ' + (spec.flags & ZEROPAD);
- 
--		__prt_chars(out, c, field_width);
--		field_width = 0;
+-	/* put_dec() may work incorrectly for num = 0 (generate "", not "0") */
+-	if (num <= 9) {
+-		tmp[0] = '0' + num;
+-		len = 1;
+-	} else {
+-		len = put_dec(tmp, num) - tmp;
 -	}
--	/* hmm even more zero padding? */
--	if (precision > i)
--		__prt_chars(out, '0', precision - i);
-+	/* zero padding */
-+	if (!(spec.flags & LEFT) && field_width)
-+		__prt_chars_reserved(out, '0', field_width);
-+
-+	/* zero padding from precision */
-+	if (precision > nr_digits)
-+		__prt_chars_reserved(out, '0', precision - nr_digits);
-+
- 	/* actual digits of result */
--	while (--i >= 0)
--		__prt_char(out, tmp[i]);
-+	while (--nr_digits >= 0)
-+		__prt_char_reserved(out, tmp[nr_digits]);
-+
- 	/* trailing space padding */
--	if (field_width)
--		__prt_chars(out, ' ', field_width);
-+	if ((spec.flags & LEFT) && field_width)
-+		__prt_chars_reserved(out, ' ', field_width);
++	printbuf_make_room(out, max(len, width));
  
- 	printbuf_nul_terminate(out);
+-	if (len > size || width > size)
+-		return 0;
++	if (width > len)
++		__prt_chars_reserved(out, '0', width - len);
+ 
+-	if (width > len) {
+-		width = width - len;
+-		for (idx = 0; idx < width; idx++)
+-			buf[idx] = ' ';
+-	} else {
+-		width = 0;
+-	}
++	while (len)
++		__prt_char_reserved(out, tmp[--len]);
++	printbuf_nul_terminate(out);
++}
+ 
+-	for (idx = 0; idx < len; ++idx)
+-		buf[idx + width] = tmp[len - idx - 1];
++/**
++ * prt_u64 - print a simple u64, in decimal
++ * @out: printbuf to output to
++ * @num: u64 to print
++ */
++void prt_u64(struct printbuf *out, u64 num)
++{
++	prt_u64_minwidth(out, num, 0);
++}
+ 
+-	return len + width;
++/*
++ * Convert passed number to decimal string.
++ * Returns the length of string.  On buffer overflow, returns 0.
++ *
++ * Consider switching to printbufs and using prt_u64() or prt_u64_minwith()
++ * instead.
++ */
++int num_to_str(char *buf, int size, unsigned long long num, unsigned int width)
++{
++	struct printbuf out = PRINTBUF_EXTERN(buf, size);
++
++	prt_u64_minwidth(&out, num, width);
++	return out.pos;
  }
+ 
+ #define SIGN	1		/* unsigned/signed, must be 1 */
+@@ -1018,20 +1028,6 @@ static const struct printf_spec default_dec_spec = {
+ 	.precision = -1,
+ };
+ 
+-static const struct printf_spec default_dec02_spec = {
+-	.base = 10,
+-	.field_width = 2,
+-	.precision = -1,
+-	.flags = ZEROPAD,
+-};
+-
+-static const struct printf_spec default_dec04_spec = {
+-	.base = 10,
+-	.field_width = 4,
+-	.precision = -1,
+-	.flags = ZEROPAD,
+-};
+-
+ static noinline_for_stack
+ void resource_string(struct printbuf *out, struct resource *res,
+ 		     struct printf_spec spec, const char *fmt)
+@@ -1231,12 +1227,12 @@ void bitmap_list_string(struct printbuf *out, unsigned long *bitmap,
+ 			prt_char(out, ',');
+ 		first = false;
+ 
+-		number(out, rbot, default_dec_spec);
++		prt_u64(out, rbot);
+ 		if (rtop == rbot + 1)
+ 			continue;
+ 
+ 		prt_char(out, '-');
+-		number(out, rtop - 1, default_dec_spec);
++		prt_u64(out, rtop - 1);
+ 	}
+ }
+ 
+@@ -1778,21 +1774,21 @@ void date_str(struct printbuf *out,
+ 	int year = tm->tm_year + (r ? 0 : 1900);
+ 	int mon = tm->tm_mon + (r ? 0 : 1);
+ 
+-	number(out, year, default_dec04_spec);
++	prt_u64_minwidth(out, year, 4);
+ 	prt_char(out, '-');
+-	number(out, mon, default_dec02_spec);
++	prt_u64_minwidth(out, mon, 2);
+ 	prt_char(out, '-');
+-	number(out, tm->tm_mday, default_dec02_spec);
++	prt_u64_minwidth(out, tm->tm_mday, 2);
+ }
+ 
+ static noinline_for_stack
+ void time_str(struct printbuf *out, const struct rtc_time *tm, bool r)
+ {
+-	number(out, tm->tm_hour, default_dec02_spec);
++	prt_u64_minwidth(out, tm->tm_hour, 2);
+ 	prt_char(out, ':');
+-	number(out, tm->tm_min, default_dec02_spec);
++	prt_u64_minwidth(out, tm->tm_min, 2);
+ 	prt_char(out, ':');
+-	number(out, tm->tm_sec, default_dec02_spec);
++	prt_u64_minwidth(out, tm->tm_sec, 2);
+ }
+ 
+ static noinline_for_stack
+@@ -2070,7 +2066,7 @@ void device_node_string(struct printbuf *out, struct device_node *dn,
+ 			str_spec.precision = precision;
+ 			break;
+ 		case 'p':	/* phandle */
+-			number(out, (unsigned int)dn->phandle, default_dec_spec);
++			prt_u64(out, (unsigned int)dn->phandle);
+ 			break;
+ 		case 'P':	/* path-spec */
+ 			p = fwnode_get_name(of_fwnode_handle(dn));
 -- 
 2.36.1
 

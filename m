@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FAD552533
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F36552531
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344123AbiFTUHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S1343712AbiFTUHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244507AbiFTUGw (ORCPT
+        with ESMTP id S1343777AbiFTUGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:06:52 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB501DA7A;
-        Mon, 20 Jun 2022 13:06:42 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so6194766wml.2;
-        Mon, 20 Jun 2022 13:06:42 -0700 (PDT)
+        Mon, 20 Jun 2022 16:06:55 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAE41EED1;
+        Mon, 20 Jun 2022 13:06:44 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so8296616wmq.0;
+        Mon, 20 Jun 2022 13:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6euAwHf+u1ItA2eK0so1Yr2FypSsHdAXRoV366E1T7A=;
-        b=ltBWD1dr5RteubU05COvdKRAItNBE3XGRxsyg7vyiQ01v6gFjKkGQCa7AxlmlAlEzY
-         AezfAXia6RuJ38Bg9CC3TjmJVkv+VhSCZoabV6MHfCWW/xklUdcZ/WY/1zIABVKL88nB
-         WIUir0+yDu0HI5+CAA3jsSyTlvoO/BMKRYNcAGaUDoqrRUi7MUBaYNF+YGqEKRDqHCrk
-         6NWMWphH7cTh+N4d7Wj2CRuYxpEAqY1ZRwT8qgOSayGNQKBdURajaEjI6DjrBNeapqlB
-         yYOfUhgVlTPPPj0QyHa5BKMwDnq4P6Qhr+RaXEI/210OX3LUMTHtrnc7u7e9RyvHCH4H
-         a21g==
+        bh=yDbkoyglFzlD/is/5GkDF5bxT9ENs1AtX/zXNAcYF8s=;
+        b=gdmCZ/lBOcInOC7Vpu1bY/iCkTRvuWC70p3sTpyPTGpiGjPvbOfn3qCcOS6TYvfax1
+         3L11FjZaxXZKn19jySJpcCpWV+xtFrtQQCVooDpT2B76t5Yf89SzliwlOHigso1rDVLk
+         oTKVebpiS712yjcf0kpN9r3uejsVQPOSwQQwOfRTaV3WxoLZf11oL8qGCQ6IIb3JKTvH
+         Gd5oqTmwdqCLXQGfP9Un8n1q4CYFfIWgJvxX8PaS4jqeICZF2WLj79nuYT2SFdtS4Hri
+         hh9xIXG5EB3E4bg9SOAm4e7Z9wjbeiNwP/00cDnzR6iUmi2i9i1qZqeOzh3rmmFV/C0Q
+         vMPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6euAwHf+u1ItA2eK0so1Yr2FypSsHdAXRoV366E1T7A=;
-        b=6uET5Ro9/8Ww4eN3QpdAKyQ6qK4YPGCtn7JOlzQd+/sil80jkyJrl/NT6mTJdd61id
-         7PxE4SXjRlqirUbcNFQ6NhC7ewNB38ERr8npVmIWsCe5cIoD8SoSSoVPonENATbJXXJN
-         tcwuNG7r+yJipK6B6yJ3TrHnBAA4k8eFRKDC7RvWu7BOkvJFha72+cxmeY6OFzJ2ESI6
-         SJPOJmc/r4f//3BPrGYH+PbXVotr03Ess4wdSJmkX0gEq7gJwQdxFoEdbJrV9Cn4qK2o
-         oZ1vwTfyfhHAm8eXTwGWX/xlgXS2fm3mmrURGFtZdLavFw7ccRyaI38MTfQy9pcIQU1t
-         8DZQ==
-X-Gm-Message-State: AJIora839Ae2QQaM+faGB893O8x4bqpHO/dLB/ISdJqDU61F2F1S11bT
-        LEw5kgTfXN79fgovLHGCd/k=
-X-Google-Smtp-Source: AGRyM1vvGym6dIu1dzL5D9w5ByCyaMzKJVi5dIkF/tCPnAULV9l/JONes8lGy1VG4OGs+OyJ5i+Pgg==
-X-Received: by 2002:a7b:c012:0:b0:39c:529a:7590 with SMTP id c18-20020a7bc012000000b0039c529a7590mr26485917wmb.6.1655755601453;
-        Mon, 20 Jun 2022 13:06:41 -0700 (PDT)
+        bh=yDbkoyglFzlD/is/5GkDF5bxT9ENs1AtX/zXNAcYF8s=;
+        b=vwNP5QeGZvNQP5tGjpSuHJqw6IwRzQFpMmGgXIxYQ9c08ATyJclMeaEXk0Hcq0E0Yh
+         kEGJBWZrlxV6WOx6bY+mV3E5UHelJgoZkicLH9ep8xmchJrL4rOCaudwvxbt2xkVbi2+
+         ri+ern06qHUcw0L7/YxbSP5obeOOPfwi4TCdDwkkxVGgdgknWsKI9cVKexvE1Ntb8UG3
+         r/udmFtgZC9/1NGZ5gJg0HTmYhrYFdd4oIaSYfigHuo/2GOdCcUqLSzzw+UuvPhfGOJ3
+         vaTaq+sxcT2T6frxwZeuFacXUOyXLUJVLob9uWkigLeQqUTBKzXIDQjslbh1mTwtrc+v
+         SkGQ==
+X-Gm-Message-State: AOAM532oWoPvGWFQJVd3YFO7DAbDa5P4Np5bCws9Xv6uKx8PfAjfWSfx
+        snGOzwUbFS+zicKzKSKAFfU=
+X-Google-Smtp-Source: ABdhPJynux7C1eoNMlx+vUMO5VOj8q1wBlYfPuBT+ReLmKHLRHcj/n+Q7FNGG42F1xN9EMg0dcGAng==
+X-Received: by 2002:a05:600c:601f:b0:39c:416c:4069 with SMTP id az31-20020a05600c601f00b0039c416c4069mr36844654wmb.85.1655755603037;
+        Mon, 20 Jun 2022 13:06:43 -0700 (PDT)
 Received: from localhost (92.40.169.68.threembb.co.uk. [92.40.169.68])
-        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b003973c54bd69sm19423794wme.1.2022.06.20.13.06.40
+        by smtp.gmail.com with ESMTPSA id n15-20020a5d4c4f000000b0021b966abc19sm300460wrt.19.2022.06.20.13.06.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:06:41 -0700 (PDT)
+        Mon, 20 Jun 2022 13:06:42 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 17/49] regmap-irq: Add broken_mask_unmask flag
-Date:   Mon, 20 Jun 2022 21:06:12 +0100
-Message-Id: <20220620200644.1961936-18-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 18/49] mfd: qcom-pm8008: Add broken_mask_unmask irq chip flag
+Date:   Mon, 20 Jun 2022 21:06:13 +0100
+Message-Id: <20220620200644.1961936-19-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,29 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This flag is necessary to prepare for fixing the behavior of unmask
-registers. Existing chips that set mask_base and unmask_base must
-set broken_mask_unmask=1 to declare that they expect the mask bits
-will be inverted in both registers, contrary to the usual behavior
-of mask registers.
+The qcom-pm8008 appears to use "1 to enable" convention for
+enabling interrupts, with separate set and clear registers.
+It's relying on masks and unmasks being inverted from their
+intuitive meaning, so it needs the broken_mask_unmask flag.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- include/linux/regmap.h | 1 +
+ drivers/mfd/qcom-pm8008.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index ee2567a0465c..21a70fd99493 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -1523,6 +1523,7 @@ struct regmap_irq_chip {
- 	bool clear_on_unmask:1;
- 	bool not_fixed_stride:1;
- 	bool status_invert:1;
-+	bool broken_mask_unmask:1;
- 
- 	int num_regs;
- 
+diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+index da16566f7883..18095e72714e 100644
+--- a/drivers/mfd/qcom-pm8008.c
++++ b/drivers/mfd/qcom-pm8008.c
+@@ -141,6 +141,7 @@ static struct regmap_irq_chip pm8008_irq_chip = {
+ 	.status_base		= PM8008_STATUS_BASE,
+ 	.mask_base		= PM8008_MASK_BASE,
+ 	.unmask_base		= PM8008_UNMASK_BASE,
++	.broken_mask_unmask	= true,
+ 	.ack_base		= PM8008_ACK_BASE,
+ 	.config_base		= pm8008_config_regs,
+ 	.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),
 -- 
 2.35.1
 

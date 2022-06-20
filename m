@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7775551791
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BDA551794
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241898AbiFTLmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S241930AbiFTLmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235801AbiFTLmb (ORCPT
+        with ESMTP id S241933AbiFTLmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:42:31 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932571659E;
-        Mon, 20 Jun 2022 04:42:29 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25KBgM6x061455;
-        Mon, 20 Jun 2022 06:42:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655725342;
-        bh=4plFmT78RjcqN4kVC76hW4KGxAhnAgKqHE3Pr4lusVA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=XoLD3Y4ltUZxIMljk5+60Ub/MNz2dDZKSRTwdj6DUVYfjhA7P8itoEBX3jIckGnwu
-         mLYjWdt/bLw51fQg9ELd0O846zPrAVvtS0CWIwSnw5MeYF84QPtzflmDso8AozBFON
-         pRKtuTJXsAvY/IWEPr+mfivcXFZegEK4MJY0ayds=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25KBgMU4087171
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Jun 2022 06:42:22 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Jun 2022 06:42:21 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Jun 2022 06:42:21 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25KBgKsC130217;
-        Mon, 20 Jun 2022 06:42:21 -0500
-Date:   Mon, 20 Jun 2022 17:12:19 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Nishanth Menon <nm@ti.com>
-CC:     <robh+dt@kernel.org>, <vigneshr@ti.com>, <kishon@ti.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
-        <rogerq@kernel.org>, <devicetree@vger.kernel.org>,
-        <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
-        Vijay Pothukuchi <vijayp@ti.com>
-Subject: Re: [PATCH v4 2/3] arm64: dts: ti: k3-j721e-*: Add dts nodes for
- EHRPWMs
-Message-ID: <20220620114218.fqkf6vnyxafla23z@uda0490373>
-References: <20220530101031.11357-1-r-ravikumar@ti.com>
- <20220530101031.11357-3-r-ravikumar@ti.com>
- <20220618021949.i5m4saxi2celzanz@kahuna>
+        Mon, 20 Jun 2022 07:42:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A114167E3;
+        Mon, 20 Jun 2022 04:42:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8F9F612C6;
+        Mon, 20 Jun 2022 11:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1465C3411C;
+        Mon, 20 Jun 2022 11:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655725358;
+        bh=XjBQVHtkZS96FR702JUYc7O6XJ6QMpLEjXEb3IAjCtU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nTEHa144aq1WqQkzQQ42Q0xeWOjDA30l712yxqZQ3PKJ+WkZj86BAaxSibD6r2pxK
+         /BFoOen3d9dHYExg/T2qGqLPWpDV3ddhuHsvRuCtD6iOkRQ/Z9s7XWlp8B3oIfJjRp
+         4OAVIIQYURLIzvgf32esC8xKIXnU4csyrYMKgdg0=
+Date:   Mon, 20 Jun 2022 13:42:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, ziy@nvidia.com, stable@vger.kernel.org,
+        guoren@kernel.org, huanyi.xj@alibaba-inc.com, guohanjun@huawei.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.15] mm: validate buddy page before using
+Message-ID: <YrBdKwFHfy9Lr14c@kroah.com>
+References: <20220616161746.3565225-1-xianting.tian@linux.alibaba.com>
+ <20220616161746.3565225-6-xianting.tian@linux.alibaba.com>
+ <YrBJVAZWOzmDyUN3@kroah.com>
+ <35bd7396-f5aa-e154-9495-0a36fc6f6a33@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220618021949.i5m4saxi2celzanz@kahuna>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <35bd7396-f5aa-e154-9495-0a36fc6f6a33@linux.alibaba.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,185 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21:19-20220617, Nishanth Menon wrote:
-> On 15:40-20220530, Rahul T R wrote:
-> > From: Vijay Pothukuchi <vijayp@ti.com>
-> > 
-> > Add dts nodes for 6 EHRPWM instances on SoC
-> > 
-> > Signed-off-by: Vijay Pothukuchi <vijayp@ti.com>
-> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> > ---
-> >  .../dts/ti/k3-j721e-common-proc-board.dts     | 24 +++++++
-> >  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 62 ++++++++++++++++++-
-> >  arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 24 +++++++
-> >  3 files changed, 109 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> > index 2bc26a296496..f7d02fa4d6fc 100644
-> > --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> > @@ -995,3 +995,27 @@
-> >  &main_mcan13 {
-> >  	status = "disabled";
-> >  };
-> > +
-> > +&main_ehrpwm0 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm1 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm2 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm3 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm4 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm5 {
-> > +	status = "disabled";
-> > +};
+On Mon, Jun 20, 2022 at 06:54:44PM +0800, Xianting Tian wrote:
 > 
+> 在 2022/6/20 下午6:17, Greg KH 写道:
+> > On Fri, Jun 17, 2022 at 12:17:45AM +0800, Xianting Tian wrote:
+> > > Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
+> > > fixes a bug in 1dd214b8f21c and there is a similar bug in d9dddbf55667 that
+> > > can be fixed in a similar way too.
+> > > 
+> > > In unset_migratetype_isolate(), we also need the fix, so move page_is_buddy()
+> > > from mm/page_alloc.c to mm/internal.h
+> > > 
+> > > In addition, for RISC-V arch the first 2MB RAM could be reserved for opensbi,
+> > > so it would have pfn_base=512 and mem_map began with 512th PFN when
+> > > CONFIG_FLATMEM=y.
+> > > But __find_buddy_pfn algorithm thinks the start pfn 0, it could get 0 pfn or
+> > > less than the pfn_base value. We need page_is_buddy() to verify the buddy to
+> > > prevent accessing an invalid buddy.
+> > > 
+> > > Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
+> > > Cc: stable@vger.kernel.org
+> > > Reported-by: zjb194813@alibaba-inc.com
+> > > Reported-by: tianhu.hh@alibaba-inc.com
+> > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> > > ---
+> > >   mm/internal.h       | 34 ++++++++++++++++++++++++++++++++++
+> > >   mm/page_alloc.c     | 37 +++----------------------------------
+> > >   mm/page_isolation.c |  3 ++-
+> > >   3 files changed, 39 insertions(+), 35 deletions(-)
+> > What is the commit id of this in Linus's tree?
 > 
-> Do the pwm driver croak and die OR it is un-usable on proc-board or
-> disabled due to not-primary function (ideally drivers should shut things
-> off when unused)?
+> It is also this one，
 > 
-
-Hi Nishanth,
-
-Nodes are disabled since
-EHRPWM is not primary function
-and pins are configured for
-different interfaces like MCASP10 etc..
-
-> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> > index 43b6cf5791ee..1ee00b73905d 100644
-> > --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> > @@ -66,7 +66,67 @@
-> >  			#mux-control-cells = <1>;
-> >  			mux-reg-masks = <0x4000 0x8000000>, /* USB0 to SERDES0/3 mux */
-> >  					<0x4010 0x8000000>; /* USB1 to SERDES1/2 mux */
-> > -	    };
-> > +		};
-> > +
-> > +		ehrpwm_tbclk: clock-controller@4140 {
-> > +			compatible = "ti,am654-ehrpwm-tbclk", "syscon";
-> > +			reg = <0x4140 0x18>;
-> > +			#clock-cells = <1>;
-> > +		};
-> > +	};
-> > +
-> > +	main_ehrpwm0: pwm@3000000 {
-> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-> > +		#pwm-cells = <3>;
-> > +		reg = <0x0 0x3000000 0x0 0x100>;
+> commit 787af64d05cd528aac9ad16752d11bb1c6061bb9
+> Author: Zi Yan <ziy@nvidia.com>
+> Date:   Wed Mar 30 15:45:43 2022 -0700
 > 
-> would suggest 0x00 instead of 0x0
-
-will fix this in the respin
-
-Regards
-Rahul T R
-
+>     mm: page_alloc: validate buddy before check its migratetype.
 > 
-> > +		power-domains = <&k3_pds 83 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&ehrpwm_tbclk 0>, <&k3_clks 83 0>;
-> > +		clock-names = "tbclk", "fck";
-> > +	};
-> > +
-> > +	main_ehrpwm1: pwm@3010000 {
-> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-> > +		#pwm-cells = <3>;
-> > +		reg = <0x0 0x3010000 0x0 0x100>;
-> > +		power-domains = <&k3_pds 84 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&ehrpwm_tbclk 1>, <&k3_clks 84 0>;
-> > +		clock-names = "tbclk", "fck";
-> > +	};
-> > +
-> > +	main_ehrpwm2: pwm@3020000 {
-> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-> > +		#pwm-cells = <3>;
-> > +		reg = <0x0 0x3020000 0x0 0x100>;
-> > +		power-domains = <&k3_pds 85 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&ehrpwm_tbclk 2>, <&k3_clks 85 0>;
-> > +		clock-names = "tbclk", "fck";
-> > +	};
-> > +
-> > +	main_ehrpwm3: pwm@3030000 {
-> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-> > +		#pwm-cells = <3>;
-> > +		reg = <0x0 0x3030000 0x0 0x100>;
-> > +		power-domains = <&k3_pds 86 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&ehrpwm_tbclk 3>, <&k3_clks 86 0>;
-> > +		clock-names = "tbclk", "fck";
-> > +	};
-> > +
-> > +	main_ehrpwm4: pwm@3040000 {
-> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-> > +		#pwm-cells = <3>;
-> > +		reg = <0x0 0x3040000 0x0 0x100>;
-> > +		power-domains = <&k3_pds 87 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&ehrpwm_tbclk 4>, <&k3_clks 87 0>;
-> > +		clock-names = "tbclk", "fck";
-> > +	};
-> > +
-> > +	main_ehrpwm5: pwm@3050000 {
-> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-> > +		#pwm-cells = <3>;
-> > +		reg = <0x0 0x3050000 0x0 0x100>;
-> > +		power-domains = <&k3_pds 88 TI_SCI_PD_EXCLUSIVE>;
-> > +		clocks = <&ehrpwm_tbclk 5>, <&k3_clks 88 0>;
-> > +		clock-names = "tbclk", "fck";
-> >  	};
-> >  
-> >  	gic500: interrupt-controller@1800000 {
-> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> > index 80358cba6954..98a55778f3fe 100644
-> > --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> > @@ -1129,3 +1129,27 @@
-> >  	memory-region = <&c71_0_dma_memory_region>,
-> >  			<&c71_0_memory_region>;
-> >  };
-> > +
-> > +&main_ehrpwm0 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm1 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm2 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm3 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm4 {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&main_ehrpwm5 {
-> > +	status = "disabled";
-> > +};
-> > -- 
-> > 2.17.1
-> > 
+>     Whenever a buddy page is found, page_is_buddy() should be called to
+>     check its validity.  Add the missing check during pageblock merge check.
 > 
-> -- 
-> Regards,
-> Nishanth Menon
-> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+>     Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
+> pageblocks with others")
+>     Link:
+> https://lore.kernel.org/all/20220330154208.71aca532@gandalf.local.home/
+>     Reported-and-tested-by: Steven Rostedt <rostedt@goodmis.org>
+>     Signed-off-by: Zi Yan <ziy@nvidia.com>
+>     Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+
+This commit looks nothing like what you posted here.
+
+Why the vast difference with no explaination as to why these are so
+different from the other backports you provided here?  Also why is the
+subject lines changed?
+
+Something went really wrong here, I'm going to drop all of these from
+the stable queues and wait for a full series of all new backports, with
+the correct upstream commit id added, and the original signed-off-by
+lines preserved.
+
+thanks,
+
+greg k-h

@@ -2,193 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D405552659
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 23:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B12555265B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiFTVUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 17:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S240171AbiFTVZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 17:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiFTVUJ (ORCPT
+        with ESMTP id S229608AbiFTVY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 17:20:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4299F1EEEE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:20:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5E4EB8125A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 21:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52708C3411B;
-        Mon, 20 Jun 2022 21:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655760005;
-        bh=4kXc56TAeXMy7WsIFk0raAaetVV5IC3295pxGQmXk/I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jRV0qc+25RSyc/r7q5gijX5VKcIVtLtgB7+WE0qEDCPuCL3NPmQWg0W5F1ovTrskQ
-         F1/I5v59LITPZRL4FEVmX2Brw0QYhz9m2E5QN2fHa+YvDslZutB1BQ25MOK1KhMEN7
-         LZbyCvpR8dlwyxKpYvVCn7xRP4y9gm42XYS5Td8RV0ugytKlle+6ll7v90w8xBjht8
-         6kYFKmcDnG3CKvKE6Wa/eZGLqdk6whrdE+TgXx4ks0NtjII6mh/Hk1GkwlrpkPNVts
-         eJfummxD19adPtAlM2RdICt3nqEiZny20QhNKwVa5n+sOJ4oGBpVqCq3u8y8mUfkaf
-         ac9V2kyayukJQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 071A84096F; Mon, 20 Jun 2022 18:20:03 -0300 (-03)
-Date:   Mon, 20 Jun 2022 18:20:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1 FYI] tools headers cpufeatures: Sync with the kernel
- sources
-Message-ID: <YrDkgmwhLv+nKeOo@kernel.org>
+        Mon, 20 Jun 2022 17:24:59 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35051EC50
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:24:58 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-101cdfddfacso7885996fac.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=9ifI65Hcjk0ar/WNQwl170y/WKbWs7okCtxxCy/qE2s=;
+        b=kxQ9KYelCDOHLCxIXY4Ec9e+lo+qssx3BsNInwJUYnN3NeOHGQMEaw3aSTFIGBoMXw
+         U0Udipi7DIYoCFYarfNbBADf1ksM4ESekmyKjLwZzXfcvjQafUCmyOKVzJsaiZgEwCEN
+         ub39XMRq252e5PPns+fLndm120r20G9eZ1LgECBeWG8RHrJr42dbX8bOZuOaZ4maqO6t
+         t7wsoy5i1XluLTn++5a9BgwOgZNfciZt4qCQMOt2PiKPF2Ryq22nQPQEpQ4H8lhNybKO
+         C69lhbR0YT6Dv1u1odtNpXtjArt8bY5Mxt8nW7AHNNiZ6CSzhOtZskZJMwW4aiLOg4qI
+         kKaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=9ifI65Hcjk0ar/WNQwl170y/WKbWs7okCtxxCy/qE2s=;
+        b=WYLCHijI+CMaOTu6LmLD5d/nMKlmEQqB7leEWUgHnZusPw7P8DtPqol0d/KUSOnCEa
+         +dBsT/sDTatqcKDAeMjZMsCdxJxrjJ0J2qJR7+yNKbnVLJidbOt+D07O97YAPf9DW/rx
+         fxbztZN6AmWzE39f38eVWFKgR38ANrAskass/njcoXDOl92nloVms/+Y3SF2g/FXezgW
+         jc/YdlFqyleSHEnu3jIUu0OIow7xJNyoQ64CtU++41kHE7mgZS4YYxMdIs2Q1fJgEZqw
+         FNZSd5wLSy4wFG9m85yCOJ7BQt2d6UUvm3VqPVkzK2YC6s7aXQztSqC0mp3fVk1Z1/eT
+         R28g==
+X-Gm-Message-State: AJIora/gvEMwsl1fkEUw79+JW+xA/A20i3uZGEndw0RbvFG5FOzIBLUd
+        w4ajTiOBJulk3kX4+GwZ4aRb3KfACdiDbfskfsMH1VyVWw0=
+X-Google-Smtp-Source: AGRyM1sNWrQz/8SjM1QjBqcgnp3EbXT9/r2mcyrw0KOhjhQELEZA5rhDO1cpdpApAfsZfFcQa/GOhVT2OlJ1V97rUu8=
+X-Received: by 2002:a05:6870:5247:b0:101:ec40:6a3a with SMTP id
+ o7-20020a056870524700b00101ec406a3amr4274753oai.276.1655760298309; Mon, 20
+ Jun 2022 14:24:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Jaccon Bastiaansen <jaccon.bastiaansen@gmail.com>
+Date:   Mon, 20 Jun 2022 23:24:47 +0200
+Message-ID: <CAGzjT4c54TJA__dcx43745JKeZPeYQ3siowR66j0-KFe=EMRCA@mail.gmail.com>
+Subject: Clocksource: should the read() function of a clocksource be NMI safe?
+To:     daniel.lezcano@linaro.org, Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Hello all,
 
-- Arnaldo
+The ktime_get_*_fast_ns() functions in kernel/time/timekeeping.c are
+listed as NMI safe.
 
-Full explanation:
+If I am correct, the implementation of these functions uses the read()
+function of the currently selected clocksource.
 
-There used not to be copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+But a potential lockup can occur if this read() function uses a raw
+spinlock. A running read() function can be interrupted by an NMI which
+also calls the read() function. The NMI handler will then spin forever
+in an attempt to lock an already locked raw spinlock.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+Is my reasoning correct? Should the read() function of a clocksource
+always be NMI safe? This requirement is not documented and I see that
+several clocksource drivers (such as drivers/clocksource/i8253.c) are
+not NMI safe (they lock a raw spinlock in their read() function).
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes from:
-
-  d6d0c7f681fda1d0 ("x86/cpufeatures: Add PerfMonV2 feature bit")
-  296d5a17e793956f ("KVM: SEV-ES: Use V_TSC_AUX if available instead of RDTSC/MSR_TSC_AUX intercepts")
-  f30903394eb62316 ("x86/cpufeatures: Add virtual TSC_AUX feature bit")
-  8ad7e8f696951f19 ("x86/fpu/xsave: Support XSAVEC in the kernel")
-  59bd54a84d15e933 ("x86/tdx: Detect running as a TDX guest in early boot")
-  a77d41ac3a0f41c8 ("x86/cpufeatures: Add AMD Fam19h Branch Sampling feature")
-
-This only causes these perf files to be rebuilt:
-
-  CC       /tmp/build/perf/bench/mem-memcpy-x86-64-asm.o
-  CC       /tmp/build/perf/bench/mem-memset-x86-64-asm.o
-
-And addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/disabled-features.h' differs from latest version at 'arch/x86/include/asm/disabled-features.h'
-  diff -u tools/arch/x86/include/asm/disabled-features.h arch/x86/include/asm/disabled-features.h
-
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Sandipan Das <sandipan.das@amd.com>
-Cc: Babu Moger <babu.moger@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/lkml/fill-this-up
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/asm/cpufeatures.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-index e17de69faa5432db..03acc823838a7e46 100644
---- a/tools/arch/x86/include/asm/cpufeatures.h
-+++ b/tools/arch/x86/include/asm/cpufeatures.h
-@@ -201,7 +201,7 @@
- #define X86_FEATURE_INVPCID_SINGLE	( 7*32+ 7) /* Effectively INVPCID && CR4.PCIDE=1 */
- #define X86_FEATURE_HW_PSTATE		( 7*32+ 8) /* AMD HW-PState */
- #define X86_FEATURE_PROC_FEEDBACK	( 7*32+ 9) /* AMD ProcFeedbackInterface */
--/* FREE!                                ( 7*32+10) */
-+#define X86_FEATURE_XCOMPACTED		( 7*32+10) /* "" Use compacted XSTATE (XSAVES or XSAVEC) */
- #define X86_FEATURE_PTI			( 7*32+11) /* Kernel Page Table Isolation enabled */
- #define X86_FEATURE_RETPOLINE		( 7*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
- #define X86_FEATURE_RETPOLINE_LFENCE	( 7*32+13) /* "" Use LFENCE for Spectre variant 2 */
-@@ -211,7 +211,7 @@
- #define X86_FEATURE_SSBD		( 7*32+17) /* Speculative Store Bypass Disable */
- #define X86_FEATURE_MBA			( 7*32+18) /* Memory Bandwidth Allocation */
- #define X86_FEATURE_RSB_CTXSW		( 7*32+19) /* "" Fill RSB on context switches */
--/* FREE!                                ( 7*32+20) */
-+#define X86_FEATURE_PERFMON_V2		( 7*32+20) /* AMD Performance Monitoring Version 2 */
- #define X86_FEATURE_USE_IBPB		( 7*32+21) /* "" Indirect Branch Prediction Barrier enabled */
- #define X86_FEATURE_USE_IBRS_FW		( 7*32+22) /* "" Use IBRS during runtime firmware calls */
- #define X86_FEATURE_SPEC_STORE_BYPASS_DISABLE	( 7*32+23) /* "" Disable Speculative Store Bypass. */
-@@ -238,6 +238,7 @@
- #define X86_FEATURE_VMW_VMMCALL		( 8*32+19) /* "" VMware prefers VMMCALL hypercall instruction */
- #define X86_FEATURE_PVUNLOCK		( 8*32+20) /* "" PV unlock function */
- #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* "" PV vcpu_is_preempted function */
-+#define X86_FEATURE_TDX_GUEST		( 8*32+22) /* Intel Trust Domain Extensions Guest */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:0 (EBX), word 9 */
- #define X86_FEATURE_FSGSBASE		( 9*32+ 0) /* RDFSBASE, WRFSBASE, RDGSBASE, WRGSBASE instructions*/
-@@ -315,6 +316,7 @@
- #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
- #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
- #define X86_FEATURE_CPPC		(13*32+27) /* Collaborative Processor Performance Control */
-+#define X86_FEATURE_BRS			(13*32+31) /* Branch Sampling available */
- 
- /* Thermal and Power Management Leaf, CPUID level 0x00000006 (EAX), word 14 */
- #define X86_FEATURE_DTHERM		(14*32+ 0) /* Digital Thermal Sensor */
-@@ -405,6 +407,7 @@
- #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
- #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
- #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
-+#define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
- #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
- 
- /*
--- 
-2.36.1
-
+Regards,
+   Jaccon Bastiaansen

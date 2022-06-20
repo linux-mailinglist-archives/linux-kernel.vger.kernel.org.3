@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB67C550E26
+	by mail.lfdr.de (Postfix) with ESMTP id 90948550E25
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237974AbiFTAnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S237439AbiFTAn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237786AbiFTAnJ (ORCPT
+        with ESMTP id S237816AbiFTAnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:43:09 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3850B4A2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:56 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id i17so7357747qvo.13
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:56 -0700 (PDT)
+        Sun, 19 Jun 2022 20:43:11 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69880B4B4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:58 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id p31so13998603qvp.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=q4yiyjFbZ5Juzr+Gz/H2w54X4y4pvmCy/Lt7Z6lfmMw=;
-        b=fXdKF00OwYkVBQf5hc3gb32tV7KgsiOs4n11yQWXVgL+6mj6VmTxCqqddq1hNVmhhU
-         KnOhYxLu3QkN7RTkyQTS1gssSo1Bs8yCPVd83VicRXKVetgS5XGkH4BVuQwGgNEMsyzt
-         f+5N9qn32cEEPz+/h0lsztWQc+7wEmOd/oF4eBS3qD+OMHV5abMffRwqYiZEzYdQSV0f
-         VNb70uSvAss1oYJz7Lyvz5M5d+FXM4ct3UUdozsqRSgbcm7tXrrifgDWO1e5AnZYs8RN
-         I3NpuImwcCt1EKiid56vxO5FhQQhJrihSRM+lKNsbjKK1UPRLtQ8Xa62KQ6MyLdF+vyR
-         BOUg==
+        bh=4+doRSndIqb/FisTLPVe5Bh/ofBw5aQUkb0tO+s0zbQ=;
+        b=WRsAgh5sLiSXnUWsFWUdKfv3snQ371BnO978e4fY372IVVti8PHQr4mdmPcHCoZIfl
+         cWczSiCcC50anmfaWm5q+8+IS6sHDTgs3xufm0GoK1c6bn3oMXlKLNMszpjs0bDm7H9b
+         VJm2O7Ylezs9ZcWjgYT74IdKN+FJ+ItstRUT58jSjskNJXfCspOSSunzLuskncp+UTom
+         ETzU9mOWaaMZ0IN7+jLeqWPNOuFYTit5m4dagIJPviypEkq0hnRkrDJ4tK9AgOtHougZ
+         o2L9q/1OmXm/Y7ZyrFN6uDiZMnY883rXN8+npJm2rHrMai7cWfip3CRSNksw6aBnugVH
+         J6wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=q4yiyjFbZ5Juzr+Gz/H2w54X4y4pvmCy/Lt7Z6lfmMw=;
-        b=eLOj7NU10r0Ss/5J1uuEN4VGwU/UcIx1Rxieg0Her6/akilDxStu+hFqYO+vqIh59g
-         ukfo29y1YoR9GkcWNdiva8VDDcobnwv1wmb/m911jIsyicFi4xH8znFSrauONqeKyY/O
-         ec01N/Xd8dIISyQi1BIQJgh+7yGrv5O9pkeS5w9VGlVQU+/VNRtpWTMJ26am2OyD4ubx
-         SXf2gwy86FV9pEtVD0+1io+zSPdyMKwm6+gPHGGv1DfKM7Qc9iWMEEcwKOIsQ/noEZT4
-         TlFHkKtTpVc8US1sxIWXtXYamKaiUvWgwt7XkvE1EvB1TcOGdMeUQxgsdACoRAUt/bFe
-         GcXQ==
-X-Gm-Message-State: AJIora+P60lnOYLau5UwA0WdfYe5Hz7CKLNRo2udBiHn5f/nA4QHe6Mm
-        DlInCB0gi0Depef6siuCrxCASEAelmFmHFo=
-X-Google-Smtp-Source: AGRyM1tYNk5fbWQsttURTreDFM+BkJM6BzdKKxG44Rqes86jH7ptzH4Kis++RT67FHxHEe1SWABRfg==
-X-Received: by 2002:ac8:57c3:0:b0:305:2dbd:92b3 with SMTP id w3-20020ac857c3000000b003052dbd92b3mr17904388qta.173.1655685774989;
-        Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
+        bh=4+doRSndIqb/FisTLPVe5Bh/ofBw5aQUkb0tO+s0zbQ=;
+        b=u4k/HewOLoewD/82d+CP7BMxlOunqfQi8GAi/xjRK/gA/uxs8u71Lvu3aofnjkMnNL
+         e9uXIfV7V0Dn9cVJizoXo50kTznVYS/dqIa8yI7QEfMBJ61uCTfHZA+iuxLOKocX0BrY
+         NqDqUnPt1Ohwv4ZuVHE48/KL7Say8O2Zyqw/ysv0OY8Qi4ufFp0FAM5qypbtqruR2lpQ
+         BPbHqRyArJTcqKUseVwFRA0wKppw/Sv/XsEfzQZQvXpNTaRcHR40sI+XXD+4SjfAHfHP
+         OPpk/q1v9S2AbbHLUmLV/8G5wdK3hT4N6SJubTVoLHUkAn0QR6EXuwSrNubxP+VfBwyi
+         zhPA==
+X-Gm-Message-State: AJIora/1i1qlXlaryHKk09+5vCrun/HmV69VKHhQFjWQhHHYz9TjRZ2W
+        Xe6NXH/T/n3Roe3/0LysD61MiqzXk745HAY=
+X-Google-Smtp-Source: AGRyM1vA0V9RjbIKZsYA7zZoD0L520hpVBmC/QV5Y4Fl5nCasrnrNz3TXtyGGqCBHjwmSFxKxKwLGQ==
+X-Received: by 2002:a05:6214:c82:b0:46a:b677:e284 with SMTP id r2-20020a0562140c8200b0046ab677e284mr16988331qvr.28.1655685777230;
+        Sun, 19 Jun 2022 17:42:57 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id q4-20020ac87344000000b00304e5839734sm9303936qtp.55.2022.06.19.17.42.53
+        by smtp.gmail.com with ESMTPSA id l16-20020a05620a28d000b006a6cadd89efsm11521487qkp.82.2022.06.19.17.42.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
+        Sun, 19 Jun 2022 17:42:55 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 10/34] lib/pretty-printers: prt_string_option(), prt_bitflags()
-Date:   Sun, 19 Jun 2022 20:42:09 -0400
-Message-Id: <20220620004233.3805-11-kent.overstreet@gmail.com>
+Subject: [PATCH v4 11/34] vsprintf: Improve number()
+Date:   Sun, 19 Jun 2022 20:42:10 -0400
+Message-Id: <20220620004233.3805-12-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,110 +71,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch refactors number() to make it a bit clearer, and it also
+changes it to call printbuf_make_room() only once at the start, instead
+of in the printbuf output helpers.
+
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- include/linux/pretty-printers.h | 10 ++++++
- lib/Makefile                    |  2 +-
- lib/pretty-printers.c           | 60 +++++++++++++++++++++++++++++++++
- 3 files changed, 71 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/pretty-printers.h
- create mode 100644 lib/pretty-printers.c
+ lib/vsprintf.c | 83 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 41 insertions(+), 42 deletions(-)
 
-diff --git a/include/linux/pretty-printers.h b/include/linux/pretty-printers.h
-new file mode 100644
-index 0000000000..f39d8edfba
---- /dev/null
-+++ b/include/linux/pretty-printers.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: LGPL-2.1+ */
-+/* Copyright (C) 2022 Kent Overstreet */
-+
-+#ifndef _LINUX_PRETTY_PRINTERS_H
-+#define _LINUX_PRETTY_PRINTERS_H
-+
-+void prt_string_option(struct printbuf *, const char * const[], size_t);
-+void prt_bitflags(struct printbuf *, const char * const[], u64);
-+
-+#endif /* _LINUX_PRETTY_PRINTERS_H */
-diff --git a/lib/Makefile b/lib/Makefile
-index b4609a4258..b520024852 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
- 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
- 	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
--	 buildid.o printbuf.o
-+	 buildid.o printbuf.o pretty-printers.o
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 5afa74dda5..7d20406deb 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -458,93 +458,92 @@ void number(struct printbuf *out, unsigned long long num,
+ {
+ 	/* put_dec requires 2-byte alignment of the buffer. */
+ 	char tmp[3 * sizeof(num)] __aligned(2);
+-	char sign;
+-	char locase;
++	char sign = 0;
++	/* locase = 0 or 0x20. ORing digits or letters with 'locase'
++	 * produces same digits or (maybe lowercased) letters */
++	char locase = (spec.flags & SMALL);
+ 	int need_pfx = ((spec.flags & SPECIAL) && spec.base != 10);
+-	int i;
+ 	bool is_zero = num == 0LL;
+ 	int field_width = spec.field_width;
+ 	int precision = spec.precision;
++	int nr_digits = 0;
++	int output_bytes = 0;
  
- lib-$(CONFIG_PRINTK) += dump_stack.o
- lib-$(CONFIG_SMP) += cpumask.o
-diff --git a/lib/pretty-printers.c b/lib/pretty-printers.c
-new file mode 100644
-index 0000000000..addbac95e0
---- /dev/null
-+++ b/lib/pretty-printers.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: LGPL-2.1+
-+/* Copyright (C) 2022 Kent Overstreet */
+-	/* locase = 0 or 0x20. ORing digits or letters with 'locase'
+-	 * produces same digits or (maybe lowercased) letters */
+-	locase = (spec.flags & SMALL);
+ 	if (spec.flags & LEFT)
+ 		spec.flags &= ~ZEROPAD;
+-	sign = 0;
+ 	if (spec.flags & SIGN) {
+ 		if ((signed long long)num < 0) {
+ 			sign = '-';
+ 			num = -(signed long long)num;
+-			field_width--;
++			output_bytes++;
+ 		} else if (spec.flags & PLUS) {
+ 			sign = '+';
+-			field_width--;
++			output_bytes++;
+ 		} else if (spec.flags & SPACE) {
+ 			sign = ' ';
+-			field_width--;
++			output_bytes++;
+ 		}
+ 	}
+ 	if (need_pfx) {
+ 		if (spec.base == 16)
+-			field_width -= 2;
++			output_bytes += 2;
+ 		else if (!is_zero)
+-			field_width--;
++			output_bytes++;
+ 	}
+ 
+ 	/* generate full string in tmp[], in reverse order */
+-	i = 0;
+-	if (num < spec.base)
+-		tmp[i++] = hex_asc_upper[num] | locase;
+-	else if (spec.base != 10) { /* 8 or 16 */
++	if (spec.base == 10) {
++		nr_digits = put_dec(tmp, num) - tmp;
++	} else { /* 8 or 16 */
+ 		int mask = spec.base - 1;
+-		int shift = 3;
++		int shift = ilog2((unsigned) spec.base);
+ 
+-		if (spec.base == 16)
+-			shift = 4;
+ 		do {
+-			tmp[i++] = (hex_asc_upper[((unsigned char)num) & mask] | locase);
++			tmp[nr_digits++] = (hex_asc_upper[((unsigned char)num) & mask] | locase);
+ 			num >>= shift;
+ 		} while (num);
+-	} else { /* base 10 */
+-		i = put_dec(tmp, num) - tmp;
+ 	}
+ 
+ 	/* printing 100 using %2d gives "100", not "00" */
+-	if (i > precision)
+-		precision = i;
++	precision = max(nr_digits, precision);
++	output_bytes += precision;
++	field_width = max(0, field_width - output_bytes);
 +
-+#include <linux/bitops.h>
-+#include <linux/kernel.h>
-+#include <linux/printbuf.h>
-+#include <linux/pretty-printers.h>
++	printbuf_make_room(out, field_width + output_bytes);
 +
-+/**
-+ * prt_string_option - Given a list of strings, print out the list and indicate
-+ * which option is selected, with square brackets (sysfs style)
-+ *
-+ * @out: The printbuf to output to
-+ * @list: List of strings to choose from
-+ * @selected: The option to highlight, with square brackets
-+ */
-+void prt_string_option(struct printbuf *out,
-+		       const char * const list[],
-+		       size_t selected)
-+{
-+	size_t i;
+ 	/* leading space padding */
+-	field_width = max(0, field_width - precision);
+ 	if (!(spec.flags & (ZEROPAD | LEFT)) && field_width) {
+-		__prt_chars(out, ' ', field_width);
++		__prt_chars_reserved(out, ' ', field_width);
+ 		field_width = 0;
+ 	}
 +
-+	for (i = 0; list[i]; i++) {
-+		if (i)
-+			prt_char(out, ' ');
-+		if (i == selected)
-+			prt_char(out, '[');
-+		prt_str(out, list[i]);
-+		if (i == selected)
-+			prt_char(out, ']');
-+	}
-+}
-+EXPORT_SYMBOL(prt_string_option);
+ 	/* sign */
+ 	if (sign)
+-		__prt_char(out, sign);
++		__prt_char_reserved(out, sign);
 +
-+/**
-+ * prt_bitflags: Given a bitmap and a list of names for each bit, print out which
-+ * bits are on, comma separated
-+ *
-+ * @out: The printbuf to output to
-+ * @list: List of names for each bit
-+ * @flags: Bits to print
-+ */
-+void prt_bitflags(struct printbuf *out,
-+		  const char * const list[], u64 flags)
-+{
-+	unsigned bit, nr = 0;
-+	bool first = true;
+ 	/* "0x" / "0" prefix */
+ 	if (need_pfx) {
+ 		if (spec.base == 16 || !is_zero)
+-			__prt_char(out, '0');
++			__prt_char_reserved(out, '0');
+ 		if (spec.base == 16)
+-			__prt_char(out, 'X' | locase);
++			__prt_char_reserved(out, 'X' | locase);
+ 	}
+-	/* zero or space padding */
+-	if (!(spec.flags & LEFT) && field_width) {
+-		char c = ' ' + (spec.flags & ZEROPAD);
+ 
+-		__prt_chars(out, c, field_width);
+-		field_width = 0;
+-	}
+-	/* hmm even more zero padding? */
+-	if (precision > i)
+-		__prt_chars(out, '0', precision - i);
++	/* zero padding */
++	if (!(spec.flags & LEFT) && field_width)
++		__prt_chars_reserved(out, '0', field_width);
 +
-+	while (list[nr])
-+		nr++;
++	/* zero padding from precision */
++	if (precision > nr_digits)
++		__prt_chars_reserved(out, '0', precision - nr_digits);
 +
-+	while (flags && (bit = __ffs(flags)) < nr) {
-+		if (!first)
-+			prt_char(out, ',');
-+		first = false;
-+		prt_str(out, list[bit]);
-+		flags ^= 1 << bit;
-+	}
-+}
-+EXPORT_SYMBOL(prt_bitflags);
+ 	/* actual digits of result */
+-	while (--i >= 0)
+-		__prt_char(out, tmp[i]);
++	while (--nr_digits >= 0)
++		__prt_char_reserved(out, tmp[nr_digits]);
++
+ 	/* trailing space padding */
+-	if (field_width)
+-		__prt_chars(out, ' ', field_width);
++	if ((spec.flags & LEFT) && field_width)
++		__prt_chars_reserved(out, ' ', field_width);
+ 
+ 	printbuf_nul_terminate(out);
+ }
 -- 
 2.36.1
 

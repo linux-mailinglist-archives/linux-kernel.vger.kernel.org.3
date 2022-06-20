@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E3552262
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583CA552265
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238074AbiFTQjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S242855AbiFTQjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbiFTQi6 (ORCPT
+        with ESMTP id S239357AbiFTQjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:38:58 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832F2DEF5;
-        Mon, 20 Jun 2022 09:38:57 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id h20so1604900ilj.13;
-        Mon, 20 Jun 2022 09:38:57 -0700 (PDT)
+        Mon, 20 Jun 2022 12:39:12 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D83DEF1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:39:09 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id l66so18491975ybl.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=lrS+XQ6q0/IbuyZboKtezHKPWmJBm+89oKw9EV9G/So=;
-        b=G8LY/7avl7Neq7P1NOZdIS7LJY7m7B559/2aou2WT4U+H4bsLE/d31HyyaL5XVt5f2
-         GxlSppbITKjvvwMdVA4Gg3KiY9qLOB+6owOCbEbwKjpGQVd1+YKNcrJ/T/kJxvnvdrIB
-         EtrjPpEiZ/4bMvCmAanUfGVKh5iL+YBbXd7XbY2cUwDAPnaAzB6rxJBGAdHk2qkQsJCo
-         LFw6n4ldGwr1j1eFxdbjxOKkFwAVHwXnkIAeAFQ7woP6txKaqtWFVAMC6q2ctIYcbGOi
-         YgpejF2HipUa37v/LzbkSXcMPADEgGTDijEeirqdmr80Aiip61oVb+kLWq2Lo3rXxEEx
-         5NEw==
+        bh=J6YCM3GGK2hsL7x+PaMSvF/YdxNaFbB33EhpPOoQiZE=;
+        b=UdYUpqS6dQw7Bdkcj32xJ1fI8eLDtGWL5htYnsgxOCvdla9DAnsdY1xWnsnjTq27Wp
+         Puu3EXy70JpD74hx1/Py8dmb6Jm/NXZyuhynvd+5j+YMl3pGBnUoiFcoKB/TZ6fBnRvM
+         Kbh4COyNk/VwxQJHVHqzykTNgBye41I8JCOqe91NTSh1FQZbmYIvq0lqKkgG/SxJG+uK
+         mmMP45iAfRPH5itK1EwTApjgGBMu+35yXTR1r1XpJihHt6T7ANMg0+uNrjQeaQSkBa+/
+         vqhVz446WGG1BHygeautRcuB9DFxm120U4hFy9XI8s6TGfTlbNyabejvP2deLJjY/gxS
+         glqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=lrS+XQ6q0/IbuyZboKtezHKPWmJBm+89oKw9EV9G/So=;
-        b=sJtzPgpA9lFiYv2SercaR/Rh2pKswsKaQ0/AVK1j1NOkDDBRLN2iEj2+H99E46L2f8
-         rfZEPayvo0b9pixy1oxKSXnkI29LPu+8l9MZYyuoVU0uY+Wy+bXVgU5Vl5FZYDbUlpuK
-         Wh7PMos0jG2dBDPAr8R3JVnbV6NzcQQKbkDOql7lxlbwYnZd/RVbn9X9K5gAR85hU1Rx
-         FC1v4nyiUmXQTbgQAC7Re/69cTJh2fD6DYAN9L31cucYyTRQn3+7kuXI3xSLCJ/nQgJd
-         4LbhBpnpnFTw0MqywTrzDTTn2pRalnN1jDBHyFBUbgeP/aGPmObwclXE64aA30OupvKD
-         wjSg==
-X-Gm-Message-State: AJIora+22rhq7m+VQ1o4Xxai7HhZg5DTF7EHU1ktc75coE1veLfOGne1
-        FxEbd1YLfT4pMk52zOAAOulXw1biDWxUVbJQ
-X-Google-Smtp-Source: AGRyM1u3hba50xIf7mH6IAzS37+1OkpcDZgGKoWvomSu/m1NhJgxF9+zp0iUAweDmVxG5wPtW9xW2g==
-X-Received: by 2002:a05:6e02:2193:b0:2d9:1195:a080 with SMTP id j19-20020a056e02219300b002d91195a080mr3290832ila.22.1655743136517;
-        Mon, 20 Jun 2022 09:38:56 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id c9-20020a029609000000b00331fdc68ccesm6153275jai.140.2022.06.20.09.38.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 09:38:56 -0700 (PDT)
-Message-ID: <62b0a2a0.1c69fb81.a84ba.6e71@mx.google.com>
-Date:   Mon, 20 Jun 2022 09:38:56 -0700 (PDT)
-X-Google-Original-Date: Mon, 20 Jun 2022 16:38:54 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 000/106] 5.15.49-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=J6YCM3GGK2hsL7x+PaMSvF/YdxNaFbB33EhpPOoQiZE=;
+        b=3ROUBO3o8AH4haq21cz/f2qGJ8/4kLF7UArhAAG3VveULAZuOaC3LgZfz1uYyGDaus
+         jk/GaT179JKU3Suib9Xzd2WTKUd5zi/4M+qqlBVHwhLY9zIM92YgKFERW87JncCbrphf
+         2GYuUSrxhtvo7eXFGFKEpNGlLaae88oBdRICu/5h/8djqqEhFW612jwk4P1o+oBONjsZ
+         xOq+9kancMpUyyxgzG+SCgPESwTT6yuI+Nm9RWjxcKVR6oAk3AKfrVj98Z/PcP1aA/zW
+         3G88sCrSf9TMnwNjxHlcLDdrJUiFIIsm7/vQzPZBfC3HvpNDdyRMnECih8hwDcUzpK3z
+         Uprw==
+X-Gm-Message-State: AJIora9uuHQf1Kvz/NE5nyS4QxNZv2yQ8DUw3Ajo6Gj2Spr3FBLEAhJT
+        YqeAt6CTxwJOry+nuG+EO8IbOYAHFIpbs/AdL4E=
+X-Google-Smtp-Source: AGRyM1uf0BmEtzsSrcCWm5D/IYFVANeo3WUYJrHCml79BpJusifvihclMumza8hNN1RRZ2jZZI7SWKl8EsEPT1EZP8A=
+X-Received: by 2002:a25:86d0:0:b0:664:8657:fe63 with SMTP id
+ y16-20020a2586d0000000b006648657fe63mr26330696ybm.460.1655743149008; Mon, 20
+ Jun 2022 09:39:09 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6918:704:b0:c6:5e36:6de2 with HTTP; Mon, 20 Jun 2022
+ 09:39:08 -0700 (PDT)
+Reply-To: michellegoodman45@gmail.com
+From:   Michelle <michellegood044@gmail.com>
+Date:   Mon, 20 Jun 2022 16:39:08 +0000
+Message-ID: <CAJ5e1jZEWAOZ2+FDouv9GLSj1vGrOSiMWgz1DzBctnTHMMGGqQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 14:50:19 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.49 release.
-> There are 106 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.49-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Dobr=C3=BD de=C5=88, d=C3=BAfam, =C5=BEe ste dostali moju spr=C3=A1vu.
+Potrebujem r=C3=BDchle reakcie
 
-5.15.49-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
-
+V=C4=8Faka.
+Michelle

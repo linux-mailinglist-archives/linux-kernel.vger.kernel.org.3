@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425F8551C67
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09E5551A88
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245625AbiFTNWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S244232AbiFTNHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346149AbiFTNUV (ORCPT
+        with ESMTP id S244915AbiFTNEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:20:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2941222507;
-        Mon, 20 Jun 2022 06:08:37 -0700 (PDT)
+        Mon, 20 Jun 2022 09:04:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61976186E1;
+        Mon, 20 Jun 2022 05:59:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20D3B61589;
-        Mon, 20 Jun 2022 13:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1303FC3411B;
-        Mon, 20 Jun 2022 13:07:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1931BB811A5;
+        Mon, 20 Jun 2022 12:59:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7654AC3411B;
+        Mon, 20 Jun 2022 12:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730421;
-        bh=r8XnFs77UWEw8tdx9AYeZYY87hyU7AdHg/IfaytmtIk=;
+        s=korg; t=1655729956;
+        bh=uff/LSoDCFORTp4ktTMN5owM8qbjZKsdjHY4n5fumQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G0eSH96EiCoAflrCwTn2bjWWA40VWGluZzYKbF+xtJjooFInEsQRAM5UDnLrRE8TD
-         7VPIruPw6+OUQSmb159cfFDewzCMgVi48tNo3uVFKqdNUH5FqGeVj1VKQdBfFXqNIe
-         lKpZvZxkyfflw4qK6/T3W0vZnCTbW47XxsPMpulM=
+        b=fyCyhiZbQEty+8KMZGDrawEnievsCHV6zNxGeUCZ7/oLAhsVbnyMBOqH0hfNLMoJ2
+         ve7HhbEh+ZL61gphdAiUuAwkcPkypCyrTdYb581kP7+C9/5GivRHUwmcgsJlQS53Vp
+         a+0lg+GZHq7PIwBmyu9ndzi8USklW/VwE+Iyu28w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 048/106] pNFS: Avoid a live lock condition in pnfs_update_layout()
-Date:   Mon, 20 Jun 2022 14:51:07 +0200
-Message-Id: <20220620124725.811625811@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Zhang Yi <yi.zhang@huawei.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.18 130/141] ext4: add reserved GDT blocks check
+Date:   Mon, 20 Jun 2022 14:51:08 +0200
+Message-Id: <20220620124733.399180590@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[ Upstream commit 880265c77ac415090090d1fe72a188fee71cb458 ]
+commit b55c3cd102a6f48b90e61c44f7f3dda8c290c694 upstream.
 
-If we're about to send the first layoutget for an empty layout, we want
-to make sure that we drain out the existing pending layoutget calls
-first. The reason is that these layouts may have been already implicitly
-returned to the server by a recall to which the client gave a
-NFS4ERR_NOMATCHING_LAYOUT response.
+We capture a NULL pointer issue when resizing a corrupt ext4 image which
+is freshly clear resize_inode feature (not run e2fsck). It could be
+simply reproduced by following steps. The problem is because of the
+resize_inode feature was cleared, and it will convert the filesystem to
+meta_bg mode in ext4_resize_fs(), but the es->s_reserved_gdt_blocks was
+not reduced to zero, so could we mistakenly call reserve_backup_gdb()
+and passing an uninitialized resize_inode to it when adding new group
+descriptors.
 
-The problem is that wait_var_event_killable() could in principle see the
-plh_outstanding count go back to '1' when the first process to wake up
-starts sending a new layoutget. If it fails to get a layout, then this
-loop can continue ad infinitum...
+ mkfs.ext4 /dev/sda 3G
+ tune2fs -O ^resize_inode /dev/sda #forget to run requested e2fsck
+ mount /dev/sda /mnt
+ resize2fs /dev/sda 8G
 
-Fixes: 0b77f97a7e42 ("NFSv4/pnfs: Fix layoutget behaviour after invalidation")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ ========
+ BUG: kernel NULL pointer dereference, address: 0000000000000028
+ CPU: 19 PID: 3243 Comm: resize2fs Not tainted 5.18.0-rc7-00001-gfde086c5ebfd #748
+ ...
+ RIP: 0010:ext4_flex_group_add+0xe08/0x2570
+ ...
+ Call Trace:
+  <TASK>
+  ext4_resize_fs+0xbec/0x1660
+  __ext4_ioctl+0x1749/0x24e0
+  ext4_ioctl+0x12/0x20
+  __x64_sys_ioctl+0xa6/0x110
+  do_syscall_64+0x3b/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7f2dd739617b
+ ========
+
+The fix is simple, add a check in ext4_resize_begin() to make sure that
+the es->s_reserved_gdt_blocks is zero when the resize_inode feature is
+disabled.
+
+Cc: stable@kernel.org
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220601092717.763694-1-yi.zhang@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/callback_proc.c |  1 +
- fs/nfs/pnfs.c          | 15 +++++++++------
- fs/nfs/pnfs.h          |  1 +
- 3 files changed, 11 insertions(+), 6 deletions(-)
+ fs/ext4/resize.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
-index a30dd35ec1c2..ccf313238441 100644
---- a/fs/nfs/callback_proc.c
-+++ b/fs/nfs/callback_proc.c
-@@ -288,6 +288,7 @@ static u32 initiate_file_draining(struct nfs_client *clp,
- 		rv = NFS4_OK;
- 		break;
- 	case -ENOENT:
-+		set_bit(NFS_LAYOUT_DRAIN, &lo->plh_flags);
- 		/* Embrace your forgetfulness! */
- 		rv = NFS4ERR_NOMATCHING_LAYOUT;
+--- a/fs/ext4/resize.c
++++ b/fs/ext4/resize.c
+@@ -54,6 +54,16 @@ int ext4_resize_begin(struct super_block
+ 		return -EPERM;
  
-diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
-index 9b2549222391..7217f3eeb069 100644
---- a/fs/nfs/pnfs.c
-+++ b/fs/nfs/pnfs.c
-@@ -469,6 +469,7 @@ pnfs_mark_layout_stateid_invalid(struct pnfs_layout_hdr *lo,
- 		pnfs_clear_lseg_state(lseg, lseg_list);
- 	pnfs_clear_layoutreturn_info(lo);
- 	pnfs_free_returned_lsegs(lo, lseg_list, &range, 0);
-+	set_bit(NFS_LAYOUT_DRAIN, &lo->plh_flags);
- 	if (test_bit(NFS_LAYOUT_RETURN, &lo->plh_flags) &&
- 	    !test_and_set_bit(NFS_LAYOUT_RETURN_LOCK, &lo->plh_flags))
- 		pnfs_clear_layoutreturn_waitbit(lo);
-@@ -1917,8 +1918,9 @@ static void nfs_layoutget_begin(struct pnfs_layout_hdr *lo)
- 
- static void nfs_layoutget_end(struct pnfs_layout_hdr *lo)
- {
--	if (atomic_dec_and_test(&lo->plh_outstanding))
--		wake_up_var(&lo->plh_outstanding);
-+	if (atomic_dec_and_test(&lo->plh_outstanding) &&
-+	    test_and_clear_bit(NFS_LAYOUT_DRAIN, &lo->plh_flags))
-+		wake_up_bit(&lo->plh_flags, NFS_LAYOUT_DRAIN);
- }
- 
- static bool pnfs_is_first_layoutget(struct pnfs_layout_hdr *lo)
-@@ -2025,11 +2027,11 @@ pnfs_update_layout(struct inode *ino,
- 	 * If the layout segment list is empty, but there are outstanding
- 	 * layoutget calls, then they might be subject to a layoutrecall.
- 	 */
--	if ((list_empty(&lo->plh_segs) || !pnfs_layout_is_valid(lo)) &&
-+	if (test_bit(NFS_LAYOUT_DRAIN, &lo->plh_flags) &&
- 	    atomic_read(&lo->plh_outstanding) != 0) {
- 		spin_unlock(&ino->i_lock);
--		lseg = ERR_PTR(wait_var_event_killable(&lo->plh_outstanding,
--					!atomic_read(&lo->plh_outstanding)));
-+		lseg = ERR_PTR(wait_on_bit(&lo->plh_flags, NFS_LAYOUT_DRAIN,
-+					   TASK_KILLABLE));
- 		if (IS_ERR(lseg))
- 			goto out_put_layout_hdr;
- 		pnfs_put_layout_hdr(lo);
-@@ -2413,7 +2415,8 @@ pnfs_layout_process(struct nfs4_layoutget *lgp)
- 		goto out_forget;
- 	}
- 
--	if (!pnfs_layout_is_valid(lo) && !pnfs_is_first_layoutget(lo))
-+	if (test_bit(NFS_LAYOUT_DRAIN, &lo->plh_flags) &&
-+	    !pnfs_is_first_layoutget(lo))
- 		goto out_forget;
- 
- 	if (nfs4_stateid_match_other(&lo->plh_stateid, &res->stateid)) {
-diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
-index 5a54cf8ac6f3..3307361c7956 100644
---- a/fs/nfs/pnfs.h
-+++ b/fs/nfs/pnfs.h
-@@ -109,6 +109,7 @@ enum {
- 	NFS_LAYOUT_FIRST_LAYOUTGET,	/* Serialize first layoutget */
- 	NFS_LAYOUT_INODE_FREEING,	/* The inode is being freed */
- 	NFS_LAYOUT_HASHED,		/* The layout visible */
-+	NFS_LAYOUT_DRAIN,
- };
- 
- enum layoutdriver_policy_flags {
--- 
-2.35.1
-
+ 	/*
++	 * If the reserved GDT blocks is non-zero, the resize_inode feature
++	 * should always be set.
++	 */
++	if (EXT4_SB(sb)->s_es->s_reserved_gdt_blocks &&
++	    !ext4_has_feature_resize_inode(sb)) {
++		ext4_error(sb, "resize_inode disabled but reserved GDT blocks non-zero");
++		return -EFSCORRUPTED;
++	}
++
++	/*
+ 	 * If we are not using the primary superblock/GDT copy don't resize,
+          * because the user tools have no way of handling this.  Probably a
+          * bad time to do it anyways.
 
 

@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17115518A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7AA5518AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242348AbiFTMTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S237337AbiFTMT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242272AbiFTMTF (ORCPT
+        with ESMTP id S241215AbiFTMT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:19:05 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794595F6F;
-        Mon, 20 Jun 2022 05:19:04 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d5so9563724plo.12;
-        Mon, 20 Jun 2022 05:19:04 -0700 (PDT)
+        Mon, 20 Jun 2022 08:19:57 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EFBDFE5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:19:56 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id eq6so7532524edb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=G116oHrS6xPawz1p7YlGPW002yjrm+RWYps59Z2K3Js=;
-        b=bQ3h43AIQpxpWNQaiBLocOnzDTZ7buSOL0mz19NlUnhzLU5ap878WMs1BFn61KUgj+
-         NJM3YnYD8RdcyXovFq820Sr+ixX+2/d36WK0I82Kkhvg8CMQYkl88F95R0w9RP8Ef6jw
-         1Bz9QbxEdsbALjrEATq3d8jBUVzUM0Ar6fUTTqTY+9FxcpgIpNHbC67pFpKDGTT4bkBk
-         Lx7KPkIsOKiYHwhM9A0Dzo32AQpbgduoJ2/WKC4FeIizee5vi/DbRjJmPuJWXpyQOeHM
-         z+ePZea2G9eTqgi1mFzENPhnkF9XM4HU3QhkjAkWjToSrt8HaswFOpprPCR6Ms0Fp7IQ
-         /wAw==
+        bh=fOxxXWDCmT4VlI0QP8zYNBrVbjnoR1cMpcur/fwkues=;
+        b=hqgaT7eqL+ZGFcUrD8UyVLJHHXULrEwZJAYyFIikimThExXDF8jL04sot9bfSVvnHo
+         2mfZi8G2AxNJiDmNrzvocoKFgB14UJD8flKjKbU10SaGSyXtmrWGKBfxI/I7tm5WRI4n
+         FtypTbHMAOsBKQ6Lhdl0j0nCS45R5X/IM9beuaGlHDyw47KJYMxVDvNWu7K9DWJ/gZA9
+         2Mr5G8Yak4svelL/JvxhLTbkpPROixstu8GeciQvm9y/1j1y4fexwzW7LNnkMCzUK3Qn
+         4E04Yxma/xSzzFN0SrjYT8pjxw5YzM3nMkk1J2fPq3HPmuTkIGltfERQRqB1lLUu0fiE
+         6USw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=G116oHrS6xPawz1p7YlGPW002yjrm+RWYps59Z2K3Js=;
-        b=VOn7Pb+cD/RS4Cq7Z7aoxcgwiFfIGTNgSeMA1k3dg4H2skG3UNQ+CSqkE+Fo/RSpRy
-         YFreEjYER/4e2uueJv5mcoTFSGcIPv9wALAJxZyZ/miwB9ROul1vGMoTvgeHLv+cCji4
-         OIzVyxixwPKegDmFrXaGBvJFowNbz+HiRyVuZN5W8TFz0fuAnb98VDwDa5Fjoy83pEiN
-         Og2zQrJj6ra2X2KTA68+jfIyeraBOcJw+Xh76o13JjtnZeVET04rJZ4dwoLmfFf5rGq6
-         n/UQb2LaUo5cp/mI1DjvFSCuLaxONhmQxNiV24K/U4wCvDCKqYwyl/OwLHVcNJm6pYLj
-         PEqw==
-X-Gm-Message-State: AJIora9f3H6EoL18POlUcjL5nxTwoaNBh5HnYBq/u7tHRS0JrUovbk+C
-        Nb2+d35IPcA8mK0CJZvC90o=
-X-Google-Smtp-Source: AGRyM1sUC8evC+f5PKK5DpcdqH/W0moQU/CHSv+aQrDCs/vVJib+j3xnh+/izPRDQMZhpVLBdI8p8g==
-X-Received: by 2002:a17:903:41cd:b0:16a:f48:c357 with SMTP id u13-20020a17090341cd00b0016a0f48c357mr13447166ple.21.1655727543869;
-        Mon, 20 Jun 2022 05:19:03 -0700 (PDT)
-Received: from linux-server-us.. ([172.247.46.202])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b00168c1668a49sm8477165plm.85.2022.06.20.05.19.03
+        bh=fOxxXWDCmT4VlI0QP8zYNBrVbjnoR1cMpcur/fwkues=;
+        b=dXboplhmA59yqs2yB9Bb8WOGtrhuJGjI2ngmuO7BLqx0IoopG2UwsjB+9c9YdvTDf8
+         oRnjOcG9gdnmYbpsrdI4VIKLmSxegQq+HsSQZmS2EUAItJ9pxYqqRodzToN6qESaVVYa
+         k6tra1Ku3F5/tMkVfCKoLxI/PjnMnsIqGALl6DIxK2S64HWIgobtVwy1JJTrRz7yTvvR
+         65SLBQehNFFtR01eFwxkrBckIS5kWZYKVOepVEFwS/inr7gsACNPttNALLX1d3xlv5vZ
+         G7XFRZLJhfybiWv4teUml/mvGdvfkkjK3p1VIYDNn55kIIunYJGC9XIilloIpU0j2yss
+         v/fw==
+X-Gm-Message-State: AJIora+JyxHzt1fEN6WY/7yElfH81DH1KZVMPEnda4mhO9UWHUirHBfL
+        2wxxMVAmndDlhEbE6GKJQDRBJei8d/N+Nw==
+X-Google-Smtp-Source: AGRyM1tsykB59CUTJb8JLSnlFjFGcmSM6049dfMsto5MK+grNMISh5jWMfyl5ZV3em9S+NMNhWvWyw==
+X-Received: by 2002:a05:6402:c95:b0:435:8113:1276 with SMTP id cm21-20020a0564020c9500b0043581131276mr5743279edb.193.1655727595189;
+        Mon, 20 Jun 2022 05:19:55 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y21-20020a056402441500b0042dcbc3f302sm10494892eda.36.2022.06.20.05.19.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 05:19:03 -0700 (PDT)
-From:   YuTong Chang <mtwget@gmail.com>
-To:     bcousson@baylibre.com
-Cc:     tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        YuTong Chang <mtwget@gmail.com>
-Subject: [PATCH v1] ARM: dts: am33xx: Fix MMCHS0 dma properties
-Date:   Mon, 20 Jun 2022 05:19:00 -0700
-Message-Id: <20220620121900.5196-1-mtwget@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 20 Jun 2022 05:19:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] clk: samsung: exynos 7885 eMMC bindings
+Date:   Mon, 20 Jun 2022 14:19:43 +0200
+Message-Id: <20220620121944.42942-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to technical manual(table 11-24), the DMA of MMCHS0 should be
-direct mapped.
+Hi Sylwester,
 
-Signed-off-by: YuTong Chang <mtwget@gmail.com>
----
-v1: Cleaned up coding style and addressed review comments
+Bindings for you.
 
- arch/arm/boot/dts/am33xx-l4.dtsi | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Best regards,
+Krzysztof
 
-diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
-index 7da42a5b959c..7e50fe633d8a 100644
---- a/arch/arm/boot/dts/am33xx-l4.dtsi
-+++ b/arch/arm/boot/dts/am33xx-l4.dtsi
-@@ -1502,8 +1502,7 @@ SYSC_OMAP2_SOFTRESET |
- 			mmc1: mmc@0 {
- 				compatible = "ti,am335-sdhci";
- 				ti,needs-special-reset;
--				dmas = <&edma_xbar 24 0 0
--					&edma_xbar 25 0 0>;
-+				dmas = <&edma 24 0>, <&edma 25 0>;
- 				dma-names = "tx", "rx";
- 				interrupts = <64>;
- 				reg = <0x0 0x1000>;
--- 
-2.36.1
 
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-clk-exynos7885-emmc-5.20
+
+for you to fetch changes up to e756e932a3a16418cd8bad757b028bfb337b4a51:
+
+  dt-bindings: clock: Add indices for Exynos7885 TREX clocks (2022-06-20 13:57:20 +0200)
+
+----------------------------------------------------------------
+Samsung clock controller changes for v5.20
+
+Add bindings for Exynos7885 eMMC used on Samsung Galaxy A8 (2018).
+
+----------------------------------------------------------------
+David Virag (2):
+      dt-bindings: clock: Add bindings for Exynos7885 CMU_FSYS
+      dt-bindings: clock: Add indices for Exynos7885 TREX clocks
+
+ .../bindings/clock/samsung,exynos7885-clock.yaml   | 27 +++++++++++
+ include/dt-bindings/clock/exynos7885.h             | 54 ++++++++++++++++++----
+ 2 files changed, 72 insertions(+), 9 deletions(-)

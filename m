@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEB7551C32
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792B3551AF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344456AbiFTNWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S244345AbiFTNKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344983AbiFTNTh (ORCPT
+        with ESMTP id S231754AbiFTNF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:19:37 -0400
+        Mon, 20 Jun 2022 09:05:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29D21B780;
-        Mon, 20 Jun 2022 06:08:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B800E1A044;
+        Mon, 20 Jun 2022 06:00:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90F39B811D8;
-        Mon, 20 Jun 2022 13:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBB0C3411B;
-        Mon, 20 Jun 2022 13:08:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C2A9B811B9;
+        Mon, 20 Jun 2022 13:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AD1C3411B;
+        Mon, 20 Jun 2022 13:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730488;
-        bh=AKwpJEEE7pLrDoVknv5eywu/fVXwKCDL907a8dWzw1w=;
+        s=korg; t=1655730021;
+        bh=jEjmNSh47oqp7uebHlYwyx7toZeZXvjP9kh3xiYrcNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SUFxWT+ZAKkVXUTdxduERLq3mcaXDKscDc8wmKC3RBYUeyeMWTVC72/x5AyfwikpX
-         UgB71dJHLTMOl1QYW7ul315jIZ3wgVhnEUR8dcVpQ0qJbnMfzDk6OBfyFwKWbuE5qI
-         eM8z6xpr6kp0LGrc83qgWQYfCgpUYHdzSTfjHnr0=
+        b=YQR+yTBsFekN7oF6VPVg0bBgArZYU4yGbiyHtb2zxXJf6tyNeI6wlkVjaTPUakrGE
+         6aLtKsc3cZJIZRt/2uTdIr4V0vGs/71VmfQdu9E0WB9xhAI3uuYCCHY2syaW2l8qtO
+         XGNFsp1PrkCcGOrEnN/VoPz12C8/JXTW8ZenuD5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 036/106] mellanox: mlx5: avoid uninitialized variable warning with gcc-12
-Date:   Mon, 20 Jun 2022 14:50:55 +0200
-Message-Id: <20220620124725.456928916@linuxfoundation.org>
+        stable@vger.kernel.org, Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>
+Subject: [PATCH 5.18 118/141] md/raid5-ppl: Fix argument order in bio_alloc_bioset()
+Date:   Mon, 20 Jun 2022 14:50:56 +0200
+Message-Id: <20220620124733.039144373@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Logan Gunthorpe <logang@deltatee.com>
 
-[ Upstream commit 842c3b3ddc5f4d17275edbaa09e23d712bf8b915 ]
+commit f34fdcd4a0e7a0b92340ad7e48e7bcff9393fab5 upstream.
 
-gcc-12 started warning about 'tracker' being used uninitialized:
+bio_alloc_bioset() takes a block device, number of vectors, the
+OP flags, the GFP mask and the bio set. However when the prototype
+was changed, the callisite in ppl_do_flush() had the OP flags and
+the GFP flags reversed. This introduced some sparse error:
 
-  drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c: In function ‘mlx5_do_bond’:
-  drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c:786:28: warning: ‘tracker’ is used uninitialized [-Wuninitialized]
-    786 |         struct lag_tracker tracker;
-        |                            ^~~~~~~
+  drivers/md/raid5-ppl.c:632:57: warning: incorrect type in argument 3
+				    (different base types)
+  drivers/md/raid5-ppl.c:632:57:    expected unsigned int opf
+  drivers/md/raid5-ppl.c:632:57:    got restricted gfp_t [usertype]
+  drivers/md/raid5-ppl.c:633:61: warning: incorrect type in argument 4
+  				    (different base types)
+  drivers/md/raid5-ppl.c:633:61:    expected restricted gfp_t [usertype]
+				    gfp_mask
+  drivers/md/raid5-ppl.c:633:61:    got unsigned long long
 
-which seems to be because it doesn't track how the use (and
-initialization) is bound by the 'do_bond' flag.
+The sparse error introduction may not have been reported correctly by
+0day due to other work that was cleaning up other sparse errors in this
+area.
 
-But admittedly that 'do_bond' usage is fairly complicated, and involves
-passing it around as an argument to helper functions, so it's somewhat
-understandable that gcc doesn't see how that all works.
-
-This function could be rewritten to make the use of that tracker
-variable more obviously safe, but for now I'm just adding the forced
-initialization of it.
-
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 609be1066731 ("block: pass a block_device and opf to bio_alloc_bioset")
+Cc: stable@vger.kernel.org # 5.18+
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/lag.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/raid5-ppl.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag.c b/drivers/net/ethernet/mellanox/mlx5/core/lag.c
-index 57d86d47ec2a..0fbb239559f3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lag.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lag.c
-@@ -435,7 +435,7 @@ static void mlx5_do_bond(struct mlx5_lag *ldev)
- {
- 	struct mlx5_core_dev *dev0 = ldev->pf[MLX5_LAG_P1].dev;
- 	struct mlx5_core_dev *dev1 = ldev->pf[MLX5_LAG_P2].dev;
--	struct lag_tracker tracker;
-+	struct lag_tracker tracker = { };
- 	bool do_bond, roce_lag;
- 	int err;
+--- a/drivers/md/raid5-ppl.c
++++ b/drivers/md/raid5-ppl.c
+@@ -629,9 +629,9 @@ static void ppl_do_flush(struct ppl_io_u
+ 		if (bdev) {
+ 			struct bio *bio;
  
--- 
-2.35.1
-
+-			bio = bio_alloc_bioset(bdev, 0, GFP_NOIO,
++			bio = bio_alloc_bioset(bdev, 0,
+ 					       REQ_OP_WRITE | REQ_PREFLUSH,
+-					       &ppl_conf->flush_bs);
++					       GFP_NOIO, &ppl_conf->flush_bs);
+ 			bio->bi_private = io;
+ 			bio->bi_end_io = ppl_flush_endio;
+ 
 
 

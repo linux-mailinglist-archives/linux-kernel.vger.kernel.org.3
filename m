@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EC1550E60
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 03:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EB8550E5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 03:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbiFTBPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 21:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
+        id S238042AbiFTBOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 21:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237739AbiFTBOm (ORCPT
+        with ESMTP id S234884AbiFTBOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 21:14:42 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA5AB1D1
+        Sun, 19 Jun 2022 21:14:36 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7466EAE62
         for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 18:14:34 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25JKACH5013171;
-        Mon, 20 Jun 2022 01:14:14 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25JEFUO3012858;
+        Mon, 20 Jun 2022 01:14:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=R3fLhmovGlX74ReigGhVPEWVr7zEEzYeYHsjq/K7XQ4=;
- b=K1CjLA5cw38X3kW6URY6mS4Z2UxJceuleVO+BQxyDJ+3BWpy5x6SUdRTRxtHkn3QQuPr
- f1LCxqEjMAfOkGVX3SapPvzvEGy5L2kSXAwZCU2oFNoDAlsD+NJ36LshcyYDrbj13nUs
- T6e0VhuWZjSlIPz9wqnVU6FYceiJVJJALcu4c5eesqqyZXu7YIK9tOJEFfvqNSKYwotm
- CpqH8hcXmHEBVlJPFf8I5Uuxl32Z+3WQIvzRf/MgDsBUOu7ErhnkPZQhLtjYR1vZk2NR
- 7L5WgAjtuinuZDPfSIhBhL+ZCWCvkpeca4pWXc6x1DkgIoaILKKf6aFk9wFSCqXPNwbg BA== 
+ s=corp-2021-07-09; bh=WFaY45VwYR6sWK6+fArlPWWBj6ZoOOjrrsZeqeJkdZ8=;
+ b=hyPMkTRXkVz45y8eFHfKZ/hKIW5smhBkVrJovW6Eeyago6JdPMD0iaubHkyfm01Ozmpx
+ PXcTWBsA1egGByPkgQAq8toUsA7e0RrhkGYSrZ4fPpSM2U6lnn87pTV7WNQxjh49DSuu
+ Ehlxlab4ZABbFgUEsdZP68SYVqHJyeKQiAt+rcmLoN9UwuufepVftNNnoRVXjVTw5CcM
+ 0nNrRTh4IvPvcvBeJzRnTQe9bgfCuy+Ro3oqzuxNaY43J8Q2Os4mz0jnB7OvH8OuNrOB
+ aujQuofIMChg0w39+1tEDNZE/RdIudfj0NhnVaOzuzR5X392Bx/PoMlqkdLdGw1Qv4F/ GQ== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs54cj1bn-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs78tsxan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jun 2022 01:14:15 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25K19qKt038388;
+        Mon, 20 Jun 2022 01:14:14 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2040.outbound.protection.outlook.com [104.47.73.40])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtbu5tbfn-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 20 Jun 2022 01:14:14 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25K19qKs038388;
-        Mon, 20 Jun 2022 01:14:13 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2040.outbound.protection.outlook.com [104.47.73.40])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtbu5tbfn-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jun 2022 01:14:13 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NsovWcrUcldjnlvogvvE9yYEn8iu4DDhQLK2tqTVtZgEhG0PB57x1pxj4aiF38J7lKrYSi0zvjKD6ZonwTiHt3Py9QGJ9bv0eWbx6KVI0+kKXFzGljeTHY252Zxqc0932L/R6O14O6mn5GKEyYzsvA2eiGgkOcHftWqWCMbpjYc3SP7lWNUlfsKsMQP/m9ezK24Uc1RKVYB4OINZKcYP9AdE+1Pvkup1PCA2wYrkvJkf+b4t506V++MarKgCsdJ6ZdVF0geJ/G5i/Juwkms1UcZ9i/hQHJOmyhr4trF9O4oKDvz1fQ9f5i7IVmCfGrOFLYVeaJlTa44ALBCYcOCFZA==
+ b=Z5HbYJd9QiRnBXuSaJmJoQfy1OYI3BvcRd2Dl5PXdZUH+Quvjsan2LEN83cr3sExjjVEVtbxS6Cnue2XQ68E9miCWXTba8JQUnufg+Q53NdFR+cBQIMnqx/l09EKxBb48pvlLrEzml5NEnQ030p3NjDRrp3uzjlsr9cVX7DKl1qLoD1aBW1xIQCi9bGyD7sK/3i3sjAp7mwRuYqjSBMpVNRa1eqCDoU6gVyWpQcE2LmNZuFDAk12ddJyJsxhluI1wGQ6y9XyqClVQ8ta+v2IawvhHUHzeVPmEQn9CRj+dX9DU19czzS/QXcsSLV+zKmlz6JD1pvQi9t9JdjP+dA5yg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R3fLhmovGlX74ReigGhVPEWVr7zEEzYeYHsjq/K7XQ4=;
- b=fHBxlt9ArMSkO4N2bt3Td38hkAe0TkfFnbFXCU98LUTkRG44+ip/OawZvhSdgXwDdy4n8RxDoiWp9EcoDZwi5oh7A/H1Iz4zsA5cCyM9HZ7lMS0KHpyn6bFn3yZUqTfWh1jgzVHh+yn6RuGa9aa6jon/OXmCidBnNAKA2kFLWwagu+S6Xb6CX9OuFfGA/gkkGoVaq1Azc+jWQMGFpvmezTvEyxSJ/W3zv8B4hHVfElyJ9jcviPFu8fdcdp7KnPH73SAAjdcIR8HZyzhYid0USejppoxOQyr2LzdZbtxW3IywObOPXGyBspRo6mUCtKXwjiU0U5zWzlNOcSUZtfdVTg==
+ bh=WFaY45VwYR6sWK6+fArlPWWBj6ZoOOjrrsZeqeJkdZ8=;
+ b=OvUx1X/yWleIdqoGJeaaASsPzvvEXDYZsF3LZCExDYzeT4H8oXORT3SqnIccdODVwOc8Y2dBQFg0Qw12jPFIU8Czmj0K8++Cw+F07d828ugWHOI+WQHH66mVzrcE7LjWMqC3/NsiItH8XYFDgR0PaWnTTFH6V2BIppZwDK22+DpB6UswA/EN2GPsqRdS4dbd/sFRhRcU2MxkJF/TMyPc0vsCSgUVFykUgpLQjRAC1SR2MMDbYgOYdZw0WBKoHYRGnXcTHMs8fCpxHTpTXpoxbA+xfQJz1+a+fpZK6HLXQ8UrRpXhLk5kMN5kPqU9gABBLspXEPpEN2KZf6eXwDkdyQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R3fLhmovGlX74ReigGhVPEWVr7zEEzYeYHsjq/K7XQ4=;
- b=QZrqXKmoMPXPvGaoF1FipyzvPG5YY1ZjenmVRPqNFa8LH/wquizUxhSsm/rUXa/wpXSu4En/gE2yiVN0XvMuZ28ZLQKbJeari/lHz9tHPopWI+XAtl14VDdFJfTso01Gp7Z9dRwhIMWqrQbAnOTkJ4WVwHnYj11stb2Dya/k0gc=
+ bh=WFaY45VwYR6sWK6+fArlPWWBj6ZoOOjrrsZeqeJkdZ8=;
+ b=K8gsqPjkeGyz/Z6MvSj+VQzp8u4EccPHJWkfB0is6xGZUSQiOBj+GmW3JACAislxR0yfViCOY1mkpFfEYDtBSQt4VOIp4oP50XMwPOPDlEfLYHq2GU9j0CmyK1HEvI7wdLoP30byarYLEYbhU1aMLc9NLIQg9Ig92FqB12fGNAo=
 Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
  BN6PR10MB1905.namprd10.prod.outlook.com (2603:10b6:404:ff::16) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Mon, 20 Jun 2022 01:14:11 +0000
+ 15.20.5353.14; Mon, 20 Jun 2022 01:14:12 +0000
 Received: from DM5PR10MB1466.namprd10.prod.outlook.com
  ([fe80::f81d:b8ef:c5a4:9c9b]) by DM5PR10MB1466.namprd10.prod.outlook.com
  ([fe80::f81d:b8ef:c5a4:9c9b%3]) with mapi id 15.20.5353.018; Mon, 20 Jun 2022
- 01:14:11 +0000
+ 01:14:12 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
         mst@redhat.com, sgarzare@redhat.com,
         virtualization@lists.linux-foundation.org, brauner@kernel.org,
         ebiederm@xmission.com, linux-kernel@vger.kernel.org
-Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v10 6/8] vhost_task: Allow vhost layer to use copy_process
-Date:   Sun, 19 Jun 2022 20:13:55 -0500
-Message-Id: <20220620011357.10646-7-michael.christie@oracle.com>
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v10 7/8] vhost: move worker thread fields to new struct
+Date:   Sun, 19 Jun 2022 20:13:56 -0500
+Message-Id: <20220620011357.10646-8-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220620011357.10646-1-michael.christie@oracle.com>
 References: <20220620011357.10646-1-michael.christie@oracle.com>
@@ -80,55 +81,55 @@ X-ClientProxiedBy: DM6PR13CA0014.namprd13.prod.outlook.com
  (2603:10b6:3:b::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8cecb3d-58cd-4504-7994-08da525a2e39
+X-MS-Office365-Filtering-Correlation-Id: d9a0d4cf-aae2-4c91-fa8f-08da525a2ebe
 X-MS-TrafficTypeDiagnostic: BN6PR10MB1905:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR10MB190519793FABA71E0A5CEB17F1B09@BN6PR10MB1905.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BN6PR10MB19057565F40367DFE92D425CF1B09@BN6PR10MB1905.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6nJTL+dlOTIzPUdrdfl/lduPUL9TqcdgfiW3ZQoxuuVWBHgDe7Efxxt55VddM5RLeROP7x+7j7E0L9NUORbCn/e1P1Er3xWlNjK40W2YgIB2x5ASKu2QVyYA+ZEz4xt+cTPVbKghVQhteh7u5XlE23ySxiT8Jwc5aeGob08o8s8ItyG1mwOQuJaWS4HYbfMnRsLTuMTm7vcly9bKiD+BBc3g37n/APASJpsfhBcI4oE7XRPQ6Y6ZOyuMV9XjFhs2i0/3pmsCfp0xv0k+jKKdVn64HlfERyNAhHie/CwfBBsk5EngTd6V2DQcmn825QqeDahkKCHqXFiyi3lXt6NO/f9bo8fxNV7KArS1e3juSi1rG2hKjO8ASaAYZON00OVH+i5kusKTLImAIyp34C7lWrI1a7skPykRpKEmxTsvhE/uKEhBGCfclOQmFr+inL1KVQW2g4l8Yrsk0qPrC1l22da4FrvwGUAz4icTkBFabi1N6aheUSdJhhGkhFV9dEQsxtl4ORrlChglZ425URH8u/LD90NYDPtmqsb5hccFGSjpbxJv6+9TdM4+OaveZqYDg145jmKVVZmdvTmtdBf3CMvCorsWMcFH6kbwFacDHp1usBdVq5336589eOVetYKuEzGx+LUkM6y643IkGcSa0jgYm4RfyPDMpWk9dRue0A+tz4nqFI8ejVr4853Od1I4V6zt1Ryr1b9QULfeZ+3mbw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(107886003)(38100700002)(5660300002)(2616005)(6512007)(2906002)(6506007)(6666004)(38350700002)(26005)(86362001)(52116002)(66946007)(83380400001)(66556008)(36756003)(66476007)(8676002)(4326008)(498600001)(1076003)(6486002)(8936002)(316002)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /MK6u6QQwcPQ7EZzDLxIlndFl6A+61ZL4MazGCYtl6Qnqxdpg9g+F8KCIL8fLL6s89qBLzFvSR1C7Z9aOy1PCc4K8FwN4H/7nZFoJWwMGvuVl/zSKrtImpHsFF4IjNs6GL0iEC24reneG4n2RgbFJVYLu7mPrlpPU9nkvAvjTaRZIxrGkE2JAWSDlapDGHdlWLhqpI0gmcgLf0sgJhpQ5CF5BGHKjGDJoKw4BjWhWI+IKlccxdUBq5TCmAFsbZfPZ9e2uva/Zz4S5atD6YBOB7jR0rkZgqePXr0Xqjb3Hk+W0/qiynFA/jRTm5aQn3LKUUt6yX8Lyi/O2hMASpWIhN0ZgDHPgKZEU1O3yjiPGCEikRgeXZGyn+r3PmGOaHoM+TFZicUaK/DIk/Wf4ikJs4Ab+fgD8gDbxLNO9nGLabWBKv8I7vn72sRLlLVjvPg0v+v1ZhQdHaycgnoC1EyqYVFt3Fla+EIKSbu9gV0TPpgYhXWjHqfLK98n/tzy0zFzxHZZ6PrUMEt1Zg87IJcN9a+MEBfLzf/cNXNbsZm174aaT2LrRUpvw0O1vF0hCYn7szRV/NyNV/3ESpNEqrADykfl1SUqgAGg6mR7RlcBs0RustiPk2EiABqtsgfSHRZcPAgQTN/zoLFFfo0qxWMjRyKu1EqLKRtkqEv3v5/SvyRp3ot/vl8b+ENWK8ljCVLArIiI2q8PhS/Z9sQ/bnsQGA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(38100700002)(5660300002)(2616005)(7416002)(6512007)(2906002)(6506007)(6666004)(38350700002)(26005)(86362001)(52116002)(66946007)(83380400001)(66556008)(36756003)(66476007)(8676002)(4326008)(498600001)(1076003)(6486002)(8936002)(316002)(186003)(54906003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OZTygz3mVRv8i2NaJiO3GnD/xV9j5cfubP2v4pyhWG/Xook0JPprxa5hyDnW?=
- =?us-ascii?Q?SLBdobRapSwoAK0F09vBjlyv52d6suf9oeavn0jzWm9OztPTWknWT6YV1mj5?=
- =?us-ascii?Q?U1nHBufUJsoIEd4BrlZGPMBke1W2bNswFP2ubTwyC9MBiKlydMqwom+OSCfH?=
- =?us-ascii?Q?epZsTBLX/hBdb4PIeeEAYtqkh1pZ0rH6YCUOCiDNsBs9g5Iqe+BkyD7SNRgA?=
- =?us-ascii?Q?oYQIy7dCWyd+bRA1R0qi435jdBrXarjcOT9jFfbhfOgnmL1l8xBGK+grCEuk?=
- =?us-ascii?Q?+5QICDJLlTPLrocK7mm9ZbqbsDe7DvRtOFeHwjegY/UHj3LGPTalrmmkcw9X?=
- =?us-ascii?Q?7y4tRAeHlW3bnvzJl3Dbe71V+kyaJXh+Qpgu3wiPiwXv1u4TXSbh1Jeu6lL9?=
- =?us-ascii?Q?P0c2gJv5xOTypfU7hnDe8Vk6Eg2QUB3hVY9nDzjKxdIwuNCnucMF2XQYdTSv?=
- =?us-ascii?Q?ss8G3UOQF0ngHole1pQMYLEMksh9/YL9gZS759NPd4lenHyXdogPWO5PL8Iz?=
- =?us-ascii?Q?PqWNlIe4ZOiOhoZULuWkKdaIkEu7vTN4sEUIW5GVsiyMqYcPJYKKiC05Ve7O?=
- =?us-ascii?Q?9hkn6TSu2Xz0ZEeKxMHR50MKtBnfF5nMpDzDtqxWCBwqIavOlF41WwMf++Bz?=
- =?us-ascii?Q?h/NJEhdRyNcg7sF6bIAHRU6KKNMq39/uUw4P5ISwUMZuuxAtiQlEJeVoCaS1?=
- =?us-ascii?Q?GLHEN966FvAfTeWnPWF9A8eaIsrAF5fPZkFHx5atJ56YWh6dZsGyWww5PUXE?=
- =?us-ascii?Q?gQdYrM0FFMbK9MZjQ94am+Gm+lqTUwplRKkHVTg4nPepbcK/D/yg2bXLvXYV?=
- =?us-ascii?Q?5Ls5mopt43kvE/QXHpHomiHx9IV7tus8p7xzngr/E90cPCceZkC7XE9OkojS?=
- =?us-ascii?Q?abadNyTk1tEAWphKCLantW1UJdfZ8bOG+vvjZhDPglmh0xlK4nqldlq69Ou9?=
- =?us-ascii?Q?g5Ez9I/rD01lB9c6hpHV1PS7zeVINVUAQmsvvHcS83KAb+vBENDsL3sJKWSN?=
- =?us-ascii?Q?TV0yPoQVKO9tR64Vj1SN6G6xBCV74S9RCn+hjHSACEh0dgH1jq1A/U0Dg/JD?=
- =?us-ascii?Q?6KoZL1AvR3KzgEv90vxD/zL23W0HHh5IOdpkebjEs1N3lZS3NaHpj5TFqB+W?=
- =?us-ascii?Q?zID0RCuaoD4RY1FYCQPMbsW8e2YwM5Fh85sglKri64tuDuLPazzBwA6SANfv?=
- =?us-ascii?Q?xQlQPZMWpPuy0cORQgs9nYzxbBP2sjtjuog4pYdhpfTAlZww2aO23YyQ8O3i?=
- =?us-ascii?Q?0cjhZhH5GEo5woYHsF2vELgLeYkVKGI/Oiw2bFxehHhH0ljiXsxb++yGOuMe?=
- =?us-ascii?Q?p5iDDz2+ka4j1YaUzhjErnkQbTNhQGipWBY2umcWAOV1fZCeM8HHxLNJjGd7?=
- =?us-ascii?Q?3vTZnHWsjX8c8nm02NkiakRVVk1kictBuWe2yEZCsNR2UEgGearT7blKjThV?=
- =?us-ascii?Q?It9EJgiu8LMpExa6Iyii8b28eSkugmDKryaJ12tLotR9RoOWwfJyOM9nKIVB?=
- =?us-ascii?Q?8yCC2ej1hdHbrJM/POCYvnwUJhGBwpRFFqBLlUtXCBROcnHl7obtcJpaoaF9?=
- =?us-ascii?Q?26fkAPbKlbOXeWZSXDyi+488xtMxfb/c76ybT02+dGznOR3xV8FAOx0ifn5j?=
- =?us-ascii?Q?BKgGe2gQUEOEGjwMVKIhYY5j1Mbvhrq6X+ucf+9J/NxxR9/GXidu9xjsmrdZ?=
- =?us-ascii?Q?HbkpqBRDKDDQ74/omRrp82DUk4XkcEaRfRg3KCim4Z56lTpRlpiGiw1kiH4l?=
- =?us-ascii?Q?n3hMpdwfon8RmxXALhwAjyJ1X7P6aTg=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kPMviPcxXUBYr2V+ltLrt5fk58j3ldrVDr21KWVTIN1c0Z8Ck/vmkY7HW9I+?=
+ =?us-ascii?Q?LKLtBA6L9wWz/s+pU3qHZ/SAk1+OHOxszCvjps0b9adWSm1rvx2G22BII2oy?=
+ =?us-ascii?Q?yZ5/UARYhIWXwJWAblz7gq56hE473lC2Qb1pi2wbVfJfaPyCuocYuCfIO6+A?=
+ =?us-ascii?Q?4HVGCd0lp3zRf7o9S2smXlmyBb85RAtZt/11Avoyky5MOT8j893qncqqZwly?=
+ =?us-ascii?Q?nf7jBQwDHsQ1RGJCs9j8CqGKg+/6KYeg7AnB8ie2z596644U3nPNtDzJfFtU?=
+ =?us-ascii?Q?1s4K0AqzmjttRm+WGrdtXoXiWxE9HDMh795qPFYF47jdwf4znNfBfHiWGpCF?=
+ =?us-ascii?Q?+jHkB7SbY7yE7Mv0D8VlDXVrCGGXlt9au18wljQUpTwO8CPiRH4J2rkzDAQa?=
+ =?us-ascii?Q?NWuQUNDPG5GJX7+AkCIUPBmZhUxg0QpISPdGkX3N2tNesaFpcvQibjit1E4u?=
+ =?us-ascii?Q?LP1RtD3kEeYxgYAW1hOSgQLefNvLq+ZWR5In1SuCB5XWN2wcQtM7sgJ8uvie?=
+ =?us-ascii?Q?S7wRQCClXSv2v8JgP6JvvrqZM/s5lC6raQoKgmTb2NKXQXjkVaQqNNFxKPdf?=
+ =?us-ascii?Q?/8Hqu5I2hnX9IlfQZpGPa+j+w12baIll3xPuibWTYSMyjL3smeiPSjdUrkvR?=
+ =?us-ascii?Q?WkVSf1hY+NCKmGedLZCO9X+7f6U1OA/aaUOcQXOCqrdBVkRsM4OLi+hrfAf+?=
+ =?us-ascii?Q?lfAMw5xelP4HF98ZHb/F092BWNPNLo77N+x2af0rRVvOp4Xy5+lzZW3JXx5z?=
+ =?us-ascii?Q?pRhF4LGCm0+ZJcaEcP597c7K1KA4DW+qNw8/KgCo6bV2loGecVZfQaeLYKcy?=
+ =?us-ascii?Q?1Fjyr9P3kc7QMgd5DdvM7PcetoRe0wXe5mnLcQwonvvZ03wahEhG5BS+OcFU?=
+ =?us-ascii?Q?9cPI/wdhqgl/wCGUcgIbbIy8MCaQFvsyaRW0mMYy2lMNEjzhWmocxKt90EZl?=
+ =?us-ascii?Q?1Xr9EOmRJL7rFKOyx3Ces1qJoWaBmVVylFeVRLSsq0++R/buMGlM31cO0Cck?=
+ =?us-ascii?Q?3qx6/d0jkxHvFHdxtR4VdJ3jk3j5cXktn0rpO2PF18IWLGf9KLpFwn6s9Gif?=
+ =?us-ascii?Q?Gul7mfuN6iOmPnZgeQEzizPxt99HElwsD0McI2w3PlHHbH96CcBPlyHC8XKY?=
+ =?us-ascii?Q?Os7xpx6bjYx1bwjqdgVOPnbZnQv3IwyU8hj/eE8wbpWVQylHaZCz/ne/Xuf+?=
+ =?us-ascii?Q?iT4CyNYD7/emuas3RuJiGCJTKeS8dEMuDcd0yYofc8kfZhENaiosdenf4PPt?=
+ =?us-ascii?Q?q69EusujS9pPPN1uMnftUUgXWnBARxnzxKZ8Ojos8V2o5H0PefryYwNai4Ez?=
+ =?us-ascii?Q?n75TJc8NH8qv7bhWIIrVbq3i3NoA7F5MKSrKn0CqyQSRHqM/rywIO8OFviEi?=
+ =?us-ascii?Q?YMRp7JvMFai5PXTn3T8In1lyr+SR080udkSOmSMlPXFzRl/7ES7TmfetPgpg?=
+ =?us-ascii?Q?yJicTOHITeb0YhNWNc09rUDBxKb91ZeEqUWIWXPg/LBI4O+4pWhIjvoRtuwI?=
+ =?us-ascii?Q?2TqnJZ+3w3fKabxC1YGi/wPDAi71iXmdZIkLMUn9I+5THWGNt58n8GyjNmo9?=
+ =?us-ascii?Q?2Lq2Vdmk5P2usTLtU8cZOJugOAR3/QyYbS6V9F/etKsf8ix7KlVrvQX3aotn?=
+ =?us-ascii?Q?73oQxX7bW5Gffz5wYYuwSjH0Ga3n/IjZMEj4SCZlcbAtnMsfrXAAv+7tYi4O?=
+ =?us-ascii?Q?nQol72t03gxLXUt+GpOE+q2Ml6vXI1twTmp35fplOJS+Iq67AFxwbTiWuYOx?=
+ =?us-ascii?Q?xVc2x0ISpx2cOmvQt0f+evS87F7IT4s=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8cecb3d-58cd-4504-7994-08da525a2e39
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9a0d4cf-aae2-4c91-fa8f-08da525a2ebe
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 01:14:10.4118
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 01:14:11.2867
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xKuD8f4X4Vm/NLka7z+ZgjhKZQ4OsO2MYms+RrepVG5q/vY81Jf3AZK5F7W291T5BDaHLy8aLTk8pIluOpCTOoOfGzBb246AAtAmzv8tKho=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 68jV+6ieihgm7eo5VgaveYJ06oR/PQNzXsdpA00CYeSlxsYwxnQBI7VJp91o5N3YXa4nKC775o/xbq29Y8k6MNip99SpZpALUWxx6PhI/po=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1905
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
  definitions=2022-06-19_12:2022-06-17,2022-06-19 signatures=0
@@ -136,8 +137,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spams
  mlxscore=0 phishscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
  definitions=main-2206200004
-X-Proofpoint-GUID: RnuMfabyio46HaR2fQ5CfnNUPAGokDbZ
-X-Proofpoint-ORIG-GUID: RnuMfabyio46HaR2fQ5CfnNUPAGokDbZ
+X-Proofpoint-GUID: cmKmpt8Y186bwgMnlii1zYLOE6x2EyOs
+X-Proofpoint-ORIG-GUID: cmKmpt8Y186bwgMnlii1zYLOE6x2EyOs
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -148,234 +149,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qemu will create vhost devices in the kernel which perform network, SCSI,
-etc IO and management operations from worker threads created by the
-kthread API. Because the kthread API does a copy_process on the kthreadd
-thread, the vhost layer has to use kthread_use_mm to access the Qemu
-thread's memory and cgroup_attach_task_all to add itself to the Qemu
-thread's cgroups, and it bypasses the RLIMIT_NPROC limit which can result
-in VMs creating more threads than the admin expected.
-
-This patch adds a new struct vhost_task which can be used instead of
-kthreads. They allow the vhost layer to use copy_process and inherit
-the userspace process's mm and cgroups, the task is accounted for
-under the userspace's nproc count and can be seen in its process tree,
-and other features like namespaces work and are inherited by default.
+This is just a prep patch. It moves the worker related fields to a new
+vhost_worker struct and moves the code around to create some helpers that
+will be used in the next patch.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
 Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- MAINTAINERS                      |   2 +
- drivers/vhost/Kconfig            |   5 ++
- include/linux/sched/vhost_task.h |  23 ++++++
- kernel/Makefile                  |   1 +
- kernel/vhost_task.c              | 122 +++++++++++++++++++++++++++++++
- 5 files changed, 153 insertions(+)
- create mode 100644 include/linux/sched/vhost_task.h
- create mode 100644 kernel/vhost_task.c
+ drivers/vhost/vhost.c | 98 ++++++++++++++++++++++++++++---------------
+ drivers/vhost/vhost.h | 11 +++--
+ 2 files changed, 72 insertions(+), 37 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f52543aedd61..8efd697499fd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21147,7 +21147,9 @@ L:	virtualization@lists.linux-foundation.org
- L:	netdev@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git
-+F:	kernel/vhost_task.c
- F:	drivers/vhost/
-+F:	include/linux/sched/vhost_task.h
- F:	include/linux/vhost_iotlb.h
- F:	include/uapi/linux/vhost.h
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 40097826cff0..4e17ac40c08c 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -255,8 +255,8 @@ void vhost_work_queue(struct vhost_dev *dev, struct vhost_work *work)
+ 		 * sure it was not in the list.
+ 		 * test_and_set_bit() implies a memory barrier.
+ 		 */
+-		llist_add(&work->node, &dev->work_list);
+-		wake_up_process(dev->worker);
++		llist_add(&work->node, &dev->worker->work_list);
++		wake_up_process(dev->worker->task);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(vhost_work_queue);
+@@ -264,7 +264,7 @@ EXPORT_SYMBOL_GPL(vhost_work_queue);
+ /* A lockless hint for busy polling code to exit the loop */
+ bool vhost_has_work(struct vhost_dev *dev)
+ {
+-	return !llist_empty(&dev->work_list);
++	return dev->worker && !llist_empty(&dev->worker->work_list);
+ }
+ EXPORT_SYMBOL_GPL(vhost_has_work);
  
-diff --git a/drivers/vhost/Kconfig b/drivers/vhost/Kconfig
-index 587fbae06182..b455d9ab6f3d 100644
---- a/drivers/vhost/Kconfig
-+++ b/drivers/vhost/Kconfig
-@@ -13,9 +13,14 @@ config VHOST_RING
- 	  This option is selected by any driver which needs to access
- 	  the host side of a virtio ring.
+@@ -335,7 +335,8 @@ static void vhost_vq_reset(struct vhost_dev *dev,
  
-+config VHOST_TASK
-+	bool
-+	default n
-+
- config VHOST
- 	tristate
- 	select VHOST_IOTLB
-+	select VHOST_TASK
- 	help
- 	  This option is selected by any driver which needs to access
- 	  the core of vhost.
-diff --git a/include/linux/sched/vhost_task.h b/include/linux/sched/vhost_task.h
-new file mode 100644
-index 000000000000..50d02a25d37b
---- /dev/null
-+++ b/include/linux/sched/vhost_task.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_VHOST_TASK_H
-+#define _LINUX_VHOST_TASK_H
-+
-+#include <linux/completion.h>
-+
-+struct task_struct;
-+
-+struct vhost_task {
-+	int (*fn)(void *data);
-+	void *data;
-+	struct completion exited;
-+	unsigned long flags;
-+	struct task_struct *task;
-+};
-+
-+struct vhost_task *vhost_task_create(int (*fn)(void *), void *arg, int node);
-+__printf(2, 3)
-+void vhost_task_start(struct vhost_task *vtsk, const char namefmt[], ...);
-+void vhost_task_stop(struct vhost_task *vtsk);
-+bool vhost_task_should_stop(struct vhost_task *vtsk);
-+
-+#endif
-diff --git a/kernel/Makefile b/kernel/Makefile
-index a7e1f49ab2b3..c00409e526ad 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -15,6 +15,7 @@ obj-y     = fork.o exec_domain.o panic.o \
- obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o
- obj-$(CONFIG_MODULES) += kmod.o
- obj-$(CONFIG_MULTIUSER) += groups.o
-+obj-$(CONFIG_VHOST_TASK) += vhost_task.o
+ static int vhost_worker(void *data)
+ {
+-	struct vhost_dev *dev = data;
++	struct vhost_worker *worker = data;
++	struct vhost_dev *dev = worker->dev;
+ 	struct vhost_work *work, *work_next;
+ 	struct llist_node *node;
  
- ifdef CONFIG_FUNCTION_TRACER
- # Do not trace internal ftrace files
-diff --git a/kernel/vhost_task.c b/kernel/vhost_task.c
-new file mode 100644
-index 000000000000..517dd166bb2b
---- /dev/null
-+++ b/kernel/vhost_task.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021 Oracle Corporation
-+ */
-+#include <linux/slab.h>
-+#include <linux/completion.h>
-+#include <linux/sched/task.h>
-+#include <linux/sched/vhost_task.h>
-+#include <linux/sched/signal.h>
-+
-+enum vhost_task_flags {
-+	VHOST_TASK_FLAGS_STOP,
-+};
-+
-+static int vhost_task_fn(void *data)
+@@ -350,7 +351,7 @@ static int vhost_worker(void *data)
+ 			break;
+ 		}
+ 
+-		node = llist_del_all(&dev->work_list);
++		node = llist_del_all(&worker->work_list);
+ 		if (!node)
+ 			schedule();
+ 
+@@ -360,7 +361,7 @@ static int vhost_worker(void *data)
+ 		llist_for_each_entry_safe(work, work_next, node, node) {
+ 			clear_bit(VHOST_WORK_QUEUED, &work->flags);
+ 			__set_current_state(TASK_RUNNING);
+-			kcov_remote_start_common(dev->kcov_handle);
++			kcov_remote_start_common(worker->kcov_handle);
+ 			work->fn(work);
+ 			kcov_remote_stop();
+ 			if (need_resched())
+@@ -479,7 +480,6 @@ void vhost_dev_init(struct vhost_dev *dev,
+ 	dev->byte_weight = byte_weight;
+ 	dev->use_worker = use_worker;
+ 	dev->msg_handler = msg_handler;
+-	init_llist_head(&dev->work_list);
+ 	init_waitqueue_head(&dev->wait);
+ 	INIT_LIST_HEAD(&dev->read_list);
+ 	INIT_LIST_HEAD(&dev->pending_list);
+@@ -571,10 +571,60 @@ static void vhost_detach_mm(struct vhost_dev *dev)
+ 	dev->mm = NULL;
+ }
+ 
++static void vhost_worker_free(struct vhost_dev *dev)
 +{
-+	struct vhost_task *vtsk = data;
++	struct vhost_worker *worker = dev->worker;
++
++	if (!worker)
++		return;
++
++	dev->worker = NULL;
++	WARN_ON(!llist_empty(&worker->work_list));
++	kthread_stop(worker->task);
++	kfree(worker);
++}
++
++static int vhost_worker_create(struct vhost_dev *dev)
++{
++	struct vhost_worker *worker;
++	struct task_struct *task;
 +	int ret;
 +
-+	ret = vtsk->fn(vtsk->data);
-+	complete(&vtsk->exited);
-+	do_exit(ret);
-+}
++	worker = kzalloc(sizeof(*worker), GFP_KERNEL_ACCOUNT);
++	if (!worker)
++		return -ENOMEM;
 +
-+/**
-+ * vhost_task_stop - stop a vhost_task
-+ * @vtsk: vhost_task to stop
-+ *
-+ * Callers must call vhost_task_should_stop and return from their worker
-+ * function when it returns true;
-+ */
-+void vhost_task_stop(struct vhost_task *vtsk)
-+{
-+	pid_t pid = vtsk->task->pid;
++	dev->worker = worker;
++	worker->dev = dev;
++	worker->kcov_handle = kcov_common_handle();
++	init_llist_head(&worker->work_list);
 +
-+	set_bit(VHOST_TASK_FLAGS_STOP, &vtsk->flags);
-+	wake_up_process(vtsk->task);
-+	/*
-+	 * Make sure vhost_task_fn is no longer accessing the vhost_task before
-+	 * freeing it below. If userspace crashed or exited without closing,
-+	 * then the vhost_task->task could already be marked dead so
-+	 * kernel_wait will return early.
-+	 */
-+	wait_for_completion(&vtsk->exited);
-+	/*
-+	 * If we are just closing/removing a device and the parent process is
-+	 * not exiting then reap the task.
-+	 */
-+	kernel_wait4(pid, NULL, __WCLONE, NULL);
-+	kfree(vtsk);
-+}
-+EXPORT_SYMBOL_GPL(vhost_task_stop);
-+
-+/**
-+ * vhost_task_should_stop - should the vhost task return from the work function
-+ */
-+bool vhost_task_should_stop(struct vhost_task *vtsk)
-+{
-+	return test_bit(VHOST_TASK_FLAGS_STOP, &vtsk->flags);
-+}
-+EXPORT_SYMBOL_GPL(vhost_task_should_stop);
-+
-+/**
-+ * vhost_task_create - create a copy of a process to be used by the kernel
-+ * @fn: thread stack
-+ * @arg: data to be passed to fn
-+ * @node: numa node to allocate task from
-+ *
-+ * This returns a specialized task for use by the vhost layer or NULL on
-+ * failure. The returned task is inactive, and the caller must fire it up
-+ * through vhost_task_start().
-+ */
-+struct vhost_task *vhost_task_create(int (*fn)(void *), void *arg, int node)
-+{
-+	struct kernel_clone_args args = {
-+		.flags		= CLONE_FS | CLONE_UNTRACED | CLONE_VM,
-+		.exit_signal	= 0,
-+		.worker_flags	= USER_WORKER | USER_WORKER_NO_FILES |
-+				  USER_WORKER_SIG_IGN,
-+		.fn		= vhost_task_fn,
-+	};
-+	struct vhost_task *vtsk;
-+	struct task_struct *tsk;
-+
-+	vtsk = kzalloc(sizeof(*vtsk), GFP_KERNEL);
-+	if (!vtsk)
-+		return ERR_PTR(-ENOMEM);
-+	init_completion(&vtsk->exited);
-+	vtsk->data = arg;
-+	vtsk->fn = fn;
-+
-+	args.fn_arg = vtsk;
-+
-+	tsk = copy_process(NULL, 0, node, &args);
-+	if (IS_ERR(tsk)) {
-+		kfree(vtsk);
-+		return NULL;
++	task = kthread_create(vhost_worker, worker, "vhost-%d", current->pid);
++	if (IS_ERR(task)) {
++		ret = PTR_ERR(task);
++		goto free_worker;
 +	}
 +
-+	vtsk->task = tsk;
-+	return vtsk;
++	worker->task = task;
++	wake_up_process(task); /* avoid contributing to loadavg */
++
++	ret = vhost_attach_cgroups(dev);
++	if (ret)
++		goto stop_worker;
++
++	return 0;
++
++stop_worker:
++	kthread_stop(worker->task);
++free_worker:
++	kfree(worker);
++	dev->worker = NULL;
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(vhost_task_create);
 +
-+/**
-+ * vhost_task_start - start a vhost_task created with vhost_task_create
-+ * @vtsk: vhost_task to wake up
-+ * @namefmt: printf-style format string for the thread name
-+ */
-+void vhost_task_start(struct vhost_task *vtsk, const char namefmt[], ...)
-+{
-+	char name[TASK_COMM_LEN];
-+	va_list args;
+ /* Caller should have device mutex */
+ long vhost_dev_set_owner(struct vhost_dev *dev)
+ {
+-	struct task_struct *worker;
+ 	int err;
+ 
+ 	/* Is there an owner already? */
+@@ -585,36 +635,21 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+ 
+ 	vhost_attach_mm(dev);
+ 
+-	dev->kcov_handle = kcov_common_handle();
+ 	if (dev->use_worker) {
+-		worker = kthread_create(vhost_worker, dev,
+-					"vhost-%d", current->pid);
+-		if (IS_ERR(worker)) {
+-			err = PTR_ERR(worker);
+-			goto err_worker;
+-		}
+-
+-		dev->worker = worker;
+-		wake_up_process(worker); /* avoid contributing to loadavg */
+-
+-		err = vhost_attach_cgroups(dev);
++		err = vhost_worker_create(dev);
+ 		if (err)
+-			goto err_cgroup;
++			goto err_worker;
+ 	}
+ 
+ 	err = vhost_dev_alloc_iovecs(dev);
+ 	if (err)
+-		goto err_cgroup;
++		goto err_iovecs;
+ 
+ 	return 0;
+-err_cgroup:
+-	if (dev->worker) {
+-		kthread_stop(dev->worker);
+-		dev->worker = NULL;
+-	}
++err_iovecs:
++	vhost_worker_free(dev);
+ err_worker:
+ 	vhost_detach_mm(dev);
+-	dev->kcov_handle = 0;
+ err_mm:
+ 	return err;
+ }
+@@ -704,12 +739,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+ 	dev->iotlb = NULL;
+ 	vhost_clear_msg(dev);
+ 	wake_up_interruptible_poll(&dev->wait, EPOLLIN | EPOLLRDNORM);
+-	WARN_ON(!llist_empty(&dev->work_list));
+-	if (dev->worker) {
+-		kthread_stop(dev->worker);
+-		dev->worker = NULL;
+-		dev->kcov_handle = 0;
+-	}
++	vhost_worker_free(dev);
+ 	vhost_detach_mm(dev);
+ }
+ EXPORT_SYMBOL_GPL(vhost_dev_cleanup);
+diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+index d9109107af08..2f6beab93784 100644
+--- a/drivers/vhost/vhost.h
++++ b/drivers/vhost/vhost.h
+@@ -25,6 +25,13 @@ struct vhost_work {
+ 	unsigned long		flags;
+ };
+ 
++struct vhost_worker {
++	struct task_struct	*task;
++	struct llist_head	work_list;
++	struct vhost_dev	*dev;
++	u64			kcov_handle;
++};
 +
-+	va_start(args, namefmt);
-+	vsnprintf(name, sizeof(name), namefmt, args);
-+	set_task_comm(vtsk->task, name);
-+	va_end(args);
-+
-+	wake_up_new_task(vtsk->task);
-+}
-+EXPORT_SYMBOL_GPL(vhost_task_start);
+ /* Poll a file (eventfd or socket) */
+ /* Note: there's nothing vhost specific about this structure. */
+ struct vhost_poll {
+@@ -147,8 +154,7 @@ struct vhost_dev {
+ 	struct vhost_virtqueue **vqs;
+ 	int nvqs;
+ 	struct eventfd_ctx *log_ctx;
+-	struct llist_head work_list;
+-	struct task_struct *worker;
++	struct vhost_worker *worker;
+ 	struct vhost_iotlb *umem;
+ 	struct vhost_iotlb *iotlb;
+ 	spinlock_t iotlb_lock;
+@@ -158,7 +164,6 @@ struct vhost_dev {
+ 	int iov_limit;
+ 	int weight;
+ 	int byte_weight;
+-	u64 kcov_handle;
+ 	bool use_worker;
+ 	int (*msg_handler)(struct vhost_dev *dev, u32 asid,
+ 			   struct vhost_iotlb_msg *msg);
 -- 
 2.25.1
 

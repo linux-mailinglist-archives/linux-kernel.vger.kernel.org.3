@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344A6550E0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77A4550E29
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238561AbiFTApN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S238146AbiFTAp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238418AbiFTAnv (ORCPT
+        with ESMTP id S238421AbiFTAnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Jun 2022 20:43:51 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8949325F
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:47 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id c83so6889035qke.3
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:47 -0700 (PDT)
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681EFC31
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:49 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id o73so6882163qke.7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X/vHm1f3WoFXRt6JUj3SilR7opGdtbcYgwZ9r1atlS8=;
-        b=merDOSNMLYB6urSNHfDzTPlO9cTnNP2/a+Co95AIL+tp45UY1ESEm0GqSiRzYXGjPq
-         lKJyO17f8asxDNlFx3YoHH74RPB12Y1OXa3miHqcxl3nepJtQLBUO9Vv5UHdySoFPh8K
-         PGKEHVHhgt9ZYBn4DvdxjpTQB5GqGkaI+LQAnRZWVQ8SX7TbDJNlwW2CW67lMlBrQaqM
-         fHJMTDRHSDe1GvdIBQNm34YtHj7FhTmUjvYWB9DPu2p8WHbZTwICJGdaIzqbiHLk2tuN
-         ZC81jsJMxRKZ1U5KcvigCc/Eahf5rQRytJ7Y04hPgHNB3cyrUwmXC8gLtHcpNZqCkTdj
-         ugFw==
+        bh=Xv+tIa48UrOnTpHHPCzrOKYFNSv+Nn5TCx9go9g+iVw=;
+        b=eaiXZoK60MvQ2CdtXu2PKhXT8ZplmCpv6qZBmPhhRT6rU2xYRyXdZB1+R8eXU1S/qT
+         HhozAYwmzcVyoaCt0qvx1Syis9C82cWy/ZWngnhXuo1SInk+5vmM8qPqTAB6iNBlVEm5
+         qXeOiX8WY68mu+PI5TUIICPdFSNaBtfIw84y9jtE1YWKTEoqOOkxnngPKLovgYlEoPnU
+         HbUboPBVLgLM0sMuy9GDMTxY8OKmk3+ujgOfgWSOaTNgxjH1EminncL9p9ytrwV6+hoG
+         VGibstPfbF0Ff2sntd85ZRZqAJjyA5J62LM0NCWVXtR56CN9omTm0Z5LgE1xyRuNGK1X
+         rxRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X/vHm1f3WoFXRt6JUj3SilR7opGdtbcYgwZ9r1atlS8=;
-        b=RNpibXciZBe1JI2iQu6GRfQih+FQnTZir4KnBSwwf0XK/EptASStvZ9mWFD6EY35Mv
-         6Ld5Wx3S5b6lYCf2lnt8SDUzgCzjVXQBbqMEi7iLlCT8xk5gwF0MCSVpaemnc+za+JQ0
-         HhsglhcWB0/zVVSYFfXeeXM09tCVceReNY8maWT2HTzyCci8Efa5b6ycH9k64oBCNA0N
-         T7qUIxQNJ9Bs3o5wVf9D6WqpJPGzIQaPVau1Ko47VPzKL/Sfn/vG4L9D+YBi+OyFfCg4
-         //37bewFjBRXrmQDvPPpJnMM4hNTKePNLrTMyByOfBa5hYvaQUG8h1ov7J3KuoezzYRK
-         wMQQ==
-X-Gm-Message-State: AJIora81UwKzHr5tR0n857GjpEXxMw7tHF4Tsh2W1aOSYbvsrZ0m/ZcW
-        oWXc4pavf4X5FS9k7GbSQO9U43e6bVkj+Hk=
-X-Google-Smtp-Source: AGRyM1shE4oiEAmMw5aoUvXut3DE6PwvQ/fgFRcao0IJAPOeGEA0eOkJ0l5lxSyNWcz00L20yvlfpg==
-X-Received: by 2002:a05:620a:2720:b0:6a7:c28:3afa with SMTP id b32-20020a05620a272000b006a70c283afamr14575088qkp.438.1655685825745;
-        Sun, 19 Jun 2022 17:43:45 -0700 (PDT)
+        bh=Xv+tIa48UrOnTpHHPCzrOKYFNSv+Nn5TCx9go9g+iVw=;
+        b=29rEK/N+IgBffi3vwZuYf1SKgQLK8WJNjm11yK6nRkUKPQRl9UnzU7YEroJjy/WXSl
+         7hSXG8HNYYzKlDdkW3OMsThgED7e313M5okhmO276q70fc467Dj0+5TFymW7OxrfFjmI
+         PYIcyHP0QmREnG7fVKw9S8tYv6KMXGybdQVPpdJKnTHejzT1zJyrRpjvPt+gCjJ/NSsI
+         KVLLPZNP/kH0+CJDiMU01go2gfQJRxT3mzmyAVVFnzIJmsF4D46UQ7ItHOo7o6pcJJsL
+         h1kLY+BL19m6PV/8wrgZA9zSnul5NKnBW6eD9WTee0eQcxWbeI2mGrmqllkv3KZ06FLI
+         R5Aw==
+X-Gm-Message-State: AJIora9LdbievqRqD+aBblxwKv6zpjxnBROsFg7GJgPFGmZvAvs3kE5t
+        hLjQYTVjzITtnRLD64PN7kamrnihHkKJ/V4=
+X-Google-Smtp-Source: AGRyM1sSYBZpSG6ZKIG2kKHTTolELNxubEJe5pVBUEcpCqD1kkcqL+HgabyrFTApw9T4QrGr9yrf9w==
+X-Received: by 2002:a37:98b:0:b0:6a6:b2ca:194c with SMTP id 133-20020a37098b000000b006a6b2ca194cmr15003040qkj.470.1655685827787;
+        Sun, 19 Jun 2022 17:43:47 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id bq38-20020a05620a46a600b006a785ba0c25sm10096007qkb.77.2022.06.19.17.43.44
+        by smtp.gmail.com with ESMTPSA id bj6-20020a05620a190600b006a73ad95d40sm10706091qkb.55.2022.06.19.17.43.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:43:44 -0700 (PDT)
+        Sun, 19 Jun 2022 17:43:46 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 31/34] d_path: prt_path()
-Date:   Sun, 19 Jun 2022 20:42:30 -0400
-Message-Id: <20220620004233.3805-32-kent.overstreet@gmail.com>
+Subject: [PATCH v4 32/34] ACPI/APEI: Add missing include
+Date:   Sun, 19 Jun 2022 20:42:31 -0400
+Message-Id: <20220620004233.3805-33-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,80 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements a new printbuf version of d_path()/mangle_path(), which
-will replace the seq_buf version.
+The upcoming patch to switch tracing from seq_buf to printbuf means
+we're no longer pulling in headers that we used to; this adds a missing
+include so things don't break.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- fs/d_path.c            | 35 +++++++++++++++++++++++++++++++++++
- include/linux/dcache.h |  1 +
- 2 files changed, 36 insertions(+)
+ drivers/acpi/apei/erst-dbg.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/d_path.c b/fs/d_path.c
-index e4e0ebad1f..1bd9e85f2f 100644
---- a/fs/d_path.c
-+++ b/fs/d_path.c
-@@ -5,6 +5,7 @@
- #include <linux/fs_struct.h>
- #include <linux/fs.h>
- #include <linux/slab.h>
-+#include <linux/printbuf.h>
- #include <linux/prefetch.h>
- #include "mount.h"
- 
-@@ -294,6 +295,40 @@ char *d_path(const struct path *path, char *buf, int buflen)
- }
- EXPORT_SYMBOL(d_path);
- 
-+/**
-+ * prt_path - format a path for output
-+ * @out: printbuf to output to
-+ * @path: path to write into the sequence buffer.
-+ * @esc: set of characters to escape in the output
-+ *
-+ * Write a path name into the sequence buffer.
-+ *
-+ * Returns 0 on success, or error code from d_path
-+ */
-+int prt_path(struct printbuf *out, const struct path *path, const char *esc)
-+{
-+	char *p, *buf;
-+	size_t size;
-+again:
-+	buf = out->buf + out->pos;
-+	size = printbuf_remaining_size(out);
-+
-+	p = d_path(path, buf, size);
-+	if (IS_ERR(p)) {
-+		printbuf_make_room(out, max_t(size_t, 64, size * 2));
-+		if (printbuf_remaining_size(out) > size)
-+			goto again;
-+
-+		return PTR_ERR(p);
-+	}
-+
-+	p = mangle_path(buf, p, esc);
-+	if (p)
-+		out->pos += p - buf;
-+	return 0;
-+}
-+EXPORT_SYMBOL(prt_path);
-+
- /*
-  * Helper function for dentry_operations.d_dname() members
+diff --git a/drivers/acpi/apei/erst-dbg.c b/drivers/acpi/apei/erst-dbg.c
+index c740f0faad..90aa034dce 100644
+--- a/drivers/acpi/apei/erst-dbg.c
++++ b/drivers/acpi/apei/erst-dbg.c
+@@ -11,6 +11,7 @@
+  *   Author: Huang Ying <ying.huang@intel.com>
   */
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index f5bba51480..2181144f9f 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -293,6 +293,7 @@ extern char *d_absolute_path(const struct path *, char *, int);
- extern char *d_path(const struct path *, char *, int);
- extern char *dentry_path_raw(const struct dentry *, char *, int);
- extern char *dentry_path(const struct dentry *, char *, int);
-+extern int prt_path(struct printbuf *, const struct path *, const char *);
  
- /* Allocation counts.. */
- 
++#include <linux/fs.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/uaccess.h>
 -- 
 2.36.1
 

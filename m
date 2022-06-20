@@ -2,102 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4875E552072
+	by mail.lfdr.de (Postfix) with ESMTP id 9544D552073
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbiFTPUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S244618AbiFTPUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244485AbiFTPUN (ORCPT
+        with ESMTP id S244576AbiFTPUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:20:13 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960451EEDB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:13:59 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id c144so7981645qkg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ncDFNOnl+cCgd6dAuRe9aChIBV1dAVghpVpOuyZyjVU=;
-        b=jiS48Fs848z08I+sel1Ax9ab2PeBI2TMzMUV4U6B4nvdTN6o01DkA+pcswlRLgyfxT
-         f47uOz0SJzKGbY7H/YSZcSH5nS4/jfAB2YCnFnQ3EEBnVD6V4nWaYm7hXwi6kVJwcZPN
-         zRmO9EVAX1ja45Mh8FWOTmCCCVd3/Woyoc+jlGP8uYbGDcYHcrD+wvw3Pcjr0uONoC2+
-         yZMEYGq79eXneDYySZxKh5eZJBILfPSmKIcVLfVM+TUhUUyHPYIm9NXorqFSx585u4DG
-         4PB30movJbM4S3j3yQubVwVFZH8nHvFQ2iVo/GNKLVlNBLVDkHaIVRfYTZ0YIuofYpmO
-         aMTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ncDFNOnl+cCgd6dAuRe9aChIBV1dAVghpVpOuyZyjVU=;
-        b=2iRxUSGdkurmEVAT8OIpsZgiF8+EjnqibVDJj0lOLV1U6V7+obb+qGs4oYRBNV4vEN
-         qv6j7JfSCDHbk4AA84Ynn3pYjT5RSCMmqG/gTm95JQFuKpxNnju+FahWPDTSyqXiWyew
-         tlOTvuPn9f3IrMA67TEYxrDAoCQWzvjxVP1kMhSpRL2IyRwXSkt+sRbFSWz1ov+SZpwj
-         Ejz21tqqtRwtSnCfWJnnh5y9pkf0iwuy+bm8qZXMtZCmxLaJg7n6fGj2aR2P0WIs8sGl
-         m8Ywl1IqI6CrYQD2rovSghDsiaP+PqjAaYnKPRBKfBpZCUctsXp3bhemMgKf5FFVuhui
-         qMMQ==
-X-Gm-Message-State: AJIora/L3XrHmh9r8kQ2LUX3oFi1DH564wgBglyiYkQvl7JOHnh3aves
-        OZM8+kj0pdHWYzuiy/SAuw==
-X-Google-Smtp-Source: AGRyM1szywDzgnhgTGpkuYD1vzFatQ2rmjw6UpkostX6GW84beAb66eFMNv+PS+oh9s4WjlmQUng0Q==
-X-Received: by 2002:a37:ef02:0:b0:6ac:470a:cf96 with SMTP id j2-20020a37ef02000000b006ac470acf96mr7029701qkk.763.1655738038675;
-        Mon, 20 Jun 2022 08:13:58 -0700 (PDT)
-Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id g19-20020ac85813000000b00307aed25fc7sm10834097qtg.31.2022.06.20.08.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 08:13:57 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 11:13:56 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
-        rostedt@goodmis.org, enozhatsky@chromium.org,
-        linux@rasmusvillemoes.dk, willy@infradead.org
-Subject: Re: [PATCH v4 24/34] mm/memcontrol.c: Convert to printbuf
-Message-ID: <20220620151356.gxmpv3wceg3kn4k2@moria.home.lan>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220620004233.3805-25-kent.overstreet@gmail.com>
- <YrBcFLpvvfJOnhGO@dhcp22.suse.cz>
+        Mon, 20 Jun 2022 11:20:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22527E08
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:14:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D0AD221B35;
+        Mon, 20 Jun 2022 15:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655738070; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SoFB2BpxllfCrWxzKxJln9/E/pmAquuEKo7NBfk0/mo=;
+        b=c64UCUWf/Klbv+y9ypZTy/eWydJDMS8GuKHin38bDkrx44v9oomVEIkxStGW/AmCJUYuSO
+        AEEaLs/+r2fFlSlzXtnB/y4D/Y0zTpRceFppRtyEAPjwv7Z6pG7VatJT7e0AvP7ejaPR5D
+        Y41Ez1RsG0vSMmyanZPOdnyQl1U4OAw=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 712852C141;
+        Mon, 20 Jun 2022 15:14:29 +0000 (UTC)
+Date:   Mon, 20 Jun 2022 17:14:27 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] printk/console: Enable console kthreads only when there is
+ no boot console left
+Message-ID: <YrCO04oNncE1xF5K@alley>
+References: <20220619204949.50d9154d@thinkpad>
+ <87r13kwawb.fsf@jogness.linutronix.de>
+ <20220620112936.48fcb2a4@thinkpad>
+ <YrBdjVwBOVgLfHyb@alley>
+ <CAHk-=wgdquXVVE37CZooVK4X+YdSa7XoGtjr71CEYh8UsdKUow@mail.gmail.com>
+ <YrCDNqsPrY+Hs9ju@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YrBcFLpvvfJOnhGO@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrCDNqsPrY+Hs9ju@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 01:37:56PM +0200, Michal Hocko wrote:
-> On Sun 19-06-22 20:42:23, Kent Overstreet wrote:
-> > This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
-> > simalar to seq_buf except that it heap allocates the string buffer:
-> > here, we were already heap allocating the buffer with kmalloc() so the
-> > conversion is trivial.
-> > 
-> > Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-> 
-> I have asked for a justification two times already not hearing anything.
-> Please drop this patch. I do not see any actual advantage of the
-> conversion. The primary downside of the existing code is that an
-> internal buffer is exposed to the caller which is error prone and ugly.
-> The conversion doesn't really address that part.
+The console kthreads uncovered several races in console drivers.
+All problems were in situation when a console was being properly
+initialized and registered while an early console, using the same
+port, was being used.
 
-Do you want to tone down the hostility? Yeesh.
+These problems are pretty hard to debug because they often result
+into silent boot crashes. It would be nice to fix them but it
+looks like a can of worms.
 
-This patch is part of a wider series that deletes seq_buf, if you missed it here
-you go: https://lore.kernel.org/all/20220620004233.3805-1-kent.overstreet@gmail.com/
+Prevent these problems by delaying the use of console kthreads
+after all early consoles are gone. It might later be optimized.
+But let's close this can of worms with a big hammer for now
+so that they do not break first impression on the kthreads
+that solve other real problems.
 
-> Moreover there is an inconsistency between failrure case where the
-> printbuf is destroyed by a docummented way (printbuf_exit) and when the
-> caller frees the buffer directly. If printbuf_exit evers need to do more
-> than just kfree (e.g. kvfree) then this is a subtle bug hard to find.
+Link: https://lore.kernel.org/r/20220619204949.50d9154d@thinkpad
+Link: https://lore.kernel.org/r/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
+Reported=by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+---
+ kernel/printk/printk.c | 38 +++++++++++++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 13 deletions(-)
 
-Ok, _that's_ a technical point we can talk about and address. I'll add
-documentation to the printbuf code that the buffer must be freeable with
-kfree().
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index b095fb5f5f61..c0c5e2b6b91d 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -3551,6 +3551,19 @@ void __init console_init(void)
+ 	}
+ }
+ 
++static int __init printk_activate_kthreads(void)
++{
++	struct console *con;
++
++	console_lock();
++	printk_kthreads_available = true;
++	for_each_console(con)
++		printk_start_kthread(con);
++	console_unlock();
++
++	return 0;
++}
++
+ /*
+  * Some boot consoles access data that is in the init section and which will
+  * be discarded after the initcalls have been run. To make sure that no code
+@@ -3567,6 +3580,7 @@ void __init console_init(void)
+  */
+ static int __init printk_late_init(void)
+ {
++	bool no_bootcon = true;
+ 	struct console *con;
+ 	int ret;
+ 
+@@ -3588,7 +3602,10 @@ static int __init printk_late_init(void)
+ 			pr_warn("bootconsole [%s%d] uses init memory and must be disabled even before the real one is ready\n",
+ 				con->name, con->index);
+ 			unregister_console(con);
++			continue;
+ 		}
++
++		no_bootcon = false;
+ 	}
+ 	ret = cpuhp_setup_state_nocalls(CPUHP_PRINTK_DEAD, "printk:dead", NULL,
+ 					console_cpu_notify);
+@@ -3597,23 +3614,18 @@ static int __init printk_late_init(void)
+ 					console_cpu_notify, NULL);
+ 	WARN_ON(ret < 0);
+ 	printk_sysctl_init();
+-	return 0;
+-}
+-late_initcall(printk_late_init);
+-
+-static int __init printk_activate_kthreads(void)
+-{
+-	struct console *con;
+ 
+-	console_lock();
+-	printk_kthreads_available = true;
+-	for_each_console(con)
+-		printk_start_kthread(con);
+-	console_unlock();
++	/*
++	 * Some console drivers are not ready to use the same port with
++	 * boot (early) and normal console in parallel. Stay on the safe
++	 * side and enable kthreads only when there is no boot console.
++	 */
++	if (no_bootcon)
++		printk_activate_kthreads();
+ 
+ 	return 0;
+ }
+-early_initcall(printk_activate_kthreads);
++late_initcall(printk_late_init);
+ 
+ #if defined CONFIG_PRINTK
+ /* If @con is specified, only wait for that console. Otherwise wait for all. */
+-- 
+2.35.3
+

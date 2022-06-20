@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D636D551A81
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51496551D62
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244989AbiFTNGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
+        id S1349185AbiFTNvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244855AbiFTNEE (ORCPT
+        with ESMTP id S1349489AbiFTNsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:04:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501C71ADB4;
-        Mon, 20 Jun 2022 05:58:58 -0700 (PDT)
+        Mon, 20 Jun 2022 09:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BDF38AF;
+        Mon, 20 Jun 2022 06:17:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD7CB811A6;
-        Mon, 20 Jun 2022 12:58:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEAEC3411B;
-        Mon, 20 Jun 2022 12:58:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 915636114F;
+        Mon, 20 Jun 2022 13:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830EDC3411B;
+        Mon, 20 Jun 2022 13:16:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729935;
-        bh=hoomPFvizVhvLiU8GGXlQ5OeL4zUjz8Sg1399iIawpg=;
+        s=korg; t=1655731017;
+        bh=dYx8PdSREqiQ5TasPNKE71jnKx6CBu7ljjQxcwdD4tw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jmsjvorF7akC2HHLoJpKIM3hLtfacVs120xx7ynyWyeNUXxykh/7sk3wkpq4+L4zm
-         Ykk8q1y4nQSpAk/8WxHltgjYb4rS1er+9e3aZwgy3NB/3Dtjf9ues+Evvwpq+KJrtq
-         WEKupau2aQjS3i5GmO1VxLscN4upIWYlA3Lf8brk=
+        b=QdsAwoNVB63Gmr0ikE/NLds+XFDOC3m3YgvEaSdUD6LWr2FFnnKxcYzNMvco3xFj5
+         9kAlr0vMiMUTVhl/Q9poHk9fZSU6/39MlvQCi0FAtpsifvpkGYGWYadPmnklXP7sSI
+         8sYJOdAMkPvfbaOfbypgKlmu3MTXDuSkIVm2Vm6c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 089/141] x86/ftrace: Remove OBJECT_FILES_NON_STANDARD usage
-Date:   Mon, 20 Jun 2022 14:50:27 +0200
-Message-Id: <20220620124732.176155347@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Tso <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 127/240] random: make random_get_entropy() return an unsigned long
+Date:   Mon, 20 Jun 2022 14:50:28 +0200
+Message-Id: <20220620124742.692651357@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,141 +57,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit 7b6c7a877cc616bc7dc9cd39646fe454acbed48b ]
+commit b0c3e796f24b588b862b61ce235d3c9417dc8983 upstream.
 
-The file-wide OBJECT_FILES_NON_STANDARD annotation is used with
-CONFIG_FRAME_POINTER to tell objtool to skip the entire file when frame
-pointers are enabled.  However that annotation is now deprecated because
-it doesn't work with IBT, where objtool runs on vmlinux.o instead of
-individual translation units.
+Some implementations were returning type `unsigned long`, while others
+that fell back to get_cycles() were implicitly returning a `cycles_t` or
+an untyped constant int literal. That makes for weird and confusing
+code, and basically all code in the kernel already handled it like it
+was an `unsigned long`. I recently tried to handle it as the largest
+type it could be, a `cycles_t`, but doing so doesn't really help with
+much.
 
-Instead, use more fine-grained function-specific annotations:
+Instead let's just make random_get_entropy() return an unsigned long all
+the time. This also matches the commonly used `arch_get_random_long()`
+function, so now RDRAND and RDTSC return the same sized integer, which
+means one can fallback to the other more gracefully.
 
-- The 'save_mcount_regs' macro does funny things with the frame pointer.
-  Use STACK_FRAME_NON_STANDARD_FP to tell objtool to ignore the
-  functions using it.
-
-- The return_to_handler() "function" isn't actually a callable function.
-  Instead of being called, it's returned to.  The real return address
-  isn't on the stack, so unwinding is already doomed no matter which
-  unwinder is used.  So just remove the STT_FUNC annotation, telling
-  objtool to ignore it.  That also removes the implicit
-  ANNOTATE_NOENDBR, which now needs to be made explicit.
-
-Fixes the following warning:
-
-  vmlinux.o: warning: objtool: __fentry__+0x16: return with modified stack frame
-
-Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Link: https://lore.kernel.org/r/b7a7a42fe306aca37826043dac89e113a1acdbac.1654268610.git.jpoimboe@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/Makefile      |  4 ----
- arch/x86/kernel/ftrace_64.S   | 11 ++++++++---
- include/linux/objtool.h       |  6 ++++++
- tools/include/linux/objtool.h |  6 ++++++
- 4 files changed, 20 insertions(+), 7 deletions(-)
+ drivers/char/random.c |   20 +++++++-------------
+ include/linux/timex.h |    2 +-
+ 2 files changed, 8 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index c41ef42adbe8..25828e4c6237 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -36,10 +36,6 @@ KCSAN_SANITIZE := n
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1010,7 +1010,7 @@ int __init rand_initialize(void)
+  */
+ void add_device_randomness(const void *buf, size_t size)
+ {
+-	cycles_t cycles = random_get_entropy();
++	unsigned long cycles = random_get_entropy();
+ 	unsigned long flags, now = jiffies;
  
- OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
+ 	if (crng_init == 0 && size)
+@@ -1041,8 +1041,7 @@ struct timer_rand_state {
+  */
+ static void add_timer_randomness(struct timer_rand_state *state, unsigned int num)
+ {
+-	cycles_t cycles = random_get_entropy();
+-	unsigned long flags, now = jiffies;
++	unsigned long cycles = random_get_entropy(), now = jiffies, flags;
+ 	long delta, delta2, delta3;
  
--ifdef CONFIG_FRAME_POINTER
--OBJECT_FILES_NON_STANDARD_ftrace_$(BITS).o		:= y
--endif
+ 	spin_lock_irqsave(&input_pool.lock, flags);
+@@ -1297,8 +1296,7 @@ static void mix_interrupt_randomness(str
+ void add_interrupt_randomness(int irq)
+ {
+ 	enum { MIX_INFLIGHT = 1U << 31 };
+-	cycles_t cycles = random_get_entropy();
+-	unsigned long now = jiffies;
++	unsigned long cycles = random_get_entropy(), now = jiffies;
+ 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned int new_count;
+@@ -1311,16 +1309,12 @@ void add_interrupt_randomness(int irq)
+ 	if (cycles == 0)
+ 		cycles = get_reg(fast_pool, regs);
+ 
+-	if (sizeof(cycles) == 8)
++	if (sizeof(unsigned long) == 8) {
+ 		irq_data.u64[0] = cycles ^ rol64(now, 32) ^ irq;
+-	else {
++		irq_data.u64[1] = regs ? instruction_pointer(regs) : _RET_IP_;
++	} else {
+ 		irq_data.u32[0] = cycles ^ irq;
+ 		irq_data.u32[1] = now;
+-	}
 -
- # If instrumentation of this dir is enabled, boot hangs during first second.
- # Probably could be more selective here, but note that files related to irqs,
- # boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 4ec13608d3c6..dfeb227de561 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -175,6 +175,7 @@ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+-	if (sizeof(unsigned long) == 8)
+-		irq_data.u64[1] = regs ? instruction_pointer(regs) : _RET_IP_;
+-	else {
+ 		irq_data.u32[2] = regs ? instruction_pointer(regs) : _RET_IP_;
+ 		irq_data.u32[3] = get_reg(fast_pool, regs);
+ 	}
+@@ -1367,7 +1361,7 @@ static void entropy_timer(struct timer_l
+ static void try_to_generate_entropy(void)
+ {
+ 	struct {
+-		cycles_t cycles;
++		unsigned long cycles;
+ 		struct timer_list timer;
+ 	} stack;
  
- 	jmp ftrace_epilogue
- SYM_FUNC_END(ftrace_caller);
-+STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
- 
- SYM_FUNC_START(ftrace_epilogue)
- /*
-@@ -282,6 +283,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
- 	jmp	ftrace_epilogue
- 
- SYM_FUNC_END(ftrace_regs_caller)
-+STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
- 
- 
- #else /* ! CONFIG_DYNAMIC_FTRACE */
-@@ -311,10 +313,14 @@ trace:
- 	jmp ftrace_stub
- SYM_FUNC_END(__fentry__)
- EXPORT_SYMBOL(__fentry__)
-+STACK_FRAME_NON_STANDARD_FP(__fentry__)
-+
- #endif /* CONFIG_DYNAMIC_FTRACE */
- 
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
--SYM_FUNC_START(return_to_handler)
-+SYM_CODE_START(return_to_handler)
-+	UNWIND_HINT_EMPTY
-+	ANNOTATE_NOENDBR
- 	subq  $16, %rsp
- 
- 	/* Save the return values */
-@@ -339,7 +345,6 @@ SYM_FUNC_START(return_to_handler)
- 	int3
- .Ldo_rop:
- 	mov %rdi, (%rsp)
--	UNWIND_HINT_FUNC
- 	RET
--SYM_FUNC_END(return_to_handler)
-+SYM_CODE_END(return_to_handler)
+--- a/include/linux/timex.h
++++ b/include/linux/timex.h
+@@ -75,7 +75,7 @@
+  * By default we use get_cycles() for this purpose, but individual
+  * architectures may override this in their asm/timex.h header file.
+  */
+-#define random_get_entropy()	get_cycles()
++#define random_get_entropy()	((unsigned long)get_cycles())
  #endif
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 586d35720f13..c81ea2264ad8 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -141,6 +141,12 @@ struct unwind_hint {
- 	.popsection
- .endm
  
-+.macro STACK_FRAME_NON_STANDARD_FP func:req
-+#ifdef CONFIG_FRAME_POINTER
-+	STACK_FRAME_NON_STANDARD \func
-+#endif
-+.endm
-+
- .macro ANNOTATE_NOENDBR
- .Lhere_\@:
- 	.pushsection .discard.noendbr
-diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
-index 586d35720f13..c81ea2264ad8 100644
---- a/tools/include/linux/objtool.h
-+++ b/tools/include/linux/objtool.h
-@@ -141,6 +141,12 @@ struct unwind_hint {
- 	.popsection
- .endm
- 
-+.macro STACK_FRAME_NON_STANDARD_FP func:req
-+#ifdef CONFIG_FRAME_POINTER
-+	STACK_FRAME_NON_STANDARD \func
-+#endif
-+.endm
-+
- .macro ANNOTATE_NOENDBR
- .Lhere_\@:
- 	.pushsection .discard.noendbr
--- 
-2.35.1
-
+ /*
 
 

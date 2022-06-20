@@ -2,137 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3775522B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 19:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0759A5522B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 19:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235508AbiFTRYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 13:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S242077AbiFTRZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 13:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbiFTRYo (ORCPT
+        with ESMTP id S232421AbiFTRZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 13:24:44 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E5F1EAC9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 10:24:44 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id e63so9333094pgc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 10:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=378B6AarfCsUnZPRyvz8/gQguvAL2Hh1HBjIQaMIiAE=;
-        b=yV0Kc6wRhdE/cj5b5juTpHMlvmkY8Nvv+/l9sm8yEizaKk7GOIW673f81bJTQDQJzF
-         sdFFYLCBZZN/6eqKe2s7OJcEfTQ49zEEj4US/ZyyhuBTmznILrJvIb5Q0NEWgfiwFu1i
-         emjfiXNBEr9IR3K9cLlhV9uMPT9E0toElufcP4KbeedtAA1y9G3kjPYO62nlEZRsD54g
-         xfl1i3Up3BEwZWRbIhxWCFvBlC9J5e93ez35ddoCSmZlrRaSd41R3pH4ZOcphJK/inyO
-         KcfUMcGTV0Ldf0ra5qFSxFaPkEOH7y/iOSc74OWkUY+U2Dfd2KbvsRrrml8ehsGdEQhw
-         yoYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=378B6AarfCsUnZPRyvz8/gQguvAL2Hh1HBjIQaMIiAE=;
-        b=CqmQ+U3HYaVzG8CB/OB4B9XPA1NYAXQvGrFuOosFymZWelNH5IM+GDHh/HD6qCBBCC
-         hvOV6oZENtu0YrAO46sKrYbWmhiNkWJGK84hRWCd2yIyDzk/aDLNAxmRW2YR8z0yD5p7
-         E/OkE9c01ettTdlFUhxn0ihGr0k7JlXXe/lKe15OXcaNMZejO3bTobtOWiQc889ySeA8
-         DMxwyV7I5EpHS9q064GBVBj9go5c2qzvRFNkI1dBAhOCS8aTQYWMGPU0fjMz+borkH+Y
-         IzSMvziz6yx7AIUXHXj/9DUg1sYr0Le0ndLy+ijhfFVasaNwlce3iWIl4/V/T4X9jw0z
-         YyHg==
-X-Gm-Message-State: AJIora+iOooiF1IYqLAgTHoqDnMJ66CqxKIWQUtswP0EQzuNbE8Hvggn
-        SxXckEKPlkksf7giAiZtDVZJbg==
-X-Google-Smtp-Source: AGRyM1tv9LoQREr/ywAotQ7isz2K+LlXji9NnQRojuO9bRW+atXaJ05eleyg0SdaNnDEaf5XknCMeA==
-X-Received: by 2002:a05:6a00:164c:b0:50a:472a:6b0a with SMTP id m12-20020a056a00164c00b0050a472a6b0amr25843548pfc.77.1655745883108;
-        Mon, 20 Jun 2022 10:24:43 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id o1-20020a629a01000000b0051bada81bc7sm9358861pfe.161.2022.06.20.10.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 10:24:41 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 11:24:38 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     john.garry@huawei.com, will@kernel.org, leo.yan@linaro.org,
-        suzuki.poulose@arm.com, mike.leach@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>, james.clark@arm.com
-Subject: Re: [PATCH] perf cs-etm: Use swap() instead of open coding it
-Message-ID: <20220620172438.GB1458883@p14s>
-References: <20220506091718.82858-1-jiapeng.chong@linux.alibaba.com>
+        Mon, 20 Jun 2022 13:25:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48891EAC9;
+        Mon, 20 Jun 2022 10:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655745941; x=1687281941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BbgzJRwAzZfGnN6+fsR430k9tPyCeFnjovUdsDb86xE=;
+  b=dKWdKAyLLj1Meq1T7fN60BxFeHP5t3A7NFxqvOOR9R2fVdbgaEPeUpx5
+   /DG+Y3Ux90UN3HVCWddaQicO5q1h5Y3INAJEtTT7s0HUiIZIat+4LuOaE
+   awACAJSkJA1scih7VE5a1k9tQxqk+sG2gjENoDbIy3ZoX9Ho2UbF3yHjp
+   QHrrlwcFpmsqOKG1Xfud2hNnw+Ngn4a4is2B9/xo0SRIY9ToyJdL1e14B
+   Kn7icifMaokzOdzW5BU22LSoG/yPbObPRg9+0Y5XeaSkIk9RZHT7AGhYF
+   ZEESiSwhVv3Vu85oJg6UwGmG+SKoSN5VTPkTc9eCHaoGjrOmKbXHd5gUG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="366267955"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="366267955"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 10:25:41 -0700
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="729475487"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 10:25:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3L9Z-000kYr-9m;
+        Mon, 20 Jun 2022 20:25:33 +0300
+Date:   Mon, 20 Jun 2022 20:25:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        hkallweit1@gmail.com, gjb@semihalf.com, jaz@semihalf.com,
+        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 01/12] net: phy: fixed_phy: switch to fwnode_
+ API
+Message-ID: <YrCtjWSokoFPKwoJ@smile.fi.intel.com>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-2-mw@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220506091718.82858-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220620150225.1307946-2-mw@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Adding James]
+On Mon, Jun 20, 2022 at 05:02:14PM +0200, Marcin Wojtas wrote:
+> This patch allows to use fixed_phy driver and its helper
+> functions without Device Tree dependency, by swtiching from
+> of_ to fwnode_ API.
 
-Hi Jiapeng,
+...
 
-On Fri, May 06, 2022 at 05:17:18PM +0800, Jiapeng Chong wrote:
-> Clean the following coccicheck warning:
-> 
-> ./tools/perf/util/cs-etm.c:418:34-35: WARNING opportunity for swap().
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  tools/perf/util/cs-etm.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index 8b95fb3c4d7b..0cb555cc766f 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -406,18 +406,13 @@ struct cs_etm_packet_queue
->  static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
->  				struct cs_etm_traceid_queue *tidq)
+> -#ifdef CONFIG_OF_GPIO
+
+Nice to see this gone, because it's my goal as well.
+
+...
+
+> -static struct gpio_desc *fixed_phy_get_gpiod(struct device_node *np)
+> +static struct gpio_desc *fixed_phy_get_gpiod(struct fwnode_handle *fwnode)
 >  {
-> -	struct cs_etm_packet *tmp;
-> -
->  	if (etm->synth_opts.branches || etm->synth_opts.last_branch ||
-> -	    etm->synth_opts.instructions) {
-> +	    etm->synth_opts.instructions)
->  		/*
->  		 * Swap PACKET with PREV_PACKET: PACKET becomes PREV_PACKET for
->  		 * the next incoming packet.
->  		 */
-> -		tmp = tidq->packet;
-> -		tidq->packet = tidq->prev_packet;
-> -		tidq->prev_packet = tmp;
+> -	struct device_node *fixed_link_node;
+> +	struct fwnode_handle *fixed_link_node;
+>  	struct gpio_desc *gpiod;
 
-Those 3 lines have burned a lot of eyes...  As far as I can remember the idea is
-simply to make sure that after that point, ->prev_packet is now set to ->packet
-in preparation for the next iteration.  There is no point in setting ->packet to
-->prev_packet.  As such the following would work just fine:
+> -	if (!np)
+> +	if (!fwnode)
+>  		return NULL;
 
-                tidq->prev_packet = tidq->packet;
+Can be dropped altogether. The following call will fail and return the same.
 
-... but I will let James and Leo have a final say on that.
-
-> -	}
-> +		swap(tidq->packet, tidq->prev_packet);
-
-If we absolutely need to keep swapping the packets please add the header file
-where swap() is found.
-
-Thanks,
-Mathieu
-
->  }
+> -	fixed_link_node = of_get_child_by_name(np, "fixed-link");
+> +	fixed_link_node = fwnode_get_named_child_node(fwnode, "fixed-link");
+>  	if (!fixed_link_node)
+>  		return NULL;
 >  
->  static void cs_etm__packet_dump(const char *pkt_string)
-> -- 
-> 2.20.1.7.g153144c
-> 
+> @@ -204,7 +203,7 @@ static struct gpio_desc *fixed_phy_get_gpiod(struct device_node *np)
+>  	 * Linux device associated with it, we simply have obtain
+>  	 * the GPIO descriptor from the device tree like this.
+>  	 */
+> -	gpiod = fwnode_gpiod_get_index(of_fwnode_handle(fixed_link_node),
+
+> +	gpiod = fwnode_gpiod_get_index(fixed_link_node,
+>  				       "link", 0, GPIOD_IN, "mdio");
+
+Can fit one line now.
+
+>  	if (IS_ERR(gpiod) && PTR_ERR(gpiod) != -EPROBE_DEFER) {
+>  		if (PTR_ERR(gpiod) != -ENOENT)
+> @@ -212,20 +211,14 @@ static struct gpio_desc *fixed_phy_get_gpiod(struct device_node *np)
+>  			       fixed_link_node);
+>  		gpiod = NULL;
+>  	}
+> -	of_node_put(fixed_link_node);
+> +	fwnode_handle_put(fixed_link_node);
+>  
+>  	return gpiod;
+>  }
+
+...
+
+> -	of_node_get(np);
+> -	phy->mdio.dev.of_node = np;
+> +	fwnode_handle_get(fwnode);
+> +	phy->mdio.dev.fwnode = fwnode;
+
+Please, use device_set_node().
+
+...
+
+> +	fwnode_handle_put(phy->mdio.dev.fwnode);
+
+dev_fwnode()
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

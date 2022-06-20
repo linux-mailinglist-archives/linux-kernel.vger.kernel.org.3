@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8706551C5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830A7551BCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344104AbiFTNSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S1345142AbiFTNOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344253AbiFTNNg (ORCPT
+        with ESMTP id S1344027AbiFTNJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:13:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198941EED3;
-        Mon, 20 Jun 2022 06:06:13 -0700 (PDT)
+        Mon, 20 Jun 2022 09:09:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D409A1C10A;
+        Mon, 20 Jun 2022 06:05:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8FE9B811D8;
-        Mon, 20 Jun 2022 13:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A6E0C3411B;
-        Mon, 20 Jun 2022 13:04:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE066615A0;
+        Mon, 20 Jun 2022 13:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95477C341C6;
+        Mon, 20 Jun 2022 13:04:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730260;
-        bh=BrMAr5keXlVGAt/2wfdpi2cV9Jtsmv2DZ3dYTdZLhrw=;
+        s=korg; t=1655730264;
+        bh=laOXoPHW2nCB9BheLcxWUWK6vmMnekRsr4lZlIDiysE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YFiW0eZk6SUsojmbD3b+tN1aJdFacoy9ro9sUp4WYKDKOX+NG0bOk85OtAfWYoQzW
-         xam2myxhc0T5/3PyUEgJd0AR3Qma8iIVQ0WJQ7Y0hveU9JJh/djYWARiyXOO29+lPW
-         RMr6d00/Dgr1dckSGU7tcyePwx9klhJwKldg9pYY=
+        b=PA/L5RLBzaXA0WScGO8Ik5Gw9zPZcqUCz8SEWFMZ4f748UPr2ngPwQ11WuaHVjApL
+         s/iy04FWc/fX8PDu5Uhiv61su4Jd4NrIQ3BvXXi88fDF7L5BKI6kCkORh24gp0FioI
+         oFhA2P8qW+CyuirfQwtHDr0YaOB22woMrTJeyvHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH 5.10 82/84] igc: Enable PCIe PTM
-Date:   Mon, 20 Jun 2022 14:51:45 +0200
-Message-Id: <20220620124723.313079844@linuxfoundation.org>
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Scott Wood <oss@buserror.net>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 83/84] powerpc/book3e: get rid of #include <generated/compile.h>
+Date:   Mon, 20 Jun 2022 14:51:46 +0200
+Message-Id: <20220620124723.341479262@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
 References: <20220620124720.882450983@linuxfoundation.org>
@@ -57,50 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit 1b5d73fb862414106cf270a1a7300ce8ae77de83 upstream.
+commit 7ad4bd887d27c6b6ffbef216f19c19f8fe2b8f52 upstream.
 
-Enables PCIe PTM (Precision Time Measurement) support in the igc
-driver. Notifies the PCI devices that PCIe PTM should be enabled.
+You cannot include <generated/compile.h> here because it is generated
+in init/Makefile but there is no guarantee that it happens before
+arch/powerpc/mm/nohash/kaslr_booke.c is compiled for parallel builds.
 
-PCIe PTM is similar protocol to PTP (Precision Time Protocol) running
-in the PCIe fabric, it allows devices to report time measurements from
-their internal clocks and the correlation with the PCIe root clock.
+The places where you can reliably include <generated/compile.h> are:
 
-The i225 NIC exposes some registers that expose those time
-measurements, those registers will be used, in later patches, to
-implement the PTP_SYS_OFFSET_PRECISE ioctl().
+  - init/          (because init/Makefile can specify the dependency)
+  - arch/*/boot/   (because it is compiled after vmlinux)
 
-Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Tested-by: Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Commit f231e4333312 ("hexagon: get rid of #include <generated/compile.h>")
+fixed the last breakage at that time, but powerpc re-added this.
+
+<generated/compile.h> was unneeded because 'build_str' is almost the
+same as 'linux_banner' defined in init/version.c
+
+Let's copy the solution from MIPS.
+(get_random_boot() in arch/mips/kernel/relocate.c)
+
+Fixes: 6a38ea1d7b94 ("powerpc/fsl_booke/32: randomize the kernel image offset")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Acked-by: Scott Wood <oss@buserror.net>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220604085050.4078927-1-masahiroy@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/igc/igc_main.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ arch/powerpc/mm/nohash/kaslr_booke.c |    8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -9,6 +9,7 @@
- #include <linux/udp.h>
- #include <linux/ip.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pci.h>
- #include <net/pkt_sched.h>
+--- a/arch/powerpc/mm/nohash/kaslr_booke.c
++++ b/arch/powerpc/mm/nohash/kaslr_booke.c
+@@ -18,7 +18,6 @@
+ #include <asm/prom.h>
+ #include <asm/kdump.h>
+ #include <mm/mmu_decl.h>
+-#include <generated/compile.h>
+ #include <generated/utsrelease.h>
  
- #include <net/ipv6.h>
-@@ -5041,6 +5042,10 @@ static int igc_probe(struct pci_dev *pde
+ struct regions {
+@@ -36,10 +35,6 @@ struct regions {
+ 	int reserved_mem_size_cells;
+ };
  
- 	pci_enable_pcie_error_reporting(pdev);
+-/* Simplified build-specific string for starting entropy. */
+-static const char build_str[] = UTS_RELEASE " (" LINUX_COMPILE_BY "@"
+-		LINUX_COMPILE_HOST ") (" LINUX_COMPILER ") " UTS_VERSION;
+-
+ struct regions __initdata regions;
  
-+	err = pci_enable_ptm(pdev, NULL);
-+	if (err < 0)
-+		dev_info(&pdev->dev, "PCIe PTM not supported by PCIe bus/controller\n");
-+
- 	pci_set_master(pdev);
+ static __init void kaslr_get_cmdline(void *fdt)
+@@ -72,7 +67,8 @@ static unsigned long __init get_boot_see
+ {
+ 	unsigned long hash = 0;
  
- 	err = -ENOMEM;
+-	hash = rotate_xor(hash, build_str, sizeof(build_str));
++	/* build-specific string for starting entropy. */
++	hash = rotate_xor(hash, linux_banner, strlen(linux_banner));
+ 	hash = rotate_xor(hash, fdt, fdt_totalsize(fdt));
+ 
+ 	return hash;
 
 

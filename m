@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF017551AFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CC0551B85
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343525AbiFTNRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S1343651AbiFTNM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343578AbiFTNMY (ORCPT
+        with ESMTP id S1343687AbiFTNJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:12:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5B11D328;
-        Mon, 20 Jun 2022 06:05:49 -0700 (PDT)
+        Mon, 20 Jun 2022 09:09:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3B1A82D;
+        Mon, 20 Jun 2022 06:04:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1B8F614F4;
-        Mon, 20 Jun 2022 13:04:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B485DC3411B;
-        Mon, 20 Jun 2022 13:04:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A87B3B811C3;
+        Mon, 20 Jun 2022 13:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011EBC3411B;
+        Mon, 20 Jun 2022 13:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730245;
-        bh=GYU38HEj4rh8+X71tEHJGkKhTn4HiMBRUlYTJJu1n1k=;
+        s=korg; t=1655730248;
+        bh=cmruC+OqZfqrMTsfd/DVGK3o8B7R6lhV1CvtHack+6c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hS/P4HDDr67NvzmQmihjeEiq+otZoEN6SVshYrz9HoPZPK7W1tMjRz7ZgmfzmWhZn
-         0BiVDXshGmu+BdUIX2MzjSFwQGOTsGfy2lABIJ+HBr34Cf5r1BdN2nmF1k5LB2PeH7
-         ktr8k/CDzsMo2suvVhLw0neddIsYEPg77XEOlVLY=
+        b=c53i8IoSu7pddUGYWRtTgBqiy/eiMNeu/lqkDOwQ5utQyMfp+p7MLdnp93+azd5Ga
+         KQusycmK9KM7YJym5z7dWvVfOB2dnWUVaoHFeoXyHH2rtLZzmA1H2GTmA+WJbkFiIK
+         nA82OT5hXTkduLa8FgNYonUgY/BodS3U+ic/+c7o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        David Rientjes <rientjes@google.com>
-Subject: [PATCH 5.10 78/84] dma-direct: dont over-decrypt memory
-Date:   Mon, 20 Jun 2022 14:51:41 +0200
-Message-Id: <20220620124723.196723432@linuxfoundation.org>
+        stable@vger.kernel.org, Davide Caratti <dcaratti@redhat.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 79/84] net/sched: act_police: more accurate MTU policing
+Date:   Mon, 20 Jun 2022 14:51:42 +0200
+Message-Id: <20220620124723.225943635@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
 References: <20220620124720.882450983@linuxfoundation.org>
@@ -55,107 +55,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+From: Davide Caratti <dcaratti@redhat.com>
 
-commit 4a37f3dd9a83186cb88d44808ab35b78375082c9 upstream.
+commit 4ddc844eb81da59bfb816d8d52089aba4e59e269 upstream.
 
-The original x86 sev_alloc() only called set_memory_decrypted() on
-memory returned by alloc_pages_node(), so the page order calculation
-fell out of that logic. However, the common dma-direct code has several
-potential allocators, not all of which are guaranteed to round up the
-underlying allocation to a power-of-two size, so carrying over that
-calculation for the encryption/decryption size was a mistake. Fix it by
-rounding to a *number* of pages, rather than an order.
+in current Linux, MTU policing does not take into account that packets at
+the TC ingress have the L2 header pulled. Thus, the same TC police action
+(with the same value of tcfp_mtu) behaves differently for ingress/egress.
+In addition, the full GSO size is compared to tcfp_mtu: as a consequence,
+the policer drops GSO packets even when individual segments have the L2 +
+L3 + L4 + payload length below the configured valued of tcfp_mtu.
 
-Until recently there was an even worse interaction with DMA_DIRECT_REMAP
-where we could have ended up decrypting part of the next adjacent
-vmalloc area, only averted by no architecture actually supporting both
-configs at once. Don't ask how I found that one out...
+Improve the accuracy of MTU policing as follows:
+ - account for mac_len for non-GSO packets at TC ingress.
+ - compare MTU threshold with the segmented size for GSO packets.
+Also, add a kselftest that verifies the correct behavior.
 
-Fixes: c10f07aa27da ("dma/direct: Handle force decryption for DMA coherent buffers in common code")
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Acked-by: David Rientjes <rientjes@google.com>
-[ backport the functional change without all the prior refactoring ]
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Davide Caratti <dcaratti@redhat.com>
+Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[dcaratti: fix conflicts due to lack of the following commits:
+ - commit 2ffe0395288a ("net/sched: act_police: add support for
+   packet-per-second policing")
+ - commit 53b61f29367d ("selftests: forwarding: Add tc-police tests for
+   packets per second")]
+Link: https://lore.kernel.org/netdev/876d597a0ff55f6ba786f73c5a9fd9eb8d597a03.1644514748.git.dcaratti@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/dma/direct.c |   16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ net/sched/act_police.c                              |   16 +++++-
+ tools/testing/selftests/net/forwarding/tc_police.sh |   52 ++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 1 deletion(-)
 
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -188,7 +188,7 @@ void *dma_direct_alloc(struct device *de
- 			goto out_free_pages;
- 		if (force_dma_unencrypted(dev)) {
- 			err = set_memory_decrypted((unsigned long)ret,
--						   1 << get_order(size));
-+						   PFN_UP(size));
- 			if (err)
- 				goto out_free_pages;
- 		}
-@@ -210,7 +210,7 @@ void *dma_direct_alloc(struct device *de
- 	ret = page_address(page);
- 	if (force_dma_unencrypted(dev)) {
- 		err = set_memory_decrypted((unsigned long)ret,
--					   1 << get_order(size));
-+					   PFN_UP(size));
- 		if (err)
- 			goto out_free_pages;
- 	}
-@@ -231,7 +231,7 @@ done:
- out_encrypt_pages:
- 	if (force_dma_unencrypted(dev)) {
- 		err = set_memory_encrypted((unsigned long)page_address(page),
--					   1 << get_order(size));
-+					   PFN_UP(size));
- 		/* If memory cannot be re-encrypted, it must be leaked */
- 		if (err)
- 			return NULL;
-@@ -244,8 +244,6 @@ out_free_pages:
- void dma_direct_free(struct device *dev, size_t size,
- 		void *cpu_addr, dma_addr_t dma_addr, unsigned long attrs)
- {
--	unsigned int page_order = get_order(size);
--
- 	if ((attrs & DMA_ATTR_NO_KERNEL_MAPPING) &&
- 	    !force_dma_unencrypted(dev)) {
- 		/* cpu_addr is a struct page cookie, not a kernel address */
-@@ -266,7 +264,7 @@ void dma_direct_free(struct device *dev,
- 		return;
- 
- 	if (force_dma_unencrypted(dev))
--		set_memory_encrypted((unsigned long)cpu_addr, 1 << page_order);
-+		set_memory_encrypted((unsigned long)cpu_addr, PFN_UP(size));
- 
- 	if (IS_ENABLED(CONFIG_DMA_REMAP) && is_vmalloc_addr(cpu_addr))
- 		vunmap(cpu_addr);
-@@ -302,8 +300,7 @@ struct page *dma_direct_alloc_pages(stru
- 
- 	ret = page_address(page);
- 	if (force_dma_unencrypted(dev)) {
--		if (set_memory_decrypted((unsigned long)ret,
--				1 << get_order(size)))
-+		if (set_memory_decrypted((unsigned long)ret, PFN_UP(size)))
- 			goto out_free_pages;
- 	}
- 	memset(ret, 0, size);
-@@ -318,7 +315,6 @@ void dma_direct_free_pages(struct device
- 		struct page *page, dma_addr_t dma_addr,
- 		enum dma_data_direction dir)
- {
--	unsigned int page_order = get_order(size);
- 	void *vaddr = page_address(page);
- 
- 	/* If cpu_addr is not from an atomic pool, dma_free_from_pool() fails */
-@@ -327,7 +323,7 @@ void dma_direct_free_pages(struct device
- 		return;
- 
- 	if (force_dma_unencrypted(dev))
--		set_memory_encrypted((unsigned long)vaddr, 1 << page_order);
-+		set_memory_encrypted((unsigned long)vaddr, PFN_UP(size));
- 
- 	dma_free_contiguous(dev, page, size);
+--- a/net/sched/act_police.c
++++ b/net/sched/act_police.c
+@@ -213,6 +213,20 @@ release_idr:
+ 	return err;
  }
+ 
++static bool tcf_police_mtu_check(struct sk_buff *skb, u32 limit)
++{
++	u32 len;
++
++	if (skb_is_gso(skb))
++		return skb_gso_validate_mac_len(skb, limit);
++
++	len = qdisc_pkt_len(skb);
++	if (skb_at_tc_ingress(skb))
++		len += skb->mac_len;
++
++	return len <= limit;
++}
++
+ static int tcf_police_act(struct sk_buff *skb, const struct tc_action *a,
+ 			  struct tcf_result *res)
+ {
+@@ -235,7 +249,7 @@ static int tcf_police_act(struct sk_buff
+ 			goto inc_overlimits;
+ 	}
+ 
+-	if (qdisc_pkt_len(skb) <= p->tcfp_mtu) {
++	if (tcf_police_mtu_check(skb, p->tcfp_mtu)) {
+ 		if (!p->rate_present) {
+ 			ret = p->tcfp_result;
+ 			goto end;
+--- a/tools/testing/selftests/net/forwarding/tc_police.sh
++++ b/tools/testing/selftests/net/forwarding/tc_police.sh
+@@ -35,6 +35,8 @@ ALL_TESTS="
+ 	police_shared_test
+ 	police_rx_mirror_test
+ 	police_tx_mirror_test
++	police_mtu_rx_test
++	police_mtu_tx_test
+ "
+ NUM_NETIFS=6
+ source tc_common.sh
+@@ -290,6 +292,56 @@ police_tx_mirror_test()
+ 	police_mirror_common_test $rp2 egress "police tx and mirror"
+ }
+ 
++police_mtu_common_test() {
++	RET=0
++
++	local test_name=$1; shift
++	local dev=$1; shift
++	local direction=$1; shift
++
++	tc filter add dev $dev $direction protocol ip pref 1 handle 101 flower \
++		dst_ip 198.51.100.1 ip_proto udp dst_port 54321 \
++		action police mtu 1042 conform-exceed drop/ok
++
++	# to count "conform" packets
++	tc filter add dev $h2 ingress protocol ip pref 1 handle 101 flower \
++		dst_ip 198.51.100.1 ip_proto udp dst_port 54321 \
++		action drop
++
++	mausezahn $h1 -a own -b $(mac_get $rp1) -A 192.0.2.1 -B 198.51.100.1 \
++		-t udp sp=12345,dp=54321 -p 1001 -c 10 -q
++
++	mausezahn $h1 -a own -b $(mac_get $rp1) -A 192.0.2.1 -B 198.51.100.1 \
++		-t udp sp=12345,dp=54321 -p 1000 -c 3 -q
++
++	tc_check_packets "dev $dev $direction" 101 13
++	check_err $? "wrong packet counter"
++
++	# "exceed" packets
++	local overlimits_t0=$(tc_rule_stats_get ${dev} 1 ${direction} .overlimits)
++	test ${overlimits_t0} = 10
++	check_err $? "wrong overlimits, expected 10 got ${overlimits_t0}"
++
++	# "conform" packets
++	tc_check_packets "dev $h2 ingress" 101 3
++	check_err $? "forwarding error"
++
++	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
++	tc filter del dev $dev $direction protocol ip pref 1 handle 101 flower
++
++	log_test "$test_name"
++}
++
++police_mtu_rx_test()
++{
++	police_mtu_common_test "police mtu (rx)" $rp1 ingress
++}
++
++police_mtu_tx_test()
++{
++	police_mtu_common_test "police mtu (tx)" $rp2 egress
++}
++
+ setup_prepare()
+ {
+ 	h1=${NETIFS[p1]}
 
 

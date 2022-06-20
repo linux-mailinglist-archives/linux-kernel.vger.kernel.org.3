@@ -2,141 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E3C5524F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C616C5524F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243547AbiFTUEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S244729AbiFTUGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243664AbiFTUEv (ORCPT
+        with ESMTP id S236360AbiFTUGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:04:51 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDF2B7C3;
-        Mon, 20 Jun 2022 13:04:50 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id j21so5824897lfe.1;
-        Mon, 20 Jun 2022 13:04:50 -0700 (PDT)
+        Mon, 20 Jun 2022 16:06:17 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0152AF8;
+        Mon, 20 Jun 2022 13:06:16 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id p6-20020a05600c1d8600b0039c630b8d96so6919402wms.1;
+        Mon, 20 Jun 2022 13:06:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TpJe2xpme7GXSbx8BteS+b1+C5CW+OzG00NqoqCd678=;
-        b=GSgF+cLqRXJKYf3yNnfmWqr54AVdQjLh6edCJujqgsd97Yjvqs+yQjD7Jss7v+++RO
-         WKaj++N7QCuShBxlUPYrSALOOKBULdeMgxc0SJHf4THv6hvfIC2dW0a44SVE9NMkeMVI
-         EWL7JiYMtx6ugjahBmlNNaxgkXDPMC1MPUkM4v7198x49O6R5rstD7SPtwITAQb83WEo
-         YGPBmLgBESR5eVQIKB4t5Kt1h8H+C3vpRWBo4mgxfPYVbqgsFscseHB4frUSn7H1Asol
-         XXZuy4kBz/Kf394dNHiZ8cBD9IlwrKu88hPNY+gpaZHSgW0bg0HnWhM7AVjpE5wWRcSy
-         6VSQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oX9lN4QRIjjDytL1egq7FKfqlZ9uKSn9qlbeSJsieqg=;
+        b=K+4UeUWjHq6YAI9jmYvUTMkv1gq1iw00GX/6AlYN+9b41Q3kf86nQDTqY6rD37C4HI
+         kzPm2mFeTHl+1E1B1XQfdRnKW8+YaELFKaQgGAqgsXl7/q1p71QRVLhIGdeg4j5KK+cP
+         3YX3ykOuY2lgJL2B7erq/iMhopV+WmK1QZ8/MAPeoCMn4tyiCnMezfoZOyzEos9QqFg2
+         e5w+U0RJhQvBhZddSX2H2SbdIyiKQLQYRn4o5iDRWV3n6i8JNHC0MqRAoimLsqSlXU0f
+         qGvg/aHb4Vfv5PQh5RZ68Qw5K5jk6ukus9q+UPCgwRCPHKmP1bzrm1D+okCYj+yUNj2Q
+         +fUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TpJe2xpme7GXSbx8BteS+b1+C5CW+OzG00NqoqCd678=;
-        b=G9Aw9TIv3WOmMTP1kBQb78B9cCKfRjccFiXcm5pLqONIWZQX0+zI+HhPLtGHc7Qvwq
-         nsZ2Mgswo+V+PpseHtzEyw7hfn7h2fhShuHFUhTiuT8KDfoFhCVMSNchV/QKY1Aa/AMi
-         rt9usWG7Qe1JSkA5Ady+dVxXUj7UQ1tfuzcsgmWxGTDoBOtp+YWsjailXuc0PWRmcgu6
-         CPIXs3lFdgUhyk1Ott4KF0pua2SktBokjjsl3tDa/PMivON4+XxQvZUZbdSgdAkoKDEt
-         sDlYPLeWTR2Ythe/xllfAlaBaWQpmCy+xESw0esZUrWXcN6QW/ffrZ+4+WpU8GOECFLq
-         yruA==
-X-Gm-Message-State: AJIora8GU7o/qBV157OxHyFIGnEjjN4Yr1WjPcBKRW+McAPe7My9hlmA
-        X3XPouTbbJ9C30ROL0uy3sw=
-X-Google-Smtp-Source: AGRyM1s9hC3AkuXJ3ZweWOOQOtexRt7GAioDH6EyzKPh6oV4TFpEWuIx0FeO/g4ACaXSg0VuNLv3WQ==
-X-Received: by 2002:a05:6512:1050:b0:47d:c714:10ba with SMTP id c16-20020a056512105000b0047dc71410bamr14078604lfb.165.1655755488996;
-        Mon, 20 Jun 2022 13:04:48 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id a10-20020a19660a000000b0047e789b9700sm1867834lfc.118.2022.06.20.13.04.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oX9lN4QRIjjDytL1egq7FKfqlZ9uKSn9qlbeSJsieqg=;
+        b=a8H96RgpN96G0T5Iv7wKFAuPnjIPjQ50bAsCth6/GDrxHPSXSmVPztD2BQ77zhcG8F
+         RfNj5WoCvLjcildybIeqYJnFWSpzuSdFwX9rGQwiTjccEiBJ+Qo1D79g+mXOeWEJIytq
+         AFGHmVMgaLvIx0sT30N6EpDwy4wuz4ZuIlg9WHJyJ6wtGd88t7N8SI8VOwX4Cjg/HNx0
+         5c+fsydMBXXX8v+2tlhdLlfZQ+PI+6hP0LXgYzWhXaODPFOfyMFUmb+qJgZMyK+9lubo
+         SORdpWS4TE2Yc0uziplsd/SJ8HtCyswKOvXV9uI95xptCN/UV06uvweFMPu+ywGXqCGi
+         z5vw==
+X-Gm-Message-State: AOAM532QsphJ9yvxqwEy8cryQ6/1/6cE4NFWINYRdDIkKeZAr9bjNkK/
+        lAYSSK6Qg7ypgFku5HCWTqE=
+X-Google-Smtp-Source: ABdhPJxsi6sQIkVr9H0Bu1PTh/rzJ3ELem1KRMbimP0CLQUhYJkhAnA3ChsXiGO+dNs73Bpag9foIA==
+X-Received: by 2002:a05:600c:3acc:b0:39c:7427:d379 with SMTP id d12-20020a05600c3acc00b0039c7427d379mr36991978wms.32.1655755574785;
+        Mon, 20 Jun 2022 13:06:14 -0700 (PDT)
+Received: from localhost (92.40.169.68.threembb.co.uk. [92.40.169.68])
+        by smtp.gmail.com with ESMTPSA id eh1-20020a05600c61c100b003973d425a7fsm17910543wmb.41.2022.06.20.13.06.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:04:48 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 23:04:45 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
-        blarson@amd.com, brijeshkumar.singh@amd.com,
-        catalin.marinas@arm.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
-        broonie@kernel.org, yamada.masahiro@socionext.com,
-        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        ulf.hansson@linaro.org, will@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 04/15] dt-bindings: spi: dw: Add AMD Pensando Elba SoC
- SPI Controller bindings
-Message-ID: <20220620200445.yew3vo3pnjhos7rs@mobilestation>
-References: <20220613195658.5607-1-brad@pensando.io>
- <20220613195658.5607-5-brad@pensando.io>
- <20220620193044.ihxfn6kddif7j5la@mobilestation>
- <0a68aa72-df85-cf78-dcca-2d75038234c6@kernel.org>
+        Mon, 20 Jun 2022 13:06:14 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     broonie@kernel.org
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        srinivas.kandagatla@linaro.org, bgoswami@codeaurora.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        cw00.choi@samsung.com, krzysztof.kozlowski@linaro.org,
+        b.zolnierkie@samsung.com, myungjoo.ham@samsung.com,
+        michael@walle.cc, linus.walleij@linaro.org, brgl@bgdev.pl,
+        tglx@linutronix.de, maz@kernel.org, lee.jones@linaro.org,
+        mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
+        tharvey@gateworks.com, rjones@gateworks.com,
+        mazziesaccount@gmail.com, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        jernej.skrabec@gmail.com, samuel@sholland.org, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 00/49] regmap-irq cleanups and refactoring
+Date:   Mon, 20 Jun 2022 21:05:55 +0100
+Message-Id: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a68aa72-df85-cf78-dcca-2d75038234c6@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 09:46:25PM +0200, Krzysztof Kozlowski wrote:
-> On 20/06/2022 21:30, Serge Semin wrote:
-> > On Mon, Jun 13, 2022 at 12:56:47PM -0700, Brad Larson wrote:
-> >> From: Brad Larson <blarson@amd.com>
-> >>
-> >> The AMD Pensando Elba SoC has integrated the DW APB SPI Controller
-> >>
-> >> Signed-off-by: Brad Larson <blarson@amd.com>
-> >> ---
-> >>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
-> >>  1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> >> index e25d44c218f2..2a55b947cffc 100644
-> >> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> >> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> >> @@ -73,6 +73,8 @@ properties:
-> >>                - renesas,r9a06g032-spi # RZ/N1D
-> >>                - renesas,r9a06g033-spi # RZ/N1S
-> >>            - const: renesas,rzn1-spi   # RZ/N1
-> > 
-> >> +      - description: AMD Pensando Elba SoC SPI Controller
-> >> +        const: amd,pensando-elba-spi
-> > 
-> > Not enough. The driver requires to have a phandle reference to the
-> > Pensando System Controller. So the property like
-> > "amd,pensando-elba-syscon" is also needed to be added to the DT schema
-> > otherwise should the dt-schema tool correctly handle the
-> > "unevaluatedProperties: false" setting (Rob says it isn't fully
-> > supported at the moment), the dtbs_check procedure will fail on your
-> > dts evaluation.
-> 
+Hi Mark,
 
-> The property was here before, now removed, so I assume it was also
-> removed from the driver and DTS. Isn't that the case?
+Here's a bunch of cleanups for regmap-irq focused on simplifying the API
+and generalizing it a bit. It's broken up into three refactors, focusing
+on one area at a time.
 
-Ah, the property has been indeed removed. The driver now searches for
-the system controller by the next compatible string:
-"amd,pensando-elba-syscon" using the
-syscon_regmap_lookup_by_compatible() method. My mistake. Sorry for the
-noise.
+* Patches 01 and 02 are straightforward bugfixes, independent of the
+  rest of the series. Neither of the bugs are triggered by in-tree
+  drivers but they might be worth picking up early anyhow.
 
-* Though personally I'd prefer to have a property with the phandle
-reference in order to signify the connection between the system controller
-and the SPI-controller. Otherwise the implicit DT bindings like having
-the "amd,pensando-elba-syscon"-compatible syscon gets to be
-hidden behind the DT scene. But seeing we have already got the Microsemi
-platform with such semantic, I can't insist on fixing this.
+* Patches 03-13 clean up everything related to configuring IRQ types.
 
--Sergey
+* Patches 14-45 deal with mask/unmask registers. First, make unmask
+  registers behave more intuitively and usefully, and get rid of the
+  mask_invert flag in favor of describing inverted mask registers as
+  unmask registers. Second, make the mask_writeonly flag more useful
+  and enable it for two chips where it makes sense.
 
-> 
-> Otherwise this is incomplete binding...
-> 
-> Best regards,
-> Krzysztof
+* Patches 46-49 refactor sub_irq_reg() as a get_irq_reg() callback,
+  and use that to eliminate the not_fixed_stride flag.
+
+The approach I used when refactoring is pretty simple: (1) introduce new
+functionality in regmap-irq, (2) convert the drivers, and (3) remove any
+old code. Nothing should break in the middle.
+
+The patches can be re-ordered to some extent if that's preferable, but
+it's best to add get_irq_reg() last to avoid having to think about how
+it interacts with features that'll be removed anyway.
+
+I can't test most of the devices affected by this series so a lot of the
+code is only build tested. I've tested on real hardware with my AXP192
+patchset[1], although it only provides limited code coverage.
+
+qcom-pm8008 in particular deserves careful testing - it used all of the
+features touched by the refactors and required the most changes. Other
+drivers only required trivial changes but there are three of them worth
+mentioning: wcd943x, wcd9335, and wcd938x. They have suspicious looking
+IRQ type definitions and I'm pretty sure aren't working properly, but
+I can't fix them myself. The refactor shouldn't affect their behavior
+so how / when / if they get fixed shouldn't be much of an issue.
+
+Oh, and I added the 'mask_writeonly' flag and volatile ranges to the
+stpmic1 driver based on its datasheet[2] as a small optimization. It's
+probably fine but testing would be a good idea.
+
+[1]: https://lore.kernel.org/linux-iio/20220618214009.2178567-1-aidanmacdonald.0x0@gmailcom/
+[2]: https://www.st.com/resource/en/datasheet/stpmic1.pdf
+
+Aidan MacDonald (49):
+  regmap-irq: Fix a bug in regmap_irq_enable() for type_in_mask chips
+  regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
+  regmap-irq: Remove an unnecessary restriction on type_in_mask
+  regmap-irq: Introduce config registers for irq types
+  mfd: qcom-pm8008: Convert irq chip to config regs
+  mfd: wcd934x: Convert irq chip to config regs
+  sound: soc: codecs: wcd9335: Convert irq chip to config regs
+  sound: soc: codecs: wcd938x: Remove spurious type_base from irq chip
+  mfd: max77650: Remove useless type_invert flag
+  regmap-irq: Remove virtual registers support
+  regmap-irq: Remove old type register support, refactor
+  regmap-irq: Remove unused type_reg_stride field
+  regmap-irq: Remove unused type_invert flag
+  regmap-irq: Do not use regmap_irq_update_bits() for wake regs
+  regmap-irq: Change the behavior of mask_writeonly
+  regmap-irq: Rename regmap_irq_update_bits()
+  regmap-irq: Add broken_mask_unmask flag
+  mfd: qcom-pm8008: Add broken_mask_unmask irq chip flag
+  mfd: stpmic1: Add broken_mask_unmask irq chip flag
+  regmap-irq: Fix inverted handling of unmask registers
+  mfd: tps65090: replace irqchip mask_invert with unmask_base
+  mfd: sun4i-gpadc: replace irqchip mask_invert with unmask_base
+  mfd: sprd-sc27xx-spi: replace irqchip mask_invert with unmask_base
+  mfd: rt5033: replace irqchip mask_invert with unmask_base
+  mfd: rohm-bd71828: replace irqchip mask_invert with unmask_base
+  mfd: rn5t618: replace irqchip mask_invert with unmask_base
+  mfd: gateworks-gsc: replace irqchip mask_invert with unmask_base
+  mfd: axp20x: replace irqchip mask_invert with unmask_base
+  mfd: atc260x: replace irqchip mask_invert with unmask_base
+  mfd: 88pm800: replace irqchip mask_invert with unmask_base
+  mfd: max14577: replace irqchip mask_invert with unmask_base
+  mfd: max77693: replace irqchip mask_invert with unmask_base
+  mfd: rohm-bd718x7: drop useless mask_invert flag on irqchip
+  mfd: max77843: drop useless mask_invert flag on irqchip
+  extcon: max77843: replace irqchip mask_invert with unmask_base
+  extcon: sm5502: drop useless mask_invert flag on irqchip
+  extcon: rt8973a: drop useless mask_invert flag on irqchip
+  irqchip: sl28cpld: replace irqchip mask_invert with unmask_base
+  gpio: sl28cpld: replace irqchip mask_invert with unmask_base
+  mfd: stpmic1: Fix broken mask/unmask in irq chip
+  mfd: stpmic1: Enable mask_writeonly flag for irq chip
+  mfd: qcom-pm8008: Fix broken mask/unmask in irq chip
+  mfd: qcom-pm8008: Enable mask_writeonly flag for irq chip
+  regmap-irq: Remove broken_mask_unmask flag
+  regmap-irq: Remove mask_invert flag
+  regmap-irq: Refactor checks for status bulk read support
+  regmap-irq: Add get_irq_reg() callback
+  mfd: qcom-pm8008: Use get_irq_reg() for irq chip
+  regmap-irq: Remove not_fixed_stride flag
+
+ drivers/base/regmap/regmap-irq.c | 457 ++++++++++++++-----------------
+ drivers/extcon/extcon-max77843.c |   3 +-
+ drivers/extcon/extcon-rt8973a.c  |   1 -
+ drivers/extcon/extcon-sm5502.c   |   2 -
+ drivers/gpio/gpio-sl28cpld.c     |   3 +-
+ drivers/irqchip/irq-sl28cpld.c   |   3 +-
+ drivers/mfd/88pm800.c            |   3 +-
+ drivers/mfd/atc260x-core.c       |   6 +-
+ drivers/mfd/axp20x.c             |  21 +-
+ drivers/mfd/gateworks-gsc.c      |   3 +-
+ drivers/mfd/max14577.c           |   7 +-
+ drivers/mfd/max77650.c           |   1 -
+ drivers/mfd/max77693.c           |   6 +-
+ drivers/mfd/max77843.c           |   1 -
+ drivers/mfd/qcom-pm8008.c        | 131 ++++-----
+ drivers/mfd/rn5t618.c            |   3 +-
+ drivers/mfd/rohm-bd71828.c       |   6 +-
+ drivers/mfd/rohm-bd718x7.c       |   1 -
+ drivers/mfd/rt5033.c             |   3 +-
+ drivers/mfd/sprd-sc27xx-spi.c    |   3 +-
+ drivers/mfd/stpmic1.c            |   7 +-
+ drivers/mfd/sun4i-gpadc.c        |   3 +-
+ drivers/mfd/tps65090.c           |   3 +-
+ drivers/mfd/wcd934x.c            |  11 +-
+ include/linux/regmap.h           |  59 ++--
+ sound/soc/codecs/wcd9335.c       |  10 +-
+ sound/soc/codecs/wcd938x.c       |   1 -
+ 27 files changed, 332 insertions(+), 426 deletions(-)
+
+-- 
+2.35.1
+

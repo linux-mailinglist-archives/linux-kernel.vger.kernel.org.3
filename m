@@ -2,51 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD3E55159C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DC255159B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240681AbiFTKSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S240910AbiFTKSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240960AbiFTKSV (ORCPT
+        with ESMTP id S240811AbiFTKSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:18:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAC312D02;
-        Mon, 20 Jun 2022 03:18:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B71360F39;
-        Mon, 20 Jun 2022 10:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AFD5C3411B;
-        Mon, 20 Jun 2022 10:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655720299;
-        bh=xbUYrGZ4lJgGxgsFFzQXmYD9L6O/YoMdaDnokqi6Zkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z8wTss+dR6BlX5Bx6Lc0LjllOqloq24Qf+DvdPAWza0do0JFMFoUZNupVcURaje8r
-         uNxgMKIv9x8egrb9aBqPOR2fyyeL5DNB3cghyANk5D2o0M4exLBtYa0RDapsGUzW6q
-         HPjcNwvSc0PHN++tcuAOkWsXY/knHbX1da9hpYcg=
-Date:   Mon, 20 Jun 2022 12:17:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, ziy@nvidia.com, stable@vger.kernel.org,
-        guoren@kernel.org, huanyi.xj@alibaba-inc.com, guohanjun@huawei.com,
-        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.15] mm: validate buddy page before using
-Message-ID: <YrBJVAZWOzmDyUN3@kroah.com>
-References: <20220616161746.3565225-1-xianting.tian@linux.alibaba.com>
- <20220616161746.3565225-6-xianting.tian@linux.alibaba.com>
+        Mon, 20 Jun 2022 06:18:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D35C13F68
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655720322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nm+eORp3zH2jrCWgqulUmPpdYYIUAnWdQdIYkQxKCxc=;
+        b=fRVqSSP6RSWpI7sPT+A+u95mOzYqwQe7bQ2zWHI0Wtd6+JRWn7aT50hYK3gYyLsYXoOv8d
+        I7+nyqMn02SfqHCXeiEH2vpF3iKYHiiCrTzmMnFxD45FNvahBQYi/u0Kc0i/7aZKJv0Gmp
+        jVGlAUzeinpP3c233bGPnV5l5ug7yWg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-133-eZ1tN0CRMlaR_PJlGulp4Q-1; Mon, 20 Jun 2022 06:18:40 -0400
+X-MC-Unique: eZ1tN0CRMlaR_PJlGulp4Q-1
+Received: by mail-wr1-f72.google.com with SMTP id i16-20020adfa510000000b0021b8e9f7666so701637wrb.19
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:18:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nm+eORp3zH2jrCWgqulUmPpdYYIUAnWdQdIYkQxKCxc=;
+        b=Ttw4wc+cIphhR6g14QK7K/YWpiYdBeDyO7XTMfrgyvy8+WAxKNk/crWHP1RkEgeZZ5
+         jVDUaPzF7KDnWOmvOB0AQXudqRl528H30uGcI9T8boU1YWjGEwlBBlUNPoIvGz5cYhrr
+         E6DxhZjQGyfi1AHUHgedOcXH7yG/fz8yzpJM7UYIAEWrYrA2Npsfh7uEtR+vnDcWzofD
+         V6bUbvXB4+l2XkXTkjqz2Pl+tAUt+6O77rm9akVndXloAZ4QBtTg585SVBDN1Y5NxJn3
+         XxTXgwLPjIuXLpfQ9wKrWZBi6uSV26tJalUVGxCrgtHU589f69Ow2WPXxLl50ootlUYH
+         V7zg==
+X-Gm-Message-State: AOAM533U/E6NsyiLlBn+tEhgrKmPt9u8mo6o5GNHUOO9s5lECLxIYTWk
+        dWeajNAodaWjhKjavtZyU/ayRpnT10FDneJsjyHZzwiNlsQq2KBMuZLXvNpoqpPUCvK0GVMtlIh
+        HMyUroLkjJMnWVVOZhJRO2VEz
+X-Received: by 2002:a7b:c31a:0:b0:39c:4783:385e with SMTP id k26-20020a7bc31a000000b0039c4783385emr35408653wmj.185.1655720319446;
+        Mon, 20 Jun 2022 03:18:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwcakcs2Da84r0qRgyJ2AJNFnTRJfDw0r95PsCWFIAzPqNF7lYCclsTp5XJoBLwTxe6twkMaA==
+X-Received: by 2002:a7b:c31a:0:b0:39c:4783:385e with SMTP id k26-20020a7bc31a000000b0039c4783385emr35408630wmj.185.1655720319132;
+        Mon, 20 Jun 2022 03:18:39 -0700 (PDT)
+Received: from redhat.com ([2.52.146.221])
+        by smtp.gmail.com with ESMTPSA id k190-20020a1ca1c7000000b0039c587342d8sm18156471wme.3.2022.06.20.03.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 03:18:38 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 06:18:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        erwan.yvin@stericsson.com
+Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev
+ unregister
+Message-ID: <20220620061607-mutt-send-email-mst@kernel.org>
+References: <20220620051115.3142-1-jasowang@redhat.com>
+ <20220620051115.3142-4-jasowang@redhat.com>
+ <20220620050446-mutt-send-email-mst@kernel.org>
+ <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616161746.3565225-6-xianting.tian@linux.alibaba.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,34 +82,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 12:17:45AM +0800, Xianting Tian wrote:
-> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
-> fixes a bug in 1dd214b8f21c and there is a similar bug in d9dddbf55667 that
-> can be fixed in a similar way too.
+On Mon, Jun 20, 2022 at 05:18:29PM +0800, Jason Wang wrote:
+> On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
+> > > We use to do the following steps during .remove():
+> >
+> > We currently do
+> >
+> >
+> > > static void cfv_remove(struct virtio_device *vdev)
+> > > {
+> > >       struct cfv_info *cfv = vdev->priv;
+> > >
+> > >       rtnl_lock();
+> > >       dev_close(cfv->ndev);
+> > >       rtnl_unlock();
+> > >
+> > >       tasklet_kill(&cfv->tx_release_tasklet);
+> > >       debugfs_remove_recursive(cfv->debugfs);
+> > >
+> > >       vringh_kiov_cleanup(&cfv->ctx.riov);
+> > >       virtio_reset_device(vdev);
+> > >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> > >       cfv->vr_rx = NULL;
+> > >       vdev->config->del_vqs(cfv->vdev);
+> > >       unregister_netdev(cfv->ndev);
+> > > }
+> > > This is racy since device could be re-opened after dev_close() but
+> > > before unregister_netdevice():
+> > >
+> > > 1) RX vringh is cleaned before resetting the device, rx callbacks that
+> > >    is called after the vringh_kiov_cleanup() will result a UAF
+> > > 2) Network stack can still try to use TX virtqueue even if it has been
+> > >    deleted after dev_vqs()
+> > >
+> > > Fixing this by unregistering the network device first to make sure not
+> > > device access from both TX and RX side.
+> > >
+> > > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > ---
+> > >  drivers/net/caif/caif_virtio.c | 6 ++----
+> > >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
+> > > index 66375bea2fcd..a29f9b2df5b1 100644
+> > > --- a/drivers/net/caif/caif_virtio.c
+> > > +++ b/drivers/net/caif/caif_virtio.c
+> > > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
+> > >  {
+> > >       struct cfv_info *cfv = vdev->priv;
+> > >
+> > > -     rtnl_lock();
+> > > -     dev_close(cfv->ndev);
+> > > -     rtnl_unlock();
+> > > +     /* Make sure NAPI/TX won't try to access the device */
+> > > +     unregister_netdev(cfv->ndev);
+> > >
+> > >       tasklet_kill(&cfv->tx_release_tasklet);
+> > >       debugfs_remove_recursive(cfv->debugfs);
+> > > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
+> > >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> > >       cfv->vr_rx = NULL;
+> > >       vdev->config->del_vqs(cfv->vdev);
+> > > -     unregister_netdev(cfv->ndev);
+> > >  }
+> >
+> >
+> > This gives me pause, callbacks can now trigger after device
+> > has been unregistered. Are we sure this is safe?
 > 
-> In unset_migratetype_isolate(), we also need the fix, so move page_is_buddy()
-> from mm/page_alloc.c to mm/internal.h
+> It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
+> after tasklet_kill(). I can add a comment to explain this.
+
+that waits for outstanding tasklets but does it really prevent
+future ones?
+
+> > Won't it be safer to just keep the rtnl_lock around
+> > the whole process?
 > 
-> In addition, for RISC-V arch the first 2MB RAM could be reserved for opensbi,
-> so it would have pfn_base=512 and mem_map began with 512th PFN when
-> CONFIG_FLATMEM=y.
-> But __find_buddy_pfn algorithm thinks the start pfn 0, it could get 0 pfn or
-> less than the pfn_base value. We need page_is_buddy() to verify the buddy to
-> prevent accessing an invalid buddy.
+> It looks to me we rtnl_lock can't help in synchronizing with the
+> callbacks, anything I miss?
 > 
-> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
-> Cc: stable@vger.kernel.org
-> Reported-by: zjb194813@alibaba-inc.com
-> Reported-by: tianhu.hh@alibaba-inc.com
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> ---
->  mm/internal.h       | 34 ++++++++++++++++++++++++++++++++++
->  mm/page_alloc.c     | 37 +++----------------------------------
->  mm/page_isolation.c |  3 ++-
->  3 files changed, 39 insertions(+), 35 deletions(-)
+> Thanks
 
-What is the commit id of this in Linus's tree?
+good point.
 
-thanks,
 
-greg k-h
+> >
+> > >  static struct virtio_device_id id_table[] = {
+> > > --
+> > > 2.25.1
+> >
+

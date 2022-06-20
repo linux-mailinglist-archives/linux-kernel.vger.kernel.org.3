@@ -2,152 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402C255178F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7775551791
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241613AbiFTLmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
+        id S241898AbiFTLmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235801AbiFTLmP (ORCPT
+        with ESMTP id S235801AbiFTLmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:42:15 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F296167DB;
-        Mon, 20 Jun 2022 04:42:10 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 20 Jun 2022 19:42:06
- +0800 (GMT+08:00)
-X-Originating-IP: [10.192.42.160]
-Date:   Mon, 20 Jun 2022 19:42:06 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5r2Y6auY5a6B?= <pgn@zju.edu.cn>
-To:     "Dmitry Vyukov" <dvyukov@google.com>
-Cc:     22121145@zju.edu.cn, kangel@zju.edu.cn, syzkaller@googlegroups.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: Re: 'WARNING in handle_exception_nmi' bug at
- arch/x86/kvm/vmx/vmx.c:4959
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <CACT4Y+anXSNgCW3jvsm8wPf0LPxW-kCmXTeno4n-BWntpMaZBA@mail.gmail.com>
-References: <69ab985c.7d507.18180a4dcd7.Coremail.pgn@zju.edu.cn>
- <CACT4Y+anXSNgCW3jvsm8wPf0LPxW-kCmXTeno4n-BWntpMaZBA@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 20 Jun 2022 07:42:31 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932571659E;
+        Mon, 20 Jun 2022 04:42:29 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25KBgM6x061455;
+        Mon, 20 Jun 2022 06:42:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1655725342;
+        bh=4plFmT78RjcqN4kVC76hW4KGxAhnAgKqHE3Pr4lusVA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=XoLD3Y4ltUZxIMljk5+60Ub/MNz2dDZKSRTwdj6DUVYfjhA7P8itoEBX3jIckGnwu
+         mLYjWdt/bLw51fQg9ELd0O846zPrAVvtS0CWIwSnw5MeYF84QPtzflmDso8AozBFON
+         pRKtuTJXsAvY/IWEPr+mfivcXFZegEK4MJY0ayds=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25KBgMU4087171
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Jun 2022 06:42:22 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
+ Jun 2022 06:42:21 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 20 Jun 2022 06:42:21 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25KBgKsC130217;
+        Mon, 20 Jun 2022 06:42:21 -0500
+Date:   Mon, 20 Jun 2022 17:12:19 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     <robh+dt@kernel.org>, <vigneshr@ti.com>, <kishon@ti.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
+        <rogerq@kernel.org>, <devicetree@vger.kernel.org>,
+        <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
+        Vijay Pothukuchi <vijayp@ti.com>
+Subject: Re: [PATCH v4 2/3] arm64: dts: ti: k3-j721e-*: Add dts nodes for
+ EHRPWMs
+Message-ID: <20220620114218.fqkf6vnyxafla23z@uda0490373>
+References: <20220530101031.11357-1-r-ravikumar@ti.com>
+ <20220530101031.11357-3-r-ravikumar@ti.com>
+ <20220618021949.i5m4saxi2celzanz@kahuna>
 MIME-Version: 1.0
-Message-ID: <66df6207.7d469.18180eb8295.Coremail.pgn@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgC3PiEPXbBi8fo4Ag--.53045W
-X-CM-SenderInfo: qsryjiatsqq6lmxovvfxof0/1tbiAgkHBlZdtaTnLgAAsZ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220618021949.i5m4saxi2celzanz@kahuna>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T3VyIGhvc3QgbWFjaGluZSBpcyBsaW51eC01LjExLjAuCgoKPiAtLS0tLeWOn+Wni+mCruS7ti0t
-LS0tCj4g5Y+R5Lu25Lq6OiAiRG1pdHJ5IFZ5dWtvdiIgPGR2eXVrb3ZAZ29vZ2xlLmNvbT4KPiDl
-j5HpgIHml7bpl7Q6IDIwMjItMDYtMjAgMTk6MjQ6MjYgKOaYn+acn+S4gCkKPiDmlLbku7bkuro6
-ICLmvZjpq5jlroEiIDxwZ25Aemp1LmVkdS5jbj4KPiDmioTpgIE6IGxpbnV4LXNneEB2Z2VyLmtl
-cm5lbC5vcmcsIHNlY2FsZXJ0QHJlZGhhdC5jb20sIHBib256aW5pQHJlZGhhdC5jb20sIHNlYW5q
-Y0Bnb29nbGUuY29tLCB2a3V6bmV0c0ByZWRoYXQuY29tLCB3YW5wZW5nbGlAdGVuY2VudC5jb20s
-IGptYXR0c29uQGdvb2dsZS5jb20sIGpvcm9AOGJ5dGVzLm9yZywgdGdseEBsaW51dHJvbml4LmRl
-LCBtaW5nb0ByZWRoYXQuY29tLCBicEBhbGllbjguZGUsIGRhdmUuaGFuc2VuQGxpbnV4LmludGVs
-LmNvbSwgeDg2QGtlcm5lbC5vcmcsIGhwYUB6eXRvci5jb20sIGt2bUB2Z2VyLmtlcm5lbC5vcmcs
-IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsIHN5emthbGxlckBnb29nbGVncm91cHMuY29t
-LCBrYW5nZWxAemp1LmVkdS5jbiwgMjIxMjExNDVAemp1LmVkdS5jbgo+IOS4u+mimDogUmU6ICdX
-QVJOSU5HIGluIGhhbmRsZV9leGNlcHRpb25fbm1pJyBidWcgYXQgYXJjaC94ODYva3ZtL3ZteC92
-bXguYzo0OTU5Cj4gCj4gT24gTW9uLCAyMCBKdW4gMjAyMiBhdCAxMjoyNSwg5r2Y6auY5a6BIDxw
-Z25Aemp1LmVkdS5jbj4gd3JvdGU6Cj4gPgo+ID4gSGVsbG8sCj4gPgo+ID4gICAgIFRoaXMgaXMg
-WGlhbyBMZWksIEdhb25pbmcgUGFuIGFuZCBZb25na2FuZyBKaWEgZnJvbSBaaGVqaWFuZyBVbml2
-ZXJzaXR5LiBXZSBmb3VuZCBhICdXQVJOSU5HIGluIGhhbmRsZV9leGNlcHRpb25fbm1pJyBidWcg
-Ynkgc3l6a2FsbGVyLiBUaGlzIGZsYXcgYWxsb3dzIGEgbWFsaWNpb3VzIHVzZXIgaW4gYSBsb2Nh
-bCBEb1MgY29uZGl0aW9uLiBUaGUgZm9sbG93aW5nIHByb2dyYW0gdHJpZ2dlcnMgTG9jYWwgRG9T
-IGF0IGFyY2gveDg2L2t2bS92bXgvdm14LmM6NDk1OSBpbiBsYXRlc3QgcmVsZWFzZSBsaW51eC01
-LjE4LjUsIHRoaXMgYnVnIGNhbiBiZSByZXByb2R1Y2libGUgc3RhYmx5IGJ5IHRoZSBDIHJlcHJv
-ZHVjZXI6Cj4gCj4gCj4gRldJVyBhIHNpbWlsYXJseS1sb29raW5nIGlzc3VlIHdhcyByZXBvcnRl
-ZCBieSBzeXpib3Q6Cj4gaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20vYnVnP2lkPTFiNDEx
-YmZiMTczOWM0OTdhOGYwYzdmMWFhNTAxMjAyNzI2Y2QwMWEKPiBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9hbGwvMDAwMDAwMDAwMDAwMGE1ZWFlMDVkODk0N2FkYkBnb29nbGUuY29tLwo+IAo+IFNl
-YW4gc2FpZCBpdCBtYXkgYmUgYW4gaXNzdWUgaW4gTDAga2VybmVsIHJhdGhlciB0aGFuIGluIHRo
-ZSB0ZXN0ZWQga2VybmVsOgo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC9ZcWQ1dXBBSE5P
-eEQwd3JRQGdvb2dsZS5jb20vCj4gCj4gV2hhdCBrZXJuZWwgZGlkIHlvdSB1c2UgZm9yIHRoZSBo
-b3N0IG1hY2hpbmU/Cj4gCj4gCj4gCj4gCj4gCj4gPiAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0t
-LS0tLS0tLS0tLS0KPiA+IFdBUk5JTkc6IENQVTogMTQgUElEOiA5Mjc3IGF0IGFyY2gveDg2L2t2
-bS92bXgvdm14LmM6NDk1OSBoYW5kbGVfZXhjZXB0aW9uX25taSsweDExYTcvMHgxNGQwIGFyY2gv
-eDg2L2t2bS92bXgvdm14LmM6NDk1OQo+ID4gTW9kdWxlcyBsaW5rZWQgaW46Cj4gPiBDUFU6IDE0
-IFBJRDogOTI3NyBDb21tOiBzeXotZXhlY3V0b3IuNyBOb3QgdGFpbnRlZCA1LjE4LjUgIzEKPiA+
-IEhhcmR3YXJlIG5hbWU6IFFFTVUgU3RhbmRhcmQgUEMgKGk0NDBGWCArIFBJSVgsIDE5OTYpLCBC
-SU9TIDEuMTMuMC0xdWJ1bnR1MS4xIDA0LzAxLzIwMTQKPiA+IFJJUDogMDAxMDpoYW5kbGVfZXhj
-ZXB0aW9uX25taSsweDExYTcvMHgxNGQwIGFyY2gveDg2L2t2bS92bXgvdm14LmM6NDk1OQo+ID4g
-Q29kZTogZmYgZTggMWQgYjcgM2MgMDAgYmUgMGMgNDQgMDAgMDAgNDggYzcgYzcgMDAgYzkgMjMg
-OGEgYzYgMDUgOWYgNzEgNWUgMDQgMDEgZTggNWIgMDIgOGQgMDIgMGYgMGIgZTkgNjQgZjggZmYg
-ZmYgZTggZjkgYjYgM2MgMDAgPDBmPiAwYiBlOSBhZSBmNCBmZiBmZiBlOCBlZCBiNiAzYyAwMCBl
-OCAyOCA5NyBhMCAwMiBlOSA1ZiBmZCBmZiBmZgo+ID4gUlNQOiAwMDE4OmZmZmY4ODgwMzhkYzdi
-NDggRUZMQUdTOiAwMDAxMDI4Ngo+ID4gUkFYOiAwMDAwMDAwMDAwMDAyNjE3IFJCWDogMDAwMDAw
-MDAwMDAwMDAwMCBSQ1g6IGZmZmZmZmZmODExZGNmMjcKPiA+IFJEWDogMDAwMDAwMDAwMDA0MDAw
-MCBSU0k6IGZmZmZjOTAwMDNkZDEwMDAgUkRJOiBmZmZmODg4MDM5NTk1YzBjCj4gPiBSQlA6IGZm
-ZmY4ODgwMzk1OTQwMDAgUjA4OiAwMDAwMDAwMDAwMDAwMDAxIFIwOTogZmZmZjg4ODAzOTU5NDFh
-Nwo+ID4gUjEwOiBmZmZmZWQxMDA3MmIyODM0IFIxMTogMDAwMDAwMDAwMDAwMDAwMSBSMTI6IGZm
-ZmZmZmZmZmZmZmZmZjgKPiA+IFIxMzogMDAwMDAwMDA4MDAwMDMwZSBSMTQ6IGZmZmY4ODgwMzg5
-NWMwMDAgUjE1OiBmZmZmODg4MDM5NTk0MDY4Cj4gPiBGUzogIDAwMDA3ZmY1NmVkZjc3MDAoMDAw
-MCkgR1M6ZmZmZjg4ODA2N2QwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwCj4gPiBD
-UzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4gPiBDUjI6
-IDAwMDAwMDAwMDAwMDAwMDAgQ1IzOiAwMDAwMDAwMDNhZWM4MDA2IENSNDogMDAwMDAwMDAwMDc3
-MmVlMAo+ID4gRFIwOiAwMDAwMDAwMDAwMDAwMDAwIERSMTogMDAwMDAwMDAwMDAwMDAwMCBEUjI6
-IDAwMDAwMDAwMDAwMDAwMDAKPiA+IERSMzogMDAwMDAwMDAwMDAwMDAwMCBEUjY6IDAwMDAwMDAw
-ZmZmZTBmZjAgRFI3OiAwMDAwMDAwMDAwMDAwNDAwCj4gPiBQS1JVOiA1NTU1NTU1NAo+ID4gQ2Fs
-bCBUcmFjZToKPiA+ICA8VEFTSz4KPiA+ICBfX3ZteF9oYW5kbGVfZXhpdCBhcmNoL3g4Ni9rdm0v
-dm14L3ZteC5jOjYyMzkgW2lubGluZV0KPiA+ICB2bXhfaGFuZGxlX2V4aXQrMHg1ZTcvMHgxYWEw
-IGFyY2gveDg2L2t2bS92bXgvdm14LmM6NjI1Ngo+ID4gIHZjcHVfZW50ZXJfZ3Vlc3QgYXJjaC94
-ODYva3ZtL3g4Ni5jOjEwMjgzIFtpbmxpbmVdCj4gPiAgdmNwdV9ydW4gYXJjaC94ODYva3ZtL3g4
-Ni5jOjEwMzY1IFtpbmxpbmVdCj4gPiAga3ZtX2FyY2hfdmNwdV9pb2N0bF9ydW4rMHgyYTJlLzB4
-NWNhMCBhcmNoL3g4Ni9rdm0veDg2LmM6MTA1NjYKPiA+ICBrdm1fdmNwdV9pb2N0bCsweDRkMi8w
-eGM2MCBhcmNoL3g4Ni9rdm0vLi4vLi4vLi4vdmlydC9rdm0va3ZtX21haW4uYzozOTQzCj4gPiAg
-dmZzX2lvY3RsIGZzL2lvY3RsLmM6NTEgW2lubGluZV0KPiA+ICBfX2RvX3N5c19pb2N0bCBmcy9p
-b2N0bC5jOjg3MCBbaW5saW5lXQo+ID4gIF9fc2Vfc3lzX2lvY3RsIGZzL2lvY3RsLmM6ODU2IFtp
-bmxpbmVdCj4gPiAgX194NjRfc3lzX2lvY3RsKzB4MTZkLzB4MWQwIGZzL2lvY3RsLmM6ODU2Cj4g
-PiAgZG9fc3lzY2FsbF94NjQgYXJjaC94ODYvZW50cnkvY29tbW9uLmM6NTAgW2lubGluZV0KPiA+
-ICBkb19zeXNjYWxsXzY0KzB4MzgvMHg5MCBhcmNoL3g4Ni9lbnRyeS9jb21tb24uYzo4MAo+ID4g
-IGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ0LzB4YWUKPiA+IFJJUDogMDAzMzow
-eDQ1ZThjOQo+ID4gQ29kZTogNGQgYWYgZmIgZmYgYzMgNjYgMmUgMGYgMWYgODQgMDAgMDAgMDAg
-MDAgMDAgNjYgOTAgNDggODkgZjggNDggODkgZjcgNDggODkgZDYgNDggODkgY2EgNGQgODkgYzIg
-NGQgODkgYzggNGMgOGIgNGMgMjQgMDggMGYgMDUgPDQ4PiAzZCAwMSBmMCBmZiBmZiAwZiA4MyAx
-YiBhZiBmYiBmZiBjMyA2NiAyZSAwZiAxZiA4NCAwMCAwMCAwMCAwMAo+ID4gUlNQOiAwMDJiOjAw
-MDA3ZmY1NmVkZjZjNTggRUZMQUdTOiAwMDAwMDI0NiBPUklHX1JBWDogMDAwMDAwMDAwMDAwMDAx
-MAo+ID4gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDogMDAwMDAwMDAwMDc3YmY2MCBSQ1g6IDAw
-MDAwMDAwMDA0NWU4YzkKPiA+IFJEWDogMDAwMDAwMDAwMDAwMDAwMCBSU0k6IDAwMDAwMDAwMDAw
-MGFlODAgUkRJOiAwMDAwMDAwMDAwMDAwMDA1Cj4gPiBSQlA6IDAwMDAwMDAwMDA3N2JmNjAgUjA4
-OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogMDAwMDAwMDAwMDAwMDAwMAo+ID4gUjEwOiAwMDAwMDAw
-MDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6IDAwMDAwMDAwMDAwMDAwMDAKPiA+
-IFIxMzogMDAwMDdmZmM0OTFiZTZhZiBSMTQ6IDAwMDA3ZmY1NmVkZjc5YzAgUjE1OiAwMDAwMDAw
-MDAwMDAwMDAwCj4gPiAgPC9UQVNLPgo+ID4gLS0tWyBlbmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAw
-MCBdLS0tCj4gPgo+ID4gU3l6a2FsbGVyIHJlcHJvZHVjZXI6Cj4gPiAjIHtUaHJlYWRlZDpmYWxz
-ZSBSZXBlYXQ6ZmFsc2UgUmVwZWF0VGltZXM6MCBQcm9jczoxIFNsb3dkb3duOjEgU2FuZGJveDog
-TGVhazpmYWxzZSBOZXRJbmplY3Rpb246ZmFsc2UgTmV0RGV2aWNlczpmYWxzZSBOZXRSZXNldDpm
-YWxzZSBDZ3JvdXBzOmZhbHNlIEJpbmZtdE1pc2M6ZmFsc2UgQ2xvc2VGRHM6ZmFsc2UgS0NTQU46
-ZmFsc2UgRGV2bGlua1BDSTpmYWxzZSBVU0I6ZmFsc2UgVmhjaUluamVjdGlvbjpmYWxzZSBXaWZp
-OmZhbHNlIElFRUU4MDIxNTQ6ZmFsc2UgU3lzY3RsOnRydWUgVXNlVG1wRGlyOmZhbHNlIEhhbmRs
-ZVNlZ3Y6ZmFsc2UgUmVwcm86ZmFsc2UgVHJhY2U6ZmFsc2UgTGVnYWN5T3B0aW9uczp7Q29sbGlk
-ZTpmYWxzZSBGYXVsdDpmYWxzZSBGYXVsdENhbGw6MCBGYXVsdE50aDowfX0KPiA+IHIwID0gb3Bl
-bmF0JGt2bSgweGZmZmZmZmZmZmZmZmZmOWMsICYoMHg3ZjAwMDAwMDAwMDApLCAweDAsIDB4MCkK
-PiA+IHIxID0gaW9jdGwkS1ZNX0NSRUFURV9WTShyMCwgMHhhZTAxLCAweDApCj4gPiByMiA9IGlv
-Y3RsJEtWTV9DUkVBVEVfVkNQVShyMSwgMHhhZTQxLCAweDApCj4gPiBzeXpfa3ZtX3NldHVwX2Nw
-dSR4ODYocjEsIHIyLCAmKDB4N2YwMDAwZmU4MDAwLzB4MTgwMDApPW5pbCwgJigweDdmMDAwMDAw
-MDBjMCk9W0B0ZXh0cmVhbD17MHg4LCAweDB9XSwgMHgxLCAweDE3LCAmKDB4N2YwMDAwMDAwMTAw
-KT1bQGNyND17MHgxLCAweDIwMDkxNX1dLCAweDEpCj4gPiBpb2N0bCRLVk1fUlVOKHIyLCAweGFl
-ODAsIDB4MCkKPiA+Cj4gPgo+ID4gQyByZXBybyBhbmQgY29uZmlnIGFyZSBhdHRhY2hlZC4KPiA+
-Cj4gPgo+ID4gQmVzdCByZWdyYWRzLgo+ID4KPiA+IFhpYW8gTGVpIGZyb20gWmhlamlhbmcgVW5p
-dmVyc2l0eS4KPiA+Cj4gPiAtLQo+ID4gWW91IHJlY2VpdmVkIHRoaXMgbWVzc2FnZSBiZWNhdXNl
-IHlvdSBhcmUgc3Vic2NyaWJlZCB0byB0aGUgR29vZ2xlIEdyb3VwcyAic3l6a2FsbGVyIiBncm91
-cC4KPiA+IFRvIHVuc3Vic2NyaWJlIGZyb20gdGhpcyBncm91cCBhbmQgc3RvcCByZWNlaXZpbmcg
-ZW1haWxzIGZyb20gaXQsIHNlbmQgYW4gZW1haWwgdG8gc3l6a2FsbGVyK3Vuc3Vic2NyaWJlQGdv
-b2dsZWdyb3Vwcy5jb20uCj4gPiBUbyB2aWV3IHRoaXMgZGlzY3Vzc2lvbiBvbiB0aGUgd2ViIHZp
-c2l0IGh0dHBzOi8vZ3JvdXBzLmdvb2dsZS5jb20vZC9tc2dpZC9zeXprYWxsZXIvNjlhYjk4NWMu
-N2Q1MDcuMTgxODBhNGRjZDcuQ29yZW1haWwucGduJTQwemp1LmVkdS5jbi4K
+On 21:19-20220617, Nishanth Menon wrote:
+> On 15:40-20220530, Rahul T R wrote:
+> > From: Vijay Pothukuchi <vijayp@ti.com>
+> > 
+> > Add dts nodes for 6 EHRPWM instances on SoC
+> > 
+> > Signed-off-by: Vijay Pothukuchi <vijayp@ti.com>
+> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> > ---
+> >  .../dts/ti/k3-j721e-common-proc-board.dts     | 24 +++++++
+> >  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 62 ++++++++++++++++++-
+> >  arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 24 +++++++
+> >  3 files changed, 109 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > index 2bc26a296496..f7d02fa4d6fc 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > @@ -995,3 +995,27 @@
+> >  &main_mcan13 {
+> >  	status = "disabled";
+> >  };
+> > +
+> > +&main_ehrpwm0 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm1 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm2 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm3 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm4 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm5 {
+> > +	status = "disabled";
+> > +};
+> 
+> 
+> Do the pwm driver croak and die OR it is un-usable on proc-board or
+> disabled due to not-primary function (ideally drivers should shut things
+> off when unused)?
+> 
+
+Hi Nishanth,
+
+Nodes are disabled since
+EHRPWM is not primary function
+and pins are configured for
+different interfaces like MCASP10 etc..
+
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> > index 43b6cf5791ee..1ee00b73905d 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> > @@ -66,7 +66,67 @@
+> >  			#mux-control-cells = <1>;
+> >  			mux-reg-masks = <0x4000 0x8000000>, /* USB0 to SERDES0/3 mux */
+> >  					<0x4010 0x8000000>; /* USB1 to SERDES1/2 mux */
+> > -	    };
+> > +		};
+> > +
+> > +		ehrpwm_tbclk: clock-controller@4140 {
+> > +			compatible = "ti,am654-ehrpwm-tbclk", "syscon";
+> > +			reg = <0x4140 0x18>;
+> > +			#clock-cells = <1>;
+> > +		};
+> > +	};
+> > +
+> > +	main_ehrpwm0: pwm@3000000 {
+> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
+> > +		#pwm-cells = <3>;
+> > +		reg = <0x0 0x3000000 0x0 0x100>;
+> 
+> would suggest 0x00 instead of 0x0
+
+will fix this in the respin
+
+Regards
+Rahul T R
+
+> 
+> > +		power-domains = <&k3_pds 83 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&ehrpwm_tbclk 0>, <&k3_clks 83 0>;
+> > +		clock-names = "tbclk", "fck";
+> > +	};
+> > +
+> > +	main_ehrpwm1: pwm@3010000 {
+> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
+> > +		#pwm-cells = <3>;
+> > +		reg = <0x0 0x3010000 0x0 0x100>;
+> > +		power-domains = <&k3_pds 84 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&ehrpwm_tbclk 1>, <&k3_clks 84 0>;
+> > +		clock-names = "tbclk", "fck";
+> > +	};
+> > +
+> > +	main_ehrpwm2: pwm@3020000 {
+> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
+> > +		#pwm-cells = <3>;
+> > +		reg = <0x0 0x3020000 0x0 0x100>;
+> > +		power-domains = <&k3_pds 85 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&ehrpwm_tbclk 2>, <&k3_clks 85 0>;
+> > +		clock-names = "tbclk", "fck";
+> > +	};
+> > +
+> > +	main_ehrpwm3: pwm@3030000 {
+> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
+> > +		#pwm-cells = <3>;
+> > +		reg = <0x0 0x3030000 0x0 0x100>;
+> > +		power-domains = <&k3_pds 86 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&ehrpwm_tbclk 3>, <&k3_clks 86 0>;
+> > +		clock-names = "tbclk", "fck";
+> > +	};
+> > +
+> > +	main_ehrpwm4: pwm@3040000 {
+> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
+> > +		#pwm-cells = <3>;
+> > +		reg = <0x0 0x3040000 0x0 0x100>;
+> > +		power-domains = <&k3_pds 87 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&ehrpwm_tbclk 4>, <&k3_clks 87 0>;
+> > +		clock-names = "tbclk", "fck";
+> > +	};
+> > +
+> > +	main_ehrpwm5: pwm@3050000 {
+> > +		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
+> > +		#pwm-cells = <3>;
+> > +		reg = <0x0 0x3050000 0x0 0x100>;
+> > +		power-domains = <&k3_pds 88 TI_SCI_PD_EXCLUSIVE>;
+> > +		clocks = <&ehrpwm_tbclk 5>, <&k3_clks 88 0>;
+> > +		clock-names = "tbclk", "fck";
+> >  	};
+> >  
+> >  	gic500: interrupt-controller@1800000 {
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+> > index 80358cba6954..98a55778f3fe 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+> > @@ -1129,3 +1129,27 @@
+> >  	memory-region = <&c71_0_dma_memory_region>,
+> >  			<&c71_0_memory_region>;
+> >  };
+> > +
+> > +&main_ehrpwm0 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm1 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm2 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm3 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm4 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&main_ehrpwm5 {
+> > +	status = "disabled";
+> > +};
+> > -- 
+> > 2.17.1
+> > 
+> 
+> -- 
+> Regards,
+> Nishanth Menon
+> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

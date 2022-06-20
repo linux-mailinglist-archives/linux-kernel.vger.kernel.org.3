@@ -2,156 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3768B5523A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506425523A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240588AbiFTSNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S245172AbiFTSP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245301AbiFTSNl (ORCPT
+        with ESMTP id S243978AbiFTSPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:13:41 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D83E1A387
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:13:39 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n185so6241788wmn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T+Bp4C6tHNEGnt3nH/cIgRCgYn49Fk+PkAiYN+Dhmk4=;
-        b=Zejyg6E+FHLKxRKdaEVHf2AZnDX7ypJREPoEvt3q1fFl3poi2cMzNceoS2L5xfLnPb
-         Hj+R732naG47N54mKP5MQpsSSUdgqOafOLptTfNnpGpubW05/fVMDbTQV+sMTeE5+PGP
-         G1PtclC9DqxT26xSkM2/3RaxOLmFefPV37XUIQua/iSphifY21dvtzrbnCUZpiXg0N2n
-         XHXPevhVP0+l851iCLc4EkMrnfLnwki+2xj71hWiMdp2ZVSD9hEm9rzWNJpCO9T6G8hu
-         5SHb0+fboJV+3XgJVsDIf3OWHEYhAcr8JYttvJwxKMLyTDOEH0o0B+KvQ5EYF5l9zpIf
-         8uQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T+Bp4C6tHNEGnt3nH/cIgRCgYn49Fk+PkAiYN+Dhmk4=;
-        b=HBi2/kghZtbu4LElw711RY2OgKQDLmlNuMa3DsOGUALSPDKxNwZ0QedRXiMu/BRfDz
-         H0uFwIyuB2kKtbz0zhbDyQLP5+j+EPMyZ1FSrOb2wkKaP3v5ZR+iPyfG05oQHN2db8Lo
-         IjkY81hIIpFrmbbvqMcpG71ZmDU8AgjmcOiXz/8PEHktF3gAYVv3ACEG2Du2BLhXGmAI
-         4+zv/fJ8aN/+uec8bSCQoOXWZeyag+JnTX06wss6LeXyjmlfpcXbjii38HcCLt23HUNl
-         vhPRJ7/pe1qBLwPnNzupFWsRFbAnBSu4aNylmoIcAHiNz6+5y60f8kB92oiWqtMav5qt
-         sdJA==
-X-Gm-Message-State: AJIora9AIGlZJX+DEPO+8VRMsngN/61MrRtEDB6tGxHk+PQwSJhy2LJ3
-        6JvXU4LbLOxpu44NqVoH1Qeb/O3bB0I=
-X-Google-Smtp-Source: AGRyM1uI4F8cjHPAFAwOIFBOoZgwystK4qPSTCHz/P/WvlP3vbn23eKdbUXeK8JyCxxGaxVhOGfXAw==
-X-Received: by 2002:a7b:c389:0:b0:39c:49fe:25df with SMTP id s9-20020a7bc389000000b0039c49fe25dfmr25474259wmj.164.1655748818130;
-        Mon, 20 Jun 2022 11:13:38 -0700 (PDT)
-Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id k20-20020adfc714000000b002103aebe8absm14006977wrg.93.2022.06.20.11.13.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 11:13:37 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, wens@csie.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v2] drm/sun4i: Add DMA mask and segment size
-Date:   Mon, 20 Jun 2022 20:13:33 +0200
-Message-Id: <20220620181333.650301-1-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 20 Jun 2022 14:15:15 -0400
+Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3801A828
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655748911; bh=h6STTI1UnnL+/N3bGacK6gIQvLl45g+igMgXSobAa6k=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XD/2KBFQ1Y/36NnnFX/REkiZDBGikafJXHNS7cO0UsjWZA9uKbik4wwkl5e7EjAeYAy+Et3tr8D82UuxrPAOUGkAo7SNbIykDUUyFO5TceIbcIIYmjCBeZntjOj5ZSBcvfw1ldCjG9H2DQII0FZEnNx7KAfmq58P/DSiu4ziFtJmY1bQosgXSJDfMyUWrFFysGDxqXspSUz0huVlN2p3lES3IolPTOv49npDQDLH329jv5pZJ+gCePc4qNO/LjVByndiq4VCIECat5hm3iEobOJVM6ODUQ5CAvDwd2JXLTsjMPhmk2WcVjJLNXCg7rl320CyLif4pMTp2umhKh4Mtw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655748911; bh=YEF1FrjC7NXSFSdeBmelWh56TfJ25Qfhl3bgWMGiUva=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=J/V5Fj2Q+NfnJ1ib5oE5CxmxWIvd5CM+7jZqZ64y6q4ruHy+6lwNXIhnF469TC4bc/PkyOnh1D/GdPuQG6dxd7aWnDitz3UR4VUS+Qo6YksKJtw9xMQhqoS9sDsmM2Gp2ZDB6D3MO5igGw14i0D/0iYggaKfCtygQL9gDsfzUTwPBjBsZ8L06Eubu9d9djN1Jed3AzOmEhJD5hF/JGyvbu/+NkWd9OMl1X7/UJfQB+AsvHrkLHP39RXJH4t7uvLMjQ1Z4toG8immy5iRuRAkITWAw72RkyWR0I4CIVDKEIGPOMs2r8vIsb8EmTTE+RBBpoi/GbSKQOR3bzXwyiaLFw==
+X-YMail-OSG: o8Gq5L8VM1lPUC8VL_bF9qPClxoHXmnPoJUA60LINBZ33qRP8DTLQZlqJsEZpuJ
+ CMnbrbw150KXQYJHk41w3tn7D9RIoYgW1GZH3hdhV8dviUfWCWRyoD7wo1aBMOlb3BOLc1FyGbA9
+ Ac7jlXRqozjITHXhZu77cs6LBM6kPjeeAnShH10Sr1oddrvbPCnSF_7HG3xnhZwczW7AvgdU6YXD
+ gUJe4sRYyAkXb0cHN1wZwSEgQZuE8jF9AtGrUDPuFMwdl61LptZoYr3VYtyf.8i7u4q8rsP7sGyx
+ Qlwahhm0GuY_1otpWcjLL2IbqKo53.x9pDtqYWMyzuC4bvYutPRWmWJftuKJXH_.tyZdRe36zwXB
+ xjWK5Yv_XEAa8YOKKQj.F58uE7mLDok6_cl8.hoIHptcV0E0gF8OUmAmXlH2zxREZ6hWPdhwf8vu
+ sNgna6umT0j2HoPrzGXKlUwfFWtiTe5ITnObc2OjscWr0o15PjxL061lim6UEHzF3VWq6pHTXdHs
+ KfmSHf08aaJY30T0anFJ_IAJfyxaafuoO_guKjMIqgp_b1_B.mHKxYTqb3D7_MjDySCCSkQ4_aeH
+ fVQwIkRESXi0DDevIJDu1jK157ck6Lga_EPUtkl71vOgKfQ6nYCtNUnjfeQGzg4C71P0Ko1U9a0j
+ nmp.qTRmQUzxcI1etsICGKrIvCxYDLkboFwVdd5OPX3KJ_vlb2PhFHiM2diYQSAzE8rGhYJ9g2Yb
+ WeQIG0W7tiKYWvv46f43sOyxt6ovOBb07JAhiRvz29.tFEHOy4vyXPiCKGz0kGuC8ueLTGfZnI8P
+ ZeKInvW.yy_Xl7NYVlHaqq9Du3aGBc3G2I6X7NLSWZn2mlNjJLnTJizI0oaeCevniKb3adQGNXFT
+ ieXedJDrHOoCDqXx7e2p5KEvtGsvw0QSNOYETgxdg9znnRnBC.in5WqSsr.ftqvqBmAnwLK2Saum
+ GYwzNR7troI.nWrYyEPr3T9c9gooRSEzuPxAMLBkJKjD2JqfUEBPLprc0RQSnP1tgBWI5fS5DTcD
+ s.jH6OifAU7SnZd5AZDSPfFxWKEQfAGFIeRiblRc5PROYP6iuar97ShS3n91wN5Aq7FrlaM6QwfT
+ dGrWsukMAwosr8PpCVa.SeZZHWDvqpWqYax5Zvw.7PpBBF_Prb3M4BsNNR0vbCmfjjZyEY473V7l
+ 98ZvnP7quuudvX_TYQe.AIwfopu8uP4e1BqDfPxNMns_6nZQ6jhWXKbDScYNMxn9foghYaWkdgwv
+ bTfKrSrlctRySjxR3qGuoN7.TlvUkTzKKHdykczSgU6kw4o790pxAQ9W1me.mHND3zKGb8vggSX2
+ x4qOFBb6cID8n63hYtscDArYzxzZdhBljmOZ8f7HEzTAU9s0JiBi83YfwErqCeYB_YgohW0STY3T
+ XnwSMLLONC9aPscnNzn.Z4QHB7k1JDaRwXMu1WcQ2bNiBwLkgByATkW7l0o2N3DA1DhYFxC4YLns
+ iX_NTkGqtMyUzk77jJ5tH_jUVx5K65QYs23hZsjY8.mS7f0fYlGho3_VSkQZd7NQkclhwJUXcXmm
+ btnSvL.Pk12sfb2ojeE9vBZNOoYFunHW._yin11R6QdZBo17_zuM2q35eeKOg525sLYURqcqJaN0
+ 0R7SmwVVPOj3ACIMWZrpz6q3yOf__YtDS54gs.A1tT_e9l.k5onHMlicsGyxeF58juVuy32FHEqh
+ Z0RsvmOOFA1CwcyfE_JMZXhqOxkyN2sEntn_kdL0FMUFp2w4dOgUmsO4S1_5LdC3M13jz9MdX4Ir
+ VqlrCkyV7A1N9SIfw8mGsH8t8nKT03Ta2kTdjQiqamEYcH3xAfe3Hqug.r6mbCOfCEf3dG4y.jzi
+ 8wc5MC3YundGTIq2D4fJmfHIvagQjlbhrgFW4Cx_sDXqIUzfWlsm.dcA1gwV5PnXbPd6bDB3vNXY
+ 33lUOfalqAEmZ2uivNTj7KoAvBqFoJgFay.Wl2UdGwLHPyHrgIBUf9hR6oa88Wr4r0UY1OQRblig
+ tFjQhIrslPdqgvzXIRvZlJQWJXg_3Q4zLJiJ0saqeFXMl_lJmgFn7Kfv.EkAHsZG8UFnvZBpVaf1
+ nLBmRcAX_ZUYQ2QRuO1GJEQRzeK23aUIIRd6ZGbOYCNAZ0zNP89LPm_niaUnphmXTYHUjJokrUkz
+ cAK9DQglNGQFXz8MktDVXCaOMwJAkZI7bB7_65srYqXlVMW1deNFLW8bGj03Ds05ddqNVFo9q22P
+ tU3.VBMqegTVQAQ4zrJSUmzucIoylhJlRt.Pi076I
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Mon, 20 Jun 2022 18:15:11 +0000
+Received: by hermes--canary-production-bf1-8bb76d6cf-44t2w (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e2a7845c38f5e224c788e30894a53d85;
+          Mon, 20 Jun 2022 18:15:08 +0000 (UTC)
+Message-ID: <034eb96c-573e-a074-2506-99456ec7f6f7@schaufler-ca.com>
+Date:   Mon, 20 Jun 2022 11:15:05 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] security: Add LSM hook to setgroups() syscall
+Content-Language: en-US
+To:     Micah Morton <mortonm@chromium.org>,
+        linux-security-module@vger.kernel.org
+Cc:     keescook@chromium.org, jmorris@namei.org, serge@hallyn.com,
+        linux-kernel@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220616171809.783277-1-mortonm@chromium.org>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220616171809.783277-1-mortonm@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel occasionally complains that there is mismatch in segment size
-when trying to render HW decoded videos and rendering them directly with
-sun4i DRM driver. Following message can be observed on H6 SoC:
+On 6/16/2022 10:18 AM, Micah Morton wrote:
+> Give the LSM framework the ability to filter setgroups() syscalls. There
+> are already analagous hooks for the set*uid() and set*gid() syscalls.
+> The SafeSetID LSM will use this new hook to ensure setgroups() calls are
+> allowed by the installed security policy. Tested by putting print
+> statement in security_task_fix_setgroups() hook and confirming that it
+> gets hit when userspace does a setgroups() syscall.
+>
+> Signed-off-by: Micah Morton <mortonm@chromium.org>
 
-[  184.298308] ------------[ cut here ]------------
-[  184.298326] DMA-API: sun4i-drm display-engine: mapping sg segment longer than device claims to support [len=6144000] [max=65536]
-[  184.298364] WARNING: CPU: 1 PID: 382 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2b0/0x350
-[  184.322997] CPU: 1 PID: 382 Comm: ffmpeg Not tainted 5.19.0-rc1+ #1331
-[  184.329533] Hardware name: Tanix TX6 (DT)
-[  184.333544] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  184.340512] pc : debug_dma_map_sg+0x2b0/0x350
-[  184.344882] lr : debug_dma_map_sg+0x2b0/0x350
-[  184.349250] sp : ffff800009f33a50
-[  184.352567] x29: ffff800009f33a50 x28: 0000000000010000 x27: ffff000001b86c00
-[  184.359725] x26: ffffffffffffffff x25: ffff000005d8cc80 x24: 0000000000000000
-[  184.366879] x23: ffff80000939ab18 x22: 0000000000000001 x21: 0000000000000001
-[  184.374031] x20: 0000000000000000 x19: ffff0000018a7410 x18: ffffffffffffffff
-[  184.381186] x17: 0000000000000000 x16: 0000000000000000 x15: ffffffffffffffff
-[  184.388338] x14: 0000000000000001 x13: ffff800009534e86 x12: 6f70707573206f74
-[  184.395493] x11: 20736d69616c6320 x10: 000000000000000a x9 : 0000000000010000
-[  184.402647] x8 : ffff8000093b6d40 x7 : ffff800009f33850 x6 : 000000000000000c
-[  184.409800] x5 : ffff0000bf997940 x4 : 0000000000000000 x3 : 0000000000000027
-[  184.416953] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000003960e80
-[  184.424106] Call trace:
-[  184.426556]  debug_dma_map_sg+0x2b0/0x350
-[  184.430580]  __dma_map_sg_attrs+0xa0/0x110
-[  184.434687]  dma_map_sgtable+0x28/0x4c
-[  184.438447]  vb2_dc_dmabuf_ops_map+0x60/0xcc
-[  184.442729]  __map_dma_buf+0x2c/0xd4
-[  184.446321]  dma_buf_map_attachment+0xa0/0x130
-[  184.450777]  drm_gem_prime_import_dev+0x7c/0x18c
-[  184.455410]  drm_gem_prime_fd_to_handle+0x1b8/0x214
-[  184.460300]  drm_prime_fd_to_handle_ioctl+0x2c/0x40
-[  184.465190]  drm_ioctl_kernel+0xc4/0x174
-[  184.469123]  drm_ioctl+0x204/0x420
-[  184.472534]  __arm64_sys_ioctl+0xac/0xf0
-[  184.476474]  invoke_syscall+0x48/0x114
-[  184.480240]  el0_svc_common.constprop.0+0x44/0xec
-[  184.484956]  do_el0_svc+0x2c/0xc0
-[  184.488283]  el0_svc+0x2c/0x84
-[  184.491354]  el0t_64_sync_handler+0x11c/0x150
-[  184.495723]  el0t_64_sync+0x18c/0x190
-[  184.499397] ---[ end trace 0000000000000000 ]---
+I don't see any problems with this.
+Acked-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Fix that by setting DMA mask and segment size.
-
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
-Changes from v1:
-- added comment
-- updated commit message with kernel report
-
- drivers/gpu/drm/sun4i/sun4i_drv.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-index 275f7e4a03ae..f135a6b3cadb 100644
---- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/component.h>
-+#include <linux/dma-mapping.h>
- #include <linux/kfifo.h>
- #include <linux/module.h>
- #include <linux/of_graph.h>
-@@ -367,6 +368,13 @@ static int sun4i_drv_probe(struct platform_device *pdev)
- 
- 	INIT_KFIFO(list.fifo);
- 
-+	/*
-+	 * DE2 and DE3 cores actually supports 40-bit addresses, but
-+	 * driver does not.
-+	 */
-+	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-+
- 	for (i = 0;; i++) {
- 		struct device_node *pipeline = of_parse_phandle(np,
- 								"allwinner,pipelines",
--- 
-2.36.1
-
+> ---
+>   include/linux/lsm_hook_defs.h |  1 +
+>   include/linux/lsm_hooks.h     |  7 +++++++
+>   include/linux/security.h      |  7 +++++++
+>   kernel/groups.c               | 13 +++++++++++++
+>   security/security.c           |  5 +++++
+>   5 files changed, 33 insertions(+)
+>
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index eafa1d2489fd..806448173033 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -201,6 +201,7 @@ LSM_HOOK(int, 0, task_fix_setuid, struct cred *new, const struct cred *old,
+>   	 int flags)
+>   LSM_HOOK(int, 0, task_fix_setgid, struct cred *new, const struct cred * old,
+>   	 int flags)
+> +LSM_HOOK(int, 0, task_fix_setgroups, struct cred *new, const struct cred * old)
+>   LSM_HOOK(int, 0, task_setpgid, struct task_struct *p, pid_t pgid)
+>   LSM_HOOK(int, 0, task_getpgid, struct task_struct *p)
+>   LSM_HOOK(int, 0, task_getsid, struct task_struct *p)
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 91c8146649f5..84a0d7e02176 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -702,6 +702,13 @@
+>    *	@old is the set of credentials that are being replaced.
+>    *	@flags contains one of the LSM_SETID_* values.
+>    *	Return 0 on success.
+> + * @task_fix_setgroups:
+> + *	Update the module's state after setting the supplementary group
+> + *	identity attributes of the current process.
+> + *	@new is the set of credentials that will be installed.  Modifications
+> + *	should be made to this rather than to @current->cred.
+> + *	@old is the set of credentials that are being replaced.
+> + *	Return 0 on success.
+>    * @task_setpgid:
+>    *	Check permission before setting the process group identifier of the
+>    *	process @p to @pgid.
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 7fc4e9f49f54..1dfd32c49fa3 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -415,6 +415,7 @@ int security_task_fix_setuid(struct cred *new, const struct cred *old,
+>   			     int flags);
+>   int security_task_fix_setgid(struct cred *new, const struct cred *old,
+>   			     int flags);
+> +int security_task_fix_setgroups(struct cred *new, const struct cred *old);
+>   int security_task_setpgid(struct task_struct *p, pid_t pgid);
+>   int security_task_getpgid(struct task_struct *p);
+>   int security_task_getsid(struct task_struct *p);
+> @@ -1098,6 +1099,12 @@ static inline int security_task_fix_setgid(struct cred *new,
+>   	return 0;
+>   }
+>   
+> +static inline int security_task_fix_setgroups(struct cred *new,
+> +					   const struct cred *old)
+> +{
+> +	return 0;
+> +}
+> +
+>   static inline int security_task_setpgid(struct task_struct *p, pid_t pgid)
+>   {
+>   	return 0;
+> diff --git a/kernel/groups.c b/kernel/groups.c
+> index 787b381c7c00..9aaed2a31073 100644
+> --- a/kernel/groups.c
+> +++ b/kernel/groups.c
+> @@ -134,13 +134,26 @@ EXPORT_SYMBOL(set_groups);
+>   int set_current_groups(struct group_info *group_info)
+>   {
+>   	struct cred *new;
+> +	const struct cred *old;
+> +	int retval;
+>   
+>   	new = prepare_creds();
+>   	if (!new)
+>   		return -ENOMEM;
+>   
+> +	old = current_cred();
+> +
+>   	set_groups(new, group_info);
+> +
+> +	retval = security_task_fix_setgroups(new, old);
+> +	if (retval < 0)
+> +		goto error;
+> +
+>   	return commit_creds(new);
+> +
+> +error:
+> +	abort_creds(new);
+> +	return retval;
+>   }
+>   
+>   EXPORT_SYMBOL(set_current_groups);
+> diff --git a/security/security.c b/security/security.c
+> index 188b8f782220..15c686145ad6 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1803,6 +1803,11 @@ int security_task_fix_setgid(struct cred *new, const struct cred *old,
+>   	return call_int_hook(task_fix_setgid, 0, new, old, flags);
+>   }
+>   
+> +int security_task_fix_setgroups(struct cred *new, const struct cred *old)
+> +{
+> +	return call_int_hook(task_fix_setgroups, 0, new, old);
+> +}
+> +
+>   int security_task_setpgid(struct task_struct *p, pid_t pgid)
+>   {
+>   	return call_int_hook(task_setpgid, 0, p, pgid);

@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CF0551CA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E16551B19
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344527AbiFTNXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S1343499AbiFTNMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245570AbiFTNUm (ORCPT
+        with ESMTP id S245692AbiFTNJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:20:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7DE22523;
-        Mon, 20 Jun 2022 06:08:50 -0700 (PDT)
+        Mon, 20 Jun 2022 09:09:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E59228;
+        Mon, 20 Jun 2022 06:03:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D68A61537;
-        Mon, 20 Jun 2022 13:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79633C3411B;
-        Mon, 20 Jun 2022 13:07:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A417B811C6;
+        Mon, 20 Jun 2022 13:02:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF10C3411B;
+        Mon, 20 Jun 2022 13:02:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730430;
-        bh=vFdejECll6k6STgIMzyhcUkU/wxsO+FwIvlIlIPfv3Q=;
+        s=korg; t=1655730144;
+        bh=M/2gDY7ZzNb/oAKKkhfnwbKWyEObv/vJS66e1WXjz3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qpzVOGXI+D3PuUd92gCtK8X1KjeliZbvIGOq44wRAOi+ufjtZoPWRPO+lpWb25mQN
-         NHWg7j1ITOneuovoyqsSrB6L7l3zH2OXdflKd2wpkWeOz31f1vEq91+GqALDAPYENy
-         brJTblKOTV5tFAC87aLe/sttWj18M52KPk7I+VLc=
+        b=mtAKoeoyxJm+z56H8a5RQFrb4coUfhZn2x+dg/eIz2hnOzuQThMYn9k+mpms/RasT
+         g9bAoRwn9aBHcSg1ZQbL+ZPGmjaF49M8G5gIbxREupa2e4YcYwc5CVacxzzZ8XoeeO
+         7bQRfeXJ0lweJI+M3tjxdpEzQdXlqbvKyVW9+GIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Grzegorz Szczurek <grzegorzx.szczurek@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Bharathi Sreenivas <bharathi.sreenivas@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 051/106] i40e: Fix adding ADQ filter to TC0
+Subject: [PATCH 5.10 47/84] mlxsw: spectrum_cnt: Reorder counter pools
 Date:   Mon, 20 Jun 2022 14:51:10 +0200
-Message-Id: <20220620124725.900194880@linuxfoundation.org>
+Message-Id: <20220620124722.280423006@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,43 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grzegorz Szczurek <grzegorzx.szczurek@intel.com>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit c3238d36c3a2be0a29a9d848d6c51e1b14be6692 ]
+[ Upstream commit 4b7a632ac4e7101ceefee8484d5c2ca505d347b3 ]
 
-Procedure of configure tc flower filters erroneously allows to create
-filters on TC0 where unfiltered packets are also directed by default.
-Issue was caused by insufficient checks of hw_tc parameter specifying
-the hardware traffic class to pass matching packets to.
+Both RIF and ACL flow counters use a 24-bit SW-managed counter address to
+communicate which counter they want to bind.
 
-Fix checking hw_tc parameter which blocks creation of filters on TC0.
+In a number of Spectrum FW releases, binding a RIF counter is broken and
+slices the counter index to 16 bits. As a result, on Spectrum-2 and above,
+no more than about 410 RIF counters can be effectively used. This
+translates to 205 netdevices for which L3 HW stats can be enabled. (This
+does not happen on Spectrum-1, because there are fewer counters available
+overall and the counter index never exceeds 16 bits.)
 
-Fixes: 2f4b411a3d67 ("i40e: Enable cloud filters via tc-flower")
-Signed-off-by: Grzegorz Szczurek <grzegorzx.szczurek@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Bharathi Sreenivas <bharathi.sreenivas@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Binding counters to ACLs does not have this issue. Therefore reorder the
+counter allocation scheme so that RIF counters come first and therefore get
+lower indices that are below the 16-bit barrier.
+
+Fixes: 98e60dce4da1 ("Merge branch 'mlxsw-Introduce-initial-Spectrum-2-support'")
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/20220613125017.2018162-1-idosch@nvidia.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 29387f0814e9..9bc05d671ad5 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -8523,6 +8523,11 @@ static int i40e_configure_clsflower(struct i40e_vsi *vsi,
- 		return -EOPNOTSUPP;
- 	}
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h b/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h
+index a68d931090dd..15c8d4de8350 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h
+@@ -8,8 +8,8 @@
+ #include "spectrum.h"
  
-+	if (!tc) {
-+		dev_err(&pf->pdev->dev, "Unable to add filter because of invalid destination");
-+		return -EINVAL;
-+	}
-+
- 	if (test_bit(__I40E_RESET_RECOVERY_PENDING, pf->state) ||
- 	    test_bit(__I40E_RESET_INTR_RECEIVED, pf->state))
- 		return -EBUSY;
+ enum mlxsw_sp_counter_sub_pool_id {
+-	MLXSW_SP_COUNTER_SUB_POOL_FLOW,
+ 	MLXSW_SP_COUNTER_SUB_POOL_RIF,
++	MLXSW_SP_COUNTER_SUB_POOL_FLOW,
+ };
+ 
+ int mlxsw_sp_counter_alloc(struct mlxsw_sp *mlxsw_sp,
 -- 
 2.35.1
 

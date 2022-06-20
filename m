@@ -2,183 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116A4551754
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9655F55175A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241642AbiFTLYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S241622AbiFTLY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241531AbiFTLYn (ORCPT
+        with ESMTP id S241198AbiFTLY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:24:43 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2267F15FC1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:40 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id a2so16745587lfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GszSVp79XAdXJU7rWHtCrAkj4julP+0D9zoLxgrCKdY=;
-        b=dE40iflDWiIg3dbBtlZNYQHlXUjMq9ZMaPhSGn53RsV74vNnYrQK/pmCzFd2IeviP6
-         aDy231iwKufFpKLCJShSq1/VOU9xiXmGMZ92QuAa/gfPDWgVrq81EHxaFmlCfrtW7crz
-         jM9NO8ExBks75IXjmP8Ogov7MAw54BvOSxfL9d/GNHio9n5xXkDZtuh6P0kKhHlSwV2e
-         Z8tbt5RvlfHCmMjHCXP+iCPgw9ZxTeX301yC6k4oVeAowKHb+TKYtqWlxE3caa3/yu1p
-         azI+Bm44AA8oOZ0NkxJ3MuvizhFZIHvz2MxWFeoZTMWb+7gu5SSVRAATJuHrANsb5f3D
-         wOfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GszSVp79XAdXJU7rWHtCrAkj4julP+0D9zoLxgrCKdY=;
-        b=U/KgBQcFETc87XXSmbeiFPjCRtaqrKeIEVWpXJAMpeYPYj7WPE/HLtVeqFLubhgxhZ
-         SsZt5P0ZvUjT20NnKnGwFoYGlzkaALpLA8646Omdg00fvDkxkbvk1Pz2BZX12/hn+1Su
-         MDmdEqRuDgZ4+WFj/VAVgd3DiZQfeCZq5ujMD3BGZS82j0XsBBV3AY4S8EyJefrLYP4e
-         9/1bHc8C4Kymp3Xf0B8vOCgy+rjpqzxvNUp1KboCHvL/bZlQnY9j7oRrkbjZ+26t7qg+
-         3wnPLK4WTba4twHF+svtF2yYCpqeE+aYoySrqXiTlSME8w3GE+g6p5X2SlDINEIZt+RG
-         nXmQ==
-X-Gm-Message-State: AJIora87cj7zr1ilirOspZ3RUVXnSCB024eJopukUejb8IqTf74gqTqG
-        IMSK0847TEfyuG0XsUGe4W2O53s5tSasmtA8sS/tfQ==
-X-Google-Smtp-Source: AGRyM1upflgaldDlhYWfrHQJ6AHZQSFUvBTmSclg7C+sCslrwxL414z5JvSlGFcjizt1E9RwBOx17FG6iZa1TnSxKpM=
-X-Received: by 2002:a05:6512:90f:b0:47f:5a23:c62a with SMTP id
- e15-20020a056512090f00b0047f5a23c62amr7448750lft.598.1655724278169; Mon, 20
- Jun 2022 04:24:38 -0700 (PDT)
+        Mon, 20 Jun 2022 07:24:57 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662BE15FC7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655724294; x=1687260294;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oxhVRJ6tOkVNNCJSnJSYC9k+6zLYgkj6GgwGyEKrNWc=;
+  b=YZQ0MjJK/Yab3p+6NaQ0aXnvjNCb7BkU1988mVj7bRQL4kJNXvI8vk6O
+   ImEjnKkocIrEX694lBauAgbRUjyoXJWAVmQ2ppyJSenfbb1eRMfceVTVL
+   H5CIpNlfl+TKUiYNNKQmHGHUmIS2/oEKgPIbc/V+0e1/ua1rmutUN8Tg2
+   6o4TxBuDY4zBPTWaBK7HJb6rHESo8cQyclczJ5LPIN2KqUA46z/FrgzVN
+   Oc3rOS9zck5QhoODDAfgFQjCwjZo/4L6x3l1NSii3XChvcKOBnT2W3uHW
+   wreEyrN5wkhOr6BF9K7743Tza3IlPx0joQfUDIpU8h/S6/XtWVzyj9a89
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
+   d="scan'208";a="208478725"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 20 Jun 2022 19:24:51 +0800
+IronPort-SDR: OcS1xaDXjWQ/Con6wTG75OCI7Y9r2X7gdj6XC3V4zdW4jZWlsJxOUNH1mY6EESy1yxvHPeWAyq
+ n5FiPrZcbSlAHoFUzsZLNhFxnnCz0ZXhHHBAo4GMYncDReRWs8aNwvUkqiWqfjTOktMcRig8PI
+ IrNDKrqKiqHHwb+U020JM7ohP5+dmta2Sq7fizRjVXbqWd/B3M+i/iywoBByi1Af69U41ThFXh
+ RLlvqGWiagTgCiMWfI/1Nj4sks5cz7/Y6dU0JHrjM8EPan6X4rQ9U/QFGt3VNHXOqi5L5DKV9R
+ eEvdkSaKN1udX4iCb9I2t4zd
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jun 2022 03:43:02 -0700
+IronPort-SDR: eb83THqGHhzoJL0lFk9Rj/iRSelM968nbN8V5Tt3Bqd4Pnmdv/MiDFErCK7k1PZBWIPPzN7mNd
+ 3BBiydGxSpFk5zgK3y+hFKE9nrpUAA/+zkX13x4dWpGzqvUkaFZ/jnHti3aV6y67J+Mzpi/N4k
+ R1FD1VD2WWEzOjXSTtwENdACBSO7DdQKp5YvxrDPOWBrNabdB8jVFIatLUn8Iwtx5+qC4toQjO
+ qoEKbf/FF5o3cbwHkXrU/Wg6oMXSbOtshTwrwgRoKxtxg75cMtihxWv9fH0GKltH+iICxXFzgo
+ llc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jun 2022 04:24:53 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LRS3m3yBzz1SVp7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:52 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655724291; x=1658316292; bh=oxhVRJ6tOkVNNCJSnJSYC9k+6zLYgkj6Ggw
+        GyEKrNWc=; b=ts0IFfQwD5Ix0HxpEyjed/zuPEgJWH7rwbIKA9DOhvCJ+JH+g8g
+        OrwqwcaIvmZkyZY6I3/jiYdxx/ExoQgCuyvCoObqNlwj79U5sZeyezUibP2KHNGJ
+        ao9O5FhXUlrCa8S4n5lFBTSlN2C88uzG0Xa0VqhPVdNLHlzohIfV5LdjI4mAweju
+        6VYJNIA9KHaC3zhOay0ZF1+UmE1xSIF8etAsm/E7/XtXoZaRGDQAmYXNyV0ijtWB
+        G0r0NKHaBCJ87szoRqzhfuGl7rNJzj1ZfOUGvUEznCWoDLNZ8Sxc20NTC1bZiMVM
+        +3rSJWEYnnvOydUJ9B808GUCfI3HdR33Q4A==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wSOevvb0O4-G for <linux-kernel@vger.kernel.org>;
+        Mon, 20 Jun 2022 04:24:51 -0700 (PDT)
+Received: from [10.225.163.87] (unknown [10.225.163.87])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LRS3j3PyMz1Rvlc;
+        Mon, 20 Jun 2022 04:24:49 -0700 (PDT)
+Message-ID: <41fa0f12-cdcf-f2c4-7366-1abd04312f1f@opensource.wdc.com>
+Date:   Mon, 20 Jun 2022 20:24:48 +0900
 MIME-Version: 1.0
-References: <69ab985c.7d507.18180a4dcd7.Coremail.pgn@zju.edu.cn>
-In-Reply-To: <69ab985c.7d507.18180a4dcd7.Coremail.pgn@zju.edu.cn>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 20 Jun 2022 13:24:26 +0200
-Message-ID: <CACT4Y+anXSNgCW3jvsm8wPf0LPxW-kCmXTeno4n-BWntpMaZBA@mail.gmail.com>
-Subject: Re: 'WARNING in handle_exception_nmi' bug at arch/x86/kvm/vmx/vmx.c:4959
-To:     =?UTF-8?B?5r2Y6auY5a6B?= <pgn@zju.edu.cn>
-Cc:     linux-sgx@vger.kernel.org, secalert@redhat.com,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller@googlegroups.com, kangel@zju.edu.cn, 22121145@zju.edu.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Hannes Reinecke <hare@suse.de>, John Garry <john.garry@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
+        linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        chenxiang66@hisilicon.com
+References: <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+ <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
+ <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+ <c702f06e-b7da-92be-3c4f-5dd405600235@opensource.wdc.com>
+ <ecfb0694-21b8-55b4-c9b8-5e738f59ce8d@huawei.com>
+ <98fa010d-3555-a82b-e960-f47aeeb38151@opensource.wdc.com>
+ <7b046321-fdb3-33f0-94a0-78a25cbbe02e@suse.de>
+ <9de5ed1b-e874-28ac-0532-cd5420892064@opensource.wdc.com>
+ <20220620090543.GA13643@lst.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220620090543.GA13643@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 at 12:25, =E6=BD=98=E9=AB=98=E5=AE=81 <pgn@zju.edu.cn> =
-wrote:
->
-> Hello,
->
->     This is Xiao Lei, Gaoning Pan and Yongkang Jia from Zhejiang Universi=
-ty. We found a 'WARNING in handle_exception_nmi' bug by syzkaller. This fla=
-w allows a malicious user in a local DoS condition. The following program t=
-riggers Local DoS at arch/x86/kvm/vmx/vmx.c:4959 in latest release linux-5.=
-18.5, this bug can be reproducible stably by the C reproducer:
+On 6/20/22 18:05, Christoph Hellwig wrote:
+> On Mon, Jun 20, 2022 at 06:02:30PM +0900, Damien Le Moal wrote:
+>> So reserving a tag/req to be able to do NCQ at the cost of max qd being 31
+>> works for that. We could keep max qd at 32 by creating one more "fake" tag
+>> and having a request for it, that is, having the fake tag visible to the
+>> block layer as a reserved tag, as John's series is doing, but for the
+>> reserved tags, we actually need to use an effective tag (qc->hw_tag) when
+>> issuing the commands. And for that, we can reuse the tag of one of the
+>> failed commands.
+> 
+> Take a look at the magic flush request in blk-flush.c, which is
+> preallocated but borrows a tag from the request that wants a pre- or
+> post-flush.  The logic is rather ugly, but maybe it might actually
+> become cleaner by generalizing it a bit.
 
+Thanks. Will check.
+I am also looking at scsi_unjam_host() and scsi_eh_get_sense(). These
+reuse a scsi command to do eh operations. So I could use that too, modulo
+making it work outside of eh context to keep the command flow intact.
 
-FWIW a similarly-looking issue was reported by syzbot:
-https://syzkaller.appspot.com/bug?id=3D1b411bfb1739c497a8f0c7f1aa501202726c=
-d01a
-https://lore.kernel.org/all/0000000000000a5eae05d8947adb@google.com/
-
-Sean said it may be an issue in L0 kernel rather than in the tested kernel:
-https://lore.kernel.org/all/Yqd5upAHNOxD0wrQ@google.com/
-
-What kernel did you use for the host machine?
-
-
-
-
-
-> ------------[ cut here ]------------
-> WARNING: CPU: 14 PID: 9277 at arch/x86/kvm/vmx/vmx.c:4959 handle_exceptio=
-n_nmi+0x11a7/0x14d0 arch/x86/kvm/vmx/vmx.c:4959
-> Modules linked in:
-> CPU: 14 PID: 9277 Comm: syz-executor.7 Not tainted 5.18.5 #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubunt=
-u1.1 04/01/2014
-> RIP: 0010:handle_exception_nmi+0x11a7/0x14d0 arch/x86/kvm/vmx/vmx.c:4959
-> Code: ff e8 1d b7 3c 00 be 0c 44 00 00 48 c7 c7 00 c9 23 8a c6 05 9f 71 5=
-e 04 01 e8 5b 02 8d 02 0f 0b e9 64 f8 ff ff e8 f9 b6 3c 00 <0f> 0b e9 ae f4=
- ff ff e8 ed b6 3c 00 e8 28 97 a0 02 e9 5f fd ff ff
-> RSP: 0018:ffff888038dc7b48 EFLAGS: 00010286
-> RAX: 0000000000002617 RBX: 0000000000000000 RCX: ffffffff811dcf27
-> RDX: 0000000000040000 RSI: ffffc90003dd1000 RDI: ffff888039595c0c
-> RBP: ffff888039594000 R08: 0000000000000001 R09: ffff8880395941a7
-> R10: ffffed10072b2834 R11: 0000000000000001 R12: fffffffffffffff8
-> R13: 000000008000030e R14: ffff88803895c000 R15: ffff888039594068
-> FS:  00007ff56edf7700(0000) GS:ffff888067d00000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000000 CR3: 000000003aec8006 CR4: 0000000000772ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  __vmx_handle_exit arch/x86/kvm/vmx/vmx.c:6239 [inline]
->  vmx_handle_exit+0x5e7/0x1aa0 arch/x86/kvm/vmx/vmx.c:6256
->  vcpu_enter_guest arch/x86/kvm/x86.c:10283 [inline]
->  vcpu_run arch/x86/kvm/x86.c:10365 [inline]
->  kvm_arch_vcpu_ioctl_run+0x2a2e/0x5ca0 arch/x86/kvm/x86.c:10566
->  kvm_vcpu_ioctl+0x4d2/0xc60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:394=
-3
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x16d/0x1d0 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x38/0x90 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x45e8c9
-> Code: 4d af fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f=
-7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
- ff 0f 83 1b af fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007ff56edf6c58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 000000000077bf60 RCX: 000000000045e8c9
-> RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
-> RBP: 000000000077bf60 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffc491be6af R14: 00007ff56edf79c0 R15: 0000000000000000
->  </TASK>
-> ---[ end trace 0000000000000000 ]---
->
-> Syzkaller reproducer:
-> # {Threaded:false Repeat:false RepeatTimes:0 Procs:1 Slowdown:1 Sandbox: =
-Leak:false NetInjection:false NetDevices:false NetReset:false Cgroups:false=
- BinfmtMisc:false CloseFDs:false KCSAN:false DevlinkPCI:false USB:false Vhc=
-iInjection:false Wifi:false IEEE802154:false Sysctl:true UseTmpDir:false Ha=
-ndleSegv:false Repro:false Trace:false LegacyOptions:{Collide:false Fault:f=
-alse FaultCall:0 FaultNth:0}}
-> r0 =3D openat$kvm(0xffffffffffffff9c, &(0x7f0000000000), 0x0, 0x0)
-> r1 =3D ioctl$KVM_CREATE_VM(r0, 0xae01, 0x0)
-> r2 =3D ioctl$KVM_CREATE_VCPU(r1, 0xae41, 0x0)
-> syz_kvm_setup_cpu$x86(r1, r2, &(0x7f0000fe8000/0x18000)=3Dnil, &(0x7f0000=
-0000c0)=3D[@textreal=3D{0x8, 0x0}], 0x1, 0x17, &(0x7f0000000100)=3D[@cr4=3D=
-{0x1, 0x200915}], 0x1)
-> ioctl$KVM_RUN(r2, 0xae80, 0x0)
->
->
-> C repro and config are attached.
->
->
-> Best regrads.
->
-> Xiao Lei from Zhejiang University.
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller/69ab985c.7d507.18180a4dcd7.Coremail.pgn%40zju.edu.cn.
+-- 
+Damien Le Moal
+Western Digital Research

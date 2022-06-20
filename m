@@ -2,58 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B69755118A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847A255118D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239384AbiFTHc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 03:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S236876AbiFTHeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 03:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236876AbiFTHcT (ORCPT
+        with ESMTP id S238922AbiFTHeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 03:32:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AA0DED6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655710338; x=1687246338;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=+G28GLDrdNJ98I4YnokMT1hGC4CArBlW7m+z/O+dMU4=;
-  b=lEpT+8QwSnh7czWAb+Jmokubqa8CRDubtV6YdIzaPZKIlUmTQxr4BFS+
-   /7wb+cwKWpNliTdRCELGXC0jdIP+2Q9sOY8542lPvEQMVsvgjTnEzsj70
-   0NcPmvJgQZhtRpYSdL0Mr7LxlocFy7m00HaqaxJzkP1vl7Do0qv3ydDPa
-   stfXE428Mv/Xd+sFfTfftR5W06EnFVDGCY7dMYc1bKVL5/aAM7GNppl1k
-   czhmj9RIxtuAwDl8nRjvXyWvZPy915LLsM2ZSCrmeSQ41vCIosfNHCCon
-   ENoHY9y4quZ+8SWVNQuwGO6qzUYSWAmpyCrHqsEzW6cTkAMJPJA2maV3G
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278600784"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278600784"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:32:18 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="832989989"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:32:17 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
- work as expected
-References: <20220608144031.829-1-linmiaohe@huawei.com>
-        <20220608144031.829-2-linmiaohe@huawei.com>
-Date:   Mon, 20 Jun 2022 15:31:46 +0800
-In-Reply-To: <20220608144031.829-2-linmiaohe@huawei.com> (Miaohe Lin's message
-        of "Wed, 8 Jun 2022 22:40:29 +0800")
-Message-ID: <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 20 Jun 2022 03:34:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B70B6AE76
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655710441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9O0CIqeEaoJn03vVtSYdv9IsNbaraVCXGcehJj6LilQ=;
+        b=BfDApnmT7TD6h8hYXmbv84ET73ro96bm2Ug/mCPq5iB4RInm64D8HKG8fbCuxanbWgfu4R
+        demVSV+8TVYb0h3CyJwbhrJhqpLtEkWcxBSNOH3ALvS0h7pMYVDofQPZ54lGeYg5RPuwfp
+        zMWHp7ybxz7SqLs/zoc0K6R8T23/K2g=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-F-p-ug5mPU-LDTh9sa8ODA-1; Mon, 20 Jun 2022 03:34:00 -0400
+X-MC-Unique: F-p-ug5mPU-LDTh9sa8ODA-1
+Received: by mail-wm1-f70.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so4666309wmq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:34:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9O0CIqeEaoJn03vVtSYdv9IsNbaraVCXGcehJj6LilQ=;
+        b=iDzJJK3XY2NmZbclufCMI84QlT23Tf52033CAtfkFsbA6bzqxOV7UD/HY4LpoJt/KI
+         h+svJ6HrIkgrvSgTgYP1DAagCEsVNG11+EH9QgRJD+sjzDlzdvPtuRmD7cMAH2aXQ4Yp
+         PWlwU+SlIrkPpSO8u8G8wlhZnDeoKHQLlmcE7Z+XfzqVnicl3/tPgZwlL+g89/1D+99y
+         4+2IvuSz3Lir+j285gTTRs7TnflciEFLJtfE84tQ5ud5egtiUxlWaYKa7dn0dqpzDPxN
+         4wj7Ly6qkhLn724w92AdmCLKiT6PntINRkSaDnDtmzjj+hy/WV/zEU3FrnqOrvhMSKwT
+         k0ZQ==
+X-Gm-Message-State: AJIora+9G6yOxL5toaYH06pxfaBens1IJBFP7qNgNiaEGhbCi+JLHT4r
+        bi62KPqebmLatr7N4pDtABFNBuUccyS3v6bT31MUrgss9+wkDCZmc6Il8eWGYGPYb9Gjhw0EfRZ
+        YGL6xBv+qmVq7Ygg9jcisTcPB
+X-Received: by 2002:a5d:59ac:0:b0:218:5b7e:1c1c with SMTP id p12-20020a5d59ac000000b002185b7e1c1cmr21891416wrr.621.1655710439273;
+        Mon, 20 Jun 2022 00:33:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vkewhJzwIOJ9l+/yqE7pUpzblIRdbrwtFQigT8P4KR1GnlkLPaHlZsigHVgHZi02aADaZXLg==
+X-Received: by 2002:a5d:59ac:0:b0:218:5b7e:1c1c with SMTP id p12-20020a5d59ac000000b002185b7e1c1cmr21891397wrr.621.1655710439119;
+        Mon, 20 Jun 2022 00:33:59 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1c7909000000b0039c96b97359sm14054471wme.37.2022.06.20.00.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 00:33:58 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 09:33:56 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
+Subject: Re: [PATCH 0/3] KVM: selftests: Consolidate ucall code
+Message-ID: <20220620073356.fmtsa4ub74igm7me@gator>
+References: <20220618001618.1840806-1-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618001618.1840806-1-seanjc@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,46 +90,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
+On Sat, Jun 18, 2022 at 12:16:15AM +0000, Sean Christopherson wrote:
+> Consolidate the code for making and getting ucalls.  All architectures pass
+> the ucall struct via memory, so filling and copying the struct is 100%
+> generic.  The only per-arch code is sending and receiving the address of
+> said struct.
+> 
+> Tested on x86 and arm, compile tested on s390 and RISC-V.
 
-> security_vm_enough_memory_mm() checks whether a process has enough memory
-> to allocate a new virtual mapping. And total_swap_pages is considered as
-> available memory while swapoff tries to make sure there's enough memory
-> that can hold the swapped out memory. But total_swap_pages contains the
-> swap space that is being swapoff. So security_vm_enough_memory_mm() will
-> success even if there's no memory to hold the swapped out memory because
-> total_swap_pages always greater than or equal to p->pages.
+For the series
 
-Per my understanding, swapoff will not allocate virtual mapping by
-itself.  But after swapoff, the overcommit limit could be exceeded.
-security_vm_enough_memory_mm() is used to check that.  For example, in a
-system with 4GB memory and 8GB swap, and 10GB is in use,
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 
-CommitLimit:    4+8 = 12GB
-Committed_AS:   10GB
+Thanks,
+drew
 
-security_vm_enough_memory_mm() in swapoff() will fail because
-10+8 = 18 > 12.  This is expected because after swapoff, the overcommit
-limit will be exceeded.
-
-If 3GB is in use,
-
-CommitLimit:    4+8 = 12GB
-Committed_AS:   3GB
-
-security_vm_enough_memory_mm() in swapoff() will succeed because
-3+8 = 11 < 12.  This is expected because after swapoff, the overcommit
-limit will not be exceeded.
-
-So, what's the real problem of the original implementation?  Can you
-show it with an example as above?
-
-Best Regards,
-Huang, Ying
-
-> In order to fix it, p->pages should be retracted from total_swap_pages
-> first and then check whether there's enough memory for inuse swap pages.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-[snip]

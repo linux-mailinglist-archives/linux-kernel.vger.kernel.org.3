@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356AD5520B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECE75520DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244251AbiFTPZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S243499AbiFTP1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243658AbiFTPZN (ORCPT
+        with ESMTP id S239649AbiFTP1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:25:13 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4E3D3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655738621; x=1687274621;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IOpznbgvSaym+Sif0wAWCP/JivReL3TNtBOptLf7zn8=;
-  b=wgjTf1UGWwQYP8eyRqatehUMZffOiqT4mm/V4yJSOXkzC3KhGvXG4g0+
-   T6ZFGkjmd5dnRSWMT2WtDJcn0avmk4KF2KVCSbgQSnGAFw8b3iat81388
-   bNiI1iQ0mEAqyCZxjW+UzKOJ1w15rw/deMEeFJ8d6Dzc6lbkg5mAjHyN6
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 08:23:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:23:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 08:23:40 -0700
-Received: from [10.110.14.194] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
- 2022 08:23:39 -0700
-Message-ID: <920ec4fd-2ab0-2a0a-83fb-fc824ca7425d@quicinc.com>
-Date:   Mon, 20 Jun 2022 08:23:39 -0700
+        Mon, 20 Jun 2022 11:27:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07531198;
+        Mon, 20 Jun 2022 08:27:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 880EEB81210;
+        Mon, 20 Jun 2022 15:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CACFC3411B;
+        Mon, 20 Jun 2022 15:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655738852;
+        bh=C160ci2Jg/MpBwPywHpQUs6DyohwjJWURvf3+rO7Gk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s1HGH3mQcRoX+mNi/4tHHGxCNMQ1nHYEjBZhMp+Do+RBgGPC8+bAYHo8/U6E3ClmS
+         SA69tjtH53L5ejhbO4yMOO4CX6o7+fMy9IZlUPoka4dgkstqmWWZWZlO03Kmp1Wyla
+         +t1ZBl8LLLWsjmtK9K5fQzlyNVkq4NM4Vi4TVnSaOpsjc2zcFm8FCcNSNFTkhaZf3l
+         smZjMh+TWQwRwy3HSqgwIbne/OvyfMUSZrpoPT2xsOJWBeMNTJoa8r+7MuSxK2w7Rb
+         rzUszD5a81ct93P5Ax80i2Y/bMoMpbx29RBcOhIHHDwEhlm9ZLhbAzkZJFOfqgB6Tx
+         9l62jW8mbiO0A==
+Date:   Mon, 20 Jun 2022 09:27:28 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Leo Savernik <l.savernik@aon.at>,
+        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [bugzilla-daemon@kernel.org: [Bug 216147] New: NVMe quirk needed
+ for multiple Micron MTFDKBA2T0TFH SSDs]
+Message-ID: <YrCR4Bjcto09kJyQ@kbusch-mbp.dhcp.thefacebook.com>
+References: <20220619132039.GA1243474@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] drm/msm/dp: Reorganize code to avoid forward
- declaration
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-CC:     <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Sean Paul <sean@poorly.run>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220617204750.2347797-1-swboyd@chromium.org>
- <20220617204750.2347797-2-swboyd@chromium.org>
- <ddddcb1d-46c6-4903-3a8a-83bc96ece159@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <ddddcb1d-46c6-4903-3a8a-83bc96ece159@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619132039.GA1243474@bhelgaas>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,165 +58,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 19, 2022 at 08:20:39AM -0500, Bjorn Helgaas wrote:
+> The proposed patch itself (also see attachment):
+> 
+> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+> index b925a5f4afc3..2e5c33f3b868 100644
+> --- a/drivers/nvme/host/pci.c
+> +++ b/drivers/nvme/host/pci.c
+> @@ -3372,5 +3372,7 @@ static const struct pci_device_id nvme_id_table[] = {
+> NVME_QUIRK_128_BYTES_SQES |
+>                                 NVME_QUIRK_NO_DEEPEST_PS |
+>                                 NVME_QUIRK_IGNORE_DEV_SUBNQN, },
+> +       { PCI_DEVICE(0x1344, 0x5407), /* Micron Technology Inc NVMe SSD */
+> +               .driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN },
+>         { PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
+>         { 0, }
+>  };
 
-On 6/17/2022 3:50 PM, Dmitry Baryshkov wrote:
-> On 17/06/2022 23:47, Stephen Boyd wrote:
->> Let's move these functions around to avoid having to forward declare
->> dp_ctrl_on_stream_phy_test_report(). Also remove
->> dp_ctrl_reinitialize_mainlink() forward declaration because we're doing
->> that sort of task.
->>
->> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->
->> ---
->>   drivers/gpu/drm/msm/dp/dp_ctrl.c | 104 +++++++++++++++----------------
->>   1 file changed, 50 insertions(+), 54 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
->> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> index 703249384e7c..bd445e683cfc 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> @@ -1238,8 +1238,6 @@ static int dp_ctrl_link_train_2(struct 
->> dp_ctrl_private *ctrl,
->>       return -ETIMEDOUT;
->>   }
->>   -static int dp_ctrl_reinitialize_mainlink(struct dp_ctrl_private 
->> *ctrl);
->> -
->>   static int dp_ctrl_link_train(struct dp_ctrl_private *ctrl,
->>               int *training_step)
->>   {
->> @@ -1534,38 +1532,6 @@ static int dp_ctrl_link_maintenance(struct 
->> dp_ctrl_private *ctrl)
->>       return ret;
->>   }
->>   -static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl 
->> *dp_ctrl);
->> -
->> -static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private 
->> *ctrl)
->> -{
->> -    int ret = 0;
->> -
->> -    if (!ctrl->link->phy_params.phy_test_pattern_sel) {
->> -        drm_dbg_dp(ctrl->drm_dev,
->> -            "no test pattern selected by sink\n");
->> -        return ret;
->> -    }
->> -
->> -    /*
->> -     * The global reset will need DP link related clocks to be
->> -     * running. Add the global reset just before disabling the
->> -     * link clocks and core clocks.
->> -     */
->> -    ret = dp_ctrl_off(&ctrl->dp_ctrl);
->> -    if (ret) {
->> -        DRM_ERROR("failed to disable DP controller\n");
->> -        return ret;
->> -    }
->> -
->> -    ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
->> -    if (!ret)
->> -        ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
->> -    else
->> -        DRM_ERROR("failed to enable DP link controller\n");
->> -
->> -    return ret;
->> -}
->> -
->>   static bool dp_ctrl_send_phy_test_pattern(struct dp_ctrl_private 
->> *ctrl)
->>   {
->>       bool success = false;
->> @@ -1618,6 +1584,56 @@ static bool 
->> dp_ctrl_send_phy_test_pattern(struct dp_ctrl_private *ctrl)
->>       return success;
->>   }
->>   +static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
->> +{
->> +    int ret;
->> +    struct dp_ctrl_private *ctrl;
->> +
->> +    ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
->> +
->> +    ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
->> +
->> +    ret = dp_ctrl_enable_stream_clocks(ctrl);
->> +    if (ret) {
->> +        DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    dp_ctrl_send_phy_test_pattern(ctrl);
->> +
->> +    return 0;
->> +}
->> +
->> +static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private 
->> *ctrl)
->> +{
->> +    int ret = 0;
->> +
->> +    if (!ctrl->link->phy_params.phy_test_pattern_sel) {
->> +        drm_dbg_dp(ctrl->drm_dev,
->> +            "no test pattern selected by sink\n");
->> +        return ret;
->> +    }
->> +
->> +    /*
->> +     * The global reset will need DP link related clocks to be
->> +     * running. Add the global reset just before disabling the
->> +     * link clocks and core clocks.
->> +     */
->> +    ret = dp_ctrl_off(&ctrl->dp_ctrl);
->> +    if (ret) {
->> +        DRM_ERROR("failed to disable DP controller\n");
->> +        return ret;
->> +    }
->> +
->> +    ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
->> +    if (!ret)
->> +        ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
->> +    else
->> +        DRM_ERROR("failed to enable DP link controller\n");
->> +
->> +    return ret;
->> +}
->> +
->>   void dp_ctrl_handle_sink_request(struct dp_ctrl *dp_ctrl)
->>   {
->>       struct dp_ctrl_private *ctrl;
->> @@ -1815,26 +1831,6 @@ static int dp_ctrl_link_retrain(struct 
->> dp_ctrl_private *ctrl)
->>       return dp_ctrl_setup_main_link(ctrl, &training_step);
->>   }
->>   -static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
->> -{
->> -    int ret;
->> -    struct dp_ctrl_private *ctrl;
->> -
->> -    ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
->> -
->> -    ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
->> -
->> -    ret = dp_ctrl_enable_stream_clocks(ctrl);
->> -    if (ret) {
->> -        DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
->> -        return ret;
->> -    }
->> -
->> -    dp_ctrl_send_phy_test_pattern(ctrl);
->> -
->> -    return 0;
->> -}
->> -
->>   int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
->>   {
->>       int ret = 0;
->
->
+Coould you send this as an actual patch to the mailing list so we can include
+it in the next pull request?

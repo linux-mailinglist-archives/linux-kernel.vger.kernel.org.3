@@ -2,180 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0813551479
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6B655147F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239143AbiFTJhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S239844AbiFTJiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbiFTJhY (ORCPT
+        with ESMTP id S240629AbiFTJhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:37:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3545D13D6F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655717842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VQ+wxgfxoQfff153/vfAo2kcjYPMXeSYBFIlenJ41tM=;
-        b=HMQyYN+Cg/n04ftlgHF72xElan9Ki39vONrlxFrkeMIii3PEflsV+Wg5/VBs0WUbupaPBK
-        MHb/aUBHBA/elr1hFne4K0Gx0b+AObGY/qF/tDI77TN6EiptlnmTqdXJajIPPU+z9t1fwR
-        TPPnhKZGRf1+moQxMs40tBowYgi9vDE=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-494-O4D51inKMMSY2WEARHivVg-1; Mon, 20 Jun 2022 05:37:20 -0400
-X-MC-Unique: O4D51inKMMSY2WEARHivVg-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-317bfb7aaacso22692267b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:20 -0700 (PDT)
+        Mon, 20 Jun 2022 05:37:53 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FE013DF5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:46 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id cu16so14533644qvb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=qY7gu8YtTZxweTSpjNCkj53ezR/bpeffN15MCHzYdb9vuuiKCFSdu80S0px0q7XU5Z
+         lbHzTJ9nW8Kkwa3BpagEtM/9MjqwzV6eS6TW3eVgDSGJoNv1hgTHgV8i8D8Jp5MNlIkx
+         SIrrXh4Y6LsUPvkfV5B6bFTIGunW8Nk4OGs2PchnnMK9QnjRjnHO1yACBkxakFTzkESt
+         O2IMJel3268EwD/FqT/hZ2/v3/C8lPMb8B+yqrzL0Igs29mpv0yffpJ0uRf7YrpeG5Vn
+         HmMnDoK/O9OqjGPLg8jj1blOpqH7klSRJYCMVOJrslctm8wY4QP3S10blqGht/Vr9NbJ
+         5qqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VQ+wxgfxoQfff153/vfAo2kcjYPMXeSYBFIlenJ41tM=;
-        b=yE3SyOvmQDjSaqLMPKpiTmCt89gsDs3woo4DnjV0EU77ERdjl8cxRymOCfuWRThOG2
-         CobboqPxnamyOnoR8IwXmRu2M55ZZd7C+PdW0Yvk/j0YhYb1JBY9ZsYUf/qLRxix65Hk
-         W6zc/6c7zD+75Bgiy7Sznb2Jhcg9YbtpoO0EDJhJO81wSNMxxnjnbTwwwy4b/eGBTbkv
-         Xig28J1+U888rd5BmTgyplToqrO4XUhQ02eYSVBAbhsacWiUcTeEaETUouSp5pKo4iFD
-         jeeVoWWmOW+8BGdOE3CarUBmM1ZTzG6hA3riOdQ8LMVfkVP1oEgYoOSKa7tNku7BKPOn
-         jCEw==
-X-Gm-Message-State: AJIora9An3HmBPI4b7vrZfMmNU4Ef1s0QArHKRktyCm8FLFn+hFS7Ne5
-        Hfj2do6F+LvsMGEbOODRzLoVZYXq51NRsWUi7BQEVbUg+qOwZB38URslp7KwATYv5VZziHwgFPM
-        l37yq5blWpiJFCY7OIufo+HUIQMGnQ36uhNK6KhB/
-X-Received: by 2002:a0d:db11:0:b0:317:bb2f:c0b5 with SMTP id d17-20020a0ddb11000000b00317bb2fc0b5mr6574726ywe.353.1655717840355;
-        Mon, 20 Jun 2022 02:37:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vrPu6/K/TANEgGnpYuHrIsHuTgK8u6Yev4N3pR40RwsAtj2AcGxEnAUHpyOEoTPgV5V3+odIq4XFdTWxSjiCY=
-X-Received: by 2002:a0d:db11:0:b0:317:bb2f:c0b5 with SMTP id
- d17-20020a0ddb11000000b00317bb2fc0b5mr6574712ywe.353.1655717840048; Mon, 20
- Jun 2022 02:37:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=S3QTvAhEW4Ts9/o0Y4F08TCx1rDy3alJ81VYWGx06JblctyEA4+M/yrKuqDYUbf2Ts
+         b7pIxow3H1/afj3MIvPnajbAFTw3XgRbYbWF4+3VUwPoxwuJs4047tzkMK5LamdRbQQh
+         nyeng2KyDkhOy00GkkI3miNPgkxBVdFNqg/z3ksjEoP9SHzKzbJcNb2fDEdP/EEF21u/
+         qmwVy/TfPyo0q98ejk3igaHaWQXYgr/ZvOFjnFk5v3fIjq/5wKvKTX+FZcflnAPkquHp
+         Q31w3Kzrm6R7j4WSKIWXTHxzn+fi5aPBv9rAHlQq8bbEIA+Mp6dw5t4AcSQ2jygCqUmB
+         0kFw==
+X-Gm-Message-State: AJIora+gKGaBzipnAsagss/VbXDuNd/1ErHfTEn6qDsUMzNRl8OXCtj1
+        gDNaTpLi5AiDShBGXE6Lc4QRCycYShbyXr5dcr4=
+X-Google-Smtp-Source: AGRyM1saCA//1oWAM6tg4YpPNZKAYhKXDiXxBhih/tXzjIqub59UH6DFA9Wlcxu60+xxPnlNkU28dEWK9InnIC/5IUA=
+X-Received: by 2002:ac8:5f0e:0:b0:305:1ae7:e318 with SMTP id
+ x14-20020ac85f0e000000b003051ae7e318mr18743915qta.663.1655717865481; Mon, 20
+ Jun 2022 02:37:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620085413.948265-1-hpa@redhat.com> <a1decfb3-fd32-a8d1-e627-23430099565a@redhat.com>
-In-Reply-To: <a1decfb3-fd32-a8d1-e627-23430099565a@redhat.com>
-From:   Kate Hsuan <hpa@redhat.com>
-Date:   Mon, 20 Jun 2022 17:37:09 +0800
-Message-ID: <CAEth8oGg3U27fHpnvtHXsT8GLsfxk3ZNshGLN5e4P_5Ksx7tsA@mail.gmail.com>
-Subject: Re: [PATCH v1] staging: r8188eu: an incorrect return value made the
- function always return fail
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Received: by 2002:a05:6214:27ef:0:0:0:0 with HTTP; Mon, 20 Jun 2022 02:37:45
+ -0700 (PDT)
+Reply-To: davidnelson7702626@gmail.com
+From:   david <nenkan1975@gmail.com>
+Date:   Mon, 20 Jun 2022 10:37:45 +0100
+Message-ID: <CAFO9AXgNYFoGDt1E106Y-oL9StpeoLqy86nO7mhPhzU3UzMUXQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 5:02 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Kate,
->
-> Good catch!
->
-> On 6/20/22 10:54, Kate Hsuan wrote:
-> > Since _SUCCESS (1) and _FAIL (0) are used to indicate the status of the
-> > functions. The previous commit 8ae7bf782eacad803f752c83a183393b0a67127b
->
-> This is the commit hash from one of the stable series backports, you
-> should always use the commit hash from Linus' master branch which is
-> f94b47c6bde6 and the format for referencing commits in a commit-message is:
->
-> commit <12 char hash> ("commit subject")
->
-> so in this case this should have been:
->
-> commit f94b47c6bde6 ("staging: r8188eu: add check for kzalloc")
->
-> Note that checkpatch.pl would have complained about the wrong format
-> (but not the wrong hash)
-
-Thanks for this. I'll improve my commit message.
-
->
-> > fixed and prevented dereferencing a NULL pointer through checking the
-> > return pointer. The NULL pointer check work properly but the return
-> > values (-ENOMEM on fail and 0 on success). This work fixed the return
-> > values to make sure the caller function will return the correct status.
-> >
-> > BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2097526
-> > Signed-off-by: Kate Hsuan <hpa@redhat.com>
->
-> This should have a fixes tag:
->
-> Fixes: f94b47c6bde6 ("staging: r8188eu: add check for kzalloc")
->
-> But while looking up the torvalds/master branch hash I noticed
-> someone alreayd beat you to it. Linus' master already has
-> a fix for this:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/staging/r8188eu?id=5b7419ae1d208cab1e2826d473d8dab045aa75c7
->
-> So this patch can be dropped since it is a duplicate.
-
-Ah~ I have to check before starting to fix it.
-
-Thank you :)
-
->
-> Regards,
->
-> hans
->
->
->
-> > ---
-> >  drivers/staging/r8188eu/core/rtw_xmit.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> > index f4e9f6102539..2f8720db21d9 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> > @@ -180,10 +180,8 @@ s32      _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
-> >       pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
-> >
-> >       res = rtw_alloc_hwxmits(padapter);
-> > -     if (res) {
-> > -             res = _FAIL;
-> > +     if (res == _FAIL)
-> >               goto exit;
-> > -     }
-> >
-> >       rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
-> >
-> > @@ -1510,7 +1508,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
-> >
-> >       pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
-> >       if (!pxmitpriv->hwxmits)
-> > -             return -ENOMEM;
-> > +             return _FAIL;
-> >
-> >       hwxmits = pxmitpriv->hwxmits;
-> >
-> > @@ -1528,7 +1526,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
-> >       } else {
-> >       }
-> >
-> > -     return 0;
-> > +     return _SUCCESS;
-> >  }
-> >
-> >  void rtw_free_hwxmits(struct adapter *padapter)
->
-
-
--- 
-BR,
-Kate
-
+Hello friend, I want to send money to you to enable me invest in your
+country get back to me if you are interested.

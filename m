@@ -2,143 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28684551241
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026F7551244
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239298AbiFTINJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S238339AbiFTINp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiFTIND (ORCPT
+        with ESMTP id S239730AbiFTINd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:13:03 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5618625C;
-        Mon, 20 Jun 2022 01:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1655712780;
-  x=1687248780;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gZFTepVCVuUiqVxMVdZ46Oj4Iz+xt4uwly/OdoZth3I=;
-  b=ejM5C1dTXUQXl0PyF0zSPtptwseGwwUEExKTkagu51codOB5xGEuGiLP
-   rNac9fNUKlX3AUMHvYk84+2LnaTvtrnkbenkYwwghzNW4FK/klfaYqYZp
-   tphOQ4x+w2WSd3Kuh6W07BHhiRzLHMQjzJFpV+TfPwc3YgBU0kN0SPVZi
-   bYxBElXDIfGxb+NHvXsUerwS9bGcJ4laYShEL83hjdrgkYweyBte6V0Kd
-   SPhzSVj6WeQzC79VI5Uh6yfkMmbR5WqK/1dXEYrzT4251Z04vYI4stGjS
-   RzvUvIILVJukpqNh95TAJeGS948CshA8b9B3wsPsROMuRDrcBqh1tR6By
-   g==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>
-CC:     <kernel@axis.com>, <linux-mm@kvack.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-Subject: [PATCH v2] mm/smaps: add Pss_Dirty
-Date:   Mon, 20 Jun 2022 10:12:50 +0200
-Message-ID: <20220620081251.2928103-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 20 Jun 2022 04:13:33 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44979A467
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:13:30 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id i2-20020a056e021d0200b002d8ff49e7c4so2976363ila.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:13:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9ywDEso0dQZcglSpzFj/mt9efOmvvmhNQfcEW/85dMI=;
+        b=6luaufhf4Yb2a/nS9ZikQa8+8YeKi1NFaYYnOV4LBHhpQW4X5MZpFKFrRaysgD+CKc
+         N/xKqH0kqEsAQOQ6AX+3iDsd4/6EixoLxdNBPGAsXCMjhsTRM+Af2w7nsWhfYDcHJvw/
+         TOoKtEvcUuwPuCIkej2fKFZYo19Gusur5W3/97Ag7otJMpf5yl/saNV4w0yllkYUHl1g
+         T8GC1K1fJDREgi+MWRYwWkIN5IMb7MHf0mPyKcMEOfsjZxcpl/sxDM06k7oauVG1dxED
+         L2qkXrvs9RciSFlASWPrkK4jIpt+M8iBIpbqyeRMTUGoctC3OWWmQCE6xnnFQfvgk75P
+         deZw==
+X-Gm-Message-State: AJIora/h0Ms1kl4GdsXqnSDC7oxyEQbpAhIOvxkkUuUH7r2KMajXIN92
+        sn28Hh6fKYY4rtnBu8nVDhSyN9Nb31aIsIc4Je/dFaQJ9Lqt
+X-Google-Smtp-Source: AGRyM1vQ2Kzp9ibANk2E6+AdQKZU4mfee24UKOGtvBvW0rCeru0G9qq4QAoTrItBfymsmhjlMhJMgiI3NFhMSYkrWmC1IJ8XKNGF
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:c909:0:b0:2d9:1e8f:276c with SMTP id
+ t9-20020a92c909000000b002d91e8f276cmr419529ilp.305.1655712809905; Mon, 20 Jun
+ 2022 01:13:29 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 01:13:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e2769d05e1dcadd0@google.com>
+Subject: [syzbot] WARNING: suspicious RCU usage in atomic_notifier_call_chain
+From:   syzbot <syzbot+3333557f53051744538d@syzkaller.appspotmail.com>
+To:     bigeasy@linutronix.de, bp@suse.de, dmitry.osipenko@collabora.com,
+        linux-kernel@vger.kernel.org, mirq-linux@rere.qmqm.pl,
+        rafael.j.wysocki@intel.com, syzkaller-bugs@googlegroups.com,
+        vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pss is the sum of the sizes of clean and dirty private pages, and the
-proportional sizes of clean and dirty shared pages:
+Hello,
 
- Private = Private_Dirty + Private_Clean
- Shared_Proportional = Shared_Dirty_Proportional + Shared_Clean_Proportional
- Pss = Private + Shared_Proportional
+syzbot found the following issue on:
 
-The Shared*Proportional fields are not present in smaps, so it is not
-always possible to determine how much of the Pss is from dirty pages and
-how much is from clean pages.  This information can be useful for
-measuring memory usage for the purpose of optimisation, since clean
-pages can usually be discarded by the kernel immediately while dirty
-pages cannot.
+HEAD commit:    07dc787be231 Add linux-next specific files for 20220617
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f4d5d8080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d2512136c9b01d87
+dashboard link: https://syzkaller.appspot.com/bug?extid=3333557f53051744538d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-The smaps routines in the kernel already have access to this data, so
-add a Pss_Dirty to show it to userspace.  Pss_Clean is not added since
-it can be calculated from Pss and Pss_Dirty.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3333557f53051744538d@syzkaller.appspotmail.com
+
+ arch_call_rest_init+0xf/0x14 init/main.c:886
+ start_kernel+0x473/0x494 init/main.c:1142
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+=============================
+WARNING: suspicious RCU usage
+5.19.0-rc2-next-20220617-syzkaller #0 Not tainted
+-----------------------------
+include/linux/rcupdate.h:707 rcu_read_lock() used illegally while idle!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+RCU used illegally from extended quiescent state!
+1 lock held by swapper/0/0:
+ #0: ffffffff8bd87780 (rcu_read_lock){....}-{1:2}, at: atomic_notifier_call_chain+0x0/0x180 kernel/notifier.c:455
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ rcu_read_lock include/linux/rcupdate.h:707 [inline]
+ atomic_notifier_call_chain+0x112/0x180 kernel/notifier.c:224
+ panic+0x35f/0x64a kernel/panic.c:316
+ __warn.cold+0x1ea/0x2cd kernel/panic.c:627
+ report_bug+0x1bc/0x210 lib/bug.c:198
+ handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
+ asm_exc_invalid_op+0x1b/0x20 arch/x86/include/asm/idtentry.h:568
+RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
+Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
+RSP: 0018:ffffffff8ba07d90 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
+RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
+RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+ rest_init+0x169/0x270 init/main.c:729
+ arch_call_rest_init+0xf/0x14 init/main.c:886
+ start_kernel+0x473/0x494 init/main.c:1142
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+Kernel Offset: disabled
+
+=============================
+WARNING: suspicious RCU usage
+5.19.0-rc2-next-20220617-syzkaller #0 Not tainted
+-----------------------------
+include/linux/rcupdate.h:735 rcu_read_unlock() used illegally while idle!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+RCU used illegally from extended quiescent state!
+1 lock held by swapper/0/0:
+ #0: ffffffff8bd87780 (rcu_read_lock){....}-{1:2}, at: atomic_notifier_call_chain+0x0/0x180 kernel/notifier.c:455
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ rcu_read_unlock include/linux/rcupdate.h:735 [inline]
+ atomic_notifier_call_chain+0x175/0x180 kernel/notifier.c:226
+ panic+0x35f/0x64a kernel/panic.c:316
+ __warn.cold+0x1ea/0x2cd kernel/panic.c:627
+ report_bug+0x1bc/0x210 lib/bug.c:198
+ handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
+ asm_exc_invalid_op+0x1b/0x20 arch/x86/include/asm/idtentry.h:568
+RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
+Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
+RSP: 0018:ffffffff8ba07d90 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
+RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
+RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+ rest_init+0x169/0x270 init/main.c:729
+ arch_call_rest_init+0xf/0x14 init/main.c:886
+ start_kernel+0x473/0x494 init/main.c:1142
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+
+=============================
+WARNING: suspicious RCU usage
+5.19.0-rc2-next-20220617-syzkaller #0 Not tainted
+-----------------------------
+include/linux/rcupdate.h:707 rcu_read_lock() used illegally while idle!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+RCU used illegally from extended quiescent state!
+1 lock held by swapper/0/0:
+ #0: ffffffff8bd87780 (rcu_read_lock){....}-{1:2}, at: kmsg_dump+0x0/0x260 kernel/printk/printk.c:3982
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ rcu_read_lock include/linux/rcupdate.h:707 [inline]
+ kmsg_dump+0x1c8/0x260 kernel/printk/printk.c:4122
+ panic+0x36e/0x64a kernel/panic.c:320
+ __warn.cold+0x1ea/0x2cd kernel/panic.c:627
+ report_bug+0x1bc/0x210 lib/bug.c:198
+ handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
+ asm_exc_invalid_op+0x1b/0x20 arch/x86/include/asm/idtentry.h:568
+RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
+Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
+RSP: 0018:ffffffff8ba07d90 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
+RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
+RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+ rest_init+0x169/0x270 init/main.c:729
+ arch_call_rest_init+0xf/0x14 init/main.c:886
+ start_kernel+0x473/0x494 init/main.c:1142
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+
+=============================
+WARNING: suspicious RCU usage
+5.19.0-rc2-next-20220617-syzkaller #0 Not tainted
+-----------------------------
+include/linux/rcupdate.h:735 rcu_read_unlock() used illegally while idle!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+RCU used illegally from extended quiescent state!
+1 lock held by swapper/0/0:
+ #0: ffffffff8bd87780 (rcu_read_lock){....}-{1:2}, at: kmsg_dump+0x0/0x260 kernel/printk/printk.c:3982
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-next-20220617-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ rcu_read_unlock include/linux/rcupdate.h:735 [inline]
+ kmsg_dump+0x22b/0x260 kernel/printk/printk.c:4140
+ panic+0x36e/0x64a kernel/panic.c:320
+ __warn.cold+0x1ea/0x2cd kernel/panic.c:627
+ report_bug+0x1bc/0x210 lib/bug.c:198
+ handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
+ asm_exc_invalid_op+0x1b/0x20 arch/x86/include/asm/idtentry.h:568
+RIP: 0010:ct_idle_exit+0x34/0x40 kernel/context_tracking.c:335
+Code: 00 02 00 00 31 ff 48 89 de 0f 1f 44 00 00 48 85 db 75 12 0f 1f 44 00 00 5b be 03 00 00 00 31 ff e9 01 fe ff ff 0f 1f 44 00 00 <0f> 0b eb e5 0f 1f 84 00 00 00 00 00 41 56 41 55 41 54 41 89 f4 55
+RSP: 0018:ffffffff8ba07d90 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
+RDX: ffffffff8babc980 RSI: 0000000000000200 RDI: 0000000000000000
+RBP: ffffffff8c7c0200 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ cpuidle_enter_state+0x6f7/0xc80 drivers/cpuidle/cpuidle.c:240
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:352
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+ rest_init+0x169/0x270 init/main.c:729
+ arch_call_rest_init+0xf/0x14 init/main.c:886
+ start_kernel+0x473/0x494 init/main.c:1142
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+Rebooting in 86400 seconds..
+
+
 ---
- Documentation/ABI/testing/procfs-smaps_rollup | 1 +
- Documentation/filesystems/proc.rst            | 5 ++++-
- fs/proc/task_mmu.c                            | 3 +++
- 3 files changed, 8 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/ABI/testing/procfs-smaps_rollup b/Documentation/ABI/testing/procfs-smaps_rollup
-index a4e31c465194..b446a7154a1b 100644
---- a/Documentation/ABI/testing/procfs-smaps_rollup
-+++ b/Documentation/ABI/testing/procfs-smaps_rollup
-@@ -22,6 +22,7 @@ Description:
- 			MMUPageSize:           4 kB
- 			Rss:		     884 kB
- 			Pss:		     385 kB
-+			Pss_Dirty:	      68 kB
- 			Pss_Anon:	     301 kB
- 			Pss_File:	      80 kB
- 			Pss_Shmem:	       4 kB
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 1bc91fb8c321..f7dce062548f 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -448,6 +448,7 @@ Memory Area, or VMA) there is a series of lines such as the following::
-     MMUPageSize:           4 kB
-     Rss:                 892 kB
-     Pss:                 374 kB
-+    Pss_Dirty:             0 kB
-     Shared_Clean:        892 kB
-     Shared_Dirty:          0 kB
-     Private_Clean:         0 kB
-@@ -479,7 +480,9 @@ dirty shared and private pages in the mapping.
- The "proportional set size" (PSS) of a process is the count of pages it has
- in memory, where each page is divided by the number of processes sharing it.
- So if a process has 1000 pages all to itself, and 1000 shared with one other
--process, its PSS will be 1500.
-+process, its PSS will be 1500.  "Pss_Dirty" is the portion of PSS which
-+consists of dirty pages.  ("Pss_Clean" is not included, but it can be
-+calculated by subtracting "Pss_Dirty" from "Pss".)
- 
- Note that even a page which is part of a MAP_SHARED mapping, but has only
- a single pte mapped, i.e.  is currently used by only one process, is accounted
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 2d04e3470d4c..751c19d5bfdd 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -406,6 +406,7 @@ struct mem_size_stats {
- 	u64 pss_anon;
- 	u64 pss_file;
- 	u64 pss_shmem;
-+	u64 pss_dirty;
- 	u64 pss_locked;
- 	u64 swap_pss;
- };
-@@ -427,6 +428,7 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
- 		mss->pss_locked += pss;
- 
- 	if (dirty || PageDirty(page)) {
-+		mss->pss_dirty += pss;
- 		if (private)
- 			mss->private_dirty += size;
- 		else
-@@ -808,6 +810,7 @@ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
- {
- 	SEQ_PUT_DEC("Rss:            ", mss->resident);
- 	SEQ_PUT_DEC(" kB\nPss:            ", mss->pss >> PSS_SHIFT);
-+	SEQ_PUT_DEC(" kB\nPss_Dirty:      ", mss->pss_dirty >> PSS_SHIFT);
- 	if (rollup_mode) {
- 		/*
- 		 * These are meaningful only for smaps_rollup, otherwise two of
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

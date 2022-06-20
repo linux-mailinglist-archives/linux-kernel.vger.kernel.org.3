@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF404551F4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A87551F5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244603AbiFTOrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        id S240776AbiFTOtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240916AbiFTOqy (ORCPT
+        with ESMTP id S240838AbiFTOsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 10:46:54 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF337BF2;
-        Mon, 20 Jun 2022 07:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1655734065; x=1687270065;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WFUlWOfqcV+dfLqXHwjqs/AJN8x0qxLjeeFqsnGEuGs=;
-  b=oYvOkfi/U6TLnjaze31CPCWSoZXnPb0nj/Mui9YDETfduwPJdeViNR68
-   bKOqtyj7NTO5ZQ1Aru1A+mtstjecVPJq88tosHzu3JbwLCXJcEEauXryJ
-   a0w3XZgyRQf8ccdd/j3f9vldIgugIsD4VxCWrxqesAz5LXedn2/kOcmNj
-   4=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="301914076"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650924000"; 
-   d="scan'208";a="301914076"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 16:06:28 +0200
-Received: from MUCSE812.infineon.com (MUCSE812.infineon.com [172.23.29.38])
+        Mon, 20 Jun 2022 10:48:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4383A1B6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:08:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Mon, 20 Jun 2022 16:06:27 +0200 (CEST)
-Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE812.infineon.com
- (172.23.29.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 20 Jun
- 2022 16:06:27 +0200
-Received: from [10.160.196.13] (172.23.8.247) by MUCSE807.infineon.com
- (172.23.29.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 20 Jun
- 2022 16:06:26 +0200
-Message-ID: <cb973352-36f9-8d70-95ac-5b63a566422c@infineon.com>
-Date:   Mon, 20 Jun 2022 16:06:25 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91AF5B811C2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D10C341CB;
+        Mon, 20 Jun 2022 14:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655734085;
+        bh=Z/oJEsaKj+L+FGhbF0pNjut3FueP7Z/IV1nVOkNcn0Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vRarTaatcWNz+voPqUJMYscS68LZ1V477ksWEK9vwO6iV0nA/rf98ijJsgcHxdofI
+         8X6AEd4luZ8WEtvGupUAu6Dl3jRpi70w+JdzR5lDcBmY53P4PiU4wAVSo0bTgtow5p
+         dcG2hOFryndE0fh8ZbqXWGh/SHYpov/j0AClwWMKB/1PY8CyClX2XHYe1Vun9dE0eW
+         oD7AZLQxzWwQyB9BLR2AtgM1oScItE9V033yioqeoNwn/2JFyFxPF3M9vfMy3vItQz
+         4q8OsyPCmd+hgq8JW+nYEyN5kEQIiZ+yiph0T6rdZE2tN1m7ZCx0EfrR/pIXkUNKYU
+         9HaAV3Cepn3iw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3I4P-0002Yi-U4; Mon, 20 Jun 2022 16:08:02 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH RESEND] x86/pmem: fix platform-device leak in error path
+Date:   Mon, 20 Jun 2022 16:07:23 +0200
+Message-Id: <20220620140723.9810-1-johan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] dt-bindings: net: broadcom-bluetooth: Add CYW55572 DT
- binding
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>
-References: <cover.1655723462.git.hakan.jansson@infineon.com>
- <acd9e85b1ba82875e83ca68ae2aa62d828bfdfa3.1655723462.git.hakan.jansson@infineon.com>
- <2c753258-b68e-b2ad-c4cc-f0a437769bc2@linaro.org>
-From:   Hakan Jansson <hakan.jansson@infineon.com>
-In-Reply-To: <2c753258-b68e-b2ad-c4cc-f0a437769bc2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE812.infineon.com (172.23.29.38) To
- MUCSE807.infineon.com (172.23.29.33)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,39 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Make sure to free the platform device in the unlikely event that
+registration fails.
 
-Thanks for replying.
+Fixes: 7a67832c7e44 ("libnvdimm, e820: make CONFIG_X86_PMEM_LEGACY a tristate option")
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
 
-On 6/20/2022 2:32 PM, Krzysztof Kozlowski wrote:
->> CYW55572 is a Wi-Fi + Bluetooth combo device from Infineon.
->> Extend the binding with its DT compatible.
->>
->> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
->> ---
->>   Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
->> index df59575840fe..71fe9b17f8f1 100644
->> --- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
->> +++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
->> @@ -24,6 +24,7 @@ properties:
->>         - brcm,bcm43540-bt
->>         - brcm,bcm4335a0
->>         - brcm,bcm4349-bt
->> +      - infineon,cyw55572-bt
-> Patch is okay, but just to be sure - is it entirely different device
-> from Infineon or some variant of Broadcom block?
+It's been almost four months so resending.
 
-CYW55572 is a new device from Infineon. It is not the same as any 
-Broadcom device.
+Obviously not an important fix in itself, but this allows for getting
+rid of the last two users of platform_device_add() that failed to
+release the platform device on errors (and may help prevent new ones
+from being added).
 
->   Are all existing
-> properties applicable to it as well?
-
-Yes, all existing properties are applicable.
+Johan
 
 
-Regards,
-Håkan
+ arch/x86/kernel/pmem.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/pmem.c b/arch/x86/kernel/pmem.c
+index 6b07faaa1579..23154d24b117 100644
+--- a/arch/x86/kernel/pmem.c
++++ b/arch/x86/kernel/pmem.c
+@@ -27,6 +27,11 @@ static __init int register_e820_pmem(void)
+ 	 * simply here to trigger the module to load on demand.
+ 	 */
+ 	pdev = platform_device_alloc("e820_pmem", -1);
+-	return platform_device_add(pdev);
++
++	rc = platform_device_add(pdev);
++	if (rc)
++		platform_device_put(pdev);
++
++	return rc;
+ }
+ device_initcall(register_e820_pmem);
+-- 
+2.35.1
+

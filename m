@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332F85518A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6F45518B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240840AbiFTMTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S242517AbiFTMVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240101AbiFTMTt (ORCPT
+        with ESMTP id S242511AbiFTMVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:19:49 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABDF63FF
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:19:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VGx.DGq_1655727584;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VGx.DGq_1655727584)
-          by smtp.aliyun-inc.com;
-          Mon, 20 Jun 2022 20:19:45 +0800
-Date:   Mon, 20 Jun 2022 20:19:44 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     hongnanLi <hongnan.li@linux.alibaba.com>
-Cc:     Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] erofs: update ctx->pos for every emitted dirent
-Message-ID: <YrBl4CMZUiO6YqNM@B-P7TQMD6M-0146.local>
-References: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
- <20220609034006.76649-1-hongnan.li@linux.alibaba.com>
- <0c139517-e976-5017-8e7a-d34c38f0f6bb@kernel.org>
- <70fe93a3-7af5-b563-dcb7-3f7be81348ed@linux.alibaba.com>
+        Mon, 20 Jun 2022 08:21:08 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFA813E0F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:21:06 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gl15so20744860ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=E3uLSUhwprnezWhgNjelyDpi9Pkas63/v00xHF+/vU8=;
+        b=flreMh2NroyVGNd8enChslIN1cvKVgxJxxhnUBXjFc9GVkI3Na7171+B+8hmxsSCTc
+         C+Ma1occ9HY+e4IsC8v/zHw3TpPYl4Bf0TLhYA59l6+j0yhZkKlL/xsC+6NFHesXH7pC
+         Kckm2x6ElBlHssfWWt8q/9jHJclIQeii4Z7rGfBXUEFkOVCkxQtAkqxXVmtYmbB0N7MK
+         ZxFjcocE1ZgZ2vu5v6lXz/B4wS8JCi/jpJCkIYU5QVzMs+VpPclxLTdVrWEtrvJF8Y92
+         4WJCKynOvfZUu66df703sEw9PmtPZJJ0GKqrET1M62IN4wy9vnfsnE/Kxx8Y1k04cIRe
+         Rx9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E3uLSUhwprnezWhgNjelyDpi9Pkas63/v00xHF+/vU8=;
+        b=IU+SO/QPic0PEB6bEUYPm6/AWXEU7EA1tf82/LdM82zyKVV/jWubYMzB9DwrG6yqvF
+         s+e3ZCiVNkp2KX1HP4H6deNh7ApoPS5pzLJRW4JVHJerNxc65hGnS+SaHGM7x2G3sWC0
+         05W+aEhxW89if9SAY1cAQXuWAugKewdSkD/RZYiHFuw4REhUSKPVo7KsO+iI2/rOLaHh
+         VORZBlUnuaBlCAhFFdQAUALRelMs9CFmmVPDLCZHyA3dglYS7VVSo3injcrMsh8Ce7W4
+         9sI883SylVZXCECr4SDXD41YfKr0NvC4D/FC+vx9gabtopEmD2gnWB3FfdzQ0g+uIwWO
+         ieaA==
+X-Gm-Message-State: AJIora+8cBt2rmgQPDIZJM1XMZe8WIb87zmOY/M7SFCqGxyc4ky6ntb2
+        tuAU/+05dem6iDrw2cLDREmUvg==
+X-Google-Smtp-Source: AGRyM1vsj2E2sC4eUk0ilvBOHumMn3Rq/1xT8iNhBngVpGkOy7XHu2JJYt87D1bB1ZyJpVmJz4ls8Q==
+X-Received: by 2002:a17:907:629a:b0:6d7:b33e:43f4 with SMTP id nd26-20020a170907629a00b006d7b33e43f4mr21018798ejc.149.1655727665312;
+        Mon, 20 Jun 2022 05:21:05 -0700 (PDT)
+Received: from [192.168.0.209] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y4-20020aa7ccc4000000b004316f94ec4esm10152674edt.66.2022.06.20.05.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 05:21:04 -0700 (PDT)
+Message-ID: <170ebce3-4f29-c571-650b-abdcf05f3702@linaro.org>
+Date:   Mon, 20 Jun 2022 14:21:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <70fe93a3-7af5-b563-dcb7-3f7be81348ed@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] soc: samsung: Add missing of_node_put in exynos-pmu.c
+Content-Language: en-US
+To:     Liang He <windhl@126.com>, alim.akhtar@samsung.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615135659.3967956-1-windhl@126.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220615135659.3967956-1-windhl@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hongnan,
-
-On Mon, Jun 20, 2022 at 05:37:07PM +0800, hongnanLi wrote:
-> on 2022/6/19 8:19, Chao Yu wrote:
-> > On 2022/6/9 11:40, Hongnan Li wrote:
-> > > erofs_readdir update ctx->pos after filling a batch of dentries
-> > > and it may cause dir/files duplication for NFS readdirplus which
-> > > depends on ctx->pos to fill dir correctly. So update ctx->pos for
-> > > every emitted dirent in erofs_fill_dentries to fix it.
-> > > 
-> > > Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
-> > > Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
-> > > ---
-> > >   fs/erofs/dir.c | 20 ++++++++++----------
-> > >   1 file changed, 10 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
-> > > index 18e59821c597..94ef5287237a 100644
-> > > --- a/fs/erofs/dir.c
-> > > +++ b/fs/erofs/dir.c
-> > > @@ -22,10 +22,9 @@ static void debug_one_dentry(unsigned char
-> > > d_type, const char *de_name,
-> > >   }
-> > >   static int erofs_fill_dentries(struct inode *dir, struct
-> > > dir_context *ctx,
-> > > -                   void *dentry_blk, unsigned int *ofs,
-> > > +                   void *dentry_blk, struct erofs_dirent *de,
-> > >                      unsigned int nameoff, unsigned int maxsize)
-> > >   {
-> > > -    struct erofs_dirent *de = dentry_blk + *ofs;
-> > >       const struct erofs_dirent *end = dentry_blk + nameoff;
-> > >       while (de < end) {
-> > > @@ -59,9 +58,8 @@ static int erofs_fill_dentries(struct inode *dir,
-> > > struct dir_context *ctx,
-> > >               /* stopped by some reason */
-> > >               return 1;
-> > >           ++de;
-> > > -        *ofs += sizeof(struct erofs_dirent);
-> > > +        ctx->pos += sizeof(struct erofs_dirent);
-> > >       }
-> > > -    *ofs = maxsize;
-> > >       return 0;
-> > >   }
-> > > @@ -95,7 +93,7 @@ static int erofs_readdir(struct file *f, struct
-> > > dir_context *ctx)
-> > >                     "invalid de[0].nameoff %u @ nid %llu",
-> > >                     nameoff, EROFS_I(dir)->nid);
-> > >               err = -EFSCORRUPTED;
-> > > -            goto skip_this;
-> > > +            break;
-> > >           }
-> > >           maxsize = min_t(unsigned int,
-> > > @@ -106,17 +104,19 @@ static int erofs_readdir(struct file *f,
-> > > struct dir_context *ctx)
-> > >               initial = false;
-> > >               ofs = roundup(ofs, sizeof(struct erofs_dirent));
-> > > -            if (ofs >= nameoff)
-> > > +            if (ofs >= nameoff) {
-> > > +                ctx->pos = blknr_to_addr(i) + ofs;
-> > >                   goto skip_this;
-> > > +            }
-> > >           }
-> > > -        err = erofs_fill_dentries(dir, ctx, de, &ofs,
-> > > -                      nameoff, maxsize);
-> > > -skip_this:
-> > >           ctx->pos = blknr_to_addr(i) + ofs;
-> > 
-> > Why updating ctx->pos before erofs_fill_dentries()?
-> > 
-> > Thanks,
+On 15/06/2022 15:56, Liang He wrote:
+> In exynos_get_pmu_regmap(), of_find_matching_node() will return a
+> node pointer with refcount incremented. We should use of_node_put()
+> for that node pointer. We need a similar code logic in the function
+> syscon_regmap_lookup_by_compatible().
 > 
-> It’s to ensure the ctx->pos is correct and up to date in
-> erofs_fill_dentries() so that we can update ctx->pos instead of ofs for
-> every emitted dirent.
-> 
+> Signed-off-by: Liang He <windhl@126.com>
 
-How about this, since blknr_to_addr(i) + maxsize should be the start of
-the next dir block.
 
-	if (initial) {
-		ofs = roundup(ofs, sizeof(struct erofs_dirent));
-		ctx->pos = blknr_to_addr(i) + ofs;
-		if (ofs >= nameoff)
-			goto skip_this;
-	}
-	err = erofs_fill_dentries(dir, ctx, de, (void *)de + ofs,
-				  nameoff, maxsize);
-	if (err)
-		break;
-	ctx->pos = blknr_to_addr(i) + maxsize;
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-Gao Xiang
+
+Best regards,
+Krzysztof

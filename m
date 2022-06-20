@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD192552282
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69B5552285
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236985AbiFTQzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S238170AbiFTQzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbiFTQzI (ORCPT
+        with ESMTP id S231153AbiFTQzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:55:08 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCC1193E0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:55:06 -0700 (PDT)
+        Mon, 20 Jun 2022 12:55:48 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D2193F6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:55:46 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso7983190pjn.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:55:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=80UMITqfcEXbQBuxCEFv3WvM8vMQi18p2VPQJD28/NU=;
-  b=WplHZSV4v5Cb0PupcCAvLTVl7rdhbOpIS6h6wmjsTuLVWqUKIpFjJXTH
-   goJOfa+jBX6rEgM177rcNmCn5TF5U3v1oNcu4YWwQX8qHrzWJSPI5GM7U
-   IsmNhZLRciRMwuchLMDYSwO8hR+m5i0zewHsqERY+sC7raeCWNdnlHK/t
-   U=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.92,207,1650924000"; 
-   d="scan'208";a="17310869"
-Received: from 71-51-190-12.chvl.centurylink.net (HELO hadrien) ([71.51.190.12])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:55:02 +0200
-Date:   Mon, 20 Jun 2022 12:54:56 -0400 (EDT)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Michal Hocko <mhocko@suse.com>
-cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
-        kernel test robot <lkp@intel.com>,
-        Minchan Kim <minchan@kernel.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [kbuild-all] Re: mm/madvise.c:1438:6: warning: Redundant assignment
- of 'ret' to itself. [selfAssignment]
-In-Reply-To: <YrCgcEGKxjN7mNu9@dhcp22.suse.cz>
-Message-ID: <alpine.DEB.2.22.394.2206201253480.2243@hadrien>
-References: <202206180617.UzO7ymnD-lkp@intel.com> <5ec7b561-551b-f02a-9b7b-65d05ccdabbc@quicinc.com> <YrCgcEGKxjN7mNu9@dhcp22.suse.cz>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9TORdfYQFQKgAhdhPY0/TGW8ISlZe4/y20YwBArxs8g=;
+        b=sZMQE20IyaQUtRKPzoV/2u6lHzq7JWLKdc8dQWF41nkuvPkMxMKVfdYHzUdkDPwgFj
+         xpm/Lc38Kj+5PVAFvwYEQmNudoKWTPfpuGDrIYcy+rt5KlOUU5kdZ367RzxtJxmBWzRe
+         6o3DWq2IEqm7YhuZl4jSkKBCEy10sRNpds+T2vYkB0FxDKldnFiYhdZXUTmb+HKRg+vk
+         l9amyAJLKGmE8RIdqF40WU35HLun2w6qIwTDYtUBvp4iM1Vydh9BdUiqihT8vcFQYJEP
+         8yUO7lvWwEAemin1zCPjm7AvUr3fX/gNRiCx+z9Lgq+07yEiAwnHJbaQriDpfNW+0+91
+         KCQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9TORdfYQFQKgAhdhPY0/TGW8ISlZe4/y20YwBArxs8g=;
+        b=g2g7H6fjs53SepJvrwGFbSWZ46UGSgNaUg0LGYd9AL2RBQmpmwBUz/Ej7QzxOMT6RL
+         udUYT1plL5wChISOuOb6ueC8UqmSKnTB3LRaiWm/wrJL7brNoD++ROLMiRQ3h91o0Sp5
+         3XYpVmv9sqI0WQYAjsBJoTTEef5AWuzifpFotWAklkrWTatbWGMYT6O7pepuIRjJc2je
+         6+Wf/RkZvctKs4RA/qqaSV+COsbItRVo6zgsiANpPF5nb6Bt1pZziJRw9R2m23wLNCPi
+         4fFtR9aT7sn+PWL9tGSsf9lG83/YEcXwUGYjJBBgZdmKHKeGbWXePkmdkFTleRWBh3Vq
+         9ueQ==
+X-Gm-Message-State: AJIora8+GurO9yJZwGM9eGLd7LOIOprYJtj564h+ZwCuyYqkkaZf7V9m
+        0WAZH8tUzEpob29FygnMgEyWkg==
+X-Google-Smtp-Source: AGRyM1vrThp/+RuoSszgeUjGDa9nDwZAkbWmyYv5f6Xjh2MuoGsLzwCkyEV9CVaGQ07t/XO+wVAtdg==
+X-Received: by 2002:a17:903:234e:b0:16a:2d02:add7 with SMTP id c14-20020a170903234e00b0016a2d02add7mr3087040plh.10.1655744145818;
+        Mon, 20 Jun 2022 09:55:45 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id b9-20020a170902d50900b0015e8d4eb25fsm8912013plg.169.2022.06.20.09.55.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 09:55:43 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 10:55:41 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/3] dt-bindings: Arm CoreSight binding schema
+ conversions
+Message-ID: <20220620165541.GA1458883@p14s>
+References: <20220603011933.3277315-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603011933.3277315-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rob,
 
+On Thu, Jun 02, 2022 at 08:19:30PM -0500, Rob Herring wrote:
+> This series converts all the CoreSight debug bindings to DT schema
+> format. These bindings are at the top of the list of occurrences of
+> bindings without a schema. For arm64 dts files:
+> 
+>     702 ['arm,coresight-etm4x', 'arm,primecell']
+>     536 ['arm,coresight-cpu-debug', 'arm,primecell']
+>     509 ['arm,coresight-dynamic-funnel', 'arm,primecell']
+>     213 ['arm,coresight-tmc', 'arm,primecell']
+>     143 ['arm,coresight-dynamic-replicator', 'arm,primecell']
+>      97 ['arm,coresight-stm', 'arm,primecell']
+> 
+> I'll send a reply to these with the errors in dts files that this
+> causes. I've reviewed them and they all look legit. Xilinx Zynq though
+> has 3 clocks instead of 2.
+> 
+> v2:
+>  - Rename other Coresight bindings to use compatible string for filename
+>  - Add missing arm,coresight-dynamic-replicator.yaml and
+>    arm,coresight-static-funnel.yaml
+>  - Update MAINTAINERS
+>  - Fix coresight.txt references
 
-On Mon, 20 Jun 2022, Michal Hocko wrote:
+What a massive undertaking... I have looked scrupulously and everything adds up.
+Let me know if you were looking for me to pick this up.  Otherwise:
 
-> On Sat 18-06-22 11:25:43, Charan Teja Kalla wrote:
-> > Hello Andrew,
-> >
-> > On 6/18/2022 4:34 AM, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-> > > commit: 5bd009c7c9a9e888077c07535dc0c70aeab242c3 mm: madvise: return correct bytes advised with process_madvise
-> > > date:   3 months ago
-> > > compiler: mips-linux-gcc (GCC) 11.3.0
-> > > reproduce (cppcheck warning):
-> > >         # apt-get install cppcheck
-> > >         git checkout 5bd009c7c9a9e888077c07535dc0c70aeab242c3
-> > >         cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
-> > >
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > >
-> > > cppcheck warnings: (new ones prefixed by >>)
-> > >>> mm/madvise.c:1438:6: warning: Redundant assignment of 'ret' to itself. [selfAssignment]
-> > >     ret = (total_len - iov_iter_count(&iter)) ? : ret;
-> >
-> > Other way to avoid this warning is by creating another local variable
-> > that holds the total bytes processed. Having another local variable to
-> > get rid off some compilation warning doesn't seem proper to me. So,
-> > leaving this warning unless you ask me to fix this.
->
-> Is this a new warning? I do not see it supported by my gcc 10.x. Do we
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-cppcheck is a static analysis tool.  It looks like it doesn't have a
-proper understanding of ?:
+Thanks,
+Mathieu
 
-julia
-
-> plan to have it enabled by default? I do not see anything wrong with the
-> above code and I think this is not an unusual pattern in the kernel.
-> While you could go with
-> 	if (rotal_len - iov_iter_count(&iter))
-> 		ret = rotal_len - iov_iter_count(&iter);
->
-> or do the same with a temporary variable but I am not really sure this would
-> add to the readability much.
+> 
+> Rob
+> 
+> Rob Herring (3):
+>   dt-bindings: arm: Rename Coresight filenames to match compatible
+>   dt-bindings: arm: Convert CoreSight bindings to DT schema
+>   dt-bindings: arm: Convert CoreSight CPU debug to DT schema
+> 
+>  .../bindings/arm/arm,coresight-catu.yaml      | 101 +++++
+>  .../bindings/arm/arm,coresight-cpu-debug.yaml |  81 ++++
+>  ...esight-cti.yaml => arm,coresight-cti.yaml} |   5 +-
+>  .../arm/arm,coresight-dynamic-funnel.yaml     | 126 ++++++
+>  .../arm/arm,coresight-dynamic-replicator.yaml | 126 ++++++
+>  .../bindings/arm/arm,coresight-etb10.yaml     |  92 ++++
+>  .../bindings/arm/arm,coresight-etm.yaml       | 156 +++++++
+>  .../arm/arm,coresight-static-funnel.yaml      |  89 ++++
+>  .../arm/arm,coresight-static-replicator.yaml  |  90 ++++
+>  .../bindings/arm/arm,coresight-stm.yaml       | 101 +++++
+>  .../bindings/arm/arm,coresight-tmc.yaml       | 131 ++++++
+>  .../bindings/arm/arm,coresight-tpiu.yaml      |  91 ++++
+>  ...yaml => arm,embedded-trace-extension.yaml} |   3 +-
+>  ...e.yaml => arm,trace-buffer-extension.yaml} |   2 +-
+>  .../bindings/arm/coresight-cpu-debug.txt      |  49 ---
+>  .../devicetree/bindings/arm/coresight.txt     | 402 ------------------
+>  Documentation/trace/coresight/coresight.rst   |   2 +-
+>  MAINTAINERS                                   |   8 +-
+>  18 files changed, 1192 insertions(+), 463 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
+>  rename Documentation/devicetree/bindings/arm/{coresight-cti.yaml => arm,coresight-cti.yaml} (98%)
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+>  rename Documentation/devicetree/bindings/arm/{ete.yaml => arm,embedded-trace-extension.yaml} (95%)
+>  rename Documentation/devicetree/bindings/arm/{trbe.yaml => arm,trace-buffer-extension.yaml} (94%)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
+>  delete mode 100644 Documentation/devicetree/bindings/arm/coresight.txt
+> 
 > --
-> Michal Hocko
-> SUSE Labs
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
->
+> 2.34.1

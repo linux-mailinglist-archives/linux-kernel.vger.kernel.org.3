@@ -2,110 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3C0551DD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A99D551E12
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350599AbiFTOIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S1350971AbiFTOLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352465AbiFTN4d (ORCPT
+        with ESMTP id S1352992AbiFTN50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:56:33 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548A43632A;
-        Mon, 20 Jun 2022 06:22:29 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 25KDKAgo049381
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Mon, 20 Jun 2022 21:20:11 +0800 (CST)
-        (envelope-from Di.Shen@unisoc.com)
-Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 20 Jun 2022 21:20:12 +0800
-From:   Di Shen <di.shen@unisoc.com>
-To:     <rafael@kernel.org>, <rui.zhang@intel.com>
-CC:     <xuewen.yan@unisoc.com>, <cindygm567@gmail.com>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lukasz.luba@arm.com>
-Subject: [PATCH 1/1] thermal/sysfs: Clear the slot left in cooling_device_attr_groups
-Date:   Mon, 20 Jun 2022 21:19:53 +0800
-Message-ID: <20220620131953.16575-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 20 Jun 2022 09:57:26 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0348437A3D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:23:14 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657f0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57f0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E81721EC0657;
+        Mon, 20 Jun 2022 15:22:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1655731333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LrGpaF007OQqZrjEUL4cOEK+6b5ptHcd1OgrPbOBhQc=;
+        b=kWLHioT5UQlaSJoVi5j86oOVwPwb26iLxGk6Lbs+ei26Nq/TNiLbkDhLvIBEcM1dDW7PwE
+        REHLuI7rtdbxYZJ11zXspxBMbDlwr0roQw/RaMWMbPlZlmUydz0+9GqupSWNQ5iHJDtzLd
+        ZDKnGzQwg1BILxQITGEggBx6lvjZ+IE=
+Date:   Mon, 20 Jun 2022 15:22:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2] x86/pat: fix x86_has_pat_wp()
+Message-ID: <YrB0gNtIfCwV+xnE@zn.tnic>
+References: <20220620113441.23961-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.51]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 25KDKAgo049381
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220620113441.23961-1-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a space allocated for cooling_device_stats_attr_group within co-
-oling_device_attr_groups. This space is shared by all cooling devices.
++ Tom.
 
-If not clear this space before cooling_device_stats_attr_group is initi-
-alized, the next cooling device will still create stats sysfs file node.
-At this time, read or write related nodes will cause kernel crash.
+On Mon, Jun 20, 2022 at 01:34:41PM +0200, Juergen Gross wrote:
+> x86_has_pat_wp() is using a wrong test, as it relies on the normal
+> PAT configuration used by the kernel. In case the PAT MSR has been
+> setup by another entity (e.g. BIOS or Xen hypervisor) it might return
+> false even if the PAT configuration is allowing WP mappings.
 
-[exception_reboot_reason]: kernel_crash
-[exception_panic_reason]: Fatal exception
-[exception_time]: 2022-06-07_06-32-25
-[exception_file_info]: not-bugon
-[exception_task_id]: 3154
-[exception_task_family]: [cat, 3154][sh, 2597][sh, 2362][adbd, 1804]
-[exception_pc_symbol]: [<747516ae>] _raw_spin_lock+0x20/0x60
-[exception_stack_info]: [<4cbe9ac1>] prepare_exception_info+0x19c/0x1a4
-[<03041be7>] sysdump_panic_event+0x57c/0x6f4
-[<b16f865e>] atomic_notifier_call_chain+0x48/0x7c
-[<5baac8d4>] panic+0x1b4/0x3c8
-[<9d287b0f>] arm_notify_die+0x0/0x78
-[<094fc22c>] __do_kernel_fault+0x94/0xa4
-[<3b4b69a4>] do_page_fault+0xd4/0x364
-[<23793e7a>] do_translation_fault+0x38/0xc0
-[<6e5cc52a>] do_DataAbort+0x4c/0xd0
-[<a28c16b8>] __dabt_svc+0x5c/0xa0
-[<747516ae>] _raw_spin_lock+0x20/0x60
-[<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-[<cb78325e>] dev_attr_show+0x38/0x64
-[<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-[<c0a843ab>] seq_read+0x244/0x620
-[<b316b374>] vfs_read+0xd8/0x218
-[<3aebf5fa>] sys_read+0x80/0xe4
-[<7cf100f5>] ret_fast_syscall+0x0/0x28
-[<08cbe22f>] 0xbe8c1198
+... because Xen doesn't allow writing the PAT MSR. Please explain
+exactly what happens because we will forget.
 
-So clear the slot left in cooling_device_attr_groups before cooling_dev-
-ice_stats_attr_group is initialized to avoid kernel crash.
+> The correct way to test for WP support is:
+> 
+> 1. Get the PTE protection bits needed to select WP mode by reading
+>    __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP] (depending on the PAT MSR
+>    setting this might return protection bits for a stronger mode, e.g.
+>    UC-)
+> 2. Translate those bits back into the real cache mode selected by those
+>    PTE bits by reading __pte2cachemode_tbl[__pte2cm_idx(prot)]
+> 3. Test for the cache mode to be _PAGE_CACHE_MODE_WP
 
-Signed-off-by: Di Shen <di.shen@unisoc.com>
----
- drivers/thermal/thermal_sysfs.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Yes, this is a good explanation albeit a bit too verbose. You can stick
+a shorter version of it as a comment over the function so that we don't
+have to swap it all back in next time.
 
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 1c4aac8464a7..fbc3dbc85841 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -817,6 +817,11 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
- 	unsigned long states;
- 	int var;
- 
-+	/* Clear the slot left in cooling_device_attr_groups */
-+	var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-+	if (cooling_device_attr_groups[var])
-+		cooling_device_attr_groups[var] = NULL;
-+
- 	if (cdev->ops->get_max_state(cdev, &states))
- 		return;
- 
+> Fixes: 1f6f655e01ad ("x86/mm: Add a x86_has_pat_wp() helper")
+
+If anything, this should be:
+
+f88a68facd9a ("x86/mm: Extend early_memremap() support with additional attrs")
+
+Also, I'm thinking CC:stable here.
+
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+> V2:
+> - fix indexing into __pte2cachemode_tbl[]
+
+Yes, in any case, I see it now. The key aspect being in the comment
+above it:
+
+ *   Index into __pte2cachemode_tbl[] are the caching attribute bits of the pte
+ *   (_PAGE_PWT, _PAGE_PCD, _PAGE_PAT) at index bit positions 0, 1, 2.
+
+which is how one should index into that array.
+
+Thx.
+
 -- 
-2.17.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,69 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6B655147F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2667455147D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239844AbiFTJiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S240032AbiFTJiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240629AbiFTJhx (ORCPT
+        with ESMTP id S240247AbiFTJiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:37:53 -0400
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FE013DF5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:46 -0700 (PDT)
-Received: by mail-qv1-xf44.google.com with SMTP id cu16so14533644qvb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=qY7gu8YtTZxweTSpjNCkj53ezR/bpeffN15MCHzYdb9vuuiKCFSdu80S0px0q7XU5Z
-         lbHzTJ9nW8Kkwa3BpagEtM/9MjqwzV6eS6TW3eVgDSGJoNv1hgTHgV8i8D8Jp5MNlIkx
-         SIrrXh4Y6LsUPvkfV5B6bFTIGunW8Nk4OGs2PchnnMK9QnjRjnHO1yACBkxakFTzkESt
-         O2IMJel3268EwD/FqT/hZ2/v3/C8lPMb8B+yqrzL0Igs29mpv0yffpJ0uRf7YrpeG5Vn
-         HmMnDoK/O9OqjGPLg8jj1blOpqH7klSRJYCMVOJrslctm8wY4QP3S10blqGht/Vr9NbJ
-         5qqw==
+        Mon, 20 Jun 2022 05:38:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 557821007
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655717878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mVJ4Pc7idX3cRmZ7fOi1Ns6MbMDwBjisN2g0tryFY6w=;
+        b=VNoHXUA0DL40Zi+bDVAE6jIYIhn4fWCiQZa8Rl/r5v6jmgUdvxMC3lECUl+oA59n31dhK0
+        +MHtrEKUpUeb63AII4lkI+q3GCDfIo4QKsWOBTkNPKDXEsby8ZfPF7jjblmBfQLh1QbQd4
+        RHEdTtraQCdfxYKt7ITrv16xgtMzTf0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-1O_-_gYdMQGPNp9pVI4E0w-1; Mon, 20 Jun 2022 05:37:56 -0400
+X-MC-Unique: 1O_-_gYdMQGPNp9pVI4E0w-1
+Received: by mail-wr1-f71.google.com with SMTP id m7-20020adfa3c7000000b0021b94088ba2so205341wrb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:37:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=S3QTvAhEW4Ts9/o0Y4F08TCx1rDy3alJ81VYWGx06JblctyEA4+M/yrKuqDYUbf2Ts
-         b7pIxow3H1/afj3MIvPnajbAFTw3XgRbYbWF4+3VUwPoxwuJs4047tzkMK5LamdRbQQh
-         nyeng2KyDkhOy00GkkI3miNPgkxBVdFNqg/z3ksjEoP9SHzKzbJcNb2fDEdP/EEF21u/
-         qmwVy/TfPyo0q98ejk3igaHaWQXYgr/ZvOFjnFk5v3fIjq/5wKvKTX+FZcflnAPkquHp
-         Q31w3Kzrm6R7j4WSKIWXTHxzn+fi5aPBv9rAHlQq8bbEIA+Mp6dw5t4AcSQ2jygCqUmB
-         0kFw==
-X-Gm-Message-State: AJIora+gKGaBzipnAsagss/VbXDuNd/1ErHfTEn6qDsUMzNRl8OXCtj1
-        gDNaTpLi5AiDShBGXE6Lc4QRCycYShbyXr5dcr4=
-X-Google-Smtp-Source: AGRyM1saCA//1oWAM6tg4YpPNZKAYhKXDiXxBhih/tXzjIqub59UH6DFA9Wlcxu60+xxPnlNkU28dEWK9InnIC/5IUA=
-X-Received: by 2002:ac8:5f0e:0:b0:305:1ae7:e318 with SMTP id
- x14-20020ac85f0e000000b003051ae7e318mr18743915qta.663.1655717865481; Mon, 20
- Jun 2022 02:37:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=mVJ4Pc7idX3cRmZ7fOi1Ns6MbMDwBjisN2g0tryFY6w=;
+        b=GMNYhzZH9DZ8MUXDkeynzHpO88efJ6sXwKEYCohB0XnNqJLGZxgbrE6fS0EcspWigI
+         5QSvx55o99d1/TaPELQRCCObkykL21/3h98W/VlQlPQ4XX6zHqcDlRg7J6TZMM/qVpiR
+         rD3zNRXRu64d+bnHzkmc3mCiPokZeRPc1DjcNSp4a05RjtJ6m5t4KzDuiXeT4ZU7v/SB
+         GAbM5PknXbfScL6uT5e8BGanvJVpaw73Lrq/EMLy1wsp/PDNoyog32EGyT/DQR8ZVfqk
+         A6+Ftst5KEhgVQvMjKHkOmRWU88KHYzc31qM3dbkqIsidR152a+r5yLBo/Gu7qx24pnD
+         SKjw==
+X-Gm-Message-State: AJIora8H3Yk1d3nsHpA9LTpQi2O/Rzi8YDBId3z7SS0iffTYmGlZ5AEd
+        5A3ajkrGDdUz3Xuq4k7SdNwandjwq9j0MkE5tDWSz3oFhNyYuDV1TKXByADiAC+loSqjYxlfrck
+        s7p7BJhA7ro2t44qLMmL10v5O
+X-Received: by 2002:a05:6000:2a4:b0:213:bb34:7ff6 with SMTP id l4-20020a05600002a400b00213bb347ff6mr22791895wry.292.1655717875392;
+        Mon, 20 Jun 2022 02:37:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tkrLOZNzUhdaLZd1T7cZrm18QpT/h/SI9PyK8jG4W9Tt/2oH4zMfDzBTXmcISzHSSxAUXX6A==
+X-Received: by 2002:a05:6000:2a4:b0:213:bb34:7ff6 with SMTP id l4-20020a05600002a400b00213bb347ff6mr22791874wry.292.1655717875163;
+        Mon, 20 Jun 2022 02:37:55 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-40.retail.telecomitalia.it. [79.46.200.40])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b0039c50d2d28csm18574590wmq.44.2022.06.20.02.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 02:37:54 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 11:37:50 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bo Liu =?utf-8?B?KOWImOazoikt5rWq5r2u5L+h5oGv?= 
+        <liubo03@inspur.com>
+Cc:     "mst@redhat.com" <mst@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virtio: Remove unnecessary variable assignments
+Message-ID: <20220620093750.ug6g7vzrninakd3x@sgarzare-redhat>
+References: <d6527c0690634815820c1c7c04b31551@inspur.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:27ef:0:0:0:0 with HTTP; Mon, 20 Jun 2022 02:37:45
- -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   david <nenkan1975@gmail.com>
-Date:   Mon, 20 Jun 2022 10:37:45 +0100
-Message-ID: <CAFO9AXgNYFoGDt1E106Y-oL9StpeoLqy86nO7mhPhzU3UzMUXQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d6527c0690634815820c1c7c04b31551@inspur.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+Hi Bo,
+
+On Mon, Jun 20, 2022 at 09:32:28AM +0000, Bo Liu (刘波)-浪潮信息 wrote:
+>Hi
+>
+>>On Fri, Jun 17, 2022 at 01:59:52AM -0400, Bo Liu wrote:
+>>>In function vp_modern_probe(), "mdev->pci_dev" is assigned to 
+>>>variable
+>>>"pci_dev", variable "pci_dev" and "mdev->pci_dev" have the same 
+>>>value.
+>>>There is no need to assign variable "pci_dev" to "mdev->pci_dev". So
+>>>remove it.
+>>>
+>>
+>>I suggest rephrasing the description a bit.
+>>Maybe into something like this:
+>>
+>>     In function vp_modern_probe(), "pci_dev" is initialized with the
+>>     value of "mdev->pci_dev", so assigning "pci_dev" to 
+>>     "mdev->pci_dev"
+>>     is unnecessary since they store the same value.
+>>
+>>Anyway, the patch LGTM:
+>>
+>>Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+>>
+>The new patch is:
+>
+>In function vp_modern_probe(), "pci_dev" is initialized with the
+>value of "mdev->pci_dev", so assigning "pci_dev" to "mdev->pci_dev"
+>is unnecessary since they store the same value.
+>
+>Signed-off-by: Bo Liu <liubo03@inspur.com>
+>---
+> drivers/virtio/virtio_pci_modern_dev.c | 2 --
+> 1 file changed, 2 deletions(-)
+
+It looks good, but I think it is better to send a proper v2.
+
+You can also add my R-b just before your S-o-b
+
+Thanks,
+Stefano
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BE85519C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F19551CBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243018AbiFTMyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S1347379AbiFTNi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242912AbiFTMxo (ORCPT
+        with ESMTP id S1346819AbiFTNhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:53:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CB1140A7;
-        Mon, 20 Jun 2022 05:53:41 -0700 (PDT)
+        Mon, 20 Jun 2022 09:37:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055F028727;
+        Mon, 20 Jun 2022 06:14:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35C55B811A2;
-        Mon, 20 Jun 2022 12:53:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7090EC3411B;
-        Mon, 20 Jun 2022 12:53:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 920D460A52;
+        Mon, 20 Jun 2022 13:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DCFC3411B;
+        Mon, 20 Jun 2022 13:13:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729618;
-        bh=/S8yQzz0bEZtXnByi4TQCeaXrYJNa/rP7ocesI2o9rc=;
+        s=korg; t=1655730799;
+        bh=1gYXjOiQ/z90nRzb8U321OxJ4EeK2vYVDyO9CPVnJcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XtJb6mvVbX+lNZoquJkhEsvdtl+K+Drvsbro7mgbjQmgunvFW3qRXaW9tS7O3WReQ
-         vI/8whB+86LP6xRa0Zi0mv7do2fsyf7R6replqAraWuP3R45AbGG7ow5+MZfLMKuVO
-         M4hVUban8wLHwQfd2U1sJj3Xlct1GrcW/qGmKB0Y=
+        b=H3upP1T/zkKAalkC7ibdBwFkxhc0vJ/OhkH+iV2md6+IltvqWMZ8j9vWbe0NnFsd2
+         5aW+pA+g9jhNML83l+QFLaVjzhxN7dz9G1ChAFQoEeDsBL+jgQ1yhxns3WD/aLRoZN
+         Qrh6NB66QuiKJQNCghbrZMmG5SIy0vWIs5q8hYco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 020/141] ata: libata-core: fix NULL pointer deref in ata_host_alloc_pinfo()
-Date:   Mon, 20 Jun 2022 14:49:18 +0200
-Message-Id: <20220620124730.118972624@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 058/240] random: cleanup fractional entropy shift constants
+Date:   Mon, 20 Jun 2022 14:49:19 +0200
+Message-Id: <20220620124739.946246102@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit bf476fe22aa1851bab4728e0c49025a6a0bea307 ]
+commit 18263c4e8e62f7329f38f5eadc568751242ca89c upstream.
 
-In an unlikely (and probably wrong?) case that the 'ppi' parameter of
-ata_host_alloc_pinfo() points to an array starting with a NULL pointer,
-there's going to be a kernel oops as the 'pi' local variable won't get
-reassigned from the initial value of NULL. Initialize 'pi' instead to
-'&ata_dummy_port_info' to fix the possible kernel oops for good...
+The entropy estimator is calculated in terms of 1/8 bits, which means
+there are various constants where things are shifted by 3. Move these
+into our pool info enum with the other relevant constants. While we're
+at it, move an English assertion about sizes into a proper BUILD_BUG_ON
+so that the compiler can ensure this invariant.
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-analysis tool.
-
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/random.c |   28 +++++++++++++---------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 3d57fa84e2be..ea9671821258 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -5506,7 +5506,7 @@ struct ata_host *ata_host_alloc_pinfo(struct device *dev,
- 				      const struct ata_port_info * const * ppi,
- 				      int n_ports)
- {
--	const struct ata_port_info *pi;
-+	const struct ata_port_info *pi = &ata_dummy_port_info;
- 	struct ata_host *host;
- 	int i, j;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -359,16 +359,6 @@
+ /* #define ADD_INTERRUPT_BENCH */
  
-@@ -5514,7 +5514,7 @@ struct ata_host *ata_host_alloc_pinfo(struct device *dev,
- 	if (!host)
- 		return NULL;
+ /*
+- * To allow fractional bits to be tracked, the entropy_count field is
+- * denominated in units of 1/8th bits.
+- *
+- * 2*(POOL_ENTROPY_SHIFT + poolbitshift) must <= 31, or the multiply in
+- * credit_entropy_bits() needs to be 64 bits wide.
+- */
+-#define POOL_ENTROPY_SHIFT 3
+-#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
+-
+-/*
+  * If the entropy count falls under this number of bits, then we
+  * should wake up processes which are selecting or polling on write
+  * access to /dev/random.
+@@ -425,8 +415,13 @@ enum poolinfo {
+ 	POOL_WORDMASK = POOL_WORDS - 1,
+ 	POOL_BYTES = POOL_WORDS * sizeof(u32),
+ 	POOL_BITS = POOL_BYTES * 8,
+-	POOL_BITSHIFT = ilog2(POOL_WORDS) + 5,
+-	POOL_FRACBITS = POOL_WORDS << (POOL_ENTROPY_SHIFT + 5),
++	POOL_BITSHIFT = ilog2(POOL_BITS),
++
++	/* To allow fractional bits to be tracked, the entropy_count field is
++	 * denominated in units of 1/8th bits. */
++	POOL_ENTROPY_SHIFT = 3,
++#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
++	POOL_FRACBITS = POOL_BITS << POOL_ENTROPY_SHIFT,
  
--	for (i = 0, j = 0, pi = NULL; i < host->n_ports; i++) {
-+	for (i = 0, j = 0; i < host->n_ports; i++) {
- 		struct ata_port *ap = host->ports[i];
+ 	/* x^128 + x^104 + x^76 + x^51 +x^25 + x + 1 */
+ 	POOL_TAP1 = 104,
+@@ -652,6 +647,9 @@ static void credit_entropy_bits(int nbit
+ 	int entropy_count, entropy_bits, orig;
+ 	int nfrac = nbits << POOL_ENTROPY_SHIFT;
  
- 		if (ppi[j])
--- 
-2.35.1
-
++	/* Ensure that the multiplication can avoid being 64 bits wide. */
++	BUILD_BUG_ON(2 * (POOL_ENTROPY_SHIFT + POOL_BITSHIFT) > 31);
++
+ 	if (!nbits)
+ 		return;
+ 
+@@ -687,13 +685,13 @@ retry:
+ 		/* The +2 corresponds to the /4 in the denominator */
+ 
+ 		do {
+-			unsigned int anfrac = min(pnfrac, POOL_FRACBITS/2);
++			unsigned int anfrac = min(pnfrac, POOL_FRACBITS / 2);
+ 			unsigned int add =
+-				((POOL_FRACBITS - entropy_count)*anfrac*3) >> s;
++				((POOL_FRACBITS - entropy_count) * anfrac * 3) >> s;
+ 
+ 			entropy_count += add;
+ 			pnfrac -= anfrac;
+-		} while (unlikely(entropy_count < POOL_FRACBITS-2 && pnfrac));
++		} while (unlikely(entropy_count < POOL_FRACBITS - 2 && pnfrac));
+ 	}
+ 
+ 	if (WARN_ON(entropy_count < 0)) {
 
 

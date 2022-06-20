@@ -2,189 +2,578 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD188551F90
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD16551F92
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242034AbiFTO7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:59:18 -0400
+        id S241247AbiFTO7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:59:47 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243444AbiFTO6o (ORCPT
+        with ESMTP id S241215AbiFTO7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 10:58:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45571E3D2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655734932; x=1687270932;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=DLYU3obuw2FzjjH17NUxRUoMUaCXSbi6YD3GQAGoHgY=;
-  b=bJ4WLhW7Mdido7J3wl3Nzis9pvdexJWydi/KTnXGHPamEBxDUYdVMSzJ
-   g1yEDuD1e1S4a/rAbnpIBCGWqJh/lcovRMEWQEtNGUYhC97tpnLm4/j2g
-   lzFSe+J5NQvUJrfkQvZM8Naol/3vdFGWKwNO/dMA7NtW8jA3omLjJ3EP3
-   pE06W03KPielc1+Vz15L5YLE896D7h/t4nAr24S7zZB+HUkqM8/f8zKYL
-   Jm1p+u5A0u6MgjK32pzCZy7VHlReybliikFaNFPA3yXqplCxbk/2GQl8A
-   LNfIvYgzjmRDPv3n57dyOfJ1zza5p2dOkubFILPn5uKS5J6qzzr/G+bR7
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="164179403"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jun 2022 07:22:11 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 20 Jun 2022 07:22:05 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 20 Jun 2022 07:22:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VZz4tSej81j4d3ly2ygR+Hgep1h2a1IBNwZOiT0zb1FJy8uESDSbLHmDaa74HgREB+5hsMM4mKCMKieNBDQE8TnDJK+q6X6kC7YSX0GyXQXziYIurB9r9qhAigt4nfB5uV2dKFzvNuyQ5BDOxEvPegdXyCauDu0gBcuO2Z/jXbXDO0ozpXcxetKAVgY+dH/jLLMDUZT+4KSUCgr5szQfUqgIDTfZCLNhVXTYJGPWWDSfuksJpdVmnXlmd5Atl7Fue7NKeEt5zRoFPdALszb3dsDTbtWsI7JbjVc4OHZGPRwYKLuIjyBx5TAyHJ3DEhexbXldMBfZjzdoxbOmwjpnYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DLYU3obuw2FzjjH17NUxRUoMUaCXSbi6YD3GQAGoHgY=;
- b=PdEXiL17zG7xU4m9eTeNIZxzADfxBkkZ7ZZ4dwsNr+Tl6isoysTymqQuqfVecdRmDt1VCs7H97vLLRiFXRGDc4FU+RNv5zv3ujDzfVuE9QGsN3R9SdNUeCVjh894haObUo91OLiEWJhzDcvZEUPZU5shha2w0D2ATSefDhJQyMSjJ5/mnlQ8iyBKtVftzg5J0Mqxevm9yJHNMcfB8ddXcmrjiiceTapDk7YtAXb/OVK0rcIUovACpFbXEaXzO+Iq4N08GsTfcNd6PCIAh6zw80faTMjy2RdjsZCAW3u2u/GTX82+DzpvixNEL9gn/WaVEgntgyi9lDVGPnHNVQoB4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DLYU3obuw2FzjjH17NUxRUoMUaCXSbi6YD3GQAGoHgY=;
- b=Hd3Zb6ijeJHtc4z6J69kd4hShtjYAEdV4oIqYeZ3+ZoHIRnvieVkzrfDWg6WedRzBa9BPVZNj205QSz1wokr9J5oyFnzumurGWeo/zhN6pDGDp+1WW1fXOsWsy/5dVpR64Jlqw/4IL3iJPeSYbVf41Tn0EhAu3ZdRfEe553QMjw=
-Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
- CH0PR11MB5753.namprd11.prod.outlook.com (2603:10b6:610:101::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Mon, 20 Jun
- 2022 14:22:03 +0000
-Received: from DM4PR11MB6479.namprd11.prod.outlook.com
- ([fe80::1954:e4ab:eafd:9cb4]) by DM4PR11MB6479.namprd11.prod.outlook.com
- ([fe80::1954:e4ab:eafd:9cb4%5]) with mapi id 15.20.5353.014; Mon, 20 Jun 2022
- 14:22:03 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <regressions@leemhuis.info>, <peda@axentia.se>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <du@axentia.se>, <Patrice.Vilchez@microchip.com>,
-        <Cristian.Birsan@microchip.com>, <Ludovic.Desroches@microchip.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <gregkh@linuxfoundation.org>, <saravanak@google.com>
-Subject: Re: Regression: memory corruption on Atmel SAMA5D31
-Thread-Topic: Regression: memory corruption on Atmel SAMA5D31
-Thread-Index: AQHYL7i/by/02n1wA0qavxdAEojSf61ZAsYA
-Date:   Mon, 20 Jun 2022 14:22:02 +0000
-Message-ID: <0d8b2d9c-af85-7148-ff13-aa968a7f51ad@microchip.com>
-References: <13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se>
- <e47c155a-f25d-11b3-3339-b2bf71b886ce@microchip.com>
- <9e24034e-f586-a721-9031-179601a69abb@axentia.se>
- <7214ea3d-1445-c0fb-2620-cdc3d6167bcc@axentia.se>
- <b5c57978-212f-55c4-2f0b-b38a8f157ca3@microchip.com>
- <a024180a-493c-af20-0910-da30dd5fe364@axentia.se>
- <6d9561a4-39e4-3dbe-5fe2-c6f88ee2a4c6@axentia.se>
- <ed24a281-1790-8e24-5f5a-25b66527044b@microchip.com>
- <d563c7ba-6431-2639-9f2a-2e2c6788e625@axentia.se>
- <e5a715c5-ad9f-6fd4-071e-084ab950603e@microchip.com>
- <220ddbef-5592-47b7-5150-4291f9532c6d@axentia.se>
- <6ad73fa2-0ebb-1e96-a45a-b70faca623dd@axentia.se>
- <0879d887-6558-bb9f-a1b9-9220be984380@leemhuis.info>
- <4a1e8827-1ff0-4034-d96e-f561508df432@microchip.com>
- <1a398441-c901-2dae-679e-f0b5b1c43b18@axentia.se>
- <14e5ccbe-8275-c316-e3e1-f77461309249@microchip.com>
- <c5928610-4902-27f3-7312-e8c85eefad39@axentia.se>
- <bfb4cb27-e2e1-e709-1c27-d938e4d30eab@leemhuis.info>
- <6b1bae01-d8fb-1676-3dee-9d5d376e37f1@microchip.com>
-In-Reply-To: <6b1bae01-d8fb-1676-3dee-9d5d376e37f1@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fd7d99db-91d5-494e-cbbe-08da52c83efe
-x-ms-traffictypediagnostic: CH0PR11MB5753:EE_
-x-microsoft-antispam-prvs: <CH0PR11MB5753343FFCB94198BBDB07A7F0B09@CH0PR11MB5753.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sWYILedbYUqJctohu32H9yzErP68vUh4HMyUReVQB6o6Mo4fPZAW6FJ/ObFwUGZgiyhk4rbcTY1dDfASMyZlcXgzGxOawiykVe+HUAVcMv9CN38UKEc7A/CTifs4u+1krxhPmoJkuhJ/YjYYsosk5+36+Tj2I080Yf5imyiI1qvaiE5qPDNolFcKFD7PXmLW+IVy0N9zt6HAejHBFYNEU4+LG87h/P25lmiw86Uh+qDSt9miCMY/q7hxZFt7AkyAerTpOtkxq0702EoYIciTuzBNuYGjrszfafbzb6Qv765rI/LEkuU61hfTYDsFRr4xSxHG8a7BKojUQ79cvndTLGoM+73LIGKdgiDS27YkLgbgldiC9UCT72HFO/ixJx25mfvVM5FV0zVSmw5anFsv0mxZI4ValFfz3zTzk1cG+44wf3aMLunRd5Zwqb2vKNWWtUtodBaMH5s1iWxqtUdwNWmkpouGmAziQ/iCFD5wlKGJp0DNCslqjPmKbqLC02z6x1F5HHzmjDinmCZutdKsKQoMEhYm2wFMxocnCaRtQpUsu0TQpJiy4EEYAaUkNBK1ijr22bCAzQOHKeSpVGcgO9yKF6AkD9pyl1/KKhZZCSqFnGUEjD4YALx30LuJuoc3111nlxquA2YHp/EW39mEVAV6db2LO0DF1eXK/08CivzZLsvXbRy7cRtMWvVu9hbh+oTkBr8Enqw5L8kdbF/u/k9N5S1BaV09xovAg7j5gk7lQWRVnh+IKA6LO1UMUcuX37p6q3M+royqJJwxoD0z6A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(396003)(136003)(346002)(376002)(38100700002)(6506007)(4326008)(8676002)(6512007)(31686004)(26005)(478600001)(110136005)(8936002)(2906002)(31696002)(86362001)(66556008)(76116006)(6486002)(38070700005)(4744005)(186003)(71200400001)(66476007)(36756003)(91956017)(64756008)(66946007)(316002)(122000001)(66446008)(54906003)(41300700001)(2616005)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z24yWUhHSkxicTNOOERKUCtlSDN2NE91czM1eDFQclJwbkl3ZTRDdWpKU1dC?=
- =?utf-8?B?Q1IzeTZ2Z3B5UU5YdXpYamFWMEg0cTIxbXRUWnJSVlJPWEVLN1dQdGx4M3lJ?=
- =?utf-8?B?MS9xUmFxOHRvcUFtRjJxb0FPcHRQVkpTbGxoRjczOWlTeDA3V0daUnJidnIx?=
- =?utf-8?B?NEFvL25zaUxLVkV4eDR6Wm9rRUFBWjhJSW8wY0lkUzJ6QTdMUUp0L1JCUnl0?=
- =?utf-8?B?T1YwSkxtMHVoYzF3VEdzcXk5UTlnTUhGbzlVemhSR2hJQlNTR0xIQTBiNGlB?=
- =?utf-8?B?SEVJd3UxQTU2VmdaSk1TWVA3WXIwVW9hNmlIb0tESUZhN3dpNktTL0JJQWg1?=
- =?utf-8?B?YlNvdXZNeTVJMmZuQTA3TFlvMGlzREFTRUVIY2JWMVR4WmUxeTZVdWZXYVht?=
- =?utf-8?B?dytoOW8rVW5Ta2FxTnpSUlVMQ21GeGhFTEJ1VldZM2NGZVNKb1MrQ2hITlps?=
- =?utf-8?B?VEJsaklxS2Y5NnI3YnFVSmJHYzZoY1pmZTMwbjdPVlF2VWxUVEJ2eUpORXJK?=
- =?utf-8?B?WHNGRUVmaVhqajZ1TENYNUpTa2l0TmRwOVdZaHk5VmI5SmtGZnJlY2EwT1Rz?=
- =?utf-8?B?YnE0TVFtSTRuRXNLREVUT0hwN3cwSno4bithS2drRk1QclpoMnZub2VzcG43?=
- =?utf-8?B?Z1VaU3NSTzlIM3pGVUdRdENhNlk4eFE3T0pzWVJsMnpaMnJJbXdxRXBrNk8w?=
- =?utf-8?B?UzVWalZkdmpVUEsyb05CQk9FMUlwWlBwc0Q5Y2t3WmJMQkIyYlpqZHRuY0Rp?=
- =?utf-8?B?YjkzRTg1WndKUVRxd09rNmNoWW5DS3ZJaXc1YWpFcUErUW1qUjR3R0NwWXZ3?=
- =?utf-8?B?NENCdmhSaUdHWXNxaUR1MjVsWU50SkJIaWRKQ0JoUE9OU1RaZkJ3dExnMHo0?=
- =?utf-8?B?dm5iVTJ3WVFueVFKb2RlTmV2NVg3cWNRQTYyWHZGdXhITXJrbE9MRHkwL1k0?=
- =?utf-8?B?Ry9mbFRlRUtUSC9GUkd6YkY1eU5pZmplOW9RbWV1bW5ZeG5PNW0vN09lS2Iy?=
- =?utf-8?B?d2xwYmJKSFJzRW03QTlsZDRTWXNCVm1TM0RtdThHelY0S2UybHRLZWlOWVBS?=
- =?utf-8?B?QVhLN1RUZVpDSFZEcm53TytmOTBvVWxka2toeWhjYTZhNnBJR3F0RVRXYWZI?=
- =?utf-8?B?MWF3RERYdWV5dnNjWXF0VVRqYndsa2IweFdIOUxsbWVibmVMMmwydjJENUtu?=
- =?utf-8?B?OGJuZzVQMEJudjZJTkdlNGZVS0dTTitqNVpzTjYwbUo0TUVRd1dMQ0RJM0xF?=
- =?utf-8?B?aXBpSGtUTGJCWkJzVzNBYjlKQktRT3E2Y2xXTmMrd25KUk10MmR6TGZPdzBJ?=
- =?utf-8?B?YUZyQTRPcmgxcWJhSEdXdnJhTmlQTGt1VDBvakFodmE2MHVETkdIckk3NnZt?=
- =?utf-8?B?Q2NFLzlQVkVrVVZ1N1c2Tm52TE52WXRwcjdacjZLTEdsRVBNMUF2MlM0N0RG?=
- =?utf-8?B?MVZLRGJUUFQwRnh6UGtRUzRJanF0T2hkMmw2dkZlV3dSMUtLWHlqaEx5aVBn?=
- =?utf-8?B?WWtjaGt6OTlqVllhSVpHTGlIWlVBQ3hMa2N3d0hDZm1URnREQzl3V05VUnBm?=
- =?utf-8?B?cmtENlhqMWdmeDN0L1ZmMmxldmdJTzNKZDFKalpqZEJxdVFVN3g5dnpXV3Mw?=
- =?utf-8?B?cGcrSGpmMUppbG94N1ZPUjhiZ01tZC9GcU8yWFBXS1Q0TFdRdWVGL040eHJs?=
- =?utf-8?B?WDVTQnltK3oyTkFQMFREbHR5b3ByaGU3Z1U2bzNuZytma3M1amFkMnEzUnMz?=
- =?utf-8?B?NmxLVGpTRkREdWphUG9pWHdkNkRmMVhTdDNSZklQeXZaS240WnFlTXdKWXJV?=
- =?utf-8?B?eUxoTENaVWNOYXR1VHVWZHJoTHgzMkI5MGhRckdpSWhXS3RyM0M4MFBXSGdH?=
- =?utf-8?B?TTl1U3hGK0FwSlE1bDIxcTRUUzZtcjBOaHV0ZDlReHYyeUc0QWZRMTdqLzZn?=
- =?utf-8?B?OG9PeTZYWjZCd2ppOFJUYTZLTk5qdjMyUS9sZzU3UTBtTmkwck1tWnl3dGEv?=
- =?utf-8?B?bnoxMnhTR1BVdmJyUVhhaUhTbmxrM0xaTFZOMk9QdVRPWHBTRGJhTU9pcCty?=
- =?utf-8?B?QXB4aWN5YmtqQVZzOG1SVUdyd3JrNnFUYnZjUW9UOEF5SXBVa0ZBL2NOVVVq?=
- =?utf-8?B?aVowZmJmb2ROUWk2dVhETkJZVmQ5NW55b25peFZabDlhdTcwd3JOWHRPSDhD?=
- =?utf-8?B?c0p2M0wxSHZBcExVVVRRZnBPT0JxMVJrNi9ZekI1N1VleVhUM1FiTWx2aHFM?=
- =?utf-8?B?VzhmSmc4NjVZanNFd2FDOXdHNDdOeVBQaDdsQmNoN3hCN2hDMVo5clpCWTVU?=
- =?utf-8?B?aGRmeVZWdmN4YVBGdFNUdzdrSGJWWlcrajhEd3BINGVyb3dSVE1rTGVnZ3V0?=
- =?utf-8?Q?EBqBvndy3CKtun0Q=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <766671662D6FED419C94A99172DAF937@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 20 Jun 2022 10:59:25 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5041D14000;
+        Mon, 20 Jun 2022 07:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1655735049;
+        bh=mqwk42X40zW8zNvpTM2nfy3vsakf+Ef44fCi2/yrgPo=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=ANGxP0uZ+kjJmFpcesOLQyw/wxuxlRjdbs7Om23fTujlpM3YZhWlk52tDJxrVeKij
+         vv6IJBEAqb+Su6mLiKPKfxHWkcAqhluMVPw5IIRcc18Tng38x2/0wiJ4ujnufRHETG
+         BDTh3J/4gXJEW4QvV8tpku7ETFKbV1tY2sgpYlOw=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0EC5E128692D;
+        Mon, 20 Jun 2022 10:24:09 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ER6VUdcEzv1q; Mon, 20 Jun 2022 10:24:08 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1655735048;
+        bh=mqwk42X40zW8zNvpTM2nfy3vsakf+Ef44fCi2/yrgPo=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=NaqFKCdvaHVohJ77IHEvLFOOXoLRP99AbZovwK1mNJWCyqbRrrd6GpJ/I37Or/K/W
+         IjzPmNoIo9hD6MhJ7JBbGX5fn/8MYRrxBJFynTQ6RJY3nE6cN5hBcwTkWVi/xnyM5y
+         0E+RrnxA8hrUiDhq36XSTzqqPeLJ7jV1dM4vFYWU=
+Received: from lingrow.int.hansenpartnership.com (c-67-166-174-65.hsd1.va.comcast.net [67.166.174.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2E514128691A;
+        Mon, 20 Jun 2022 10:24:08 -0400 (EDT)
+Message-ID: <151c2749ac4ca8ca853d36f0f6899b009c1db518.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.19-rc3
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 20 Jun 2022 10:24:06 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd7d99db-91d5-494e-cbbe-08da52c83efe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 14:22:02.9700
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AMH4bWpMH6g5eX5YjZEHURyTKwxbV7CGr1LzyXyum5hl+QyFB0lj/k5wVgCyYbSYDv62f3io68Ocnqaae2KQpoSnQr6WGMPbzFiao1ExFMo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5753
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IA0KPiBnaXRAZ2l0aHViLmNvbTphbWJhcnVzL2xpbnV4LTBkYXkuZ2l0LCBicmFuY2ggZG1h
-LXJlZ3Jlc3Npb24taGRtYWMtdjUuMTgtcmM3LTR0aC1hdHRlbXB0DQo+IA0KDQpIaSwgUGV0ZXIs
-DQoNCkkndmUganVzdCBmb3JjZWQgcHVzaGVkIG9uIHRoaXMgYnJhbmNoLCBJIGhhZCBhIHR5cG8g
-c29tZXdoZXJlIGFuZCB3aXRoIHRoYXQgZml4ZWQgSSBjb3VsZA0Kbm8gbG9uZ2VyIHJlcHJvZHVj
-ZSB0aGUgYnVnLiBUZXN0ZWQgZm9yIH4yMCBtaW51dGVzLiBXb3VsZCB5b3UgcGxlYXNlIHRlc3Qg
-bGFzdCAzIHBhdGNoZXMNCmFuZCB0ZWxsIG1lIGlmIHlvdSBjYW4gc3RpbGwgcmVwcm9kdWNlIHRo
-ZSBidWc/DQoNClRoYW5rcywNCnRhDQo=
+Eight fixes, all in drivers (ufs, scsi_debug, storvsc, iscsi, ibmvfc). 
+Apart from the ufs command clearing updates, these are mostly minor and
+obvious fixes.
+
+The patch is available here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+The short changelog is:
+
+Bart Van Assche (3):
+      scsi: ufs: Fix a race between the interrupt handler and the reset handler
+      scsi: ufs: Support clearing multiple commands at once
+      scsi: ufs: Simplify ufshcd_clear_cmd()
+
+Damien Le Moal (1):
+      scsi: scsi_debug: Fix zone transition to full condition
+
+Saurabh Sengar (1):
+      scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+
+Sergey Gorenko (1):
+      scsi: iscsi: Exclude zero from the endpoint ID range
+
+Tyrel Datwyler (2):
+      scsi: ibmvfc: Store vhost pointer during subcrq allocation
+      scsi: ibmvfc: Allocate/free queue resource only during probe/remove
+
+And the diffstat:
+
+ drivers/scsi/ibmvscsi/ibmvfc.c      | 82 +++++++++++++++++++++++++++++--------
+ drivers/scsi/ibmvscsi/ibmvfc.h      |  2 +-
+ drivers/scsi/scsi_debug.c           | 22 +++++++++-
+ drivers/scsi/scsi_transport_iscsi.c |  7 +++-
+ drivers/scsi/storvsc_drv.c          | 27 +++++++++---
+ drivers/ufs/core/ufshcd.c           | 76 +++++++++++++++++++++-------------
+ 6 files changed, 161 insertions(+), 55 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index d0eab5700dc5..00684e11976b 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -160,8 +160,8 @@ static void ibmvfc_npiv_logout(struct ibmvfc_host *);
+ static void ibmvfc_tgt_implicit_logout_and_del(struct ibmvfc_target *);
+ static void ibmvfc_tgt_move_login(struct ibmvfc_target *);
+ 
+-static void ibmvfc_release_sub_crqs(struct ibmvfc_host *);
+-static void ibmvfc_init_sub_crqs(struct ibmvfc_host *);
++static void ibmvfc_dereg_sub_crqs(struct ibmvfc_host *);
++static void ibmvfc_reg_sub_crqs(struct ibmvfc_host *);
+ 
+ static const char *unknown_error = "unknown error";
+ 
+@@ -917,7 +917,7 @@ static int ibmvfc_reenable_crq_queue(struct ibmvfc_host *vhost)
+ 	struct vio_dev *vdev = to_vio_dev(vhost->dev);
+ 	unsigned long flags;
+ 
+-	ibmvfc_release_sub_crqs(vhost);
++	ibmvfc_dereg_sub_crqs(vhost);
+ 
+ 	/* Re-enable the CRQ */
+ 	do {
+@@ -936,7 +936,7 @@ static int ibmvfc_reenable_crq_queue(struct ibmvfc_host *vhost)
+ 	spin_unlock(vhost->crq.q_lock);
+ 	spin_unlock_irqrestore(vhost->host->host_lock, flags);
+ 
+-	ibmvfc_init_sub_crqs(vhost);
++	ibmvfc_reg_sub_crqs(vhost);
+ 
+ 	return rc;
+ }
+@@ -955,7 +955,7 @@ static int ibmvfc_reset_crq(struct ibmvfc_host *vhost)
+ 	struct vio_dev *vdev = to_vio_dev(vhost->dev);
+ 	struct ibmvfc_queue *crq = &vhost->crq;
+ 
+-	ibmvfc_release_sub_crqs(vhost);
++	ibmvfc_dereg_sub_crqs(vhost);
+ 
+ 	/* Close the CRQ */
+ 	do {
+@@ -988,7 +988,7 @@ static int ibmvfc_reset_crq(struct ibmvfc_host *vhost)
+ 	spin_unlock(vhost->crq.q_lock);
+ 	spin_unlock_irqrestore(vhost->host->host_lock, flags);
+ 
+-	ibmvfc_init_sub_crqs(vhost);
++	ibmvfc_reg_sub_crqs(vhost);
+ 
+ 	return rc;
+ }
+@@ -5682,6 +5682,8 @@ static int ibmvfc_alloc_queue(struct ibmvfc_host *vhost,
+ 	queue->cur = 0;
+ 	queue->fmt = fmt;
+ 	queue->size = PAGE_SIZE / fmt_size;
++
++	queue->vhost = vhost;
+ 	return 0;
+ }
+ 
+@@ -5757,9 +5759,6 @@ static int ibmvfc_register_scsi_channel(struct ibmvfc_host *vhost,
+ 
+ 	ENTER;
+ 
+-	if (ibmvfc_alloc_queue(vhost, scrq, IBMVFC_SUB_CRQ_FMT))
+-		return -ENOMEM;
+-
+ 	rc = h_reg_sub_crq(vdev->unit_address, scrq->msg_token, PAGE_SIZE,
+ 			   &scrq->cookie, &scrq->hw_irq);
+ 
+@@ -5790,7 +5789,6 @@ static int ibmvfc_register_scsi_channel(struct ibmvfc_host *vhost,
+ 	}
+ 
+ 	scrq->hwq_id = index;
+-	scrq->vhost = vhost;
+ 
+ 	LEAVE;
+ 	return 0;
+@@ -5800,7 +5798,6 @@ static int ibmvfc_register_scsi_channel(struct ibmvfc_host *vhost,
+ 		rc = plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address, scrq->cookie);
+ 	} while (rtas_busy_delay(rc));
+ reg_failed:
+-	ibmvfc_free_queue(vhost, scrq);
+ 	LEAVE;
+ 	return rc;
+ }
+@@ -5826,12 +5823,50 @@ static void ibmvfc_deregister_scsi_channel(struct ibmvfc_host *vhost, int index)
+ 	if (rc)
+ 		dev_err(dev, "Failed to free sub-crq[%d]: rc=%ld\n", index, rc);
+ 
+-	ibmvfc_free_queue(vhost, scrq);
++	/* Clean out the queue */
++	memset(scrq->msgs.crq, 0, PAGE_SIZE);
++	scrq->cur = 0;
++
++	LEAVE;
++}
++
++static void ibmvfc_reg_sub_crqs(struct ibmvfc_host *vhost)
++{
++	int i, j;
++
++	ENTER;
++	if (!vhost->mq_enabled || !vhost->scsi_scrqs.scrqs)
++		return;
++
++	for (i = 0; i < nr_scsi_hw_queues; i++) {
++		if (ibmvfc_register_scsi_channel(vhost, i)) {
++			for (j = i; j > 0; j--)
++				ibmvfc_deregister_scsi_channel(vhost, j - 1);
++			vhost->do_enquiry = 0;
++			return;
++		}
++	}
++
++	LEAVE;
++}
++
++static void ibmvfc_dereg_sub_crqs(struct ibmvfc_host *vhost)
++{
++	int i;
++
++	ENTER;
++	if (!vhost->mq_enabled || !vhost->scsi_scrqs.scrqs)
++		return;
++
++	for (i = 0; i < nr_scsi_hw_queues; i++)
++		ibmvfc_deregister_scsi_channel(vhost, i);
++
+ 	LEAVE;
+ }
+ 
+ static void ibmvfc_init_sub_crqs(struct ibmvfc_host *vhost)
+ {
++	struct ibmvfc_queue *scrq;
+ 	int i, j;
+ 
+ 	ENTER;
+@@ -5847,30 +5882,41 @@ static void ibmvfc_init_sub_crqs(struct ibmvfc_host *vhost)
+ 	}
+ 
+ 	for (i = 0; i < nr_scsi_hw_queues; i++) {
+-		if (ibmvfc_register_scsi_channel(vhost, i)) {
+-			for (j = i; j > 0; j--)
+-				ibmvfc_deregister_scsi_channel(vhost, j - 1);
++		scrq = &vhost->scsi_scrqs.scrqs[i];
++		if (ibmvfc_alloc_queue(vhost, scrq, IBMVFC_SUB_CRQ_FMT)) {
++			for (j = i; j > 0; j--) {
++				scrq = &vhost->scsi_scrqs.scrqs[j - 1];
++				ibmvfc_free_queue(vhost, scrq);
++			}
+ 			kfree(vhost->scsi_scrqs.scrqs);
+ 			vhost->scsi_scrqs.scrqs = NULL;
+ 			vhost->scsi_scrqs.active_queues = 0;
+ 			vhost->do_enquiry = 0;
+-			break;
++			vhost->mq_enabled = 0;
++			return;
+ 		}
+ 	}
+ 
++	ibmvfc_reg_sub_crqs(vhost);
++
+ 	LEAVE;
+ }
+ 
+ static void ibmvfc_release_sub_crqs(struct ibmvfc_host *vhost)
+ {
++	struct ibmvfc_queue *scrq;
+ 	int i;
+ 
+ 	ENTER;
+ 	if (!vhost->scsi_scrqs.scrqs)
+ 		return;
+ 
+-	for (i = 0; i < nr_scsi_hw_queues; i++)
+-		ibmvfc_deregister_scsi_channel(vhost, i);
++	ibmvfc_dereg_sub_crqs(vhost);
++
++	for (i = 0; i < nr_scsi_hw_queues; i++) {
++		scrq = &vhost->scsi_scrqs.scrqs[i];
++		ibmvfc_free_queue(vhost, scrq);
++	}
+ 
+ 	kfree(vhost->scsi_scrqs.scrqs);
+ 	vhost->scsi_scrqs.scrqs = NULL;
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
+index 3718406e0988..c39a245f43d0 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.h
++++ b/drivers/scsi/ibmvscsi/ibmvfc.h
+@@ -789,6 +789,7 @@ struct ibmvfc_queue {
+ 	spinlock_t _lock;
+ 	spinlock_t *q_lock;
+ 
++	struct ibmvfc_host *vhost;
+ 	struct ibmvfc_event_pool evt_pool;
+ 	struct list_head sent;
+ 	struct list_head free;
+@@ -797,7 +798,6 @@ struct ibmvfc_queue {
+ 	union ibmvfc_iu cancel_rsp;
+ 
+ 	/* Sub-CRQ fields */
+-	struct ibmvfc_host *vhost;
+ 	unsigned long cookie;
+ 	unsigned long vios_cookie;
+ 	unsigned long hw_irq;
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 1f423f723d06..b8a76b89f85a 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -2826,6 +2826,24 @@ static void zbc_open_zone(struct sdebug_dev_info *devip,
+ 	}
+ }
+ 
++static inline void zbc_set_zone_full(struct sdebug_dev_info *devip,
++				     struct sdeb_zone_state *zsp)
++{
++	switch (zsp->z_cond) {
++	case ZC2_IMPLICIT_OPEN:
++		devip->nr_imp_open--;
++		break;
++	case ZC3_EXPLICIT_OPEN:
++		devip->nr_exp_open--;
++		break;
++	default:
++		WARN_ONCE(true, "Invalid zone %llu condition %x\n",
++			  zsp->z_start, zsp->z_cond);
++		break;
++	}
++	zsp->z_cond = ZC5_FULL;
++}
++
+ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 		       unsigned long long lba, unsigned int num)
+ {
+@@ -2838,7 +2856,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 	if (zsp->z_type == ZBC_ZTYPE_SWR) {
+ 		zsp->z_wp += num;
+ 		if (zsp->z_wp >= zend)
+-			zsp->z_cond = ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+ 		return;
+ 	}
+ 
+@@ -2857,7 +2875,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 			n = num;
+ 		}
+ 		if (zsp->z_wp >= zend)
+-			zsp->z_cond = ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+ 
+ 		num -= n;
+ 		lba += n;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 2c0dd64159b0..5d21f07456c6 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -212,7 +212,12 @@ iscsi_create_endpoint(int dd_size)
+ 		return NULL;
+ 
+ 	mutex_lock(&iscsi_ep_idr_mutex);
+-	id = idr_alloc(&iscsi_ep_idr, ep, 0, -1, GFP_NOIO);
++
++	/*
++	 * First endpoint id should be 1 to comply with user space
++	 * applications (iscsid).
++	 */
++	id = idr_alloc(&iscsi_ep_idr, ep, 1, -1, GFP_NOIO);
+ 	if (id < 0) {
+ 		mutex_unlock(&iscsi_ep_idr_mutex);
+ 		printk(KERN_ERR "Could not allocate endpoint ID. Error %d.\n",
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index ca3530982e52..fe000da11332 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -1844,7 +1844,7 @@ static struct scsi_host_template scsi_driver = {
+ 	.cmd_per_lun =		2048,
+ 	.this_id =		-1,
+ 	/* Ensure there are no gaps in presented sgls */
+-	.virt_boundary_mask =	PAGE_SIZE-1,
++	.virt_boundary_mask =	HV_HYP_PAGE_SIZE - 1,
+ 	.no_write_same =	1,
+ 	.track_queue_depth =	1,
+ 	.change_queue_depth =	storvsc_change_queue_depth,
+@@ -1895,6 +1895,7 @@ static int storvsc_probe(struct hv_device *device,
+ 	int target = 0;
+ 	struct storvsc_device *stor_device;
+ 	int max_sub_channels = 0;
++	u32 max_xfer_bytes;
+ 
+ 	/*
+ 	 * We support sub-channels for storage on SCSI and FC controllers.
+@@ -1968,12 +1969,28 @@ static int storvsc_probe(struct hv_device *device,
+ 	}
+ 	/* max cmd length */
+ 	host->max_cmd_len = STORVSC_MAX_CMD_LEN;
+-
+ 	/*
+-	 * set the table size based on the info we got
+-	 * from the host.
++	 * Any reasonable Hyper-V configuration should provide
++	 * max_transfer_bytes value aligning to HV_HYP_PAGE_SIZE,
++	 * protecting it from any weird value.
++	 */
++	max_xfer_bytes = round_down(stor_device->max_transfer_bytes, HV_HYP_PAGE_SIZE);
++	/* max_hw_sectors_kb */
++	host->max_sectors = max_xfer_bytes >> 9;
++	/*
++	 * There are 2 requirements for Hyper-V storvsc sgl segments,
++	 * based on which the below calculation for max segments is
++	 * done:
++	 *
++	 * 1. Except for the first and last sgl segment, all sgl segments
++	 *    should be align to HV_HYP_PAGE_SIZE, that also means the
++	 *    maximum number of segments in a sgl can be calculated by
++	 *    dividing the total max transfer length by HV_HYP_PAGE_SIZE.
++	 *
++	 * 2. Except for the first and last, each entry in the SGL must
++	 *    have an offset that is a multiple of HV_HYP_PAGE_SIZE.
+ 	 */
+-	host->sg_tablesize = (stor_device->max_transfer_bytes >> PAGE_SHIFT);
++	host->sg_tablesize = (max_xfer_bytes >> HV_HYP_PAGE_SHIFT) + 1;
+ 	/*
+ 	 * For non-IDE disks, the host supports multiple channels.
+ 	 * Set the number of HW queues we are supporting.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 01fb4bad86be..ce86d1b790c0 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -748,17 +748,28 @@ static enum utp_ocs ufshcd_get_tr_ocs(struct ufshcd_lrb *lrbp)
+ }
+ 
+ /**
+- * ufshcd_utrl_clear - Clear a bit in UTRLCLR register
++ * ufshcd_utrl_clear() - Clear requests from the controller request list.
+  * @hba: per adapter instance
+- * @pos: position of the bit to be cleared
++ * @mask: mask with one bit set for each request to be cleared
+  */
+-static inline void ufshcd_utrl_clear(struct ufs_hba *hba, u32 pos)
++static inline void ufshcd_utrl_clear(struct ufs_hba *hba, u32 mask)
+ {
+ 	if (hba->quirks & UFSHCI_QUIRK_BROKEN_REQ_LIST_CLR)
+-		ufshcd_writel(hba, (1 << pos), REG_UTP_TRANSFER_REQ_LIST_CLEAR);
+-	else
+-		ufshcd_writel(hba, ~(1 << pos),
+-				REG_UTP_TRANSFER_REQ_LIST_CLEAR);
++		mask = ~mask;
++	/*
++	 * From the UFSHCI specification: "UTP Transfer Request List CLear
++	 * Register (UTRLCLR): This field is bit significant. Each bit
++	 * corresponds to a slot in the UTP Transfer Request List, where bit 0
++	 * corresponds to request slot 0. A bit in this field is set to ‘0’
++	 * by host software to indicate to the host controller that a transfer
++	 * request slot is cleared. The host controller
++	 * shall free up any resources associated to the request slot
++	 * immediately, and shall set the associated bit in UTRLDBR to ‘0’. The
++	 * host software indicates no change to request slots by setting the
++	 * associated bits in this field to ‘1’. Bits in this field shall only
++	 * be set ‘1’ or ‘0’ by host software when UTRLRSR is set to ‘1’."
++	 */
++	ufshcd_writel(hba, ~mask, REG_UTP_TRANSFER_REQ_LIST_CLEAR);
+ }
+ 
+ /**
+@@ -2863,27 +2874,26 @@ static int ufshcd_compose_dev_cmd(struct ufs_hba *hba,
+ 	return ufshcd_compose_devman_upiu(hba, lrbp);
+ }
+ 
+-static int
+-ufshcd_clear_cmd(struct ufs_hba *hba, int tag)
++/*
++ * Clear all the requests from the controller for which a bit has been set in
++ * @mask and wait until the controller confirms that these requests have been
++ * cleared.
++ */
++static int ufshcd_clear_cmds(struct ufs_hba *hba, u32 mask)
+ {
+-	int err = 0;
+ 	unsigned long flags;
+-	u32 mask = 1 << tag;
+ 
+ 	/* clear outstanding transaction before retry */
+ 	spin_lock_irqsave(hba->host->host_lock, flags);
+-	ufshcd_utrl_clear(hba, tag);
++	ufshcd_utrl_clear(hba, mask);
+ 	spin_unlock_irqrestore(hba->host->host_lock, flags);
+ 
+ 	/*
+ 	 * wait for h/w to clear corresponding bit in door-bell.
+ 	 * max. wait is 1 sec.
+ 	 */
+-	err = ufshcd_wait_for_register(hba,
+-			REG_UTP_TRANSFER_REQ_DOOR_BELL,
+-			mask, ~mask, 1000, 1000);
+-
+-	return err;
++	return ufshcd_wait_for_register(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL,
++					mask, ~mask, 1000, 1000);
+ }
+ 
+ static int
+@@ -2963,7 +2973,7 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
+ 		err = -ETIMEDOUT;
+ 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
+ 			__func__, lrbp->task_tag);
+-		if (!ufshcd_clear_cmd(hba, lrbp->task_tag))
++		if (!ufshcd_clear_cmds(hba, 1U << lrbp->task_tag))
+ 			/* successfully cleared the command, retry if needed */
+ 			err = -EAGAIN;
+ 		/*
+@@ -6958,14 +6968,14 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+ }
+ 
+ /**
+- * ufshcd_eh_device_reset_handler - device reset handler registered to
+- *                                    scsi layer.
++ * ufshcd_eh_device_reset_handler() - Reset a single logical unit.
+  * @cmd: SCSI command pointer
+  *
+  * Returns SUCCESS/FAILED
+  */
+ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+ {
++	unsigned long flags, pending_reqs = 0, not_cleared = 0;
+ 	struct Scsi_Host *host;
+ 	struct ufs_hba *hba;
+ 	u32 pos;
+@@ -6984,14 +6994,24 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+ 	}
+ 
+ 	/* clear the commands that were pending for corresponding LUN */
+-	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs) {
+-		if (hba->lrb[pos].lun == lun) {
+-			err = ufshcd_clear_cmd(hba, pos);
+-			if (err)
+-				break;
+-			__ufshcd_transfer_req_compl(hba, 1U << pos);
+-		}
++	spin_lock_irqsave(&hba->outstanding_lock, flags);
++	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs)
++		if (hba->lrb[pos].lun == lun)
++			__set_bit(pos, &pending_reqs);
++	hba->outstanding_reqs &= ~pending_reqs;
++	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++
++	if (ufshcd_clear_cmds(hba, pending_reqs) < 0) {
++		spin_lock_irqsave(&hba->outstanding_lock, flags);
++		not_cleared = pending_reqs &
++			ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
++		hba->outstanding_reqs |= not_cleared;
++		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++
++		dev_err(hba->dev, "%s: failed to clear requests %#lx\n",
++			__func__, not_cleared);
+ 	}
++	__ufshcd_transfer_req_compl(hba, pending_reqs & ~not_cleared);
+ 
+ out:
+ 	hba->req_abort_count = 0;
+@@ -7088,7 +7108,7 @@ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
+ 		goto out;
+ 	}
+ 
+-	err = ufshcd_clear_cmd(hba, tag);
++	err = ufshcd_clear_cmds(hba, 1U << tag);
+ 	if (err)
+ 		dev_err(hba->dev, "%s: Failed clearing cmd at tag %d, err %d\n",
+ 			__func__, tag, err);
+
+

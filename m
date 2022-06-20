@@ -2,130 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F095510C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6AC5510CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238937AbiFTG45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S238944AbiFTG6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiFTG44 (ORCPT
+        with ESMTP id S235909AbiFTG6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:56:56 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA985FCA;
-        Sun, 19 Jun 2022 23:56:55 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o3BL9-000466-Of; Mon, 20 Jun 2022 08:56:51 +0200
-Message-ID: <5bcb5963-9da0-fd59-45c5-d27af02e7748@leemhuis.info>
-Date:   Mon, 20 Jun 2022 08:56:50 +0200
+        Mon, 20 Jun 2022 02:58:51 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE9E5FBF
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:58:50 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id d19so10804103lji.10
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AQB+fC1Ry/DquRxnS+KzvjL21WPwMtczsitm2G5gP3c=;
+        b=C6STohw//IykeHfdXURwO7799cZQ18Nlm4+ldNTxKcSx4vWR9qvXRDpNIyLD54ex+u
+         YQaHM9Dk3m3PFonrqpKPGK4aXzVGcwXzET6FCFQ7fuhgEKTsZUUlQQRDIga7/FPAAPif
+         T7aHWbs9y1syUqemR2x5rsBIXls0dDsco1sc0ViUttb6Subl4obOXmpQRiXukK3mstzx
+         0ixOa82cyx/GO2gBNQDoGrF+aabZ4+9m1Jw6vF8wOrgUYRacwXNxcLoo7nybOqebcp30
+         jvxOyKLwul1nBQs1mCZRgXIPH1WfidMky4XGF2WWs0hfzbTOk7wiG4IEmwAdrDuOhNgm
+         QveQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AQB+fC1Ry/DquRxnS+KzvjL21WPwMtczsitm2G5gP3c=;
+        b=JXu75qXDQNwkl3z2+ffvNNKbAWY8GBV0dgHUy1MGo09FHe0IaZIiuAZSzs0IEe7pmj
+         WE6oHNANqRS7bqV8OTMpszJODe5QAlUf1lYuBip3o2b4QEmKUrsbnfG/Q9Dwiz4IuNZH
+         aUJNmfK86oBbjpm7At4Yx2d70BkRidksjwjVnC9rkmDvt3TXT+E1DGuxrUgukEAlmSZV
+         RbHOjeWycMSGTDWLOyJ1z7A0pS/gxOov3qwxCLSuo2ZvZIZG8DmQqmgXLu2tq5dkjhth
+         JB69eHBTMdWqdkBXebdjktxGX9M6NVineLbR110yk+CVXfUlDwk50Nqx9BmsTh9Xg4eq
+         Im9Q==
+X-Gm-Message-State: AJIora809IKguJlwxNk5oDzwZwcdDyiLnhIvR7YnrFvhe8ez2cgAsSIl
+        uPQCBfxmPZ0sNb9AlOUzaz4BkepUDEU29za6zovcL8nEFVw=
+X-Google-Smtp-Source: AGRyM1sPhDhnvBU5edUFq2ix7rPoHJrM6i6s1+9KG/pPuqwhUjaMgKKUm7FDpj0w6+x1EHx4TPQdH5qLVvlYUE1JEx0=
+X-Received: by 2002:a2e:b0fc:0:b0:255:6f92:f9d4 with SMTP id
+ h28-20020a2eb0fc000000b002556f92f9d4mr11174955ljl.92.1655708328432; Sun, 19
+ Jun 2022 23:58:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Arun Easi <aeasi@marvell.com>,
-        Tony Battersby <tonyb@cybernetics.com>
-Cc:     Saurav Kashyap <skashyap@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-References: <baef87c3-5dad-3b47-44c1-6914bfc90108@cybernetics.com>
- <alpine.LRH.2.21.9999.2205271524460.4730@mvluser05.qlc.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [REGRESSION] qla2xxx: tape drive not removed after unplug FC
- cable
-In-Reply-To: <alpine.LRH.2.21.9999.2205271524460.4730@mvluser05.qlc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1655708215;9d5f6de7;
-X-HE-SMSGID: 1o3BL9-000466-Of
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1653447164-15017-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <CAB8ipk9cAoP6yV_-Gn8bwbn5ezCZujLeMpioa0TiNU5=akBaug@mail.gmail.com> <Yq+PMWlARgDhv8uL@pc638.lan>
+In-Reply-To: <Yq+PMWlARgDhv8uL@pc638.lan>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Mon, 20 Jun 2022 14:58:18 +0800
+Message-ID: <CAGWkznHPdk_yqn2GWPDJaT32+4MnFLnRjdjBkaFv9BLMh4yM=g@mail.gmail.com>
+Subject: Re: [PATCH] mm: fix racing of vb->va when kasan enabled
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>, hch@lst.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On 28.05.22 02:27, Arun Easi wrote:
-> Hi Tony,
-> 
-> Thanks for reporting the issue. We are trying to recreate this issue in 
-> house. I will reach out to you for logs, if we cannot repro. Typically, we 
-> get sufficient context to the issue when the problem is reproduced with 
-> module parameter "ql2xextended_error_logging=1".
-> 
-> Anyway, I will let you know the status.
-
-What's the status here? Tony, did you provide the info Arun asked for=
-Or was some progress made somehow without it?
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
-> On Wed, 25 May 2022, 3:03pm, Tony Battersby wrote:
-> 
->> #regzbot introduced: 44c57f205876
->>
->> I have several different QLogic FC HBAs (8, 16, 32 Gbps) and several
->> different FC LTO tape drives (IBM Ultrium 8 & 9).  When I plug in the FC
->> cable, the tape drive shows up as a SCSI device as expected.  With older
->> kernels, when I unplug the FC cable, the tape drive SCSI device would
->> disappear after about 30 seconds.  But with newer kernels (including
->> 5.18), when I unplug the FC cable, the tape drive SCSI device never
->> disappears.  I have bisected the change in behavior to the following
->> commit in kernel 5.15:
->>
->> 44c57f205876 ("scsi: qla2xxx: Changes to support FCP2 Target")
->>
->> This commit has been backported to various -stable kernels, so they are
->> also affected.
->>
->> When testing with two different tape drives:
->> 1) Plug FC cable into tape drive A.  Tape drive A shows up as a SCSI device.
->> 2) Unplug FC cable; wait 60 seconds.  Tape drive A does not disappear.
->> 3) Plug FC cable into tape drive B.  Tape drive A disappears 30 seconds
->> later, but tape drive B does not show up.
->> 4) Unplug FC cable and plug it back into tape drive B.  Tape drive B
->> shows up as a SCSI device.
->>
->> So I can actually make a tape drive disappear by plugging the cable into
->> a different tape drive, but then I have to reseat the cable again to
->> make the new tape drive show up.
->>
->> lspci -n
->> 83:00.0 0c04: 1077:2031 (rev 02)
->> 83:00.1 0c04: 1077:2031 (rev 02)
->>
->> When plugging in cable:
->> qla2xxx [0000:83:00.1]-500a:7: LOOP UP detected (8 Gbps).
->>
->> When unplugging cable with old kernel:
->> qla2xxx [0000:83:00.1]-500b:7: LOOP DOWN detected (2 7 0 0).
->> rport-7:0-2: blocked FC remote port time out: removing target and saving binding
->>
->> When unplugging cable with new kernel:
->> qla2xxx [0000:83:00.1]-500b:7: LOOP DOWN detected (2 7 0 0).
->>
->> /sys/class/fc_remote_ports/rport-*/
->> dev_loss_tmo: 30
->> supported_classes: Class 3
->> port_state: Online
->> (port_state remains Online even when FC cable unplugged)
->>
->> /proc/scsi/scsi
->> Host: scsi7 Channel: 00 Id: 01 Lun: 00
->>   Vendor: IBM      Model: ULTRIUM-HH8      Rev: K4K1
->>   Type:   Sequential-Access                ANSI  SCSI revision: 06
->>
->> Tony Battersby
->> Cybernetics
->>
+On Mon, Jun 20, 2022 at 5:03 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+>
+> > On Thu, May 26, 2022 at 10:18 AM zhaoyang.huang
+> > <zhaoyang.huang@unisoc.com> wrote:
+> > >
+> > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > >
+> > > Accessing to vb->va could be deemed as use after free when KASAN is
+> > > enabled like bellowing. Fix it by expanding the mutex's range.
+> > >
+> > > [   20.232335] ==================================================================
+> > > [   20.232365] BUG: KASAN: use-after-free in _vm_unmap_aliases+0x164/0x364
+> > > [   20.232376] Read of size 8 at addr ffffff80d84af780 by task modprobe/300
+> > > [   20.232380]
+> > > [   20.232395] CPU: 5 PID: 300 Comm: modprobe Tainted: G S       C O      5.4.161-android12-9-03238-gd43329d103de-ab20547 #1
+> > > [   20.232401] Hardware name: Spreadtrum UMS512-1H10 SoC (DT)
+> > > [   20.232407] Call trace:
+> > > [   20.232419]  dump_backtrace+0x0/0x2b4
+> > > [   20.232428]  show_stack+0x24/0x30
+> > > [   20.232443]  dump_stack+0x15c/0x1f4
+> > > [   20.232455]  print_address_description+0x88/0x568
+> > > [   20.232465]  __kasan_report+0x1b8/0x1dc
+> > > [   20.232474]  kasan_report+0x10/0x18
+> > > [   20.232486]  __asan_report_load8_noabort+0x1c/0x24
+> > > [   20.232495]  _vm_unmap_aliases+0x164/0x364
+> > > [   20.232505]  vm_unmap_aliases+0x20/0x28
+> > > [   20.232516]  change_memory_common+0x2c4/0x3ec
+> > > [   20.232524]  set_memory_ro+0x30/0x3c
+> > > [   20.232539]  module_enable_ro+0x144/0x3f0
+> > > [   20.232547]  load_module+0x54c0/0x8248
+> > > [   20.232555]  __se_sys_finit_module+0x174/0x1b0
+> > > [   20.232564]  __arm64_sys_finit_module+0x78/0x88
+> > > [   20.232573]  el0_svc_common+0x19c/0x354
+> > > [   20.232581]  el0_svc_handler+0x48/0x54
+> > > [   20.232591]  el0_svc+0x8/0xc
+> > > [   20.232595]
+> > > [   20.232602] Allocated by task 297:
+> > > [   20.232615]  __kasan_kmalloc+0x130/0x1f8
+> > > [   20.232625]  kasan_slab_alloc+0x14/0x1c
+> > > [   20.232638]  kmem_cache_alloc+0x1dc/0x394
+> > > [   20.232648]  alloc_vmap_area+0xb4/0x1630
+> > > [   20.232657]  vm_map_ram+0x3ac/0x768
+> > > [   20.232671]  z_erofs_decompress_generic+0x2f0/0x844
+> > > [   20.232681]  z_erofs_decompress+0xa8/0x594
+> > > [   20.232692]  z_erofs_decompress_pcluster+0xeb4/0x1458
+> > > [   20.232702]  z_erofs_vle_unzip_wq+0xe4/0x140
+> > > [   20.232715]  process_one_work+0x5c0/0x10ac
+> > > [   20.232724]  worker_thread+0x888/0x1128
+> > > [   20.232733]  kthread+0x290/0x304
+> > > [   20.232744]  ret_from_fork+0x10/0x18
+> > > [   20.232747]
+> > > [   20.232752] Freed by task 51:
+> > > [   20.232762]  __kasan_slab_free+0x1a0/0x270
+> > > [   20.232772]  kasan_slab_free+0x10/0x1c
+> > > [   20.232781]  slab_free_freelist_hook+0xd0/0x1ac
+> > > [   20.232792]  kmem_cache_free+0x110/0x368
+> > > [   20.232803]  __purge_vmap_area_lazy+0x524/0x13e4
+> > > [   20.232813]  _vm_unmap_aliases+0x290/0x364
+> > > [   20.232822]  __vunmap+0x45c/0x5c4
+> > > [   20.232831]  vfree+0x74/0x16c
+> > > [   20.232841]  module_memfree+0x44/0x7c
+> > > [   20.232850]  do_free_init+0x5c/0xac
+> > > [   20.232860]  process_one_work+0x5c0/0x10ac
+> > > [   20.232869]  worker_thread+0xb3c/0x1128
+> > > [   20.232877]  kthread+0x290/0x304
+> > > [   20.232887]  ret_from_fork+0x10/0x18
+> > >
+> > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > ---
+> > >  mm/vmalloc.c | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > >
+> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > > index d2a00ad..028d65a 100644
+> > > --- a/mm/vmalloc.c
+> > > +++ b/mm/vmalloc.c
+> > > @@ -2081,7 +2081,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
+> > >                 return;
+> > >
+> > >         might_sleep();
+> > > -
+> > > +       mutex_lock(&vmap_purge_lock);
+> > >         for_each_possible_cpu(cpu) {
+> > >                 struct vmap_block_queue *vbq = &per_cpu(vmap_block_queue, cpu);
+> > >                 struct vmap_block *vb;
+> > > @@ -2106,7 +2106,6 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
+> > >                 rcu_read_unlock();
+> > >         }
+> > >
+> > > -       mutex_lock(&vmap_purge_lock);
+> > >         purge_fragmented_blocks_allcpus();
+> > >         if (!__purge_vmap_area_lazy(start, end) && flush)
+> > >                 flush_tlb_kernel_range(start, end);
+> > > --
+> > > 1.9.1
+> > >
+> >
+> Is it easy to reproduce? If so could you please describe the steps? As i see
+> the freeing of the "vb" is RCU safe whereas vb->va is not. But from the first
+> glance i do not see how it can accessed twice. Hm..
+It was raised from a monkey test on A13_k515 system and got 1/20 pcs
+failed. IMO, vb->va which out of vmap_purge_lock protection could race
+with a concurrent ra freeing within __purge_vmap_area_lazy.
+>
+> --
+> Uladzislau Rezki

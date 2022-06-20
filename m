@@ -2,450 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B5F551037
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F33D55103E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238645AbiFTGVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S238009AbiFTGV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238674AbiFTGU7 (ORCPT
+        with ESMTP id S238674AbiFTGVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:20:59 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35834DFA7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:20:55 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id t21so3067182pfq.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=N1BCvou7NjHgyn5FaZtbtm6KuJ8J4dRe9ttSN/j/ctQ=;
-        b=cHGwYOA4+fjDkMfnjvLgbEyCegfeNBpivH4NmSMz9ASl9oQVixTWpt0kIlro+GSPqt
-         Rbw7XQkrFZMd9YmIn90P77ws/HKJMSMWQDZ7+lTxv2zAP9KRo518hDeM5pMJTYHtlcs0
-         E8PrvKxueE79jnk3vSh/85HslH0xisNhlYg5FvVucnSKAo9KBqhR28SVHFPaRJcoDrMX
-         eb4O9qwJg5ZOqMjCSXM0OzV8Ri7NxElbd0dF7DlQfAbUU8GWshn9lXWESmIUCHgSfg7l
-         E3SauOOLCMWPLik8blMUSHrAPEb61HKnpOtKSUEnuiBJKjmgTsVk9WUw7wDH5AA7vgRW
-         S4vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=N1BCvou7NjHgyn5FaZtbtm6KuJ8J4dRe9ttSN/j/ctQ=;
-        b=7TUkGomoJLOyhNan1rJU1mrDYf4L6/cMiqSRcLvCCyKkUP6prVYLror+7gNusrTrPv
-         KDXx3RfD2DUX4O0vSw2ynty/ZIOvcEibN73CjdE2eZgZPrAEdZlS6+gKDzgOW8iN5gwo
-         FsIeDmXFXqKdIWFQ0MSJomm/Mv0QylvvZaWvUUJiGK6HqnKqHI7rrWAUJo5y3OquGdDl
-         53Ulev0EcL4XrUlHB3NghpPzI4CJ0xSjFZo3fGWi24a/2kCvBope3dtux+C0xb84np/e
-         bMu0RjW60Xalxcy3dhZFmIhuDRwfkuQ2WaSGfh4EgCNzK1rav/7alvOt1NlMH2p7FlAQ
-         VmVg==
-X-Gm-Message-State: AJIora/4W02yUSORdsu0B1avUbGyGrr5Q4HfB5l0UeVrg961lZ9fFBfw
-        uB4A9Oe3jxFHupmQAxgO4fyO/9DBEt8=
-X-Google-Smtp-Source: AGRyM1uA4fRAjWNJzxKjrTK1PKVn+fspJ+AZ0eLfDdvFCiwpvRuf/csgWBMOmMeaHK+AKUPWX/69gg==
-X-Received: by 2002:a05:6a00:b81:b0:51c:3bfe:7d89 with SMTP id g1-20020a056a000b8100b0051c3bfe7d89mr22964865pfj.31.1655706054695;
-        Sun, 19 Jun 2022 23:20:54 -0700 (PDT)
-Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b003fd9e4911f9sm8010469pgd.31.2022.06.19.23.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 23:20:54 -0700 (PDT)
-From:   Zhang Boyang <zhangboyang.id@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zhang Boyang <zhangboyang.id@gmail.com>
-Subject: [PATCH v3 6/6] rslib: Fix integer overflow on large fcr or prim
-Date:   Mon, 20 Jun 2022 14:20:15 +0800
-Message-Id: <20220620062015.15612-7-zhangboyang.id@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220620062015.15612-1-zhangboyang.id@gmail.com>
-References: <20220620062015.15612-1-zhangboyang.id@gmail.com>
+        Mon, 20 Jun 2022 02:21:43 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB5CDFD8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:21:39 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LRKKt2WVzz9tbp;
+        Mon, 20 Jun 2022 08:21:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cb3Nm-abgv7T; Mon, 20 Jun 2022 08:21:38 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LRKKt1myVz9slY;
+        Mon, 20 Jun 2022 08:21:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2DD468B767;
+        Mon, 20 Jun 2022 08:21:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id LTTpEnEITGGK; Mon, 20 Jun 2022 08:21:38 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0B7088B763;
+        Mon, 20 Jun 2022 08:21:38 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25K6LRJF357174
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 20 Jun 2022 08:21:27 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25K6LQkf357165;
+        Mon, 20 Jun 2022 08:21:26 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc: Remove _PAGE_SAO stub for book3e/64
+Date:   Mon, 20 Jun 2022 08:21:22 +0200
+Message-Id: <715e644fb3c7d992c0b71f6165ab6cf8c682055a.1655706069.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655706081; l=781; s=20211009; h=from:subject:message-id; bh=Q4l8G+KeG8Eo3hZSvGh5+jy4Bdlec5M0i0lmsFXFY/M=; b=EzEdBiWJiz0REjGWLb1rfu2y7+ersGWAamYa61rTK7Xa2HYwXV76KH1H2rif8e5rdp2Fr/8nVCg6 avEmtRZoDqky/F5YXJ24JBSUc2+BYAfx/NmDh9Z26UcYgEi0xRqZ
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current rslib support symsize up to 16, so the max value of rs->nn can
-be 0xFFFF. Since fcr <= nn, prim <= nn, multiplications on them can
-overflow easily, e.g. fcr*root[j], fcr*prim.
+Since commit 634093c59a12 ("powerpc/mm: enable
+ARCH_HAS_VM_GET_PAGE_PROT"), _PAGE_SAO is used only in
+arch/powerpc/mm/book3s64/pgtable.c
 
-This patch fixes these problems by introducing rs_modnn_mul(a, b). This
-function is same as rs_modnn(a*b) but it will avoid overflow when
-calculating a*b. It requires 0 <= a <= nn && 0 <= b <= nn, because it
-use uint32_t to do the multiplication internally, so there will be no
-overflow as long as 0 <= a <= nn <= 0xFFFF && 0 <= b <= nn <= 0xFFFF. In
-fact, if we use `unsigned int' everywhere, there is no need to have
-rs_modnn_mul(). But the `unsigned int' approach has poor scalability and
-it may bring us to the mess of signed and unsigned integers.
+The _PAGE_SAO stub defined as 0 for book3e/64 can be removed.
 
-With rs_modnn(), the intermediate result is now restricted to [0, nn).
-This enables us to use rs_modnn_fast(a+b) to replace rs_modnn(a+b), as
-long as 0 <= a+b < 2*nn. The most common case is one addend in [0, nn]
-and the other addend in [0, nn). The examples of values in [0, nn] are
-fcr, prim, indexes taken from rs->index_of[0...nn], etc. The examples of
-values in [0, nn) are results from rs_modnn(), indexes taken from
-rs->index_of[1...nn], etc.
-
-Since the roots of RS generator polynomial, i.e. (fcr+i)*prim%nn, is
-often used. It's now precomputed into rs->genroot[], to avoid writing
-rs_modnn_mul(rs, rs_modnn_fast(rs, fcr + i), prim) everywhere.
-
-The algorithm of searching for rs->iprim is also changed. Instead of
-searching for (1+what*nn)%prim == 0, then iprim = (1+what*nn)/prim, it
-now searches for iprim*prim%nn == 1 directly.
-
-A new test case is also added to test_rslib.c to ensure correctness.
-
-Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- include/linux/rslib.h           | 23 +++++++++++++
- lib/reed_solomon/decode_rs.c    | 60 +++++++++++++++++++--------------
- lib/reed_solomon/reed_solomon.c | 30 ++++++++++++-----
- lib/reed_solomon/test_rslib.c   |  8 ++---
- 4 files changed, 83 insertions(+), 38 deletions(-)
+ arch/powerpc/include/asm/nohash/64/pgtable.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/include/linux/rslib.h b/include/linux/rslib.h
-index a277a178157b..a11ea5e8eb14 100644
---- a/include/linux/rslib.h
-+++ b/include/linux/rslib.h
-@@ -22,6 +22,7 @@
-  * @alpha_to:	exp() lookup table
-  * @index_of:	log() lookup table
-  * @genpoly:	Generator polynomial
-+ * @genroot:	Roots of generator polynomial, index form
-  * @nroots:	Number of generator roots = number of parity symbols
-  * @fcr:	First consecutive root, index form
-  * @prim:	Primitive element, index form
-@@ -37,6 +38,7 @@ struct rs_codec {
- 	uint16_t	*alpha_to;
- 	uint16_t	*index_of;
- 	uint16_t	*genpoly;
-+	uint16_t	*genroot;
- 	int		nroots;
- 	int		fcr;
- 	int		prim;
-@@ -128,6 +130,27 @@ static inline int rs_modnn(struct rs_codec *rs, int x)
- 	return x;
- }
+diff --git a/arch/powerpc/include/asm/nohash/64/pgtable.h b/arch/powerpc/include/asm/nohash/64/pgtable.h
+index 57083f95e82b..25b72b2b30ce 100644
+--- a/arch/powerpc/include/asm/nohash/64/pgtable.h
++++ b/arch/powerpc/include/asm/nohash/64/pgtable.h
+@@ -83,8 +83,6 @@
+  */
+ #include <asm/nohash/pte-book3e.h>
  
-+/**
-+ * rs_modnn_mul() - Modulo replacement for galois field arithmetics
-+ *
-+ *  @rs:	Pointer to the RS codec
-+ *  @a:		0 <= a <= nn ; a*b is the value to reduce
-+ *  @b:		0 <= b <= nn ; a*b is the value to reduce
-+ *
-+ *  Same as rs_modnn(a*b), but avoid integer overflow when calculating a*b
-+*/
-+static inline int rs_modnn_mul(struct rs_codec *rs, int a, int b)
-+{
-+	/* nn <= 0xFFFF, so (a * b) will not overflow uint32_t */
-+	uint32_t x = (uint32_t)a * (uint32_t)b;
-+	uint32_t nn = (uint32_t)rs->nn;
-+	while (x >= nn) {
-+		x -= nn;
-+		x = (x >> rs->mm) + (x & nn);
-+	}
-+	return (int)x;
-+}
-+
- /**
-  * rs_modnn_fast() - Modulo replacement for galois field arithmetics
-  *
-diff --git a/lib/reed_solomon/decode_rs.c b/lib/reed_solomon/decode_rs.c
-index 6c1d53d1b702..3387465ab429 100644
---- a/lib/reed_solomon/decode_rs.c
-+++ b/lib/reed_solomon/decode_rs.c
-@@ -20,6 +20,7 @@
- 	int iprim = rs->iprim;
- 	uint16_t *alpha_to = rs->alpha_to;
- 	uint16_t *index_of = rs->index_of;
-+	uint16_t *genroot = rs->genroot;
- 	uint16_t u, q, tmp, num1, num2, den, discr_r, syn_error;
- 	int count = 0;
- 	int num_corrected;
-@@ -69,8 +70,8 @@
- 			} else {
- 				syn[i] = ((((uint16_t) data[j]) ^
- 					   invmsk) & msk) ^
--					alpha_to[rs_modnn(rs, index_of[syn[i]] +
--						       (fcr + i) * prim)];
-+					alpha_to[rs_modnn_fast(rs,
-+						index_of[syn[i]] + genroot[i])];
- 			}
- 		}
- 	}
-@@ -81,8 +82,8 @@
- 				syn[i] = ((uint16_t) par[j]) & msk;
- 			} else {
- 				syn[i] = (((uint16_t) par[j]) & msk) ^
--					alpha_to[rs_modnn(rs, index_of[syn[i]] +
--						       (fcr+i)*prim)];
-+					alpha_to[rs_modnn_fast(rs,
-+						index_of[syn[i]] + genroot[i])];
- 			}
- 		}
- 	}
-@@ -108,15 +109,17 @@
+-#define _PAGE_SAO	0
+-
+ #define PTE_RPN_MASK	(~((1UL << PTE_RPN_SHIFT) - 1))
  
- 	if (no_eras > 0) {
- 		/* Init lambda to be the erasure locator polynomial */
--		lambda[1] = alpha_to[rs_modnn(rs,
--					prim * (nn - 1 - (eras_pos[0] + pad)))];
-+		lambda[1] = alpha_to[rs_modnn_mul(rs,
-+					 prim, (nn - 1 - (eras_pos[0] + pad)))];
- 		for (i = 1; i < no_eras; i++) {
--			u = rs_modnn(rs, prim * (nn - 1 - (eras_pos[i] + pad)));
-+			u = rs_modnn_mul(rs,
-+					 prim, (nn - 1 - (eras_pos[i] + pad)));
- 			for (j = i + 1; j > 0; j--) {
- 				tmp = index_of[lambda[j - 1]];
- 				if (tmp != nn) {
- 					lambda[j] ^=
--						alpha_to[rs_modnn(rs, u + tmp)];
-+						alpha_to[rs_modnn_fast(rs,
-+							 u + tmp)];
- 				}
- 			}
- 		}
-@@ -137,9 +140,9 @@
- 		for (i = 0; i < r; i++) {
- 			if ((lambda[i] != 0) && (s[r - i - 1] != nn)) {
- 				discr_r ^=
--					alpha_to[rs_modnn(rs,
--							  index_of[lambda[i]] +
--							  s[r - i - 1])];
-+					alpha_to[rs_modnn_fast(rs,
-+						 index_of[lambda[i]] +
-+						 s[r - i - 1])];
- 			}
- 		}
- 		discr_r = index_of[discr_r];	/* Index form */
-@@ -153,8 +156,8 @@
- 			for (i = 0; i < nroots; i++) {
- 				if (b[i] != nn) {
- 					t[i + 1] = lambda[i + 1] ^
--						alpha_to[rs_modnn(rs, discr_r +
--								  b[i])];
-+						alpha_to[rs_modnn_fast(rs,
-+							 discr_r + b[i])];
- 				} else
- 					t[i + 1] = lambda[i + 1];
- 			}
-@@ -166,8 +169,9 @@
- 				 */
- 				for (i = 0; i <= nroots; i++) {
- 					b[i] = (lambda[i] == 0) ? nn :
--						rs_modnn(rs, index_of[lambda[i]]
--							 - discr_r + nn);
-+						rs_modnn_fast(rs,
-+						        index_of[lambda[i]] +
-+							nn - discr_r);
- 				}
- 			} else {
- 				/* 2 lines below: B(x) <-- x*B(x) */
-@@ -197,11 +201,11 @@
- 	/* Find roots of error+erasure locator polynomial by Chien search */
- 	memcpy(&reg[1], &lambda[1], nroots * sizeof(reg[0]));
- 	count = 0;		/* Number of roots of lambda(x) */
--	for (i = 1, k = iprim - 1; i <= nn; i++, k = rs_modnn(rs, k + iprim)) {
-+	for (i = 1, k = iprim-1; i <= nn; i++, k = rs_modnn_fast(rs, k+iprim)) {
- 		q = alpha_to[0];	/* lambda[0] is always 0 */
- 		for (j = deg_lambda; j > 0; j--) {
- 			if (reg[j] != nn) {
--				reg[j] = rs_modnn(rs, reg[j] + j);
-+				reg[j] = rs_modnn_fast(rs, reg[j] + j);
- 				q ^= alpha_to[reg[j]];
- 			}
- 		}
-@@ -238,8 +242,8 @@
- 		tmp = 0;
- 		for (j = i; j >= 0; j--) {
- 			if ((s[i - j] != nn) && (lambda[j] != nn))
--				tmp ^=
--				    alpha_to[rs_modnn(rs, s[i - j] + lambda[j])];
-+				tmp ^= alpha_to[rs_modnn_fast(rs,
-+						s[i - j] + lambda[j])];
- 		}
- 		omega[i] = index_of[tmp];
- 	}
-@@ -254,8 +258,9 @@
- 		num1 = 0;
- 		for (i = deg_omega; i >= 0; i--) {
- 			if (omega[i] != nn)
--				num1 ^= alpha_to[rs_modnn(rs, omega[i] +
--							i * root[j])];
-+				num1 ^= alpha_to[rs_modnn_fast(rs,
-+						 omega[i] +
-+						 rs_modnn_mul(rs, i, root[j]))];
- 		}
- 
- 		if (num1 == 0) {
-@@ -264,15 +269,18 @@
- 			continue;
- 		}
- 
--		num2 = alpha_to[rs_modnn(rs, root[j] * (fcr - 1) + nn)];
-+		num2 = alpha_to[rs_modnn_fast(rs,
-+				rs_modnn_mul(rs, root[j], fcr) +
-+				nn - root[j])];
- 		den = 0;
- 
- 		/* lambda[i+1] for i even is the formal derivative
- 		 * lambda_pr of lambda[i] */
- 		for (i = min(deg_lambda, nroots - 1) & ~1; i >= 0; i -= 2) {
- 			if (lambda[i + 1] != nn) {
--				den ^= alpha_to[rs_modnn(rs, lambda[i + 1] +
--						       i * root[j])];
-+				den ^= alpha_to[rs_modnn_fast(rs,
-+						lambda[i + 1] +
-+						rs_modnn_mul(rs, i, root[j]))];
- 			}
- 		}
- 
-@@ -292,8 +300,8 @@
- 			if (b[j] == 0)
- 				continue;
- 
--			k = (fcr + i) * prim * (nn-loc[j]-1);
--			tmp ^= alpha_to[rs_modnn(rs, index_of[b[j]] + k)];
-+			k = rs_modnn_mul(rs, genroot[i], nn - loc[j] - 1);
-+			tmp ^= alpha_to[rs_modnn_fast(rs, index_of[b[j]] + k)];
- 		}
- 
- 		if (tmp != alpha_to[s[i]])
-diff --git a/lib/reed_solomon/reed_solomon.c b/lib/reed_solomon/reed_solomon.c
-index da46026a60b8..2c86e4dfcbaa 100644
---- a/lib/reed_solomon/reed_solomon.c
-+++ b/lib/reed_solomon/reed_solomon.c
-@@ -100,6 +100,10 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
- 	if(rs->genpoly == NULL)
- 		goto err;
- 
-+	rs->genroot = kmalloc_array(rs->nroots, sizeof(uint16_t), gfp);
-+	if(rs->genroot == NULL)
-+		goto err;
-+
- 	/* Generate Galois field lookup tables */
- 	rs->index_of[0] = rs->nn;	/* log(zero) = -inf */
- 	rs->alpha_to[rs->nn] = 0;	/* alpha**-inf = 0 */
-@@ -126,26 +130,34 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
- 		goto err;
- 
- 	/* Find prim-th root of 1, used in decoding */
--	for(iprim = 1; (iprim % prim) != 0; iprim += rs->nn);
-+	for (iprim = 1; rs_modnn_mul(rs, iprim, prim) != 1; iprim++);
- 	/* prim-th root of 1, index form */
--	rs->iprim = iprim / prim;
-+	rs->iprim = iprim;
-+
-+	/* Precompute generator polynomial roots */
-+	root = rs_modnn_mul(rs, fcr, prim);
-+	for (i = 0; i < nroots; i++) {
-+		rs->genroot[i] = root; /*  = (fcr + i) * prim % nn  */
-+		root = rs_modnn_fast(rs, root + prim);
-+	}
- 
- 	/* Form RS code generator polynomial from its roots */
- 	rs->genpoly[0] = rs->alpha_to[0];
--	for (i = 0, root = fcr * prim; i < nroots; i++, root += prim) {
-+	for (i = 0; i < nroots; i++) {
-+		root = rs->genroot[i];
- 		rs->genpoly[i + 1] = rs->alpha_to[0];
- 		/* Multiply rs->genpoly[] by  @**(root + x) */
- 		for (j = i; j > 0; j--) {
- 			if (rs->genpoly[j] != 0) {
--				rs->genpoly[j] = rs->genpoly[j -1] ^
--					rs->alpha_to[rs_modnn(rs,
-+				rs->genpoly[j] = rs->genpoly[j - 1] ^
-+					rs->alpha_to[rs_modnn_fast(rs,
- 					rs->index_of[rs->genpoly[j]] + root)];
- 			} else
- 				rs->genpoly[j] = rs->genpoly[j - 1];
- 		}
- 		/* rs->genpoly[0] can never be zero */
- 		rs->genpoly[0] =
--			rs->alpha_to[rs_modnn(rs,
-+			rs->alpha_to[rs_modnn_fast(rs,
- 				rs->index_of[rs->genpoly[0]] + root)];
- 	}
- 	/* convert rs->genpoly[] to index form for quicker encoding */
-@@ -157,6 +169,7 @@ static struct rs_codec *codec_init(int symsize, int gfpoly, int (*gffunc)(int),
- 	return rs;
- 
- err:
-+	kfree(rs->genroot);
- 	kfree(rs->genpoly);
- 	kfree(rs->index_of);
- 	kfree(rs->alpha_to);
-@@ -188,6 +201,7 @@ void free_rs(struct rs_control *rs)
- 		kfree(cd->alpha_to);
- 		kfree(cd->index_of);
- 		kfree(cd->genpoly);
-+		kfree(cd->genroot);
- 		kfree(cd);
- 	}
- 	mutex_unlock(&rslistlock);
-@@ -340,7 +354,7 @@ EXPORT_SYMBOL_GPL(encode_rs8);
-  *  @data:	data field of a given type
-  *  @par:	received parity data field
-  *  @len:	data length
-- *  @s: 	syndrome data field, must be in index form
-+ *  @s: 	syndrome data field, must be in index form, 0 <= index <= nn
-  *		(if NULL, syndrome is calculated)
-  *  @no_eras:	number of erasures
-  *  @eras_pos:	position of erasures, can be NULL
-@@ -393,7 +407,7 @@ EXPORT_SYMBOL_GPL(encode_rs16);
-  *  @data:	data field of a given type
-  *  @par:	received parity data field
-  *  @len:	data length
-- *  @s: 	syndrome data field, must be in index form
-+ *  @s: 	syndrome data field, must be in index form, 0 <= index <= nn
-  *		(if NULL, syndrome is calculated)
-  *  @no_eras:	number of erasures
-  *  @eras_pos:	position of erasures, can be NULL
-diff --git a/lib/reed_solomon/test_rslib.c b/lib/reed_solomon/test_rslib.c
-index d9d1c33aebda..a03c7249f920 100644
---- a/lib/reed_solomon/test_rslib.c
-+++ b/lib/reed_solomon/test_rslib.c
-@@ -55,6 +55,7 @@ static struct etab Tab[] = {
- 	{8,	0x11d,	1,	1,	30,	100	},
- 	{8,	0x187,	112,	11,	32,	100	},
- 	{9,	0x211,	1,	1,	33,	80	},
-+	{16,  0x1ffed,	65534,	65534,	50,	5	},
- 	{0, 0, 0, 0, 0, 0},
- };
- 
-@@ -232,9 +233,8 @@ static void compute_syndrome(struct rs_control *rsc, uint16_t *data,
- 	struct rs_codec *rs = rsc->codec;
- 	uint16_t *alpha_to = rs->alpha_to;
- 	uint16_t *index_of = rs->index_of;
-+	uint16_t *genroot = rs->genroot;
- 	int nroots = rs->nroots;
--	int prim = rs->prim;
--	int fcr = rs->fcr;
- 	int i, j;
- 
- 	/* Calculating syndrome */
-@@ -245,8 +245,8 @@ static void compute_syndrome(struct rs_control *rsc, uint16_t *data,
- 				syn[i] = data[j];
- 			} else {
- 				syn[i] = data[j] ^
--					alpha_to[rs_modnn(rs, index_of[syn[i]]
--						+ (fcr + i) * prim)];
-+					alpha_to[rs_modnn_fast(rs,
-+						index_of[syn[i]] + genroot[i])];
- 			}
- 		}
- 	}
+ /*
 -- 
-2.30.2
+2.36.1
 

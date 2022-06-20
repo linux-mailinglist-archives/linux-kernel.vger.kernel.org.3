@@ -2,148 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0625511E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E77E5511ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239562AbiFTHxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 03:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S239630AbiFTHzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 03:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238483AbiFTHxh (ORCPT
+        with ESMTP id S236311AbiFTHzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 03:53:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B89E0E4;
-        Mon, 20 Jun 2022 00:53:34 -0700 (PDT)
+        Mon, 20 Jun 2022 03:55:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FE5E0E4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655711616; x=1687247616;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=WmXXD82WDY2lb/RJx0DI6EQgl775Y4vH/1ER9y50VeE=;
-  b=nT1yFDOCm+cxlwf2xpdLn8DKzuPesCGcgbkEZc17ZxIzzUiooxndibJY
-   641u2VR2Qb/x8D6ff1SCnbAj2J2UP0xbqy+pi9OJ5TJ81EUtkYO50v8nX
-   oDMex+mnfZF4N84T+A/yKJ4uqsoGGxQR7FSA6Ki/vp3LdTUZ07XQRprPS
-   +xaZpv5ha2sv9Ge3x4qZyqKp6iJtqMA0SHq9OaOT+7phXilUBwOmVqbwy
-   Q50gsIQ2hNImt5lLfoKKl+4CAXyuTiDmULTqS5omtuqLJEYwxt3VLb8IJ
-   L6pXq2VSmrNUQXQxLuri4YKx8eL1Ab7qRY7Q0XEtquhs3fJGXyO9MBOuk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262866792"
+  t=1655711707; x=1687247707;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=BUrlbNZSKUvYRK40167TMJIvTUurjES69a62ziV+rhY=;
+  b=PqkIKp8wBepmwqO4OM05JDNgnt1w1QywxtuLdYSTRefNmyJAvuKnkOng
+   x1QncA6yl/EznKUneRcP/m2YdWNc4ZiihR4UyXKGmonHvbUr2AYDJ1B2i
+   +g+H3SjtEppluIi94XZQ9du1k38CuWUf9vO+wUFpqNu6P2Ly4A1TaNqVr
+   J52ZtJy+KF56qwWijYOikubmxVgsGuGmzV8SkGWUMdiRLFso8nOnk/CeP
+   G1L2ZHnUL36cphzkindLHymKY2W0uQnIgkODjH74Acf3JJfpZSrKNIYNM
+   q650yotQUqvjL3u+Nxa3WPH152I5iWqAOdCPdJfwJnj9MpHez+nJFsNAV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280888333"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="262866792"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:53:28 -0700
+   d="scan'208";a="280888333"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:55:01 -0700
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="591060446"
-Received: from lspinell-mobl1.ger.corp.intel.com ([10.251.215.169])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:53:26 -0700
-Date:   Mon, 20 Jun 2022 10:53:24 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Yi Yang <yiyang13@huawei.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] serial: 8250: fix return error code in
- serial8250_request_std_resource()
-In-Reply-To: <20220620072025.172088-1-yiyang13@huawei.com>
-Message-ID: <fe25cbe3-3cc3-45c3-d6d0-e867ee372b7@linux.intel.com>
-References: <20220620072025.172088-1-yiyang13@huawei.com>
+   d="scan'208";a="654559721"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:54:59 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] mm/swapfile: fix possible data races of inuse_pages
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+        <20220608144031.829-3-linmiaohe@huawei.com>
+Date:   Mon, 20 Jun 2022 15:54:55 +0800
+In-Reply-To: <20220608144031.829-3-linmiaohe@huawei.com> (Miaohe Lin's message
+        of "Wed, 8 Jun 2022 22:40:30 +0800")
+Message-ID: <87edzjrcq8.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022, Yi Yang wrote:
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-> If port->mapbase = NULL in serial8250_request_std_resource() , it need
-> return a error code instead of 0. If uart_set_info() fail to request new
-> regions by serial8250_request_std_resource() but the return value of
-> serial8250_request_std_resource() is 0, that The system will mistakenly
-> considers that port resources are successfully applied for. A null
-> pointer reference is triggered when the port resource is later invoked.
-> 
-> The problem can also be triggered with the following simple program:
-> ----------
->   #include <stdio.h>
->   #include <sys/types.h>
->   #include <sys/stat.h>
->   #include <fcntl.h>
->   #include <sys/ioctl.h>
->   #include <unistd.h>
->   #include <errno.h>
-> 
->   struct serial_struct {
->       int type;
->       int line;
->       unsigned int    port;
->       int irq;
->       int flags;
->       int xmit_fifo_size;
->       int custom_divisor;
->       int baud_base;
->       unsigned short  close_delay;
->       char    io_type;
->       char    reserved_char[1];
->       int hub6;
->       unsigned short  closing_wait; /* time to wait before closing */
->       unsigned short  closing_wait2; /* no longer used... */
->       unsigned char   *iomem_base;
->       unsigned short  iomem_reg_shift;
->       unsigned int    port_high;
->       unsigned long   iomap_base; /* cookie passed into ioremap */
->   };
-> 
->   struct serial_struct str;
-> 
->   int main(void)
->   {
->       open("/dev/ttyS0", O_RDWR);
->       ioctl(fd, TIOCGSERIAL, &str);
->       str.iomem_base = 0;
->       ioctl(fd, TIOCSSERIAL, str);
->       return 0;
->   }
-
-With admin priviledges I guess?
-
-> ----------
-> 
-> Signed-off-by: Yi Yang <yiyang13@huawei.com>
+> si->inuse_pages could still be accessed concurrently now. The plain reads
+> outside si->lock critical section, i.e. swap_show and si_swapinfo, which
+> results in data races. But these should be ok because they're just used
+> for showing swap info.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 > ---
->  drivers/tty/serial/8250/8250_port.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 3e3d784aa628..e1cefa97bdeb 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -2961,8 +2961,10 @@ static int serial8250_request_std_resource(struct uart_8250_port *up)
->  	case UPIO_MEM32BE:
->  	case UPIO_MEM16:
->  	case UPIO_MEM:
-> -		if (!port->mapbase)
-> +		if (!port->mapbase) {
-> +			ret = -EFAULT;
->  			break;
-> +		}
+>  mm/swapfile.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index d2bead7b8b70..3fa26f6971e9 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -2646,7 +2646,7 @@ static int swap_show(struct seq_file *swap, void *v)
+>  	}
 >  
->  		if (!request_mem_region(port->mapbase, size, "serial")) {
->  			ret = -EBUSY;
-> 
+>  	bytes = si->pages << (PAGE_SHIFT - 10);
+> -	inuse = si->inuse_pages << (PAGE_SHIFT - 10);
+> +	inuse = READ_ONCE(si->inuse_pages) << (PAGE_SHIFT - 10);
+>  
+>  	file = si->swap_file;
+>  	len = seq_file_path(swap, file, " \t\n\\");
+> @@ -3265,7 +3265,7 @@ void si_swapinfo(struct sysinfo *val)
+>  		struct swap_info_struct *si = swap_info[type];
+>  
+>  		if ((si->flags & SWP_USED) && !(si->flags & SWP_WRITEOK))
+> -			nr_to_be_unused += si->inuse_pages;
+> +			nr_to_be_unused += READ_ONCE(si->inuse_pages);
+>  	}
+>  	val->freeswap = atomic_long_read(&nr_swap_pages) + nr_to_be_unused;
+>  	val->totalswap = total_swap_pages + nr_to_be_unused;
 
-I recall reading somewhere that somebody more knowledgeful than me noted 
-that this interface has many ways to shoot oneself in the foot if one 
-really wants to which is why some things are limited to admin only.
-I cannot seem to find that a reference to that now though.
+READ_ONCE() should be paired with WRITE_ONCE().  So, change the writer
+side too?
 
-
--- 
- i.
-
+Best Regards,
+Huang, Ying

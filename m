@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8D35512A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429655512AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237923AbiFTIZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S234725AbiFTI0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiFTIYq (ORCPT
+        with ESMTP id S232112AbiFTI0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:24:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20A97105
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655713485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e6ksPPnyGgOYO6quOjNZEzWgaMag0zFdWZyTCSpNBko=;
-        b=Gwke25D+AhuWklw9TJA7JooY6+2vzHcDY87Uz2INEqHegE29rr6ktN22z7vOAFqNYm/r/7
-        mGwmHyQKvOGti77737Y832Kd9ZRJr76YogZxAZgFVATvcl7+2ZUjVi7nWPk/pk6uP72/US
-        ns84C5qn5B+RWuo+Kb+saZlz990wilY=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-67wBrxcaNO2M5cuzvYCjtg-1; Mon, 20 Jun 2022 04:24:36 -0400
-X-MC-Unique: 67wBrxcaNO2M5cuzvYCjtg-1
-Received: by mail-ej1-f69.google.com with SMTP id fp4-20020a1709069e0400b00711911cecf9so3133298ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:24:35 -0700 (PDT)
+        Mon, 20 Jun 2022 04:26:14 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9756D89
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:26:13 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z7so13992434edm.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:26:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ytMUXjmaN8uHSvhOnNn2seCP4qJ7rfDpUHNy7RTqCxM=;
+        b=hd1CcsMoEubcv6jr6mmIlVzkPnefJUP8r20R0zYK/c+jUCgKI8Q3JnLWgClt35Uisy
+         4KbHXd9q38JNpI5fY6UQgh6EaWIHQxw+4tio8Di8lZre94OlHMYRIdM/jJdTFqHVz7B3
+         bSbk0rAc/JmUZdW8yMVeBf8pChYxs09lHNpEo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e6ksPPnyGgOYO6quOjNZEzWgaMag0zFdWZyTCSpNBko=;
-        b=EEtQazgthVRnMMG6xsJVFi46RjRTxP9jIIqJtYZvXGZGlg73K+AkaOm0hpymwkRBsJ
-         BeYlNonjD6DZ9TsnALAxoahAKzR6eu/OqEAHdVZ0KLfIUPEjR4T0AH02+Sxitb20lCS8
-         VZvujVsXS8X2uGx7LSpfzbBsrACh5HdLr2fCQApftxNFJfKK0d2Ng+9YwtAi/fllyRaH
-         nz5oU7qP6pQg6TOPpaGKJ3JHbCaIQvr8EuaM0wHx8az16iDlekR+ehd20ZS07eZyAyyR
-         7r8Tul7s51vThCiVGR+9a5+vJfsWXBBcCCnZQAPKCsw35H1xhhPiIrwR1lRm/4/DKUTY
-         kaMg==
-X-Gm-Message-State: AJIora8N8rA8jBdIZiOh7zul76mFaSRMQjvzSpzig1bbeMJe7HUzXsRT
-        iVIwNRPyHDaJVOsFAOv5EyXtvG8crU6HbsgZFGTItd0tko/yTVZQ8lG6XkRIJ/kHJlrQPM5Jh0H
-        C96FXreBiHO796xMwVIcV36y+
-X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id b14-20020a056402350e00b0042fb2c19393mr28239620edd.11.1655713474777;
-        Mon, 20 Jun 2022 01:24:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uZJFz4jypDP9bnqRJi3iDgujFYlZ8/dhQlpRBA4gnyiHbIdX6gXU3ScDQzxUS9zbdSyqyZfQ==
-X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id b14-20020a056402350e00b0042fb2c19393mr28239603edd.11.1655713474518;
-        Mon, 20 Jun 2022 01:24:34 -0700 (PDT)
-Received: from redhat.com ([2.52.146.221])
-        by smtp.gmail.com with ESMTPSA id c25-20020aa7d619000000b0043574d27ddasm4114501edr.16.2022.06.20.01.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 01:24:33 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 04:24:30 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_ring: Optimize duplicate judgment codes for
- virtqueue_add_split
-Message-ID: <20220620042221-mutt-send-email-mst@kernel.org>
-References: <20220620080656.1559-1-wangdeming@inspur.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ytMUXjmaN8uHSvhOnNn2seCP4qJ7rfDpUHNy7RTqCxM=;
+        b=OmBrReURvEC4QW1Q/HvC2emLmHl7bJ+D6WBuovSB90Y+yLTjGiMxFUdJODh7vWx2Y5
+         cr5UIi2VtyuRFT9MmjCXrLT5T+0si52XOyJUl2v+Y+Pbi7lCehLq5qI2TiQrEdx3FfGI
+         nL+ymHHmRm4p/XM0pBnuVM5ZHtBF0uuqIe6tdPVhrvRtVfbfjVb/hGETPF/mQtQEny9g
+         AOH8nqemDRmcHIGkkBmwU6lRzf+6dZRdha46v/mjq85rtkHVTge7UrZcS8YGnqvKAbh8
+         DAshw1FkaNajypB1WfvZsW5vFFkg9JI3wOZIhwxhHXrn64oxNtF0pUHjW2brwCC0+GfC
+         kMpw==
+X-Gm-Message-State: AJIora+GPxxH4EejKiYpVAO36Fl0V0IXI7gCG4Pq38mUORK8w/Q3GhY3
+        0o4YOLX0JNZb05K41WRQZhOmvILDdJr796XGEg/hdw==
+X-Google-Smtp-Source: AGRyM1sW1N2WJNAFBze0aVQVaROgZ8Ht/RO6hxNo4xmROEhN05naPzIBxPQWeqLSKYLqFDl/OC2uAiiLvkZXDWbHcKQ=
+X-Received: by 2002:aa7:c84d:0:b0:431:4226:70c9 with SMTP id
+ g13-20020aa7c84d000000b00431422670c9mr27849166edt.51.1655713572457; Mon, 20
+ Jun 2022 01:26:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620080656.1559-1-wangdeming@inspur.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220620063217.9867-1-yunfei.dong@mediatek.com>
+In-Reply-To: <20220620063217.9867-1-yunfei.dong@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 20 Jun 2022 16:26:01 +0800
+Message-ID: <CAGXv+5F8jvzz9DkM4x0MKQ_hZGpYXwQNfOEp_Gvqr__t-WDW+w@mail.gmail.com>
+Subject: Re: [PATCH, v2] media: mediatek: vcodec: Initialize decoder
+ parameters after getting dec_capability
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,53 +85,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 04:06:56AM -0400, Deming Wang wrote:
-> We combine repeated judgments about indirect in one place
-> 
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+On Mon, Jun 20, 2022 at 2:32 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+>
+> Need to get dec_capability from scp first, then initialize decoder
+> supported format and other parameters according to dec_capability value.
+>
+> Fixes: fd00d90330d1 ("media: mtk-vcodec: vdec: move stateful ops into their own file")
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-
-Point being? The patch makes the code kind of confusing.
-What do we gain in return?
-
-> ---
->  drivers/virtio/virtio_ring.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 13a7348cedff..331fa3cf5be7 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -582,23 +582,19 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
->  					 total_sg * sizeof(struct vring_desc),
->  					 VRING_DESC_F_INDIRECT,
->  					 false);
-> +		vq->free_head = vq->split.desc_extra[head].next;
-> +		vq->split.desc_state[head].indir_desc = desc;
-> +	} else {
-> +		/* Update free pointer */
-> +		vq->free_head = i;
-> +		vq->split.desc_state[head].indir_desc = ctx;
->  	}
->  
->  	/* We're using some buffers from the free list. */
->  	vq->vq.num_free -= descs_used;
->  
-> -	/* Update free pointer */
-> -	if (indirect)
-> -		vq->free_head = vq->split.desc_extra[head].next;
-> -	else
-> -		vq->free_head = i;
-> -
->  	/* Store token and indirect buffer state. */
->  	vq->split.desc_state[head].data = data;
-> -	if (indirect)
-> -		vq->split.desc_state[head].indir_desc = desc;
-> -	else
-> -		vq->split.desc_state[head].indir_desc = ctx;
->  
->  	/* Put entry in available array (but don't update avail->idx until they
->  	 * do sync). */
-> -- 
-> 2.27.0
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A8F5526E2
+	by mail.lfdr.de (Postfix) with ESMTP id 29E905526E1
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343916AbiFTWUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S1344143AbiFTWVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244095AbiFTWUj (ORCPT
+        with ESMTP id S244457AbiFTWUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:20:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0ACE1B792;
-        Mon, 20 Jun 2022 15:20:35 -0700 (PDT)
+        Mon, 20 Jun 2022 18:20:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934801B7BA;
+        Mon, 20 Jun 2022 15:20:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E484F611FA;
-        Mon, 20 Jun 2022 22:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49EC6C341C5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4421B8164A;
+        Mon, 20 Jun 2022 22:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3CEC341C4;
         Mon, 20 Jun 2022 22:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1655763634;
-        bh=Ev7MJB6+VbSr95NwkxJsx9nVPnwQqYzMCUqVwoydx3A=;
+        bh=BzfEqP9ZYAPt1rGlIDWKlmdtdWPBu8au1LUFkZLPWlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b4YeM8PlT4eNafI0SiBQ7QwlQtyA/YRjo9Scwk4seglPe/QhehGEGvXXQokLvspsw
-         2KYNYpltfwkTkOyhDhlqpB/ynVQs2yWgYBRnRI6wTYX/RGI9EAmFHFc8up3Fnx+/PS
-         CODH6o+apFAqzE3JRJYL/RZS3SlBym6xi2Al3cd+UVF9rxkkozuATx6nGZ6CPZ5hTa
-         aeoy3amLtgg9klHtQNF5yX++gCNXbt4NdUwgzm3qANWeVK+KAC0BlnrpIE4AYwjLJI
-         7zpcelurrXCEk16saDoTgSSAsbX0hjehg9UeTKH9qJytC/X+Nf9EHgZRiUXWl8M5in
-         /vVm/jda2tTcg==
+        b=oHVBE8KNv/cZfZZ+GP0GVSaJkI0CWNmwoGVW4IkSqhdIU1gj3ueXFrCicOqFBcpy6
+         z1RtdbYlRukO8rO81rMfaZiLjkluSmlKJf2Y0ZlXgc97fIv+hbW6LsPbJA3bA/UPIV
+         ESpCpICh1e4FCA7uf8XuwzxC7lNhoD2J5Yct/uUP3XU+PtndgEkZfl+PTQheYREKjS
+         E/uIBMHEcFzHjxvhBYm9bB8cgG9onuwpFH2/MLpx6FVMKLso+AvL7PsuBoVlnAK8po
+         KNyDv6CCW1iu93u9FeMo7V8mfjHG/vA3Gv57P8HBTYIoD+htSRsSc0LC4pfG/2rF3g
+         1RfDROIS/WBcQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01D095C0A15; Mon, 20 Jun 2022 15:20:34 -0700 (PDT)
+        id 03B8C5C0A33; Mon, 20 Jun 2022 15:20:34 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 03/12] rcu: Add rnp->cbovldmask check in rcutree_migrate_callbacks()
-Date:   Mon, 20 Jun 2022 15:20:23 -0700
-Message-Id: <20220620222032.3839547-3-paulmck@kernel.org>
+Subject: [PATCH rcu 04/12] rcu: Immediately boost preempted readers for strict grace periods
+Date:   Mon, 20 Jun 2022 15:20:24 -0700
+Message-Id: <20220620222032.3839547-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
 References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
@@ -59,44 +59,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zqiang <qiang1.zhang@intel.com>
 
-Currently, the rcu_node structure's ->cbovlmask field is set in call_rcu()
-when a given CPU is suffering from callback overload.  But if that CPU
-goes offline, the outgoing CPU's callbacks is migrated to the running
-CPU, which is likely to overload the running CPU.  However, that CPU's
-bit in its leaf rcu_node structure's ->cbovlmask field remains zero.
+The intent of the CONFIG_RCU_STRICT_GRACE_PERIOD Konfig option is to
+cause normal grace periods to complete quickly in order to better catch
+errors resulting from improperly leaking pointers from RCU read-side
+critical sections.  However, kernels built with this option enabled still
+wait for some hundreds of milliseconds before boosting RCU readers that
+have been preempted within their current critical section.  The value
+of this delay is set by the CONFIG_RCU_BOOST_DELAY Kconfig option,
+which defaults to 500 milliseconds.
 
-Initially, this is OK because the outgoing CPU's bit remains set.
-However, that bit will be cleared at the next end of a grace period,
-at which time it is quite possible that the running CPU will still
-be overloaded.  If the running CPU invokes call_rcu(), then overload
-will be checked for and the bit will be set.  Except that there is no
-guarantee that the running CPU will invoke call_rcu(), in which case the
-next grace period will fail to take the running CPU's overload condition
-into account.  Plus, because the bit is not set, the end of the grace
-period won't check for overload on this CPU.
-
-This commit therefore adds a call to check_cb_ovld_locked() in
-check_cb_ovld_locked() to set the running CPU's ->cbovlmask bit
-appropriately.
+This commit therefore causes kernels build with strict grace periods
+to ignore CONFIG_RCU_BOOST_DELAY.  This causes rcu_initiate_boost()
+to start boosting immediately after all CPUs on a given leaf rcu_node
+structure have passed through their quiescent states.
 
 Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/rcu/tree_plugin.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index c19d5926886fb..f4a37f2032664 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -4491,6 +4491,7 @@ void rcutree_migrate_callbacks(int cpu)
- 	needwake = needwake || rcu_advance_cbs(my_rnp, my_rdp);
- 	rcu_segcblist_disable(&rdp->cblist);
- 	WARN_ON_ONCE(rcu_segcblist_empty(&my_rdp->cblist) != !rcu_segcblist_n_cbs(&my_rdp->cblist));
-+	check_cb_ovld_locked(my_rdp, my_rnp);
- 	if (rcu_rdp_is_offloaded(my_rdp)) {
- 		raw_spin_unlock_rcu_node(my_rnp); /* irqs remain disabled. */
- 		__call_rcu_nocb_wake(my_rdp, true, flags);
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 440d9e02a26e0..53d05eb804121 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -1140,7 +1140,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
+ 	    (rnp->gp_tasks != NULL &&
+ 	     rnp->boost_tasks == NULL &&
+ 	     rnp->qsmask == 0 &&
+-	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld))) {
++	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld ||
++	      IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD)))) {
+ 		if (rnp->exp_tasks == NULL)
+ 			WRITE_ONCE(rnp->boost_tasks, rnp->gp_tasks);
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
 -- 
 2.31.1.189.g2e36527f23
 

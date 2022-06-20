@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0454A551688
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCBC55169A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241148AbiFTLFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S241030AbiFTLH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239912AbiFTLFE (ORCPT
+        with ESMTP id S241234AbiFTLHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:05:04 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A1F12AA2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=JtWYZV1ZUB9zWxnOO4bgicY4RQzn+QgQFFTY9VvrXQw=; b=n8sIg
-        XF3SiOc5XAmJlqEPRH9w4T59X6m+7fZ5y/F/Qb6F7qWo0h1ajoVkArF7YcYfpp+TZQF4c7i1aJubw
-        LqhGrGilz8QDOo/hoZUC2DO0heXPlc3eC+RbrCVvOVaoxDNANduUUyMy/t1a12wzWtcnFs6yOoh9J
-        DUlSHMLnjeqXeunHjxFjtL0izeiyMyfr3Q6f0h0RhFGWSHaQJhd+dVwtpGX31R6WM1ybVzm32DjMG
-        DzNcZLqUbbMtWjdn57XS9KRslbU+ZvrvpAPiA9ibsWTccyd4rYC0Ukwo6Um+iP77+PCsyopPTGamH
-        vxvHbVfim8mrn9zqJS5N+kBJZKQhA==;
-Received: from 92.40.170.2.threembb.co.uk ([92.40.170.2] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1o3FCk-0002O9-Hw; Mon, 20 Jun 2022 12:04:26 +0100
-Date:   Mon, 20 Jun 2022 12:04:24 +0100
-From:   John Keeping <john@metanate.com>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     heiko@sntech.de, ardb@kernel.org, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v7 14/33] crypto: rockchip: handle reset also in PM
-Message-ID: <YrBUODGF51oUsF1f@donbot>
-References: <20220508185957.3629088-1-clabbe@baylibre.com>
- <20220508185957.3629088-15-clabbe@baylibre.com>
+        Mon, 20 Jun 2022 07:07:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAE71572B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:07:17 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso7118181pjn.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0sGj0xCuJeJNCCPLHCLqdmxME5IfW++lXhxnglYboi8=;
+        b=hoWVGpODBe/YKi9SbmUMRWfZQJopZdiyFsLI2U8DvbSKvA2tL/nSGGZQMpvN59k09M
+         SkSvRyeC6dchTzsqKc2s19iHWCsYP9MBUHvEX8zNgzeOclL1hodoeZDWcSNTphc516dN
+         dtirYjK+EQTfLbtOVfqp31nsfVl/CwOiek5szJVpv0rO+tyOEi7dPxGfUm4gT8cLiPX0
+         VpaTfe9jDF7sDKI+gzNgojc91WHIAfMHGiJ27STOPLWAFd703qyYYOQBtMfDdpqWCCq9
+         Qel7ZDV7nkgbAHf/9ME6xi65rdgEJ/p+gg77qHUru8c5pOWpZTnm1lBApsgJk5P/f9GH
+         ZLeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0sGj0xCuJeJNCCPLHCLqdmxME5IfW++lXhxnglYboi8=;
+        b=u2fMkMwY7E2jZDgmMgqconMbUm2j9At16s68wi8fBEfytWLTRaSLa6Ng82pxzdAPMG
+         YjefOGr0Hl+M5uh+kzq1X9pQhEo9W3zgeNWnM6N/26Od30tFXqc7DMaJLURAGOhLWyNm
+         p0TmuL00Pmi5KvDI+sku0Xxr/2YGJ34Gcd4AMBzr7OvmAmKctiw+B7H2sZHlg8Fv4N0P
+         +ODLL4ELWYqhUzLGNEBV5Kl/4GpScsc2J4cOqgolm31S/7gwTgKtQnoG8jo+QMBFTgck
+         WXYPyYXcVNIo2/dx+OaQoxJXvbsPEf9tGnNOkVPZf4YEipfSXTYN3Q+h21v6RIdmWSzk
+         aWVg==
+X-Gm-Message-State: AJIora/fv4qK1c6v7NpgU6filBjx4eLLTqhMMduxAJ2fhjLIzj24o6hT
+        Fag7v61nb7cqMg150WZB3HVX6w==
+X-Google-Smtp-Source: AGRyM1suLGp4qjo9VDQHNPePbkZuz6/HSVjWExA6/4od6/EiLpwMBCaC4xzkmVvMSj7Q0DQ26y2tjA==
+X-Received: by 2002:a17:902:ee55:b0:16a:5b2:a2b0 with SMTP id 21-20020a170902ee5500b0016a05b2a2b0mr16073492plo.133.1655723236602;
+        Mon, 20 Jun 2022 04:07:16 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id iw10-20020a170903044a00b0016a214e4afasm2385962plb.125.2022.06.20.04.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 04:07:16 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
+        mike.kravetz@oracle.com, osalvador@suse.de, paulmck@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v5 0/2] make hugetlb_optimize_vmemmap compatible with memmap_on_memory
+Date:   Mon, 20 Jun 2022 19:06:14 +0800
+Message-Id: <20220620110616.12056-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220508185957.3629088-15-clabbe@baylibre.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,75 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 06:59:38PM +0000, Corentin Labbe wrote:
-> reset could be handled by PM functions.
+This series makes hugetlb_optimize_vmemmap compatible with memmap_on_memory
+and is based on mm-stable.  The reason refers to the patch 2's commit log.
 
-Is there any further rationale for this?
+v5:
+ - Replace enum to defines per David.
+ - Walk vmemmap page tables to avoid false-positive.
 
-After this change there is no longer a guaranteed reset pulse on probe
-since the reset control may already be de-asserted.  This is normally
-the most important case for a reset as it's the only time when the state
-of the hardware is unknown.
+v4:
+ - Fix compiling error when CONFIG_MEMORY_HOTPLUG is disabled reported by kernel test robot.
+ - Fix a bug when memory_block_size_bytes() is not equal to section size.
 
-The original use of devm_add_action_or_reset() seems a bit weird already
-since there doesn't seem to be any need to assert reset when the driver
-is unloaded.
+v3:
+ - Switch complicated enumeration magic (David).
+ - Introduce PageVmemmapSelfHosted to make both parameters compatible (David and Oscar).
 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  drivers/crypto/rockchip/rk3288_crypto.c | 19 ++++---------------
->  1 file changed, 4 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-> index d9258b9e71b3..a11a92e1f3fd 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto.c
-> +++ b/drivers/crypto/rockchip/rk3288_crypto.c
-> @@ -73,6 +73,8 @@ static int rk_crypto_pm_suspend(struct device *dev)
->  {
->  	struct rk_crypto_info *rkdev = dev_get_drvdata(dev);
->  
-> +	reset_control_assert(rkdev->rst);
-> +
->  	rk_crypto_disable_clk(rkdev);
->  	return 0;
->  }
-> @@ -81,6 +83,8 @@ static int rk_crypto_pm_resume(struct device *dev)
->  {
->  	struct rk_crypto_info *rkdev = dev_get_drvdata(dev);
->  
-> +	reset_control_deassert(rkdev->rst);
-> +
->  	return rk_crypto_enable_clk(rkdev);
->  }
->  
-> @@ -222,13 +226,6 @@ static void rk_crypto_unregister(void)
->  	}
->  }
->  
-> -static void rk_crypto_action(void *data)
-> -{
-> -	struct rk_crypto_info *crypto_info = data;
-> -
-> -	reset_control_assert(crypto_info->rst);
-> -}
-> -
->  static const struct of_device_id crypto_of_id_table[] = {
->  	{ .compatible = "rockchip,rk3288-crypto" },
->  	{}
-> @@ -254,14 +251,6 @@ static int rk_crypto_probe(struct platform_device *pdev)
->  		goto err_crypto;
->  	}
->  
-> -	reset_control_assert(crypto_info->rst);
-> -	usleep_range(10, 20);
-> -	reset_control_deassert(crypto_info->rst);
-> -
-> -	err = devm_add_action_or_reset(dev, rk_crypto_action, crypto_info);
-> -	if (err)
-> -		goto err_crypto;
-> -
->  	crypto_info->reg = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(crypto_info->reg)) {
->  		err = PTR_ERR(crypto_info->reg);
-> -- 
-> 2.35.1
+v2:
+ - Fix compile error when !CONFIG_ZONE_DEVICE reported by kernel test robot.
+
+Muchun Song (2):
+  mm: memory_hotplug: enumerate all supported section flags
+  mm: memory_hotplug: make hugetlb_optimize_vmemmap compatible with
+    memmap_on_memory
+
+ Documentation/admin-guide/kernel-parameters.txt | 22 ++++-----
+ Documentation/admin-guide/sysctl/vm.rst         |  5 +-
+ include/linux/memory_hotplug.h                  |  9 ----
+ include/linux/mmzone.h                          | 41 +++++++++++----
+ include/linux/page-flags.h                      | 11 +++++
+ mm/hugetlb_vmemmap.c                            | 66 ++++++++++++++++++++++---
+ mm/memory_hotplug.c                             | 33 +++++++------
+ mm/sparse.c                                     |  2 +-
+ 8 files changed, 132 insertions(+), 57 deletions(-)
+
+-- 
+2.11.0
+

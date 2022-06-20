@@ -2,77 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8497A55220A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CD455220C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244509AbiFTQOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S242047AbiFTQPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244441AbiFTQOb (ORCPT
+        with ESMTP id S239722AbiFTQPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:14:31 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99C920F6C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:14:30 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id g18so9031942qvn.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p4CMxnr4TX5oTAzHAubXZp5xX3+REtv8nCM4eiESU5Q=;
-        b=R71i2J2sED1s83Ouq64dlBdAsgl6Hc+byj0jgTAfBVjpFq7/xHf3OP2w+HnJ8mmJ5x
-         zjwTLG17LwnFGi/zwaPhTCuQafI6PcICLitDLgiLnvw7axAxXqSdKOih1Ezff8KJghUs
-         7OZupfpYvYEJH+xKVcd3+aARs9CbYHe4ZNoeISKMVeB+Bpg2gwX7UUIy4WQjar9mRDjd
-         vs78qa26KuW5gQit2fAiUFaE6/XUEcMiakyXens8dSJSaY02+sKtjsZhGYD5UbyyTtVH
-         j7PUm+fvN4xa8AT0ug9fRenkTLUeECXlYPxq4NoKviDlBgc1l8fXZl/mnm5pM0SaLh3k
-         OXlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p4CMxnr4TX5oTAzHAubXZp5xX3+REtv8nCM4eiESU5Q=;
-        b=Usx9lvkR/xJEqrgxpVKutNpF+EFEsuIbEsA8PXim4/4MeIH1TFO9SP3Z1vPB2y/07e
-         qPLDYf8MBXCh4y+goVlBPom2p5prwMmiJhbP/1+p/YtuqhB+f/0xWi0PFK1K6ulJhyez
-         +TAU1YQxUr1Chu2KDaV5yrTBbjqaI2IgBlI1XeQWeXZSThLv3tbIRQR3cRl5X1WJLbRy
-         ly4IQnYLzXSfSp5BCDwKZsN+lYLMHUbxvQIivg0nHzV8FwBidL43lBwAebpaOLdu/1d/
-         PhIFg/UxT4aFFFLiRBDouLzUFt9Wsq2BZ7+qiuuCR+LI9+QeHOU10Bg2akQfVfPCn+qG
-         o34Q==
-X-Gm-Message-State: AJIora8HfG6UIn8Wu5S14T98QWra+djaTqqHP49tbDL+H83xstbqw1L3
-        zI5WmglfRXONJSpMRFK+Gg==
-X-Google-Smtp-Source: AGRyM1u8NQs9vos0RvN+IdXTEzRMdEFf/mAMb2m50gpqQYvGPYboO9VcT0Y/URUd//KABL+M7SKtbQ==
-X-Received: by 2002:a05:6214:20aa:b0:467:cb4b:a1fa with SMTP id 10-20020a05621420aa00b00467cb4ba1famr19378623qvd.9.1655741669967;
-        Mon, 20 Jun 2022 09:14:29 -0700 (PDT)
-Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id j17-20020a05622a039100b00304fe96c7aasm11294030qtx.24.2022.06.20.09.14.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 09:14:29 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 12:14:28 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "willy@infradead.org" <willy@infradead.org>
-Subject: Re: [PATCH v4 01/34] lib/printbuf: New data structure for printing
- strings
-Message-ID: <20220620161428.xdowwr6zsvfgm5qi@moria.home.lan>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220620004233.3805-2-kent.overstreet@gmail.com>
- <f0808aaee9ac4b088121c0fbe7e18f0d@AcuMS.aculab.com>
- <20220620153043.vgtfrltebiyprufz@moria.home.lan>
- <5156ce6a38ab4f9c87ddf29ee05a266a@AcuMS.aculab.com>
+        Mon, 20 Jun 2022 12:15:45 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80049.outbound.protection.outlook.com [40.107.8.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299E521248
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:15:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IUWq2hMY2Sgk9AuX2SyxQXwZcj2rJsleNHSCSAKhAZFF7U0QJb3hW+MkzJIlwEEt8Y2tjiOtP0klZDICluP8lT4tLt4LQ2jq6N0raZ7R/i9sx4imwApewj+VE/Z16bfxYszgra/jSBC9q08cVuHxRDxBPPTYoH8mnJ2QJJnHaRxFuMt1btX27PYSu2HXXB0yCGoMSeeBsi57BEMC/Og/k0nh3HZkw36ilh7sdsU7EgtTJZ+0AuZvWlETFV8orq6UvU1LzzN682Ye9lSfTZ24hZ8OzPSZ3DI26tMLWU81Y1lpv+JB/lKQdy5tEgLV7gtS6snwhi30VTrWkkX2uDmNMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uCiWPqcaC0W0R6JtIxcinMVm6aDTHh3ffikJy2y6wEo=;
+ b=TkyRrl8lrz10gQp4iU8Km14Hm0XXnVdN4nZIk4Dgi5QndL3AsYNOR1zBSrKcWunvVCHHST7CaMcs4seBfW2+BkUJFxg4AmEsluffFRb9WdYXTiyWF5Z3jxp0icweKOKAOCMhZ8gGLn0qpBcZDCiSOXymrObUuesrkf7kkh2YE4MsSqG1BEYSN7zEPlXYieTp+3M+FGQHKG2BZl6AciKiZsLGLMMGbPgKtUUX5BHuPnwmFxOQRQVq8K9jT8Heibdq5S20pfebpu5amo2ZgoJWY5l/zipTpUR4Jz/ZPhh66tRL4PAB8XKc05TTqCwT+HKjfYmt+WuDj7M3iDbsSGGHjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uCiWPqcaC0W0R6JtIxcinMVm6aDTHh3ffikJy2y6wEo=;
+ b=UJQ869w0/dbymOShF8lOsw0h9Xfsntf51eaLpcmUVZGrsNRYGZIswsHrRMfw/KWX7vNot9OWwBWCaqi4b4TcpoSk1Lbhm8TbCVdr0T3p3bTDNBhaMIPQfWVANkGgFnRsHh2zeC1nLMLRtwHE/R0ohN7UoG46Ha068U7/yNPHO30=
+Received: from DB9PR04MB8477.eurprd04.prod.outlook.com (10.242.27.107) by
+ DU2PR04MB8744.eurprd04.prod.outlook.com (10.141.108.213) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5353.21; Mon, 20 Jun 2022 16:15:40 +0000
+Received: from DB9PR04MB8477.eurprd04.prod.outlook.com
+ ([fe80::1942:6123:5468:bf72]) by DB9PR04MB8477.eurprd04.prod.outlook.com
+ ([fe80::1942:6123:5468:bf72%7]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
+ 16:15:40 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dongas86@gmail.com" <dongas86@gmail.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        Peng Fan <peng.fan@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+Subject: RE: [PATCH RFC 1/2] regmap: add option to disable debugfs
+Thread-Topic: [PATCH RFC 1/2] regmap: add option to disable debugfs
+Thread-Index: AQHYhKwihmmQwo9gZ0uCTra8XCwz/61YZSEAgAAK2aCAAAFvAIAABRJA
+Date:   Mon, 20 Jun 2022 16:15:40 +0000
+Message-ID: <DB9PR04MB8477CD99D5847291A629994180B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
+References: <20220620134758.1286480-1-aisheng.dong@nxp.com>
+ <20220620134758.1286480-2-aisheng.dong@nxp.com>
+ <YrCM0reni+x/KWsG@sirena.org.uk>
+ <DB9PR04MB84779EF2842D789FA66094C380B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
+ <YrCXILblKsp6DuN3@sirena.org.uk>
+In-Reply-To: <YrCXILblKsp6DuN3@sirena.org.uk>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ae160335-df55-4c05-dd9f-08da52d81e9a
+x-ms-traffictypediagnostic: DU2PR04MB8744:EE_
+x-microsoft-antispam-prvs: <DU2PR04MB8744D412BFB160E3BCA056F880B09@DU2PR04MB8744.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T7VkLPbFaCgCT16P+cMobxVvPgoEk67cLTxrQXkl54KbYSHt55vwGBMOlAxr9e2isktbr8J4i7P1+shQQ1goKCdtPD+WLcbx9rp85vuziHJEVY3mMV1A+35La45vOVkIOuJF29Nh6C0mMrlT82czENbgLR4XmQ6hFbDL3vcTXV0TxS4caaObX920QfpGJ+wkQY60xkeOYvYc0jP/Md5CntrcWl6TR8x6uFco+jrpm087drluKkXpRafPrxoW0Zz4JlibLdBTdZbmc8dYpIFMowMlaSjJMbbcNVNZg5G1As+RhYvShkyNonyz7ODmJ5u5yQKGAx/K1/pSC20bGaqyvuUeTgUoa1LUlid+Pm6Gu5duRw7duIUff8uk6G9uOe4B+Cwl5KlLQ85ziFOSjPleP0/hsN0rY2i+vTjfARGGmeZDrugxyrhycnqtVJ+ltlnjMX8czFRmHOShprp41hfJOTR8yC7c+hF0RKJ89YC6f5nX3axO23p8YlUiH/6pAfjizNS/3quq1q1tRtgExEvTsOto41acnSyXPWqKT7ohPCHHYZHZFmuEFhC9e5wIL8RkN+UKuM7n7mZopp4x7jGW2nL8SYfJIoQK9ldBXDoONw/OH/jq/IjZ3k76uiVtBIm81As9ep8ciD2bLUHI6A0ajcNWGmS/MYe4JrC3tJQajGNCZT9yZr4TSV5Cau6xsirT6BsxuQJNV128GlEs1ShwgA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(376002)(366004)(136003)(41300700001)(83380400001)(55016003)(186003)(9686003)(2906002)(26005)(33656002)(38100700002)(6916009)(66476007)(122000001)(86362001)(66446008)(6506007)(54906003)(5660300002)(66556008)(44832011)(8676002)(7696005)(38070700005)(66946007)(76116006)(316002)(64756008)(52536014)(71200400001)(4326008)(478600001)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bStRdWdRZFpYQzVsZlVLUms1eVB4WGQzMXBwN3JOc3Jkb1kxVDR2WEVLS1Mr?=
+ =?utf-8?B?NHU3WGIrUCtJZHkyYXoxZGFRdmlROU82V2U3VUs5dFJjc1ZMNEhuMjFiazNw?=
+ =?utf-8?B?TElXeFdCZkZSRUsraG9yaHljcFY5RTV4UWc5MlE0TWRpVjZCSTJuWkxaWlB3?=
+ =?utf-8?B?Z1pJamxsSVcvN2E3T21kUnJ6Y3hvSVlJNzA0RjU3YUp0WTVSQi9lVE9VZGwz?=
+ =?utf-8?B?WlYwZnVGUzlkanFnVmlaR1R0V3JrYkZmcjRwQjAwMVRKUFdZdnZpWVB2aGlP?=
+ =?utf-8?B?dmpRVENHcktXNUV1aFI3Nmk0cnlXcFVHUUZKWGRhZkR5bFVxT0NVVit1UmFZ?=
+ =?utf-8?B?R29LUnlpTHRjUFRFTFhiaGJBaW9hVnlCZXhuVzdvQUc1b3lRRzh1b3FNSW9y?=
+ =?utf-8?B?ZW5QWTBqam5kbjNVNFJHMlB6YVFBNHY1NEFxcjZTakRqZnYvTHM1UHAwMGpR?=
+ =?utf-8?B?dXZyMDBmemlNUThUbndURVVlakEwZnQzOFB4T3A3enFDSmMzNW96TUJkb3Rn?=
+ =?utf-8?B?MzNIRm1rMVM3R0J5MVRSVytxYmF1eEhHMEg3N3N0b2N2OFoxa0tkazloazNI?=
+ =?utf-8?B?K25tcTdjdHNpanppVzVXUTVIVDdvQTQ0YVJKMFV1Yi9xTVF6TGxkTnM1ajdR?=
+ =?utf-8?B?QzI5ZzRVallORnFyOXFLcXR2M280RWtHTzBrNitIU0ZOemF4RlcwbXZKM1J4?=
+ =?utf-8?B?cVkvZFdqWTExSEx5dm1mSnpBVXVmbG9JOWdCZ0NrQkVKcXN0Qllhb1lOVWhp?=
+ =?utf-8?B?UzNXeWF2eHU2c0RkandCc1E4OTNlOC94MUY3Q2RSY1daZHFtZHJ0VWUxNXpz?=
+ =?utf-8?B?c1EwdTVMZGNUMkNMcFhmbjRnMDNFT2t3NXBKeXZ3RGt6bzcwSFNiTmpVbEJO?=
+ =?utf-8?B?MW41MHBDMnczazNFMjhxQTBYUURJeHlqTDZPR3BOVUt4U0hpOENCMGVEejll?=
+ =?utf-8?B?R284SmVsczRETE9kWmFKSmx5MVZacTBMZnJIdDU2R3NWbVhIa3FEUGx6OFlz?=
+ =?utf-8?B?TFJqM21jUnprSThBSE1tT240bElqTVZja2tjMUpFQ05FRGhXbWJTaGNRZ3p2?=
+ =?utf-8?B?Q1doZzMwSTYrZzhpMTE3NVdtNUpXeDlmcklwY2RpcmtjZ2xleXNBeVBUMzVi?=
+ =?utf-8?B?aE1iK0pCQi9PQW9PcWJRZFFFK2YveHhUWXNDQVhvd0kxbyszOTQ0a2xqNDhP?=
+ =?utf-8?B?WWNXUWNJa2h6MXorYkUweVdjQzBGMzFmNWJUenVDTXFveG0rQnlaY1RyNkx4?=
+ =?utf-8?B?SnU2YmVQMmkvSzBXV1RRN09iaFVxMmlBUFR2dDhYVHdGeHR0S1dKQ2tiTmRD?=
+ =?utf-8?B?UFRNellrNTBaT21kMnJWaWFWZCtNVDVnU1hKSURlUWl5RVJHSXlQc1hwQlZG?=
+ =?utf-8?B?RHVuMmQrOW83N0VNNmRnWEUwUXpaOFROZGx5ZTg3VmZOYjJCdGJsYS9DUzZI?=
+ =?utf-8?B?c3VidnBoYlB6ZmttSFVObDBhdGcvdXp6MkxFdEFsRGllTWVaenliR1h1Tk1y?=
+ =?utf-8?B?Njk0cXcwQlhTRkFFL2hkQkIwQ2VWM1Rwcy9aNnBFU0c0TWNNTE82UG9Eemdu?=
+ =?utf-8?B?Z1V0NGZlMXp6OGpPSzRpUGNXRUhSaStFc0pybGxWRkVrT1YwSHlNaU04T3VF?=
+ =?utf-8?B?ZmlNaVFHNU5KSzZHaFJkOFpsVFpJNUhEZXpzZ1FnaDZ0YjRuTWpMYlkvVXZ0?=
+ =?utf-8?B?YVVJTUNWeThpenRVNmtsNThyNThQWHZUcmdHRGVQRnlxaGZlUWpraGRtRnlK?=
+ =?utf-8?B?YjRlSjgyRmQvZFA3RmExbktsU0wwNE1XZUFpMVo5bWVCZ3VFaHBaUzVmbmJp?=
+ =?utf-8?B?bTFMM2lwWW4rbnhhVHFLdk13ZWVKYW1xR3ZvZ0I4cjIyWHRFdDBHZnlNejQv?=
+ =?utf-8?B?ZTBpWnJMK0hsRWF6ODRkUmUwbUJIZFBpZVRhdTJPcHdUYUljNStPRDBlaWwr?=
+ =?utf-8?B?SGJ4RlVCUVJna2FYaEdvb2pKNERRdG56czNMa1dOd2NlcHVwNktvSFJtNXQ2?=
+ =?utf-8?B?TVB6SkZRL1N1cTJCVTB1MW5KNXdtVTFON3hSdWltS3JuYkJiL0ZvS2NXV0tB?=
+ =?utf-8?B?bWVMQ1ZRYysyRGV3M1VlVzd1Zm1wSVdnUHpuL1IyNkRQLzZsVXBtSXJ6ZXYr?=
+ =?utf-8?B?Zzh0Wjh4bXJJcU16aDRMakd5a1d3eE5la3h3VDRoU0lNSzA0SFRFeTVnamE3?=
+ =?utf-8?B?VHVnTnZnZDQ0cGtWRVJ2YXFDUkpuUjNTbmNWZ0tVSm85QWd1R1R5SWROUEJr?=
+ =?utf-8?B?ckIyT1lRd1VTMktZVk0zNEwvclY0bllCT1I0YnZ5Q3hNTzBxVTFVcTA4bUM0?=
+ =?utf-8?B?dEVacmhORjFLTWJKMit3NEhyd0J4QkQ1SDJQSDIxdkpyaVY4QWI4dz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5156ce6a38ab4f9c87ddf29ee05a266a@AcuMS.aculab.com>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8477.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae160335-df55-4c05-dd9f-08da52d81e9a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 16:15:40.6069
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DyhQze2Q3ET8WWExLNgVZO8JxwoyYEXXhmCC1izTBuP5HGL9qqOclIx2Ru4166IHIfXMEj+bIYufUtXUfsCWfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8744
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,160 +134,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 03:53:38PM +0000, David Laight wrote:
-> From: Kent Overstreet
-> > Sent: 20 June 2022 16:31
-> > 
-> > On Mon, Jun 20, 2022 at 04:44:10AM +0000, David Laight wrote:
-> > > From: Kent Overstreet
-> > > > Sent: 20 June 2022 01:42
-> > > >
-> > > > This adds printbufs: a printbuf points to a char * buffer and knows the
-> > > > size of the output buffer as well as the current output position.
-> > > >
-> > > > Future patches will be adding more features to printbuf, but initially
-> > > > printbufs are targeted at refactoring and improving our existing code in
-> > > > lib/vsprintf.c - so this initial printbuf patch has the features
-> > > > required for that.
-> > > >
-> > > > Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-> > > > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > > ---
-> > > >  include/linux/printbuf.h | 122 +++++++++++++++++++++++++++++++++++++++
-> > > >  1 file changed, 122 insertions(+)
-> > > >  create mode 100644 include/linux/printbuf.h
-> > > >
-> > > > diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-> > > > new file mode 100644
-> > > > index 0000000000..8186c447ca
-> > > > --- /dev/null
-> > > > +++ b/include/linux/printbuf.h
-> > > > @@ -0,0 +1,122 @@
-> > > > +/* SPDX-License-Identifier: LGPL-2.1+ */
-> > > > +/* Copyright (C) 2022 Kent Overstreet */
-> > > > +
-> > > > +#ifndef _LINUX_PRINTBUF_H
-> > > > +#define _LINUX_PRINTBUF_H
-> > > > +
-> > > > +#include <linux/kernel.h>
-> > > > +#include <linux/string.h>
-> > > > +
-> > > > +/*
-> > > > + * Printbufs: String buffer for outputting (printing) to, for vsnprintf
-> > > > + */
-> > > > +
-> > > > +struct printbuf {
-> > > > +	char			*buf;
-> > > > +	unsigned		size;
-> > > > +	unsigned		pos;
-> > >
-> > > No naked unsigneds.
-> > 
-> > This is the way I've _always_ written kernel code - single word type names.
-> 
-> I'm pretty sure the coding standards require 'int'.
-
-I've been contributing code to the kernel for many years and I'm picky about my
-style, I'm not about to change now.
-
-> 
-> > >
-> > > > +};
-> > > > +
-> > > > +/*
-> > > > + * Returns size remaining of output buffer:
-> > > > + */
-> > > > +static inline unsigned printbuf_remaining_size(struct printbuf *out)
-> > > > +{
-> > > > +	return out->pos < out->size ? out->size - out->pos : 0;
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * Returns number of characters we can print to the output buffer - i.e.
-> > > > + * excluding the terminating nul:
-> > > > + */
-> > > > +static inline unsigned printbuf_remaining(struct printbuf *out)
-> > > > +{
-> > > > +	return out->pos < out->size ? out->size - out->pos - 1 : 0;
-> > > > +}
-> > >
-> > > Those two are so similar mistakes will be make.
-> > 
-> > If you've got ideas for better names I'd be happy to hear them - we discussed
-> > this and this was what we came up with.
-> > 
-> > > You can also just return negatives when the buffer has overlowed
-> > > and get the callers to test < or <= as required.
-> > 
-> > Yeesh, no.
-> 
-> Why not?
-> All the callers are internal.
-> It saves a test and branch (or cmove).
-
-Because this is a subtle thing and having two separate helpers better documents
-the _intent_ of the code. I prioritize having clear and understandable code over
-shaving every branch.
-
-printbuf_remaining() is the one almost all callers want to use;
-printbuf_remaining_size() is only for a few callers that are doing weird things
-and should probably be converted to something more standard.
-
-> 
-> > > I also wonder it is necessary to count the total length
-> > > when the buffer isn't long enough?
-> > > Unless there is a real pressing need for it I'd not bother.
-> > > Setting pos == size (after writing the '\0') allows
-> > > overflow be detected without most of the dangers.
-> > 
-> > Because that's what snprintf() needs.
-> > 
-> > > > +
-> > > > +static inline unsigned printbuf_written(struct printbuf *out)
-> > > > +{
-> > > > +	return min(out->pos, out->size);
-> > >
-> > > That excludes the '\0' for short buffers but includes
-> > > it for overlong ones.
-> > 
-> > It actually doesn't.
-> 
-> If size is 2 it goes 0, 1, 2, 2, 2 as bytes are added.
-> But the string is "" "a" "a" "a" - never 2 characters. 
-
-Ah, you're right. Ok, that's a bug, I'll fix that.
-
-> As opposed to the one in strlen() ?
-> I realise that there are shift and mask algorithms from strlen()
-> that are likely faster than a byte scan on 64 bit systems.
-> But they are likely slower than the check when you have a loop
-> that is scanning byte by byte.
-> This is especially true on out of order superscaler cpu when
-> the copy loop won't be using all the execution blocks.
-> 
-> What might be faster on cpu (like x86) where misaligned memory
-> access are almost entirely free is to copy 8 bytes at a time
-> while checking for a zero at the same time.
-> 
-> Remember kernel strings are quite often short, the overhead
-> costs for 'fast' routines slow things down.
-> (As you found when calling memcpy() and memset().)
-
-Look, from scanning the kernel log I get you're the kind of programmer who likes
-shaving every branch and instruction.
-
-I've spent a _lot_ of time in my career staring at profiles and assembly and
-counting cycles (and was working with someone juinor doing that just last
-night), and what I've found over the years is that time and again...  it's
-memory accesses and cache misses that matter, and not much else.
-
-I put a lot of effort into writing high performance code, and what I find is
-that my time is better spent when I focus on writing clear and understandable
-code, and making sure that things are laid out in memory intelligently, instead
-of trying to generate the "perfect" assembly from all the code I write.
-
-Perfect can be the enemy of good.
-
-If you want to submit patches later optimizing this stuff, be my guest - _but_,
-if it comes at the cost of making the code harder to read I'll want to see
-benchmark improvements, and of more than a few percent here and there.
+PiBGcm9tOiBNYXJrIEJyb3duIDxicm9vbmllQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IE1vbmRheSwg
+SnVuZSAyMCwgMjAyMiAxMTo1MCBQTQ0KPiANCj4gT24gTW9uLCBKdW4gMjAsIDIwMjIgYXQgMDM6
+NDc6MDVQTSArMDAwMCwgQWlzaGVuZyBEb25nIHdyb3RlOg0KPiANCj4gPiA+IEFzIGluZGljYXRl
+ZCBpbiB0aGUgbWVzc2FnZSB5b3UncmUgbGlua2luZyB0byBoZXJlIGlmIHRoZSBkZXZpY2UNCj4g
+PiA+IGNhbid0IGJlIGFjY2Vzc2VkIGl0IHNob3VsZCBiZSBiZWluZyBwdXQgaW4gY2FjaGUgb25s
+eSBtb2RlIHdoaWNoDQo+ID4gPiB3aWxsIGVuc3VyZSB0aGF0IG5vdGhpbmcgY2FuIGRvIGFueSBw
+aHlzaWNhbCBhY2Nlc3Nlcy4NCj4gDQo+ID4gSSB3b25kZXIgdGhhdCdzIG5vdCBhIHN0YWJsZSBz
+b2x1dGlvbiBhc3N1bWluZyB0aGVyZSdyZSBwb3NzaWJsZSB2b2xhdGlsZQ0KPiByZWdpc3RlcnMu
+DQo+ID4gSXNuJ3QgdGhhdD8NCj4gDQo+IFRoZSBkcml2ZXIgaXMgZ29pbmcgdG8gbmVlZCB0byBw
+b3dlciB0aGUgZGV2aWNlIGJhY2sgdXAgdG8gYWNjZXNzIHRoZSB2b2xhdGlsZQ0KPiByZWdpc3Rl
+cnMgc28gaXQgY2FuIHRha2UgdGhlIGRldmljZSBvdXQgb2YgY2FjaGUgb25seSBtb2RlIHdoZW4g
+aXQncyBkb2luZyB0aGF0DQo+IGNhbid0IGl0Pw0KDQpTb3JyeSwgSSBkaWRuJ3QgcXVpdGUgZ2V0
+IGl0Lg0KVGhlcmUncyBubyBwcm9ibGVtIGluIGRyaXZlciB0byBhY2Nlc3Mgdm9sYXRpbGUgcmVn
+aXN0ZXJzIGFzIGl0IHVzdWFsbHkgd2lsbCBwb3dlciB1cA0KZGV2aWNlIGZpcnN0IGJ5IHJwbS4N
+CkJ1dCBmb3IgZGVidWdmcywgZnJvbSB3aGF0IEkgc2F3IGluIGNvZGUsIGlmIHRoZXJlJ3MgYSB2
+b2xhdGlsZSByZWdpc3RlciwgX3JlZ21hcF9yZWFkKCkNCndpbGwgYnlwYXNzIGNhY2hlIGFuZCB0
+cnkgdG8gcmVhZCB0aGUgcmVnaXN0ZXIgdmFsdWUgZnJvbSBIVy4NClRoZW4gc3lzdGVtIG1heSBo
+YW5nIGFzIG5vIG9uZSBwb3dlcmVkIHVwIHRoZSBkZXZpY2UgYmVmb3JlLg0KQW55dGhpbmcgSSBt
+aXNzZWQ/DQoNCnN0YXRpYyBpbnQgX3JlZ21hcF9yZWFkKHN0cnVjdCByZWdtYXAgKm1hcCwgdW5z
+aWduZWQgaW50IHJlZywNCiAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGludCAqdmFs
+KQ0Kew0KICAgICAgICBpbnQgcmV0Ow0KICAgICAgICB2b2lkICpjb250ZXh0ID0gX3JlZ21hcF9t
+YXBfZ2V0X2NvbnRleHQobWFwKTsNCg0KICAgICAgICBpZiAoIW1hcC0+Y2FjaGVfYnlwYXNzKSB7
+DQogICAgICAgICAgICAgICAgcmV0ID0gcmVnY2FjaGVfcmVhZChtYXAsIHJlZywgdmFsKTsNCiAg
+ICAgICAgICAgICAgICBpZiAocmV0ID09IDApDQogICAgICAgICAgICAgICAgICAgICAgICByZXR1
+cm4gMDsNCiAgICAgICAgfQ0KDQogICAgICAgIHJldCA9IG1hcC0+cmVnX3JlYWQoY29udGV4dCwg
+cmVnLCB2YWwpOw0KICAgICAgICAuLi4NCn0NCg0KT3IgeW91IG1lYW4gc2ltcGx5IGZvcmdldHRp
+bmcgYWJvdXQgdm9sYXRpbGUgcmVnaXN0ZXJzIGFuZCBsZXQgZGVidWdmcw0KdG8gcmVhZCB0aGUg
+c3RhbGUgdmFsdWUgZnJvbSBjYWNoZT8NCg0KUmVnYXJkcw0KQWlzaGVuZw0K

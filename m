@@ -2,96 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088A7552170
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C49552173
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240472AbiFTPoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S240546AbiFTPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236110AbiFTPoN (ORCPT
+        with ESMTP id S241246AbiFTPov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:44:13 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68FE1AD94
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:44:11 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id f16so9185389pjj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UF07x+KnC24YwAp8Zs4wTUOe9n56U36o0sDtsdMKcd8=;
-        b=Y8eqlHQkFI6Q7/UGjenXvlQi5VFjn2bOO+EB4M6bkbVpQp5Feutj2lG2yJAlO2tva5
-         6mWHpvRhz7WQuOaqNRspQjyloBLJMiZJz6zlk0SRN4MuqlZ+EvZ1ih4AIlwGId0CvBrs
-         7QOkdjtsuKU4gVduY0wlBbwACw1l52voPohchtPGrrnvQYLH83OFXOc2Eglg+siP7woh
-         Hmk8o2gAKYI6PG1fxoPAxf1MdmTU/EljkqwlhNfMpRWmeSkRsy9hvn+EwqywbNYOlhp+
-         ukq7JDLv53AL+1NxEZ3rSWztWILGbj6q2nTOVxtTdVr4LyMYUI9DFCfGby5WMdqTFxhd
-         Bbsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UF07x+KnC24YwAp8Zs4wTUOe9n56U36o0sDtsdMKcd8=;
-        b=kWHFRzFz7UlO9S9b+nAsidZVAR6PGi+PZK3SZB/J/zaxoYIKCtzFUUJjsbPCBJsg6g
-         URRhcXvOh0Q/OXyZPEpfcRqt1DOM6V0rh3S0V2aG5mMxPTW/C/AsM8tFnP8BuwSN74Qm
-         fkvoDzjQHB7JEpowYulwsG54BM9H7gqDlEpTA6thkZmI1U6Xk3dqupP6n5pO9/qnV6mf
-         BEYsZX8PHNlJj2a3npXMuJiFB9fpFJUm6H/Hna5SnzW1UDRf59QXHlG3MUvxC1BIBkUk
-         Ub/cnZVnLKAhpS8Uj7099x29qEnIpEioDN1QMlZWIfBQmSJIGxyzHKF0frfT/f3idil4
-         ulsg==
-X-Gm-Message-State: AJIora93z82Muk+UAcwH90/YAm6ZkM8eb4lUv6cMOfF1di7Yp7oaXfJ2
-        Ea6RbVSL7Y6huwT64xac/o7UX36cj2IH7o2fD2hstg==
-X-Google-Smtp-Source: AGRyM1v15k9qrsixLm6raqv4MPyHwRjWVANU3gzBqV102eylPn2lN/jX0JMnapEC7t0R2BZSaQGds5zvTzoNauNdUKA=
-X-Received: by 2002:a17:90b:3e8a:b0:1ec:c09d:7963 with SMTP id
- rj10-20020a17090b3e8a00b001ecc09d7963mr667756pjb.199.1655739850930; Mon, 20
- Jun 2022 08:44:10 -0700 (PDT)
+        Mon, 20 Jun 2022 11:44:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8498A1AD92
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:44:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655739890; x=1687275890;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1oYOE8hSsPq2OivSAvYFzTxc8OIE4rMleIdzOr/mgCY=;
+  b=SlBLRxI32KvdtZkT/zfg+q0/jkm4c9fBZNGBXGsQhk+vaFu/w8j4JU5y
+   3nFQ5f8/Vne2QFdczLzIuBL7HGjaoPTMmgtTKjz8PKPEyTdBLMzduqemg
+   oV5DdlMAwWdtigXOI0Iz29xkOuxHTLXlfX3ytV84kWBxQolQ9Ry25vgbS
+   fboyNZxBP9Xv1z3mo2ZIweP0X1OIfW9Osp0ad3wBkUFyIwvFGJauVWI/e
+   Rs0SKvBlr8bhCQtNKg6yaeYCiit3oBem285carFpJqGC2T/cs73AhVZSf
+   7BboT506+sh6YBSB5eWJB0ecv2b0mglIJw0KOldekNLnqUalHTNilitvY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="279976210"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="279976210"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:44:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="562002842"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jun 2022 08:44:48 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3Ja4-000U1A-7Z;
+        Mon, 20 Jun 2022 15:44:48 +0000
+Date:   Mon, 20 Jun 2022 23:44:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:block-bitwise-opf 15/15] kernel/power/swap.c:279:50:
+ sparse: sparse: restricted blk_mq_opf_t degrades to integer
+Message-ID: <202206202333.blYnLQ0m-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
- <YqIJ8HtdqnoVzfQD@google.com> <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
- <YqNVYz4+yVbWnmNv@google.com> <CAH76GKNSfaHwpy46r1WWTVgnsuijqcHe=H5nvUTUUs1UbdZvkQ@mail.gmail.com>
- <Yqtez/J540yD7VdD@google.com> <2201fe5f-5bd8-baaf-aad5-eaaea2f1e20e@amd.com>
-In-Reply-To: <2201fe5f-5bd8-baaf-aad5-eaaea2f1e20e@amd.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Mon, 20 Jun 2022 17:43:59 +0200
-Message-ID: <CAH76GKP=2wu4+eqLCFu1F5a4rHhReUT_7N89K8xbO-gSqEQ-3w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>, Dominik Behr <dbehr@google.com>,
-        Dmitry Torokhov <dtor@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,82 +61,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 16 cze 2022 o 18:58 Limonciello, Mario
-<mario.limonciello@amd.com> napisa=C5=82(a):
->
-> On 6/16/2022 11:48, Sean Christopherson wrote:
-> > On Wed, Jun 15, 2022, Grzegorz Jaszczyk wrote:
-> >> pt., 10 cze 2022 o 16:30 Sean Christopherson <seanjc@google.com> napis=
-a=C5=82(a):
-> >>> MMIO or PIO for the actual exit, there's nothing special about hyperc=
-alls.  As for
-> >>> enumerating to the guest that it should do something, why not add a n=
-ew ACPI_LPS0_*
-> >>> function?  E.g. something like
-> >>>
-> >>> static void s2idle_hypervisor_notify(void)
-> >>> {
-> >>>          if (lps0_dsm_func_mask > 0)
-> >>>                  acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT_HYPERVISOR_NO=
-TIFY
-> >>>                                          lps0_dsm_func_mask, lps0_dsm=
-_guid);
-> >>> }
-> >>
-> >> Great, thank you for your suggestion! I will try this approach and
-> >> come back. Since this will be the main change in the next version,
-> >> will it be ok for you to add Suggested-by: Sean Christopherson
-> >> <seanjc@google.com> tag?
-> >
-> > If you want, but there's certainly no need to do so.  But I assume you =
-or someone
-> > at Intel will need to get formal approval for adding another ACPI LPS0 =
-function?
-> > I.e. isn't there work to be done outside of the kernel before any patch=
-es can be
-> > merged?
->
-> There are 3 different LPS0 GUIDs in use.  An Intel one, an AMD (legacy)
-> one, and a Microsoft one.  They all have their own specs, and so if this
-> was to be added I think all 3 need to be updated.
+tree:   https://github.com/bvanassche/linux block-bitwise-opf
+head:   031ccdd616b11c4e774e56aa7eae906188ab24cc
+commit: 031ccdd616b11c4e774e56aa7eae906188ab24cc [15/15] block: Introduce the type blk_mq_opf_t
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220620/202206202333.blYnLQ0m-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-30-g92122700-dirty
+        # https://github.com/bvanassche/linux/commit/031ccdd616b11c4e774e56aa7eae906188ab24cc
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche block-bitwise-opf
+        git checkout 031ccdd616b11c4e774e56aa7eae906188ab24cc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/btrfs/ kernel/power/
 
-Yes this will not be easy to achieve I think.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> As this is Linux specific hypervisor behavior, I don't know you would be
-> able to convince Microsoft to update theirs' either.
->
-> How about using s2idle_devops?  There is a prepare() call and a
-> restore() call that is set for each handler.  The only consumer of this
-> ATM I'm aware of is the amd-pmc driver, but it's done like a
-> notification chain so that a bunch of drivers can hook in if they need to=
-.
->
-> Then you can have this notification path and the associated ACPI device
-> it calls out to be it's own driver.
 
-Thank you for your suggestion, just to be sure that I've understand
-your idea correctly:
-1) it will require to extend acpi_s2idle_dev_ops about something like
-hypervisor_notify() call, since existing prepare() is called from end
-of acpi_s2idle_prepare_late so it is too early as it was described in
-one of previous message (between acpi_s2idle_prepare_late and place
-where we use hypercall there are several places where the suspend
-could be canceled, otherwise we could probably try to trap on other
-acpi_sleep_run_lps0_dsm occurrence from acpi_s2idle_prepare_late).
+sparse warnings: (new ones prefixed by >>)
+>> kernel/power/swap.c:279:50: sparse: sparse: restricted blk_mq_opf_t degrades to integer
+>> kernel/power/swap.c:279:48: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted blk_mq_opf_t [usertype] opf @@     got unsigned int @@
+   kernel/power/swap.c:279:48: sparse:     expected restricted blk_mq_opf_t [usertype] opf
+   kernel/power/swap.c:279:48: sparse:     got unsigned int
+--
+>> fs/btrfs/check-integrity.c:2059:47: sparse: sparse: restricted blk_mq_opf_t degrades to integer
+   fs/btrfs/check-integrity.c:2067:47: sparse: sparse: restricted blk_mq_opf_t degrades to integer
+>> fs/btrfs/check-integrity.c:2669:64: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected int submit_bio_bh_rw @@     got restricted blk_mq_opf_t [usertype] bi_opf @@
+   fs/btrfs/check-integrity.c:2669:64: sparse:     expected int submit_bio_bh_rw
+   fs/btrfs/check-integrity.c:2669:64: sparse:     got restricted blk_mq_opf_t [usertype] bi_opf
+>> fs/btrfs/check-integrity.c:2687:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected int submit_bio_bh_rw @@     got restricted blk_mq_opf_t [usertype] bi_opf @@
+   fs/btrfs/check-integrity.c:2687:41: sparse:     expected int submit_bio_bh_rw
+   fs/btrfs/check-integrity.c:2687:41: sparse:     got restricted blk_mq_opf_t [usertype] bi_opf
 
-2) using newly introduced acpi_s2idle_dev_ops hypervisor_notify() call
-will allow to register handler from Intel x86/intel/pmc/core.c driver
-and/or AMD x86/amd-pmc.c driver. Therefore we will need to get only
-Intel and/or AMD approval about extending the ACPI LPS0 _DSM method,
-correct?
+vim +279 kernel/power/swap.c
 
-I wonder if this will be affordable so just re-thinking loudly if
-there is no other mechanism that could be suggested and used upstream
-so we could notify hypervisor/vmm about guest entering s2idle state?
-Especially that such _DSM function will be introduced only to trap on
-some fake MMIO/PIO access and will be useful only for guest ACPI
-tables?
+343df3c79c62b6 Christoph Hellwig 2015-05-19  271  
+031ccdd616b11c Bart Van Assche   2022-06-16  272  static int hib_submit_io(enum req_op op, blk_mq_opf_t op_flags,
+031ccdd616b11c Bart Van Assche   2022-06-16  273  			 pgoff_t page_off, void *addr, struct hib_bio_batch *hb)
+343df3c79c62b6 Christoph Hellwig 2015-05-19  274  {
+343df3c79c62b6 Christoph Hellwig 2015-05-19  275  	struct page *page = virt_to_page(addr);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  276  	struct bio *bio;
+343df3c79c62b6 Christoph Hellwig 2015-05-19  277  	int error = 0;
+343df3c79c62b6 Christoph Hellwig 2015-05-19  278  
+07888c665b405b Christoph Hellwig 2022-01-24 @279  	bio = bio_alloc(hib_resume_bdev, 1, op | op_flags,
+07888c665b405b Christoph Hellwig 2022-01-24  280  			GFP_NOIO | __GFP_HIGH);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  281  	bio->bi_iter.bi_sector = page_off * (PAGE_SIZE >> 9);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  282  
+343df3c79c62b6 Christoph Hellwig 2015-05-19  283  	if (bio_add_page(bio, page, PAGE_SIZE, 0) < PAGE_SIZE) {
+64ec72a1ece37d Joe Perches       2017-09-27  284  		pr_err("Adding page to bio failed at %llu\n",
+343df3c79c62b6 Christoph Hellwig 2015-05-19  285  		       (unsigned long long)bio->bi_iter.bi_sector);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  286  		bio_put(bio);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  287  		return -EFAULT;
+343df3c79c62b6 Christoph Hellwig 2015-05-19  288  	}
+343df3c79c62b6 Christoph Hellwig 2015-05-19  289  
+343df3c79c62b6 Christoph Hellwig 2015-05-19  290  	if (hb) {
+343df3c79c62b6 Christoph Hellwig 2015-05-19  291  		bio->bi_end_io = hib_end_io;
+343df3c79c62b6 Christoph Hellwig 2015-05-19  292  		bio->bi_private = hb;
+343df3c79c62b6 Christoph Hellwig 2015-05-19  293  		atomic_inc(&hb->count);
+4e49ea4a3d2763 Mike Christie     2016-06-05  294  		submit_bio(bio);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  295  	} else {
+4e49ea4a3d2763 Mike Christie     2016-06-05  296  		error = submit_bio_wait(bio);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  297  		bio_put(bio);
+343df3c79c62b6 Christoph Hellwig 2015-05-19  298  	}
+343df3c79c62b6 Christoph Hellwig 2015-05-19  299  
+343df3c79c62b6 Christoph Hellwig 2015-05-19  300  	return error;
+343df3c79c62b6 Christoph Hellwig 2015-05-19  301  }
+343df3c79c62b6 Christoph Hellwig 2015-05-19  302  
 
-Thank you,
-Grzegorz
+:::::: The code at line 279 was first introduced by commit
+:::::: 07888c665b405b1cd3577ddebfeb74f4717a84c4 block: pass a block_device and opf to bio_alloc
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

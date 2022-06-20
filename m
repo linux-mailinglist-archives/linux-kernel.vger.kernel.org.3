@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2DB552544
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7986F552537
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344197AbiFTUHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S1344209AbiFTUH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343854AbiFTUG7 (ORCPT
+        with ESMTP id S1343707AbiFTUHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:06:59 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1DE1F61A;
-        Mon, 20 Jun 2022 13:06:48 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id n1so15843342wrg.12;
-        Mon, 20 Jun 2022 13:06:48 -0700 (PDT)
+        Mon, 20 Jun 2022 16:07:02 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891522AF8;
+        Mon, 20 Jun 2022 13:06:50 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id g27so9432647wrb.10;
+        Mon, 20 Jun 2022 13:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uoe8IKHiznCb2+08YYHq6Yn162+SdkatHT+ONYvtyvg=;
-        b=VO5DAnqEeePAwi/axXTy4qE8A246zDDyLHKvfEeupMh4NJS9PKzy2HLbzv2HmLinOh
-         sJDew7tvb/Du6JA9+pWT6wLYpZiUruBlDXuUNGniMiaSflxpZ999oM2RPoZbfWY8bM3s
-         gls0xbSabfR+zndjmVVe2gZatWsAghFwtSJv7FWIrq2fOl5iZF4ORrEzRPpb9VagUUok
-         bzn4DhZTxBTkt686Eof5bwsbZb+iffrPyGoKCrO/d9vttrGG2aS8UHirbaHGBHIZdzMU
-         DZCNjjT5h1ru5g19uCfpQwoKH/YS5Rr49DFzT6RKpFmZ5PA1XwoUduGXijcI+1DBXDyM
-         XTeg==
+        bh=gBD4FGBJfr7WfKu1UZU1bV8IB7E8/qXlLxTviEK1Akg=;
+        b=n+dv2OHyeLcXNTmM5AoQ5y71hnTNJIpcERPeXRAZGzH3I/VENsQCVHYqLkDxbEjmN/
+         TTkfawWz7sGx1fEvNmiL1zWs5fqtd8PmEYJ/uuxwTzmlN3TNWDIjfT7h7X2oiiCeJDJo
+         G0D3xiO8ep0dRDPxWfA7mglV2rl0lfdiXs/NgfHf3uClxo2T0zSzKmcugT014uVsbBA4
+         a8d72hUTWqP7aMSTkN4E6jMQH1AsJpvanWTcr/TzYICesUohxeYCLmlbHF8Or3sDiq5E
+         ReozveZPFU1OGId9YBAanmpEq2oZ6/HDOKmehZPgromaOnVKCB0W7RktevOubR0I+UbT
+         T3Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uoe8IKHiznCb2+08YYHq6Yn162+SdkatHT+ONYvtyvg=;
-        b=ARTfRv8e/xsEWlc5NdolwYAieEyBFvJ5mMrXJ/lRkq8Fno/TXo2cBsto+tA7GFPPSu
-         EtHVhR2d0DUgSs2pFThe/5rufDBxjwaMijzJCmV9iy+NRwNeMtB5PgIAnZSVg4GlSjb9
-         KMrRfmyfU8qVXandxHe/A42aTVTmfk5FB1Q8cYOXGQK9rWIvp7WgdPRXc+6Phx2Oaryv
-         f7G6BKnw1tsKpb/4v+BSFF/FciENTXBBU+OQCJvVbV0M0BxfeIiDyQA59f478VwlqDut
-         oSsk9tdnGweXBERfKnoRfy2Mi/j00raFxBHvm6zDYLAbwGchzM3bZ75+cJ2BtzXhNQME
-         5CzQ==
-X-Gm-Message-State: AJIora9mvSdYAnRQ8vRonyfg7p9swRoD14sh9dO/PPFaOaKekpPaNci3
-        XW+mEoNuXzsscK7fECPS0k0=
-X-Google-Smtp-Source: AGRyM1uZONrpz0spvVCV2D/AIVMzkFz9w2tp1QWQa34Ft0vrEMdw9wgaS52AsbxHhGWZBMtjoEgiDw==
-X-Received: by 2002:adf:fec2:0:b0:21a:6cff:a4f1 with SMTP id q2-20020adffec2000000b0021a6cffa4f1mr18316222wrs.139.1655755607554;
-        Mon, 20 Jun 2022 13:06:47 -0700 (PDT)
+        bh=gBD4FGBJfr7WfKu1UZU1bV8IB7E8/qXlLxTviEK1Akg=;
+        b=6JH4+cctLqHH39ZSncHjlYvz7fHrD2P4QvazMTeS/I1Rouk/bXlw4hMa0r/ecrvcDK
+         vXaw42S3fbeGqUQit+0T0D5fZFIv2O8cNIbnzrhy/o413glsgYYoLLcgep35sjbN+DDL
+         PcZM2TLr9i69r/wBdfG9LFdv8YgsTbgWaM0ZO1idKNy0XVzv5FCcfyrfkbHyVvQLVdQa
+         MB3t7NoCyLCDw0NkW78Gu8xpGi+GiakMzsmPyscD+74SKIYSgtmd1/IEJ29Y7A5DWUdM
+         xWGoH66jP112xTcpbn0vbK8bURJepPV4KsDvUQqrubKvVqQXvTahLFlhvJFjh6veMHJT
+         BD6A==
+X-Gm-Message-State: AJIora9HaLrt1lkIWfy+llcTkImkWaPCKCwECbr0stZFa4kkhxDooLsT
+        vqo8G6afu8OGhM58rDzkIBY=
+X-Google-Smtp-Source: AGRyM1ueeTVj4W+irPUqcFh4aibJZGRQv0luVUmTWKHSamp2328uXg/JWH281sGfd9zcwAAoGkXCMQ==
+X-Received: by 2002:adf:ae09:0:b0:20e:e4f0:2133 with SMTP id x9-20020adfae09000000b0020ee4f02133mr24684442wrc.104.1655755608969;
+        Mon, 20 Jun 2022 13:06:48 -0700 (PDT)
 Received: from localhost (92.40.169.68.threembb.co.uk. [92.40.169.68])
-        by smtp.gmail.com with ESMTPSA id j27-20020a05600c1c1b00b0039c1396b495sm16596378wms.9.2022.06.20.13.06.46
+        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b0039db500714fsm16981828wmq.6.2022.06.20.13.06.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:06:47 -0700 (PDT)
+        Mon, 20 Jun 2022 13:06:48 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 21/49] mfd: tps65090: replace irqchip mask_invert with unmask_base
-Date:   Mon, 20 Jun 2022 21:06:16 +0100
-Message-Id: <20220620200644.1961936-22-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 22/49] mfd: sun4i-gpadc: replace irqchip mask_invert with unmask_base
+Date:   Mon, 20 Jun 2022 21:06:17 +0100
+Message-Id: <20220620200644.1961936-23-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -89,23 +89,24 @@ as an unmask register.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/mfd/tps65090.c | 3 +--
+ drivers/mfd/sun4i-gpadc.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/tps65090.c b/drivers/mfd/tps65090.c
-index bd6235308c6b..e474e1ca253a 100644
---- a/drivers/mfd/tps65090.c
-+++ b/drivers/mfd/tps65090.c
-@@ -127,8 +127,7 @@ static struct regmap_irq_chip tps65090_irq_chip = {
- 	.num_irqs = ARRAY_SIZE(tps65090_irqs),
- 	.num_regs = NUM_INT_REG,
- 	.status_base = TPS65090_REG_INTR_STS,
--	.mask_base = TPS65090_REG_INTR_MASK,
+diff --git a/drivers/mfd/sun4i-gpadc.c b/drivers/mfd/sun4i-gpadc.c
+index cfe14d9bf6dc..edc180d83a4b 100644
+--- a/drivers/mfd/sun4i-gpadc.c
++++ b/drivers/mfd/sun4i-gpadc.c
+@@ -34,9 +34,8 @@ static const struct regmap_irq_chip sun4i_gpadc_regmap_irq_chip = {
+ 	.name = "sun4i_gpadc_irq_chip",
+ 	.status_base = SUN4I_GPADC_INT_FIFOS,
+ 	.ack_base = SUN4I_GPADC_INT_FIFOS,
+-	.mask_base = SUN4I_GPADC_INT_FIFOC,
++	.unmask_base = SUN4I_GPADC_INT_FIFOC,
+ 	.init_ack_masked = true,
 -	.mask_invert = true,
-+	.unmask_base = TPS65090_REG_INTR_MASK,
- };
- 
- static bool is_volatile_reg(struct device *dev, unsigned int reg)
+ 	.irqs = sun4i_gpadc_regmap_irq,
+ 	.num_irqs = ARRAY_SIZE(sun4i_gpadc_regmap_irq),
+ 	.num_regs = 1,
 -- 
 2.35.1
 

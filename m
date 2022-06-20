@@ -2,271 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AA9552234
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26DA552245
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240165AbiFTQ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S241950AbiFTQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbiFTQ0l (ORCPT
+        with ESMTP id S244553AbiFTQ2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:26:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F27C1D317
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655742400; x=1687278400;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f7g5q36s3nBOH9s2jmYUtqMFNU2MA/u3zaucBxlEbHc=;
-  b=nq505Ox3R+Fvs7phDJ6NDoYUsnVNvzG9Cc9CO/AGGekVCJi9mMHz53T2
-   sDv5oq4UgNciPjM+xSnMWmd2ub0t0QbQLXYHGXvVoVxaQQk10doxkOxL0
-   qEQ5AklN4GegQuHLIFaldSTN2fANvorfHAcEQZQzTeqK+x/DDuoxf2Kc4
-   iyGgoOMSlh8JeBfzCpjDUte92GD1NUUWy4ci9pU9DjNzc5I8c7No5nGx7
-   VG5A7r+9/N88ANVjaLnmO9cn3M93mICDNhDMsTdVYvWW7kHQI+8iJjE5s
-   DcKANE9wp2SlWrppiRBjZMGF1q1EhvWGN9/6UPkwxLXxvDCeTf/yqFvly
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="366257595"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="366257595"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 09:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="591243077"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2022 09:25:22 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3KDG-000UBr-44;
-        Mon, 20 Jun 2022 16:25:18 +0000
-Date:   Tue, 21 Jun 2022 00:24:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning:
- 'ixp4xx_npe_of_match' defined but not used
-Message-ID: <202206210010.piIa6O1b-lkp@intel.com>
+        Mon, 20 Jun 2022 12:28:50 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBB9BE0C;
+        Mon, 20 Jun 2022 09:28:50 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25KDDo2h010544;
+        Mon, 20 Jun 2022 16:28:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=UPuXuwaATnCiD95hRgHKAmygUc1xM5cEW1R932PHfNc=;
+ b=dg7RELv6yPPnxOGDkTR5jTbbt/a4uBWvKqvW6rVBDSmyfiYqNcxvJ6hbGeK5fSQW87I4
+ aYhAOH7NvJxVs/sZYDrjPyFXRf5ifmiit0SjiJvrCTQCkKrzVdtwpPJV1PIktm75QrFd
+ pcScMHs3Ez6s+nMaB8Of+ioRXmijOHKKdBKbCI2vOmdjrL6gujVzusIthL9WQ2TJAiZS
+ gc8gm8sEUYtERkHexZGWR8I5TGuvfOWRMnFk2rmZq0OVU23VMGOFBSH6eFJuEQbR36vS
+ 4lEhgX2BV/sk37X9JmtDmVb2bKLZTCWLZSYwGTMvsfoMkbiktPiAqAT03bkdPn5jBur5 dA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs78tunpu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jun 2022 16:28:43 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25KGKfjN000850;
+        Mon, 20 Jun 2022 16:28:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtg5tjd40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jun 2022 16:28:42 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25KGSf6Y019345;
+        Mon, 20 Jun 2022 16:28:41 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtg5tjd3a-1;
+        Mon, 20 Jun 2022 16:28:41 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
+        Rishi Gupta <gupt21@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: mcp2221: prevent a buffer overflow in mcp_smbus_write()
+Date:   Mon, 20 Jun 2022 09:28:24 -0700
+Message-Id: <20220620162824.58937-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: m7rxXkTFRvbfervoWggKeeMRoHZOjazw
+X-Proofpoint-ORIG-GUID: m7rxXkTFRvbfervoWggKeeMRoHZOjazw
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Smatch Warning:
+drivers/hid/hid-mcp2221.c:388 mcp_smbus_write() error: __memcpy()
+'&mcp->txbuf[5]' too small (59 vs 255)
+drivers/hid/hid-mcp2221.c:388 mcp_smbus_write() error: __memcpy() 'buf'
+too small (34 vs 255)
 
-First bad commit (maybe != root cause):
+The 'len' variable can take a value between 0-255 as it can come from
+data->block[0] and it is user data. So add an bound check to prevent a
+buffer overflow in memcpy().
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-commit: 7f94b69ece515ac82defa60ef7cba2cf26180216 ARM: ixp4xx: fix compile-testing soc drivers
-date:   11 months ago
-config: x86_64-buildonly-randconfig-r003-20220620 (https://download.01.org/0day-ci/archive/20220621/202206210010.piIa6O1b-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f94b69ece515ac82defa60ef7cba2cf26180216
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7f94b69ece515ac82defa60ef7cba2cf26180216
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/rockchip/ drivers/irqchip/ drivers/soc/ixp4xx/ kernel/sched/
+Fixes: 67a95c21463d ("HID: mcp2221: add usb to i2c-smbus host bridge")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+I believe I2C_SMBUS_BLOCK_MAX (32) is the appropriate limit to use here
+but the &mcp->txbuf[5] array could actually fit 59 bytes which is the
+destination in this case. I don't know why the buffer is larger than
+expected.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+ drivers/hid/hid-mcp2221.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:25: note: in expansion of macro 'dev_info'
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:54: note: format string is defined here
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                                                   ~~~^
-         |                                                      |
-         |                                                      unsigned int
-         |                                                   %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:39: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:25: note: in expansion of macro 'dev_info'
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:61: note: format string is defined here
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                                                          ~~~^
-         |                                                             |
-         |                                                             unsigned int
-         |                                                          %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:39: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:25: note: in expansion of macro 'dev_info'
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:54: note: format string is defined here
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                                   ~~~^
-         |                                                      |
-         |                                                      unsigned int
-         |                                                   %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:39: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:25: note: in expansion of macro 'dev_info'
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:61: note: format string is defined here
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                                          ~~~^
-         |                                                             |
-         |                                                             unsigned int
-         |                                                          %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:31: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:17: note: in expansion of macro 'dev_info'
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                 ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:46: note: format string is defined here
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                                           ~~~^
-         |                                              |
-         |                                              unsigned int
-         |                                           %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:31: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:17: note: in expansion of macro 'dev_info'
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                 ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:53: note: format string is defined here
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                                                  ~~~^
-         |                                                     |
-         |                                                     unsigned int
-         |                                                  %08llx
-   At top level:
->> drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning: 'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
-     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/ixp4xx_npe_of_match +737 drivers/soc/ixp4xx/ixp4xx-npe.c
-
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  679  
-bc4d7eafb7ad59 drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  680  static int ixp4xx_npe_probe(struct platform_device *pdev)
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  681  {
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  682  	int i, found = 0;
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  683  	struct device *dev = &pdev->dev;
-76f24b4f46b8ca drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2021-05-25  684  	struct device_node *np = dev->of_node;
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  685  	struct resource *res;
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  686  
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  687  	for (i = 0; i < NPE_COUNT; i++) {
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  688  		struct npe *npe = &npe_tab[i];
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  689  
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  690  		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  691  		if (!res)
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  692  			return -ENODEV;
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  693  
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  694  		if (!(ixp4xx_read_feature_bits() &
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  695  		      (IXP4XX_FEATURE_RESET_NPEA << i))) {
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  696  			dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  697  				 i, res->start, res->end);
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  698  			continue; /* NPE already disabled or not present */
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  699  		}
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  700  		npe->regs = devm_ioremap_resource(dev, res);
-cd3967bee004bc drivers/soc/ixp4xx/ixp4xx-npe.c   Dan Carpenter    2019-06-18  701  		if (IS_ERR(npe->regs))
-cd3967bee004bc drivers/soc/ixp4xx/ixp4xx-npe.c   Dan Carpenter    2019-06-18  702  			return PTR_ERR(npe->regs);
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  703  
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  704  		if (npe_reset(npe)) {
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  705  			dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  706  				 i, res->start, res->end);
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  707  			continue;
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  708  		}
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  709  		npe->valid = 1;
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10 @710  		dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  711  			 i, res->start, res->end);
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  712  		found++;
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  713  	}
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  714  
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  715  	if (!found)
-3ba8c792055286 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Hałasa 2009-04-28  716  		return -ENODEV;
-76f24b4f46b8ca drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2021-05-25  717  
-76f24b4f46b8ca drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2021-05-25  718  	/* Spawn crypto subdevice if using device tree */
-76f24b4f46b8ca drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2021-05-25  719  	if (IS_ENABLED(CONFIG_OF) && np)
-76f24b4f46b8ca drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2021-05-25  720  		devm_of_platform_populate(dev);
-76f24b4f46b8ca drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2021-05-25  721  
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  722  	return 0;
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  723  }
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  724  
-bc4d7eafb7ad59 drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  725  static int ixp4xx_npe_remove(struct platform_device *pdev)
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  726  {
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  727  	int i;
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  728  
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  729  	for (i = 0; i < NPE_COUNT; i++)
-0b458d7b10f83e drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  730  		if (npe_tab[i].regs) {
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  731  			npe_reset(&npe_tab[i]);
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  732  		}
-bc4d7eafb7ad59 drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  733  
-bc4d7eafb7ad59 drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  734  	return 0;
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  735  }
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_npe.c Krzysztof Halasa 2008-01-01  736  
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10 @737  static const struct of_device_id ixp4xx_npe_of_match[] = {
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  738  	{
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  739  		.compatible = "intel,ixp4xx-network-processing-engine",
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  740          },
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  741  	{},
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  742  };
-e00797f2e05b7f drivers/soc/ixp4xx/ixp4xx-npe.c   Linus Walleij    2019-02-10  743  
-
-:::::: The code at line 737 was first introduced by commit
-:::::: e00797f2e05b7f3758bb96e6248aff8d95999cec soc: ixp4xx: npe: Add DT probe code
-
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
-
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index 4211b9839209..de52e9f7bb8c 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -385,6 +385,9 @@ static int mcp_smbus_write(struct mcp2221 *mcp, u16 addr,
+ 		data_len = 7;
+ 		break;
+ 	default:
++		if (len > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
++
+ 		memcpy(&mcp->txbuf[5], buf, len);
+ 		data_len = len + 5;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

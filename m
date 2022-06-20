@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC5A551629
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D428551639
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241023AbiFTKoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S239886AbiFTKse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbiFTKof (ORCPT
+        with ESMTP id S240834AbiFTKs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:44:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631E513F3D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655721875; x=1687257875;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xvsOTELv8MJG/5HFmG/TU/grmUBnZPStDe6N1zoGGIs=;
-  b=BUqRdE2YjGUAPc+lDIxE2g2W4n0fMjVBOYomsahXTlXCVh1V9hLwJETe
-   Hj2oMkjtm7HATRuqprTVwwAA15zuNHLDG11osaQZj7WykCN1aavp+3AWn
-   1cVdbQqpsTDx+59j9GtISKXy+dxx1+YwLu5L/mh//hmNpejOYjJvyzRGO
-   b99UCvYK+E/SIU9fKbTLCXLjJxYr3bwNjRp8YGtLj+eHvb3Gygd8hN2lh
-   BJcHy802UDOALcPe/IfSBelVuDbiS2jDr1QGjEM8ZrHAfHs135nd0SFEq
-   aOm3P+eQP9NN7jF/8xFE+BySFjGLkqY5aaoCwGlGI62hT+8rcdcgr7Fdn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="366187377"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="366187377"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:44:35 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="729321974"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:44:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3EtT-000kHN-7e;
-        Mon, 20 Jun 2022 13:44:31 +0300
-Date:   Mon, 20 Jun 2022 13:44:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
- crc
-Message-ID: <YrBPjzOaAjqSZBqD@smile.fi.intel.com>
-References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
- <f000cf13-5e73-3c76-700c-a087954d4050@redhat.com>
- <YrBA+XOzefxSfi72@smile.fi.intel.com>
- <ff5ac808-fde9-57ee-7d47-a4999428210e@redhat.com>
+        Mon, 20 Jun 2022 06:48:26 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493C5FFA;
+        Mon, 20 Jun 2022 03:48:21 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1655722026tpfowczi
+Received: from localhost.localdomain ( [106.117.82.33])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 20 Jun 2022 18:46:56 +0800 (CST)
+X-QQ-SSF: 01000000004000D0I000B00A0000000
+X-QQ-FEAT: AsJu5+SoYW4r99ODow98FzXA05NwqwMOP0PDB6J+D6MRSmW7JE7EPnWFeeFyr
+        WBMGF/XR9kGz/QAfFWvSnljZE0ukbHUzd3DQYAfbDif8AJ8meakRTgmfH1Xc2jyXua8A7sP
+        Wad3n3PSwrIvp87ycqBsdInNghQv/HBooxfOvzXvS0VFj8crsEFnZMX6KOEnZYGJ6Slz8S+
+        u3iInKuO1HH9MCeu4RL/iH76Caj3jU6MFYUg4paqInSyEEcaB3nNVzurKnDttF6aVCU074I
+        pIaXvzyGsMtNBvK0M7lsn/paPyPgrMgKeHvOKQN2ThqiyC6+UPJ2RcmAjv/UfaPzRNeXTXw
+        90zLVVQ37CKXuEugCU=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     jason.wessel@windriver.com
+Cc:     daniel.thompson@linaro.org, dianders@chromium.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] serial: kgdboc: Fix typo in comment
+Date:   Mon, 20 Jun 2022 18:46:53 +0800
+Message-Id: <20220620104653.5451-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff5ac808-fde9-57ee-7d47-a4999428210e@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 12:00:35PM +0200, Hans de Goede wrote:
-> On 6/20/22 11:42, Andy Shevchenko wrote:
-> > On Mon, Jun 20, 2022 at 10:51:33AM +0200, Hans de Goede wrote:
+Delete the redundant word 'the'.
 
-...
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ drivers/tty/serial/kgdboc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >> Maybe do a follow up renaming CONFIG_INTEL_SOC_PMIC to
-> >> CONFIG_INTEL_SOC_PMIC_CRC and also change the module name
-> >> from intel-soc-pmic to intel-soc-pmic-crc ?
-> > 
-> > I thought about that, but decided to leave it for later since it will take a
-> > lot of subsystems and better to be considered out of the scope of this series.
-> > 
-> > Do you agree?
-> 
-> Sure we can do this later. Note that there are not that much dependencies
-> on INTEL_SOC_PMIC though. The ones which I could find are:
-> 
-> drivers/usb/typec/tcpm/Kconfig: config TYPEC_WCOVE
-> -which is wrong regardless of the rename and should just be dropped
->  in a separate/unrelated patch. can you submit a patch for this ?
-
-Sure...
-
-Done!
-
-> drivers/gpio/Kconfig: config GPIO_CRYSTAL_COVE
-> drivers/pwm/Kconfig: config PWM_CRC
-> drivers/acpi/pmic/Kconfig: config BYTCRC_PMIC_OPREGION &&
->                            config CHTCRC_PMIC_OPREGION
-> 
-> So not that much, but still 3 subystems, so yeah probably best
-> to do that cleanup later,
-
-Yup, let's do it later with Type-C fix in mind, that will save us
-doing unneeded churn.
-
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index 79b7db8580e0..7aa37be3216a 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -342,7 +342,7 @@ static int param_set_kgdboc_var(const char *kmessage,
+ 	/*
+ 	 * Configure with the new params as long as init already ran.
+ 	 * Note that we can get called before init if someone loads us
+-	 * with "modprobe kgdboc kgdboc=..." or if they happen to use the
++	 * with "modprobe kgdboc kgdboc=..." or if they happen to use
+ 	 * the odd syntax of "kgdboc.kgdboc=..." on the kernel command.
+ 	 */
+ 	if (configured >= 0)
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.1
 

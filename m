@@ -2,85 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA46E5517B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCB95517BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240411AbiFTLrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S241007AbiFTLr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236674AbiFTLrS (ORCPT
+        with ESMTP id S235408AbiFTLr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:47:18 -0400
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F4965D1;
-        Mon, 20 Jun 2022 04:47:14 -0700 (PDT)
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id 60B59C3F3EEF;
-        Mon, 20 Jun 2022 13:47:10 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 60B59C3F3EEF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1655725630; bh=zVAjM2tmOCFjOeWx0q9T800geGdrhxbgvRA9OL39OZU=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=WBDBwKgIgrp5kWzwSKFLiNguH5X/dsHDEkQpPWiFLHF1mOoPNqdw2LiK1wIWOcqT1
-         ptcuK4oI+BNby3X/s42rssKgZ4Nfprxa9ivdfsQsCL23+UShabC94hudTZk8gHPoEb
-         0xvRosD46bsjfhFeZQ6fKfXFO2hMh0ZnUa9PY8Rk=
-From:   Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH v8 2/2] On Semi AR0521 sensor driver
-In-Reply-To: <m37d7ufrzx.fsf@t19.piap.pl>
-Lines:  18
-References: <m3pmn66pie.fsf@t19.piap.pl> <m3h78i6p4t.fsf@t19.piap.pl>
-        <20220301093107.ihokyp4xptkzpbpc@uno.localdomain>
-        <m38rtt7sx7.fsf@t19.piap.pl>
-        <20220301143044.2l4vlwbnh5n3g5ng@uno.localdomain>
-        <m37d7ufrzx.fsf@t19.piap.pl>
-Sender: khalasa@piap.pl
-Date:   Mon, 20 Jun 2022 13:47:10 +0200
-Message-ID: <m3bkun7e0x.fsf@t19.piap.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Rule-ID: 3
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, whitelist
-X-KLMS-AntiPhishing: not scanned, whitelist
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Jun 2022 07:47:28 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2AEA47A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:47:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VGxGypi_1655725642;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VGxGypi_1655725642)
+          by smtp.aliyun-inc.com;
+          Mon, 20 Jun 2022 19:47:23 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: rmap: Simplify the hugetlb handling when unmapping or migration
+Date:   Mon, 20 Jun 2022 19:47:15 +0800
+Message-Id: <28414b1b96f095e838c1e548074f8e0fc70d78cf.1655724713.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro et al,
+According to previous discussion [1], there are so many levels of indenting
+to handle the hugetlb case when unmapping or migration. We can combine
+folio_test_anon() and huge_pmd_unshare() to save one level of indenting,
+by adding a local variable and moving the VM_BUG_ON() a little forward.
 
-it appears my last mail dated 6th of May hadn't reached you.
+No intended functional changes in this patch.
 
-Mauro, you are the drivers/media maintainer. Is the AR0521 driver ready
-to be merged, are there still unresolved issues, or the driver is not to
-be merged at all? I understand everyone's so busy but a simple yes or no
-isn't too much, is it?
+[1] https://lore.kernel.org/all/0b986dc4-5843-3e2d-c2df-5a2e9f13e6ab@oracle.com/
 
-Perhaps we have a breakage in communications here? Are you receiving
-this?
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ mm/rmap.c | 90 +++++++++++++++++++++++++++++++--------------------------------
+ 1 file changed, 44 insertions(+), 46 deletions(-)
 
-> Since it appears all remaining issues with the AR0521 driver have been
-> resolved weeks (now months) ago... is there anything I should do in
-> order to have the driver merged, should I rather proceed with the
-> "staging" thing, or maybe some other option should be used?
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 04fac1a..2f48a54 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1537,6 +1537,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 				 PageAnonExclusive(subpage);
+ 
+ 		if (folio_test_hugetlb(folio)) {
++			bool anon = folio_test_anon(folio);
++
+ 			/*
+ 			 * The try_to_unmap() is only passed a hugetlb page
+ 			 * in the case where the hugetlb page is poisoned.
+@@ -1551,31 +1553,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 			 */
+ 			flush_cache_range(vma, range.start, range.end);
+ 
+-			if (!folio_test_anon(folio)) {
++			/*
++			 * To call huge_pmd_unshare, i_mmap_rwsem must be
++			 * held in write mode.  Caller needs to explicitly
++			 * do this outside rmap routines.
++			 */
++			VM_BUG_ON(!anon && !(flags & TTU_RMAP_LOCKED));
++			if (!anon && huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
++				flush_tlb_range(vma, range.start, range.end);
++				mmu_notifier_invalidate_range(mm, range.start,
++							      range.end);
++
+ 				/*
+-				 * To call huge_pmd_unshare, i_mmap_rwsem must be
+-				 * held in write mode.  Caller needs to explicitly
+-				 * do this outside rmap routines.
++				 * The ref count of the PMD page was dropped
++				 * which is part of the way map counting
++				 * is done for shared PMDs.  Return 'true'
++				 * here.  When there is no other sharing,
++				 * huge_pmd_unshare returns false and we will
++				 * unmap the actual page and drop map count
++				 * to zero.
+ 				 */
+-				VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+-
+-				if (huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
+-					flush_tlb_range(vma, range.start, range.end);
+-					mmu_notifier_invalidate_range(mm, range.start,
+-								      range.end);
+-
+-					/*
+-					 * The ref count of the PMD page was dropped
+-					 * which is part of the way map counting
+-					 * is done for shared PMDs.  Return 'true'
+-					 * here.  When there is no other sharing,
+-					 * huge_pmd_unshare returns false and we will
+-					 * unmap the actual page and drop map count
+-					 * to zero.
+-					 */
+-					page_vma_mapped_walk_done(&pvmw);
+-					break;
+-				}
++				page_vma_mapped_walk_done(&pvmw);
++				break;
+ 			}
+ 			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+ 		} else {
+@@ -1906,6 +1905,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 				 PageAnonExclusive(subpage);
+ 
+ 		if (folio_test_hugetlb(folio)) {
++			bool anon = folio_test_anon(folio);
++
+ 			/*
+ 			 * huge_pmd_unshare may unmap an entire PMD page.
+ 			 * There is no way of knowing exactly which PMDs may
+@@ -1915,31 +1916,28 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 			 */
+ 			flush_cache_range(vma, range.start, range.end);
+ 
+-			if (!folio_test_anon(folio)) {
++			/*
++			 * To call huge_pmd_unshare, i_mmap_rwsem must be
++			 * held in write mode.  Caller needs to explicitly
++			 * do this outside rmap routines.
++			 */
++			VM_BUG_ON(!anon && !(flags & TTU_RMAP_LOCKED));
++			if (!anon && huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
++				flush_tlb_range(vma, range.start, range.end);
++				mmu_notifier_invalidate_range(mm, range.start,
++							      range.end);
++
+ 				/*
+-				 * To call huge_pmd_unshare, i_mmap_rwsem must be
+-				 * held in write mode.  Caller needs to explicitly
+-				 * do this outside rmap routines.
++				 * The ref count of the PMD page was dropped
++				 * which is part of the way map counting
++				 * is done for shared PMDs.  Return 'true'
++				 * here.  When there is no other sharing,
++				 * huge_pmd_unshare returns false and we will
++				 * unmap the actual page and drop map count
++				 * to zero.
+ 				 */
+-				VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+-
+-				if (huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
+-					flush_tlb_range(vma, range.start, range.end);
+-					mmu_notifier_invalidate_range(mm, range.start,
+-								      range.end);
+-
+-					/*
+-					 * The ref count of the PMD page was dropped
+-					 * which is part of the way map counting
+-					 * is done for shared PMDs.  Return 'true'
+-					 * here.  When there is no other sharing,
+-					 * huge_pmd_unshare returns false and we will
+-					 * unmap the actual page and drop map count
+-					 * to zero.
+-					 */
+-					page_vma_mapped_walk_done(&pvmw);
+-					break;
+-				}
++				page_vma_mapped_walk_done(&pvmw);
++				break;
+ 			}
+ 
+ 			/* Nuke the hugetlb page table entry */
+-- 
+1.8.3.1
 
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa

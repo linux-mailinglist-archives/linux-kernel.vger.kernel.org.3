@@ -2,234 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8AA5517F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B825517FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbiFTMBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S241721AbiFTMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240445AbiFTMBM (ORCPT
+        with ESMTP id S241377AbiFTMBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:01:12 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB1126C4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:01:11 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b7so11648283ljr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:01:11 -0700 (PDT)
+        Mon, 20 Jun 2022 08:01:48 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893601838A;
+        Mon, 20 Jun 2022 05:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RELZ48tdINLiJ7oRIphqtUqBQp/m2ZnJE4ag9EyIEdE=;
-        b=BpFXMUKsQnMnHAlcOEOWAA0qdjsO/jqf16/HCSanER80jjZi+mADHa+M3iAl9OdDzB
-         PvCauCAcYEqe/PBMTW9Ru1vq6rB87hX62bNBJovb4K4OjxtGmZxHiOHgYJssjM0eilVI
-         rgymKsD63jcjZJkJUxpOzlAoXaLzoYJ0e39M1ak+C8xCn1LURS2uwhPuxkKUNQ4ra2/l
-         IYZ69G/G9Ho43O5VlDQvL2CgPU9FeRV7JBkoNUJX8KJvoQwQXRvwjx4mCnVNam3Z+czr
-         zuqMCoPUfzMa+fO3kVTfKrFCSTRJIL97kYepOxyO0FEq0iNR2qMIUnCaq2xsI6/I2zHg
-         C9vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RELZ48tdINLiJ7oRIphqtUqBQp/m2ZnJE4ag9EyIEdE=;
-        b=2ZDq6gErFK8PeiVSsQH7oaqoYb4im01PiisnpDAIkKMlkbwTKhGtWoQ8BsjiqUypLC
-         NKiYxk8uz6scrS7BROU/8BG15h7GflWfSqWbZ28SymF7WivTuG5yFVmy3kxzkj60tKk6
-         +89ye1Rp1SoHr+tPgc+o5/bEb0BsmYsSNIoRTaUvX+6CRHVurJVnD5spXHnrdUdqLL1U
-         aLkWetN7rjz1LAZHJ2wjRe4Bso9Ufy6hmGjDsPhsficwyVgJEzi3mGuK99OxAbfJEpGk
-         4/pqyBlHTxbxzN1ztBzDBBjSm19zNVIKJS8oOUdB/r54EYC8oAHuaBIMMIJzFuZ6VDdo
-         Wc8g==
-X-Gm-Message-State: AJIora+xXP49rs5jrugyWIbJwgKbAYfyYnJ9gbAdLh1RdGtHg07QXqQZ
-        RfzfiKOeOKGd/rC8APKn0OBIt0nvidldA4IWxwQeTg==
-X-Google-Smtp-Source: AGRyM1t3kCfZUBu+7Zyuh/+Yx/Ni2dDy8M8FTpyJHfVBAHZt9He9PnoI3iyDCjZ4HkKWBvi6WdodL/FD0nSu3pws0c8=
-X-Received: by 2002:a2e:a236:0:b0:259:c94:3144 with SMTP id
- i22-20020a2ea236000000b002590c943144mr11361200ljm.466.1655726469519; Mon, 20
- Jun 2022 05:01:09 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655726505; x=1687262505;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=3YedOrNBMgpBzmEf70XxRoMrvwOwruTcI/HhSxXglXA=;
+  b=r+UznJXTcMcrYam9SfRmyeWSETnLiLnQyYCQUJ70bCKXglBYarcUsYCQ
+   EqzZWdq7ykaJ/MA7jMAqYKasdDR3y4LPOPk6h+ShqfQb2joVsEWCKGiAO
+   Hj7omn4II57DrOZrXMWwg9GcdEkD0I8RQ6oNVFluB8gBWWM9XDUw3O8AX
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jun 2022 05:01:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 05:01:45 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 20 Jun 2022 05:01:44 -0700
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 20 Jun 2022 05:01:40 -0700
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v11 6/9] Coresight: Add TPDA link driver
+Date:   Mon, 20 Jun 2022 20:00:58 +0800
+Message-ID: <20220620120101.2906-7-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220620120101.2906-1-quic_jinlmao@quicinc.com>
+References: <20220620120101.2906-1-quic_jinlmao@quicinc.com>
 MIME-Version: 1.0
-References: <20220619111115.6354-1-nikita.shubin@maquefel.me> <20220619111115.6354-2-nikita.shubin@maquefel.me>
-In-Reply-To: <20220619111115.6354-2-nikita.shubin@maquefel.me>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Mon, 20 Jun 2022 17:30:58 +0530
-Message-ID: <CAK9=C2X4TTCEjZya4wz-W6ndBaxzUpLBtzQAGJ4zphVM8NSgdg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] RISC-V: Create unique identification for SoC PMU
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Atish Patra <atishp@atishpatra.org>, Will Deacon <will@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlvIERvbWluZ29z?= 
-        <joao.mario@tecnico.ulisboa.pt>, linux <linux@yadro.com>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 4:41 PM Nikita Shubin <nikita.shubin@maquefel.me> w=
-rote:
->
-> From: Nikita Shubin <n.shubin@yadro.com>
->
-> Provide RISC-V SBI PMU id to distinguish different cores or SoCs via
-> "devices/platform/riscv-pmu/id" sysfs entry.
->
-> The identification is generated as string of marchid, mimpid, mvendorid
-> in hex format separated by coma - "0x70032,0x70032,0x0".
->
-> The CSRs are detailed in the RISC-V privileged spec [1].
-> [1] https://github.com/riscv/riscv-isa-manual
->
-> Inspired-by: Jo=C3=A3o M=C3=A1rio Domingos <joao.mario@tecnico.ulisboa.pt=
->
-> Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
+TPDA(Trace, Profiling and Diagnostics Aggregator) is
+to provide packetization, funneling and timestamping of
+TPDM data. Multiple monitors are connected to different
+input ports of TPDA.This change is to add tpda
+enable/disable/probe functions for coresight tpda driver.
 
-The mvendorid, marchid, and mimpid can be useful to apps other than
-perf tool.
+ - - - -         - - - -        - - - -
+| TPDM 0|      | TPDM 1 |     | TPDM 2|
+ - - - -         - - - -        - - - -
+    |               |             |
+    |_ _ _ _ _ _    |     _ _ _ _ |
+                |   |    |
+                |   |    |
+           ------------------
+          |        TPDA      |
+           ------------------
 
-I have tried to extend /proc/cpuinfo with this information which can be
-parsed by perf tool:
-https://lore.kernel.org/all/20220620115549.1529597-1-apatel@ventanamicro.co=
-m/
+Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+---
+ drivers/hwtracing/coresight/Kconfig          |  11 +
+ drivers/hwtracing/coresight/Makefile         |   1 +
+ drivers/hwtracing/coresight/coresight-tpda.c | 206 +++++++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpda.h |  35 ++++
+ 4 files changed, 253 insertions(+)
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
 
-Regards,
-Anup
+diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+index b2b72a35e416..0cbebfd0d23e 100644
+--- a/drivers/hwtracing/coresight/Kconfig
++++ b/drivers/hwtracing/coresight/Kconfig
+@@ -205,6 +205,7 @@ config CORESIGHT_TRBE
+ config CORESIGHT_TPDM
+ 	tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
+ 	select CORESIGHT_LINKS_AND_SINKS
++	select CORESIGHT_TPDA
+ 	help
+ 	  This driver provides support for configuring monitor. Monitors are
+ 	  primarily responsible for data set collection and support the
+@@ -213,4 +214,14 @@ config CORESIGHT_TPDM
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called coresight-tpdm.
+ 
++config CORESIGHT_TPDA
++	tristate "CoreSight Trace, Profiling & Diagnostics Aggregator driver"
++	help
++	  This driver provides support for configuring aggregator. This is
++	  primarily useful for pulling the data sets from one or more
++	  attached monitors and pushing the resultant data out. Multiple
++	  monitors are connected on different input ports of TPDA.
++
++	  To compile this driver as a module, choose M here: the module will be
++	  called coresight-tpda.
+ endif
+diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
+index 6bb9b1746bc7..1712d82e7260 100644
+--- a/drivers/hwtracing/coresight/Makefile
++++ b/drivers/hwtracing/coresight/Makefile
+@@ -26,5 +26,6 @@ obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
+ obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
+ obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
+ obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
++obj-$(CONFIG_CORESIGHT_TPDA) += coresight-tpda.o
+ coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
+ 		   coresight-cti-sysfs.o
+diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
+new file mode 100644
+index 000000000000..7a0478a8b63e
+--- /dev/null
++++ b/drivers/hwtracing/coresight/coresight-tpda.c
+@@ -0,0 +1,206 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#include <linux/amba/bus.h>
++#include <linux/bitfield.h>
++#include <linux/coresight.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/fs.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++
++#include "coresight-priv.h"
++#include "coresight-tpda.h"
++#include "coresight-trace-id.h"
++
++DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
++
++/* Settings pre enabling port control register */
++static void tpda_enable_pre_port(struct tpda_drvdata *drvdata)
++{
++	u32 val;
++
++	val = readl_relaxed(drvdata->base + TPDA_CR);
++	val |= FIELD_PREP(TPDA_CR_ATID, drvdata->atid);
++	writel_relaxed(val, drvdata->base + TPDA_CR);
++}
++
++static void tpda_enable_port(struct tpda_drvdata *drvdata, int port)
++{
++	u32 val;
++
++	val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
++	/* Enable the port */
++	val |= TPDA_Pn_CR_ENA;
++	writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
++}
++
++static void __tpda_enable(struct tpda_drvdata *drvdata, int port)
++{
++	CS_UNLOCK(drvdata->base);
++
++	if (!drvdata->csdev->enable)
++		tpda_enable_pre_port(drvdata);
++
++	tpda_enable_port(drvdata, port);
++
++	CS_LOCK(drvdata->base);
++}
++
++static int tpda_enable(struct coresight_device *csdev, int inport, int outport)
++{
++	struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
++
++	spin_lock(&drvdata->spinlock);
++	if (atomic_read(&csdev->refcnt[inport]) == 0)
++		__tpda_enable(drvdata, inport);
++
++	atomic_inc(&csdev->refcnt[inport]);
++	spin_unlock(&drvdata->spinlock);
++
++	dev_dbg(drvdata->dev, "TPDA inport %d enabled.\n", inport);
++	return 0;
++}
++
++static void __tpda_disable(struct tpda_drvdata *drvdata, int port)
++{
++	u32 val;
++
++	CS_UNLOCK(drvdata->base);
++
++	val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
++	val &= ~TPDA_Pn_CR_ENA;
++	writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
++
++	CS_LOCK(drvdata->base);
++}
++
++static void tpda_disable(struct coresight_device *csdev, int inport,
++			   int outport)
++{
++	struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
++
++	spin_lock(&drvdata->spinlock);
++	if (atomic_dec_return(&csdev->refcnt[inport]) == 0)
++		__tpda_disable(drvdata, inport);
++
++	spin_unlock(&drvdata->spinlock);
++
++	dev_dbg(drvdata->dev, "TPDA inport %d disabled\n", inport);
++}
++
++static const struct coresight_ops_link tpda_link_ops = {
++	.enable		= tpda_enable,
++	.disable	= tpda_disable,
++};
++
++static const struct coresight_ops tpda_cs_ops = {
++	.link_ops	= &tpda_link_ops,
++};
++
++static int tpda_init_default_data(struct tpda_drvdata *drvdata)
++{
++	int atid;
++	/*
++	 * TPDA must has a unique atid. This atid can uniquely
++	 * identify the TPDM trace source connected to the TPDA.
++	 */
++	atid = coresight_trace_id_get_system_id(coresight_get_trace_id_map());
++	if (atid < 0)
++		return atid;
++
++	drvdata->atid = atid;
++	return 0;
++}
++
++static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
++{
++	int ret;
++	struct device *dev = &adev->dev;
++	struct coresight_platform_data *pdata;
++	struct tpda_drvdata *drvdata;
++	struct coresight_desc desc = { 0 };
++	void __iomem *base;
++
++	pdata = coresight_get_platform_data(dev);
++	if (IS_ERR(pdata))
++		return PTR_ERR(pdata);
++	adev->dev.platform_data = pdata;
++
++	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
++	if (!drvdata)
++		return -ENOMEM;
++
++	drvdata->dev = &adev->dev;
++	dev_set_drvdata(dev, drvdata);
++
++	base = devm_ioremap_resource(dev, &adev->res);
++	if (!base)
++		return -ENOMEM;
++	drvdata->base = base;
++
++	spin_lock_init(&drvdata->spinlock);
++
++	ret = tpda_init_default_data(drvdata);
++	if (ret)
++		return ret;
++
++	desc.name = coresight_alloc_device_name(&tpda_devs, dev);
++	if (!desc.name)
++		return -ENOMEM;
++	desc.type = CORESIGHT_DEV_TYPE_LINK;
++	desc.subtype.link_subtype = CORESIGHT_DEV_SUBTYPE_LINK_MERG;
++	desc.ops = &tpda_cs_ops;
++	desc.pdata = adev->dev.platform_data;
++	desc.dev = &adev->dev;
++	desc.access = CSDEV_ACCESS_IOMEM(base);
++	drvdata->csdev = coresight_register(&desc);
++	if (IS_ERR(drvdata->csdev))
++		return PTR_ERR(drvdata->csdev);
++
++	pm_runtime_put(&adev->dev);
++
++	dev_dbg(drvdata->dev, "TPDA initialized\n");
++	return 0;
++}
++
++static void __exit tpda_remove(struct amba_device *adev)
++{
++	struct tpda_drvdata *drvdata = dev_get_drvdata(&adev->dev);
++
++	coresight_unregister(drvdata->csdev);
++}
++
++/*
++ * Different TPDA has different periph id.
++ * The difference is 0-7 bits' value. So ignore 0-7 bits.
++ */
++static struct amba_id tpda_ids[] = {
++	{
++		.id     = 0x000f0f00,
++		.mask   = 0x000fff00,
++	},
++	{ 0, 0},
++};
++
++static struct amba_driver tpda_driver = {
++	.drv = {
++		.name   = "coresight-tpda",
++		.owner	= THIS_MODULE,
++		.suppress_bind_attrs = true,
++	},
++	.probe          = tpda_probe,
++	.remove		= tpda_remove,
++	.id_table	= tpda_ids,
++};
++
++module_amba_driver(tpda_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Aggregator driver");
+diff --git a/drivers/hwtracing/coresight/coresight-tpda.h b/drivers/hwtracing/coresight/coresight-tpda.h
+new file mode 100644
+index 000000000000..4beb33263c96
+--- /dev/null
++++ b/drivers/hwtracing/coresight/coresight-tpda.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef _CORESIGHT_CORESIGHT_TPDA_H
++#define _CORESIGHT_CORESIGHT_TPDA_H
++
++#define TPDA_CR			(0x000)
++#define TPDA_Pn_CR(n)		(0x004 + (n * 4))
++/* Aggregator port enable bit */
++#define TPDA_Pn_CR_ENA		BIT(0)
++
++#define TPDA_MAX_INPORTS	32
++
++/* Bits 6 ~ 12 is for atid value */
++#define TPDA_CR_ATID		GENMASK(12, 6)
++
++/**
++ * struct tpda_drvdata - specifics associated to an TPDA component
++ * @base:       memory mapped base address for this component.
++ * @dev:        The device entity associated to this component.
++ * @csdev:      component vitals needed by the framework.
++ * @spinlock:   lock for the drvdata value.
++ * @enable:     enable status of the component.
++ */
++struct tpda_drvdata {
++	void __iomem		*base;
++	struct device		*dev;
++	struct coresight_device	*csdev;
++	spinlock_t		spinlock;
++	u8			atid;
++};
++
++#endif  /* _CORESIGHT_CORESIGHT_TPDA_H */
+-- 
+2.17.1
 
-> ---
-> v3->v4:
-> - use string for pmuid
-> - rename pmu_sbi_id_show to id_show
-> - fix error print message in id_show
-> - fix DEVICE_ATTR to use octal permissions
-> ---
->  arch/riscv/kernel/sbi.c        |  3 +++
->  drivers/perf/riscv_pmu_sbi.c   | 41 ++++++++++++++++++++++++++++++++++
->  include/linux/perf/riscv_pmu.h |  1 +
->  3 files changed, 45 insertions(+)
->
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index 775d3322b422..50dd9b6ecc9e 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
->  {
->         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
->  }
-> +EXPORT_SYMBOL(sbi_get_mvendorid);
->
->  long sbi_get_marchid(void)
->  {
->         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
->  }
-> +EXPORT_SYMBOL(sbi_get_marchid);
->
->  long sbi_get_mimpid(void)
->  {
->         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
->  }
-> +EXPORT_SYMBOL(sbi_get_mimpid);
->
->  static void sbi_send_cpumask_ipi(const struct cpumask *target)
->  {
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index dca3537a8dcc..be812f855617 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -693,6 +693,28 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu,=
- struct platform_device *pde
->         return 0;
->  }
->
-> +static ssize_t id_show(struct device *dev,
-> +                               struct device_attribute *attr, char *buf)
-> +{
-> +       int len;
-> +       struct riscv_pmu *pmu =3D container_of(dev_get_drvdata(dev), stru=
-ct riscv_pmu, pmu);
-> +
-> +       len =3D sprintf(buf, "%s\n", pmu->pmuid);
-> +       if (len <=3D 0)
-> +               dev_err(dev, "invalid sprintf len: %d\n", len);
-> +
-> +       return len;
-> +}
-> +
-> +static DEVICE_ATTR(id, 0644, id_show, NULL);
-> +
-> +static struct attribute *pmu_sbi_attrs[] =3D {
-> +       &dev_attr_id.attr,
-> +       NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(pmu_sbi);
-> +
->  static int pmu_sbi_device_probe(struct platform_device *pdev)
->  {
->         struct riscv_pmu *pmu =3D NULL;
-> @@ -714,6 +736,14 @@ static int pmu_sbi_device_probe(struct platform_devi=
-ce *pdev)
->         if (pmu_sbi_get_ctrinfo(num_counters))
->                 goto out_free;
->
-> +       /* fill pmuid */
-> +       pmu->pmuid =3D kasprintf(GFP_KERNEL, "0x%lx,0x%lx,0x%lx",
-> +                              sbi_get_marchid(),
-> +                              sbi_get_mimpid(),
-> +                              sbi_get_mvendorid());
-> +       if (!pmu->pmuid)
-> +               goto out_free_pmuid;
-> +
->         ret =3D pmu_sbi_setup_irqs(pmu, pdev);
->         if (ret < 0) {
->                 pr_info("Perf sampling/filtering is not supported as ssco=
-f extension is not available\n");
-> @@ -739,8 +769,19 @@ static int pmu_sbi_device_probe(struct platform_devi=
-ce *pdev)
->                 return ret;
->         }
->
-> +       ret =3D sysfs_create_group(&pdev->dev.kobj, &pmu_sbi_group);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "sysfs creation failed\n");
-> +               return ret;
-> +       }
-> +
-> +       pdev->dev.groups =3D pmu_sbi_groups;
-> +       dev_set_drvdata(&pdev->dev, pmu);
-> +
->         return 0;
->
-> +out_free_pmuid:
-> +       kfree(pmu->pmuid);
->  out_free:
->         kfree(pmu);
->         return ret;
-> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pm=
-u.h
-> index 46f9b6fe306e..cf3557b77fb8 100644
-> --- a/include/linux/perf/riscv_pmu.h
-> +++ b/include/linux/perf/riscv_pmu.h
-> @@ -42,6 +42,7 @@ struct cpu_hw_events {
->  struct riscv_pmu {
->         struct pmu      pmu;
->         char            *name;
-> +       char            *pmuid;
->
->         irqreturn_t     (*handle_irq)(int irq_num, void *dev);
->
-> --
-> 2.35.1
->

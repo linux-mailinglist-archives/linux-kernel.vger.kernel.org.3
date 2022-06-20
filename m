@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBC5550E2A
+	by mail.lfdr.de (Postfix) with ESMTP id 69926550E2B
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238524AbiFTApF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S238534AbiFTApK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiFTAnu (ORCPT
+        with ESMTP id S238415AbiFTAnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Jun 2022 20:43:50 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C94DB847;
-        Sun, 19 Jun 2022 17:43:42 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id p63so6869820qkd.10;
-        Sun, 19 Jun 2022 17:43:42 -0700 (PDT)
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FBAC3C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:44 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 88so10493708qva.9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+Xg1dB8Y2o2fTfyU6/JMm3V6r0Q6Byu7YKRWwJ+H+P4=;
-        b=YMEMmazsTJymTBZg5B+MMIRicoAxtJ7ZVBPY72BhCaDEL02Th5qRPhx4J9aamZdt2R
-         AX6lCzjBTjorsmk12pbSZSnV0blpooWefBhQa6O2wBOTFFgCptAUNs6vG+zx+1sNT2Mw
-         LsDQZlzhxIvqKfjVGHbfpXG9X53Bhl1mbztGVaEhDrq+vD3TvA+a3nopvnrSOryggHkf
-         UClv9V+ds1nzIuGbf+Yfl6o/j7LxV6WRfVzHcH3rr6l+9uBQi3CPFh2zdLvJhef/dXM3
-         4QAWd9MFzvQ0BmraqaKTlWNuOtkOTVXJWKV3g7AsUDD1EU1RBhJcxlTykX8tjZ3KXK0p
-         br0A==
+        bh=fhCWzyYhHQUfgLaJoA4/luR9p1DQeXQQcw2AdhNu860=;
+        b=LNOtI32q4WsSf62+lp4sxFsq0bvgPEpDH7tubWopigkHyJasJcMXtxp6uhe/k056YK
+         mHTCf4zl7jPsNE7ZDlNYCWbiEDRe7d2d6hBWTTvbyfN8QNhTuGyfoiOgpVBh5jbwxYNb
+         wN4IEHaZ5JKnXGFqcxJcgQ356aOF+2/EiAu4mYPbQ0G9LRzp2dF14oqFlIfb+GgMCboF
+         /svbE10GemkPJ/8PCTtYi25sf4XvEi7xd2lfrcq3Sikn1ZC55Ns7T+T4SJUvkWF/Xl6a
+         pBoPIuzg4YVajlJR0+oHaAKlw9vN0nVxPk56KJucHUH+c7dt8C7G5JCpd/2Psqi2xQZ3
+         7pBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+Xg1dB8Y2o2fTfyU6/JMm3V6r0Q6Byu7YKRWwJ+H+P4=;
-        b=D5cCQjNK4ZV5k8u0E55GXNtDpdw5liqm3aZr0vlPyip/vRuHmojWMOnDwC6GCrdjNo
-         P/om2v4/FDiuBwfmoLk62BfM2OYxKBkf65HEVx6NI0bD9kDhtcJ3ws7udogYnJ4zNzoV
-         hL86EAYod9ZLg51vZvYfQRHZpKcpWj/Cg7pjwEubkmE2bjkh/gTyrjL3VPTnoSRtu158
-         ChPTL5F/3JA+f6yxIARZKh30ymqsuHrBoGENeVeIAnRlnVC0wG2EAuyiwQPTmgCvd4xs
-         AUTW3y9Wds1fhy/wyT2nPUCeN7II93pC5PCXTWhi8DBpG6S64eGzVna+QixYWRixrNIa
-         byXg==
-X-Gm-Message-State: AJIora/cv7gH4lAYu5q1i2OTnrQ30P1VDcj4O9/E4aS9rlEZ+yOFEQoc
-        l7JApDkRx2td1O9l4qECjQzwr0UK0pyRNDQ=
-X-Google-Smtp-Source: AGRyM1uCfrheAlhgCp9i1EFrQVHXoukF22l+FI6Up40z4nZppqvuTPxoWyFhEbHIP29gGwI1wSisVA==
-X-Received: by 2002:a37:5e46:0:b0:6ab:90dc:d9d6 with SMTP id s67-20020a375e46000000b006ab90dcd9d6mr9561307qkb.131.1655685821224;
-        Sun, 19 Jun 2022 17:43:41 -0700 (PDT)
+        bh=fhCWzyYhHQUfgLaJoA4/luR9p1DQeXQQcw2AdhNu860=;
+        b=z96r/GoEqttVBg+D2vPEmJNY2HAKK7gvszh9TtNcksD3b3rGedcnUprBDdt7rePmHt
+         pEB52qvzKvCt2OeanmObN9B7/AeIzZ1IwHL8oCudNCFeH5iFmM/KrqVeCPUerUMI8R0S
+         kHpK+kgGHBvLg0tDuz/NmedaO6mX3Pz0FjRg13fIfxTH4yeIFaqwskNStqrHTkFTKr9J
+         qxSwXWy+UYZBZ/WHEwgh8SwKuQ7MXmS5f0jYoXPIlFqgcknT+1FFP0gyb+3Zy/BoyNNN
+         m9Fqkro0zRHpG63Lil8B/qxZeGfRKWZHbcfo6yF/Je9nm/U2rgM+CxFHP/kLTP+lT00c
+         e6Nw==
+X-Gm-Message-State: AJIora+oujuytRowK/3NeG+bkRnVS2DJa5HAFjde09O9L3T75BC4QZtH
+        4faD/d5fEfvtHt7vG/Ir2CTzLpGXEaEKW0I=
+X-Google-Smtp-Source: AGRyM1uK4SE0R2rC8ICXr/1qyDRW063L27/c5mYvQJDhXdbWpPTz/vsIaae7XwlBInXy3JqUohNKFQ==
+X-Received: by 2002:a05:6214:23c8:b0:45f:b582:346e with SMTP id hr8-20020a05621423c800b0045fb582346emr17516453qvb.109.1655685823664;
+        Sun, 19 Jun 2022 17:43:43 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id ci6-20020a05622a260600b003051ce7812asm9739089qtb.5.2022.06.19.17.43.39
+        by smtp.gmail.com with ESMTPSA id b198-20020a3767cf000000b0069fc13ce1f3sm10580202qkc.36.2022.06.19.17.43.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:43:40 -0700 (PDT)
+        Sun, 19 Jun 2022 17:43:42 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        willy@infradead.org, linux-pci@vger.kernel.org
-Subject: [PATCH v4 29/34] PCI/P2PDMA: Convert to printbuf
-Date:   Sun, 19 Jun 2022 20:42:28 -0400
-Message-Id: <20220620004233.3805-30-kent.overstreet@gmail.com>
+        willy@infradead.org, Ingo Molnar <mingo@redhat.com>
+Subject: [PATCH v4 30/34] tracing: trace_events_synth: Convert to printbuf
+Date:   Sun, 19 Jun 2022 20:42:29 -0400
+Message-Id: <20220620004233.3805-31-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,91 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts from seq_buf to printbuf. We're using printbuf in external
-buffer mode, so it's a direct conversion, aside from some trivial
-refactoring in cpu_show_meltdown() to make the code more consistent.
+This converts from seq_buf to printbuf
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: linux-pci@vger.kernel.org
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
 ---
- drivers/pci/p2pdma.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ kernel/trace/trace_events_synth.c | 30 ++++++++++++++----------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-index 30b1df3c9d..3b7a6ca446 100644
---- a/drivers/pci/p2pdma.c
-+++ b/drivers/pci/p2pdma.c
-@@ -17,7 +17,7 @@
- #include <linux/memremap.h>
- #include <linux/percpu-refcount.h>
- #include <linux/random.h>
--#include <linux/seq_buf.h>
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index 5e8c07aef0..627e0e45f0 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -5,13 +5,14 @@
+  * Copyright (C) 2015, 2020 Tom Zanussi <tom.zanussi@linux.intel.com>
+  */
+ 
+-#include <linux/module.h>
+ #include <linux/kallsyms.h>
+-#include <linux/security.h>
++#include <linux/module.h>
+ #include <linux/mutex.h>
 +#include <linux/printbuf.h>
- #include <linux/xarray.h>
++#include <linux/rculist.h>
++#include <linux/security.h>
+ #include <linux/slab.h>
+ #include <linux/stacktrace.h>
+-#include <linux/rculist.h>
+ #include <linux/tracefs.h>
  
- enum pci_p2pdma_map_type {
-@@ -281,12 +281,9 @@ static int pci_bridge_has_acs_redir(struct pci_dev *pdev)
- 	return 0;
- }
+ /* for gfp flag names */
+@@ -611,7 +612,7 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+ 	const char *prefix = NULL, *field_type = argv[0], *field_name, *array;
+ 	struct synth_field *field;
+ 	int len, ret = -ENOMEM;
+-	struct seq_buf s;
++	struct printbuf s;
+ 	ssize_t size;
  
--static void seq_buf_print_bus_devfn(struct seq_buf *buf, struct pci_dev *pdev)
-+static void prt_bus_devfn(struct printbuf *buf, struct pci_dev *pdev)
- {
--	if (!buf)
--		return;
+ 	if (!strcmp(field_type, "unsigned")) {
+@@ -666,17 +667,15 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+ 	if (!field->type)
+ 		goto free;
+ 
+-	seq_buf_init(&s, field->type, len);
++	s = PRINTBUF_EXTERN(field->type, len);
+ 	if (prefix)
+-		seq_buf_puts(&s, prefix);
+-	seq_buf_puts(&s, field_type);
++		prt_str(&s, prefix);
++	prt_str(&s, field_type);
+ 	if (array)
+-		seq_buf_puts(&s, array);
+-	if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
++		prt_str(&s, array);
++	if (WARN_ON_ONCE(!printbuf_remaining(&s)))
+ 		goto free;
+ 
+-	s.buffer[s.len] = '\0';
 -
--	seq_buf_printf(buf, "%s;", pci_name(pdev));
-+	prt_printf(buf, "%s;", pci_name(pdev));
- }
+ 	size = synth_field_size(field->type);
+ 	if (size < 0) {
+ 		if (array)
+@@ -694,13 +693,12 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+ 			if (!type)
+ 				goto free;
  
- static bool cpu_supports_p2pdma(void)
-@@ -455,13 +452,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 	struct pci_dev *a = provider, *b = client, *bb;
- 	bool acs_redirects = false;
- 	struct pci_p2pdma *p2pdma;
--	struct seq_buf acs_list;
- 	int acs_cnt = 0;
- 	int dist_a = 0;
- 	int dist_b = 0;
- 	char buf[128];
--
--	seq_buf_init(&acs_list, buf, sizeof(buf));
-+	struct printbuf acs_list = PRINTBUF_EXTERN(buf, sizeof(buf));
+-			seq_buf_init(&s, type, len);
+-			seq_buf_puts(&s, "__data_loc ");
+-			seq_buf_puts(&s, field->type);
++			s = PRINTBUF_EXTERN(type, len);
++			prt_str(&s, "__data_loc ");
++			prt_str(&s, field->type);
  
- 	/*
- 	 * Note, we don't need to take references to devices returned by
-@@ -472,7 +467,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 		dist_b = 0;
+-			if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
++			if (WARN_ON_ONCE(!printbuf_remaining(&s)))
+ 				goto free;
+-			s.buffer[s.len] = '\0';
  
- 		if (pci_bridge_has_acs_redir(a)) {
--			seq_buf_print_bus_devfn(&acs_list, a);
-+			prt_bus_devfn(&acs_list, a);
- 			acs_cnt++;
- 		}
- 
-@@ -501,7 +496,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 			break;
- 
- 		if (pci_bridge_has_acs_redir(bb)) {
--			seq_buf_print_bus_devfn(&acs_list, bb);
-+			prt_bus_devfn(&acs_list, bb);
- 			acs_cnt++;
- 		}
- 
-@@ -516,11 +511,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 	}
- 
- 	if (verbose) {
--		acs_list.buffer[acs_list.len-1] = 0; /* drop final semicolon */
-+		acs_list.buf[acs_list.pos-1] = 0; /* drop final semicolon */
- 		pci_warn(client, "ACS redirect is set between the client and provider (%s)\n",
- 			 pci_name(provider));
- 		pci_warn(client, "to disable ACS redirect for this path, add the kernel parameter: pci=disable_acs_redir=%s\n",
--			 acs_list.buffer);
-+			 acs_list.buf);
- 	}
- 	acs_redirects = true;
- 
+ 			kfree(field->type);
+ 			field->type = type;
 -- 
 2.36.1
 

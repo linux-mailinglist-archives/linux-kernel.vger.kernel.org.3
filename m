@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F30155115B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B633551163
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239299AbiFTHSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 03:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        id S239247AbiFTHWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 03:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239274AbiFTHSr (ORCPT
+        with ESMTP id S235073AbiFTHWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 03:18:47 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703E2DF45;
-        Mon, 20 Jun 2022 00:18:46 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25K7FtNo016906;
-        Mon, 20 Jun 2022 07:18:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=IXPS0hxb2WsPVstdS80ZS9yicyCYhnEl/7vD2drjTP4=;
- b=GHSbyoInDtnWCSbySiwdMDHRJ9aDWqn1r5ZC1ZYhfRBUguFfT6K6oNC2lULbOHRUmo/H
- KVvSVljd9JOxiLdvHIluwTmf3/FZZcZl/05OE2D6aZKixoEokKWd7vYq4bK1bOxyXcsB
- SUvhSu8yJIlz52bL7Hpw3kP+c2UXaK9Uw8e4g1J9o3ZHrTENrBqTGoINkqh1O9mPWfsP
- KAGN5jb1QrfDXxfwD3h9tbfBit9bxx52+6L2oeJ33RbEKu8TW6Zy4gYOS301n7ieNhYF
- emAxgRmzrWEpCan79qghju/nVY2DoZ6+hHSC0S7a/33RpciDGJkTp0nsqCOOL4iNb4nl yg== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gsrqt0v3n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 07:18:42 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25K77ilh012066;
-        Mon, 20 Jun 2022 07:18:41 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3gs6b8sn1b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 07:18:41 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25K7IcUX19071430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jun 2022 07:18:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEA054203F;
-        Mon, 20 Jun 2022 07:18:37 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9871B42041;
-        Mon, 20 Jun 2022 07:18:37 +0000 (GMT)
-Received: from [9.171.78.67] (unknown [9.171.78.67])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jun 2022 07:18:37 +0000 (GMT)
-Message-ID: <9ef06123-b44f-b009-5bf5-60ad27bbede7@linux.ibm.com>
-Date:   Mon, 20 Jun 2022 09:18:37 +0200
+        Mon, 20 Jun 2022 03:22:41 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10C6EE0E;
+        Mon, 20 Jun 2022 00:22:39 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LRLfL5zXDzkWS2;
+        Mon, 20 Jun 2022 15:20:58 +0800 (CST)
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 20 Jun 2022 15:22:34 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.28) by
+ kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 20 Jun 2022 15:22:34 +0800
+From:   Yi Yang <yiyang13@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <ilpo.jarvinen@linux.intel.com>, <andy.shevchenko@gmail.com>
+CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] serial: 8250: fix return error code in serial8250_request_std_resource()
+Date:   Mon, 20 Jun 2022 15:20:25 +0800
+Message-ID: <20220620072025.172088-1-yiyang13@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] s390/kvm: avoid hypfs error message
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20220607123314.10255-1-jgross@suse.com>
- <5431f626-9bd3-ed54-9889-aafbba9ca3e0@suse.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <5431f626-9bd3-ed54-9889-aafbba9ca3e0@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Zw-vnw8fT7O8emOlwCa-pj0E_NR-o1AD
-X-Proofpoint-ORIG-GUID: Zw-vnw8fT7O8emOlwCa-pj0E_NR-o1AD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-20_05,2022-06-17_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- bulkscore=0 impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 spamscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206200032
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.28]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600014.china.huawei.com (7.193.23.54)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 20.06.22 um 08:03 schrieb Juergen Gross:
-> Ping?
-> 
-> On 07.06.22 14:33, Juergen Gross wrote:
->> When booting under KVM the following error messages are issued:
->>
->> hypfs.7f5705: The hardware system does not support hypfs
->> hypfs.7a79f0: Initialization of hypfs failed with rc=-61
->>
->> While being documented, they can easily be avoided by bailing out of
->> hypfs_init() early in case of running as a KVM guest.
->>
->> Signed-off-by: Juergen Gross <jgross@suse.com>
->> ---
->>   arch/s390/hypfs/inode.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
->> index 5c97f48cea91..bdf078f3c641 100644
->> --- a/arch/s390/hypfs/inode.c
->> +++ b/arch/s390/hypfs/inode.c
->> @@ -464,6 +464,9 @@ static int __init hypfs_init(void)
->>   {
->>       int rc;
->> +    if (MACHINE_IS_KVM)
->> +        return -ENODATA;
->> +
->>       hypfs_dbfs_init();
->>       if (hypfs_diag_init()) {
+If port->mapbase = NULL in serial8250_request_std_resource() , it need
+return a error code instead of 0. If uart_set_info() fail to request new
+regions by serial8250_request_std_resource() but the return value of
+serial8250_request_std_resource() is 0, that The system will mistakenly
+considers that port resources are successfully applied for. A null
+pointer reference is triggered when the port resource is later invoked.
 
-In case KVM implements hypfs this check would then be wrong.
-Question to people on CC/TO.
-Would it be an option to still check with KVM but avoid the error message.
-So basically changing hypfs_diag_init and fail_dbfs_exit to check
-for KVM on error?
-Or is this worse?
+The problem can also be triggered with the following simple program:
+----------
+  #include <stdio.h>
+  #include <sys/types.h>
+  #include <sys/stat.h>
+  #include <fcntl.h>
+  #include <sys/ioctl.h>
+  #include <unistd.h>
+  #include <errno.h>
+
+  struct serial_struct {
+      int type;
+      int line;
+      unsigned int    port;
+      int irq;
+      int flags;
+      int xmit_fifo_size;
+      int custom_divisor;
+      int baud_base;
+      unsigned short  close_delay;
+      char    io_type;
+      char    reserved_char[1];
+      int hub6;
+      unsigned short  closing_wait; /* time to wait before closing */
+      unsigned short  closing_wait2; /* no longer used... */
+      unsigned char   *iomem_base;
+      unsigned short  iomem_reg_shift;
+      unsigned int    port_high;
+      unsigned long   iomap_base; /* cookie passed into ioremap */
+  };
+
+  struct serial_struct str;
+
+  int main(void)
+  {
+      open("/dev/ttyS0", O_RDWR);
+      ioctl(fd, TIOCGSERIAL, &str);
+      str.iomem_base = 0;
+      ioctl(fd, TIOCSSERIAL, str);
+      return 0;
+  }
+----------
+
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
+---
+ drivers/tty/serial/8250/8250_port.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 3e3d784aa628..e1cefa97bdeb 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2961,8 +2961,10 @@ static int serial8250_request_std_resource(struct uart_8250_port *up)
+ 	case UPIO_MEM32BE:
+ 	case UPIO_MEM16:
+ 	case UPIO_MEM:
+-		if (!port->mapbase)
++		if (!port->mapbase) {
++			ret = -EFAULT;
+ 			break;
++		}
+ 
+ 		if (!request_mem_region(port->mapbase, size, "serial")) {
+ 			ret = -EBUSY;
+-- 
+2.17.1
+

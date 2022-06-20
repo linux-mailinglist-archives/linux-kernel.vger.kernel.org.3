@@ -2,95 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB934551BC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7879A551AEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345751AbiFTNbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S1346384AbiFTNc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346757AbiFTN3R (ORCPT
+        with ESMTP id S1346293AbiFTNc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:29:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079D3248F3;
-        Mon, 20 Jun 2022 06:11:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0EF5CE139F;
-        Mon, 20 Jun 2022 13:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC825C3411C;
-        Mon, 20 Jun 2022 13:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655730653;
-        bh=SHVwJLEk2tnmicNGaRD3YPQJdxFUin99Ol3gEng/YzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DzBJYmasWqnspP8jyZlLQwdZh+WpKwfIQaHEJQohLSkOnCxyJTrIni3XGZkn2x7Yl
-         zRqmC7/woIw1ThSGqggImr1d7rRVupXKZAe/RnXH5lbzMkGQtVPE/bsNoGL6DwZ4t2
-         okIXjHqB3novCwABI2il9fXgs1Ks7ai4feFwpW80Buumn0nkFY0vKXoBSaLAgno6PD
-         NhnAsvAZPb8XJd3km+w/ZY7YJFo9pRk9A4dIzQdjfQbX9DN9ypUoAokdEG72ENz0PX
-         XAxd0W/qEtTJoI1+zr+Do3FQARkLuecRexLZJjn522xf575e3CmZFTz7KBuyBpqDId
-         lL1j9CENZP/jw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3HB3-0000z6-3O; Mon, 20 Jun 2022 15:10:49 +0200
-Date:   Mon, 20 Jun 2022 15:10:49 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: use kmemdup instead of kmalloc + memcpy
-Message-ID: <YrBx2eQYwiGcDC8m@hovoldconsulting.com>
-References: <20220620105939.5128-1-slark_xiao@163.com>
+        Mon, 20 Jun 2022 09:32:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640F525E85;
+        Mon, 20 Jun 2022 06:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655730757; x=1687266757;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A26pOIWVwaxFpebW3F8OTi5WCNGWKZeMpH4yZlFPMe4=;
+  b=Y0eb+JvxB9QvpWcLb0EldUsFeZHh9nUmlSU66q83p3Nb30b4LkH3Gt4v
+   B6gcsNijIETJq2jV4tUS7imw/8AkQ/aVD/72ztaVBZqEPRSlOr2fDZ6Fe
+   rY92yJZoaKfVHwk2wPK4q5rzAVOBQRwIXhIWB7DdM6/yVKU32WWYtMFjJ
+   pB7ZzZ6fzvuiCX8LlfXHQjdBk+hJZOEbuN3InlDzl8TRdPrdyKTCLhSwD
+   P4ER6U7DtengSUfH+npkncH69pH3etuhM3bIk/tTulFBS0V06Q2OVp+j9
+   cvcy2mEMhlTKmJ2JqEBKl36EuRnkIsuA7RCMW4CGBZybKzZP785lLp4Xz
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280621613"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280621613"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 06:12:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="913657331"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Jun 2022 06:12:30 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25KDCSEE027662;
+        Mon, 20 Jun 2022 14:12:28 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] bitops: let optimize out non-atomic bitops on compile-time constants
+Date:   Mon, 20 Jun 2022 15:12:23 +0200
+Message-Id: <20220620131223.2627869-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <YrBGUqfS7r9m0eAf@smile.fi.intel.com>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com> <20220617144031.2549432-7-alexandr.lobakin@intel.com> <YrBGUqfS7r9m0eAf@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620105939.5128-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 06:59:39PM +0800, Slark Xiao wrote:
-> For code neat purpose, we can use kmemdup to replace
-> kmalloc + memcpy.
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  drivers/usb/serial/opticon.c | 4 +---
->  drivers/usb/serial/sierra.c  | 4 +---
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
-> index aed28c35caff..bca6766a63e6 100644
-> --- a/drivers/usb/serial/opticon.c
-> +++ b/drivers/usb/serial/opticon.c
-> @@ -208,7 +208,7 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
->  	priv->outstanding_bytes += count;
->  	spin_unlock_irqrestore(&priv->lock, flags);
->  
-> -	buffer = kmalloc(count, GFP_ATOMIC);
-> +	buffer = kmemdup(buf, count, GFP_ATOMIC);
->  	if (!buffer)
->  		goto error_no_buffer;
->  
-> @@ -216,8 +216,6 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
->  	if (!urb)
->  		goto error_no_urb;
->  
-> -	memcpy(buffer, buf, count);
-> -
->  	usb_serial_debug_data(&port->dev, __func__, count, buffer);
->  
->  	/* The connected devices do not have a bulk write endpoint,
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 20 Jun 2022 13:05:06 +0300
 
-Looks like we have the same pattern also in garmin_write_bulk(). Care to
-include that one as well?
+> On Fri, Jun 17, 2022 at 04:40:30PM +0200, Alexander Lobakin wrote:
+> > Currently, many architecture-specific non-atomic bitop
+> > implementations use inline asm or other hacks which are faster or
+> > more robust when working with "real" variables (i.e. fields from
+> > the structures etc.), but the compilers have no clue how to optimize
+> > them out when called on compile-time constants. That said, the
+> > following code:
+> > 
+> > 	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
+> > 	unsigned long bar = BIT(BAR_BIT);
+> > 	unsigned long baz = 0;
+> > 
+> > 	__set_bit(FOO_BIT, foo);
+> > 	baz |= BIT(BAZ_BIT);
+> > 
+> > 	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
+> > 	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
+> > 	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> > 
+> > triggers the first assertion on x86_64, which means that the
+> > compiler is unable to evaluate it to a compile-time initializer
+> > when the architecture-specific bitop is used even if it's obvious.
+> > In order to let the compiler optimize out such cases, expand the
+> > bitop() macro to use the "constant" C non-atomic bitop
+> > implementations when all of the arguments passed are compile-time
+> > constants, which means that the result will be a compile-time
+> > constant as well, so that it produces more efficient and simple
+> > code in 100% cases, comparing to the architecture-specific
+> > counterparts.
+> > 
+> > The savings are architecture, compiler and compiler flags dependent,
+> > for example, on x86_64 -O2:
+> > 
+> > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> > 
+> > and ARM64 (courtesy of Mark):
+> > 
+> > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
+> 
+> ...
+> 
+> > +/*
+> > + * Many architecture-specific non-atomic bitops contain inline asm code and due
+> > + * to that the compiler can't optimize them to compile-time expressions or
+> > + * constants. In contrary, gen_*() helpers are defined in pure C and compilers
+> 
+> generic_*() ?
 
-Johan
+Ah right, bah, forgot to change that in v2. Will fix in v4, as
+__builtin_constant_p() test from v7 triggered build bugs on ARC,
+will look into that.
+
+> 
+> > + * optimize them just well.
+> > + * Therefore, to make `unsigned long foo = 0; __set_bit(BAR, &foo)` effectively
+> > + * equal to `unsigned long foo = BIT(BAR)`, pick the generic C alternative when
+> > + * the arguments can be resolved at compile time. That expression itself is a
+> > + * constant and doesn't bring any functional changes to the rest of cases.
+> > + * The casts to `uintptr_t` are needed to mitigate `-Waddress` warnings when
+> > + * passing a bitmap from .bss or .data (-> `!!addr` is always true).
+> > + */
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+
+Thanks,
+Al

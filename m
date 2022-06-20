@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6B1551030
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C91551031
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238198AbiFTGUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S237755AbiFTGUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbiFTGUl (ORCPT
+        with ESMTP id S238623AbiFTGUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:20:41 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8764CDED7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:20:40 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id g8so8852727plt.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:20:40 -0700 (PDT)
+        Mon, 20 Jun 2022 02:20:44 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1770BE35
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:20:42 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so9321413pjz.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=847DDg6hmMSry+X3CbdyKKpEZE7fJcTvj1pxYsPYSEs=;
-        b=TVfrpV+9ee06mypjQZlWEqFtNXU4E7sBxRe29ZU/P6peKxSlJpmPBgJTFoLW1gwIRL
-         wFqmQ8R/LyAK6mTJjxcnwFcEaGI1+4nTZT+cELYBrnPmC/PGYWjH9DkrMLNkvjljN2+U
-         mwpSMUO2e/3udg83ZSeRDxPG6tGvLoTHsaWUUXiS7f0otQ82jWHSQUkF8PvdOxli+QuE
-         kSzHCWkxbjUJK19m46qHgk1zCKAuJt3pPYkAfnYleTdQH2LiBkLogbDHNMZKDtSYn++g
-         5gqfwEjVNSh/HB5tVj0qNu0F2ubLzQgbO4kQ9j80rqb064kC7W10KmJwHCAEWRBy/9GZ
-         CPNA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UbGxgyfmTUw0NnY5/Pu/ELaJtqQmXlFiXmZPB/RD9VQ=;
+        b=BCKyHJKgJVC1YpEUicCh20DA21la9tgGHs7csj+SNh0FG56qi7jLZUaL3pFpprq6Z3
+         bnQKbNYkEB7UG4kVXBfOkZUPEEda7pEA+ilcNi+40nrIUh1kfc+1L1XuMn3xoRwh0ldO
+         mnA8YMLNGISombnZw4j9SSfmmsvBQElkAhn3vG8SLvUcmtrGpqBNowDi38CbD+DMk+iT
+         Xree/joIIdceqgair8UYmQhPT8PgRYaqtPPoJvc/HukhY5/6TCFUuWT66fjapCZa6OjM
+         XWsJAbGYv6F0/8FgbuzF0Eu2JUQVtfTqrlAGEd0ReQs81GFALv9ZxbB/sIfljpzgZHWi
+         uMsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=847DDg6hmMSry+X3CbdyKKpEZE7fJcTvj1pxYsPYSEs=;
-        b=hfWLhy7vy3ueP3xaQ1gqVQdKgGhpusdZCpaCsbt8CC341FshAWsF39vJC5PiSLai18
-         Sm0ZgZOWVRhF1uFukX1KVZVJM2s/L3Z3XU64+tA8VC5RHscFP/VG+woQ4RQ1KNFvwSG+
-         hKB6/umVz/LVuqGjpxLZhoKAtMCucnfgZVwQvCjiynz3wlj+Jpca29pI4SmEaR1yF59t
-         bWcgzvPj5JpPV/EnUWGUmOtQvwqqJ+WjOEsrCZIYwgi5b8BtiXLmBNgcRVsAdcOimz+B
-         9UMhcbEJcvTSCY0Rig+2RHuhNsDp+BPuQbhn0hhNqZ4TITjTCTRy9S/NjGu91luYxKAO
-         QDwQ==
-X-Gm-Message-State: AJIora/aqI3c1N+vVb0hSTuCJXFhjbM8C+iAZgX7OIdsQDYbNS5gSgnx
-        tcNlCk5ZTEliLuSeJQsoPROg9mki8pE=
-X-Google-Smtp-Source: AGRyM1vZTFZGidzxwI+PGvvFDVL/52CRRN/HbZNfGSvKQHcAwtAHKlBoxmPUEb5GasBhJL5eyFir3g==
-X-Received: by 2002:a17:902:c40c:b0:16a:252c:ec82 with SMTP id k12-20020a170902c40c00b0016a252cec82mr3837080plk.5.1655706039615;
-        Sun, 19 Jun 2022 23:20:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UbGxgyfmTUw0NnY5/Pu/ELaJtqQmXlFiXmZPB/RD9VQ=;
+        b=tCsQUZaxGiMeUK9I+Iy3hbWCGUNPLGDP2cz1ybSmDzgGP+Dgfb1IyDKRUJ/odNoQsg
+         UGkAQQsr3i0Odjf1Z/KSuguw6xtLJ7sf9u8ZN8BzL2PVjEDt1hvYn9hzvHqIQ+qysc9J
+         0Xc1AQm0b5yQglv/a1b9930cT9rdgNxQFGEylk+9Q88KyXZjH4udGF+GfhXeRjE13AfI
+         5+mrkNI5WyMD12nXCbzsXmwxgYOu7+I+AO5NGQ1NfYz+/TIPSAzjXd3/Qj60/aAJKAQK
+         UfZ5CxsVgufI/Sn2M6EWBugumfLbEsiL7l0GqVCF6LA4xGOlh29u1nIvS6Us1DzFD4yj
+         T+PA==
+X-Gm-Message-State: AJIora+N0pX2rBDCBBsArOcKPoCY+ujIa56efjg3SHJx1ZZNcy/NC1Qq
+        L+Z0oLsBmznljf3ZEBg/fRYvYh0s0RM=
+X-Google-Smtp-Source: AGRyM1u86HO7R76wzYwPXfjTHJphHnY93jRL+hnnaKmflAfyB2/6f+Ki6OjXtWaTt4NXmtjHu6hf7w==
+X-Received: by 2002:a17:902:ccca:b0:168:a88f:4833 with SMTP id z10-20020a170902ccca00b00168a88f4833mr21979897ple.104.1655706042169;
+        Sun, 19 Jun 2022 23:20:42 -0700 (PDT)
 Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b003fd9e4911f9sm8010469pgd.31.2022.06.19.23.20.37
+        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b003fd9e4911f9sm8010469pgd.31.2022.06.19.23.20.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 23:20:39 -0700 (PDT)
+        Sun, 19 Jun 2022 23:20:41 -0700 (PDT)
 From:   Zhang Boyang <zhangboyang.id@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Kees Cook <keescook@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3] rslib: Several improvements
-Date:   Mon, 20 Jun 2022 14:20:09 +0800
-Message-Id: <20220620062015.15612-1-zhangboyang.id@gmail.com>
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zhang Boyang <zhangboyang.id@gmail.com>
+Subject: [PATCH v3 1/6] rslib: Fix incorrect documentation of rs_modnn()
+Date:   Mon, 20 Jun 2022 14:20:10 +0800
+Message-Id: <20220620062015.15612-2-zhangboyang.id@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220620062015.15612-1-zhangboyang.id@gmail.com>
+References: <20220620062015.15612-1-zhangboyang.id@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,35 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Previous documentation of rs_modnn() states simple arithmetic modulo
+return a wrong result for values >= (3 * rs->nn). However, that is not
+true. The rs_modnn() does the exactly same job as (x % rs->nn). This can
+be proved from following loop invariants:
 
-Hello,
+  while (x >= rs->nn) {
+    x -= rs->nn; // (1)
+    x = (x >> rs->mm) + (x & rs->nn); // (2)
+  }
 
-I made several improvements to reed-solomon library.
-Please have a look. :)
+Let x0 denote the value of x before assignment. At (1), it is obvious
+that x % nn == x0 % nn. At (2), because nn == ((1 << mm) - 1), we have
 
-Thanks!
+  x0 % nn == x0 % nn
+  x0 % nn == (((x0 >> mm) << mm) + (x0 & nn)) % nn
+  x0 % nn == ((x0 >> mm) * (nn + 1) + (x0 & nn)) % nn
+  x0 % nn == ((x0 >> mm) * ((nn + 1) % nn) + (x0 & nn)) % nn
+  x0 % nn == ((x0 >> mm) * 1 + (x0 & nn)) % nn   // let's assume nn > 1
+  x0 % nn == ((x0 >> mm) + (x0 & nn)) % nn
+  x0 % nn == x % nn
 
-Changes in [PATCH v3]:
-Fixed kernel-doc style. Thanks to Randy Dunlap :)
-(But I decide to keep "a*b" instead of "a * b" because I think it's more
-readable)
-Reordered some patches to group similar things together.
+When the loop exits, it is obvious that 0 <= x < nn, so the return value
+must equal to (x % rs->nn).
 
-Best Regards,
-Zhang Boyang
+Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
+---
+ include/linux/rslib.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-===
-
-Changes in [PATCH v2]:
-Added more patches. Removed init_rs16(), since init_rs_non_canonical()
-can do the same job.
-Link: https://lore.kernel.org/all/20220617144624.158973-1-zhangboyang.id@gmail.com/
-
-Changes in [PATCH v1]:
-Added init_rs16().
-Link: https://lore.kernel.org/all/20220606101901.83538-1-zhangboyang.id@gmail.com/
-
-[RFC PATCH]:
-Link: https://lore.kernel.org/all/20220605073857.126497-1-zhangboyang.id@gmail.com/
-
+diff --git a/include/linux/rslib.h b/include/linux/rslib.h
+index 238bb85243d3..507fa14c03b2 100644
+--- a/include/linux/rslib.h
++++ b/include/linux/rslib.h
+@@ -116,8 +116,7 @@ void free_rs(struct rs_control *rs);
+  *  rs->mm = number of bits per symbol
+  *  rs->nn = (2^rs->mm) - 1
+  *
+- *  Simple arithmetic modulo would return a wrong result for values
+- *  >= 3 * rs->nn
++ *  Calculate (x % rs->nn), without using a div instruction
+ */
+ static inline int rs_modnn(struct rs_codec *rs, int x)
+ {
+-- 
+2.30.2
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F88551D3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8383551D4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349092AbiFTNs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S1348407AbiFTNu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348989AbiFTNro (ORCPT
+        with ESMTP id S1348435AbiFTNsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:47:44 -0400
+        Mon, 20 Jun 2022 09:48:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABF62EA3B;
-        Mon, 20 Jun 2022 06:17:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239692ED77;
+        Mon, 20 Jun 2022 06:17:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F4A8B811F2;
-        Mon, 20 Jun 2022 13:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CF8C3411B;
-        Mon, 20 Jun 2022 13:17:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32049B811C7;
+        Mon, 20 Jun 2022 13:17:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8613EC3411B;
+        Mon, 20 Jun 2022 13:17:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731051;
-        bh=YVFCm9IvwmgkDNWZPZYSkH8bYCAZpNilJPeiWNu6Xuk=;
+        s=korg; t=1655731055;
+        bh=Af/mC/zq4tKhaB0LwhH5Vk0R8nnqO8wO9ms7HejQAZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ScpGiY1ifLYKQdBAapQE9rfeZhXqHdCCT1+rXx3MF3qnmSHh4MRblcUQoxcsV/KWk
-         iw20QwiJA6GicbzJqL68lbmgMiOeFm6IDGJ/gg39l5SAoVn4YsL9gL/reAAZ8nofLT
-         uNXJYkOhUYb0jjNGtQ2tWUyKIw0Tcx45yErXbKoQ=
+        b=W2oNKjbMQ4P8qx0z9w9bfJZl3Zqx2orA9I1JQwplwhIUstHC8Mul8szqs+G73ylUd
+         gwtVpvvZ4WJ8SZqzCUgGQigHdoMEdvU15aECPYblxAU2Mb3z4ZAIK3Z18PRumd5kuK
+         PtotSEwmaiLIJ/48h+iAi/MGmHR8inXQHaFYrjmU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 137/240] m68k: use fallback for random_get_entropy() instead of zero
-Date:   Mon, 20 Jun 2022 14:50:38 +0200
-Message-Id: <20220620124742.978509676@linuxfoundation.org>
+Subject: [PATCH 5.4 138/240] mips: use fallback for random_get_entropy() instead of just c0 random
+Date:   Mon, 20 Jun 2022 14:50:39 +0200
+Message-Id: <20220620124743.007639709@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
 References: <20220620124737.799371052@linuxfoundation.org>
@@ -58,36 +59,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 0f392c95391f2d708b12971a07edaa7973f9eece upstream.
+commit 1c99c6a7c3c599a68321b01b9ec243215ede5a68 upstream.
 
-In the event that random_get_entropy() can't access a cycle counter or
-similar, falling back to returning 0 is really not the best we can do.
-Instead, at least calling random_get_entropy_fallback() would be
-preferable, because that always needs to return _something_, even
-falling back to jiffies eventually. It's not as though
-random_get_entropy_fallback() is super high precision or guaranteed to
-be entropic, but basically anything that's not zero all the time is
-better than returning zero all the time.
+For situations in which we don't have a c0 counter register available,
+we've been falling back to reading the c0 "random" register, which is
+usually bounded by the amount of TLB entries and changes every other
+cycle or so. This means it wraps extremely often. We can do better by
+combining this fast-changing counter with a potentially slower-changing
+counter from random_get_entropy_fallback() in the more significant bits.
+This commit combines the two, taking into account that the changing bits
+are in a different bit position depending on the CPU model. In addition,
+we previously were falling back to 0 for ancient CPUs that Linux does
+not support anyway; remove that dead path entirely.
 
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Tested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/m68k/include/asm/timex.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/timex.h |   17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
---- a/arch/m68k/include/asm/timex.h
-+++ b/arch/m68k/include/asm/timex.h
-@@ -35,7 +35,7 @@ static inline unsigned long random_get_e
- {
- 	if (mach_random_get_entropy)
- 		return mach_random_get_entropy();
--	return 0;
-+	return random_get_entropy_fallback();
+--- a/arch/mips/include/asm/timex.h
++++ b/arch/mips/include/asm/timex.h
+@@ -76,25 +76,24 @@ static inline cycles_t get_cycles(void)
+ 	else
+ 		return 0;	/* no usable counter */
  }
- #define random_get_entropy	random_get_entropy
++#define get_cycles get_cycles
+ 
+ /*
+  * Like get_cycles - but where c0_count is not available we desperately
+  * use c0_random in an attempt to get at least a little bit of entropy.
+- *
+- * R6000 and R6000A neither have a count register nor a random register.
+- * That leaves no entropy source in the CPU itself.
+  */
+ static inline unsigned long random_get_entropy(void)
+ {
+-	unsigned int prid = read_c0_prid();
+-	unsigned int imp = prid & PRID_IMP_MASK;
++	unsigned int c0_random;
+ 
+-	if (can_use_mips_counter(prid))
++	if (can_use_mips_counter(read_c0_prid()))
+ 		return read_c0_count();
+-	else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
+-		return read_c0_random();
++
++	if (cpu_has_3kex)
++		c0_random = (read_c0_random() >> 8) & 0x3f;
+ 	else
+-		return 0;	/* no usable register */
++		c0_random = read_c0_random() & 0x3f;
++	return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
+ }
+ #define random_get_entropy random_get_entropy
  
 
 

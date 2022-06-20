@@ -2,128 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924BB550EB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 04:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD822550EB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 04:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiFTC5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 22:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S231582AbiFTC6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 22:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiFTC5c (ORCPT
+        with ESMTP id S235758AbiFTC6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 22:57:32 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463E663CF;
-        Sun, 19 Jun 2022 19:57:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HREgDB48xBAhokOWhI7Q58Ml10hdDa+MHP4psUxj5KpAh00x98J5b4DYX7dwGRmX0BaPpscTWvd6dApy3gO3hj+DUncYzhgx4Z+BdgM3zp18go/wCyeZRNBeJuB+SRWJ5fA9JVSq8YbzFwLAQjVjBrZ2B/zKiGHERzwF7/90SuatR4+WSzAhGVTFSHpsDSzQqfqlGbIlKaIeuQQIiv6HJdyXeuoCtc/Xm4/f3CEzXrz+Jfjo4Y9wktMUJcvLnZ0vd6x5BxNKl+8yC0/lW2jhuNh2VbZ3nP9rlShqZqH6Vv4GNI7FIntIzMfH942aZvqR1Q1af+X20JQJAsgqBs4oyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CdeRBWNamyq0dRtPAGIOBRMw//0O4Ppq5FOAVJh+dWg=;
- b=NvhtH/4n7k1e54xia8CYiTDU4lisehj1ca8beI38hsuFDVHQCTr6qLUG3H2tuZNH4Zeckg88y0G5PHBJkj65o8dcN3kuUg4i80p6m2CFjIBppfSF9s8t1hLFmRCfxX6ITTzh389BLTpmVIYrvK0sLKl9VYbCYHVgpTmNsbA+HrK71C8854XcJ2z88Ooc0FAQJ5caQFswETT4IFbfIQK7tTK6HbSaBXWbUSgP9lA/ppk0nMvm6rOCs/JYq0KiSgsngYTz2dbY9pDHkIfhYGBK1V+U4332qmIyA5iOAg/CqKN5O4nogobkh43EKCaXWxxQ2WEQdpi4hVDGMa91e5CwUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CdeRBWNamyq0dRtPAGIOBRMw//0O4Ppq5FOAVJh+dWg=;
- b=uBq9D6K0FGLVokU/MqIaPtmZFBqJS38T/W3KDYi1BC2dcVI5ohBbIdJM+QpnZ1lJ0nW1drixHPe4EaJmDfprZRczBUTeaVc/xUhoZ1vZJzBBi2/VAoDdYBJ47dOK5RTb3hDwV6nqHkFC0q1u3uVhkilOdzjX62EC3jkkRW1zOg2+QuQsptHcYpoYg1m+gw3RxYG0g3Nxbny9rdxL0O8TBDI05E9KqEgTVv9zCu2CH9wfwtdh1RH2YGxxATR5ZLecoL2gbRocVVcDGXSfA4cjmlsgEsRyRTMd4WgQHj1rwmoliePFVNn03UpdPfVGLyH9+ufx8nh5oOySv6pN844QHg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN6PR1201MB0019.namprd12.prod.outlook.com (2603:10b6:405:4d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Mon, 20 Jun
- 2022 02:57:29 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5353.021; Mon, 20 Jun 2022
- 02:57:29 +0000
-Date:   Sun, 19 Jun 2022 23:57:26 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, kwankhede@nvidia.com,
-        corbet@lwn.net, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com,
-        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        kevin.tian@intel.com, jchrist@linux.ibm.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RFT][PATCH v1 5/6] vfio/ccw: Add kmap_local_page() for memcpy
-Message-ID: <20220620025726.GA5219@nvidia.com>
-References: <20220616235212.15185-1-nicolinc@nvidia.com>
- <20220616235212.15185-6-nicolinc@nvidia.com>
- <Yqw+7gM3Lz96UFdz@infradead.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqw+7gM3Lz96UFdz@infradead.org>
-X-ClientProxiedBy: MW4P222CA0009.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:114::14) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 25a0b0d7-8fb4-444b-f39a-08da52689ced
-X-MS-TrafficTypeDiagnostic: BN6PR1201MB0019:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR1201MB00193E613E0D72D51CF9FA47C2B09@BN6PR1201MB0019.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dbBBw9Ah39HQgTDG9BzMvJi2Wp7lK1aYQBisl7sZe9CwgFwXuBIpBBl7vH1rWqal7RGjHxKtyLknlqc7jiMLm5qY3e4WFH74xW13bNZJail6xHUInhhHT3yhrVXZ3x0T0RICXhUXyzkFhkxfiqMr7rB3FTOkUiNOO8ged6diCxCKlS+dXYP2lIz2vZnSl+HVefHFNnn3shphY5EmfyLeDs4WGrJgCsofY8jUCWkuurxAyOZc5HIjEY0VCYFaVgH0nfjoOmW2hATXs7RJ0I34ysZSijiOgg4MqgJBA6nWGTgfvmVvQaEPYJj/vLKBB3DY8lJqxsoS39klmAYRaSbkLpaUbnO48BH0L9D/qCRPhJ6Ev2nc3CAiLgj/WVeM8Y6VHicW7icfXgyvOn+kkuPHXk4LE+jzBiqMNitsNYZqCy7VSv7HQo0twPTfqT2l3eJH8blte+u5w16lJGQ+LZQTe9eNpbhtqUpKo3ucbfoNn9rkBvQ0V5NR6UwSO62xNbUizNUR0kY2RjGvaKlbrr3sni2Z+OyHJwwZ3DqK0lhvAvbT3mRVXAjyZ7jQYloPdZEpqzVcUUkoTEhCn2XOxFo4WswuOXlZfA5xKOIQ5IMkGNmoR3yWQFG4Jxnaog2ttmWDrcawSLFKPxcK6O9VdSJAUg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(8936002)(7406005)(86362001)(2906002)(6506007)(6666004)(7416002)(26005)(5660300002)(6512007)(6916009)(6486002)(478600001)(316002)(38100700002)(33656002)(4326008)(66946007)(66556008)(8676002)(66476007)(83380400001)(36756003)(2616005)(1076003)(186003)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ymJYubytJwILdP9AaFWLqdK038/Qp+bo68gGQ3lQAbsvPk+WSx06nJ56JRqK?=
- =?us-ascii?Q?UKGDxAx9o9LZTIWvaK3uvFh86dv+nDQGoOgwLSYev2/HNUTiwFSuxpN766MV?=
- =?us-ascii?Q?LmltRi/EV1FHiKHbMdy8V/ksqAK72HNY7jPgD3y+7RhCbjCpeBuXB3+RfT+/?=
- =?us-ascii?Q?KJQy+kVn+JRCZw9eYXDS+VUcjaO4rNTVbazpDJcOEabUMYn7UFmnyGExJoED?=
- =?us-ascii?Q?I1KrR9/x4/tY449PRfASELQHlDdMxZAb2QdgTAacdurf+nON2QXs/v29X+xC?=
- =?us-ascii?Q?OWZlwoLeMD0rYV7UqnUGWwwU3tCz/ekoQQiyaqNL2mJKI59WuPjSF00AxSQl?=
- =?us-ascii?Q?6BbEVCgtKkIw2Mc6NiOlGuuslhWYpr/wQfoUcerxO6ysfufKluHk6QtzttHx?=
- =?us-ascii?Q?o5A4PBmmMQXxEtNlSvBBOP3MZacNFQtFAOvluhtX49+WfnSjVls828Go2vR4?=
- =?us-ascii?Q?avOfFcZwWFPN2VD0m35Een4/LS5k3Jt7TWtPxJbpUn6sm01NAC2+Vo9C+nN4?=
- =?us-ascii?Q?JDsT3dqioovhcqmGuh5uJ7Nf56/Z5YDeouDmD3KTMFoI0ZfwPgbiuowi3HUF?=
- =?us-ascii?Q?1fsofvLFX5jwFKuzijUrbP5fL0QIR4JSCni792xf9QfoXK36QflkmG6DZ3hg?=
- =?us-ascii?Q?MJo4rE6YurGrSlwcrcmbE7P0KSG4atIdigZb88UMnYu1VvjiqND+Jmo3T1dC?=
- =?us-ascii?Q?+IkbDFcHVln6xdm5Ccs06O3zEc5JyEQOz7aDkTM15VJk974Y+4pwMAazvugL?=
- =?us-ascii?Q?qlNF5rUub1CLUsYv01Lpk9lttjxP5hJtHDP6OjR83Id2Dkb6z/c17TaScRCc?=
- =?us-ascii?Q?Wm57ut2ASszt98KWX7fdZLkQP4m3/Xd5fEq/CbkE3zP5zCdZQYVXpcV2b3Al?=
- =?us-ascii?Q?NFi/PqRxCyBxf9qzwB/H+TVn1+Ie1itlXOjDUPB11099xKG369gFAuFO52A/?=
- =?us-ascii?Q?11am/sqGzr6prO67QY24kP2Py47DNV4QiSO5SuTtmGCmgnawEWbhXKMADbB0?=
- =?us-ascii?Q?hSCMAINbNeaoQA1UQJqC/Du84eHqoQrOD0ukqieD/YtO2nc5iuiXTlHW4COY?=
- =?us-ascii?Q?fdp1LmQlA59Xvd+Heg08N3nJpTYjKy5iLv4Lqrwv/plLsI1qsFOAWkTWi1UW?=
- =?us-ascii?Q?16sRba6au1YL0SDYlkD2/wLA7Z8uulD3ivZsOvvl/QkjUn56qayoP5jBG2OW?=
- =?us-ascii?Q?zeyXZ0FtKCb5TtxKJ9H3qGx73W3Kgpmm/GhHDNP1O7YPOdKEEWWezIrryfri?=
- =?us-ascii?Q?H9wFuh2Lm/YsRgrvqBdBmdKIBpyCVxtHCKNK52vj+Seix1ezPIBO4DADG3t0?=
- =?us-ascii?Q?kYn/lCCpHyJPBNrxFb5f9BVN8kTU0WcosD4RBhyPtgvSu6dAw6D39qr6CvWP?=
- =?us-ascii?Q?lCcuakFEajGt3qMiO+qomr2Xo6CJhzi2+F5qimZRHkKjCw4OiCX8rGqEIu+Y?=
- =?us-ascii?Q?qj6g9oiHEOYhSQ246onnGMdWxkgswCSzv5c7XQiJhqbryyxR9E3H/kweKjsB?=
- =?us-ascii?Q?o7ryTyuQVRUzpehQxgpbBqQrtHl+HG7fyYzOvKOtwn1mM7soY9POjPeYGvpN?=
- =?us-ascii?Q?xaaZ9SukXQBAkQLKlQaoWcocZ1c8h6laVQb1xBOerBPrZK4D1SiDig0VrXBu?=
- =?us-ascii?Q?1kwA7Sqe927YoH76340tBypyGA9qqz4B6TkkWg/utHfU8gcrGKmOhBxxMFSg?=
- =?us-ascii?Q?ydLxschecaEhqzjz1fo4zcx2tuGMhdKlbbiu2x7eKhLLzkjW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25a0b0d7-8fb4-444b-f39a-08da52689ced
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 02:57:29.2399
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TNQeS/jExt6Yld0lvsWh8g/2obz9s4MzaDFnil2ODgbcnirEsRcp1rEBVxgmHJI+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0019
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        Sun, 19 Jun 2022 22:58:02 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9397663E2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 19:57:48 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s185so3347715pgs.3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 19:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=/OLidbSnpUHKhyvWAxxwUS8WGsf4gj9nF541RhVwgto=;
+        b=kjgxjpRyZerC9ge/Y8B5Uszl03RpWIURc9ceaMaf+kF/FCUxlSbGAV932ogoE+hDAn
+         K8HZamB7KAC5+FZZShDkIhu/R0RTH8sPHbOVM2K+TOvBYGBNEK+qoQ7+LVKonkp/UFWX
+         8pJ9lVsDhPH1QMcW3gx1ByH70cv+XiFAm1zq4fEZc0Zm6r6318F1w69cQMNW2bJUAEHv
+         Kkv3QfH2V3AvrZydQtXsCVzgCHiZBmOkYtlFrQYSdnTxA5ijTA2SmIwfW8Ra60/VRWoU
+         HPfvPbJdaiFMC9688eRpFV/8uAVuCe94qKoI6e1y5msBuVM4DyvVHhjA3g0LXZUaZbd5
+         NFrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=/OLidbSnpUHKhyvWAxxwUS8WGsf4gj9nF541RhVwgto=;
+        b=hLs3aRQbS3AVRv7hZrkfOPR8V4hxIGjjJAIyFct5wNYugZillXDUHrBOJRcKlgOVGm
+         Zu+cy+oL3qsxO7Z/BqDNL0LAqANBKYQddHx/BSxcQlg7yiczeouJIoAvsI6Kh//kuSHB
+         f+kW7XMCuJ7RbqAHr4RyIIN1QiE9ft+FfnFKtzidlrlFIz2XRmqGvuGRWtgzE8L1Jpyp
+         WN+BdhIG/bYZMoKE5AjfnRv1UC6nrko6JPdLku9YHf/c6VxR2MBt4+K+knGmqono32KM
+         ChyChoPtWHxADQsXsDDgDcOGTY1BmB0VJTiQEMXFC/QeBVpKqxyGlYIupfviutplw1L/
+         izZA==
+X-Gm-Message-State: AJIora+ccKBuWgEb1IhTp0F+TND7bd5Sze2+QWFcIKefAIegdBgVuolL
+        p5ppaLPnIr6CTpph6G9LPVHrDA==
+X-Google-Smtp-Source: AGRyM1totuspkuKuSRwEBCK7UWfynfL88ikTJQdy99vQTYkUBrSuHfct5/eq9QGZB9SxPg5fqhxr4w==
+X-Received: by 2002:a63:210e:0:b0:3fd:9c07:7670 with SMTP id h14-20020a63210e000000b003fd9c077670mr19762842pgh.222.1655693868104;
+        Sun, 19 Jun 2022 19:57:48 -0700 (PDT)
+Received: from n254-073-104.byted.org ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id jg20-20020a17090326d400b0016a0f4af4b1sm3666803plb.183.2022.06.19.19.57.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 Jun 2022 19:57:47 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [External] [PATCH] crypto: testmgr - fix version number of RSA
+ tests
+From:   =?utf-8?B?5L2V56OK?= <helei.sig11@bytedance.com>
+In-Reply-To: <20220619030904-mutt-send-email-mst@kernel.org>
+Date:   Mon, 20 Jun 2022 10:57:41 +0800
+Cc:     =?utf-8?B?5L2V56OK?= <helei.sig11@bytedance.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        dhowells@redhat.com, arei.gonglei@huawei.com, jasowang@redhat.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pizhenwei@bytedance.com, f4bug@amsat.org, berrange@redhat.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <315B0676-B712-4828-A4F4-0E559DB0DD89@bytedance.com>
+References: <20220617070754.73667-1-helei.sig11@bytedance.com>
+ <20220617070754.73667-3-helei.sig11@bytedance.com>
+ <20220619030904-mutt-send-email-mst@kernel.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,27 +77,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 01:44:30AM -0700, Christoph Hellwig wrote:
-> On Thu, Jun 16, 2022 at 04:52:11PM -0700, Nicolin Chen wrote:
-> > The pinned PFN list returned from vfio_pin_pages() is simply converted
-> > using page_to_pfn() without protection, so direct access via memcpy()
-> > will crash on S390 if the PFN is an IO PFN. Instead, the pages should
-> > be touched using kmap_local_page().
-> 
-> I don't see how this helps.  kmap_local_page only works for either
-> pages in the kernel direct map or highmem, but not for memory that needs
-> to be ioremapped.  And there is no highmem on s390.
+My mistake, please ignore this commit. I will resubmit and fix the bug =
+reported by the bot
 
-The remark about io memory is because on s390 memcpy() will crash even
-on ioremapped memory, you have to use the memcpy_to/fromio() which
-uses the special s390 io access instructions.
+> On Jun 19, 2022, at 3:09 PM, Michael S. Tsirkin <mst@redhat.com> =
+wrote:
+>=20
+> On Fri, Jun 17, 2022 at 03:07:51PM +0800, Lei He wrote:
+>> From: lei he <helei.sig11@bytedance.com>
+>>=20
+>> According to PKCS#1 standard, the 'otherPrimeInfos' field contains
+>> the information for the additional primes r_3, ..., r_u, in order.
+>> It shall be omitted if the version is 0 and shall contain at least
+>> one instance of OtherPrimeInfo if the version is 1, see:
+>> 	https://www.rfc-editor.org/rfc/rfc3447#page-44
+>>=20
+>> Replace the version number '1' with 0, otherwise, some drivers may
+>> not pass the run-time tests.
+>>=20
+>> Signed-off-by: lei he <helei.sig11@bytedance.com>
+>=20
+> Why is this posted as part of the virtio-crypto patchset thread =
+though?
+>=20
+>=20
+>> ---
+>> crypto/testmgr.h | 6 +++---
+>> 1 file changed, 3 insertions(+), 3 deletions(-)
+>>=20
+>> diff --git a/crypto/testmgr.h b/crypto/testmgr.h
+>> index 4d7449fc6a65..d57f24b906f1 100644
+>> --- a/crypto/testmgr.h
+>> +++ b/crypto/testmgr.h
+>> @@ -186,7 +186,7 @@ static const struct akcipher_testvec =
+rsa_tv_template[] =3D {
+>> #ifndef CONFIG_CRYPTO_FIPS
+>> 	.key =3D
+>> 	"\x30\x81\x9A" /* sequence of 154 bytes */
+>> -	"\x02\x01\x01" /* version - integer of 1 byte */
+>> +	"\x02\x01\x00" /* version - integer of 1 byte */
+>> 	"\x02\x41" /* modulus - integer of 65 bytes */
+>> 	=
+"\x00\xAA\x36\xAB\xCE\x88\xAC\xFD\xFF\x55\x52\x3C\x7F\xC4\x52\x3F"
+>> 	=
+"\x90\xEF\xA0\x0D\xF3\x77\x4A\x25\x9F\x2E\x62\xB4\xC5\xD9\x9C\xB5"
+>> @@ -216,7 +216,7 @@ static const struct akcipher_testvec =
+rsa_tv_template[] =3D {
+>> 	}, {
+>> 	.key =3D
+>> 	"\x30\x82\x01\x1D" /* sequence of 285 bytes */
+>> -	"\x02\x01\x01" /* version - integer of 1 byte */
+>> +	"\x02\x01\x00" /* version - integer of 1 byte */
+>> 	"\x02\x81\x81" /* modulus - integer of 129 bytes */
+>> 	=
+"\x00\xBB\xF8\x2F\x09\x06\x82\xCE\x9C\x23\x38\xAC\x2B\x9D\xA8\x71"
+>> 	=
+"\xF7\x36\x8D\x07\xEE\xD4\x10\x43\xA4\x40\xD6\xB6\xF0\x74\x54\xF5"
+>> @@ -260,7 +260,7 @@ static const struct akcipher_testvec =
+rsa_tv_template[] =3D {
+>> #endif
+>> 	.key =3D
+>> 	"\x30\x82\x02\x20" /* sequence of 544 bytes */
+>> -	"\x02\x01\x01" /* version - integer of 1 byte */
+>> +	"\x02\x01\x00" /* version - integer of 1 byte */
+>> 	"\x02\x82\x01\x01\x00" /* modulus - integer of 256 bytes */
+>> 	=
+"\xDB\x10\x1A\xC2\xA3\xF1\xDC\xFF\x13\x6B\xED\x44\xDF\xF0\x02\x6D"
+>> 	=
+"\x13\xC7\x88\xDA\x70\x6B\x54\xF1\xE8\x27\xDC\xC3\x0F\x99\x6A\xFA"
+>> --=20
+>> 2.20.1
+>=20
 
-This helps because we now block io memory from ever getting into these
-call paths. I'm pretty sure this is a serious security bug, but would
-let the IBM folks remark as I don't know it all that well..
-
-As for the kmap, I thought it was standard practice even if it is a
-non-highmem? Aren't people trying to use this for other security
-stuff these days?
-
-Jason

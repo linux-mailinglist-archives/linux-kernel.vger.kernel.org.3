@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4707552496
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C255524A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243729AbiFTTaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S244213AbiFTTkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238346AbiFTTau (ORCPT
+        with ESMTP id S233184AbiFTTke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:30:50 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9B21B7B7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:30:49 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id c2so18851257lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:30:49 -0700 (PDT)
+        Mon, 20 Jun 2022 15:40:34 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8D8764E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:40:32 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id t1so20745482ybd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:40:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4FVWZ5RD6j0T2Oz4CkZsx11e2rZOpIesuz+EhC8MdRg=;
-        b=MbUCCRU5DEOoziE4wlo9CXBSmyaZwaccLPzrC3aZa6M4LNES8QI+iVGPE7n9kWn1xr
-         FlInSDeXNkWMJR7TYkuFA9bGny04rz853TIMRJL0vjAEBysKvO2qOO777nLwYYlk0Ged
-         jugVJAJDoawma6KdVboL/15ypjCA1wzr4Xn9og9Da+DmcnJZyiV4tHNSkgP4/RqDUxo0
-         Suri7F2c6BCq6t5gsvz5OlTsVQPVQ5re0ZZC30g+xMb8sFdWoupX+PxvN5YjGS1CGdu4
-         6yqb+YdJsZQ6cudDnXMAIcknM7f6BiYFyzhadXb0gE/groQ5lW9lhcuSrGnlQn/MyZk0
-         agbg==
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MF9w10rX2iwd2h9iSBKKxPfiedtUNAOz+4kVUvfb89E=;
+        b=GG1JkThoq/+mdEhocGlISJpVEjHwAeMStlF2BWci9LDLNiYtOlkacsBNZIpZecrjsh
+         fdXdX+wm2DII0sQ2l84LTw9a/+ECRVwrXXQMYmTPPX4YFQciutNx+K6WKcrFhhntyfrc
+         nVkj0ns8Zakha5fZW91ck71QyOYRNYgY4qVg4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4FVWZ5RD6j0T2Oz4CkZsx11e2rZOpIesuz+EhC8MdRg=;
-        b=sYUNvsiNIK3FZHE3qsU0OJ+VBKengSN2NcfJCpacGDuq9TRxCPdYrU6dnXbtGGZzhv
-         dza8huQdsWDLps6PzmcEOJrn3WlOOcfWod+bJj9QRmmrhFn8UYUqvk4URmpWacRdBh3h
-         lz3SXXXUUrmqTFQifhhb8MiE3CbgVa2UxXrAOfju2b8IJQubk3mKpCuh9PU6wZDrVf6k
-         89bnE4ZpjU7P/NFhGp2Rtj2hjVRh0co4DzmyEZv43bSQjSwJDWdi/Yhw06BTsrFbxOzu
-         oGsLCLELvP/Tt49ylbrTGfiU9ukOMW6j/L0JfsumKtJCV2XXhhdZ4zmGwetzxk73J0HE
-         DKlg==
-X-Gm-Message-State: AJIora/Z/NDkad/Ejll+G7MWp3pcEZhKst0y4lnuxxECE8Bhj1KH1HlZ
-        8XAnLTkXPiaaHXKaYGaQ6iANRg==
-X-Google-Smtp-Source: AGRyM1uXYt5CRb9/0qaQTYLRAE5TNEoyPlRb7jf3bFWn+UD6F49KM7ZcWPEBO77nwZg6/8tmqZdWJA==
-X-Received: by 2002:ac2:51a5:0:b0:47f:79a1:5c02 with SMTP id f5-20020ac251a5000000b0047f79a15c02mr1094804lfk.575.1655753448163;
-        Mon, 20 Jun 2022 12:30:48 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac25ca2000000b0047255d21100sm1872617lfq.47.2022.06.20.12.30.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 12:30:47 -0700 (PDT)
-Message-ID: <fa5c77c3-517c-32da-5d8b-ecfb9c898b92@linaro.org>
-Date:   Mon, 20 Jun 2022 22:30:46 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MF9w10rX2iwd2h9iSBKKxPfiedtUNAOz+4kVUvfb89E=;
+        b=Me9/g6fz1aSX6g0uB8nlS+gTviUghSJwZGmr1eoU4w4hTjTHvI9xCBGlG5anRw/Tlr
+         UOit9s9cMNNXhtd96Qz5mxGKxOfbO9tP5Na6hVm+CrvHaMBHf0WEx718n7yuf3WK29T1
+         lE3+vW2wUhmoEIpezagpP7io1kD06yGD/E6ieeZ5HQeaNtBTPurJ2ui9mAY5yVbBGNrO
+         UdpRxoJq3Zazc38exvQBhVeykdQHEwI1VviCz4x2JOdfELoOeiNrBCQfXXveYr+knFnb
+         GqLq5+Kl2WIMa1QV1HsnrP8M4zQCeNLBqJp/8WgzYGQ0sYeixJpDS0lLlDc8ayJaXbx2
+         bAjA==
+X-Gm-Message-State: AJIora+usMDrmbzJ8HgXSAmcVZkn5xNYGUICP/s/x3O15MbcrWh8nTBR
+        v38IMQXyTksXdS9C+v0Qjze8iToXyAq7xgsP7oQp
+X-Google-Smtp-Source: AGRyM1vHKyKvtBgGAkqodprREujJq6noPO8phYFn9Ku3wdUySOubjCEpjD6+RZIwfTH5ngx3N8ua9ZZ8yggE0FO1wYY=
+X-Received: by 2002:a25:2612:0:b0:664:b1e1:3774 with SMTP id
+ m18-20020a252612000000b00664b1e13774mr26937447ybm.228.1655754031926; Mon, 20
+ Jun 2022 12:40:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/2] spmi: pmic-arb: Add support for PMIC v7
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Collins <collinsd@codeaurora.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Dai <daidavid1@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201134108.2677578-1-vkoul@kernel.org>
- <20220201134108.2677578-3-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220201134108.2677578-3-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220619111115.6354-1-nikita.shubin@maquefel.me>
+ <20220619111115.6354-2-nikita.shubin@maquefel.me> <CAK9=C2X4TTCEjZya4wz-W6ndBaxzUpLBtzQAGJ4zphVM8NSgdg@mail.gmail.com>
+ <20220620174006.1c86a456@redslave.neermore.group>
+In-Reply-To: <20220620174006.1c86a456@redslave.neermore.group>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 20 Jun 2022 12:40:20 -0700
+Message-ID: <CAOnJCU+7_z1WN_Z6frQcUwzztVL4itbPSfmLUa_7Ob5xCtLo+Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] RISC-V: Create unique identification for SoC PMU
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Will Deacon <will@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        =?UTF-8?B?Sm/Do28gTcOhcmlvIERvbWluZ29z?= 
+        <joao.mario@tecnico.ulisboa.pt>, linux <linux@yadro.com>,
+        Nikita Shubin <n.shubin@yadro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,22 +79,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2022 16:41, Vinod Koul wrote:
-> From: David Collins <collinsd@codeaurora.org>
-> 
-> PMIC v7 has different offset values and seqeunces, so add support for
-> this new version of PMIC
-> 
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+On Mon, Jun 20, 2022 at 7:40 AM Nikita Shubin <nikita.shubin@maquefel.me> w=
+rote:
+>
+> On Mon, 20 Jun 2022 17:30:58 +0530
+> Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> > On Sun, Jun 19, 2022 at 4:41 PM Nikita Shubin
+> > <nikita.shubin@maquefel.me> wrote:
+> > >
+> > > From: Nikita Shubin <n.shubin@yadro.com>
+> > >
+> > > Provide RISC-V SBI PMU id to distinguish different cores or SoCs via
+> > > "devices/platform/riscv-pmu/id" sysfs entry.
+> > >
+> > > The identification is generated as string of marchid, mimpid,
+> > > mvendorid in hex format separated by coma - "0x70032,0x70032,0x0".
+> > >
+> > > The CSRs are detailed in the RISC-V privileged spec [1].
+> > > [1] https://github.com/riscv/riscv-isa-manual
+> > >
+> > > Inspired-by: Jo=C3=A3o M=C3=A1rio Domingos <joao.mario@tecnico.ulisbo=
+a.pt>
+> > > Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
+> >
+> > The mvendorid, marchid, and mimpid can be useful to apps other than
+> > perf tool.
+> >
+> > I have tried to extend /proc/cpuinfo with this information which can
+> > be parsed by perf tool:
+> > https://lore.kernel.org/all/20220620115549.1529597-1-apatel@ventanamicr=
+o.com/
+>
+> Atish, what do you think about this ?
+>
+> RISC-V perf can rely on "/proc/cpuinfo", in some similar manner like
+> "tools/perf/arch/s390/util/header.c" does.
+>
 
-Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> # SM8450 HDK
+Yes. We can expose these three values either in sysfs or procfs (/proc/cpui=
+nfo).
+For perf tool, it shouldn't matter as the header.c will need to
+generate the unique cpuid
+string from either.
 
-> ---
->   drivers/spmi/spmi-pmic-arb.c | 233 ++++++++++++++++++++++++++++++++---
->   1 file changed, 214 insertions(+), 19 deletions(-)
+I am not sure if any other userspace tool prefers to parse sysfs
+instead of cpuinfo.
+
+> Can it create problems with pmu identification in case of hetergenous
+> harts ?
+>
+
+Does perf support hetergenous harts at all ? ARM64 code
+(tool/perf/arch/arm64/util/header.c)
+just breaks out of the loop after finding the first MIDR.
+
+> >
+> > Regards,
+> > Anup
+> >
+> > > ---
+> > > v3->v4:
+> > > - use string for pmuid
+> > > - rename pmu_sbi_id_show to id_show
+> > > - fix error print message in id_show
+> > > - fix DEVICE_ATTR to use octal permissions
+> > > ---
+> > >  arch/riscv/kernel/sbi.c        |  3 +++
+> > >  drivers/perf/riscv_pmu_sbi.c   | 41
+> > > ++++++++++++++++++++++++++++++++++ include/linux/perf/riscv_pmu.h |
+> > >  1 + 3 files changed, 45 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+> > > index 775d3322b422..50dd9b6ecc9e 100644
+> > > --- a/arch/riscv/kernel/sbi.c
+> > > +++ b/arch/riscv/kernel/sbi.c
+> > > @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
+> > >  {
+> > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
+> > >  }
+> > > +EXPORT_SYMBOL(sbi_get_mvendorid);
+> > >
+> > >  long sbi_get_marchid(void)
+> > >  {
+> > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
+> > >  }
+> > > +EXPORT_SYMBOL(sbi_get_marchid);
+> > >
+> > >  long sbi_get_mimpid(void)
+> > >  {
+> > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
+> > >  }
+> > > +EXPORT_SYMBOL(sbi_get_mimpid);
+> > >
+> > >  static void sbi_send_cpumask_ipi(const struct cpumask *target)
+> > >  {
+> > > diff --git a/drivers/perf/riscv_pmu_sbi.c
+> > > b/drivers/perf/riscv_pmu_sbi.c index dca3537a8dcc..be812f855617
+> > > 100644 --- a/drivers/perf/riscv_pmu_sbi.c
+> > > +++ b/drivers/perf/riscv_pmu_sbi.c
+> > > @@ -693,6 +693,28 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu
+> > > *pmu, struct platform_device *pde return 0;
+> > >  }
+> > >
+> > > +static ssize_t id_show(struct device *dev,
+> > > +                               struct device_attribute *attr, char
+> > > *buf) +{
+> > > +       int len;
+> > > +       struct riscv_pmu *pmu =3D container_of(dev_get_drvdata(dev),
+> > > struct riscv_pmu, pmu); +
+> > > +       len =3D sprintf(buf, "%s\n", pmu->pmuid);
+> > > +       if (len <=3D 0)
+> > > +               dev_err(dev, "invalid sprintf len: %d\n", len);
+> > > +
+> > > +       return len;
+> > > +}
+> > > +
+> > > +static DEVICE_ATTR(id, 0644, id_show, NULL);
+> > > +
+> > > +static struct attribute *pmu_sbi_attrs[] =3D {
+> > > +       &dev_attr_id.attr,
+> > > +       NULL
+> > > +};
+> > > +
+> > > +ATTRIBUTE_GROUPS(pmu_sbi);
+> > > +
+> > >  static int pmu_sbi_device_probe(struct platform_device *pdev)
+> > >  {
+> > >         struct riscv_pmu *pmu =3D NULL;
+> > > @@ -714,6 +736,14 @@ static int pmu_sbi_device_probe(struct
+> > > platform_device *pdev) if (pmu_sbi_get_ctrinfo(num_counters))
+> > >                 goto out_free;
+> > >
+> > > +       /* fill pmuid */
+> > > +       pmu->pmuid =3D kasprintf(GFP_KERNEL, "0x%lx,0x%lx,0x%lx",
+> > > +                              sbi_get_marchid(),
+> > > +                              sbi_get_mimpid(),
+> > > +                              sbi_get_mvendorid());
+> > > +       if (!pmu->pmuid)
+> > > +               goto out_free_pmuid;
+> > > +
+> > >         ret =3D pmu_sbi_setup_irqs(pmu, pdev);
+> > >         if (ret < 0) {
+> > >                 pr_info("Perf sampling/filtering is not supported
+> > > as sscof extension is not available\n"); @@ -739,8 +769,19 @@
+> > > static int pmu_sbi_device_probe(struct platform_device *pdev)
+> > > return ret; }
+> > >
+> > > +       ret =3D sysfs_create_group(&pdev->dev.kobj, &pmu_sbi_group);
+> > > +       if (ret) {
+> > > +               dev_err(&pdev->dev, "sysfs creation failed\n");
+> > > +               return ret;
+> > > +       }
+> > > +
+> > > +       pdev->dev.groups =3D pmu_sbi_groups;
+> > > +       dev_set_drvdata(&pdev->dev, pmu);
+> > > +
+> > >         return 0;
+> > >
+> > > +out_free_pmuid:
+> > > +       kfree(pmu->pmuid);
+> > >  out_free:
+> > >         kfree(pmu);
+> > >         return ret;
+> > > diff --git a/include/linux/perf/riscv_pmu.h
+> > > b/include/linux/perf/riscv_pmu.h index 46f9b6fe306e..cf3557b77fb8
+> > > 100644 --- a/include/linux/perf/riscv_pmu.h
+> > > +++ b/include/linux/perf/riscv_pmu.h
+> > > @@ -42,6 +42,7 @@ struct cpu_hw_events {
+> > >  struct riscv_pmu {
+> > >         struct pmu      pmu;
+> > >         char            *name;
+> > > +       char            *pmuid;
+> > >
+> > >         irqreturn_t     (*handle_irq)(int irq_num, void *dev);
+> > >
+> > > --
+> > > 2.35.1
+> > >
+>
 
 
--- 
-With best wishes
-Dmitry
+--=20
+Regards,
+Atish

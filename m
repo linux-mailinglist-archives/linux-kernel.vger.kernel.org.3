@@ -2,261 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B335D55204D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE31552060
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243521AbiFTPPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S243923AbiFTPP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243469AbiFTPMY (ORCPT
+        with ESMTP id S244867AbiFTPOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:12:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAAC1FA65
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:03:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 110EB21B79;
-        Mon, 20 Jun 2022 15:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655737381; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t6itNPFCM/lnavaNprI7q2GJhGFOOJ4FXVt/3QTMdTs=;
-        b=jOSWh3cSp4qY3jrTArBNyIWTSlP5sN2zlFDhgHJ99Ozpm375sY35aUAhORYaS9bBmyqJtF
-        5jK87/i8SX7btIMnj2ZyL98Ycnmhnno5C2NpSKwsPehEEe6YfjodHB70KcBEyplNjPGXzK
-        9UT4pblTVXqOFEmS/Bxj30/1CXT15wI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655737381;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t6itNPFCM/lnavaNprI7q2GJhGFOOJ4FXVt/3QTMdTs=;
-        b=0MVJS+bvc8DE3OaNhF1caC9jOh1Y5VYohGLxkHR87aE6dlNl9+vibYS2EcGprXoX6Hdn1W
-        IMRJ/KyoZcz9vjCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE54F13638;
-        Mon, 20 Jun 2022 15:03:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M0+9NSSMsGIucAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 20 Jun 2022 15:03:00 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH] lib/stackdepot: replace CONFIG_STACK_HASH_ORDER with automatic sizing
-Date:   Mon, 20 Jun 2022 17:02:49 +0200
-Message-Id: <20220620150249.16814-1-vbabka@suse.cz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527113706.24870-1-vbabka@suse.cz>
-References: <20220527113706.24870-1-vbabka@suse.cz>
+        Mon, 20 Jun 2022 11:14:42 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70088.outbound.protection.outlook.com [40.107.7.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1A6D5C;
+        Mon, 20 Jun 2022 08:03:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L2xBhPQbXMxbbFmfs6dGJhppLinKJYaYAPa3tlk8kJGsP3i0shDz/e4JPnAZFElIW9dBc0ONdazk73xKPHXhisTXinvYGeB5JNZ2DzAjnzIuKEYyo+01Lx7lI7xxBSvUbLSfuZ/nrJo/twKKJjBhkLvhHJRAcKZar/aMNqzuq54imA1GVVejrycFXBUJ3WsQqF2kBgq1Yue1N2Q7ekZwxgqdUU1Ny8XYJttW2NBdq9ssDJRSyvZKrS145k9wRZXjP+mqlejshVEu3G6N5xFBPzZbFBms432LLcZHGZgDJkDgYF7nVnt4PdI8XRaR6g9oUTVjty8DRrSU4Il71MrBkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EBK9/XxX55cR0NwTEm3JCwJ2pTI2Tsfw26Yn4NYjlY0=;
+ b=A/3gmS48t/Yz18OhUE48lG1G8zUAeqDUNugH6MlYu82G+NagZBlZnjXTUCH1oaTMep3AhaBuy7c6K1EtKRkPAz6JTLmgSgd8j7Qzi+trntpl59E3fbPiFsXSmmZebwucj87Ws1yXaK2dbevOxn+sjklxvtOx2JmthKA/uRxi7csYlz+HEyVUxRH0pZ7zSDN6ojR1OZT5mK+rfBkXuxTp7yaImPa+5UNi1UpYjJyAKNLYESu0Cs4ha7PwE88N/HVpiM7bAaPEromfYiAYDvz9TAFTeOmsSFCvKkEBNBWCBF7AQ1OGmnJvyi4ZXS2AMJbH/iy1TLwLRIPRx/0QkBN/9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=variscite.com; dmarc=pass action=none
+ header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EBK9/XxX55cR0NwTEm3JCwJ2pTI2Tsfw26Yn4NYjlY0=;
+ b=Ezc6ADUaviw9Iua/VGNQS/HZ/xu1A/gGEeFQrmRf2qjF/46urRAHauTXJ1lXRk5n9SuHC7Xxs8qWFuVM+fRGzmsRLdzmHYlXnJsEaOeW+9RsUyA/CPNryw3xvBTk+1m+xT4u7emGPcBu2rTPE8mRU77RJStJdCDHw6LvmjGGt7x5tQ4GTFxEZ0kPaCNLmNJTmvxSkVUU+noBQsEXvKnGUwL0L+3MkuD7C5AeDCEtvZ+DPid2wXuJ20S/WORaqoTPXcfHEv8bjIWdPYiUVYXyMPFxyRPOtCP7k9Qly7pmurL4FDPH1n6hbp7ksasxqPB2LPJWeVabNUbvHs/6mdfbpA==
+Received: from AM6PR08MB4376.eurprd08.prod.outlook.com (2603:10a6:20b:bb::21)
+ by AM8PR08MB6612.eurprd08.prod.outlook.com (2603:10a6:20b:368::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.13; Mon, 20 Jun
+ 2022 15:03:50 +0000
+Received: from AM6PR08MB4376.eurprd08.prod.outlook.com
+ ([fe80::3d45:c206:59e3:6539]) by AM6PR08MB4376.eurprd08.prod.outlook.com
+ ([fe80::3d45:c206:59e3:6539%5]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
+ 15:03:50 +0000
+From:   Pierluigi Passaro <pierluigi.p@variscite.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Alifer Willians de Moraes <alifer.m@variscite.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Eran Matityahu <eran.m@variscite.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shengjiu.wang@gmail.com" <shengjiu.wang@gmail.com>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "Xiubo.Lee@gmail.com" <Xiubo.Lee@gmail.com>
+Subject: Re: [PATCH 4/4] ASoC: wm8904: add DMIC support
+Thread-Topic: [PATCH 4/4] ASoC: wm8904: add DMIC support
+Thread-Index: AQHYhLZMl9cnd+lxxUukzbs4j0AP0g==
+Date:   Mon, 20 Jun 2022 15:03:50 +0000
+Message-ID: <AM6PR08MB4376C690036C5558058C4F16FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: 97148b09-0c98-d5de-2792-1546473bcd6b
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=variscite.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1374c813-42c5-4511-ffde-08da52ce1568
+x-ms-traffictypediagnostic: AM8PR08MB6612:EE_
+x-microsoft-antispam-prvs: <AM8PR08MB6612599FFE255063A2DA5F0BFFB09@AM8PR08MB6612.eurprd08.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: s+xVj6YK9NeRb9ESzW6lN/p2zXKITphIQhVi1rLJKlP9d1fSmNNjHOjKp7Ymd9VO5dFkNt+F59E7y4WhmC3+4N52Z/+J+ysbpvGMDqk1z77XGId8teZKJg5PbH5/Z6lokDs6yuN4PtsuiT/zHlQxNeQnt8+4FLqEz7ohwXsZoWZfwB1XgdHu6CZBUQFVWSI/2mSbHL0hSwcL1VrEk2RZEBK1lJky7RP9verHQiI52JaQAKHdZ/m3UBxkGoEqtVSVkBew33kjaneSM1D7maEhbnP7BfgmS4d6QKYd8zzDBkvRvBihDSEKtq1iKsldXJAbjQenMTWrcPxPwt3YL8BPuTldrob9R3qQVZhsqdFp7XEsKyMAApWMzCabUA09vdR5cwzVpkVtGNhsonTqUDmK3aEf0YY8AB/LP3TdqPk+wZj0XaAAnh42mwK2833XzQSGudCQv2D5wB4aMmTMdCf6xKnt71jWwVtwf7K3GxGzuu1VNV1inKPbRLpS3egWQOKEZEuoY7I7WlAfY1aLJgbzx/EFmsqAJRiIcMprzQ4rKnN4ZGYHZ8jKbVAm0LkLpspx6SEcWtioi4G5zM7rLrVhg7NJUKSGc1JOBkD9buo/rNX2iq+lkKffbxRBuYFoD6DWGwmlchvb8Wvune8TV/2rVA3Qzk7BIdZ6IihuRnlLA5Um/IlP9pKwTypF9f5IiHfd3f3IlEDB7mVKPDR6/NsDrg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB4376.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(136003)(396003)(366004)(346002)(376002)(6506007)(66556008)(6916009)(54906003)(64756008)(4744005)(316002)(66446008)(122000001)(478600001)(7416002)(7696005)(71200400001)(91956017)(86362001)(5660300002)(8936002)(2906002)(66476007)(4326008)(8676002)(26005)(38070700005)(66946007)(52536014)(9686003)(76116006)(55016003)(186003)(41300700001)(38100700002)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4m9e2KaLLru6n3NBdRi89TsS4BV7mgsPWZIdciz5V1x6PDWN2DwJlAZkSd?=
+ =?iso-8859-1?Q?RHFeoPhX0RXT55GlgeAmTPUMOI9Ub5UFhbsY3q4SCi2dGWBPkM+aJx7uLb?=
+ =?iso-8859-1?Q?LjPscDnIOQ92C8eqVJ4qP8W/PmHo3r8IHm3lfZBMS9bRhBKfI7NUU7BHCO?=
+ =?iso-8859-1?Q?1CjKs97I2pNkOB94amcQC5K2koqdSyAjlCT+kKnukOOKMPj3hbU8KydRMl?=
+ =?iso-8859-1?Q?8/wDEfmi9+rCjXiyJVTFF7TEevAlV0/B2pqNK1+6y9VtblyyA/Dk1BKEw0?=
+ =?iso-8859-1?Q?KDmDxJ3puvKBTpWiBSf2nuua8NvqPUO8sV7I/XVZCGIL6U/pMJgbS4XHR8?=
+ =?iso-8859-1?Q?z2MIL407/tstXLYTEJoBbBpgFMuQqaqUxeP6yUxnyzW37Cmjh+B9taN9uT?=
+ =?iso-8859-1?Q?9p9GQirnve8KAxH5xrcHsLf0JelDwfi+STpCvmq2MDacWPwaelMlHg1quJ?=
+ =?iso-8859-1?Q?4nth4lXMRi5DIDdpjgmBfGnCpHcXIFgPhIBpXhrz5NgxQMPzQ7Pol3f7i3?=
+ =?iso-8859-1?Q?A3c3TjUpAknPwr2Vg5RsbMmQX/BXpLMJkR4zBYGurOehSK1gtunxqLzxvD?=
+ =?iso-8859-1?Q?dR47HCuqQtD9a67cFX5AE081csejR4QRmQXUjOFWnvvBjX+xW/xreSiZqm?=
+ =?iso-8859-1?Q?M6d2O1hCtxhhI+AdGHvxZokvc+/ycfqTdERSL4g7ZZQ77jP67uqIsViss/?=
+ =?iso-8859-1?Q?uMz4ax83bSXHoXmbqf6P1Zi5HSf0wSxnAxnbLXBJ7R+c7yeXjIw7Mi5qjy?=
+ =?iso-8859-1?Q?4tJT4nl6FjeeesXO8hnRlAFQzyjzhhlfIsCpElae5c9fy+HOMv3ZtU7Y3U?=
+ =?iso-8859-1?Q?anTZAfP+DR5V2cNfqPDcOQYe/8ZGKe+TDphpvFVP/mFtabAlScEJuM6U+a?=
+ =?iso-8859-1?Q?BiN4pjJ1lvquiiVYrn+9C0zPnWCpSOogkFcVz2Q0asa3J2vnCrRsRKGBR/?=
+ =?iso-8859-1?Q?Ipjd1Hmp/Ek/IdREMOmIzrStI8fOzB0l+itmqwcG0ED0p+B9ZJA5C8BahE?=
+ =?iso-8859-1?Q?70p2uj7/dX04f4PL/XxZXao5gJgidqsFOxrtY1GWVYrHpoGb41wzmn209i?=
+ =?iso-8859-1?Q?dt5/Gb+Q6T/pdcIVqWRSbsW1IncGL6Pldiuz5biyl7Z2SqDNTo0TVUg1az?=
+ =?iso-8859-1?Q?hxw/D5+7FRkJPW6TAOZ9J+3wIxzLl1HgB+dt2VSDtoLmgs9c52Yv9T0E5R?=
+ =?iso-8859-1?Q?ij1vzSoPt+VJJae7qkLqOjCyYMrgBGZDcG21b4IP5SuLfx8dT9sCyO8c+a?=
+ =?iso-8859-1?Q?BbUrOXTppune2v5ySyr00gLZ3ApTumFGdQYtppvkJjWb5CZPYtH2N69lEh?=
+ =?iso-8859-1?Q?sgUEaNceEDTUOgLtiSM2VxHxZf4YOE5ptnXtEk03chMZb/I3Ttvk2sFNyb?=
+ =?iso-8859-1?Q?yAcWQWrLUHRy6laepbVK68J8spjrbNC3y/pal+d9pMsD/cTEpwT2ofAC42?=
+ =?iso-8859-1?Q?qmqOdQBQDXKDz6OL2n5VmOBH0psqhbrQNF6fKJ7jnfWX09JDuPT3Zn3hJk?=
+ =?iso-8859-1?Q?flmldc+67ruCpYcE8fGu5rMd82Hiwy+MUOaYYwcbkzVvhBudyK3fdOWxqM?=
+ =?iso-8859-1?Q?7Ko1Q9DQUTi8mA03EpRCaSXdFWAfhnumOHQVxnSzI1C9iYuAU3JFbs5P/K?=
+ =?iso-8859-1?Q?7gbO+Q1GCBA7Gq+vwJ+KAcboHv0QKxo60xADpe6eEw0/I2zAtTt7O/Sqxk?=
+ =?iso-8859-1?Q?JrxWAGXc8hCPhp3cM2WU1ntOxEgjQnO3rE1RHIE+NF2WJkBIB5UqyPtz71?=
+ =?iso-8859-1?Q?TYZDvE8o06dsdEFobE/MXy5kqCfHIryTeWLdSQKpd5Y85MWoxdU/tahBct?=
+ =?iso-8859-1?Q?Rtuou1E4NQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: variscite.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB4376.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1374c813-42c5-4511-ffde-08da52ce1568
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 15:03:50.1821
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bAfW2Yn6yDJlw+5bKghHga/2QuOV45vzhlBZdXF3oiH35H4a8ABKSTN/gQXAQlUkxtxsDFDF+Uk8g+Ozdx8xHD4FUT2lm0JtS7eHcUQCRao=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6612
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Linus explained [1], setting the stackdepot hash table size as a
-config option is suboptimal, especially as stackdepot becomes a
-dependency of less "expert" subsystems than initially (e.g. DRM,
-networking, SLUB_DEBUG):
-
-: (a) it introduces a new compile-time question that isn't sane to ask
-: a regular user, but is now exposed to regular users.
-
-: (b) this by default uses 1MB of memory for a feature that didn't in
-: the past, so now if you have small machines you need to make sure you
-: make a special kernel config for them.
-
-Ideally we would employ rhashtable for fully automatic resizing, which
-should be feasible for many of the new users, but problematic for the
-original users with restricted context that call __stack_depot_save()
-with can_alloc == false, i.e. KASAN.
-
-However we can easily remove the config option and scale the hash table
-automatically with system memory. The STACK_HASH_MASK constant becomes
-stack_hash_mask variable and is used only in one mask operation, so the
-overhead should be negligible to none. For early allocation we can
-employ the existing alloc_large_system_hash() function and perform
-similar scaling for the late allocation.
-
-The existing limits of the config option (between 4k and 1M buckets)
-are preserved, and scaling factor is set to one bucket per 16kB memory
-so on 64bit the max 1M buckets (8MB memory) is achieved with 16GB
-system, while a 1GB system will use 512kB.
-
-Because KASAN is reported to need the maximum number of buckets even
-with smaller amounts of memory [2], set it as such when kasan_enabled().
-
-If needed, the automatic scaling could be complemented with a boot-time
-kernel parameter, but it feels pointless to add it without a specific
-use case.
-
-[1] https://lore.kernel.org/all/CAHk-=wjC5nS+fnf6EzRD9yQRJApAhxx7gRB87ZV+pAWo9oVrTg@mail.gmail.com/
-[2] https://lore.kernel.org/all/CACT4Y+Y4GZfXOru2z5tFPzFdaSUd+GFc6KVL=bsa0+1m197cQQ@mail.gmail.com/
-
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- lib/Kconfig      |  9 --------
- lib/stackdepot.c | 59 ++++++++++++++++++++++++++++++++++++++++--------
- 2 files changed, 49 insertions(+), 19 deletions(-)
-
-diff --git a/lib/Kconfig b/lib/Kconfig
-index eaaad4d85bf2..986ea474836c 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -685,15 +685,6 @@ config STACKDEPOT_ALWAYS_INIT
- 	bool
- 	select STACKDEPOT
- 
--config STACK_HASH_ORDER
--	int "stack depot hash size (12 => 4KB, 20 => 1024KB)"
--	range 12 20
--	default 20
--	depends on STACKDEPOT
--	help
--	 Select the hash size as a power of 2 for the stackdepot hash table.
--	 Choose a lower value to reduce the memory impact.
--
- config REF_TRACKER
- 	bool
- 	depends on STACKTRACE_SUPPORT
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index 5ca0d086ef4a..e73fda23388d 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -32,6 +32,7 @@
- #include <linux/string.h>
- #include <linux/types.h>
- #include <linux/memblock.h>
-+#include <linux/kasan-enabled.h>
- 
- #define DEPOT_STACK_BITS (sizeof(depot_stack_handle_t) * 8)
- 
-@@ -145,10 +146,16 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
- 	return stack;
- }
- 
--#define STACK_HASH_SIZE (1L << CONFIG_STACK_HASH_ORDER)
--#define STACK_HASH_MASK (STACK_HASH_SIZE - 1)
-+/* one hash table bucket entry per 16kB of memory */
-+#define STACK_HASH_SCALE	14
-+/* limited between 4k and 1M buckets */
-+#define STACK_HASH_ORDER_MIN	12
-+#define STACK_HASH_ORDER_MAX	20
- #define STACK_HASH_SEED 0x9747b28c
- 
-+static unsigned int stack_hash_order;
-+static unsigned int stack_hash_mask;
-+
- static bool stack_depot_disable;
- static struct stack_record **stack_table;
- 
-@@ -175,7 +182,7 @@ void __init stack_depot_want_early_init(void)
- 
- int __init stack_depot_early_init(void)
- {
--	size_t size;
-+	unsigned long entries = 0;
- 
- 	/* This is supposed to be called only once, from mm_init() */
- 	if (WARN_ON(__stack_depot_early_init_passed))
-@@ -183,13 +190,23 @@ int __init stack_depot_early_init(void)
- 
- 	__stack_depot_early_init_passed = true;
- 
-+	if (kasan_enabled() && !stack_hash_order)
-+		stack_hash_order = STACK_HASH_ORDER_MAX;
-+
- 	if (!__stack_depot_want_early_init || stack_depot_disable)
- 		return 0;
- 
--	size = (STACK_HASH_SIZE * sizeof(struct stack_record *));
--	pr_info("Stack Depot early init allocating hash table with memblock_alloc, %zu bytes\n",
--		size);
--	stack_table = memblock_alloc(size, SMP_CACHE_BYTES);
-+	if (stack_hash_order)
-+		entries = 1UL <<  stack_hash_order;
-+	stack_table = alloc_large_system_hash("stackdepot",
-+						sizeof(struct stack_record *),
-+						entries,
-+						STACK_HASH_SCALE,
-+						HASH_EARLY | HASH_ZERO,
-+						NULL,
-+						&stack_hash_mask,
-+						1UL << STACK_HASH_ORDER_MIN,
-+						1UL << STACK_HASH_ORDER_MAX);
- 
- 	if (!stack_table) {
- 		pr_err("Stack Depot hash table allocation failed, disabling\n");
-@@ -207,13 +224,35 @@ int stack_depot_init(void)
- 
- 	mutex_lock(&stack_depot_init_mutex);
- 	if (!stack_depot_disable && !stack_table) {
--		pr_info("Stack Depot allocating hash table with kvcalloc\n");
--		stack_table = kvcalloc(STACK_HASH_SIZE, sizeof(struct stack_record *), GFP_KERNEL);
-+		unsigned long entries;
-+		int scale = STACK_HASH_SCALE;
-+
-+		if (stack_hash_order) {
-+			entries = 1UL << stack_hash_order;
-+		} else {
-+			entries = nr_free_buffer_pages();
-+			entries = roundup_pow_of_two(entries);
-+
-+			if (scale > PAGE_SHIFT)
-+				entries >>= (scale - PAGE_SHIFT);
-+			else
-+				entries <<= (PAGE_SHIFT - scale);
-+		}
-+
-+		if (entries < 1UL << STACK_HASH_ORDER_MIN)
-+			entries = 1UL << STACK_HASH_ORDER_MIN;
-+		if (entries > 1UL << STACK_HASH_ORDER_MAX)
-+			entries = 1UL << STACK_HASH_ORDER_MAX;
-+
-+		pr_info("Stack Depot allocating hash table of %lu entries with kvcalloc\n",
-+				entries);
-+		stack_table = kvcalloc(entries, sizeof(struct stack_record *), GFP_KERNEL);
- 		if (!stack_table) {
- 			pr_err("Stack Depot hash table allocation failed, disabling\n");
- 			stack_depot_disable = true;
- 			ret = -ENOMEM;
- 		}
-+		stack_hash_mask = entries - 1;
- 	}
- 	mutex_unlock(&stack_depot_init_mutex);
- 	return ret;
-@@ -386,7 +425,7 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 		goto fast_exit;
- 
- 	hash = hash_stack(entries, nr_entries);
--	bucket = &stack_table[hash & STACK_HASH_MASK];
-+	bucket = &stack_table[hash & stack_hash_mask];
- 
- 	/*
- 	 * Fast path: look the stack trace up without locking.
--- 
-2.36.1
-
+> > > > +static const char *cin_text[] =3D {=0A=
+> > > > +=A0=A0=A0=A0 "ADC", "DMIC"=0A=
+> > > > +};=0A=
+=0A=
+> > > > +static SOC_ENUM_SINGLE_DECL(cin_enum,=0A=
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 WM8904_DIGITAL_MICROPHONE_0, 12, cin_text);=0A=
+=0A=
+> > > Why would this be runtime selectable?=A0 I'd expect the decision to u=
+se=0A=
+> > > an analogue or digital microphone to be made in the hardware design.=
+=0A=
+=0A=
+> > I agree that dedicated HW is required, but currently SW side there's no=
+ support at all.=0A=
+> > This patch is aiming to provide a way to enable DMIC on boards using it=
+.=0A=
+> > Is this supposed to be managed in a different way ?=0A=
+=0A=
+> Via firmware description.=0A=
+=0A=
+Can you please provide any reference approach in the kernel code ?=

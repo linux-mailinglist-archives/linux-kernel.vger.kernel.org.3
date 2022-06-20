@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C255524A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0B15524A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244213AbiFTTkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S244492AbiFTTl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbiFTTke (ORCPT
+        with ESMTP id S233184AbiFTTlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:40:34 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8D8764E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:40:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id t1so20745482ybd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:40:32 -0700 (PDT)
+        Mon, 20 Jun 2022 15:41:25 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690B41401C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:41:24 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31772f8495fso109503327b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=atishpatra.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MF9w10rX2iwd2h9iSBKKxPfiedtUNAOz+4kVUvfb89E=;
-        b=GG1JkThoq/+mdEhocGlISJpVEjHwAeMStlF2BWci9LDLNiYtOlkacsBNZIpZecrjsh
-         fdXdX+wm2DII0sQ2l84LTw9a/+ECRVwrXXQMYmTPPX4YFQciutNx+K6WKcrFhhntyfrc
-         nVkj0ns8Zakha5fZW91ck71QyOYRNYgY4qVg4=
+         :cc;
+        bh=W3cF1VcNZKMUkal3wxdtJamU5dlHgg7QxmEQyZt0dz0=;
+        b=aO2AYN3zp0ClZrYRS2Q8cyVAwbUa7767aMcv8OyCU5rPa5d03QKD5NJP4c5JAuGSij
+         3lnUxhivwtYF2TKpUEfHSSRwjzT74jT3s63IHP+4lGXEO3JebLxdma7I2g+t4M9pmcrP
+         ZBoIfAsp16J6LeFM7E9trq+cVZZhVBVFyWgw4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MF9w10rX2iwd2h9iSBKKxPfiedtUNAOz+4kVUvfb89E=;
-        b=Me9/g6fz1aSX6g0uB8nlS+gTviUghSJwZGmr1eoU4w4hTjTHvI9xCBGlG5anRw/Tlr
-         UOit9s9cMNNXhtd96Qz5mxGKxOfbO9tP5Na6hVm+CrvHaMBHf0WEx718n7yuf3WK29T1
-         lE3+vW2wUhmoEIpezagpP7io1kD06yGD/E6ieeZ5HQeaNtBTPurJ2ui9mAY5yVbBGNrO
-         UdpRxoJq3Zazc38exvQBhVeykdQHEwI1VviCz4x2JOdfELoOeiNrBCQfXXveYr+knFnb
-         GqLq5+Kl2WIMa1QV1HsnrP8M4zQCeNLBqJp/8WgzYGQ0sYeixJpDS0lLlDc8ayJaXbx2
-         bAjA==
-X-Gm-Message-State: AJIora+usMDrmbzJ8HgXSAmcVZkn5xNYGUICP/s/x3O15MbcrWh8nTBR
-        v38IMQXyTksXdS9C+v0Qjze8iToXyAq7xgsP7oQp
-X-Google-Smtp-Source: AGRyM1vHKyKvtBgGAkqodprREujJq6noPO8phYFn9Ku3wdUySOubjCEpjD6+RZIwfTH5ngx3N8ua9ZZ8yggE0FO1wYY=
-X-Received: by 2002:a25:2612:0:b0:664:b1e1:3774 with SMTP id
- m18-20020a252612000000b00664b1e13774mr26937447ybm.228.1655754031926; Mon, 20
- Jun 2022 12:40:31 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=W3cF1VcNZKMUkal3wxdtJamU5dlHgg7QxmEQyZt0dz0=;
+        b=7YvITn48JW0+qEsqX5tT+bYyeZQxWc6FqJHyYq3G00kI69BczEl4QOhzQOa0pR0QpE
+         GckQLvLtO+qYb9qrHQUHzPgO1YSavg2XZwy1YV5BnZRMTWT1p+vk/T5SIfVib0K0HzGG
+         X+YEM0w0+dMrcIEKVDIyVD0jNRhKdjEilJxuLhkRFzhA5b1aFsrDCZ52Pp+g+2ZbGPoZ
+         OD0/WZEO2JLaiwVRBkh+ryGJw8EyT4O6X/DPPIcVCvvck3KbjYIlqKicoIHNl2HRa3m8
+         n2LAfWUpIzbVRj69ibouOQ8ZeLI7oN/pfn3PE+aO+g40m9r1cRFweiOty+oh9FmJrZ6o
+         TADQ==
+X-Gm-Message-State: AJIora9+Q2VM44amFecF/Cd+6E9fjYzKkbLDHxvsWh0+orbgm4WSAwwg
+        U4fxz7ANNnb0KAT3GPFr80RxP8QOgz7D6nPP6DbSL9/qPw==
+X-Google-Smtp-Source: AGRyM1sjc6n2Bzm9cy/SUFZ/GJLuqV4owB4rH6VbtDqmkmLyBzbuScGeatMo9HK8lbzoZ8jRgbVOd1LTgcwYS7echBU=
+X-Received: by 2002:a0d:cbc8:0:b0:317:95ef:399e with SMTP id
+ n191-20020a0dcbc8000000b0031795ef399emr15460241ywd.340.1655754083630; Mon, 20
+ Jun 2022 12:41:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220619111115.6354-1-nikita.shubin@maquefel.me>
- <20220619111115.6354-2-nikita.shubin@maquefel.me> <CAK9=C2X4TTCEjZya4wz-W6ndBaxzUpLBtzQAGJ4zphVM8NSgdg@mail.gmail.com>
- <20220620174006.1c86a456@redslave.neermore.group>
-In-Reply-To: <20220620174006.1c86a456@redslave.neermore.group>
+References: <20220619203212.3604485-1-heiko@sntech.de> <20220619203212.3604485-2-heiko@sntech.de>
+ <CAOnJCUJC3dk21cYXXDOsamvwFDHsukoBx7HEYwqHM+MN5fLRpA@mail.gmail.com> <5907887.LM0AJKV5NW@phil>
+In-Reply-To: <5907887.LM0AJKV5NW@phil>
 From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 20 Jun 2022 12:40:20 -0700
-Message-ID: <CAOnJCU+7_z1WN_Z6frQcUwzztVL4itbPSfmLUa_7Ob5xCtLo+Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] RISC-V: Create unique identification for SoC PMU
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Will Deacon <will@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlvIERvbWluZ29z?= 
-        <joao.mario@tecnico.ulisboa.pt>, linux <linux@yadro.com>,
-        Nikita Shubin <n.shubin@yadro.com>,
+Date:   Mon, 20 Jun 2022 12:41:12 -0700
+Message-ID: <CAOnJCUKmWcMT83jkJHX3J56uNeVvFMgudGSg_DWg9G_faBjGXQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] of: also handle dma-noncoherent in of_dma_is_coherent()
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        Wei Fu <wefu@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Christoph Hellwig <hch@lst.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Anup Patel <anup@brainfault.org>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Drew Fustini <drew@beagleboard.org>,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,187 +77,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 7:40 AM Nikita Shubin <nikita.shubin@maquefel.me> w=
-rote:
+On Mon, Jun 20, 2022 at 11:11 AM Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> On Mon, 20 Jun 2022 17:30:58 +0530
-> Anup Patel <apatel@ventanamicro.com> wrote:
+> Hi Atish,
 >
-> > On Sun, Jun 19, 2022 at 4:41 PM Nikita Shubin
-> > <nikita.shubin@maquefel.me> wrote:
+> Am Montag, 20. Juni 2022, 18:33:09 CEST schrieb Atish Patra:
+> > On Sun, Jun 19, 2022 at 1:32 PM Heiko Stuebner <heiko@sntech.de> wrote:
 > > >
-> > > From: Nikita Shubin <n.shubin@yadro.com>
+> > > of_dma_is_coherent() currently expects the architecture to be
+> > > non-coherent and some devices being coherent getting marked
+> > > as such with the dma-coherent devicetree property.
 > > >
-> > > Provide RISC-V SBI PMU id to distinguish different cores or SoCs via
-> > > "devices/platform/riscv-pmu/id" sysfs entry.
+> > > For PowerPC CONFIG_OF_DMA_DEFAULT_COHERENT was added which currently
+> > > makes of_dma_is_coherent() always return true but doesn't handle
+> > > the case of the architecture being coherent but some devices not.
 > > >
-> > > The identification is generated as string of marchid, mimpid,
-> > > mvendorid in hex format separated by coma - "0x70032,0x70032,0x0".
+> > > So modify the function to also check for dma-noncoherent and
+> > > set a suitable default return value. If CONFIG_OF_DMA_DEFAULT_COHERENT
+> > > is set the value starts with true and finding dma-noncoherent will
+> > > set it to false and without CONFIG_OF_DMA_DEFAULT_COHERENT, the
+> > > behaviour is reversed.
 > > >
-> > > The CSRs are detailed in the RISC-V privileged spec [1].
-> > > [1] https://github.com/riscv/riscv-isa-manual
-> > >
-> > > Inspired-by: Jo=C3=A3o M=C3=A1rio Domingos <joao.mario@tecnico.ulisbo=
-a.pt>
-> > > Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
-> >
-> > The mvendorid, marchid, and mimpid can be useful to apps other than
-> > perf tool.
-> >
-> > I have tried to extend /proc/cpuinfo with this information which can
-> > be parsed by perf tool:
-> > https://lore.kernel.org/all/20220620115549.1529597-1-apatel@ventanamicr=
-o.com/
->
-> Atish, what do you think about this ?
->
-> RISC-V perf can rely on "/proc/cpuinfo", in some similar manner like
-> "tools/perf/arch/s390/util/header.c" does.
->
-
-Yes. We can expose these three values either in sysfs or procfs (/proc/cpui=
-nfo).
-For perf tool, it shouldn't matter as the header.c will need to
-generate the unique cpuid
-string from either.
-
-I am not sure if any other userspace tool prefers to parse sysfs
-instead of cpuinfo.
-
-> Can it create problems with pmu identification in case of hetergenous
-> harts ?
->
-
-Does perf support hetergenous harts at all ? ARM64 code
-(tool/perf/arch/arm64/util/header.c)
-just breaks out of the loop after finding the first MIDR.
-
-> >
-> > Regards,
-> > Anup
-> >
+> > > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 > > > ---
-> > > v3->v4:
-> > > - use string for pmuid
-> > > - rename pmu_sbi_id_show to id_show
-> > > - fix error print message in id_show
-> > > - fix DEVICE_ATTR to use octal permissions
-> > > ---
-> > >  arch/riscv/kernel/sbi.c        |  3 +++
-> > >  drivers/perf/riscv_pmu_sbi.c   | 41
-> > > ++++++++++++++++++++++++++++++++++ include/linux/perf/riscv_pmu.h |
-> > >  1 + 3 files changed, 45 insertions(+)
+> > >  drivers/of/address.c | 16 +++++++++++-----
+> > >  1 file changed, 11 insertions(+), 5 deletions(-)
 > > >
-> > > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> > > index 775d3322b422..50dd9b6ecc9e 100644
-> > > --- a/arch/riscv/kernel/sbi.c
-> > > +++ b/arch/riscv/kernel/sbi.c
-> > > @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
+> > > diff --git a/drivers/of/address.c b/drivers/of/address.c
+> > > index 94f017d808c4..1c362d09983d 100644
+> > > --- a/drivers/of/address.c
+> > > +++ b/drivers/of/address.c
+> > > @@ -1045,26 +1045,32 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
+> > >   *
+> > >   * It returns true if "dma-coherent" property was found
+> > >   * for this device in the DT, or if DMA is coherent by
+> > > - * default for OF devices on the current platform.
+> > > + * default for OF devices on the current platform and no
+> > > + * "dma-noncoherent" property was found for this device.
+> >
+> > "dma-noncoherent" is not a standard DT property. I couldn't find any
+> > references to
+> > it in the kernel as well. If we are introducing a new DT property for
+> > non-coherent devices,
+> > it should be added in DT bindings as well ?
+>
+> The dma-coherent is part of the core devicetree-spec,
+> so I sent a patch adding dma-noncoherent [0]
+> to the devicetree-spec mailing list yesterday as well.
+>
+
+Ahh. That's great. Thanks!
+
+> [0] https://www.spinics.net/lists/devicetree-spec/msg01053.html
+>
+>
+> >
+> > >   */
+> > >  bool of_dma_is_coherent(struct device_node *np)
 > > >  {
-> > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
+> > >         struct device_node *node;
+> > > +       bool ret = false;
+> > >
+> > >         if (IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT))
+> > > -               return true;
+> > > +               ret = true;
+> > >
+> > >         node = of_node_get(np);
+> > >
+> > >         while (node) {
+> > >                 if (of_property_read_bool(node, "dma-coherent")) {
+> > > -                       of_node_put(node);
+> > > -                       return true;
+> > > +                       ret = true;
+> > > +                       break;
+> > > +               }
+> > > +               if (of_property_read_bool(node, "dma-noncoherent")) {
+> > > +                       ret = false;
+> > > +                       break;
+> > >                 }
+> > >                 node = of_get_next_dma_parent(node);
+> > >         }
+> > >         of_node_put(node);
+> > > -       return false;
+> > > +       return ret;
 > > >  }
-> > > +EXPORT_SYMBOL(sbi_get_mvendorid);
-> > >
-> > >  long sbi_get_marchid(void)
-> > >  {
-> > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
-> > >  }
-> > > +EXPORT_SYMBOL(sbi_get_marchid);
-> > >
-> > >  long sbi_get_mimpid(void)
-> > >  {
-> > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
-> > >  }
-> > > +EXPORT_SYMBOL(sbi_get_mimpid);
-> > >
-> > >  static void sbi_send_cpumask_ipi(const struct cpumask *target)
-> > >  {
-> > > diff --git a/drivers/perf/riscv_pmu_sbi.c
-> > > b/drivers/perf/riscv_pmu_sbi.c index dca3537a8dcc..be812f855617
-> > > 100644 --- a/drivers/perf/riscv_pmu_sbi.c
-> > > +++ b/drivers/perf/riscv_pmu_sbi.c
-> > > @@ -693,6 +693,28 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu
-> > > *pmu, struct platform_device *pde return 0;
-> > >  }
-> > >
-> > > +static ssize_t id_show(struct device *dev,
-> > > +                               struct device_attribute *attr, char
-> > > *buf) +{
-> > > +       int len;
-> > > +       struct riscv_pmu *pmu =3D container_of(dev_get_drvdata(dev),
-> > > struct riscv_pmu, pmu); +
-> > > +       len =3D sprintf(buf, "%s\n", pmu->pmuid);
-> > > +       if (len <=3D 0)
-> > > +               dev_err(dev, "invalid sprintf len: %d\n", len);
-> > > +
-> > > +       return len;
-> > > +}
-> > > +
-> > > +static DEVICE_ATTR(id, 0644, id_show, NULL);
-> > > +
-> > > +static struct attribute *pmu_sbi_attrs[] =3D {
-> > > +       &dev_attr_id.attr,
-> > > +       NULL
-> > > +};
-> > > +
-> > > +ATTRIBUTE_GROUPS(pmu_sbi);
-> > > +
-> > >  static int pmu_sbi_device_probe(struct platform_device *pdev)
-> > >  {
-> > >         struct riscv_pmu *pmu =3D NULL;
-> > > @@ -714,6 +736,14 @@ static int pmu_sbi_device_probe(struct
-> > > platform_device *pdev) if (pmu_sbi_get_ctrinfo(num_counters))
-> > >                 goto out_free;
-> > >
-> > > +       /* fill pmuid */
-> > > +       pmu->pmuid =3D kasprintf(GFP_KERNEL, "0x%lx,0x%lx,0x%lx",
-> > > +                              sbi_get_marchid(),
-> > > +                              sbi_get_mimpid(),
-> > > +                              sbi_get_mvendorid());
-> > > +       if (!pmu->pmuid)
-> > > +               goto out_free_pmuid;
-> > > +
-> > >         ret =3D pmu_sbi_setup_irqs(pmu, pdev);
-> > >         if (ret < 0) {
-> > >                 pr_info("Perf sampling/filtering is not supported
-> > > as sscof extension is not available\n"); @@ -739,8 +769,19 @@
-> > > static int pmu_sbi_device_probe(struct platform_device *pdev)
-> > > return ret; }
-> > >
-> > > +       ret =3D sysfs_create_group(&pdev->dev.kobj, &pmu_sbi_group);
-> > > +       if (ret) {
-> > > +               dev_err(&pdev->dev, "sysfs creation failed\n");
-> > > +               return ret;
-> > > +       }
-> > > +
-> > > +       pdev->dev.groups =3D pmu_sbi_groups;
-> > > +       dev_set_drvdata(&pdev->dev, pmu);
-> > > +
-> > >         return 0;
-> > >
-> > > +out_free_pmuid:
-> > > +       kfree(pmu->pmuid);
-> > >  out_free:
-> > >         kfree(pmu);
-> > >         return ret;
-> > > diff --git a/include/linux/perf/riscv_pmu.h
-> > > b/include/linux/perf/riscv_pmu.h index 46f9b6fe306e..cf3557b77fb8
-> > > 100644 --- a/include/linux/perf/riscv_pmu.h
-> > > +++ b/include/linux/perf/riscv_pmu.h
-> > > @@ -42,6 +42,7 @@ struct cpu_hw_events {
-> > >  struct riscv_pmu {
-> > >         struct pmu      pmu;
-> > >         char            *name;
-> > > +       char            *pmuid;
-> > >
-> > >         irqreturn_t     (*handle_irq)(int irq_num, void *dev);
+> > >  EXPORT_SYMBOL_GPL(of_dma_is_coherent);
 > > >
 > > > --
 > > > 2.35.1
 > > >
+> >
+> >
+> >
+>
+>
+>
 >
 
 
---=20
+-- 
 Regards,
 Atish

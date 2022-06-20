@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138C65523A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3768B5523A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236253AbiFTSNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S240588AbiFTSNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245084AbiFTSNR (ORCPT
+        with ESMTP id S245301AbiFTSNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:13:17 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D9611144;
-        Mon, 20 Jun 2022 11:13:17 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso11019049pjh.4;
-        Mon, 20 Jun 2022 11:13:17 -0700 (PDT)
+        Mon, 20 Jun 2022 14:13:41 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D83E1A387
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:13:39 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n185so6241788wmn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:13:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2N02FiZrvhil8aNgdzMkYh6Kly8KvSddHHesGtF5gOc=;
-        b=ULqWw1MMKofjcyKFpKb5/DYOgKCJm4uttZFNlW5PaizQPD5C5Av/xpDk8MzWDkCZl/
-         mlEqYfa/IPahqxOjhBKAgbxh9PqTq6wndUUc7cMjWmLe+tSUSpmUBARAympWw+ZH1kko
-         KgJI2th52ggH3QI9rq+AUlaucb855vV+Oy+Q9WiEkLniU5W/PJUYL+OL4Eojs7070/pT
-         5WJD6NABIwB5ytTBK+pQsSowq8ijnrSu1/5w+QftCw54ec+Af9hcBdSDNzYx8npeZwP0
-         Fc6V02KJCDyayxMXHT6hJfSRvYWACjsAZWFeN0c6hhuBMr89kCdHf+rZoEObvbkx3Ssu
-         AvGA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T+Bp4C6tHNEGnt3nH/cIgRCgYn49Fk+PkAiYN+Dhmk4=;
+        b=Zejyg6E+FHLKxRKdaEVHf2AZnDX7ypJREPoEvt3q1fFl3poi2cMzNceoS2L5xfLnPb
+         Hj+R732naG47N54mKP5MQpsSSUdgqOafOLptTfNnpGpubW05/fVMDbTQV+sMTeE5+PGP
+         G1PtclC9DqxT26xSkM2/3RaxOLmFefPV37XUIQua/iSphifY21dvtzrbnCUZpiXg0N2n
+         XHXPevhVP0+l851iCLc4EkMrnfLnwki+2xj71hWiMdp2ZVSD9hEm9rzWNJpCO9T6G8hu
+         5SHb0+fboJV+3XgJVsDIf3OWHEYhAcr8JYttvJwxKMLyTDOEH0o0B+KvQ5EYF5l9zpIf
+         8uQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2N02FiZrvhil8aNgdzMkYh6Kly8KvSddHHesGtF5gOc=;
-        b=AafJv5Yb+UlIaxTlKJVkhW9Zv14+Gu4boWYLSru6+86y5OqyoRLZGJF+rWfJj1GyKk
-         Iv/LwVQcxvfFLmxjAnvqA3ihwHg584RI+PfEz1nPwqI4xy46G+vyq3Ev/uZr6MruytRo
-         sxGJMrrMT48ogRIhCNRlKHu7M4dnXDRls/N6NySTCIXkWUAlMB+Y1q7GZrv3XtqjbwtZ
-         ZFhHXizaC25K92OW/abbDcAdnIjIwjUL4kO/gt11dmVhK7dr/Ghd3+l1Kc0CPwAizPdW
-         mc1OKsAJKNqYCjBVn4z8t8eP0YHx59fOwW0Y3svjoRZ4KPyfTka+gb3z1Te6LzepsmEV
-         Uddg==
-X-Gm-Message-State: AJIora/+Y324FJm+aDbNRX+tJHbbuT/FAJBjYS22/P7YQXo8HkUnVsMV
-        NBOOJTQE3OIDfdo5+28QGN0=
-X-Google-Smtp-Source: AGRyM1tLH3VbvNoP4gutzqUaZkRK0Uo5KSu6f/9va5xR6Nn5EiIpvVbQOnPAZg1zZ977Id8haI4liw==
-X-Received: by 2002:a17:90b:4f4a:b0:1e6:9bc5:277c with SMTP id pj10-20020a17090b4f4a00b001e69bc5277cmr39105189pjb.43.1655748796506;
-        Mon, 20 Jun 2022 11:13:16 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u123-20020a626081000000b00522d329e36esm9786271pfb.140.2022.06.20.11.13.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 11:13:15 -0700 (PDT)
-Message-ID: <469e833f-d234-0dba-6526-4f9c9645e49e@gmail.com>
-Date:   Mon, 20 Jun 2022 11:13:08 -0700
+        bh=T+Bp4C6tHNEGnt3nH/cIgRCgYn49Fk+PkAiYN+Dhmk4=;
+        b=HBi2/kghZtbu4LElw711RY2OgKQDLmlNuMa3DsOGUALSPDKxNwZ0QedRXiMu/BRfDz
+         H0uFwIyuB2kKtbz0zhbDyQLP5+j+EPMyZ1FSrOb2wkKaP3v5ZR+iPyfG05oQHN2db8Lo
+         IjkY81hIIpFrmbbvqMcpG71ZmDU8AgjmcOiXz/8PEHktF3gAYVv3ACEG2Du2BLhXGmAI
+         4+zv/fJ8aN/+uec8bSCQoOXWZeyag+JnTX06wss6LeXyjmlfpcXbjii38HcCLt23HUNl
+         vhPRJ7/pe1qBLwPnNzupFWsRFbAnBSu4aNylmoIcAHiNz6+5y60f8kB92oiWqtMav5qt
+         sdJA==
+X-Gm-Message-State: AJIora9AIGlZJX+DEPO+8VRMsngN/61MrRtEDB6tGxHk+PQwSJhy2LJ3
+        6JvXU4LbLOxpu44NqVoH1Qeb/O3bB0I=
+X-Google-Smtp-Source: AGRyM1uI4F8cjHPAFAwOIFBOoZgwystK4qPSTCHz/P/WvlP3vbn23eKdbUXeK8JyCxxGaxVhOGfXAw==
+X-Received: by 2002:a7b:c389:0:b0:39c:49fe:25df with SMTP id s9-20020a7bc389000000b0039c49fe25dfmr25474259wmj.164.1655748818130;
+        Mon, 20 Jun 2022 11:13:38 -0700 (PDT)
+Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id k20-20020adfc714000000b002103aebe8absm14006977wrg.93.2022.06.20.11.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 11:13:37 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, wens@csie.org
+Cc:     airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH v2] drm/sun4i: Add DMA mask and segment size
+Date:   Mon, 20 Jun 2022 20:13:33 +0200
+Message-Id: <20220620181333.650301-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 000/106] 5.15.49-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220620124724.380838401@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,27 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 05:50, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.49 release.
-> There are 106 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.49-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Kernel occasionally complains that there is mismatch in segment size
+when trying to render HW decoded videos and rendering them directly with
+sun4i DRM driver. Following message can be observed on H6 SoC:
 
-On ARCH_BCMSTB using 32-bit and 64-bit ARM kernels:
+[  184.298308] ------------[ cut here ]------------
+[  184.298326] DMA-API: sun4i-drm display-engine: mapping sg segment longer than device claims to support [len=6144000] [max=65536]
+[  184.298364] WARNING: CPU: 1 PID: 382 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2b0/0x350
+[  184.322997] CPU: 1 PID: 382 Comm: ffmpeg Not tainted 5.19.0-rc1+ #1331
+[  184.329533] Hardware name: Tanix TX6 (DT)
+[  184.333544] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  184.340512] pc : debug_dma_map_sg+0x2b0/0x350
+[  184.344882] lr : debug_dma_map_sg+0x2b0/0x350
+[  184.349250] sp : ffff800009f33a50
+[  184.352567] x29: ffff800009f33a50 x28: 0000000000010000 x27: ffff000001b86c00
+[  184.359725] x26: ffffffffffffffff x25: ffff000005d8cc80 x24: 0000000000000000
+[  184.366879] x23: ffff80000939ab18 x22: 0000000000000001 x21: 0000000000000001
+[  184.374031] x20: 0000000000000000 x19: ffff0000018a7410 x18: ffffffffffffffff
+[  184.381186] x17: 0000000000000000 x16: 0000000000000000 x15: ffffffffffffffff
+[  184.388338] x14: 0000000000000001 x13: ffff800009534e86 x12: 6f70707573206f74
+[  184.395493] x11: 20736d69616c6320 x10: 000000000000000a x9 : 0000000000010000
+[  184.402647] x8 : ffff8000093b6d40 x7 : ffff800009f33850 x6 : 000000000000000c
+[  184.409800] x5 : ffff0000bf997940 x4 : 0000000000000000 x3 : 0000000000000027
+[  184.416953] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000003960e80
+[  184.424106] Call trace:
+[  184.426556]  debug_dma_map_sg+0x2b0/0x350
+[  184.430580]  __dma_map_sg_attrs+0xa0/0x110
+[  184.434687]  dma_map_sgtable+0x28/0x4c
+[  184.438447]  vb2_dc_dmabuf_ops_map+0x60/0xcc
+[  184.442729]  __map_dma_buf+0x2c/0xd4
+[  184.446321]  dma_buf_map_attachment+0xa0/0x130
+[  184.450777]  drm_gem_prime_import_dev+0x7c/0x18c
+[  184.455410]  drm_gem_prime_fd_to_handle+0x1b8/0x214
+[  184.460300]  drm_prime_fd_to_handle_ioctl+0x2c/0x40
+[  184.465190]  drm_ioctl_kernel+0xc4/0x174
+[  184.469123]  drm_ioctl+0x204/0x420
+[  184.472534]  __arm64_sys_ioctl+0xac/0xf0
+[  184.476474]  invoke_syscall+0x48/0x114
+[  184.480240]  el0_svc_common.constprop.0+0x44/0xec
+[  184.484956]  do_el0_svc+0x2c/0xc0
+[  184.488283]  el0_svc+0x2c/0x84
+[  184.491354]  el0t_64_sync_handler+0x11c/0x150
+[  184.495723]  el0t_64_sync+0x18c/0x190
+[  184.499397] ---[ end trace 0000000000000000 ]---
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Fix that by setting DMA mask and segment size.
+
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+Changes from v1:
+- added comment
+- updated commit message with kernel report
+
+ drivers/gpu/drm/sun4i/sun4i_drv.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
+index 275f7e4a03ae..f135a6b3cadb 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_drv.c
++++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/component.h>
++#include <linux/dma-mapping.h>
+ #include <linux/kfifo.h>
+ #include <linux/module.h>
+ #include <linux/of_graph.h>
+@@ -367,6 +368,13 @@ static int sun4i_drv_probe(struct platform_device *pdev)
+ 
+ 	INIT_KFIFO(list.fifo);
+ 
++	/*
++	 * DE2 and DE3 cores actually supports 40-bit addresses, but
++	 * driver does not.
++	 */
++	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
++
+ 	for (i = 0;; i++) {
+ 		struct device_node *pipeline = of_parse_phandle(np,
+ 								"allwinner,pipelines",
 -- 
-Florian
+2.36.1
+

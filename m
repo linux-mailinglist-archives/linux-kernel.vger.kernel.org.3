@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FA1551D34
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD2E551B1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348167AbiFTNru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S245150AbiFTNKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347953AbiFTNrS (ORCPT
+        with ESMTP id S244824AbiFTNF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:47:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD962E9EB;
-        Mon, 20 Jun 2022 06:17:30 -0700 (PDT)
+        Mon, 20 Jun 2022 09:05:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8DD1A05F;
+        Mon, 20 Jun 2022 06:00:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C529B811F6;
-        Mon, 20 Jun 2022 13:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE92BC3411B;
-        Mon, 20 Jun 2022 13:17:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E338861544;
+        Mon, 20 Jun 2022 13:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDBDC3411B;
+        Mon, 20 Jun 2022 13:00:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731033;
-        bh=NEJRdzIBCon7lIGhM4SzG1yXI0kNFTJSk5arjusZ2Bc=;
+        s=korg; t=1655730027;
+        bh=h3/CVxVIjCVxAAoWrgd+Z2TY8aIOGi1RT8g+0/Nmjpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a47401SnC4F3ptxL/8EHuHBKxtVDpO9e/bVnsN8dZ3HCYgr/xL/1n+pnIs9dkvrO5
-         3rl4yXX6I5GRRZxXKzNlbBtIlER0HJY2iXf0SdkNGv6KogjklY6Vd4HRj/f/ZlTIxF
-         Jn/wx8et3DGY06PUZYtqBeP/mRmzVUiEhSo0RSTM=
+        b=P9/8LMlpabANis8mG7fN71lwok/MrX8nwWJdXcB+1iwkj+umXjgfZc/mceIkoGTSy
+         rvFKOa4h/FozVlYqVStIhgCQvlZzo+0iUYNdYh4hiS1FWjfKG8RaxggAehDLclkaHR
+         MhZ8rih1INuU91UqDfBjknNrU58N+2CrrCM1HznU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 132/240] s390: define get_cycles macro for arch-override
+        stable@vger.kernel.org, David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 10/84] ASoC: cs53l30: Correct number of volume levels on SX controls
 Date:   Mon, 20 Jun 2022 14:50:33 +0200
-Message-Id: <20220620124742.834834377@linuxfoundation.org>
+Message-Id: <20220620124721.196165403@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,39 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-commit 2e3df523256cb9836de8441e9c791a796759bb3c upstream.
+[ Upstream commit 7fbd6dd68127927e844912a16741016d432a0737 ]
 
-S390x defines a get_cycles() function, but it does not do the usual
-`#define get_cycles get_cycles` dance, making it impossible for generic
-code to see if an arch-specific function was defined. While the
-get_cycles() ifdef is not currently used, the following timekeeping
-patch in this series will depend on the macro existing (or not existing)
-when defining random_get_entropy().
+This driver specified the maximum value rather than the number of volume
+levels on the SX controls, this is incorrect, so correct them.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: David Rhodes <david.rhodes@cirrus.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220602162119.3393857-4-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/include/asm/timex.h |    1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/codecs/cs53l30.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
---- a/arch/s390/include/asm/timex.h
-+++ b/arch/s390/include/asm/timex.h
-@@ -177,6 +177,7 @@ static inline cycles_t get_cycles(void)
- {
- 	return (cycles_t) get_tod_clock() >> 2;
- }
-+#define get_cycles get_cycles
+diff --git a/sound/soc/codecs/cs53l30.c b/sound/soc/codecs/cs53l30.c
+index ed22361b35c1..a5a383b92305 100644
+--- a/sound/soc/codecs/cs53l30.c
++++ b/sound/soc/codecs/cs53l30.c
+@@ -347,22 +347,22 @@ static const struct snd_kcontrol_new cs53l30_snd_controls[] = {
+ 	SOC_ENUM("ADC2 NG Delay", adc2_ng_delay_enum),
  
- int get_phys_clock(unsigned long *clock);
- void init_cpu_timer(void);
+ 	SOC_SINGLE_SX_TLV("ADC1A PGA Volume",
+-		    CS53L30_ADC1A_AFE_CTL, 0, 0x34, 0x18, pga_tlv),
++		    CS53L30_ADC1A_AFE_CTL, 0, 0x34, 0x24, pga_tlv),
+ 	SOC_SINGLE_SX_TLV("ADC1B PGA Volume",
+-		    CS53L30_ADC1B_AFE_CTL, 0, 0x34, 0x18, pga_tlv),
++		    CS53L30_ADC1B_AFE_CTL, 0, 0x34, 0x24, pga_tlv),
+ 	SOC_SINGLE_SX_TLV("ADC2A PGA Volume",
+-		    CS53L30_ADC2A_AFE_CTL, 0, 0x34, 0x18, pga_tlv),
++		    CS53L30_ADC2A_AFE_CTL, 0, 0x34, 0x24, pga_tlv),
+ 	SOC_SINGLE_SX_TLV("ADC2B PGA Volume",
+-		    CS53L30_ADC2B_AFE_CTL, 0, 0x34, 0x18, pga_tlv),
++		    CS53L30_ADC2B_AFE_CTL, 0, 0x34, 0x24, pga_tlv),
+ 
+ 	SOC_SINGLE_SX_TLV("ADC1A Digital Volume",
+-		    CS53L30_ADC1A_DIG_VOL, 0, 0xA0, 0x0C, dig_tlv),
++		    CS53L30_ADC1A_DIG_VOL, 0, 0xA0, 0x6C, dig_tlv),
+ 	SOC_SINGLE_SX_TLV("ADC1B Digital Volume",
+-		    CS53L30_ADC1B_DIG_VOL, 0, 0xA0, 0x0C, dig_tlv),
++		    CS53L30_ADC1B_DIG_VOL, 0, 0xA0, 0x6C, dig_tlv),
+ 	SOC_SINGLE_SX_TLV("ADC2A Digital Volume",
+-		    CS53L30_ADC2A_DIG_VOL, 0, 0xA0, 0x0C, dig_tlv),
++		    CS53L30_ADC2A_DIG_VOL, 0, 0xA0, 0x6C, dig_tlv),
+ 	SOC_SINGLE_SX_TLV("ADC2B Digital Volume",
+-		    CS53L30_ADC2B_DIG_VOL, 0, 0xA0, 0x0C, dig_tlv),
++		    CS53L30_ADC2B_DIG_VOL, 0, 0xA0, 0x6C, dig_tlv),
+ };
+ 
+ static const struct snd_soc_dapm_widget cs53l30_dapm_widgets[] = {
+-- 
+2.35.1
+
 
 

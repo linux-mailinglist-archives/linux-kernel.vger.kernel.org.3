@@ -2,208 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084325515D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74E25515DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241104AbiFTK2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S239409AbiFTK33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240987AbiFTK2h (ORCPT
+        with ESMTP id S240819AbiFTK23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:28:37 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134ABBC39;
-        Mon, 20 Jun 2022 03:28:35 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25KASN7G106135;
-        Mon, 20 Jun 2022 05:28:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655720903;
-        bh=rjNEY+fb0FLAlDCmgbjFcgdwmo6fWi+NdwjkkRfj88U=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=pf0Fz33URnLUEiDAcD4iF3Dm8SJ4hxZ/LT3CPZ+w9Txjho0mDF2YfTVd08jyoYnBM
-         J6l+mYRfTL57NHnnDiumHBaOzyFDgcQJn0EO3vDi2Lfv7BDzv0XKSkzs9LBd4VZ8/o
-         jR96kGUwUQeQ6qbycuXN97EZWXNXgkDdw9y5bEEc=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25KASNFa095347
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Jun 2022 05:28:23 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Jun 2022 05:28:22 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Jun 2022 05:28:22 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25KASM56100090;
-        Mon, 20 Jun 2022 05:28:22 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v4 2/2] arm64: dts: ti: k3-am625-sk: Add audio output support
-Date:   Mon, 20 Jun 2022 15:57:50 +0530
-Message-ID: <20220620102750.32718-4-j-luthra@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220620102750.32718-1-j-luthra@ti.com>
-References: <20220620102750.32718-1-j-luthra@ti.com>
+        Mon, 20 Jun 2022 06:28:29 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1389511470
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:28:26 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220620102820euoutp02fcfa1797471cd118bf414f50122893e9~6TWMEJqju0956309563euoutp029
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 10:28:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220620102820euoutp02fcfa1797471cd118bf414f50122893e9~6TWMEJqju0956309563euoutp029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655720900;
+        bh=qp9YVJlu4olz3oYnsD1sNkejmf6dHxDAHbWKn3wrbXs=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=m8sKfqYXwOKq5iRyo4466JVOkrWa0z1iy1XM4gumHu6yoXKRriiPGLto+i78nYnwQ
+         SMt+eUYIto0HPecP7TCEueI31x+r31LMo6dKIH6z3yu1p9NQy9V3xoylrOnSepAIEC
+         ww91rexUyZHR2VmLQVm2kWpcNd7Gam4v+JWPW47A=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220620102820eucas1p257ab2bd019e065e26fc7f61d487100e9~6TWLl3p8S0766307663eucas1p2w;
+        Mon, 20 Jun 2022 10:28:20 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 11.E8.09664.4CB40B26; Mon, 20
+        Jun 2022 11:28:20 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220620102819eucas1p2b03a01c45ca3d0d42ebb9542954f0a4a~6TWLB5yxx1180011800eucas1p2P;
+        Mon, 20 Jun 2022 10:28:19 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220620102819eusmtrp1d406de29bcbd43e98e82e8fcfe0fbfea~6TWLAuDit3265932659eusmtrp1X;
+        Mon, 20 Jun 2022 10:28:19 +0000 (GMT)
+X-AuditID: cbfec7f2-d97ff700000025c0-d7-62b04bc46c2e
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id FB.B5.09038.3CB40B26; Mon, 20
+        Jun 2022 11:28:19 +0100 (BST)
+Received: from [106.210.134.141] (unknown [106.210.134.141]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220620102818eusmtip249ef53827dc9ea948a39b0409a3c2ca2~6TWKQ8suX3096730967eusmtip2G;
+        Mon, 20 Jun 2022 10:28:18 +0000 (GMT)
+Message-ID: <4b132eb8-d823-248f-0fc0-c825ba3754fa@samsung.com>
+Date:   Mon, 20 Jun 2022 12:28:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH 1/5] dt-bindings: clock: Add bindings for Exynos7885
+ CMU_FSYS
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>
+Cc:     phone-devel@vger.kernel.org, Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+In-Reply-To: <20220601233743.56317-2-virag.david003@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKKsWRmVeSWpSXmKPExsWy7djPc7pHvDckGUxYyW7xYN42NovrX56z
+        Wsw/co7Vou/FQ2aLTY+vsVp87LnHanF51xw2ixnn9zFZXDzlarHgj51F694j7Bb/rm1ksVi1
+        6w+jxfH3jxkd+Dze32hl99g56y67x6ZVnWwed67tYfPYvKTeo2/LKkaPz5vkAtijuGxSUnMy
+        y1KL9O0SuDIm3NvOXnCWqaL91EPGBsYZTF2MHBwSAiYSkz/ZdjFycQgJrGCUOLnnABuE84VR
+        4vPsaSxdjJxAzmdGiVNXKkFskIaGXfOhipYzSvxofscE4XxklGg7+IwZpIpXwE5iXfcyRhCb
+        RUBVon/3Pai4oMTJmU/ApooKJEucO3uVDcQWFgiW+N46jRXEZhYQl7j1ZD4TiC0ioCXx4cxD
+        VpAFzAJPmCVutExlB0mwCRhK9B7tA1vACbTs6tFlLBDN8hLb385hBmmQEJjNKXG3bwMjxKMu
+        Ej333SBeEJZ4dXwLO4QtI3F6cg8LhF0vMXnKFTYIu4NR4uteMwjbWmLCphNsIGOYBTQl1u/S
+        hwg7SjyatwEajHwSN94KQlzAJzFp23RmiDCvREebEES1isTvVdOZIGwpie4n/1kmMCrNQgqU
+        WUien4Xkl1kIexcwsqxiFE8tLc5NTy02zEst1ytOzC0uzUvXS87P3cQITGmn/x3/tINx7quP
+        eocYmTgYDzFKcDArifDacG9IEuJNSaysSi3Kjy8qzUktPsQozcGiJM6bnLkhUUggPbEkNTs1
+        tSC1CCbLxMEp1cDEcKWKte2ttejHzsKcjarcU97rc+7RXp2ztODB1PznfHPPhm/ieXJs+iyh
+        vPsr5hRGqa7P1+yRT+TkNBBMLKuafGXHziJjtmXfbsgElNfufxJYcqR5toblNlkezs81vVu0
+        WHdO1969c5H2wiP8Ehe7mQRT+nbtvdT69GX13vS4S5K2BV9/fbaQVI3/ZiT441yf78nrImlh
+        kzgu1hpW8T7w0NOevmyttvXRpG/VZ0TEP62sFq1QWZcRHfrIpn2yrp9Rt91MppVTJt5Y9n/z
+        oWgmbud1S5V0Fh+3rJ2f8265hqqMvG6Fr+1/hglnA9dc9vc4I2O5JEt5bc5u36Lggrk3Thf7
+        uRgYt8zL+JKquEeJpTgj0VCLuag4EQBjWi322AMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsVy+t/xe7qHvTckGZxfL2XxYN42NovrX56z
+        Wsw/co7Vou/FQ2aLTY+vsVp87LnHanF51xw2ixnn9zFZXDzlarHgj51F694j7Bb/rm1ksVi1
+        6w+jxfH3jxkd+Dze32hl99g56y67x6ZVnWwed67tYfPYvKTeo2/LKkaPz5vkAtij9GyK8ktL
+        UhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DIm3NvOXnCWqaL9
+        1EPGBsYZTF2MnBwSAiYSDbvms3UxcnEICSxllDjx7htjFyMHUEJKYn6LEkSNsMSfa11QNe8Z
+        Jc7d+8cMkuAVsJNY172MEcRmEVCV6N99DyouKHFy5hMWEFtUIFmiecshsGXCAsES31unsYLY
+        zALiEreezAeLiwhoSXw48xAq/oxZouOlJIgtJFAosWlJN1gNm4ChRO/RPrBdnEB7rx5dxgJy
+        J7OAusT6eUIQrfIS29/OYZ7AKDQLyRWzkGybhdAxC0nHAkaWVYwiqaXFuem5xUZ6xYm5xaV5
+        6XrJ+bmbGIExvO3Yzy07GFe++qh3iJGJg/EQowQHs5IIrw33hiQh3pTEyqrUovz4otKc1OJD
+        jKbAkJjILCWanA9MInkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxS
+        DUx7Iz4eaJ6cm+mje+rmYfMzsv96lx1LlOTb01HkUztFS1n8w97z66bbRqs4WkhPNNht6bBO
+        5KJIPIuUbVPh8mrrmOkTX8t/a2m5N2m78fl8o9CXrO9LDt/4sejVodeTNne3iMetS7miGtWS
+        x/zjbL2wuNK90z5eO/9F+u6tvbgiJiWman1Pdormx5UZp/c9eM7/iT02KWLBr8Xnl/xc9Js3
+        jKlZUb35cGVbULDrCVX1rsNSb7keiATXrSqPfSWu7XQ/YPcbrxCzqcel5n6fyjhrmvyN+Lbb
+        OzJ6uwpWxZYs2ZPCWfaTTUZxY8zR6zNKLwdze9x4NOFm8I+U9w6+Rr+Xavx+uGzKZYXEbb6P
+        d/5VYinOSDTUYi4qTgQAZI0iF2oDAAA=
+X-CMS-MailID: 20220620102819eucas1p2b03a01c45ca3d0d42ebb9542954f0a4a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220620102819eucas1p2b03a01c45ca3d0d42ebb9542954f0a4a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220620102819eucas1p2b03a01c45ca3d0d42ebb9542954f0a4a
+References: <20220601233743.56317-1-virag.david003@gmail.com>
+        <20220601233743.56317-2-virag.david003@gmail.com>
+        <CGME20220620102819eucas1p2b03a01c45ca3d0d42ebb9542954f0a4a@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for audio codec and sound card, enable the audio serializer
-(McASP1) under use and update pinmux. Disable all other McASP nodes.
+On 02.06.2022 01:37, David Virag wrote:
+> CMU_FSYS clock domain provides clocks for MMC (MMC_CARD, MMC_EMBD,
+> MMC_SDIO), and USB30DRD.
+> 
+> Add clock indices and bindings documentation for CMU_FSYS domain.
+> 
+> Signed-off-by: David Virag <virag.david003@gmail.com>
 
-Audio input is currently not working properly, so the RX port on McASP1
-is disabled for now, until the issue is debugged.
-
-The serializer is shared between HDMI and codec. By default codec is
-used for output, but it can be toggled to HDMI using a FET switch
-connected to the MCASP1_FET_SEL (J24) header on the board.
-
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 89 ++++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 39fb1d763037..a502b7ac48d4 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -121,6 +121,46 @@
- 			 <3300000 0x1>;
- 	};
- 
-+	vcc_1v8: regulator-5 {
-+		/* output of TPS6282518DMQ */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_1v8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc_3v3_sys>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	tlv320_mclk: clk-0 {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+		clock-frequency = <12288000>;
-+	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "AM62x-SKEVM";
-+		simple-audio-card,widgets =
-+			"Headphone", "Headphone Jack";
-+		simple-audio-card,routing =
-+			"Headphone Jack",	"HPLOUT",
-+			"Headphone Jack",	"HPROUT";
-+		simple-audio-card,format = "dsp_b";
-+		simple-audio-card,bitclock-master = <&sound_master>;
-+		simple-audio-card,frame-master = <&sound_master>;
-+		simple-audio-card,bitclock-inversion;
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&mcasp1>;
-+		};
-+
-+		sound_master: simple-audio-card,codec {
-+			sound-dai = <&tlv320aic3106>;
-+			clocks = <&tlv320_mclk>;
-+		};
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 		pinctrl-names = "default";
-@@ -266,6 +306,15 @@
- 			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
- 		>;
- 	};
-+
-+	main_mcasp1_pins_default: main-mcasp1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0090, PIN_INPUT, 2) /* (M24) GPMC0_BE0N_CLE.MCASP1_ACLKX */
-+			AM62X_IOPAD(0x0098, PIN_INPUT, 2) /* (U23) GPMC0_WAIT0.MCASP1_AFSX */
-+			AM62X_IOPAD(0x008c, PIN_OUTPUT, 2) /* (L25) GPMC0_WEN.MCASP1_AXR0 */
-+			AM62X_IOPAD(0x0084, PIN_INPUT, 2) /* (L23) GPMC0_ADVN_ALE.MCASP1_AXR2 */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -352,6 +401,18 @@
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&main_gpio1_ioexp_intr_pins_default>;
- 	};
-+
-+	tlv320aic3106: audio-codec@1b {
-+		#sound-dai-cells = <0>;
-+		compatible = "ti,tlv320aic3106";
-+		reg = <0x1b>;
-+
-+		/* Regulators */
-+		AVDD-supply = <&vcc_3v3_sys>;
-+		IOVDD-supply = <&vcc_3v3_sys>;
-+		DRVDD-supply = <&vcc_3v3_sys>;
-+		DVDD-supply = <&vcc_1v8>;
-+	};
- };
- 
- &main_i2c2 {
-@@ -412,6 +473,34 @@
- 	};
- };
- 
-+&mcasp0 {
-+	status = "disabled";
-+};
-+
-+&mcasp1 {
-+	status = "okay";
-+	#sound-dai-cells = <0>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcasp1_pins_default>;
-+
-+	op-mode = <0>;          /* MCASP_IIS_MODE */
-+	tdm-slots = <2>;
-+
-+	serial-dir = <  /* 0: INACTIVE, 1: TX, 2: RX */
-+	       1 0 0 0
-+	       0 0 0 0
-+	       0 0 0 0
-+	       0 0 0 0
-+	>;
-+	tx-num-evt = <32>;
-+	rx-num-evt = <32>;
-+};
-+
-+&mcasp2 {
-+	status = "disabled";
-+};
-+
- &mailbox0_cluster0 {
- 	mbox_m4_0: mbox-m4-0 {
- 		ti,mbox-rx = <0 0 0>;
--- 
-2.17.1
-
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>

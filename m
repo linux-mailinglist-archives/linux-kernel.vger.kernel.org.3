@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DC255159B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6D25515A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240910AbiFTKSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S239058AbiFTKTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240811AbiFTKSo (ORCPT
+        with ESMTP id S240591AbiFTKS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:18:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D35C13F68
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655720322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nm+eORp3zH2jrCWgqulUmPpdYYIUAnWdQdIYkQxKCxc=;
-        b=fRVqSSP6RSWpI7sPT+A+u95mOzYqwQe7bQ2zWHI0Wtd6+JRWn7aT50hYK3gYyLsYXoOv8d
-        I7+nyqMn02SfqHCXeiEH2vpF3iKYHiiCrTzmMnFxD45FNvahBQYi/u0Kc0i/7aZKJv0Gmp
-        jVGlAUzeinpP3c233bGPnV5l5ug7yWg=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-eZ1tN0CRMlaR_PJlGulp4Q-1; Mon, 20 Jun 2022 06:18:40 -0400
-X-MC-Unique: eZ1tN0CRMlaR_PJlGulp4Q-1
-Received: by mail-wr1-f72.google.com with SMTP id i16-20020adfa510000000b0021b8e9f7666so701637wrb.19
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:18:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nm+eORp3zH2jrCWgqulUmPpdYYIUAnWdQdIYkQxKCxc=;
-        b=Ttw4wc+cIphhR6g14QK7K/YWpiYdBeDyO7XTMfrgyvy8+WAxKNk/crWHP1RkEgeZZ5
-         jVDUaPzF7KDnWOmvOB0AQXudqRl528H30uGcI9T8boU1YWjGEwlBBlUNPoIvGz5cYhrr
-         E6DxhZjQGyfi1AHUHgedOcXH7yG/fz8yzpJM7UYIAEWrYrA2Npsfh7uEtR+vnDcWzofD
-         V6bUbvXB4+l2XkXTkjqz2Pl+tAUt+6O77rm9akVndXloAZ4QBtTg585SVBDN1Y5NxJn3
-         XxTXgwLPjIuXLpfQ9wKrWZBi6uSV26tJalUVGxCrgtHU589f69Ow2WPXxLl50ootlUYH
-         V7zg==
-X-Gm-Message-State: AOAM533U/E6NsyiLlBn+tEhgrKmPt9u8mo6o5GNHUOO9s5lECLxIYTWk
-        dWeajNAodaWjhKjavtZyU/ayRpnT10FDneJsjyHZzwiNlsQq2KBMuZLXvNpoqpPUCvK0GVMtlIh
-        HMyUroLkjJMnWVVOZhJRO2VEz
-X-Received: by 2002:a7b:c31a:0:b0:39c:4783:385e with SMTP id k26-20020a7bc31a000000b0039c4783385emr35408653wmj.185.1655720319446;
-        Mon, 20 Jun 2022 03:18:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwcakcs2Da84r0qRgyJ2AJNFnTRJfDw0r95PsCWFIAzPqNF7lYCclsTp5XJoBLwTxe6twkMaA==
-X-Received: by 2002:a7b:c31a:0:b0:39c:4783:385e with SMTP id k26-20020a7bc31a000000b0039c4783385emr35408630wmj.185.1655720319132;
-        Mon, 20 Jun 2022 03:18:39 -0700 (PDT)
-Received: from redhat.com ([2.52.146.221])
-        by smtp.gmail.com with ESMTPSA id k190-20020a1ca1c7000000b0039c587342d8sm18156471wme.3.2022.06.20.03.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 03:18:38 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 06:18:35 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        erwan.yvin@stericsson.com
-Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev
- unregister
-Message-ID: <20220620061607-mutt-send-email-mst@kernel.org>
-References: <20220620051115.3142-1-jasowang@redhat.com>
- <20220620051115.3142-4-jasowang@redhat.com>
- <20220620050446-mutt-send-email-mst@kernel.org>
- <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
+        Mon, 20 Jun 2022 06:18:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD06F65E0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655720337; x=1687256337;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JsWiswkBl1LCE3i/DlPLr6VjhNxX61sq9DYEGWHKL+s=;
+  b=goSonvSnVbw5lx78nBKQFqnpTUK/AFQ/XubCF/Oynl7vCDDTpKkwbXdk
+   xGWFPHWxL6TIxCh9TfOR2oXJ5sz7ZcVBa6KU6aGAyP0jLcU1203NI2xtj
+   nSkMmDhK0u95f9CnmI3sYP0bNp8sQ10tpWk1Exb2X76GKMWk8JYWhLFzD
+   hnNFvZ8jDzRTpmbLMmVd5v2q/5wam9n8MHxpCrzrFxW0mpE5NDnCDXNL2
+   pXUyPUeCULDQKqq7eGlGigCD0SugNIVudyTkPJ8xosRoaL4Vacs+mWlR0
+   blBjfSf0V07hZ/nuzq6YvyTZey0dSGYb//Fd58D60HrqiPYarNUzx13oC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280588793"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280588793"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:18:57 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="643050863"
+Received: from malikhan-mobl1.amr.corp.intel.com (HELO [10.212.127.6]) ([10.212.127.6])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:18:54 -0700
+Message-ID: <7a2028c6-8ed6-1fc4-3abf-b13f7254cdee@linux.intel.com>
+Date:   Mon, 20 Jun 2022 11:18:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] drm/i915/gem: remove unused assignments
+Content-Language: en-US
+To:     zys.zljxml@gmail.com, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     bob.beckett@collabora.com, matthew.auld@intel.com,
+        thomas.hellstrom@linux.intel.com, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>
+References: <20220620100216.1791284-1-zys.zljxml@gmail.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20220620100216.1791284-1-zys.zljxml@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,97 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 05:18:29PM +0800, Jason Wang wrote:
-> On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
-> > > We use to do the following steps during .remove():
-> >
-> > We currently do
-> >
-> >
-> > > static void cfv_remove(struct virtio_device *vdev)
-> > > {
-> > >       struct cfv_info *cfv = vdev->priv;
-> > >
-> > >       rtnl_lock();
-> > >       dev_close(cfv->ndev);
-> > >       rtnl_unlock();
-> > >
-> > >       tasklet_kill(&cfv->tx_release_tasklet);
-> > >       debugfs_remove_recursive(cfv->debugfs);
-> > >
-> > >       vringh_kiov_cleanup(&cfv->ctx.riov);
-> > >       virtio_reset_device(vdev);
-> > >       vdev->vringh_config->del_vrhs(cfv->vdev);
-> > >       cfv->vr_rx = NULL;
-> > >       vdev->config->del_vqs(cfv->vdev);
-> > >       unregister_netdev(cfv->ndev);
-> > > }
-> > > This is racy since device could be re-opened after dev_close() but
-> > > before unregister_netdevice():
-> > >
-> > > 1) RX vringh is cleaned before resetting the device, rx callbacks that
-> > >    is called after the vringh_kiov_cleanup() will result a UAF
-> > > 2) Network stack can still try to use TX virtqueue even if it has been
-> > >    deleted after dev_vqs()
-> > >
-> > > Fixing this by unregistering the network device first to make sure not
-> > > device access from both TX and RX side.
-> > >
-> > > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
-> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > ---
-> > >  drivers/net/caif/caif_virtio.c | 6 ++----
-> > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
-> > > index 66375bea2fcd..a29f9b2df5b1 100644
-> > > --- a/drivers/net/caif/caif_virtio.c
-> > > +++ b/drivers/net/caif/caif_virtio.c
-> > > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
-> > >  {
-> > >       struct cfv_info *cfv = vdev->priv;
-> > >
-> > > -     rtnl_lock();
-> > > -     dev_close(cfv->ndev);
-> > > -     rtnl_unlock();
-> > > +     /* Make sure NAPI/TX won't try to access the device */
-> > > +     unregister_netdev(cfv->ndev);
-> > >
-> > >       tasklet_kill(&cfv->tx_release_tasklet);
-> > >       debugfs_remove_recursive(cfv->debugfs);
-> > > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
-> > >       vdev->vringh_config->del_vrhs(cfv->vdev);
-> > >       cfv->vr_rx = NULL;
-> > >       vdev->config->del_vqs(cfv->vdev);
-> > > -     unregister_netdev(cfv->ndev);
-> > >  }
-> >
-> >
-> > This gives me pause, callbacks can now trigger after device
-> > has been unregistered. Are we sure this is safe?
+
+On 20/06/2022 11:02, zys.zljxml@gmail.com wrote:
+> From: katrinzhou <katrinzhou@tencent.com>
 > 
-> It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
-> after tasklet_kill(). I can add a comment to explain this.
-
-that waits for outstanding tasklets but does it really prevent
-future ones?
-
-> > Won't it be safer to just keep the rtnl_lock around
-> > the whole process?
+> The variable ret is reassigned and the value EINVAL is never used.
+> Thus, remove the unused assignments.
 > 
-> It looks to me we rtnl_lock can't help in synchronizing with the
-> callbacks, anything I miss?
+> Addresses-Coverity: ("Unused value")
+> Fixes: d4433c7600f7 ("drm/i915/gem: Use the proto-context to handle create parameters (v5)")
+> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
+> ---
+>   drivers/gpu/drm/i915/gem/i915_gem_context.c | 2 --
+>   1 file changed, 2 deletions(-)
 > 
-> Thanks
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+> index ab4c5ab28e4d..d5ef5243673a 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+> @@ -931,8 +931,6 @@ static int set_proto_ctx_param(struct drm_i915_file_private *fpriv,
+>   		break;
+>   
+>   	case I915_CONTEXT_PARAM_PERSISTENCE:
+> -		if (args->size)
+> -			ret = -EINVAL;
+>   		ret = proto_context_set_persistence(fpriv->dev_priv, pc,
+>   						    args->value);
 
-good point.
+AFAICT fix should end up with code like this:
+
+if (args->size)
+	ret = -EINVAL;
+else
+	ret = proto_context_set_persistence(...)
+break;
 
 
-> >
-> > >  static struct virtio_device_id id_table[] = {
-> > > --
-> > > 2.25.1
-> >
+Alternatively move args->size checking into 
+proto_context_set_persistence to align with set_persistence().
 
+Regards,
+
+Tvrtko
+
+>   		break;

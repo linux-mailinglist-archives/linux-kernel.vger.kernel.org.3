@@ -2,244 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B7E550FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 07:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51777550FB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 07:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbiFTF33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 01:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S238286AbiFTFaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 01:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiFTF31 (ORCPT
+        with ESMTP id S229517AbiFTFaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 01:29:27 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDE395A3
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 22:29:25 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b7so10641795ljr.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 22:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
-         :subject:content-transfer-encoding;
-        bh=iKn/pU+BcEzYi2QHLJwEmgVnjVMSAMLHeAY/APRRQkQ=;
-        b=MBKv4AaZ7pTrSADg8kcfqvSAdTnMNzolFr0wqhzfyYpE/VwhnZsQcVAwvof20P+Gn3
-         qSU57A9X9nAYfHCa3qe2UOJAc4IQMNnPlDOG5692buVCOzScdkD0plE4D/UPutVkjqKK
-         ldBNV+96kybK85baMzHBsGlwF4mqWWuJpfoj78RlrxtdPJfNE60/X/BKq0ptT3w3ARsu
-         dQYnZ4v/HMD1b3033s91zBsOhGPQJH25OTd3k7ZYSgbaedRrYtecPOG1tLrnpCOh3786
-         c5rhIVXY5+xqW7bT9wuhnJZRrLGvzLjgNt3NSKhRU0ovAIxOYGo8M3QSojivgXyFBG5G
-         Aikw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:subject:content-transfer-encoding;
-        bh=iKn/pU+BcEzYi2QHLJwEmgVnjVMSAMLHeAY/APRRQkQ=;
-        b=qVnXEAlXdfGIzEL+2/s7ebpFKl4qHSRpu3+4SeylyjMikz8FjUYeAT7iN4G5V+HBYU
-         w2pvTG6aRXuXXC1iXm9uH1/HPdAMClSBGiXqgQqtp5xklKiSgHs3xVngl/4nlrA4yqN0
-         poN9Jv5nKBneyf2Iiv8PfXAvucdxiEu3OYq2k+qUqtIii5Fh7tYxwDw7c0OlLozdDscQ
-         2m5eo1xY7X4iSx9liinQm8wzHMPcBQ0LEqZhxSLX4rPt3s82auTEVUE3r8cJV4e5g2U4
-         ugVk8jDSXidYby0TiVKDCrrDsDhBQJ3TJwxpf2fxkRrnerHpsG/uptavN03sGpYLsvJf
-         AA/g==
-X-Gm-Message-State: AJIora9Qi/V7k82SIaUXr3XBBWMWY/mDIeR1CynnZJciS7niwx+ADXzl
-        CCLjXCtVVdc8nGK6uxS6jlHRKQ==
-X-Google-Smtp-Source: AGRyM1seL5StISs8Uc7ZjHFq14fhNS3OucL/oF5uFgSWbMkbrzbTxHpOS4kFYN98ms8Nydp2z3BU/A==
-X-Received: by 2002:a2e:9e4c:0:b0:25a:2a7c:4aad with SMTP id g12-20020a2e9e4c000000b0025a2a7c4aadmr10516750ljk.155.1655702963722;
-        Sun, 19 Jun 2022 22:29:23 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id a9-20020a195f49000000b0047255d210e0sm1626550lfj.15.2022.06.19.22.29.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 22:29:23 -0700 (PDT)
-Message-ID: <aae9c7c6-989c-0261-470a-252537493b53@openvz.org>
-Date:   Mon, 20 Jun 2022 08:29:22 +0300
+        Mon, 20 Jun 2022 01:30:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851C295A3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 22:30:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD3641F9A0;
+        Mon, 20 Jun 2022 05:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655703013; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lTKBeEnkA13UMoSCaO9KZJ/EHnwH3pAZboyVMGM77rU=;
+        b=QjLziJ7rqxGaGGZCI/l6SBWrV3yWGMzHEqUYWyHzS4tzmyl792yQtcV4wJylgPv01vLTF/
+        /fo/C8+r32/Hx5Ni6vdtumj1dCcxONe4Mv8xLthn1o/nuXovfzBh1NANPk9hQsijuroy2q
+        OhYKvZHkOE1C00c+bCpc6I5RK2umpNs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 55C7513427;
+        Mon, 20 Jun 2022 05:30:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ahGRE+UFsGKiVwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 20 Jun 2022 05:30:13 +0000
+Message-ID: <c5515533-29a9-9e91-5a36-45f00f25b37b@suse.com>
+Date:   Mon, 20 Jun 2022 07:30:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+ Thunderbird/91.9.0
 Content-Language: en-US
-From:   Vasily Averin <vvs@openvz.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     jbeulich@suse.com, Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
-Cc:     kernel@openvz.org, Konstantin Khorenko <khorenko@virtuozzo.com>,
-        steve.sipes@comandsolutions.com, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: "Bad pagetable: 000c" crashes and errata "Not-Present Page Faults May
- Set the RSVD Flag in the Error Code"
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-2-jgross@suse.com>
+ <fb0eadee-1d45-f414-eda4-a87f01eeb57a@suse.com>
+ <effc0c6a-9e4d-b503-e4ba-6c8d2da72699@leemhuis.info>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
+In-Reply-To: <effc0c6a-9e4d-b503-e4ba-6c8d2da72699@leemhuis.info>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------TrYTNr10W5n70OBgv21LKjlS"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some (old?) Intel CPU's have errata:
-"Not-Present Page Faults May Set the RSVD Flag in the Error Code
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------TrYTNr10W5n70OBgv21LKjlS
+Content-Type: multipart/mixed; boundary="------------pw6YLSc6mvGCJfu2mpvQIea8";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Thorsten Leemhuis <regressions@leemhuis.info>,
+ xen-devel@lists.xenproject.org, x86@kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Borislav Petkov <bp@alien8.de>
+Cc: jbeulich@suse.com, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <c5515533-29a9-9e91-5a36-45f00f25b37b@suse.com>
+Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-2-jgross@suse.com>
+ <fb0eadee-1d45-f414-eda4-a87f01eeb57a@suse.com>
+ <effc0c6a-9e4d-b503-e4ba-6c8d2da72699@leemhuis.info>
+In-Reply-To: <effc0c6a-9e4d-b503-e4ba-6c8d2da72699@leemhuis.info>
 
-Problem: 
-An attempt to access a page that is not marked present causes a page fault.
-Such a page fault delivers an error code in which both the P flag (bit 0)
-and the RSVD flag (bit 3) are 0. Due to this erratum, not-present page faults
-may deliver an error code in which the P flag is 0 but the RSVD flag is 1.
+--------------pw6YLSc6mvGCJfu2mpvQIea8
+Content-Type: multipart/mixed; boundary="------------h099hHche060m0xNSeZh399g"
 
-Implication:
-Software may erroneously infer that a page fault was due to a reserved-bit
-violation when it was actually due to an attempt to access a not-present page.
-Intel has not observed this erratum with any commercially available software.
+--------------h099hHche060m0xNSeZh399g
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Workaround: Page-fault handlers should ignore the RSVD flag in the error code
-if the P flag is 0."
+T24gMjAuMDYuMjIgMDc6MjIsIFRob3JzdGVuIExlZW1odWlzIHdyb3RlOg0KPiBPbiAxNC4w
+Ni4yMiAxNzowOSwgSnVlcmdlbiBHcm9zcyB3cm90ZToNCj4+IE9uIDAzLjA1LjIyIDE1OjIy
+LCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4+IHg4Nl9oYXNfcGF0X3dwKCkgaXMgdXNpbmcg
+YSB3cm9uZyB0ZXN0LCBhcyBpdCByZWxpZXMgb24gdGhlIG5vcm1hbA0KPj4+IFBBVCBjb25m
+aWd1cmF0aW9uIHVzZWQgYnkgdGhlIGtlcm5lbC4gSW4gY2FzZSB0aGUgUEFUIE1TUiBoYXMg
+YmVlbg0KPj4+IHNldHVwIGJ5IGFub3RoZXIgZW50aXR5IChlLmcuIEJJT1Mgb3IgWGVuIGh5
+cGVydmlzb3IpIGl0IG1pZ2h0IHJldHVybg0KPj4+IGZhbHNlIGV2ZW4gaWYgdGhlIFBBVCBj
+b25maWd1cmF0aW9uIGlzIGFsbG93aW5nIFdQIG1hcHBpbmdzLg0KPj4+DQo+Pj4gRml4ZXM6
+IDFmNmY2NTVlMDFhZCAoIng4Ni9tbTogQWRkIGEgeDg2X2hhc19wYXRfd3AoKSBoZWxwZXIi
+KQ0KPj4+IFNpZ25lZC1vZmYtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4N
+Cj4+PiAtLS0NCj4+PiAgwqAgYXJjaC94ODYvbW0vaW5pdC5jIHwgMyArKy0NCj4+PiAgwqAg
+MSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPj4+DQo+
+Pj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L21tL2luaXQuYyBiL2FyY2gveDg2L21tL2luaXQu
+Yw0KPj4+IGluZGV4IGQ4Y2ZjZTIyMTI3NS4uNzFlMTgyZWJjZWQzIDEwMDY0NA0KPj4+IC0t
+LSBhL2FyY2gveDg2L21tL2luaXQuYw0KPj4+ICsrKyBiL2FyY2gveDg2L21tL2luaXQuYw0K
+Pj4+IEBAIC04MCw3ICs4MCw4IEBAIHN0YXRpYyB1aW50OF90IF9fcHRlMmNhY2hlbW9kZV90
+YmxbOF0gPSB7DQo+Pj4gIMKgIC8qIENoZWNrIHRoYXQgdGhlIHdyaXRlLXByb3RlY3QgUEFU
+IGVudHJ5IGlzIHNldCBmb3Igd3JpdGUtcHJvdGVjdCAqLw0KPj4+ICDCoCBib29sIHg4Nl9o
+YXNfcGF0X3dwKHZvaWQpDQo+Pj4gIMKgIHsNCj4+PiAtwqDCoMKgIHJldHVybiBfX3B0ZTJj
+YWNoZW1vZGVfdGJsW19QQUdFX0NBQ0hFX01PREVfV1BdID09DQo+Pj4gX1BBR0VfQ0FDSEVf
+TU9ERV9XUDsNCj4+PiArwqDCoMKgIHJldHVybg0KPj4+IF9fcHRlMmNhY2hlbW9kZV90Ymxb
+X19jYWNoZW1vZGUycHRlX3RibFtfUEFHRV9DQUNIRV9NT0RFX1dQXV0gPT0NCj4+PiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgX1BBR0VfQ0FDSEVfTU9ERV9XUDsNCj4+PiAgwqAgfQ0KPj4+
+ICDCoCDCoCBlbnVtIHBhZ2VfY2FjaGVfbW9kZSBwZ3Byb3QyY2FjaGVtb2RlKHBncHJvdF90
+IHBncHJvdCkNCj4+DQo+PiB4ODYgbWFpbnRhaW5lcnMsIHBsZWFzZSBjb25zaWRlciB0YWtp
+bmcgdGhpcyBwYXRjaCwgYXMgaXQgaXMgZml4aW5nDQo+PiBhIHJlYWwgYnVnLiBQYXRjaCAy
+IG9mIHRoaXMgc2VyaWVzIGNhbiBiZSBkcm9wcGVkIElNTy4NCj4gDQo+IEp1ZXJnZW4sIGNh
+biB5b3UgaGVscCBtZSBvdXQgaGVyZSBwbGVhc2UuIFBhdGNoIDIgYWZhaWNzIHdhcyBzdXBw
+b3NlZCB0bw0KPiBmaXggdGhpcyByZWdyZXNzaW9uIEknbSB0cmFja2luZzoNCj4gaHR0cHM6
+Ly9sb3JlLmtlcm5lbC5vcmcvcmVncmVzc2lvbnMvWW5ISzFaM285OWVNWHNWS0BtYWlsLWl0
+bC8NCg0KTm8sIHBhdGNoIDIgd2Fzbid0IGNvdmVyaW5nIGFsbCBuZWVkZWQgY2FzZXMuDQoN
+Cj4gSXMgUGF0Y2ggMSBhbG9uZSBlbm91Z2ggdG8gZml4IGl0PyBPciBpcyB0aGVyZSBhIGRp
+ZmZlcmVudCBmaXggZm9yIGl0Pw0KDQpQYXRjaCAxIGlzIGZpeGluZyBhIGRpZmZlcmVudCBp
+c3N1ZSAoaXQgaXMgbGFja2luZyBhbnkgbWFpbnRhaW5lcg0KZmVlZGJhY2ssIHRob3VnaCku
+DQoNClRoaXMgcGF0Y2ggb2YgSmFuIHNob3VsZCBkbyB0aGUgam9iLCBidXQgaXQgc2VlbXMg
+dG8gYmUgc3R1Y2ssIHRvbzoNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC85Mzg1
+ZmE2MC1mYTVkLWY1NTktYTEzNy02NjA4NDA4Zjg4YjBAc3VzZS5jb20vDQoNCj4gT3IgaXMg
+dGhlcmUgc29tZSBvdGhlciBzb2x1dGlvbiB0byBmaW5hbGx5IGZpeCB0aGF0IHJlZ3Jlc3Np
+b25zIHRoYXQNCj4gaWRlYWxseSBzaG91bGQgaGF2ZSBiZWVuIGZpeGVkIHdlZWtzIGFnbyBh
+bHJlYWR5Pw0KDQpJIGFncmVlIGl0IHNob3VsZCBoYXZlIGJlZW4gZml4ZWQgcXVpdGUgc29t
+ZSB0aW1lIG5vdywgYnV0IHRoZSB4ODYNCm1haW50YWluZXJzIGRvbid0IHNlZW0gdG8gYmUg
+aW50ZXJlc3RlZCBpbiB0aG9zZSBzdHVjayBwYXRjaGVzLiA6LSgNCg0KTWF5YmUgSSBzaG91
+bGQgdGFrZSBhIGRpZmZlcmVudCBhcHByb2FjaDoNCg0KeDg2IG1haW50YWluZXJzLCBwbGVh
+c2Ugc3BlYWsgdXAgaWYgeW91IE5BSyAob3IgQWNrKSBhbnkgb2YgYWJvdmUgdHdvIHBhdGNo
+ZXMuDQpJbiBjYXNlIHlvdSBkb24ndCBOQUsgb3IgdGFrZSB0aGUgcGF0Y2hlcywgSSdtIGlu
+Y2xpbmVkIHRvIGNhcnJ5IHRoZW0gdmlhDQp0aGUgWGVuIHRyZWUgdG8gZ2V0IHRoZSBpc3N1
+ZXMgZml4ZWQuDQoNCg0KSnVlcmdlbg0K
+--------------h099hHche060m0xNSeZh399g
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-I think Steve Sipes, one of OpenVz7 customers, encountered this problem.
-He reported about "Bad pagetable: 000c" host crashes observed on several nodes.
-(https://bugs.openvz.org/browse/OVZ-7348)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-[1190695.900880] 
-httpd: Corrupted page table at address 7f62d5b48e68
-PGD 80000002e92bf067 PUD 1c99c5067 PMD 195015067 PTE 7fffffffb78b680
-Bad pagetable: 000c [#1] SMP
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-CPU: 5 PID: 627609 Comm: httpd ve: 053a3e76-fa58-4116-9567-97028be293c5
-  Kdump: loaded Not tainted 3.10.0-1160.53.1.vz7.185.3 #1 185.3
-Hardware name: Dell Inc. PowerEdge 2950/0H268G, BIOS 2.7.0 10/30/2010
-task: ffff8bfd19c72000 ti: ffff8bfcbc26c000 task.ti: ffff8bfcbc26c000
-RIP: 0033:[<00007f62d5888d28>] [<00007f62d5888d28>] 0x7f62d5888d28
-RSP: 002b:00007f62c6eb2c68 EFLAGS: 00010206
-RAX: fffffffffffffff5 RBX: 00005575a0197080 RCX: 00007f62d5888d1b
-RDX: 0000000000000001 RSI: 00007f62d61ac106 RDI: 0000000000008029
-RBP: 00007f62d61ac106 R08: 00007f62c6eb2c60 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 00007f62c6eb2cac
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
-FS: 00007f62c6eb3700(0000) GS:ffff8c03ffd40000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f62d5b48e68 CR3: 0000000199880000 CR4: 00000000000407e0
+--------------h099hHche060m0xNSeZh399g--
 
-vtop crash command confirms the numbers and explain the according
-memory page was moved to swap
+--------------pw6YLSc6mvGCJfu2mpvQIea8--
 
-crash> vtop 7f62d5b48e68
-VIRTUAL     PHYSICAL        
-7f62d5b48e68  (not mapped)
+--------------TrYTNr10W5n70OBgv21LKjlS
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-   PGD: 1998807f0 => 80000002e92bf067
-   PUD: 2e92bfc58 => 1c99c5067
-   PMD: 1c99c5568 => 195015067
-   PTE: 195015a40 => 7fffffffb78b680
+-----BEGIN PGP SIGNATURE-----
 
-      PTE          SWAP     OFFSET
-7fffffffb78b680  /dev/dm-1  148388
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKwBeQFAwAAAAAACgkQsN6d1ii/Ey9r
+cgf/SuURpcc5UxmfxrN1FBmBlECRuboQgwTqaMkIKajWwphVD3yONz4d7X607XzJjciy7JnnNX4l
+2mldvK9BRvUVfFrjSZsBnRVfJWnMXtjkolupeC95e5uUcskfqEBjKVokofRQgHPLIcd8o3Uf6+0/
+7yqCgUvAWUN/lY1pQ/vniERrzDs64v+z4/YSoclZ1U4sVDSH/U97GQ/XlZhhCyO3G4hdChEqYgaU
+sMkffF7zaididwAIJFWm/sjO9hOTe16D+MbLa46ifKR/hHB8jTLobeoDmFVpg+op0RilDuaZeeK1
+lUftqBV49BvxysD8YW6JXfgEv0xJO0cUJFnfWhmZcQ==
+=A6TZ
+-----END PGP SIGNATURE-----
 
-      VMA           START       END     FLAGS FILE
-ffff8bfd194132a0 7f62d5b45000 7f62d5b49000 8100071 /usr/lib64/libc-2.28.so
-
-SWAP: /dev/dm-1  OFFSET: 148388
-
-Initially I expected that it was single rare issue however Steve Sipes
-provided several other similar crash reports:
-
-[104586.499948] systemd: Corrupted page table at address 55cab6d28eb8
-[104586.500011] PGD 80000000353fe067 PUD 352dc067 PMD 3536f067 PTE 7fffffffe775680
-[104586.500011] Bad pagetable: 000c [#1] SMP 
-...
-[453049.102377] gitlab-runner: Corrupted page table at address c00028b008
-[453049.102590] PGD 8000000776349067 PUD 776103067 PMD 6e852067 PTE 7fffffffb3ad280
-[453049.102858] Bad pagetable: 000c [#1] SMP 
-...
-[ 3373.495631] httpd: Corrupted page table at address 55792c055298
-[ 3373.495828] PGD 8000000eca9c6067 PUD eca9c7067 PMD eca9c8067 PTE 7ffffffff5c4c80
-[ 3373.496084] Bad pagetable: 000c [#1] SMP 
-
-... and few more.
-
-One of such crashes was happen in kernel space on access to swapped user-space page:
-
-[147450.815301] httpd: Corrupted page table at address 7f82ecac1c60
-[147450.815503] PGD 800000005f00a067 PUD 5e55b067 PMD 8c63c2067 PTE 7fffffff395fa80
-[147450.815776] Bad pagetable: 000a [#1] SMP 
-
-[147450.816058] CPU: 5 PID: 106583 Comm: httpd ve: 053a3e76-fa58-4116-9567-97028be293c5
- Kdump: loaded Not tainted 3.10.0-1160.53.1.vz7.185.3 #1 185.3
-[147450.816058] Hardware name: Dell Inc. PowerEdge 2950/0H268G, BIOS 2.7.0 10/30/2010
-[147450.816058] task: ffff9b83781ea000 ti: ffff9b831e7b0000 task.ti: ffff9b831e7b0000
-[147450.816058] RIP: 0010:[<ffffffff8b9c64d0>]  [<ffffffff8b9c64d0>] copy_user_generic_string+0x30/0x40
-[147450.816058] RSP: 0000:ffff9b831e7b3e90  EFLAGS: 00010246
-[147450.816058] RAX: ffff9b831e7b0000 RBX: 0000000000000000 RCX: 0000000000000002
-[147450.816058] RDX: 0000000000000000 RSI: ffff9b831e7b3ea8 RDI: 00007f82ecac1c60
-[147450.816058] RBP: ffff9b831e7b3ee0 R08: ffff9b831e7b4000 R09: 0000000000000001
-[147450.816058] R10: ffffffff8c3693e0 R11: 0000000000000246 R12: ffff9b831e7b3ef8
-[147450.816058] R13: 00007f82ecac1c60 R14: 0000000000000001 R15: 0000000000000000
-[147450.816058] FS:  00007f82ecac2700(0000) GS:ffff9b842fd40000(0000) knlGS:0000000000000000
-[147450.816058] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[147450.816058] CR2: 00007f82ecac1c60 CR3: 00000000c63d0000 CR4: 00000000000407e0
-[147450.816058] Call Trace:
-[147450.816058]  [<ffffffff8b88ab93>] ? poll_select_copy_remaining+0x113/0x180
-[147450.816058]  [<ffffffff8b88ba2c>] SyS_select+0xdc/0x120
-[147450.816058]  [<ffffffff8bdd4052>] system_call_fastpath+0x25/0x2a
-[147450.816058]  [<ffffffff8bdd3f95>] ? system_call_after_swapgs+0xa2/0x13a
-[147450.816058] Code: 74 30 83 fa 08 72 27 89 f9 83 e1 07 74 15 83 e9 08 f7 d9 29 ca 8a 06
-                   88 07 48 ff c6 48 ff c7 ff c9 75 f2 89 d1 c1 e9 03 83 e2 07 
-                   <f3> 48 a5 89 d1 f3 a4 31 c0 66 66 90 c3 0f 1f 00 66 66 90 21 d2 
-
-In all these cases error code had set "Reserved" bit 3 and clear "Present" bit 0.
-Affected nodes user old Xeon E5400 and E5450 processors, according to Intel Documentation 
-all of them are affected by pointed errata, this issue was not fixed in microcode
-and have pointed workaround only.
-
-This was happen old stable OpenVZ7 kernel based on even more rock-stable RHEL7 kernel.
-I cannot explain why this happened right now on these nodes and why has no one else
-reported this before. I've checked Intel Documentation and found that few other CPUs
-are affected too. Finaly this issue is described in recent version of 
-Intel® 64 and IA-32 Architectures Software Developer’s Manual Volume 3A:
-System Programming Guide, Part 1
-"
-4.7 PAGE-FAULT EXCEPTIONS
-
-RSVD flag (bit 3).
-This flag is 1 if there is no translation for the linear address because a
-reserved bit was set in one of the paging-structure entries used to translate
-that address. (Because reserved bits are not checked in a paging-structure
-entry whose P flag is 0, bit 3 of the error code can be set only if bit 0
-is also set.[1])
-
-[1] Some past processors had errata for some page faults that occur when
-there is no translation for the linear address because the P flag was 0
-in one of the paging-structure entries used to translate that address.
-Due to these errata, some such page faults produced error codes that
-cleared bit 0 (P flag) and set bit 3 (RSVD flag).
-"
-
-Currently this case is handled in arch/x86/mm/fault.c::do_user_addr_fault()
-
-        /*
-         * Reserved bits are never expected to be set on
-         * entries in the user portion of the page tables.
-         */
-        if (unlikely(error_code & X86_PF_RSVD))
-                pgtable_bad(regs, error_code, address);
-
-
-As you can see, kernel dpes not check Present bit 0 before reporting the problem
-that calls die() and crash the host.
-
-I'm not sure that described issue really can be reproduced on current upstream.
-OpenVz7 as well as in original RHEL7 kernel does not have few recent changes,
-for example commit eee4818baac0 ("mm: x86: move _PAGE_SWP_SOFT_DIRTY from
-bit 7 to bit 1")
-
-However, as far as I understand, the reported problem may also occur in current.
-Therefore after some doubts I decided to report about the problem here.
- 
-Perhaps we should improve the above check by also testing the X86_PF_PROT bit?
-
-	if (unlikely((error_code & (X86_PF_RSVD | X86_PF_PROT)) == (X86_PF_RSVD | X86_PF_PROT))
-
-I've prepared test kernel with similar patch, provided it to affected customer
-and it looks like this resolved the problem, at least he does not report about
-new crashes.
-
-Thank you,
-	Vasily Averin
+--------------TrYTNr10W5n70OBgv21LKjlS--

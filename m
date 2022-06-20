@@ -2,74 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583CA552265
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B7455226A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242855AbiFTQjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S243373AbiFTQkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239357AbiFTQjM (ORCPT
+        with ESMTP id S229906AbiFTQkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:39:12 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D83DEF1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:39:09 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id l66so18491975ybl.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=J6YCM3GGK2hsL7x+PaMSvF/YdxNaFbB33EhpPOoQiZE=;
-        b=UdYUpqS6dQw7Bdkcj32xJ1fI8eLDtGWL5htYnsgxOCvdla9DAnsdY1xWnsnjTq27Wp
-         Puu3EXy70JpD74hx1/Py8dmb6Jm/NXZyuhynvd+5j+YMl3pGBnUoiFcoKB/TZ6fBnRvM
-         Kbh4COyNk/VwxQJHVHqzykTNgBye41I8JCOqe91NTSh1FQZbmYIvq0lqKkgG/SxJG+uK
-         mmMP45iAfRPH5itK1EwTApjgGBMu+35yXTR1r1XpJihHt6T7ANMg0+uNrjQeaQSkBa+/
-         vqhVz446WGG1BHygeautRcuB9DFxm120U4hFy9XI8s6TGfTlbNyabejvP2deLJjY/gxS
-         glqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=J6YCM3GGK2hsL7x+PaMSvF/YdxNaFbB33EhpPOoQiZE=;
-        b=3ROUBO3o8AH4haq21cz/f2qGJ8/4kLF7UArhAAG3VveULAZuOaC3LgZfz1uYyGDaus
-         jk/GaT179JKU3Suib9Xzd2WTKUd5zi/4M+qqlBVHwhLY9zIM92YgKFERW87JncCbrphf
-         2GYuUSrxhtvo7eXFGFKEpNGlLaae88oBdRICu/5h/8djqqEhFW612jwk4P1o+oBONjsZ
-         xOq+9kancMpUyyxgzG+SCgPESwTT6yuI+Nm9RWjxcKVR6oAk3AKfrVj98Z/PcP1aA/zW
-         3G88sCrSf9TMnwNjxHlcLDdrJUiFIIsm7/vQzPZBfC3HvpNDdyRMnECih8hwDcUzpK3z
-         Uprw==
-X-Gm-Message-State: AJIora9uuHQf1Kvz/NE5nyS4QxNZv2yQ8DUw3Ajo6Gj2Spr3FBLEAhJT
-        YqeAt6CTxwJOry+nuG+EO8IbOYAHFIpbs/AdL4E=
-X-Google-Smtp-Source: AGRyM1uf0BmEtzsSrcCWm5D/IYFVANeo3WUYJrHCml79BpJusifvihclMumza8hNN1RRZ2jZZI7SWKl8EsEPT1EZP8A=
-X-Received: by 2002:a25:86d0:0:b0:664:8657:fe63 with SMTP id
- y16-20020a2586d0000000b006648657fe63mr26330696ybm.460.1655743149008; Mon, 20
- Jun 2022 09:39:09 -0700 (PDT)
+        Mon, 20 Jun 2022 12:40:17 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5768BE15;
+        Mon, 20 Jun 2022 09:40:16 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657f0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57f0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 46D431EC05ED;
+        Mon, 20 Jun 2022 18:40:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1655743211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uVkwYYD3WNvkHSrPcC3CPbJPRGT2Rr8D4frbfFUL2Hs=;
+        b=n1wHZBcSwAq8PYDjrtgmPSl7w3SaSZeFIoFaI1Uu6DNJRlYzUcqGQdWqi32jQLApZWcS2a
+        hse+Za2prAk7smsjcBp9MCBk67LYupuxF7bWvaaFGclzZRn6B6Vgse2fzeRZGyb1KUqLJa
+        ZC9u+BDllQRkUxZk5raV/125ljU+3lo=
+Date:   Mon, 20 Jun 2022 18:40:07 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     medadyoung@gmail.com
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, robh+dt@kernel.org, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        ctcchien@nuvoton.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v12 1/3] dt-bindings: edac: nuvoton: add NPCM memory
+ controller
+Message-ID: <YrCi1fg+mUPwZ7sX@zn.tnic>
+References: <20220610084340.2268-1-ctcchien@nuvoton.com>
+ <20220610084340.2268-2-ctcchien@nuvoton.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6918:704:b0:c6:5e36:6de2 with HTTP; Mon, 20 Jun 2022
- 09:39:08 -0700 (PDT)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle <michellegood044@gmail.com>
-Date:   Mon, 20 Jun 2022 16:39:08 +0000
-Message-ID: <CAJ5e1jZEWAOZ2+FDouv9GLSj1vGrOSiMWgz1DzBctnTHMMGGqQ@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220610084340.2268-2-ctcchien@nuvoton.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dobr=C3=BD de=C5=88, d=C3=BAfam, =C5=BEe ste dostali moju spr=C3=A1vu.
-Potrebujem r=C3=BDchle reakcie
+On Fri, Jun 10, 2022 at 04:43:38PM +0800, medadyoung@gmail.com wrote:
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4383949ff654..7f832e6ed4e5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2367,12 +2367,14 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/*/*/*npcm*
+>  F:	Documentation/devicetree/bindings/*/*npcm*
+> +F:	Documentation/devicetree/bindings/*/npcm-memory-controller.yaml
+>  F:	arch/arm/boot/dts/nuvoton-npcm*
+>  F:	arch/arm/mach-npcm/
+>  F:	drivers/*/*npcm*
+>  F:	drivers/*/*/*npcm*
+>  F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
+>  
+> +
 
-V=C4=8Faka.
-Michelle
+That looks like it went in when committing. You can remove it in case
+you have to resend v13.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

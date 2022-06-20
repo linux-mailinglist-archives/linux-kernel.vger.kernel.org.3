@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530A55521CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66C75521CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243696AbiFTQDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S243989AbiFTQEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiFTQDN (ORCPT
+        with ESMTP id S229487AbiFTQEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:03:13 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917ED55B7;
-        Mon, 20 Jun 2022 09:03:12 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id es26so14057666edb.4;
-        Mon, 20 Jun 2022 09:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y87tteo65fPwP2KFKjtu1f8D6jluauyBet2xHwdc9hM=;
-        b=VR3IMy6yFhkhF+Q30NdfXuDFk3tjHrqKWSO+wnLWXXxkIfXXClXX9moyzub2GN2nJz
-         pUSCytPYZ12S+zqdkDFpO/wGdif8G9wzbRgutHvGAo44/Fymw9ZIZGW7aUBnhuVONkmQ
-         N7W0XZJbzUypzqXEFLlb3mDVJtN933rbP+lGPYU+hs+izpOwqw6tXx1IFohl427Xo8eI
-         zc91bUn3sQK/OClztUyOH5uz65T/VzkXZhWCgCSQ1a37JWUUISw50xYTb1LPSGU8XNGW
-         246gVosXHJbvwznd00lpEScKmt+lsisGS3L8tKKcOYovyVDHcvXDDce0e/1QxXvUV6H2
-         409Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y87tteo65fPwP2KFKjtu1f8D6jluauyBet2xHwdc9hM=;
-        b=tFX7g59SuhAprzzoK5ZOKFSa7HaORzNoadaw6GVC8b5ROHP1rT8ORn8NIvA1BNdYxm
-         2mYwLchlJdPnN3UdtrXb5tfd7H3ZIKdXmtsPiUescYz60mQVck0M7p83B+aOFIeTjMIA
-         KCOJtD0LhzL47hX9fI2pBbMGZ4wFsGla1h2h2T0Iec9JSubmJZDre7RwD9vnCnG9QJBa
-         fB2/YSKGhrqqFXVtS3PhrAZjE2+uRTKYKuO9HHtSFi3zVyViX7IjdjN0+NNrnZW7umR7
-         pG2xeP5cw5g0MWpWPWYniuiAX63CB+wkEXwtbtPqJBiUWBS+lq2UEKVQxLkwrT+m9I0a
-         ap2w==
-X-Gm-Message-State: AJIora+BNoWFRR3QTolrNWOGgWh2x1W5f/Hn1Zi51tvymcphGCHdP3uF
-        ona9tB5+KGllUf/lMtgP/JBpdDR8UD9a1jfcMmk=
-X-Google-Smtp-Source: AGRyM1sPd0yc0qBXEGBRSSGH98qQAXbevPA3SWgu7Rg29DcdeRsUnYNbYNOVihlJ4XvBCDoajC5mrLHwD0cfMGzcvsI=
-X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
- o16-20020a056402439000b0042e0b7ee9acmr30648861edc.97.1655740991082; Mon, 20
- Jun 2022 09:03:11 -0700 (PDT)
+        Mon, 20 Jun 2022 12:04:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B561FCFE;
+        Mon, 20 Jun 2022 09:04:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD79C614B3;
+        Mon, 20 Jun 2022 16:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0ACC341C5;
+        Mon, 20 Jun 2022 16:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655741079;
+        bh=eH2GAASlt54g98N+vPQt3HAgdfH+Rj39/LZHtqyPJGg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hnsu4BBCJ2zky9wcC/uFViHVphj2A2MpjRV6/EupRfzqi+8ZEPa2dsC45cK2A5psD
+         vijAeGH9A1TgC8SpFuqH97VaF8bNuH+yWjuWaG85U+lum4BfEBdV2xDUadAKytV2nQ
+         4QEDH/l/E4HGaOBoB6rl+1KITrBddWPF9ic+Rhk06MA10ABx5EVfoHDuWdXVRlMkOE
+         S5xnGWOoLjbPhKtGt0+Tkwq/gCOGunDxj09k3ja7PBXCLQv4qfin+R3IzM8CG0xZhK
+         cIgZC4in3kJjgI7U6Y0RZZDySg93f71s06R1ezjxfxaJqjwDzkgpKD0zUSrRGdEt1X
+         L0ftpdSCIQQOw==
+Received: by mail-yb1-f172.google.com with SMTP id i15so14918211ybp.1;
+        Mon, 20 Jun 2022 09:04:38 -0700 (PDT)
+X-Gm-Message-State: AJIora/ap3LOX2+NA+d9Bw7oCs409zESst2dIgbXJ+dZgDn+hGE9BP5V
+        CrjkJyuRw9DAleLhiG6l9izX/ZF21UnfDPkIKsI=
+X-Google-Smtp-Source: AGRyM1t3VYOwecfPvJe+k+RvYpPl8MpH2EqIn2VWJHKicFq3ni6wZ+GIiVERVN6Aa2escSloM2PYmanZEqga4+4KDuE=
+X-Received: by 2002:a05:6902:114c:b0:641:87a7:da90 with SMTP id
+ p12-20020a056902114c00b0064187a7da90mr27215793ybu.561.1655741078011; Mon, 20
+ Jun 2022 09:04:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220307141955.28040-1-alifer.m@variscite.com>
- <CAHp75Vf=vQd5-PGPu3Pcx9bhKSfhdnYDOSOmZKQZQ+bxVkpmYg@mail.gmail.com> <AM6PR08MB4376058D3FFB4139E9292EE8FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
-In-Reply-To: <AM6PR08MB4376058D3FFB4139E9292EE8FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Jun 2022 18:02:34 +0200
-Message-ID: <CAHp75VdDDhMgQ_oiHGA1m8TQmP+F6neT_KG=UKqsEe9P96HbHw@mail.gmail.com>
-Subject: Re: [PATCH] driver: pca953x: avoid error message when resuming
-To:     Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     Alifer Willians de Moraes <alifer.m@variscite.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Eran Matityahu <eran.m@variscite.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Francesco Ferraro <francesco.f@variscite.com>
+References: <20220520235758.1858153-1-song@kernel.org> <YrBV8darrlmUnrHR@ziqianlu-Dell-Optiplex7000>
+In-Reply-To: <YrBV8darrlmUnrHR@ziqianlu-Dell-Optiplex7000>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 20 Jun 2022 09:03:52 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5oqJKHUr6wwbFyC8DFyawKr8djuv5Bjk7FEQ5dnKDGyw@mail.gmail.com>
+Message-ID: <CAPhsuW5oqJKHUr6wwbFyC8DFyawKr8djuv5Bjk7FEQ5dnKDGyw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 0/8] bpf_prog_pack followup
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 4:18 PM Pierluigi Passaro
-<pierluigi.p@variscite.com> wrote:
+Hi Aaron,
 
-...
-
-> > > Avoids the error messages "pca953x 1-0020: failed reading register"
-> > > when resuming from suspend using gpio-key attached to pca9534.
-> > Thanks for your report and fix. My comments below.
-> > First of all, how many of them do you get and why is it a problem?
+On Mon, Jun 20, 2022 at 4:12 AM Aaron Lu <aaron.lu@intel.com> wrote:
 >
-> The number of occurrences depends on the time required to I2C bus to fully wake-up.
-> It's not a real problem, but the message may lead to think about a real I2C problem.
-
-Wolfram, do we have any mechanisms that guarantees that I2C traffic is
-not going on a semi-woken up host controller?
-
-Writing this, I'm in doubt this patch is a fix we want. Wouldn't it
-just hide the real issue with some resume ordering?
-
-...
-
-> > > +       int is_in_suspend;
-> > Usually we call it is_suspended or so, check existing code by `git
-> > grep ...`. And it can be boolean.
+> Hi Song,
 >
-> Do you mean soomething like in drivers/gpio/gpio-omap.c ?
+> On Fri, May 20, 2022 at 04:57:50PM -0700, Song Liu wrote:
+>
+> ... ...
+>
+> > The primary goal of bpf_prog_pack is to reduce iTLB miss rate and reduce
+> > direct memory mapping fragmentation. This leads to non-trivial performance
+> > improvements.
+> >
+> > For our web service production benchmark, bpf_prog_pack on 4kB pages
+> > gives 0.5% to 0.7% more throughput than not using bpf_prog_pack.
+> > bpf_prog_pack on 2MB pages 0.6% to 0.9% more throughput than not using
+> > bpf_prog_pack. Note that 0.5% is a huge improvement for our fleet. I
+> > believe this is also significant for other companies with many thousand
+> > servers.
+> >
+>
+> I'm evaluationg performance impact due to direct memory mapping
+> fragmentation and seeing the above, I wonder: is the performance improve
+> mostly due to prog pack and hugepage instead of less direct mapping
+> fragmentation?
+>
+> I can understand that when progs are packed together, iTLB miss rate will
+> be reduced and thus, performance can be improved. But I don't see
+> immediately how direct mapping fragmentation can impact performance since
+> the bpf code are running from the module alias addresses, not the direct
+> mapping addresses IIUC?
 
-I believe almost any from the list `git grep -nl -w is_suspended` will suffice.
+You are right that BPF code runs from module alias addresses. However, to
+protect text from overwrites, we use set_memory_x() and set_memory_ro()
+for the BPF code. These two functions will set permissions for all aliases
+of the memory, including the direct map, and thus cause fragmentation of
+the direct map. Does this make sense?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Song

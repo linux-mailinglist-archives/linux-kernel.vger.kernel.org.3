@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20512551B78
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A0E551CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346098AbiFTNj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
+        id S1347150AbiFTNkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346930AbiFTNiC (ORCPT
+        with ESMTP id S1347337AbiFTNi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:38:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F651F2DA;
-        Mon, 20 Jun 2022 06:14:12 -0700 (PDT)
+        Mon, 20 Jun 2022 09:38:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B94D28737;
+        Mon, 20 Jun 2022 06:14:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F41FB60A21;
-        Mon, 20 Jun 2022 13:14:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 008FDC3411C;
-        Mon, 20 Jun 2022 13:14:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFF48B80E7D;
+        Mon, 20 Jun 2022 13:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AF3C3411B;
+        Mon, 20 Jun 2022 13:14:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730850;
-        bh=XxK0OtvwNhgUMCOyhriJ/+qNy/K+HjGgOW3wfyCgR3A=;
+        s=korg; t=1655730853;
+        bh=hwxcHasEV/bb2nOwjqLI3dCmvo+Iqwr+zYuY74pKObQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iy0fn3K5kTz3c8H0QVEhk0cqLfticW76N0FARTivMB9rylQiSDG+cXeeDEfBfJ95v
-         2747trTdywZdAdIAkbeBYx+S+810mM8QTz9XSR+vxowdHgMxv5Msvo8is0Q8WSDWg1
-         GLe1Egt8tWo7YLniNftM+bHlpXBpO/SeKwm1jdiA=
+        b=19vjOpIiBbRQkAvZ2G6Ba68F/MsjUhs57cr7Ba23aO+bqFEDa99rlL9yJspDwv3cN
+         uOMkjJL0AjBJGkzNo7aLBpJp5HfEBIVGGCMekykfhp+c+WPo1Z4DadZNY3km0Jg3vM
+         nvvmDB5xoCSsI+9EIgu9Lc3i6aHgtJyxlcXPz7aw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 076/240] random: ensure early RDSEED goes through mixer on init
-Date:   Mon, 20 Jun 2022 14:49:37 +0200
-Message-Id: <20220620124740.824953394@linuxfoundation.org>
+Subject: [PATCH 5.4 077/240] random: do not xor RDRAND when writing into /dev/random
+Date:   Mon, 20 Jun 2022 14:49:38 +0200
+Message-Id: <20220620124740.911494938@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
 References: <20220620124737.799371052@linuxfoundation.org>
@@ -58,15 +58,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a02cf3d0dd77244fd5333ac48d78871de459ae6d upstream.
+commit 91c2afca290ed3034841c8c8532e69ed9e16cf34 upstream.
 
-Continuing the reasoning of "random: use RDSEED instead of RDRAND in
-entropy extraction" from this series, at init time we also don't want to
-be xoring RDSEED directly into the crng. Instead it's safer to put it
-into our entropy collector and then re-extract it, so that it goes
-through a hash function with preimage resistance. As a matter of hygiene,
-we also order these now so that the RDSEED byte are hashed in first,
-followed by the bytes that are likely more predictable (e.g. utsname()).
+Continuing the reasoning of "random: ensure early RDSEED goes through
+mixer on init", we don't want RDRAND interacting with anything without
+going through the mixer function, as a backdoored CPU could presumably
+cancel out data during an xor, which it'd have a harder time doing when
+being forced through a cryptographic hash function. There's actually no
+need at all to be calling RDRAND in write_pool(), because before we
+extract from the pool, we always do so with 32 bytes of RDSEED hashed in
+at that stage. Xoring at this stage is needless and introduces a minor
+liability.
 
 Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
@@ -74,40 +76,38 @@ Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/char/random.c |   14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1208,24 +1208,18 @@ int __init rand_initialize(void)
- 	bool arch_init = true;
- 	unsigned long rv;
+@@ -1305,25 +1305,15 @@ static __poll_t random_poll(struct file
+ static int write_pool(const char __user *buffer, size_t count)
+ {
+ 	size_t bytes;
+-	u32 t, buf[16];
++	u8 buf[BLAKE2S_BLOCK_SIZE];
+ 	const char __user *p = buffer;
  
--	mix_pool_bytes(&now, sizeof(now));
- 	for (i = BLAKE2S_BLOCK_SIZE; i > 0; i -= sizeof(rv)) {
--		if (!arch_get_random_seed_long(&rv) &&
--		    !arch_get_random_long(&rv))
--			rv = random_get_entropy();
--		mix_pool_bytes(&rv, sizeof(rv));
--	}
--	mix_pool_bytes(utsname(), sizeof(*(utsname())));
+ 	while (count > 0) {
+-		int b, i = 0;
 -
--	extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
--	for (i = 4; i < 16; i++) {
- 		if (!arch_get_random_seed_long_early(&rv) &&
- 		    !arch_get_random_long_early(&rv)) {
- 			rv = random_get_entropy();
- 			arch_init = false;
- 		}
--		primary_crng.state[i] ^= rv;
-+		mix_pool_bytes(&rv, sizeof(rv));
+ 		bytes = min(count, sizeof(buf));
+-		if (copy_from_user(&buf, p, bytes))
++		if (copy_from_user(buf, p, bytes))
+ 			return -EFAULT;
+-
+-		for (b = bytes; b > 0; b -= sizeof(u32), i++) {
+-			if (!arch_get_random_int(&t))
+-				break;
+-			buf[i] ^= t;
+-		}
+-
+ 		count -= bytes;
+ 		p += bytes;
+-
+ 		mix_pool_bytes(buf, bytes);
+ 		cond_resched();
  	}
-+	mix_pool_bytes(&now, sizeof(now));
-+	mix_pool_bytes(utsname(), sizeof(*(utsname())));
-+
-+	extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
- 	if (arch_init && trust_cpu && crng_init < 2) {
- 		invalidate_batched_entropy();
- 		crng_init = 2;
 
 

@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF005520A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EBC55209C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244402AbiFTPXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S241632AbiFTPX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244363AbiFTPWt (ORCPT
+        with ESMTP id S244698AbiFTPXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:22:49 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1F3635B;
-        Mon, 20 Jun 2022 08:18:00 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id q9so15133269wrd.8;
-        Mon, 20 Jun 2022 08:18:00 -0700 (PDT)
+        Mon, 20 Jun 2022 11:23:18 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7B93A0;
+        Mon, 20 Jun 2022 08:19:19 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id v1so21749417ejg.13;
+        Mon, 20 Jun 2022 08:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HLrdK2cHg8a+WfynFvGYZTk9JjHbb/Ti/PUAmWDEXmQ=;
-        b=qK7K5LcM7dyr13i14ftD313nslG8YxjHQmfv8LjV7Tk1r8ybUhZ5AI0jn5rTqQhgmm
-         i59iso5WlVRzUdhMyAPWt7eltJkNSfRGyu0jYjEV010WarFWgUS3zKaSaYaJfYgDz//T
-         pid5V6gslaCrjWsjULnAXS530hiyltR47EnpCo8fvT4ma6uRB5F+KGSfmkgW+IZhEhRU
-         OHPH8eR5Bncckxj2xyb0u6lbCoknZypydnAtyGNuGpMe8xIqnmVyJNbKWPMhsWl15p7Z
-         MAziNE52C7w3j7WtmrVuXvwuEgzAYrB48BIKNyK7u2dralOWnRbA4it6ts7mRM3p0T0z
-         PUdQ==
+        bh=YWN3Nb8qUtZPtBRLzgiRX4p9myMZxM2UOMateWHK0As=;
+        b=byAC9nol+eee9J9WFHdI7uUDpTHNL5XRs0QLnV1qT1B97rve/lgkuaIi309k/AJTv3
+         cXxv8zbwfDt57RZNkBY1jyxn3PmRyEK6ISXeh8PFlSmS6jt0CrAies37Mkx9oX3olSSS
+         pHMDuYUv96GQ/HYruIKQrGqaflX8mmpl4ka1YqGMmTNCBsfTSb9kg8JRqnyXDNimOS6o
+         U/ex3gxT/zjRVYJA0UOmJcE7beywnMnau1rQRkwyOHayq+sHoUW8O476yUFw9fJIZqbn
+         RLsJM5sueubEqkWOLbPj8V04RMbDqHg3V1GNdBswqfY4z1dgxuusg8GLde8EnCP6+wIt
+         ulfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HLrdK2cHg8a+WfynFvGYZTk9JjHbb/Ti/PUAmWDEXmQ=;
-        b=uHSUtpnpJZlS/Io/BZSsWi+9vi95Lr7t1T8WwRuEjtDAz9Waq8Az/9BaKMp4Gjd9Ei
-         7u1GVaGcml0XhTv5Xx+UdrwCp4UcvPu6G4aG6lwglN1zAWVyBaDYGmKo8mC/dtUhgeTs
-         FRhXxWtNN0UmU5ICaVsCkpn/wh1g57vwpsdEILBuOviaGP/AwYizCIybCkRvSlOyBJee
-         WwiEe9DUjclD956mSwt1bvqqHFrtPL+PPaLZqktJUkA/Kg5aMappsvTmaokcsjB02q10
-         IgpZBGrb8sIaOOQsJlzQMz8jqcymk4m9yRf3GpNy+SH8TjtyooR2D0Ckiz6Ed4UXksRQ
-         cnig==
-X-Gm-Message-State: AJIora+ml+vXvRGeu1Nn7fb9+Y0azSIbZMqicjoEsngSl9kwMWmMQvEb
-        9J89bG4GskYlrVz+ACgkbmmIQXo+myKalFwod2c=
-X-Google-Smtp-Source: AGRyM1uYeX1HSZm/HHpeWSpFPQwaEg25u16yH1bR8gO/m6+hhlHkAUqlKQD3fntq2L6SbV4iQSzZCmeHt3/fGRnXHoE=
-X-Received: by 2002:adf:eb45:0:b0:21a:efae:4b9f with SMTP id
- u5-20020adfeb45000000b0021aefae4b9fmr17379320wrn.585.1655738278721; Mon, 20
- Jun 2022 08:17:58 -0700 (PDT)
+        bh=YWN3Nb8qUtZPtBRLzgiRX4p9myMZxM2UOMateWHK0As=;
+        b=gF/r/9jyJF4oww3jbLhFafbuwWvVRzZ2K+i7F6FQ6XQuDn7CTUEWxdWJudV2bBtYKF
+         MQsP+XytNAP+K4qXaNqV8XrCvfMy4zjkBzvPCJTJXio9P1xKFbVbYZrZy0xf31lRUM/0
+         BJdwHW075F83CRheuqu2xvjA9VJwCiXlZf5/kHf8iuQHE2d28lg6Tcu1+fGwfno6aRWt
+         iKhh/UnmfcN6VA3dlIrYMfbhsoinMUlkkEa4NR9s0fO53qUoxqG5TtrEarTM3jNI97SM
+         b2hV/x3yjjmH+ydU8EjHO3HF1t3ah0Mo+KhICT1zwQnDRehsYZ2pZOkZH/6aZTSOF9/z
+         WEdA==
+X-Gm-Message-State: AJIora9inMR/XRUzDg9gQcIlDE0qe7Q4OQUIDjy7QzK7IE/zagxQPqNd
+        Onsk4Ts6c9tqTZCyZy9ELbrM6s45XqRzJZ6h5Tk=
+X-Google-Smtp-Source: AGRyM1uS2190/Yx1R95D98KQZlAP7JJU20NU3gNzaby0Kw+eJ7qO7bE8z7pSkhwvy6Uy9brm1yhr38JQPT9FcTLbb14=
+X-Received: by 2002:a17:906:d9d9:b0:710:f2ae:b455 with SMTP id
+ qk25-20020a170906d9d900b00710f2aeb455mr22001283ejb.77.1655738357899; Mon, 20
+ Jun 2022 08:19:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
- <20220526235040.678984-18-dmitry.osipenko@collabora.com> <CAF6AEGt61t2truYDCxm17hqUPV-UdEdHjLs+6vmj5RPoPuVBYg@mail.gmail.com>
- <3bb3dc53-69fc-8cdb-ae37-583b9b2660a3@collabora.com>
-In-Reply-To: <3bb3dc53-69fc-8cdb-ae37-583b9b2660a3@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 20 Jun 2022 08:18:04 -0700
-Message-ID: <CAF6AEGus7R_i7RMWGmbawVi62xCk5mhLTWGq2QEkcWY+XaJBAQ@mail.gmail.com>
-Subject: Re: [PATCH v6 17/22] drm/shmem-helper: Add generic memory shrinker
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, kernel@collabora.com
+References: <202206191726.wq70mbMK-lkp@intel.com> <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+ <20220620135146.2628908-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20220620135146.2628908-1-alexandr.lobakin@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 20 Jun 2022 17:18:40 +0200
+Message-ID: <CAHp75VfQ+DLFP+Jq+m=cejwk+=h9jLOQuL6uK6OCKujg=9Lfgw@mail.gmail.com>
+Subject: Re: [alobakin:bitops 3/7] block/elevator.c:222:9: sparse: sparse:
+ cast from restricted req_flags_t
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-SH <linux-sh@vger.kernel.org>,
+        Sparc kernel list <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -101,91 +90,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 7:09 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+On Mon, Jun 20, 2022 at 4:48 PM Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
 >
-> On 6/19/22 20:53, Rob Clark wrote:
-> ...
-> >> +static unsigned long
-> >> +drm_gem_shmem_shrinker_count_objects(struct shrinker *shrinker,
-> >> +                                    struct shrink_control *sc)
-> >> +{
-> >> +       struct drm_gem_shmem_shrinker *gem_shrinker = to_drm_shrinker(shrinker);
-> >> +       struct drm_gem_shmem_object *shmem;
-> >> +       unsigned long count = 0;
-> >> +
-> >> +       if (!mutex_trylock(&gem_shrinker->lock))
-> >> +               return 0;
-> >> +
-> >> +       list_for_each_entry(shmem, &gem_shrinker->lru_evictable, madv_list) {
-> >> +               count += shmem->base.size;
-> >> +
-> >> +               if (count >= SHRINK_EMPTY)
-> >> +                       break;
-> >> +       }
-> >> +
-> >> +       mutex_unlock(&gem_shrinker->lock);
+> From: kernel test robot <lkp@intel.com>
+> Date: Sun, 19 Jun 2022 17:20:05 +0800
+>
+> Also, could someone please help me with this? I don't get what went
+> wrong with sparse, it's not even some new code, just moving old
+> stuff.
+>
+> > tree:   https://github.com/alobakin/linux bitops
+> > head:   9bd39b17ce49d350eed93a031e0da6389067013e
+> > commit: 521611f961a7dda92eefa26e1afd3914c06af64e [3/7] bitops: unify non-atomic bitops prototypes across architectures
+> > config: mips-randconfig-s031-20220619 (https://download.01.org/0day-ci/archive/20220619/202206191726.wq70mbMK-lkp@intel.com/config)
+> > compiler: mips64el-linux-gcc (GCC) 11.3.0
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # apt-get install sparse
+> >         # sparse version: v0.6.4-30-g92122700-dirty
+> >         # https://github.com/alobakin/linux/commit/521611f961a7dda92eefa26e1afd3914c06af64e
+> >         git remote add alobakin https://github.com/alobakin/linux
+> >         git fetch --no-tags alobakin bitops
+> >         git checkout 521611f961a7dda92eefa26e1afd3914c06af64e
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
 > >
-> > As I mentioned on other thread, count_objects, being approximate but
-> > lockless and fast is the important thing.  Otherwise when you start
-> > hitting the shrinker on many threads, you end up serializing them all,
-> > even if you have no pages to return to the system at that point.
->
-> Daniel's point for dropping the lockless variant was that we're already
-> in trouble if we're hitting shrinker too often and extra optimizations
-> won't bring much benefits to us.
-
-At least with zram swap (which I highly recommend using even if you
-are not using a physical swap file/partition), swapin/out is actually
-quite fast.  And if you are leaning on zram swap to fit 8GB of chrome
-browser on a 4GB device, the shrinker gets hit quite a lot.  Lower
-spec (4GB RAM) chromebooks can be under constant memory pressure and
-can quite easily get into a situation where you are hitting the
-shrinker on many threads simultaneously.  So it is pretty important
-for all shrinkers in the system (not just drm driver) to be as
-concurrent as possible.  As long as you avoid serializing reclaim on
-all the threads, performance can still be quite good, but if you don't
-performance will fall off a cliff.
-
-jfwiw, we are seeing pretty good results (iirc 40-70% increase in open
-tab counts) with the combination of eviction + multigen LRU[1] +
-sizing zram swap to be 2x physical RAM
-
-[1] https://lwn.net/Articles/856931/
-
-> Alright, I'll add back the lockless variant (or will use yours
-> drm_gem_lru) in the next revision. The code difference is very small
-> after all.
->
-> ...
-> >> +               /* prevent racing with the dma-buf importing/exporting */
-> >> +               if (!mutex_trylock(&gem_shrinker->dev->object_name_lock)) {
-> >> +                       *lock_contention |= true;
-> >> +                       goto resv_unlock;
-> >> +               }
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
 > >
-> > I'm not sure this is a good idea to serialize on object_name_lock.
-> > Purgeable buffers should never be shared (imported or exported).  So
-> > at best you are avoiding evicting and immediately swapping back in, in
-> > a rare case, at the cost of serializing multiple threads trying to
-> > reclaim pages in parallel.
->
-> The object_name_lock shouldn't cause contention in practice. But objects
-> are also pinned on attachment, hence maybe this lock is indeed
-> unnecessary.. I'll re-check it.
+> >
+> > sparse warnings: (new ones prefixed by >>)
+> >    command-line: note: in included file:
+> >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+> >    builtin:0:0: sparse: this was the original definition
+> >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+> >    builtin:0:0: sparse: this was the original definition
+> >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+> >    builtin:0:0: sparse: this was the original definition
+> >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+> >    builtin:0:0: sparse: this was the original definition
+> >    block/elevator.c: note: in included file (through include/linux/bitops.h, include/linux/kernel.h):
+> >    include/asm-generic/bitops/generic-non-atomic.h:29:9: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:30:9: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:32:10: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:32:16: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:27:1: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:38:9: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:39:9: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:41:10: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:41:16: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:36:1: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:56:9: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:57:9: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:59:10: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:59:15: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:54:1: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:74:9: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:75:9: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:76:9: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:78:10: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:78:14: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:78:20: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:79:17: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:79:23: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:79:9: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:72:1: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:94:9: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:95:9: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:96:9: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:98:10: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:98:14: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:98:21: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:99:17: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:99:23: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:99:9: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:92:1: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:106:9: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:107:9: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:108:9: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:110:10: sparse: sparse: unreplaced symbol 'p'
+> >    include/asm-generic/bitops/generic-non-atomic.h:110:14: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:110:20: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:111:17: sparse: sparse: unreplaced symbol 'old'
+> >    include/asm-generic/bitops/generic-non-atomic.h:111:23: sparse: sparse: unreplaced symbol 'mask'
+> >    include/asm-generic/bitops/generic-non-atomic.h:111:9: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:104:1: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:127:9: sparse: sparse: unreplaced symbol 'return'
+> >    include/asm-generic/bitops/generic-non-atomic.h:120:1: sparse: sparse: unreplaced symbol 'return'
+> > >> block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
+> >
+> > vim +222 block/elevator.c
+> >
+> > 9817064b68fef7 Jens Axboe        2006-07-28  217
+> > 70b3ea056f3074 Jens Axboe        2016-12-07  218  void elv_rqhash_add(struct request_queue *q, struct request *rq)
+> > 9817064b68fef7 Jens Axboe        2006-07-28  219  {
+> > b374d18a4bfce7 Jens Axboe        2008-10-31  220      struct elevator_queue *e = q->elevator;
+> > 9817064b68fef7 Jens Axboe        2006-07-28  221
+> > 9817064b68fef7 Jens Axboe        2006-07-28 @222      BUG_ON(ELV_ON_HASH(rq));
+> > 242d98f077ac0a Sasha Levin       2012-12-17  223      hash_add(e->hash, &rq->hash, rq_hash_key(rq));
+> > e806402130c9c4 Christoph Hellwig 2016-10-20  224      rq->rq_flags |= RQF_HASHED;
+> > 9817064b68fef7 Jens Axboe        2006-07-28  225  }
+> > bd166ef183c263 Jens Axboe        2017-01-17  226  EXPORT_SYMBOL_GPL(elv_rqhash_add);
+> > 9817064b68fef7 Jens Axboe        2006-07-28  227
 
-I'm not worried about contention with export/import/etc, but
-contention between multiple threads hitting the shrinker in parallel.
-I guess since you are using trylock, it won't *block* the other
-threads hitting shrinker, but they'll just end up looping in
-do_shrink_slab() because they are hitting contention.
+It looks like a false positive for _your_ case, but if you want to fix
+here is the background.
 
-I'd have to do some experiments to see how it works out in practice,
-but my gut feel is that it isn't a good idea
+The sparse has an ability to control custom types that should never
+set bits outside of the limited range. For this the special annotation
+is given, i.e. __bitwise. Since the culprit type is defined that way
+it means the pure integer (signed or unsigned) that comes with pure
+definition can't be used in a safe way. To solve this each of such
+definitions should be converted to the very same type (req_flags_t).
+See serial core where some UART flags are defined in a similar way and
+how code copes with that.
 
-BR,
--R
-
-> --
-> Best regards,
-> Dmitry
+-- 
+With Best Regards,
+Andy Shevchenko

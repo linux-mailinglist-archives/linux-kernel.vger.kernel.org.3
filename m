@@ -2,204 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF62F552417
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466C8552418
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245738AbiFTSh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245707AbiFTShy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S245703AbiFTShy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 20 Jun 2022 14:37:54 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849CD60E2;
-        Mon, 20 Jun 2022 11:37:52 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id i16so11973781ioa.6;
-        Mon, 20 Jun 2022 11:37:52 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243887AbiFTShv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Jun 2022 14:37:51 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271A320C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:37:50 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id v1so22740950ejg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+oH+TPeRhTKU3xFkxsat+dvsRM7MxvHpnqcOtBFJGWE=;
-        b=K8c8ZPs4V2dyjx7nJQ3tzGLI8rSprOWvjkiKUGMerOx3lpPm+2zDQg4t7im7qK2gTG
-         gFCEHQ/AuvmTg5ZTZtpzafQt2KM7nFVzZpKbc0kh34DER0jNKMPGloQnKGwp6RX+d4NI
-         nvf3Ua6f+zz9uzPnp3FhF1O64iw5Elk44BdF0oc1OaCOomK6bviRs1PgzvG/819XGzCw
-         30XEQ3dPTsXciUh2uOu53+JytdUlCoUD1VfjiXbFNoDcqZHZA4XQADxZhYkuTC+Hydx5
-         YJovyd/LilKxHqXgCAu7n/o04ghnK/CBvP3+yB1JX3jWySIYHYV6yoAdQ5D1GnHPhvRt
-         2xyA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=of2w0PHhR5hD/6CAppicreTgy2ChYJ3890K0i0D/L90=;
+        b=AhKoMV70z3NzCSB1+F+SsObu+BcbBWWKtmuTyIYxFE3p2wqTmMwVm1PdTtMWLMePSm
+         qyiuPrTrI0lPHoLKgy/TvLJVYlsyyRgPF3z/A60LatObwrYxbIwPuXrF/ft9ZPfBn6Cm
+         UOeqtDb0X3wvWnRNJOReetdztIlG89v6Rj9aFKNP+A+57Yo3OGQ8kCWCubYxpP6g3e+i
+         uZp+itWyzV7D2hnpLqPIHRHGL7ozAC/Wso3Drpep8bd0Zkg7q249yU4kJIpiIbYl6A+k
+         ZiuYKRhes8yhITTgIxvBU0sp4VlBz7aQV9Fqc6fvfWXOeIlmbugBm21gLhdVnub6gyMD
+         BovA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=+oH+TPeRhTKU3xFkxsat+dvsRM7MxvHpnqcOtBFJGWE=;
-        b=yLEEnqXmPYhMiOV/Fst3DbKoq8SBZ4VTVr9FndGe0bYJAkBW249sCZ70e1HJXjF8V5
-         vO/9tt5HvjXkmwjyAKZpjuzFtTd/MPlsfzPeRB2GuUm4CM5/j850FaSp+12aiyCTOBWV
-         6vj/quM9lmt/L7rrKp30OrD81N5ZJksqKx5al6aD36w8M11FYAtpB3xi20upuLpP20Cr
-         bEV1RxU++Qrul2EDEtE8Ccpd88cgKhzgTn/g8DnD5ymLA0D67Vwnufy+FUxZcJ800Lus
-         BbU1e6QOcjuDRmCTQVL/ccVyVbCxRJ1ZwGeasjOiTzDN5AHFlGYIvo1DL3BTnC/wkbm7
-         FXWg==
-X-Gm-Message-State: AJIora8x7LkCJcnK95es60Y8g0PH15P2XPPIId567PJx2FBw/EE5sBKv
-        7d3lfyk/L1IWavI8DyrXnzM=
-X-Google-Smtp-Source: AGRyM1t5U1hn+TO2QIcNsREgogNYuCoKr0CzZQnzLWSzRcBlsTk9/uFcgmidlislKg1ykuUSuL8woQ==
-X-Received: by 2002:a02:6d2b:0:b0:332:1027:a2dc with SMTP id m43-20020a026d2b000000b003321027a2dcmr13722194jac.65.1655750271681;
-        Mon, 20 Jun 2022 11:37:51 -0700 (PDT)
-Received: from tremont-lap.lan ([2604:2d80:d289:7400:db6b:f24e:bef:c8f8])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056e020d0400b002d90c9077a2sm2142588ilj.57.2022.06.20.11.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 11:37:50 -0700 (PDT)
-From:   David Owens <daowens01@gmail.com>
-X-Google-Original-From: David Owens <dowens@precisionplanting.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@bitmer.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     David Owens <daowens01@gmail.com>,
-        David Owens <dowens@precisionplanting.com>,
-        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] ASoC: ti: omap-mcbsp: duplicate sysfs error
-Date:   Mon, 20 Jun 2022 13:37:43 -0500
-Message-Id: <20220620183744.3176557-1-dowens@precisionplanting.com>
-X-Mailer: git-send-email 2.34.1
+        bh=of2w0PHhR5hD/6CAppicreTgy2ChYJ3890K0i0D/L90=;
+        b=n3/4SWxn2Uwhjjwy3wzT7AfzRgmfOT2lL+hxYUDqX4L1by1N1K5Nt64q9tn2pGClP6
+         1H/PNLblypBJm8E8qY0YMshWyMN513kzoJk3UrrMds9PsFPvPPdwDP8QZFvOd60vE219
+         1JPbBTuo10gdXTDfFszBTpE4Un/lxR/rKDRNcmEyc+NkTSI0YIWqBqNjmT26/ykaBTsM
+         dN2sfcfeO98c5reILG/0Kr+Q2BsOVrMkv57rQXaxM49jWckxNGplnOG4FZKWHpr4YfsS
+         TSbXzPC01Oqoei1DkJp/jtkVNwzTWLLR61yu9qdgP/FWcyUbwDu0Ce/5p3JokMYpW4/Y
+         aKuQ==
+X-Gm-Message-State: AJIora8AGvEj6mUSlu+at8Hf2TclKM1T0DtaKW/awcOB0PkpBBK/NOhL
+        UrqJELjm/HkDMmAGox+v3Rc6TQ==
+X-Google-Smtp-Source: AGRyM1ste2L5o/LjiFIQg7XGmQjRlV4SGaTh4U3FxhvhZ1Su0LsDHiOTFfl5ZybDm8CA3kqep/fvWw==
+X-Received: by 2002:a17:907:1686:b0:710:6ff6:1b97 with SMTP id hc6-20020a170907168600b007106ff61b97mr22503989ejc.378.1655750268774;
+        Mon, 20 Jun 2022 11:37:48 -0700 (PDT)
+Received: from [192.168.0.211] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g13-20020aa7c84d000000b004357b717a96sm4369577edt.85.2022.06.20.11.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 11:37:48 -0700 (PDT)
+Message-ID: <d4972a70-8ddf-a394-3e8f-08fb778622d8@linaro.org>
+Date:   Mon, 20 Jun 2022 20:37:47 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/3] rpmsg: qcom: glink: replace strncpy() with
+ strscpy_pad()
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stephen Boyd <sboyd@kernel.org>
+References: <20220519073330.7187-1-krzysztof.kozlowski@linaro.org>
+ <640d2a3d-4c38-b921-45c1-048c255b5a9d@linaro.org>
+In-Reply-To: <640d2a3d-4c38-b921-45c1-048c255b5a9d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Owens <daowens01@gmail.com>
+On 09/06/2022 10:56, Krzysztof Kozlowski wrote:
+> On 19/05/2022 09:33, Krzysztof Kozlowski wrote:
+>> The use of strncpy() is considered deprecated for NUL-terminated
+>> strings[1]. Replace strncpy() with strscpy_pad(), to keep existing
+>> pad-behavior of strncpy, similarly to commit 08de420a8014 ("rpmsg:
+>> glink: Replace strncpy() with strscpy_pad()").  This fixes W=1 warning:
+>>
+>>   In function ‘qcom_glink_rx_close’,
+>>     inlined from ‘qcom_glink_work’ at ../drivers/rpmsg/qcom_glink_native.c:1638:4:
+>>   drivers/rpmsg/qcom_glink_native.c:1549:17: warning: ‘strncpy’ specified bound 32 equals destination size [-Wstringop-truncation]
+>>    1549 |                 strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
+>>
+>> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes since v1:
+>> 1. Split series per subsystem.
+> 
+> Any comments on these?
 
-Convert to managed versions of sysfs and clk allocation to simplify
-unbinding and error handling in probe.  Managed sysfs node
-creation specifically addresses the following error seen the second time
-probe is attempted after sdma_pcm_platform_register() previously requsted
-probe deferral:
+I sent first iteration in May, then on 19th of May. There is review from
+Stephen.
 
-sysfs: cannot create duplicate filename '/devices/platform/68000000.ocp/49022000.mcbsp/max_tx_thres'
+On 9th of June I pinged but the patchset is still waiting. Anyone minds
+me taking these?
 
-Signed-off-by: David Owens <dowens@precisionplanting.com>
----
-
-Changes in v4:
- * Reverted change that added use ATTRIBUTE_GROUP and left the attribute
-   structs as-is to fix compilation error and lessen the area of impact.
-
-Changes in v3:
- * Whitespace changes only to allow clean apply
-
-Changes in v2:
- * Improved error handling
-
----
- sound/soc/ti/omap-mcbsp-priv.h |  2 --
- sound/soc/ti/omap-mcbsp-st.c   | 14 ++------------
- sound/soc/ti/omap-mcbsp.c      | 19 ++-----------------
- 3 files changed, 4 insertions(+), 31 deletions(-)
-
-diff --git a/sound/soc/ti/omap-mcbsp-priv.h b/sound/soc/ti/omap-mcbsp-priv.h
-index 7865cda4bf0a..da519ea1f303 100644
---- a/sound/soc/ti/omap-mcbsp-priv.h
-+++ b/sound/soc/ti/omap-mcbsp-priv.h
-@@ -316,8 +316,6 @@ static inline int omap_mcbsp_read(struct omap_mcbsp *mcbsp, u16 reg,
- 
- /* Sidetone specific API */
- int omap_mcbsp_st_init(struct platform_device *pdev);
--void omap_mcbsp_st_cleanup(struct platform_device *pdev);
--
- int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp);
- int omap_mcbsp_st_stop(struct omap_mcbsp *mcbsp);
- 
-diff --git a/sound/soc/ti/omap-mcbsp-st.c b/sound/soc/ti/omap-mcbsp-st.c
-index 0bc7d26c660a..7e8179cae92e 100644
---- a/sound/soc/ti/omap-mcbsp-st.c
-+++ b/sound/soc/ti/omap-mcbsp-st.c
-@@ -347,7 +347,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
- 	if (!st_data)
- 		return -ENOMEM;
- 
--	st_data->mcbsp_iclk = clk_get(mcbsp->dev, "ick");
-+	st_data->mcbsp_iclk = devm_clk_get(mcbsp->dev, "ick");
- 	if (IS_ERR(st_data->mcbsp_iclk)) {
- 		dev_warn(mcbsp->dev,
- 			 "Failed to get ick, sidetone might be broken\n");
-@@ -359,7 +359,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
- 	if (!st_data->io_base_st)
- 		return -ENOMEM;
- 
--	ret = sysfs_create_group(&mcbsp->dev->kobj, &sidetone_attr_group);
-+	ret = devm_device_add_group(mcbsp->dev, &sidetone_attr_group);
- 	if (ret)
- 		return ret;
- 
-@@ -368,16 +368,6 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
- 	return 0;
- }
- 
--void omap_mcbsp_st_cleanup(struct platform_device *pdev)
--{
--	struct omap_mcbsp *mcbsp = platform_get_drvdata(pdev);
--
--	if (mcbsp->st_data) {
--		sysfs_remove_group(&mcbsp->dev->kobj, &sidetone_attr_group);
--		clk_put(mcbsp->st_data->mcbsp_iclk);
--	}
--}
--
- static int omap_mcbsp_st_info_volsw(struct snd_kcontrol *kcontrol,
- 				    struct snd_ctl_elem_info *uinfo)
- {
-diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
-index 58d8e200a7b9..9fb7cf0c9f88 100644
---- a/sound/soc/ti/omap-mcbsp.c
-+++ b/sound/soc/ti/omap-mcbsp.c
-@@ -702,8 +702,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
- 		mcbsp->max_tx_thres = max_thres(mcbsp) - 0x10;
- 		mcbsp->max_rx_thres = max_thres(mcbsp) - 0x10;
- 
--		ret = sysfs_create_group(&mcbsp->dev->kobj,
--					 &additional_attr_group);
-+		ret = devm_device_add_group(mcbsp->dev, &additional_attr_group);
- 		if (ret) {
- 			dev_err(mcbsp->dev,
- 				"Unable to create additional controls\n");
-@@ -711,16 +710,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = omap_mcbsp_st_init(pdev);
--	if (ret)
--		goto err_st;
--
--	return 0;
--
--err_st:
--	if (mcbsp->pdata->buffer_size)
--		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
--	return ret;
-+	return omap_mcbsp_st_init(pdev);
- }
- 
- /*
-@@ -1431,11 +1421,6 @@ static int asoc_mcbsp_remove(struct platform_device *pdev)
- 	if (cpu_latency_qos_request_active(&mcbsp->pm_qos_req))
- 		cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
- 
--	if (mcbsp->pdata->buffer_size)
--		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
--
--	omap_mcbsp_st_cleanup(pdev);
--
- 	return 0;
- }
- 
--- 
-2.34.1
-
+Best regards,
+Krzysztof

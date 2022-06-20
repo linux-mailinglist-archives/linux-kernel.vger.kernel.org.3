@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13BD551B18
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF98D5519D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347970AbiFTNlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S236244AbiFTM6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348930AbiFTNj2 (ORCPT
+        with ESMTP id S243273AbiFTM5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:39:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5218B29C8F;
-        Mon, 20 Jun 2022 06:14:48 -0700 (PDT)
+        Mon, 20 Jun 2022 08:57:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402B31AD84;
+        Mon, 20 Jun 2022 05:55:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 685AF60C1A;
-        Mon, 20 Jun 2022 13:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6038EC3411B;
-        Mon, 20 Jun 2022 13:14:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9D7FB811B8;
+        Mon, 20 Jun 2022 12:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DFFC341C5;
+        Mon, 20 Jun 2022 12:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730882;
-        bh=04Pz+fF0w/7kWMaXUXaQSnSuQMtY6Y5I1iVKp9GXD5o=;
+        s=korg; t=1655729708;
+        bh=auP6D/jWIaQ/Z7xaV4u7K4m5SlM2yD1KPaGjIjeAf0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=po4qyEmkriMo2g385Sm0cy7TUWnmVdmLmWex/5BOVm9bQF8HDSfKJmw44Rwux+0+O
-         OFq/VBjUbI7eYMvgwD3U/bIejwl3YpyWarwUbyPrOgwqjzr95OLW3GwZUadp9xaDAs
-         /iiz4RjLtvk0jrAVt7tmNo3TvBwRdEtAbQnHza5g=
+        b=OTchcy8KvziMVJ5g+TSTGmtjsOolLP2tRity82AnU+aVkezK+19IXEg/iMiFYbvh9
+         +qTIkihebTsc2V13FVsV6MgIcEmqXu1BvdFc828LazqOdnLZHIrT8GctmzKQR8fzUn
+         7rwXjyGo4tImgWKI3Y7A0BQ+QXqQmnvaHs0+BeHE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 085/240] random: tie batched entropy generation to base_crng generation
-Date:   Mon, 20 Jun 2022 14:49:46 +0200
-Message-Id: <20220620124741.407728341@linuxfoundation.org>
+        stable@vger.kernel.org, Piotr Chmura <chmooreck@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 049/141] platform/x86: gigabyte-wmi: Add Z690M AORUS ELITE AX DDR4 support
+Date:   Mon, 20 Jun 2022 14:49:47 +0200
+Message-Id: <20220620124730.984139414@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,131 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Piotr Chmura <chmooreck@gmail.com>
 
-commit 0791e8b655cc373718f0f58800fdc625a3447ac5 upstream.
+[ Upstream commit 8a041afe3e774bedd3e0a9b96f65e48a1299a595 ]
 
-Now that we have an explicit base_crng generation counter, we don't need
-a separate one for batched entropy. Rather, we can just move the
-generation forward every time we change crng_init state or update the
-base_crng key.
+Add dmi_system_id of Gigabyte Z690M AORUS ELITE AX DDR4 board.
+Tested on my PC.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Piotr Chmura <chmooreck@gmail.com>
+Link: https://lore.kernel.org/r/bd83567e-ebf5-0b31-074b-5f6dc7f7c147@gmail.com
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/random.c |   29 ++++++++---------------------
- 1 file changed, 8 insertions(+), 21 deletions(-)
+ drivers/platform/x86/gigabyte-wmi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -428,8 +428,6 @@ static DEFINE_PER_CPU(struct crng, crngs
- 
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- 
--static void invalidate_batched_entropy(void);
--
- /*
-  * crng_fast_load() can be called by code in the interrupt service
-  * path.  So we can't afford to dilly-dally. Returns the number of
-@@ -452,7 +450,7 @@ static size_t crng_fast_load(const void
- 		src++; crng_init_cnt++; len--; ret++;
- 	}
- 	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
--		invalidate_batched_entropy();
-+		++base_crng.generation;
- 		crng_init = 1;
- 	}
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -529,7 +527,6 @@ static void crng_reseed(void)
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
- 	if (crng_init < 2) {
--		invalidate_batched_entropy();
- 		crng_init = 2;
- 		finalize_init = true;
- 	}
-@@ -1254,8 +1251,9 @@ int __init rand_initialize(void)
- 	mix_pool_bytes(utsname(), sizeof(*(utsname())));
- 
- 	extract_entropy(base_crng.key, sizeof(base_crng.key));
-+	++base_crng.generation;
-+
- 	if (arch_init && trust_cpu && crng_init < 2) {
--		invalidate_batched_entropy();
- 		crng_init = 2;
- 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
- 	}
-@@ -1595,8 +1593,6 @@ struct ctl_table random_table[] = {
- };
- #endif	/* CONFIG_SYSCTL */
- 
--static atomic_t batch_generation = ATOMIC_INIT(0);
--
- struct batched_entropy {
- 	union {
- 		/*
-@@ -1609,8 +1605,8 @@ struct batched_entropy {
- 		u64 entropy_u64[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u64))];
- 		u32 entropy_u32[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
- 	};
-+	unsigned long generation;
- 	unsigned int position;
--	int generation;
+diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
+index e87a931eab1e..05588a47ac38 100644
+--- a/drivers/platform/x86/gigabyte-wmi.c
++++ b/drivers/platform/x86/gigabyte-wmi.c
+@@ -154,6 +154,7 @@ static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 GAMING X"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 I AORUS PRO WIFI"),
+ 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 UD"),
++	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("Z690M AORUS ELITE AX DDR4"),
+ 	{ }
  };
  
- /*
-@@ -1629,14 +1625,14 @@ u64 get_random_u64(void)
- 	unsigned long flags;
- 	struct batched_entropy *batch;
- 	static void *previous;
--	int next_gen;
-+	unsigned long next_gen;
- 
- 	warn_unseeded_randomness(&previous);
- 
- 	local_irq_save(flags);
- 	batch = raw_cpu_ptr(&batched_entropy_u64);
- 
--	next_gen = atomic_read(&batch_generation);
-+	next_gen = READ_ONCE(base_crng.generation);
- 	if (batch->position >= ARRAY_SIZE(batch->entropy_u64) ||
- 	    next_gen != batch->generation) {
- 		_get_random_bytes(batch->entropy_u64, sizeof(batch->entropy_u64));
-@@ -1662,14 +1658,14 @@ u32 get_random_u32(void)
- 	unsigned long flags;
- 	struct batched_entropy *batch;
- 	static void *previous;
--	int next_gen;
-+	unsigned long next_gen;
- 
- 	warn_unseeded_randomness(&previous);
- 
- 	local_irq_save(flags);
- 	batch = raw_cpu_ptr(&batched_entropy_u32);
- 
--	next_gen = atomic_read(&batch_generation);
-+	next_gen = READ_ONCE(base_crng.generation);
- 	if (batch->position >= ARRAY_SIZE(batch->entropy_u32) ||
- 	    next_gen != batch->generation) {
- 		_get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
-@@ -1685,15 +1681,6 @@ u32 get_random_u32(void)
- }
- EXPORT_SYMBOL(get_random_u32);
- 
--/* It's important to invalidate all potential batched entropy that might
-- * be stored before the crng is initialized, which we can do lazily by
-- * bumping the generation counter.
-- */
--static void invalidate_batched_entropy(void)
--{
--	atomic_inc(&batch_generation);
--}
--
- /**
-  * randomize_page - Generate a random, page aligned address
-  * @start:	The smallest acceptable address the caller will take.
+-- 
+2.35.1
+
 
 

@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A7555119A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547085511A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239414AbiFTHhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 03:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S239163AbiFTHj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 03:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbiFTHhc (ORCPT
+        with ESMTP id S239298AbiFTHjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 03:37:32 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E30EE32;
-        Mon, 20 Jun 2022 00:37:31 -0700 (PDT)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LRLzF1D8vz6H6l9;
-        Mon, 20 Jun 2022 15:35:37 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 20 Jun 2022 09:37:28 +0200
-Received: from [10.195.35.72] (10.195.35.72) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 20 Jun
- 2022 08:37:26 +0100
-Message-ID: <b033027d-2600-0c7a-a74a-133bda610f2c@huawei.com>
-Date:   Mon, 20 Jun 2022 08:37:25 +0100
+        Mon, 20 Jun 2022 03:39:23 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199D5F5AC;
+        Mon, 20 Jun 2022 00:39:22 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id g4so13343875wrh.11;
+        Mon, 20 Jun 2022 00:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WQ6BRbOQHLpfvLKr06Q8S7QB3Faa2CUcSKR939rmmV8=;
+        b=l29k3Nyvu/ZR3QGAXBAUSUtafIFBhDlCToPTbg79AkCQJbRIDCg2dS/klkUQdXdmVt
+         GNorIsnbDiZsMnD27QZF2cPb3BJSJfqiMUVrqDvIe/UVy7h68B9nIfnIXrEsUmmKaEJO
+         4wnu9eEHGEkAI5qFNQf51T7xDFXF4JTnuIRmXsnlt8tkWMF7ZqJXRwbagJzRAHcpdZq1
+         mi313j4kSDBzkM13PWtea7pQFmrkzh2/jQZxrIpF6jMlAhhQb3mwNoVGfH1BX0VUfP4B
+         7NgC1cG9keIKi+dZM9d99DS+tTzLXxOuNPoDi4zu5mt+AeJUsCVIFVeOBu2CS1IsTOiE
+         Ps0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WQ6BRbOQHLpfvLKr06Q8S7QB3Faa2CUcSKR939rmmV8=;
+        b=X+2vS/uH+SQauMMyxcpsscqkcsnfWV5+/xw/mJgOeFDzI8Zwhc9b1uz4mgpnnKPkqq
+         8mGym2pln07Rj9cJ74mgXwVpJzIqetHbd13u7uo/8RjsF9jVVcBTkf+EEh5cPfeIXCFG
+         PLEzzH1R+5qXELEUTDpjIhBlKRrpeiaXsYey7vj21sk/aT72b775r4jqtS9188Tc+wEY
+         Su1rJpyXeZQbe1Te0WAghjKCbYKla0SoR9BoP9ZcDMuIMkLVTkzzSFg74tN8cxi5B3y/
+         52XhLJCdFbdhcvRpq1LUqEQ1yMwc+RPb9yV01nKBc9pri2l3Oy21+AWCj+I0yVdRiR8d
+         vyWQ==
+X-Gm-Message-State: AJIora/RFk9Zgi3vhGmkiBbkVaix8LtzUmSAGEy4BZSmbZYMg07IdxIC
+        ODwPVyH4yewiipftWHwddoX1rRH4GVP+SJZ2WCgnxeZmQag=
+X-Google-Smtp-Source: AGRyM1sLCv5drf3iFZM2xrRkVklVax460Q6mO+V0Utu0i9SMSvdgAT5a+2K9ebvZv306mBShIlnmdhWytn6YETN59Wc=
+X-Received: by 2002:adf:fbd0:0:b0:21b:90cd:69f2 with SMTP id
+ d16-20020adffbd0000000b0021b90cd69f2mr2648047wrs.525.1655710760603; Mon, 20
+ Jun 2022 00:39:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/5] scsi: core: Remove reserved request time-out handling
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hare@suse.de>, <satishkh@cisco.com>,
-        <sebaddel@cisco.com>, <kartilak@cisco.com>,
-        <linux-rdma@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-nvme@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <mpi3mr-linuxdrv.pdl@broadcom.com>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <nbd@other.debian.org>
-References: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
- <1655463320-241202-2-git-send-email-john.garry@huawei.com>
- <20220620055828.GA10192@lst.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220620055828.GA10192@lst.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.35.72]
-X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+References: <CAMZm_C=o-rc4a+u_8-pFJtmL_2drwczASMRTqszamrks5Zm_OA@mail.gmail.com>
+ <CAG48ez2PVMs-CeLoZtvPq2EeQqOg05mm3AuvEE_pr9Sog0O5og@mail.gmail.com>
+In-Reply-To: <CAG48ez2PVMs-CeLoZtvPq2EeQqOg05mm3AuvEE_pr9Sog0O5og@mail.gmail.com>
+From:   Federico Di Pierro <nierro92@gmail.com>
+Date:   Mon, 20 Jun 2022 09:39:09 +0200
+Message-ID: <CAMZm_CmW7pHwfEfCQfXRJPiHOjeGviQunfwxY_1ejrihKab5rA@mail.gmail.com>
+Subject: Re: pgprot_encrypted macro is broken
+To:     Jann Horn <jannh@google.com>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,28 +67,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 06:58, Christoph Hellwig wrote:
-> On Fri, Jun 17, 2022 at 06:55:16PM +0800, John Garry wrote:
->> The SCSI code does not currently support reserved commands. As such,
->> requests which time-out would never be reserved, and scsi_timeout()
->> 'reserved' arg should never be set.
->>
->> Remove handling for reserved requests and drop wrapper scsi_timeout() as
->> it now just calls scsi_times_out() always.
-> 
-> Please rename scsi_times_out to scsi_timeout so it still matches the
-> method name.
->
+> Why does your driver need to use that macro? pgprot_encrypted() is
+> mostly only directly used by core kernel code, not by drivers... and
+> if memory encryption is enabled, almost all memory mappings created by
+> the kernel should be marked as encrypted automatically.
 
-ok, note that some code comments and Documentation reference 
-scsi_times_out() so I will need to fix them up also.
+This is interesting; i don't really know the history behind our piece
+of code; as far as i understand,
+we have a shared ring buffer with userspace, onto which we push tracing events,
+and we must mark it as encrypted when
+the kmod runs on an AMD SME enabled kernel to allow userspace to grab sane data.
 
+This is the commit that introduced the change (if you wish to give it a look):
+https://github.com/falcosecurity/libs/commit/0333501cf429c045c61aaf5909812156f090786e
 
-> Otherwise looks good:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-> .
+Do you see any workaround not involving `pgprot_encrypted` ?
 
-Cheers,
-John
+Thank you very much for your answer, much appreciated!
+Regards,
+Federico

@@ -2,48 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6950C5518A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17115518A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242242AbiFTMTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
+        id S242348AbiFTMTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242752AbiFTMSq (ORCPT
+        with ESMTP id S242272AbiFTMTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:18:46 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD8B273F;
-        Mon, 20 Jun 2022 05:18:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VGxWMOb_1655727520;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VGxWMOb_1655727520)
-          by smtp.aliyun-inc.com;
-          Mon, 20 Jun 2022 20:18:41 +0800
-Subject: Re: [PATCH 5.15] mm: validate buddy page before using
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     akpm@linux-foundation.org, ziy@nvidia.com, stable@vger.kernel.org,
-        guoren@kernel.org, huanyi.xj@alibaba-inc.com, guohanjun@huawei.com,
-        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220616161746.3565225-1-xianting.tian@linux.alibaba.com>
- <20220616161746.3565225-6-xianting.tian@linux.alibaba.com>
- <YrBJVAZWOzmDyUN3@kroah.com>
- <35bd7396-f5aa-e154-9495-0a36fc6f6a33@linux.alibaba.com>
- <YrBdKwFHfy9Lr14c@kroah.com>
- <8b16a502-5ad5-1efb-0d84-ed0a8ae63c0e@linux.alibaba.com>
- <YrBi1evI1/BF/WLV@kroah.com>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <d52e17da-a382-0028-2b16-105ab7053028@linux.alibaba.com>
-Date:   Mon, 20 Jun 2022 20:18:40 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Mon, 20 Jun 2022 08:19:05 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794595F6F;
+        Mon, 20 Jun 2022 05:19:04 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d5so9563724plo.12;
+        Mon, 20 Jun 2022 05:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G116oHrS6xPawz1p7YlGPW002yjrm+RWYps59Z2K3Js=;
+        b=bQ3h43AIQpxpWNQaiBLocOnzDTZ7buSOL0mz19NlUnhzLU5ap878WMs1BFn61KUgj+
+         NJM3YnYD8RdcyXovFq820Sr+ixX+2/d36WK0I82Kkhvg8CMQYkl88F95R0w9RP8Ef6jw
+         1Bz9QbxEdsbALjrEATq3d8jBUVzUM0Ar6fUTTqTY+9FxcpgIpNHbC67pFpKDGTT4bkBk
+         Lx7KPkIsOKiYHwhM9A0Dzo32AQpbgduoJ2/WKC4FeIizee5vi/DbRjJmPuJWXpyQOeHM
+         z+ePZea2G9eTqgi1mFzENPhnkF9XM4HU3QhkjAkWjToSrt8HaswFOpprPCR6Ms0Fp7IQ
+         /wAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G116oHrS6xPawz1p7YlGPW002yjrm+RWYps59Z2K3Js=;
+        b=VOn7Pb+cD/RS4Cq7Z7aoxcgwiFfIGTNgSeMA1k3dg4H2skG3UNQ+CSqkE+Fo/RSpRy
+         YFreEjYER/4e2uueJv5mcoTFSGcIPv9wALAJxZyZ/miwB9ROul1vGMoTvgeHLv+cCji4
+         OIzVyxixwPKegDmFrXaGBvJFowNbz+HiRyVuZN5W8TFz0fuAnb98VDwDa5Fjoy83pEiN
+         Og2zQrJj6ra2X2KTA68+jfIyeraBOcJw+Xh76o13JjtnZeVET04rJZ4dwoLmfFf5rGq6
+         n/UQb2LaUo5cp/mI1DjvFSCuLaxONhmQxNiV24K/U4wCvDCKqYwyl/OwLHVcNJm6pYLj
+         PEqw==
+X-Gm-Message-State: AJIora9f3H6EoL18POlUcjL5nxTwoaNBh5HnYBq/u7tHRS0JrUovbk+C
+        Nb2+d35IPcA8mK0CJZvC90o=
+X-Google-Smtp-Source: AGRyM1sUC8evC+f5PKK5DpcdqH/W0moQU/CHSv+aQrDCs/vVJib+j3xnh+/izPRDQMZhpVLBdI8p8g==
+X-Received: by 2002:a17:903:41cd:b0:16a:f48:c357 with SMTP id u13-20020a17090341cd00b0016a0f48c357mr13447166ple.21.1655727543869;
+        Mon, 20 Jun 2022 05:19:03 -0700 (PDT)
+Received: from linux-server-us.. ([172.247.46.202])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b00168c1668a49sm8477165plm.85.2022.06.20.05.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 05:19:03 -0700 (PDT)
+From:   YuTong Chang <mtwget@gmail.com>
+To:     bcousson@baylibre.com
+Cc:     tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        YuTong Chang <mtwget@gmail.com>
+Subject: [PATCH v1] ARM: dts: am33xx: Fix MMCHS0 dma properties
+Date:   Mon, 20 Jun 2022 05:19:00 -0700
+Message-Id: <20220620121900.5196-1-mtwget@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <YrBi1evI1/BF/WLV@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,85 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to technical manual(table 11-24), the DMA of MMCHS0 should be
+direct mapped.
 
-在 2022/6/20 下午8:06, Greg KH 写道:
-> On Mon, Jun 20, 2022 at 07:57:05PM +0800, Xianting Tian wrote:
->> 在 2022/6/20 下午7:42, Greg KH 写道:
->>> On Mon, Jun 20, 2022 at 06:54:44PM +0800, Xianting Tian wrote:
->>>> 在 2022/6/20 下午6:17, Greg KH 写道:
->>>>> On Fri, Jun 17, 2022 at 12:17:45AM +0800, Xianting Tian wrote:
->>>>>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
->>>>>> fixes a bug in 1dd214b8f21c and there is a similar bug in d9dddbf55667 that
->>>>>> can be fixed in a similar way too.
->>>>>>
->>>>>> In unset_migratetype_isolate(), we also need the fix, so move page_is_buddy()
->>>>>> from mm/page_alloc.c to mm/internal.h
->>>>>>
->>>>>> In addition, for RISC-V arch the first 2MB RAM could be reserved for opensbi,
->>>>>> so it would have pfn_base=512 and mem_map began with 512th PFN when
->>>>>> CONFIG_FLATMEM=y.
->>>>>> But __find_buddy_pfn algorithm thinks the start pfn 0, it could get 0 pfn or
->>>>>> less than the pfn_base value. We need page_is_buddy() to verify the buddy to
->>>>>> prevent accessing an invalid buddy.
->>>>>>
->>>>>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
->>>>>> Cc: stable@vger.kernel.org
->>>>>> Reported-by: zjb194813@alibaba-inc.com
->>>>>> Reported-by: tianhu.hh@alibaba-inc.com
->>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
->>>>>> ---
->>>>>>     mm/internal.h       | 34 ++++++++++++++++++++++++++++++++++
->>>>>>     mm/page_alloc.c     | 37 +++----------------------------------
->>>>>>     mm/page_isolation.c |  3 ++-
->>>>>>     3 files changed, 39 insertions(+), 35 deletions(-)
->>>>> What is the commit id of this in Linus's tree?
->>>> It is also this one，
->>>>
->>>> commit 787af64d05cd528aac9ad16752d11bb1c6061bb9
->>>> Author: Zi Yan <ziy@nvidia.com>
->>>> Date:   Wed Mar 30 15:45:43 2022 -0700
->>>>
->>>>       mm: page_alloc: validate buddy before check its migratetype.
->>>>
->>>>       Whenever a buddy page is found, page_is_buddy() should be called to
->>>>       check its validity.  Add the missing check during pageblock merge check.
->>>>
->>>>       Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
->>>> pageblocks with others")
->>>>       Link:
->>>> https://lore.kernel.org/all/20220330154208.71aca532@gandalf.local.home/
->>>>       Reported-and-tested-by: Steven Rostedt <rostedt@goodmis.org>
->>>>       Signed-off-by: Zi Yan <ziy@nvidia.com>
->>>>       Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
->>> This commit looks nothing like what you posted here.
->>>
->>> Why the vast difference with no explaination as to why these are so
->>> different from the other backports you provided here?  Also why is the
->>> subject lines changed?
->> Yes, the changes of 5.15 are not same with others branches, because we need
->> additional fix for 5.15,
->>
->> You can check it in the thread:
->>
->> https://lore.kernel.org/linux-mm/435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com/ <https://lore.kernel.org/linux-mm/435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com/>
->>
->> Right. But pfn_valid_within() was removed since 5.15. So your fix is
->> required for kernels between 5.15 and 5.17 (inclusive).
-> What is "your fix" here?
->
-> This change differs a lot from what is in Linus's tree now, so this all
-> needs to be resend and fixed up as I mention above if we are going to be
-> able to take this.  As-is, it's all not correct so are dropped.
+Signed-off-by: YuTong Chang <mtwget@gmail.com>
+---
+v1: Cleaned up coding style and addressed review comments
 
-I think, for branches except 5.15,  you can just backport Zi Yan's 
-commit 787af64d05cd in Linus tree. I won't send more patches further,
+ arch/arm/boot/dts/am33xx-l4.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-For 5.15, because it need additional fix except commit 787af64d05cd,  I 
-will send a new patch as your comments.
+diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
+index 7da42a5b959c..7e50fe633d8a 100644
+--- a/arch/arm/boot/dts/am33xx-l4.dtsi
++++ b/arch/arm/boot/dts/am33xx-l4.dtsi
+@@ -1502,8 +1502,7 @@ SYSC_OMAP2_SOFTRESET |
+ 			mmc1: mmc@0 {
+ 				compatible = "ti,am335-sdhci";
+ 				ti,needs-special-reset;
+-				dmas = <&edma_xbar 24 0 0
+-					&edma_xbar 25 0 0>;
++				dmas = <&edma 24 0>, <&edma 25 0>;
+ 				dma-names = "tx", "rx";
+ 				interrupts = <64>;
+ 				reg = <0x0 0x1000>;
+-- 
+2.36.1
 
-Is it ok for you?
-
->
-> thanks,
->
-> greg k-h

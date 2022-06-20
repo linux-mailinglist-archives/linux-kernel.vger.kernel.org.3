@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E405518FB
+	by mail.lfdr.de (Postfix) with ESMTP id B50175518FC
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242668AbiFTMdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S241598AbiFTMdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240332AbiFTMdA (ORCPT
+        with ESMTP id S242272AbiFTMdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:33:00 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3CCBF1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:32:58 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eo8so14977396edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:32:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UDlZOOyQdcNu04vWkuOzesBNpGjux8CrCm9cWVOIx24=;
-        b=zQ1FvVojJxROAc1xXxm+Q6cBQ7SGQl0HPdbo12uBjLljHYHp3EYPKPj2BiOT7I3HD1
-         xjEPTKhkQtk1STTWMoge8lIfpjZNp2wugI1qPpsvda68JgAfKc71C4vnlRGrqqAzP4c9
-         J883NpqgMB5f+SR8ZKBvnp9zDKPBu3O6N4dEWny9Ge4i/d172YuID0ea9s5BO3MFOQKO
-         BENntZOjJci5jUckZhfwYjTkBCLzIBp9GeTwjLK4IXhLEt2gJxVcpTbwuOtDTc+ZMdTK
-         7eiA/MJ27BjcGvjmq8rxM2VQrSsV1Fm/V2LvGhmJ1A3N1jeAKFXtz8fldr1HkQR2Uirv
-         M7sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UDlZOOyQdcNu04vWkuOzesBNpGjux8CrCm9cWVOIx24=;
-        b=CDpgfCOYofLADqn+GOuWhEuj4EpJYEVM1yRWkVnHWbz/JntpnyBgYxckv55PyBagwR
-         fLhmr6CO2JBbsTJ3qPoJz1Dd3ImI8hPmb6lVKNNq5UTTY4pihXS3dfsoEjFEOZHASaqN
-         2Q7tZNS3C44rrUiEpxfcDFKnNDyNWkhOVXdoEHYPVwQ1HQ3Q7bL+cgalMRT/Jx4CnNH4
-         Q1Ym/MaDvPF40PlNS59Hk/AALkG12/qxLpqLBw0v7djgQMt7FKwN0LxK0grjVWDcmYYw
-         xFW3YRU1ndTjw9Wr4NPjFqVl53ubusm2LCM+MFcm/FQsIGMw3OPzRenIlbydFOvzZnYB
-         vGmQ==
-X-Gm-Message-State: AJIora8MFTkz9N+BYA1l/oDxquP79+A1nYyoj7cblP+6ioOsN4SNyUDs
-        US9BsB55HcVtpbx2ek7f90YIwQ==
-X-Google-Smtp-Source: AGRyM1t9fgr1zoTLwtaWq0ssCaBkm8DpxdEBpv4kn21sr0j0OBPkidHuMRMK80YULvQJL6Af2+vclg==
-X-Received: by 2002:a05:6402:294c:b0:435:2155:fbe8 with SMTP id ed12-20020a056402294c00b004352155fbe8mr29002964edb.256.1655728377499;
-        Mon, 20 Jun 2022 05:32:57 -0700 (PDT)
-Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a23-20020a1709063a5700b0070efa110afcsm5847013ejf.83.2022.06.20.05.32.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 05:32:56 -0700 (PDT)
-Message-ID: <0d0ef565-9579-31ca-7f9a-7b3c0e7bc090@linaro.org>
-Date:   Mon, 20 Jun 2022 14:32:55 +0200
+        Mon, 20 Jun 2022 08:33:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4080BE9;
+        Mon, 20 Jun 2022 05:33:14 -0700 (PDT)
+X-UUID: da510f831bb5432c9585aded68ee28db-20220620
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:2f14da5f-b24a-459f-8e72-514307cb67e7,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:b14ad71,CLOUDID:9a7303ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: da510f831bb5432c9585aded68ee28db-20220620
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1784198173; Mon, 20 Jun 2022 20:33:09 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 20 Jun 2022 20:33:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 20 Jun 2022 20:33:07 +0800
+Message-ID: <d5a74aca024dd38030bb5edd38084d81b65e27fa.camel@mediatek.com>
+Subject: Re: [PATCH v12 01/14] dt-bindings: mediatek,dpi: Add DP_INTF
+ compatible
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+CC:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>, <devicetree@vger.kernel.org>,
+        <granquet@baylibre.com>, <jitao.shi@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <msp@baylibre.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <wenst@chromium.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <angelogioacchino.delregno@collabora.com>
+Date:   Mon, 20 Jun 2022 20:33:07 +0800
+In-Reply-To: <20220620122500.yfc5vhbuluodoo3d@houat>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-2-rex-bc.chen@mediatek.com>
+         <20220620122500.yfc5vhbuluodoo3d@houat>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1] ARM: dts: am33xx: Fix MMCHS0 dma properties
-Content-Language: en-US
-To:     YuTong Chang <mtwget@gmail.com>, bcousson@baylibre.com
-Cc:     tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220620121900.5196-1-mtwget@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220620121900.5196-1-mtwget@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +70,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 14:19, YuTong Chang wrote:
-> According to technical manual(table 11-24), the DMA of MMCHS0 should be
-> direct mapped.
+On Mon, 2022-06-20 at 14:25 +0200, Maxime Ripard wrote:
+> On Mon, Jun 20, 2022 at 08:10:15PM +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > DP_INTF is similar to DPI but does not have the exact same feature
+> > set
+> > or register layouts.
+> > 
+> > DP_INTF is the sink of the display pipeline that is connected to
+> > the
+> > DisplayPort controller and encoder unit. It takes the same clocks
+> > as
+> > DPI.
+> > 
+> > In this patch, we also do these string replacement:
+> > - s/mediatek/MediaTek/ in title.
+> > - s/Mediatek/MediaTek/ in description.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > [Bo-Chen: Modify reviewers' comments.]
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-
+> > ----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > aml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > aml
+> > index 77ee1b923991..d72f74632038 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > aml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > aml
+> > @@ -4,16 +4,16 @@
+> >  $id: 
+> > http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  
+> > -title: mediatek DPI Controller Device Tree Bindings
+> > +title: MediaTek DPI and DP_INTF Controller
+> >  
+> >  maintainers:
+> >    - CK Hu <ck.hu@mediatek.com>
+> >    - Jitao shi <jitao.shi@mediatek.com>
+> >  
+> >  description: |
+> > -  The Mediatek DPI function block is a sink of the display
+> > subsystem and
+> > -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
+> > parallel
+> > -  output bus.
+> > +  The MediaTek DPI and DP_INTF function blocks are a sink of the
+> > display
+> > +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
+> > pixel data on a
+> > +  parallel output bus.
+> >  
+> >  properties:
+> >    compatible:
+> > @@ -24,6 +24,7 @@ properties:
+> >        - mediatek,mt8183-dpi
+> >        - mediatek,mt8186-dpi
+> >        - mediatek,mt8192-dpi
+> > +      - mediatek,mt8195-dp_intf
 > 
-> Signed-off-by: YuTong Chang <mtwget@gmail.com>
-
-This should be v2, not v1. You already sent a v1.
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-> ---
-> v1: Cleaned up coding style and addressed review comments
+> Underscores are frowned upon in the compatibles. See Section 2.3.1 of
+> the device tree spec:
 > 
->  arch/arm/boot/dts/am33xx-l4.dtsi | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> > The compatible string should consist only of lowercase letters,
+> > digits
+> > and dashes, and should start with a letter. A single comma is
+> > typically only used following a vendor prefix. Underscores should
+> > not
+> > be used.
 > 
-> diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
-> index 7da42a5b959c..7e50fe633d8a 100644
-> --- a/arch/arm/boot/dts/am33xx-l4.dtsi
-> +++ b/arch/arm/boot/dts/am33xx-l4.dtsi
-> @@ -1502,8 +1502,7 @@ SYSC_OMAP2_SOFTRESET |
->  			mmc1: mmc@0 {
->  				compatible = "ti,am335-sdhci";
->  				ti,needs-special-reset;
-> -				dmas = <&edma_xbar 24 0 0
-> -					&edma_xbar 25 0 0>;
-> +				dmas = <&edma 24 0>, <&edma 25 0>;
->  				dma-names = "tx", "rx";
->  				interrupts = <64>;
->  				reg = <0x0 0x1000>;
+> Maxime
 
+Hello Maxime,
 
-Best regards,
-Krzysztof
+Thanks for review.
+I will modify this compatible as "mediatek,mt8195-dp-intf"
+
+BRs,
+Bo-Chen
+

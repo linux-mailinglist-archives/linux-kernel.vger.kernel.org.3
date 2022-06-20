@@ -2,339 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71C855195F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C985519C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242804AbiFTMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
+        id S243852AbiFTNBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiFTMu0 (ORCPT
+        with ESMTP id S244669AbiFTM7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:50:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEF62C3;
-        Mon, 20 Jun 2022 05:50:25 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25KC6rld009175;
-        Mon, 20 Jun 2022 12:50:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=MM9qviSh6Q+gTGXsfRZhcNfyoQIg+w+Icyq9ToekYBs=;
- b=RWSVNfeECgAcjXiQRPeY/m8ukEBxbfye+apSFBm6EecQDjqELR83bfCYfwiuOFliBW4O
- uf2OaA0C0IAhEBvV/AzjeeRwKRbjzcG5cREFhMKI1txU4z3BC8UD0lP/EWottZZEwzef
- e1pISTz4dQbHbdZ6FVTOxxj05yoz/wXMEnsf7xFKLIyelEtWQB7+hENnnyqYEP2Ble9o
- LZHkA4b+5H5UVu71M+f0q/G0CpqEERTW+FK1YLTeub5SyY/SzWufa93kwJAobA08v6Br
- 2xDjRheqL67XyVebJFvrNs+A3ZgpNCyIPqtG9eRo+I3poFD3HhMY5tX7pemtrMjkjB6g hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gsrb614cf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 12:50:24 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25KAtOj9021616;
-        Mon, 20 Jun 2022 12:50:23 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gsrb614bw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 12:50:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25KCa6Lg011373;
-        Mon, 20 Jun 2022 12:50:22 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gs6b8tgxm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 12:50:21 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25KCoIEI20709820
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jun 2022 12:50:18 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A72BA4053;
-        Mon, 20 Jun 2022 12:50:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBE16A4051;
-        Mon, 20 Jun 2022 12:50:17 +0000 (GMT)
-Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.62.140])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jun 2022 12:50:17 +0000 (GMT)
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, pmorel@linux.ibm.com,
-        wintera@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
-Subject: [PATCH v10 3/3] KVM: s390: resetting the Topology-Change-Report
-Date:   Mon, 20 Jun 2022 14:54:37 +0200
-Message-Id: <20220620125437.37122-4-pmorel@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220620125437.37122-1-pmorel@linux.ibm.com>
-References: <20220620125437.37122-1-pmorel@linux.ibm.com>
+        Mon, 20 Jun 2022 08:59:47 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683DD1A04E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:56:42 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id h23so20897158ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=h3Tl1NcyyBUWJ2hHdmOi/Ijf7c9vRxpUfpu/sNPMip0=;
+        b=L/a+blQMKJ0CtjtTkyZsQV8mZ9nBiyrM0wdEwFTgm1g9+bNjfOUsuqa4hfYy25H4Su
+         CrEGNcLWNROSbOjP950Cv/bHAwylQVKT2hbbdgmq0CRPZdWDIKTESY4DiTaBTaqSR8Ba
+         MHcDwv0495ZgqFzrjTcCnqdeE4PSOKLjXoXkSo4Q808FhPz9TGdHsG4x0qGP8nXUD/Zl
+         +DzUh7shBy7R5aMQGAVx043OJFbNIa7to12Skiof61OdV+8xhHZLFh6PjDxhvTrv220f
+         XJyoQvVXVaLdPTvBZnIHccivBtK1KArdEMV+A1mOwWzM2YjLyk97Eyc1ruGcDtoRe8Fb
+         hd5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=h3Tl1NcyyBUWJ2hHdmOi/Ijf7c9vRxpUfpu/sNPMip0=;
+        b=RGkI8eQHhRX2LiRdZcwcZlZY9TeShHcGNdzF3VEjUoTBHEAKDGdCFpDojphcjj8RQt
+         br19bnofV5CjhTObym0KRctzZ4Mjl+j7GOPaaVNg9IEk0tX3sFFiWeM5UKrnWsCMRLvA
+         COBqWdYJukuAEJiPmDvnp90MBKI51j6ab3Q+5HLg7tadoe3bx5oWJPuce0YAaZraF6MU
+         IawtDtnHnt30hBwyJHFZA4WUozW4Ev4w4KTxUHRQBmTRGykQDIKKvDhESQ8nsSBmoCBM
+         2mKEv0LoKKPX5/TeoR7eDmZQ++JG5eVja2pSNeQP8ebWOz7opMjWdlB/9DKe6nHE/Z1N
+         qlOA==
+X-Gm-Message-State: AJIora+nvRX0KpXAkPmMH1/VRZylAYf7vL1sc/uGuUqufvEpr2AGlu9I
+        oFEofRXxSugD+fyZ6U3uyaqJmg==
+X-Google-Smtp-Source: AGRyM1u/8SxdA92Z860M9UR7l1Kg2/zV6W837GoE6rMQOgOO+jYLeQhNPSn5HkrZgk422GiqUnGnEQ==
+X-Received: by 2002:a17:906:7053:b0:711:b90e:47b7 with SMTP id r19-20020a170906705300b00711b90e47b7mr20354864ejj.652.1655729800692;
+        Mon, 20 Jun 2022 05:56:40 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b23-20020aa7df97000000b004357ab9cfb1sm3830386edy.26.2022.06.20.05.56.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 05:56:40 -0700 (PDT)
+Message-ID: <b42b197f-2b11-cb6e-458a-ed12b2eb997d@linaro.org>
+Date:   Mon, 20 Jun 2022 14:56:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: G0To1EClj_X2f3Tz__NoJxVOgcKawI5w
-X-Proofpoint-GUID: 8vGgjoAXEPQz2RniSNz-eSAnxDkqJ4Bz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-20_05,2022-06-17_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0
- suspectscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206200059
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 06/15] dt-bindings: mfd: amd,pensando-elbasr: Add AMD
+ Pensando Elba System Resource chip
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-7-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613195658.5607-7-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a subsystem reset the Topology-Change-Report is cleared.
-Let's give userland the possibility to clear the MTCR in the case
-of a subsystem reset.
+On 13/06/2022 21:56, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
+> 
+> Add support for the AMD Pensando Elba SoC System Resource chip
+> using the SPI interface.  The Elba SR is a Multi-function Device
+> supporting device register access using CS0, smbus interface for
+> FRU and board peripherals using CS1, dual Lattice I2C masters for
+> transceiver management using CS2, and CS3 for flash access.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+>  .../bindings/mfd/amd,pensando-elbasr.yaml     | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml b/Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> new file mode 100644
+> index 000000000000..13356800b1cf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/amd,pensando-elbasr.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/amd,pensando-elbasr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMD Pensando Elba SoC Resource Controller bindings
+> +
+> +description: |
+> +  AMD Pensando Elba SoC Resource Controller bindings attached to a SPI bus.
+> +
+> +maintainers:
+> +  - Brad Larson <blarson@amd.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - amd,pensando-elbasr
+> +      - const: simple-mfd
+> +
+> +  spi-max-frequency:
+> +    description: Maximum SPI frequency of the device in Hz.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +
+> +patternProperties:
+> +  '^reset-controller@[a-f0-9]+$':
+> +    $ref: ../reset/amd,pensando-elbasr-reset.yaml
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/amd,pensando-elba-reset.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    spi0 {
 
-To migrate the MTCR, we give userland the possibility to
-query the MTCR state.
+Just "spi"
 
-We indicate KVM support for the CPU topology facility with a new
-KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        num-cs = <4>;
+> +
+> +        spi@0 {
 
-Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
----
- Documentation/virt/kvm/api.rst   | 31 +++++++++++
- arch/s390/include/uapi/asm/kvm.h | 10 ++++
- arch/s390/kvm/kvm-s390.c         | 96 ++++++++++++++++++++++++++++++++
- include/uapi/linux/kvm.h         |  1 +
- 4 files changed, 138 insertions(+)
+"spi" is for SPI controllers. Use generic name matching the device.
+Usually this is "system-controller", however Rob pointed out your
+inaccurate bindings and example.
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 11e00a46c610..326f8b7e7671 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -7956,6 +7956,37 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
- When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
- type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
- 
-+8.37 KVM_CAP_S390_CPU_TOPOLOGY
-+------------------------------
-+
-+:Capability: KVM_CAP_S390_CPU_TOPOLOGY
-+:Architectures: s390
-+:Type: vm
-+
-+This capability indicates that KVM will provide the S390 CPU Topology
-+facility which consist of the interpretation of the PTF instruction for
-+the Function Code 2 along with interception and forwarding of both the
-+PTF instruction with Function Codes 0 or 1 and the STSI(15,1,x)
-+instruction to the userland hypervisor.
-+
-+The stfle facility 11, CPU Topology facility, should not be provided
-+to the guest without this capability.
-+
-+When this capability is present, KVM provides a new attribute group
-+on vm fd, KVM_S390_VM_CPU_TOPOLOGY.
-+This new attribute allows to get, set or clear the Modified Change
-+Topology Report (MTCR) bit of the SCA through the kvm_device_attr
-+structure.
-+
-+Getting the MTCR bit is realized by using a kvm_device_attr attr
-+entry value of KVM_GET_DEVICE_ATTR and with kvm_device_attr addr
-+entry pointing to the address of a struct kvm_cpu_topology.
-+The value of the MTCR is return by the bit mtcr of the structure.
-+
-+When using KVM_SET_DEVICE_ATTR the MTCR is set by using the
-+attr->attr value KVM_S390_VM_CPU_TOPO_MTCR_SET and cleared by
-+using KVM_S390_VM_CPU_TOPO_MTCR_CLEAR.
-+
- 9. Known KVM API problems
- =========================
- 
-diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
-index 7a6b14874d65..df5e8279ffd0 100644
---- a/arch/s390/include/uapi/asm/kvm.h
-+++ b/arch/s390/include/uapi/asm/kvm.h
-@@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
- #define KVM_S390_VM_CRYPTO		2
- #define KVM_S390_VM_CPU_MODEL		3
- #define KVM_S390_VM_MIGRATION		4
-+#define KVM_S390_VM_CPU_TOPOLOGY	5
- 
- /* kvm attributes for mem_ctrl */
- #define KVM_S390_VM_MEM_ENABLE_CMMA	0
-@@ -171,6 +172,15 @@ struct kvm_s390_vm_cpu_subfunc {
- #define KVM_S390_VM_MIGRATION_START	1
- #define KVM_S390_VM_MIGRATION_STATUS	2
- 
-+/* kvm attributes for cpu topology */
-+#define KVM_S390_VM_CPU_TOPO_MTCR_CLEAR	0
-+#define KVM_S390_VM_CPU_TOPO_MTCR_SET	1
-+
-+struct kvm_cpu_topology {
-+	__u16 mtcr : 1;
-+	__u16 reserved : 15;
-+};
-+
- /* for KVM_GET_REGS and KVM_SET_REGS */
- struct kvm_regs {
- 	/* general purpose regs for s390 */
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 95b96019ca8e..ae39041bb149 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -606,6 +606,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_S390_PROTECTED:
- 		r = is_prot_virt_host();
- 		break;
-+	case KVM_CAP_S390_CPU_TOPOLOGY:
-+		r = test_facility(11);
-+		break;
- 	default:
- 		r = 0;
- 	}
-@@ -817,6 +820,20 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
- 		icpt_operexc_on_all_vcpus(kvm);
- 		r = 0;
- 		break;
-+	case KVM_CAP_S390_CPU_TOPOLOGY:
-+		r = -EINVAL;
-+		mutex_lock(&kvm->lock);
-+		if (kvm->created_vcpus) {
-+			r = -EBUSY;
-+		} else if (test_facility(11)) {
-+			set_kvm_facility(kvm->arch.model.fac_mask, 11);
-+			set_kvm_facility(kvm->arch.model.fac_list, 11);
-+			r = 0;
-+		}
-+		mutex_unlock(&kvm->lock);
-+		VM_EVENT(kvm, 3, "ENABLE: CPU TOPOLOGY %s",
-+			 r ? "(not available)" : "(success)");
-+		break;
- 	default:
- 		r = -EINVAL;
- 		break;
-@@ -1710,6 +1727,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
- 	ipte_unlock(kvm);
- }
- 
-+/**
-+ * kvm_s390_sca_clear_mtcr
-+ * @kvm: guest KVM description
-+ *
-+ * Is only relevant if the topology facility is present,
-+ * the caller should check KVM facility 11
-+ *
-+ * Updates the Multiprocessor Topology-Change-Report to signal
-+ * the guest with a topology change.
-+ */
-+static void kvm_s390_sca_clear_mtcr(struct kvm *kvm)
-+{
-+	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-+
-+	ipte_lock(kvm);
-+	sca->utility &= ~SCA_UTILITY_MTCR;
-+	ipte_unlock(kvm);
-+}
-+
-+static int kvm_s390_set_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-+{
-+	if (!test_kvm_facility(kvm, 11))
-+		return -ENXIO;
-+
-+	switch (attr->attr) {
-+	case KVM_S390_VM_CPU_TOPO_MTCR_SET:
-+		kvm_s390_sca_set_mtcr(kvm);
-+		break;
-+	case KVM_S390_VM_CPU_TOPO_MTCR_CLEAR:
-+		kvm_s390_sca_clear_mtcr(kvm);
-+		break;
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * kvm_s390_sca_get_mtcr
-+ * @kvm: guest KVM description
-+ *
-+ * Is only relevant if the topology facility is present,
-+ * the caller should check KVM facility 11
-+ *
-+ * reports to QEMU the Multiprocessor Topology-Change-Report.
-+ */
-+static int kvm_s390_sca_get_mtcr(struct kvm *kvm)
-+{
-+	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-+	int val;
-+
-+	ipte_lock(kvm);
-+	val = sca->utility & SCA_UTILITY_MTCR;
-+	ipte_unlock(kvm);
-+
-+	return val;
-+}
-+
-+static int kvm_s390_get_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-+{
-+	struct kvm_cpu_topology topo = {};
-+
-+	if (!test_kvm_facility(kvm, 11))
-+		return -ENXIO;
-+
-+	topo.mtcr = kvm_s390_sca_get_mtcr(kvm) ? 1 : 0;
-+	if (copy_to_user((void __user *)attr->addr, &topo, sizeof(topo)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- static int kvm_s390_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- {
- 	int ret;
-@@ -1730,6 +1817,9 @@ static int kvm_s390_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- 	case KVM_S390_VM_MIGRATION:
- 		ret = kvm_s390_vm_set_migration(kvm, attr);
- 		break;
-+	case KVM_S390_VM_CPU_TOPOLOGY:
-+		ret = kvm_s390_set_topology(kvm, attr);
-+		break;
- 	default:
- 		ret = -ENXIO;
- 		break;
-@@ -1755,6 +1845,9 @@ static int kvm_s390_vm_get_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- 	case KVM_S390_VM_MIGRATION:
- 		ret = kvm_s390_vm_get_migration(kvm, attr);
- 		break;
-+	case KVM_S390_VM_CPU_TOPOLOGY:
-+		ret = kvm_s390_get_topology(kvm, attr);
-+		break;
- 	default:
- 		ret = -ENXIO;
- 		break;
-@@ -1828,6 +1921,9 @@ static int kvm_s390_vm_has_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- 	case KVM_S390_VM_MIGRATION:
- 		ret = 0;
- 		break;
-+	case KVM_S390_VM_CPU_TOPOLOGY:
-+		ret = test_kvm_facility(kvm, 11) ? 0 : -ENXIO;
-+		break;
- 	default:
- 		ret = -ENXIO;
- 		break;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 5088bd9f1922..33317d820032 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1157,6 +1157,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_VM_TSC_CONTROL 214
- #define KVM_CAP_SYSTEM_EVENT_DATA 215
- #define KVM_CAP_ARM_SYSTEM_SUSPEND 216
-+#define KVM_CAP_S390_CPU_TOPOLOGY 217
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
--- 
-2.31.1
+> +          compatible = "amd,pensando-elbasr", "simple-mfd";
+> +          reg = <0>;
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +          spi-max-frequency = <12000000>;
+> +
+> +          rstc: reset-controller@0 {
+> +            compatible = "amd,pensando-elbasr-reset";
+> +            reg = <0>;
+> +            #reset-cells = <1>;
+> +          };
+> +        };
+> +
+> +        spi@1 {
+> +          compatible = "amd,pensando-elbasr", "simple-mfd";
+> +          reg = <1>;
+> +          spi-max-frequency = <12000000>;
+> +        };
+> +
+> +        spi@2 {
+> +          compatible = "amd,pensando-elbasr", "simple-mfd";
+> +          reg = <2>;
+> +          spi-max-frequency = <12000000>;
+> +          interrupt-parent = <&porta>;
+> +          interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> +        };
+> +
+> +        spi@3 {
+> +          compatible = "amd,pensando-elbasr", "simple-mfd";
+> +          reg = <3>;
+> +          spi-max-frequency = <12000000>;
+> +        };
+> +    };
+> +
+> +...
 
+
+Best regards,
+Krzysztof

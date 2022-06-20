@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A24B551C7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E57551A85
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343548AbiFTNMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S244005AbiFTNGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245686AbiFTNJV (ORCPT
+        with ESMTP id S244881AbiFTNEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:09:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DBC5F9D;
-        Mon, 20 Jun 2022 06:03:55 -0700 (PDT)
+        Mon, 20 Jun 2022 09:04:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8C193CB;
+        Mon, 20 Jun 2022 05:59:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EA86B811B9;
-        Mon, 20 Jun 2022 13:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5403C3411B;
-        Mon, 20 Jun 2022 13:01:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17C1EB81092;
+        Mon, 20 Jun 2022 12:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD0AC3411B;
+        Mon, 20 Jun 2022 12:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730069;
-        bh=DwlLbd8GKUT6Ycqzy2yQZei1Q/LJ1eFQP4Yg2Ok8Y7s=;
+        s=korg; t=1655729941;
+        bh=OR3RQNyE27ZIpiYht6F5EFvIBUfv9fN4ckMXp3vcjGk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eyYqHwo6nJi9A1usGy2Rc7QA8KUVv0V0Kgof4x/S846YIBACkkp3vrUiJCapg9sG1
-         R0xpOMnaX/Sbpk2mZ66d1vr7wAPmVc+LhYE3hLZRkgzdoCnj/5OQ/ayd3Brl7OHlbC
-         OVShvt95g4+IycXbpje1aiqgSY3PGwlEd549RIAY=
+        b=hXDlL5J1m1xtD7XY5ITderRHnBr3u7LM2YX1fDKqiZBcrJoPj0kBXzHwQfDFJbyCx
+         uexurhJ3LF2SeCADydwQQPheVd0ASDreMolURmT1vMjCrf4U9kep6hCcclYfB3Ps6G
+         KybXdRiWfrS6z4ePpn3v7YejonTKslc22774FgBA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Lin <ctlin0@nuvoton.com>,
-        John Hsu <kchsu0@nuvoton.com>, Seven Li <wtli@nuvoton.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 06/84] ASoC: nau8822: Add operation for internal PLL off and on
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 091/141] irqchip/gic/realview: Fix refcount leak in realview_gic_of_init
 Date:   Mon, 20 Jun 2022 14:50:29 +0200
-Message-Id: <20220620124721.074506001@linuxfoundation.org>
+Message-Id: <20220620124732.234984349@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hui Wang <hui.wang@canonical.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit aeca8a3295022bcec46697f16e098140423d8463 ]
+[ Upstream commit f4b98e314888cc51486421bcf6d52852452ea48b ]
 
-We tried to enable the audio on an imx6sx EVB with the codec nau8822,
-after setting the internal PLL fractional parameters, the audio still
-couldn't work and the there was no sdma irq at all.
+of_find_matching_node_and_match() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-After checking with the section "8.1.1 Phase Locked Loop (PLL) Design
-Example" of "NAU88C22 Datasheet Rev 0.6", we found we need to
-turn off the PLL before programming fractional parameters and turn on
-the PLL after programming.
-
-After this change, the audio driver could record and play sound and
-the sdma's irq is triggered when playing or recording.
-
-Cc: David Lin <ctlin0@nuvoton.com>
-Cc: John Hsu <kchsu0@nuvoton.com>
-Cc: Seven Li <wtli@nuvoton.com>
-Signed-off-by: Hui Wang <hui.wang@canonical.com>
-Link: https://lore.kernel.org/r/20220530040151.95221-2-hui.wang@canonical.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 82b0a434b436 ("irqchip/gic/realview: Support more RealView DCC variants")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220601080930.31005-2-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/nau8822.c | 4 ++++
- sound/soc/codecs/nau8822.h | 3 +++
- 2 files changed, 7 insertions(+)
+ drivers/irqchip/irq-gic-realview.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/nau8822.c b/sound/soc/codecs/nau8822.c
-index 609aeeb27818..d831959d8ff7 100644
---- a/sound/soc/codecs/nau8822.c
-+++ b/sound/soc/codecs/nau8822.c
-@@ -740,6 +740,8 @@ static int nau8822_set_pll(struct snd_soc_dai *dai, int pll_id, int source,
- 		pll_param->pll_int, pll_param->pll_frac,
- 		pll_param->mclk_scaler, pll_param->pre_factor);
+diff --git a/drivers/irqchip/irq-gic-realview.c b/drivers/irqchip/irq-gic-realview.c
+index b4c1924f0255..38fab02ffe9d 100644
+--- a/drivers/irqchip/irq-gic-realview.c
++++ b/drivers/irqchip/irq-gic-realview.c
+@@ -57,6 +57,7 @@ realview_gic_of_init(struct device_node *node, struct device_node *parent)
  
-+	snd_soc_component_update_bits(component,
-+		NAU8822_REG_POWER_MANAGEMENT_1, NAU8822_PLL_EN_MASK, NAU8822_PLL_OFF);
- 	snd_soc_component_update_bits(component,
- 		NAU8822_REG_PLL_N, NAU8822_PLLMCLK_DIV2 | NAU8822_PLLN_MASK,
- 		(pll_param->pre_factor ? NAU8822_PLLMCLK_DIV2 : 0) |
-@@ -757,6 +759,8 @@ static int nau8822_set_pll(struct snd_soc_dai *dai, int pll_id, int source,
- 		pll_param->mclk_scaler << NAU8822_MCLKSEL_SFT);
- 	snd_soc_component_update_bits(component,
- 		NAU8822_REG_CLOCKING, NAU8822_CLKM_MASK, NAU8822_CLKM_PLL);
-+	snd_soc_component_update_bits(component,
-+		NAU8822_REG_POWER_MANAGEMENT_1, NAU8822_PLL_EN_MASK, NAU8822_PLL_ON);
- 
- 	return 0;
- }
-diff --git a/sound/soc/codecs/nau8822.h b/sound/soc/codecs/nau8822.h
-index 489191ff187e..b45d42c15de6 100644
---- a/sound/soc/codecs/nau8822.h
-+++ b/sound/soc/codecs/nau8822.h
-@@ -90,6 +90,9 @@
- #define NAU8822_REFIMP_3K			0x3
- #define NAU8822_IOBUF_EN			(0x1 << 2)
- #define NAU8822_ABIAS_EN			(0x1 << 3)
-+#define NAU8822_PLL_EN_MASK			(0x1 << 5)
-+#define NAU8822_PLL_ON				(0x1 << 5)
-+#define NAU8822_PLL_OFF				(0x0 << 5)
- 
- /* NAU8822_REG_AUDIO_INTERFACE (0x4) */
- #define NAU8822_AIFMT_MASK			(0x3 << 3)
+ 	/* The PB11MPCore GIC needs to be configured in the syscon */
+ 	map = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (!IS_ERR(map)) {
+ 		/* new irq mode with no DCC */
+ 		regmap_write(map, REALVIEW_SYS_LOCK_OFFSET,
 -- 
 2.35.1
 

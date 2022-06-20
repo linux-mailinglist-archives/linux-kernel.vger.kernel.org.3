@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4CA5519BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC2B551CD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243549AbiFTM5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S1348391AbiFTNl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243272AbiFTM51 (ORCPT
+        with ESMTP id S1349527AbiFTNjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:57:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB1A1AD80;
-        Mon, 20 Jun 2022 05:55:23 -0700 (PDT)
+        Mon, 20 Jun 2022 09:39:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45762A427;
+        Mon, 20 Jun 2022 06:15:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15756B811A3;
-        Mon, 20 Jun 2022 12:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A853C3411B;
-        Mon, 20 Jun 2022 12:55:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6773D61171;
+        Mon, 20 Jun 2022 13:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517FAC36AEC;
+        Mon, 20 Jun 2022 13:15:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729719;
-        bh=ZNITDWnOHqy+yw+B4Q7xomhpdap+YNYWvyjpMY0ed+0=;
+        s=korg; t=1655730901;
+        bh=gRkETQJvr2FxHDr9oXch+XuY+cPLZ3ZZHS7YjlX3Skc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wcKgwUDt8DQ3wiX7lUOVfmeLXfx511V60ELivP5Kitb/UAjmgIuOpFNvT4gDjApna
-         /DlcxMLv/vtiAy3t6c4paRXzSvil6lA7IRIFHas00KZnVIocEqLHgYIymR8QnD+k1t
-         BAf8qjwnaRbagvq+2cGQEL2U1Ba7160vg+ctqs/8=
+        b=n5M+qOiSU/uLYUyeT2z0HSM7Cck4wIfZOBzPslx/nZxP017CfbpVrSE8Mrw7e0RxA
+         naTZ9KhV6C/JTK3wqqP9To7dml6Pr0JEFLxJMQzJ12djqPDUl8CtMU4fhCnM7K7u6j
+         soY1BqD8Z7oJCXozXKF55vC9eleDGsusZGwE0NDM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 053/141] staging: r8188eu: Fix warning of array overflow in ioctl_linux.c
-Date:   Mon, 20 Jun 2022 14:49:51 +0200
-Message-Id: <20220620124731.104290428@linuxfoundation.org>
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 091/240] random: remove useless header comment
+Date:   Mon, 20 Jun 2022 14:49:52 +0200
+Message-Id: <20220620124741.650491692@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Larry Finger <Larry.Finger@lwfinger.net>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit 96f0a54e8e65a765b3a4ad4b53751581f23279f3 ]
+commit 6071a6c0fba2d747742cadcbb3ba26ed756ed73b upstream.
 
-Building with -Warray-bounds results in the following warning plus others
-related to the same problem:
+This really adds nothing at all useful.
 
-CC [M]  drivers/staging/r8188eu/os_dep/ioctl_linux.o
-In function ‘wpa_set_encryption’,
-    inlined from ‘rtw_wx_set_enc_ext’ at drivers/staging/r8188eu/os_dep/ioctl_linux.c:1868:9:
-drivers/staging/r8188eu/os_dep/ioctl_linux.c:412:41: warning: array subscript ‘struct ndis_802_11_wep[0]’ is partly outside array bounds of ‘void[25]’ [-Warray-bounds]
-  412 |                         pwep->KeyLength = wep_key_len;
-      |                         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-In file included from drivers/staging/r8188eu/os_dep/../include/osdep_service.h:19,
-                 from drivers/staging/r8188eu/os_dep/ioctl_linux.c:4:
-In function ‘kmalloc’,
-    inlined from ‘kzalloc’ at ./include/linux/slab.h:733:9,
-    inlined from ‘wpa_set_encryption’ at drivers/staging/r8188eu/os_dep/ioctl_linux.c:408:11,
-    inlined from ‘rtw_wx_set_enc_ext’ at drivers/staging/r8188eu/os_dep/ioctl_linux.c:1868:9:
-./include/linux/slab.h:605:16: note: object of size [17, 25] allocated by ‘__kmalloc’
-  605 |         return __kmalloc(size, flags);
-      |                ^~~~~~~~~~~~~~~~~~~~~~
-./include/linux/slab.h:600:24: note: object of size [17, 25] allocated by ‘kmem_cache_alloc_trace’
-  600 |                 return kmem_cache_alloc_trace(
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~
-  601 |                                 kmalloc_caches[kmalloc_type(flags)][index],
-      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  602 |                                 flags, size);
-      |                                 ~~~~~~~~~~~~
-
-Although it is unlikely that anyone is still using WEP encryption, the
-size of the allocation needs to be increased just in case.
-
-Fixes commit 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
-
-Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
-Cc: Phillip Potter <phil@philpotter.co.uk>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220531013103.2175-3-Larry.Finger@lwfinger.net
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/random.h |    6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 60bd1cc2b3af..607c5e1eb320 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -404,7 +404,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param,
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -1,9 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * include/linux/random.h
+- *
+- * Include file for the random number generator.
+- */
++
+ #ifndef _LINUX_RANDOM_H
+ #define _LINUX_RANDOM_H
  
- 		if (wep_key_len > 0) {
- 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
--			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
-+			wep_total_len = wep_key_len + sizeof(*pwep);
- 			pwep = kzalloc(wep_total_len, GFP_KERNEL);
- 			if (!pwep)
- 				goto exit;
--- 
-2.35.1
-
 
 

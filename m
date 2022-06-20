@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E14551C0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53727551BB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344696AbiFTNZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S1344115AbiFTNN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345991AbiFTNYQ (ORCPT
+        with ESMTP id S1343884AbiFTNJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:24:16 -0400
+        Mon, 20 Jun 2022 09:09:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA2319C2C;
-        Mon, 20 Jun 2022 06:09:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5061AF05;
+        Mon, 20 Jun 2022 06:04:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80D4560A6D;
-        Mon, 20 Jun 2022 13:09:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718CEC3411C;
-        Mon, 20 Jun 2022 13:09:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDBD66159D;
+        Mon, 20 Jun 2022 13:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4881C3411B;
+        Mon, 20 Jun 2022 13:03:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730548;
-        bh=/5STY4As5xDCMvpwXO6rE/4s0dKYkRo+K5FsrP4My5E=;
+        s=korg; t=1655730223;
+        bh=NteclWDXlePxh1H5eTA08WagvvdgxSblS2/fwoaoEsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pv8VIR0qebwxZV3chopcWV9RFPzZc1b6JHDQ6IWBcD25Q5p8Wr7vbwodIL/hPeUQs
-         WDN/Sp/Q6xD97gJmaCW4GQji9YWf/ZvOeQgmtYYR6JPZoiQo8yHFB/HBHGszaABTzz
-         sqDW0+lNd8Wh03BRwgJFZ9ghDbZOrGxxAE7oHstk=
+        b=qTBxmaGBvN9aAsltlwoQKlSVZcC7Rv3VKp1u2/0ktLVncVgJEZh7yTK7/K8clGrje
+         EoVOpAu+YIDgawsPlVLOwWHkDwD2AjEW/6tHj/4R0Ors6V3Ze1cA1q3mY1Gy/iuVIs
+         EIRJWDKCjVwqYJ3sQ4ohre9Eh+4jcF3xRcwzl9YQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 074/106] i2c: npcm7xx: Add check for platform_driver_register
-Date:   Mon, 20 Jun 2022 14:51:33 +0200
-Message-Id: <20220620124726.590844761@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Ding Xiang <dingxiang@cmss.chinamobile.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.10 71/84] ext4: make variable "count" signed
+Date:   Mon, 20 Jun 2022 14:51:34 +0200
+Message-Id: <20220620124722.991011427@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Ding Xiang <dingxiang@cmss.chinamobile.com>
 
-[ Upstream commit 6ba12b56b9b844b83ed54fb7ed59fb0eb41e4045 ]
+commit bc75a6eb856cb1507fa907bf6c1eda91b3fef52f upstream.
 
-As platform_driver_register() could fail, it should be better
-to deal with the return value in order to maintain the code
-consisitency.
+Since dx_make_map() may return -EFSCORRUPTED now, so change "count" to
+be a signed integer so we can correctly check for an error code returned
+by dx_make_map().
 
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Tali Perry <tali.perry1@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 46c116b920eb ("ext4: verify dir block before splitting it")
+Cc: stable@kernel.org
+Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
+Link: https://lore.kernel.org/r/20220530100047.537598-1-dingxiang@cmss.chinamobile.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/ext4/namei.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 20a2f903b7f6..d9ac62c1ac25 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -2369,8 +2369,7 @@ static struct platform_driver npcm_i2c_bus_driver = {
- static int __init npcm_i2c_init(void)
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -1841,7 +1841,8 @@ static struct ext4_dir_entry_2 *do_split
+ 			struct dx_hash_info *hinfo)
  {
- 	npcm_i2c_debugfs_dir = debugfs_create_dir("npcm_i2c", NULL);
--	platform_driver_register(&npcm_i2c_bus_driver);
--	return 0;
-+	return platform_driver_register(&npcm_i2c_bus_driver);
- }
- module_init(npcm_i2c_init);
- 
--- 
-2.35.1
-
+ 	unsigned blocksize = dir->i_sb->s_blocksize;
+-	unsigned count, continued;
++	unsigned continued;
++	int count;
+ 	struct buffer_head *bh2;
+ 	ext4_lblk_t newblock;
+ 	u32 hash2;
 
 

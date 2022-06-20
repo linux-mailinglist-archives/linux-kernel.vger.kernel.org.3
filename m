@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A55C5524C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818895524C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245361AbiFTTms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S245659AbiFTTns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245505AbiFTTmi (ORCPT
+        with ESMTP id S245092AbiFTTnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:42:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACE1CB15;
-        Mon, 20 Jun 2022 12:42:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6E32B81636;
-        Mon, 20 Jun 2022 19:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C7BC3411B;
-        Mon, 20 Jun 2022 19:42:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655754152;
-        bh=QUatO8LljWRFWGqX+mKGIdqVItZiPZbPTMtwsPK3ejg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P7M1cz9itYGT0Le204mddGf50LgAqGQGNLHKf6zrrQjK63f3g+n+qlzYHm2n/1wqH
-         QHa4rWTpe8CltOZpz4jIzQTS/ndinb9UdJMMWtoIUBiGKZAZXG5LQRxPYz5cjAMK5O
-         DWRsta3SQzZ8bI8cEG8FdxsbRfPuanXC5Ur1TaEMe6C9CusUY1nPqtxCzSXOJTk011
-         IfrtMncfVckj3zH15Sa6EUJvgdFrBO9zoqPxpTsOw42EzzE/Kgv8UxvHAZcvgpkVyX
-         KEDbgyL4b2twcUfB3+cKEZlQtMWU+KD59LwrxlPfKg7W9qZk4/aCZ3fo7MvC6RW0J+
-         4ZdlivkKFSQ8Q==
-Date:   Mon, 20 Jun 2022 20:42:25 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH v1 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
-Message-ID: <20220620204225.34d40a3f@jic23-huawei>
-In-Reply-To: <20220603181006.2c5cc6c4@jic23-huawei>
-References: <20220530173324.921-1-andriy.shevchenko@linux.intel.com>
-        <20220603181006.2c5cc6c4@jic23-huawei>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 20 Jun 2022 15:43:47 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6881CFE7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:43:46 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id e63so9617870pgc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PzT5BLDkdhOQNSy5zzuFU3a+r6aXrK7pxM/avNB16y4=;
+        b=tjH/onhKKhU+kX3Pqg8Ksn+d/SN1sKS3QOFOOpz1EViEMY5II1O2Lu39tObzWxcQQ6
+         Msol/v5oV55kz0s6ca7JN5/r/gLH5fXOp7XkzG4WsU/4qZEA0fuEFGzagUrnnzY0vpU9
+         1hb83rmaUGhwnuY20HgwM2pJBs5lDepokjNPPp2fJSkmbzAjGfODPP6cKN0xOcLoeNTB
+         kamd8+ap5ihsWjZpGylJ+oe06r6E3xN9lVUhbFbIKjydBTL5IQWJYgfI+7OJUadpytjq
+         2vRGxdoo4nemBtbtxG3pOi9x2vist7RjZsY7kbtL7fByIy5ltTt4a7LjCmC5+BHR85nk
+         xgsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PzT5BLDkdhOQNSy5zzuFU3a+r6aXrK7pxM/avNB16y4=;
+        b=qAWa8/h+AftbJaTiktD3SDKdtXgPWqkqEsOUzBx97aWXhgp778J8HzG/4CD+Tlj1uX
+         aKfkfD0Leh7Tc2WuCeL418H6f8bHlzRAzhu7GYnh62Ht4NH3oknMBQJZSinEzBpUExsS
+         2eSsL/ZzDD8NTHV3AL1nnVd3RLZj75RXnna9z7aVxcWFPlyXbItU7wXNBEM1+BW//syZ
+         5KTs7zomLm7c5e7ZVDpT9fqdErntS28oC2XVmksvy0Ht6Y0mEBKD+LY4EpHcpewpz93P
+         Wf3SwcjgrIDQaAWm0eGpl1AemZTARGSgJIbiN3XOmK7sqwfzHYQkXajtdBL2Bur+5/CU
+         ROJw==
+X-Gm-Message-State: AJIora/sopKbQRXsx1SNDWGlZkYvJK+b98NuVyRoDT2D5yqqEWZyyfjr
+        PPGEsSEtlS51xxrlqtXLh8b7CO3mMctok27zqYdxHw==
+X-Google-Smtp-Source: AGRyM1vu02wE9Ha7pCyZAUWeI5M0PutLotSWD0Ave5kjcj/jl7vlY1BwnQ5lVcOmr+ANJbA/gzPNIbqCogRUKDAmXv8=
+X-Received: by 2002:a63:dd56:0:b0:405:34ac:9bc9 with SMTP id
+ g22-20020a63dd56000000b0040534ac9bc9mr23080773pgj.324.1655754226276; Mon, 20
+ Jun 2022 12:43:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220615222221.1501-1-jirivanek1@gmail.com>
+In-Reply-To: <20220615222221.1501-1-jirivanek1@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 20 Jun 2022 21:43:35 +0200
+Message-ID: <CAG3jFyuL6EwvPNqy3QndwHtHVJei4fHNr85-pAbaycLhBCf4ig@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fixes for TC358775 DSI to LVDS bridge
+To:     Jiri Vanek <jirivanek1@gmail.com>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vinay Simha B N <simhavcs@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,88 +73,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 18:10:06 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+On Thu, 16 Jun 2022 at 00:25, Jiri Vanek <jirivanek1@gmail.com> wrote:
+>
+> This patchset fixes two bugs in the driver for TC358775 DSI to LVDS bridge.
+>
+> Jiri Vanek (2):
+>   drm/bridge/tc358775: Return before displaying inappropriate error
+>     message
+>   drm/bridge/tc358775: Fix DSI clock division for vsync delay
+>     calculation
+>
+>  drivers/gpu/drm/bridge/tc358775.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
 
-> On Mon, 30 May 2022 20:33:24 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > First of all, the additional conversion from vIRQ, and this is exactly
-> > what is returned by platform_get_irq_byname(), to vIRQ is not needed.  
-> Confusing sentence form.  Perhaps:
-> 
-> First, the additional conversion from vIRQ (returned by platform_get_irq_byname())
-> to vIRQ is not needed.
-> 
-> > Hence, drop no-op call to irq_of_parse_and_map().
-> > 
-> > Second, assign the firmware node instead of of_node.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> Hi,
-> 
-> Seems sensible to me, but I'd like a sanity check from someone more
-> familiar with this driver.
-
-This one has been outstanding for a few weeks. I'd still like
-an Ack or similar form someone who knows this device well.
-
-If no one has looked at it in a week or so I'll just go with
-my judgement and pick it up.
-
-Thanks,
-
-Jonathan
-
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/adc/mxs-lradc-adc.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/iio/adc/mxs-lradc-adc.c b/drivers/iio/adc/mxs-lradc-adc.c
-> > index bca79a93cbe4..25292bb8a13f 100644
-> > --- a/drivers/iio/adc/mxs-lradc-adc.c
-> > +++ b/drivers/iio/adc/mxs-lradc-adc.c
-> > @@ -17,7 +17,6 @@
-> >  #include <linux/mfd/core.h>
-> >  #include <linux/mfd/mxs-lradc.h>
-> >  #include <linux/module.h>
-> > -#include <linux/of_irq.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/sysfs.h>
-> >  
-> > @@ -692,7 +691,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
-> >  	struct mxs_lradc_adc *adc;
-> >  	struct iio_dev *iio;
-> >  	struct resource *iores;
-> > -	int ret, irq, virq, i, s, n;
-> > +	int ret, irq, i, s, n;
-> >  	u64 scale_uv;
-> >  	const char **irq_name;
-> >  
-> > @@ -721,7 +720,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
-> >  	platform_set_drvdata(pdev, iio);
-> >  
-> >  	iio->name = pdev->name;
-> > -	iio->dev.of_node = dev->parent->of_node;
-> > +	device_set_node(&iio->dev, dev_fwnode(dev->parent));
-> >  	iio->info = &mxs_lradc_adc_iio_info;
-> >  	iio->modes = INDIO_DIRECT_MODE;
-> >  	iio->masklength = LRADC_MAX_TOTAL_CHANS;
-> > @@ -747,9 +746,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
-> >  		if (irq < 0)
-> >  			return irq;
-> >  
-> > -		virq = irq_of_parse_and_map(dev->parent->of_node, irq);
-> > -
-> > -		ret = devm_request_irq(dev, virq, mxs_lradc_adc_handle_irq,
-> > +		ret = devm_request_irq(dev, irq, mxs_lradc_adc_handle_irq,
-> >  				       0, irq_name[i], iio);
-> >  		if (ret)
-> >  			return ret;  
-> 
-
+Applied to drm-misc-next.

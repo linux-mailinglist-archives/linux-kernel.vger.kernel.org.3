@@ -2,202 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88728552596
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B7A552598
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344708AbiFTULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S1344762AbiFTUMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344623AbiFTUJa (ORCPT
+        with ESMTP id S245663AbiFTUMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:09:30 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019D6220D4;
-        Mon, 20 Jun 2022 13:07:41 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id m1so8328310wrb.2;
-        Mon, 20 Jun 2022 13:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8kelxsU1mTvCHb8JyuDiGnwBNKthLdTp6riqPTxASyE=;
-        b=o6bhf9AeZ2+5NqgP4pO+3P9gyNweVr/bGU2k/NUXa6NYXjGakzCObDD7wDkgdnebAg
-         v6HJT2NvVLc4mo3MpTeYh7ui7/s+BGJ7Q4/gnJt/JyyKpgFnZPhBR2Ka+BdipZTmpezs
-         50XXSFPysaMCnC2KyoQqTfJgpwHcP8Qs6csQsoSjKJr7YEOzIlf0AvxEBaBGy51urmg4
-         0Qc9l+ouyuPb6zVKalYja0H/6iGdSRaP0Jx3Ik9CPxUwZcQPoSFsBH2qzIwE8XNgSX1u
-         1SryEGKFSLwPnYG9/aqm/DK+EGcho8O+D/L54CfDLfTFRjDpxwWLjKpGj0GZHfs/pPGX
-         yvQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8kelxsU1mTvCHb8JyuDiGnwBNKthLdTp6riqPTxASyE=;
-        b=NODORLP8gEvs6jwWpB2eRLvVw22NeBxEhGrRL5qMQ7QVptqNAIjIlIPu0xIsg0rKCg
-         aW4NKW3bnx+XaB8mFdK+p8kDo0/s9WfWXf8Tw/c7sIOwovLX2W83VeTUYLuxX9scA1e5
-         vkoiGyk8kyiAStYNJ1ZUCtOl8Lgv7IDvxsQwiB3A/m93B+dhWSJR/EzXCn1jD9xs3phl
-         iHpCaD15618Vv2O4wiqAf+K5bVV3yGvqgtqsazXsBZu4hmvv7zPpsALCQehgEXhA1yDC
-         KIdw73jOkFIC0HptNN3L3LynryHRc4s1s3ODKiYeWgN34dkSNnIECVLIqU/QrV/Aa3hN
-         x5mA==
-X-Gm-Message-State: AJIora8slbMCbWStkhVOEEBLfuujqRR1EtXy8vwMXE/uJAmjpOUxKJ9z
-        T1VuBfxaKfUWwhpAcxErp98=
-X-Google-Smtp-Source: AGRyM1svSmsGihGwSulWHMLA111MOtQXrfsi0glFa3Tcg1QRdKrN9n0oiKBKxxv3eSGlgwCYymRU0Q==
-X-Received: by 2002:a05:6000:1689:b0:218:3fb1:fd30 with SMTP id y9-20020a056000168900b002183fb1fd30mr24704084wrd.302.1655755655073;
-        Mon, 20 Jun 2022 13:07:35 -0700 (PDT)
-Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id j6-20020adff006000000b0021b892f4b35sm7152390wro.98.2022.06.20.13.07.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:34 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     broonie@kernel.org
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        srinivas.kandagatla@linaro.org, bgoswami@codeaurora.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        cw00.choi@samsung.com, krzysztof.kozlowski@linaro.org,
-        b.zolnierkie@samsung.com, myungjoo.ham@samsung.com,
-        michael@walle.cc, linus.walleij@linaro.org, brgl@bgdev.pl,
-        tglx@linutronix.de, maz@kernel.org, lee.jones@linaro.org,
-        mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
-        tharvey@gateworks.com, rjones@gateworks.com,
-        mazziesaccount@gmail.com, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        jernej.skrabec@gmail.com, samuel@sholland.org, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 49/49] regmap-irq: Remove not_fixed_stride flag
-Date:   Mon, 20 Jun 2022 21:06:44 +0100
-Message-Id: <20220620200644.1961936-50-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+        Mon, 20 Jun 2022 16:12:05 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9108C21828;
+        Mon, 20 Jun 2022 13:09:18 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.78.78) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 20 Jun
+ 2022 23:07:40 +0300
+Subject: Re: linux-next: build warning after merge of the libata tree
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220620103400.6b03f8d9@canb.auug.org.au>
+ <20220620182108.5efb3107@canb.auug.org.au>
+ <387885f0-999f-3746-0238-77052f10b25c@opensource.wdc.com>
+ <8e0717c2-d3c0-c81c-3a33-afdc045d123c@omp.ru>
+ <71cca7ed-6409-3066-8878-cdc647b17057@opensource.wdc.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <54db2644-aa04-82cc-88cd-1cb40a2b2d77@omp.ru>
+Date:   Mon, 20 Jun 2022 23:07:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <71cca7ed-6409-3066-8878-cdc647b17057@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.78.78]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/20/2022 19:47:14
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171243 [Jun 20 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 490 490 64947c9fe6ec4170c45683de1592f92a9c3bac07
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.78 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.78 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.78.78
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/20/2022 19:50:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/20/2022 5:27:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up all the cruft related to not_fixed_stride. The same thing
-can be accomplished with a custom get_irq_reg() callback.
+On 6/20/22 2:07 PM, Damien Le Moal wrote:
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/base/regmap/regmap-irq.c | 41 +++-----------------------------
- include/linux/regmap.h           |  7 ------
- 2 files changed, 3 insertions(+), 45 deletions(-)
+[...]
+>>>>> After merging the libata tree, today's linux-next build (powercp
+>>>>> ppc64_defconfig) produced this warning:
+>>>>>
+>>>>> In file included from include/linux/device.h:15,
+>>>>>                  from arch/powerpc/include/asm/io.h:27,
+>>>>>                  from include/linux/io.h:13,
+>>>>>                  from include/linux/irq.h:20,
+>>>>>                  from arch/powerpc/include/asm/hardirq.h:6,
+>>>>>                  from include/linux/hardirq.h:11,
+>>>>>                  from include/linux/highmem.h:11,
+>>>>>                  from include/linux/bvec.h:10,
+>>>>>                  from include/linux/blk_types.h:10,
+>>>>>                  from include/linux/blkdev.h:9,
+>>>>>                  from drivers/ata/pata_macio.c:18:
+>>>>> drivers/ata/pata_macio.c: In function 'pmac_macio_calc_timing_masks':
+>>>>> drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=]
+>>>>>  1031 |         dev_dbg(priv->dev, "Supported masks: PIO=%lx, MWDMA=%lx, UDMA=%lx\n",
+>>>>
+>>>> 	.
+>>>> 	.
+>>>> 	.
+>>>>
+>>>>> Introduced by commit
+>>>>>
+>>>>>   f0a6d77b351c ("ata: make transfer mode masks *unsigned int*")
+>>
+>>    Oops, sorry about that!>
+>>>> This turned into a build failure in my powerpc allyesconfig build, so I
+>>>> reverted the above commit for today.
+>>>
+>>> I pushed the fix already. It is in ata for-next branch.
+>>
+>>    Thank you!
+>>    Note that your Fixes: tag doesn't look right -- the asterisks are missing
+>> in the summary...
+> 
+> Fixed. Copy-paste from the mailer (build failure report email), the
+> asterisks are gone and "unsigned int" shown with bold font. Please stop
 
-diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index acbd6e22b0cd..0c9dd218614a 100644
---- a/drivers/base/regmap/regmap-irq.c
-+++ b/drivers/base/regmap/regmap-irq.c
-@@ -320,15 +320,8 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
- 			unsigned int offset = subreg->offset[i];
- 			unsigned int index = offset / map->reg_stride;
- 
--			if (chip->not_fixed_stride)
--				ret = regmap_read(map,
--						chip->status_base + offset,
--						&data->status_buf[b]);
--			else
--				ret = regmap_read(map,
--						chip->status_base + offset,
--						&data->status_buf[index]);
--
-+			ret = regmap_read(map, chip->status_base + offset,
-+					  &data->status_buf[index]);
- 			if (ret)
- 				break;
- 		}
-@@ -380,18 +373,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
- 		 * sake of simplicity. and add bulk reads only if needed
- 		 */
- 		for (i = 0; i < chip->num_main_regs; i++) {
--			/*
--			 * For not_fixed_stride, don't use get_irq_reg().
--			 * It would produce an incorrect result.
--			 */
--			if (data->chip->not_fixed_stride)
--				reg = chip->main_status +
--					(i * map->reg_stride *
--					 data->irq_reg_stride);
--			else
--				reg = data->get_irq_reg(data,
--							chip->main_status, i);
--
-+			reg = data->get_irq_reg(data, chip->main_status, i);
- 			ret = regmap_read(map, reg, &data->main_status_buf[i]);
- 			if (ret) {
- 				dev_err(map->dev,
-@@ -561,17 +543,6 @@ unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
- 	const struct regmap_irq_chip *chip = data->chip;
- 	struct regmap *map = data->map;
- 
--	/*
--	 * NOTE: This is for backward compatibility only and will be removed
--	 * when not_fixed_stride is dropped (it's only used by qcom-pm8008).
--	 */
--	if (chip->not_fixed_stride && chip->sub_reg_offsets) {
--		struct regmap_irq_sub_irq_map *subreg;
--
--		subreg = &chip->sub_reg_offsets[0];
--		return base + subreg->offset[0];
--	}
--
- 	return base + index * (map->reg_stride * chip->irq_reg_stride);
- }
- EXPORT_SYMBOL_GPL(regmap_irq_get_irq_reg_linear);
-@@ -674,12 +645,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 			return -EINVAL;
- 	}
- 
--	if (chip->not_fixed_stride) {
--		for (i = 0; i < chip->num_regs; i++)
--			if (chip->sub_reg_offsets[i].num_regs != 1)
--				return -EINVAL;
--	}
--
- 	if (irq_base) {
- 		irq_base = irq_alloc_descs(irq_base, 0, chip->num_irqs, 0);
- 		if (irq_base < 0) {
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index be51af0a2425..ecd3682de269 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -1446,9 +1446,6 @@ struct regmap_irq_chip_data;
-  *		     status_base. Should contain num_regs arrays.
-  *		     Can be provided for chips with more complex mapping than
-  *		     1.st bit to 1.st sub-reg, 2.nd bit to 2.nd sub-reg, ...
-- *		     When used with not_fixed_stride, each one-element array
-- *		     member contains offset calculated as address from each
-- *		     peripheral to first peripheral.
-  * @num_main_regs: Number of 'main status' irq registers for chips which have
-  *		   main_status set.
-  *
-@@ -1474,9 +1471,6 @@ struct regmap_irq_chip_data;
-  * @clear_on_unmask: For chips with interrupts cleared on read: read the status
-  *                   registers before unmasking interrupts to clear any bits
-  *                   set when they were masked.
-- * @not_fixed_stride: Used when chip peripherals are not laid out with fixed
-- * 		      stride. Must be used with sub_reg_offsets containing the
-- * 		      offsets to each peripheral.
-  * @status_invert: Inverted status register: cleared bits are active interrupts.
-  * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
-  *
-@@ -1529,7 +1523,6 @@ struct regmap_irq_chip {
- 	bool runtime_pm:1;
- 	bool type_in_mask:1;
- 	bool clear_on_unmask:1;
--	bool not_fixed_stride:1;
- 	bool status_invert:1;
- 
- 	int num_regs;
--- 
-2.35.1
+   Strange, I'm seeing both asterisks and bold font there. What kind of MUA
+you use? :-)
 
+> with the markdown style emphasis. That creates problems.
+
+   Mhm, OK...
+
+MBR, Sergey

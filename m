@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D982551A25
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48455551D1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243545AbiFTNAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S1348762AbiFTNqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244381AbiFTM7a (ORCPT
+        with ESMTP id S1350014AbiFTNon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:59:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0387A19F95;
-        Mon, 20 Jun 2022 05:56:28 -0700 (PDT)
+        Mon, 20 Jun 2022 09:44:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7D42CE22;
+        Mon, 20 Jun 2022 06:16:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0475C614B7;
-        Mon, 20 Jun 2022 12:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF25C3411B;
-        Mon, 20 Jun 2022 12:56:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9346B811DC;
+        Mon, 20 Jun 2022 13:16:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AFCC341C0;
+        Mon, 20 Jun 2022 13:16:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729782;
-        bh=Y7btmtWqz+zAxG7Ja3P/n/px+Y7cn2ZHLPzm5BXZRds=;
+        s=korg; t=1655730962;
+        bh=Wf5YjyGS/Miwbxm5fWl0FgB1C4SqltlK0Q2dh7YVefI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aetnlOlnRsYSlUul8iChS9UCUkOKZK2ph+iZUxPzNXg2b3eQw43ZbnQAP22GcEsNq
-         YkHtziJPBotS5kKqAbu3WIh+A8OdUKLIono88t9BixmRCmna5U0dnkOaJPjJyma7NL
-         KYhkKtGFxVQxj0lckLEOWm0wcmhlgveYDHbu4swc=
+        b=po6bLrejzGSsDoO6QCFd2hGF5kQ6NQZQUAWL0xOp+WcgKR4N7C8Wrz8nqkO+TocYJ
+         WO6aBk0P9v85scOnFim/dyL6ONGgJ1chN7mPF7XmESVScFeB8ib0UjmGxJIFjKeqTG
+         3it5gMbaBk9GD0WJ/4+goK+Ly7Rrh4yziOUIguOk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        Chengguang Xu <cgxu519@mykernel.net>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 032/141] scsi: ipr: Fix missing/incorrect resource cleanup in error case
-Date:   Mon, 20 Jun 2022 14:49:30 +0200
-Message-Id: <20220620124730.480598927@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 070/240] random: remove use_input_pool parameter from crng_reseed()
+Date:   Mon, 20 Jun 2022 14:49:31 +0200
+Message-Id: <20220620124740.466737563@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengguang Xu <cgxu519@mykernel.net>
+From: Eric Biggers <ebiggers@google.com>
 
-[ Upstream commit d64c491911322af1dcada98e5b9ee0d87e8c8fee ]
+commit 5d58ea3a31cc98b9fa563f6921d3d043bf0103d1 upstream.
 
-Fix missing resource cleanup (when '(--i) == 0') for error case in
-ipr_alloc_mem() and skip incorrect resource cleanup (when '(--i) == 0') for
-error case in ipr_request_other_msi_irqs() because variable i started from
-1.
+The primary_crng is always reseeded from the input_pool, while the NUMA
+crngs are always reseeded from the primary_crng.  Remove the redundant
+'use_input_pool' parameter from crng_reseed() and just directly check
+whether the crng is the primary_crng.
 
-Link: https://lore.kernel.org/r/20220529153456.4183738-4-cgxu519@mykernel.net
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Brian King <brking@linux.vnet.ibm.com>
-Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ipr.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/random.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 104bee9b3a9d..00593d8953f1 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -9795,7 +9795,7 @@ static int ipr_alloc_mem(struct ipr_ioa_cfg *ioa_cfg)
- 					GFP_KERNEL);
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -365,7 +365,7 @@ static struct {
  
- 		if (!ioa_cfg->hrrq[i].host_rrq)  {
--			while (--i > 0)
-+			while (--i >= 0)
- 				dma_free_coherent(&pdev->dev,
- 					sizeof(u32) * ioa_cfg->hrrq[i].size,
- 					ioa_cfg->hrrq[i].host_rrq,
-@@ -10068,7 +10068,7 @@ static int ipr_request_other_msi_irqs(struct ipr_ioa_cfg *ioa_cfg,
- 			ioa_cfg->vectors_info[i].desc,
- 			&ioa_cfg->hrrq[i]);
- 		if (rc) {
--			while (--i >= 0)
-+			while (--i > 0)
- 				free_irq(pci_irq_vector(pdev, i),
- 					&ioa_cfg->hrrq[i]);
- 			return rc;
--- 
-2.35.1
-
+ static void extract_entropy(void *buf, size_t nbytes);
+ 
+-static void crng_reseed(struct crng_state *crng, bool use_input_pool);
++static void crng_reseed(struct crng_state *crng);
+ 
+ /*
+  * This function adds bytes into the entropy "pool".  It does not
+@@ -464,7 +464,7 @@ static void credit_entropy_bits(int nbit
+ 	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
+ 
+ 	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
+-		crng_reseed(&primary_crng, true);
++		crng_reseed(&primary_crng);
+ }
+ 
+ /*********************************************************************
+@@ -701,7 +701,7 @@ static int crng_slow_load(const u8 *cp,
+ 	return 1;
+ }
+ 
+-static void crng_reseed(struct crng_state *crng, bool use_input_pool)
++static void crng_reseed(struct crng_state *crng)
+ {
+ 	unsigned long flags;
+ 	int i;
+@@ -710,7 +710,7 @@ static void crng_reseed(struct crng_stat
+ 		u32 key[8];
+ 	} buf;
+ 
+-	if (use_input_pool) {
++	if (crng == &primary_crng) {
+ 		int entropy_count;
+ 		do {
+ 			entropy_count = READ_ONCE(input_pool.entropy_count);
+@@ -748,7 +748,7 @@ static void _extract_crng(struct crng_st
+ 		init_time = READ_ONCE(crng->init_time);
+ 		if (time_after(READ_ONCE(crng_global_init_time), init_time) ||
+ 		    time_after(jiffies, init_time + CRNG_RESEED_INTERVAL))
+-			crng_reseed(crng, crng == &primary_crng);
++			crng_reseed(crng);
+ 	}
+ 	spin_lock_irqsave(&crng->lock, flags);
+ 	chacha20_block(&crng->state[0], out);
+@@ -1547,7 +1547,7 @@ static long random_ioctl(struct file *f,
+ 			return -EPERM;
+ 		if (crng_init < 2)
+ 			return -ENODATA;
+-		crng_reseed(&primary_crng, true);
++		crng_reseed(&primary_crng);
+ 		WRITE_ONCE(crng_global_init_time, jiffies - 1);
+ 		return 0;
+ 	default:
 
 

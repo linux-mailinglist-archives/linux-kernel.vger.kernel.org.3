@@ -2,234 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3221F5515B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103135515B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236858AbiFTKXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S239025AbiFTKZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240116AbiFTKXi (ORCPT
+        with ESMTP id S238850AbiFTKZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:23:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80EADE9A;
-        Mon, 20 Jun 2022 03:23:34 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LRQhb4GzDz688G2;
-        Mon, 20 Jun 2022 18:23:11 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 20 Jun 2022 12:23:30 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 20 Jun
- 2022 11:23:30 +0100
-Date:   Mon, 20 Jun 2022 11:23:28 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     <ira.weiny@intel.com>, Bjorn Helgaas <bhelgaas@google.com>,
-        "Alison Schofield" <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V11 3/8] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220620112328.00004f63@Huawei.com>
-In-Reply-To: <62ad06a643ddf_844b1294f@dwillia2-xfh.notmuch>
-References: <20220610202259.3544623-1-ira.weiny@intel.com>
-        <20220610202259.3544623-4-ira.weiny@intel.com>
-        <62ad06a643ddf_844b1294f@dwillia2-xfh.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 20 Jun 2022 06:25:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A23612776
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:25:00 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3AC2E660166D;
+        Mon, 20 Jun 2022 11:24:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655720698;
+        bh=2y7HCdJit3cXRA/sDODSECzq5lWWkGtctbxdIAXtr5U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JRR5D1caw1ZcwxMgpxW97vZsMeHafj7w8aot2aPajs1M7TM3xcsOef6iQPvE+dsl0
+         CeOy9FUfLZwMlTaks+kXcjbamsg0eFmqKSLym6WD/WrRHFoB9Stv8IRMM88rc/PoFY
+         /fLJF/KT2rQInCoc7Y5Pp55JG174wzdiJRV3tG3aU1MPnyrNzsHDnKA1JeWsQbAJrm
+         89yG32Gu7SICP9amZOPiE5Wv/Axa5B7St5ogalkjH6SoD9D8IVO5A7n2oOsa4o4vp1
+         2VXOvCkoYLPMwjNsQY+aR6vkzfhh8lhIiJOdr4RCcNbYCoYy+vNAvPFT7gs65Yr1dA
+         Ts5btv9Tp7fow==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     fparent@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] soc: mediatek: mutex: Use DDP_COMPONENT_DITHER0 mod index for MT8365
+Date:   Mon, 20 Jun 2022 12:24:54 +0200
+Message-Id: <20220620102454.131417-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 15:56:38 -0700
-Dan Williams <dan.j.williams@intel.com> wrote:
+In commit
+4e8988c634a1 ("soc: mediatek: add DDP_DOMPONENT_DITHER0 enum for mt8195 vdosys0")
+the enum mtk_ddp_comp_id was modified to add an index number to the
+DITHER component because some new SoCs have multiple dither blocks.
 
-> ira.weiny@ wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > Introduced in a PCI r6.0, sec 6.30, DOE provides a config space based
-> > mailbox with standard protocol discovery.  Each mailbox is accessed
-> > through a DOE Extended Capability.
-> > 
-> > Each DOE mailbox must support the DOE discovery protocol in addition to
-> > any number of additional protocols.
-> > 
-> > Define core PCI functionality to manage a single PCI DOE mailbox at a
-> > defined config space offset.  Functionality includes iterating,
-> > creating, query of supported protocol, task submission, and destruction
-> > of the mailboxes.
-> > 
-> > If interrupts are desired, the interrupt number can be queried and
-> > passed to the create function.  Passing a negative value disables
-> > interrupts for that mailbox.  It is the callers responsibility to ensure  
-> 
-> s/callers/caller's/
-> 
-> > enough interrupt vectors are allocated.
-> > 
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
+As a result, all of the mutex mod arrays have been changed to use the
+new definition instead of the old one (even if that's retained): for
+consistency purposes, follow the same trend on the newly introduced
+MT8365 mutex mod array.
 
-...
+This commit brings no functional changes.
 
-> > + * @task_lock: Protect cur_task  
-> 
-> Protect what about cur_task? Assigning and clearing a pointer is atomic.
-> 
-> > + * @statemachine: Work item for the DOE state machine  
-> 
-> Why does the pci_doe_mb have a work item? I would expect a work item per
-> task. Then this gets a waitqueue for free to wait for task completion.
-> Otherwise I suspect this introduces complexity in the DOE implementation
-> to simulate per-task-work that a workqueue per DOE and a work item per
-> task gets you for free, and for recalling hardware context from one
-> firing of the state machine to the next. Just run the task work all
-> in-line in one context.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/soc/mediatek/mtk-mutex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We went through a model that looked rather more like that.  Maybe
-I misunderstood your feedback at the time (way back around the first RFC)
-where you suggested using timeouts via delayed workqueue and limiting
-the access to the DOE to a single thread (explicitly by using a single
-work item). See description of changes in v2.
-https://lore.kernel.org/all/20210413160159.935663-3-Jonathan.Cameron@huawei.com/
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index fa8e0ba38803..2fd8318c3bdc 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -358,7 +358,7 @@ static const unsigned int mt8365_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_AAL0] = MT8365_MUTEX_MOD_DISP_AAL,
+ 	[DDP_COMPONENT_CCORR] = MT8365_MUTEX_MOD_DISP_CCORR,
+ 	[DDP_COMPONENT_COLOR0] = MT8365_MUTEX_MOD_DISP_COLOR0,
+-	[DDP_COMPONENT_DITHER] = MT8365_MUTEX_MOD_DISP_DITHER,
++	[DDP_COMPONENT_DITHER0] = MT8365_MUTEX_MOD_DISP_DITHER,
+ 	[DDP_COMPONENT_DPI0] = MT8365_MUTEX_MOD_DISP_DPI0,
+ 	[DDP_COMPONENT_DSI0] = MT8365_MUTEX_MOD_DISP_DSI0,
+ 	[DDP_COMPONENT_GAMMA] = MT8365_MUTEX_MOD_DISP_GAMMA,
+-- 
+2.35.1
 
-This logic has been fundamentally the same since around v2.
-
-...
-
-> > +static irqreturn_t pci_doe_irq_handler(int irq, void *data)
-> > +{
-> > +	struct pci_doe_mb *doe_mb = data;
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	u32 val;
-> > +
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +	if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
-> > +					PCI_DOE_STATUS_INT_STATUS);
-> > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);  
-> 
-> Wait, no, not system_wq. I expected this wants a dedicated / ordered queue
-> per doe and this likely wants a queue that can sleep while processing a
-> task and just not support overlapping tasks.
-> 
-> In that model the irq is just waking up any tasks in execution that are
-> awaiting a polling timeout. The irq handler does:
-> 
-> wake_up(&doe_mb->wait);
-> 
-> ...and then task that is executing in the queue continues what it was
-> doing.
-
-Sure that should work. 
-
-
-> 
-> > +		return IRQ_HANDLED;
-> > +	}
-> > +
-> > +	return IRQ_NONE;
-> > +}
-> > +
-> > +/*
-> > + * Only called when safe to directly access the DOE from
-> > + * doe_statemachine_work().  Outside access is not protected.  Users who
-> > + * perform such access are left with the pieces.  
-> 
-> What pieces, where? I expect the abort implementation would be something
-> like:
-> 
-> set_bit(ABORT_PENDING) <== blocks new task submissions until clear
-> flush_workqueue() <== make sure all in-flight tasks see the abort
-> do_doe_abort(...) <== do the abort
-> clear_bit(ABORT_PENDING) <== optionally restart the tasks that were
-> cancelled, or just expect them to be resubmitted.
-
-I think this is an artifact of trying to act on suggestion to only access
-the DOE from a single thread. Without that complexity something like you
-suggest should work.
-
-Fundamentally should still only be called from within the state machine
-though (as that's the only place it makes sense) and will need to
-interrupt work in flight (waiting for interrupt / polling for timeout etc).
-
-
-> > +static int pci_doe_abort(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	reinit_completion(&doe_mb->abort_c);
-> > +	set_bit(PCI_DOE_FLAG_ABORT, &doe_mb->flags);
-> > +	schedule_delayed_work(&doe_mb->statemachine, 0);
-> > +	wait_for_completion(&doe_mb->abort_c);
-> > +
-> > +	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags))
-> > +		return -EIO;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int pci_doe_enable_irq(struct pci_doe_mb *doe_mb, unsigned int irq)
-> > +{
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	int rc;
-> > +
-> > +	/*
-> > +	 * Enabling bus mastering is required for MSI/MSIx.  It is safe to call
-> > +	 * this multiple times and thus is called here to ensure that mastering
-> > +	 * is enabled even if the driver has done so.
-> > +	 */  
-> 
-> It is required for MSI/MSIx to work, yes, but if the caller that created
-> the doe object has not set it yet that's its prerogative.
-
-We went around this in one of the earlier threads, and I think consensus
-was that it made sense to have this in core code.
-
-> 
-> > +	pci_set_master(pdev);
-> > +	rc = pci_request_irq(pdev, irq, pci_doe_irq_handler, NULL, doe_mb,
-> > +			     "DOE[%d:%s]", irq, pci_name(pdev));  
-> 
-> If the DOE object creation is use devm_ then this wants to be
-> devm_request_irq(), although I now notice that devm_pci_doe_create()
-> only existed in the code comments, not the implementation.
-> 
-> Is there any need for the unmanaged version of this API?
-> 
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	doe_mb->irq = irq;
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_CTRL,
-> > +			       PCI_DOE_CTRL_INT_EN);
-> > +	return 0;
-> > +}
-> > +
-
-Thanks,
-
-
-Jonathan

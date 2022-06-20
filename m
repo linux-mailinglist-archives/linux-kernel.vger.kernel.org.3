@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5D055112F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F5D551134
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239221AbiFTHOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 03:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S239178AbiFTHPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 03:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiFTHOd (ORCPT
+        with ESMTP id S235073AbiFTHPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 03:14:33 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F18E036
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:14:32 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id k7so8957587plg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:14:32 -0700 (PDT)
+        Mon, 20 Jun 2022 03:15:35 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5926CE096
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:15:31 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso9420350pjh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eje5eCQ8r99TF3Jk0Qo8Mipd7vUdFeKKOC/KwGU7LYo=;
-        b=5rjycCsWpc48JYQSoB4UcNVOmG+xAyesyo1mdm5rRUN994NyEiZ9k1gWuZ8JtZpRMP
-         +t2ea1U2dv3RAM5uPoEEheqmZOFdxYojQE4qK1jJiWODWj7qtMc9qreieOw7jgRi3Gru
-         CPQKm469WxG0mK9uHF8ugLNBD9vNZqHP0iscnj9b6MT52CKIda2e4NasxL+5tUKOxTOh
-         NyfiZR36HKx1Bor2GxITw1ZyRLZ4XW+Qdtc42fjrzuFgzmH9UkQ5/fN/NQv2MgLO8+mA
-         ssZzqrrmOpBYjTaya8uuD4A6lIQrGOXoCTbtrCcSo3ZV+2R4u94IGcyvAyggnunAWW9a
-         Pc/A==
+        d=gs-ncku-edu-tw.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0mOlgPiY8NctsBbPdtFtolqRiB7asIJTPtqqPiH8p+8=;
+        b=NGhtV6oC7UGeJmGoCzKkFK166pwQEvMLVC/dCGikhg6ACgcA/WW/z4uqE1RfxWK9xl
+         GXVg/NlBjL6gdKDROMZrmkw+GzhA8RwfeT4tzRtIlYU0qnHWVTVjdOceiOlo9Kvxbcyy
+         p1HH7GCjnwl6ON0TaZCY9mWXn4f5NAa4U8t+BZCTrocYTba1B+gOaccMIjKRe4ZqNPdc
+         aFdD19PlV9YmQnxyBP0ZTxZkV5QmBwfWaFM/PPLayRp87xmGuGzpGZRcNrOHjWQeKDqL
+         Yh3r6EziufF6Q/gGFYSp3jXSdpTD9jrUjc+bBjs9ys8zgDGsDv2reGhK7yE9LqDG7MRn
+         +zGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eje5eCQ8r99TF3Jk0Qo8Mipd7vUdFeKKOC/KwGU7LYo=;
-        b=vK5/xyz0jLqqgGRjbGpMY0z31WFNTBJP2//u3AtTVB/mqEyqfkjwTCh6hRNjuCtBRk
-         Dcebz/kmiqy6cf1R/TvCj7BfytnxgltPvSD6RL295xFrU0t9d9bYH2LRoN0HF9tao/RV
-         pTqp80QcUTJExg/h7Z2r3VmLoyNljvpheVZSERgFPRHYoMHkk1h0X5HqM5suvyZzZSER
-         yJrfTDQmUva1LN+1CyA/Dm6vugz69CkvZxGnUumoSUxMT4dYuwx6g5p2mZbLUTSEdJgi
-         kgjIo0Fg1n/nc0C7Kw5oAMcY1EM82TQfgiqKXXNa6eqqqtlbfrjm8nRqA5tDmAWRvaEI
-         ViXQ==
-X-Gm-Message-State: AJIora8CfNwyH8+cf2/tKLrsYw7e9ga6PUJxacGACS/wAqlBLZKrgxDt
-        7RJKj0cYrrxwAcM99jdNLrJwHg==
-X-Google-Smtp-Source: AGRyM1tSD/PcZEEst4MVznqWWeY3KmDeC0shEVp/6sGC9nq7iORMis0MpgAxZTqLlpVES7+Lm1YvQw==
-X-Received: by 2002:a17:90b:38c8:b0:1e8:5202:f6d4 with SMTP id nn8-20020a17090b38c800b001e85202f6d4mr25245023pjb.149.1655709271470;
-        Mon, 20 Jun 2022 00:14:31 -0700 (PDT)
-Received: from localhost ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170903024300b001624965d83bsm7892935plh.228.2022.06.20.00.14.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0mOlgPiY8NctsBbPdtFtolqRiB7asIJTPtqqPiH8p+8=;
+        b=69scfXI5U2f5uzp9LYX2QiCBCW1DG4ed8WC4VgTW80E2E2fhe6o+PrP2TdC5d0d2wC
+         L9NZYyFdF3KcIOZk04SXKJ4IRkg1onDcc60EgORcSzwKnz0uuvtVXhK0q9qxbzMYXCWo
+         gLMPdndjpSWtnKqUFRqxNXh5xxMg5AczfOFrX8oWE8cXzkw6Y8Q2NmJuPXZ7fPtpPv9j
+         PiDkzvx6GDSin7IxwMeC3wOFxxL/P5cOOfwPXxxTc49gTtJZkKptEvmbtRzQUwX8DDje
+         5cFYyRc/W5IQLpGSCl8kfSzUzJ/DTCPYeWEhFilMT8Om96siy+O/XReULCDEc64y6vFP
+         y9kw==
+X-Gm-Message-State: AJIora/C2gx+Syfis1lrKKTokMd30vnHfJhNJCNUjftjJyF3hzhkY0Dr
+        u0WqKcHLlPfw5ClDc3ENwFzZMg==
+X-Google-Smtp-Source: AGRyM1s3VSa9NaclVivzLgd4xlgsfqOrZGqTr+nFoV4u9Jf+n7sK3ZiPLBzLkiGfZL1yRMOJhzZTTw==
+X-Received: by 2002:a17:90a:df91:b0:1e3:4dc8:46e7 with SMTP id p17-20020a17090adf9100b001e34dc846e7mr36092979pjv.106.1655709330826;
+        Mon, 20 Jun 2022 00:15:30 -0700 (PDT)
+Received: from localhost.localdomain ([2001:288:7001:2724:a6bf:1ff:fe8c:70bc])
+        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b00518424f8922sm8232210pfi.77.2022.06.20.00.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 00:14:31 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 15:14:27 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, longman@redhat.com
-Subject: Re: [PATCH v5 08/11] mm: memcontrol: introduce memcg_reparent_ops
-Message-ID: <YrAeU7yy6jhh+4zd@FVFYT0MHHV2J.usts.net>
-References: <20220530074919.46352-1-songmuchun@bytedance.com>
- <20220530074919.46352-9-songmuchun@bytedance.com>
- <Yq99W9ps1b/+XOwh@castle>
+        Mon, 20 Jun 2022 00:15:30 -0700 (PDT)
+From:   Yun-Ze Li <p76091292@gs.ncku.edu.tw>
+To:     akpm@linux-foundation.org
+Cc:     jrdr.linux@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yun-Ze Li <p76091292@gs.ncku.edu.tw>
+Subject: [PATCH v2] mm, docs: fix comments that mention mem_hotplug_end()
+Date:   Mon, 20 Jun 2022 07:15:16 +0000
+Message-Id: <20220620071516.1286101-1-p76091292@gs.ncku.edu.tw>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAFqt6zYF3wRRpmhGzK_r9436JbWfVyjnKKp0oWpSZ+3zad=bxw@mail.gmail.com>
+References: <CAFqt6zYF3wRRpmhGzK_r9436JbWfVyjnKKp0oWpSZ+3zad=bxw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yq99W9ps1b/+XOwh@castle>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,68 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 12:47:39PM -0700, Roman Gushchin wrote:
-> On Mon, May 30, 2022 at 03:49:16PM +0800, Muchun Song wrote:
-> > In the previous patch, we know how to make the lruvec lock safe when LRU
-> > pages are reparented. We should do something like following.
-> > 
-> >     memcg_reparent_objcgs(memcg)
-> >         1) lock
-> >         // lruvec belongs to memcg and lruvec_parent belongs to parent memcg.
-> >         spin_lock(&lruvec->lru_lock);
-> >         spin_lock(&lruvec_parent->lru_lock);
-> > 
-> >         2) relocate from current memcg to its parent
-> >         // Move all the pages from the lruvec list to the parent lruvec list.
-> > 
-> >         3) unlock
-> >         spin_unlock(&lruvec_parent->lru_lock);
-> >         spin_unlock(&lruvec->lru_lock);
-> > 
-> > Apart from the page lruvec lock, the deferred split queue lock (THP only)
-> > also needs to do something similar. So we extract the necessary three steps
-> > in the memcg_reparent_objcgs().
-> > 
-> >     memcg_reparent_objcgs(memcg)
-> >         1) lock
-> >         memcg_reparent_ops->lock(memcg, parent);
-> > 
-> >         2) relocate
-> >         memcg_reparent_ops->relocate(memcg, reparent);
-> > 
-> >         3) unlock
-> >         memcg_reparent_ops->unlock(memcg, reparent);
-> > 
-> > Now there are two different locks (e.g. lruvec lock and deferred split
-> > queue lock) need to use this infrastructure. In the next patch, we will
-> > use those APIs to make those locks safe when the LRU pages reparented.
-> > 
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> 
-> I've mixed feelings about this: it looks nice, but maybe too nice. I wonder
-> if it's better to open-code it. Not very confident, I wonder what others are
-> thinking.
->
+Comments that mention mem_hotplug_end() are confusing as there is no
+function called mem_hotplug_end(). Fix them by replacing all the
+occurences of mem_hotplug_end() in the comments with mem_hotplug_done().
 
-I also thought about this. Open-code is not simplified than this since
-memcg_reparent_ops can be used for 3 locks which simplifies code a lot.
-I also want to hear others' thoughts on this.
+Signed-off-by: Yun-Ze Li <p76091292@gs.ncku.edu.tw>
+---
+V1 -> V2: Addressed review comments
+
+ include/linux/mmzone.h | 4 ++--
+ mm/compaction.c        | 2 +-
+ mm/vmscan.c            | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index aab70355d64f..7c7947109986 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -591,7 +591,7 @@ struct zone {
+ 	 * give them a chance of being in the same cacheline.
+ 	 *
+ 	 * Write access to present_pages at runtime should be protected by
+-	 * mem_hotplug_begin/end(). Any reader who can't tolerant drift of
++	 * mem_hotplug_begin/done(). Any reader who can't tolerant drift of
+ 	 * present_pages should get_online_mems() to get a stable value.
+ 	 */
+ 	atomic_long_t		managed_pages;
+@@ -870,7 +870,7 @@ typedef struct pglist_data {
+ 	unsigned long nr_reclaim_start;	/* nr pages written while throttled
+ 					 * when throttling started. */
+ 	struct task_struct *kswapd;	/* Protected by
+-					   mem_hotplug_begin/end() */
++					   mem_hotplug_begin/done() */
+ 	int kswapd_order;
+ 	enum zone_type kswapd_highest_zoneidx;
  
-> 1) Because the lock callback is first called for all ops, then relocate, then
-> unlock, implicit lock dependencies are created. Now it depends on the order
-> of elements in the memcg_reparent_ops array, which isn't very obvious.
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 65970107b789..d18b07368755 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -3009,7 +3009,7 @@ void kcompactd_run(int nid)
+ 
+ /*
+  * Called by memory hotplug when all memory in a node is offlined. Caller must
+- * hold mem_hotplug_begin/end().
++ * be hold mem_hotplug_begin/done().
+  */
+ void kcompactd_stop(int nid)
+ {
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index c6918fff06e1..e53195a0c019 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -4586,7 +4586,7 @@ void kswapd_run(int nid)
+ 
+ /*
+  * Called by memory hotplug when all memory in a node is offlined.  Caller must
+- * hold mem_hotplug_begin/end().
++ * be hold mem_hotplug_begin/done().
+  */
+ void kswapd_stop(int nid)
+ {
+-- 
+2.25.1
 
-Maybe we can add some comments explaining the lock dependency depends on the
-element order in array.
-
-> 2) Unlikely there will be a lot of new ops added in the future.
->
-
-Yep. I think so.
-
-Thanks.
-
-> The code looks correct though.
-> 
-> Thanks!
-> 

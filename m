@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B12555265B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 23:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788E755265E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 23:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240171AbiFTVZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 17:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S241423AbiFTV31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 17:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiFTVY7 (ORCPT
+        with ESMTP id S229608AbiFTV30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 17:24:59 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35051EC50
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:24:58 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-101cdfddfacso7885996fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:24:58 -0700 (PDT)
+        Mon, 20 Jun 2022 17:29:26 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3250112AFB;
+        Mon, 20 Jun 2022 14:29:25 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id j9so3974506ilr.0;
+        Mon, 20 Jun 2022 14:29:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=9ifI65Hcjk0ar/WNQwl170y/WKbWs7okCtxxCy/qE2s=;
-        b=kxQ9KYelCDOHLCxIXY4Ec9e+lo+qssx3BsNInwJUYnN3NeOHGQMEaw3aSTFIGBoMXw
-         U0Udipi7DIYoCFYarfNbBADf1ksM4ESekmyKjLwZzXfcvjQafUCmyOKVzJsaiZgEwCEN
-         ub39XMRq252e5PPns+fLndm120r20G9eZ1LgECBeWG8RHrJr42dbX8bOZuOaZ4maqO6t
-         t7wsoy5i1XluLTn++5a9BgwOgZNfciZt4qCQMOt2PiKPF2Ryq22nQPQEpQ4H8lhNybKO
-         C69lhbR0YT6Dv1u1odtNpXtjArt8bY5Mxt8nW7AHNNiZ6CSzhOtZskZJMwW4aiLOg4qI
-         kKaQ==
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=bLsi37feRIDrIrL8QhRCbJ9MTM9afnBNA1o8C1A8Fyk=;
+        b=HPqUxrH5Jzht/dhmssnhD4G4uRE7RzTtHwlXmUJFDlfKhP9j9NgzwwnEHD61Qg8fCV
+         y8DkpGjxKdUInlOVeYn1gih2b5wby7V7czYxUFHDGPLc6zyU9fZTaTVwa+nQLcDq8jC4
+         S+q2nOGDtKugPuLLSeiL3hr0IDri5hBUXeqC6J+17dtRxKYeEosQYwvnJsxytx83Ikcb
+         aIrXnMFYx6UhAc+8WB84AmQSBKiuF9/pqw6nfWmGhHDRLZxcn0dNphKwultI/G3dD0eE
+         7FoFaoV+vdeBkbaDDrH3msPwY4dEpJtkOlRCBvZpRvRc7ZMcvIKF0xnI0trJDiyuEH1g
+         1f6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=9ifI65Hcjk0ar/WNQwl170y/WKbWs7okCtxxCy/qE2s=;
-        b=WYLCHijI+CMaOTu6LmLD5d/nMKlmEQqB7leEWUgHnZusPw7P8DtPqol0d/KUSOnCEa
-         +dBsT/sDTatqcKDAeMjZMsCdxJxrjJ0J2qJR7+yNKbnVLJidbOt+D07O97YAPf9DW/rx
-         fxbztZN6AmWzE39f38eVWFKgR38ANrAskass/njcoXDOl92nloVms/+Y3SF2g/FXezgW
-         jc/YdlFqyleSHEnu3jIUu0OIow7xJNyoQ64CtU++41kHE7mgZS4YYxMdIs2Q1fJgEZqw
-         FNZSd5wLSy4wFG9m85yCOJ7BQt2d6UUvm3VqPVkzK2YC6s7aXQztSqC0mp3fVk1Z1/eT
-         R28g==
-X-Gm-Message-State: AJIora/gvEMwsl1fkEUw79+JW+xA/A20i3uZGEndw0RbvFG5FOzIBLUd
-        w4ajTiOBJulk3kX4+GwZ4aRb3KfACdiDbfskfsMH1VyVWw0=
-X-Google-Smtp-Source: AGRyM1sNWrQz/8SjM1QjBqcgnp3EbXT9/r2mcyrw0KOhjhQELEZA5rhDO1cpdpApAfsZfFcQa/GOhVT2OlJ1V97rUu8=
-X-Received: by 2002:a05:6870:5247:b0:101:ec40:6a3a with SMTP id
- o7-20020a056870524700b00101ec406a3amr4274753oai.276.1655760298309; Mon, 20
- Jun 2022 14:24:58 -0700 (PDT)
-MIME-Version: 1.0
-From:   Jaccon Bastiaansen <jaccon.bastiaansen@gmail.com>
-Date:   Mon, 20 Jun 2022 23:24:47 +0200
-Message-ID: <CAGzjT4c54TJA__dcx43745JKeZPeYQ3siowR66j0-KFe=EMRCA@mail.gmail.com>
-Subject: Clocksource: should the read() function of a clocksource be NMI safe?
-To:     daniel.lezcano@linaro.org, Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=bLsi37feRIDrIrL8QhRCbJ9MTM9afnBNA1o8C1A8Fyk=;
+        b=QFKG9gyd6aJHFStQvcLe2PTxf8TeFR8EtEusjBEhecvX96MckZwZiV5XEdKMEp4Ar/
+         uSr9k2lrtxEdF31eto7GW+qobDRQF5wXEvgRvXpOr6LHG47VzCyyh3OsJnecGBiUsGEj
+         8gpoH9sAOLTOvVgS5eWhWhIzQE2aZL2mDj0zMLP8K9TArOUS197DxAApcrk9m7PuGOtX
+         EzLrcDf+w6TnOJ0R6DHFdK/NE6AHlcgURxhIDfLXZvN9lVHlucYBUR/io4kz9zqVIu4d
+         t6K0tZ5Biun1Xgb3YryW9yOMcTSKl/Pp8egNCQzyUU7t5BA62p9GK88huv2uwV/gusaa
+         ISWg==
+X-Gm-Message-State: AJIora+m1W+/gFlGnHJS0zWBFvviWJ+NqfUilvmLQKBswF3OAITZjAT9
+        lriDB4nIQx9M3mOHo1LIFNU76PYQnVOzc0h6
+X-Google-Smtp-Source: AGRyM1u1tHNe5GW6jHjLuhlxZ+OhM8pFiWzQFI1eKi7EX92Mur3ZVi1O77qwFdp1NEZtg3D46zirwQ==
+X-Received: by 2002:a05:6e02:2185:b0:2d8:f742:b276 with SMTP id j5-20020a056e02218500b002d8f742b276mr7497061ila.140.1655760564199;
+        Mon, 20 Jun 2022 14:29:24 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05660229c500b0065a47e16f4esm7383991ioq.32.2022.06.20.14.29.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 14:29:23 -0700 (PDT)
+Message-ID: <62b0e6b3.1c69fb81.3c985.92e4@mx.google.com>
+Date:   Mon, 20 Jun 2022 14:29:23 -0700 (PDT)
+X-Google-Original-Date: Mon, 20 Jun 2022 21:29:22 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/84] 5.10.124-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -61,23 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all,
+On Mon, 20 Jun 2022 14:50:23 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.124 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.124-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-The ktime_get_*_fast_ns() functions in kernel/time/timekeeping.c are
-listed as NMI safe.
+5.10.124-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-If I am correct, the implementation of these functions uses the read()
-function of the currently selected clocksource.
-
-But a potential lockup can occur if this read() function uses a raw
-spinlock. A running read() function can be interrupted by an NMI which
-also calls the read() function. The NMI handler will then spin forever
-in an attempt to lock an already locked raw spinlock.
-
-Is my reasoning correct? Should the read() function of a clocksource
-always be NMI safe? This requirement is not documented and I see that
-several clocksource drivers (such as drivers/clocksource/i8253.c) are
-not NMI safe (they lock a raw spinlock in their read() function).
-
-Regards,
-   Jaccon Bastiaansen

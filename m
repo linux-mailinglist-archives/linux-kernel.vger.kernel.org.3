@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F240A552593
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88728552596
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344732AbiFTULx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S1344708AbiFTULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344570AbiFTUJS (ORCPT
+        with ESMTP id S1344623AbiFTUJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:09:18 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC012220CB;
-        Mon, 20 Jun 2022 13:07:39 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso8276740wms.2;
-        Mon, 20 Jun 2022 13:07:39 -0700 (PDT)
+        Mon, 20 Jun 2022 16:09:30 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019D6220D4;
+        Mon, 20 Jun 2022 13:07:41 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id m1so8328310wrb.2;
+        Mon, 20 Jun 2022 13:07:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gGGGI5LNQd5QfFmuY5vVwQrtUD8WBKwvWjL6Bicr/nE=;
-        b=S/EtAgiYih2o97vzKZ46FuXvAcLZH4aZSRqS9u2yBKGwrnkXOKPCMGGLd7i9ZmxQaG
-         BnBbK63aSq4v1vSjGAPc164mZGaSk3LPHtRt8daUl8xMv0xp20Wh0ybrxjQLqHXLqdDy
-         yhDIj9t6XfrHHFv3whu+IVZQrWETjZ1AesrYnf54NJGg7Cy+3sRgTPv9faAKYSFooPY0
-         45O48rrjzHJTrXu/6XULoJep5LjaBkkIDGdtmMKtfzD41Z5IcTn0ruAikZetXvnqo0Tl
-         Zdz1vCizcAGpaQKPTcGKQxbHlaaCG3L3c003lP0kS60LBM2I8ti3fkUMC/+0uVt3nR1g
-         Y3+g==
+        bh=8kelxsU1mTvCHb8JyuDiGnwBNKthLdTp6riqPTxASyE=;
+        b=o6bhf9AeZ2+5NqgP4pO+3P9gyNweVr/bGU2k/NUXa6NYXjGakzCObDD7wDkgdnebAg
+         v6HJT2NvVLc4mo3MpTeYh7ui7/s+BGJ7Q4/gnJt/JyyKpgFnZPhBR2Ka+BdipZTmpezs
+         50XXSFPysaMCnC2KyoQqTfJgpwHcP8Qs6csQsoSjKJr7YEOzIlf0AvxEBaBGy51urmg4
+         0Qc9l+ouyuPb6zVKalYja0H/6iGdSRaP0Jx3Ik9CPxUwZcQPoSFsBH2qzIwE8XNgSX1u
+         1SryEGKFSLwPnYG9/aqm/DK+EGcho8O+D/L54CfDLfTFRjDpxwWLjKpGj0GZHfs/pPGX
+         yvQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gGGGI5LNQd5QfFmuY5vVwQrtUD8WBKwvWjL6Bicr/nE=;
-        b=V6mYZhraa+r19xr65iPPGyVil2wGL6CdM0InYTMK0U5V0tiQUDLhP3mcWeVHzP1eug
-         VO5SV4J31vdxfBypf5MFWUTo3eTCH92eUZPcdm+OhyWxPeXuqlogzE6Y8P8raTPYEhAd
-         cIZBDldTRIKE2/krY4YVbTPdbMBGZCBUNHl9IGIlJv7PXgW6Lx33vRuznbgHSv9S6s0y
-         oVOl+OEo2+MkIu1t3FMu+UfnvzP4J47inWvj/a/CXKY9VPMQGXc0L4bJR7i+jyh9pZo+
-         R/PgP8F07msI4UuxO1ed5bLiqpvlNzZMOP7KswxFR9ue+tpgG72YKQxQIBHlGy94tkQH
-         4uVw==
-X-Gm-Message-State: AJIora87Bt3QwjtkbXzFR9sHtCOvi4iJTb8Q8SpiqG3Sl2XrRYOIlNe4
-        3lc2sjbxK1fa38PyBalCY2A=
-X-Google-Smtp-Source: AGRyM1t7nmjsnyP7qTIA/w/988Wjv4MiUTlTDpMZzgOJTqyM5/Li8wCJHVRxnaV0tBlHxN/JpqOs4g==
-X-Received: by 2002:a05:600c:4ec7:b0:39c:84a7:3762 with SMTP id g7-20020a05600c4ec700b0039c84a73762mr25749060wmq.153.1655755653087;
-        Mon, 20 Jun 2022 13:07:33 -0700 (PDT)
+        bh=8kelxsU1mTvCHb8JyuDiGnwBNKthLdTp6riqPTxASyE=;
+        b=NODORLP8gEvs6jwWpB2eRLvVw22NeBxEhGrRL5qMQ7QVptqNAIjIlIPu0xIsg0rKCg
+         aW4NKW3bnx+XaB8mFdK+p8kDo0/s9WfWXf8Tw/c7sIOwovLX2W83VeTUYLuxX9scA1e5
+         vkoiGyk8kyiAStYNJ1ZUCtOl8Lgv7IDvxsQwiB3A/m93B+dhWSJR/EzXCn1jD9xs3phl
+         iHpCaD15618Vv2O4wiqAf+K5bVV3yGvqgtqsazXsBZu4hmvv7zPpsALCQehgEXhA1yDC
+         KIdw73jOkFIC0HptNN3L3LynryHRc4s1s3ODKiYeWgN34dkSNnIECVLIqU/QrV/Aa3hN
+         x5mA==
+X-Gm-Message-State: AJIora8slbMCbWStkhVOEEBLfuujqRR1EtXy8vwMXE/uJAmjpOUxKJ9z
+        T1VuBfxaKfUWwhpAcxErp98=
+X-Google-Smtp-Source: AGRyM1svSmsGihGwSulWHMLA111MOtQXrfsi0glFa3Tcg1QRdKrN9n0oiKBKxxv3eSGlgwCYymRU0Q==
+X-Received: by 2002:a05:6000:1689:b0:218:3fb1:fd30 with SMTP id y9-20020a056000168900b002183fb1fd30mr24704084wrd.302.1655755655073;
+        Mon, 20 Jun 2022 13:07:35 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id s7-20020a5d6a87000000b0021b8c99860asm5606007wru.115.2022.06.20.13.07.32
+        by smtp.gmail.com with ESMTPSA id j6-20020adff006000000b0021b892f4b35sm7152390wro.98.2022.06.20.13.07.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:32 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:34 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 48/49] mfd: qcom-pm8008: Use get_irq_reg() for irq chip
-Date:   Mon, 20 Jun 2022 21:06:43 +0100
-Message-Id: <20220620200644.1961936-49-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 49/49] regmap-irq: Remove not_fixed_stride flag
+Date:   Mon, 20 Jun 2022 21:06:44 +0100
+Message-Id: <20220620200644.1961936-50-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,109 +84,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the not_fixed_stride flag with a get_irq_reg() callback,
-which expresses what we want to do here more directly instead of
-relying on a convoluted hierarchy of offsets.
+Clean up all the cruft related to not_fixed_stride. The same thing
+can be accomplished with a custom get_irq_reg() callback.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/mfd/qcom-pm8008.c | 56 +++++++++++++++++----------------------
- 1 file changed, 25 insertions(+), 31 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 41 +++-----------------------------
+ include/linux/regmap.h           |  7 ------
+ 2 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index c778f2f87a17..f6407aa0bcfc 100644
---- a/drivers/mfd/qcom-pm8008.c
-+++ b/drivers/mfd/qcom-pm8008.c
-@@ -44,16 +44,6 @@ enum {
- #define PM8008_GPIO1_ADDR	PM8008_PERIPH_2_BASE
- #define PM8008_GPIO2_ADDR	PM8008_PERIPH_3_BASE
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index acbd6e22b0cd..0c9dd218614a 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -320,15 +320,8 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 			unsigned int offset = subreg->offset[i];
+ 			unsigned int index = offset / map->reg_stride;
  
--#define PM8008_STATUS_BASE	(PM8008_PERIPH_0_BASE | INT_LATCHED_STS_OFFSET)
--#define PM8008_MASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_CLR_OFFSET)
--#define PM8008_UNMASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_SET_OFFSET)
--#define PM8008_TYPE_BASE	(PM8008_PERIPH_0_BASE | INT_SET_TYPE_OFFSET)
--#define PM8008_ACK_BASE		(PM8008_PERIPH_0_BASE | INT_LATCHED_CLR_OFFSET)
--#define PM8008_POLARITY_HI_BASE	(PM8008_PERIPH_0_BASE | INT_POL_HIGH_OFFSET)
--#define PM8008_POLARITY_LO_BASE	(PM8008_PERIPH_0_BASE | INT_POL_LOW_OFFSET)
+-			if (chip->not_fixed_stride)
+-				ret = regmap_read(map,
+-						chip->status_base + offset,
+-						&data->status_buf[b]);
+-			else
+-				ret = regmap_read(map,
+-						chip->status_base + offset,
+-						&data->status_buf[index]);
 -
--#define PM8008_PERIPH_OFFSET(paddr)	(paddr - PM8008_PERIPH_0_BASE)
++			ret = regmap_read(map, chip->status_base + offset,
++					  &data->status_buf[index]);
+ 			if (ret)
+ 				break;
+ 		}
+@@ -380,18 +373,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
+ 		 * sake of simplicity. and add bulk reads only if needed
+ 		 */
+ 		for (i = 0; i < chip->num_main_regs; i++) {
+-			/*
+-			 * For not_fixed_stride, don't use get_irq_reg().
+-			 * It would produce an incorrect result.
+-			 */
+-			if (data->chip->not_fixed_stride)
+-				reg = chip->main_status +
+-					(i * map->reg_stride *
+-					 data->irq_reg_stride);
+-			else
+-				reg = data->get_irq_reg(data,
+-							chip->main_status, i);
 -
- struct pm8008_data {
- 	struct device *dev;
- 	struct regmap *regmap;
-@@ -61,22 +51,10 @@ struct pm8008_data {
- 	struct regmap_irq_chip_data *irq_data;
- };
++			reg = data->get_irq_reg(data, chip->main_status, i);
+ 			ret = regmap_read(map, reg, &data->main_status_buf[i]);
+ 			if (ret) {
+ 				dev_err(map->dev,
+@@ -561,17 +543,6 @@ unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
+ 	const struct regmap_irq_chip *chip = data->chip;
+ 	struct regmap *map = data->map;
  
--static unsigned int p0_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_0_BASE)};
--static unsigned int p1_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_1_BASE)};
--static unsigned int p2_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_2_BASE)};
--static unsigned int p3_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_3_BASE)};
+-	/*
+-	 * NOTE: This is for backward compatibility only and will be removed
+-	 * when not_fixed_stride is dropped (it's only used by qcom-pm8008).
+-	 */
+-	if (chip->not_fixed_stride && chip->sub_reg_offsets) {
+-		struct regmap_irq_sub_irq_map *subreg;
 -
--static struct regmap_irq_sub_irq_map pm8008_sub_reg_offsets[] = {
--	REGMAP_IRQ_MAIN_REG_OFFSET(p0_offs),
--	REGMAP_IRQ_MAIN_REG_OFFSET(p1_offs),
--	REGMAP_IRQ_MAIN_REG_OFFSET(p2_offs),
--	REGMAP_IRQ_MAIN_REG_OFFSET(p3_offs),
--};
+-		subreg = &chip->sub_reg_offsets[0];
+-		return base + subreg->offset[0];
+-	}
 -
- static unsigned int pm8008_config_regs[] = {
--	PM8008_TYPE_BASE,
--	PM8008_POLARITY_HI_BASE,
--	PM8008_POLARITY_LO_BASE,
-+	INT_SET_TYPE_OFFSET,
-+	INT_POL_HIGH_OFFSET,
-+	INT_POL_LOW_OFFSET,
- };
+ 	return base + index * (map->reg_stride * chip->irq_reg_stride);
+ }
+ EXPORT_SYMBOL_GPL(regmap_irq_get_irq_reg_linear);
+@@ -674,12 +645,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 			return -EINVAL;
+ 	}
  
- enum {
-@@ -96,6 +74,23 @@ static struct regmap_irq pm8008_irqs[] = {
- 	REGMAP_IRQ_REG(PM8008_IRQ_GPIO2,	PM8008_GPIO2,	BIT(0)),
- };
+-	if (chip->not_fixed_stride) {
+-		for (i = 0; i < chip->num_regs; i++)
+-			if (chip->sub_reg_offsets[i].num_regs != 1)
+-				return -EINVAL;
+-	}
+-
+ 	if (irq_base) {
+ 		irq_base = irq_alloc_descs(irq_base, 0, chip->num_irqs, 0);
+ 		if (irq_base < 0) {
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index be51af0a2425..ecd3682de269 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -1446,9 +1446,6 @@ struct regmap_irq_chip_data;
+  *		     status_base. Should contain num_regs arrays.
+  *		     Can be provided for chips with more complex mapping than
+  *		     1.st bit to 1.st sub-reg, 2.nd bit to 2.nd sub-reg, ...
+- *		     When used with not_fixed_stride, each one-element array
+- *		     member contains offset calculated as address from each
+- *		     peripheral to first peripheral.
+  * @num_main_regs: Number of 'main status' irq registers for chips which have
+  *		   main_status set.
+  *
+@@ -1474,9 +1471,6 @@ struct regmap_irq_chip_data;
+  * @clear_on_unmask: For chips with interrupts cleared on read: read the status
+  *                   registers before unmasking interrupts to clear any bits
+  *                   set when they were masked.
+- * @not_fixed_stride: Used when chip peripherals are not laid out with fixed
+- * 		      stride. Must be used with sub_reg_offsets containing the
+- * 		      offsets to each peripheral.
+  * @status_invert: Inverted status register: cleared bits are active interrupts.
+  * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
+  *
+@@ -1529,7 +1523,6 @@ struct regmap_irq_chip {
+ 	bool runtime_pm:1;
+ 	bool type_in_mask:1;
+ 	bool clear_on_unmask:1;
+-	bool not_fixed_stride:1;
+ 	bool status_invert:1;
  
-+static const unsigned int pm8008_periph_base[] = {
-+	PM8008_PERIPH_0_BASE,
-+	PM8008_PERIPH_1_BASE,
-+	PM8008_PERIPH_2_BASE,
-+	PM8008_PERIPH_3_BASE,
-+};
-+
-+static unsigned int pm8008_get_irq_reg(struct regmap_irq_chip_data *data,
-+				       unsigned int base, int index)
-+{
-+	/* Simple linear addressing for the main status register */
-+	if (base == I2C_INTR_STATUS_BASE)
-+		return base + index;
-+
-+	return pm8008_periph_base[index] + base;
-+}
-+
- static int pm8008_set_type_config(unsigned int **buf, unsigned int type,
- 				  const struct regmap_irq *irq_data, int idx)
- {
-@@ -136,17 +131,16 @@ static struct regmap_irq_chip pm8008_irq_chip = {
- 	.irqs			= pm8008_irqs,
- 	.num_irqs		= ARRAY_SIZE(pm8008_irqs),
- 	.num_regs		= PM8008_NUM_PERIPHS,
--	.not_fixed_stride	= true,
--	.sub_reg_offsets	= pm8008_sub_reg_offsets,
--	.status_base		= PM8008_STATUS_BASE,
--	.mask_base		= PM8008_MASK_BASE,
--	.unmask_base		= PM8008_UNMASK_BASE,
-+	.status_base		= INT_LATCHED_STS_OFFSET,
-+	.mask_base		= INT_EN_CLR_OFFSET,
-+	.unmask_base		= INT_EN_SET_OFFSET,
- 	.mask_writeonly		= true,
--	.ack_base		= PM8008_ACK_BASE,
-+	.ack_base		= INT_LATCHED_CLR_OFFSET,
- 	.config_base		= pm8008_config_regs,
- 	.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),
- 	.num_config_regs	= PM8008_NUM_PERIPHS,
- 	.set_type_config	= pm8008_set_type_config,
-+	.get_irq_reg		= pm8008_get_irq_reg,
- };
- 
- static struct regmap_config qcom_mfd_regmap_cfg = {
+ 	int num_regs;
 -- 
 2.35.1
 

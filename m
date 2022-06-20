@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F785524EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F5A5524F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242574AbiFTUC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
+        id S243344AbiFTUEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiFTUCO (ORCPT
+        with ESMTP id S236360AbiFTUEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:02:14 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C8D1CB0F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:02:13 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id s124so14720736oia.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:02:13 -0700 (PDT)
+        Mon, 20 Jun 2022 16:04:47 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A107F6341
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:04:46 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id h23so23152237ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:04:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XZYTVNN3OTIFAKlJr31QtDNYvtTZSjURUEwd4yxlavE=;
-        b=IuJJXPocprRwnIMc5qD8E0ArJ9j4zrbdncIaUPN6SHFiyJROFTTfiQ4fWadbPTup+d
-         lyXWq7eKwk76iJz90VgOMKvpLQ1Q7j+RygtKUZlFCS13F4apJfy5w3oKi2E0DDQZrUSl
-         WLro7uhGls+p++NMILOPKPMgqoViBBF/qn5cBIZGBRMX3B6MJyK+iZYAaaPsSrN+V9Dj
-         OPz1wpegOSVmr6xAGV8+VH9H+cY7zmsg5KSSPNtuqtqvNyevVQwFWmdO4E9Bf5sBRGE8
-         0aZLFqQvK9xh8V/8+DXbLTehnUl3/6HSJK+oladrYWSbISfHb6tl2EWBJaPWWD1GUHhG
-         D3Mg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XwA7zkpBKMOa7D6ahvef+MzrRp6DsCvkHXwYy4FzqiI=;
+        b=P2gDeGV3k/r7RAKVxZ9/QjwPRwuf0EMwLboNOSL223k+Gy49GmkW1W/fLLx7Y0qDHZ
+         WnxwAJzRMBaMcKMjPmfDELUOztgKWAVbPXieRedDs0mUv+gKTHVHuarBJfkzWeJMBuiR
+         qkSbMOpdJb8tf9gOc+yvpv+9inlxaySAoKjq4d0V8eqgU6oBcXoGDVE5N9XSkVir12g6
+         QSGe1nC+VZRi624UrQIORS93a8wkeT8/jPpCcqhVDgjRyXiEauODN0Urx1jZez7GhjaA
+         2b2hG132gR1ihRmeSjtkrUH0eaXx9OfdDNWQEzLBqML7nBUr2EH2U4tIquZ1ch5wcPXa
+         87sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=XZYTVNN3OTIFAKlJr31QtDNYvtTZSjURUEwd4yxlavE=;
-        b=wn09gfg+rv45bGMvgleF8z02Hl2guZ3qfwVKZbpC/jZ0XIpTzpUkoMK3m/izoA7z3f
-         /kEE2lZVWjXMO0clY0GZ7wnxgKOdBToNiLCFz7nR105JixP2wtvNiONJu/W2z50eUNPe
-         xmOpxsfktieu05mkhdd9i+0b1KFqWoejuMP32MNMQM9YLApyF7A0NwXpnJvaHWo0WiOI
-         C89fcQ+6aUzRlEPzqykM10ihDUKgiJ7YQd8tD5fSchuuqNbvxARawib6s+zeKb1m3Ghr
-         Kj+R4D54Em0IbU904G0wa+jlvq8TUsO8TycbjcCZ2kKuAJnQfzP1ISqAConLyEXPl7qQ
-         4jqA==
-X-Gm-Message-State: AOAM532D41M440MRdSUpt9rZts9LMmkUQIEuJKleDlRTjvMYxmVMvbka
-        ri6NUEvBUaeW5QzJTwxM+RlroZvJqds=
-X-Google-Smtp-Source: ABdhPJzUcP6Xsquvvp31yhoKLnPS5U+zovKalrAzvTPyCdjqjdcvxUC1lxc61U6Ui+Crb/cWMQdINg==
-X-Received: by 2002:a05:6808:1999:b0:32f:2fc:aed1 with SMTP id bj25-20020a056808199900b0032f02fcaed1mr17560674oib.255.1655755332744;
-        Mon, 20 Jun 2022 13:02:12 -0700 (PDT)
-Received: from [192.168.1.108] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id s204-20020aca45d5000000b0032f662af5d5sm7928355oia.1.2022.06.20.13.02.11
+        bh=XwA7zkpBKMOa7D6ahvef+MzrRp6DsCvkHXwYy4FzqiI=;
+        b=JyBefZwXrogzEf1k8ZpTnqZ2bQTzbEvcgeh0B8Foi60NKPcayggP+4gsV2Jj7M+oD7
+         VQxF72dY+KadAK2pJI0s61NrrlsJKUivzYDRyj6ZSwvvtKVrXKzwJW4HXMzHs3Wk7YSC
+         q0XrWhiWfaLAHVRBzddIjxJBG4wGi3v061GFLOrvdSu1cjtvj8lVPBNLLaSSpdLoRNEV
+         c4YDT2J3FlcKTnGMLG4x6P13z4vhFf2Qvhx5AncHxZdUv0hVoJ+FOmVJfzMY/u74BWFs
+         iL7XUqKGlwDMetYvD84VBII8sZFiDWTK3ig0x8dD+TDrOImzjIz9HsGfRloiN8VgK7+e
+         Qf0Q==
+X-Gm-Message-State: AJIora9lPFuRJK1WlPcfyRPTdhYaZZGdxWEHIMOW9hIX1jBlllpOjfk3
+        CHz9iHrgfMitXSuLqds/Ynk=
+X-Google-Smtp-Source: AGRyM1sY14201r8EiKcD4MYti4igobBBgrd4ld+Bv0vP7AV1cqCnfFzQ7WYB2chx1Ihz20IWlwayTQ==
+X-Received: by 2002:a17:906:74c2:b0:722:e1e2:edea with SMTP id z2-20020a17090674c200b00722e1e2edeamr370227ejl.658.1655755485204;
+        Mon, 20 Jun 2022 13:04:45 -0700 (PDT)
+Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id kw2-20020a170907770200b007121361d54asm6561454ejc.25.2022.06.20.13.04.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 13:02:11 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <3a73a59c-29a1-5f96-ad0b-476c46587fcd@lwfinger.net>
-Date:   Mon, 20 Jun 2022 15:02:10 -0500
+        Mon, 20 Jun 2022 13:04:44 -0700 (PDT)
+Message-ID: <f1731d4c-e66a-b7e0-d460-7729a41d1cd2@gmail.com>
+Date:   Mon, 20 Jun 2022 22:04:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] get rid of useless header file
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 0/5] Fixed some coding style issues and spelling
 Content-Language: en-US
-To:     Nam Cao <namcaov@gmail.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        phil@philpotter.co.uk, paskripkin@gmail.com
-References: <cover.1655745123.git.namcaov@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <cover.1655745123.git.namcaov@gmail.com>
+To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net,
+        paskripkin@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1655666628.git.marcus.yu.56@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <cover.1655666628.git.marcus.yu.56@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 12:19, Nam Cao wrote:
-> The stuffs in basic_types.h are either not used, or already defined in
-> the kernel. Get rid of it.
+On 6/19/22 21:42, Chang Yu wrote:
+> Fixed a few coding style issues and some spelling errors in the
+> comments.
 > 
-> Nam Cao (2):
->    staging: r8188eu: replace N_BYTE_ALIGMENT with ALIGN
->    staging: r8188eu: remove basic_types.h
+> Changes in v2:
+> Separated the original big patch into 5 smaller patches so that each
+> clean up is in its own patch.
 > 
->   drivers/staging/r8188eu/core/rtw_recv.c       |  2 +-
->   drivers/staging/r8188eu/core/rtw_xmit.c       |  6 +++---
->   drivers/staging/r8188eu/hal/rtl8188eu_recv.c  |  2 +-
->   drivers/staging/r8188eu/include/basic_types.h | 19 -------------------
->   .../staging/r8188eu/include/osdep_service.h   |  1 -
->   drivers/staging/r8188eu/os_dep/xmit_linux.c   |  2 +-
->   6 files changed, 6 insertions(+), 26 deletions(-)
->   delete mode 100644 drivers/staging/r8188eu/include/basic_types.h
+> Chang Yu (5):
+>    Staging: r8188eu: core: rtw_xmit: Fixed some whitespace coding style
+>      issues
+>    Staging: r8188eu: core: rtw_xmit: Fixed two indentation coding style
+>      issues.
+>    Staging: r8188eu: core: rtw_xmit: Fixed some spelling errors in the
+>      comments
+>    Staging: r8188eu: core: rtw_xmit: Fixed a brace coding style issue
+>    Staging: r8188eu: core: rtw_xmit: Fixed a coding style issue
+> 
+>   drivers/staging/r8188eu/core/rtw_xmit.c | 28 ++++++++++---------------
+>   1 file changed, 11 insertions(+), 17 deletions(-)
 > 
 
-For future patch sets, please include the "staging: r8188eu:" part of the 
-subject of the cover letter. It makes it easier to sort out the rest of the 
-patches; however,it is not necessary to resubmit this one.
-
-The two patchesw are fine.
-
-Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
-
-Thanks,
-
-Larry
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150 
+Adapter

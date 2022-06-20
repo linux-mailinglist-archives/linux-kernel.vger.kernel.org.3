@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C35A551A01
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A818551BA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242949AbiFTMx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S1346506AbiFTNfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242856AbiFTMxc (ORCPT
+        with ESMTP id S1347392AbiFTNeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:53:32 -0400
+        Mon, 20 Jun 2022 09:34:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26271B7F;
-        Mon, 20 Jun 2022 05:53:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EA01DA42;
+        Mon, 20 Jun 2022 06:13:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6222B811AB;
-        Mon, 20 Jun 2022 12:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B83EC3411B;
-        Mon, 20 Jun 2022 12:53:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF676B80E2F;
+        Mon, 20 Jun 2022 13:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12BB1C3411C;
+        Mon, 20 Jun 2022 13:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729609;
-        bh=S/Vkk66dwA0IO7czVdg1bfEsT+DY2lAwrlHSsB0U1QU=;
+        s=korg; t=1655730792;
+        bh=zC0rhojZPGoDhoHSXiKLJ+XGxJ+VMgmJnAnInp68XIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G5dIpTUoKXDRlJuyaXTORJZzIK3O1ZK5LfaDkANnQefpoXlOq2ci1FbO/pLf+az36
-         wsjLiuAgx85Y7FqZCDyF0DWyg5fdP47ROXP7I90hzEd/D1TXACfsThJMlFAnicOhRd
-         AqOrfUaA5qrzFCl67PN9wKbdfqMrqwtoLTJAGQgo=
+        b=eIttD3E3jiysFqKxT7CsdQb94GzuZuQ90ikhVbbhmSw+E90B8F/yOx4jjzYwUclr6
+         O6suHtpsD7irduL3Exhu93XhNcWBdYgvTjSKdjmNjN8wZYe8bSdEy+bWL2X0BeSxAm
+         7Oz2nMY4fvleInpOdpTEK3ke9c97wmkmnZwZRASk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 018/141] ASoC: cs42l51: Correct minimum value for SX volume control
-Date:   Mon, 20 Jun 2022 14:49:16 +0200
-Message-Id: <20220620124730.058892182@linuxfoundation.org>
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 056/240] random: de-duplicate INPUT_POOL constants
+Date:   Mon, 20 Jun 2022 14:49:17 +0200
+Message-Id: <20220620124739.846276857@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit fcb3b5a58926d16d9a338841b74af06d4c29be15 ]
+commit 5b87adf30f1464477169a1d653e9baf8c012bbfe upstream.
 
-The minimum value for the PGA Volume is given as 0x1A, however the
-values from there to 0x19 are all the same volume and this is not
-represented in the TLV structure. The number of volumes given is correct
-so this leads to all the volumes being shifted. Move the minimum value
-up to 0x19 to fix this.
+We already had the POOL_* constants, so deduplicate the older INPUT_POOL
+ones. As well, fold EXTRACT_SIZE into the poolinfo enum, since it's
+related.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220602162119.3393857-7-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/cs42l51.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/sound/soc/codecs/cs42l51.c b/sound/soc/codecs/cs42l51.c
-index e9c3cb4e2bfc..b9c262a15edf 100644
---- a/sound/soc/codecs/cs42l51.c
-+++ b/sound/soc/codecs/cs42l51.c
-@@ -146,7 +146,7 @@ static const struct snd_kcontrol_new cs42l51_snd_controls[] = {
- 			0, 0xA0, 96, adc_att_tlv),
- 	SOC_DOUBLE_R_SX_TLV("PGA Volume",
- 			CS42L51_ALC_PGA_CTL, CS42L51_ALC_PGB_CTL,
--			0, 0x1A, 30, pga_tlv),
-+			0, 0x19, 30, pga_tlv),
- 	SOC_SINGLE("Playback Deemphasis Switch", CS42L51_DAC_CTL, 3, 1, 0),
- 	SOC_SINGLE("Auto-Mute Switch", CS42L51_DAC_CTL, 2, 1, 0),
- 	SOC_SINGLE("Soft Ramp Switch", CS42L51_DAC_CTL, 1, 1, 0),
--- 
-2.35.1
-
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -359,13 +359,6 @@
+ /* #define ADD_INTERRUPT_BENCH */
+ 
+ /*
+- * Configuration information
+- */
+-#define INPUT_POOL_SHIFT	12
+-#define INPUT_POOL_WORDS	(1 << (INPUT_POOL_SHIFT-5))
+-#define EXTRACT_SIZE		(BLAKE2S_HASH_SIZE / 2)
+-
+-/*
+  * To allow fractional bits to be tracked, the entropy_count field is
+  * denominated in units of 1/8th bits.
+  *
+@@ -440,7 +433,9 @@ enum poolinfo {
+ 	POOL_TAP2 = 76,
+ 	POOL_TAP3 = 51,
+ 	POOL_TAP4 = 25,
+-	POOL_TAP5 = 1
++	POOL_TAP5 = 1,
++
++	EXTRACT_SIZE = BLAKE2S_HASH_SIZE / 2
+ };
+ 
+ /*
+@@ -503,7 +498,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Dis
+  *
+  **********************************************************************/
+ 
+-static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
++static u32 input_pool_data[POOL_WORDS] __latent_entropy;
+ 
+ static struct {
+ 	/* read-only data: */
+@@ -1961,7 +1956,7 @@ SYSCALL_DEFINE3(getrandom, char __user *
+ #include <linux/sysctl.h>
+ 
+ static int min_write_thresh;
+-static int max_write_thresh = INPUT_POOL_WORDS * 32;
++static int max_write_thresh = POOL_BITS;
+ static int random_min_urandom_seed = 60;
+ static char sysctl_bootid[16];
+ 
+@@ -2018,7 +2013,7 @@ static int proc_do_entropy(struct ctl_ta
+ 	return proc_dointvec(&fake_table, write, buffer, lenp, ppos);
+ }
+ 
+-static int sysctl_poolsize = INPUT_POOL_WORDS * 32;
++static int sysctl_poolsize = POOL_BITS;
+ extern struct ctl_table random_table[];
+ struct ctl_table random_table[] = {
+ 	{
 
 

@@ -2,114 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B946550DE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4BA550DEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237345AbiFTAdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
+        id S235367AbiFTAeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbiFTAdS (ORCPT
+        with ESMTP id S234884AbiFTAeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:33:18 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CACE63BF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:33:17 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id o9so3706203edt.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=p55hH6T7clwukBPSZ47upp2dou3M8Dr1IzQrPoB8Ojc=;
-        b=mnXowVFlBTFnWSpv+wGqVNCchh8iNhmOYYcpKx7nuwSWo4UAiMh/iGQW1qW4f3VA+V
-         teOeBe/wYNC3r8E+vmHWZd16mxfWRDhwOsPYrYhfNIdUmXmwRy37TVUe0ho+NjvQATEm
-         eOVvmsq3dpHkLyoxmZnFAWccS8iwsOov2jfb2Kn3NGpasbAyBb6lfeMSiaA8pAzfvFbd
-         GPNjAg1IajpW0MCeokfOSspnqvRlewXFgo7o4xPpJxqlG6d+auSwd3/MqrVmMbI8Wi13
-         HdYqleDSufOy0+DQfTCvODESRrCxM1y0k2UaYW6KtiTaLBZnl7hTXO5k9RClY6UnqEj/
-         OO9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=p55hH6T7clwukBPSZ47upp2dou3M8Dr1IzQrPoB8Ojc=;
-        b=Dvs/j1OVsutBaWr0F94mOi3s5pfgpNd0ShtT4e1O6YW7FzsppVwHfyYFqSYCrn3RfP
-         X8LTsaSAVeP6UEuMIIp+178fCjP0nibb8plWeuKiJbW5mUX2633LARIeQ6DEdNDssxLy
-         ercgUDCGxYnovyxIm8TGhRxvdpUhX4+TqCcoLFI5DJue9DsBaUWyzeMSe7dVPgwGXCdv
-         CzYIfkIuLk4FpT8W64+c59hmWJsQDT/R4U5if5kY/42osflcyqU9t6x6R7Szb+KdvgYN
-         XphSUMjYsA/s7kI0nWU9QQl53eRpJFyOf1VYrIeujG4zpZwIMHoABzh7RyX8TKobbm8w
-         MFKQ==
-X-Gm-Message-State: AJIora+woCQrlGrLt9o5Tg87UKlyNQoUC8cOsaVjHKvAj8zDDcK4qkOb
-        FrXhQrJjrWLNiITZp7W96qG3Fbdnehhk2tvKdeQ=
-X-Google-Smtp-Source: AGRyM1tvpQ5pcnN3779tjkHcm8mIvijraBtqp6pq/PMEpHTDvQ0HnRfa/4pQhD8bAvbnFEeuUPgeWo+tJtjv/2q0JUU=
-X-Received: by 2002:a05:6402:51c7:b0:42d:f4ea:c09 with SMTP id
- r7-20020a05640251c700b0042df4ea0c09mr25981451edd.319.1655685195713; Sun, 19
- Jun 2022 17:33:15 -0700 (PDT)
+        Sun, 19 Jun 2022 20:34:06 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6FE64D8;
+        Sun, 19 Jun 2022 17:34:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LR9cn5ssGz4xXg;
+        Mon, 20 Jun 2022 10:34:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655685242;
+        bh=XYrTSyLWg2AFPQRTLYk09ow8SjdYYKMi0gid5hZ4uD4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=duaL0ouuYhuOOEkW3Dq+J3iOUdebscrRtIa12Rx9G4ACbdZwwDWVmQUe+77gyNg8i
+         Zn3vA25V31JJfAMUn8qBgaM/NrKE+WjndOffrVltEaejvPCDvjIbbJwNk0ikxq0uHP
+         yavmkYCkWjAP05KIJsx0emOq56VcW17OHVsSRed7jZosBh8bAyZNie2ILOAlNJnWQc
+         DUzQOjfh0MdH8XQ3iUEMVodXs0OC7IQbHoprpPE2orGIrOpoEdeywDUf7WtNIFbQho
+         lPMpRzcd6h/E7Tl28vpJU3RNoH+Z03n4/etO7Y8uNDxRQS/fVCrLbJlGe4zxO02luW
+         X5cqgR7RVRHVQ==
+Date:   Mon, 20 Jun 2022 10:34:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the libata tree
+Message-ID: <20220620103400.6b03f8d9@canb.auug.org.au>
 MIME-Version: 1.0
-Sender: usmanyakabu49901@gmail.com
-Received: by 2002:a54:3984:0:0:0:0:0 with HTTP; Sun, 19 Jun 2022 17:33:15
- -0700 (PDT)
-From:   "Mr.Ajebor Tony" <ajebortony126@gmail.com>
-Date:   Mon, 20 Jun 2022 00:33:15 +0000
-X-Google-Sender-Auth: HSsQK0VVFhwDYX1IesaPOMeXVM4
-Message-ID: <CAG1_V3fAcb92g3HiQ5fNgp4z_oFLAszWYQ3vvZbwzgqEhjuZnw@mail.gmail.com>
-Subject: urgent respond
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_50,DEAR_FRIEND,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_5,
-        RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [usmanyakabu49901[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [usmanyakabu49901[at]gmail.com]
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.1 RISK_FREE No risk!
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: ******
+Content-Type: multipart/signed; boundary="Sig_/rJPnq34a.us=_zyvi_8w_lF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
-How are you today with your family, Hope all is well? Please, It's my
-great pleasure to contact you today. I am Mr.Ajebor Tony from
-Burkina-Faso. Please, I want to transfer the sum of (US$20.5M) into
-your bank account. This business is 100% risk free. Your share will be
-50% while 50% for me. More details will be forwarded to you
-immediately I receive your urgent response.
+--Sig_/rJPnq34a.us=_zyvi_8w_lF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-1) Your FullName.......................
-2) Your Private Telephone No........
-3) Your  Receiving Country............
+Hi all,
 
-Thank you for your anticipated co-operation.
-Yours Sincerely,
-Mr.Ajebor Tony
+After merging the libata tree, today's linux-next build (powercp
+ppc64_defconfig) produced this warning:
+
+In file included from include/linux/device.h:15,
+                 from arch/powerpc/include/asm/io.h:27,
+                 from include/linux/io.h:13,
+                 from include/linux/irq.h:20,
+                 from arch/powerpc/include/asm/hardirq.h:6,
+                 from include/linux/hardirq.h:11,
+                 from include/linux/highmem.h:11,
+                 from include/linux/bvec.h:10,
+                 from include/linux/blk_types.h:10,
+                 from include/linux/blkdev.h:9,
+                 from drivers/ata/pata_macio.c:18:
+drivers/ata/pata_macio.c: In function 'pmac_macio_calc_timing_masks':
+drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of=
+ type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=
+=3D]
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~
+include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
+  129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);       =
+     \
+      |                                         ^~~
+include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
+  163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_AR=
+GS__); \
+      |                                             ^~~~~~~
+drivers/ata/pata_macio.c:1031:9: note: in expansion of macro 'dev_dbg'
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |         ^~~~~~~
+drivers/ata/pata_macio.c:1031:52: note: format string is defined here
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |                                                  ~~^
+      |                                                    |
+      |                                                    long unsigned int
+      |                                                  %x
+In file included from include/linux/device.h:15,
+                 from arch/powerpc/include/asm/io.h:27,
+                 from include/linux/io.h:13,
+                 from include/linux/irq.h:20,
+                 from arch/powerpc/include/asm/hardirq.h:6,
+                 from include/linux/hardirq.h:11,
+                 from include/linux/highmem.h:11,
+                 from include/linux/bvec.h:10,
+                 from include/linux/blk_types.h:10,
+                 from include/linux/blkdev.h:9,
+                 from drivers/ata/pata_macio.c:18:
+drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of=
+ type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wformat=
+=3D]
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~
+include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
+  129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);       =
+     \
+      |                                         ^~~
+include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
+  163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_AR=
+GS__); \
+      |                                             ^~~~~~~
+drivers/ata/pata_macio.c:1031:9: note: in expansion of macro 'dev_dbg'
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |         ^~~~~~~
+drivers/ata/pata_macio.c:1031:63: note: format string is defined here
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |                                                             ~~^
+      |                                                               |
+      |                                                               long =
+unsigned int
+      |                                                             %x
+In file included from include/linux/device.h:15,
+                 from arch/powerpc/include/asm/io.h:27,
+                 from include/linux/io.h:13,
+                 from include/linux/irq.h:20,
+                 from arch/powerpc/include/asm/hardirq.h:6,
+                 from include/linux/hardirq.h:11,
+                 from include/linux/highmem.h:11,
+                 from include/linux/bvec.h:10,
+                 from include/linux/blk_types.h:10,
+                 from include/linux/blkdev.h:9,
+                 from drivers/ata/pata_macio.c:18:
+drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of=
+ type 'long unsigned int', but argument 6 has type 'unsigned int' [-Wformat=
+=3D]
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~
+include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
+  129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);       =
+     \
+      |                                         ^~~
+include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
+  163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_AR=
+GS__); \
+      |                                             ^~~~~~~
+drivers/ata/pata_macio.c:1031:9: note: in expansion of macro 'dev_dbg'
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |         ^~~~~~~
+drivers/ata/pata_macio.c:1031:73: note: format string is defined here
+ 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
+, UDMA=3D%lx\n",
+      |                                                                    =
+   ~~^
+      |                                                                    =
+     |
+      |                                                                    =
+     long unsigned int
+      |                                                                    =
+   %x
+
+Introduced by commit
+
+  f0a6d77b351c ("ata: make transfer mode masks *unsigned int*")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rJPnq34a.us=_zyvi_8w_lF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKvwHgACgkQAVBC80lX
+0Gxv1wf/Uv39UOVcDl3NlTfPJ0+6q0ChNv5dAgtvq3qLiMarkPcsrVxK+FQSWqny
+sOLWyKO8TMWg+WzprqcH13ADeFBZNsUHVXFwkqUOJgpZF7Mm2z8vE6JJSFHRkq31
+dVzrwD2IxClulkuvHxpsbLaQJBhTxSutOZreoNcAk5ahI4bjlAfJX1qAMCboPPDb
+2RCTIu8/pm4mp+FLRZv8X06iPofYxu2e8kRlCvXIUTM1Ly1yWzbAel60R2WfjLTV
+1BKr4T3CQiyVOZfQdX8HXCj0G2T3P/kY2OBXWRhUNq4/IsZAw+yWA5HmJ5AZqrkS
+MsoArYjaKNTHz3g0KbxWcsqtKUVmAg==
+=1V5m
+-----END PGP SIGNATURE-----
+
+--Sig_/rJPnq34a.us=_zyvi_8w_lF--

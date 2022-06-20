@@ -2,188 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F69551460
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED46255146A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbiFTJch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S240736AbiFTJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235299AbiFTJcf (ORCPT
+        with ESMTP id S240646AbiFTJeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:32:35 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481D113D5B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:32:32 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id PHB00027;
-        Mon, 20 Jun 2022 17:32:27 +0800
-Received: from jtjnmail201622.home.langchao.com (10.100.2.22) by
- jtjnmail201621.home.langchao.com (10.100.2.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Mon, 20 Jun 2022 17:32:28 +0800
-Received: from jtjnmail201622.home.langchao.com ([fe80::15c3:8d74:3aa6:25f6])
- by jtjnmail201622.home.langchao.com ([fe80::15c3:8d74:3aa6:25f6%7]) with mapi
- id 15.01.2308.027; Mon, 20 Jun 2022 17:32:28 +0800
-From:   =?gb2312?B?Qm8gTGl1ICjB9bKoKS3Ay7Ox0MXPog==?= <liubo03@inspur.com>
-To:     "sgarzare@redhat.com" <sgarzare@redhat.com>
-CC:     "mst@redhat.com" <mst@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] virtio: Remove unnecessary variable assignments
-Thread-Topic: [PATCH] virtio: Remove unnecessary variable assignments
-Thread-Index: AdiEiIh3ESX30+Ok7U+Rcqk6/Fad3Q==
-Date:   Mon, 20 Jun 2022 09:32:28 +0000
-Message-ID: <d6527c0690634815820c1c7c04b31551@inspur.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.200.104.97]
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-        micalg=SHA1; boundary="----=_NextPart_000_0074_01D884CB.B606DC00"
+        Mon, 20 Jun 2022 05:34:18 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AA41274C;
+        Mon, 20 Jun 2022 02:34:17 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id f65so9811719pgc.7;
+        Mon, 20 Jun 2022 02:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wBq3Z7oEu9gFIA7jCFZpeq+S3fU28ZeUrdw/hJHHGkg=;
+        b=dWaNUQiBx1z6mDhfWG2BGKV681ibxqG2PSBUFwROknXuWxP1DCiK4ikZdsiO8mZAm/
+         0cCFhFnwAmz/7AFFMSSqWJW/bMYtuGchqrTPmPRuVm6J/dIVYEjVnnE2LzDdBX1rcAH2
+         bpqJWI/S0dYpoz2wp/y3YbpxzmS0h4IbFFk0+Tp8HM8w7e2za3i7yiL1bOb8wyWa6sFN
+         Iy4yEryvI+vKRrM0KNaJOGLkuWQeDPsGtPsotEsI4TEHVQlwYRkOknRKMOE0gWI7y6Sv
+         6BAdPbTt0CjcN1f+jaYzBBu6xsBlOxb+c0FLelG73tV01XbMxwwafTrMgw4S/TFdwvuW
+         +5gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wBq3Z7oEu9gFIA7jCFZpeq+S3fU28ZeUrdw/hJHHGkg=;
+        b=oV8InNO/fSfuqFy/b5HO1Xpghw1/GNv0bm+ElbBvoSpS4b/TAgCPdyMRU/Ldbv58fd
+         BT5CaejMb3yD5mNY8ClrnRf8yihqEHR6ldtNvYsl/2yfr5ZOgIhhEdKj4zd7QnIdFYyU
+         Imz848vjVBNdK4Jhi0yf5H94nyzKDYzU59RUN/2QyjgGb6STjETqvRhJaq4VrEfU2TpS
+         1eT/F8O7Lt6A5aCt2gj4nESFapycLgxa+//UjQxWlWZQ3NMPJ3DM/MSLPSuduAAuayrI
+         5Tul+a83F6qyFWbtWEHO1VTKXc5yc4nzCvHCREIolaQtiKc6iSt8gt4M/Uc/V29zurEn
+         Mq8w==
+X-Gm-Message-State: AJIora/3saoMAdNeghTT7DfQXWPHNzibkwPRQG5r6lwrcER2nlM3C5FN
+        xuH+2OJrmbusrq+HAaUQAVA=
+X-Google-Smtp-Source: AGRyM1tBauLNcRR7D2sWkvnvtc1HidI5RlyIcwafqqTpriwR07db5llpY299JzgZ8s69dWDyl3jJJA==
+X-Received: by 2002:a05:6a00:1941:b0:50d:807d:530b with SMTP id s1-20020a056a00194100b0050d807d530bmr23516600pfk.17.1655717657206;
+        Mon, 20 Jun 2022 02:34:17 -0700 (PDT)
+Received: from linux-server-us.. ([172.247.46.202])
+        by smtp.gmail.com with ESMTPSA id i4-20020aa78b44000000b0051c66160a3asm8574380pfd.181.2022.06.20.02.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 02:34:16 -0700 (PDT)
+From:   YuTong Chang <mtwget@gmail.com>
+To:     bcousson@baylibre.com
+Cc:     tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        YuTong Chang <mtwget@gmail.com>
+Subject: [PATCH] ARM: dts: am33xx: Fix MMCHS0 dma properties
+Date:   Mon, 20 Jun 2022 02:34:13 -0700
+Message-Id: <20220620093413.4041-1-mtwget@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-tUid:   2022620173227a7c8603687b1f7ad7ba3958029691fbb
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------=_NextPart_000_0074_01D884CB.B606DC00
-Content-Type: text/plain;
-	charset="gb2312"
-Content-Transfer-Encoding: 7bit
+According to technical manual(table 11-24),
+the DMA of MMCHS0 should be direct mapped.
 
-Hi
-
->On Fri, Jun 17, 2022 at 01:59:52AM -0400, Bo Liu wrote:
->>In function vp_modern_probe(), "mdev->pci_dev" is assigned to variable
->>"pci_dev", variable "pci_dev" and "mdev->pci_dev" have the same value.
->>There is no need to assign variable "pci_dev" to "mdev->pci_dev". So
->>remove it.
->>
->
->I suggest rephrasing the description a bit.
->Maybe into something like this:
->
->     In function vp_modern_probe(), "pci_dev" is initialized with the
->     value of "mdev->pci_dev", so assigning "pci_dev" to "mdev->pci_dev"
->     is unnecessary since they store the same value.
->
->Anyway, the patch LGTM:
->
->Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
->
-The new patch is:
-
-In function vp_modern_probe(), "pci_dev" is initialized with the
-value of "mdev->pci_dev", so assigning "pci_dev" to "mdev->pci_dev"
-is unnecessary since they store the same value.
-
-Signed-off-by: Bo Liu <liubo03@inspur.com>
+Signed-off-by: YuTong Chang <mtwget@gmail.com>
 ---
- drivers/virtio/virtio_pci_modern_dev.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm/boot/dts/am33xx-l4.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c
-b/drivers/virtio/virtio_pci_modern_dev.c
-index b790f30b2b56..fa2a9445bb18 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -220,8 +220,6 @@ int vp_modern_probe(struct virtio_pci_modern_device
-*mdev)
- 
- 	check_offsets();
- 
--	mdev->pci_dev = pci_dev;
--
- 	/* We only own devices >= 0x1000 and <= 0x107f: leave the rest. */
- 	if (pci_dev->device < 0x1000 || pci_dev->device > 0x107f)
- 		return -ENODEV;
---
-2.27.0
+diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
+index 7da42a5b959c..0446e2622d5f 100644
+--- a/arch/arm/boot/dts/am33xx-l4.dtsi
++++ b/arch/arm/boot/dts/am33xx-l4.dtsi
+@@ -1502,8 +1502,8 @@ SYSC_OMAP2_SOFTRESET |
+ 			mmc1: mmc@0 {
+ 				compatible = "ti,am335-sdhci";
+ 				ti,needs-special-reset;
+-				dmas = <&edma_xbar 24 0 0
+-					&edma_xbar 25 0 0>;
++				dmas = <&edma 24 0
++					&edma 25 0>;
+ 				dma-names = "tx", "rx";
+ 				interrupts = <64>;
+ 				reg = <0x0 0x1000>;
+-- 
+2.36.1
 
-------=_NextPart_000_0074_01D884CB.B606DC00
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-
-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
-9w0DAgICAIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMB0GA1UdDgQWBBTk
-Hdp/y3+DuDJ13Q1YzgU9iV7NdzAfBgNVHSMEGDAWgBReWQOmtExYYJFO9h61pTmmMsE1ajCCAQ8G
-A1UdHwSCAQYwggECMIH/oIH8oIH5hoG6bGRhcDovLy9DTj1JTlNQVVItQ0EsQ049SlRDQTIwMTIs
-Q049Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3Vy
-YXRpb24sREM9aG9tZSxEQz1sYW5nY2hhbyxEQz1jb20/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlz
-dD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50hjpodHRwOi8vSlRDQTIwMTIu
-aG9tZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9JTlNQVVItQ0EuY3JsMIIBKQYIKwYBBQUHAQEE
-ggEbMIIBFzCBsQYIKwYBBQUHMAKGgaRsZGFwOi8vL0NOPUlOU1BVUi1DQSxDTj1BSUEsQ049UHVi
-bGljJTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21l
-LERDPWxhbmdjaGFvLERDPWNvbT9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9Y2VydGlm
-aWNhdGlvbkF1dGhvcml0eTBhBggrBgEFBQcwAoZVaHR0cDovL0pUQ0EyMDEyLmhvbWUubGFuZ2No
-YW8uY29tL0NlcnRFbnJvbGwvSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb21fSU5TUFVSLUNBLmNy
-dDBBBgNVHREEOjA4oCIGCisGAQQBgjcUAgOgFAwSbGl1Ym8wM0BpbnNwdXIuY29tgRJsaXVibzAz
-QGluc3B1ci5jb20wDQYJKoZIhvcNAQELBQADggEBAA+BaY3B3qXmvZq7g7tZLzq2VQjU//XHTmyl
-58GLDWdVHsuX3lrAGwEfLVnUodpvthjtb7T7xEUzJh4F62zLFSm8HOBPH1B+6SFQKChHZeM0pauv
-Xr1krRtVv82RgLsU26XrXFUPN+NcPwt7vOw1zHOiDic4anL3A9gsuDljAi2l+CA5RY05yL+8oras
-EAhOYL6+ks9aB8QiCxbZzShkDTMkrh0N1DjoBLaibtnlI/fxOUYM6vgdiI+FC02G41B364ZAc1ma
-bSFvGIP6cIdr/olprPQOj9cq6zMi05qUBUj22hDvhcY0TlT4fEJSrvblp/LG6qTtVI3ilUAxhe8i
-9cIxggOTMIIDjwIBATBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghs
-YW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA0dHV
-TGwIT1/wiwAAAADR0TAJBgUrDgMCGgUAoIIB+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
-CSqGSIb3DQEJBTEPFw0yMjA2MjAwOTMyMjdaMCMGCSqGSIb3DQEJBDEWBBSIUaf7wvoLeGV6frhy
-tyoHsxJ+0jB/BgkrBgEEAYI3EAQxcjBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJ
-k/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1D
-QQITfgAA0dHVTGwIT1/wiwAAAADR0TCBgQYLKoZIhvcNAQkQAgsxcqBwMFkxEzARBgoJkiaJk/Is
-ZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUx
-EjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA0dHVTGwIT1/wiwAAAADR0TCBkwYJKoZIhvcNAQkPMYGF
-MIGCMAoGCCqGSIb3DQMHMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMA4G
-CCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCGjALBglghkgBZQMEAgMwCwYJYIZI
-AWUDBAICMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCTgl3KxedgW2zM+BN8Z23k1+96
-ag0MLiKDtbUWCC98qO11KFPTt91WwRDQAmxnzcGx6Q1hgUyDlRz+5V5FGNAMJ80VQReVwLUTGJab
-yFMootri0ydHULINEXyiVCGveJRIiSjbgQaxdBS4CLwKyaptAbMv2gf+9TQKa8bUEjZmLlyLUVlU
-M4yddXkiTOEVuUYBXhStXKC/hN48WImsdC31Nz/9Pre6FFqGHOTDOSq2rP/ITT5fyoKGCn/laay1
-yPAcw3IV7f5DsbcLjcXy//X07V0kaCAl+rr1WAAi3t/CZVX1crdPYS33+GPh0L0Tr+oh+QcO3MZv
-sB2wGkRBexYKAAAAAAAA
-
-------=_NextPart_000_0074_01D884CB.B606DC00--

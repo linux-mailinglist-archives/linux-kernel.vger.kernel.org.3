@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FE1552759
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07938552755
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245220AbiFTXAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 19:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
+        id S1345880AbiFTXAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 19:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345973AbiFTW7q (ORCPT
+        with ESMTP id S1345942AbiFTW7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:59:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFB3193D3;
-        Mon, 20 Jun 2022 15:58:21 -0700 (PDT)
+        Mon, 20 Jun 2022 18:59:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A854186D1;
+        Mon, 20 Jun 2022 15:58:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07564614A1;
-        Mon, 20 Jun 2022 22:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39148C341CE;
-        Mon, 20 Jun 2022 22:58:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B489B8125A;
+        Mon, 20 Jun 2022 22:58:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E30C3411B;
+        Mon, 20 Jun 2022 22:58:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655765900;
-        bh=mZiTOBDcqD704lMtn9ef+smf6JxOTN0xNvMG6GVm+gQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pdyRVY6Gx7syR9u3gBHnFgnVLZX4lTnhJvR/8/DhawivveNWjnPPHLjM/3UcsCJFl
-         n8+uaVwbsqPe4xS93AeCIM73DJ4E/Mj06QKGSOpl+SLAXKQCUNJ65Q51W+gQEeV1UG
-         M8zAIUpYqEhuPkJo4OV1eMckhR5rXK+4J1C/wwqqFnsr+AE0EEVNs6IJP+9ZLO+sLI
-         gMthiBSYBMrq04o/HL94POibots/38XEWhdIjVh6CcJxh3jSsOplYWrmZmSn1NOIqP
-         4ScpI2saB+Iwd5pIUMlVuBe4rpyQ25piljzxS7nmZKtFMyG9McVVmYBUm4hBiUMxB5
-         jubzQEPWH0qzw==
+        s=k20201202; t=1655765895;
+        bh=hbfsCMIA8UZFLtewmwQIjAp1YYBY7vRz1838WgDBFtA=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=gX8LTWfJR1jJqKN96C0uXr5GT74mtZFzwYP7DLJqjq49ouD7Dk77mBtC8J+McQkdt
+         35iPaJUAJl1MbRETjhtCujAjOHt2lbAQ/IrfMHOH5aZ2xtNHL9nJE/lUqdFw29bAgk
+         lq+HTVHmbcOTIZWpspHohwA9ONCvQlQnq46hdv81Q4TX1JayPtiakiUA/wfU5d2GWE
+         Aoe94cHdRZTifklPvxNgwLcWtn1SCJtO09sLKbMmegp4h+AFDf2I2Q2KlecjJ9TE3c
+         ugenmVuBGzkLbidLWJ9fsO8c07mLyYC9kGuTYRVh03vcFWTxRt8E4hPyFzpmv7m2zC
+         jXX9dUmrcUsAA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A36725C0CCE; Mon, 20 Jun 2022 15:58:19 -0700 (PDT)
+        id 9BB2F5C05B9; Mon, 20 Jun 2022 15:58:14 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 15:58:14 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 08/12] torture: Create kvm-check-branches.sh output in proper location
-Date:   Mon, 20 Jun 2022 15:58:13 -0700
-Message-Id: <20220620225817.3843106-8-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220620225814.GA3842995@paulmck-ThinkPad-P17-Gen-1>
-References: <20220620225814.GA3842995@paulmck-ThinkPad-P17-Gen-1>
+        rostedt@goodmis.org
+Subject: [PATCH rcu 0/12] Torture-test updates for v5.20
+Message-ID: <20220620225814.GA3842995@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
@@ -56,50 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, kvm-check-branches.sh causes each kvm.sh invocation create a
-separate date-stamped directory, then after that invocation completes,
-moves it into the *-group/NNNN directory.  This works, but makes it more
-difficult to monitor an ongoing run.  This commit therefore uses the
-kvm.sh --datestamp argument to make kvm.sh put the output in the right
-place to start with, and also dispenses with the additional level of
-datestamping.  (Those wanting datestamps can find them in the log files.)
+Hello!
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- .../selftests/rcutorture/bin/kvm-check-branches.sh    | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+This series provides torture-test updates, both C-language and scripting:
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-index f17000a2ccf1f..ed0ec7f0927e7 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-@@ -35,7 +35,7 @@ then
- 	exit 1
- fi
- 
--# Remember where we started so that we can get back and the end.
-+# Remember where we started so that we can get back at the end.
- curcommit="`git status | head -1 | awk '{ print $NF }'`"
- 
- nfail=0
-@@ -73,15 +73,10 @@ do
- 		# Test the specified commit.
- 		git checkout $i > $resdir/$ds/$idir/git-checkout.out 2>&1
- 		echo git checkout return code: $? "(Commit $ntry: $i)"
--		kvm.sh --allcpus --duration 3 --trust-make > $resdir/$ds/$idir/kvm.sh.out 2>&1
-+		kvm.sh --allcpus --duration 3 --trust-make --datestamp "$ds/$idir" > $resdir/$ds/$idir/kvm.sh.out 2>&1
- 		ret=$?
- 		echo kvm.sh return code $ret for commit $i from branch $gitbr
--
--		# Move the build products to their resting place.
--		runresdir="`grep -m 1 '^Results directory:' < $resdir/$ds/$idir/kvm.sh.out | sed -e 's/^Results directory://'`"
--		mv $runresdir $resdir/$ds/$idir
--		rrd="`echo $runresdir | sed -e 's,^.*/,,'`"
--		echo Run results: $resdir/$ds/$idir/$rrd
-+		echo Run results: $resdir/$ds/$idir
- 		if test "$ret" -ne 0
- 		then
- 			# Failure, so leave all evidence intact.
--- 
-2.31.1.189.g2e36527f23
+1.	Make kvm-remote.sh announce which system is being waited on.
 
+2.	Change order of warning and trace dump, courtesy of Anna-Maria
+	Behnsen.
+
+3.	Simplify rcu_torture_read_exit_child() loop.
+
+4.	Fix memory leak in rcu_test_debug_objects(), courtesy of Zqiang.
+
+5.	Adjust to again produce debugging information.
+
+6.	Make failure indication note reader-batch overflow.
+
+7.	Fix smp_processor_id()-in-preemptible warnings, courtesy of
+	Zqiang.
+
+8.	Create kvm-check-branches.sh output in proper location.
+
+9.	Fix ksoftirqd boosting timing and iteration, courtesy of Frederic
+	Weisbecker.
+
+10.	Handle failure of memory allocation functions, courtesy of
+	Li Qiong.
+
+11.	Flush printk() buffers before powering off.
+
+12.	Convert test_lock spinlock to raw_spinlock, courtesy of Zqiang.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/kernel/rcu/rcuscale.c                                        |    1 
+ b/kernel/rcu/rcutorture.c                                      |    3 
+ b/kernel/rcu/refscale.c                                        |   18 +-
+ b/kernel/torture.c                                             |    1 
+ b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh |   11 -
+ b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh         |    1 
+ b/tools/testing/selftests/rcutorture/bin/kvm.sh                |    6 
+ kernel/rcu/rcutorture.c                                        |   88 +++++-----
+ 8 files changed, 65 insertions(+), 64 deletions(-)

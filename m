@@ -2,135 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA375523DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AFF5523D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244557AbiFTS30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S245370AbiFTS2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245390AbiFTS2W (ORCPT
+        with ESMTP id S238810AbiFTS2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:28:22 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303711402C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:28:21 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id 19so11938347iou.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:28:21 -0700 (PDT)
+        Mon, 20 Jun 2022 14:28:50 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E811402C;
+        Mon, 20 Jun 2022 11:28:49 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e25so11927650wrc.13;
+        Mon, 20 Jun 2022 11:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=NTFM/4VkpDM2qI5OcPL5gWkEDJT/oSyHrioA8LlzOIU=;
-        b=aSKVtffmz3QNrbI6AfMjpHOi7dR22/XMjkwuUa1rUdiyZHhHDH5IhQDv2zrCwAS3Rd
-         Ut7gGihbDQFKwEV/RrNE2BDxuwumRPQHV1ZkGAKBnlQUXBPyWL0vtV3U/rw+rjsrBpIp
-         gMEAorP2KJLq7IYrUV8lE0aEdnjmTD0hA2UMGjpPfHUBFfo4m7SHvn+127HlZjrM6tZT
-         i1atnOT4dJOE/a1qlYzwOSVf25tZ7n/PO59+TKw0VCuvJGnJsENPd8Mnh4y4AjDGa2Tp
-         zOC5YTMd85CofMH+p6BK+CTFfsSJHyXZDHsJRkPB5GOeUZtldpBiin0sSRGcW/hBFWo8
-         DwIA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EbH61xgbcQFZqiKdtF3EiTrlMIA03mVcXgcJh8nFhYw=;
+        b=mSQEmLJ0Fn5QVozsHIogGY5NXi+9CJYGRIz8gpuc1yRs1WXusV7NLcUOAPe/oDHd+p
+         CGfunJlCmJ3FttTozAiBihvuQo80brGH5cxd7esS/dJ8+prrLrD9NYWnUklcB1Wn/L9D
+         4xSjQZ8Ht1+2KVRUzP+G9tpz8dK5qZdWFtEcKKIo3UWWd5lQCv7rPsKZhCW5toVy38+V
+         HzYrtpJ5nPWn9oymuE5UJnlGqTc5qT4epprO+dTLcXI+5zwNJsTsQNUu7WMD9R9VluLf
+         yzP0plxjqlwIb92S1XFNdmlBBMjgngHOZahcjJtaSnvziwMaVFoUKTmPGRSoHc1Y+Zlh
+         1dxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=NTFM/4VkpDM2qI5OcPL5gWkEDJT/oSyHrioA8LlzOIU=;
-        b=hadV07/zEokE9dzHJt8PxBrr54M3twB8I1s6M8OuUH22ztjTa1HtZVGNSmwoUOYK7G
-         Eq5NVkG/NBS6ziHhL5uzDuIuJsgqc+NFqVjJ2uIHy0pQ0QQ/7/4jhfFh0LSZmSu1yRuX
-         w8ryEgFT+OXwRgqglV5hn/mYN8JjuWBBcdV1mUQK2SCH2XwxqMm8CqT3FVOxPLIYMdw3
-         RESOtYkEUCaXT8/+iigoBGKFUD+XeruZ6gz0MXsfSECcHKi/oLI5yVQPx+szI2dSabFU
-         geI3CFcBEpqBmzZcyLESMEw10QiE7X2T1OrgydbAlBgLA4s6pB7guHUinGe/Edf+r5X4
-         0Qsg==
-X-Gm-Message-State: AJIora/6U2H/Q8f3UTEdBFMd+YDdjvhQjFathSl4EYKEWqGBIrc/NfYx
-        vRuWHTBHKkjeCx9Ce9f5gTh58RsuGHGkqMC5rgg=
-X-Google-Smtp-Source: AGRyM1uy/OVi8SRBztp8LPRbt9VW7FRsFaCHo5j/ZaDG/8ULmt9RXkLPCq1kC6AhX0OKW62sWx3X6XLqZ0NJH9fzzI8=
-X-Received: by 2002:a02:bb85:0:b0:331:7a13:201b with SMTP id
- g5-20020a02bb85000000b003317a13201bmr14417922jan.41.1655749700418; Mon, 20
- Jun 2022 11:28:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EbH61xgbcQFZqiKdtF3EiTrlMIA03mVcXgcJh8nFhYw=;
+        b=3fbZzVOsre0YyqJTJjqtn6TD85OU9GirMi64OjFaYnpvNXaJo9RFSS+NKccpRiCPKn
+         OPKHUIKo/P6nfdkAGqQE/TSMxTaoOfuQLsWXNir6ku6b8Mcve0CkpsuuBJDrNfXpXcX4
+         w0OOSndnO/u9UQ2Njd1YSLAntL4wGZ5uRlYz6SsCiasEvtXmQHlAYpqBxNctrPTqJHyg
+         rOxRqirRElfO6XRgtTqvmzaWpMRyJN4HidJqDVUQruWlkY1TNjydEvvJTArW0bcrW+8h
+         cjm6JOPU0zS9RIFdGV5V+l4iupNavN2hUM0BF2WY/4Wa4q1xd6o3rnWhygwUTu8nrXWd
+         U88Q==
+X-Gm-Message-State: AJIora9ZiNq3qBGDtsI6/U28T+8vv6VYnXrCUumvbNVjxgn0G8jr6LZH
+        ABKBdb1awfgY6HM3TcRk3is=
+X-Google-Smtp-Source: AGRyM1t14bVeWv+aaSXZzdp98dSIn+wgQmnAILYuJY07t+yPD4z3EwzouaR/YGr9cTVVtwEooMSWGA==
+X-Received: by 2002:a5d:584c:0:b0:218:4ee2:38fd with SMTP id i12-20020a5d584c000000b002184ee238fdmr24050138wrf.584.1655749727868;
+        Mon, 20 Jun 2022 11:28:47 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id l8-20020a1ced08000000b0039744bd664esm19254682wmh.13.2022.06.20.11.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 11:28:47 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Vinod Koul <vkoul@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] dmaengine: sun6i: Set the maximum segment size
+Date:   Mon, 20 Jun 2022 20:28:46 +0200
+Message-ID: <3494277.R56niFO833@kista>
+In-Reply-To: <20220617034209.57337-1-samuel@sholland.org>
+References: <20220617034209.57337-1-samuel@sholland.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:164c:0:0:0:0 with HTTP; Mon, 20 Jun 2022 11:28:19
- -0700 (PDT)
-From:   robert anderson <robertandersongood2@gmail.com>
-Date:   Mon, 20 Jun 2022 18:28:19 +0000
-Message-ID: <CAPOVD_g06OVV+4x3vna8wLNP9O6m=_JmD_DqJJ3Maz8yOvnMtA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        MONEY_FORM,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [robertandersongood2[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [robertandersongood2[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  1.1 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Congratulations!
+Dne petek, 17. junij 2022 ob 05:42:09 CEST je Samuel Holland napisal(a):
+> The sun6i DMA engine supports segment sizes up to 2^25-1 bytes. This is
+> explicitly stated in newer SoC documentation (H6, D1), and it is implied
+> in older documentation by the 25-bit width of the "bytes left in the
+> current segment" register field.
 
-The United Nations has come into conclusion to endorse compensation
-fund payment of six million us dollars ($ 6,000,000.00 ) to lucky
-beneficiaries across the globe through the help of the newly elected
-president due to covid-19 ( coronavirus ) that has cause economic melt
-down in different countries and global hazard to so many lives.
+At least A10 user manual says 128k max in description for Byte Counter 
+register (0x100+N*0x20+0xC), although field size is defined as 23:0, but that's 
+still less than 2^25-1. A20 supports only 128k too according to manual. New 
+quirk should be introduced for this.
 
- The United Nations has instructed the swiss world bank to release
-compensation fund payment in collaboration with IBE bank in the United
-Kingdom.
+Best regards,
+Jernej
 
-The payment will be issue into atm visa card and send it to lucky
-beneficary who apply for it via IBE bank in United Kingdom through
-diplomatic courier service company close to the beneficiary country.
+> 
+> Exposing the real segment size limit (instead of the 64k default)
+> reduces the number of SG list segments needed for a transaction.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> Tested on A64, verified that the maximum ALSA PCM period increased, and
+> that audio playback still worked.
+> 
+>  drivers/dma/sun6i-dma.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
+> index b7557f437936..1425f87d97b7 100644
+> --- a/drivers/dma/sun6i-dma.c
+> +++ b/drivers/dma/sun6i-dma.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/dma-mapping.h>
+>  #include <linux/dmaengine.h>
+>  #include <linux/dmapool.h>
+>  #include <linux/interrupt.h>
+> @@ -1334,6 +1335,8 @@ static int sun6i_dma_probe(struct platform_device 
+*pdev)
+>  	INIT_LIST_HEAD(&sdc->pending);
+>  	spin_lock_init(&sdc->lock);
+>  
+> +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(25));
+> +
+>  	dma_cap_set(DMA_PRIVATE, sdc->slave.cap_mask);
+>  	dma_cap_set(DMA_MEMCPY, sdc->slave.cap_mask);
+>  	dma_cap_set(DMA_SLAVE, sdc->slave.cap_mask);
+> -- 
+> 2.35.1
+> 
+> 
 
-This is the information United Kingdom management require to deliver
-compensation fund payment to beneficiary country door step.
 
-1. Your name:
-2. Home address:
-3. City:
-4. Country:
-5. Occupation:
-6. Sex:
-7. Marital status:
-8. Age:
-9. Passport / ID card/ Drivers lience
-10.Phone number:
-Contact our Agent email id:
-name solomo brandy
-
-EMIL ADDRESS (solomonbrandyfiveone@gmail.com ) for your payment without a delay,
-
-Best Regard
-Mrs Mary J Robertson.

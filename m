@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBA2550E19
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B581550E13
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237719AbiFTAnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S237705AbiFTAnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237661AbiFTAnG (ORCPT
+        with ESMTP id S237696AbiFTAnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:43:06 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F41331C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:50 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id n15so10001087qvh.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:49 -0700 (PDT)
+        Sun, 19 Jun 2022 20:43:07 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF80EBB
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:51 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id cu16so13426196qvb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mEyqeuvyYVFCq68f4Sk4QZALU7t6VA5DEezL7DQis8Y=;
-        b=fLu3mcbah3LeFFcLd6Sx4ixRcKu0bTfXOqe3wbxf8BJ/DFjC9wL0kNwb/EUtHx+yFz
-         8ppi9jdAqVGLub6K7TW0N1Rw5me8QfiKIL50CH8ksgTyNpisxLe4Q/4nO2shsPeItLEw
-         /Cr7czGYPiY9moaX2Rc+i/wFJT9AsM05eEQrpNPzBi8ZRTNFaYrgX3v2HIu/HlJ4JpU0
-         uYU/mgQmWRG73TeXu6m04lU1h8RaMkVD9JobbgM8IkCBpjakHTvS1J8xWo3NglcCQeM3
-         bdjGN0Zxo4FCJ5RnoRqUif+F4XMSg5aVyUViwoU34GrE5kWhyORUvLbgup9Vw3TrAkuG
-         Vs8g==
+        bh=sRvBrdNqHSOuaoyss77k+WXhFUbhXQ/IETYNRL++H68=;
+        b=C0iy85m5EuxdFG09Uh6+Haq+2q/rP3zXWcbwUJqs4YtBMwxq/vLtLbpPqkuakivAnS
+         ERWQbldL9l9Kg5o9jHhW0xACtq8slkMT8ajsWOzPiBM1CNZhx4DG7LjmuSYVJEC0XnjG
+         B6uawwH76VEa/hLnq+G8O+A1rKHcebJtjF/N6zbqbAa6U5kpWUWDbW+WN10ocx5NnMsL
+         mV0Vq8Ujxr7mnxKyOgvit6Iez+Jfn9+vpjwrAKltmw9A7ZUZJs7z/JyH6XrWtpZQv8VK
+         33hPYUZKtz2gESvicUXyk5SE+EUdRBdogDul0KWQhLRmvb9dMHUWpaBnbQgklvUM3ZpI
+         Fm3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mEyqeuvyYVFCq68f4Sk4QZALU7t6VA5DEezL7DQis8Y=;
-        b=IyH4VP5Z23Kedf/MF0TrGYS/nul7dACcy/XyNb4Ns47VvfkDESCyFHJ4/3MnlWxuoi
-         G3PA4+QBT+pwltIPKOXlD8RCrmBzR0X18jdyOSO8anT6PygiC9rtF6/rKfsTg7Izuh47
-         eWoAuunybfU7ztiDJ4oKnN7k4ir2hQ7fFRnGTNKOet5IIwmH8781mNOFAv4NkbywEoac
-         fWXgak+tBP8LGF86yFaVUNM6gj+u0JFHhpkn5POBoeOtNvt/cAdDhfvOeqdtGulUN+Mh
-         chz4234OmP45sdwTWXHhxVUoFvSeSPqGzJqHSSSXwHMUlCXuy31uSgyW4TGc/0CT0MzJ
-         66Qg==
-X-Gm-Message-State: AJIora9zDXDRirpRXpNdz3zfRW4j8xsLVBhLdpkisqbOWf/1AUhQLzNw
-        FgFlEmyVVzCI2ccYzxMPCYPi0yrrDynikX4=
-X-Google-Smtp-Source: AGRyM1vqcEN8zqRw3lIFKIxZcvzXrdHxzPNSGUo0ecIByl4eOVuaZ3nH1CAHTH2mUn4bKReF7j7P5A==
-X-Received: by 2002:a05:6214:d05:b0:464:6293:be35 with SMTP id 5-20020a0562140d0500b004646293be35mr17200317qvh.120.1655685767967;
-        Sun, 19 Jun 2022 17:42:47 -0700 (PDT)
+        bh=sRvBrdNqHSOuaoyss77k+WXhFUbhXQ/IETYNRL++H68=;
+        b=swBXAwzGTyheCTJy3Y7+XmRhhIZTXRPu56XxUPJOBlKhJKlj4yennxDXamJTIeuWj5
+         88pngVVZCrVqslBTASWd/mQHJjqPoIMmN7++TIhNbh5UF/W89qkBboWJpJDGA5Blo/ZZ
+         8mc3sWPMReCzvp3DukypVUt3SLeUG2pCNQFz6o25Y8mw7LM470HejFQueohc2P210Xez
+         hbu7O/d1V9IJXOphlHeBIhyheM1sn3KeKcgzivIwUbwlHXOxhn36daP2Nw8LHWY+h2/N
+         BOIfSn+0K1fzelT7oLJ2jVHPJYO8gejM/4wiMllCnlp2WbBtxD5ieXQ88ax7aH5ayYF1
+         vsng==
+X-Gm-Message-State: AJIora/mqBR0OgJG3ZX25QXbgf9PdVh+nI8DKIZmjUk7WPGS8UD5T47L
+        kYabBDilwIkmpLNLZdJyMcQvl/ut3QqjTUQ=
+X-Google-Smtp-Source: AGRyM1scNnKLdDPjDmLLvYvy5kkK6KyNyDdCsMJnrp7LkoNXR5fOfae3fke6nNaiaLijdgXoPJsvNA==
+X-Received: by 2002:a05:622a:d0:b0:305:c643:68fe with SMTP id p16-20020a05622a00d000b00305c64368femr17928566qtw.232.1655685769928;
+        Sun, 19 Jun 2022 17:42:49 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id a2-20020ac86102000000b00307c9b5e087sm7097089qtm.3.2022.06.19.17.42.46
+        by smtp.gmail.com with ESMTPSA id t20-20020ac86a14000000b00304b5eef8aasm9398994qtr.32.2022.06.19.17.42.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:42:46 -0700 (PDT)
+        Sun, 19 Jun 2022 17:42:49 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 06/34] lib/string_helpers: string_get_size() now returns characters wrote
-Date:   Sun, 19 Jun 2022 20:42:05 -0400
-Message-Id: <20220620004233.3805-7-kent.overstreet@gmail.com>
+Subject: [PATCH v4 07/34] lib/printbuf: Heap allocation
+Date:   Sun, 19 Jun 2022 20:42:06 -0400
+Message-Id: <20220620004233.3805-8-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,56 +71,330 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-printbuf now needs to know the number of characters that would have been
-written if the buffer was too small, like snprintf(); this changes
-string_get_size() to return the the return value of snprintf().
+This makes printbufs optionally heap allocated: a printbuf initialized
+with the PRINTBUF initializer will automatically heap allocate and
+resize as needed.
+
+Allocations are done with GFP_KERNEL: code should use e.g.
+memalloc_nofs_save()/restore() as needed. Since we do not currently have
+memalloc_nowait_save()/restore(), in contexts where it is not safe to
+block we provide the helpers
+
+  printbuf_atomic_inc()
+  printbuf_atomic_dec()
+
+When the atomic count is nonzero, memory allocations will be done with
+GFP_NOWAIT.
+
+On memory allocation failure, output will be truncated. Code that wishes
+to check for memory allocation failure (in contexts where we should
+return -ENOMEM) should check if printbuf->allocation_failure is set.
+Since printbufs are expected to be typically used for log messages and
+on a best effort basis, we don't return errors directly.
+
+Other helpers provided by this patch:
+
+ - printbuf_make_room(buf, extra)
+   Reallocates if necessary to make room for @extra bytes (not including
+   terminating null).
+
+ - printbuf_str(buf)
+   Returns a null terminated string equivalent to the contents of @buf.
+   If @buf was never allocated (or allocation failed), returns a
+   constant empty string.
+
+ - printbuf_exit(buf)
+   Releases memory allocated by a printbuf.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- include/linux/string_helpers.h | 4 ++--
- lib/string_helpers.c           | 7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ include/linux/printbuf.h | 120 +++++++++++++++++++++++++++++++++------
+ lib/Makefile             |   2 +-
+ lib/printbuf.c           |  71 +++++++++++++++++++++++
+ 3 files changed, 175 insertions(+), 18 deletions(-)
+ create mode 100644 lib/printbuf.c
 
-diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
-index 67de398944..52e0f1d283 100644
---- a/include/linux/string_helpers.h
-+++ b/include/linux/string_helpers.h
-@@ -19,8 +19,8 @@ enum string_size_units {
- 	STRING_UNITS_2,		/* use binary powers of 2^10 */
+diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
+index 8186c447ca..382863afa7 100644
+--- a/include/linux/printbuf.h
++++ b/include/linux/printbuf.h
+@@ -4,19 +4,69 @@
+ #ifndef _LINUX_PRINTBUF_H
+ #define _LINUX_PRINTBUF_H
+ 
+-#include <linux/kernel.h>
+-#include <linux/string.h>
+-
+ /*
+- * Printbufs: String buffer for outputting (printing) to, for vsnprintf
++ * Printbufs: Simple strings for printing to, with optional heap allocation
++ *
++ * This code has provisions for use in userspace, to aid in making other code
++ * portable between kernelspace and userspace.
++ *
++ * Basic example:
++ *   struct printbuf buf = PRINTBUF;
++ *
++ *   prt_printf(&buf, "foo=");
++ *   foo_to_text(&buf, foo);
++ *   printk("%s", buf.buf);
++ *   printbuf_exit(&buf);
++ *
++ * Or
++ *   struct printbuf buf = PRINTBUF_EXTERN(char_buf, char_buf_size)
++ *
++ * We can now write pretty printers instead of writing code that dumps
++ * everything to the kernel log buffer, and then those pretty-printers can be
++ * used by other code that outputs to kernel log, sysfs, debugfs, etc.
++ *
++ * Memory allocation: Outputing to a printbuf may allocate memory. This
++ * allocation is done with GFP_KERNEL, by default: use the newer
++ * memalloc_*_(save|restore) functions as needed.
++ *
++ * Since no equivalent yet exists for GFP_ATOMIC/GFP_NOWAIT, memory allocations
++ * will be done with GFP_NOWAIT if printbuf->atomic is nonzero.
++ *
++ * Memory allocation failures: We don't return errors directly, because on
++ * memory allocation failure we usually don't want to bail out and unwind - we
++ * want to print what we've got, on a best-effort basis. But code that does want
++ * to return -ENOMEM may check printbuf.allocation_failure.
+  */
+ 
++#include <linux/kernel.h>
++#include <linux/string.h>
++
+ struct printbuf {
+ 	char			*buf;
+ 	unsigned		size;
+ 	unsigned		pos;
++	/*
++	 * If nonzero, allocations will be done with GFP_ATOMIC:
++	 */
++	u8			atomic;
++	bool			allocation_failure:1;
++	bool			heap_allocated:1;
  };
  
--void string_get_size(u64 size, u64 blk_size, enum string_size_units units,
--		     char *buf, int len);
-+int string_get_size(u64 size, u64 blk_size, enum string_size_units units,
-+		    char *buf, int len);
- 
- #define UNESCAPE_SPACE		BIT(0)
- #define UNESCAPE_OCTAL		BIT(1)
-diff --git a/lib/string_helpers.c b/lib/string_helpers.c
-index 167c31f377..c1c8d4dfc9 100644
---- a/lib/string_helpers.c
-+++ b/lib/string_helpers.c
-@@ -33,8 +33,8 @@
-  * at least 9 bytes and will always be zero terminated.
-  *
++int printbuf_make_room(struct printbuf *, unsigned);
++const char *printbuf_str(const struct printbuf *);
++void printbuf_exit(struct printbuf *);
++
++/* Initializer for a heap allocated printbuf: */
++#define PRINTBUF ((struct printbuf) { .heap_allocated = true })
++
++/* Initializer a printbuf that points to an external buffer: */
++#define PRINTBUF_EXTERN(_buf, _size)			\
++((struct printbuf) {					\
++	.buf	= _buf,					\
++	.size	= _size,				\
++})
++
+ /*
+  * Returns size remaining of output buffer:
   */
--void string_get_size(u64 size, u64 blk_size, const enum string_size_units units,
--		     char *buf, int len)
-+int string_get_size(u64 size, u64 blk_size, const enum string_size_units units,
-+		    char *buf, int len)
+@@ -49,26 +99,36 @@ static inline bool printbuf_overflowed(struct printbuf *out)
+ 
+ static inline void printbuf_nul_terminate(struct printbuf *out)
  {
- 	static const char *const units_10[] = {
- 		"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"
-@@ -127,8 +127,7 @@ void string_get_size(u64 size, u64 blk_size, const enum string_size_units units,
- 	else
- 		unit = units_str[units][i];
- 
--	snprintf(buf, len, "%u%s %s", (u32)size,
--		 tmp, unit);
-+	return snprintf(buf, len, "%u%s %s", (u32)size, tmp, unit);
++	printbuf_make_room(out, 1);
++
+ 	if (out->pos < out->size)
+ 		out->buf[out->pos] = 0;
+ 	else if (out->size)
+ 		out->buf[out->size - 1] = 0;
  }
- EXPORT_SYMBOL(string_get_size);
  
+-static inline void __prt_char(struct printbuf *out, char c)
++/* Doesn't call printbuf_make_room(), doesn't nul terminate: */
++static inline void __prt_char_reserved(struct printbuf *out, char c)
+ {
+ 	if (printbuf_remaining(out))
+ 		out->buf[out->pos] = c;
+ 	out->pos++;
+ }
+ 
++/* Doesn't nul terminate: */
++static inline void __prt_char(struct printbuf *out, char c)
++{
++	printbuf_make_room(out, 1);
++	__prt_char_reserved(out, c);
++}
++
+ static inline void prt_char(struct printbuf *out, char c)
+ {
+ 	__prt_char(out, c);
+ 	printbuf_nul_terminate(out);
+ }
+ 
+-static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
++static inline void __prt_chars_reserved(struct printbuf *out, char c, unsigned n)
+ {
+ 	unsigned i, can_print = min(n, printbuf_remaining(out));
+ 
+@@ -79,13 +139,18 @@ static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
+ 
+ static inline void prt_chars(struct printbuf *out, char c, unsigned n)
+ {
+-	__prt_chars(out, c, n);
++	printbuf_make_room(out, n);
++	__prt_chars_reserved(out, c, n);
+ 	printbuf_nul_terminate(out);
+ }
+ 
+ static inline void prt_bytes(struct printbuf *out, const void *b, unsigned n)
+ {
+-	unsigned i, can_print = min(n, printbuf_remaining(out));
++	unsigned i, can_print;
++
++	printbuf_make_room(out, n);
++
++	can_print = min(n, printbuf_remaining(out));
+ 
+ 	for (i = 0; i < can_print; i++)
+ 		out->buf[out->pos++] = ((char *) b)[i];
+@@ -101,22 +166,43 @@ static inline void prt_str(struct printbuf *out, const char *str)
+ 
+ static inline void prt_hex_byte(struct printbuf *out, u8 byte)
+ {
+-	__prt_char(out, hex_asc_hi(byte));
+-	__prt_char(out, hex_asc_lo(byte));
++	printbuf_make_room(out, 2);
++	__prt_char_reserved(out, hex_asc_hi(byte));
++	__prt_char_reserved(out, hex_asc_lo(byte));
+ 	printbuf_nul_terminate(out);
+ }
+ 
+ static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
+ {
+-	__prt_char(out, hex_asc_upper_hi(byte));
+-	__prt_char(out, hex_asc_upper_lo(byte));
++	printbuf_make_room(out, 2);
++	__prt_char_reserved(out, hex_asc_upper_hi(byte));
++	__prt_char_reserved(out, hex_asc_upper_lo(byte));
+ 	printbuf_nul_terminate(out);
+ }
+ 
+-#define PRINTBUF_EXTERN(_buf, _size)			\
+-((struct printbuf) {					\
+-	.buf	= _buf,					\
+-	.size	= _size,				\
+-})
++/**
++ * printbuf_reset - re-use a printbuf without freeing and re-initializing it:
++ */
++static inline void printbuf_reset(struct printbuf *buf)
++{
++	buf->pos		= 0;
++	buf->allocation_failure	= 0;
++}
++
++/**
++ * printbuf_atomic_inc - mark as entering an atomic section
++ */
++static inline void printbuf_atomic_inc(struct printbuf *buf)
++{
++	buf->atomic++;
++}
++
++/**
++ * printbuf_atomic_inc - mark as leaving an atomic section
++ */
++static inline void printbuf_atomic_dec(struct printbuf *buf)
++{
++	buf->atomic--;
++}
+ 
+ #endif /* _LINUX_PRINTBUF_H */
+diff --git a/lib/Makefile b/lib/Makefile
+index 6b9ffc1bd1..b4609a4258 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+ 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+ 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+ 	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
+-	 buildid.o
++	 buildid.o printbuf.o
+ 
+ lib-$(CONFIG_PRINTK) += dump_stack.o
+ lib-$(CONFIG_SMP) += cpumask.o
+diff --git a/lib/printbuf.c b/lib/printbuf.c
+new file mode 100644
+index 0000000000..8c70128e31
+--- /dev/null
++++ b/lib/printbuf.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: LGPL-2.1+
++/* Copyright (C) 2022 Kent Overstreet */
++
++#ifdef __KERNEL__
++#include <linux/export.h>
++#include <linux/kernel.h>
++#else
++#define EXPORT_SYMBOL(x)
++#endif
++
++#include <linux/err.h>
++#include <linux/slab.h>
++#include <linux/printbuf.h>
++
++int printbuf_make_room(struct printbuf *out, unsigned extra)
++{
++	unsigned new_size;
++	char *buf;
++
++	if (!out->heap_allocated)
++		return 0;
++
++	/* Reserved space for terminating nul: */
++	extra += 1;
++
++	if (out->pos + extra < out->size)
++		return 0;
++
++	new_size = roundup_pow_of_two(out->size + extra);
++	buf = krealloc(out->buf, new_size, !out->atomic ? GFP_KERNEL : GFP_NOWAIT);
++
++	if (!buf) {
++		out->allocation_failure = true;
++		return -ENOMEM;
++	}
++
++	out->buf	= buf;
++	out->size	= new_size;
++	return 0;
++}
++EXPORT_SYMBOL(printbuf_make_room);
++
++/**
++ * printbuf_str - returns printbuf's buf as a C string, guaranteed to be null
++ * terminated
++ */
++const char *printbuf_str(const struct printbuf *buf)
++{
++	/*
++	 * If we've written to a printbuf then it's guaranteed to be a null
++	 * terminated string - but if we haven't, then we might not have
++	 * allocated a buffer at all:
++	 */
++	return buf->pos
++		? buf->buf
++		: "";
++}
++EXPORT_SYMBOL(printbuf_str);
++
++/**
++ * printbuf_exit - exit a printbuf, freeing memory it owns and poisoning it
++ * against accidental use.
++ */
++void printbuf_exit(struct printbuf *buf)
++{
++	if (buf->heap_allocated) {
++		kfree(buf->buf);
++		buf->buf = ERR_PTR(-EINTR); /* poison value */
++	}
++}
++EXPORT_SYMBOL(printbuf_exit);
 -- 
 2.36.1
 

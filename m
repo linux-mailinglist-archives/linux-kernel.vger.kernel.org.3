@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30825519EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F22551C6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242057AbiFTMxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S1345928AbiFTNfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241878AbiFTMxL (ORCPT
+        with ESMTP id S1347873AbiFTNeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:53:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BC1A47E;
-        Mon, 20 Jun 2022 05:53:10 -0700 (PDT)
+        Mon, 20 Jun 2022 09:34:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896531D327;
+        Mon, 20 Jun 2022 06:13:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94CCCB811AB;
-        Mon, 20 Jun 2022 12:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D79C3411B;
-        Mon, 20 Jun 2022 12:53:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B496F60FF2;
+        Mon, 20 Jun 2022 13:12:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BBA4C3411B;
+        Mon, 20 Jun 2022 13:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729588;
-        bh=jpahqU4Ez2Jv2ovq+6xWJVXthFohCC2sf6mGPWztRhY=;
+        s=korg; t=1655730766;
+        bh=vPRTMm+R+ACCNBJFw2ofXGsoF9uzS5IfdoIy6DONyu0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uRXraJslE664cO+IxmD4PT+zwxCuV7rbBPm5tj8XE0Qoc9e+Em3rFXftihRcZFdip
-         3DbwHOP1LpWdPa+1yA/ax7oAN0pksjldWoRxO3fpksfzkrSP1k+/+sih7+/7NXr0mL
-         KhG3FcXwcSwyIYOY+MlCmR7xLDT4l45NVxmVjWSw=
+        b=PifwZyozUkL8EIKQGxYVDqTUBjl/V44+wOHBN3w0UVnUpfR3u7/40lIyu3db7qbpo
+         dG8n7sW3PcROaj0p+zUrl8vf4lxUXQi4BS2z5TeAj5yHpErKO/5y07/AGoE9gi5YeD
+         ti+iMJnm6Hwk1I2+1mP9lh1quMnjXdY+76kX9C9s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 011/141] dma-debug: make things less spammy under memory pressure
-Date:   Mon, 20 Jun 2022 14:49:09 +0200
-Message-Id: <20220620124729.852674260@linuxfoundation.org>
+        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 049/240] random: fix typo in comments
+Date:   Mon, 20 Jun 2022 14:49:10 +0200
+Message-Id: <20220620124739.556186349@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Schspa Shi <schspa@gmail.com>
 
-[ Upstream commit e19f8fa6ce1ca9b8b934ba7d2e8f34c95abc6e60 ]
+commit c0a8a61e7abbf66729687ee63659ee25983fbb1e upstream.
 
-Limit the error msg to avoid flooding the console.  If you have a lot of
-threads hitting this at once, they could have already gotten passed the
-dma_debug_disabled() check before they get to the point of allocation
-failure, resulting in quite a lot of this error message spamming the
-log.  Use pr_err_once() to limit that.
+s/or/for
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/dma/debug.c | 2 +-
+ drivers/char/random.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index ac740630c79c..2caafd13f8aa 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -564,7 +564,7 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
- 
- 	rc = active_cacheline_insert(entry);
- 	if (rc == -ENOMEM) {
--		pr_err("cacheline tracking ENOMEM, dma-debug disabled\n");
-+		pr_err_once("cacheline tracking ENOMEM, dma-debug disabled\n");
- 		global_disable = true;
- 	} else if (rc == -EEXIST && !(attrs & DMA_ATTR_SKIP_CPU_SYNC)) {
- 		err_printk(entry->dev, entry,
--- 
-2.35.1
-
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -101,7 +101,7 @@
+  * ===============================
+  *
+  * There are four exported interfaces; two for use within the kernel,
+- * and two or use from userspace.
++ * and two for use from userspace.
+  *
+  * Exported interfaces ---- userspace output
+  * -----------------------------------------
 
 

@@ -2,168 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7441955134F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2C7551355
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240076AbiFTIvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S240090AbiFTIvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240065AbiFTIvD (ORCPT
+        with ESMTP id S238836AbiFTIvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:51:03 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F41612D05
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:51:01 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id u12so19673041eja.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:51:01 -0700 (PDT)
+        Mon, 20 Jun 2022 04:51:41 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1278E12D05;
+        Mon, 20 Jun 2022 01:51:40 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a29so16148160lfk.2;
+        Mon, 20 Jun 2022 01:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=l921OzWrKWAkvgffalKJcegxOLa36ztSxqMp8PQLuKE=;
-        b=K8YhUSw2j90oN35WVE7NTJrtHV0dTZB20ol4mTQLyuO94nvyW83AU6qr2lg51vXODD
-         o9R3B4RVANHBRkwyy5TbfSI5mdDhNLzseI0fobTy4UBH7yf9wD34/VB0ukydEmAnDfEM
-         r6RAuE4N+pbS9G/7F5TcxO3zeAPrHW3QK7tL8XYJ1N5qLb5Z4l5makzcW+3y4rT+aUMZ
-         5ZICp0zJ7tQCeNGS4S2hCy54OrzCp0unX7VKSKximXDZomJApbztoGxg0RIc7KDgsDsy
-         m9yTbwwjbzu1OkI5yydxa1OjRCcqzZsnk2F0p2yKA+eyL3eUr1/iWAjbNiwlkdLcj0jT
-         6N1g==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nmsby/owyh04k0ycvHIy9l6TCn3KX4vCVQ8FvknbAxM=;
+        b=OhX35MjDbqMX8PT+D6KgZRwN4bXObTsbs0ih7IFYqtsvOa1wuBKqHj/RyYXlS3d87a
+         acnj6QFINKrCvJVEwTCPQMx8iqGAfRdGKSIaOen1/wiSYmvuHHL9IZAc4FMsdJacFG8m
+         Le4ZFTQhp7OU1Tp48G8+wSKci6gOp3qVE1kiWeGGwZnzYmS7g28O6WZuPZGEVT59zLuL
+         vLX2rDcUHCgvd39E7LLZSfnomBVATG0w3h1mBxwquDjVC1X3LvfMXGT5oIXuwYF1BjCR
+         qj3D6IeMXHff3qbezYRsA0jv/3e9ITV7luOJ27hBzyUnyGVW0jqTdrD6erT/DV9BZhxM
+         j0Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=l921OzWrKWAkvgffalKJcegxOLa36ztSxqMp8PQLuKE=;
-        b=1BbqbUxrFV7/5RCwAcs9nhOrZ1RpR65TK3Fd/oEUXl8ZPA/tZwPkII/vL9bkM7tnyt
-         DMI29D22BFjB6NtrDZACl1gRsLcCSSy3ahbhXRvHKlxjXWHnfR97U+AuVcRriS7lnGE2
-         +yG18KufjDrwtA4F60KVUX6bpf9c2d/oY0Gi1v30gwxt0qsrnZ9pbPI/rvlqko2m0HbI
-         ZPrljw/Lh4KvX3aR/1zeFCVRqyuKcIPVabN3+ME1fUjCgbBF38b5Jcsmr4tlwRFuGmCv
-         oFVAvqQzXl7blPwOPQO/RLlOu8wwlYw2r23dvtOcmrEranchBlX0PI6PBDGdhsef0wio
-         2/HA==
-X-Gm-Message-State: AJIora+pHym7XHAKQ0Z5yPtHc/kSHaPY5mBx/N/wZcuzDe7KAnNp5/x8
-        0CqaTkbxKXQhmgS+dotNNfXeqw==
-X-Google-Smtp-Source: AGRyM1vg839TPzO9Llk78TgzhogRHGaP18+CEPGCz+ZqKqNWO6QJy5rQo9Fs6ITkPjHkEQ3FwxwpLw==
-X-Received: by 2002:a17:907:16a2:b0:711:d048:7d41 with SMTP id hc34-20020a17090716a200b00711d0487d41mr20355368ejc.126.1655715059676;
-        Mon, 20 Jun 2022 01:50:59 -0700 (PDT)
-Received: from [192.168.0.207] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ff10-20020a1709069c0a00b006fec69696a0sm5512140ejc.220.2022.06.20.01.50.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 01:50:59 -0700 (PDT)
-Message-ID: <a24c24e6-fdee-df79-fd2f-6a71540bd9b3@linaro.org>
-Date:   Mon, 20 Jun 2022 10:50:57 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nmsby/owyh04k0ycvHIy9l6TCn3KX4vCVQ8FvknbAxM=;
+        b=Li5jmL2vATkjTk3/K0AExIvlhU3HiPDjwSQsdF+MS65kWLofzBVX6eTe+1TetOltx7
+         geW22ooKbl8Bye1oTrCeY7Ziw1VgSGRSAYtNk9IJQxCGgVhnAONRj6mPOPINkNkcY0TV
+         0xIJlCkdTdqLLElnhcwavb48j/M2fiab1bz/sNIgBGHOX0JzrOHVFeM8r/Q9LNPpOnf0
+         O9XYW7UNoIoB1MScsE/2Cvq6hsGh1DrVkVYobSPOyNJZ/ZnqEZCoTZcSdjH/Liz84VDY
+         yV7q4yuPAjvcosRHGH0LgZ60jdaNBkQSDLTtNTKEuAWnNWN8WChmpGWnhLBYgewU/x64
+         JMYQ==
+X-Gm-Message-State: AJIora+574n4jiYVoHx3l/lJQxeLcRdj/D+VPPS1Q2WCIXYfZWJu4rlt
+        MLjeaW2cmEBwdehVec8PWq5lVx59LTi1MEzeX2Q=
+X-Google-Smtp-Source: AGRyM1sVjX2HtRVHYgJLfOUlDY1CN4gBAcxTLBHTjQ4lp3ME+dD6n0bXuPvlQwDNAMCQBdXF21S0fja6MceEuZ+Ul8M=
+X-Received: by 2002:a05:6512:1390:b0:47f:74c4:dd45 with SMTP id
+ p16-20020a056512139000b0047f74c4dd45mr1117184lfa.536.1655715098427; Mon, 20
+ Jun 2022 01:51:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
- clocks to be missing
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+References: <20220619151225.209029-1-tmaimon77@gmail.com> <20220619151225.209029-6-tmaimon77@gmail.com>
+ <040f149b-c441-c778-6d4f-f3b2b2afaf4e@linaro.org>
+In-Reply-To: <040f149b-c441-c778-6d4f-f3b2b2afaf4e@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Mon, 20 Jun 2022 11:51:27 +0300
+Message-ID: <CAP6Zq1j9=wsK=HGLkvPRrVYrQdCqL0+LaujmTxnRY7fbK2zi1g@mail.gmail.com>
+Subject: Re: [PATCH v3 05/18] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-References: <20220617222916.2435618-1-nfraprado@collabora.com>
- <20220617222916.2435618-3-nfraprado@collabora.com>
- <8639e64d-c659-7090-2d0a-078fd96cfbd4@linaro.org>
- <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
- <bc5458fe-083c-d679-9fcb-95810a290da8@linaro.org>
- <af50210b95d0cd8b2e3103b3d4a9702aeeba9452.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <af50210b95d0cd8b2e3103b3d4a9702aeeba9452.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 08:59, Chunfeng Yun wrote:
-> On Sun, 2022-06-19 at 14:05 +0200, Krzysztof Kozlowski wrote:
->> On 19/06/2022 09:46, Chunfeng Yun wrote:
->>> On Fri, 2022-06-17 at 18:25 -0700, Krzysztof Kozlowski wrote:
->>>> On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
->>>>> The current clock list in the binding doesn't allow for one of
->>>>> the
->>>>> optional clocks to be missing and a subsequent clock to be
->>>>> present.
->>>>> An
->>>>> example where this is an issue is in mt8192.dtsi, which has
->>>>> "sys_ck",
->>>>> "ref_ck", "xhci_ck" and would cause dtbs_check warnings.
->>>>>
->>>>> Change the clock list in a way that allows the middle optional
->>>>> clocks to
->>>>> be missing, while still guaranteeing a fixed order. The
->>>>> "ref_ck" is
->>>>> kept
->>>>> as a const even though it is optional for simplicity, since it
->>>>> is
->>>>> present in all current dts files.
->>>>>
->>>>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>>>> ---
->>>>>
->>>>>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml       | 9
->>>>> +++++++--
->>>>>  1 file changed, 7 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/usb/mediatek,mtk-
->>>>> xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
->>>>> xhci.yaml
->>>>> index 63cbc2b62d18..99a1b233ec90 100644
->>>>> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-
->>>>> xhci.yaml
->>>>> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-
->>>>> xhci.yaml
->>>>> @@ -80,8 +80,13 @@ properties:
->>>>>      items:
->>>>>        - const: sys_ck  # required, the following ones are
->>>>> optional
->>>>>        - const: ref_ck
->>>>> -      - const: mcu_ck
->>>>> -      - const: dma_ck
->>>>> +      - enum:
->>>>> +          - mcu_ck
->>>>> +          - dma_ck
->>>>> +          - xhci_ck
->>>>> +      - enum:
->>>>> +          - dma_ck
->>>>> +          - xhci_ck
->>>>>        - const: xhci_ck
->>>>
->>>> You allow now almost any order here, including incorrect like
->>>> sys,ref,xhci,xhci,xhci.
->>>>
->>>> The order of clocks has to be fixed and we cannot allow
->>>> flexibility.
->>>> Are
->>>> you sure that these clocks are actually optional (not wired to
->>>> the
->>>> device)?
->>>
->>> In fact, these optional clocks are fixed, due to no gates are
->>> provided,
->>> SW can't control them by CCF;
->>> In this case, I usually use a fixed clock, or ignore it.
->>
->> But in some versions these clocks are controllable or not?
-> Some SoCs are controllable, some ones are not (fixed clock).
+Hi Krzysztof,
 
-Thanks for confirming. Then I would prefer to make these clocks required
-(not optional) and always provide them - via common clock framework or
-fixed-clock.
+On Mon, 20 Jun 2022 at 11:21, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 19/06/2022 17:12, Tomer Maimon wrote:
+> > Add binding for the Arbel BMC NPCM8XX Clock controller.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 49 +++++++++++++++++++
+> >  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 49 +++++++++++++++++++
+> >  2 files changed, 98 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> >  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > new file mode 100644
+> > index 000000000000..3d4fddc090ca
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > @@ -0,0 +1,49 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM8XX Clock Controller Binding
+> > +
+> > +maintainers:
+> > +  - Tomer Maimon <tmaimon77@gmail.com>
+> > +
+> > +description: |
+> > +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+> > +  generates and supplies clocks to all modules within the BMC.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - nuvoton,npcm845-clk
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#clock-cells':
+> > +    const: 1
+> > +    description:
+> > +      See include/dt-bindings/clock/nuvoton,npcm8xx-clock.h for the full
+> > +      list of NPCM8XX clock IDs.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "#clock-cells"
+>
+> Use same quotes through your patchset - either " or '. Do not mix.
+>
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    ahb {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        clock-controller@f0801000 {
+> > +            compatible = "nuvoton,npcm845-clk";
+> > +            reg = <0x0 0xf0801000 0x0 0x1000>;
+> > +            #clock-cells = <1>;
+> > +        };
+> > +    };
+> > +...
+> > diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> > new file mode 100644
+> > index 000000000000..e5cce08b00e1
+> > --- /dev/null
+> > +++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> > @@ -0,0 +1,49 @@
+> > +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>
+> My comment about filename is still waiting to be resolved. I asked for
+> same filename as bindings in v1.
+Right, forgot to modify the file name will be done in next version.
+>
+> https://lore.kernel.org/all/CAP6Zq1gXEqqquKzxTHoxYnvh2LCGt-ES+k=aX61FKyHW5WB62w@mail.gmail.com/
+>
+> I am still going to NAK it if it is not implemented.
+>
+> Best regards,
+> Krzysztof
 
 Best regards,
-Krzysztof
+
+Tomer

@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036C5551251
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE06551252
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239475AbiFTIPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S239320AbiFTIP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234943AbiFTIPE (ORCPT
+        with ESMTP id S239679AbiFTIPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:15:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58421181D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:15:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B84EB80E19
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D8EC3411B;
-        Mon, 20 Jun 2022 08:15:00 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PLuZLoja"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1655712899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+X19RxcvbjERl3ri3qP76Zy15OFpjPX6+U0WKHFEW7I=;
-        b=PLuZLojacHYHy2loWss+n4sQ8uPMmBHxEGiGFYb47J5D4g8+qOJyP0ZKorcEIgKWZsUKmp
-        9ObApvQ5u0yDOI2X+39fhF6eMdeIS3VNVfERtVAVLE9hNXYaiemUPtehwceBmGAnmWHFbb
-        wveTKqEly1ONwS4Xur/y7e766fv4WSo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7add4f2e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 20 Jun 2022 08:14:58 +0000 (UTC)
-Date:   Mon, 20 Jun 2022 10:14:57 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Siewior <bigeasy@linutronix.de>
-Cc:     Jann Horn <jannh@google.com>, Theodore Ts'o <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] random: Fix signal_pending() usage
-Message-ID: <YrAsgZC3iEHI+nu3@zx2c4.com>
-References: <20220405163931.1108442-1-jannh@google.com>
- <CAHmME9pW6heXtPrfCP7J6ODgSc8sotsv6E3dnJoVBaPi+Ph=HA@mail.gmail.com>
- <YqywapDM7NPC/X+E@linutronix.de>
- <Yq0EcG9GsAkoiF3H@zx2c4.com>
- <YrAlPKeOowD5qv/B@linutronix.de>
+        Mon, 20 Jun 2022 04:15:23 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6611182B;
+        Mon, 20 Jun 2022 01:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1655712922;
+  x=1687248922;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xq6zEn6uVMYjR4CpQtb8F3SebvExuhNNdlj7lnspcBY=;
+  b=ZwdZLzcmmcy3NkeppwiDnc8SrgBe/O6JgGlxpcHzngDjZQdjv0ak7i/O
+   wbx2H0o2dGydIpF16/4JpMSE6G/Zlj1sZ+y0ghE8cYt4m1T1p21LXEKBb
+   Cgdss51q3H3wCZGvX/xzsYMmUXN7eti2hdRtIffOGovY/o2gAUc3sZaIZ
+   DfmNxTOzTWZqzOXEZb9a2sjbWnAtnOmwowEDJdnr28T3AHl3qS0XLNWc6
+   XxrGvLml+teduxXTVhis3stw54Cu7RI1n7Qmkt75lmi4GIGv6wqNmNjDy
+   CpdyUWcKSl2VP6eAlifScKvN9A92T0IHpAXs3aatM1ei+ymuIXBQ05n3q
+   w==;
+Date:   Mon, 20 Jun 2022 10:15:19 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     kernel <kernel@axis.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2] mm/smaps: add Pss_Dirty
+Message-ID: <20220620081518.GA26066@axis.com>
+References: <20220620081251.2928103-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <YrAlPKeOowD5qv/B@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220620081251.2928103-1-vincent.whitchurch@axis.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
-
-On Mon, Jun 20, 2022 at 09:43:56AM +0200, Sebastian Siewior wrote:
-> > As for your suggestion to drop it entirely: that'd be nice, in that it'd
-> > add a guarantee that currently doesn't exist. But it can lead to
-> > somewhat large delays if somebody tries to read 2 gigabytes at a time
-> > and hits Ctrl+C during it. That seems potentially bad?
+On Mon, Jun 20, 2022 at 10:12:50AM +0200, Vincent Whitchurch wrote:
+> Pss is the sum of the sizes of clean and dirty private pages, and the
+> proportional sizes of clean and dirty shared pages:
 > 
-> So on my x86 box which runs a Debian kernel (based on v5.18.2):
+>  Private = Private_Dirty + Private_Clean
+>  Shared_Proportional = Shared_Dirty_Proportional + Shared_Clean_Proportional
+>  Pss = Private + Shared_Proportional
 > 
-> | ~$ dd if=/dev/random of=/dev/null bs=2147483648 count=1
-> | 0+1 records in
-> | 0+1 records out
-> | 2147479552 bytes (2,1 GB, 2,0 GiB) copied, 5,97452 s, 359 MB/s
+> The Shared*Proportional fields are not present in smaps, so it is not
+> always possible to determine how much of the Pss is from dirty pages and
+> how much is from clean pages.  This information can be useful for
+> measuring memory usage for the purpose of optimisation, since clean
+> pages can usually be discarded by the kernel immediately while dirty
+> pages cannot.
 > 
-> almost 6 secs. On a smaller box it might take 12s or more. Your
-> implementation change ensured that it does not block for unpredicted
-> amount of time. Previously it would block until the random pool is
-> filled with enough entropy and this could take an unforeseen amount of
-> time. That read now makes more or less constant progress since it
-> depends only on CPU time.
-> Based on that, I don't see a problem dropping that signal check
-> especially that requests larger than 4KiB are most likely exotic.
+> The smaps routines in the kernel already have access to this data, so
+> add a Pss_Dirty to show it to userspace.  Pss_Clean is not added since
+> it can be calculated from Pss and Pss_Dirty.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
 
-I don't have a huge objection to that, but I also don't really know
-what's normal and expected behavior here. What do you make of the usage
-of should_stop_iteration() in drivers/char/mem.c, for example? Would you
-also remove that? If you send a patch to change this in random.c,
-perhaps you should also change it in mem.c and elsewhere, so that some
-broader consensus forms (or doesn't form) on what the expected behavior
-is.
+I forgot to include the changelog:
 
-Jason
+  v2:
+  - Update Documentation/ABI/testing/procfs-smaps_rollup and
+    Documentation/filesystems/proc.rst.
+  - Move Pss_Dirty next to Pss so that the location is consistent between
+    non-rollup and rollup (since the later has some extra Pss* fields).

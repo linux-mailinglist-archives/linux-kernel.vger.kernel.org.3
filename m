@@ -2,156 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE31552060
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E9F552053
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243923AbiFTPP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S243176AbiFTPQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244867AbiFTPOm (ORCPT
+        with ESMTP id S243066AbiFTPQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:14:42 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70088.outbound.protection.outlook.com [40.107.7.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1A6D5C;
-        Mon, 20 Jun 2022 08:03:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L2xBhPQbXMxbbFmfs6dGJhppLinKJYaYAPa3tlk8kJGsP3i0shDz/e4JPnAZFElIW9dBc0ONdazk73xKPHXhisTXinvYGeB5JNZ2DzAjnzIuKEYyo+01Lx7lI7xxBSvUbLSfuZ/nrJo/twKKJjBhkLvhHJRAcKZar/aMNqzuq54imA1GVVejrycFXBUJ3WsQqF2kBgq1Yue1N2Q7ekZwxgqdUU1Ny8XYJttW2NBdq9ssDJRSyvZKrS145k9wRZXjP+mqlejshVEu3G6N5xFBPzZbFBms432LLcZHGZgDJkDgYF7nVnt4PdI8XRaR6g9oUTVjty8DRrSU4Il71MrBkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EBK9/XxX55cR0NwTEm3JCwJ2pTI2Tsfw26Yn4NYjlY0=;
- b=A/3gmS48t/Yz18OhUE48lG1G8zUAeqDUNugH6MlYu82G+NagZBlZnjXTUCH1oaTMep3AhaBuy7c6K1EtKRkPAz6JTLmgSgd8j7Qzi+trntpl59E3fbPiFsXSmmZebwucj87Ws1yXaK2dbevOxn+sjklxvtOx2JmthKA/uRxi7csYlz+HEyVUxRH0pZ7zSDN6ojR1OZT5mK+rfBkXuxTp7yaImPa+5UNi1UpYjJyAKNLYESu0Cs4ha7PwE88N/HVpiM7bAaPEromfYiAYDvz9TAFTeOmsSFCvKkEBNBWCBF7AQ1OGmnJvyi4ZXS2AMJbH/iy1TLwLRIPRx/0QkBN/9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=variscite.com; dmarc=pass action=none
- header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EBK9/XxX55cR0NwTEm3JCwJ2pTI2Tsfw26Yn4NYjlY0=;
- b=Ezc6ADUaviw9Iua/VGNQS/HZ/xu1A/gGEeFQrmRf2qjF/46urRAHauTXJ1lXRk5n9SuHC7Xxs8qWFuVM+fRGzmsRLdzmHYlXnJsEaOeW+9RsUyA/CPNryw3xvBTk+1m+xT4u7emGPcBu2rTPE8mRU77RJStJdCDHw6LvmjGGt7x5tQ4GTFxEZ0kPaCNLmNJTmvxSkVUU+noBQsEXvKnGUwL0L+3MkuD7C5AeDCEtvZ+DPid2wXuJ20S/WORaqoTPXcfHEv8bjIWdPYiUVYXyMPFxyRPOtCP7k9Qly7pmurL4FDPH1n6hbp7ksasxqPB2LPJWeVabNUbvHs/6mdfbpA==
-Received: from AM6PR08MB4376.eurprd08.prod.outlook.com (2603:10a6:20b:bb::21)
- by AM8PR08MB6612.eurprd08.prod.outlook.com (2603:10a6:20b:368::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.13; Mon, 20 Jun
- 2022 15:03:50 +0000
-Received: from AM6PR08MB4376.eurprd08.prod.outlook.com
- ([fe80::3d45:c206:59e3:6539]) by AM6PR08MB4376.eurprd08.prod.outlook.com
- ([fe80::3d45:c206:59e3:6539%5]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
- 15:03:50 +0000
-From:   Pierluigi Passaro <pierluigi.p@variscite.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Alifer Willians de Moraes <alifer.m@variscite.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Eran Matityahu <eran.m@variscite.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shengjiu.wang@gmail.com" <shengjiu.wang@gmail.com>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "Xiubo.Lee@gmail.com" <Xiubo.Lee@gmail.com>
-Subject: Re: [PATCH 4/4] ASoC: wm8904: add DMIC support
-Thread-Topic: [PATCH 4/4] ASoC: wm8904: add DMIC support
-Thread-Index: AQHYhLZMl9cnd+lxxUukzbs4j0AP0g==
-Date:   Mon, 20 Jun 2022 15:03:50 +0000
-Message-ID: <AM6PR08MB4376C690036C5558058C4F16FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 97148b09-0c98-d5de-2792-1546473bcd6b
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=variscite.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1374c813-42c5-4511-ffde-08da52ce1568
-x-ms-traffictypediagnostic: AM8PR08MB6612:EE_
-x-microsoft-antispam-prvs: <AM8PR08MB6612599FFE255063A2DA5F0BFFB09@AM8PR08MB6612.eurprd08.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s+xVj6YK9NeRb9ESzW6lN/p2zXKITphIQhVi1rLJKlP9d1fSmNNjHOjKp7Ymd9VO5dFkNt+F59E7y4WhmC3+4N52Z/+J+ysbpvGMDqk1z77XGId8teZKJg5PbH5/Z6lokDs6yuN4PtsuiT/zHlQxNeQnt8+4FLqEz7ohwXsZoWZfwB1XgdHu6CZBUQFVWSI/2mSbHL0hSwcL1VrEk2RZEBK1lJky7RP9verHQiI52JaQAKHdZ/m3UBxkGoEqtVSVkBew33kjaneSM1D7maEhbnP7BfgmS4d6QKYd8zzDBkvRvBihDSEKtq1iKsldXJAbjQenMTWrcPxPwt3YL8BPuTldrob9R3qQVZhsqdFp7XEsKyMAApWMzCabUA09vdR5cwzVpkVtGNhsonTqUDmK3aEf0YY8AB/LP3TdqPk+wZj0XaAAnh42mwK2833XzQSGudCQv2D5wB4aMmTMdCf6xKnt71jWwVtwf7K3GxGzuu1VNV1inKPbRLpS3egWQOKEZEuoY7I7WlAfY1aLJgbzx/EFmsqAJRiIcMprzQ4rKnN4ZGYHZ8jKbVAm0LkLpspx6SEcWtioi4G5zM7rLrVhg7NJUKSGc1JOBkD9buo/rNX2iq+lkKffbxRBuYFoD6DWGwmlchvb8Wvune8TV/2rVA3Qzk7BIdZ6IihuRnlLA5Um/IlP9pKwTypF9f5IiHfd3f3IlEDB7mVKPDR6/NsDrg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB4376.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(136003)(396003)(366004)(346002)(376002)(6506007)(66556008)(6916009)(54906003)(64756008)(4744005)(316002)(66446008)(122000001)(478600001)(7416002)(7696005)(71200400001)(91956017)(86362001)(5660300002)(8936002)(2906002)(66476007)(4326008)(8676002)(26005)(38070700005)(66946007)(52536014)(9686003)(76116006)(55016003)(186003)(41300700001)(38100700002)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4m9e2KaLLru6n3NBdRi89TsS4BV7mgsPWZIdciz5V1x6PDWN2DwJlAZkSd?=
- =?iso-8859-1?Q?RHFeoPhX0RXT55GlgeAmTPUMOI9Ub5UFhbsY3q4SCi2dGWBPkM+aJx7uLb?=
- =?iso-8859-1?Q?LjPscDnIOQ92C8eqVJ4qP8W/PmHo3r8IHm3lfZBMS9bRhBKfI7NUU7BHCO?=
- =?iso-8859-1?Q?1CjKs97I2pNkOB94amcQC5K2koqdSyAjlCT+kKnukOOKMPj3hbU8KydRMl?=
- =?iso-8859-1?Q?8/wDEfmi9+rCjXiyJVTFF7TEevAlV0/B2pqNK1+6y9VtblyyA/Dk1BKEw0?=
- =?iso-8859-1?Q?KDmDxJ3puvKBTpWiBSf2nuua8NvqPUO8sV7I/XVZCGIL6U/pMJgbS4XHR8?=
- =?iso-8859-1?Q?z2MIL407/tstXLYTEJoBbBpgFMuQqaqUxeP6yUxnyzW37Cmjh+B9taN9uT?=
- =?iso-8859-1?Q?9p9GQirnve8KAxH5xrcHsLf0JelDwfi+STpCvmq2MDacWPwaelMlHg1quJ?=
- =?iso-8859-1?Q?4nth4lXMRi5DIDdpjgmBfGnCpHcXIFgPhIBpXhrz5NgxQMPzQ7Pol3f7i3?=
- =?iso-8859-1?Q?A3c3TjUpAknPwr2Vg5RsbMmQX/BXpLMJkR4zBYGurOehSK1gtunxqLzxvD?=
- =?iso-8859-1?Q?dR47HCuqQtD9a67cFX5AE081csejR4QRmQXUjOFWnvvBjX+xW/xreSiZqm?=
- =?iso-8859-1?Q?M6d2O1hCtxhhI+AdGHvxZokvc+/ycfqTdERSL4g7ZZQ77jP67uqIsViss/?=
- =?iso-8859-1?Q?uMz4ax83bSXHoXmbqf6P1Zi5HSf0wSxnAxnbLXBJ7R+c7yeXjIw7Mi5qjy?=
- =?iso-8859-1?Q?4tJT4nl6FjeeesXO8hnRlAFQzyjzhhlfIsCpElae5c9fy+HOMv3ZtU7Y3U?=
- =?iso-8859-1?Q?anTZAfP+DR5V2cNfqPDcOQYe/8ZGKe+TDphpvFVP/mFtabAlScEJuM6U+a?=
- =?iso-8859-1?Q?BiN4pjJ1lvquiiVYrn+9C0zPnWCpSOogkFcVz2Q0asa3J2vnCrRsRKGBR/?=
- =?iso-8859-1?Q?Ipjd1Hmp/Ek/IdREMOmIzrStI8fOzB0l+itmqwcG0ED0p+B9ZJA5C8BahE?=
- =?iso-8859-1?Q?70p2uj7/dX04f4PL/XxZXao5gJgidqsFOxrtY1GWVYrHpoGb41wzmn209i?=
- =?iso-8859-1?Q?dt5/Gb+Q6T/pdcIVqWRSbsW1IncGL6Pldiuz5biyl7Z2SqDNTo0TVUg1az?=
- =?iso-8859-1?Q?hxw/D5+7FRkJPW6TAOZ9J+3wIxzLl1HgB+dt2VSDtoLmgs9c52Yv9T0E5R?=
- =?iso-8859-1?Q?ij1vzSoPt+VJJae7qkLqOjCyYMrgBGZDcG21b4IP5SuLfx8dT9sCyO8c+a?=
- =?iso-8859-1?Q?BbUrOXTppune2v5ySyr00gLZ3ApTumFGdQYtppvkJjWb5CZPYtH2N69lEh?=
- =?iso-8859-1?Q?sgUEaNceEDTUOgLtiSM2VxHxZf4YOE5ptnXtEk03chMZb/I3Ttvk2sFNyb?=
- =?iso-8859-1?Q?yAcWQWrLUHRy6laepbVK68J8spjrbNC3y/pal+d9pMsD/cTEpwT2ofAC42?=
- =?iso-8859-1?Q?qmqOdQBQDXKDz6OL2n5VmOBH0psqhbrQNF6fKJ7jnfWX09JDuPT3Zn3hJk?=
- =?iso-8859-1?Q?flmldc+67ruCpYcE8fGu5rMd82Hiwy+MUOaYYwcbkzVvhBudyK3fdOWxqM?=
- =?iso-8859-1?Q?7Ko1Q9DQUTi8mA03EpRCaSXdFWAfhnumOHQVxnSzI1C9iYuAU3JFbs5P/K?=
- =?iso-8859-1?Q?7gbO+Q1GCBA7Gq+vwJ+KAcboHv0QKxo60xADpe6eEw0/I2zAtTt7O/Sqxk?=
- =?iso-8859-1?Q?JrxWAGXc8hCPhp3cM2WU1ntOxEgjQnO3rE1RHIE+NF2WJkBIB5UqyPtz71?=
- =?iso-8859-1?Q?TYZDvE8o06dsdEFobE/MXy5kqCfHIryTeWLdSQKpd5Y85MWoxdU/tahBct?=
- =?iso-8859-1?Q?Rtuou1E4NQ=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 20 Jun 2022 11:16:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ECA65BF
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:06:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8614860F85
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:06:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4341DC3411B;
+        Mon, 20 Jun 2022 15:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655737559;
+        bh=30bUgYkE58y/tfhWoWExyJKJwkRteOnIMFUM7GJATck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mUKULYIoKfzav1Mowvjal+nJKHco9Kht5rLuuBy6WhmEA0607is7HGcJODV7syg0S
+         eGPVptRNHnD/ZI+bwpiOG6CwgJM5RxJD7QSGYcXvBeMmgl7haGSG87GBka6+l3WFTB
+         HVCFsLrfBbV3ut+tHImgwhG+MmDgV4oO7bfi7H6GyHo2B8A6r6joSEqRPs3dLmY5lG
+         BCkUatAoITWZV76MH6Jr0UjPKpFqi00DBsnduFfIxmlpYUxgMYI3cssBftHD/eOXwk
+         VMxASv+oSgsrSTFFiPzwUVjiD4H5YaF3D6U7q//vw+K6Sq+jsdtXOoUPV54i804Ww6
+         Fj5wYAkcZwynA==
+Date:   Mon, 20 Jun 2022 16:05:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dong Aisheng <aisheng.dong@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, dongas86@gmail.com,
+        l.stach@pengutronix.de, peng.fan@nxp.com, shawnguo@kernel.org
+Subject: Re: [PATCH RFC 1/2] regmap: add option to disable debugfs
+Message-ID: <YrCM0reni+x/KWsG@sirena.org.uk>
+References: <20220620134758.1286480-1-aisheng.dong@nxp.com>
+ <20220620134758.1286480-2-aisheng.dong@nxp.com>
 MIME-Version: 1.0
-X-OriginatorOrg: variscite.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB4376.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1374c813-42c5-4511-ffde-08da52ce1568
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 15:03:50.1821
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bAfW2Yn6yDJlw+5bKghHga/2QuOV45vzhlBZdXF3oiH35H4a8ABKSTN/gQXAQlUkxtxsDFDF+Uk8g+Ozdx8xHD4FUT2lm0JtS7eHcUQCRao=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6612
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w6/RnThi4AoDAs3H"
+Content-Disposition: inline
+In-Reply-To: <20220620134758.1286480-2-aisheng.dong@nxp.com>
+X-Cookie: Good day to avoid cops.  Crawl to work.
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > > +static const char *cin_text[] =3D {=0A=
-> > > > +=A0=A0=A0=A0 "ADC", "DMIC"=0A=
-> > > > +};=0A=
-=0A=
-> > > > +static SOC_ENUM_SINGLE_DECL(cin_enum,=0A=
-> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 WM8904_DIGITAL_MICROPHONE_0, 12, cin_text);=0A=
-=0A=
-> > > Why would this be runtime selectable?=A0 I'd expect the decision to u=
-se=0A=
-> > > an analogue or digital microphone to be made in the hardware design.=
-=0A=
-=0A=
-> > I agree that dedicated HW is required, but currently SW side there's no=
- support at all.=0A=
-> > This patch is aiming to provide a way to enable DMIC on boards using it=
-.=0A=
-> > Is this supposed to be managed in a different way ?=0A=
-=0A=
-> Via firmware description.=0A=
-=0A=
-Can you please provide any reference approach in the kernel code ?=
+
+--w6/RnThi4AoDAs3H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 20, 2022 at 09:47:57PM +0800, Dong Aisheng wrote:
+> The regmap core will create debugfs by default for each instance.
+> However, it's fairly possible that some devices may not work properly
+> with regmap registers dump via debugfs due to it may be in suspend
+> state (e.g. Power domain is off).
+>=20
+> Current regmap core does not support runtime pm for MMIO bus.
+> Although there have been several retries [1] in community but finally
+> didn't get accepted.
+>=20
+> This patch adds an option to allow drivers to claim no debugfs support
+> due to possible platform limitations.
+>=20
+> 1. Link: https://lkml.iu.edu/hypermail/linux/kernel/1204.0/01646.html
+
+As indicated in the message you're linking to here if the device can't
+be accessed it should be being put in cache only mode which will ensure
+that nothing can do any physical accesses.
+
+--w6/RnThi4AoDAs3H
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKwjNEACgkQJNaLcl1U
+h9BZSwf/Xa5fqERKUAqb0rz8NlQCQTHcgSDHZZIRuRgZ8jiSwihmf122nGNvSGD1
+GOm2MJEvT4KZBhCf7oihtXnc3uraecq2a2pk3m2oRV1UN3zzKrT9EG+Io4sQkI8Q
+1JbrKOVbeU0sv/DU5fqh1kQEvPIOq1py+Cbhnjds/e5dvz29XI0lHx9vsQcyASto
+ki+8VVP1kbd1xAzsFP0SnZVoTa7u0HQVw+Nxh5+BBT8VJzjBX/xG4bNQF729lDfL
+c4PmI8FKpq33EozUj1kRfSlLfY06XKpyfXc4pSvM1EAeglFijD2QN9QiCwwAEnoF
+9N2dGv6Vlz2kT9Hf3GGdwYKtS30acA==
+=ahj6
+-----END PGP SIGNATURE-----
+
+--w6/RnThi4AoDAs3H--

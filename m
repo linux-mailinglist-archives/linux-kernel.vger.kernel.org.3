@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E62550E9A
+	by mail.lfdr.de (Postfix) with ESMTP id E3FF4550E9B
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 04:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235145AbiFTChr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 22:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
+        id S235447AbiFTChu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 22:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiFTCho (ORCPT
+        with ESMTP id S229774AbiFTChp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 22:37:44 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B31BC2F;
-        Sun, 19 Jun 2022 19:37:43 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3B44D20061C;
-        Mon, 20 Jun 2022 04:37:42 +0200 (CEST)
+        Sun, 19 Jun 2022 22:37:45 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E148BC30;
+        Sun, 19 Jun 2022 19:37:45 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A9E141A05F1;
+        Mon, 20 Jun 2022 04:37:43 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E4E6420061B;
-        Mon, 20 Jun 2022 04:37:41 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5E28E1A05E7;
+        Mon, 20 Jun 2022 04:37:43 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id C40001802204;
-        Mon, 20 Jun 2022 10:37:40 +0800 (+08)
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id B17281802183;
+        Mon, 20 Jun 2022 10:37:41 +0800 (+08)
 From:   Shengjiu Wang <shengjiu.wang@nxp.com>
 To:     robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     shengjiu.wang@gmail.com
-Subject: [PATCH v2 1/3] arm64: dts: imx8mm-evk: add bt-sco sound card support
-Date:   Mon, 20 Jun 2022 10:23:31 +0800
-Message-Id: <1655691813-19878-2-git-send-email-shengjiu.wang@nxp.com>
+Subject: [PATCH v2 2/3] arm64: dts: imx8mq-evk: add bt-sco sound card support
+Date:   Mon, 20 Jun 2022 10:23:32 +0800
+Message-Id: <1655691813-19878-3-git-send-email-shengjiu.wang@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1655691813-19878-1-git-send-email-shengjiu.wang@nxp.com>
 References: <1655691813-19878-1-git-send-email-shengjiu.wang@nxp.com>
@@ -50,14 +50,14 @@ Add bt-sco sound card, which supports wb profile as default
 
 Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 43 +++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts | 43 ++++++++++++++++++++
  1 file changed, 43 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-index c42b966f7a64..cf734d2a94be 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-@@ -75,6 +75,11 @@
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+index 99fed35168eb..993cd91e1153 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+@@ -71,12 +71,36 @@
  		linux,autosuspend-period = <125>;
  	};
  
@@ -69,11 +69,9 @@ index c42b966f7a64..cf734d2a94be 100644
  	wm8524: audio-codec {
  		#sound-dai-cells = <0>;
  		compatible = "wlf,wm8524";
-@@ -107,6 +112,25 @@
- 			clocks = <&clk IMX8MM_CLK_SAI3_ROOT>;
- 		};
+ 		wlf,mute-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
  	};
-+
+ 
 +	sound-bt-sco {
 +		compatible = "simple-audio-card";
 +		simple-audio-card,name = "bt-sco-audio";
@@ -83,7 +81,7 @@ index c42b966f7a64..cf734d2a94be 100644
 +		simple-audio-card,bitclock-master = <&btcpu>;
 +
 +		btcpu: simple-audio-card,cpu {
-+			sound-dai = <&sai2>;
++			sound-dai = <&sai3>;
 +			dai-tdm-slot-num = <2>;
 +			dai-tdm-slot-width = <16>;
 +		};
@@ -92,42 +90,43 @@ index c42b966f7a64..cf734d2a94be 100644
 +			sound-dai = <&audio_codec_bt_sco 1>;
 +		};
 +	};
- };
- 
- &A53_0 {
-@@ -346,6 +370,16 @@
++
+ 	sound-wm8524 {
+ 		compatible = "simple-audio-card";
+ 		simple-audio-card,name = "wm8524-audio";
+@@ -386,6 +410,16 @@
  	status = "okay";
  };
  
-+&sai2 {
++&sai3 {
 +	#sound-dai-cells = <0>;
 +	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai2>;
-+	assigned-clocks = <&clk IMX8MM_CLK_SAI2>;
-+	assigned-clock-parents = <&clk IMX8MM_AUDIO_PLL1_OUT>;
++	pinctrl-0 = <&pinctrl_sai3>;
++	assigned-clocks = <&clk IMX8MQ_CLK_SAI3>;
++	assigned-clock-parents = <&clk IMX8MQ_AUDIO_PLL1_OUT>;
 +	assigned-clock-rates = <24576000>;
 +	status = "okay";
 +};
 +
- &sai3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sai3>;
-@@ -494,6 +528,15 @@
+ &snvs_pwrkey {
+ 	status = "okay";
+ };
+@@ -548,6 +582,15 @@
  		>;
  	};
  
-+	pinctrl_sai2: sai2grp {
++	pinctrl_sai3: sai3grp {
 +		fsl,pins = <
-+			MX8MM_IOMUXC_SAI2_TXC_SAI2_TX_BCLK      0xd6
-+			MX8MM_IOMUXC_SAI2_TXFS_SAI2_TX_SYNC     0xd6
-+			MX8MM_IOMUXC_SAI2_TXD0_SAI2_TX_DATA0    0xd6
-+			MX8MM_IOMUXC_SAI2_RXD0_SAI2_RX_DATA0    0xd6
++			MX8MQ_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC     0xd6
++			MX8MQ_IOMUXC_SAI3_TXC_SAI3_TX_BCLK      0xd6
++			MX8MQ_IOMUXC_SAI3_TXD_SAI3_TX_DATA0     0xd6
++			MX8MQ_IOMUXC_SAI3_RXD_SAI3_RX_DATA0     0xd6
 +		>;
 +	};
 +
- 	pinctrl_sai3: sai3grp {
+ 	pinctrl_spdif1: spdif1grp {
  		fsl,pins = <
- 			MX8MM_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC     0xd6
+ 			MX8MQ_IOMUXC_SPDIF_TX_SPDIF1_OUT	0xd6
 -- 
 2.17.1
 

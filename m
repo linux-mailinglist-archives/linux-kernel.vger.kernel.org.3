@@ -2,47 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69EB5526BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 23:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03A55526C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 23:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238954AbiFTVv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 17:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S243626AbiFTV4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 17:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235833AbiFTVv5 (ORCPT
+        with ESMTP id S230366AbiFTV4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 17:51:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CC51A064;
-        Mon, 20 Jun 2022 14:51:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRjzF1GrXz4xDB;
-        Tue, 21 Jun 2022 07:51:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655761913;
-        bh=P20hJGueQ+TlbFzqWZ44ZVVemwRlB6d8HHlOrayd5OQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VbWpbq90XlaXIyJKR7xT+kk45W4rtPKlyaXARnyuyXLkKKJEHLycJ1WNKN3kumpLz
-         jZ3cnHGZ7xlmhLOV08arXxzHtikEBCh+BupAV9/oj7rfV4NiU9LoQRUuTBN6pxnH5e
-         l8ktk3YznBEKrocz31bTjzASxGjp2/c9G/WfwuoJnCOCKoiaNLhpUgTP4uCEB+DLFv
-         HrW9PWoCrON+R7YP0+7LlUCZhrXfMeyh86tksj6Qi+cECSo6Bw3hpJ6l29qPGTfXV3
-         kx2jRZLhHaSYXxeggYJSQsNRt52HwppQKoFuhEwde4utFSrM5bJSSMF3WK1bevvf6L
-         0QyPBsGiMe8ug==
-Date:   Tue, 21 Jun 2022 07:51:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the stm32 tree
-Message-ID: <20220621075151.1c612be6@canb.auug.org.au>
+        Mon, 20 Jun 2022 17:56:39 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C8D193F9;
+        Mon, 20 Jun 2022 14:56:38 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so11488506pjz.1;
+        Mon, 20 Jun 2022 14:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=151HFblY1lwXymNA1HK3iTBlso3zy5ZP5wBtRRxvVyM=;
+        b=FDjiPDUY1wEBHX0EiYNuHM/qYw050Hq+iRQvd4EP8+MGqSjx4Yjs+VTXdZqVKpgLJy
+         7f74qcI0JcBYLmYPNTg+4N5+S1MDn9jg1IuVphw9n6uf/nJXfcxgZba8NC9IH4Imp13H
+         /8gR/xXyZE1y5tnQpuGXDLVlI9owurBJCUwLQpNvNNARCJR7CbUJrIm2Y/UR+kM6oG+q
+         bzvmtgBQJB6ftlqi7dDvHEU+JxxKiOJi9oxDngM0pEKcTolsScPpbT3mepRtrGTie5mo
+         H3iKweYXz2KzfmrhPTV0YsFQ0WE5QZlkKMY/ExEC2Z7kN2wCTurg9DY5npEWp7ogvUlh
+         eH2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=151HFblY1lwXymNA1HK3iTBlso3zy5ZP5wBtRRxvVyM=;
+        b=cqbdwRl2SXnqbDAe7rVSBKxBQPYIyAlYya3UdCZB826ttPcySy2W1JPW4L9u/uJgMv
+         KE9qclP1ethYzqVm3O8PpJK0guV3YdzNCwXvDOexV3eaT2H3MGRUsESwv/yyNLeY77Nb
+         ItphVmGI6GTNALQh5RtQRcsFHPkG/zkZIqS5aXTY3yujlW452SeF3V0yQHsVDHbPXONi
+         7d/fUCxzrAPldg8ZFNzZNZWbRuc2N5OpNdWTl1BWbPxF0QQUJENmMjck3biRsAcA9sTV
+         dehTifY3NLNWo4Yp9jfZcSgr9ckubpN5pOGT8vGJh7rASGz5eQPWAR3M9RtwTup992ZT
+         mZ0g==
+X-Gm-Message-State: AJIora8NEawSQcNhqFDhwTy2PbKqFUxqiyV24/Oe3IfcwxNwudKqL8ed
+        MXFPVmUiFXflTafqabs31dmvJ2RFgvj/wykej7Y=
+X-Google-Smtp-Source: AGRyM1uZ7KnjmzjDpF3W2OjlRCHTeTuo+S+rOMEbCoW+lJpejZfY+1YHwemZLUml543VwaM0fhEIwnstamfY9Hq2b/Q=
+X-Received: by 2002:a17:90b:1c11:b0:1e7:8bd2:697d with SMTP id
+ oc17-20020a17090b1c1100b001e78bd2697dmr39976866pjb.90.1655762197720; Mon, 20
+ Jun 2022 14:56:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2VSfGPI0Bcd7h3bVoeRN.+f";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220530173324.921-1-andriy.shevchenko@linux.intel.com>
+ <CAOMZO5CtjkjsbOTaNF7+Hwswsn-fs2WNK=zyFL53JnBBpS8=0Q@mail.gmail.com> <CAHp75Vd9yah3D8dUOPinhj=nm9GQs3xOsWZRL=6CvaROZC3OCQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vd9yah3D8dUOPinhj=nm9GQs3xOsWZRL=6CvaROZC3OCQ@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 20 Jun 2022 18:56:27 -0300
+Message-ID: <CAOMZO5Bp83NSWPmbwp4uzrGSVkW2xQ+pRMFHaghs_XN+j32fcw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +76,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2VSfGPI0Bcd7h3bVoeRN.+f
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 20, 2022 at 6:34 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 
-Hi all,
+> Still? Does it mean you have it before my patch? If no, I will be very puzzled...
 
-Commit
+Yes, the warning is present before your patch.
 
-  b3c4c7346bc9 ("firmware: arm_scmi: Relax base protocol sanity checks on t=
-he protocol list")
+> Otherwise does the touchscreen work?
 
-is missing a Signed-off-by from its committer.
+I cannot test touchscreen at the moment.
 
---=20
-Cheers,
-Stephen Rothwell
+>> Any suggestions?
+>
+> Perhaps, but we need to eliminate the proposed change from the  equation
 
---Sig_/2VSfGPI0Bcd7h3bVoeRN.+f
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+If you send a v2 with "#include <linux/property.h>" then you can add:
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKw6/cACgkQAVBC80lX
-0GzgVQf/foeGc1UCGDG3UkSt9QCJGthgQejurAUanV1/a8nYN9jL7ba/0zktwwTu
-VCC6h6jn0LakP040wbbssIASBLKv+T1egmO9IRpB7Tm3Rn/Y2uUyyxXETG/w/EYb
-uozrwYsoE/51QiijDSLuIM2PmhXdKkwpeP2ZJRcBXfS+wHrS1jW3L6TQ+VkB5Pze
-hKIF3Xyg4jk9+kXoqEEZACHNyOtv3Xl6fxEwj0HqcdGtlxPPvMVnEzMXKdz9a388
-kGhZiygCdrHBK+hCrYXJWQgkUVLXbhYLqFoxmPZSwTt7G6+6mgCnN5cjItN0sKzu
-1WW+MvuhyhMUvto7SrfSyo06PS0gSA==
-=bFcy
------END PGP SIGNATURE-----
-
---Sig_/2VSfGPI0Bcd7h3bVoeRN.+f--
+Tested-by: Fabio Estevam <festevam@gmail.com>

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDEB551C2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA33551CEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245163AbiFTNQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S1343815AbiFTNQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343859AbiFTNJl (ORCPT
+        with ESMTP id S1344146AbiFTNJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:09:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571641ADBA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:04:53 -0700 (PDT)
+        Mon, 20 Jun 2022 09:09:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF391C136
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:05:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C11E4B811B9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:04:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA4CCC385A2;
-        Mon, 20 Jun 2022 13:04:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56B9961575
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9D2C3411B;
+        Mon, 20 Jun 2022 13:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655730280;
-        bh=4mWPS+IfdQfX2LFjSB1gQ8XAQoFyzPvPGQA6/ViGNYo=;
+        s=k20201202; t=1655730281;
+        bh=jSR7IjcsR2+GyvGmEMWqDNbvzujtbnJRgMjf3an/hzE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuJZ8+kv4fsJf8BiGugozyqf60OTkrTlIdWIcI8yrTvi0LpCB/Hh2E0JuxvVW8kAM
-         9VtBV1WX99d3my3TEiaZJi/Tu+Olv2iE7g8nea4aUNJRzR8wfhJc8iaL1vyWBSJ6tT
-         y9BsP49hVm7DcazSA3iiLSFKottkehj0LiF9J2bHoZXzDkylGgqRngPTZW+bmeXoSc
-         JWLiung0jYb+o2850+kd0XGHAUxnJP64gXQwq8hHjXHQfvjTzc4V/9sou4/1fUWX7/
-         ah88arg2Sy/gi47RiD9pY1fg9V1l//rajgWYFzs90yQWQE23jzZRpFDpJue7/IlJz7
-         HWaC5CjSyYpew==
+        b=OPwQpG4D/fChawGIcHTnzG6nEzuJ9m6J8uvTmYEz1qWHw51OOXYD8EISYwL+nwsr1
+         qj/GiHnnPhOQUyWCp558ni+8VuU7Gvk0h7I2Oi6niMOVsm6BDkuICVmIZKuooxoSaC
+         Bwmsx/ej5XM44Ftkqz2Felbx2nHcyVCUar3Vk4CtuVr7iciNL+VQ/w1Hr+gHVvHRkj
+         hI6Sk9XVpUdfWzvrHclyN8Q6GadqAHey/96VnASbIUUCtugrhOg/mSkQrOowucSXkj
+         Dwb5e51asL2JmGK+1WY8YbwZ5abPFYEOQbR3Uk+QGOs8Skzi0E2RtUydszV3NQpxsM
+         el8agfoblgjJQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Tal Cohen <talcohen@habana.ai>
-Subject: [PATCH 02/17] habanalabs: expose undefined opcode status via info ioctl
-Date:   Mon, 20 Jun 2022 16:04:17 +0300
-Message-Id: <20220620130432.1180451-2-ogabbay@kernel.org>
+Subject: [PATCH 03/17] habanalabs/gaudi: invoke device reset from one code block
+Date:   Mon, 20 Jun 2022 16:04:18 +0300
+Message-Id: <20220620130432.1180451-3-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220620130432.1180451-1-ogabbay@kernel.org>
 References: <20220620130432.1180451-1-ogabbay@kernel.org>
@@ -55,115 +55,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tal Cohen <talcohen@habana.ai>
 
-The info ioctl retrieves information on the last undefined opcode
-occurred.
+In order to prepare the driver code for device reset event
+notification, change the event handler function flow to call
+device reset from one code block.
+
+In addition, the commit fixes an issue that reset was performed
+w/o checking the 'hard_reset_on_fw_event' state and w/o setting
+the HL_DRV_RESET_DELAY flag.
 
 Signed-off-by: Tal Cohen <talcohen@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../misc/habanalabs/common/habanalabs_ioctl.c | 25 ++++++++++++++++
- include/uapi/misc/habanalabs.h                | 30 +++++++++++++++++++
- 2 files changed, 55 insertions(+)
+ drivers/misc/habanalabs/gaudi/gaudi.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index c7864d6bb0a1..fe7ed46cd1c5 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -610,6 +610,28 @@ static int razwi_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
- 	return copy_to_user(out, &info, min_t(size_t, max_size, sizeof(info))) ? -EFAULT : 0;
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index ec9f0a93cbe2..8f37297b2c3b 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -7795,10 +7795,10 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 	struct gaudi_device *gaudi = hdev->asic_specific;
+ 	u64 data = le64_to_cpu(eq_entry->data[0]), event_mask = 0;
+ 	u32 ctl = le32_to_cpu(eq_entry->hdr.ctl);
+-	u32 fw_fatal_err_flag = 0;
++	u32 fw_fatal_err_flag = 0, flags = 0;
+ 	u16 event_type = ((ctl & EQ_CTL_EVENT_TYPE_MASK)
+ 			>> EQ_CTL_EVENT_TYPE_SHIFT);
+-	bool reset_required;
++	bool reset_required, reset_direct = false;
+ 	u8 cause;
+ 	int rc;
+ 
+@@ -7886,7 +7886,8 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 			dev_err(hdev->dev, "reset required due to %s\n",
+ 				gaudi_irq_map_table[event_type].name);
+ 
+-			hl_device_reset(hdev, 0);
++			reset_direct = true;
++			goto reset_device;
+ 		} else {
+ 			hl_fw_unmask_irq(hdev, event_type);
+ 		}
+@@ -7908,7 +7909,8 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 			dev_err(hdev->dev, "reset required due to %s\n",
+ 				gaudi_irq_map_table[event_type].name);
+ 
+-			hl_device_reset(hdev, 0);
++			reset_direct = true;
++			goto reset_device;
+ 		} else {
+ 			hl_fw_unmask_irq(hdev, event_type);
+ 		}
+@@ -8050,12 +8052,17 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 	return;
+ 
+ reset_device:
+-	if (hdev->asic_prop.fw_security_enabled)
+-		hl_device_reset(hdev, HL_DRV_RESET_HARD
+-					| HL_DRV_RESET_BYPASS_REQ_TO_FW
+-					| fw_fatal_err_flag);
++	reset_required = true;
++
++	if (hdev->asic_prop.fw_security_enabled && !reset_direct)
++		flags = HL_DRV_RESET_HARD | HL_DRV_RESET_BYPASS_REQ_TO_FW | fw_fatal_err_flag;
+ 	else if (hdev->hard_reset_on_fw_events)
+-		hl_device_reset(hdev, HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag);
++		flags = HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag;
++	else
++		reset_required = false;
++
++	if (reset_required)
++		hl_device_reset(hdev, flags);
+ 	else
+ 		hl_fw_unmask_irq(hdev, event_type);
  }
- 
-+static int undefined_opcode_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
-+{
-+	struct hl_device *hdev = hpriv->hdev;
-+	u32 max_size = args->return_size;
-+	struct hl_info_undefined_opcode_event info = {0};
-+	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
-+
-+	if ((!max_size) || (!out))
-+		return -EINVAL;
-+
-+	info.timestamp = ktime_to_ns(hdev->last_error.undef_opcode.timestamp);
-+	info.engine_id = hdev->last_error.undef_opcode.engine_id;
-+	info.cq_addr = hdev->last_error.undef_opcode.cq_addr;
-+	info.cq_size = hdev->last_error.undef_opcode.cq_size;
-+	info.stream_id = hdev->last_error.undef_opcode.stream_id;
-+	info.cb_addr_streams_len = hdev->last_error.undef_opcode.cb_addr_streams_len;
-+	memcpy(info.cb_addr_streams, hdev->last_error.undef_opcode.cb_addr_streams,
-+			sizeof(info.cb_addr_streams));
-+
-+	return copy_to_user(out, &info, min_t(size_t, max_size, sizeof(info))) ? -EFAULT : 0;
-+}
-+
- static int dev_mem_alloc_page_sizes_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
- {
- 	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
-@@ -718,6 +740,9 @@ static int _hl_info_ioctl(struct hl_fpriv *hpriv, void *data,
- 	case HL_INFO_RAZWI_EVENT:
- 		return razwi_info(hpriv, args);
- 
-+	case HL_INFO_UNDEFINED_OPCODE_EVENT:
-+		return undefined_opcode_info(hpriv, args);
-+
- 	case HL_INFO_DEV_MEM_ALLOC_PAGE_SIZES:
- 		return dev_mem_alloc_page_sizes_info(hpriv, args);
- 
-diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
-index c94b89cf1ec1..5f9a6097f5f3 100644
---- a/include/uapi/misc/habanalabs.h
-+++ b/include/uapi/misc/habanalabs.h
-@@ -352,6 +352,7 @@ enum hl_server_type {
-  * HL_INFO_REGISTER_EVENTFD   - Register eventfd for event notifications.
-  * HL_INFO_UNREGISTER_EVENTFD - Unregister eventfd
-  * HL_INFO_GET_EVENTS         - Retrieve the last occurred events
-+ * HL_INFO_UNDEFINED_OPCODE_EVENT - Retrieve last undefined opcode error information.
-  */
- #define HL_INFO_HW_IP_INFO			0
- #define HL_INFO_HW_EVENTS			1
-@@ -380,6 +381,7 @@ enum hl_server_type {
- #define HL_INFO_REGISTER_EVENTFD		28
- #define HL_INFO_UNREGISTER_EVENTFD		29
- #define HL_INFO_GET_EVENTS			30
-+#define HL_INFO_UNDEFINED_OPCODE_EVENT		31
- 
- #define HL_INFO_VERSION_MAX_LEN			128
- #define HL_INFO_CARD_NAME_MAX_LEN		16
-@@ -656,6 +658,34 @@ struct hl_info_razwi_event {
- 	__u8 pad[2];
- };
- 
-+#define MAX_QMAN_STREAMS_INFO		4
-+#define OPCODE_INFO_MAX_ADDR_SIZE	8
-+/**
-+ * struct hl_info_undefined_opcode_event - info about last undefined opcode error
-+ * @timestamp: timestamp of the undefined opcode error
-+ * @cb_addr_streams: CB addresses (per stream) that are currently exists in the PQ
-+ *                   entiers. In case all streams array entries are
-+ *                   filled with values, it means the execution was in Lower-CP.
-+ * @cq_addr: the address of the current handled command buffer
-+ * @cq_size: the size of the current handled command buffer
-+ * @cb_addr_streams_len: num of streams - actual len of cb_addr_streams array.
-+ *                       should be equal to 1 incase of undefined opcode
-+ *                       in Upper-CP (specific stream) and equal to 4 incase
-+ *                       of undefined opcode in Lower-CP.
-+ * @engine_id: engine-id that the error occurred on
-+ * @stream_id: the stream id the error occurred on. In case the stream equals to
-+ *             MAX_QMAN_STREAMS_INFO it means the error occurred on a Lower-CP.
-+ */
-+struct hl_info_undefined_opcode_event {
-+	__s64 timestamp;
-+	__u64 cb_addr_streams[MAX_QMAN_STREAMS_INFO][OPCODE_INFO_MAX_ADDR_SIZE];
-+	__u64 cq_addr;
-+	__u32 cq_size;
-+	__u32 cb_addr_streams_len;
-+	__u32 engine_id;
-+	__u32 stream_id;
-+};
-+
- /**
-  * struct hl_info_dev_memalloc_page_sizes - valid page sizes in device mem alloc information.
-  * @page_order_bitmask: bitmap in which a set bit represents the order of the supported page size
 -- 
 2.25.1
 

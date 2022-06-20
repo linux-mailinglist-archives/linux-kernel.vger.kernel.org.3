@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A37551321
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6988555135C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbiFTIqZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 04:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S240128AbiFTIv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239620AbiFTIqX (ORCPT
+        with ESMTP id S240087AbiFTIvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:46:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5442BE9A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:46:21 -0700 (PDT)
-Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LRNVQ5NBzzhYYG;
-        Mon, 20 Jun 2022 16:44:14 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 20 Jun 2022 16:46:19 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2375.024;
- Mon, 20 Jun 2022 16:46:19 +0800
-From:   "chenjun (AM)" <chenjun102@huawei.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "xuqiang (M)" <xuqiang36@huawei.com>
-Subject: Re: [PATCH 1/1] lockdep: pass curr_inner to
- print_lock_invalid_wait_context
-Thread-Topic: [PATCH 1/1] lockdep: pass curr_inner to
- print_lock_invalid_wait_context
-Thread-Index: AQHYgk0/9VHjoiftGU6cvzdp/UjhBQ==
-Date:   Mon, 20 Jun 2022 08:46:18 +0000
-Message-ID: <233a8820e3df4c8ca594c4a78fdb0fb9@huawei.com>
-References: <20220616134042.130002-1-chenjun102@huawei.com>
- <YqyAAvSw3+0GyHhg@worktop.programming.kicks-ass.net>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.178.43]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+        Mon, 20 Jun 2022 04:51:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE0512D05;
+        Mon, 20 Jun 2022 01:51:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF52A61341;
+        Mon, 20 Jun 2022 08:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208DFC341C4;
+        Mon, 20 Jun 2022 08:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655715103;
+        bh=re/LIYFaBcxg1SjWjXGFFxl9Hd6mgfMNrzdReDBPFsQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nPJkKch4UQztDtvVOyXeFY7RIebmIdoIT9uPlryPezOsuLMMs+gjQIYXSRFblLehj
+         /hrBxK+fWfzjS99sHdADkVubsXzqPCNUl3lLuDbGtpda3T0pSAyM51YdJwQa6+Btmr
+         uXHhBSS6LmZg1yJgWP0u3uireUMMMon5ucsD1e/oRkIvWMVv4gxwGKTP0SOvWtX7RZ
+         9XbQl4TLj+q+39Si1Hm91kdCybOcVag3aoD3dybwybnDH+RyXdbfhvArOWJDt67qcB
+         HztQZWX4+ELiDYvBd11WkwKj6GMz5Fw2WsnGKB8l3cHbGq2xM8hC227ctYt8a4HuwL
+         YVjs8HfCc+tjg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3D8F-0005Tm-Ho; Mon, 20 Jun 2022 10:51:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/2] Input: usbtouchscreen - suppress empty array warnings
+Date:   Mon, 20 Jun 2022 10:46:26 +0200
+Message-Id: <20220620084628.20894-1-johan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,25 +55,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/17 21:22, Peter Zijlstra 写道:
-> On Thu, Jun 16, 2022 at 01:40:42PM +0000, Chen Jun wrote:
->> Same information (task_wait_context(curr)) is printed twice.
-> 
-> Yes, because at that point the inner and outer context are the same.
-> 
->> curr_inner in check_wait_context is what we need.
-> 
-> IIRC it simply prints the task_wait_context as a starting point, the
-> lockdep_print_held_locks() should include the contexts for each of
-> those, after which you can compute the resulting value.
-> 
-> IOW, the information is complete.
-> 
-> 
-> 
+I ran into some new (?) compiler warnings with -rc3 this morning. Not
+sure if it's after updating to GCC 11.3.0 a few weeks ago, or due to
+some other change.
 
-Thanks for pointing this out.
+Either way, making sure that the device info table is non empty is
+straight forward and the sentinel value can also be used to protect
+against potential future bugs due to the somewhat fragile driver
+ifdeffery.
+
+Johan
+
+
+Johan Hovold (2):
+  Input: usbtouchscreen - suppress empty array warnings
+  Input: usbtouchscreen - add driver_info sanity check
+
+ drivers/input/touchscreen/usbtouchscreen.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 -- 
-Regards
-Chen Jun
+2.35.1
+

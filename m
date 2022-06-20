@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D8E551A90
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04276551CEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244659AbiFTNH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        id S1343899AbiFTNRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239006AbiFTNEK (ORCPT
+        with ESMTP id S1344454AbiFTNKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:04:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD7D17053;
-        Mon, 20 Jun 2022 05:59:27 -0700 (PDT)
+        Mon, 20 Jun 2022 09:10:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93DD1CFC4;
+        Mon, 20 Jun 2022 06:05:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1736F61535;
-        Mon, 20 Jun 2022 12:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1E5C3411B;
-        Mon, 20 Jun 2022 12:59:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3011B811CC;
+        Mon, 20 Jun 2022 13:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC80C3411B;
+        Mon, 20 Jun 2022 13:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729966;
-        bh=SjXAoznO5JPsYpcWKUijlKX7Px6pqsQqLLa1A/Kne20=;
+        s=korg; t=1655730147;
+        bh=9iz+eAWx5+Ws2N52jR5JJFMW77Zr3QxK4wBKjTOUjec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cLAyI4ZROC+Wk5pXpeY6CVul6BieYdWKCLtWKe/agY2j1S5wNt08nweOsk0KIHlyZ
-         mN/jfTZhyDF3cMmYYNxeqfobF923QCmtKd6f4wvuXEmM3wuSBuDvAgbRY/AXI/6sDY
-         XtACUQavjdO3JExDoM1l8cXPZvarOQ8sUfDix85Y=
+        b=C6Xf7WN4z1fsZe/JUj1fCXtFSMGXrKdGlTcHj6BYWlOaoY1aJSPBbF1vCsqUB+1rz
+         msVjX7GMwUQtAhD6AXHhizaMb834QOVn70ogj5YdxV9Un8pfUTLNHIU2diGV8umUbn
+         a06sNAZ9HE2CIQCHb+UnvZmyMP6DiFNL7zPaxVOs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Murilo Opsfelder Araujo <muriloo@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.18 133/141] virtio-pci: Remove wrong address verification in vp_del_vqs()
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 48/84] net: bgmac: Fix an erroneous kfree() in bgmac_remove()
 Date:   Mon, 20 Jun 2022 14:51:11 +0200
-Message-Id: <20220620124733.488734442@linuxfoundation.org>
+Message-Id: <20220620124722.309628108@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit 7e415282b41bf0d15c6e0fe268f822d9b083f2f7 upstream.
+[ Upstream commit d7dd6eccfbc95ac47a12396f84e7e1b361db654b ]
 
-GCC 12 enhanced -Waddress when comparing array address to null [0],
-which warns:
+'bgmac' is part of a managed resource allocated with bgmac_alloc(). It
+should not be freed explicitly.
 
-    drivers/virtio/virtio_pci_common.c: In function ‘vp_del_vqs’:
-    drivers/virtio/virtio_pci_common.c:257:29: warning: the comparison will always evaluate as ‘true’ for the pointer operand in ‘vp_dev->msix_affinity_masks + (sizetype)((long unsigned int)i * 256)’ must not be NULL [-Waddress]
-      257 |                         if (vp_dev->msix_affinity_masks[i])
-          |                             ^~~~~~
+Remove the erroneous kfree() from the .remove() function.
 
-In fact, the verification is comparing the result of a pointer
-arithmetic, the address "msix_affinity_masks + i", which will always
-evaluate to true.
-
-Under the hood, free_cpumask_var() calls kfree(), which is safe to pass
-NULL, not requiring non-null verification.  So remove the verification
-to make compiler happy (happy compiler, happy life).
-
-[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102103
-
-Signed-off-by: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
-Message-Id: <20220415023002.49805-1-muriloo@linux.ibm.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Christophe de Dinechin <dinechin@redhat.com>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 34a5102c3235 ("net: bgmac: allocate struct bgmac just once & don't copy it")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/a026153108dd21239036a032b95c25b5cece253b.1655153616.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/virtio/virtio_pci_common.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/broadcom/bgmac-bcma.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -254,8 +254,7 @@ void vp_del_vqs(struct virtio_device *vd
+diff --git a/drivers/net/ethernet/broadcom/bgmac-bcma.c b/drivers/net/ethernet/broadcom/bgmac-bcma.c
+index a5fd161ab5ee..26746197515f 100644
+--- a/drivers/net/ethernet/broadcom/bgmac-bcma.c
++++ b/drivers/net/ethernet/broadcom/bgmac-bcma.c
+@@ -323,7 +323,6 @@ static void bgmac_remove(struct bcma_device *core)
+ 	bcma_mdio_mii_unregister(bgmac->mii_bus);
+ 	bgmac_enet_remove(bgmac);
+ 	bcma_set_drvdata(core, NULL);
+-	kfree(bgmac);
+ }
  
- 	if (vp_dev->msix_affinity_masks) {
- 		for (i = 0; i < vp_dev->msix_vectors; i++)
--			if (vp_dev->msix_affinity_masks[i])
--				free_cpumask_var(vp_dev->msix_affinity_masks[i]);
-+			free_cpumask_var(vp_dev->msix_affinity_masks[i]);
- 	}
- 
- 	if (vp_dev->msix_enabled) {
+ static struct bcma_driver bgmac_bcma_driver = {
+-- 
+2.35.1
+
 
 

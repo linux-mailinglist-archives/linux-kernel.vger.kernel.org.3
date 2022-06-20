@@ -2,210 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253595513C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70E05513CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240514AbiFTJKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S239917AbiFTJN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240228AbiFTJKf (ORCPT
+        with ESMTP id S234626AbiFTJN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:10:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E43BDEB7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:10:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF0A1113E;
-        Mon, 20 Jun 2022 02:10:33 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.70.167])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B72B3F7D7;
-        Mon, 20 Jun 2022 02:10:30 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 10:10:23 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: Re: [PATCH -next v5 2/8] arm64: extable: make uaaccess helper use
- extable type EX_TYPE_UACCESS_ERR_ZERO
-Message-ID: <YrA5f44hySky8v5g@FVFF77S0Q05N>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-3-tongtiangen@huawei.com>
- <Yqw6TP3MhEqnQ+2o@FVFF77S0Q05N>
- <4371a7c9-8766-9fee-2558-e6f43f06ad19@huawei.com>
- <0da734f3-5743-3df3-3f90-d92e5bd585ce@huawei.com>
- <Yq3HoUyEcnKKk1AY@FVFF77S0Q05N>
- <684f0362-6e58-753d-32e1-112c6ffe6d12@huawei.com>
+        Mon, 20 Jun 2022 05:13:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDD1B84D;
+        Mon, 20 Jun 2022 02:13:54 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25K8kr6F010058;
+        Mon, 20 Jun 2022 09:13:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=nt5IlIyzyHgTgxTWNHW6T/YuGcNz1Ky46jJWZsFmvAQ=;
+ b=jkjXpL33qhreHk/06XuV6AYOI28YBvxnxQXKbUx311XJNV4kNpAeoBwxSe+O6SAEviF2
+ LKW8XfoZqNZ6jOtkcaATKOWs0MFzR/83/fPVd/SNW0lYHzJ4psyxW9WhD9GgkRgZ8or1
+ KoiXvCUJzdv3do1CCa9PfhRMiSYJz4XXjlqwjV7VTyXEjw5obu03AY03Qt0h069EPyzS
+ bJ9lQuPwCrENL0aBTftPrk18dPf3LgSUgoFpegZCdaXtpPRQQaA5kjX2FqHB1GBHR1g3
+ 13G73JkaL7I7Pd3JkZ5On9gtSl7mPD9HIhqwi4/TAvaZMJhJOJ3YnKiSsgcojG42i0nr jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gsr1aknv2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jun 2022 09:13:53 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25K8rHLa019602;
+        Mon, 20 Jun 2022 09:13:53 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gsr1aknty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jun 2022 09:13:53 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25K96veJ020586;
+        Mon, 20 Jun 2022 09:13:51 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gs5yhj89b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jun 2022 09:13:51 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25K9DmUh17564046
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Jun 2022 09:13:48 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EC6B11C04C;
+        Mon, 20 Jun 2022 09:13:48 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 89CE411C052;
+        Mon, 20 Jun 2022 09:13:47 +0000 (GMT)
+Received: from [9.145.19.23] (unknown [9.145.19.23])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Jun 2022 09:13:47 +0000 (GMT)
+Message-ID: <ca855209-59b1-f17e-dd1d-7106410d0342@linux.ibm.com>
+Date:   Mon, 20 Jun 2022 11:13:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <684f0362-6e58-753d-32e1-112c6ffe6d12@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v11 16/19] KVM: s390: pv: api documentation for
+ asynchronous destroy
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
+ <20220603065645.10019-17-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220603065645.10019-17-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LavpEDHOoaCuDqkjZ5bCJId5Q7X487ma
+X-Proofpoint-GUID: M-1x24M-57p5nf0HQw506XCj21Cdjmp5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-20_05,2022-06-17_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 spamscore=0 phishscore=0 impostorscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 mlxscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206200043
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:59:12AM +0800, Tong Tiangen wrote:
-> 在 2022/6/18 20:40, Mark Rutland 写道:
-> > On Sat, Jun 18, 2022 at 04:42:06PM +0800, Tong Tiangen wrote:
-> > > > > > diff --git a/arch/arm64/include/asm/asm-extable.h
-> > > > > > b/arch/arm64/include/asm/asm-extable.h
-> > > > > > index 56ebe183e78b..9c94ac1f082c 100644
-> > > > > > --- a/arch/arm64/include/asm/asm-extable.h
-> > > > > > +++ b/arch/arm64/include/asm/asm-extable.h
-> > > > > > @@ -28,6 +28,14 @@
-> > > > > >        __ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
-> > > > > >        .endm
-> > > > > > +/*
-> > > > > > + * Create an exception table entry for uaccess `insn`, which
-> > > > > > will branch to `fixup`
-> > > > > > + * when an unhandled fault is taken.
-> > > > > > + * ex->data = ~0 means both reg_err and reg_zero is set to wzr(x31).
-> > > > > > + */
-> > > > > > +    .macro          _asm_extable_uaccess, insn, fixup
-> > > > > > +    __ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_ERR_ZERO, ~0)
-> > > > > > +    .endm
-> > > > > 
-> > > > > I'm not too keen on using `~0` here, since that also sets other bits
-> > > > > in the
-> > > > > data field, and its somewhat opaque.
-> > > > > 
-> > > > > How painful is it to generate the data fields as with the C version
-> > > > > of this
-> > > > > macro, so that we can pass in wzr explciitly for the two sub-fields?
-> > > > > 
-> > > > > Other than that, this looks good to me.
-> > > > > 
-> > > > > Thanks,
-> > > > > Mark.
-> > > > 
-> > > > ok, will fix next version.
-> > > > 
-> > > > Thanks,
-> > > > Tong.
-> > > 
-> > > I tried to using data filelds as with C version, but here assembly code we
-> > > can not using operator such as << and |, if we use lsl and orr instructions,
-> > > the gpr will be occupied.
-> > > 
-> > > So how about using 0x3ff directly here? it means err register and zero
-> > > register both set to x31.
-> > 
-> > I had a go at implementing this, and it seems simple enough. Please see:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/extable/asm-uaccess
-> > 
+On 6/3/22 08:56, Claudio Imbrenda wrote:
+> Add documentation for the new commands added to the KVM_S390_PV_COMMAND
+> ioctl.
 > 
-> I made the following modifications, and the other parts are based on your
-> implementation:
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+> ---
+>   Documentation/virt/kvm/api.rst | 25 ++++++++++++++++++++++---
+>   1 file changed, 22 insertions(+), 3 deletions(-)
 > 
-> arch/arm64/include/asm/asm-extable.h
-> [...]
-> .macro          _asm_extable_uaccess, insn, fixup
-> _ASM_EXTABLE_UACCESS(\insn, \fixup)
-> .endm
-> [...]
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 11e00a46c610..97d35b30ce3b 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5143,11 +5143,13 @@ KVM_PV_ENABLE
+>     =====      =============================
+>   
+>   KVM_PV_DISABLE
+> -
+>     Deregister the VM from the Ultravisor and reclaim the memory that
+>     had been donated to the Ultravisor, making it usable by the kernel
+> -  again.  All registered VCPUs are converted back to non-protected
+> -  ones.
+> +  again. All registered VCPUs are converted back to non-protected
+> +  ones. If a previous VM had been prepared for asynchonous teardown
+> +  with KVM_PV_ASYNC_DISABLE_PREPARE and not actually torn down with
+> +  KVM_PV_ASYNC_DISABLE, it will be torn down in this call together with
+> +  the current VM.
+>   
+>   KVM_PV_VM_SET_SEC_PARMS
+>     Pass the image header from VM memory to the Ultravisor in
+> @@ -5160,6 +5162,23 @@ KVM_PV_VM_VERIFY
+>     Verify the integrity of the unpacked image. Only if this succeeds,
+>     KVM is allowed to start protected VCPUs.
+>   
+> +KVM_PV_ASYNC_DISABLE_PREPARE
+> +  Prepare the current protected VM for asynchronous teardown. Most
+> +  resources used by the current protected VM will be set aside for a
 
-I also made this same change locally when testing, and building with GCC 11.1.0
-or LLVM 14.0.0 I am not seeing any problem when building, and the result is as
-expected:
-
-| [mark@lakrids:~/src/linux]% usekorg 11.1.0 make ARCH=arm64 CROSS_COMPILE=aarch64-linux- defconfig
-| *** Default configuration is based on 'defconfig'
-| #
-| # No change to .config
-| #
-| [mark@lakrids:~/src/linux]% usekorg 11.1.0 make ARCH=arm64 CROSS_COMPILE=aarch64-linux- -j50 arch/arm64/lib/
-|   CALL    scripts/atomic/check-atomics.sh
-|   CC      arch/arm64/kernel/asm-offsets.s
-|   CALL    scripts/checksyscalls.sh
-|   AS      arch/arm64/kernel/vdso/note.o
-|   AS      arch/arm64/kernel/vdso/sigreturn.o
-|   LD      arch/arm64/kernel/vdso/vdso.so.dbg
-|   VDSOSYM include/generated/vdso-offsets.h
-|   OBJCOPY arch/arm64/kernel/vdso/vdso.so
-| make[2]: Nothing to be done for 'arch/arm64/lib/'.
-|   AS      arch/arm64/lib/clear_page.o
-|   AS      arch/arm64/lib/clear_user.o
-|   AS      arch/arm64/lib/copy_from_user.o
-|   AS      arch/arm64/lib/copy_page.o
-|   AS      arch/arm64/lib/copy_to_user.o
-|   CC      arch/arm64/lib/csum.o
-|   CC      arch/arm64/lib/delay.o
-|   AS      arch/arm64/lib/memchr.o
-|   AS      arch/arm64/lib/memcmp.o
-|   AS      arch/arm64/lib/memcpy.o
-|   AS      arch/arm64/lib/memset.o
-|   AS      arch/arm64/lib/strchr.o
-|   AS      arch/arm64/lib/strcmp.o
-|   AS      arch/arm64/lib/strlen.o
-|   AS      arch/arm64/lib/strncmp.o
-|   AS      arch/arm64/lib/strnlen.o
-|   AS      arch/arm64/lib/strrchr.o
-|   AS      arch/arm64/lib/tishift.o
-|   AS      arch/arm64/lib/crc32.o
-|   AS      arch/arm64/lib/mte.o
-|   CC [M]  arch/arm64/lib/xor-neon.o
-|   AR      arch/arm64/lib/built-in.a
-|   AR      arch/arm64/lib/lib.a
-| [mark@lakrids:~/src/linux]% usekorg 12.1.0 aarch64-linux-objdump -j __ex_table -D arch/arm64/lib/clear_user.o
-| 
-| arch/arm64/lib/clear_user.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section __ex_table:
-| 
-| 0000000000000000 <__ex_table>:
-|         ...
-|    8:   03ff0003        .inst   0x03ff0003 ; undefined
-|         ...
-|   14:   03ff0003        .inst   0x03ff0003 ; undefined
-|         ...
-|   20:   03ff0003        .inst   0x03ff0003 ; undefined
-|         ...
-|   2c:   03ff0003        .inst   0x03ff0003 ; undefined
-|         ...
-|   38:   03ff0003        .inst   0x03ff0003 ; undefined
-|         ...
-|   44:   03ff0003        .inst   0x03ff0003 ; undefined
-
-> The following errors are reported during compilation:
-> [...]
-> arch/arm64/lib/clear_user.S:45: Error: invalid operands (*ABS* and *UND*
-> sections) for `<<'
-> [...]
-
-As above, I'm not seeing this.
-
-This suggests that the EX_DATA_REG() macro is going wrong somehow. Assuming the
-operand types correspond to the LHS and RHS of the expression, this would mean
-the GPR number is defined, but the REG value is not, and I can't currently see
-how that can happen.
-
-> "<<" is invalid operands in assembly, is there something wrong with me?
-
-At the moment I can only assume there is a local problem. I'd suspect a typo
-somewhere, but maybe you have a toolchain which behaves differently?
-
-Thanks,
-Mark.
+We should state that leftover UV state needs cleanup, namely secure 
+storage and the configuration.

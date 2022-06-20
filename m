@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D165523F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396B95523FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245581AbiFTSfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S245602AbiFTSf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245555AbiFTSfM (ORCPT
+        with ESMTP id S242619AbiFTSfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:35:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FD1EC6C;
-        Mon, 20 Jun 2022 11:35:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA4B8B812AB;
-        Mon, 20 Jun 2022 18:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C0EC3411B;
-        Mon, 20 Jun 2022 18:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655750108;
-        bh=3mSgNT10b4IjzPgWigmKhCRzl+Ti+EYL/1+uQFwMp0Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YvLC0E9QtvNI2VOwXPiBN5gXjqLr5rXxoHEMOQ5sUWXijZHmHqlZZoWVN+2mGVmI5
-         EP/BOzf3vOI83Nawe3EQM58nzxZAe6m0FgdZ/DpWODRGH6Cl5/dPjtx+o4oAnzLIe+
-         vLUBc4kyvZpN9kK3lF4+sU0CqlKEfutvlSARgTIOtq+LXAz47jazByohylHteahUL9
-         GvRGmi+FKujuIbhBWASw1vLw0pkSfwU5G6iFYlht1leiC50pXx4jiMfj9TBX8+yLXS
-         aAQGL6ZkuYyzt59Xj0R0hgJ8s3YfDEkKxYFZGovzaJGKdKQKHWXfeSG+Uq/2fOKYAW
-         v/wxDubWF0gSA==
-Date:   Mon, 20 Jun 2022 19:35:00 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: Re: [PATCH v2 07/15] Documentation: ABI: testing: mt6370: Add ADC
- sysfs guideline
-Message-ID: <20220620193500.145f05b9@jic23-huawei>
-In-Reply-To: <CABtFH5+R761Tyd4yaWg-foSC4K=_aeYiVaTf37KvVH1Z4z9Jhw@mail.gmail.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
-        <20220613111146.25221-8-peterwu.pub@gmail.com>
-        <20220618164820.2eeb8ae8@jic23-huawei>
-        <CABtFH5+R761Tyd4yaWg-foSC4K=_aeYiVaTf37KvVH1Z4z9Jhw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 20 Jun 2022 14:35:54 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBAF1EECB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:35:53 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id h23so22746727ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DyuNPVuSNowzrm63j1zsZJOThbj5GObu7cLWAKANMVc=;
+        b=pbdIFkiuQqNLXWDkXm0ZZlPgMwWln0kuPO3GqebuD6FpRbecakmMC9pmVmX9e7g/gr
+         z7rxpqJjJePcy5F/YNjdX0w4ynSTIr61n7l+DWPCwX20nXn05QyvSI4lQZMjE0wazSPb
+         EZ3+oHePxJcAmU2lNDmbGpO4zaQqKLwrobBerU4FQeUOWcEKVZMeXbk0eHXJi0xXQpds
+         JBd23DA5ctC/COOo3SEX4YDX1Dupd7P8rehz+AuWb+/w1L+pigbtyqwDxD58dfEFWV9N
+         C94bWle+erS3g6LzNvYpcpeVVEz/jNhBW/26pIOGT7xnqcGWrjvLUBGB5aa85vAgmZU2
+         FXEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DyuNPVuSNowzrm63j1zsZJOThbj5GObu7cLWAKANMVc=;
+        b=zkm3Mh14S1N5IzdzUsGatgS9gSBOUSdW8JHkqIkNzv68kn7w2YGx789eg+C1LAdI1l
+         /pCvkdv4UV9dePQNqzpW3S/RdsLIwg16O3nJ+8KUI/nlrlaz/diSbdhekTa8/PzVofdp
+         zyTVJiTsPlqVzi0dhOt8yTrTAAp0IGpOH9LgoT/Dbh4CdP/MPujV7lkc7xpZIkfvUQAJ
+         eAprrxBSV83otzMwgT3IZQnv7OjgatLOK0PYEQ9/QxmxBIgVZg0stR5Ra4AehQ24d698
+         N0cCzI/ajNOZWDeNMyD5V9qOiRlSxkCf9r00lbF36rY17wItNPiHYslZKw8Xd97V0IUS
+         BObA==
+X-Gm-Message-State: AJIora9rqdwTaZuIoNM651I/ZXPKLAETa+1ET71s7WdZxZW3WND0KqA7
+        lu0d/ktxJht1bT7JUeRmE4ooOA==
+X-Google-Smtp-Source: AGRyM1vRDkQYO1pg9ZiRuIjA3okLtAlzs+qA/W4WQkKiGYLXITM9Otidvg2yY0cS5IPwrALT6s/X3g==
+X-Received: by 2002:a17:906:221b:b0:708:a007:5a77 with SMTP id s27-20020a170906221b00b00708a0075a77mr22461190ejs.566.1655750151701;
+        Mon, 20 Jun 2022 11:35:51 -0700 (PDT)
+Received: from [192.168.0.211] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170906315300b00704cf66d415sm6481779eje.13.2022.06.20.11.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 11:35:50 -0700 (PDT)
+Message-ID: <c92b0b51-0e59-72ab-5306-ccec92b0cb94@linaro.org>
+Date:   Mon, 20 Jun 2022 20:35:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] remoteproc: qcom: correct kerneldoc
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stephen Boyd <sboyd@kernel.org>
+References: <20220519073349.7270-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220519073349.7270-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,127 +77,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 14:00:43 +0800
-ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+On 19/05/2022 09:33, Krzysztof Kozlowski wrote:
+> Correct kerneldoc warnings like:
+> 
+>   drivers/remoteproc/qcom_common.c:68:
+>     warning: expecting prototype for struct minidump_subsystem_toc. Prototype was for struct minidump_subsystem instead
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> 
 
-> Hi Jonathan,
->=20
-> Thanks for your helpful comments, and I have some questions want to
-> ask you below.
->=20
-> Jonathan Cameron <jic23@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=8818=
-=E6=97=A5 =E9=80=B1=E5=85=AD =E6=99=9A=E4=B8=8A11:39=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > On Mon, 13 Jun 2022 19:11:38 +0800
-> > ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> > =20
-> > > From: ChiaEn Wu <chiaen_wu@richtek.com>
-> > >
-> > > Add ABI documentation for mt6370 non-standard ADC sysfs interfaces.
-> > >
-> > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > > ---
-> > >  .../ABI/testing/sysfs-bus-iio-adc-mt6370      | 36 +++++++++++++++++=
-++
-> > >  1 file changed, 36 insertions(+)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370 b/Doc=
-umentation/ABI/testing/sysfs-bus-iio-adc-mt6370
-> > > new file mode 100644
-> > > index 000000000000..039b3381176a
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
-> > > @@ -0,0 +1,36 @@
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage0_ra=
-w =20
-> >
-> > Unfortunately the kernel documentation build scripts do no support dupl=
-icating
-> > standard ABI for particular devices so as to provide more information.
-> > Hence you can't have anything in this file.
-> > =20
->=20
-> I want to confirm with you again,
-> because my ABI file duplicates with standard sysfs-bus-iio (voltage,
-> current, and temperature channels),
-> Should I just remove this ABI file and modify the code of mt6370-adc
-> to meet your expectations??
+Although these warnings are not that important, they are still warnings
+we want to fix to be able to compile with W=1.
 
-yes.
+Is there anyone willing to pick it up? Any other comments?
 
->=20
-> > =20
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 VBUS ADC with lower accuracy(+-75mA) =
-=20
-> > Curious though, voltage with a mA accuracy range? =20
->=20
-> Yes, this description is based on the data sheet.
 
-Weird :)=20
-
->=20
-> > This scale should be presented directly to userspace anyway so no need
-> > for this doc.
-> > =20
-> > > +             higher measure range(1~22V)
-> > > +             Calculating with scale returns voltage in uV =20
-> >
-> > No. All channels return in mV. That's the ABI requirement as
-> > in sysfs-bus-iio and we cannot vary if for particular drivers.  If we d=
-id
-> > no generic tooling would work. =20
->=20
-> Ok, I got it!
->=20
-> > =20
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage1_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 VBUS ADC with higher accuracy(+-30mA)
-> > > +             lower measure range(1~9.76V)
-> > > +             Calculating with scale offset returns voltage in uV
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage4_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 TS_BAT ADC
-> > > +             Calculating with scale returns voltage in uV
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage7_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 CHG_VDDP ADC
-> > > +             Calculating with scale returns voltage in mV
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_temp8_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 IC junction temperature
-> > > +             Calculating with scale and offset returns temperature i=
-n degree =20
->=20
-> Shall I modify the scale of temperature to milli degrees in
-> mt6370-adc.c and remove this item??
-
-yes.
-
-Thanks,
-
-Jonathan
-
->=20
-> > =20
->=20
-> Best regards,
-> ChiaEn Wu
-
+Best regards,
+Krzysztof

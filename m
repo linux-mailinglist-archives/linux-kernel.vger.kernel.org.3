@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2BC5526F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C6E5526F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243664AbiFTWZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S243384AbiFTWb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242768AbiFTWZI (ORCPT
+        with ESMTP id S243182AbiFTWbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:25:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340A113E3F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:25:07 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3E74E1F9D0;
-        Mon, 20 Jun 2022 22:25:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655763905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PJ0iztHxsK8a+Ha9h5rHbJfy+QtzjyiswzEJIkBJEYg=;
-        b=Lou7oJk0l21cmXaZoH5uz/345ApgwxkXV3JrYfjJ3Fxse7kAMVwnYzhoECxQEy7NK1+TbP
-        lvceRmr6MG7ZQUkmE76xbGdfFvw6NMBdnu8FetBVz9b1z5vhSDp0F/ndcTT5qKnxx5WPb5
-        50+tyeKnw/McWVROCIfEKqCSuUOrSzg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A38E02C141;
-        Mon, 20 Jun 2022 22:25:04 +0000 (UTC)
-Date:   Tue, 21 Jun 2022 00:25:01 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] printk/console: Enable console kthreads only when there
- is no boot console left
-Message-ID: <YrDzvX1fXWn5hMWL@alley>
-References: <20220619204949.50d9154d@thinkpad>
- <87r13kwawb.fsf@jogness.linutronix.de>
- <20220620112936.48fcb2a4@thinkpad>
- <YrBdjVwBOVgLfHyb@alley>
- <CAHk-=wgdquXVVE37CZooVK4X+YdSa7XoGtjr71CEYh8UsdKUow@mail.gmail.com>
- <YrCDNqsPrY+Hs9ju@alley>
- <YrCO04oNncE1xF5K@alley>
- <CAHk-=whBSrixcBVoWGnU0eoaksp82gnQ9_1jMNZsCzhLXEgEpw@mail.gmail.com>
+        Mon, 20 Jun 2022 18:31:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF5B1CB39;
+        Mon, 20 Jun 2022 15:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655764274; x=1687300274;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pmSKwHf+XOx/cVvFoD/KBOhPf+3PAaRJZ2sU7Jq1+98=;
+  b=ekgd5lyLhWR66HOYz8oPMcLI3tfs1DkAhwI0S7DL3s+aPYy0kxdNDQ3F
+   6+7/cOVRN+9nqDhvkbhl8yrtjln4HjCe4l3iwSYC0aY6GgPaL7da33RhW
+   zqXsQwyO5TCqQTnYcAXByr/FHC05itfD+gmvqQqv4NfkZmMK9SRZcGEuH
+   ireaJ7lDjGzkCnjmBQsRReiA7MXBn73FRRypBdd71ed1m3lr85VxjvJ3U
+   1Fbdfm8dOEexlqos2+mtptqZr6zDAPpBhe8WupVgSF8eeQIQGh2KkUTDq
+   PlAeQULvxwVetU5NnwaDkObn26+1w3Ihn8QL17v1vpTIAnvwapRHHu0Zx
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="305417435"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="305417435"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 15:31:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="585046305"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 20 Jun 2022 15:31:09 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3PvI-000Wkl-OD;
+        Mon, 20 Jun 2022 22:31:08 +0000
+Date:   Tue, 21 Jun 2022 06:30:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, rafael@kernel.org,
+        andriy.shevchenko@linux.intel.com, lenb@kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, hkallweit1@gmail.com,
+        gjb@semihalf.com, mw@semihalf.com, jaz@semihalf.com,
+        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 05/12] net: core: switch to
+ fwnode_find_net_device_by_node()
+Message-ID: <202206210649.QCsWk7fK-lkp@intel.com>
+References: <20220620150225.1307946-6-mw@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whBSrixcBVoWGnU0eoaksp82gnQ9_1jMNZsCzhLXEgEpw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220620150225.1307946-6-mw@semihalf.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-06-20 14:10:20, Linus Torvalds wrote:
-> On Mon, Jun 20, 2022 at 10:14 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > The console kthreads uncovered several races in console drivers.
-> 
-> I really want to make it clear that this was NOT some kind of "races
-> in drivers".
->
-> Console drivers may very well  have intentionally avoided taking locks
-> for console output, since the printk output was supposed to be
-> serialized by printk.
-> 
-> Don't try to make this some kind of "buggy drivers" thing. This is on
-> printk, not on anything else.
+Hi Marcin,
 
-OK, I see that uart_console_write() is used by
-early_serial8250_write() without port->lock. It means that it is
-racy against serial8250_console_write(). It might
-cause problems reported by this thread. And you are
-right that it has never been used in parallel before the kthreads.
+I love your patch! Yet something to improve:
 
-But I believe that it might cause real problems. serial8250_console_write()
-takes port->lock to get serialized against other operations on the
-port. And there might be some when the same port is added as
-a proper serial console.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on robh/for-next linus/master v5.19-rc2 next-20220617]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Today I found that probe_baud() is called from
-serial8250_console_setup() without port->lock. It does reads and
-writes. I believe that it might break with the earlycon.
+url:    https://github.com/intel-lab-lkp/linux/commits/Marcin-Wojtas/ACPI-support-for-DSA/20220620-231646
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220621/202206210649.QCsWk7fK-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/68a7a52989207bfe8640877c512c77ca233c3bba
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Marcin-Wojtas/ACPI-support-for-DSA/20220620-231646
+        git checkout 68a7a52989207bfe8640877c512c77ca233c3bba
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Also the commit 589f892ac8ef244e47c5a ("serial: meson:
-acquire port->lock in startup()") fixes a race between
-meson_serial_port_write() and meson_uart_startup(), where
-meson_serial_port_write() is used by both early and proper
-console driver. The problem was there even without kthreads.
-They just made it more visible.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-My colleagues familiar with ARM told me that they heard about
-boot freezes with early consoles before threads. The kthreads
-allow to reproduce and fix them. In the end, they make the early
-consoles more reliable.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+ERROR: modpost: missing MODULE_LICENSE() in drivers/watchdog/gxp-wdt.o
+>> ERROR: modpost: "fwnode_find_net_device_by_node" [net/dsa/dsa_core.ko] undefined!
 
-> Assuming this solves all issues, I'm ok with this approach, but I
-> really want this to be clearly about printk being buggy, no "blame the
-> drivers" garbage.
->
-> And if there are other issues coming up, we revert the whole thing entirely.
-> 
-> Because printk is too important to play games with, and too important
-> to try to blame drivers.
-
-I take printk() really seriously. And I definitely do not want
-to wave out problems as others problem.
-
-I do not want to release 5.19 with broken printk(). But the kthreads
-solve real bugs where printk() put the system into knees. I want
-to invest much more time on improving them and fixing related
-problems. Unfortunately, linux-next was not able to catch
-the recently reported problems and we were not able to fix them
-in advance.
-
-All the recent fixes were generic and should make printk() with
-kthreads much more reliable. I can't be sure if it will be enough.
-I could only say that I am going to fix any new ones.
-
-Of course, if people continue reporting problems, we would need
-to revert it for 5.19. But I would really like to give it another
-chance later.
-
-Best Regards,
-Petr
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

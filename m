@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8AB551A99
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB521551AA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244880AbiFTNIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S245081AbiFTNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244226AbiFTNEo (ORCPT
+        with ESMTP id S244450AbiFTNFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:04:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF8519C03;
-        Mon, 20 Jun 2022 06:00:09 -0700 (PDT)
+        Mon, 20 Jun 2022 09:05:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABB519C24;
+        Mon, 20 Jun 2022 06:00:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A95561542;
-        Mon, 20 Jun 2022 13:00:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E19C3411C;
-        Mon, 20 Jun 2022 13:00:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10DD4B811A6;
+        Mon, 20 Jun 2022 13:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29CE9C3411B;
+        Mon, 20 Jun 2022 13:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730008;
-        bh=uGrc4TFtsDDheb0tYM3honumC3oheP7ORB0HHwlNEes=;
+        s=korg; t=1655730011;
+        bh=WaG1nHyRp9gM42Yl11WvQkmWsXZ9kxeW+GdjIh4gZQ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X4lT8BOCexjpEkHtFjQSF9cCVFb+MzlPDcm5E9cN7uIsLw3aIXky5ZqmvBLTsoUhs
-         HDX4JCuMV58xoakMuyHhHeFmfTTjCg3eHJcjaQ0j1H0VNamWxSDiK9pI673kekIC4l
-         3WSpVl56hU9i333TvhvqOv85VsakeKASxxXI30+0=
+        b=neck4NhXlgyFTZVyO1V8lKwrP4EVn6Zu3igtZNX+fkO38djIZIRYvK42qYL8yGZmV
+         02leBcLKj0NW6UAVyLQSNm+mAFDx3Lke8+kDGHhprnFminAPl16XUL53JU0MphfHC1
+         ynrG+MU9PtXMthTV7JfMwHtusnhmojboK4IQ1gqY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.18 124/141] cfi: Fix __cfi_slowpath_diag RCU usage with cpuidle
-Date:   Mon, 20 Jun 2022 14:51:02 +0200
-Message-Id: <20220620124733.217761642@linuxfoundation.org>
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>
+Subject: [PATCH 5.18 125/141] fs: account for group membership
+Date:   Mon, 20 Jun 2022 14:51:03 +0200
+Message-Id: <20220620124733.247984907@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
 References: <20220620124729.509745706@linuxfoundation.org>
@@ -54,76 +58,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sami Tolvanen <samitolvanen@google.com>
+From: Christian Brauner <brauner@kernel.org>
 
-commit 57cd6d157eb479f0a8e820fd36b7240845c8a937 upstream.
+commit 168f912893407a5acb798a4a58613b5f1f98c717 upstream.
 
-RCU_NONIDLE usage during __cfi_slowpath_diag can result in an invalid
-RCU state in the cpuidle code path:
+When calling setattr_prepare() to determine the validity of the
+attributes the ia_{g,u}id fields contain the value that will be written
+to inode->i_{g,u}id. This is exactly the same for idmapped and
+non-idmapped mounts and allows callers to pass in the values they want
+to see written to inode->i_{g,u}id.
 
-  WARNING: CPU: 1 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter+0xe4/0x138
-  ...
-  Call trace:
-    rcu_eqs_enter+0xe4/0x138
-    rcu_idle_enter+0xa8/0x100
-    cpuidle_enter_state+0x154/0x3a8
-    cpuidle_enter+0x3c/0x58
-    do_idle.llvm.6590768638138871020+0x1f4/0x2ec
-    cpu_startup_entry+0x28/0x2c
-    secondary_start_kernel+0x1b8/0x220
-    __secondary_switched+0x94/0x98
+When group ownership is changed a caller whose fsuid owns the inode can
+change the group of the inode to any group they are a member of. When
+searching through the caller's groups we need to use the gid mapped
+according to the idmapped mount otherwise we will fail to change
+ownership for unprivileged users.
 
-Instead, call rcu_irq_enter/exit to wake up RCU only when needed and
-disable interrupts for the entire CFI shadow/module check when we do.
+Consider a caller running with fsuid and fsgid 1000 using an idmapped
+mount that maps id 65534 to 1000 and 65535 to 1001. Consequently, a file
+owned by 65534:65535 in the filesystem will be owned by 1000:1001 in the
+idmapped mount.
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Link: https://lore.kernel.org/r/20220531175910.890307-1-samitolvanen@google.com
-Fixes: cf68fffb66d6 ("add support for Clang CFI")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+The caller now requests the gid of the file to be changed to 1000 going
+through the idmapped mount. In the vfs we will immediately map the
+requested gid to the value that will need to be written to inode->i_gid
+and place it in attr->ia_gid. Since this idmapped mount maps 65534 to
+1000 we place 65534 in attr->ia_gid.
+
+When we check whether the caller is allowed to change group ownership we
+first validate that their fsuid matches the inode's uid. The
+inode->i_uid is 65534 which is mapped to uid 1000 in the idmapped mount.
+Since the caller's fsuid is 1000 we pass the check.
+
+We now check whether the caller is allowed to change inode->i_gid to the
+requested gid by calling in_group_p(). This will compare the passed in
+gid to the caller's fsgid and search the caller's additional groups.
+
+Since we're dealing with an idmapped mount we need to pass in the gid
+mapped according to the idmapped mount. This is akin to checking whether
+a caller is privileged over the future group the inode is owned by. And
+that needs to take the idmapped mount into account. Note, all helpers
+are nops without idmapped mounts.
+
+New regression test sent to xfstests.
+
+Link: https://github.com/lxc/lxd/issues/10537
+Link: https://lore.kernel.org/r/20220613111517.2186646-1-brauner@kernel.org
+Fixes: 2f221d6f7b88 ("attr: handle idmapped mounts")
+Cc: Seth Forshee <sforshee@digitalocean.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: stable@vger.kernel.org # 5.15+
+CC: linux-fsdevel@vger.kernel.org
+Reviewed-by: Seth Forshee <sforshee@digitalocean.com>
+Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/cfi.c |   22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ fs/attr.c |   26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -281,6 +281,8 @@ static inline cfi_check_fn find_module_c
- static inline cfi_check_fn find_check_fn(unsigned long ptr)
+--- a/fs/attr.c
++++ b/fs/attr.c
+@@ -61,9 +61,15 @@ static bool chgrp_ok(struct user_namespa
+ 		     const struct inode *inode, kgid_t gid)
  {
- 	cfi_check_fn fn = NULL;
-+	unsigned long flags;
-+	bool rcu_idle;
- 
- 	if (is_kernel_text(ptr))
- 		return __cfi_check;
-@@ -290,13 +292,21 @@ static inline cfi_check_fn find_check_fn
- 	 * the shadow and __module_address use RCU, so we need to wake it
- 	 * up if necessary.
- 	 */
--	RCU_NONIDLE({
--		if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
--			fn = find_shadow_check_fn(ptr);
-+	rcu_idle = !rcu_is_watching();
-+	if (rcu_idle) {
-+		local_irq_save(flags);
-+		rcu_irq_enter();
-+	}
- 
--		if (!fn)
--			fn = find_module_check_fn(ptr);
--	});
-+	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-+		fn = find_shadow_check_fn(ptr);
-+	if (!fn)
-+		fn = find_module_check_fn(ptr);
+ 	kgid_t kgid = i_gid_into_mnt(mnt_userns, inode);
+-	if (uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)) &&
+-	    (in_group_p(gid) || gid_eq(gid, inode->i_gid)))
+-		return true;
++	if (uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode))) {
++		kgid_t mapped_gid;
 +
-+	if (rcu_idle) {
-+		rcu_irq_exit();
-+		local_irq_restore(flags);
++		if (gid_eq(gid, inode->i_gid))
++			return true;
++		mapped_gid = mapped_kgid_fs(mnt_userns, i_user_ns(inode), gid);
++		if (in_group_p(mapped_gid))
++			return true;
 +	}
+ 	if (capable_wrt_inode_uidgid(mnt_userns, inode, CAP_CHOWN))
+ 		return true;
+ 	if (gid_eq(kgid, INVALID_GID) &&
+@@ -123,12 +129,20 @@ int setattr_prepare(struct user_namespac
  
- 	return fn;
- }
+ 	/* Make sure a caller can chmod. */
+ 	if (ia_valid & ATTR_MODE) {
++		kgid_t mapped_gid;
++
+ 		if (!inode_owner_or_capable(mnt_userns, inode))
+ 			return -EPERM;
++
++		if (ia_valid & ATTR_GID)
++			mapped_gid = mapped_kgid_fs(mnt_userns,
++						i_user_ns(inode), attr->ia_gid);
++		else
++			mapped_gid = i_gid_into_mnt(mnt_userns, inode);
++
+ 		/* Also check the setgid bit! */
+-               if (!in_group_p((ia_valid & ATTR_GID) ? attr->ia_gid :
+-                                i_gid_into_mnt(mnt_userns, inode)) &&
+-                    !capable_wrt_inode_uidgid(mnt_userns, inode, CAP_FSETID))
++		if (!in_group_p(mapped_gid) &&
++		    !capable_wrt_inode_uidgid(mnt_userns, inode, CAP_FSETID))
+ 			attr->ia_mode &= ~S_ISGID;
+ 	}
+ 
 
 

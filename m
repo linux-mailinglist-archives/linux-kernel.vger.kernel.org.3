@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171295522C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 19:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7A35522C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 19:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237508AbiFTRbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 13:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S235624AbiFTRc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 13:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbiFTRbi (ORCPT
+        with ESMTP id S232421AbiFTRcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 13:31:38 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4397192B2;
-        Mon, 20 Jun 2022 10:31:37 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id p14so5149563pfh.6;
-        Mon, 20 Jun 2022 10:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1bLgqvEEENgFKUoyFnVjLtWmBq98EqIomCusSe2yS1Y=;
-        b=oQZp6BJwz75SgKPZozr/qgEkZS7Duw1LYftku/nK/zp+6KzoZwUlb0wLd8us6aPqeg
-         ScKgamunEvRL3wesdw1/8bYaKuI+ZZMfrMHNLL1FLIDIl7zrPpueXEP9EIZ9ARoYiA8e
-         r19GPvnsrtnmGG6B+8yCw2bw/FdC6B2oruJimqr+PvQx8i6l1/dyq5oNxV1WM6DyrSkV
-         v4dwszTzkkFL7y6K0Mvje1wHpkdsf41v5PCHJjm7n8UMd+4kQuxNxViPygYS6O2YOo9c
-         dxtBcYj0/KaSfmsvoVPNkNJbDYlQQISRAdmzc0uEtiFVv/FCtEVGKKrMS+bZyyN154eJ
-         x96A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1bLgqvEEENgFKUoyFnVjLtWmBq98EqIomCusSe2yS1Y=;
-        b=SEWleRcmSnu4W3vd/ObwHuSWsXxsJg8WpWQGXaaq2PjTU9aQ4ZE27/5XoKazXiUuAv
-         ep5Z7siGDXlI0OTvchDaV5U0U3ghvC9LQuIU9H77b/YQ1yWFhTJVh+mif35rXhcIDGvh
-         7gnWWjsAY/2YBz7LYPH6NRXumwI10Y5UgJ/NKZG532P8m/FMT8A1EUbN1mGJ/+9e9N+E
-         A8vRIhBiYgp+HD1AJyLOh8pD7De99PjQSrRLKWJDN2Plso0wz9CPF8IOBTZi8tSBfcdq
-         cmE9hwebwnouxvRpdaZc2lbYtGe+3+LWUq4ks0PzJR5neOjycQb7J1PuJtat3ROIJ3jD
-         PcMw==
-X-Gm-Message-State: AJIora9jw7vKw6v6Hyssu3StPnvT5Oki8ZcBEz4o7ud6tkudS3To4Z54
-        6DbodmugF60Aby7U8ch5C4A=
-X-Google-Smtp-Source: AGRyM1tWDGnQpGz0cXjZi00gcXj3IBEjyYEslYQUYPyp4qlX4AUpq8R2xQr8QTEJWQDff+Htf6+jgA==
-X-Received: by 2002:a63:1a56:0:b0:405:28e3:e4fb with SMTP id a22-20020a631a56000000b0040528e3e4fbmr22939811pgm.16.1655746297171;
-        Mon, 20 Jun 2022 10:31:37 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a17090add4500b001df264610c4sm18627794pjv.0.2022.06.20.10.31.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 10:31:36 -0700 (PDT)
-Message-ID: <e1aecd67-0458-fcf8-a077-9ca7609c9abe@gmail.com>
-Date:   Mon, 20 Jun 2022 10:31:30 -0700
+        Mon, 20 Jun 2022 13:32:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7251A3A4;
+        Mon, 20 Jun 2022 10:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655746343; x=1687282343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CyJzJbaODMGrvMP4xiCkCq489CmE3t9woHs5eOyjZy4=;
+  b=N/k5ZBkKSTQsCV7IxA+P4IW73DP4hisMU+7BHxGBuJhZtAPVeQ8KUada
+   b0UWMa4P3aAXDZsmaJUhTX9K45xJ5e5uzHxIypvPUmVBQUDFE0EeoJIXI
+   3FC6+NhrK8xL0VWrH0+74O+8VGFsvA5e+pmtHgHz7IV/h9K30RLevmkzR
+   IVOA6+erjJmCM4Kw5o2xtH+YX+CBVWyc/6T4CjvzUgkxlNWLTOku7yTmO
+   8/PA97BaQsmCo5EGP7J36ACjWwok8bPNnnlrAbFB7uDK3cqPJ7gUvb4fz
+   pU3xQDtmLSasyDm0UUUUQSiWgwk86WgWkxRK5eTx5gocMOTKep5IDK6dP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="305382381"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="305382381"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 10:32:13 -0700
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="764171985"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 10:32:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3LFt-000kZM-AM;
+        Mon, 20 Jun 2022 20:32:05 +0300
+Date:   Mon, 20 Jun 2022 20:32:05 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        hkallweit1@gmail.com, gjb@semihalf.com, jaz@semihalf.com,
+        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 02/12] net: mdio: switch fixed-link PHYs API to
+ fwnode_
+Message-ID: <YrCvFYaBuICKIQM/@smile.fi.intel.com>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-3-mw@semihalf.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.10 00/84] 5.10.124-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220620124720.882450983@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620150225.1307946-3-mw@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 05:50, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.124 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.124-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Jun 20, 2022 at 05:02:15PM +0200, Marcin Wojtas wrote:
+> fixed-link PHYs API is used by DSA and a number of drivers
+> and was depending on of_. Switch to fwnode_ so to make it
+> hardware description agnostic and allow to be used in ACPI
+> world as well.
 
-On ARCH_BCMSTB using 32-bit and 64-bit ARM kernels:
+...
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> +bool fwnode_phy_is_fixed_link(struct fwnode_handle *fwnode)
+> +{
+> +	struct fwnode_handle *fixed_link_node;
+> +	const char *managed;
+> +	int len;
+> +
+> +	/* New binding */
+> +	fixed_link_node = fwnode_get_named_child_node(fwnode, "fixed-link");
+> +	if (fixed_link_node) {
+> +		fwnode_handle_put(fixed_link_node);
+> +		return true;
+> +	}
+> +
+> +	if (fwnode_property_read_string(fwnode, "managed", &managed) == 0 &&
+> +	    strcmp(managed, "auto") != 0)
+> +		return true;
+> +
+> +	/* Old binding */
+> +	len = fwnode_property_read_u32_array(fwnode, "fixed-link", NULL, 0);
+
+
+fwnode_property_count_u32()
+
+> +	if (len == (5 * sizeof(u32)))
+
+I'm not sure how to interpret this. len will return a count of u32 elements.
+What does the sizeof(u32) mean here?
+
+> +		return true;
+> +
+> +	return false;
+> +}
+
 -- 
-Florian
+With Best Regards,
+Andy Shevchenko
+
+

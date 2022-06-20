@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365A4551B3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6DA551AF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343602AbiFTNQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        id S1344653AbiFTNWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245340AbiFTNIp (ORCPT
+        with ESMTP id S1345643AbiFTNUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:08:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1396119FB4;
-        Mon, 20 Jun 2022 06:02:32 -0700 (PDT)
+        Mon, 20 Jun 2022 09:20:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1AE193FE;
+        Mon, 20 Jun 2022 06:08:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45AAE61543;
-        Mon, 20 Jun 2022 13:01:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D29C3411B;
-        Mon, 20 Jun 2022 13:01:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB2A16153E;
+        Mon, 20 Jun 2022 13:06:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0735DC3411B;
+        Mon, 20 Jun 2022 13:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730062;
-        bh=MgywS8XvIM5eqT3QyCdyvklsRJN0u5CnLIFVeSWA3Cg=;
+        s=korg; t=1655730389;
+        bh=0G8hn+LDRdvLcmIuBLbKikNM+6KmtRGefFtgmQdTpPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qZ7ztMDLDxbG4/XCBFInhJvfJS3DBLbonF2vRD3Ptrl/IaRxy3pkSGKSg4Um8FZDJ
-         oaXwxLzzkxKAkicBxMJAU/BOvRSBRw3oeecWnHPrIH82w8sUOzGePW9pWYRP6t72qB
-         dblYO9pH2rKa2Hl5xuQqqvCcmUuDwSA8idCaBFIQ=
+        b=hl7T6zFxRP9P/kwZl1n0fMkVVso1y1VLzZNGpC7DrgCJ5Y0FYrN6DYU3y1hQ31n88
+         ynHXriMKkAdvhMdjRTOU0hOhxBofHiHKDEX2gZMWDImzfU7pMNglZQtq7V8bkiEb9S
+         STKZkWMG4KxqGQh4RFjOsKe8Yn3irXyunvM8TPmU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Ford <aford173@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.10 04/84] arm64: dts: imx8mm-beacon: Enable RTS-CTS on UART3
+        stable@vger.kernel.org, Philip Yang <Philip.Yang@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 008/106] drm/amdkfd: Use mmget_not_zero in MMU notifier
 Date:   Mon, 20 Jun 2022 14:50:27 +0200
-Message-Id: <20220620124721.016486184@linuxfoundation.org>
+Message-Id: <20220620124724.634826037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
+References: <20220620124724.380838401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+From: Philip Yang <Philip.Yang@amd.com>
 
-commit 4ce01ce36d77137cf60776b320babed89de6bd4c upstream.
+[ Upstream commit fa582c6f3684ac0098a9d02ddf0ed52a02b37127 ]
 
-There is a header for a DB9 serial port, but any attempts to use
-hardware handshaking fail.  Enable RTS and CTS pin muxing and enable
-handshaking in the uart node.
+MMU notifier callback may pass in mm with mm->mm_users==0 when process
+is exiting, use mmget_no_zero to avoid accessing invalid mm in deferred
+list work after mm is gone.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Philip Yang <Philip.Yang@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi |    3 +++
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 3 +++
  1 file changed, 3 insertions(+)
 
---- a/arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
-@@ -167,6 +167,7 @@
- 	pinctrl-0 = <&pinctrl_uart3>;
- 	assigned-clocks = <&clk IMX8MM_CLK_UART3>;
- 	assigned-clock-parents = <&clk IMX8MM_SYS_PLL1_80M>;
-+	uart-has-rtscts;
- 	status = "okay";
- };
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+index 830809b694dd..74e6f613be02 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+@@ -2181,6 +2181,8 @@ svm_range_cpu_invalidate_pagetables(struct mmu_interval_notifier *mni,
  
-@@ -237,6 +238,8 @@
- 		fsl,pins = <
- 			MX8MM_IOMUXC_ECSPI1_SCLK_UART3_DCE_RX	0x40
- 			MX8MM_IOMUXC_ECSPI1_MOSI_UART3_DCE_TX	0x40
-+			MX8MM_IOMUXC_ECSPI1_MISO_UART3_DCE_CTS_B	0x40
-+			MX8MM_IOMUXC_ECSPI1_SS0_UART3_DCE_RTS_B	0x40
- 		>;
- 	};
+ 	if (range->event == MMU_NOTIFY_RELEASE)
+ 		return true;
++	if (!mmget_not_zero(mni->mm))
++		return true;
  
+ 	start = mni->interval_tree.start;
+ 	last = mni->interval_tree.last;
+@@ -2207,6 +2209,7 @@ svm_range_cpu_invalidate_pagetables(struct mmu_interval_notifier *mni,
+ 	}
+ 
+ 	svm_range_unlock(prange);
++	mmput(mni->mm);
+ 
+ 	return true;
+ }
+-- 
+2.35.1
+
 
 

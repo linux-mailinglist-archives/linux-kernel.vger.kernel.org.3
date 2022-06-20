@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BD9551FC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FF4551FD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241314AbiFTPHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S241645AbiFTPHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242487AbiFTPHF (ORCPT
+        with ESMTP id S242643AbiFTPHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 11:07:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B18426105
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:45:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB60125E93;
+        Mon, 20 Jun 2022 07:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1655736313; x=1687272313;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=UZGEgfDdFQPKNBb7uSvz5hHYFgyURg4ZXmrlm9p+W5Q=;
+  b=L4Y39zJfcId2X3FaUThF5y88EjNniTsJ9LJMLpFY9sJre5dtAph5uzB4
+   zd+MjSUovDmdpZEfz0eFiI5KJZh7p+5I9KlXRFOWhV/s4Mqr6/F1pPfyZ
+   SOmeYejueLKxGJQpPh/L0KP0IjvmLuR9UMSnqyzw4OpxzdasGr5G3wPww
+   o=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="127205080"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650924000"; 
+   d="scan'208";a="127205080"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 16:45:11 +0200
+Received: from MUCSE805.infineon.com (MUCSE805.infineon.com [172.23.29.31])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B14166119B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 14:44:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ED9DC3411B;
-        Mon, 20 Jun 2022 14:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655736279;
-        bh=BNeslKVmd3jvxQWIBQe1ylqJrzC04i9s7he5Fynox0M=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dCNqyivp5vSaY/lYdisTmi5hMpBY8kcLfLzPOQEvfP4xWnGjDxHCC4HT9BambMhfZ
-         jQ0OBsuCmJF2ntkYQsqrrvmZXh07sVO7Z5VX7UHAg3rWv040KfXXRrvhLt3mIVn+C6
-         8bbj9AgaDxCRPubVjhcHHuF+JVcdOAy8TS6BrXS/IiAlv5S44GIQ3dSpGsyiFewHI/
-         ZDU1BIBjEHv+Zq4x2aVYPyRdg0DB9hxvkr/hYrO+eYEj8YA9x3aRq8eRxNAfFUb3Nm
-         MoaR6ssnAML+W3fq8IfWby1+agjb1lgArlVLAduQ/yoGPb9PwPppZCfDf9E2Ei1zEe
-         YwvYiguP6g2Pg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A70BE737E8;
-        Mon, 20 Jun 2022 14:44:39 +0000 (UTC)
-Subject: Re: [GIT PULL] slab fixes for 5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <a8082f00-3e00-f781-f5f0-20b4853b3335@suse.cz>
-References: <a8082f00-3e00-f781-f5f0-20b4853b3335@suse.cz>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a8082f00-3e00-f781-f5f0-20b4853b3335@suse.cz>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.19-fixup
-X-PR-Tracked-Commit-Id: eeaa345e128515135ccb864c04482180c08e3259
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 59b785fe2abbe21267516799f6c584cf4fe5f08b
-Message-Id: <165573627903.17677.13888569351342590014.pr-tracker-bot@kernel.org>
-Date:   Mon, 20 Jun 2022 14:44:39 +0000
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Mon, 20 Jun 2022 16:45:10 +0200 (CEST)
+Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE805.infineon.com
+ (172.23.29.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 20 Jun
+ 2022 16:45:10 +0200
+Received: from [10.165.68.86] (10.165.68.86) by MUCSE818.infineon.com
+ (172.23.29.44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 20 Jun
+ 2022 16:45:10 +0200
+Message-ID: <4832efdf-f2a7-7b0c-4477-088772c962c0@infineon.com>
+Date:   Mon, 20 Jun 2022 16:45:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Reply-To: <stefan.mahnke-hartmann@infineon.com>
+Subject: Re: [PATCH] tpm: increase timeout for kselftests
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+CC:     Johannes Holland <johannes.holland@infineon.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <stefan.mahnke-hartmann@infineon.com>
+References: <20220510111607.22984-1-johannes.holland@infineon.com>
+ <YnvSwJxOg+IZxrxz@kernel.org>
+ <51a14f28-ce94-ade9-6512-a265f7b32dfb@infineon.com>
+ <YovniXv6ATJ/vpt6@kernel.org>
+From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Organization: Infineon Technologies AG
+In-Reply-To: <YovniXv6ATJ/vpt6@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.165.68.86]
+X-ClientProxiedBy: MUCSE807.infineon.com (172.23.29.33) To
+ MUCSE818.infineon.com (172.23.29.44)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,15 +79,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 20 Jun 2022 14:02:45 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.19-fixup
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/59b785fe2abbe21267516799f6c584cf4fe5f08b
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+On 23.05.22 21:59, Jarkko Sakkinen wrote:
+> On Fri, May 20, 2022 at 03:28:42PM +0200, Stefan Mahnke-Hartmann wrote:
+>>
+>> On 11.05.22 17:14, Jarkko Sakkinen wrote:
+>>> On Tue, May 10, 2022 at 01:16:08PM +0200, Johannes Holland wrote:
+>>>> Due to CreatePrimary commands which need to create RSA keys of
+>>>> increasing size, the timeout value need to be raised, as well.
+>>>> Default is 300s.
+>>>>
+>>>> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+>>>> ---
+>>>> A timeout of anything below 600s still lead to occasional timeouts for
+>>>> me. Therefore, I propose 600s as a new value. 
+>>>>
+>>>>  tools/testing/selftests/tpm2/settings | 2 ++
+>>>>  1 file changed, 2 insertions(+)
+>>>>  create mode 100644 tools/testing/selftests/tpm2/settings
+>>>>
+>>>> diff --git a/tools/testing/selftests/tpm2/settings b/tools/testing/selftests/tpm2/settings
+>>>> new file mode 100644
+>>>> index 000000000000..919bc3803f03
+>>>> --- /dev/null
+>>>> +++ b/tools/testing/selftests/tpm2/settings
+>>>> @@ -0,0 +1,2 @@
+>>>> +timeout=600
+>>>> +
+>>>> -- 
+>>>> 2.34.1
+>>>>
+>>> Could cope but I did not get why it needs to be raised.
+>> The TPM2 SpaceTest testsuite currently creates 8 primary RSA 2k keys + 1 for
+>> setup. Generating a RSA2k key can take up to ~1-2 minutes on some of our TPMs.
+>> => 2x9 = 18 minutes. In the kernel we even define a duration timeout for rsa2k
+>> keygen of 5 min per key! (TPM2_DURATION_LONG_LONG = 300000) => up to 45 minutes
+>> would be "acceptable".
+>>
+>> However since the average key generation time is much faster, a value of ~10
+>> minutes should be fine enough.
+>>
+>> The reason why you did not experience this yet on your test system is either
+>> because PTT TPMs are faster in that respect and/or some TPMs implement pre-gen
+>> mechanisms for key generation, (or just plain luck)
+>>
+>> BR, Stefan
+>>
+>>> BR, Jarkko
+> I think this is ok.
+>
+>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>
+> BR, Jarkko
+>
+Hi Jarkko,
+ 
+Just curious. I can't see this patch was added to linux-next. Was I
+expected to do something more to it?
+ 
+Kind regards
+Stefan

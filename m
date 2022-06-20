@@ -2,267 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E73550F76
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5420C550F7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237672AbiFTEoT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 00:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S237802AbiFTEpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 00:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiFTEoR (ORCPT
+        with ESMTP id S229908AbiFTEpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 00:44:17 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33501A446
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:44:16 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-166-e-ku6nOkPGGi772ICmkLdQ-1; Mon, 20 Jun 2022 05:44:13 +0100
-X-MC-Unique: e-ku6nOkPGGi772ICmkLdQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 20 Jun 2022 05:44:10 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 20 Jun 2022 05:44:10 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kent Overstreet' <kent.overstreet@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pmladek@suse.com" <pmladek@suse.com>
-CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "willy@infradead.org" <willy@infradead.org>
-Subject: RE: [PATCH v4 01/34] lib/printbuf: New data structure for printing
- strings
-Thread-Topic: [PATCH v4 01/34] lib/printbuf: New data structure for printing
- strings
-Thread-Index: AQHYhD6p9ckAsWkCSk+0B0i5FtmPu61XsWog
-Date:   Mon, 20 Jun 2022 04:44:10 +0000
-Message-ID: <f0808aaee9ac4b088121c0fbe7e18f0d@AcuMS.aculab.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220620004233.3805-2-kent.overstreet@gmail.com>
-In-Reply-To: <20220620004233.3805-2-kent.overstreet@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 20 Jun 2022 00:45:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A022B859
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:45:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 268D21042;
+        Sun, 19 Jun 2022 21:45:32 -0700 (PDT)
+Received: from [10.163.42.162] (unknown [10.163.42.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04BA53F7D7;
+        Sun, 19 Jun 2022 21:45:28 -0700 (PDT)
+Message-ID: <da75a2d1-afc5-b6ff-dce0-ef0b20dbfde0@arm.com>
+Date:   Mon, 20 Jun 2022 10:15:31 +0530
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 1/2] mm/mmap: Restrict generic protection_map[] array
+ visibility
 Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, linux-mm@kvack.org
+Cc:     kbuild-all@lists.01.org, hch@infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+References: <20220616040924.1022607-2-anshuman.khandual@arm.com>
+ <202206162004.ak9KTfMD-lkp@intel.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202206162004.ak9KTfMD-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kent Overstreet
-> Sent: 20 June 2022 01:42
+
+On 6/16/22 18:14, kernel test robot wrote:
+> Hi Anshuman,
 > 
-> This adds printbufs: a printbuf points to a char * buffer and knows the
-> size of the output buffer as well as the current output position.
+> Thank you for the patch! Yet something to improve:
 > 
-> Future patches will be adding more features to printbuf, but initially
-> printbufs are targeted at refactoring and improving our existing code in
-> lib/vsprintf.c - so this initial printbuf patch has the features
-> required for that.
+> [auto build test ERROR on akpm-mm/mm-everything]
 > 
-> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  include/linux/printbuf.h | 122 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 122 insertions(+)
->  create mode 100644 include/linux/printbuf.h
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220616-121132
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206162004.ak9KTfMD-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/4eb89368b130fe235d5e587bcc2eec18bb688e2d
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220616-121132
+>         git checkout 4eb89368b130fe235d5e587bcc2eec18bb688e2d
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 > 
-> diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-> new file mode 100644
-> index 0000000000..8186c447ca
-> --- /dev/null
-> +++ b/include/linux/printbuf.h
-> @@ -0,0 +1,122 @@
-> +/* SPDX-License-Identifier: LGPL-2.1+ */
-> +/* Copyright (C) 2022 Kent Overstreet */
-> +
-> +#ifndef _LINUX_PRINTBUF_H
-> +#define _LINUX_PRINTBUF_H
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/string.h>
-> +
-> +/*
-> + * Printbufs: String buffer for outputting (printing) to, for vsnprintf
-> + */
-> +
-> +struct printbuf {
-> +	char			*buf;
-> +	unsigned		size;
-> +	unsigned		pos;
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from arch/x86/include/asm/percpu.h:27,
+>                     from arch/x86/include/asm/preempt.h:6,
+>                     from include/linux/preempt.h:78,
+>                     from include/linux/spinlock.h:55,
+>                     from include/linux/mmzone.h:8,
+>                     from include/linux/gfp.h:6,
+>                     from include/linux/mm.h:7,
+>                     from arch/x86/mm/mem_encrypt_amd.c:14:
+>    arch/x86/mm/mem_encrypt_amd.c: In function 'sme_early_init':
+>>> arch/x86/mm/mem_encrypt_amd.c:499:36: error: 'protection_map' undeclared (first use in this function)
+>      499 |         for (i = 0; i < ARRAY_SIZE(protection_map); i++)
+>          |                                    ^~~~~~~~~~~~~~
+>    include/linux/kernel.h:55:33: note: in definition of macro 'ARRAY_SIZE'
+>       55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>          |                                 ^~~
+>    arch/x86/mm/mem_encrypt_amd.c:499:36: note: each undeclared identifier is reported only once for each function it appears in
+>      499 |         for (i = 0; i < ARRAY_SIZE(protection_map); i++)
+>          |                                    ^~~~~~~~~~~~~~
+>    include/linux/kernel.h:55:33: note: in definition of macro 'ARRAY_SIZE'
+>       55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>          |                                 ^~~
+>    In file included from include/linux/bits.h:22,
+>                     from include/linux/ratelimit_types.h:5,
+>                     from include/linux/printk.h:9,
+>                     from include/asm-generic/bug.h:22,
+>                     from arch/x86/include/asm/bug.h:87,
+>                     from include/linux/bug.h:5,
+>                     from include/linux/mmdebug.h:5,
+>                     from include/linux/mm.h:6,
+>                     from arch/x86/mm/mem_encrypt_amd.c:14:
+>    include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not an integer constant
+>       16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+>          |                                                   ^
+>    include/linux/compiler.h:240:33: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
+>      240 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+>          |                                 ^~~~~~~~~~~~~~~~~
+>    include/linux/kernel.h:55:59: note: in expansion of macro '__must_be_array'
+>       55 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>          |                                                           ^~~~~~~~~~~~~~~
+>    arch/x86/mm/mem_encrypt_amd.c:499:25: note: in expansion of macro 'ARRAY_SIZE'
+>      499 |         for (i = 0; i < ARRAY_SIZE(protection_map); i++)
+>          |                         ^~~~~~~~~~
 
-No naked unsigneds.
+This patch fixes the build failure here.
 
-> +};
-> +
-> +/*
-> + * Returns size remaining of output buffer:
-> + */
-> +static inline unsigned printbuf_remaining_size(struct printbuf *out)
-> +{
-> +	return out->pos < out->size ? out->size - out->pos : 0;
-> +}
-> +
-> +/*
-> + * Returns number of characters we can print to the output buffer - i.e.
-> + * excluding the terminating nul:
-> + */
-> +static inline unsigned printbuf_remaining(struct printbuf *out)
-> +{
-> +	return out->pos < out->size ? out->size - out->pos - 1 : 0;
-> +}
-
-Those two are so similar mistakes will be make.
-You can also just return negatives when the buffer has overlowed
-and get the callers to test < or <= as required.
-
-I also wonder it is necessary to count the total length
-when the buffer isn't long enough?
-Unless there is a real pressing need for it I'd not bother.
-Setting pos == size (after writing the '\0') allows
-overflow be detected without most of the dangers.
-
-> +
-> +static inline unsigned printbuf_written(struct printbuf *out)
-> +{
-> +	return min(out->pos, out->size);
-
-That excludes the '\0' for short buffers but includes
-it for overlong ones.
-
-> +}
-> +
-> +/*
-> + * Returns true if output was truncated:
-> + */
-> +static inline bool printbuf_overflowed(struct printbuf *out)
-> +{
-> +	return out->pos >= out->size;
-> +}
-> +
-> +static inline void printbuf_nul_terminate(struct printbuf *out)
-> +{
-> +	if (out->pos < out->size)
-> +		out->buf[out->pos] = 0;
-> +	else if (out->size)
-> +		out->buf[out->size - 1] = 0;
-> +}
-> +
-> +static inline void __prt_char(struct printbuf *out, char c)
-> +{
-> +	if (printbuf_remaining(out))
-> +		out->buf[out->pos] = c;
-
-At this point it is (should be) always safe to add the '\0'.
-Doing so would save the extra conditionals later on.
-
-> +	out->pos++;
-> +}
-> +
-> +static inline void prt_char(struct printbuf *out, char c)
-> +{
-> +	__prt_char(out, c);
-> +	printbuf_nul_terminate(out);
-> +}
-> +
-> +static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
-> +{
-> +	unsigned i, can_print = min(n, printbuf_remaining(out));
-> +
-> +	for (i = 0; i < can_print; i++)
-> +		out->buf[out->pos++] = c;
-> +	out->pos += n - can_print;
-> +}
-> +
-> +static inline void prt_chars(struct printbuf *out, char c, unsigned n)
-> +{
-> +	__prt_chars(out, c, n);
-> +	printbuf_nul_terminate(out);
-> +}
-> +
-> +static inline void prt_bytes(struct printbuf *out, const void *b, unsigned n)
-> +{
-> +	unsigned i, can_print = min(n, printbuf_remaining(out));
-> +
-> +	for (i = 0; i < can_print; i++)
-> +		out->buf[out->pos++] = ((char *) b)[i];
-> +	out->pos += n - can_print;
-> +
-> +	printbuf_nul_terminate(out);
-
-jeepers - that can be written so much better.
-Something like:
-	unsigned int i, pos = out->pos;
-	int space = pos - out->size - 1;
-	char *tgt = out->buf + pos;
-	const char *src = b;
-	out->pos = pos + n;
-
-	if (space <= 0)
-		return;
-	if (n > space)
-		n = space;
-
-	for (i = 0; i < n; i++)
-		tgt[i] = src[i];
-	tgt[1] = 0;
-
-> +}
-> +
-> +static inline void prt_str(struct printbuf *out, const char *str)
-> +{
-> +	prt_bytes(out, str, strlen(str));
-
-Do you really need to call strlen() and then process
-the buffer byte by byte?
-
-	David
-
-> +}
-> +
-> +static inline void prt_hex_byte(struct printbuf *out, u8 byte)
-> +{
-> +	__prt_char(out, hex_asc_hi(byte));
-> +	__prt_char(out, hex_asc_lo(byte));
-> +	printbuf_nul_terminate(out);
-> +}
-> +
-> +static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
-> +{
-> +	__prt_char(out, hex_asc_upper_hi(byte));
-> +	__prt_char(out, hex_asc_upper_lo(byte));
-> +	printbuf_nul_terminate(out);
-> +}
-> +
-> +#define PRINTBUF_EXTERN(_buf, _size)			\
-> +((struct printbuf) {					\
-> +	.buf	= _buf,					\
-> +	.size	= _size,				\
-> +})
-> +
-> +#endif /* _LINUX_PRINTBUF_H */
-> --
-> 2.36.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+index f6d038e2cd8e..d0c2ec1bb659 100644
+--- a/arch/x86/mm/mem_encrypt_amd.c
++++ b/arch/x86/mm/mem_encrypt_amd.c
+@@ -484,6 +484,8 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages, boo
+        enc_dec_hypercall(vaddr, npages, enc);
+ }
+ 
++extern pgprot_t protection_map[16];
++
+ void __init sme_early_init(void)
+ {
+        unsigned int i;
+diff --git a/arch/x86/mm/pgprot.c b/arch/x86/mm/pgprot.c
+index 7eca1b009af6..96eca0b2ec90 100644
+--- a/arch/x86/mm/pgprot.c
++++ b/arch/x86/mm/pgprot.c
+@@ -4,7 +4,7 @@
+ #include <linux/mm.h>
+ #include <asm/pgtable.h>
+ 
+-static pgprot_t protection_map[16] __ro_after_init = {
++pgprot_t protection_map[16] __ro_after_init = {
+        [VM_NONE]                                       = PAGE_NONE,
+        [VM_READ]                                       = PAGE_READONLY,
+        [VM_WRITE]                                      = PAGE_COPY,

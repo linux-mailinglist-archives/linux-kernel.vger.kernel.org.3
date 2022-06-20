@@ -2,52 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17224551CCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBE3551961
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245700AbiFTNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S233263AbiFTMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245456AbiFTNIu (ORCPT
+        with ESMTP id S231730AbiFTMuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:08:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3B618380;
-        Mon, 20 Jun 2022 06:02:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA066614E9;
-        Mon, 20 Jun 2022 13:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFD3C3411B;
-        Mon, 20 Jun 2022 13:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730109;
-        bh=gC3Xx2zFCXwqUVpSF+7ZiWx0Laaw7FOFLzekA/Sq/VY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=knQjE2bb2NEbBLE8akF0FQKwjFOL8EFsXGfgu8XRlzTR6ypPgw3buf+IXG/pYbBfN
-         upCKwG6vptnI/8d5TaSxM7BD0U8VNFYDrzsq56F7orRcFFgr3BU47l0XVvViGQ5vU0
-         Dx6tS5RPs1Q+vjfZf41s+kucUJGHWt6eD7+SYeQ8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 22/84] scsi: lpfc: Allow reduced polling rate for nvme_admin_async_event cmd completion
+        Mon, 20 Jun 2022 08:50:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5560C13E2C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:50:49 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id mf9so582914ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wVGPCyQyPkXTNhupcCugMyUqAIjoQ2WAlQx451WBx0I=;
+        b=dYC9w8eDKPI+JGg49DsE+daHrtI1etV780GnsMfr8ha5KntBMDTWbv4sYUG4CY9gNn
+         fbvpsVmFnde2GARCnt42yjPrlgz1A/fHOjq2aQwU58khMNY+OzzgHto+iU/g94o0LjsH
+         HIDWiFwMjvQUN/Qp7xywZefNzn+qJympTQOCkfIqqaSVU4S2NkcmSDPQKbEin+5+b5Xm
+         nXD17eBwKop1QpWM5iySrFoK9usHrVWafJVabIYCIyYuVWln8bH3THIxC4E17oMEew5e
+         Iysip+1On7OdaqNte+TrbeAGQHryGTDFQyZF5rkt1LyGKR1S4ARKUJ8vUh3StZpSJfU+
+         839g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wVGPCyQyPkXTNhupcCugMyUqAIjoQ2WAlQx451WBx0I=;
+        b=yfCWPD25/Ee10zVBZijYbi0SjpC4I79iGM0nHpB3B/pl3dtZYGJHJYw6MJDWNnd/XF
+         4LzjCnt/HcWZ8U+rN1X3VLBk9rXeDY9c0vu5Qog6y6VhXNfk6UZB07LNQgjNY+cLm1vl
+         tRqaF/BLcUgt1cUnXXQJF8ibh7B3YX5rPrelGBEmdGO+sSrwuf8I/BwUA6JgubhRnWan
+         ezePT8K36hVmPwFmea9UiBrL9z911rDETw57J3x2PzKbV39EC2mkISCwvzobdfoXwBj/
+         Uoi1YlLr62kjazClbB9bhS0xCt93oKgNFIcFuReYA0ZFzXJ+8ke8Iqjlkk6soazoMW6V
+         ueqQ==
+X-Gm-Message-State: AJIora/3Gz9wc2oaVQkT/QNvzSyyz3OrZJoo4trzrNHYWfbSSawgsb96
+        oqy7FgOdlPzul/l/qtZ4ncT+IA==
+X-Google-Smtp-Source: AGRyM1szXn/V8sntLjlItwCnzxeR/PMgaxIVnmKQ5ioDo/U2K9vNJYDX8XT2OfmCLsGo4DE6u1he+Q==
+X-Received: by 2002:a17:907:6e0f:b0:706:9a4f:2f3d with SMTP id sd15-20020a1709076e0f00b007069a4f2f3dmr20880444ejc.413.1655729447921;
+        Mon, 20 Jun 2022 05:50:47 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z7-20020a05640240c700b0042617ba63c2sm10546832edb.76.2022.06.20.05.50.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 05:50:47 -0700 (PDT)
+Message-ID: <c3785da1-0142-5c4c-4f46-c569c8c06efa@linaro.org>
 Date:   Mon, 20 Jun 2022 14:50:45 +0200
-Message-Id: <20220620124721.548828402@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba
+ SoC binding
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-3-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613195658.5607-3-brad@pensando.io>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,73 +87,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+On 13/06/2022 21:56, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
+> 
+> AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
+> explicitly controls byte-lane enables.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+>  .../devicetree/bindings/mmc/cdns,sdhci.yaml        | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> index 4207fed62dfe..35bc4cf6f214 100644
+> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> @@ -13,10 +13,24 @@ maintainers:
+>  allOf:
+>    - $ref: mmc-controller.yaml
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amd,pensando-elba-sd4hc
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: Cadence host controller registers
+> +            - description: Byte-lane control register
+> +          minItems: 2
+> +
 
-[ Upstream commit 2e7e9c0c1ec05f18d320ecc8a31eec59d2af1af9 ]
-
-NVMe Asynchronous Event Request commands have no command timeout value per
-specifications.
-
-Set WQE option to allow a reduced FLUSH polling rate for I/O error
-detection specifically for nvme_admin_async_event commands.
-
-Link: https://lore.kernel.org/r/20220603174329.63777-9-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/lpfc/lpfc_hw4.h  |  3 +++
- drivers/scsi/lpfc/lpfc_nvme.c | 11 +++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_hw4.h b/drivers/scsi/lpfc/lpfc_hw4.h
-index 47e832b7f2c2..bfbc1c4fcab1 100644
---- a/drivers/scsi/lpfc/lpfc_hw4.h
-+++ b/drivers/scsi/lpfc/lpfc_hw4.h
-@@ -4281,6 +4281,9 @@ struct wqe_common {
- #define wqe_sup_SHIFT         6
- #define wqe_sup_MASK          0x00000001
- #define wqe_sup_WORD          word11
-+#define wqe_ffrq_SHIFT         6
-+#define wqe_ffrq_MASK          0x00000001
-+#define wqe_ffrq_WORD          word11
- #define wqe_wqec_SHIFT        7
- #define wqe_wqec_MASK         0x00000001
- #define wqe_wqec_WORD         word11
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 03c81cec6bc9..ef92e0b4b9cf 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -1315,7 +1315,8 @@ lpfc_nvme_prep_io_cmd(struct lpfc_vport *vport,
- {
- 	struct lpfc_hba *phba = vport->phba;
- 	struct nvmefc_fcp_req *nCmd = lpfc_ncmd->nvmeCmd;
--	struct lpfc_iocbq *pwqeq = &(lpfc_ncmd->cur_iocbq);
-+	struct nvme_common_command *sqe;
-+	struct lpfc_iocbq *pwqeq = &lpfc_ncmd->cur_iocbq;
- 	union lpfc_wqe128 *wqe = &pwqeq->wqe;
- 	uint32_t req_len;
- 
-@@ -1371,8 +1372,14 @@ lpfc_nvme_prep_io_cmd(struct lpfc_vport *vport,
- 		cstat->control_requests++;
- 	}
- 
--	if (pnode->nlp_nvme_info & NLP_NVME_NSLER)
-+	if (pnode->nlp_nvme_info & NLP_NVME_NSLER) {
- 		bf_set(wqe_erp, &wqe->generic.wqe_com, 1);
-+		sqe = &((struct nvme_fc_cmd_iu *)
-+			nCmd->cmdaddr)->sqe.common;
-+		if (sqe->opcode == nvme_admin_async_event)
-+			bf_set(wqe_ffrq, &wqe->generic.wqe_com, 1);
-+	}
-+
- 	/*
- 	 * Finish initializing those WQE fields that are independent
- 	 * of the nvme_cmnd request_buffer
--- 
-2.35.1
+Except Rob's comment, the entire section now should be moved to bottom -
+just before unevaluated/additionalProperties:false
 
 
-
+Best regards,
+Krzysztof

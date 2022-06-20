@@ -2,118 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE157552848
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8E1552849
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347395AbiFTXZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 19:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S1347760AbiFTXZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 19:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347354AbiFTXY6 (ORCPT
+        with ESMTP id S1347700AbiFTXZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 19:24:58 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2068127157
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 16:21:54 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id b23so4950176ljh.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 16:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ur/MUBYcS1Q/QKNpXUCglSf5F59d0HWGTRVKBIepEDE=;
-        b=GNRt7tT9S9xvcwHyHM40dX+0JaFJIUhwyEwwLSabMcUU7w33ohJRv8TmTIzPcUpjdk
-         FE7h/zE4Ge2KA3ZRWr9ghHl1SOIXB1mokPhl5UTIMIkubDtlr98Kg1tUlTecVnUR0ZjO
-         NUbBvpqXCB5d2GXmh/Mm0j4YS7ZK7N0TCM/KL2G0IHEySgCZ4rpRLf/szNbIZhpWr1fh
-         AoLJm2yGFojXcMtqpDKAYjjgVdt7xMxd0bPXvTg+mykdsnEQm4/XqG1kJAdPj7OaJqpK
-         HuRDmP5r++IBnSOCeGCcDWqPABjceE1MEaHgMgZUVoWIbmExZRBmmMOGmzQAxVOd6J7/
-         uJUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ur/MUBYcS1Q/QKNpXUCglSf5F59d0HWGTRVKBIepEDE=;
-        b=OcF7qNeaOUAoEdLrwfuxNBRsC2m87KOGJ0Q5mKcUC6UoyCJZh4Kw3ym2Pf6c/RX+k0
-         OpF05UbRbHvv/kBI6Ec9FiIlCESivazlGchjA2aoaszQd54B39I2VeB0WbNEZiab3FX5
-         hF3bL6hDVia8ej75sCyhdEMFtozPMmauqCtyaTdYE30xo3zgpnkKMJNMYWvmMujqlt4S
-         uaMvO97Oq7kkb/1OjuXUkEMl85dm2ThnHjRLdcfSA7RUOK8Ut3c22L6+6gPohWpQsKoa
-         bPJPb/rv44TWrPt+6FBalCzMvvddhEhb77Ees/F8a4hFgZ/nfyCXxnftEj6v9Ht/TTqN
-         zgLg==
-X-Gm-Message-State: AJIora+X5VK42BBWnXU/ptinjkZJbrLINVw3nJvSGREZgKqQQ9mi0ORu
-        zuG/wA5ophWv723FOt06E5WpLIQB2qn0Kva2q4TCnA==
-X-Google-Smtp-Source: AGRyM1umHmCHjUaSlc4jQIWCikcJqPjhTSaSbtvEsQB+8Sb4DNMpDbRmU2BtcR+xboE2+9+orXsggpCBfshz6a3nCzc=
-X-Received: by 2002:a2e:a58d:0:b0:25a:6348:9595 with SMTP id
- m13-20020a2ea58d000000b0025a63489595mr6664777ljp.72.1655767312454; Mon, 20
- Jun 2022 16:21:52 -0700 (PDT)
+        Mon, 20 Jun 2022 19:25:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B4D13D41;
+        Mon, 20 Jun 2022 16:23:07 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1655767384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bW3D6fQYGfq+LIKDb9Z3o0JUaxdED14t0XLDrOY7eGE=;
+        b=0MFlDp+fgTDE8bBCTtUT18/CkQO+E7Xwyft0XBiN29o7FLIk/WE2N81Vv5OmlIfdDN0/KE
+        AhVpxfDMW/n0tHyDElhcv0sTEaafym4f7eZBW8238jZRPHyf9g3KtWT7LOfRz3ugAVtJdc
+        KAuoXrQJofP3eQXu6c3OFotAv3puGRtEI1UPGMCfgdeGjmhP7q8DCfGNsFgj0qwBj9wmmn
+        EcjPoxZ4f7mkGdJqmfJ9S6Pr+yhyfujwRf81jSoN+bG/gxWRVyx4O8tWKl0N5EZkhCBX4Y
+        ypC/4IlZWkJdLc7ftq5yuBV7ZyqM19ZjhgUurm40WOe5VeIRSEusjE+TWOLqTw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1655767384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bW3D6fQYGfq+LIKDb9Z3o0JUaxdED14t0XLDrOY7eGE=;
+        b=Sxeyk7CewSWdRmO93S3lfQ2EPCEZdxQPQkZ1Yz73CbaU8YQEAeKXP7qFpFEWxEymEakMlV
+        CSuJ4OL1MbbmppBw==
+To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH rcu 11/12] torture: Flush printk() buffers before
+ powering off
+In-Reply-To: <20220620225817.3843106-11-paulmck@kernel.org>
+References: <20220620225814.GA3842995@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225817.3843106-11-paulmck@kernel.org>
+Date:   Tue, 21 Jun 2022 01:29:04 +0206
+Message-ID: <8735fyc42v.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-10-mw@semihalf.com>
- <YrC6Ihd4I13ctL18@lunn.ch>
-In-Reply-To: <YrC6Ihd4I13ctL18@lunn.ch>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 21 Jun 2022 01:21:42 +0200
-Message-ID: <CAPv3WKeLYDR3PuspOGU-oVf8tak5aNRDNP0nEN-jDJmoWa-USg@mail.gmail.com>
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA description
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 20 cze 2022 o 20:19 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
+On 2022-06-20, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> The rcutorture test suite produces quite a bit of console output
+> at the end of a test.  This means that the new printk() kthreads
+> are likely to be in the process of flushing output at the time of
+> the torture_shutdown() function's call to kernel_power_off().
 >
-> On Mon, Jun 20, 2022 at 05:02:22PM +0200, Marcin Wojtas wrote:
-> > Describe the Distributed Switch Architecture (DSA) - compliant
-> > MDIO devices. In ACPI world they are represented as children
-> > of the MDIO busses, which are responsible for their enumeration
-> > based on the standard _ADR fields and description in _DSD objects
-> > under device properties UUID [1].
+> This commit therefore invokes pr_flush(1000, true) to flush this
+> pending console output before invoking kernel_power_off().
 >
-> I would say this is too limiting. In the DT world, they are not
-> limited to MDIO children. They can be I2C children, SPI children
-> etc. There are plenty of I2C switches and SPI switches. This is
-> actually something we got wrong with the first DT binding. We simply
-> translated the platform data in DT, and at that time, there was only
-> MDIO switches supported. That was a real blocker to I2C, SPI and MMIO
-> devices until we discarded the DT binding and had a second go.
->
-> DSA switches are just devices on a bus, any sort of bus.
->
-> Look at Documentation/devicetree/binding/net/dsa/dsa.yaml. There is no
-> reference to MDIO.
->
-> I would expect the same with ACPI. Somehow the bus enumerates and
-> instantiates a device on the bus. The device then registers itself
-> with the DSA core. The DSA core does not care what sort of bus it is
-> on, that is the drivers problem.
->
+> Fixes: 8e274732115f ("printk: extend console_lock for per-console locking")
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Thanks for mentioning the other options. It makes things easier and
-the MDIO as current strict dependency will be dropped.
-
-Best regards,
-Marcin
+Reviewed-by: John Ogness <john.ogness@linutronix.de>

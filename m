@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8B755282C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF21552826
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347514AbiFTXSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 19:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S1347540AbiFTXSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 19:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347131AbiFTXRR (ORCPT
+        with ESMTP id S1347158AbiFTXRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 19:17:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CABC22523;
-        Mon, 20 Jun 2022 16:13:31 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E8B20F69;
+        Mon, 20 Jun 2022 16:13:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE680614FB;
-        Mon, 20 Jun 2022 23:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33909C341C5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84BFEB8125A;
+        Mon, 20 Jun 2022 23:13:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E875C341C8;
         Mon, 20 Jun 2022 23:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1655766810;
-        bh=1Srkx65V0c9fIsN8Z0dMTBAwhSk2DBTXR07RMoGi6c4=;
+        bh=hQDDfCX6FrCbbHOOBzzqdZX9si4toBVrX232zBu3hPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dq2ZBHdfTiwpVgxDlLftqae43xY/guqf/ZId2SSTTmCVujCRb4I/S7+GrshWoUVzh
-         6whwK6x/wNXmcXtC+GV5i57GpmUpyJd4O/yFN2TfrEWWMqbNXlHWlWAPqhqZXw2kki
-         ASSCpnRW+9DNkYYZEL4ypv+wuMV9EyA+JwkrPc1OhwQsoj6pAWSmxQhRrCqF6OY9+y
-         fo/4yxLbl70olO2g895b60j7zi8y/eJzDJi/WyhweTueQa3Hrh8BIG8AicwaBx0JmS
-         K5tZUVS4u69Mc6C+P/tpYvohOsbTd4JRHRamFKzQlOXQFV9vgg56LvVJ6VCanY3sZC
-         WTAQuYgFGKySg==
+        b=pKbFH2f6v1EhhycIA1bhHU6Mr6VnY3KlF2ITwaZml3znskuB5lk/aHqTev5gUFcRL
+         5veMbV4mBKK2WpFjWmLHyLCQ+EjFKGq75NegtlJNOVz6KJTaG/WbSaADNndRK+w3hr
+         g02s4enD3GZmugFmiVwG7jxDab1hRF8U2En+3HyU2zgzJGMpHdudZcmrNumHFE61Fs
+         GIGQ8L/5m8+0ajcBvjICcadLc1JPciMt/qLkLaSIDFYibHwifQlefrHdo86h963kGu
+         SkzdY6TJp89D8e9vYPbErYueu8Ms/0jZ/gtjnTUL3j4TtMYHJhhuvKFUW6do9OjMR2
+         v2L8NAHXGsbdg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E18295C0A33; Mon, 20 Jun 2022 16:13:29 -0700 (PDT)
+        id E37125C0ADC; Mon, 20 Jun 2022 16:13:29 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 4/5] tools/nolibc: make the default target build the headers
-Date:   Mon, 20 Jun 2022 16:13:27 -0700
-Message-Id: <20220620231328.3845126-4-paulmck@kernel.org>
+Subject: [PATCH rcu 5/5] tools/nolibc: add a help target to list supported targets
+Date:   Mon, 20 Jun 2022 16:13:28 -0700
+Message-Id: <20220620231328.3845126-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220620231325.GA3845036@paulmck-ThinkPad-P17-Gen-1>
 References: <20220620231325.GA3845036@paulmck-ThinkPad-P17-Gen-1>
@@ -59,47 +59,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-The help in "make -C tools" enumerates nolibc as a valid target so we
-must at least make it do something. Let's make it do the equivalent
-of "make headers" in that it will prepare a sysroot with the arch's
-headers, but will not install the kernel's headers. This is the
-minimum some tools will need when built with a full-blown toolchain
-anyway.
+The "help" target simply presents the list of supported targets
+and the current set of variables being used to build the sysroot.
+
+Since the help in tools/ suggests to use "install", which is
+supported by most tools while such a target is not really relevant
+here, an "install" target was also added, redirecting to "help".
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/Makefile                | 3 +++
- tools/include/nolibc/Makefile | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ tools/include/nolibc/Makefile | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/tools/Makefile b/tools/Makefile
-index c074e42fd92f5..e497875fc7e3f 100644
---- a/tools/Makefile
-+++ b/tools/Makefile
-@@ -78,6 +78,9 @@ bpf/%: FORCE
- libapi: FORCE
- 	$(call descend,lib/api)
- 
-+nolibc: FORCE
-+	$(call descend,include/nolibc)
-+
- nolibc_%: FORCE
- 	$(call descend,include/nolibc,$(patsubst nolibc_%,%,$@))
- 
 diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index e8bac6ef36538..9768819abd55d 100644
+index 9768819abd55d..cfd06764b5aee 100644
 --- a/tools/include/nolibc/Makefile
 +++ b/tools/include/nolibc/Makefile
-@@ -29,7 +29,7 @@ all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
-              sys.h time.h types.h unistd.h
- 
+@@ -31,6 +31,23 @@ all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
  # install all headers needed to support a bare-metal compiler
--all:
-+all: headers
+ all: headers
  
++install: help
++
++help:
++	@echo "Supported targets under nolibc:"
++	@echo "  all                 call \"headers\""
++	@echo "  clean               clean the sysroot"
++	@echo "  headers             prepare a sysroot in tools/include/nolibc/sysroot"
++	@echo "  headers_standalone  like \"headers\", and also install kernel headers"
++	@echo "  help                this help"
++	@echo ""
++	@echo "These targets may also be called from tools as \"make nolibc_<target>\"."
++	@echo ""
++	@echo "Currently using the following variables:"
++	@echo "  ARCH    = $(ARCH)"
++	@echo "  OUTPUT  = $(OUTPUT)"
++	@echo ""
++
  # Note: when ARCH is "x86" we concatenate both x86_64 and i386
  headers:
+ 	$(Q)mkdir -p $(OUTPUT)sysroot
 -- 
 2.31.1.189.g2e36527f23
 

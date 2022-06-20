@@ -2,223 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6CD5520E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61085520F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244044AbiFTP3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S239373AbiFTP3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243889AbiFTP2W (ORCPT
+        with ESMTP id S242525AbiFTP3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:28:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527D3CD8;
-        Mon, 20 Jun 2022 08:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655738883; x=1687274883;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Z7q7xtuOU4GkNKNky8lxCljPlrJivkK5wKNhOZIUxpA=;
-  b=OFQ5hiapOrUBBEUHdNN3rI9pzaEJLE/yQYM0iXallO+zz643s6mUygBc
-   D6W4kI087DC7cIL8BFZ7jOISoBULMndK55nnHVeK0ZT/4yGDswFyRE3by
-   0vf3kJvWQBYrA12SS+Yc+oMZFDDchtPmrDXQph6WyQzBoiFk9FTNO3INW
-   b/VKiExNiSa920pMDaASKO8x/0zBxNaZ5D5A5MSl+8GwC9t8wJoQONo2j
-   ngFnZVUb5KjK8u6f9f/3x7umUn/wbmEKz7kNwOITQ2xkCkEYjhV7/xNUv
-   nw2kvAC34fkl2acSo0XcV3gqBbMflKrj+D9+20Ig9AkgW2YL44uvh2Olj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="305359536"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="305359536"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:28:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="614430674"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2022 08:27:52 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25KFRoXw029454;
-        Mon, 20 Jun 2022 16:27:50 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Sparc kernel list <sparclinux@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>
-Subject: Re: [alobakin:bitops 3/7] block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
-Date:   Mon, 20 Jun 2022 17:27:39 +0200
-Message-Id: <20220620152739.2631490-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CAHp75VfQ+DLFP+Jq+m=cejwk+=h9jLOQuL6uK6OCKujg=9Lfgw@mail.gmail.com>
-References: <202206191726.wq70mbMK-lkp@intel.com> <20220617144031.2549432-1-alexandr.lobakin@intel.com> <20220620135146.2628908-1-alexandr.lobakin@intel.com> <CAHp75VfQ+DLFP+Jq+m=cejwk+=h9jLOQuL6uK6OCKujg=9Lfgw@mail.gmail.com>
+        Mon, 20 Jun 2022 11:29:31 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F97B51
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:29:29 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id p31so16335954qvp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5VndZVtq5GR8zAUTTPcriPZTsvb65boEMepiu1YlJlU=;
+        b=e+aI3OnbMi7dROFiNyQpARD46xR1ZpoaOYC+mTGz52e4ier/93ErjJLvX1YuCh3P9G
+         iay/akhVM++PXFIyheVi7JhXXMu66Qe4khLKYQ4Z/VZetL77bKQAanpNkA0oG8DHYw6X
+         EjVX4iEZuxd6plQKxiQyRMXf619L0u5kAVr8lriKyWeFjQ4dPZIUqoCCcdIa/m83mze/
+         2tnL8wqqT+Ja/UgO3+P6faR6Du5WXPX9DS/YXr0hzNV0oKhtnRHhhSPDhVKC1UkrULEQ
+         Xj+BK3NmGfWK+DAcj+Gug244HkM3Lie1hYgXH8HQqsKG4KTdWV8l46aq1P6KoepSvr28
+         q2IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5VndZVtq5GR8zAUTTPcriPZTsvb65boEMepiu1YlJlU=;
+        b=ULKb/mrXq/FqwAQ3epbqGfxLHUWpUNK3XVGuc9wAETDSB2Pm/bHHQvrrKRil/LzbZK
+         e0KL7AWLXHaRDuf42muT3oaPsmOfG8tkOa3dvBueVQk+RxUrCv+hhNioq7VBHPU8nNeT
+         YpcGRcjpuUqFWe86IU1CFNGDNdxJspUEnPX2W1AXEB9RfPgvNHdEzEoPa1MNoZIt126G
+         u6iPTKbEN/GdLip1PGOZpT4Gsf2QKQR4GAPYFU8yrHyEPyMYMpcIqQwyaaLG/fdsrwNX
+         y4pZjP1+i9zak/Zy4J4QNvTUjEgKHgOBja+5U3mGi5C6gPMAbCkpvCEplZJZLFWnJgtX
+         Ua5Q==
+X-Gm-Message-State: AJIora9GLZALrD7+tVj+HocaiqHhP0ORP0VJNQ1+dBo1HZUQj1B1qTsm
+        xgd2BkDmG+aC7VqWk6xCCdpiYrAA5qY0X8LhYkjKvA==
+X-Google-Smtp-Source: AGRyM1tdVpp7xvSw4FOS/ZCTUWJ61lnNFgxg2ZTAAv4XYtQW3PrOGtPyWsT2mwBT4mb4dNri1J2G990AtCSKCiKulGE=
+X-Received: by 2002:ac8:598f:0:b0:305:8f8:2069 with SMTP id
+ e15-20020ac8598f000000b0030508f82069mr20510425qte.370.1655738968648; Mon, 20
+ Jun 2022 08:29:28 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220620150759.11507-1-johan+linaro@kernel.org>
+In-Reply-To: <20220620150759.11507-1-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 20 Jun 2022 18:29:17 +0300
+Message-ID: <CAA8EJpr02CGRLyafkVV6V=0mchbfQga2=YiE_MkhuLE9veUj3w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: qcom: Drop unused post-init callbacks
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 20 Jun 2022 17:18:40 +0200
+On Mon, 20 Jun 2022 at 18:19, Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> Drop the unused post_init and post_deinit callbacks that were added for
+> the now removed pipe clock handling.
 
-> On Mon, Jun 20, 2022 at 4:48 PM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> >
-> > From: kernel test robot <lkp@intel.com>
-> > Date: Sun, 19 Jun 2022 17:20:05 +0800
-> >
-> > Also, could someone please help me with this? I don't get what went
-> > wrong with sparse, it's not even some new code, just moving old
-> > stuff.
-> >
-> > > tree:   https://github.com/alobakin/linux bitops
-> > > head:   9bd39b17ce49d350eed93a031e0da6389067013e
-> > > commit: 521611f961a7dda92eefa26e1afd3914c06af64e [3/7] bitops: unify non-atomic bitops prototypes across architectures
-> > > config: mips-randconfig-s031-20220619 (https://download.01.org/0day-ci/archive/20220619/202206191726.wq70mbMK-lkp@intel.com/config)
-> > > compiler: mips64el-linux-gcc (GCC) 11.3.0
-> > > reproduce:
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # apt-get install sparse
-> > >         # sparse version: v0.6.4-30-g92122700-dirty
-> > >         # https://github.com/alobakin/linux/commit/521611f961a7dda92eefa26e1afd3914c06af64e
-> > >         git remote add alobakin https://github.com/alobakin/linux
-> > >         git fetch --no-tags alobakin bitops
-> > >         git checkout 521611f961a7dda92eefa26e1afd3914c06af64e
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
-> > >
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > >
-> > > sparse warnings: (new ones prefixed by >>)
-> > >    command-line: note: in included file:
-> > >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-> > >    builtin:0:0: sparse: this was the original definition
-> > >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-> > >    builtin:0:0: sparse: this was the original definition
-> > >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-> > >    builtin:0:0: sparse: this was the original definition
-> > >    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-> > >    builtin:0:0: sparse: this was the original definition
-> > >    block/elevator.c: note: in included file (through include/linux/bitops.h, include/linux/kernel.h):
-> > >    include/asm-generic/bitops/generic-non-atomic.h:29:9: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:30:9: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:32:10: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:32:16: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:27:1: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:38:9: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:39:9: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:41:10: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:41:16: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:36:1: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:56:9: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:57:9: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:59:10: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:59:15: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:54:1: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:74:9: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:75:9: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:76:9: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:78:10: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:78:14: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:78:20: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:79:17: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:79:23: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:79:9: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:72:1: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:94:9: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:95:9: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:96:9: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:98:10: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:98:14: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:98:21: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:99:17: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:99:23: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:99:9: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:92:1: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:106:9: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:107:9: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:108:9: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:110:10: sparse: sparse: unreplaced symbol 'p'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:110:14: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:110:20: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:111:17: sparse: sparse: unreplaced symbol 'old'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:111:23: sparse: sparse: unreplaced symbol 'mask'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:111:9: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:104:1: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:127:9: sparse: sparse: unreplaced symbol 'return'
-> > >    include/asm-generic/bitops/generic-non-atomic.h:120:1: sparse: sparse: unreplaced symbol 'return'
-> > > >> block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
-> > >
-> > > vim +222 block/elevator.c
-> > >
-> > > 9817064b68fef7 Jens Axboe        2006-07-28  217
-> > > 70b3ea056f3074 Jens Axboe        2016-12-07  218  void elv_rqhash_add(struct request_queue *q, struct request *rq)
-> > > 9817064b68fef7 Jens Axboe        2006-07-28  219  {
-> > > b374d18a4bfce7 Jens Axboe        2008-10-31  220      struct elevator_queue *e = q->elevator;
-> > > 9817064b68fef7 Jens Axboe        2006-07-28  221
-> > > 9817064b68fef7 Jens Axboe        2006-07-28 @222      BUG_ON(ELV_ON_HASH(rq));
-> > > 242d98f077ac0a Sasha Levin       2012-12-17  223      hash_add(e->hash, &rq->hash, rq_hash_key(rq));
-> > > e806402130c9c4 Christoph Hellwig 2016-10-20  224      rq->rq_flags |= RQF_HASHED;
-> > > 9817064b68fef7 Jens Axboe        2006-07-28  225  }
-> > > bd166ef183c263 Jens Axboe        2017-01-17  226  EXPORT_SYMBOL_GPL(elv_rqhash_add);
-> > > 9817064b68fef7 Jens Axboe        2006-07-28  227
-> 
-> It looks like a false positive for _your_ case, but if you want to fix
-> here is the background.
-> 
-> The sparse has an ability to control custom types that should never
-> set bits outside of the limited range. For this the special annotation
-> is given, i.e. __bitwise. Since the culprit type is defined that way
-> it means the pure integer (signed or unsigned) that comes with pure
-> definition can't be used in a safe way. To solve this each of such
-> definitions should be converted to the very same type (req_flags_t).
-> See serial core where some UART flags are defined in a similar way and
-> how code copes with that.
+I think the IPQ60xx PCIe support is intended to use post_init
+callback. See [1]. That is the reason why I left the post_init in
+place, while reworking the pipe clocks handling.
 
-Ah, I haven't looked at the req_flags_t definition and didn't know
-it uses bitwise annotation. So it's a local blk layer problem (not
-casting from/to bitwise), not a generic header issue. Thanks for
-the hint!
+[1] https://lore.kernel.org/linux-arm-msm/a470b27a642d21e7b3e64d0f3287c0c3521bd182.1655028401.git.baruch@tkos.co.il/
 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>
+> Now that Bjorn has merged the pipe clock series:
+>
+>         https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/ctrl/qcom
+>
+> the post_init and post_deinit callbacks can also be removed.
+>
+> Note that this one depends on the patch adding support for modular
+> builds:
+>
+>         https://lore.kernel.org/all/20220519094646.23009-1-johan+linaro@kernel.org/
+>
+> which has been reviewed by Rob and should be ready to be picked up.
+>
+> Johan
+>
+>
+>  drivers/pci/controller/dwc/pcie-qcom.c | 17 ++---------------
+>  1 file changed, 2 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index ff1b40f213c1..fe701da32119 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -180,9 +180,7 @@ struct qcom_pcie;
+>  struct qcom_pcie_ops {
+>         int (*get_resources)(struct qcom_pcie *pcie);
+>         int (*init)(struct qcom_pcie *pcie);
+> -       int (*post_init)(struct qcom_pcie *pcie);
+>         void (*deinit)(struct qcom_pcie *pcie);
+> -       void (*post_deinit)(struct qcom_pcie *pcie);
+>         void (*ltssm_enable)(struct qcom_pcie *pcie);
+>         int (*config_sid)(struct qcom_pcie *pcie);
+>  };
+> @@ -1331,27 +1329,18 @@ static int qcom_pcie_host_init(struct pcie_port *pp)
+>         if (ret)
+>                 goto err_deinit;
+>
+> -       if (pcie->cfg->ops->post_init) {
+> -               ret = pcie->cfg->ops->post_init(pcie);
+> -               if (ret)
+> -                       goto err_disable_phy;
+> -       }
+> -
+>         qcom_ep_reset_deassert(pcie);
+>
+>         if (pcie->cfg->ops->config_sid) {
+>                 ret = pcie->cfg->ops->config_sid(pcie);
+>                 if (ret)
+> -                       goto err;
+> +                       goto err_assert_reset;
+>         }
+>
+>         return 0;
+>
+> -err:
+> +err_assert_reset:
+>         qcom_ep_reset_assert(pcie);
+> -       if (pcie->cfg->ops->post_deinit)
+> -               pcie->cfg->ops->post_deinit(pcie);
+> -err_disable_phy:
+>         phy_power_off(pcie->phy);
+>  err_deinit:
+>         pcie->cfg->ops->deinit(pcie);
+> @@ -1362,8 +1351,6 @@ static int qcom_pcie_host_init(struct pcie_port *pp)
+>  static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
+>  {
+>         qcom_ep_reset_assert(pcie);
+> -       if (pcie->cfg->ops->post_deinit)
+> -               pcie->cfg->ops->post_deinit(pcie);
+>         phy_power_off(pcie->phy);
+>         pcie->cfg->ops->deinit(pcie);
+>  }
+> --
+> 2.35.1
+>
 
-Thanks,
-Olek
+
+-- 
+With best wishes
+Dmitry

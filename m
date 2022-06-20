@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DB4551A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7610551A2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244928AbiFTNF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S244930AbiFTNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244815AbiFTNEC (ORCPT
+        with ESMTP id S244817AbiFTNEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 09:04:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3802F1929F;
-        Mon, 20 Jun 2022 05:58:40 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D99192A7;
+        Mon, 20 Jun 2022 05:58:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1AE0B811A0;
-        Mon, 20 Jun 2022 12:58:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40453C3411B;
-        Mon, 20 Jun 2022 12:58:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B83761531;
+        Mon, 20 Jun 2022 12:58:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4DAC3411B;
+        Mon, 20 Jun 2022 12:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729917;
-        bh=sHsXTox6zXc52iWCMVLZETrIvLTuw2UPYLMvDA+1G08=;
+        s=korg; t=1655729920;
+        bh=cwYVA5ku9iWbOLnzjHvadjXVOQ6ppJC4qboEjze0bsQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GdONSvaEIES9dhW740bQYLaXRHhebA1ocJmL8xRgCGwTndChE8UvgTqNKiAJIEyXq
-         IeAOYcE5Fw4NpRt2IEbl0+a0fsSUSWni5nTvpx7TXdC3GUPgvPGyVZTKpvsKbY3Oyo
-         88rKv7s4mDZdGbwd5ep8+KRsdsiCpzhn9kqT4hgE=
+        b=cFl+04RpznFMm/njSLBa1k6B4cUOrKfI6+iuAepcmjZdLlYb0LCx4h7XDTMCBg1Fr
+         lL4esw62h8iAHVCCfgZIdjaExj3icXwAPzs7OIBlcxp3HhbrnM5AlFlgVqZU/Xeu+z
+         aHMUf1ZF5dHQGYgEkvW49l69ThxQ6BoqhxwWqnf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, stable <stable@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [PATCH 5.18 115/141] tty: n_gsm: Debug output allocation must use GFP_ATOMIC
-Date:   Mon, 20 Jun 2022 14:50:53 +0200
-Message-Id: <20220620124732.946064778@linuxfoundation.org>
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@penugtronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.18 116/141] serial: 8250: Store to lsr_save_flags after lsr read
+Date:   Mon, 20 Jun 2022 14:50:54 +0200
+Message-Id: <20220620124732.976352182@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
 References: <20220620124729.509745706@linuxfoundation.org>
@@ -56,40 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit e74024b2eccbb784824a0f9feaeaaa3b47514b79 upstream.
+commit be03b0651ffd8bab69dfd574c6818b446c0753ce upstream.
 
-Dan Carpenter <dan.carpenter@oracle.com> reported the following Smatch
-warning:
+Not all LSR register flags are preserved across reads. Therefore, LSR
+readers must store the non-preserved bits into lsr_save_flags.
 
-drivers/tty/n_gsm.c:720 gsm_data_kick()
-warn: sleeping in atomic context
+This fix was initially mixed into feature commit f6f586102add ("serial:
+8250: Handle UART without interrupt on TEMT using em485"). However,
+that feature change had a flaw and it was reverted to make room for
+simpler approach providing the same feature. The embedded fix got
+reverted with the feature change.
 
-This is because gsm_control_message() is holding a spin lock so
-gsm_hex_dump_bytes() needs to use GFP_ATOMIC instead of GFP_KERNEL.
+Re-add the lsr_save_flags fix and properly mark it's a fix.
 
-Fixes: 925ea0fa5277 ("tty: n_gsm: Fix packet data hex dump output")
+Link: https://lore.kernel.org/all/1d6c31d-d194-9e6a-ddf9-5f29af829f3@linux.intel.com/T/#m1737eef986bd20cf19593e344cebd7b0244945fc
+Fixes: e490c9144cfa ("tty: Add software emulated RS485 support for 8250")
 Cc: stable <stable@kernel.org>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Link: https://lore.kernel.org/r/20220523155052.57129-1-tony@atomide.com
+Acked-by: Uwe Kleine-König <u.kleine-koenig@penugtronix.de>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/f4d774be-1437-a550-8334-19d8722ab98c@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_port.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -455,7 +455,7 @@ static void gsm_hex_dump_bytes(const cha
- 		return;
- 	}
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1535,6 +1535,8 @@ static inline void __stop_tx(struct uart
  
--	prefix = kasprintf(GFP_KERNEL, "%s: ", fname);
-+	prefix = kasprintf(GFP_ATOMIC, "%s: ", fname);
- 	if (!prefix)
- 		return;
- 	print_hex_dump(KERN_INFO, prefix, DUMP_PREFIX_OFFSET, 16, 1, data, len,
+ 	if (em485) {
+ 		unsigned char lsr = serial_in(p, UART_LSR);
++		p->lsr_saved_flags |= lsr & LSR_SAVE_FLAGS;
++
+ 		/*
+ 		 * To provide required timeing and allow FIFO transfer,
+ 		 * __stop_tx_rs485() must be called only when both FIFO and
 
 

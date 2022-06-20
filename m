@@ -2,47 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282CD550F86
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5059550F8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbiFTEuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 00:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S237902AbiFTEyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 00:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbiFTEuQ (ORCPT
+        with ESMTP id S233817AbiFTEy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 00:50:16 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4232DF;
-        Sun, 19 Jun 2022 21:50:15 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o39MZ-0007A2-Mm; Mon, 20 Jun 2022 06:50:11 +0200
-Message-ID: <1198479a-ed0a-ae45-4aef-d750113aa3b0@leemhuis.info>
-Date:   Mon, 20 Jun 2022 06:50:10 +0200
+        Mon, 20 Jun 2022 00:54:29 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B394DEB9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:54:25 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id o9so4176538edt.12
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mukyLCtBBbCJ6QLdWGYeYZEZ9YqINwpy/ZdfkORqBZE=;
+        b=UKNKFhdL+7ivgne6rJC21mSSfiaLKZHX9yoOuIh9UmqiDzzaewQHD7yYJipRMbN5SI
+         sqMO9Scex5fT2OG4s3idcHiBshzVzr83BQRiz9MclD5AgLHLh9ef6R0EaL7PWErhcE/g
+         wKYAz5furNCnzUMXK/fAv/VmQ0Psdwl6aMHDw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mukyLCtBBbCJ6QLdWGYeYZEZ9YqINwpy/ZdfkORqBZE=;
+        b=rV8bNXRJ3SldOTaVGr8lrGbVd8u+H0bM5oAILNthNsJVSGmxlIDIZuTAIFmUO5LYLJ
+         dkn0F4pqVaMe3Z8PSZ2lZ2VR7mhYFOFiT0UD/GQNFAhNziAQVgwIH8mhRhD+yVprnev1
+         JUrVenWQVUWt5I397rpFjfHumbkd9IFi/Y+uOKQxgicUFM/awRimkt1zbAKtE1COLcMg
+         7WXb6CLvZ/JVQAQ7W+vZg7BvMZHz6w1nfUBEz99TMj1W1YVhvqPUsOAulFQWK9QJWxPi
+         FvspZTh9Z+K1x9C/GvjqXbbAcHymRJdhLx5QFzVphe29tRhP7mkj6lZEtmtIgAolkGwi
+         RLlA==
+X-Gm-Message-State: AJIora+bQTrMHmVpxwObv5XQq+AyI/yFvPOhZmKADZverMDSH8zF1Lkn
+        bKwByfRTyHJ2HiL9aeiI++4EjlKXZDHS03FsvXnseA==
+X-Google-Smtp-Source: AGRyM1uRThNT8XmE57SQVNixL8TMkzT1S2u9lzIBzMfvygATaLlCkuFrLWUz2Cy72NYhPuNYT7dU009axLMuI9/ox2A=
+X-Received: by 2002:a05:6402:3785:b0:435:5d0e:2a2e with SMTP id
+ et5-20020a056402378500b004355d0e2a2emr19724945edb.307.1655700863894; Sun, 19
+ Jun 2022 21:54:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        Anton Makarov <am@3a-alliance.com>
-Cc:     David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david.lebrun@uclouvain.be,
-        regressions@lists.linux.dev, stable@vger.kernel.org,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-References: <7e315ff1-e172-16c3-44b5-0c83c4c92779@3a-alliance.com>
- <20220606143338.91df592bbb7dc2f7db4747e6@uniroma2.it>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [REGRESSION] net: SRv6 End.DT6 function is broken in VRF mode
-In-Reply-To: <20220606143338.91df592bbb7dc2f7db4747e6@uniroma2.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1655700615;6ebfc65e;
-X-HE-SMSGID: 1o39MZ-0007A2-Mm
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220618072929.28783-1-yunfei.dong@mediatek.com>
+In-Reply-To: <20220618072929.28783-1-yunfei.dong@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 20 Jun 2022 12:54:12 +0800
+Message-ID: <CAGXv+5EFkZ6-bvu68dV4hr795+N3tAwbXYg5WCJp+Zd+pf1Aqw@mail.gmail.com>
+Subject: Re: [PATCH] media: mediatek: vcodec: Initialize decoder parameters
+ after getting dec_capability
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,35 +85,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.06.22 14:33, Andrea Mayer wrote:
-> On Fri, 3 Jun 2022 15:23:26 +0300
-> Anton Makarov <am@3a-alliance.com> wrote:
-> 
->> #regzbot introduced: b9132c32e01976686efa26252cc246944a0d2cab
->>
->> Seems there is a regression of SRv6 End.DT6 function in VRF mode. In the 
->> following scenario packet is decapsulated successfully on vrf10 
->> interface but not forwarded to vrf10's slave interface:
->>
->> ip netns exec r4 ip -6 nexthop add id 1004 encap seg6local action 
->> End.DT6 vrftable 10 dev vrf10
->>
->> ip netns exec r4 ip -6 route add fcff:0:4:200:: nhid 1004
+On Sat, Jun 18, 2022 at 3:29 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+>
+> Need to get dec_capability from scp first, then initialize decoder
+> supported format and other parameters according to dec_capability value.
+>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-#regzbot fixed-by: a3bd2102e4642
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-> thank you for reporting this issue. I am already working on a fix patch which I
-> will send shortly.
+Tested on MT8183 on mainline 20220617-next with the vcodec-dec DT node
+copied from the ChromeOS v5.10 kernel.
 
-@Andrea: when you fix a reported issue, next time please include a
-"Link: <url>" that links to the report, as explained in the
-documentation (see submitting-patches.rst). Linus wants these tags(¹)
-and my regression tracking efforts rely on them (that'S why I had to
-write this mail to tell regression tracking bot with above command that
-the issue has been fixed). tia!
-
-Ciao, Thorsten
-
-(¹) see for example:
-https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+This fixes an issue where the first attempt to enumerate formats on the
+device right after boot returns an empty list.

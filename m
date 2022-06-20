@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6612550E14
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB67C550E26
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237965AbiFTAnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S237974AbiFTAnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237747AbiFTAnI (ORCPT
+        with ESMTP id S237786AbiFTAnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:43:08 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1466585
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id d128so6880176qkg.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
+        Sun, 19 Jun 2022 20:43:09 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3850B4A2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:56 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id i17so7357747qvo.13
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fmnZsBS7ICfhtPbFVJE00Af049vTUvEMSfkA9G33Z+Y=;
-        b=FS+p1cBlMgrvZr0p4b+tva3wEIao0KwdEJw4GNGD0MkRDG+Q78eE9bMbYmNKtz1DFW
-         GYcGcOEivpoUJV4yz/3AMofzVI9M8D5IHkPwmR43g0hZNzL2RqObGCtM+s3hyXdZq783
-         xLNOzqLaOM6J7c3kv6aoM5vBqMw0zgVGzD2LoWbaO7xkjPaZXtnuAlFvKDfkD8uYtTZd
-         ZRCJVXDTZy/0Ev8v0CWU9Eb7XNDiYE0PjEzKuUhKWCrILL/AKr1H5WNdMMggHtDpzHM/
-         clj7iSjtJR+pHdqJp9SNzOJ7LOOnh768E6/lULh9I5d3iDT6/zzudxsdIJHoxuM45QLq
-         OktA==
+        bh=q4yiyjFbZ5Juzr+Gz/H2w54X4y4pvmCy/Lt7Z6lfmMw=;
+        b=fXdKF00OwYkVBQf5hc3gb32tV7KgsiOs4n11yQWXVgL+6mj6VmTxCqqddq1hNVmhhU
+         KnOhYxLu3QkN7RTkyQTS1gssSo1Bs8yCPVd83VicRXKVetgS5XGkH4BVuQwGgNEMsyzt
+         f+5N9qn32cEEPz+/h0lsztWQc+7wEmOd/oF4eBS3qD+OMHV5abMffRwqYiZEzYdQSV0f
+         VNb70uSvAss1oYJz7Lyvz5M5d+FXM4ct3UUdozsqRSgbcm7tXrrifgDWO1e5AnZYs8RN
+         I3NpuImwcCt1EKiid56vxO5FhQQhJrihSRM+lKNsbjKK1UPRLtQ8Xa62KQ6MyLdF+vyR
+         BOUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fmnZsBS7ICfhtPbFVJE00Af049vTUvEMSfkA9G33Z+Y=;
-        b=tttIGVoLdvN6moR2cU9O/Uyey8/Vx9xnmIBxY5KMiAWYszEfOq7TmUereCavKq0c5V
-         HbZMPMTRY2uZTO/BjBdz2VqjhASSIRgfqS4pzF1Acw8rLr+sC/TFRCf2LXnWKjDYLpu3
-         Fpi20Yzo1mMBHQCL2XwPj2qN7HXEPfY6SUSibUy2idxk8C+V6PRRBJSl88bmTxLoJZQr
-         DnxtPS/B3FRNO3gUp70bKPUKs1rEoJIutiNojNBsANnjlntw3TEv2I6eGnBkMa5n61jt
-         UMl8UUNjulT4vJTTLsw+/DZWOGXAwHc4/tyGuUsmAAnbwgIOg4i8Gjxq5DGOeVsNhxb+
-         oHQg==
-X-Gm-Message-State: AJIora/wMfd6uOj+IEwhJMxMnBE/rqLV+7rZoaSwk5tkhREARFaI/wYx
-        YKPAe+5ohGCu93wPdRVnjJCt9tYmMZ3Vae8=
-X-Google-Smtp-Source: AGRyM1tBmrxf1indi/uvJgmAPcm0cBP3mfXeFK9mluLQyQy1jfh9ZCHnRGgEBFB8u9JlPE8+z6ipmw==
-X-Received: by 2002:a05:620a:d94:b0:6a6:6c9c:c7ec with SMTP id q20-20020a05620a0d9400b006a66c9cc7ecmr14807435qkl.221.1655685772861;
-        Sun, 19 Jun 2022 17:42:52 -0700 (PDT)
+        bh=q4yiyjFbZ5Juzr+Gz/H2w54X4y4pvmCy/Lt7Z6lfmMw=;
+        b=eLOj7NU10r0Ss/5J1uuEN4VGwU/UcIx1Rxieg0Her6/akilDxStu+hFqYO+vqIh59g
+         ukfo29y1YoR9GkcWNdiva8VDDcobnwv1wmb/m911jIsyicFi4xH8znFSrauONqeKyY/O
+         ec01N/Xd8dIISyQi1BIQJgh+7yGrv5O9pkeS5w9VGlVQU+/VNRtpWTMJ26am2OyD4ubx
+         SXf2gwy86FV9pEtVD0+1io+zSPdyMKwm6+gPHGGv1DfKM7Qc9iWMEEcwKOIsQ/noEZT4
+         TlFHkKtTpVc8US1sxIWXtXYamKaiUvWgwt7XkvE1EvB1TcOGdMeUQxgsdACoRAUt/bFe
+         GcXQ==
+X-Gm-Message-State: AJIora+P60lnOYLau5UwA0WdfYe5Hz7CKLNRo2udBiHn5f/nA4QHe6Mm
+        DlInCB0gi0Depef6siuCrxCASEAelmFmHFo=
+X-Google-Smtp-Source: AGRyM1tYNk5fbWQsttURTreDFM+BkJM6BzdKKxG44Rqes86jH7ptzH4Kis++RT67FHxHEe1SWABRfg==
+X-Received: by 2002:ac8:57c3:0:b0:305:2dbd:92b3 with SMTP id w3-20020ac857c3000000b003052dbd92b3mr17904388qta.173.1655685774989;
+        Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05620a405500b0069fe1dfbeffsm11316870qko.92.2022.06.19.17.42.52
+        by smtp.gmail.com with ESMTPSA id q4-20020ac87344000000b00304e5839734sm9303936qtp.55.2022.06.19.17.42.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:42:52 -0700 (PDT)
+        Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 09/34] lib/printbuf: Unit specifiers
-Date:   Sun, 19 Jun 2022 20:42:08 -0400
-Message-Id: <20220620004233.3805-10-kent.overstreet@gmail.com>
+Subject: [PATCH v4 10/34] lib/pretty-printers: prt_string_option(), prt_bitflags()
+Date:   Sun, 19 Jun 2022 20:42:09 -0400
+Message-Id: <20220620004233.3805-11-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,143 +71,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds options to printbuf for specifying whether units should be
-printed raw (default) or with human readable units, and for controlling
-whether human-readable units should be base 2 (default), or base 10.
-
-This also adds new helpers that obey these options:
-
- - pr_human_readable_u64
- - pr_human_readable_s64
-These obey printbuf->si_units
-
- - pr_units_u64
- - pr_units_s64
-These obey both printbuf-human_readable_units and printbuf->si_units
-
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- include/linux/printbuf.h | 15 +++++++++++
- lib/printbuf.c           | 57 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+)
+ include/linux/pretty-printers.h | 10 ++++++
+ lib/Makefile                    |  2 +-
+ lib/pretty-printers.c           | 60 +++++++++++++++++++++++++++++++++
+ 3 files changed, 71 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/pretty-printers.h
+ create mode 100644 lib/pretty-printers.c
 
-diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-index 1e43c47891..5100287eed 100644
---- a/include/linux/printbuf.h
-+++ b/include/linux/printbuf.h
-@@ -53,11 +53,20 @@
-  *
-  * Make sure you use prt_newline() instead of \n in the format string for indent
-  * level and tabstops to work corretly.
-+ *
-+ * Output units: printbuf->units exists to tell pretty-printers how to output
-+ * numbers: a raw value (e.g. directly from a superblock field), as bytes, or as
-+ * human readable bytes. prt_units() obeys it.
-  */
- 
- #include <linux/kernel.h>
- #include <linux/string.h>
- 
-+enum printbuf_si {
-+	PRINTBUF_UNITS_2,	/* use binary powers of 2^10 */
-+	PRINTBUF_UNITS_10,	/* use powers of 10^3 (standard SI) */
-+};
+diff --git a/include/linux/pretty-printers.h b/include/linux/pretty-printers.h
+new file mode 100644
+index 0000000000..f39d8edfba
+--- /dev/null
++++ b/include/linux/pretty-printers.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: LGPL-2.1+ */
++/* Copyright (C) 2022 Kent Overstreet */
 +
- struct printbuf {
- 	char			*buf;
- 	unsigned		size;
-@@ -71,6 +80,8 @@ struct printbuf {
- 	u8			atomic;
- 	bool			allocation_failure:1;
- 	bool			heap_allocated:1;
-+	enum printbuf_si	si_units:1;
-+	bool			human_readable_units:1;
- 	u8			tabstop;
- 	u8			tabstops[4];
- };
-@@ -84,6 +95,10 @@ void printbuf_indent_add(struct printbuf *, unsigned);
- void printbuf_indent_sub(struct printbuf *, unsigned);
- void prt_tab(struct printbuf *);
- void prt_tab_rjust(struct printbuf *);
-+void prt_human_readable_u64(struct printbuf *, u64);
-+void prt_human_readable_s64(struct printbuf *, s64);
-+void prt_units_u64(struct printbuf *, u64);
-+void prt_units_s64(struct printbuf *, s64);
++#ifndef _LINUX_PRETTY_PRINTERS_H
++#define _LINUX_PRETTY_PRINTERS_H
++
++void prt_string_option(struct printbuf *, const char * const[], size_t);
++void prt_bitflags(struct printbuf *, const char * const[], u64);
++
++#endif /* _LINUX_PRETTY_PRINTERS_H */
+diff --git a/lib/Makefile b/lib/Makefile
+index b4609a4258..b520024852 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+ 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+ 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+ 	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
+-	 buildid.o printbuf.o
++	 buildid.o printbuf.o pretty-printers.o
  
- /* Initializer for a heap allocated printbuf: */
- #define PRINTBUF ((struct printbuf) { .heap_allocated = true })
-diff --git a/lib/printbuf.c b/lib/printbuf.c
-index a7f80f63ca..553f89ebc1 100644
---- a/lib/printbuf.c
-+++ b/lib/printbuf.c
-@@ -10,6 +10,7 @@
- 
- #include <linux/err.h>
- #include <linux/slab.h>
-+#include <linux/string_helpers.h>
- #include <linux/printbuf.h>
- 
- static inline size_t printbuf_linelen(struct printbuf *buf)
-@@ -194,3 +195,59 @@ void prt_tab_rjust(struct printbuf *buf)
- 	buf->tabstop++;
- }
- EXPORT_SYMBOL(prt_tab_rjust);
+ lib-$(CONFIG_PRINTK) += dump_stack.o
+ lib-$(CONFIG_SMP) += cpumask.o
+diff --git a/lib/pretty-printers.c b/lib/pretty-printers.c
+new file mode 100644
+index 0000000000..addbac95e0
+--- /dev/null
++++ b/lib/pretty-printers.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: LGPL-2.1+
++/* Copyright (C) 2022 Kent Overstreet */
++
++#include <linux/bitops.h>
++#include <linux/kernel.h>
++#include <linux/printbuf.h>
++#include <linux/pretty-printers.h>
 +
 +/**
-+ * prt_human_readable_u64 - Print out a u64 in human readable units
++ * prt_string_option - Given a list of strings, print out the list and indicate
++ * which option is selected, with square brackets (sysfs style)
 + *
-+ * Units of 2^10 (default) or 10^3 are controlled via @buf->si_units
++ * @out: The printbuf to output to
++ * @list: List of strings to choose from
++ * @selected: The option to highlight, with square brackets
 + */
-+void prt_human_readable_u64(struct printbuf *buf, u64 v)
++void prt_string_option(struct printbuf *out,
++		       const char * const list[],
++		       size_t selected)
 +{
-+	printbuf_make_room(buf, 10);
-+	buf->pos += string_get_size(v, 1, !buf->si_units,
-+				    buf->buf + buf->pos,
-+				    printbuf_remaining_size(buf));
++	size_t i;
++
++	for (i = 0; list[i]; i++) {
++		if (i)
++			prt_char(out, ' ');
++		if (i == selected)
++			prt_char(out, '[');
++		prt_str(out, list[i]);
++		if (i == selected)
++			prt_char(out, ']');
++	}
 +}
-+EXPORT_SYMBOL(prt_human_readable_u64);
++EXPORT_SYMBOL(prt_string_option);
 +
 +/**
-+ * prt_human_readable_s64 - Print out a s64 in human readable units
++ * prt_bitflags: Given a bitmap and a list of names for each bit, print out which
++ * bits are on, comma separated
 + *
-+ * Units of 2^10 (default) or 10^3 are controlled via @buf->si_units
++ * @out: The printbuf to output to
++ * @list: List of names for each bit
++ * @flags: Bits to print
 + */
-+void prt_human_readable_s64(struct printbuf *buf, s64 v)
++void prt_bitflags(struct printbuf *out,
++		  const char * const list[], u64 flags)
 +{
-+	if (v < 0)
-+		prt_char(buf, '-');
-+	prt_human_readable_u64(buf, abs(v));
-+}
-+EXPORT_SYMBOL(prt_human_readable_s64);
++	unsigned bit, nr = 0;
++	bool first = true;
 +
-+/**
-+ * prt_units_u64 - Print out a u64 according to printbuf unit options
-+ *
-+ * Units are either raw (default), or human reabable units (controlled via
-+ * @buf->human_readable_units)
-+ */
-+void prt_units_u64(struct printbuf *out, u64 v)
-+{
-+	if (out->human_readable_units)
-+		prt_human_readable_u64(out, v);
-+	else
-+		prt_printf(out, "%llu", v);
-+}
-+EXPORT_SYMBOL(prt_units_u64);
++	while (list[nr])
++		nr++;
 +
-+/**
-+ * prt_units_s64 - Print out a s64 according to printbuf unit options
-+ *
-+ * Units are either raw (default), or human reabable units (controlled via
-+ * @buf->human_readable_units)
-+ */
-+void prt_units_s64(struct printbuf *out, s64 v)
-+{
-+	if (v < 0)
-+		prt_char(out, '-');
-+	prt_units_u64(out, abs(v));
++	while (flags && (bit = __ffs(flags)) < nr) {
++		if (!first)
++			prt_char(out, ',');
++		first = false;
++		prt_str(out, list[bit]);
++		flags ^= 1 << bit;
++	}
 +}
-+EXPORT_SYMBOL(prt_units_s64);
++EXPORT_SYMBOL(prt_bitflags);
 -- 
 2.36.1
 

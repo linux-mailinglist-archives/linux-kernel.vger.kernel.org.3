@@ -2,147 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30D65518CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9731D5518D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241813AbiFTMY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S241741AbiFTMZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240332AbiFTMY5 (ORCPT
+        with ESMTP id S241221AbiFTMZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:24:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051B17A88;
-        Mon, 20 Jun 2022 05:24:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61988B81109;
-        Mon, 20 Jun 2022 12:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7159FC3411B;
-        Mon, 20 Jun 2022 12:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655727894;
-        bh=96SJ91bHPcmvh/H5Q9sbEWTRnmt/EmdCB9umBa+DUFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TUCemtr7+TrjM61PNrav4LBrQNVpR3vXLmPq6PrARzuYxThcIOIl3uBGpPTtq9IJU
-         Pk4Sy8PDbg+D4Ajk8t3tm2z1odqE27eJNQZoxZK65aBX3xANLHtPUnNomlVPXNba4D
-         VHZ+Aol2uw6LhS2sRDCrnHL52rWbnE94kepIHEwo=
-Date:   Mon, 20 Jun 2022 14:24:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, ziy@nvidia.com, stable@vger.kernel.org,
-        guoren@kernel.org, huanyi.xj@alibaba-inc.com, guohanjun@huawei.com,
-        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.15] mm: validate buddy page before using
-Message-ID: <YrBnE6Q1pijgE3gR@kroah.com>
-References: <20220616161746.3565225-1-xianting.tian@linux.alibaba.com>
- <20220616161746.3565225-6-xianting.tian@linux.alibaba.com>
- <YrBJVAZWOzmDyUN3@kroah.com>
- <35bd7396-f5aa-e154-9495-0a36fc6f6a33@linux.alibaba.com>
- <YrBdKwFHfy9Lr14c@kroah.com>
- <8b16a502-5ad5-1efb-0d84-ed0a8ae63c0e@linux.alibaba.com>
- <YrBi1evI1/BF/WLV@kroah.com>
- <d52e17da-a382-0028-2b16-105ab7053028@linux.alibaba.com>
+        Mon, 20 Jun 2022 08:25:10 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9012817A94;
+        Mon, 20 Jun 2022 05:25:07 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id BAFA23200940;
+        Mon, 20 Jun 2022 08:25:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 20 Jun 2022 08:25:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1655727902; x=1655814302; bh=4w3jdU0hxh
+        LIhLx/hb2vdJV2QvbLPK7j7835Nc/A3CU=; b=BnmlfRcrX+Ttpr6MzdP8lZnM7x
+        xNIITlUT8KJ7NXZE+sz9X7GUbU+S1wgfFEpKsPsB3/a43CMjHY7rqLrM8h2F5m1t
+        DXAEO/zxcUQAzEyJOGrRHoPdsfeYrlmUgdZPTE58bcuZA6hBnEg215nx+mWLnJzc
+        +QijTxygyRMMCXH+uvBlu4syS0anCMtFto6fQ/W0OZLqlD4qU/5Azzoo7Lrx9G4m
+        wS9rCH+8Dp447JOZFNkRoARGxT1tyWJxBigV26oAV5b+A6plqZNO1y2xHcJaqvqn
+        6KCO3pCV2k5MXPVW1tIb8Hk6WScCU/ZR1cR7m0eKdWm3Ngp4veZ2TvglTj3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1655727902; x=1655814302; bh=4w3jdU0hxhLIhLx/hb2vdJV2QvbL
+        PK7j7835Nc/A3CU=; b=Jzw/NmA5XetuhJNkcTtT/9lgdVca/9nZRA9Nl3HRPci/
+        CX0vg7mEBPcOWb2zBuMwEUh/FWa3bg2E9iMYntfz7pCYbxIMfMY7QitXSwtWvaEX
+        KDS7BbU/A54yjOh4Dmx+h2eQMhO8qmb4FW7wwaqqcKleD69XpEX/ppT8T1dntyxn
+        kGWZryuvkYeVzfmVgy60i222LnpWUDxb6PG1FNtY/3d6jjtJy/dmb3Tk/lf0IGmD
+        mGtFGDLXhMRvLL3GRIIPnrXy/UL1DoY6vgdCeDABGCLezzfXs1/Mxd8Lss3MczOJ
+        GIUZWUTZaQh3LvnO0hgtmOyVTrNIh3wWIomUtcvTjA==
+X-ME-Sender: <xms:HWewYgz18GmJTXzgPlfrRyt6k4BwT0Ueak8dgDEC6sQl66rva_3Eqw>
+    <xme:HWewYkQ6xy4Pw6pbEFLqYlupX3faFt29xT6h1Ue9DuXS49WD3j8-Gbn8Wd2Wmhi02
+    3Q-pc1YM7U5m35G9io>
+X-ME-Received: <xmr:HWewYiU_PY8pJSt6Al5r1_sXHcK916V2voOaQHyGpRM1mSDXDEqgctjCWLUjPj0JgY-sowqCoN04l_RMFWn4zTaOXHZh7_ifX9Npwk0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefuddgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeelvdeuuddvgeelueefteejueevhfeiheejuddttdffkeelkeegudeigfff
+    tdfhgfenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhho
+    rdhtvggthh
+X-ME-Proxy: <xmx:HWewYuiMzpQfyFOVtiziYr4HrjsohGpCzoPuqwI6FBiFwxtnrrTg3Q>
+    <xmx:HWewYiAzrkBGh7aYKaGBOmrqhqRkgaWSlQecNm4yhfcPurGwB_ajeg>
+    <xmx:HWewYvIggW6OaT7nONpzU1hsY2yndHLYEVePTBCuoIoxiqsBMifYvA>
+    <xmx:HmewYq09tGJQ9MIGuCOgCtwe-SfMuqcGX1cLHpkRuWlsGk4pEi_Owg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Jun 2022 08:25:01 -0400 (EDT)
+Date:   Mon, 20 Jun 2022 14:25:00 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, airlied@linux.ie,
+        devicetree@vger.kernel.org, granquet@baylibre.com,
+        jitao.shi@mediatek.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, msp@baylibre.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v12 01/14] dt-bindings: mediatek,dpi: Add DP_INTF
+ compatible
+Message-ID: <20220620122500.yfc5vhbuluodoo3d@houat>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+ <20220620121028.29234-2-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r2fbom76io5w77eq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d52e17da-a382-0028-2b16-105ab7053028@linux.alibaba.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220620121028.29234-2-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 08:18:40PM +0800, Xianting Tian wrote:
-> 
-> 在 2022/6/20 下午8:06, Greg KH 写道:
-> > On Mon, Jun 20, 2022 at 07:57:05PM +0800, Xianting Tian wrote:
-> > > 在 2022/6/20 下午7:42, Greg KH 写道:
-> > > > On Mon, Jun 20, 2022 at 06:54:44PM +0800, Xianting Tian wrote:
-> > > > > 在 2022/6/20 下午6:17, Greg KH 写道:
-> > > > > > On Fri, Jun 17, 2022 at 12:17:45AM +0800, Xianting Tian wrote:
-> > > > > > > Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
-> > > > > > > fixes a bug in 1dd214b8f21c and there is a similar bug in d9dddbf55667 that
-> > > > > > > can be fixed in a similar way too.
-> > > > > > > 
-> > > > > > > In unset_migratetype_isolate(), we also need the fix, so move page_is_buddy()
-> > > > > > > from mm/page_alloc.c to mm/internal.h
-> > > > > > > 
-> > > > > > > In addition, for RISC-V arch the first 2MB RAM could be reserved for opensbi,
-> > > > > > > so it would have pfn_base=512 and mem_map began with 512th PFN when
-> > > > > > > CONFIG_FLATMEM=y.
-> > > > > > > But __find_buddy_pfn algorithm thinks the start pfn 0, it could get 0 pfn or
-> > > > > > > less than the pfn_base value. We need page_is_buddy() to verify the buddy to
-> > > > > > > prevent accessing an invalid buddy.
-> > > > > > > 
-> > > > > > > Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
-> > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > Reported-by: zjb194813@alibaba-inc.com
-> > > > > > > Reported-by: tianhu.hh@alibaba-inc.com
-> > > > > > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> > > > > > > ---
-> > > > > > >     mm/internal.h       | 34 ++++++++++++++++++++++++++++++++++
-> > > > > > >     mm/page_alloc.c     | 37 +++----------------------------------
-> > > > > > >     mm/page_isolation.c |  3 ++-
-> > > > > > >     3 files changed, 39 insertions(+), 35 deletions(-)
-> > > > > > What is the commit id of this in Linus's tree?
-> > > > > It is also this one，
-> > > > > 
-> > > > > commit 787af64d05cd528aac9ad16752d11bb1c6061bb9
-> > > > > Author: Zi Yan <ziy@nvidia.com>
-> > > > > Date:   Wed Mar 30 15:45:43 2022 -0700
-> > > > > 
-> > > > >       mm: page_alloc: validate buddy before check its migratetype.
-> > > > > 
-> > > > >       Whenever a buddy page is found, page_is_buddy() should be called to
-> > > > >       check its validity.  Add the missing check during pageblock merge check.
-> > > > > 
-> > > > >       Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
-> > > > > pageblocks with others")
-> > > > >       Link:
-> > > > > https://lore.kernel.org/all/20220330154208.71aca532@gandalf.local.home/
-> > > > >       Reported-and-tested-by: Steven Rostedt <rostedt@goodmis.org>
-> > > > >       Signed-off-by: Zi Yan <ziy@nvidia.com>
-> > > > >       Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > > This commit looks nothing like what you posted here.
-> > > > 
-> > > > Why the vast difference with no explaination as to why these are so
-> > > > different from the other backports you provided here?  Also why is the
-> > > > subject lines changed?
-> > > Yes, the changes of 5.15 are not same with others branches, because we need
-> > > additional fix for 5.15,
-> > > 
-> > > You can check it in the thread:
-> > > 
-> > > https://lore.kernel.org/linux-mm/435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com/ <https://lore.kernel.org/linux-mm/435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com/>
-> > > 
-> > > Right. But pfn_valid_within() was removed since 5.15. So your fix is
-> > > required for kernels between 5.15 and 5.17 (inclusive).
-> > What is "your fix" here?
-> > 
-> > This change differs a lot from what is in Linus's tree now, so this all
-> > needs to be resend and fixed up as I mention above if we are going to be
-> > able to take this.  As-is, it's all not correct so are dropped.
-> 
-> I think, for branches except 5.15,  you can just backport Zi Yan's commit
-> 787af64d05cd in Linus tree. I won't send more patches further,
 
-So just for 5.18?  I am confused.
+--r2fbom76io5w77eq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> For 5.15, because it need additional fix except commit 787af64d05cd,  I will
-> send a new patch as your comments.
-> 
-> Is it ok for you?
+On Mon, Jun 20, 2022 at 08:10:15PM +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+>=20
+> DP_INTF is similar to DPI but does not have the exact same feature set
+> or register layouts.
+>=20
+> DP_INTF is the sink of the display pipeline that is connected to the
+> DisplayPort controller and encoder unit. It takes the same clocks as
+> DPI.
+>=20
+> In this patch, we also do these string replacement:
+> - s/mediatek/MediaTek/ in title.
+> - s/Mediatek/MediaTek/ in description.
+>=20
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Modify reviewers' comments.]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
+dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.=
+yaml
+> index 77ee1b923991..d72f74632038 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+> @@ -4,16 +4,16 @@
+>  $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: mediatek DPI Controller Device Tree Bindings
+> +title: MediaTek DPI and DP_INTF Controller
+> =20
+>  maintainers:
+>    - CK Hu <ck.hu@mediatek.com>
+>    - Jitao shi <jitao.shi@mediatek.com>
+> =20
+>  description: |
+> -  The Mediatek DPI function block is a sink of the display subsystem and
+> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a parall=
+el
+> -  output bus.
+> +  The MediaTek DPI and DP_INTF function blocks are a sink of the display
+> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel da=
+ta on a
+> +  parallel output bus.
+> =20
+>  properties:
+>    compatible:
+> @@ -24,6 +24,7 @@ properties:
+>        - mediatek,mt8183-dpi
+>        - mediatek,mt8186-dpi
+>        - mediatek,mt8192-dpi
+> +      - mediatek,mt8195-dp_intf
 
-No, please send fixed up patches for all branches you want them applied
-to as I do not understand what to do here at all, sorry.
+Underscores are frowned upon in the compatibles. See Section 2.3.1 of
+the device tree spec:
 
-greg k-h
+> The compatible string should consist only of lowercase letters, digits
+> and dashes, and should start with a letter. A single comma is
+> typically only used following a vendor prefix. Underscores should not
+> be used.
+
+Maxime
+
+--r2fbom76io5w77eq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYrBnHAAKCRDj7w1vZxhR
+xWJaAQCGat3hffrKiQmHEgq1IoiodDFVSCLGEO8sZBn2NJ1vpAD+NSyr3Wbf1+9P
+APQLi2RmmHLhPvXKrVXVvO3z4r0r3Q0=
+=AAFA
+-----END PGP SIGNATURE-----
+
+--r2fbom76io5w77eq--

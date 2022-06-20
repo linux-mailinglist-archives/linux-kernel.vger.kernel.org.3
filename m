@@ -2,125 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657F2552773
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697A055278A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345162AbiFTXD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 19:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S1345574AbiFTXEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 19:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346434AbiFTXDJ (ORCPT
+        with ESMTP id S1346437AbiFTXDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 19:03:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B7205C2;
-        Mon, 20 Jun 2022 16:03:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92DC761423;
-        Mon, 20 Jun 2022 23:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BC9C341C8;
-        Mon, 20 Jun 2022 23:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655766184;
-        bh=/TZe/YP2QF337a39WuOjnChciiFdYN/X4oGHttBLylw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AoqibELdgjr34VaW8NlOKdLsMLL0zJAR+Ot62A7bBcNfSwpl3s6QRkHaQMd/Y8zOv
-         sXmjPgDgKLDQpRrbRnimJcA974C7wddl0930lTu06ZwvxdNtpzZLqXGiy0J+Q0cshK
-         WpXN7djRT0S/5ktJY64Qmc1N7UbPzV2DU24jXTC5MHIJPH3reQSb/94Zd5cf2pKtXT
-         zp5Ji96ZTyCNsUdpaPF3SwM2N/1wGwnk3OdZwVnSAOtSuV/2+GFL8EZpN8Khnn0Bsi
-         29s9g/K5REXRF5mUA5HgXLTEnMrqK82CrEHpQTBGIaoXGp4Vr1BGyc2sGqGf+1swmE
-         iAt0s6Licjk3Q==
-Received: by mail-vs1-f46.google.com with SMTP id l28so3957740vsb.1;
-        Mon, 20 Jun 2022 16:03:03 -0700 (PDT)
-X-Gm-Message-State: AJIora+mX9VpWZLz62rZWq0RFZu4yVe0UAVH57zYL/DxPkyhWiUvSSBY
-        B82F/ayKgx8SAF16vdVn7Ry4ztQTD8SiMezZYMg=
-X-Google-Smtp-Source: AGRyM1u/RVN5U63G9HFr68t8lzKAMpiuuVrHV89dBmegx0UQHU1v8TtMPi2UxFLK89ZVnLG11vabRaQ+NgahQlUGj7w=
-X-Received: by 2002:a05:6102:5493:b0:34b:b583:f557 with SMTP id
- bk19-20020a056102549300b0034bb583f557mr10777975vsb.2.1655766182967; Mon, 20
- Jun 2022 16:03:02 -0700 (PDT)
+        Mon, 20 Jun 2022 19:03:13 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A326A;
+        Mon, 20 Jun 2022 16:03:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UF/O2LdY1y0sM+lmNG1u8bI1Jz3TFtgdpd9IEc4qbUsFsBt6/K8GwoUc1/BDByJ6J89RyPW7FGg8Yd9iJfVKLpVWmqy3BdNjpj1KZciabadyCIjpdLxf71OPh4Rd+2opOxKfyKZhGI7OcCYFtet5KoS/WbM4dASGWJ5Ffbp2LaGlJb4tjTgpCtZSLkj3dUXC2dQKRUKsS4sRG39zMAU58Jh3ua1SXqS9JopOq+f1cokMy/sgeE5NmWuGXiq9AGd6sY60Nk/YteZU2hSzMasU1ZwwgndYDwxWFqlY+grjFfzLbFKk2KPrldELHmYN2RjQKkv4l4uDDreltPXHtpaZNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nYv/Dd9ylbR7sB6pYeGtnenzQgpHeT/327OIouQsHEY=;
+ b=FNhwY9vblG4ZjGi6U4zRRFURBaMmfJqxjR5/R4DQWgq9RAzw2Z5AB0U7z5x/h+5M+jrzatqq0qzdbZAAXJvCNv3aoxS6Vh+zC5QPz/nRvpFgMq1Rh1u9Ua8PaCqi6I8pA3kgFbC2VP4P9nYwUqwW15P/eaOuv6kGPeVsSwU9jFYdQq7LRm1T9FitVD4OwEH1tCbmE6062lalcL6Izm4mflwqELoTChWmLMT5B5mnAI+tVE/h0Q6hjAObHkBp3g/6PvEMqeSTLKE31vv6GGSUzOUOU75vuHzPiZ4vyD8Kfb49hQmglEw8oqV3iJ7VenjOXygfiJEQxLQgrYEwrqTPwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nYv/Dd9ylbR7sB6pYeGtnenzQgpHeT/327OIouQsHEY=;
+ b=NA1VwggxMpWnh2pLMXXDHS6gdJUIyih6q44Nt9E5kLKMUPsXtVj219SslAmFN/73Euc85r54F7Zpv0yDO5ciC6bVJYczUFLg5eLMZ8V1Amx7cbrsPdm+8m5T0dxXrplzjeCWP0pjQtIES7JSupjoYUULin+YcMgqbNevb8QuWNk=
+Received: from CP3P284CA0012.BRAP284.PROD.OUTLOOK.COM (2603:10d6:103:6c::17)
+ by BL1PR12MB5334.namprd12.prod.outlook.com (2603:10b6:208:31d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Mon, 20 Jun
+ 2022 23:03:09 +0000
+Received: from DM6NAM11FT061.eop-nam11.prod.protection.outlook.com
+ (2603:10d6:103:6c:cafe::41) by CP3P284CA0012.outlook.office365.com
+ (2603:10d6:103:6c::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
+ Transport; Mon, 20 Jun 2022 23:03:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT061.mail.protection.outlook.com (10.13.173.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Mon, 20 Jun 2022 23:03:06 +0000
+Received: from ashkalraubuntuserver.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 20 Jun 2022 18:03:01 -0500
+From:   Ashish Kalra <Ashish.Kalra@amd.com>
+To:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
+        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <michael.roth@amd.com>, <vbabka@suse.cz>, <kirill@shutemov.name>,
+        <ak@linux.intel.com>, <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>
+Subject: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for RMPUPDATE and PSMASH instruction
+Date:   Mon, 20 Jun 2022 23:02:52 +0000
+Message-ID: <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1655761627.git.ashish.kalra@amd.com>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-References: <20220620155404.1968739-1-guoren@kernel.org> <CAK8P3a2enbvE9a5V=JpUFt7FfyDGLQHTWTszibqqLVoeiMAo5Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a2enbvE9a5V=JpUFt7FfyDGLQHTWTszibqqLVoeiMAo5Q@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 21 Jun 2022 07:02:51 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT9YHgTzPaBN4ekYS7UcBOj_9k9xEcrsoXgW6PCZc8x3Q@mail.gmail.com>
-Message-ID: <CAJF2gTT9YHgTzPaBN4ekYS7UcBOj_9k9xEcrsoXgW6PCZc8x3Q@mail.gmail.com>
-Subject: Re: [PATCH V5] riscv: Add qspinlock support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e8063cf-dcb5-484c-dbce-08da53110961
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5334:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5334EAF5672FD6E5F79668F28EB09@BL1PR12MB5334.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ALXOuh581tFfbGNuqFc0kMGymRd1AgkPdGkvaHQjXhBxZeQZnLmN8EUUVvtlYHWRDnk4IYMpXg5YKdY1QA28E/mb5oa6YqQifSkPRhjYBeS7doNIS6XSUddIwK33Ef7Agfo2QKT7YFGVPj1dIxKTNFaFReMR7H8SfmRAule8qLmFWUzf8NRDNeTrHcnJ28FX4OI9gCdifCyGsddk+i60JgdOynCdlVplRhS60jGd+evjU/M+/YIKy+yYG9vqEW0Ezqbmu4XFXoJsD8aS2Wuap0wAh7uqI8NwbTL7otmhDN9iDl0iv0qTKB4YrM0DkeBIhMtIIW+GDBKDLHbMlb+keWiA/O8+lI4rdI2vioAPpzeBKk1bXQ5FGDcvse7B7ij/AQuT0s+QR0Deq8mrmMscD2s0QojboBOeKpLMXLzEr2UXyeDk5LneLcqDGypaSu9emqyADnzTGP4JcXNY3vp4DsRc9+7NIjVCPtukeqr/oPHKKbT9Cyo8iFTJxvB2w/w2gerGsXJBoA7hT1THZzlI3GUSjFKsGqcsGY0X3/R6CJUDTARRVInRM7AZg3W+XzZSutwGpZo4pEtdNweewiXcYFrL9JGPvoV4apO9sQYodRiqLXJmcNz3MGM/ZUtdD2R5Dqxf09eU0Jc99pcc0p57bf1aiw1LPXhzaEue8YaQ0q+vnPwLXGtX9Se5hsonSVG95QlEs7ouh3UBRe5vENd9LCGPokkHRLjWfJUzmfz8Qb8tEFxuBE4xHjx8okvdGiNeDZJdVIwLLgv90rQAlOBHBQp3IZAZmeZvh5hFtSpKJcc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(39860400002)(136003)(46966006)(40470700004)(36840700001)(8936002)(70206006)(7406005)(70586007)(8676002)(5660300002)(316002)(54906003)(2906002)(478600001)(4326008)(36860700001)(110136005)(7416002)(40480700001)(82310400005)(36756003)(7696005)(6666004)(40460700003)(26005)(356005)(86362001)(336012)(81166007)(83380400001)(16526019)(47076005)(82740400003)(426003)(41300700001)(2616005)(186003)(36900700001)(2101003)(309714004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 23:03:06.2366
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e8063cf-dcb5-484c-dbce-08da53110961
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT061.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5334
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 4:42 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Jun 20, 2022 at 5:54 PM <guoren@kernel.org> wrote:
-> > >+config RISCV_USE_QUEUED_SPINLOCKS
-> > +       bool "Using queued spinlock instead of ticket-lock"
->
-> Maybe we can just make ARCH_USE_QUEUED_SPINLOCKS
-> user visible and give users the choice between the two generic
-> implementations across all architectures that support the qspinlock
-> variant.
->
-> In arch/riscv, you'd then just have a
->
->         select ARCH_HAVE_QUEUED_SPINLOCKS
-Good point, but I think it should be another cross-arch cleanup
-patchset, let's put qspinlock in riscv first with the current
-framework.
+From: Brijesh Singh <brijesh.singh@amd.com>
 
->
-> diff --git a/arch/riscv/include/asm/spinlock.h
-> b/arch/riscv/include/asm/spinlock.h
-> > new file mode 100644
-> > index 000000000000..fd3fd09cff52
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/spinlock.h
-> > @@ -0,0 +1,12 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __ASM_SPINLOCK_H
-> > +#define __ASM_SPINLOCK_H
-> > +
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +#include <asm/qspinlock.h>
-> > +#include <asm/qrwlock.h>
-> > +#else
-> > +#include <asm-generic/spinlock.h>
-> > +#endif
-> > +
->
-> Along the same lines:
->
-> I think I'd prefer the header changes to be done in the asm-generic
-> version of this file, so this can be shared across all architectures
-> that want to give the choice between ticket and queued spinlock.
-I would put the above part in the series, but they would base on the
-riscv qspinlock patch.
+The RMPUPDATE instruction writes a new RMP entry in the RMP Table. The
+hypervisor will use the instruction to add pages to the RMP table. See
+APM3 for details on the instruction operations.
 
->
->         Arnd
+The PSMASH instruction expands a 2MB RMP entry into a corresponding set of
+contiguous 4KB-Page RMP entries. The hypervisor will use this instruction
+to adjust the RMP entry without invalidating the previous RMP entry.
 
+Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+---
+ arch/x86/include/asm/sev.h | 11 ++++++
+ arch/x86/kernel/sev.c      | 72 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 83 insertions(+)
 
-
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index cb16f0e5b585..6ab872311544 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -85,7 +85,9 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
+ 
+ /* RMP page size */
+ #define RMP_PG_SIZE_4K			0
++#define RMP_PG_SIZE_2M			1
+ #define RMP_TO_X86_PG_LEVEL(level)	(((level) == RMP_PG_SIZE_4K) ? PG_LEVEL_4K : PG_LEVEL_2M)
++#define X86_TO_RMP_PG_LEVEL(level)	(((level) == PG_LEVEL_4K) ? RMP_PG_SIZE_4K : RMP_PG_SIZE_2M)
+ 
+ /*
+  * The RMP entry format is not architectural. The format is defined in PPR
+@@ -126,6 +128,15 @@ struct snp_guest_platform_data {
+ 	u64 secrets_gpa;
+ };
+ 
++struct rmpupdate {
++	u64 gpa;
++	u8 assigned;
++	u8 pagesize;
++	u8 immutable;
++	u8 rsvd;
++	u32 asid;
++} __packed;
++
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ extern struct static_key_false sev_es_enable_key;
+ extern void __sev_es_ist_enter(struct pt_regs *regs);
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 59e7ec6b0326..f6c64a722e94 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -2429,3 +2429,75 @@ int snp_lookup_rmpentry(u64 pfn, int *level)
+ 	return !!rmpentry_assigned(e);
+ }
+ EXPORT_SYMBOL_GPL(snp_lookup_rmpentry);
++
++int psmash(u64 pfn)
++{
++	unsigned long paddr = pfn << PAGE_SHIFT;
++	int ret;
++
++	if (!pfn_valid(pfn))
++		return -EINVAL;
++
++	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
++		return -ENXIO;
++
++	/* Binutils version 2.36 supports the PSMASH mnemonic. */
++	asm volatile(".byte 0xF3, 0x0F, 0x01, 0xFF"
++		      : "=a"(ret)
++		      : "a"(paddr)
++		      : "memory", "cc");
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(psmash);
++
++static int rmpupdate(u64 pfn, struct rmpupdate *val)
++{
++	unsigned long paddr = pfn << PAGE_SHIFT;
++	int ret;
++
++	if (!pfn_valid(pfn))
++		return -EINVAL;
++
++	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
++		return -ENXIO;
++
++	/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
++	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
++		     : "=a"(ret)
++		     : "a"(paddr), "c"((unsigned long)val)
++		     : "memory", "cc");
++	return ret;
++}
++
++int rmp_make_private(u64 pfn, u64 gpa, enum pg_level level, int asid, bool immutable)
++{
++	struct rmpupdate val;
++
++	if (!pfn_valid(pfn))
++		return -EINVAL;
++
++	memset(&val, 0, sizeof(val));
++	val.assigned = 1;
++	val.asid = asid;
++	val.immutable = immutable;
++	val.gpa = gpa;
++	val.pagesize = X86_TO_RMP_PG_LEVEL(level);
++
++	return rmpupdate(pfn, &val);
++}
++EXPORT_SYMBOL_GPL(rmp_make_private);
++
++int rmp_make_shared(u64 pfn, enum pg_level level)
++{
++	struct rmpupdate val;
++
++	if (!pfn_valid(pfn))
++		return -EINVAL;
++
++	memset(&val, 0, sizeof(val));
++	val.pagesize = X86_TO_RMP_PG_LEVEL(level);
++
++	return rmpupdate(pfn, &val);
++}
++EXPORT_SYMBOL_GPL(rmp_make_shared);
 -- 
-Best Regards
- Guo Ren
+2.25.1
 
-ML: https://lore.kernel.org/linux-csky/

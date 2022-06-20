@@ -2,108 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE09550E91
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 04:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B53550E92
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 04:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbiFTCal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 22:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
+        id S232340AbiFTCe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 22:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiFTCaj (ORCPT
+        with ESMTP id S229774AbiFTCe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 22:30:39 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C9EBC1D
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 19:30:38 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id o18so1449767plg.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 19:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rKDkCWFLL2LKHrd0PY7oJwJSwDpD2T5oprcITiH4OoM=;
-        b=caQjzPuBIHwA2jjjyPgS+SZbXzK2In7vHfu7aUGNIa+U/C2FXhNA3dChQV+bWaMcPG
-         7FlS2gMLACmKgYIq4Cw1zTdb3dP+si8wWFZJujAs2+n4ZdWgXCl0slFlOChKYG/fm1Yo
-         nNGpEcLHuSYfPWoKClGZYjMWL/nz6ACorgOwJ1+S7jXI9N/gEVwENiHOwo8Tib8PlyqS
-         ikEj1dZ27MGpqnNJ+1u0cCNmGqLMim/wVupR6XNaTcBIr4LFLQXuOFrkKkoI2App6+OX
-         oarEM0yWQdccJgOLK+o6cEp/LX/iKe+L3kccp6rOvoUVdwwN9mx11+k0RgFN0y9iDfu/
-         oTiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rKDkCWFLL2LKHrd0PY7oJwJSwDpD2T5oprcITiH4OoM=;
-        b=COXpFd+Vh6TJInUgYe6l8wmPwWLTKvrDVp3vd3LH35Ym/zDci6c7xuC2K+4A45lobP
-         dFCosbwIKm8g2xwYBxDbfBlQehhRoSqoLhZ9wJ7vo185dBRMvGPjdILrUt2oc9hUE1rT
-         JnNzeoJ63eqHXBjVWq4UIz+C8FWv2Ndh0gwBucUNzEcubiQ8ORrMaYta9IJbRIv+wGtN
-         u78GqUGPOpvjCB+Igvyd/sRdJi/w4xbKcRz+rxpkKasjJO/9YCufUk8Co4ra+8nqFXnd
-         nFRSigb4ikonBDxQ3tYQrMUei612Ixjt18ID+YcEGzsR1V46cMWaEVdYOTIcB8ZGFJ9h
-         ErtQ==
-X-Gm-Message-State: AJIora9HJ1C0YBs7nx71DWztKefOKzz1N3diZAbnyz3TVjIvfpjx/HMH
-        sjE6lLPbiSGRP6H0R4l8QCiUcg==
-X-Google-Smtp-Source: AGRyM1tG7Y4Ri55cxJYS8evvg2vI5g0ekaQOzL/vT2Lew/EEVtV27PGqa1e/oIscRqU39mMZiRtzsg==
-X-Received: by 2002:a17:903:2291:b0:164:95f:b512 with SMTP id b17-20020a170903229100b00164095fb512mr21978303plh.120.1655692238298;
-        Sun, 19 Jun 2022 19:30:38 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id z7-20020a17090a8b8700b001ecb29de3e4sm153644pjn.49.2022.06.19.19.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 19:30:38 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     akpm@linux-foundation.org, mike.kravetz@oracle.com
-Cc:     duanxiongchun@bytedance.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>, stable@vger.kernel.org
-Subject: [PATCH] mm: sparsemem: fix missing higher order allocation splitting
-Date:   Mon, 20 Jun 2022 10:30:19 +0800
-Message-Id: <20220620023019.94257-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 19 Jun 2022 22:34:56 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77F5B1F2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 19:34:54 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VGpSCch_1655692491;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VGpSCch_1655692491)
+          by smtp.aliyun-inc.com;
+          Mon, 20 Jun 2022 10:34:52 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        baolin.wang@linux.alibaba.com, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/damon: Use set_huge_pte_at() to make huge pte old
+Date:   Mon, 20 Jun 2022 10:34:42 +0800
+Message-Id: <1655692482-28797-1-git-send-email-baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Higher order allocations for vmemmap pages from buddy allocator must be
-able to be treated as indepdenent small pages as they can be freed
-individually by the caller.  There is no problem for higher order vmemmap
-pages allocated at boot time since each individual small page will be
-initialized at boot time.  However, it will be an issue for memory hotplug
-case since those higher order vmemmap pages are allocated from buddy
-allocator without initializing each individual small page's refcount. The
-system will panic in put_page_testzero() when CONFIG_DEBUG_VM is enabled
-if the vmemmap page is freed.
+The huge_ptep_set_access_flags() can not make the huge pte old according
+to the discussion [1], that means we will always mornitor the young state
+of the hugetlb though we stopped accessing the hugetlb, as a result DAMON
+will get inaccurate accessing statistics.
 
-Fixes: d8d55f5616cf ("mm: sparsemem: use page table lock to protect kernel pmd operations")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+So changing to use set_huge_pte_at() to make the huge pte old to fix this
+issue.
+
+[1] https://lore.kernel.org/all/Yqy97gXI4Nqb7dYo@arm.com/
+
+Fixes: 49f4203aae06 ("mm/damon: add access checking for hugetlb pages")
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- mm/sparse-vmemmap.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ mm/damon/vaddr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-index 652f11a05749..ebb489fcf07c 100644
---- a/mm/sparse-vmemmap.c
-+++ b/mm/sparse-vmemmap.c
-@@ -78,6 +78,14 @@ static int __split_vmemmap_huge_pmd(pmd_t *pmd, unsigned long start)
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 5767be72c181..d24148a8149f 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -337,8 +337,7 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+ 	if (pte_young(entry)) {
+ 		referenced = true;
+ 		entry = pte_mkold(entry);
+-		huge_ptep_set_access_flags(vma, addr, pte, entry,
+-					   vma->vm_flags & VM_WRITE);
++		set_huge_pte_at(mm, addr, pte, entry);
+ 	}
  
- 	spin_lock(&init_mm.page_table_lock);
- 	if (likely(pmd_leaf(*pmd))) {
-+		/*
-+		 * Higher order allocations from buddy allocator must be able to
-+		 * be treated as indepdenent small pages (as they can be freed
-+		 * individually).
-+		 */
-+		if (!PageReserved(page))
-+			split_page(page, get_order(PMD_SIZE));
-+
- 		/* Make pte visible before pmd. See comment in pmd_install(). */
- 		smp_wmb();
- 		pmd_populate_kernel(&init_mm, pmd, pgtable);
+ #ifdef CONFIG_MMU_NOTIFIER
 -- 
-2.11.0
+2.27.0
 

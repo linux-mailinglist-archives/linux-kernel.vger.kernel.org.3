@@ -2,53 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934B0551C2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D9E551965
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244949AbiFTN0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S241439AbiFTMwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346134AbiFTNYX (ORCPT
+        with ESMTP id S240811AbiFTMwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:24:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7FA237E7;
-        Mon, 20 Jun 2022 06:09:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6582CB811E1;
-        Mon, 20 Jun 2022 13:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB53EC3411B;
-        Mon, 20 Jun 2022 13:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730583;
-        bh=/DeqA/AUkMll6QIh9dhURmDyXT8bU6Z23ax3clh4fdk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E99FddR/2nmrcx450i/DK8AaMl2fvDjHnPYHFHV5U7aFOMpXrTvmH+8DDAJT5xCB9
-         pRRYHApaiBlqbd4Vk8WVR3VsmgUASQY55yeJslenrbxCiYRjx4sZ99zRLZh0PX9ayC
-         KDuZRjbCW5TM93FySWylRoVPswa8qupLXAqDf2ao=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 099/106] ext4: fix bug_on ext4_mb_use_inode_pa
-Date:   Mon, 20 Jun 2022 14:51:58 +0200
-Message-Id: <20220620124727.318893531@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 20 Jun 2022 08:52:04 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC8117A9D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:52:02 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id kq6so20874290ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cWoMh6jcYULMxgiCtSM6Nsx9EX6xJ4oFr3v4h1QaeUA=;
+        b=Qd97ylwoHz89QA3GuE9aP4ewPd+umV+YmRiMxUlTlj6PtBU/O2AulZTiXwnHK3gshP
+         DEqtxCJz7dgzmbKOLIcD8spegNyAhX/dJHU0tK0vUFVcrLJSW2FSglfqEsgiQNEMh60o
+         wfFAZPbbb3Wb4dz/EYkuwEGBzqZrWANeO7YIWMEq8CFJaH9g4yDYXYkI8mQrHH1pHph/
+         8l3XTnHtsIteSoi6RGHdedWqjMF+52TPtvONU+ywlZQ2QF+40ovduoBZGodbvZEGKJSa
+         KcLzQrhG0sV+QfD+Spcmxvb0KBNuCK5OvCK8IjUudWzuG5BCUojEIBJ8b8GF7lxElNlk
+         PkXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cWoMh6jcYULMxgiCtSM6Nsx9EX6xJ4oFr3v4h1QaeUA=;
+        b=F47jHY/NRJVxpPs0aioHPy6lw4NTDzzBJ1LaJlA9cdqO77CCT0DTZh+3h1pFL9wJY/
+         91/JmEt0bh+ohULk6potJNB48TR/4vfr5BeUiYE/EILC5/vTQnDTDIF3LYvD/Ylmm0rv
+         2KIaBFdDBw52sHoijsyJBdjureIVCCynDTECo74lhOzU215qhmD3tynHDTOogDYxkdXd
+         nHu9DzR5wUYWhcBqxQ1BCB9yJLrhYsfPSEaFJTu5ta7N98PLaanvuW+cVICDG/vu2czU
+         YFWYCeCxQ6Sx0lWdvKTMFtWBM7+Nm9TLmJvnEX/a2IeVV/Iev+cZT+uy+X15CojFyir0
+         XDjA==
+X-Gm-Message-State: AJIora8YR9gwgLYG2wll554V1iiMHFpuhxLgNT5XIPm6oOiX/pYo4KnE
+        LnwefNOuSQVKwDemKfzKYT34Lg==
+X-Google-Smtp-Source: AGRyM1tFwJBKpOFL9z95U+Y6J4vmsN+xYfvk7zpnW8VOrvnI5dwPyBXDTvQIxiK8fOk9X6E0BZWtFQ==
+X-Received: by 2002:a17:907:3dac:b0:722:dcbe:6848 with SMTP id he44-20020a1709073dac00b00722dcbe6848mr79363ejc.515.1655729521196;
+        Mon, 20 Jun 2022 05:52:01 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c19-20020aa7c753000000b004357063bf60sm5653327eds.41.2022.06.20.05.51.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 05:52:00 -0700 (PDT)
+Message-ID: <1c3a29b8-d462-0619-4e7e-41fcdcc3abdc@linaro.org>
+Date:   Mon, 20 Jun 2022 14:51:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 03/15] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-4-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613195658.5607-4-brad@pensando.io>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,97 +87,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
-
-commit a08f789d2ab5242c07e716baf9a835725046be89 upstream.
-
-Hulk Robot reported a BUG_ON:
-==================================================================
-kernel BUG at fs/ext4/mballoc.c:3211!
-[...]
-RIP: 0010:ext4_mb_mark_diskspace_used.cold+0x85/0x136f
-[...]
-Call Trace:
- ext4_mb_new_blocks+0x9df/0x5d30
- ext4_ext_map_blocks+0x1803/0x4d80
- ext4_map_blocks+0x3a4/0x1a10
- ext4_writepages+0x126d/0x2c30
- do_writepages+0x7f/0x1b0
- __filemap_fdatawrite_range+0x285/0x3b0
- file_write_and_wait_range+0xb1/0x140
- ext4_sync_file+0x1aa/0xca0
- vfs_fsync_range+0xfb/0x260
- do_fsync+0x48/0xa0
-[...]
-==================================================================
-
-Above issue may happen as follows:
--------------------------------------
-do_fsync
- vfs_fsync_range
-  ext4_sync_file
-   file_write_and_wait_range
-    __filemap_fdatawrite_range
-     do_writepages
-      ext4_writepages
-       mpage_map_and_submit_extent
-        mpage_map_one_extent
-         ext4_map_blocks
-          ext4_mb_new_blocks
-           ext4_mb_normalize_request
-            >>> start + size <= ac->ac_o_ex.fe_logical
-           ext4_mb_regular_allocator
-            ext4_mb_simple_scan_group
-             ext4_mb_use_best_found
-              ext4_mb_new_preallocation
-               ext4_mb_new_inode_pa
-                ext4_mb_use_inode_pa
-                 >>> set ac->ac_b_ex.fe_len <= 0
-           ext4_mb_mark_diskspace_used
-            >>> BUG_ON(ac->ac_b_ex.fe_len <= 0);
-
-we can easily reproduce this problem with the following commands:
-	`fallocate -l100M disk`
-	`mkfs.ext4 -b 1024 -g 256 disk`
-	`mount disk /mnt`
-	`fsstress -d /mnt -l 0 -n 1000 -p 1`
-
-The size must be smaller than or equal to EXT4_BLOCKS_PER_GROUP.
-Therefore, "start + size <= ac->ac_o_ex.fe_logical" may occur
-when the size is truncated. So start should be the start position of
-the group where ac_o_ex.fe_logical is located after alignment.
-In addition, when the value of fe_logical or EXT4_BLOCKS_PER_GROUP
-is very large, the value calculated by start_off is more accurate.
-
-Cc: stable@kernel.org
-Fixes: cd648b8a8fd5 ("ext4: trim allocation requests to group size")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
-Link: https://lore.kernel.org/r/20220528110017.354175-2-libaokun1@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- fs/ext4/mballoc.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
-
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -4099,6 +4099,15 @@ ext4_mb_normalize_request(struct ext4_al
- 	size = size >> bsbits;
- 	start = start_off >> bsbits;
- 
-+	/*
-+	 * For tiny groups (smaller than 8MB) the chosen allocation
-+	 * alignment may be larger than group size. Make sure the
-+	 * alignment does not move allocation to a different group which
-+	 * makes mballoc fail assertions later.
-+	 */
-+	start = max(start, rounddown(ac->ac_o_ex.fe_logical,
-+			(ext4_lblk_t)EXT4_BLOCKS_PER_GROUP(ac->ac_sb)));
-+
- 	/* don't cover already allocated blocks in selected range */
- 	if (ar->pleft && start <= ar->lleft) {
- 		size -= ar->lleft + 1 - start;
+On 13/06/2022 21:56, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
+> 
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml       | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

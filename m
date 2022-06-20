@@ -2,172 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07775516A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C457551788
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241318AbiFTLHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S241971AbiFTLj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241255AbiFTLHs (ORCPT
+        with ESMTP id S241956AbiFTLjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:07:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B3C15822;
-        Mon, 20 Jun 2022 04:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655723262; x=1687259262;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=p9cScR7+8tqT8UOdrsD/iPQ6vHskmsKAJjjJIaAQlj8=;
-  b=PUoIq0RB0ciq7/T273PnI+wrCDXU4TFwczb5TcnhEpTZErRTe+0x++yu
-   h+Byafnv59RcP2GT1qsRa0W7NSuZ0b/flPWmjZTUJnNRyUwqKChtUWczw
-   K5TNntWmWROAc8xAMK5K8CA+73IYL/JR3mpn05jMYKNi2U6/3dEvzzfhH
-   k=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 20 Jun 2022 04:07:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 04:07:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 04:07:40 -0700
-Received: from [10.50.53.124] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
- 2022 04:07:35 -0700
-Message-ID: <a11732d6-a9b1-7ead-e89a-564a57a7192b@quicinc.com>
-Date:   Mon, 20 Jun 2022 16:37:31 +0530
+        Mon, 20 Jun 2022 07:39:24 -0400
+X-Greylist: delayed 1844 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Jun 2022 04:39:23 PDT
+Received: from imablier.rawalpindihotel.com (imablier.rawalpindihotel.com [45.130.138.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E6C16591
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=rawalpindihotel.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=cor.car@rawalpindihotel.com;
+ bh=Nyf5OaNLvLP6QtC9iHPCmZ9OukM=;
+ b=C8mBrdBcSjO+CQVSVIRducMn0ntfI54Ha8Po5grh0AK9vZpcLpsXyjeVGdgM+2k8+uh5Asrwk49S
+   HLAlfYWXjzPRnpNXQH7irAcIaB+6JihA74mnmh6kQBYDAtmb9zdlsO1aoquuB5+N/OlJkIlZNbH7
+   oQc04HLqS0hddX28c4Dp0vRbskwe9XfB1l0zBC/0Mi3RJULKpNGS/iT4orYl3aJfCfqaqb5UZQyS
+   eSx/o1X6+XqnxYPUL+75mW2kvs+tAJLiGNimwfMO16lGWJKy7MnJ4d98suWpVMTi/qnNdGvCqb+a
+   HoPHHLN13FJEy/EbAvp2wgyN7c0xWBowgouh+A==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=rawalpindihotel.com;
+ b=wiZHDp431zghB8mXISNVC6WNEthb9YO5GLJTQ0klxUkSuIBmc8R/Ya64Abuk/vRMsC85BggMKBWS
+   mXJWI1hsSQ//92vqmWEeVjNk90u+poVSQXpwIVYW9JHhmewYLcwzfWTlkJIlRLpl1qj2JZz+l5L0
+   2a+n6UxzTpLD6L99TLQ42/N9CQaYmazacim3Jkeo+gD52tuu4lGHqUFypKRHWpnnLMA62ZNkRdG/
+   SxiGF1X5opesjQLNFIDoq7ORN0eSCTChTPIiZCmWHmxFvaLvqsm0fGHW03x2ZFb6DQWwPjqgsRtc
+   Uqf0kwkzuxpKILWjA2XiGQFzI7YesRArAByIXQ==;
+Reply-To: lloydhoffman@dr.com
+From:   Lloyd <cor.car@rawalpindihotel.com>
+To:     linux-kernel@vger.kernel.org
+Subject: Business Capital Funding.
+Date:   20 Jun 2022 04:08:19 -0700
+Message-ID: <20220620040819.1A8DCA36BAA4D2D7@rawalpindihotel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_jprakash@quicinc.com>
-References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
- <1655200111-18357-7-git-send-email-quic_c_skakit@quicinc.com>
- <YquZRcuRCrdF+Q1z@google.com>
- <eccbb030-97f7-3a6c-958e-05adcdca6210@quicinc.com>
- <YrAt6dq6ty9p8d05@google.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-In-Reply-To: <YrAt6dq6ty9p8d05@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+ 
 
-On 6/20/2022 1:50 PM, Lee Jones wrote:
-> On Mon, 20 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
->
->> On 6/17/2022 2:27 AM, Lee Jones wrote:
->>> On Tue, 14 Jun 2022, Satya Priya wrote:
->>>
->>>> Use i2c_new_dummy_device() to register pm8008-regulator
->>>> client present at a different address space, instead of
->>>> defining a separate DT node. This avoids calling the probe
->>>> twice for the same chip, once for each client pm8008-infra
->>>> and pm8008-regulator.
->>>>
->>>> As a part of this define pm8008_regmap_init() to do regmap
->>>> init for both the clients and define pm8008_get_regmap() to
->>>> pass the regmap to the regulator driver.
->>>>
->>>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
->>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->>>> ---
->>>> Changes in V15:
->>>>    - None.
->>>>
->>>> Changes in V14:
->>>>    - None.
->>>>
->>>> Changes in V13:
->>>>    - None.
->>>>
->>>>    drivers/mfd/qcom-pm8008.c       | 34 ++++++++++++++++++++++++++++++++--
->>>>    include/linux/mfd/qcom_pm8008.h |  9 +++++++++
->>>>    2 files changed, 41 insertions(+), 2 deletions(-)
->>>>    create mode 100644 include/linux/mfd/qcom_pm8008.h
->>>>
->>>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
->>>> index 569ffd50..55e2a8e 100644
->>>> --- a/drivers/mfd/qcom-pm8008.c
->>>> +++ b/drivers/mfd/qcom-pm8008.c
->>>> @@ -9,6 +9,7 @@
->>>>    #include <linux/interrupt.h>
->>>>    #include <linux/irq.h>
->>>>    #include <linux/irqdomain.h>
->>>> +#include <linux/mfd/qcom_pm8008.h>
->>>>    #include <linux/module.h>
->>>>    #include <linux/of_device.h>
->>>>    #include <linux/of_platform.h>
->>>> @@ -57,6 +58,7 @@ enum {
->>>>    struct pm8008_data {
->>>>    	struct device *dev;
->>>> +	struct regmap *regulators_regmap;
->>>>    	int irq;
->>>>    	struct regmap_irq_chip_data *irq_data;
->>>>    };
->>>> @@ -150,6 +152,12 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
->>>>    	.max_register	= 0xFFFF,
->>>>    };
->>>> +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
->>>> +{
->>>> +	return chip->regulators_regmap;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(pm8008_get_regmap);
->>> Seems like abstraction for the sake of abstraction.
->>>
->>> Why not do the dereference inside the regulator driver?
->> To derefer this in the regulator driver, we need to have the pm8008_data
->> struct definition in the qcom_pm8008 header file.
->>
->> I think it doesn't look great to have only that structure in header and all
->> other structs and enum in the mfd driver.
-> Then why pass 'pm8008_data' at all?
-
-
-There is one more option, instead of passing the pm8008_data, we could 
-pass the pdev->dev.parent and get the pm8008 chip data directly in the 
-pm8008_get_regmap() like below
-
-
-struct regmap *pm8008_get_regmap(const struct device *dev)
-  {
-      const struct pm8008_data *chip = dev_get_drvdata(dev);
-
-      return chip->regulators_regmap;
-}
-EXPORT_SYMBOL_GPL(pm8008_get_regmap);
-
-
-By doing this we can avoid having declaration of pm8008_data also in the 
-header. Please let me know if this looks good.
-
-> What's preventing you from passing 'regmap'?
-
-
-I didn't get what you meant here, could you please elaborate a bit?
-
+We are expanding our global presence by investing in viable=20
+projects across the globe.
+=20
+We will be willing to inject upto $5 Billion and more into a=20
+viable project(s) We grant our funding at a 3.95% ROI per annum=20
+for 10 years and 12 months moratorium.
+=20
+If you have a viable project that needs funding, kindly revert=20
+with your business plan and executive summary for our review and=20
+possible funding.
+=20
+In Anticipation of your reply
+Lloyd Hoffman .
+Client Executive.
 

@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1498551939
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A586055193E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242407AbiFTMqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S239764AbiFTMrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242324AbiFTMqO (ORCPT
+        with ESMTP id S237161AbiFTMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:46:14 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16A815829
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655729173; x=1687265173;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=2+QvE3+wZSpZa2VGu7+V3PAJf9h7zO3xUJ+BH1YJ0zk=;
-  b=mJ+IdrPPiV8Gz4xmldlg0goVc1clEQydjVTnxVBn9rjKRERdAz+zReMf
-   8x/tai/Xg13bHx4WTyRsGNJPJejyk2X9s9xmQLilFXTXMIBngqXeOmh8k
-   xGVIVEi880Yj40d83xGa4MSGU46Cmr5h3XR1VRodYXALbp1WdoYz6/50+
-   M8Zl81YIeqqed+MdqqDSsfNV8qm4G1I3VWA1lcooFFV2OW3eKr0oVUHxW
-   p4WyFBPRPjydalvqhu0fxMwn3efBdM95b+EPdIBxMTeONT0z9lOqlb0g+
-   HjVkS4s1kgFt89m4Jgn2RaHepHEOzHOOIh65mrIiLMOzSxvxillfLAiIz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343877735"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="343877735"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 05:46:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="537665504"
-Received: from dkburrow-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.191.162])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 05:46:05 -0700
-Message-ID: <d90a10964ecee3269a26a48155733e10848ae471.camel@intel.com>
-Subject: Re: [PATCH v7 0/5] Add TDX Guest Attestation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 21 Jun 2022 00:46:03 +1200
-In-Reply-To: <d0931a48-ac87-c83e-1241-64819b87cf3c@linux.intel.com>
-References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <d0931a48-ac87-c83e-1241-64819b87cf3c@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 20 Jun 2022 08:47:34 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6B9120A4;
+        Mon, 20 Jun 2022 05:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=1Qtj9avAPxxxcxlS9R24X+qIn7gqwbxWq3fY/ZtZ/r0=; b=QlKX47fxikFPWZhUCHG1+dih53
+        +IQ1EPYovRtFDHyFK51GCH+/ADR1j/xK2zZVc+lRnViEosZ0+hVbFHjGr4epb/e4IQ/A/XD5qyi3P
+        31JWYdCVF4pvM2OuUhiXPrmrdCjBREULJaYQM2JBlmxCuCEbi9quzpa0GlYPiOqRreh5mfYExqNF0
+        PzKsF6VDKUiS3lmP9uncFN+a4GujEfno7m6R0wUc/C+aaEwnWd0Ux1O+8sY8RWHa8jTPhU9fYNUDT
+        FX3dwzudZySs8lZAOPgW7hdh7NZ3ChRSRbJ9JHVq6u7owMgK5Hz8USfRRX90/HxHxxRm/ZZz08xjL
+        /IemGjqeXVnfxarAMwvNlSX0lg2t43yaJ7KweIKPytdqLxHiCkUlq/jnDrIGQyd/NKm+27yH4bJIO
+        nEJDTkAei3fYeuZSl58CImb6ArNRPexjSn49WxS1pIWQIvahpU3DYdahmLVcLpgNBs4M6Vu5PW175
+        WR89O7dvixywSsXXcmgTE/4Q4fYWz+b+rMJzYr7YMzyTKa9YqxeWl2oKi6l6Y5ZBtDtCyBA9FQt22
+        ftZMJ3LeBzedMjOwbp6PhqBpBMzj7FlWKH5NqMRP0vNi67Z/muNBZovTLZuGl9cujvClzVuLlzosY
+        GrF4WyrvZ3iSKfEoMklGnypWIV/lcL+y5rcF8+5E4=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Howells <dhowells@redhat.com>, stable@vger.kernel.org
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] 9p: fix EBADF errors in cached mode
+Date:   Mon, 20 Jun 2022 14:47:24 +0200
+Message-ID: <1902408.H94Nh90b8Q@silver>
+In-Reply-To: <20220616211025.1790171-1-asmadeus@codewreck.org>
+References: <15767273.MGizftpLG7@silver>
+ <20220616211025.1790171-1-asmadeus@codewreck.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-06-19 at 17:36 -0700, Sathyanarayanan Kuppuswamy wrote:
-> Hi Dave/Boris/Thomas,
->=20
-> On 5/23/22 9:05 PM, Kuppuswamy Sathyanarayanan wrote:
-> > Hi All,
->=20
-> Gentle ping!
->=20
-> Can you please let me know your comments on this patch set? This series
-> is so far reviewed by Kai, Wander, and Isaku. I have addressed all the
-> comments raised by them. So to progress further, your comments would be
-> appreciated.
->=20
->=20
+On Donnerstag, 16. Juni 2022 23:10:25 CEST Dominique Martinet wrote:
+> cached operations sometimes need to do invalid operations (e.g. read
+> on a write only file)
+> Historic fscache had added a "writeback fid", a special handle opened
+> RW as root, for this. The conversion to new fscache missed that bit.
+> 
+> This commit reinstates a slightly lesser variant of the original code
+> that uses the writeback fid for partial pages backfills if the regular
+> user fid had been open as WRONLY, and thus would lack read permissions.
+> 
+> Link:
+> https://lkml.kernel.org/r/20220614033802.1606738-1-asmadeus@codewreck.org
+> Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do reads
+> and caching") Cc: stable@vger.kernel.org
+> Cc: David Howells <dhowells@redhat.com>
+> Reported-By: Christian Schoenebeck <linux_oss@crudebyte.com>
+> Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> Tested-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> ---
+> v3: use the least permissive version of the patch that only uses
+> writeback fid when really required
+> 
+> If no problem shows up by then I'll post this patch around Wed 23 (next
+> week) with the other stable fixes.
+> 
+>  fs/9p/vfs_addr.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+> index a8f512b44a85..d0833fa69faf 100644
+> --- a/fs/9p/vfs_addr.c
+> +++ b/fs/9p/vfs_addr.c
+> @@ -58,8 +58,21 @@ static void v9fs_issue_read(struct netfs_io_subrequest
+> *subreq) */
+>  static int v9fs_init_request(struct netfs_io_request *rreq, struct file
+> *file) {
+> +	struct inode *inode = file_inode(file);
+> +	struct v9fs_inode *v9inode = V9FS_I(inode);
+>  	struct p9_fid *fid = file->private_data;
+> 
+> +	BUG_ON(!fid);
+> +
+> +	/* we might need to read from a fid that was opened write-only
+> +	 * for read-modify-write of page cache, use the writeback fid
+> +	 * for that */
+> +	if (rreq->origin == NETFS_READ_FOR_WRITE &&
+> +			(fid->mode & O_ACCMODE) == O_WRONLY) {
+> +		fid = v9inode->writeback_fid;
+> +		BUG_ON(!fid);
+> +	}
+> +
+>  	refcount_inc(&fid->count);
+>  	rreq->netfs_priv = fid;
+>  	return 0;
 
-To be precise I provided Acked-by to the first patch.  Sorry I was basicall=
-y
-sick leave in the past two weeks so didn't fully review the rest.
+Some more tests this weekend; all looks fine. It appears that this also fixed
+the performance degradation that I reported early in this thread. Again,
+benchmarks compiling a bunch of sources:
 
---=20
-Thanks,
--Kai
+Case  Linux kernel version         msize   cache  duration (average)
+
+A)    EBADF fix only [1]           512000  loose  31m 14s
+B)    EBADF fix only [1]           512000  mmap   44m 1s
+C)    EBADF fix + clunk fixes [2]  512000  loose  29m 32s
+D)    EBADF fix + clunk fixes [2]  512000  mmap   44m 0s
+E)    5.10.84                      512000  loose  35m 5s
+F)    5.10.84                      512000  mmap   65m 5s
+
+[1] 5.19.0-rc2 + EBADF fix v3 patch (alone):
+https://lore.kernel.org/lkml/20220616211025.1790171-1-asmadeus@codewreck.org/
+
+[2] 5.19.0-rc2 + EBADF fix v3 patch + clunk fix patches, a.k.a. 9p-next:
+https://github.com/martinetd/linux/commit/b0017602fdf6bd3f344dd49eaee8b6ffeed6dbac
+
+Conclusion: all thumbs in my possession pointing upwards. :)
+
+Thanks Dominique!
+
+Best regards,
+Christian Schoenebeck
 
 

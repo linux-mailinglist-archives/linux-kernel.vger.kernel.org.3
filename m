@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68CD551876
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8675A55186C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242261AbiFTMKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S242584AbiFTML1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242102AbiFTMKl (ORCPT
+        with ESMTP id S242172AbiFTMKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:10:41 -0400
+        Mon, 20 Jun 2022 08:10:42 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3051834E;
-        Mon, 20 Jun 2022 05:10:38 -0700 (PDT)
-X-UUID: 8e952cd87254483fbde6e43b48ba54b9-20220620
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5764A183A4;
+        Mon, 20 Jun 2022 05:10:40 -0700 (PDT)
+X-UUID: 3783de95a3bb4715880d6eecdbc7392c-20220620
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:7b698a67-3fc3-42d1-beb3-5611c14b2536,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:6a37333d-9948-4b2a-a784-d8a6c1086106,C
+X-CID-O-INFO: VERSION:1.1.6,REQID:6622845b-e5dc-422a-8b43-10e1bde3d3d9,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:20
+X-CID-META: VersionHash:b14ad71,CLOUDID:522703ea-f7af-4e69-92ee-0fd74a0c286c,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
         ,QS:nil,BEC:nil,COL:0
-X-UUID: 8e952cd87254483fbde6e43b48ba54b9-20220620
+X-UUID: 3783de95a3bb4715880d6eecdbc7392c-20220620
 Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 92012483; Mon, 20 Jun 2022 20:10:31 +0800
+        with ESMTP id 1635342494; Mon, 20 Jun 2022 20:10:31 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -49,10 +49,12 @@ CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v12 00/14] drm/mediatek: Add MT8195 dp_intf driver
-Date:   Mon, 20 Jun 2022 20:10:14 +0800
-Message-ID: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+Subject: [PATCH v12 01/14] dt-bindings: mediatek,dpi: Add DP_INTF compatible
+Date:   Mon, 20 Jun 2022 20:10:15 +0800
+Message-ID: <20220620121028.29234-2-rex-bc.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -65,55 +67,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dpi/dpintf driver and the added helper functions are required for
-the DisplayPort driver to work.
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-This series is separated from [1] which is original from Guillaume.
-The display port driver is [2].
+DP_INTF is similar to DPI but does not have the exact same feature set
+or register layouts.
 
-Changes for v12:
-1. Remove pll_gate.
-2. Add more detailed commit message.
-3. Separate tvd_clk patch and yuv422 output support from add dpintf
-   support patch
-4. Remove limit patch and use common driver codes to determine this.
+DP_INTF is the sink of the display pipeline that is connected to the
+DisplayPort controller and encoder unit. It takes the same clocks as
+DPI.
 
-Changes for v11:
-1. Rename ck_cg to pll_gate.
-2. Add some commit message to clarify the modification reason.
-3. Fix some driver order and modify for reviewers' comments.
+In this patch, we also do these string replacement:
+- s/mediatek/MediaTek/ in title.
+- s/Mediatek/MediaTek/ in description.
 
-[1]:https://lore.kernel.org/all/20220523104758.29531-1-granquet@baylibre.com/
-[2]:https://lore.kernel.org/all/20220610105522.13449-1-rex-bc.chen@mediatek.com/
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+[Bo-Chen: Modify reviewers' comments.]
+Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+---
+ .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Bo-Chen Chen (3):
-  drm/mediatek: dpi: Add support for quantization range
-  drm/mediatek: dpi: Add tvd_clk enable/disable flow
-  drm/mediatek: dpi: Add YUV422 output support
-
-Guillaume Ranquet (10):
-  drm/mediatek: dpi: implement a CK/DE pol toggle in SoC config
-  drm/mediatek: dpi: implement a swap_input toggle in SoC config
-  drm/mediatek: dpi: move dimension mask to SoC config
-  drm/mediatek: dpi: move hvsize_mask to SoC config
-  drm/mediatek: dpi: move swap_shift to SoC config
-  drm/mediatek: dpi: move the yuv422_en_bit to SoC config
-  drm/mediatek: dpi: move the csc_enable bit to SoC config
-  drm/mediatek: dpi: Add dpintf support
-  drm/mediatek: dpi: Only enable dpi after the bridge is enabled
-  drm/mediatek: dpi: Add matrix_sel helper
-
-Markus Schneider-Pargmann (1):
-  dt-bindings: mediatek,dpi: Add DP_INTF compatible
-
- .../display/mediatek/mediatek,dpi.yaml        |  11 +-
- drivers/gpu/drm/mediatek/mtk_dpi.c            | 248 +++++++++++++++---
- drivers/gpu/drm/mediatek/mtk_dpi_regs.h       |  16 ++
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   |   4 +
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |   1 +
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   3 +
- 6 files changed, 235 insertions(+), 48 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+index 77ee1b923991..d72f74632038 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: mediatek DPI Controller Device Tree Bindings
++title: MediaTek DPI and DP_INTF Controller
+ 
+ maintainers:
+   - CK Hu <ck.hu@mediatek.com>
+   - Jitao shi <jitao.shi@mediatek.com>
+ 
+ description: |
+-  The Mediatek DPI function block is a sink of the display subsystem and
+-  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a parallel
+-  output bus.
++  The MediaTek DPI and DP_INTF function blocks are a sink of the display
++  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
++  parallel output bus.
+ 
+ properties:
+   compatible:
+@@ -24,6 +24,7 @@ properties:
+       - mediatek,mt8183-dpi
+       - mediatek,mt8186-dpi
+       - mediatek,mt8192-dpi
++      - mediatek,mt8195-dp_intf
+ 
+   reg:
+     maxItems: 1
+@@ -55,7 +56,7 @@ properties:
+     $ref: /schemas/graph.yaml#/properties/port
+     description:
+       Output port node. This port should be connected to the input port of an
+-      attached HDMI or LVDS encoder chip.
++      attached HDMI, LVDS or DisplayPort encoder chip.
+ 
+ required:
+   - compatible
 -- 
 2.18.0
 

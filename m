@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A24C551E55
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B62551DF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243810AbiFTNwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S1351169AbiFTOMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350834AbiFTNt4 (ORCPT
+        with ESMTP id S1350399AbiFTNxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:49:56 -0400
+        Mon, 20 Jun 2022 09:53:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6003C30F4C;
-        Mon, 20 Jun 2022 06:18:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456B95F8D;
+        Mon, 20 Jun 2022 06:19:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C26FB811A9;
-        Mon, 20 Jun 2022 13:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E76C341C5;
-        Mon, 20 Jun 2022 13:03:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E08DEB811BF;
+        Mon, 20 Jun 2022 13:19:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B588C3411B;
+        Mon, 20 Jun 2022 13:19:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730183;
-        bh=sqCmcWHluf9t/3T2aEcZzz6GD+/iuY1ae/T0xU5MOPA=;
+        s=korg; t=1655731190;
+        bh=PnwFDSr0QbHhkvmwmnkK4Kuu2ybmHtpHvkQaBoGakRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ALMwcAc/s8XWUJ3mWrD83GOrmQOiLGbUf7oAgsBa9+43FLUx/ILUSqT7J9Xfr2PJt
-         RWDO7bJ2fBmpjwKT73KvMgF0KM6VZ+btvHdeG4q+6CQxICKzihji+rgPvyAL9IqE1m
-         9nv46wwNP/BfJsA9zuPTqfS3Zxuupj5sVJmflnRQ=
+        b=r74nb9u7TZk1Hk9CJR2W3FuGm0a22MaO38cfTYgySyKvWTBAlBlChv7Vp69r3bnL/
+         fY5fkhW0EvZbXDmxkQJ7g5lpCyFhLHvjksAcZltFbCnGf1DeZ+LwkIUNJyfl6YdusK
+         NPFTjH3Kc/3fWU6wX2qCLR/0aJxH+11pdBSB33UY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 59/84] i2c: designware: Use standard optional ref clock implementation
+        stable@vger.kernel.org, Wanming Hu <huwanming@huaweil.com>,
+        He Ying <heying24@huawei.com>,
+        Chen Jingwen <chenjingwen6@huawei.com>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 181/240] powerpc/kasan: Silence KASAN warnings in __get_wchan()
 Date:   Mon, 20 Jun 2022 14:51:22 +0200
-Message-Id: <20220620124722.635416518@linuxfoundation.org>
+Message-Id: <20220620124744.238370329@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,78 +58,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From: He Ying <heying24@huawei.com>
 
-[ Upstream commit 27071b5cbca59d8e8f8750c199a6cbf8c9799963 ]
+[ Upstream commit a1b29ba2f2c171b9bea73be993bfdf0a62d37d15 ]
 
-Even though the DW I2C controller reference clock source is requested by
-the method devm_clk_get() with non-optional clock requirement the way the
-clock handler is used afterwards has a pure optional clock semantic
-(though in some circumstances we can get a warning about the clock missing
-printed in the system console). There is no point in reimplementing that
-functionality seeing the kernel clock framework already supports the
-optional interface from scratch. Thus let's convert the platform driver to
-using it.
+The following KASAN warning was reported in our kernel.
 
-Note by providing this commit we get to fix two problems. The first one
-was introduced in commit c62ebb3d5f0d ("i2c: designware: Add support for
-an interface clock"). It causes not having the interface clock (pclk)
-enabled/disabled in case if the reference clock isn't provided. The second
-problem was first introduced in commit b33af11de236 ("i2c: designware: Do
-not require clock when SSCN and FFCN are provided"). Since that
-modification the deferred probe procedure has been unsupported in case if
-the interface clock isn't ready.
+  BUG: KASAN: stack-out-of-bounds in get_wchan+0x188/0x250
+  Read of size 4 at addr d216f958 by task ps/14437
 
-Fixes: c62ebb3d5f0d ("i2c: designware: Add support for an interface clock")
-Fixes: b33af11de236 ("i2c: designware: Do not require clock when SSCN and FFCN are provided")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+  CPU: 3 PID: 14437 Comm: ps Tainted: G           O      5.10.0 #1
+  Call Trace:
+  [daa63858] [c0654348] dump_stack+0x9c/0xe4 (unreliable)
+  [daa63888] [c035cf0c] print_address_description.constprop.3+0x8c/0x570
+  [daa63908] [c035d6bc] kasan_report+0x1ac/0x218
+  [daa63948] [c00496e8] get_wchan+0x188/0x250
+  [daa63978] [c0461ec8] do_task_stat+0xce8/0xe60
+  [daa63b98] [c0455ac8] proc_single_show+0x98/0x170
+  [daa63bc8] [c03cab8c] seq_read_iter+0x1ec/0x900
+  [daa63c38] [c03cb47c] seq_read+0x1dc/0x290
+  [daa63d68] [c037fc94] vfs_read+0x164/0x510
+  [daa63ea8] [c03808e4] ksys_read+0x144/0x1d0
+  [daa63f38] [c005b1dc] ret_from_syscall+0x0/0x38
+  --- interrupt: c00 at 0x8fa8f4
+      LR = 0x8fa8cc
+
+  The buggy address belongs to the page:
+  page:98ebcdd2 refcount:0 mapcount:0 mapping:00000000 index:0x2 pfn:0x1216f
+  flags: 0x0()
+  raw: 00000000 00000000 01010122 00000000 00000002 00000000 ffffffff 00000000
+  raw: 00000000
+  page dumped because: kasan: bad access detected
+
+  Memory state around the buggy address:
+   d216f800: 00 00 00 00 00 f1 f1 f1 f1 00 00 00 00 00 00 00
+   d216f880: f2 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  >d216f900: 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00
+                                            ^
+   d216f980: f2 f2 f2 f2 f2 f2 f2 00 00 00 00 00 00 00 00 00
+   d216fa00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+After looking into this issue, I find the buggy address belongs
+to the task stack region. It seems KASAN has something wrong.
+I look into the code of __get_wchan in x86 architecture and
+find the same issue has been resolved by the commit
+f7d27c35ddff ("x86/mm, kasan: Silence KASAN warnings in get_wchan()").
+The solution could be applied to powerpc architecture too.
+
+As Andrey Ryabinin said, get_wchan() is racy by design, it may
+access volatile stack of running task, thus it may access
+redzone in a stack frame and cause KASAN to warn about this.
+
+Use READ_ONCE_NOCHECK() to silence these warnings.
+
+Reported-by: Wanming Hu <huwanming@huaweil.com>
+Signed-off-by: He Ying <heying24@huawei.com>
+Signed-off-by: Chen Jingwen <chenjingwen6@huawei.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220121014418.155675-1-heying24@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-designware-common.c  |  3 ---
- drivers/i2c/busses/i2c-designware-platdrv.c | 13 +++++++++++--
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ arch/powerpc/kernel/process.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 3c19aada4b30..9468c6c89b3f 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -474,9 +474,6 @@ int i2c_dw_prepare_clk(struct dw_i2c_dev *dev, bool prepare)
- {
- 	int ret;
+diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
+index c94bba9142e7..832663f21422 100644
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -2001,12 +2001,12 @@ static unsigned long __get_wchan(struct task_struct *p)
+ 		return 0;
  
--	if (IS_ERR(dev->clk))
--		return PTR_ERR(dev->clk);
--
- 	if (prepare) {
- 		/* Optional interface clock */
- 		ret = clk_prepare_enable(dev->pclk);
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 0dfeb2d11603..ad91c7c0faa5 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -266,8 +266,17 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 		goto exit_reset;
- 	}
- 
--	dev->clk = devm_clk_get(&pdev->dev, NULL);
--	if (!i2c_dw_prepare_clk(dev, true)) {
-+	dev->clk = devm_clk_get_optional(&pdev->dev, NULL);
-+	if (IS_ERR(dev->clk)) {
-+		ret = PTR_ERR(dev->clk);
-+		goto exit_reset;
-+	}
-+
-+	ret = i2c_dw_prepare_clk(dev, true);
-+	if (ret)
-+		goto exit_reset;
-+
-+	if (dev->clk) {
- 		u64 clk_khz;
- 
- 		dev->get_clk_rate_khz = i2c_dw_get_clk_rate_khz;
+ 	do {
+-		sp = *(unsigned long *)sp;
++		sp = READ_ONCE_NOCHECK(*(unsigned long *)sp);
+ 		if (!validate_sp(sp, p, STACK_FRAME_OVERHEAD) ||
+ 		    p->state == TASK_RUNNING)
+ 			return 0;
+ 		if (count > 0) {
+-			ip = ((unsigned long *)sp)[STACK_FRAME_LR_SAVE];
++			ip = READ_ONCE_NOCHECK(((unsigned long *)sp)[STACK_FRAME_LR_SAVE]);
+ 			if (!in_sched_functions(ip))
+ 				return ip;
+ 		}
 -- 
 2.35.1
 

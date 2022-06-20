@@ -2,168 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287275517BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3DA5517C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241198AbiFTLrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S242053AbiFTLso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbiFTLrn (ORCPT
+        with ESMTP id S242052AbiFTLsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:47:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AC465D1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:47:42 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E5ACF1FD99;
-        Mon, 20 Jun 2022 11:47:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655725660; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=96v5KVBMCRN0CUZgfk6RU0ZTFsFKM6nbaz5uskmEPVk=;
-        b=e5FAVZ6ebvJIKU0QIKQTrIBY2XCb2PpMgiBdrZMl3DtvavI4S2wsClKp9rxhXZGlV0HkUp
-        RuZufOChROY3avKns7frOhIQOZ1XicY41Ry0V6zZnG7+81pt/j14tWdn6HCoXE0Bn57LAx
-        2eQ7l+SFnOeg9XQNCYaOnCLakQKAAAg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B8BEC2C15D;
-        Mon, 20 Jun 2022 11:47:40 +0000 (UTC)
-Date:   Mon, 20 Jun 2022 13:47:40 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: Boot stall regression from "printk for 5.19" merge
-Message-ID: <YrBeXDHAF7vxybyP@alley>
-References: <20220619204949.50d9154d@thinkpad>
- <87r13kwawb.fsf@jogness.linutronix.de>
- <20220620112936.48fcb2a4@thinkpad>
- <YrBdjVwBOVgLfHyb@alley>
+        Mon, 20 Jun 2022 07:48:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9DE17057;
+        Mon, 20 Jun 2022 04:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655725717; x=1687261717;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Fg8wToUgzOMv1MBkkI+JlUdgqqTH6ag3Hnfhb3mXbJs=;
+  b=H0dXDi4NhcfC1Ih6+wo1mI+6tHgKG2fNeHFvK8slsiYvMgmVP2VlYiED
+   p0ex7U7XyLtaufSc8mT2Lcoe3yJTW8ANH6EJf9TiKAeZvbdrJLc85XR4d
+   qcTPdpt5g53Y0R6oJBXFCp9N3KYwJxf7SAV30/MAxazvOaLhOPTsX+JiH
+   Lq5+Xx3u3pOGVUoZSLWlimVT1QBV1uM5HrhoQk8ac27PcqvvMyfUqwJxb
+   FfWER7Xf+FNnUZg8+QT4FfeSbVPEZSO8TcHgMk+dHi+ZmTCkQr/jfTWT1
+   +Hvl5sISBEZ+E8nAjlCGib/TcMvPlzSrmtvpkyQ21Xl/pX88WINg7FASL
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280605064"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280605064"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 04:48:37 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="833079546"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 04:48:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3FtO-000kLC-P2;
+        Mon, 20 Jun 2022 14:48:30 +0300
+Date:   Mon, 20 Jun 2022 14:48:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH v8 5/6] serial: Support for RS-485 multipoint addresses
+Message-ID: <YrBejkxeZfpQ35iG@smile.fi.intel.com>
+References: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
+ <20220620064030.7938-6-ilpo.jarvinen@linux.intel.com>
+ <YrBS03ymAWVajy7e@smile.fi.intel.com>
+ <a9b8ec3a-4f40-c0f5-e1a-bb577d5937ff@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrBdjVwBOVgLfHyb@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a9b8ec3a-4f40-c0f5-e1a-bb577d5937ff@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resending with Ilpo, driver maintainer, in CC.
+On Mon, Jun 20, 2022 at 02:26:17PM +0300, Ilpo Järvinen wrote:
+> On Mon, 20 Jun 2022, Andy Shevchenko wrote:
+> > On Mon, Jun 20, 2022 at 09:40:29AM +0300, Ilpo Järvinen wrote:
 
-On Mon 2022-06-20 13:44:17, Petr Mladek wrote:
-> On Mon 2022-06-20 11:29:36, Marek Behún wrote:
-> > On Mon, 20 Jun 2022 00:29:16 +0206
-> > John Ogness <john.ogness@linutronix.de> wrote:
-> > > On 2022-06-19, Marek Behún <kabel@kernel.org> wrote:
-> > > > causes a regression on arm64 (Marvell CN9130-CRB board) where the
-> > > > system boot freezes in most cases (and is unusable until restarted by
-> > > > watchdog), or, in some cases boots, but the console output gets mangled
-> > > > for a while (the serial console spits garbage characters).  
+...
+
+> > > The changes to serial_rs485 struct were test built with a few traps to
+> > > detect mislayouting on archs lkp/0day builts for (all went fine):
+> > >   BUILD_BUG_ON(((&rs485.delay_rts_after_send) + 1) != &rs485.padding[0]);
+> > >   BUILD_BUG_ON(&rs485.padding[1] != &rs485.padding1[0]);
+> > >   BUILD_BUG_ON(sizeof(rs485) != ((u8 *)(&rs485.padding[4]) -
+> > > 				 ((u8 *)&rs485.flags) + sizeof(__u32)));
 > > 
-> > attaching bootlogs and config.
+> > You may add static_asserts() for the above mentioned cases.
 > 
-> This is the log when the system booted:
+> I'll add into the end of serial_core.h but in a cleaned up form
+> using offsetof(). Those above look rather ugly :-).
+
+Agree!
+
+...
+
+> > > -	__u32	padding[5];		/* Memory is cheap, new structs
+> > > -					   are a royal PITA .. */
+> > > +	union {
+> > > +		/* v1 */
+> > > +		__u32	padding[5];		/* Memory is cheap, new structs are a pain */
+> > > +
+> > > +		/* v2 (adds addressing mode fields) */
+> > 
+> > How user space will inform a kernel that it's trying v2?
+> >
+> > Usually when we have a union, it should be accompanied with the enum or version
+> > or something to tell which part of it is in use. I can imagine that in this case
+> > it's implied by the IOCTL parameters that never should be used on a garbage.
+> > 
+> > Either add a commit message / UAPI comment or add a version field or ...?
+> > 
+> > > +		struct {
+> > > +			__u8	addr_recv;
+> > > +			__u8	addr_dest;
 > 
-> > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd083]
-> > [    0.000000] Linux version 5.19.0-rc2-00410-g9776fe0f424b (kabel@dellmb) (aarch64-unknown-linux-gnu-gcc (Gentoo Hardened 10.3.1_p20211126 p0) 10.3.1 20211126, GNU ld (Gentoo 2.37_p1 p2) 2.37) #491 SMP Mon Jun 20 11:00:54 CEST 2022
-> > [    0.000000] Machine model: Marvell Armada CN9130-CRB-B
-> > [    0.000000] earlycon: uart8250 at MMIO32 0x00000000f0512000 (options '')
-> > [    0.000000] printk: bootconsole [uart8250] enabled
-> 
-> Early console enabled.
-> 
-> > [    0.000000] NUMA: No NUMA configuration found
-> [...]
-> > [    0.062565] rcu: Hierarchical SRCU implementation.
-> > [    0.062589] printk: bootconsole [uart8250] printing thread started
-> 
-> The early console started being handled by the kthread.
-> 
-> > [    0.073843] smp: Bringing up secondary CPUs ...
-> > [    0.074238] Detected PIPT I-cache on CPU1
-> [...]
-> > [    1.067359] io scheduler kyber registered
-> > [    1.120214] armada-ap806-pinctrl f06f4000.system-controller:pinctrl: registered pinctrl driver
-> > [    1.120577] armada-cp110-pinctrl f2440000.system-controller:pinctrl: registered pinctrl driver
-> > [    1.137980] mv_xor_v2 f0400000.xor: Marvell Version 2 XOR driver
-> > [    1.166562] printk:[ console [ttyS0] printing thread started
-> >  [    1.166564] printk: console [ttyS0] enabled
-> 
-> 2nd console was added using the properly initialized serial port.
-> It should use the same physical port as the early console.
-> 
-> Both early console and proper console driver has its own kthread.
-> 
-> >    1.166486] f0512000.serial: ttyS0 at MMIO 0xf0512000 (irq = 22, base_baud = 12500000) is a 16550A
-> 
-> The line is malformed. I wonder if both early console and proper
-> console used the same port in parallel.
-> 
-> > [    1.166567] printk: bootconsole [uart8250] disabled
-> > [    1.185422] printk: bootconsole [uart8250] printing thread stopped
-> 
-> The early console was disabled. Only the properly initialized serial
-> console is used. All should be fine now.
-> 
-> 
-> > [    1.188773] brd: module loaded
-> > [    1.190567] loop: module loaded
-> [...]
-> > [    5.316958] Freeing unused kernel memory: 2752K
-> > [    5.364349] Run /sbin/init as init process
-> 
-> And I did not catch any further problem.
-> 
-> So, it looks like that con->write() code is not correctly serialized
-> between the early and normal console.
-> 
-> 
-> Now, let's see the last lines of failing logs:
-> 
-> 
-> > [    1.071214] io scheduler kyber registered
-> > [    1.124272] armada-ap806-pinctrl f06f4000.system-controller:pinctrl: registered pinctrl driver
-> > [
-> 
-> > [    1.067314] io scheduler kyber registered
-> > [    1.120226] armada-ap806-pinctrl f06f4000.system-controller:pinctrl: registered pinctrl driver
-> > [    1.120603] armada-cp110-pinctrl f2440000.system-controller:pinctrl: registered pinctrl driver
-> > [    1.137975] mv_xor_v2 f0400000.xor: Marvell Version 2 XOR driver
-> > [    1.138248] mv_xor_v2 f0420000.xor: Marvell Version 2 XOR driver
-> > [    1.
-> 
-> > [    1.067214] io scheduler kyber registered
-> > [    1.120098] armada-ap806-pinctrl f06f4000.system-controller:pinctrl: registered pinctrl driver
-> > [    1.120466] armada-cp110-pinctrl f2440000.system-controller:pinctrl: registered pinctrl driver
-> > [    1.137871] mv_xor_v2 f0400000.xor: Marvell Version 2 XOR driver
-> > [    1.138160] mv_xor_v2 f0420000.xor: Marvell Version 2 XOR driver
-> > [
-> 
-> All three logs end in the middle of a line. If you compare it with the
-> "working" log then the end 1-3 lines before the normal console was added.
-> 
-> The console output might is delayed because of the threads. Most
-> likely, the output ended when both early and normal console driver
-> started to use the same port.
-> 
-> I am going to check the driver...
-> 
-> Best Regards,
-> Petr
+> The flags in .flags indicate when these two new fields are in use. Do you 
+> think I need something beyond that. Maybe I should remove those comments 
+> so they don't mislead you to think it's a "version" for real?
+
+Yes, either drop this versioning, or replace with a comment on top of a union
+like:
+
+	/* The fields are defined by flags */
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

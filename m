@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F8455143A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504AB55143B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiFTJY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S240529AbiFTJZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiFTJYy (ORCPT
+        with ESMTP id S240250AbiFTJZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:24:54 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D668412ABF;
-        Mon, 20 Jun 2022 02:24:53 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LRPNw22LKz688LD;
-        Mon, 20 Jun 2022 17:24:32 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 20 Jun 2022 11:24:51 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 20 Jun
- 2022 10:24:51 +0100
-Date:   Mon, 20 Jun 2022 10:24:49 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V11 3/8] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <20220620102449.000041d4@Huawei.com>
-In-Reply-To: <20220617224019.GA1208614@bhelgaas>
-References: <20220610202259.3544623-4-ira.weiny@intel.com>
-        <20220617224019.GA1208614@bhelgaas>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 20 Jun 2022 05:25:04 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0B912604
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:25:03 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id b7so11209818ljr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xbydWtTEQ7/9ZWZC+wL+2zf+Ge3aJVYC062WRrIfkg0=;
+        b=Mbk+soIB+gNfMR++dR/N+4RrxMk+FZPgSYoBYMP9pou/tI+pWFRwGuTSczx+EozJMM
+         AlWDarxHpI0bFfguGDaFHOWJiZFfzgbrnBrrdSo7xFyxD0vBX4AWFDUpmaZuIP7xLTIx
+         mTI4GfPzBs2Ct0G8Wqm8uCPENtr0UfB/0GqpO16cn3oHYgMLN3IuwLS+BDjCtni3PTKC
+         ECH48h6wOHRc4UpHhzjWKaj2BbBCsCjb0AL6Kw8+muEnVUSkdl4XyWcWEw9YuiqQIYY9
+         H7euaxE/MOH7LimSFjVo5SszxacqZL9xIWMPDHMYuBM72bqcNWOKz1LjskbBgg1ZtC74
+         6HnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xbydWtTEQ7/9ZWZC+wL+2zf+Ge3aJVYC062WRrIfkg0=;
+        b=Ipl71b27B+jDSierHiqyeyhDi8GQhTDamBMsqYGOUM9r3bgHj/oPCHpupjFbw3S2qZ
+         VQQ0j3Yx9202s4eRNH5RiOCcpKDvM0DErB0QRxM2PaisL14pp3JVwODMl2Q3TRpbCNtx
+         rwkFuV9+/SavpwhPy0iUYXzsI5SvzB4aL+m+D/vsRXszp7UqkHtD/xgEy5FlbhjajnVx
+         Sv4jGQWsXy1XmzFClBqT3TQritzAbOO8IqbupaZc1JeGRWbHhrHU1z3kuI5WNIN+3Bpx
+         a13fyYso4rGNm1gN9krW0gmJV9Zysa3ioz+ppd/eE84mhjYpFrXQsGl1iS788Ns3eReG
+         P3TQ==
+X-Gm-Message-State: AJIora/todks6zbfxEacgJv72rtULzwcUkdbCKetaUZbuqHhanqYrBvh
+        ETzRlhNgQNvKeUc/kW3HUrfkmvC05rWotw==
+X-Google-Smtp-Source: AGRyM1suLPIRh/79vPEuUEkBApingnuv7ol/BqpefRAXAjYrZcQv+mHti1q2oHM3BNipn1o0Sc2JUw==
+X-Received: by 2002:a2e:964a:0:b0:25a:66ac:70e with SMTP id z10-20020a2e964a000000b0025a66ac070emr4082158ljh.147.1655717101522;
+        Mon, 20 Jun 2022 02:25:01 -0700 (PDT)
+Received: from mutt (c-7303e555.07-21-73746f28.bbcust.telenor.se. [85.229.3.115])
+        by smtp.gmail.com with ESMTPSA id e17-20020a195011000000b00478e9b28fe4sm1699729lfb.80.2022.06.20.02.25.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 02:25:01 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 11:24:59 +0200
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.petersen@oracle.com, avri.altman@wdc.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com, bvanassche@acm.org,
+        peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
+        alice.chao@mediatek.com, powen.kao@mediatek.com,
+        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, eddie.huang@mediatek.com,
+        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
+Subject: Re: [PATCH v5 10/11] scsi: ufs-mediatek: Support multiple VCC sources
+Message-ID: <20220620092459.GA37723@mutt>
+References: <20220616053725.5681-1-stanley.chu@mediatek.com>
+ <20220616053725.5681-11-stanley.chu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220616053725.5681-11-stanley.chu@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Bjorn,
-
-Thanks for reviewing!  Up to Ira of course, but I agree with all your
-comments - a few responses to questions follow.
-
+On 2022-06-16 13:37, Stanley Chu wrote:
+> Support multiple VCC source in MediaTek UFS platforms.
 > 
-> > + * pci_doe_supports_prot() - Return if the DOE instance supports the given
-> > + *			     protocol
-> > + * @doe_mb: DOE mailbox capability to query
-> > + * @vid: Protocol Vendor ID
-> > + * @type: Protocol type
-> > + *
-> > + * RETURNS: True if the DOE mailbox supports the protocol specified  
+> Two options are provided and distinguished by specific
+> device tree attributes as below examples,
 > 
-> Is the typical use that the caller has a few specific protocols it
-> cares about?  There's no case where a caller might want to enumerate
-> them all?  I guess they're all in prots[], but that's supposed to be
-> opaque to users.
-
-Given each protocol needs specific handling in the driver, the only
-usecase for a general enumeration would be debug I think.  Maybe
-it makes sense to provide that info to userspace somewhere, but
-definitely feels like something for a follow up discussion.
-
+> [Option 1: By numbering]
+> mediatek,ufs-vcc-by-num;
+> vcc-opt1-supply = <&mt6373_vbuck4_ufs>;
+> vcc-opt2-supply = <&mt6363_vemc>;
 > 
-> > + */
-> > +bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
-> > +{
-> > +	int i;
-> > +
-> > +	/* The discovery protocol must always be supported */
-> > +	if (vid == PCI_VENDOR_ID_PCI_SIG && type == PCI_DOE_PROTOCOL_DISCOVERY)
-> > +		return true;
-> > +
-> > +	for (i = 0; i < doe_mb->num_prots; i++)
-> > +		if ((doe_mb->prots[i].vid == vid) &&
-> > +		    (doe_mb->prots[i].type == type))
-> > +			return true;
-> > +
-> > +	return false;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_doe_supports_prot);  
+> [Option 2: By UFS version]
+> mediatek,ufs-vcc-by-ver;
+> vcc-ufs3-supply = <&mt6373_vbuck4_ufs>;
 > 
-> > + * struct pci_doe_task - represents a single query/response
-> > + *
-> > + * @prot: DOE Protocol
-> > + * @request_pl: The request payload
-> > + * @request_pl_sz: Size of the request payload  
+> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+> ---
+>  drivers/ufs/host/ufs-mediatek.c | 46 ++++++++++++++++++++++++++++++++-
+>  drivers/ufs/host/ufs-mediatek.h | 14 ++++++++++
+>  2 files changed, 59 insertions(+), 1 deletion(-)
 > 
-> Size is in dwords, not bytes, I guess?
+> diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+> index e756aba45acd..34e51c094366 100755
+> --- a/drivers/ufs/host/ufs-mediatek.c
+> +++ b/drivers/ufs/host/ufs-mediatek.c
+> @@ -669,6 +669,49 @@ static u32 ufs_mtk_get_ufs_hci_version(struct ufs_hba *hba)
+>  	return hba->ufs_version;
+>  }
+>  
+> +#define MAX_VCC_NAME 30
+> +static int ufs_mtk_vreg_fix_vcc(struct ufs_hba *hba)
+> +{
+> +	struct ufs_vreg_info *info = &hba->vreg_info;
+> +	struct device_node *np = hba->dev->of_node;
+> +	struct device *dev = hba->dev;
+> +	char vcc_name[MAX_VCC_NAME];
+> +	struct arm_smccc_res res;
+> +	int err, ver;
+> +
+> +	if (hba->vreg_info.vcc)
+> +		return 0;
+> +
+> +	if (of_property_read_bool(np, "mediatek,ufs-vcc-by-num")) {
+> +		ufs_mtk_get_vcc_num(res);
+> +		if (res.a1 > UFS_VCC_NONE && res.a1 < UFS_VCC_MAX)
+> +			snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%u", res.a1);
 
-It's in bytes (IIRC) - we divide it by. It's a bit of a mess,
-but there are parts of SPDM over CMA where messages are not
-full number of dwords. My thinking was that we 'might' move
-the padding into the generic code if this becomes something
-multiple protocols need.  For now the RFC does the
-padding at the CMA layer.
+Building this showes the following build warning/error
 
-Let's avoid this being unclear in future by stating that it's
-in bytes in the comment.
+drivers/ufs/host/ufs-mediatek.c: In function 'ufs_mtk_vreg_fix_vcc':
+drivers/ufs/host/ufs-mediatek.c:688:67: error: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Werror=format=]
+  688 |                         snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%u", res.a1);
+      |                                                                  ~^   ~~~~~~
+      |                                                                   |      |
+      |                                                                   |      long unsigned int
+      |                                                                   unsigned int
+      |                                                                  %lu
+cc1: all warnings being treated as errors
 
-Jonathan
 
-> 
-> > + * @response_pl: The response payload
-> > + * @response_pl_sz: Size of the response payload
-> > + * @rv: Return value.  Length of received response or error
-> > + * @complete: Called when task is complete
-> > + * @private: Private data for the consumer
-> > + */
-> > +struct pci_doe_task {
-> > +	struct pci_doe_protocol prot;
-> > +	u32 *request_pl;
-> > +	size_t request_pl_sz;
-> > +	u32 *response_pl;
-> > +	size_t response_pl_sz;
-> > +	int rv;
-> > +	void (*complete)(struct pci_doe_task *task);
-> > +	void *private;
-> > +};  
-
+Cheers,
+Anders

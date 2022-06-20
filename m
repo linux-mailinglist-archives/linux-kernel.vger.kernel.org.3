@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30CC551D5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E09551A7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348918AbiFTNux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S244965AbiFTNGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349194AbiFTNs3 (ORCPT
+        with ESMTP id S244841AbiFTNED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:48:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5802EA24;
-        Mon, 20 Jun 2022 06:17:47 -0700 (PDT)
+        Mon, 20 Jun 2022 09:04:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEAE193C0;
+        Mon, 20 Jun 2022 05:58:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 230A161017;
-        Mon, 20 Jun 2022 13:16:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DE9C3411B;
-        Mon, 20 Jun 2022 13:16:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CD3861531;
+        Mon, 20 Jun 2022 12:58:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D445C3411C;
+        Mon, 20 Jun 2022 12:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731006;
-        bh=5ytWGEPki7zvNjF/6JjZcMbuk3kQQxptfDHVJxBB9QY=;
+        s=korg; t=1655729932;
+        bh=ytZ1+hFyV2RqybENQgs4g/BucLFJXxFLio4+veEmxzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hfjbz/BVtHuqvp2yOv8wzDibAt8ojXKRdQFh9HUH+cuDfSoLZK35TozDlJzGD+7VN
-         u6jGZ4bvdB/dezYZDJ8f8KSMBDbSlk4xe27TPeCL2HoOTLG21b8L80F3DPe4nbitWN
-         7U0HOgzQqsQvrh4VQjMacEfilDgm9Dg9Ne0fkSQc=
+        b=XRJKcA/DDfNX5NnJL/H08kwpIpNiyL4jh8UWQvLlAjXcDPO8uVul2YWeyI3NNnuYx
+         rvCGxA/I1sVUsp1aRXJW82tuMSD7T8+hEIF9rnyatD7g5uoDqXL6+0JhhfolSqFHv6
+         ha2OTQppkwdCo1cj1TXwQOBuPA4KxHjG+N/tQidg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Theodore Tso <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 125/240] random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+        stable@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 088/141] faddr2line: Fix overlapping text section failures, the sequel
 Date:   Mon, 20 Jun 2022 14:50:26 +0200
-Message-Id: <20220620124742.634945767@linuxfoundation.org>
+Message-Id: <20220620124732.147178843@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,109 +55,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-commit e3c1c4fd9e6d14059ed93ebfe15e1c57793b1a05 upstream.
+[ Upstream commit dcea997beed694cbd8705100ca1a6eb0d886de69 ]
 
-In 1448769c9cdb ("random: check for signal_pending() outside of
-need_resched() check"), Jann pointed out that we previously were only
-checking the TIF_NOTIFY_SIGNAL and TIF_SIGPENDING flags if the process
-had TIF_NEED_RESCHED set, which meant in practice, super long reads to
-/dev/[u]random would delay signal handling by a long time. I tried this
-using the below program, and indeed I wasn't able to interrupt a
-/dev/urandom read until after several megabytes had been read. The bug
-he fixed has always been there, and so code that reads from /dev/urandom
-without checking the return value of read() has mostly worked for a long
-time, for most sizes, not just for <= 256.
+If a function lives in a section other than .text, but .text also exists
+in the object, faddr2line may wrongly assume .text.  This can result in
+comically wrong output.  For example:
 
-Maybe it makes sense to keep that code working. The reason it was so
-small prior, ignoring the fact that it didn't work anyway, was likely
-because /dev/random used to block, and that could happen for pretty
-large lengths of time while entropy was gathered. But now, it's just a
-chacha20 call, which is extremely fast and is just operating on pure
-data, without having to wait for some external event. In that sense,
-/dev/[u]random is a lot more like /dev/zero.
+  $ scripts/faddr2line vmlinux.o enter_from_user_mode+0x1c
+  enter_from_user_mode+0x1c/0x30:
+  find_next_bit at /home/jpoimboe/git/linux/./include/linux/find.h:40
+  (inlined by) perf_clear_dirty_counters at /home/jpoimboe/git/linux/arch/x86/events/core.c:2504
 
-Taking a page out of /dev/zero's read_zero() function, it always returns
-at least one chunk, and then checks for signals after each chunk. Chunk
-sizes there are of length PAGE_SIZE. Let's just copy the same thing for
-/dev/[u]random, and check for signals and cond_resched() for every
-PAGE_SIZE amount of data. This makes the behavior more consistent with
-expectations, and should mitigate the impact of Jann's fix for the
-age-old signal check bug.
+Fix it by passing the section name to addr2line, unless the object file
+is vmlinux, in which case the symbol table uses absolute addresses.
 
----- test program ----
-
-  #include <unistd.h>
-  #include <signal.h>
-  #include <stdio.h>
-  #include <sys/random.h>
-
-  static unsigned char x[~0U];
-
-  static void handle(int) { }
-
-  int main(int argc, char *argv[])
-  {
-    pid_t pid = getpid(), child;
-    signal(SIGUSR1, handle);
-    if (!(child = fork())) {
-      for (;;)
-        kill(pid, SIGUSR1);
-    }
-    pause();
-    printf("interrupted after reading %zd bytes\n", getrandom(x, sizeof(x), 0));
-    kill(child, SIGTERM);
-    return 0;
-  }
-
-Cc: Jann Horn <jannh@google.com>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1d1a0e7c5100 ("scripts/faddr2line: Fix overlapping text section failures")
+Reported-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Link: https://lore.kernel.org/r/7d25bc1408bd3a750ac26e60d2f2815a5f4a8363.1654130536.git.jpoimboe@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/random.c |   17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ scripts/faddr2line | 45 ++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 34 insertions(+), 11 deletions(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -523,7 +523,6 @@ EXPORT_SYMBOL(get_random_bytes);
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 0e6268d59883..94ed98dd899f 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -95,17 +95,25 @@ __faddr2line() {
+ 	local print_warnings=$4
  
- static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
- {
--	bool large_request = nbytes > 256;
- 	ssize_t ret = 0;
- 	size_t len;
- 	u32 chacha_state[CHACHA_BLOCK_SIZE / sizeof(u32)];
-@@ -549,15 +548,6 @@ static ssize_t get_random_bytes_user(voi
- 	}
+ 	local sym_name=${func_addr%+*}
+-	local offset=${func_addr#*+}
+-	offset=${offset%/*}
++	local func_offset=${func_addr#*+}
++	func_offset=${func_offset%/*}
+ 	local user_size=
++	local file_type
++	local is_vmlinux=0
+ 	[[ $func_addr =~ "/" ]] && user_size=${func_addr#*/}
  
- 	do {
--		if (large_request) {
--			if (signal_pending(current)) {
--				if (!ret)
--					ret = -ERESTARTSYS;
--				break;
--			}
--			cond_resched();
--		}
--
- 		chacha20_block(chacha_state, output);
- 		if (unlikely(chacha_state[12] == 0))
- 			++chacha_state[13];
-@@ -571,6 +561,13 @@ static ssize_t get_random_bytes_user(voi
- 		nbytes -= len;
- 		buf += len;
- 		ret += len;
+-	if [[ -z $sym_name ]] || [[ -z $offset ]] || [[ $sym_name = $func_addr ]]; then
++	if [[ -z $sym_name ]] || [[ -z $func_offset ]] || [[ $sym_name = $func_addr ]]; then
+ 		warn "bad func+offset $func_addr"
+ 		DONE=1
+ 		return
+ 	fi
+ 
++	# vmlinux uses absolute addresses in the section table rather than
++	# section offsets.
++	local file_type=$(${READELF} --file-header $objfile |
++		${AWK} '$1 == "Type:" { print $2; exit }')
++	[[ $file_type = "EXEC" ]] && is_vmlinux=1
 +
-+		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
-+		if (!(ret % PAGE_SIZE) && nbytes) {
-+			if (signal_pending(current))
-+				break;
-+			cond_resched();
-+		}
- 	} while (nbytes);
+ 	# Go through each of the object's symbols which match the func name.
+ 	# In rare cases there might be duplicates, in which case we print all
+ 	# matches.
+@@ -114,9 +122,11 @@ __faddr2line() {
+ 		local sym_addr=0x${fields[1]}
+ 		local sym_elf_size=${fields[2]}
+ 		local sym_sec=${fields[6]}
++		local sec_size
++		local sec_name
  
- 	memzero_explicit(output, sizeof(output));
+ 		# Get the section size:
+-		local sec_size=$(${READELF} --section-headers --wide $objfile |
++		sec_size=$(${READELF} --section-headers --wide $objfile |
+ 			sed 's/\[ /\[/' |
+ 			${AWK} -v sec=$sym_sec '$1 == "[" sec "]" { print "0x" $6; exit }')
+ 
+@@ -126,6 +136,17 @@ __faddr2line() {
+ 			return
+ 		fi
+ 
++		# Get the section name:
++		sec_name=$(${READELF} --section-headers --wide $objfile |
++			sed 's/\[ /\[/' |
++			${AWK} -v sec=$sym_sec '$1 == "[" sec "]" { print $2; exit }')
++
++		if [[ -z $sec_name ]]; then
++			warn "bad section name: section: $sym_sec"
++			DONE=1
++			return
++		fi
++
+ 		# Calculate the symbol size.
+ 		#
+ 		# Unfortunately we can't use the ELF size, because kallsyms
+@@ -174,10 +195,10 @@ __faddr2line() {
+ 
+ 		sym_size=0x$(printf %x $sym_size)
+ 
+-		# Calculate the section address from user-supplied offset:
+-		local addr=$(($sym_addr + $offset))
++		# Calculate the address from user-supplied offset:
++		local addr=$(($sym_addr + $func_offset))
+ 		if [[ -z $addr ]] || [[ $addr = 0 ]]; then
+-			warn "bad address: $sym_addr + $offset"
++			warn "bad address: $sym_addr + $func_offset"
+ 			DONE=1
+ 			return
+ 		fi
+@@ -191,9 +212,9 @@ __faddr2line() {
+ 		fi
+ 
+ 		# Make sure the provided offset is within the symbol's range:
+-		if [[ $offset -gt $sym_size ]]; then
++		if [[ $func_offset -gt $sym_size ]]; then
+ 			[[ $print_warnings = 1 ]] &&
+-				echo "skipping $sym_name address at $addr due to size mismatch ($offset > $sym_size)"
++				echo "skipping $sym_name address at $addr due to size mismatch ($func_offset > $sym_size)"
+ 			continue
+ 		fi
+ 
+@@ -202,11 +223,13 @@ __faddr2line() {
+ 		[[ $FIRST = 0 ]] && echo
+ 		FIRST=0
+ 
+-		echo "$sym_name+$offset/$sym_size:"
++		echo "$sym_name+$func_offset/$sym_size:"
+ 
+ 		# Pass section address to addr2line and strip absolute paths
+ 		# from the output:
+-		local output=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
++		local args="--functions --pretty-print --inlines --exe=$objfile"
++		[[ $is_vmlinux = 0 ]] && args="$args --section=$sec_name"
++		local output=$(${ADDR2LINE} $args $addr | sed "s; $dir_prefix\(\./\)*; ;")
+ 		[[ -z $output ]] && continue
+ 
+ 		# Default output (non --list):
+-- 
+2.35.1
+
 
 

@@ -2,65 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67807551009
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24D855100C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238493AbiFTGDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S238491AbiFTGHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238502AbiFTGDV (ORCPT
+        with ESMTP id S232762AbiFTGHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:03:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865055FF1;
-        Sun, 19 Jun 2022 23:03:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 432821F916;
-        Mon, 20 Jun 2022 06:03:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655704999; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gv9EGbhHKTU9NAIzd5Fwb9sAZGrgO5CTCjt3oCBuAAc=;
-        b=ifGeYyEecXtzyzBHhtx0iLHzGIzv0JnsYRL7bPucqrxYTOX0SwrN6yw/VU0+Z5rd7G0aGg
-        ABGHfNibUwmaCy6VpVZJyC1hqBSMA7FgderqocB9nnYm04PsAxftqTeOWMqTXp3SJIrOts
-        +9xcLW5uzLdkS+YryOgCvGmUbFjRUQw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0427813638;
-        Mon, 20 Jun 2022 06:03:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id umzVOqYNsGL/YgAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 20 Jun 2022 06:03:18 +0000
-Message-ID: <5431f626-9bd3-ed54-9889-aafbba9ca3e0@suse.com>
-Date:   Mon, 20 Jun 2022 08:03:18 +0200
+        Mon, 20 Jun 2022 02:07:12 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4204A656E
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655705232; x=1687241232;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jCVW2VD3p3E4Ofb+bvcuspH3xYyQy+8SWjIJiqR2b4M=;
+  b=pkPhtuLaxyZC5K73L2bIxAfLf6BWFSveat0VKaJAebhmMlM00N6Cj1Hr
+   gxOuisgk05dw02P19nSG04GCT+acGMbadeLg5545ZUfVvR3q5zF+Lwa59
+   OBcvlsmqSpIP3WKIsihBhjpsa5NG3Rb052WX4qU43x9UCfXkINkI/p5mK
+   wV+RV9gQkTk/8k/hPHSyvOahjVI14t295by1udAPgI8YLG6KE9JzGShXV
+   vE3bR8yxGkozALx9IBGGctjGFtFrHQaav3lLsR0jMFYiyZOy4JstD1IPV
+   H7sdQiMexrDJtjmWXWtIoXNQER6LSCcL6/TSrCwwH3ofAenSuR2WSu38a
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
+   d="scan'208";a="307912573"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 20 Jun 2022 14:07:10 +0800
+IronPort-SDR: ZjXpLpbHChALf6/z3zkvwEBqB24W2jj9wFFg3SsRS13cbYZr4hl6L59Gy3aPS33T4Md8GloHeQ
+ Hi4wr+ni2NZS79v9U0glsCM0UP7M3pSewDfgqxsTVENliEyzaUuOs2iHQEH740caS/Jkh4F9ko
+ a2EGmoLuLaqX+MTrV1jlsJE5m0ab3QCRdlgUPhRkrRRUjg4JHEgiyw2kSB/9YltIOosE5Olf/+
+ pUxrBC9Pu661KtqpRQo/7dHC139LT2PFp7AgUwKCunaih0sO9V52IeFYOVYDqzwABwdwVxewTr
+ kF5L2iDMOWXJOb1TDTKEDqCB
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jun 2022 22:29:42 -0700
+IronPort-SDR: 2GgwTNq92oXIEbcOwrfAPwPl8qYnP5Al2QyinBCTQ7Giz8shwFK1KpCWnvG0A2eCrXfW3pdnz9
+ bP9FxR4ByB+5zKKUwWPiHnzcFpuPwXQ9xOG1fhbyEEkZ6gmGkFwKV3uOXCFZTYLHzL5ZhtZY8P
+ Qq6mQbObZDvYZzgcemeWv1ScvOTlArs/a3IHmlPrZSWOE9yA1Jp5pLsa0aD7VtdDXy/sfuC7co
+ q5Yu9OYTaSj+hEcfhHAS/jhx3fG3b4Z01UMp663XmEx1HDrG2i/wc/1uDqEErPIdW/XOeWmyib
+ LiE=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jun 2022 23:07:11 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LRK196yzxz1SVp2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:07:09 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655705229; x=1658297230; bh=jCVW2VD3p3E4Ofb+bvcuspH3xYyQy+8SWjI
+        JiqR2b4M=; b=q3eZULXz9zGyoqnyr9s7mb/E5slOyE0yiAfnO3ioxojdfjrLpS2
+        ftX2RJ+A/SkBChLaHGQrlzoGrkbLCtOoS11b2TzN+esm+4U39V/fTgPJdZgmj2a1
+        frFphEFvyXCkgZhsUr8v8BAwDdGE8i5e6OE3vZhPDNSJ1pl1iv5SGQ2AUREyK+j0
+        SxThN0R7nEL26MqextyVaPYFUSO/63gjjv8/NvCUTIBAvfyfHkiOuvHhXaVfwBXD
+        5+zULVMWxOuX0CPBdaRDoidYpIvEIWQAE3dC08m35C7oC9Dw4u162G8tPUvcPZLy
+        TE0InorKFCsTpiGNkjfgIlQLIjJcXiv12qg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yYW57WC6g-XL for <linux-kernel@vger.kernel.org>;
+        Sun, 19 Jun 2022 23:07:09 -0700 (PDT)
+Received: from [10.225.163.87] (unknown [10.225.163.87])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LRK180Gdwz1Rvlc;
+        Sun, 19 Jun 2022 23:07:07 -0700 (PDT)
+Message-ID: <594ac0c9-a55b-bec7-77e3-a6c7e9525f6b@opensource.wdc.com>
+Date:   Mon, 20 Jun 2022 15:07:06 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] s390/kvm: avoid hypfs error message
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/4] scsi: pm8001: Use non-atomic bitmap ops for tag alloc
+ + free
 Content-Language: en-US
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20220607123314.10255-1-jgross@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220607123314.10255-1-jgross@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------JgAyFWNqVwFMFl2oFcsEXtqa"
+To:     Hannes Reinecke <hare@suse.de>, John Garry <john.garry@huawei.com>,
+        jinpu.wang@cloud.ionos.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ajish.Koshy@microchip.com
+References: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
+ <1654879602-33497-4-git-send-email-john.garry@huawei.com>
+ <303bbfad-edde-1197-679e-4a09175fb1f3@suse.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <303bbfad-edde-1197-679e-4a09175fb1f3@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,121 +103,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------JgAyFWNqVwFMFl2oFcsEXtqa
-Content-Type: multipart/mixed; boundary="------------dhzp00Q81Bwnv5shN4Kh1pv3";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
- Heiko Carstens <hca@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>
-Message-ID: <5431f626-9bd3-ed54-9889-aafbba9ca3e0@suse.com>
-Subject: Re: [PATCH] s390/kvm: avoid hypfs error message
-References: <20220607123314.10255-1-jgross@suse.com>
-In-Reply-To: <20220607123314.10255-1-jgross@suse.com>
+On 6/20/22 15:00, Hannes Reinecke wrote:
+> On 6/10/22 18:46, John Garry wrote:
+>> In pm8001_tag_alloc() we don't require atomic set_bit() as we are already
+>> in atomic context. In pm8001_tag_free() we should use the same host
+>> spinlock to protect clearing the tag (and then don't require the atomic
+>> clear_bit()).
+>>
+>> Signed-off-by: John Garry <john.garry@huawei.com>
+>> ---
+>>   drivers/scsi/pm8001/pm8001_sas.c | 10 +++++++---
+>>   1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+>> index 3a863d776724..8e3f2f9ddaac 100644
+>> --- a/drivers/scsi/pm8001/pm8001_sas.c
+>> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+>> @@ -66,7 +66,11 @@ static int pm8001_find_tag(struct sas_task *task, u32 *tag)
+>>   void pm8001_tag_free(struct pm8001_hba_info *pm8001_ha, u32 tag)
+>>   {
+>>   	void *bitmap = pm8001_ha->tags;
+>> -	clear_bit(tag, bitmap);
+>> +	unsigned long flags;
+>> +
+>> +	spin_lock_irqsave(&pm8001_ha->bitmap_lock, flags);
+>> +	__clear_bit(tag, bitmap);
+>> +	spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+>>   }
+>>   
+> This spin lock is pretty much pointless; clear_bit() is always atomic.
 
---------------dhzp00Q81Bwnv5shN4Kh1pv3
-Content-Type: multipart/mixed; boundary="------------fasRUmpl5lg2YranrntzxJB7"
+But __clear_bit() is not atomic. I think it was the point of this patch,
+to not use atomics and use the spinlock instead to protect bitmap.
 
---------------fasRUmpl5lg2YranrntzxJB7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Before the patch, pm8001_tag_alloc() takes the spinlock *and* use the
+atomic set_bit(), which is an overkill. pm8001_tag_free() only clears the
+bit using the the atomic clear_bit().
 
-UGluZz8NCg0KT24gMDcuMDYuMjIgMTQ6MzMsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IFdo
-ZW4gYm9vdGluZyB1bmRlciBLVk0gdGhlIGZvbGxvd2luZyBlcnJvciBtZXNzYWdlcyBhcmUg
-aXNzdWVkOg0KPiANCj4gaHlwZnMuN2Y1NzA1OiBUaGUgaGFyZHdhcmUgc3lzdGVtIGRvZXMg
-bm90IHN1cHBvcnQgaHlwZnMNCj4gaHlwZnMuN2E3OWYwOiBJbml0aWFsaXphdGlvbiBvZiBo
-eXBmcyBmYWlsZWQgd2l0aCByYz0tNjENCj4gDQo+IFdoaWxlIGJlaW5nIGRvY3VtZW50ZWQs
-IHRoZXkgY2FuIGVhc2lseSBiZSBhdm9pZGVkIGJ5IGJhaWxpbmcgb3V0IG9mDQo+IGh5cGZz
-X2luaXQoKSBlYXJseSBpbiBjYXNlIG9mIHJ1bm5pbmcgYXMgYSBLVk0gZ3Vlc3QuDQo+IA0K
-PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IC0t
-LQ0KPiAgIGFyY2gvczM5MC9oeXBmcy9pbm9kZS5jIHwgMyArKysNCj4gICAxIGZpbGUgY2hh
-bmdlZCwgMyBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9zMzkwL2h5
-cGZzL2lub2RlLmMgYi9hcmNoL3MzOTAvaHlwZnMvaW5vZGUuYw0KPiBpbmRleCA1Yzk3ZjQ4
-Y2VhOTEuLmJkZjA3OGYzYzY0MSAxMDA2NDQNCj4gLS0tIGEvYXJjaC9zMzkwL2h5cGZzL2lu
-b2RlLmMNCj4gKysrIGIvYXJjaC9zMzkwL2h5cGZzL2lub2RlLmMNCj4gQEAgLTQ2NCw2ICs0
-NjQsOSBAQCBzdGF0aWMgaW50IF9faW5pdCBoeXBmc19pbml0KHZvaWQpDQo+ICAgew0KPiAg
-IAlpbnQgcmM7DQo+ICAgDQo+ICsJaWYgKE1BQ0hJTkVfSVNfS1ZNKQ0KPiArCQlyZXR1cm4g
-LUVOT0RBVEE7DQo+ICsNCj4gICAJaHlwZnNfZGJmc19pbml0KCk7DQo+ICAgDQo+ICAgCWlm
-IChoeXBmc19kaWFnX2luaXQoKSkgew0KDQo=
---------------fasRUmpl5lg2YranrntzxJB7
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+After the patch, spinlock guarantees atomicity for both alloc and free.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Not sure there is any gain from this.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+> 
+> Cheers,
+> 
+> Hannes
 
---------------fasRUmpl5lg2YranrntzxJB7--
 
---------------dhzp00Q81Bwnv5shN4Kh1pv3--
-
---------------JgAyFWNqVwFMFl2oFcsEXtqa
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKwDaYFAwAAAAAACgkQsN6d1ii/Ey/a
-BQgAhxz9eio2otyh5DRhmdEQwOo4DB8l1E7hy0c0vIza/9vFFc1+BaB3j/UrMATjWxkmiX2dVagB
-ujeBDwMMWM7Q0K9+YRJfkiDFtJaPELYhhWrdSWoo/pACjQKgHh29VklwSTLWAlpK0dC/kWv8b7sR
-CFI6XgKkSmpZyWmUhPG5zseruVCA6Q3SEilh2x5yyAoJBq+2b2uF2e7RrWwOtidNe3LDUExuRfn7
-dZZUAlYVxXfGuM67589tLE2CQ5/HpnnZACIxsbQ1medTLCEuXb6oBncvR+QxM18/PCweZ/Qwd8y5
-4OSDgIlYrZgvnEWfdZ8skAdnOtKC32+tVKAuseZ4DQ==
-=8nr5
------END PGP SIGNATURE-----
-
---------------JgAyFWNqVwFMFl2oFcsEXtqa--
+-- 
+Damien Le Moal
+Western Digital Research

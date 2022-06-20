@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C368550E1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A2A550E27
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238445AbiFTAou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S237724AbiFTAox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbiFTAnr (ORCPT
+        with ESMTP id S238382AbiFTAnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:43:47 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30959B7FC
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:32 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id 15so6879985qki.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:32 -0700 (PDT)
+        Sun, 19 Jun 2022 20:43:49 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F226582
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:34 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id i17so7358941qvo.13
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NyLJo+KoIiEhpVGAQ2QxyVkabvxhAF2JfmbYzoDAQFQ=;
-        b=ZwMhY+29YOmX0RvGbQvKKpPUJ/LqiQlfG/fgzGyHH2KruyCzuGFG7Cx9DBTnJkvwbK
-         gAaCicWiyizg4Ns7w9SJIH9poWXfXv4BSJRB8E3LDl9mvltSXu+AiBCzfX/xNZFzqIjQ
-         v8SpfIbUg2ZXZgRZ48WZbDJ4lNh+p6rokBEkhGJAC1sQYvtHz9gEd0+35p9o8Bt+BNE1
-         pZmzrLUxry5FvQMPKjEHsa+YCN8WwrOA/Rhd1OQ5cJCvVgyG64UUWUMsgq1X6/YcQeP2
-         5fmQ5xebpkhNfdNLRNu2ImCzxKO2l/tZuPB9FyaW/6ikTd+q6pzU6aFO9/E7fP4o/7/M
-         tMxA==
+        bh=gsfcZAwqlEFdpq95DCanp3EHZzLLogwQwMtGGhdzNxc=;
+        b=IJg+Op9gT+0zu+I1RSZ69r2h/io0Iax9HRwqmS4TNZwJTDJb7fQj026KZbjdqpzkeQ
+         jl63+ujHD9wLMzImVc5A4YY4qI9U2LNA4I8nLz6Ol+iQOJjRrtaICS3bqCJLtm94lkMX
+         HlRwKatR1EWzhIi0kVdHwo7ijnkdt45FIgHRrvgsVL5dZRFPVZofaM8mB83/j4l1Y5JR
+         de2b8vrhPFqHXAhnsiNg9oAo1naki+8XE3L9tyvz45B1eG2U/C1sxsCrFe0K1ge80Tq2
+         QxqXh5GjwwdfbGbY3qllndBsStR188f/LqZMiittFETjyR0Ev3SqPq0l+ztbB3+OacT6
+         qoXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NyLJo+KoIiEhpVGAQ2QxyVkabvxhAF2JfmbYzoDAQFQ=;
-        b=W6ReSAzmCDYTFpS0wdjL1z2F5SdzOkyhWSAr/AxZ7SA9Gvr8uIWA3SNPxqzA+pBU7R
-         hTrNJd2FoOBpo1SAPCFjbmWa0Xp0Wk7kRBqp9lNRkKgtSLwWs5erQ0Gr9FDMShNIA3NL
-         /vpcmOYZSHMHD7sUlxWpLv7+txNFtCwtmtZoKgKfBwIa7RuZMguvIiuqsI2ZywdnaN+q
-         64AOHSaUP+8/k0EP+OaK6MZWYJxeWgBnpsn0EHpWvpkTVFhRDGDFMijwfxr6tiVxtm5w
-         uXQ4O0qeRdoCkW3x5KOCY7AjvSMTZTymovTCNmVR0CMqT1Ebg9eV33GWqwZ5riemdGEB
-         k65Q==
-X-Gm-Message-State: AJIora8WN78bhsV+fRZD0E9+iu8L/B3TBS78S8fTR/uz2FVI8QVDYudN
-        DcSvjSieh4O/SdSQiht9v0PYC1sW6UG2x7Y=
-X-Google-Smtp-Source: AGRyM1uaH48yIvoz9xPy//ybN6M0Bpovt4qpzmAy41Tiev9BddZLDAZCbKgQyHBrnnXmG62fhuA/aw==
-X-Received: by 2002:ae9:ef47:0:b0:6a6:809a:aab5 with SMTP id d68-20020ae9ef47000000b006a6809aaab5mr14526624qkg.615.1655685810646;
-        Sun, 19 Jun 2022 17:43:30 -0700 (PDT)
+        bh=gsfcZAwqlEFdpq95DCanp3EHZzLLogwQwMtGGhdzNxc=;
+        b=IqE3lEmqV2Ico727s9PVPjaUlb+vIlLINsABxqv4XCl9O39ybnOardIyKtE6EgBN+4
+         ljFC4383jm2S6BcnpfI1kxxqBMuROVI6gD/hnXlUk6JMrVcPf2UPOM62XOvumTAXMUUb
+         t4Bh2RZTz4KU1EmGvQCKq/lN8RtiLUXqvtkE3kfyQnp2vMwkQ662M9BQ1NF6VKy33Vlh
+         Br7ODgD+I0ErSyZcPTAWfvCVEjYWPBpa3gMd6EjgGTRs88YrhV2sgosTxOhC8MdVbYbB
+         rK3QprrY66CqNB+aB2xnnsHaMQQjSO0GWyfvw+QsJpWqoUSD7+wf5zYPIEk6IPMLl5lA
+         Q4og==
+X-Gm-Message-State: AJIora/Kj9SvXcciyGVs2ZZote98APs1NNoVOzAagUPmDl2+XvIz/iEn
+        rV1goKjf14qcJgKOkrgwHRN/E9TP/wqYMEc=
+X-Google-Smtp-Source: AGRyM1tQ+0xDN5He/7+qn3hDH+zCCBLc6Ym4XEqTwDgs43uHcX8GDVZ/W0pK2YuJv48o6g71jadKkQ==
+X-Received: by 2002:a05:622a:493:b0:306:7794:a16 with SMTP id p19-20020a05622a049300b0030677940a16mr17925571qtx.605.1655685812910;
+        Sun, 19 Jun 2022 17:43:32 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05620a40ca00b006a791a42693sm11091058qko.133.2022.06.19.17.43.29
+        by smtp.gmail.com with ESMTPSA id b7-20020ac86787000000b002f93be3ccfdsm9462183qtp.18.2022.06.19.17.43.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:43:29 -0700 (PDT)
+        Sun, 19 Jun 2022 17:43:32 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 24/34] mm/memcontrol.c: Convert to printbuf
-Date:   Sun, 19 Jun 2022 20:42:23 -0400
-Message-Id: <20220620004233.3805-25-kent.overstreet@gmail.com>
+Subject: [PATCH v4 25/34] clk: tegra: bpmp: Convert to printbuf
+Date:   Sun, 19 Jun 2022 20:42:24 -0400
+Message-Id: <20220620004233.3805-26-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,125 +71,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
-simalar to seq_buf except that it heap allocates the string buffer:
-here, we were already heap allocating the buffer with kmalloc() so the
-conversion is trivial.
+This converts from seq_buf to printbuf, which is similar but heap
+allocates the string buffer.
+
+Previously in this code the string buffer was allocated on the stack;
+this means we've added a new potential memory allocation failure. This
+is fine though since it's only for a dev_printk() message.
+
+Memory allocation context: printbuf doesn't take gfp flags, instead we
+prefer the new memalloc_no*_(save|restore) interfaces to be used. Here
+the surrounding code is already allocating with GFP_KERNEL, so
+everything is fine.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- mm/memcontrol.c | 68 ++++++++++++++++++++++++-------------------------
- 1 file changed, 33 insertions(+), 35 deletions(-)
+ drivers/clk/tegra/clk-bpmp.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 598fece89e..57861dc9fe 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -62,7 +62,7 @@
- #include <linux/file.h>
- #include <linux/resume_user_mode.h>
- #include <linux/psi.h>
+diff --git a/drivers/clk/tegra/clk-bpmp.c b/drivers/clk/tegra/clk-bpmp.c
+index 6ecf18f71c..301551174c 100644
+--- a/drivers/clk/tegra/clk-bpmp.c
++++ b/drivers/clk/tegra/clk-bpmp.c
+@@ -5,7 +5,7 @@
+ 
+ #include <linux/clk-provider.h>
+ #include <linux/device.h>
 -#include <linux/seq_buf.h>
 +#include <linux/printbuf.h>
- #include "internal.h"
- #include <net/sock.h>
- #include <net/ip.h>
-@@ -1461,13 +1461,9 @@ static inline unsigned long memcg_page_state_output(struct mem_cgroup *memcg,
+ #include <linux/slab.h>
  
- static char *memory_stat_format(struct mem_cgroup *memcg)
+ #include <soc/tegra/bpmp.h>
+@@ -360,39 +360,38 @@ static void tegra_bpmp_clk_info_dump(struct tegra_bpmp *bpmp,
+ 				     const struct tegra_bpmp_clk_info *info)
  {
--	struct seq_buf s;
+ 	const char *prefix = "";
+-	struct seq_buf buf;
 +	struct printbuf buf = PRINTBUF;
- 	int i;
- 
--	seq_buf_init(&s, kmalloc(PAGE_SIZE, GFP_KERNEL), PAGE_SIZE);
--	if (!s.buffer)
--		return NULL;
+ 	unsigned int i;
+-	char flags[64];
 -
- 	/*
- 	 * Provide statistics on the state of the memory subsystem as
- 	 * well as cumulative event counters that show past behavior.
-@@ -1484,49 +1480,51 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
- 		u64 size;
+-	seq_buf_init(&buf, flags, sizeof(flags));
  
- 		size = memcg_page_state_output(memcg, memory_stats[i].idx);
--		seq_buf_printf(&s, "%s %llu\n", memory_stats[i].name, size);
-+		prt_printf(&buf, "%s %llu\n", memory_stats[i].name, size);
+ 	if (info->flags)
+-		seq_buf_printf(&buf, "(");
++		prt_printf(&buf, "(");
  
- 		if (unlikely(memory_stats[i].idx == NR_SLAB_UNRECLAIMABLE_B)) {
- 			size += memcg_page_state_output(memcg,
- 							NR_SLAB_RECLAIMABLE_B);
--			seq_buf_printf(&s, "slab %llu\n", size);
-+			prt_printf(&buf, "slab %llu\n", size);
- 		}
+ 	if (info->flags & TEGRA_BPMP_CLK_HAS_MUX) {
+-		seq_buf_printf(&buf, "%smux", prefix);
++		prt_printf(&buf, "%smux", prefix);
+ 		prefix = ", ";
  	}
  
- 	/* Accumulated memory events */
+ 	if ((info->flags & TEGRA_BPMP_CLK_HAS_SET_RATE) == 0) {
+-		seq_buf_printf(&buf, "%sfixed", prefix);
++		prt_printf(&buf, "%sfixed", prefix);
+ 		prefix = ", ";
+ 	}
  
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
--		       memcg_events(memcg, PGFAULT));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
--		       memcg_events(memcg, PGMAJFAULT));
--	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
--		       memcg_events(memcg, PGREFILL));
--	seq_buf_printf(&s, "pgscan %lu\n",
--		       memcg_events(memcg, PGSCAN_KSWAPD) +
--		       memcg_events(memcg, PGSCAN_DIRECT));
--	seq_buf_printf(&s, "pgsteal %lu\n",
--		       memcg_events(memcg, PGSTEAL_KSWAPD) +
--		       memcg_events(memcg, PGSTEAL_DIRECT));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
--		       memcg_events(memcg, PGACTIVATE));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
--		       memcg_events(memcg, PGDEACTIVATE));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
--		       memcg_events(memcg, PGLAZYFREE));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
--		       memcg_events(memcg, PGLAZYFREED));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(PGFAULT),
-+	       memcg_events(memcg, PGFAULT));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(PGMAJFAULT),
-+	       memcg_events(memcg, PGMAJFAULT));
-+	prt_printf(&buf, "%s %lu\n",  vm_event_name(PGREFILL),
-+	       memcg_events(memcg, PGREFILL));
-+	prt_printf(&buf, "pgscan %lu\n",
-+	       memcg_events(memcg, PGSCAN_KSWAPD) +
-+	       memcg_events(memcg, PGSCAN_DIRECT));
-+	prt_printf(&buf, "pgsteal %lu\n",
-+	       memcg_events(memcg, PGSTEAL_KSWAPD) +
-+	       memcg_events(memcg, PGSTEAL_DIRECT));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(PGACTIVATE),
-+	       memcg_events(memcg, PGACTIVATE));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(PGDEACTIVATE),
-+	       memcg_events(memcg, PGDEACTIVATE));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(PGLAZYFREE),
-+	       memcg_events(memcg, PGLAZYFREE));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(PGLAZYFREED),
-+	       memcg_events(memcg, PGLAZYFREED));
+ 	if (info->flags & TEGRA_BPMP_CLK_IS_ROOT) {
+-		seq_buf_printf(&buf, "%sroot", prefix);
++		prt_printf(&buf, "%sroot", prefix);
+ 		prefix = ", ";
+ 	}
  
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
--		       memcg_events(memcg, THP_FAULT_ALLOC));
--	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
--		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
-+	       memcg_events(memcg, THP_FAULT_ALLOC));
-+	prt_printf(&buf, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
-+	       memcg_events(memcg, THP_COLLAPSE_ALLOC));
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 	if (info->flags)
+-		seq_buf_printf(&buf, ")");
++		prt_printf(&buf, ")");
  
--	/* The above should easily fit into one page */
--	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
-+	if (buf.allocation_failure) {
-+		printbuf_exit(&buf);
-+		return NULL;
-+	}
+ 	dev_printk(level, bpmp->dev, "%03u: %s\n", info->id, info->name);
+-	dev_printk(level, bpmp->dev, "  flags: %lx %s\n", info->flags, flags);
++	dev_printk(level, bpmp->dev, "  flags: %lx %s\n", info->flags, printbuf_str(&buf));
+ 	dev_printk(level, bpmp->dev, "  parents: %u\n", info->num_parents);
  
--	return s.buffer;
-+	return buf.buf;
+ 	for (i = 0; i < info->num_parents; i++)
+ 		dev_printk(level, bpmp->dev, "    %03u\n", info->parents[i]);
++
++	printbuf_exit(&buf);
  }
  
- #define K(x) ((x) << (PAGE_SHIFT-10))
+ static int tegra_bpmp_probe_clocks(struct tegra_bpmp *bpmp,
 -- 
 2.36.1
 

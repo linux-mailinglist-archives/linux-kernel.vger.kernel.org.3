@@ -2,144 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875765517D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111C05517DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241787AbiFTL4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S242028AbiFTL5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiFTL4O (ORCPT
+        with ESMTP id S242088AbiFTL5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:56:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1D926DC
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:56:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o3G0j-0008Lu-35; Mon, 20 Jun 2022 13:56:05 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o3G0f-001dBj-Kw; Mon, 20 Jun 2022 13:56:03 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o3G0g-008XiD-Fg; Mon, 20 Jun 2022 13:56:02 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v4 1/1] net: phy: dp83td510: add SQI support
-Date:   Mon, 20 Jun 2022 13:56:01 +0200
-Message-Id: <20220620115601.2035452-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Mon, 20 Jun 2022 07:57:12 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BF217E11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:57:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id cv13so7325314pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fspGpbF+a/tNC1sNSTA/NSolNIjuZW10eZcuVG52+qI=;
+        b=nDA9AxaJXkSw4h/423thk9/K+swFT7dC4J0doqPwQxKqklzzggoB/0sE1fLQwnmnph
+         R/Mca/oYREnoJzMn6FCQlY+a8r5ZUDTYRZ9DUCKGykDVtpTgwOelo0mYBQfODVC17oxr
+         2whc8bUGZ3Uf63wCW/TCYM0Q4oqahPWeYX1GvMmLAirCgnarYInaOwmdfRTqFy+7NdlZ
+         fdqpKZjdsoE3hqe53K06hBnLi3ICjBGMZsuAItI715alDkNeL/USie3quNHNwsG1/ota
+         l366q46liN0agQJBZoC8sWUkd1qk2xJuCOSMLpGKb6YrN934MBn5JQ02g/OqPe5VSGDW
+         jmBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fspGpbF+a/tNC1sNSTA/NSolNIjuZW10eZcuVG52+qI=;
+        b=evSUWkO37gq7RDw5ll46Cdv+zVyHGWyi1yEBs6/Ybxt8lbsFflFnbEwHO2tskZYuye
+         yBt8zZL7I7cQKCtc8pNh1T/zQQAPy11MxmCGymdT7zL3CypEyEzPCCIJPUAtrdfX+iGP
+         MggBgO27biBoCri7oUo9sxB+u+iuXdOdx5zQx+i1eNa+2DD5ga4BLrROwz/CHIyXzl5N
+         0UZxjY9oYy7ZIVq8TZzfdYWmHuZ2Q4IXoC07K80nkGJZvRGaFcr6t9VoIDddqEZ+OkfJ
+         U8soU0rBE/lRPk/b7+ZmidPkDlC70Gl99G7AUWRJQcMpE/7MkVjqs6nWelLFgn7O1sWI
+         0MaA==
+X-Gm-Message-State: AJIora8dVXscN1cjDc68QaZak9PDCWIVyLcMIR5XgAw10Ac2jE74UQXw
+        X8tgHMOamutCTcT+4RfvcZs=
+X-Google-Smtp-Source: AGRyM1t0+MI3KijEuW3nC/Cff77T+NSYR2+WTfmcGO8La3flzJPImRe/aqeqT9b4P6W/iTnWJ0H9Eg==
+X-Received: by 2002:a17:90b:388f:b0:1e8:5a44:8205 with SMTP id mu15-20020a17090b388f00b001e85a448205mr38161790pjb.221.1655726229869;
+        Mon, 20 Jun 2022 04:57:09 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.250])
+        by smtp.gmail.com with ESMTPSA id mm21-20020a17090b359500b001ec86a0490csm4539154pjb.32.2022.06.20.04.57.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 Jun 2022 04:57:09 -0700 (PDT)
+From:   qixiaoyu1 <qxy65535@gmail.com>
+X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, liuchao12@xiaomi.com,
+        qxy65535@gmail.com, qixiaoyu1 <qixiaoyu1@xiaomi.com>
+Subject: [PATCH v3 1/2] resize.f2fs: add option to manually specify new overprovision
+Date:   Mon, 20 Jun 2022 19:56:28 +0800
+Message-Id: <20220620115629.9169-1-qixiaoyu1@xiaomi.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <5627a654-d605-6840-a133-e583c804aadd@kernel.org>
+References: <5627a654-d605-6840-a133-e583c804aadd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert MSE (mean-square error) values to SNR and split it SQI (Signal Quality
-Indicator) ranges. The used ranges are taken from "OPEN ALLIANCE - Advanced
-diagnostic features for 100BASE-T1 automotive Ethernet PHYs"
-specification.
+From: liuchao12 <liuchao12@xiaomi.com>
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Make.f2fs supports manually specifying overprovision, and we expect
+resize.f2fs to support it as well.
+
+This change add a new '-o' option to manually specify overprovision,
+and fix to check free space before grow. Otherwise, after grow,
+kernel may report below error message when we mount the image if -o
+parameter is specified during resize:
+
+F2FS-fs (loop0): invalid crc_offset: 0
+F2FS-fs (loop0): Wrong valid_user_blocks: 16404, user_block_count: 13312
+F2FS-fs (loop0): Failed to get valid F2FS checkpoint
+mount(2) system call failed: Structure needs cleaning.
+
+Signed-off-by: liuchao12 <liuchao12@xiaomi.com>
+Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
 ---
- drivers/net/phy/dp83td510.c | 49 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
 
-diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
-index 1ae792b0daaa..3cd9a77f9532 100644
---- a/drivers/net/phy/dp83td510.c
-+++ b/drivers/net/phy/dp83td510.c
-@@ -27,6 +27,27 @@
- #define DP83TD510E_AN_STAT_1			0x60c
- #define DP83TD510E_MASTER_SLAVE_RESOL_FAIL	BIT(15)
+  Change log from v2:
+    - Sorry for miss liuchao12 mistakenly when merge the two patches...
+
+  Change log from v1:
+    - merged fix to check free space before grow
+    - delete unessassary check of "c.new_overprovision == 0"
+    - update man page
+
+ fsck/main.c       |  8 ++++++--
+ fsck/resize.c     | 45 ++++++++++++++++++++++++++++++++-------------
+ man/resize.f2fs.8 |  9 +++++++++
+ 3 files changed, 47 insertions(+), 15 deletions(-)
+
+diff --git a/fsck/main.c b/fsck/main.c
+index aef797e..3b4da0f 100644
+--- a/fsck/main.c
++++ b/fsck/main.c
+@@ -121,7 +121,8 @@ void resize_usage()
+ 	MSG(0, "[options]:\n");
+ 	MSG(0, "  -d debug level [default:0]\n");
+ 	MSG(0, "  -i extended node bitmap, node ratio is 20%% by default\n");
+-	MSG(0, "  -s safe resize (Does not resize metadata)");
++	MSG(0, "  -o overprovision percentage [default:auto]\n");
++	MSG(0, "  -s safe resize (Does not resize metadata)\n");
+ 	MSG(0, "  -t target sectors [default: device size]\n");
+ 	MSG(0, "  -V print the version number and exit\n");
+ 	exit(1);
+@@ -527,7 +528,7 @@ void f2fs_parse_options(int argc, char *argv[])
+ #endif
+ 	} else if (!strcmp("resize.f2fs", prog)) {
+ #ifdef WITH_RESIZE
+-		const char *option_string = "d:fst:iV";
++		const char *option_string = "d:fst:io:V";
  
-+#define DP83TD510E_MSE_DETECT			0xa85
+ 		c.func = RESIZE;
+ 		while ((option = getopt(argc, argv, option_string)) != EOF) {
+@@ -561,6 +562,9 @@ void f2fs_parse_options(int argc, char *argv[])
+ 			case 'i':
+ 				c.large_nat_bitmap = 1;
+ 				break;
++			case 'o':
++				c.new_overprovision = atof(optarg);
++				break;
+ 			case 'V':
+ 				show_version(prog);
+ 				exit(0);
+diff --git a/fsck/resize.c b/fsck/resize.c
+index f1b7701..3d8ea46 100644
+--- a/fsck/resize.c
++++ b/fsck/resize.c
+@@ -146,7 +146,9 @@ safe_resize:
+ 						get_sb(segs_per_sec));
+ 
+ 	/* Let's determine the best reserved and overprovisioned space */
+-	c.new_overprovision = get_best_overprovision(sb);
++	if (c.new_overprovision == 0)
++		c.new_overprovision = get_best_overprovision(sb);
 +
-+#define DP83TD510_SQI_MAX	7
+ 	c.new_reserved_segments =
+ 		(2 * (100 / c.new_overprovision + 1) + 6) *
+ 						get_sb(segs_per_sec);
+@@ -476,6 +478,11 @@ static void rebuild_checkpoint(struct f2fs_sb_info *sbi,
+ 	set_cp(overprov_segment_count, get_cp(overprov_segment_count) +
+ 						get_cp(rsvd_segment_count));
+ 
++	DBG(0, "Info: Overprovision ratio = %.3lf%%\n", c.new_overprovision);
++	DBG(0, "Info: Overprovision segments = %u (GC reserved = %u)\n",
++					get_cp(overprov_segment_count),
++					c.new_reserved_segments);
 +
-+/* Register values are converted to SNR(dB) as suggested by
-+ * "Application Report - DP83TD510E Cable Diagnostics Toolkit":
-+ * SNR(dB) = -10 * log10 (VAL/2^17) - 1.76 dB.
-+ * SQI ranges are implemented according to "OPEN ALLIANCE - Advanced diagnostic
-+ * features for 100BASE-T1 automotive Ethernet PHYs"
-+ */
-+static const u16 dp83td510_mse_sqi_map[] = {
-+	0x0569, /* < 18dB */
-+	0x044c, /* 18dB =< SNR < 19dB */
-+	0x0369, /* 19dB =< SNR < 20dB */
-+	0x02b6, /* 20dB =< SNR < 21dB */
-+	0x0227, /* 21dB =< SNR < 22dB */
-+	0x01b6, /* 22dB =< SNR < 23dB */
-+	0x015b, /* 23dB =< SNR < 24dB */
-+	0x0000  /* 24dB =< SNR */
-+};
-+
- static int dp83td510_config_intr(struct phy_device *phydev)
- {
- 	int ret;
-@@ -164,6 +185,32 @@ static int dp83td510_config_aneg(struct phy_device *phydev)
- 	return genphy_c45_check_and_restart_aneg(phydev, changed);
+ 	free_segment_count = get_free_segments(sbi);
+ 	new_segment_count = get_newsb(segment_count_main) -
+ 					get_sb(segment_count_main);
+@@ -591,6 +598,26 @@ static void rebuild_checkpoint(struct f2fs_sb_info *sbi,
+ 	DBG(0, "Info: Done to rebuild checkpoint blocks\n");
  }
  
-+static int dp83td510_get_sqi(struct phy_device *phydev)
++static int f2fs_resize_check(struct f2fs_sb_info *sbi, struct f2fs_super_block *new_sb)
 +{
-+	int sqi, ret;
-+	u16 mse_val;
++	struct f2fs_checkpoint *cp = F2FS_CKPT(sbi);
++	block_t user_block_count;
++	unsigned int overprov_segment_count;
 +
-+	if (!phydev->link)
-+		return 0;
++	overprov_segment_count = (get_newsb(segment_count_main) -
++			c.new_reserved_segments) *
++			c.new_overprovision / 100;
++	overprov_segment_count += c.new_reserved_segments;
 +
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_MSE_DETECT);
-+	if (ret < 0)
-+		return ret;
++	user_block_count = (get_newsb(segment_count_main) -
++			overprov_segment_count) * c.blks_per_seg;
 +
-+	mse_val = 0xFFFF & ret;
-+	for (sqi = 0; sqi < ARRAY_SIZE(dp83td510_mse_sqi_map); sqi++) {
-+		if (mse_val >= dp83td510_mse_sqi_map[sqi])
-+			return sqi;
-+	}
++	if (get_cp(valid_block_count) > user_block_count)
++		return -1;
 +
-+	return -EINVAL;
++	return 0;
 +}
 +
-+static int dp83td510_get_sqi_max(struct phy_device *phydev)
-+{
-+	return DP83TD510_SQI_MAX;
-+}
-+
- static int dp83td510_get_features(struct phy_device *phydev)
+ static int f2fs_resize_grow(struct f2fs_sb_info *sbi)
  {
- 	/* This PHY can't respond on MDIO bus if no RMII clock is enabled.
-@@ -192,6 +239,8 @@ static struct phy_driver dp83td510_driver[] = {
- 	.get_features	= dp83td510_get_features,
- 	.config_intr	= dp83td510_config_intr,
- 	.handle_interrupt = dp83td510_handle_interrupt,
-+	.get_sqi	= dp83td510_get_sqi,
-+	.get_sqi_max	= dp83td510_get_sqi_max,
+ 	struct f2fs_super_block *sb = F2FS_RAW_SUPER(sbi);
+@@ -608,6 +635,9 @@ static int f2fs_resize_grow(struct f2fs_sb_info *sbi)
+ 	if (get_new_sb(new_sb))
+ 		return -1;
  
- 	.suspend	= genphy_suspend,
- 	.resume		= genphy_resume,
++	if (f2fs_resize_check(sbi, new_sb) < 0)
++		return -1;
++
+ 	/* check nat availability */
+ 	if (get_sb(segment_count_nat) > get_newsb(segment_count_nat)) {
+ 		err = shrink_nats(sbi, new_sb);
+@@ -651,11 +681,8 @@ static int f2fs_resize_shrink(struct f2fs_sb_info *sbi)
+ 	struct f2fs_super_block *sb = F2FS_RAW_SUPER(sbi);
+ 	struct f2fs_super_block new_sb_raw;
+ 	struct f2fs_super_block *new_sb = &new_sb_raw;
+-	struct f2fs_checkpoint *cp = F2FS_CKPT(sbi);
+ 	block_t old_end_blkaddr, old_main_blkaddr;
+ 	block_t new_end_blkaddr, new_main_blkaddr, tmp_end_blkaddr;
+-	block_t user_block_count;
+-	unsigned int overprov_segment_count;
+ 	unsigned int offset;
+ 	int err = -1;
+ 
+@@ -666,15 +693,7 @@ static int f2fs_resize_shrink(struct f2fs_sb_info *sbi)
+ 	if (get_new_sb(new_sb))
+ 		return -1;
+ 
+-	overprov_segment_count = (get_newsb(segment_count_main) -
+-			c.new_reserved_segments) *
+-			c.new_overprovision / 100;
+-	overprov_segment_count += c.new_reserved_segments;
+-
+-	user_block_count = (get_newsb(segment_count_main) -
+-			overprov_segment_count) * c.blks_per_seg;
+-
+-	if (get_cp(valid_block_count) > user_block_count)
++	if (f2fs_resize_check(sbi, new_sb) < 0)
+ 		return -1;
+ 
+ 	/* check nat availability */
+diff --git a/man/resize.f2fs.8 b/man/resize.f2fs.8
+index 463eca5..a4b6cd7 100644
+--- a/man/resize.f2fs.8
++++ b/man/resize.f2fs.8
+@@ -13,6 +13,10 @@ resize.f2fs \- resize filesystem size
+ .B \-d
+ .I debugging-level
+ ]
++[
++.B \-o
++.I overprovision-ratio-percentage
++]
+ .I device
+ .SH DESCRIPTION
+ .B resize.f2fs
+@@ -35,6 +39,11 @@ Specify the size in sectors.
+ Specify the level of debugging options.
+ The default number is 0, which shows basic debugging messages.
+ .TP
++.BI \-o " overprovision-ratio-percentage"
++Specify the percentage of the volume that will be used as overprovision area.
++This area is hidden to users, and utilized by F2FS cleaner. If not specified, the
++best number will be assigned automatically according to the partition size.
++.TP
+ .SH AUTHOR
+ This version of
+ .B resize.f2fs
 -- 
-2.30.2
+2.36.1
 

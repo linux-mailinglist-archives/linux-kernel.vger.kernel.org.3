@@ -2,93 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F287551411
+	by mail.lfdr.de (Postfix) with ESMTP id 52ABF551410
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240223AbiFTJS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S239188AbiFTJS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240698AbiFTJSg (ORCPT
+        with ESMTP id S240745AbiFTJSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:18:36 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1536452;
-        Mon, 20 Jun 2022 02:18:35 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id um5so4870951ejb.5;
-        Mon, 20 Jun 2022 02:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OBDb8+EHsywC1sWORQkwWBvQ5vhlilwVW0bHJD11CSM=;
-        b=GX99+7R2JbJOWlg09LQWo6ERil78LgaO9beLsUg4fzM2vZKXqRI3oCvD8U9NhDaxEO
-         mL3MNlFAnxeh5K6Sy97so7+2/s4VoDpBk6CqLaACGxgvEKanXZhAOxx9Z6Q6r+hxnCiK
-         BwPTBYeZzOTZ/9L3sxlPRsAw8WXksC5NPEcYM2MhytADZZJapDC6n+MRbScZBVUf82KV
-         Y6NoSEXmce0I97uGLu67ER2gAsgqwwbNI1/1gKT+Oj/+HMZ7unTqUcFdl26ENxEpUwru
-         PP048S7yfYkdnEggUp7jDIHZ4RSYneaObTd+gcC8iJm00LwNnQdYyQZDQCe463tDNDGj
-         2GLQ==
+        Mon, 20 Jun 2022 05:18:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BAF87665
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655716726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AXb8PQzSuHtcxtD5+f9CgGG707rMaJ28CjJj10Bwyow=;
+        b=ZcXC0PK5whjZhKFwmb/kGKc2Nf3ZF9B8P/mVEFKH6UT5OoiJzpOaCkF+izH5xZfVO+Ictp
+        4mwshLinZnaL6eKrd18QUW+eIIOsHxDC3RYUJfxq83EPfUKB3wSzbzZPgs0ejKTRkL2OBn
+        N/Wb+V+qsROz3wp/40fapdZH8BShuhI=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-ftgYs-WSOOqV6Gzu3LzhOA-1; Mon, 20 Jun 2022 05:18:42 -0400
+X-MC-Unique: ftgYs-WSOOqV6Gzu3LzhOA-1
+Received: by mail-lf1-f70.google.com with SMTP id h35-20020a0565123ca300b00479113319f9so5265623lfv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:18:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OBDb8+EHsywC1sWORQkwWBvQ5vhlilwVW0bHJD11CSM=;
-        b=XVtbLCwP4pGcxfsw+q3KbBHCKEqOIYyULmslh7kq/pS2bNYE+8OFvCdG7B4tQGwBJ1
-         8Nzd9QQGise4f9z5+/WdbuVG2yJOme9Y5tpETMzQJGRTfpgxvhYLhs22deWgcu0htcWk
-         L4tVEtMZcSG2nBRdVlgYug53fKYj3w88fT4CKockAXou8TyktYfT7CnAhDpxTe7UyV+D
-         VdJHh82UwLkPV6L4OQVUG+fPQaB7oMAPRcVkhAkIa/5XAxiwYdFkUhZkyNWAKIg7jw8e
-         8QVFp7DHvsFO7+EtEP+9j0uP3yv24xveQczAC4QtKRyZbrEuokVPLTLbbD94CP3568Y5
-         0lZA==
-X-Gm-Message-State: AJIora8PTNpKlsQBXahgR1vbhGD7LWZ/8zF38jkUBVG8koOrjjwe91kG
-        VApAZDoHb/LsthV9yL9gConXIjzG0nFQTch1RrNJMQudHz/D6Q==
-X-Google-Smtp-Source: AGRyM1vQMS1QkqFB+UUmS4kuMMjw928dXIoulZwgezgIYW9ID81N9dO7dqSOiWTPiv+3g7W50IXDLj1oDqKErEWPewM=
-X-Received: by 2002:a17:906:1193:b0:70d:cf39:a4db with SMTP id
- n19-20020a170906119300b0070dcf39a4dbmr20209192eja.44.1655716713463; Mon, 20
- Jun 2022 02:18:33 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=AXb8PQzSuHtcxtD5+f9CgGG707rMaJ28CjJj10Bwyow=;
+        b=pabUAf37WF65L/J1W3PdDJ9QJNiZsSc/dlhqAXyoWJlU+VgSCH7YUnq4+dLURpUwXL
+         aUM2yRs8Hg5TSJl4BKLiYobIqIXj02r6l6fU//0MrrbfUQ79qhAg6xHsGeFnarZxjQA2
+         eYULtIybbuE9hGEBdNxr/SglcOaw9ZsFYthO9hZaDIZgsb28/Ei9wXaApqPsDt8B3TUC
+         Tbnadwhp1fms8SGjMQbfuN0QhJ1IrQ44V2PZGC7wGfjWVhqe5GEKQbaOJSm1tkiYuXL/
+         63kfQ0pJHf+OoHWHxNjSCq7i0+v7//fl9gc9t6F2sg9KXdLaUYwT3HiK356LTKuEwa24
+         Xp7A==
+X-Gm-Message-State: AJIora9jlgp4fJnvMeVRmoLTkhFEJaZLFJbGhKxr9bkP5kfueqFiBYDk
+        yQUCbxViu0Mco0niP6hrcHpWQ2pTzpTRyalgvQFA/GfHSzdw4bSKzlAtBT/8+xvmXlFEd5BhI1t
+        nL/OJaT9KJ3YgoxzdZoQ+c9PlK5s7+YzE6F1wljmC
+X-Received: by 2002:a2e:3a16:0:b0:255:7811:2827 with SMTP id h22-20020a2e3a16000000b0025578112827mr11190683lja.130.1655716720474;
+        Mon, 20 Jun 2022 02:18:40 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tgaoFSoLISRFH9h+lSO0AXM25Aoq8+VJEqPR3rbJHlSQaKiS3xClDL7guWIBhuvU/zP5YTgnYDl5S5lhrRRnk=
+X-Received: by 2002:a2e:3a16:0:b0:255:7811:2827 with SMTP id
+ h22-20020a2e3a16000000b0025578112827mr11190676lja.130.1655716720289; Mon, 20
+ Jun 2022 02:18:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220619074030.1154429-1-mw@semihalf.com> <CAHp75VdmtFJe5k_6biofS0HtgqC7HQuNzrM=9cMhM1uz1p5Eng@mail.gmail.com>
- <CAPv3WKeR+iVE5KObWHmsSxDZtCqCbcCkoLWksmwhiu9E=ZcOxQ@mail.gmail.com>
-In-Reply-To: <CAPv3WKeR+iVE5KObWHmsSxDZtCqCbcCkoLWksmwhiu9E=ZcOxQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Jun 2022 11:17:57 +0200
-Message-ID: <CAHp75VfpNkADuzo_-99bm4Lh-wJ3Dro9+oOszc=1oG4FQheHOQ@mail.gmail.com>
-Subject: Re: [PATCH] serial: 8250: dw: enable using pdata with ACPI
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
+References: <20220620051115.3142-1-jasowang@redhat.com> <20220620051115.3142-4-jasowang@redhat.com>
+ <20220620050446-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220620050446-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 20 Jun 2022 17:18:29 +0800
+Message-ID: <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev unregister
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        erwan.yvin@stericsson.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:14 AM Marcin Wojtas <mw@semihalf.com> wrote:
-> pon., 20 cze 2022 o 10:01 Andy Shevchenko <andy.shevchenko@gmail.com>
-> napisa=C5=82(a):
-> > On Sun, Jun 19, 2022 at 9:43 AM Marcin Wojtas <mw@semihalf.com> wrote:
-
-...
-
-> > Since you are touching all of them, please keep the order
-> > alphanumerically sorted by the HID.
+On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> Sure.
+> On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
+> > We use to do the following steps during .remove():
+>
+> We currently do
+>
+>
+> > static void cfv_remove(struct virtio_device *vdev)
+> > {
+> >       struct cfv_info *cfv = vdev->priv;
+> >
+> >       rtnl_lock();
+> >       dev_close(cfv->ndev);
+> >       rtnl_unlock();
+> >
+> >       tasklet_kill(&cfv->tx_release_tasklet);
+> >       debugfs_remove_recursive(cfv->debugfs);
+> >
+> >       vringh_kiov_cleanup(&cfv->ctx.riov);
+> >       virtio_reset_device(vdev);
+> >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> >       cfv->vr_rx = NULL;
+> >       vdev->config->del_vqs(cfv->vdev);
+> >       unregister_netdev(cfv->ndev);
+> > }
+> > This is racy since device could be re-opened after dev_close() but
+> > before unregister_netdevice():
+> >
+> > 1) RX vringh is cleaned before resetting the device, rx callbacks that
+> >    is called after the vringh_kiov_cleanup() will result a UAF
+> > 2) Network stack can still try to use TX virtqueue even if it has been
+> >    deleted after dev_vqs()
+> >
+> > Fixing this by unregistering the network device first to make sure not
+> > device access from both TX and RX side.
+> >
+> > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/net/caif/caif_virtio.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
+> > index 66375bea2fcd..a29f9b2df5b1 100644
+> > --- a/drivers/net/caif/caif_virtio.c
+> > +++ b/drivers/net/caif/caif_virtio.c
+> > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
+> >  {
+> >       struct cfv_info *cfv = vdev->priv;
+> >
+> > -     rtnl_lock();
+> > -     dev_close(cfv->ndev);
+> > -     rtnl_unlock();
+> > +     /* Make sure NAPI/TX won't try to access the device */
+> > +     unregister_netdev(cfv->ndev);
+> >
+> >       tasklet_kill(&cfv->tx_release_tasklet);
+> >       debugfs_remove_recursive(cfv->debugfs);
+> > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
+> >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> >       cfv->vr_rx = NULL;
+> >       vdev->config->del_vqs(cfv->vdev);
+> > -     unregister_netdev(cfv->ndev);
+> >  }
+>
+>
+> This gives me pause, callbacks can now trigger after device
+> has been unregistered. Are we sure this is safe?
 
-With that addressed,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
+after tasklet_kill(). I can add a comment to explain this.
 
+> Won't it be safer to just keep the rtnl_lock around
+> the whole process?
 
---=20
-With Best Regards,
-Andy Shevchenko
+It looks to me we rtnl_lock can't help in synchronizing with the
+callbacks, anything I miss?
+
+Thanks
+
+>
+> >  static struct virtio_device_id id_table[] = {
+> > --
+> > 2.25.1
+>
+

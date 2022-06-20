@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E091552729
+	by mail.lfdr.de (Postfix) with ESMTP id D5FF655272B
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344606AbiFTWvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
+        id S243561AbiFTWvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344189AbiFTWvd (ORCPT
+        with ESMTP id S1344253AbiFTWvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 18:51:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8DC1ADAC;
-        Mon, 20 Jun 2022 15:51:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2E0193FF;
+        Mon, 20 Jun 2022 15:51:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23BCC6139D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AED8961403;
         Mon, 20 Jun 2022 22:51:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4535BC341CF;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52442C341D2;
         Mon, 20 Jun 2022 22:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1655765490;
-        bh=sHD8Jv1wPIjthYlFnVLCEKXYLSonurfknaURlKWDm4w=;
+        bh=1W8xRB96Stnh91DupT9jlBEEZh4AW4ECwyhZaB9Eb+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aGUVkqBEoN1R94ZbPWVkS3OPYo1v8GBDPGoiW6cZwr4fGC6zovJqRC2x0dS/jQk7Y
-         QdXN0npCLs/0PjEpBAywv+tRCpDuXyVt8U55VuZogdBzQIyvwzuMNMtF456r5iyO78
-         g5NqKCq59qWnlAPLrO6lJNm1WXehxBIxTHFaolK5lyeTPQlyq1fzerjBut0eH7ValX
-         QIeEu6S8/QisGS3aEzqfZP1IXZ7Mff8W8VCpCORTjivFkn5N5LqANUB9+B0tkc2YS/
-         E/LimHXoANuG3ZLW2t/jtskxkZVhLnzAX2Yvt3jxzeNa7bY9+DMfkUo4RTc/EdRZTE
-         /xsIXx+TyrAfg==
+        b=FhwdeZIwsrZuqdOkuX423DHrQNMMD8WmlphYc+kb0llcEOsZE+A7xt0slpzaiIkmx
+         1/mnXqHRErv0C+vmjaqDKSiJldPycCGwoEPdpOdglJ9+iu/AY/NPV3r2FQw3VWZC5j
+         CAIaeJMYSGkG7VkCxfAEkXgNWTKHS2MckYWVpl/4IBSxfQnhpPYpBAc6Rv9taNB1+g
+         U9ZtxR3gJGjVMb37aDKAr2t0qvpP/X2JQSEU407eKPabOesj4985Xot2ffUXknhJDd
+         Yt9uL2HtQfZw4YARH+TBRvxD9kniG+0zGemT4lX7SEn2yOV+XEg+EWNh12CHb6n4lq
+         TQUyOVFyyXZ4Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A12AF5C0CCE; Mon, 20 Jun 2022 15:51:29 -0700 (PDT)
+        id A39095C0D1B; Mon, 20 Jun 2022 15:51:29 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
@@ -41,9 +41,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Brian Foster <bfoster@redhat.com>,
         Dave Chinner <david@fromorbit.com>,
         Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>
-Subject: [PATCH rcu 08/12] rcu: Add polled expedited grace-period primitives
-Date:   Mon, 20 Jun 2022 15:51:24 -0700
-Message-Id: <20220620225128.3842050-8-paulmck@kernel.org>
+Subject: [PATCH rcu 09/12] rcutorture: Test polled expedited grace-period primitives
+Date:   Mon, 20 Jun 2022 15:51:25 -0700
+Message-Id: <20220620225128.3842050-9-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
 References: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
@@ -59,20 +59,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds expedited grace-period functionality to RCU's polled
-grace-period API, adding start_poll_synchronize_rcu_expedited() and
-cond_synchronize_rcu_expedited(), which are similar to the existing
-start_poll_synchronize_rcu() and cond_synchronize_rcu() functions,
-respectively.
-
-Note that although start_poll_synchronize_rcu_expedited() can be invoked
-very early, the resulting expedited grace periods are not guaranteed
-to start until after workqueues are fully initialized.  On the other
-hand, both synchronize_rcu() and synchronize_rcu_expedited() can also
-be invoked very early, and the resulting grace periods will be taken
-into account as they occur.
-
-[ paulmck: Apply feedback from Neeraj Upadhyay. ]
+This commit adds tests of start_poll_synchronize_rcu_expedited() and
+poll_state_synchronize_rcu_expedited().
 
 Link: https://lore.kernel.org/all/20220121142454.1994916-1-bfoster@redhat.com/
 Link: https://docs.google.com/document/d/1RNKWW9jQyfjxw2E8dsXVTdvZYh0HnYeSHDKog9jhdN8/edit?usp=sharing
@@ -82,213 +70,199 @@ Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Ian Kent <raven@themaw.net>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/rcutiny.h | 10 +++++
- include/linux/rcutree.h |  2 +
- kernel/rcu/tree.c       | 17 ++++++---
- kernel/rcu/tree.h       |  7 ++++
- kernel/rcu/tree_exp.h   | 85 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 116 insertions(+), 5 deletions(-)
+ kernel/rcu/rcutorture.c | 87 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 74 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-index 5fed476f977f6..ab7e20dfb07b0 100644
---- a/include/linux/rcutiny.h
-+++ b/include/linux/rcutiny.h
-@@ -23,6 +23,16 @@ static inline void cond_synchronize_rcu(unsigned long oldstate)
- 	might_sleep();
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index d2edc763bb92a..0788ef2a44911 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -86,10 +86,12 @@ torture_param(int, fwd_progress_holdoff, 60,
+ torture_param(bool, fwd_progress_need_resched, 1,
+ 	      "Hide cond_resched() behind need_resched()");
+ torture_param(bool, gp_cond, false, "Use conditional/async GP wait primitives");
++torture_param(bool, gp_cond_exp, false, "Use conditional/async expedited GP wait primitives");
+ torture_param(bool, gp_exp, false, "Use expedited GP wait primitives");
+ torture_param(bool, gp_normal, false,
+ 	     "Use normal (non-expedited) GP wait primitives");
+ torture_param(bool, gp_poll, false, "Use polling GP wait primitives");
++torture_param(bool, gp_poll_exp, false, "Use polling expedited GP wait primitives");
+ torture_param(bool, gp_sync, false, "Use synchronous GP wait primitives");
+ torture_param(int, irqreader, 1, "Allow RCU readers from irq handlers");
+ torture_param(int, leakpointer, 0, "Leak pointer dereferences from readers");
+@@ -209,12 +211,16 @@ static int rcu_torture_writer_state;
+ #define RTWS_DEF_FREE		3
+ #define RTWS_EXP_SYNC		4
+ #define RTWS_COND_GET		5
+-#define RTWS_COND_SYNC		6
+-#define RTWS_POLL_GET		7
+-#define RTWS_POLL_WAIT		8
+-#define RTWS_SYNC		9
+-#define RTWS_STUTTER		10
+-#define RTWS_STOPPING		11
++#define RTWS_COND_GET_EXP	6
++#define RTWS_COND_SYNC		7
++#define RTWS_COND_SYNC_EXP	8
++#define RTWS_POLL_GET		9
++#define RTWS_POLL_GET_EXP	10
++#define RTWS_POLL_WAIT		11
++#define RTWS_POLL_WAIT_EXP	12
++#define RTWS_SYNC		13
++#define RTWS_STUTTER		14
++#define RTWS_STOPPING		15
+ static const char * const rcu_torture_writer_state_names[] = {
+ 	"RTWS_FIXED_DELAY",
+ 	"RTWS_DELAY",
+@@ -222,9 +228,13 @@ static const char * const rcu_torture_writer_state_names[] = {
+ 	"RTWS_DEF_FREE",
+ 	"RTWS_EXP_SYNC",
+ 	"RTWS_COND_GET",
++	"RTWS_COND_GET_EXP",
+ 	"RTWS_COND_SYNC",
++	"RTWS_COND_SYNC_EXP",
+ 	"RTWS_POLL_GET",
++	"RTWS_POLL_GET_EXP",
+ 	"RTWS_POLL_WAIT",
++	"RTWS_POLL_WAIT_EXP",
+ 	"RTWS_SYNC",
+ 	"RTWS_STUTTER",
+ 	"RTWS_STOPPING",
+@@ -337,6 +347,10 @@ struct rcu_torture_ops {
+ 	void (*deferred_free)(struct rcu_torture *p);
+ 	void (*sync)(void);
+ 	void (*exp_sync)(void);
++	unsigned long (*get_gp_state_exp)(void);
++	unsigned long (*start_gp_poll_exp)(void);
++	bool (*poll_gp_state_exp)(unsigned long oldstate);
++	void (*cond_sync_exp)(unsigned long oldstate);
+ 	unsigned long (*get_gp_state)(void);
+ 	unsigned long (*get_gp_completed)(void);
+ 	unsigned long (*start_gp_poll)(void);
+@@ -509,6 +523,10 @@ static struct rcu_torture_ops rcu_ops = {
+ 	.start_gp_poll		= start_poll_synchronize_rcu,
+ 	.poll_gp_state		= poll_state_synchronize_rcu,
+ 	.cond_sync		= cond_synchronize_rcu,
++	.get_gp_state_exp	= get_state_synchronize_rcu,
++	.start_gp_poll_exp	= start_poll_synchronize_rcu_expedited,
++	.poll_gp_state_exp	= poll_state_synchronize_rcu,
++	.cond_sync_exp		= cond_synchronize_rcu_expedited,
+ 	.call			= call_rcu,
+ 	.cb_barrier		= rcu_barrier,
+ 	.fqs			= rcu_force_quiescent_state,
+@@ -1138,9 +1156,8 @@ rcu_torture_fqs(void *arg)
+ 	return 0;
  }
  
-+static inline unsigned long start_poll_synchronize_rcu_expedited(void)
-+{
-+	return start_poll_synchronize_rcu();
-+}
-+
-+static inline void cond_synchronize_rcu_expedited(unsigned long oldstate)
-+{
-+	cond_synchronize_rcu(oldstate);
-+}
-+
- extern void rcu_barrier(void);
- 
- static inline void synchronize_rcu_expedited(void)
-diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
-index 9c6cfb742504f..20dbaa9a38820 100644
---- a/include/linux/rcutree.h
-+++ b/include/linux/rcutree.h
-@@ -40,6 +40,8 @@ bool rcu_eqs_special_set(int cpu);
- void rcu_momentary_dyntick_idle(void);
- void kfree_rcu_scheduler_running(void);
- bool rcu_gp_might_be_stalled(void);
-+unsigned long start_poll_synchronize_rcu_expedited(void);
-+void cond_synchronize_rcu_expedited(unsigned long oldstate);
- unsigned long get_state_synchronize_rcu(void);
- unsigned long start_poll_synchronize_rcu(void);
- bool poll_state_synchronize_rcu(unsigned long oldstate);
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 251eb9a8cd925..8b6e5414fbaa7 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -4021,20 +4021,20 @@ EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
- /**
-  * cond_synchronize_rcu - Conditionally wait for an RCU grace period
-  *
-- * @oldstate: value from get_state_synchronize_rcu() or start_poll_synchronize_rcu()
-+ * @oldstate: value from get_state_synchronize_rcu(), start_poll_synchronize_rcu(), or start_poll_synchronize_rcu_expedited()
-  *
-  * If a full RCU grace period has elapsed since the earlier call to
-  * get_state_synchronize_rcu() or start_poll_synchronize_rcu(), just return.
-  * Otherwise, invoke synchronize_rcu() to wait for a full grace period.
-  *
-- * Yes, this function does not take counter wrap into account.  But
-- * counter wrap is harmless.  If the counter wraps, we have waited for
-+ * Yes, this function does not take counter wrap into account.
-+ * But counter wrap is harmless.  If the counter wraps, we have waited for
-  * more than 2 billion grace periods (and way more on a 64-bit system!),
-- * so waiting for one additional grace period should be just fine.
-+ * so waiting for a couple of additional grace periods should be just fine.
-  *
-  * This function provides the same memory-ordering guarantees that
-  * would be provided by a synchronize_rcu() that was invoked at the call
-- * to the function that provided @oldstate, and that returned at the end
-+ * to the function that provided @oldstate and that returned at the end
-  * of this function.
-  */
- void cond_synchronize_rcu(unsigned long oldstate)
-@@ -4787,6 +4787,9 @@ static void __init rcu_init_one(void)
- 			init_waitqueue_head(&rnp->exp_wq[3]);
- 			spin_lock_init(&rnp->exp_lock);
- 			mutex_init(&rnp->boost_kthread_mutex);
-+			raw_spin_lock_init(&rnp->exp_poll_lock);
-+			rnp->exp_seq_poll_rq = RCU_GET_STATE_COMPLETED;
-+			INIT_WORK(&rnp->exp_poll_wq, sync_rcu_do_polled_gp);
- 		}
- 	}
- 
-@@ -5012,6 +5015,10 @@ void __init rcu_init(void)
- 		qovld_calc = DEFAULT_RCU_QOVLD_MULT * qhimark;
- 	else
- 		qovld_calc = qovld;
-+
-+	// Kick-start any polled grace periods that started early.
-+	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
-+		(void)start_poll_synchronize_rcu_expedited();
- }
- 
- #include "tree_stall.h"
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 5634e76106c48..fb77deca5f5c6 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -133,6 +133,10 @@ struct rcu_node {
- 	wait_queue_head_t exp_wq[4];
- 	struct rcu_exp_work rew;
- 	bool exp_need_flush;	/* Need to flush workitem? */
-+	raw_spinlock_t exp_poll_lock;
-+				/* Lock and data for polled expedited grace periods. */
-+	unsigned long exp_seq_poll_rq;
-+	struct work_struct exp_poll_wq;
- } ____cacheline_internodealigned_in_smp;
+-// Used by writers to randomly choose from the available grace-period
+-// primitives.  The only purpose of the initialization is to size the array.
+-static int synctype[] = { RTWS_DEF_FREE, RTWS_EXP_SYNC, RTWS_COND_GET, RTWS_POLL_GET, RTWS_SYNC };
++// Used by writers to randomly choose from the available grace-period primitives.
++static int synctype[ARRAY_SIZE(rcu_torture_writer_state_names)] = { };
+ static int nsynctypes;
  
  /*
-@@ -484,3 +488,6 @@ static void rcu_iw_handler(struct irq_work *iwp);
- static void check_cpu_stall(struct rcu_data *rdp);
- static void rcu_check_gp_start_stall(struct rcu_node *rnp, struct rcu_data *rdp,
- 				     const unsigned long gpssdelay);
-+
-+/* Forward declarations for tree_exp.h. */
-+static void sync_rcu_do_polled_gp(struct work_struct *wp);
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index e0258066b881e..571b0a700cced 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -962,3 +962,88 @@ void synchronize_rcu_expedited(void)
- 		synchronize_rcu_expedited_destroy_work(&rew);
- }
- EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
-+
-+/*
-+ * Ensure that start_poll_synchronize_rcu_expedited() has the expedited
-+ * RCU grace periods that it needs.
-+ */
-+static void sync_rcu_do_polled_gp(struct work_struct *wp)
-+{
-+	unsigned long flags;
-+	struct rcu_node *rnp = container_of(wp, struct rcu_node, exp_poll_wq);
-+	unsigned long s;
-+
-+	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
-+	s = rnp->exp_seq_poll_rq;
-+	rnp->exp_seq_poll_rq = RCU_GET_STATE_COMPLETED;
-+	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
-+	if (s == RCU_GET_STATE_COMPLETED)
-+		return;
-+	while (!poll_state_synchronize_rcu(s))
-+		synchronize_rcu_expedited();
-+	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
-+	s = rnp->exp_seq_poll_rq;
-+	if (poll_state_synchronize_rcu(s))
-+		rnp->exp_seq_poll_rq = RCU_GET_STATE_COMPLETED;
-+	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
-+}
-+
-+/**
-+ * start_poll_synchronize_rcu_expedited - Snapshot current RCU state and start expedited grace period
-+ *
-+ * Returns a cookie to pass to a call to cond_synchronize_rcu(),
-+ * cond_synchronize_rcu_expedited(), or poll_state_synchronize_rcu(),
-+ * allowing them to determine whether or not any sort of grace period has
-+ * elapsed in the meantime.  If the needed expedited grace period is not
-+ * already slated to start, initiates that grace period.
-+ */
-+unsigned long start_poll_synchronize_rcu_expedited(void)
-+{
-+	unsigned long flags;
-+	struct rcu_data *rdp;
-+	struct rcu_node *rnp;
-+	unsigned long s;
-+
-+	s = get_state_synchronize_rcu();
-+	rdp = per_cpu_ptr(&rcu_data, raw_smp_processor_id());
-+	rnp = rdp->mynode;
-+	if (rcu_init_invoked())
-+		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
-+	if (!poll_state_synchronize_rcu(s)) {
-+		rnp->exp_seq_poll_rq = s;
-+		if (rcu_init_invoked())
-+			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+@@ -1148,18 +1165,27 @@ static int nsynctypes;
+  */
+ static void rcu_torture_write_types(void)
+ {
+-	bool gp_cond1 = gp_cond, gp_exp1 = gp_exp, gp_normal1 = gp_normal;
+-	bool gp_poll1 = gp_poll, gp_sync1 = gp_sync;
++	bool gp_cond1 = gp_cond, gp_cond_exp1 = gp_cond_exp, gp_exp1 = gp_exp;
++	bool gp_poll_exp1 = gp_poll_exp, gp_normal1 = gp_normal, gp_poll1 = gp_poll;
++	bool gp_sync1 = gp_sync;
+ 
+ 	/* Initialize synctype[] array.  If none set, take default. */
+-	if (!gp_cond1 && !gp_exp1 && !gp_normal1 && !gp_poll1 && !gp_sync1)
+-		gp_cond1 = gp_exp1 = gp_normal1 = gp_poll1 = gp_sync1 = true;
++	if (!gp_cond1 && !gp_cond_exp1 && !gp_exp1 && !gp_poll_exp &&
++	    !gp_normal1 && !gp_poll1 && !gp_sync1)
++		gp_cond1 = gp_cond_exp1 = gp_exp1 = gp_poll_exp1 =
++			   gp_normal1 = gp_poll1 = gp_sync1 = true;
+ 	if (gp_cond1 && cur_ops->get_gp_state && cur_ops->cond_sync) {
+ 		synctype[nsynctypes++] = RTWS_COND_GET;
+ 		pr_info("%s: Testing conditional GPs.\n", __func__);
+ 	} else if (gp_cond && (!cur_ops->get_gp_state || !cur_ops->cond_sync)) {
+ 		pr_alert("%s: gp_cond without primitives.\n", __func__);
+ 	}
++	if (gp_cond_exp1 && cur_ops->get_gp_state_exp && cur_ops->cond_sync_exp) {
++		synctype[nsynctypes++] = RTWS_COND_GET_EXP;
++		pr_info("%s: Testing conditional expedited GPs.\n", __func__);
++	} else if (gp_cond_exp && (!cur_ops->get_gp_state_exp || !cur_ops->cond_sync_exp)) {
++		pr_alert("%s: gp_cond_exp without primitives.\n", __func__);
 +	}
-+	if (rcu_init_invoked())
-+		raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
-+
-+	return s;
-+}
-+EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu_expedited);
-+
-+/**
-+ * cond_synchronize_rcu_expedited - Conditionally wait for an expedited RCU grace period
-+ *
-+ * @oldstate: value from get_state_synchronize_rcu(), start_poll_synchronize_rcu(), or start_poll_synchronize_rcu_expedited()
-+ *
-+ * If any type of full RCU grace period has elapsed since the earlier
-+ * call to get_state_synchronize_rcu(), start_poll_synchronize_rcu(),
-+ * or start_poll_synchronize_rcu_expedited(), just return.  Otherwise,
-+ * invoke synchronize_rcu_expedited() to wait for a full grace period.
-+ *
-+ * Yes, this function does not take counter wrap into account.
-+ * But counter wrap is harmless.  If the counter wraps, we have waited for
-+ * more than 2 billion grace periods (and way more on a 64-bit system!),
-+ * so waiting for a couple of additional grace periods should be just fine.
-+ *
-+ * This function provides the same memory-ordering guarantees that
-+ * would be provided by a synchronize_rcu() that was invoked at the call
-+ * to the function that provided @oldstate and that returned at the end
-+ * of this function.
-+ */
-+void cond_synchronize_rcu_expedited(unsigned long oldstate)
-+{
-+	if (!poll_state_synchronize_rcu(oldstate))
-+		synchronize_rcu_expedited();
-+}
-+EXPORT_SYMBOL_GPL(cond_synchronize_rcu_expedited);
+ 	if (gp_exp1 && cur_ops->exp_sync) {
+ 		synctype[nsynctypes++] = RTWS_EXP_SYNC;
+ 		pr_info("%s: Testing expedited GPs.\n", __func__);
+@@ -1178,6 +1204,12 @@ static void rcu_torture_write_types(void)
+ 	} else if (gp_poll && (!cur_ops->start_gp_poll || !cur_ops->poll_gp_state)) {
+ 		pr_alert("%s: gp_poll without primitives.\n", __func__);
+ 	}
++	if (gp_poll_exp1 && cur_ops->start_gp_poll_exp && cur_ops->poll_gp_state_exp) {
++		synctype[nsynctypes++] = RTWS_POLL_GET_EXP;
++		pr_info("%s: Testing polling expedited GPs.\n", __func__);
++	} else if (gp_poll_exp && (!cur_ops->start_gp_poll_exp || !cur_ops->poll_gp_state_exp)) {
++		pr_alert("%s: gp_poll_exp without primitives.\n", __func__);
++	}
+ 	if (gp_sync1 && cur_ops->sync) {
+ 		synctype[nsynctypes++] = RTWS_SYNC;
+ 		pr_info("%s: Testing normal GPs.\n", __func__);
+@@ -1285,6 +1317,14 @@ rcu_torture_writer(void *arg)
+ 				cur_ops->cond_sync(gp_snap);
+ 				rcu_torture_pipe_update(old_rp);
+ 				break;
++			case RTWS_COND_GET_EXP:
++				rcu_torture_writer_state = RTWS_COND_GET_EXP;
++				gp_snap = cur_ops->get_gp_state_exp();
++				torture_hrtimeout_jiffies(torture_random(&rand) % 16, &rand);
++				rcu_torture_writer_state = RTWS_COND_SYNC_EXP;
++				cur_ops->cond_sync_exp(gp_snap);
++				rcu_torture_pipe_update(old_rp);
++				break;
+ 			case RTWS_POLL_GET:
+ 				rcu_torture_writer_state = RTWS_POLL_GET;
+ 				gp_snap = cur_ops->start_gp_poll();
+@@ -1294,6 +1334,15 @@ rcu_torture_writer(void *arg)
+ 								  &rand);
+ 				rcu_torture_pipe_update(old_rp);
+ 				break;
++			case RTWS_POLL_GET_EXP:
++				rcu_torture_writer_state = RTWS_POLL_GET_EXP;
++				gp_snap = cur_ops->start_gp_poll_exp();
++				rcu_torture_writer_state = RTWS_POLL_WAIT_EXP;
++				while (!cur_ops->poll_gp_state_exp(gp_snap))
++					torture_hrtimeout_jiffies(torture_random(&rand) % 16,
++								  &rand);
++				rcu_torture_pipe_update(old_rp);
++				break;
+ 			case RTWS_SYNC:
+ 				rcu_torture_writer_state = RTWS_SYNC;
+ 				if (cur_ops->get_gp_state && cur_ops->poll_gp_state)
+@@ -1400,6 +1449,11 @@ rcu_torture_fakewriter(void *arg)
+ 				torture_hrtimeout_jiffies(torture_random(&rand) % 16, &rand);
+ 				cur_ops->cond_sync(gp_snap);
+ 				break;
++			case RTWS_COND_GET_EXP:
++				gp_snap = cur_ops->get_gp_state_exp();
++				torture_hrtimeout_jiffies(torture_random(&rand) % 16, &rand);
++				cur_ops->cond_sync_exp(gp_snap);
++				break;
+ 			case RTWS_POLL_GET:
+ 				gp_snap = cur_ops->start_gp_poll();
+ 				while (!cur_ops->poll_gp_state(gp_snap)) {
+@@ -1407,6 +1461,13 @@ rcu_torture_fakewriter(void *arg)
+ 								  &rand);
+ 				}
+ 				break;
++			case RTWS_POLL_GET_EXP:
++				gp_snap = cur_ops->start_gp_poll_exp();
++				while (!cur_ops->poll_gp_state_exp(gp_snap)) {
++					torture_hrtimeout_jiffies(torture_random(&rand) % 16,
++								  &rand);
++				}
++				break;
+ 			case RTWS_SYNC:
+ 				cur_ops->sync();
+ 				break;
 -- 
 2.31.1.189.g2e36527f23
 

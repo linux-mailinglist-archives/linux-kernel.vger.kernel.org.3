@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1AE55258F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9036F55257E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344547AbiFTULk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S1344996AbiFTUJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344444AbiFTUJI (ORCPT
+        with ESMTP id S1344741AbiFTUIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:09:08 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93F621E2B;
-        Mon, 20 Jun 2022 13:07:35 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id g27so9434564wrb.10;
-        Mon, 20 Jun 2022 13:07:35 -0700 (PDT)
+        Mon, 20 Jun 2022 16:08:42 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EA02183A;
+        Mon, 20 Jun 2022 13:07:29 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id q15so6375291wmj.2;
+        Mon, 20 Jun 2022 13:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=klzG1EiAdFscBZBcoCzDKMr3GKqX2S6ab3hLTukICYA=;
-        b=l4GFUZrKtyjWTlZn2W6sbNe7RkJpSisjb5nPFCMRsK4VVftYk11OQgyGsUsVQOVVxd
-         WveltYUyuvOFbYFUdYhxpXNuxE4S4YCumzKcvnxPGX4OsA13JEey1GXiYfj+BN3FyuAk
-         YoyM6iFFHOgbk2ykc+NDEEHh/n23+NkaBHDoIRTmULng90YVn+qOGMdpsjX8phANF5/i
-         sk5OxAxVvNJ2GPbb6NqRjZvP8u6Pf1FxTRCjPvzgHPcXQnzfgqR8rhEIYzbMNaK4cAp6
-         yiv/olpO3Koxh4OhoUfRvU3fEVkmdETxuX090a9/gNWOJYRM4fDVw5XWJYzxI9yxqfA6
-         IXWQ==
+        bh=E0jLkqilWpvnbTcSo4wfjkJhQqF1reP5Ib9ezCHoYWc=;
+        b=U/u1eI8XG0RLSewZC9yH0TEBjAQ2QVQeFgi9rzCUa/S/IXH9PHYw0gdakIKNDT90kV
+         hMuwVJCliXAFt+/OKjfOJGf07gA2TRZWRFVa9nvnR7w8MWysPG76mxgNw9ukyrADHZ5N
+         ALr37IiaH9saP7DoyArHAIbUsX5KFRzx8Uw6meqm+M15MdeUmVUAWTmMi15JWu+Wq07m
+         itZyiVgoqQZkvIT6ra3IIfQvQJZJo5C0Y+CD2t4yxMPenkkULdYZFq6Wwj6TJ4CoenZF
+         dRCH3mEbVAzCd1YjOvUgfQGm1TEKpTWU8WSRmJwdw9G0Be/ybY4XqRUVEJ0I0EIJYNRr
+         FSCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=klzG1EiAdFscBZBcoCzDKMr3GKqX2S6ab3hLTukICYA=;
-        b=Mj6MLl20uYFHL5Mtdya4XtPph4a5+6SYuPWAFNEt6N+xo5Nnj3OztSAGXODz26S7yJ
-         MpId9/0Z1dKaxTngzyN8eg+abvyZW6+Ze7ytwys+cKmXo3VQ/qb+bdor2djaXhnL5Tnt
-         U4Hc4SmQ/dC2EuR0FfSeUnoRls/EKhDUuAbda4UQp5LRWeOp1FLPuKgeAeqUv5H729JO
-         VEQGoptOhRhc4g1vCUxrrGaJYH0FPkiJmxEvHBKdr/WfHdFR5Hv8UQcxiKfP68t7zTGs
-         ulaE1l4+TqrTrFZXWLpAW0MwTAfjYB7WEezqt20KGipBi7Ssy0XpSFsQTTgjF3KSuQ+a
-         Y7JA==
-X-Gm-Message-State: AJIora8rN2IrMWaPKvbXhI4jn5DKnUAmMJpHQqEdlg4ezBezeSfFT1N/
-        vlMTp3OMjHvkqAv6jw4SA0k=
-X-Google-Smtp-Source: AGRyM1tNlpsLQBbADqcDPRR01JRNtswf/HBtBf5oihaYlvZj08PdTVfZrZn0YfVlGpD8PsGFQGId1w==
-X-Received: by 2002:a5d:5981:0:b0:218:51ae:8808 with SMTP id n1-20020a5d5981000000b0021851ae8808mr24885992wri.244.1655755648056;
-        Mon, 20 Jun 2022 13:07:28 -0700 (PDT)
+        bh=E0jLkqilWpvnbTcSo4wfjkJhQqF1reP5Ib9ezCHoYWc=;
+        b=1Xy+1tjkZ1GV5lQ3g5DPuBw+io2/y9ZSIc3csHyFPVeuwB8XJFyNr0bk8ZokQqWcqa
+         VvD6pPC8zwznOfMxWggTwpc/kV/BXu0hO9jSALm118Espc+HOSUlVbD3bEI7inWuZJfR
+         d6lTYRc36wcXxL1BtNae54LHdyTYJWNTuLucJom3i0Oad55VIh3MeRMJL9uTwQT1+mH0
+         noEwZ9atXshX1uxArroPJOsd5SVgJCnKYwsmpndP1PsFTrjiLQSDDbZSd41VZ8/E2AZ+
+         JdaBggyI7jWQrq1OIzHuEaGJRn1XzPuPhztae+rEYBwtPlGLq95HCHhyw1RIuMnWSeeH
+         Ccuw==
+X-Gm-Message-State: AJIora+O9GpFtnQAQUSgoNUf39qKFl0p2sbc44E2ep9dcr2qe0ypkRQg
+        Uzwk7M5Jt6OVTmAwWtu1heA=
+X-Google-Smtp-Source: AGRyM1uhXBLM2mCEhpF1oCgYeIG722Adlji+SZHE2C7bZquQV7GS0wP1KfS6UMHZPFYNwRmyV3niBQ==
+X-Received: by 2002:a05:600c:1c10:b0:39c:4708:648d with SMTP id j16-20020a05600c1c1000b0039c4708648dmr26590108wms.85.1655755649580;
+        Mon, 20 Jun 2022 13:07:29 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id d3-20020adffbc3000000b0020e6ce4dabdsm14219147wrs.103.2022.06.20.13.07.27
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b0039c5328ad92sm22754411wmq.41.2022.06.20.13.07.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:27 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:29 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 45/49] regmap-irq: Remove mask_invert flag
-Date:   Mon, 20 Jun 2022 21:06:40 +0100
-Message-Id: <20220620200644.1961936-46-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 46/49] regmap-irq: Refactor checks for status bulk read support
+Date:   Mon, 20 Jun 2022 21:06:41 +0100
+Message-Id: <20220620200644.1961936-47-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,111 +84,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An inverted mask register can be represented more directly
-as an unmask register. Drop the redundant mask_invert flag.
+There are several conditions that must be satisfied to support
+bulk read of status registers. Move the check into a function
+to avoid duplicating it in two places.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c | 30 ++++++++----------------------
- include/linux/regmap.h           |  2 --
- 2 files changed, 8 insertions(+), 24 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 8a718615fd09..0a8edaee064a 100644
+index 0a8edaee064a..7b5bd1d45fc0 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -30,9 +30,6 @@ struct regmap_irq_chip_data {
- 	int irq;
- 	int wake_count;
+@@ -72,6 +72,14 @@ struct regmap_irq *irq_to_regmap_irq(struct regmap_irq_chip_data *data,
+ 	return &data->chip->irqs[irq];
+ }
  
--	unsigned int mask_base;
--	unsigned int unmask_base;
--
- 	void *status_reg_buf;
- 	unsigned int *main_status_buf;
- 	unsigned int *status_buf;
-@@ -126,8 +123,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 	 * suppress pointless writes.
- 	 */
- 	for (i = 0; i < d->chip->num_regs; i++) {
--		if (d->mask_base) {
--			reg = sub_irq_reg(d, d->mask_base, i);
-+		if (d->chip->mask_base) {
-+			reg = sub_irq_reg(d, d->chip->mask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], d->mask_buf[i]);
- 			if (ret != 0)
-@@ -135,8 +132,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 					reg);
- 		}
- 
--		if (d->unmask_base) {
--			reg = sub_irq_reg(d, d->unmask_base, i);
-+		if (d->chip->unmask_base) {
-+			reg = sub_irq_reg(d, d->chip->unmask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], ~d->mask_buf[i]);
- 			if (ret != 0)
-@@ -721,17 +718,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	d->chip = chip;
- 	d->irq_base = irq_base;
- 
--	/*
--	 * Swap role of mask_base and unmask_base if mask bits are inverted.
--	 */
--	if (chip->mask_invert) {
--		d->mask_base = chip->unmask_base;
--		d->unmask_base = chip->mask_base;
--	} else {
--		d->mask_base = chip->mask_base;
--		d->unmask_base = chip->unmask_base;
--	}
--
- 	if (chip->irq_reg_stride)
- 		d->irq_reg_stride = chip->irq_reg_stride;
- 	else
-@@ -756,8 +742,8 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	for (i = 0; i < chip->num_regs; i++) {
- 		d->mask_buf[i] = d->mask_buf_def[i];
- 
--		if (d->mask_base) {
--			reg = sub_irq_reg(d, d->mask_base, i);
-+		if (d->chip->mask_base) {
-+			reg = sub_irq_reg(d, d->chip->mask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], d->mask_buf[i]);
- 			if (ret != 0) {
-@@ -767,8 +753,8 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
++static bool regmap_irq_can_bulk_read_status(struct regmap_irq_chip_data *data)
++{
++	struct regmap *map = data->map;
++
++	return !map->use_single_read && map->reg_stride == 1 &&
++		data->irq_reg_stride == 1;
++}
++
+ static void regmap_irq_lock(struct irq_data *data)
+ {
+ 	struct regmap_irq_chip_data *d = irq_data_get_irq_chip_data(data);
+@@ -413,8 +421,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
  			}
- 		}
  
--		if (d->unmask_base) {
--			reg = sub_irq_reg(d, d->unmask_base, i);
-+		if (d->chip->unmask_base) {
-+			reg = sub_irq_reg(d, d->chip->unmask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], ~d->mask_buf[i]);
- 			if (ret != 0) {
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index a3103c88e936..bb625a1edef9 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -1462,7 +1462,6 @@ struct regmap_irq_sub_irq_map {
-  * @config_base: Base address for IRQ type config regs. If null unsupported.
-  * @irq_reg_stride:  Stride to use for chips where registers are not contiguous.
-  * @init_ack_masked: Ack all masked interrupts once during initalization.
-- * @mask_invert: Inverted mask register: cleared bits are masked out.
-  * @use_ack:     Use @ack register even if it is zero.
-  * @ack_invert:  Inverted ack register: cleared bits for ack.
-  * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupts.
-@@ -1514,7 +1513,6 @@ struct regmap_irq_chip {
- 	unsigned int irq_reg_stride;
- 	bool mask_writeonly:1;
- 	bool init_ack_masked:1;
--	bool mask_invert:1;
- 	bool use_ack:1;
- 	bool ack_invert:1;
- 	bool clear_ack:1;
+ 		}
+-	} else if (!map->use_single_read && map->reg_stride == 1 &&
+-		   data->irq_reg_stride == 1) {
++	} else if (regmap_irq_can_bulk_read_status(data)) {
+ 
+ 		u8 *buf8 = data->status_reg_buf;
+ 		u16 *buf16 = data->status_reg_buf;
+@@ -723,8 +730,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	else
+ 		d->irq_reg_stride = 1;
+ 
+-	if (!map->use_single_read && map->reg_stride == 1 &&
+-	    d->irq_reg_stride == 1) {
++	if (regmap_irq_can_bulk_read_status(d)) {
+ 		d->status_reg_buf = kmalloc_array(chip->num_regs,
+ 						  map->format.val_bytes,
+ 						  GFP_KERNEL);
 -- 
 2.35.1
 

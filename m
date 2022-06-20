@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889D5551D55
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C4E551C23
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243621AbiFTNuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S240373AbiFTNKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241684AbiFTNsF (ORCPT
+        with ESMTP id S244814AbiFTNF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:48:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0066B2F009;
-        Mon, 20 Jun 2022 06:17:43 -0700 (PDT)
+        Mon, 20 Jun 2022 09:05:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0651A057;
+        Mon, 20 Jun 2022 06:00:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C16C060FF3;
-        Mon, 20 Jun 2022 13:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8472C3411B;
-        Mon, 20 Jun 2022 13:16:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FCB8B811C0;
+        Mon, 20 Jun 2022 13:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2373C3411B;
+        Mon, 20 Jun 2022 13:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731000;
-        bh=ZE8Oti+fu3e1FxWiLUTqce4e2vXw7qouPFIc2w4kBJs=;
+        s=korg; t=1655730024;
+        bh=bC9DTLtvzQkenP0Knef0ZUSmmW0hUV8voMCfBw0foiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YhzJ8YqKOePz4BQRRjVACR17Pbai0KAZdx1oPANmLe4CofpDowUX55tXs+bFA0rSY
-         qM9/Q8DFhX7N3v9gq2q7TjVeETyFKQvrq4yfCaXdLhbtnsm3xprX2e87fk5+O5wjEc
-         uXctUAZIlEI8pXx0DXHBGgtBm/Po4plidSWd9sko=
+        b=CJMUcnifHv7RuNxxHI//Ro2CL7rzoWgH0ejtYJGaQibMPU3cozwAViJxVuCEUjojE
+         JuNByvKK8rw6AbZZuqPZGc8z+WwsRp0VF/nJ9xsG/O7dOGnJUyjUXFU7tgHfOfpI2q
+         d9RtBj6v/38AWTMyW6PLtYCmazmOJEQ/D2AI6q1k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Jann Horn <jannh@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 123/240] random: do not allow user to keep crng key around on stack
+        stable@vger.kernel.org, Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH 5.10 01/84] 9p: missing chunk of "fs/9p: Dont update file type when updating file attributes"
 Date:   Mon, 20 Jun 2022 14:50:24 +0200
-Message-Id: <20220620124742.577765573@linuxfoundation.org>
+Message-Id: <20220620124720.928225421@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,98 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit aba120cc101788544aa3e2c30c8da88513892350 upstream.
+commit b577d0cd2104fdfcf0ded3707540a12be8ddd8b0 upstream.
 
-The fast key erasure RNG design relies on the key that's used to be used
-and then discarded. We do this, making judicious use of
-memzero_explicit().  However, reads to /dev/urandom and calls to
-getrandom() involve a copy_to_user(), and userspace can use FUSE or
-userfaultfd, or make a massive call, dynamically remap memory addresses
-as it goes, and set the process priority to idle, in order to keep a
-kernel stack alive indefinitely. By probing
-/proc/sys/kernel/random/entropy_avail to learn when the crng key is
-refreshed, a malicious userspace could mount this attack every 5 minutes
-thereafter, breaking the crng's forward secrecy.
+In commit 45089142b149 Aneesh had missed one (admittedly, very unlikely
+to hit) case in v9fs_stat2inode_dotl().  However, the same considerations
+apply there as well - we have no business whatsoever to change ->i_rdev
+or the file type.
 
-In order to fix this, we just overwrite the stack's key with the first
-32 bytes of the "free" fast key erasure output. If we're returning <= 32
-bytes to the user, then we can still return those bytes directly, so
-that short reads don't become slower. And for long reads, the difference
-is hopefully lost in the amortization, so it doesn't change much, with
-that amortization helping variously for medium reads.
-
-We don't need to do this for get_random_bytes() and the various
-kernel-space callers, and later, if we ever switch to always batching,
-this won't be necessary either, so there's no need to change the API of
-these functions.
-
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Jann Horn <jannh@google.com>
-Fixes: c92e040d575a ("random: add backtracking protection to the CRNG")
-Fixes: 186873c549df ("random: use simpler fast key erasure flow on per-cpu keys")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   35 +++++++++++++++++++++++------------
- 1 file changed, 23 insertions(+), 12 deletions(-)
+ fs/9p/vfs_inode_dotl.c |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -532,19 +532,29 @@ static ssize_t get_random_bytes_user(voi
- 	if (!nbytes)
- 		return 0;
- 
--	len = min_t(size_t, 32, nbytes);
--	crng_make_state(chacha_state, output, len);
--
--	if (copy_to_user(buf, output, len))
--		return -EFAULT;
--	nbytes -= len;
--	buf += len;
--	ret += len;
-+	/*
-+	 * Immediately overwrite the ChaCha key at index 4 with random
-+	 * bytes, in case userspace causes copy_to_user() below to sleep
-+	 * forever, so that we still retain forward secrecy in that case.
-+	 */
-+	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA_KEY_SIZE);
-+	/*
-+	 * However, if we're doing a read of len <= 32, we don't need to
-+	 * use chacha_state after, so we can simply return those bytes to
-+	 * the user directly.
-+	 */
-+	if (nbytes <= CHACHA_KEY_SIZE) {
-+		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
-+		goto out_zero_chacha;
-+	}
- 
--	while (nbytes) {
-+	do {
- 		if (large_request && need_resched()) {
--			if (signal_pending(current))
-+			if (signal_pending(current)) {
-+				if (!ret)
-+					ret = -ERESTARTSYS;
- 				break;
-+			}
- 			schedule();
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -657,14 +657,10 @@ v9fs_stat2inode_dotl(struct p9_stat_dotl
+ 		if (stat->st_result_mask & P9_STATS_NLINK)
+ 			set_nlink(inode, stat->st_nlink);
+ 		if (stat->st_result_mask & P9_STATS_MODE) {
+-			inode->i_mode = stat->st_mode;
+-			if ((S_ISBLK(inode->i_mode)) ||
+-						(S_ISCHR(inode->i_mode)))
+-				init_special_inode(inode, inode->i_mode,
+-								inode->i_rdev);
++			mode = stat->st_mode & S_IALLUGO;
++			mode |= inode->i_mode & ~S_IALLUGO;
++			inode->i_mode = mode;
  		}
- 
-@@ -561,10 +571,11 @@ static ssize_t get_random_bytes_user(voi
- 		nbytes -= len;
- 		buf += len;
- 		ret += len;
--	}
-+	} while (nbytes);
- 
--	memzero_explicit(chacha_state, sizeof(chacha_state));
- 	memzero_explicit(output, sizeof(output));
-+out_zero_chacha:
-+	memzero_explicit(chacha_state, sizeof(chacha_state));
- 	return ret;
- }
- 
+-		if (stat->st_result_mask & P9_STATS_RDEV)
+-			inode->i_rdev = new_decode_dev(stat->st_rdev);
+ 		if (!(flags & V9FS_STAT2INODE_KEEP_ISIZE) &&
+ 		    stat->st_result_mask & P9_STATS_SIZE)
+ 			v9fs_i_size_write(inode, stat->st_size);
 
 

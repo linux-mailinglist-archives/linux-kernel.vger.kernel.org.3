@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182D75518BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5A45518C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242617AbiFTMV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        id S240716AbiFTMXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240896AbiFTMVY (ORCPT
+        with ESMTP id S237517AbiFTMXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:21:24 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB2415A37;
-        Mon, 20 Jun 2022 05:21:21 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9345061EA1923;
-        Mon, 20 Jun 2022 14:21:18 +0200 (CEST)
-Message-ID: <1a554d8e-c479-f646-ce9d-25871affbcee@molgen.mpg.de>
-Date:   Mon, 20 Jun 2022 14:21:18 +0200
+        Mon, 20 Jun 2022 08:23:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E4C17594
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:23:42 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LRTHj6XgkzSgtk;
+        Mon, 20 Jun 2022 20:20:17 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 20 Jun 2022 20:23:33 +0800
+Subject: Re: [PATCH v2 2/3] mm/swapfile: fix possible data races of
+ inuse_pages
+To:     Muchun Song <songmuchun@bytedance.com>,
+        "Huang, Ying" <ying.huang@intel.com>, <cai@lca.pw>
+CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+ <20220608144031.829-3-linmiaohe@huawei.com>
+ <87edzjrcq8.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <13414d6a-9e72-fb6c-f0a8-8b83ba0455de@huawei.com>
+ <YrA8kxavqsDfH5R7@FVFYT0MHHV2J.usts.net>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <09ffac27-7fe9-0977-cb33-30433e78e662@huawei.com>
+Date:   Mon, 20 Jun 2022 20:23:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 4/4] Bluetooth: hci_bcm: Increase host baudrate for
- CYW55572 in autobaud mode
+In-Reply-To: <YrA8kxavqsDfH5R7@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Hakan Jansson <hakan.jansson@infineon.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-References: <cover.1655723462.git.hakan.jansson@infineon.com>
- <386b205422099c795272ad8b792091b692def3cd.1655723462.git.hakan.jansson@infineon.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <386b205422099c795272ad8b792091b692def3cd.1655723462.git.hakan.jansson@infineon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -59,128 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Your To: header field has:
+On 2022/6/20 17:23, Muchun Song wrote:
+> On Mon, Jun 20, 2022 at 05:04:50PM +0800, Miaohe Lin wrote:
+>> On 2022/6/20 15:54, Huang, Ying wrote:
+>>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>>>
+>>>> si->inuse_pages could still be accessed concurrently now. The plain reads
+>>>> outside si->lock critical section, i.e. swap_show and si_swapinfo, which
+>>>> results in data races. But these should be ok because they're just used
+>>>> for showing swap info.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> Reviewed-by: David Hildenbrand <david@redhat.com>
+>>>> ---
+>>>>  mm/swapfile.c | 4 ++--
+>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/mm/swapfile.c b/mm/swapfile.c
+>>>> index d2bead7b8b70..3fa26f6971e9 100644
+>>>> --- a/mm/swapfile.c
+>>>> +++ b/mm/swapfile.c
+>>>> @@ -2646,7 +2646,7 @@ static int swap_show(struct seq_file *swap, void *v)
+>>>>  	}
+>>>>  
+>>>>  	bytes = si->pages << (PAGE_SHIFT - 10);
+>>>> -	inuse = si->inuse_pages << (PAGE_SHIFT - 10);
+>>>> +	inuse = READ_ONCE(si->inuse_pages) << (PAGE_SHIFT - 10);
+>>>>  
+>>>>  	file = si->swap_file;
+>>>>  	len = seq_file_path(swap, file, " \t\n\\");
+>>>> @@ -3265,7 +3265,7 @@ void si_swapinfo(struct sysinfo *val)
+>>>>  		struct swap_info_struct *si = swap_info[type];
+>>>>  
+>>>>  		if ((si->flags & SWP_USED) && !(si->flags & SWP_WRITEOK))
+>>>> -			nr_to_be_unused += si->inuse_pages;
+>>>> +			nr_to_be_unused += READ_ONCE(si->inuse_pages);
+>>>>  	}
+>>>>  	val->freeswap = atomic_long_read(&nr_swap_pages) + nr_to_be_unused;
+>>>>  	val->totalswap = total_swap_pages + nr_to_be_unused;
+>>>
+>>> READ_ONCE() should be paired with WRITE_ONCE().  So, change the writer
+>>> side too?
+>>
+>> READ_ONCE() is used to fix the complaint of concurrent accessing to si->inuse_pages from KCSAN here.
+>> The similar commit is 218209487c3d ("mm/swapfile: fix data races in try_to_unuse()"). IMHO, it's fine
+> 
+> I think the fix 218209487c3d is incomplete. The write side in swap_range_free() should
+> also be fixed. Otherwise, IIUC, it cannot stop KCSAN complaining.
 
-     To:     unlisted-recipients:; (no To-header on input)
+I tend to agree with you. READ_ONCE() should be paired with WRITE_ONCE() theoretically. But WRITTE_ONCE()
+is ignored while the commit is introduced. Add Qian Cai for helping verify it. It's very kind of @Qian Cai
+if he could tell us whether WRITTE_ONCE() is ignored deliberately.
 
-which is added to the receiver list when replying to all in Mozilla 
-Thunderbird 91.10.0.
-]
-
-
-Dear Hakan,
-
-
-Am 20.06.22 um 14:01 schrieb Hakan Jansson:
-> Add device specific data for max baudrate in autobaud mode. This allows the
-> host to use a baudrate higher than "init speed" when loading FW in autobaud
-> mode.
-
-Please mention 921600 in the commit message, and maybe also document 
-what the current default is.
-
-Please also add the measurement data to the commit message, that means, 
-how much is the time to load the firmware decreased.
+Thanks all of you. :)
 
 > 
-> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
-> ---
->   drivers/bluetooth/hci_bcm.c | 20 ++++++++++++++++----
->   1 file changed, 16 insertions(+), 4 deletions(-)
+>> to see a not-uptodate value of si->inuse_pages because it's just used for showing swap info. So
+>> WRITE_ONCE() is not obligatory. Or am I miss something?
+>>
+>>>
+>>> Best Regards,
+>>> Huang, Ying
+>>
+>> Thanks!
+>>
+>>> .
+>>>
+>>
+>>
+> .
 > 
-> diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-> index 0ae627c293c5..d7e0b75db8a6 100644
-> --- a/drivers/bluetooth/hci_bcm.c
-> +++ b/drivers/bluetooth/hci_bcm.c
-> @@ -53,10 +53,12 @@
->    * struct bcm_device_data - device specific data
->    * @no_early_set_baudrate: Disallow set baudrate before driver setup()
->    * @drive_rts_on_open: drive RTS signal on ->open() when platform requires it
-> + * @max_autobaud_speed: max baudrate supported by device in autobaud mode
->    */
->   struct bcm_device_data {
->   	bool	no_early_set_baudrate;
->   	bool	drive_rts_on_open;
-> +	u32	max_autobaud_speed;
 
-Why specify the length, and not just `unsigned int`? Maybe also add the 
-unit to the variable name?
-
->   };
->   
->   /**
-> @@ -100,6 +102,7 @@ struct bcm_device_data {
->    * @drive_rts_on_open: drive RTS signal on ->open() when platform requires it
->    * @pcm_int_params: keep the initial PCM configuration
->    * @use_autobaud_mode: start Bluetooth device in autobaud mode
-> + * @max_autobaud_speed: max baudrate supported by device in autobaud mode
->    */
->   struct bcm_device {
->   	/* Must be the first member, hci_serdev.c expects this. */
-> @@ -139,6 +142,7 @@ struct bcm_device {
->   	bool			drive_rts_on_open;
->   	bool			use_autobaud_mode;
->   	u8			pcm_int_params[5];
-> +	u32			max_autobaud_speed;
-
-Ditto.
-
->   };
->   
->   /* generic bcm uart resources */
-> @@ -479,7 +483,10 @@ static int bcm_open(struct hci_uart *hu)
->   		else if (bcm->dev->drive_rts_on_open)
->   			hci_uart_set_flow_control(hu, true);
->   
-> -		hu->init_speed = bcm->dev->init_speed;
-> +		if (bcm->dev->use_autobaud_mode && bcm->dev->max_autobaud_speed)
-> +			hu->init_speed = min(bcm->dev->oper_speed, bcm->dev->max_autobaud_speed);
-> +		else
-> +			hu->init_speed = bcm->dev->init_speed;
->   
->   		/* If oper_speed is set, ldisc/serdev will set the baudrate
->   		 * before calling setup()
-> @@ -585,8 +592,8 @@ static int bcm_setup(struct hci_uart *hu)
->   		return 0;
->   
->   	/* Init speed if any */
-> -	if (hu->init_speed)
-> -		speed = hu->init_speed;
-> +	if (bcm->dev && bcm->dev->init_speed)
-> +		speed = bcm->dev->init_speed;
->   	else if (hu->proto->init_speed)
->   		speed = hu->proto->init_speed;
->   	else
-> @@ -1519,6 +1526,7 @@ static int bcm_serdev_probe(struct serdev_device *serdev)
->   
->   	data = device_get_match_data(bcmdev->dev);
->   	if (data) {
-> +		bcmdev->max_autobaud_speed = data->max_autobaud_speed;
->   		bcmdev->no_early_set_baudrate = data->no_early_set_baudrate;
->   		bcmdev->drive_rts_on_open = data->drive_rts_on_open;
->   	}
-> @@ -1542,6 +1550,10 @@ static struct bcm_device_data bcm43438_device_data = {
->   	.drive_rts_on_open = true,
->   };
->   
-> +static struct bcm_device_data cyw55572_device_data = {
-> +	.max_autobaud_speed = 921600,
-> +};
-> +
->   static const struct of_device_id bcm_bluetooth_of_match[] = {
->   	{ .compatible = "brcm,bcm20702a1" },
->   	{ .compatible = "brcm,bcm4329-bt" },
-> @@ -1554,7 +1566,7 @@ static const struct of_device_id bcm_bluetooth_of_match[] = {
->   	{ .compatible = "brcm,bcm4349-bt", .data = &bcm43438_device_data },
->   	{ .compatible = "brcm,bcm43540-bt", .data = &bcm4354_device_data },
->   	{ .compatible = "brcm,bcm4335a0" },
-> -	{ .compatible = "infineon,cyw55572-bt" },
-> +	{ .compatible = "infineon,cyw55572-bt", .data = &cyw55572_device_data },
->   	{ },
->   };
->   MODULE_DEVICE_TABLE(of, bcm_bluetooth_of_match);
-
-
-Kind regards,
-
-Paul

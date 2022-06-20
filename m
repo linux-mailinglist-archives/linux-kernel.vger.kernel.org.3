@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20109551C61
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574AC551AFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243559AbiFTNVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S245597AbiFTNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343966AbiFTNR1 (ORCPT
+        with ESMTP id S245266AbiFTNIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:17:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE49F1145;
-        Mon, 20 Jun 2022 06:07:55 -0700 (PDT)
+        Mon, 20 Jun 2022 09:08:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E631BE92;
+        Mon, 20 Jun 2022 06:02:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42924B811E0;
-        Mon, 20 Jun 2022 13:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 711E2C36AF4;
-        Mon, 20 Jun 2022 13:07:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0917961531;
+        Mon, 20 Jun 2022 13:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9987C385A9;
+        Mon, 20 Jun 2022 13:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730468;
-        bh=X5ZsW+5AJFVaTR65HbXpOKA8Yb1ZrXLbKvlRDnWkls4=;
+        s=korg; t=1655730096;
+        bh=u6BCNLTrsZoIKbQqERzMMZ5VeSUX1G5hq5Lifk5rhkk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WuH4DGm423XCNGjPUrLcvLnAyH3atjnbEDG7fhH7vUchwK2DmUXZsw3gyK3uAlAMe
-         fBubJV2+9LqMRRV6rlZ6o7CrUhhNDjaiKZu23//nOCyQUqgPWZdFNalysdWrWjJ8TE
-         jBrA0/40PrXOLf8Qhf0+Ws2y98plTtqxdPWwKWG8=
+        b=o1Y9UZetHmRVLzuvI1sUnTjqvJlHJyY5sgKnxHxuSynelq0RdInghwWhKZPhs4oEU
+         4iE9lUhtUgB/tZFTX61joqV7QNWCu9imZ6lBPVxzGhyQ/9oE0owsT3nMcZX4eRfUFq
+         GCTcIuypen4FgMd1Ss12FgEZxVbEhmSoPbqLhGZQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Yupeng Li <liyupeng@zbhlos.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 035/106] gcc-12: disable -Wdangling-pointer warning for now
-Date:   Mon, 20 Jun 2022 14:50:54 +0200
-Message-Id: <20220620124725.427024679@linuxfoundation.org>
+Subject: [PATCH 5.10 32/84] MIPS: Loongson-3: fix compile mips cpu_hwmon as module build error.
+Date:   Mon, 20 Jun 2022 14:50:55 +0200
+Message-Id: <20220620124721.842657761@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Yupeng Li <liyupeng@zbhlos.com>
 
-[ Upstream commit 49beadbd47c270a00754c107a837b4f29df4c822 ]
+[ Upstream commit 41e456400212803704e82691716e1d7b0865114a ]
 
-While the concept of checking for dangling pointers to local variables
-at function exit is really interesting, the gcc-12 implementation is not
-compatible with reality, and results in false positives.
+  set cpu_hwmon as a module build with loongson_sysconf, loongson_chiptemp
+  undefined error,fix cpu_hwmon compile options to be bool.Some kernel
+  compilation error information is as follows:
 
-For example, gcc sees us putting things on a local list head allocated
-on the stack, which involves exactly those kinds of pointers to the
-local stack entry:
+  Checking missing-syscalls for N32
+  CALL    scripts/checksyscalls.sh
+  Checking missing-syscalls for O32
+  CALL    scripts/checksyscalls.sh
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  CC [M]  drivers/platform/mips/cpu_hwmon.o
+  Building modules, stage 2.
+  MODPOST 200 modules
+ERROR: "loongson_sysconf" [drivers/platform/mips/cpu_hwmon.ko] undefined!
+ERROR: "loongson_chiptemp" [drivers/platform/mips/cpu_hwmon.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:92：__modpost] 错误 1
+make: *** [Makefile:1261：modules] 错误 2
 
-  In function ‘__list_add’,
-      inlined from ‘list_add_tail’ at include/linux/list.h:102:2,
-      inlined from ‘rebuild_snap_realms’ at fs/ceph/snap.c:434:2:
-  include/linux/list.h:74:19: warning: storing the address of local variable ‘realm_queue’ in ‘*&realm_27(D)->rebuild_item.prev’ [-Wdangling-pointer=]
-     74 |         new->prev = prev;
-        |         ~~~~~~~~~~^~~~~~
-
-But then gcc - understandably - doesn't really understand the big
-picture how the doubly linked list works, so doesn't see how we then end
-up emptying said list head in a loop and the pointer we added has been
-removed.
-
-Gcc also complains about us (intentionally) using this as a way to store
-a kind of fake stack trace, eg
-
-  drivers/acpi/acpica/utdebug.c:40:38: warning: storing the address of local variable ‘current_sp’ in ‘acpi_gbl_entry_stack_pointer’ [-Wdangling-pointer=]
-     40 |         acpi_gbl_entry_stack_pointer = &current_sp;
-        |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-
-which is entirely reasonable from a compiler standpoint, and we may want
-to change those kinds of patterns, but not not.
-
-So this is one of those "it would be lovely if the compiler were to
-complain about us leaving dangling pointers to the stack", but not this
-way.
-
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/platform/mips/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 8d7d65bd8efb..3f19b55e9958 100644
---- a/Makefile
-+++ b/Makefile
-@@ -811,6 +811,9 @@ endif
- KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
- KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
+index 8ac149173c64..495da331ca2d 100644
+--- a/drivers/platform/mips/Kconfig
++++ b/drivers/platform/mips/Kconfig
+@@ -17,7 +17,7 @@ menuconfig MIPS_PLATFORM_DEVICES
+ if MIPS_PLATFORM_DEVICES
  
-+# These result in bogus false positives
-+KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
-+
- ifdef CONFIG_FRAME_POINTER
- KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
- else
+ config CPU_HWMON
+-	tristate "Loongson-3 CPU HWMon Driver"
++	bool "Loongson-3 CPU HWMon Driver"
+ 	depends on MACH_LOONGSON64
+ 	select HWMON
+ 	default y
 -- 
 2.35.1
 

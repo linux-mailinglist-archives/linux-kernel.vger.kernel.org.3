@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE1955131C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017AA55131E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240134AbiFTIoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        id S240173AbiFTIo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239062AbiFTIop (ORCPT
+        with ESMTP id S239062AbiFTIo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:44:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C31E9A;
-        Mon, 20 Jun 2022 01:44:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D5CFC1F383;
-        Mon, 20 Jun 2022 08:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655714682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mMXO29bS5Q5WlYmqVACMoUiiETrgWHmM6SWuoP7+kKk=;
-        b=lP9zx3xPKJLxlJpBtp1BMFWIfqYN19uwvucIIYapP9tnNRt001tMLdLVdX5Auq/B7OpdNK
-        ICULE3T252YKMFmyGXMaiBHQu0D+Y3wbC8hgjCjiuKFLfO+ysv3XMJJdGlyQRk5CmGh6z5
-        IheflEFXNcTl67Nohect5VcFvKupEV0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655714682;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mMXO29bS5Q5WlYmqVACMoUiiETrgWHmM6SWuoP7+kKk=;
-        b=OXh9d08JY4cPZuhYh4bghTRS6B4Iaz6hpajRV8YXITxOpgsVKp5mBAdN5nBqdtYrSM3eP2
-        Ms1Tw9nvVP1aWLAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3796313638;
-        Mon, 20 Jun 2022 08:44:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7mreCnozsGLQLAAAMHmgww
-        (envelope-from <osalvador@suse.de>); Mon, 20 Jun 2022 08:44:42 +0000
-Date:   Mon, 20 Jun 2022 10:44:40 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        corbet@lwn.net, mike.kravetz@oracle.com, paulmck@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v4 2/2] mm: memory_hotplug: make hugetlb_optimize_vmemmap
- compatible with memmap_on_memory
-Message-ID: <YrAzeHbYt1mAs9ue@localhost.localdomain>
-References: <20220619133851.68184-1-songmuchun@bytedance.com>
- <20220619133851.68184-3-songmuchun@bytedance.com>
- <YrAgUtV6wD6CIrad@FVFYT0MHHV2J.usts.net>
- <226243a9-b4f5-182e-1a5b-7b8d5c28f3b3@redhat.com>
- <YrAv18GnMOcQaAxz@FVFYT0MHHV2J.usts.net>
+        Mon, 20 Jun 2022 04:44:57 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2C8E9A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:44:56 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 15so1159680vko.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=wmbiGL9iOa5y5x27MKgGYUO4KhU8OxfP5CRX2AvU4zY=;
+        b=hVz7aOYL39sp7cKEj9tP3uxUCMyP/wc2pLboBtPjUSWfmeQbtpuvFFXiyQ7/8/U5sN
+         8DlJIxc90osoUmTjo0e4SEu0srBd9zZNkDIsXeQF7wr+uHGXE4ANog4fYUb7qYL9FhrC
+         u+craSXtDLyvaMflE4Zjxy2XxQcfxTkmD4mG7TSic5go2O/zxLDZ3sjTUCPvZteQShf8
+         fGRWhX8u6dfkgQYZefkb+2qBeqUN/BjohJ/3ZXPG2gRRtOESxktbkt64AA63gi8d/RGJ
+         Jrm44Q2mMmkMvFyNRnBvA10s0duWWqkpUEoQgqW9YK2SJXiNLoiEc32PULS7TniXKJ5U
+         V+sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=wmbiGL9iOa5y5x27MKgGYUO4KhU8OxfP5CRX2AvU4zY=;
+        b=1WIaFNZZWDMvn6AVR+/CT+HOk5ZU+TIsisFn/WhdSvF93pwoT80MW1RMH+Etj+6mFv
+         7R75ZsfkV0EcPqQLQUUHsigJRErmRHXeoHMT8oRR0A6aJ14T3gbIHP42zbR+Cbl3/rXK
+         BQCKPuuHo5ssc9k7C/dCBGsqKWa+EVdINeGQ4cLa+iGtOakJpaOBTaXdCm+V67GrzugT
+         EUKPZqsZqfxAUe09qse6IYUP799S7d6Sa0mWYLyOJ1S6bxtdUXzdPwbqxTa5gQqiqL5u
+         7kWCXnDT9UVlorY6Loumt/lVwGVuP35gTelQMwuvtcZyDsee/u+vmKCT1ytc5EfCN0kP
+         TTfg==
+X-Gm-Message-State: AJIora9gXwrxKAoteWn81Ci3lIWDpvg98VCH4rOhI/XqfQip86o1dQMq
+        ywjqt9oz/ECBzriEEeOUxkqB9v9W8HBi2ded0V0=
+X-Google-Smtp-Source: AGRyM1sY0zXM+p0+YsryZfYRq8tPR/AG1YDovEEyFO+quuSiUm5QzZMlxb2qrcPx6BZWzRfi17WCjkqeF/Ti7iUDGKE=
+X-Received: by 2002:a1f:724a:0:b0:36c:309b:9a08 with SMTP id
+ n71-20020a1f724a000000b0036c309b9a08mr473183vkc.7.1655714695294; Mon, 20 Jun
+ 2022 01:44:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrAv18GnMOcQaAxz@FVFYT0MHHV2J.usts.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Sender: missaisha.gaddafi2014@gmail.com
+Received: by 2002:ab0:3d0b:0:0:0:0:0 with HTTP; Mon, 20 Jun 2022 01:44:54
+ -0700 (PDT)
+From:   Mr Ibrahim <ibrahimidewu4@gmail.com>
+Date:   Mon, 20 Jun 2022 09:44:54 +0100
+X-Google-Sender-Auth: QCm_lDhbWepUODZkvU3XBh3S2IE
+Message-ID: <CAHnzjr1XBJEXE=Xdrjvs6X1BG9nLn2hMtCgJTcAJPtOmVjX=Eg@mail.gmail.com>
+Subject: I NEED YOUR RESPOND PLEASE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_USD,MONEY_FORM,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:a2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5013]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [missaisha.gaddafi2014[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ibrahimidewu4[at]gmail.com]
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  0.0 ADVANCE_FEE_5_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 04:29:11PM +0800, Muchun Song wrote:
-> > > Although it works, I think PageVmemmapSelfHosted() check for the 1st pfn's
-> > > vmemmap page is not always reliable.  Since we reused PG_owner_priv_1
-> > > as PG_vmemmap_self_hosted, the test is noly reliable for vmemmap page's
-> > > vmemmap page.  Other non-vmemmap page can be flagged with PG_owner_priv_1.
-> > > So this check can be false-positive. Maybe the following code snippet is
-> > > the solution.
-> > 
-> > How could that happen for pages used for backing a vmemmap?
-> >
-> 
-> It cannot happen for memmap_on_memory case. Howwver, it can happen for other
-> cases. E.g. the 1st pfn (of boot memory block) whose vmemmap page may be flagged
-> as PG_owner_priv_1 (if PG_swapcache is set). Then, the check is false-positive.
+Dear partner
 
-If this can really happen, which I am not that sure tbh, maybe a way out would be
-to just define a new page-type as we did in previous versions of memmap_on_memory.
-In that way we would not for flags, but for its type.
+My name is Mr. Ibrahim. Idewu. I am working with one of the prime banks in
+Burkina Faso. Here in this bank existed a dormant account for many
+years, which belonged to one of our late foreign customers. The amount
+in this account stands at{US$19.3 Million United State Dollars}
 
-But as I said, I am not entirely sure about the potential fallout of what you mention.
+I want a foreign account where the bank will transfer this fund. I
+know you would be surprised to read this message, especially from
+someone relatively unknown to you. But, do not worry yourself so much.
+
+I am inviting you in this transaction where this money can be shared
+between us at ratio of 50/50% and help the needy around us don=E2=80=99t be
+afraid of anything I am with you I will instruct you what you will do
+to maintain this fund.
+
+Please kindly contact me with your information if you are interested
+in this transaction.
 
 
--- 
-Oscar Salvador
-SUSE Labs
+-Your Full Name:
+-Your Contact Address:
+-Your direct Mobile telephone Number:
+-Your Date of Birth:
+-Your occupation:
+
+Best regards,
+Mr. Ibrahim. Idewu
+Email:ibrahimidewu4@gmail.com

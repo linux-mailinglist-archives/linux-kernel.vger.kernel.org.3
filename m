@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2B0551FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AC2551FAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240557AbiFTPET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S242614AbiFTPEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242848AbiFTPDe (ORCPT
+        with ESMTP id S241048AbiFTPEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:03:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B34E1A056
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655735756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sB5vA/PYt/B++hSiLWtw5RtdOSfa5Qtze5kAXPaq3gM=;
-        b=ZeiqzRH3HsFuhMSdwRgj/fIYF+n7hC5hqi1p+yLatFnYWibEadVSXPD83Vq7km/l7R5/hZ
-        IJyga3ECB1X3SAvG2xnqGpO7hHg/7bcFMBBFC4CyReqBzUR0fARLxGY7D9r5yBG1ZGx+YN
-        UPNoXw0ARX0tfScyF4Mruc1496HKvgs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-7-zg0LXaoKMdC1YOXlaYTCKg-1; Mon, 20 Jun 2022 10:35:54 -0400
-X-MC-Unique: zg0LXaoKMdC1YOXlaYTCKg-1
-Received: by mail-ed1-f71.google.com with SMTP id h16-20020a05640250d000b0043572a34a61so4089387edb.15
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:35:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sB5vA/PYt/B++hSiLWtw5RtdOSfa5Qtze5kAXPaq3gM=;
-        b=F/88+Pd54SuHoyBaiUIVgRMmzaD7zq9an49lOrzL1Gm3Soiyra9DCtGbYhqq+lsxrQ
-         AI6S7ovqq6KyP0RNfwksdYmnMR8Qes54TtE4ZvzOanrQiqsfFAC4mSRumflOcV+9hLQL
-         i5qQbVPi3t1pQDWH7ED7TIQeMur8zvoRDddIaNP4sELUzw9pdjlCFl0EmxSdQBoOiO5M
-         3rVOvzVqdL6yp8Vdu/zjEKXtDXvTyA4KAnO8XCBIiRdDdmd26ejYURZU9vEXFfc34wUL
-         9/ksQD0jfoE0Q/N3TKOnKP00yed0LFJkefG2xfei8WnDnI7jeK7CbKb2OIrOWiDx9PjP
-         aGJw==
-X-Gm-Message-State: AJIora/m7VQNg1ORJUiu7og2ywcQPuki0BRehLU75WvnDWaib5OFg48p
-        dWdNLZ69NHpdKOctJYgcwq32mW0Tvllne1poD57rTDrnwkJ9sOtFFp9qljo+4S2LkSiqq7b50Nn
-        IIYPZFwJ0SvI+nsxkdy1qow8X
-X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id eh13-20020a0564020f8d00b004356df2068amr15504692edb.209.1655735753655;
-        Mon, 20 Jun 2022 07:35:53 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vd1G5IDERU5ls3ZLMFPONjt/JzOY8kxQyAIF3O5ehuje2w68JMZlruTfRe1V2x9eaZ6rKddQ==
-X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id eh13-20020a0564020f8d00b004356df2068amr15504675edb.209.1655735753508;
-        Mon, 20 Jun 2022 07:35:53 -0700 (PDT)
-Received: from [10.0.0.147] (D57D5A4B.static.ziggozakelijk.nl. [213.125.90.75])
-        by smtp.gmail.com with ESMTPSA id rh17-20020a17090720f100b006fef5088792sm6001911ejb.108.2022.06.20.07.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 07:35:53 -0700 (PDT)
-Message-ID: <738d00dd-f05b-9b31-5260-0158ee89e399@redhat.com>
-Date:   Mon, 20 Jun 2022 16:35:52 +0200
+        Mon, 20 Jun 2022 11:04:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE6B2659
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655735982; x=1687271982;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+0cVf/jOHrFvoq3mimyg8Cvm/6joXn5EE+jDGhKaQIg=;
+  b=ZpcqZx/bvVFcluGs78jqC4TrDbCdI27XjWgf9TjTC9WRVd7kXUfGybye
+   Yd1gNQ+wOpq+td9DwcEbNjPs8ThOQLC3+wP0ikKtcFyLUyLCYd/1mGov5
+   BnRZVX7Rht0FRKUhfo6Bt7TaX2Fko/cx95y7z1PvpQv4VI1hDH2ZKg0Vw
+   ZjO6gBZ4eND3DadhgZZvEJUQ59DuGOwwAAeWecoFGQTW2l1Dq9sgftOrR
+   TSiD2BVdLHsiLVxa5HKXWaUuyBm/yB4vUNfXTUDI0JUOzdKtNaCSk3erf
+   W8YIYkIunYiMmge3CPf+S4wZqEeRlejLavIJTqlCZ6naAJC9ClI994LtR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="280966988"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="280966988"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 07:37:38 -0700
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="689490503"
+Received: from jwtschan-mobl.amr.corp.intel.com (HELO [10.209.124.185]) ([10.209.124.185])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 07:37:37 -0700
+Message-ID: <30de587c-4284-751b-c6cb-d665939daf3d@linux.intel.com>
+Date:   Mon, 20 Jun 2022 07:37:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Drop wrong dependency to
- INTEL_SOC_PMIC
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v7 0/5] Add TDX Guest Attestation support
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <d0931a48-ac87-c83e-1241-64819b87cf3c@linux.intel.com>
+ <d90a10964ecee3269a26a48155733e10848ae471.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <d90a10964ecee3269a26a48155733e10848ae471.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,42 +77,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 6/20/22 12:43, Andy Shevchenko wrote:
-> Intel SoC PMIC is a generic name for all PMICs that are used
-> on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
-> option refers to Crystal Cove PMIC, which has never been a part
-> of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
+On 6/20/22 5:46 AM, Kai Huang wrote:
+> On Sun, 2022-06-19 at 17:36 -0700, Sathyanarayanan Kuppuswamy wrote:
+>> Hi Dave/Boris/Thomas,
+>>
+>> On 5/23/22 9:05 PM, Kuppuswamy Sathyanarayanan wrote:
+>>> Hi All,
+>>
+>> Gentle ping!
+>>
+>> Can you please let me know your comments on this patch set? This series
+>> is so far reviewed by Kai, Wander, and Isaku. I have addressed all the
+>> comments raised by them. So to progress further, your comments would be
+>> appreciated.
+>>
+>>
 > 
-> Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
-> which the Type-C depends on.
+> To be precise I provided Acked-by to the first patch.  Sorry I was basically
+
+Yes. I have added your Acked-by only for the first patch. I meant you and others
+mentioned had reviewed this series before (which also includes your comment on
+previous revisions), and your comments have been addressed.
+
+> sick leave in the past two weeks so didn't fully review the rest.
+
+Good to know you are back. Thanks for the review.
+
 > 
-> Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
-> Reported-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/usb/typec/tcpm/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 557f392fe24d..073fd2ea5e0b 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -56,7 +56,6 @@ config TYPEC_WCOVE
->  	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
->  	depends on ACPI
->  	depends on MFD_INTEL_PMC_BXT
-> -	depends on INTEL_SOC_PMIC
->  	depends on BXT_WC_PMIC_OPREGION
->  	help
->  	  This driver adds support for USB Type-C on Intel Broxton platforms
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

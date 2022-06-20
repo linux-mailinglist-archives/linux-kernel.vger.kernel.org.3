@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650C3551A80
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30CC551D5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244972AbiFTNGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S1348918AbiFTNux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244839AbiFTNED (ORCPT
+        with ESMTP id S1349194AbiFTNs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:04:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3936E192BD;
-        Mon, 20 Jun 2022 05:58:52 -0700 (PDT)
+        Mon, 20 Jun 2022 09:48:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5802EA24;
+        Mon, 20 Jun 2022 06:17:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF6CEB811A3;
-        Mon, 20 Jun 2022 12:58:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E09C3411C;
-        Mon, 20 Jun 2022 12:58:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 230A161017;
+        Mon, 20 Jun 2022 13:16:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DE9C3411B;
+        Mon, 20 Jun 2022 13:16:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729929;
-        bh=zF1v78wE+V4e5SLuD5aljk/ixD5fd8h/4NWR5z4xJPQ=;
+        s=korg; t=1655731006;
+        bh=5ytWGEPki7zvNjF/6JjZcMbuk3kQQxptfDHVJxBB9QY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x2j74huuUY0aZPS+bESw+2XaSSDrWjOrc9u2iNdsH4o7pxG8iKEOEDhZZ1EF6arc0
-         0SSTGvJ/E9uUwm3qCnp1Eh65lwJbdAhgSHEWTXyB+Xo+5IoT83BfzCaj1zjF/QDNJB
-         m2JOuCsc8BAmGeSJut5nClKAhpQEounH/BaWqxUw=
+        b=Hfjbz/BVtHuqvp2yOv8wzDibAt8ojXKRdQFh9HUH+cuDfSoLZK35TozDlJzGD+7VN
+         u6jGZ4bvdB/dezYZDJ8f8KSMBDbSlk4xe27TPeCL2HoOTLG21b8L80F3DPe4nbitWN
+         7U0HOgzQqsQvrh4VQjMacEfilDgm9Dg9Ne0fkSQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 087/141] block: Fix handling of offline queues in blk_mq_alloc_request_hctx()
-Date:   Mon, 20 Jun 2022 14:50:25 +0200
-Message-Id: <20220620124732.116921788@linuxfoundation.org>
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Theodore Tso <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 125/240] random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+Date:   Mon, 20 Jun 2022 14:50:26 +0200
+Message-Id: <20220620124742.634945767@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +55,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit 14dc7a18abbe4176f5626c13c333670da8e06aa1 ]
+commit e3c1c4fd9e6d14059ed93ebfe15e1c57793b1a05 upstream.
 
-This patch prevents that test nvme/004 triggers the following:
+In 1448769c9cdb ("random: check for signal_pending() outside of
+need_resched() check"), Jann pointed out that we previously were only
+checking the TIF_NOTIFY_SIGNAL and TIF_SIGPENDING flags if the process
+had TIF_NEED_RESCHED set, which meant in practice, super long reads to
+/dev/[u]random would delay signal handling by a long time. I tried this
+using the below program, and indeed I wasn't able to interrupt a
+/dev/urandom read until after several megabytes had been read. The bug
+he fixed has always been there, and so code that reads from /dev/urandom
+without checking the return value of read() has mostly worked for a long
+time, for most sizes, not just for <= 256.
 
-UBSAN: array-index-out-of-bounds in block/blk-mq.h:135:9
-index 512 is out of range for type 'long unsigned int [512]'
-Call Trace:
- show_stack+0x52/0x58
- dump_stack_lvl+0x49/0x5e
- dump_stack+0x10/0x12
- ubsan_epilogue+0x9/0x3b
- __ubsan_handle_out_of_bounds.cold+0x44/0x49
- blk_mq_alloc_request_hctx+0x304/0x310
- __nvme_submit_sync_cmd+0x70/0x200 [nvme_core]
- nvmf_connect_io_queue+0x23e/0x2a0 [nvme_fabrics]
- nvme_loop_connect_io_queues+0x8d/0xb0 [nvme_loop]
- nvme_loop_create_ctrl+0x58e/0x7d0 [nvme_loop]
- nvmf_create_ctrl+0x1d7/0x4d0 [nvme_fabrics]
- nvmf_dev_write+0xae/0x111 [nvme_fabrics]
- vfs_write+0x144/0x560
- ksys_write+0xb7/0x140
- __x64_sys_write+0x42/0x50
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+Maybe it makes sense to keep that code working. The reason it was so
+small prior, ignoring the fact that it didn't work anyway, was likely
+because /dev/random used to block, and that could happen for pretty
+large lengths of time while entropy was gathered. But now, it's just a
+chacha20 call, which is extremely fast and is just operating on pure
+data, without having to wait for some external event. In that sense,
+/dev/[u]random is a lot more like /dev/zero.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Fixes: 20e4d8139319 ("blk-mq: simplify queue mapping & schedule with each possisble CPU")
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20220615210004.1031820-1-bvanassche@acm.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Taking a page out of /dev/zero's read_zero() function, it always returns
+at least one chunk, and then checks for signals after each chunk. Chunk
+sizes there are of length PAGE_SIZE. Let's just copy the same thing for
+/dev/[u]random, and check for signals and cond_resched() for every
+PAGE_SIZE amount of data. This makes the behavior more consistent with
+expectations, and should mitigate the impact of Jann's fix for the
+age-old signal check bug.
+
+---- test program ----
+
+  #include <unistd.h>
+  #include <signal.h>
+  #include <stdio.h>
+  #include <sys/random.h>
+
+  static unsigned char x[~0U];
+
+  static void handle(int) { }
+
+  int main(int argc, char *argv[])
+  {
+    pid_t pid = getpid(), child;
+    signal(SIGUSR1, handle);
+    if (!(child = fork())) {
+      for (;;)
+        kill(pid, SIGUSR1);
+    }
+    pause();
+    printf("interrupted after reading %zd bytes\n", getrandom(x, sizeof(x), 0));
+    kill(child, SIGTERM);
+    return 0;
+  }
+
+Cc: Jann Horn <jannh@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-mq.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/char/random.c |   17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index de7fc6957271..631fb87b4976 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -579,6 +579,8 @@ struct request *blk_mq_alloc_request_hctx(struct request_queue *q,
- 	if (!blk_mq_hw_queue_mapped(data.hctx))
- 		goto out_queue_exit;
- 	cpu = cpumask_first_and(data.hctx->cpumask, cpu_online_mask);
-+	if (cpu >= nr_cpu_ids)
-+		goto out_queue_exit;
- 	data.ctx = __blk_mq_get_ctx(q, cpu);
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -523,7 +523,6 @@ EXPORT_SYMBOL(get_random_bytes);
  
- 	if (!q->elevator)
--- 
-2.35.1
-
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ {
+-	bool large_request = nbytes > 256;
+ 	ssize_t ret = 0;
+ 	size_t len;
+ 	u32 chacha_state[CHACHA_BLOCK_SIZE / sizeof(u32)];
+@@ -549,15 +548,6 @@ static ssize_t get_random_bytes_user(voi
+ 	}
+ 
+ 	do {
+-		if (large_request) {
+-			if (signal_pending(current)) {
+-				if (!ret)
+-					ret = -ERESTARTSYS;
+-				break;
+-			}
+-			cond_resched();
+-		}
+-
+ 		chacha20_block(chacha_state, output);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+@@ -571,6 +561,13 @@ static ssize_t get_random_bytes_user(voi
+ 		nbytes -= len;
+ 		buf += len;
+ 		ret += len;
++
++		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
++		if (!(ret % PAGE_SIZE) && nbytes) {
++			if (signal_pending(current))
++				break;
++			cond_resched();
++		}
+ 	} while (nbytes);
+ 
+ 	memzero_explicit(output, sizeof(output));
 
 

@@ -2,76 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEF45515C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F545515C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238850AbiFTK0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S240203AbiFTK0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiFTK0I (ORCPT
+        with ESMTP id S239999AbiFTK0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:26:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4A113E8B;
-        Mon, 20 Jun 2022 03:26:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 20 Jun 2022 06:26:12 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AD713F88
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:26:06 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657f0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57f0:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 178F160B28;
-        Mon, 20 Jun 2022 10:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E754DC3411B;
-        Mon, 20 Jun 2022 10:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655720763;
-        bh=Wal+H1rMTMUMX67N1hK9qOOenXwy00Js2GP0OU5lLmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nLD/STKXRr4oGH09HyHcudKrcxGfa2TnFtj0fGs+YchvfpQ/yHENjP/tlZc0XSBcp
-         a3JfWGHDkUt4EwoQd8oaukI/RVZq4dBRo4E2obYlxv3X4k0juV6YtlUIB2Ou/jgdEE
-         ZO/ExEnaVlHTsyeSHYOLsfyVm1dTWcmbORoXqA+U=
-Date:   Mon, 20 Jun 2022 12:26:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-Cc:     andy.shevchenko@gmail.com, arnd@arndb.de, corbet@lwn.net,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
-        guy.zadicario@intel.com, linus.walleij@linaro.org, olof@lixom.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 00/14] Driver of Intel(R) Gaussian & Neural Accelerator
-Message-ID: <YrBLOPHGAZgFJvWN@kroah.com>
-References: <85a6nq45uh.fsf@linux.intel.com>
- <20220620094907.4101274-1-maciej.kwapulinski@linux.intel.com>
- <YrBEP4P9JA60LeOB@kroah.com>
- <86czf3wsrg.fsf@linux.intel.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D9D7D1EC05ED;
+        Mon, 20 Jun 2022 12:26:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1655720760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=q17a9XDpjwTWrwYDkkTaQRPmMqGL4q0bN7aju6sX8fc=;
+        b=ot3uDji6ieMC7dhTqMOPLpRfYZ+D/oOGVFqRzqgKnfa0kcNpM/bfgTF0HcgcUwm1ytR3UF
+        ZcxLVAfRbqvIk7ehY+JDCg/3PXcH03o7yOuj7hy3MWW6UBKZz+alWlDdoJiftWvYpq7DOu
+        W9CoStDuS1uK4u2ui87Jeq2OESCWxlw=
+Date:   Mon, 20 Jun 2022 12:26:27 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, jbeulich@suse.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
+Message-ID: <YrBLU2C5cJoalnax@zn.tnic>
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-2-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <86czf3wsrg.fsf@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220503132207.17234-2-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 12:08:34PM +0200, Maciej Kwapulinski wrote:
+On Tue, May 03, 2022 at 03:22:06PM +0200, Juergen Gross wrote:
+> x86_has_pat_wp() is using a wrong test, as it relies on the normal
+> PAT configuration used by the kernel. In case the PAT MSR has been
+> setup by another entity (e.g. BIOS or Xen hypervisor) it might return
+> false even if the PAT configuration is allowing WP mappings.
 > 
-> Greg KH <gregkh@linuxfoundation.org> writes:
+> Fixes: 1f6f655e01ad ("x86/mm: Add a x86_has_pat_wp() helper")
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+>  arch/x86/mm/init.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> > On Mon, Jun 20, 2022 at 11:49:07AM +0200, maciej.kwapulinski@linux.intel.com wrote:
-> >> Please share your thoughts.
-> >
-> > No code here to share thoughts about :(
-> 
-> code will be published in comming weeks to dri-devel ML
+> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+> index d8cfce221275..71e182ebced3 100644
+> --- a/arch/x86/mm/init.c
+> +++ b/arch/x86/mm/init.c
+> @@ -80,7 +80,8 @@ static uint8_t __pte2cachemode_tbl[8] = {
+>  /* Check that the write-protect PAT entry is set for write-protect */
+>  bool x86_has_pat_wp(void)
+>  {
+> -	return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] == _PAGE_CACHE_MODE_WP;
+> +	return __pte2cachemode_tbl[__cachemode2pte_tbl[_PAGE_CACHE_MODE_WP]] ==
+> +	       _PAGE_CACHE_MODE_WP;
 
-Saying "we will send patches sometime in the future" is a bit odd when
-we have thousands of patches each week in our inbox to review now.  Why
-not help us out with that workload?  :)
+So this code always makes my head spin... especially after vacation but
+lemme take a stab:
 
-thanks,
+__pte2cachemode_tbl indices are of type enum page_cache_mode.
 
-greg k-h
+What you've done is index with
+
+__cachemode2pte_tbl[_PAGE_CACHE_MODE_WP]
+
+which gives uint16_t.
+
+So, if at all, this should do __pte2cm_idx(_PAGE_CACHE_MODE_WP) to index
+into it.
+
+But I'm still unclear on the big picture. Looking at Jan's explanation,
+there's something about PAT init being skipped due to MTRRs not being
+emulated by Xen.... or something to that effect.
+
+So if that's the case, the Xen guest code should init PAT in its own
+way, so that the generic code works with this without doing hacks.
+
+But I'm only guessing - this needs a *lot* more elaboration and
+explanation why exactly this is needed.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

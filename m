@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466D95510B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69B85510B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238887AbiFTGt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S238918AbiFTGw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbiFTGt4 (ORCPT
+        with ESMTP id S235762AbiFTGw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:49:56 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5966F6176;
-        Sun, 19 Jun 2022 23:49:55 -0700 (PDT)
-X-UUID: c299c47f328e4507b435047b71b4c7ce-20220620
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:a824e2f3-abc3-4a61-ba4f-f75105ac0024,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.6,REQID:a824e2f3-abc3-4a61-ba4f-f75105ac0024,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:b14ad71,CLOUDID:87d22a3d-9948-4b2a-a784-d8a6c1086106,C
-        OID:cb306c6fdf1b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c299c47f328e4507b435047b71b4c7ce-20220620
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1770909525; Mon, 20 Jun 2022 14:49:48 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 20 Jun 2022 14:49:46 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 20 Jun 2022 14:49:46 +0800
-Message-ID: <2cedb4cc1e1a69481d5997431ac2a4b368858afb.camel@mediatek.com>
-Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 20 Jun 2022 14:49:46 +0800
-In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
-         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 20 Jun 2022 02:52:27 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C0B6323
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:52:26 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id f16-20020a056602071000b00669bb12a6baso5646910iox.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:52:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=MCP61xtMRu0kQhKD2rnlQw35pt3dag8zKy5KedqHeAQ=;
+        b=ehHBLB+ij+C+pGjo47DuxaTZmhTjzp0xb3qmR1dpF8PBN2kLHvSb67LNboZnNa19Tt
+         +nT8b0gfPxjV9euNchaAaK5ZbQnYi+Oc1qqhTfZB3W6LRCltDPa6JjhyH3wEvRIbwMGY
+         SKVQrQvaOj+SgyHniLovFPUBM9baxMzHtMOBz7GFme2NdGM54XgUbD2Jq4beAknbcsLE
+         hSflGHlB+eaAjzlvHuW7suaNFBULil2DCu/C7sEy99yrT7MhhwEShIEN07vZXnF+FGBz
+         VR0N1In4ZVc9i4jAbUZX32bs6R/g7hIa78qh0bl/4pMWcu0O7mbxuRuFtbEoabCEffYz
+         gstA==
+X-Gm-Message-State: AJIora+NJlp12OKSnyyTECl3bQNWj7FevfoLdYv4Y2ylDB34z4z5ZOKt
+        ew9kb4ThrPkagvPzL5nJWuUV1Y17ZFsCuZefwCzOCR1t6k4D
+X-Google-Smtp-Source: AGRyM1sDJXzTPwNOJcj25fuMdPk3x9JUwEpH09MaGr8PxXrL3OV6PfSkPmHyFwPCpGF1ztLjVvjER6T59fG1+WVRjFeOraLAQ6PS
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Received: by 2002:a05:6638:f0d:b0:331:e337:f4e4 with SMTP id
+ h13-20020a0566380f0d00b00331e337f4e4mr12653981jas.249.1655707945727; Sun, 19
+ Jun 2022 23:52:25 -0700 (PDT)
+Date:   Sun, 19 Jun 2022 23:52:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f5004705e1db8bad@google.com>
+Subject: [syzbot] memory leak in setup_mq_sysctls
+From:   syzbot <syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com>
+To:     ebiederm@xmission.com, legion@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,129 +53,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+Hello,
 
-On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+syzbot found the following issue on:
 
-[snip]
+HEAD commit:    979086f5e006 Merge tag 'fs.fixes.v5.19-rc3' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1284331bf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c696a83383a77f81
+dashboard link: https://syzkaller.appspot.com/bug?extid=b4b0d1b35442afbf6fd2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=163e740ff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132b758bf00000
 
-> +
-> +static int mtk_dp_probe(struct platform_device *pdev)
-> +{
-> +	struct mtk_dp *mtk_dp;
-> +	struct device *dev = &pdev->dev;
-> +	int ret;
-> +	int irq_num = 0;
-> +
-> +	mtk_dp = devm_kzalloc(dev, sizeof(*mtk_dp), GFP_KERNEL);
-> +	if (!mtk_dp)
-> +		return -ENOMEM;
-> +
-> +	mtk_dp->dev = dev;
-> +
-> +	irq_num = platform_get_irq(pdev, 0);
-> +	if (irq_num < 0)
-> +		return dev_err_probe(dev, irq_num,
-> +				     "failed to request dp irq
-> resource\n");
-> +
-> +	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 
-> 1, 0);
-> +	if (IS_ERR(mtk_dp->next_bridge))
-> +		return dev_err_probe(dev, PTR_ERR(mtk_dp->next_bridge),
-> +				     "Failed to get bridge\n");
-> +
-> +	ret = mtk_dp_dt_parse(mtk_dp, pdev);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to parse dt\n");
-> +
-> +	drm_dp_aux_init(&mtk_dp->aux);
-> +	mtk_dp->aux.name = "aux_mtk_dp";
-> +	mtk_dp->aux.transfer = mtk_dp_aux_transfer;
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com
 
-In the comment of drm_dp_aux_init(), drm_dp_aux_init() is used before
-drm_dp_aux_register(). So I think we still need to call
-drm_dp_aux_register().
+executing program
+BUG: memory leak
+unreferenced object 0xffff888112fc9200 (size 512):
+  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+  hex dump (first 32 bytes):
+    ef d3 60 85 ff ff ff ff 0c 9b d2 12 81 88 ff ff  ..`.............
+    04 00 00 00 a4 01 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814b6eb3>] kmemdup+0x23/0x50 mm/util.c:129
+    [<ffffffff82219a9b>] kmemdup include/linux/fortify-string.h:456 [inline]
+    [<ffffffff82219a9b>] setup_mq_sysctls+0x4b/0x1c0 ipc/mq_sysctl.c:89
+    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Regards,
-CK
+BUG: memory leak
+unreferenced object 0xffff888112fd5f00 (size 256):
+  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+  hex dump (first 32 bytes):
+    00 92 fc 12 81 88 ff ff 00 00 00 00 01 00 00 00  ................
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816fea1b>] kmalloc include/linux/slab.h:605 [inline]
+    [<ffffffff816fea1b>] kzalloc include/linux/slab.h:733 [inline]
+    [<ffffffff816fea1b>] __register_sysctl_table+0x7b/0x7f0 fs/proc/proc_sysctl.c:1344
+    [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-> +
-> +	ret = devm_request_threaded_irq(dev, irq_num, mtk_dp_hpd_event,
-> +					mtk_dp_hpd_event_thread,
-> +					IRQ_TYPE_LEVEL_HIGH,
-> dev_name(dev),
-> +					mtk_dp);
-> +	if (ret)
-> +		return dev_err_probe(dev, -EPROBE_DEFER,
-> +				     "failed to request mediatek dptx
-> irq\n");
-> +
-> +	mutex_init(&mtk_dp->dp_lock);
-> +
-> +	platform_set_drvdata(pdev, mtk_dp);
-> +
-> +	mtk_dp->phy_dev = platform_device_register_data(dev, "mediatek-
-> dp-phy",
-> +							PLATFORM_DEVID_
-> AUTO,
-> +							&mtk_dp->regs,
-> +							sizeof(struct
-> regmap *));
-> +	if (IS_ERR(mtk_dp->phy_dev))
-> +		return dev_err_probe(dev, PTR_ERR(mtk_dp->phy_dev),
-> +				     "Failed to create device mediatek-
-> dp-phy\n");
-> +
-> +	mtk_dp_get_calibration_data(mtk_dp);
-> +
-> +	mtk_dp->phy = devm_phy_get(&mtk_dp->phy_dev->dev, "dp");
-> +
-> +	if (IS_ERR(mtk_dp->phy)) {
-> +		platform_device_unregister(mtk_dp->phy_dev);
-> +		return dev_err_probe(dev, PTR_ERR(mtk_dp->phy),
-> +				     "Failed to get phy\n");
-> +	}
-> +
-> +	mtk_dp->bridge.funcs = &mtk_dp_bridge_funcs;
-> +	mtk_dp->bridge.of_node = dev->of_node;
-> +
-> +	mtk_dp->bridge.ops =
-> +		DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
-> DRM_BRIDGE_OP_HPD;
-> +	mtk_dp->bridge.type = DRM_MODE_CONNECTOR_eDP;
-> +
-> +	drm_bridge_add(&mtk_dp->bridge);
-> +
-> +	pm_runtime_enable(dev);
-> +	pm_runtime_get_sync(dev);
-> +
-> +	return 0;
-> +}
+BUG: memory leak
+unreferenced object 0xffff888112fbba00 (size 256):
+  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+  hex dump (first 32 bytes):
+    78 ba fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
+    [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
+    [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
+    [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+    [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
+    [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
+BUG: memory leak
+unreferenced object 0xffff888112fbb900 (size 256):
+  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+  hex dump (first 32 bytes):
+    78 b9 fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
+    [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
+    [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
+    [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+    [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
+    [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

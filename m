@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF3C551E35
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2502551E9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351110AbiFTOI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S243710AbiFTNvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349934AbiFTNwc (ORCPT
+        with ESMTP id S1350678AbiFTNtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:52:32 -0400
+        Mon, 20 Jun 2022 09:49:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF9A31512;
-        Mon, 20 Jun 2022 06:19:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506AA5FF0;
+        Mon, 20 Jun 2022 06:18:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6A8CB811A0;
-        Mon, 20 Jun 2022 13:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D845C341C4;
-        Mon, 20 Jun 2022 13:18:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40838B811E3;
+        Mon, 20 Jun 2022 13:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1208C3411B;
+        Mon, 20 Jun 2022 13:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731112;
-        bh=598Hl7kIDIGJ5LdbwkPEKiM7nzzTHD9/w2CWnbQ9xv0=;
+        s=korg; t=1655730988;
+        bh=Mw30fV+8+1NAdHm2Iv0oeUz0sa/z0i4pdM2AgLrdCPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LCKBxV52nTdWXxz0suySnT3JGHWkpjEZbsrOrntbpxAcERCFS7qwJC4ptxVbL/EoY
-         OC9iZKKxGbtKpHkosQw0lKLdvaXA+ghFM1ACy5ybkcb22xcBEGjObbWBSYZezja010
-         s6EzsJ5xbugPKsaNOgBNYb16Pe8KUwcj05Dc+1YQ=
+        b=I1kebd0PmApUGjjO2HiY7wKy1D+/BtGZxnxfb4M4M8Y/azLlQJdvwMoxNtOiCEzaS
+         dKtMp6JQltFFxZjfuNYFUozGeOiZOjUcKAGA1K5QsHYKWnozutA99ybzikC/uP1mCW
+         Wu4cPmMQbu72Bmgm5h6bymX73C8ukC+36fSvyado=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>,
+        Graham Christensen <graham@grahamc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 116/240] random: reseed more often immediately after booting
-Date:   Mon, 20 Jun 2022 14:50:17 +0200
-Message-Id: <20220620124742.375671888@linuxfoundation.org>
+Subject: [PATCH 5.4 119/240] random: treat bootloader trust toggle the same way as cpu trust toggle
+Date:   Mon, 20 Jun 2022 14:50:20 +0200
+Message-Id: <20220620124742.460441147@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
 References: <20220620124737.799371052@linuxfoundation.org>
@@ -57,85 +59,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 7a7ff644aeaf071d433caffb3b8ea57354b55bd3 upstream.
+commit d97c68d178fbf8aaaf21b69b446f2dfb13909316 upstream.
 
-In order to chip away at the "premature first" problem, we augment our
-existing entropy accounting with more frequent reseedings at boot.
+If CONFIG_RANDOM_TRUST_CPU is set, the RNG initializes using RDRAND.
+But, the user can disable (or enable) this behavior by setting
+`random.trust_cpu=0/1` on the kernel command line. This allows system
+builders to do reasonable things while avoiding howls from tinfoil
+hatters. (Or vice versa.)
 
-The idea is that at boot, we're getting entropy from various places, and
-we're not very sure which of early boot entropy is good and which isn't.
-Even when we're crediting the entropy, we're still not totally certain
-that it's any good. Since boot is the one time (aside from a compromise)
-that we have zero entropy, it's important that we shepherd entropy into
-the crng fairly often.
-
-At the same time, we don't want a "premature next" problem, whereby an
-attacker can brute force individual bits of added entropy. In lieu of
-going full-on Fortuna (for now), we can pick a simpler strategy of just
-reseeding more often during the first 5 minutes after boot. This is
-still bounded by the 256-bit entropy credit requirement, so we'll skip a
-reseeding if we haven't reached that, but in case entropy /is/ coming
-in, this ensures that it makes its way into the crng rather rapidly
-during these early stages.
-
-Ordinarily we reseed if the previous reseeding is 300 seconds old. This
-commit changes things so that for the first 600 seconds of boot time, we
-reseed if the previous reseeding is uptime / 2 seconds old. That means
-that we'll reseed at the very least double the uptime of the previous
-reseeding.
+CONFIG_RANDOM_TRUST_BOOTLOADER is basically the same thing, but regards
+the seed passed via EFI or device tree, which might come from RDRAND or
+a TPM or somewhere else. In order to allow distros to more easily enable
+this while avoiding those same howls (or vice versa), this commit adds
+the corresponding `random.trust_bootloader=0/1` toggle.
 
 Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Cc: Graham Christensen <graham@grahamc.com>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Link: https://github.com/NixOS/nixpkgs/pull/165355
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |    6 ++++++
+ drivers/char/Kconfig                            |    3 ++-
+ drivers/char/random.c                           |    8 +++++++-
+ 3 files changed, 15 insertions(+), 2 deletions(-)
 
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3842,6 +3842,12 @@
+ 			fully seed the kernel's CRNG. Default is controlled
+ 			by CONFIG_RANDOM_TRUST_CPU.
+ 
++	random.trust_bootloader={on,off}
++			[KNL] Enable or disable trusting the use of a
++			seed passed by the bootloader (if available) to
++			fully seed the kernel's CRNG. Default is controlled
++			by CONFIG_RANDOM_TRUST_BOOTLOADER.
++
+ 	ras=option[,option,...]	[KNL] RAS-specific options
+ 
+ 		cec_disable	[X86]
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -559,4 +559,5 @@ config RANDOM_TRUST_BOOTLOADER
+ 	device randomness. Say Y here to assume the entropy provided by the
+ 	booloader is trustworthy so it will be added to the kernel's entropy
+ 	pool. Otherwise, say N here so it will be regarded as device input that
+-	only mixes the entropy pool.
+\ No newline at end of file
++	only mixes the entropy pool. This can also be configured at boot with
++	"random.trust_bootloader=on/off".
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -336,6 +336,28 @@ static void crng_fast_key_erasure(u8 key
+@@ -940,11 +940,17 @@ static bool drain_entropy(void *buf, siz
+  **********************************************************************/
+ 
+ static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
++static bool trust_bootloader __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER);
+ static int __init parse_trust_cpu(char *arg)
+ {
+ 	return kstrtobool(arg, &trust_cpu);
  }
++static int __init parse_trust_bootloader(char *arg)
++{
++	return kstrtobool(arg, &trust_bootloader);
++}
+ early_param("random.trust_cpu", parse_trust_cpu);
++early_param("random.trust_bootloader", parse_trust_bootloader);
  
  /*
-+ * Return whether the crng seed is considered to be sufficiently
-+ * old that a reseeding might be attempted. This happens if the last
-+ * reseeding was CRNG_RESEED_INTERVAL ago, or during early boot, at
-+ * an interval proportional to the uptime.
-+ */
-+static bool crng_has_old_seed(void)
-+{
-+	static bool early_boot = true;
-+	unsigned long interval = CRNG_RESEED_INTERVAL;
-+
-+	if (unlikely(READ_ONCE(early_boot))) {
-+		time64_t uptime = ktime_get_seconds();
-+		if (uptime >= CRNG_RESEED_INTERVAL / HZ * 2)
-+			WRITE_ONCE(early_boot, false);
-+		else
-+			interval = max_t(unsigned int, 5 * HZ,
-+					 (unsigned int)uptime / 2 * HZ);
-+	}
-+	return time_after(jiffies, READ_ONCE(base_crng.birth) + interval);
-+}
-+
-+/*
-  * This function returns a ChaCha state that you may use for generating
-  * random data. It also returns up to 32 bytes on its own of random data
-  * that may be used; random_data_len may not be greater than 32.
-@@ -368,10 +390,10 @@ static void crng_make_state(u32 chacha_s
- 	}
- 
- 	/*
--	 * If the base_crng is more than 5 minutes old, we reseed, which
--	 * in turn bumps the generation counter that we check below.
-+	 * If the base_crng is old enough, we try to reseed, which in turn
-+	 * bumps the generation counter that we check below.
- 	 */
--	if (unlikely(time_after(jiffies, READ_ONCE(base_crng.birth) + CRNG_RESEED_INTERVAL)))
-+	if (unlikely(crng_has_old_seed()))
- 		crng_reseed();
- 
- 	local_irq_save(flags);
+  * The first collection of entropy occurs at system boot while interrupts
+@@ -1152,7 +1158,7 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_random
+  */
+ void add_bootloader_randomness(const void *buf, size_t size)
+ {
+-	if (IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER))
++	if (trust_bootloader)
+ 		add_hwgenerator_randomness(buf, size, size * 8);
+ 	else
+ 		add_device_randomness(buf, size);
 
 

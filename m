@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91453550EF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3210550EF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbiFTDeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 23:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S237950AbiFTDgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 23:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbiFTDeS (ORCPT
+        with ESMTP id S232804AbiFTDgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 23:34:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AB20B848
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655696056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dfwEK1sq7rdGyo7PvaKmvL8otVhWygQzLxR6ANVD3rU=;
-        b=cXYevlXOgFjcct6pt7CIqrh9QJIPSvcffTcQyD0S8dzATYNA59CEA7dpkvSqcQ7ivmhufA
-        flGdtIATdwlSLmKzMpQ9gi8JgFuJUXMrMGXQI0Tf5w5wY8krpWkCaV/XYbOzlpz7+XCUEu
-        EXWimUc0G9Q5+SaimTJ1ZuHC2zRm1Dw=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-YD58PcWaMiqJLRJvxzQHQQ-1; Sun, 19 Jun 2022 23:34:15 -0400
-X-MC-Unique: YD58PcWaMiqJLRJvxzQHQQ-1
-Received: by mail-pg1-f200.google.com with SMTP id g129-20020a636b87000000b00401b8392ac8so5642370pgc.4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:34:15 -0700 (PDT)
+        Sun, 19 Jun 2022 23:36:36 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12E6B848
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:36:35 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id s37so9063672pfg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zVBB91Q21dmlELD+CGqOWdd8NHbp9ekIt+W7tA2FCWc=;
+        b=Cn12uO6fPiT9mRwhoBioM6FCV4ohhDwf11PplmQu/2/BJlCsd7FMG+4+kUOjONmK6t
+         88LXAclOy5moz2epcADuTzxYn15D5fVJtzZVJfbMEUkO4GUtysUFQ78KXNEXFQlqduF4
+         mcwBqohfszErnFvtJbEFFOmi6gzxKdGv2+YciQHV/5j86ndLKT9tuvItg56/w1VvrnUr
+         FND8hjF0xjViSh6z2iuMrjZFF4j5Jb2lR5T7F8h9lcjETTnggB+ARiNVuS8G7L1V3SH8
+         XycIDOW1sz0P2Pi8/CKwrcLc7KVQLRqaXDTcamdJ1pMVkoxRugUSBeNyb3OWVjtqU5Tj
+         wl1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dfwEK1sq7rdGyo7PvaKmvL8otVhWygQzLxR6ANVD3rU=;
-        b=ygQ3PR8WOE6i3BE/MlzhD4G6+lrgCjChi3NCTyt9fIbOQvbaU3ErLc4RFCz/bVfG4h
-         ZZYyQCQoAv6vahdJEw8XBXlVjJJIHTpgH+/0DmpmM+4+lSDANfPLSqigAn4zp9hf3pVe
-         QIVZRyYiIBAcw8ig030R8clRqK+uETzkeLggmPTR3kzF/Cr+d/W12z6XzzNs/fhtMF3+
-         oYFMzw3LsM3y6VPG046G3WBT+FMZe00IPYCcaAyRfq3T/0XR14ntTzUvYSMrDYWqpxtA
-         SC51Vjx1DeKlZZesf6KuDeE2iZ3LujgzMlrW2VCKffPfJklKmfTJx4kJCeIpsuoXCbE2
-         iF+Q==
-X-Gm-Message-State: AJIora+lt4AF3meengLczo1tni1itRBFSPxkyYMtsMI9SjoGJMHtgIur
-        lUmvoBpWdgmdSIZGm1eWFdZ8j72UCdRMAqVa+OPTZdmmDtGt21TyfRNMGNOwinN7AMC6Uo+Zoyu
-        bAscwVF362XIhDU9zF/6yC3kH
-X-Received: by 2002:a05:6a00:170b:b0:51b:d1fd:5335 with SMTP id h11-20020a056a00170b00b0051bd1fd5335mr22346548pfc.28.1655696054174;
-        Sun, 19 Jun 2022 20:34:14 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uYN9VMFAa2HlkmqX/qFWqSRenF42IdfOZYHLpfaUTJHe10i9fpjJMcSHXQutXOkNBszTIlmw==
-X-Received: by 2002:a05:6a00:170b:b0:51b:d1fd:5335 with SMTP id h11-20020a056a00170b00b0051bd1fd5335mr22346531pfc.28.1655696053829;
-        Sun, 19 Jun 2022 20:34:13 -0700 (PDT)
-Received: from [10.72.12.16] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a1-20020a170902710100b001634d581adfsm7383215pll.157.2022.06.19.20.34.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jun 2022 20:34:13 -0700 (PDT)
-Message-ID: <78d6d295-4694-c2db-5689-f0e366da9a07@redhat.com>
-Date:   Mon, 20 Jun 2022 11:34:08 +0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zVBB91Q21dmlELD+CGqOWdd8NHbp9ekIt+W7tA2FCWc=;
+        b=6s3q/y7OowZ57/kP1Nh+RkBMOM/IevYaajZZvU3u/rnVDhF2lvHIqe/2TMPviO4Cgu
+         p2ZanyegYyc8p78zQIyUrPj6r79P0oi/ISDcMla3uhZkAjySwmcoflwJDA7UxHncFdOz
+         +U6aA9hm64eQVCzJ/gWjkCQHN9Mj5xzFtZgXWuAJWBtBPTcclrps/vSSAslJh9y+lASZ
+         mCL26iVEfZ99548s6s4o7GCIZKxMy5UgwAj5xdfIrgJWUbSIFuFIzyDJOGcaNgMHcWHO
+         +cPAigE/6yQjjkHZFwFYgaBaI+akW5V7OEHYibXiBt/rVZJ0Po5h9PShfydmKav5+j5M
+         otvg==
+X-Gm-Message-State: AJIora+soXD+pncv0wCD1iUTdbfJ4ETdzISe9YK2303ukwdCregkjs5A
+        ta8UZmR3imeZsBJurukJLeqmg7t5dYdBaQ==
+X-Google-Smtp-Source: AGRyM1uOIK9MNhVOsVmDd3c5AKncc6wQPn/MuKhHQiSXwwK5WMNZg8ssYDvuST87F1ADc4lUHx7Ugw==
+X-Received: by 2002:a05:6a00:16c6:b0:522:7ed2:4ff0 with SMTP id l6-20020a056a0016c600b005227ed24ff0mr22497415pfc.9.1655696195314;
+        Sun, 19 Jun 2022 20:36:35 -0700 (PDT)
+Received: from localhost.localdomain ([110.46.146.116])
+        by smtp.gmail.com with ESMTPSA id n18-20020a639712000000b0040cb1f55391sm1315243pge.2.2022.06.19.20.36.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 20:36:34 -0700 (PDT)
+From:   onenowy <onenowy@gmail.com>
+To:     hch@lst.de
+Cc:     Jason@zx2c4.com, abhijeet.rao@intel.com, alan.adamson@oracle.com,
+        axboe@fb.com, kbusch@kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, monish.kumar.r@intel.com,
+        pankydev8@gmail.com, sagi@grimberg.me, yi.zhang@redhat.com
+Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re: [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR observed during blktests]
+Date:   Mon, 20 Jun 2022 12:36:27 +0900
+Message-Id: <20220620033627.8728-1-onenowy@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220615113106.GA10697@lst.de>
+References: <20220615113106.GA10697@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH] virtio-net: fix race between ndo_open() and
- virtio_device_ready()
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220617072949.30734-1-jasowang@redhat.com>
- <20220617060632-mutt-send-email-mst@kernel.org>
- <CACGkMEtTVs5W+qqt9Z6BcorJ6wcqcnSVuCBrHrLZbbKzG-7ULQ@mail.gmail.com>
- <20220617083141-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220617083141-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,124 +72,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> I don't think we can wait for 5.20 - the "offending" commit is in
+> 5.19-rc and -stable.  So I'll plan to prepare a patch based on the model
+> number for now, still hoping we can come up with something better
+> eventually.
 
-在 2022/6/17 20:32, Michael S. Tsirkin 写道:
-> On Fri, Jun 17, 2022 at 07:46:23PM +0800, Jason Wang wrote:
->> On Fri, Jun 17, 2022 at 6:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->>> On Fri, Jun 17, 2022 at 03:29:49PM +0800, Jason Wang wrote:
->>>> We used to call virtio_device_ready() after netdev registration. This
->>>> cause a race between ndo_open() and virtio_device_ready(): if
->>>> ndo_open() is called before virtio_device_ready(), the driver may
->>>> start to use the device before DRIVER_OK which violates the spec.
->>>>
->>>> Fixing this by switching to use register_netdevice() and protect the
->>>> virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
->>>> only be called after virtio_device_ready().
->>>>
->>>> Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
->>>> Signed-off-by: Jason Wang <jasowang@redhat.com>
->>>> ---
->>>>   drivers/net/virtio_net.c | 8 +++++++-
->>>>   1 file changed, 7 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->>>> index db05b5e930be..8a5810bcb839 100644
->>>> --- a/drivers/net/virtio_net.c
->>>> +++ b/drivers/net/virtio_net.c
->>>> @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
->>>>        if (vi->has_rss || vi->has_rss_hash_report)
->>>>                virtnet_init_default_rss(vi);
->>>>
->>>> -     err = register_netdev(dev);
->>>> +     /* serialize netdev register + virtio_device_ready() with ndo_open() */
->>>> +     rtnl_lock();
->>>> +
->>>> +     err = register_netdevice(dev);
->>>>        if (err) {
->>>>                pr_debug("virtio_net: registering device failed\n");
->>>> +             rtnl_unlock();
->>>>                goto free_failover;
->>>>        }
->>>>
->>>>        virtio_device_ready(vdev);
->>>>
->>>> +     rtnl_unlock();
->>>> +
->>>>        err = virtnet_cpu_notif_add(vi);
->>>>        if (err) {
->>>>                pr_debug("virtio_net: registering cpu notifier failed\n");
->>>
->>> Looks good but then don't we have the same issue when removing the
->>> device?
->>>
->>> Actually I looked at  virtnet_remove and I see
->>>          unregister_netdev(vi->dev);
->>>
->>>          net_failover_destroy(vi->failover);
->>>
->>>          remove_vq_common(vi); <- this will reset the device
->>>
->>> a window here?
->> Probably. For safety, we probably need to reset before unregistering.
->
-> careful not to create new races, let's analyse this one to be
-> sure first.
+Hi ,
+Some samsung SSD for OEM also have the identical PCI-ids and are affected by this quirk.
+But they have different subsystem-ids.
+
+For example,
+
+model number: MZQLB1T9HAJR-00V3 for lenovo
+vendor: 144d
+device: a808
+subvendor: 1d49
+subdevice: 403b
+
+model number: MZVLB256HBHQ-00000
+vendor: 144d
+device: a808
+subvendor: 144d
+subdevice: a801
+
+Addtition of subsystem-ids of X5 to pci_device_id(as below) may solve this problem.
+
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 17aeb7d5c48522..92fd3b1d88fc95 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3475,7 +3475,7 @@ static const struct pci_device_id nvme_id_table[] = {
+ 				NVME_QUIRK_128_BYTES_SQES |
+ 				NVME_QUIRK_SHARED_TAGS |
+ 				NVME_QUIRK_SKIP_CID_GEN },
+-	{ PCI_DEVICE(0x144d, 0xa808),   /* Samsung X5 */
++	{ PCI_DEVICE_SUB(0x144d, 0xa808, {X5 subvendor?}, {X5 subdevice?}),   /* Samsung X5 */
+ 		.driver_data =  NVME_QUIRK_DELAY_BEFORE_CHK_RDY|
+ 				NVME_QUIRK_NO_DEEPEST_PS |
+ 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
 
 
-Yes, if we do that, there could be an infinite wait in ctrl commands.
-
-So we are probably fine here since unregister_netdev() will make sure 
-(otherwise it should be a bug of unregister_netdev()):
-
-1) NAPI is disabled (and synced) so no new NAPI could be enabled by the 
-callbacks
-2) TX is disabled (and synced) so the qdisc could not be scheduled even 
-if skb_xmit_done() is called between the window
-
-
->
->>>
->>> Really, I think what we had originally was a better idea -
->>> instead of dropping interrupts they were delayed and
->>> when driver is ready to accept them it just enables them.
->> The problem is that it works only on some specific setup:
->>
->> - doesn't work on shared IRQ
->> - doesn't work on some specific driver e.g virtio-blk
-> can some core irq work fix that?
-
-
-Not sure. At least for the shared IRQ part, there's no way to disable a 
-specific handler currently. More below.
-
-
->
->>> We just need to make sure driver does not wait for
->>> interrupts before enabling them.
-
-
-This only help for the case:
-
-1) the virtio_device_ready() is called after subsystem 
-initialization/registration
-2) the driver use rx interrupt
-
-It doesn't solve the race between subsystem registration/initialization 
-and virtio_device_ready() or the case when the virtio_device_ready() 
-needs to be called before subsystem registration.
-
-Thanks
-
-
->>>
->>> And I suspect we need to make this opt-in on a per driver
->>> basis.
->> Exactly.
->>
->> Thanks
->>
->>>
->>>
->>>> --
->>>> 2.25.1
-
+But I don't know X5's subsystem ids, Can someone provide subsystem-ids of X5?

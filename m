@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AF9550EF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91453550EF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbiFTDbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 23:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S237917AbiFTDeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 23:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiFTDbp (ORCPT
+        with ESMTP id S233392AbiFTDeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 23:31:45 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C3E6264
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:31:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id s37so9057166pfg.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=J5hsVa7sKWySaqWB9vABMNQ1qHx6W6r1URjIt5Q2cJA=;
-        b=EpVZdVaPP/2/hfyxOlCmUcUO5i31my7rXtSrH/YRuZ8UnQWpCCcJCB6HjVM9UMINnq
-         Y11CrGR/LdHtayHyRS7kqm5eBZT8dolgH5Vdl94HVvOLXSIYw9ij5VKIqlmF9KsnnmLA
-         IZKkZApj9D81hSoOj8UAmAkC28lFyKplTApJEgQMV3QJUaQx+xhV/2Qm/mRsCHZTj2Ti
-         0+A1M0jAUVF9hzduuwB7ZxijwH0YQm9/vgqXdpUtueDeWse3vO0rQ5V6q1q5uPW2zZzL
-         FP0EtZxDLUD/zb/9o//+q8avo27guCq9stpJm+0LBRiiq4s9Z1RPMmnd9sai6814Sj68
-         8NVg==
+        Sun, 19 Jun 2022 23:34:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AB20B848
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655696056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dfwEK1sq7rdGyo7PvaKmvL8otVhWygQzLxR6ANVD3rU=;
+        b=cXYevlXOgFjcct6pt7CIqrh9QJIPSvcffTcQyD0S8dzATYNA59CEA7dpkvSqcQ7ivmhufA
+        flGdtIATdwlSLmKzMpQ9gi8JgFuJUXMrMGXQI0Tf5w5wY8krpWkCaV/XYbOzlpz7+XCUEu
+        EXWimUc0G9Q5+SaimTJ1ZuHC2zRm1Dw=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-329-YD58PcWaMiqJLRJvxzQHQQ-1; Sun, 19 Jun 2022 23:34:15 -0400
+X-MC-Unique: YD58PcWaMiqJLRJvxzQHQQ-1
+Received: by mail-pg1-f200.google.com with SMTP id g129-20020a636b87000000b00401b8392ac8so5642370pgc.4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:34:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=J5hsVa7sKWySaqWB9vABMNQ1qHx6W6r1URjIt5Q2cJA=;
-        b=m+m7N6UM1lp9LMx7f94ZmNYdtG+4C/jfCMjOJHO/ZeyBuxA+JSg2rc06ROs3gfsQJv
-         ORzeLyC0vclFv0WUdodM5HcTad7MNcVpROy3COdOiihicJwJ18FP65YXp7pwT4qIuwNd
-         axpbToTEVaY5LE+keMbsXyOBdfN3RM1geYQJ9CePQ51XG92kum20uCmmk4iHi7f0rPGz
-         1kctyUQ/UfSv2Xanq2wxvVCuQ8GBm7bpXqt2Kb/Z0SEw6w4qJhZAWDn5m+ses2eiq5Mo
-         uhMUMuDg54vozFONoJC7nZksIHEHRNKffT36onMV6S+TUDRHVS/friFi03Er7ZoTu4sG
-         gJ6g==
-X-Gm-Message-State: AJIora/gTz7UHvTCX4qY6UT6wm02TyaKIKhXAOvHfjjXB0sc0SvVlfsk
-        EB9qASbe7oWcV52s7t/iAOqXXodPzhnnng==
-X-Google-Smtp-Source: AGRyM1v0jI+swv2AvbUHLapd2TYU1gff/sjYtMyF7Z+P0ayi706N92H1FrJ7ei/qWMrBaYkcJT2/2Q==
-X-Received: by 2002:a05:6a00:179b:b0:51b:f51f:992e with SMTP id s27-20020a056a00179b00b0051bf51f992emr22423913pfg.60.1655695903918;
-        Sun, 19 Jun 2022 20:31:43 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id j16-20020a17090a7e9000b001e2afd35791sm7066180pjl.18.2022.06.19.20.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 20:31:43 -0700 (PDT)
-Date:   Sun, 19 Jun 2022 20:31:39 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     mingo@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] sched: Fix __cond_resched annotation typo
-Message-ID: <20220620033139.GA674930@ubuntu>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dfwEK1sq7rdGyo7PvaKmvL8otVhWygQzLxR6ANVD3rU=;
+        b=ygQ3PR8WOE6i3BE/MlzhD4G6+lrgCjChi3NCTyt9fIbOQvbaU3ErLc4RFCz/bVfG4h
+         ZZYyQCQoAv6vahdJEw8XBXlVjJJIHTpgH+/0DmpmM+4+lSDANfPLSqigAn4zp9hf3pVe
+         QIVZRyYiIBAcw8ig030R8clRqK+uETzkeLggmPTR3kzF/Cr+d/W12z6XzzNs/fhtMF3+
+         oYFMzw3LsM3y6VPG046G3WBT+FMZe00IPYCcaAyRfq3T/0XR14ntTzUvYSMrDYWqpxtA
+         SC51Vjx1DeKlZZesf6KuDeE2iZ3LujgzMlrW2VCKffPfJklKmfTJx4kJCeIpsuoXCbE2
+         iF+Q==
+X-Gm-Message-State: AJIora+lt4AF3meengLczo1tni1itRBFSPxkyYMtsMI9SjoGJMHtgIur
+        lUmvoBpWdgmdSIZGm1eWFdZ8j72UCdRMAqVa+OPTZdmmDtGt21TyfRNMGNOwinN7AMC6Uo+Zoyu
+        bAscwVF362XIhDU9zF/6yC3kH
+X-Received: by 2002:a05:6a00:170b:b0:51b:d1fd:5335 with SMTP id h11-20020a056a00170b00b0051bd1fd5335mr22346548pfc.28.1655696054174;
+        Sun, 19 Jun 2022 20:34:14 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uYN9VMFAa2HlkmqX/qFWqSRenF42IdfOZYHLpfaUTJHe10i9fpjJMcSHXQutXOkNBszTIlmw==
+X-Received: by 2002:a05:6a00:170b:b0:51b:d1fd:5335 with SMTP id h11-20020a056a00170b00b0051bd1fd5335mr22346531pfc.28.1655696053829;
+        Sun, 19 Jun 2022 20:34:13 -0700 (PDT)
+Received: from [10.72.12.16] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902710100b001634d581adfsm7383215pll.157.2022.06.19.20.34.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Jun 2022 20:34:13 -0700 (PDT)
+Message-ID: <78d6d295-4694-c2db-5689-f0e366da9a07@redhat.com>
+Date:   Mon, 20 Jun 2022 11:34:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH] virtio-net: fix race between ndo_open() and
+ virtio_device_ready()
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220617072949.30734-1-jasowang@redhat.com>
+ <20220617060632-mutt-send-email-mst@kernel.org>
+ <CACGkMEtTVs5W+qqt9Z6BcorJ6wcqcnSVuCBrHrLZbbKzG-7ULQ@mail.gmail.com>
+ <20220617083141-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220617083141-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,30 +87,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think I found a minor typo.
 
-It seems natural to end with "." rather than ",".
+在 2022/6/17 20:32, Michael S. Tsirkin 写道:
+> On Fri, Jun 17, 2022 at 07:46:23PM +0800, Jason Wang wrote:
+>> On Fri, Jun 17, 2022 at 6:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>>> On Fri, Jun 17, 2022 at 03:29:49PM +0800, Jason Wang wrote:
+>>>> We used to call virtio_device_ready() after netdev registration. This
+>>>> cause a race between ndo_open() and virtio_device_ready(): if
+>>>> ndo_open() is called before virtio_device_ready(), the driver may
+>>>> start to use the device before DRIVER_OK which violates the spec.
+>>>>
+>>>> Fixing this by switching to use register_netdevice() and protect the
+>>>> virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
+>>>> only be called after virtio_device_ready().
+>>>>
+>>>> Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
+>>>> Signed-off-by: Jason Wang <jasowang@redhat.com>
+>>>> ---
+>>>>   drivers/net/virtio_net.c | 8 +++++++-
+>>>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+>>>> index db05b5e930be..8a5810bcb839 100644
+>>>> --- a/drivers/net/virtio_net.c
+>>>> +++ b/drivers/net/virtio_net.c
+>>>> @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
+>>>>        if (vi->has_rss || vi->has_rss_hash_report)
+>>>>                virtnet_init_default_rss(vi);
+>>>>
+>>>> -     err = register_netdev(dev);
+>>>> +     /* serialize netdev register + virtio_device_ready() with ndo_open() */
+>>>> +     rtnl_lock();
+>>>> +
+>>>> +     err = register_netdevice(dev);
+>>>>        if (err) {
+>>>>                pr_debug("virtio_net: registering device failed\n");
+>>>> +             rtnl_unlock();
+>>>>                goto free_failover;
+>>>>        }
+>>>>
+>>>>        virtio_device_ready(vdev);
+>>>>
+>>>> +     rtnl_unlock();
+>>>> +
+>>>>        err = virtnet_cpu_notif_add(vi);
+>>>>        if (err) {
+>>>>                pr_debug("virtio_net: registering cpu notifier failed\n");
+>>>
+>>> Looks good but then don't we have the same issue when removing the
+>>> device?
+>>>
+>>> Actually I looked at  virtnet_remove and I see
+>>>          unregister_netdev(vi->dev);
+>>>
+>>>          net_failover_destroy(vi->failover);
+>>>
+>>>          remove_vq_common(vi); <- this will reset the device
+>>>
+>>> a window here?
+>> Probably. For safety, we probably need to reset before unregistering.
+>
+> careful not to create new races, let's analyse this one to be
+> sure first.
 
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
----
- include/linux/sched.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index c46f3a63b758..5cbced81133c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2030,7 +2030,7 @@ static inline int test_tsk_need_resched(struct task_struct *tsk)
-  * cond_resched() and cond_resched_lock(): latency reduction via
-  * explicit rescheduling in places that are safe. The return
-  * value indicates whether a reschedule was done in fact.
-- * cond_resched_lock() will drop the spinlock before scheduling,
-+ * cond_resched_lock() will drop the spinlock before scheduling.
-  */
- #if !defined(CONFIG_PREEMPTION) || defined(CONFIG_PREEMPT_DYNAMIC)
- extern int __cond_resched(void);
--- 
-2.25.1
+Yes, if we do that, there could be an infinite wait in ctrl commands.
 
-Regards,
-Hyunwoo Kim
+So we are probably fine here since unregister_netdev() will make sure 
+(otherwise it should be a bug of unregister_netdev()):
+
+1) NAPI is disabled (and synced) so no new NAPI could be enabled by the 
+callbacks
+2) TX is disabled (and synced) so the qdisc could not be scheduled even 
+if skb_xmit_done() is called between the window
+
+
+>
+>>>
+>>> Really, I think what we had originally was a better idea -
+>>> instead of dropping interrupts they were delayed and
+>>> when driver is ready to accept them it just enables them.
+>> The problem is that it works only on some specific setup:
+>>
+>> - doesn't work on shared IRQ
+>> - doesn't work on some specific driver e.g virtio-blk
+> can some core irq work fix that?
+
+
+Not sure. At least for the shared IRQ part, there's no way to disable a 
+specific handler currently. More below.
+
+
+>
+>>> We just need to make sure driver does not wait for
+>>> interrupts before enabling them.
+
+
+This only help for the case:
+
+1) the virtio_device_ready() is called after subsystem 
+initialization/registration
+2) the driver use rx interrupt
+
+It doesn't solve the race between subsystem registration/initialization 
+and virtio_device_ready() or the case when the virtio_device_ready() 
+needs to be called before subsystem registration.
+
+Thanks
+
+
+>>>
+>>> And I suspect we need to make this opt-in on a per driver
+>>> basis.
+>> Exactly.
+>>
+>> Thanks
+>>
+>>>
+>>>
+>>>> --
+>>>> 2.25.1
+

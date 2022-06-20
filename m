@@ -2,172 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBDC5514E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453795514E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiFTJwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
+        id S239904AbiFTJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240222AbiFTJwN (ORCPT
+        with ESMTP id S234256AbiFTJwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:52:13 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E6813E19
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:52:11 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id t1so18002046ybd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:52:11 -0700 (PDT)
+        Mon, 20 Jun 2022 05:52:03 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C20312740
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:52:03 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 23so3688579pgc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8DyE/KWQUZrty8rXx81JIsG8zxsuYBbuRVM0whdGKxU=;
-        b=YMx5LG7Wdq+ZbP+hmySua4p+q8ITcfNOgA4wNN233s19a/7cF/MJtq3fr/LfgGQy4p
-         ogvSHl2Cf2DYFO76BS+OtDLYvlEEfUWUUgII7m+zE9Wag3P6PJmdocnBsDRN/vqEINWI
-         ESFYkAqEprhYE9UBRvqjrDhG4Bu6CEiZVt9gmH+r/aYAAW3S3pWUCuTKX2VFxgqZG2fL
-         7fcp5qJdRksrTWb/CAUc1PuUQq8hnng4kyvcesKz7U2bEjUgU6ubETbvxyw0B2MBoO4B
-         lteMT6G/lEy2Rzwd8AoL9zq5hwcwZzAfUZEWGcxA46w79qz+mEgvNVgv0mt59z/DFyWm
-         ty1w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ScavJ5HfhBRFtp0zZHKVoMhJivP0tHPP6Uwhse7r8IM=;
+        b=Ay8c6qhZEr9qS+H3ohWqGjxavZZoUZ9K/gG55l2mPfw+JckNDtHZcrD0Q91o2jGE/X
+         hS2mObt+EUFJDgpnJo2UroCnBFqBt6R5UOonPvu50q0qmntDMklPlsRefXBbZ7IM6GW2
+         WXY9rmxVieb5wSAN+BMRX0tRnTp3csftG3OzNa4maomwjsmd6e5g5H6hB1sCm5Vaboz6
+         MQLASFkSKm2nvdgfyJnzOmghGyYaTPk8mnY2aMPQs8en75qq5yyk57k4tP6+olxzeO6t
+         TcvwmA9xLq45d6wbe+/RHEfDhp47NnmkShtAoKgRrwTnv470waP3L3dkcWbr+GhqWCcE
+         j+iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8DyE/KWQUZrty8rXx81JIsG8zxsuYBbuRVM0whdGKxU=;
-        b=Jb/w4CNFDcObno+x3DEj01DLN8pgsd1nHNJMnGuN0pVWIiDZXt0qF6YAXbAFtGExtn
-         Nrk3LKZJmTrhn8hEzxjWn2J6hghjUZ9RppRj9lCT6TGxOaIP9zEyMG0xu76Da/vz2zWp
-         //AGPbjqgVVpjFC6C0RykhuSU64G+hVUCEoHLIg6EdING1We+Kj+OyGX1BHs9F4F0u0v
-         a6YT0kocij0B+se+ikdJ4tn1CrFoUJpXFtEesLBiOhKZTCdSqY8fNgi5QhI/6IhF4XCj
-         JxrJ0fWpacMnawIDMV61blNLAfqEmFGdwBq5YDNVXj/OJDYqmXzgk12pOYF5S5+HqsdT
-         UAHA==
-X-Gm-Message-State: AJIora/lM6NCjFMefP8DddQmQDWh6ILR4NCWf54FltIyLR1XAloqQ4oW
-        bSyi+fkz8rf1DNfUeNmU8O+Q4wWTjj+yhQoqgun3RA==
-X-Google-Smtp-Source: AGRyM1sSBAv2oiSQZ55yekxja+O5pLkAMEu8ApBXNKvRuqsuhhN0KQ8acs5PUATsPYeMSQGzVNfHa1GTg72DYCPq9DI=
-X-Received: by 2002:a25:94a:0:b0:668:df94:fdf4 with SMTP id
- u10-20020a25094a000000b00668df94fdf4mr9911328ybm.425.1655718730567; Mon, 20
- Jun 2022 02:52:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ScavJ5HfhBRFtp0zZHKVoMhJivP0tHPP6Uwhse7r8IM=;
+        b=6cJL6uol52sS6Y8DoAgVgb/rwJ8+uWD21RhJ00r6mMRn3ZDr1rxCmtfUfUPv8Ae2C2
+         Pp4OdYh2mTF7STcOppM3jWmQpNlvWXIVnMQMxTkyG9gdTARoX/kpT+cRZIUoP1YSgFAR
+         y4xNB1hUXE9s5cKVltGoZu0UG3dsyiLI4eBwjjRfeknkGTE7jvQMCrYKW+jLMDZvTVd7
+         xbXKM4Lm6Ug1X53YzeRWa+S41oclCEADPNCqf7JwyxVODf7+gHrfX7Pta40itp54sz1D
+         7Ox4z+tf6FCLTqDwElUnNg501Ks2Pt8haUhI12K1iKdg4+NlSP7bLuw8PyGigs3yZGmW
+         49FA==
+X-Gm-Message-State: AJIora/W+rdTVmQyanEdiW2cUE9Q6c+Y+5hdeSUYpemQv5aiLqQXcX6B
+        cfvefJRL3oHmk05GFCKb20M=
+X-Google-Smtp-Source: AGRyM1sJ+XVyiAZN4I6bNRgTaeRUvlGZ9noyuAJnlzPP9FBFZf1QXqijDgY2zwWgiiodkgcxRxRDbQ==
+X-Received: by 2002:a05:6a00:2999:b0:51b:e3c8:9e30 with SMTP id cj25-20020a056a00299900b0051be3c89e30mr23574088pfb.41.1655718722912;
+        Mon, 20 Jun 2022 02:52:02 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:5ba:aaeb:5bc7:ad59])
+        by smtp.gmail.com with ESMTPSA id u23-20020a17090ae01700b001e31803540fsm4856710pjy.6.2022.06.20.02.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 02:52:02 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] xtensa: change '.bss' to '.section .bss'
+Date:   Mon, 20 Jun 2022 02:51:35 -0700
+Message-Id: <20220620095135.1203323-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220617144031.2549432-1-alexandr.lobakin@intel.com> <20220617144031.2549432-7-alexandr.lobakin@intel.com>
-In-Reply-To: <20220617144031.2549432-7-alexandr.lobakin@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 20 Jun 2022 11:51:34 +0200
-Message-ID: <CANpmjNMi_kOGsiuSmNpg_yDVoFzw7zSGT7u+zk3HJZ9UER7Yrg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] bitops: let optimize out non-atomic bitops on
- compile-time constants
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 at 19:00, Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> Currently, many architecture-specific non-atomic bitop
-> implementations use inline asm or other hacks which are faster or
-> more robust when working with "real" variables (i.e. fields from
-> the structures etc.), but the compilers have no clue how to optimize
-> them out when called on compile-time constants. That said, the
-> following code:
->
->         DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
->         unsigned long bar = BIT(BAR_BIT);
->         unsigned long baz = 0;
->
->         __set_bit(FOO_BIT, foo);
->         baz |= BIT(BAZ_BIT);
->
->         BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
->         BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
->         BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
->
-> triggers the first assertion on x86_64, which means that the
-> compiler is unable to evaluate it to a compile-time initializer
-> when the architecture-specific bitop is used even if it's obvious.
-> In order to let the compiler optimize out such cases, expand the
-> bitop() macro to use the "constant" C non-atomic bitop
-> implementations when all of the arguments passed are compile-time
-> constants, which means that the result will be a compile-time
-> constant as well, so that it produces more efficient and simple
-> code in 100% cases, comparing to the architecture-specific
-> counterparts.
->
-> The savings are architecture, compiler and compiler flags dependent,
-> for example, on x86_64 -O2:
->
-> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
->
-> and ARM64 (courtesy of Mark):
->
-> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
->
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+For some reason (ancient assembler?) the following build error is
+reported by the kisskb:
 
-Reviewed-by: Marco Elver <elver@google.com>
+  kisskb/src/arch/xtensa/kernel/entry.S: Error: unknown pseudo-op: `.bss':
+  => 2176
 
-> ---
->  include/linux/bitops.h | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 3c3afbae1533..26a43360c4ae 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -33,8 +33,24 @@ extern unsigned long __sw_hweight64(__u64 w);
->
->  #include <asm-generic/bitops/generic-non-atomic.h>
->
-> +/*
-> + * Many architecture-specific non-atomic bitops contain inline asm code and due
-> + * to that the compiler can't optimize them to compile-time expressions or
-> + * constants. In contrary, gen_*() helpers are defined in pure C and compilers
-> + * optimize them just well.
-> + * Therefore, to make `unsigned long foo = 0; __set_bit(BAR, &foo)` effectively
-> + * equal to `unsigned long foo = BIT(BAR)`, pick the generic C alternative when
-> + * the arguments can be resolved at compile time. That expression itself is a
-> + * constant and doesn't bring any functional changes to the rest of cases.
-> + * The casts to `uintptr_t` are needed to mitigate `-Waddress` warnings when
-> + * passing a bitmap from .bss or .data (-> `!!addr` is always true).
-> + */
->  #define bitop(op, nr, addr)                                            \
-> -       op(nr, addr)
-> +       ((__builtin_constant_p(nr) &&                                   \
-> +         __builtin_constant_p((uintptr_t)(addr) != (uintptr_t)NULL) && \
-> +         (uintptr_t)(addr) != (uintptr_t)NULL &&                       \
-> +         __builtin_constant_p(*(const unsigned long *)(addr))) ?       \
-> +        const##op(nr, addr) : op(nr, addr))
->
->  #define __set_bit(nr, addr)            bitop(___set_bit, nr, addr)
->  #define __clear_bit(nr, addr)          bitop(___clear_bit, nr, addr)
-> --
-> 2.36.1
->
+Change abbreviated '.bss' to the full '.section .bss, "aw"' to fix this
+error.
+
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/kernel/entry.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/xtensa/kernel/entry.S b/arch/xtensa/kernel/entry.S
+index e3eae648ba2e..ab30bcb46290 100644
+--- a/arch/xtensa/kernel/entry.S
++++ b/arch/xtensa/kernel/entry.S
+@@ -2173,7 +2173,7 @@ ENDPROC(ret_from_kernel_thread)
+ 
+ #ifdef CONFIG_HIBERNATION
+ 
+-	.bss
++	.section	.bss, "aw"
+ 	.align	4
+ .Lsaved_regs:
+ #if defined(__XTENSA_WINDOWED_ABI__)
+-- 
+2.30.2
+

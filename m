@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BCC552705
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26983552706
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241500AbiFTWlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
+        id S242952AbiFTWmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbiFTWlI (ORCPT
+        with ESMTP id S233825AbiFTWmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:41:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A572A1208A;
-        Mon, 20 Jun 2022 15:41:04 -0700 (PDT)
+        Mon, 20 Jun 2022 18:42:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708D81276A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:42:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 427606132A;
-        Mon, 20 Jun 2022 22:41:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975DAC3411B;
-        Mon, 20 Jun 2022 22:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655764863;
-        bh=nZWufb/2NK+PuNUs4fGkoUzOuk6Ahii+9n03Nug/AVk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IGPEgoOaPENQItD1VXLoQGdJOD5tp17KAY43++lGTW9VTaTmFrM0sAlcp1gPtlf52
-         iKB8gi8czTY/B9LN4Yc4VjVdX35yXet9Vx0yVqO+H7AFpaqBViIZR/hNLYziB3pzzl
-         QHziamEjBI07YKx1B3sqDsdeeFIMSXnYOM/SCbWsRQ69avOmApWDA4ZhX1K/q0MmNY
-         aS6W6C8AlCZH1Kq3OnTqB5Wv6EFbeJ6RhqISj7E35EXZ2c+V6U77FuNqZuORm+q9Ki
-         wDMJiBPoYskI0DWkHMWurAKxhO/XY8Y1ScOT9kVxsKJK7m0Za8wytMJzOBHsjai237
-         VNmrHcmiucakA==
-Message-ID: <b4fb0c7f-2fd9-35ff-1d09-8940e3b66455@kernel.org>
-Date:   Mon, 20 Jun 2022 17:41:01 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31C18B811EC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:42:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1082EC3411C;
+        Mon, 20 Jun 2022 22:42:04 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="XzFX3G1K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1655764923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EXc4zdICVXyYuZT3mYGMNiXmjUFP4MgtX6ODMQRhdDc=;
+        b=XzFX3G1KQjd5Wdq6qeTCBkYmYFEEywcRNIG/KDh3u+jTDhTyoIhBWn5F4+l3pOB7Nc46rl
+        lHkbhOHsCjcTgJDfJoEA1riCXKRO5IG42WqlBbKb8cQ3LV136CqDPyQsi/t/S4KQ4bfJQp
+        4KqtrKjnJu589j/ncvvXtoSEW/I0TGc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8ff005c1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 20 Jun 2022 22:42:03 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 00:41:59 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sebastian Siewior <bigeasy@linutronix.de>,
+        Jann Horn <jannh@google.com>, Theodore Ts'o <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] random: Fix signal_pending() usage
+Message-ID: <YrD3jVuXC8eH+WRi@zx2c4.com>
+References: <20220405163931.1108442-1-jannh@google.com>
+ <CAHmME9pW6heXtPrfCP7J6ODgSc8sotsv6E3dnJoVBaPi+Ph=HA@mail.gmail.com>
+ <YqywapDM7NPC/X+E@linutronix.de>
+ <Yq0EcG9GsAkoiF3H@zx2c4.com>
+ <YrAlPKeOowD5qv/B@linutronix.de>
+ <CAHk-=wg5jqTdjZrwbSsMsd=NUSi_acBHoLQmRDgNArMvXWj8bw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv5 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Content-Language: en-US
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220616141230.858409-1-dinguyen@kernel.org>
- <f8647bec-eca7-b318-4f79-bc4bae721004@linux.intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <f8647bec-eca7-b318-4f79-bc4bae721004@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg5jqTdjZrwbSsMsd=NUSi_acBHoLQmRDgNArMvXWj8bw@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,35 +64,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/17/22 07:59, Jarkko Nikula wrote:
-> Hi
+On Mon, Jun 20, 2022 at 02:00:18PM -0500, Linus Torvalds wrote:
+> Handling signals is the *default* behavior. It is only regular files
+> where that doesn't happen. This is not a regular file, and the "it's
+> about security" is not an argument.
 > 
-> On 6/16/22 17:12, Dinh Nguyen wrote:
->> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
->> thus cannot be recovered by the default method of by doing a GPIO access.
->> Only a reset of the I2C IP block can a recovery be successful.
->>
-> One thing what is unclear to me how does this release the I2C slave that 
-> potentially keeps the SDA stuck low. Does platform specific reset 
-> sequence send 9 SCL pulses, toggle HW reset of the clients or cycle 
-> power of them?
-> 
-> If recovery is only controller point of view then worth to emphasis it 
-> in the commit log and perhaps add a comment too into 
-> i2c_socfpga_scl_recovery(). Some might hit an issue that I2C client is 
-> stuck and wonder why recovery won't work.
+> As mentioned, expecting an uninterruptible read is not "security". It's garbage.
 
-The recovery is only resetting the controller itself and not the client. 
-I'll add a comment in v6 to highlight this.
-> 
->> The assignment of the recover_bus needs to get done before the call to
->> devm_gpiod_get_optional(), otherwise, the assignment is not taking place
->> because of an error after returning from devm_gpiod_get_optional().
->>
-> This sentence no longer true after v3?
+Indeed, practically speaking you are right. A few months back when I was
+fixing this to respect signals in the first place (because it used to be
+wrongly conditioned on need_resched()), I did some global code searches
+to see if I'd break anything, and basically it seemed like anything that
+used huge buffers handled EINTR, and only little buffers weren't filled
+iteratively. So PAGE_SIZE would seem to widely handle the real code out
+there.  If this is to change as an API ease of use argument or
+something, I'd expect the behavior to change across devices (/dev/zero
+and such I mentioned earlier in mem.c), not just this one -- no need to
+be a special snowflake -- which means convincing people to change
+something pretty well established.
 
-Correct...will update.
-
-Dinh
+Jason

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FAE551C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CD9551D0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243238AbiFTNZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S1344487AbiFTNXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345135AbiFTNXj (ORCPT
+        with ESMTP id S1344556AbiFTNUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:23:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181186577;
-        Mon, 20 Jun 2022 06:09:16 -0700 (PDT)
+        Mon, 20 Jun 2022 09:20:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8983B22527;
+        Mon, 20 Jun 2022 06:08:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E13DC60A21;
-        Mon, 20 Jun 2022 13:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E49C8C3411B;
-        Mon, 20 Jun 2022 13:07:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFC76B811A2;
+        Mon, 20 Jun 2022 13:07:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23813C3411B;
+        Mon, 20 Jun 2022 13:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730459;
-        bh=frZO+DvsRWIjr3bnyrZmYD0sFkxeG+az98JGpxuLi2c=;
+        s=korg; t=1655730462;
+        bh=2me0UpX2QGc470gWTPLcXDcdd34FHBXND0Eocd5bEtE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VA5m9S0U2HR8E0Zoc0FK2b0ANUqdPdT73VnHgT3hJppSWS0DtcZOxBL0pVmsnUuD/
-         BJNWm/QXP0akLni5y0QJukdztQfH5B96aokeL142ui67eHdzoOs3i/1Y+wCL/oBKg0
-         MKdebDy7ANY6ud91y79cv39pGrgmqPs0w2dMfi6o=
+        b=q46K9aZ9Pfmx8uCaJmEoLh0cp4SqGedaHSFIIwg59buTA99xluw78kiHlc1ebz09k
+         hGyl8yMAM/HzLDBze/95q8K+Vg96ENvyuIImtiAdNdRgj6UDesmVzYEvUrpcMpgV4j
+         dsZMiHoto2TeJVs+sNUE8bf0cAFAxTOBdpUS4Dek=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 059/106] drm/i915/reset: Fix error_state_read ptr + offset use
-Date:   Mon, 20 Jun 2022 14:51:18 +0200
-Message-Id: <20220620124726.149338743@linuxfoundation.org>
+Subject: [PATCH 5.15 060/106] net: hns3: split function hclge_update_port_base_vlan_cfg()
+Date:   Mon, 20 Jun 2022 14:51:19 +0200
+Message-Id: <20220620124726.177904410@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
 References: <20220620124724.380838401@linuxfoundation.org>
@@ -57,142 +56,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Previn <alan.previn.teres.alexis@intel.com>
+From: Jian Shen <shenjian15@huawei.com>
 
-[ Upstream commit c9b576d0c7bf55aeae1a736da7974fa202c4394d ]
+[ Upstream commit d25f5eddbe1ace18fa95318fd229b07a64ec4353 ]
 
-Fix our pointer offset usage in error_state_read
-when there is no i915_gpu_coredump but buf offset
-is non-zero.
+Currently the function hclge_update_port_base_vlan_cfg() is a
+bit long. Split it to several small functions, to improve the
+readability.
 
-This fixes a kernel page fault can happen when
-multiple tests are running concurrently in a loop
-and one is producing engine resets and consuming
-the i915 error_state dump while the other is
-forcing full GT resets. (takes a while to trigger).
-
-The dmesg call trace:
-
-[ 5590.803000] BUG: unable to handle page fault for address:
-               ffffffffa0b0e000
-[ 5590.803009] #PF: supervisor read access in kernel mode
-[ 5590.803013] #PF: error_code(0x0000) - not-present page
-[ 5590.803016] PGD 5814067 P4D 5814067 PUD 5815063 PMD 109de4067
-               PTE 0
-[ 5590.803022] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[ 5590.803026] CPU: 5 PID: 13656 Comm: i915_hangman Tainted: G U
-                    5.17.0-rc5-ups69-guc-err-capt-rev6+ #136
-[ 5590.803033] Hardware name: Intel Corporation Alder Lake Client
-                    Platform/AlderLake-M LP4x RVP, BIOS ADLPFWI1.R00.
-                    3031.A02.2201171222	01/17/2022
-[ 5590.803039] RIP: 0010:memcpy_erms+0x6/0x10
-[ 5590.803045] Code: fe ff ff cc eb 1e 0f 1f 00 48 89 f8 48 89 d1
-                     48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3
-                     66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4
-                     c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20
-                     72 7e 40 38 fe
-[ 5590.803054] RSP: 0018:ffffc90003a8fdf0 EFLAGS: 00010282
-[ 5590.803057] RAX: ffff888107ee9000 RBX: ffff888108cb1a00
-               RCX: 0000000000000f8f
-[ 5590.803061] RDX: 0000000000001000 RSI: ffffffffa0b0e000
-               RDI: ffff888107ee9071
-[ 5590.803065] RBP: 0000000000000000 R08: 0000000000000001
-               R09: 0000000000000001
-[ 5590.803069] R10: 0000000000000001 R11: 0000000000000002
-               R12: 0000000000000019
-[ 5590.803073] R13: 0000000000174fff R14: 0000000000001000
-               R15: ffff888107ee9000
-[ 5590.803077] FS: 00007f62a99bee80(0000) GS:ffff88849f880000(0000)
-               knlGS:0000000000000000
-[ 5590.803082] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 5590.803085] CR2: ffffffffa0b0e000 CR3: 000000010a1a8004
-               CR4: 0000000000770ee0
-[ 5590.803089] PKRU: 55555554
-[ 5590.803091] Call Trace:
-[ 5590.803093] <TASK>
-[ 5590.803096] error_state_read+0xa1/0xd0 [i915]
-[ 5590.803175] kernfs_fop_read_iter+0xb2/0x1b0
-[ 5590.803180] new_sync_read+0x116/0x1a0
-[ 5590.803185] vfs_read+0x114/0x1b0
-[ 5590.803189] ksys_read+0x63/0xe0
-[ 5590.803193] do_syscall_64+0x38/0xc0
-[ 5590.803197] entry_SYSCALL_64_after_hwframe+0x44/0xae
-[ 5590.803201] RIP: 0033:0x7f62aaea5912
-[ 5590.803204] Code: c0 e9 b2 fe ff ff 50 48 8d 3d 5a b9 0c 00 e8 05
-                     19 02 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25
-                     18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff
-                     ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
-[ 5590.803213] RSP: 002b:00007fff5b659ae8 EFLAGS: 00000246
-               ORIG_RAX: 0000000000000000
-[ 5590.803218] RAX: ffffffffffffffda RBX: 0000000000100000
-               RCX: 00007f62aaea5912
-[ 5590.803221] RDX: 000000000008b000 RSI: 00007f62a8c4000f
-               RDI: 0000000000000006
-[ 5590.803225] RBP: 00007f62a8bcb00f R08: 0000000000200010
-               R09: 0000000000101000
-[ 5590.803229] R10: 0000000000000001 R11: 0000000000000246
-               R12: 0000000000000006
-[ 5590.803233] R13: 0000000000075000 R14: 00007f62a8acb010
-               R15: 0000000000200000
-[ 5590.803238] </TASK>
-[ 5590.803240] Modules linked in: i915 ttm drm_buddy drm_dp_helper
-                        drm_kms_helper syscopyarea sysfillrect sysimgblt
-                        fb_sys_fops prime_numbers nfnetlink br_netfilter
-                        overlay mei_pxp mei_hdcp x86_pkg_temp_thermal
-                        coretemp kvm_intel snd_hda_codec_hdmi snd_hda_intel
-                        snd_intel_dspcfg snd_hda_codec snd_hwdep
-                        snd_hda_core snd_pcm mei_me mei fuse ip_tables
-                        x_tables crct10dif_pclmul e1000e crc32_pclmul ptp
-                        i2c_i801 ghash_clmulni_intel i2c_smbus pps_core
-                        [last unloa ded: ttm]
-[ 5590.803277] CR2: ffffffffa0b0e000
-[ 5590.803280] ---[ end trace 0000000000000000 ]---
-
-Fixes: 0e39037b3165 ("drm/i915: Cache the error string")
-Signed-off-by: Alan Previn <alan.previn.teres.alexis@intel.com>
-Reviewed-by: John Harrison <John.C.Harrison@Intel.com>
-Signed-off-by: John Harrison <John.C.Harrison@Intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220311004311.514198-2-alan.previn.teres.alexis@intel.com
-(cherry picked from commit 3304033a1e69cd81a2044b4422f0d7e593afb4e6)
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Jian Shen <shenjian15@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/i915_sysfs.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ .../hisilicon/hns3/hns3pf/hclge_main.c        | 69 ++++++++++---------
+ 1 file changed, 36 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_sysfs.c b/drivers/gpu/drm/i915/i915_sysfs.c
-index cdf0e9c6fd73..313c0000a814 100644
---- a/drivers/gpu/drm/i915/i915_sysfs.c
-+++ b/drivers/gpu/drm/i915/i915_sysfs.c
-@@ -445,7 +445,14 @@ static ssize_t error_state_read(struct file *filp, struct kobject *kobj,
- 	struct device *kdev = kobj_to_dev(kobj);
- 	struct drm_i915_private *i915 = kdev_minor_to_i915(kdev);
- 	struct i915_gpu_coredump *gpu;
--	ssize_t ret;
-+	ssize_t ret = 0;
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+index 892f2f12c54c..cdd1d2ebdde2 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+@@ -10397,12 +10397,41 @@ static bool hclge_need_update_vlan_filter(const struct hclge_vlan_info *new_cfg,
+ 	return false;
+ }
+ 
++static int hclge_modify_port_base_vlan_tag(struct hclge_vport *vport,
++					   struct hclge_vlan_info *new_info,
++					   struct hclge_vlan_info *old_info)
++{
++	struct hclge_dev *hdev = vport->back;
++	int ret;
 +
-+	/*
-+	 * FIXME: Concurrent clients triggering resets and reading + clearing
-+	 * dumps can cause inconsistent sysfs reads when a user calls in with a
-+	 * non-zero offset to complete a prior partial read but the
-+	 * gpu_coredump has been cleared or replaced.
-+	 */
++	/* add new VLAN tag */
++	ret = hclge_set_vlan_filter_hw(hdev, htons(new_info->vlan_proto),
++				       vport->vport_id, new_info->vlan_tag,
++				       false);
++	if (ret)
++		return ret;
++
++	/* remove old VLAN tag */
++	if (old_info->vlan_tag == 0)
++		ret = hclge_set_vf_vlan_common(hdev, vport->vport_id,
++					       true, 0);
++	else
++		ret = hclge_set_vlan_filter_hw(hdev, htons(ETH_P_8021Q),
++					       vport->vport_id,
++					       old_info->vlan_tag, true);
++	if (ret)
++		dev_err(&hdev->pdev->dev,
++			"failed to clear vport%u port base vlan %u, ret = %d.\n",
++			vport->vport_id, old_info->vlan_tag, ret);
++
++	return ret;
++}
++
+ int hclge_update_port_base_vlan_cfg(struct hclge_vport *vport, u16 state,
+ 				    struct hclge_vlan_info *vlan_info)
+ {
+ 	struct hnae3_handle *nic = &vport->nic;
+ 	struct hclge_vlan_info *old_vlan_info;
+-	struct hclge_dev *hdev = vport->back;
+ 	int ret;
  
- 	gpu = i915_first_error_state(i915);
- 	if (IS_ERR(gpu)) {
-@@ -457,8 +464,10 @@ static ssize_t error_state_read(struct file *filp, struct kobject *kobj,
- 		const char *str = "No error state collected\n";
- 		size_t len = strlen(str);
+ 	old_vlan_info = &vport->port_base_vlan_cfg.vlan_info;
+@@ -10415,38 +10444,12 @@ int hclge_update_port_base_vlan_cfg(struct hclge_vport *vport, u16 state,
+ 	if (!hclge_need_update_vlan_filter(vlan_info, old_vlan_info))
+ 		goto out;
  
--		ret = min_t(size_t, count, len - off);
--		memcpy(buf, str + off, ret);
-+		if (off < len) {
-+			ret = min_t(size_t, count, len - off);
-+			memcpy(buf, str + off, ret);
-+		}
- 	}
+-	if (state == HNAE3_PORT_BASE_VLAN_MODIFY) {
+-		/* add new VLAN tag */
+-		ret = hclge_set_vlan_filter_hw(hdev,
+-					       htons(vlan_info->vlan_proto),
+-					       vport->vport_id,
+-					       vlan_info->vlan_tag,
+-					       false);
+-		if (ret)
+-			return ret;
+-
+-		/* remove old VLAN tag */
+-		if (old_vlan_info->vlan_tag == 0)
+-			ret = hclge_set_vf_vlan_common(hdev, vport->vport_id,
+-						       true, 0);
+-		else
+-			ret = hclge_set_vlan_filter_hw(hdev,
+-						       htons(ETH_P_8021Q),
+-						       vport->vport_id,
+-						       old_vlan_info->vlan_tag,
+-						       true);
+-		if (ret) {
+-			dev_err(&hdev->pdev->dev,
+-				"failed to clear vport%u port base vlan %u, ret = %d.\n",
+-				vport->vport_id, old_vlan_info->vlan_tag, ret);
+-			return ret;
+-		}
+-
+-		goto out;
+-	}
+-
+-	ret = hclge_update_vlan_filter_entries(vport, state, vlan_info,
+-					       old_vlan_info);
++	if (state == HNAE3_PORT_BASE_VLAN_MODIFY)
++		ret = hclge_modify_port_base_vlan_tag(vport, vlan_info,
++						      old_vlan_info);
++	else
++		ret = hclge_update_vlan_filter_entries(vport, state, vlan_info,
++						       old_vlan_info);
+ 	if (ret)
+ 		return ret;
  
- 	return ret;
 -- 
 2.35.1
 

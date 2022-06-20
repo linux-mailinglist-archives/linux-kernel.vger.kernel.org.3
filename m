@@ -2,130 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D985518D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBC25518E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241954AbiFTM0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S241073AbiFTMb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241423AbiFTM0O (ORCPT
+        with ESMTP id S240064AbiFTMbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:26:14 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD5217A9F;
-        Mon, 20 Jun 2022 05:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1655727972; x=1687263972;
-  h=from:to:cc:subject:date:message-id;
-  bh=7dMi0VSxEF25HQUGoDLHHZiqB64+Uo3ECtSt/tonNIc=;
-  b=Wa8f/QOHl6/qO84nUSaLcRRbQK1VESGd/eCQcskYi09gzDv2bSL27gy/
-   OEfRcRKPdDodd4VO09MnimJfdoeBzoTvdGMyDcWYDI0wclfm5Ceq/Rk2n
-   2zDfGVXA5pDRNMBCFoYtHfj7bJbomeFACX/Bpp7KCa4gcQY6AJ7LnHS6g
-   1yQzO9jFEfst4CQ3DRcOyII6RLhS583xLWl+wYzT3/iN/zPfT8YP7karT
-   4UTt+9+XhGjDL7LmJRLmy/xrExUsaU07EukwOEMh6E4ccyebnLaV6UwS+
-   TGQtNHL4CQSfQPWGOWJqzFVLvqEvuGV+eAfvarpK1S/J5r02VdGvmhU7u
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,306,1650902400"; 
-   d="scan'208";a="208482930"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Jun 2022 20:26:11 +0800
-IronPort-SDR: SSnpdvgb3S51Is0/+vIW9HK/H6YyCmDiBU8W//FJI9IbYa8+pEVsjSVkHYGz5pVyFz5QHnNuWa
- rJQOTIbRpoPdmfz55Q3pZOckPeRPfkP93Ra1u6FblS9XGx0+s5yUlMy3Tm54aU64F7leFN6R3B
- y7vztXH6c8H/oPnePe1B5Koklmc53WLSbBNBDHhLIJa2m0MFulcyo5RMW9PDUeQvNkq5zhHtwq
- fl4TprEjephoY+lp/O3VCe9Lpellu/ZcYytmscFkttMGNhGO4r/yQeaVK2dfbQnlJXZKkGPxqw
- sPhi1ts+FQlbACQqcw9C0TBq
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jun 2022 04:48:43 -0700
-IronPort-SDR: gOHrNyTLB1Q2JcXE3fbb+uMwK4jheduZjWDMh+IhxiaaVP3yvPp9DSVUzLQxb0H9BZEAAcYeEX
- TpUyZ3G0FedEG5Cw4w1UQEZGJsUKC5jPlA4DbxKHT1RfNcCBqCjCcD2w1ZpeSBagydZsK4LjB4
- A5ScgfzOs3t3YGT8NzQ/g9EW3f9VsXG7srkIYNL1jzr20+URMa7JGT+xQqP8tlOFj3IBLGUJvi
- /juigmHhrkk4bE8KS+kB2eW1Ll6huiPR7kIB5bEfOffnidYASM96Tj7SVjBFzQpHgRt4m7A1rZ
- YlQ=
-WDCIronportException: Internal
-Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
-  by uls-op-cesaip02.wdc.com with ESMTP; 20 Jun 2022 05:26:09 -0700
-From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
-To:     James@vger.kernel.org, E.J.Bottomley@vger.kernel.org,
-        jejb@linux.vnet.ibm.com, Martin@vger.kernel.org,
-        K.Petersen@vger.kernel.org, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bean@vger.kernel.org, Huo@vger.kernel.org, beanhuo@micron.com,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size function
-Date:   Mon, 20 Jun 2022 15:26:06 +0300
-Message-Id: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 20 Jun 2022 08:31:22 -0400
+Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7C0913D33
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=W2zaJ
+        ZZZmWCsovcjbBPv8wVDU6mq90VO6c2xwP7F890=; b=SjUFNX350XJ3COY/c9/Bj
+        hpKd42XenFerfK5w8IUsuUbILIjb/KvkbgQHQJ9gdq+I0qL7JjQn10Y6R6Rm0Qpq
+        TqZeaw1CcoIvOHWv8mCBS18/cu4Ow4dTyEvAd65LHPDB9ETOJMZbgv74P0jrN5x/
+        AJtiFY035orupok84a+dGY=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
+ (Coremail) ; Mon, 20 Jun 2022 20:27:05 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Mon, 20 Jun 2022 20:27:05 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
+        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re:Re: [PATCH] powerpc: kernel: Change the order of of_node_put()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <1f3cdf9c-7437-65e7-c226-c53e17a722b7@csgroup.eu>
+References: <20220617112636.4041671-1-windhl@126.com>
+ <a6a5e5b3-ffd1-904b-bba1-22baff5f7b67@csgroup.eu>
+ <61c85548.1a55.18175d69e21.Coremail.windhl@126.com>
+ <c9785db9-b74d-540e-9c83-4db7bee10303@csgroup.eu>
+ <30af2253.74d8.181806c9337.Coremail.windhl@126.com>
+ <1f3cdf9c-7437-65e7-c226-c53e17a722b7@csgroup.eu>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Message-ID: <16a2a6b2.8542.1818114aeea.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: MsqowABXrPCaZ7Bi8RE6AA--.41388W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hkmF1uwMPrXgQABsE
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bsg driver allows user space to send device management commands.
-As such, it is often used by field application engineers to debug various problems,
-and as a test bed for new features as well.
-
-Let's not bound ourself to hard coded descriptor sizes, as the new
-Descriptors that supports new features are not defined yet.
-
-Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
----
- drivers/scsi/ufs/ufs_bsg.c | 28 ++++------------------------
- 1 file changed, 4 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufs_bsg.c b/drivers/scsi/ufs/ufs_bsg.c
-index 39bf204..7c56eba 100644
---- a/drivers/scsi/ufs/ufs_bsg.c
-+++ b/drivers/scsi/ufs/ufs_bsg.c
-@@ -6,24 +6,6 @@
-  */
- #include "ufs_bsg.h"
- 
--static int ufs_bsg_get_query_desc_size(struct ufs_hba *hba, int *desc_len,
--				       struct utp_upiu_query *qr)
--{
--	int desc_size = be16_to_cpu(qr->length);
--	int desc_id = qr->idn;
--
--	if (desc_size <= 0)
--		return -EINVAL;
--
--	ufshcd_map_desc_id_to_length(hba, desc_id, desc_len);
--	if (!*desc_len)
--		return -EINVAL;
--
--	*desc_len = min_t(int, *desc_len, desc_size);
--
--	return 0;
--}
--
- static int ufs_bsg_verify_query_size(struct ufs_hba *hba,
- 				     unsigned int request_len,
- 				     unsigned int reply_len)
-@@ -52,13 +34,11 @@ static int ufs_bsg_alloc_desc_buffer(struct ufs_hba *hba, struct bsg_job *job,
- 		goto out;
- 
- 	qr = &bsg_request->upiu_req.qr;
--	if (ufs_bsg_get_query_desc_size(hba, desc_len, qr)) {
--		dev_err(hba->dev, "Illegal desc size\n");
--		return -EINVAL;
--	}
-+	*desc_len = be16_to_cpu(qr->length);
- 
--	if (*desc_len > job->request_payload.payload_len) {
--		dev_err(hba->dev, "Illegal desc size\n");
-+	if (*desc_len <= 0 || *desc_len > QUERY_DESC_MAX_SIZE ||
-+	    *desc_len > job->request_payload.payload_len) {
-+		dev_err(hba->dev, "Illegal desc size %d\n", *desc_len);
- 		return -EINVAL;
- 	}
- 
--- 
-2.7.4
-
+CgoKQXQgMjAyMi0wNi0yMCAxOToxMTozMywgIkNocmlzdG9waGUgTGVyb3kiIDxjaHJpc3RvcGhl
+Lmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOgo+SGksCj4KPkxlIDIwLzA2LzIwMjIgw6AgMTE6MjMs
+IExpYW5nIEhlIGEgw6ljcml0wqA6Cj4+IAo+PiBIaSwgQ2hyaXN0b3BoZS4KPj4gCj4+IFNvcnJ5
+IHRvIHRyb2J1bGUgeW91IGFnYWluLgo+PiAKPj4gTm93IEkgaGF2ZSBmb3VuZCBvdGhlciBidWdz
+IGluIHNhbWUgZGlyZWN0b3JpZXMgKGkuZS4sIGFyY2gvcG93ZXJwYy9zeXNkZXYpLAo+PiB3aXRo
+IHRoZSBvbmVzIEkgaGF2ZSBzZW50IGJ1dCBub3QgcmVjaWV2ZWQgYWNrZWQtYnkgb3IgY29uZmly
+bWVkIGVtYWlsLgo+PiAKPj4gU28gSSBuZWVkIHRvIG1lcmdlIHRoZSBvbGQgb25lcyBpbnRvIHRo
+ZSBuZXcgb25lcyBhcyBhIFBBVENILXYyIGFuZCB0aGVuIHJlc2VuZCB0aGUKPj4gb2xkIG9uZXMg
+Pwo+PiBvciBqdXN0IHVzZSBhIG5ldyBQQVRDSCB0byBzZW5kIG9ubHkgbmV3IG9uZXM/Cj4+IAo+
+PiBJIGFtIGFmcmFpZCB0byBtYWtlIG5ldyB0cm91YmxlIGZvciBtYWludGFpbmVycywgc28gY2Fu
+IHlvdSBzaGFyZSB5b3VyIHZhbHVhYmxlCj4+IGV4cGVyaWVuY2U/Cj4+IAo+Cj5IZXJlIGlzIHRo
+ZSBsaXN0IG9mIHlvdXIgcGF0Y2hlcyA6IAo+aHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9w
+cm9qZWN0L2xpbnV4cHBjLWRldi9saXN0Lz9zdWJtaXR0ZXI9ODQyNTgKPgo+IEZyb20gbXkgcG9p
+bnQgb2YgdmlldywgZm9yIGFsbCB0aGUgcGF0Y2hlcyB0aGF0IGFyZSBzdGlsbCBpbiBzdGF0dXMg
+Cj4ibmV3IiBpdCBpcyBiZXR0ZXIgdGhhbiB5b3Ugc2VuZCBhIHYyIHdpdGggbW9yZSB0aGluZ3Mg
+aW50byBhIHNpbmdsZSAKPnBhdGNoLiBXaGVuIHRoZSBwYXRjaCBpcyBpbiAidW5kZXIgcmV2aWV3
+IiBzdGF0ZSwgaXQgaXMgYmV0dGVyIHRvIG5vdCAKPnVwZGF0ZSBpdCBhbnltb3JlLgo+Cj5TbyBp
+biB0aGUgbGlzdCB0aGVyZSBhcmUgZm9yIGluc3RhbmNlIHNldmVyYWwgcGF0Y2hlcyBmb3IgcG93
+ZXJudiwgc28gaXQgCj53b3VsZCBiZSBnb29kIGlmIHlvdSBjYW4gcmVncm91cCBhbGwgb2YgdGhl
+bSBpbiBhIHNpbmdsZSB2MiBwYXRjaC4KPgo+Q2hyaXN0b3BoZQoKVGhhbmtzLCBDaHJpc3RvcGhl
+LgoKSSB3aWxsIGZvbGxvdyB5b3VyIHJ1bGVzIGFuZCB0cnkgdG8gZ3JvdXAgdGhlICduZXcnIHN0
+YXRlIG9uZXMu

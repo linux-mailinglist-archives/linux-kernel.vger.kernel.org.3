@@ -2,106 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD895517EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78835517ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240671AbiFTMAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S240922AbiFTMAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbiFTMAF (ORCPT
+        with ESMTP id S240445AbiFTMAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:00:05 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63448FCB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:00:04 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id x4so3697918pfq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nWm1HuDYDniRiWG4QbCIzu8XBm9RdL4rAmU7DmwMgag=;
-        b=TnIQURtTcrz69rPQXxoFw4lPoL3YiTafG5VwGyzk+3OCP83UrfYIXmTwN7UxNx95i6
-         QySrwShr8gukdDKU4OlOmFyGwmdSHjOHwX7e0mIe11cWlpBVO+ER99SQtBLEOrMVncZV
-         jhsmEH3K9UQetdyyI1m7Ba9uN+dSo0QryEfenw/Vc2BmFt1OeMNcOIXd9Hh/oxs/Z8/t
-         D9UldAxzoDHts1avlU8ogeIZHMTSNqvD+2lGHA/lSaby28kr6uvBTfaw7zg6jzSnBXvl
-         IkXbxW9rImeluyyzPWltydnA+FvIvJQf/2HIwDqNDXCaqcQmXEczVs442/Na328Kljcm
-         X7Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nWm1HuDYDniRiWG4QbCIzu8XBm9RdL4rAmU7DmwMgag=;
-        b=ipB4h5+YnsLSiLofPRXWeOMN8gFSWSFYVf0PQHtAhDoEWHQA4I32/cLsNhklzU3Abs
-         bcdBA7VnA1rTZB5Y5OVBCxeXfC/Ccmn/CK39XRdhuMU0moQ9kUG9hthhhn5hhw4oJRZP
-         wBrMLAqYvwtS0bckkGF6cZkbFAeWmhVn2fqERhiAB3aqUXo5f8mPYW2+fdg36UlzhnJl
-         pg3ZuQ1RXgDNEsXxEaqZ/CUSgvUiGzbGUAh6z7yyFYO3Jilj+QkPbVXDYAc5MMhN6Qua
-         HJ+tHSII4tg8/JO5MwAY2TeWD2K4swojC5jubbEVflPkfZ60m8jvDuWzEZT1bf+SoKQN
-         vOiA==
-X-Gm-Message-State: AJIora+pMJtLkh7dZBwx4xLOvGAwuF5G+cg7x3frOFQW6noEfehw2nHh
-        ucLrWtJ3WgFY+Bb9l+yz/NA=
-X-Google-Smtp-Source: AGRyM1sZxtJChIafkQ//v0PvExkGTbn6NttZ0yNG8QxVW/Qp2Qb6OeR0R5t3Dvq5fb2otXRJhSTbZA==
-X-Received: by 2002:aa7:814b:0:b0:525:1ada:329b with SMTP id d11-20020aa7814b000000b005251ada329bmr8360890pfn.34.1655726403372;
-        Mon, 20 Jun 2022 05:00:03 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id w26-20020a62c71a000000b0051bbd79fc9csm8853516pfg.57.2022.06.20.05.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 05:00:03 -0700 (PDT)
-From:   zys.zljxml@gmail.com
-To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     bob.beckett@collabora.com, matthew.auld@intel.com,
-        thomas.hellstrom@linux.intel.com, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH v2] drm/i915/gem: add missing else
-Date:   Mon, 20 Jun 2022 19:59:53 +0800
-Message-Id: <20220620115953.1875309-1-zys.zljxml@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 20 Jun 2022 08:00:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B99A2185
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:00:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3ABC121AD3;
+        Mon, 20 Jun 2022 12:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655726441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6rWFG3uWKuuKdwZT86iOp2RBtyzj8xN/EPYd8WQXuuY=;
+        b=0QbMavM04QGJH3Y/IhTNDgFjE/11rLYDqeBfol2PSI9ZR4ZUTRF3bLUXOX1aRW+Cgh4CEQ
+        rz6nTSkEi9Kkbcs8K7h8BRHqINwOJSazZl0IFJQgPQr5QK4kglrMAyh4eTGpHFhVhzUj/p
+        cL2ohjotxpZtyFKE5rnGYCN/zxKfz3k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655726441;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6rWFG3uWKuuKdwZT86iOp2RBtyzj8xN/EPYd8WQXuuY=;
+        b=wK1upZ9g1hWwLkkhiY1nwMk+CxWTKKbDOs1po/GRfj6PtiirYM4Z85HNmbaEUAnj+hD2fD
+        MrO9j9H3bfl9g9CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1AC13134CA;
+        Mon, 20 Jun 2022 12:00:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4ZbUBWlhsGLaEwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 20 Jun 2022 12:00:41 +0000
+Message-ID: <93bf8148-ecc1-75fb-423b-2a76c7252c4e@suse.cz>
+Date:   Mon, 20 Jun 2022 14:00:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH 1/1] lib/stackdepot: replace CONFIG_STACK_HASH_ORDER
+ with automatic sizing
+Content-Language: en-US
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev@googlegroups.com
+References: <20220527113706.24870-1-vbabka@suse.cz>
+ <20220527113706.24870-2-vbabka@suse.cz>
+ <CACT4Y+Y4GZfXOru2z5tFPzFdaSUd+GFc6KVL=bsa0+1m197cQQ@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CACT4Y+Y4GZfXOru2z5tFPzFdaSUd+GFc6KVL=bsa0+1m197cQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: katrinzhou <katrinzhou@tencent.com>
+On 5/27/22 14:02, Dmitry Vyukov wrote:
+> On Fri, 27 May 2022 at 13:37, Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> As Linus explained [1], setting the stackdepot hash table size as a
+>> config option is suboptimal, especially as stackdepot becomes a
+>> dependency of less specialized subsystems than initially (e.g. DRM,
+>> networking, SLUB_DEBUG):
+>>
+>> : (a) it introduces a new compile-time question that isn't sane to ask
+>> : a regular user, but is now exposed to regular users.
+>>
+>> : (b) this by default uses 1MB of memory for a feature that didn't in
+>> : the past, so now if you have small machines you need to make sure you
+>> : make a special kernel config for them.
+>>
+>> Ideally we would employ rhashtable for fully automatic resizing, which
+>> should be feasible for many of the new users, but problematic for the
+>> original users with restricted context that call __stack_depot_save()
+>> with can_alloc == false, i.e. KASAN.
+>>
+>> However we can easily remove the config option and scale the hash table
+>> automatically with system memory. The STACK_HASH_MASK constant becomes
+>> stack_hash_mask variable and is used only in one mask operation, so the
+>> overhead should be negligible to none. For early allocation we can
+>> employ the existing alloc_large_system_hash() function and perform
+>> similar scaling for the late allocation.
+>>
+>> The existing limits of the config option (between 4k and 1M buckets)
+>> are preserved, and scaling factor is set to one bucket per 16kB memory
+>> so on 64bit the max 1M buckets (8MB memory) is achieved with 16GB
+>> system, while a 1GB system will use 512kB.
+> 
+> Hi Vlastimil,
+> 
+> We use KASAN with VMs with 2GB of memory.
+> If I did the math correctly this will result in 128K entries, while
+> currently we have CONFIG_STACK_HASH_ORDER=20 even for arm32.
+> I am actually not sure how full the table gets, but we can fuzz a
+> large kernel for up to an hour, so we can get lots of stacks (we were
+> the only known users who routinely overflowed default LOCKDEP tables
+> :)).
 
-Add missing else in set_proto_ctx_param() to fix coverity issue.
+Aha, good to know the order of 20 has some real use case then :)
 
-Addresses-Coverity: ("Unused value")
-Fixes: d4433c7600f7 ("drm/i915/gem: Use the proto-context to handle create parameters (v5)")
-Suggested-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Signed-off-by: katrinzhou <katrinzhou@tencent.com>
----
-Update from v1:
-Fixed the code logic as suggested by Tvrtko Ursulin.
+> I am not opposed to this in general. And I understand that KASAN Is
+> different from the other users.
+> What do you think re allowing CONFIG_STACK_HASH_ORDER=0/is not set
+> which will mean auto-size, but keeping ability to set exact size as
+> well?
+> Or alternatively auto-size if KASAN is not enabled and use a large
+> table otherwise? But I am not sure if anybody used
+> CONFIG_STACK_HASH_ORDER to reduce the default size with KASAN...
 
- drivers/gpu/drm/i915/gem/i915_gem_context.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-index ab4c5ab28e4d..1099a383e55a 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-@@ -933,7 +933,8 @@ static int set_proto_ctx_param(struct drm_i915_file_private *fpriv,
- 	case I915_CONTEXT_PARAM_PERSISTENCE:
- 		if (args->size)
- 			ret = -EINVAL;
--		ret = proto_context_set_persistence(fpriv->dev_priv, pc,
-+		else
-+			ret = proto_context_set_persistence(fpriv->dev_priv, pc,
- 						    args->value);
- 		break;
- 
--- 
-2.27.0
-
+Well if you're unsure and nobody else requested it so far, we could try
+setting it to 20 when KASAN is enabled, and autosize otherwise. If somebody
+comes up with a use-case for the boot-time parameter override (instead of
+CONFIG_), we can add it then?
+>> If needed, the automatic scaling could be complemented with a boot-time
+>> kernel parameter, but it feels pointless to add it without a specific
+>> use case.

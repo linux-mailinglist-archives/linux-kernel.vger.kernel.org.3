@@ -2,106 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847A255118D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89DA5511B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 09:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236876AbiFTHeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 03:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S239288AbiFTHma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 03:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238922AbiFTHeG (ORCPT
+        with ESMTP id S237888AbiFTHm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 03:34:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B70B6AE76
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655710441;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9O0CIqeEaoJn03vVtSYdv9IsNbaraVCXGcehJj6LilQ=;
-        b=BfDApnmT7TD6h8hYXmbv84ET73ro96bm2Ug/mCPq5iB4RInm64D8HKG8fbCuxanbWgfu4R
-        demVSV+8TVYb0h3CyJwbhrJhqpLtEkWcxBSNOH3ALvS0h7pMYVDofQPZ54lGeYg5RPuwfp
-        zMWHp7ybxz7SqLs/zoc0K6R8T23/K2g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-F-p-ug5mPU-LDTh9sa8ODA-1; Mon, 20 Jun 2022 03:34:00 -0400
-X-MC-Unique: F-p-ug5mPU-LDTh9sa8ODA-1
-Received: by mail-wm1-f70.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so4666309wmq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 00:34:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9O0CIqeEaoJn03vVtSYdv9IsNbaraVCXGcehJj6LilQ=;
-        b=iDzJJK3XY2NmZbclufCMI84QlT23Tf52033CAtfkFsbA6bzqxOV7UD/HY4LpoJt/KI
-         h+svJ6HrIkgrvSgTgYP1DAagCEsVNG11+EH9QgRJD+sjzDlzdvPtuRmD7cMAH2aXQ4Yp
-         PWlwU+SlIrkPpSO8u8G8wlhZnDeoKHQLlmcE7Z+XfzqVnicl3/tPgZwlL+g89/1D+99y
-         4+2IvuSz3Lir+j285gTTRs7TnflciEFLJtfE84tQ5ud5egtiUxlWaYKa7dn0dqpzDPxN
-         4wj7Ly6qkhLn724w92AdmCLKiT6PntINRkSaDnDtmzjj+hy/WV/zEU3FrnqOrvhMSKwT
-         k0ZQ==
-X-Gm-Message-State: AJIora+9G6yOxL5toaYH06pxfaBens1IJBFP7qNgNiaEGhbCi+JLHT4r
-        bi62KPqebmLatr7N4pDtABFNBuUccyS3v6bT31MUrgss9+wkDCZmc6Il8eWGYGPYb9Gjhw0EfRZ
-        YGL6xBv+qmVq7Ygg9jcisTcPB
-X-Received: by 2002:a5d:59ac:0:b0:218:5b7e:1c1c with SMTP id p12-20020a5d59ac000000b002185b7e1c1cmr21891416wrr.621.1655710439273;
-        Mon, 20 Jun 2022 00:33:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vkewhJzwIOJ9l+/yqE7pUpzblIRdbrwtFQigT8P4KR1GnlkLPaHlZsigHVgHZi02aADaZXLg==
-X-Received: by 2002:a5d:59ac:0:b0:218:5b7e:1c1c with SMTP id p12-20020a5d59ac000000b002185b7e1c1cmr21891397wrr.621.1655710439119;
-        Mon, 20 Jun 2022 00:33:59 -0700 (PDT)
-Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1c7909000000b0039c96b97359sm14054471wme.37.2022.06.20.00.33.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 00:33:58 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 09:33:56 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
-Subject: Re: [PATCH 0/3] KVM: selftests: Consolidate ucall code
-Message-ID: <20220620073356.fmtsa4ub74igm7me@gator>
-References: <20220618001618.1840806-1-seanjc@google.com>
+        Mon, 20 Jun 2022 03:42:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8A1FD15;
+        Mon, 20 Jun 2022 00:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655710947; x=1687246947;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=afrJTMQEPzFgwJo2gc0m4jjaI4R+MO4SngaxX75mOmk=;
+  b=d6urbr3QwU6tkkrTegj75ZyIe+KeMGd868XpFCZ42gf42mckXYv/xbB9
+   hvgm9eMBJ4TiM4xolKsuKONnMXe1i8fS3OSXHlOuvoGZ67psD+lQEOQkP
+   wes4Tc/ku5MEdvXQhn4DPTzawMuZ+ZTj2cH4smYzruimyBMkX+1wnH29u
+   wMNfr5mSsbmTWu1XyN8rOho8l/kagy1LFcmYpKlfzZXdGXHzpWAcA6VUj
+   5uEoVX2B7YzYEXLrK7PhM1O/GHeC8SE3NnbFoBCFoObz4f31ucVWUMSG2
+   sh1jc2rhcXfVECMq/l2qiOVcMMem84wUhkFz6t31bQlBqH/E0SlCS9SdK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268548831"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="268548831"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 00:42:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="676419073"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2022 00:42:18 -0700
+Date:   Mon, 20 Jun 2022 15:34:12 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>
+Subject: Re: [PATCH v2 3/3] fpga: region: Add runtime PM support
+Message-ID: <20220620073412.GA1319418@yilunxu-OptiPlex-7050>
+References: <20220523134517.4056873-1-nava.manne@xilinx.com>
+ <20220523134517.4056873-4-nava.manne@xilinx.com>
+ <DM6PR12MB3993A1FF3517D99AC9A1C21CCDB09@DM6PR12MB3993.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220618001618.1840806-1-seanjc@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR12MB3993A1FF3517D99AC9A1C21CCDB09@DM6PR12MB3993.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 12:16:15AM +0000, Sean Christopherson wrote:
-> Consolidate the code for making and getting ucalls.  All architectures pass
-> the ucall struct via memory, so filling and copying the struct is 100%
-> generic.  The only per-arch code is sending and receiving the address of
-> said struct.
-> 
-> Tested on x86 and arm, compile tested on s390 and RISC-V.
+On Mon, Jun 20, 2022 at 05:38:13AM +0000, Manne, Nava kishore wrote:
+> Ping!
 
-For the series
-
-Reviewed-by: Andrew Jones <drjones@redhat.com>
+Sorry I missed this one. Will try to catch up.
 
 Thanks,
-drew
+Yilun
 
+> 
+> > -----Original Message-----
+> > From: Nava kishore Manne <nava.manne@xilinx.com>
+> > Sent: Monday, May 23, 2022 7:15 PM
+> > To: mdf@kernel.org; hao.wu@intel.com; yilun.xu@intel.com;
+> > trix@redhat.com; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> > Michal Simek <michals@xilinx.com>; Nava kishore Manne
+> > <navam@xilinx.com>; linux-fpga@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; git <git@xilinx.com>
+> > Subject: [PATCH v2 3/3] fpga: region: Add runtime PM support
+> > 
+> > Add support to handle FPGA/PL power domain. With this patch, the PL
+> > power domain will be turned on before loading the bitstream into the
+> > targeted region and turned off while removing/unloading the bitstream from
+> > the targeted region using overlays. This can be achieved by adding the
+> > runtime PM support to the fpga regions.
+> > 
+> > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> > ---
+> > Changes for v2:
+> >               - Updated commit message.
+> >               - Updated runtime PM handling logic to fix the PM ref count
+> >                 imbalance issues.
+> > 
+> >  drivers/fpga/of-fpga-region.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+> > index ae82532fc127..f14bb5916d97 100644
+> > --- a/drivers/fpga/of-fpga-region.c
+> > +++ b/drivers/fpga/of-fpga-region.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/of_platform.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/spinlock.h>
+> > +#include <linux/pm_runtime.h>
+> > 
+> >  static const struct of_device_id fpga_region_of_match[] = {
+> >  	{ .compatible = "fpga-region", },
+> > @@ -301,10 +302,17 @@ static int of_fpga_region_notify_pre_apply(struct
+> > fpga_region *region,
+> >  		return -EINVAL;
+> >  	}
+> > 
+> > +	ret = pm_runtime_resume_and_get(dev->parent);
+> > +	if (ret < 0) {
+> > +		fpga_image_info_free(info);
+> > +		return ret;
+> > +	}
+> > +
+> >  	region->info = info;
+> >  	ret = fpga_region_program_fpga(region);
+> >  	if (ret) {
+> >  		/* error; reject overlay */
+> > +		pm_runtime_put_sync(dev->parent);
+> >  		fpga_image_info_free(info);
+> >  		region->info = NULL;
+> >  	}
+> > @@ -324,10 +332,13 @@ static int of_fpga_region_notify_pre_apply(struct
+> > fpga_region *region,  static void of_fpga_region_notify_post_remove(struct
+> > fpga_region *region,
+> >  					      struct of_overlay_notify_data
+> > *nd)  {
+> > +	struct device *dev = &region->dev;
+> > +
+> >  	fpga_bridges_disable(&region->bridge_list);
+> >  	fpga_bridges_put(&region->bridge_list);
+> >  	fpga_image_info_free(region->info);
+> >  	region->info = NULL;
+> > +	pm_runtime_put_sync(dev->parent);
+> >  }
+> > 
+> >  /**
+> > @@ -411,6 +422,8 @@ static int of_fpga_region_probe(struct
+> > platform_device *pdev)
+> >  		goto eprobe_mgr_put;
+> >  	}
+> > 
+> > +	pm_runtime_enable(&pdev->dev);
+> > +
+> >  	of_platform_populate(np, fpga_region_of_match, NULL, &region-
+> > >dev);
+> >  	platform_set_drvdata(pdev, region);
+> > 
+> > @@ -430,6 +443,7 @@ static int of_fpga_region_remove(struct
+> > platform_device *pdev)
+> > 
+> >  	fpga_region_unregister(region);
+> >  	fpga_mgr_put(mgr);
+> > +	pm_runtime_disable(region->dev.parent);
+> > 
+> >  	return 0;
+> >  }
+> > --
+> > 2.25.1

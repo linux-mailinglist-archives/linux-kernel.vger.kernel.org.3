@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C999555259A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F240A552593
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344355AbiFTULh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S1344732AbiFTULx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344186AbiFTUI7 (ORCPT
+        with ESMTP id S1344570AbiFTUJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:08:59 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F6C21E0B;
-        Mon, 20 Jun 2022 13:07:31 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id o8so16103423wro.3;
-        Mon, 20 Jun 2022 13:07:31 -0700 (PDT)
+        Mon, 20 Jun 2022 16:09:18 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC012220CB;
+        Mon, 20 Jun 2022 13:07:39 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso8276740wms.2;
+        Mon, 20 Jun 2022 13:07:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XaILMaaUfjKKrrd1BT5yUC0wzaqueGQvAdQj7TQ0vLM=;
-        b=imip7dzGE8pif//iZiBwRPgT0Zy30AicR52p+YSjODyhTVrRZ2lor3isprtfe5BvRf
-         6g0qehbR9h2oP87ubh9puaYqDZ7h0g3Qr9cE+rFnZyOveR2FPmH15B6/0Pb9aqj9zL2t
-         1WdH5LJC+mlljGPaehp7prMgTu/wr2dyHT4f+0DWYEPU53OC4k7EcUfjdBa8Y0jLKd7f
-         jOCRN3c+t45IpipXCIFg8ljs4JDcpiwga1eEgM8TL6lytc62RYsXd2Xi9hxEDHg2Johr
-         jswOtD5N2Zu8rtBWb5ETbrZRPG5UV6rhvYOpjg7uu/p7IFU2L64Kf3biwJJ9dht9BHHs
-         DmLA==
+        bh=gGGGI5LNQd5QfFmuY5vVwQrtUD8WBKwvWjL6Bicr/nE=;
+        b=S/EtAgiYih2o97vzKZ46FuXvAcLZH4aZSRqS9u2yBKGwrnkXOKPCMGGLd7i9ZmxQaG
+         BnBbK63aSq4v1vSjGAPc164mZGaSk3LPHtRt8daUl8xMv0xp20Wh0ybrxjQLqHXLqdDy
+         yhDIj9t6XfrHHFv3whu+IVZQrWETjZ1AesrYnf54NJGg7Cy+3sRgTPv9faAKYSFooPY0
+         45O48rrjzHJTrXu/6XULoJep5LjaBkkIDGdtmMKtfzD41Z5IcTn0ruAikZetXvnqo0Tl
+         Zdz1vCizcAGpaQKPTcGKQxbHlaaCG3L3c003lP0kS60LBM2I8ti3fkUMC/+0uVt3nR1g
+         Y3+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XaILMaaUfjKKrrd1BT5yUC0wzaqueGQvAdQj7TQ0vLM=;
-        b=1jY2Zm7jWJnct7XK5OoDqT3+6bP2e24S3lCIkBaHJOEkPucZIDqtoMez9KkvMoITVA
-         JkK6S4UmDCj3JwkvhEtP1qJE4y8ZpVGjuvrFmtDoJoTmBCqUOFGngFMLNKMEO8jkHEW1
-         yfzvoDVtM52VkcaSxKplPPZfay0+quVt/JrH8gI0VA50RLGPhPPrkOtQC0Ic9T7VgBCg
-         DV9SR289GY+qR63qjvhNSH+FCl/Gw6bqUVq/eg3kVe6SuthhtpS5EMhOEBji8ccUBedZ
-         fkvocDDYiZjPbKWpgZUHuXsB0CwEolHJl9IxVMBGLq2h3r7F3qO0aWe8WWg9bj5/bjha
-         SqeQ==
-X-Gm-Message-State: AJIora8grWWqN41HQmDJ/iJrBKj2twX6iLowN8vHp+3T3mttC2ccU0XO
-        UR17BoXA04bln6+PyCJ+PE0=
-X-Google-Smtp-Source: AGRyM1t9IFcsSmUxm6NbAdug13RNQx5axNz4NGatMxkirYwyQ+EAH80iv3Me1JZp6GMwiYGFFjPvjg==
-X-Received: by 2002:a5d:4cc4:0:b0:21b:8a19:b8a6 with SMTP id c4-20020a5d4cc4000000b0021b8a19b8a6mr10152154wrt.590.1655755651340;
-        Mon, 20 Jun 2022 13:07:31 -0700 (PDT)
+        bh=gGGGI5LNQd5QfFmuY5vVwQrtUD8WBKwvWjL6Bicr/nE=;
+        b=V6mYZhraa+r19xr65iPPGyVil2wGL6CdM0InYTMK0U5V0tiQUDLhP3mcWeVHzP1eug
+         VO5SV4J31vdxfBypf5MFWUTo3eTCH92eUZPcdm+OhyWxPeXuqlogzE6Y8P8raTPYEhAd
+         cIZBDldTRIKE2/krY4YVbTPdbMBGZCBUNHl9IGIlJv7PXgW6Lx33vRuznbgHSv9S6s0y
+         oVOl+OEo2+MkIu1t3FMu+UfnvzP4J47inWvj/a/CXKY9VPMQGXc0L4bJR7i+jyh9pZo+
+         R/PgP8F07msI4UuxO1ed5bLiqpvlNzZMOP7KswxFR9ue+tpgG72YKQxQIBHlGy94tkQH
+         4uVw==
+X-Gm-Message-State: AJIora87Bt3QwjtkbXzFR9sHtCOvi4iJTb8Q8SpiqG3Sl2XrRYOIlNe4
+        3lc2sjbxK1fa38PyBalCY2A=
+X-Google-Smtp-Source: AGRyM1t7nmjsnyP7qTIA/w/988Wjv4MiUTlTDpMZzgOJTqyM5/Li8wCJHVRxnaV0tBlHxN/JpqOs4g==
+X-Received: by 2002:a05:600c:4ec7:b0:39c:84a7:3762 with SMTP id g7-20020a05600c4ec700b0039c84a73762mr25749060wmq.153.1655755653087;
+        Mon, 20 Jun 2022 13:07:33 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id e1-20020a5d5941000000b0020c5253d907sm14219807wri.83.2022.06.20.13.07.30
+        by smtp.gmail.com with ESMTPSA id s7-20020a5d6a87000000b0021b8c99860asm5606007wru.115.2022.06.20.13.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:30 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:32 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 47/49] regmap-irq: Add get_irq_reg() callback
-Date:   Mon, 20 Jun 2022 21:06:42 +0100
-Message-Id: <20220620200644.1961936-48-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 48/49] mfd: qcom-pm8008: Use get_irq_reg() for irq chip
+Date:   Mon, 20 Jun 2022 21:06:43 +0100
+Message-Id: <20220620200644.1961936-49-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,327 +84,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the internal sub_irq_reg() function with a public callback
-that drivers can use when they have more complex register layouts.
-The default implementation is regmap_irq_get_irq_reg_linear(), used
-if the chip doesn't provide its own callback.
+Replace the not_fixed_stride flag with a get_irq_reg() callback,
+which expresses what we want to do here more directly instead of
+relying on a convoluted hierarchy of offsets.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c | 122 ++++++++++++++++++++-----------
- include/linux/regmap.h           |  15 +++-
- 2 files changed, 92 insertions(+), 45 deletions(-)
+ drivers/mfd/qcom-pm8008.c | 56 +++++++++++++++++----------------------
+ 1 file changed, 25 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 7b5bd1d45fc0..acbd6e22b0cd 100644
---- a/drivers/base/regmap/regmap-irq.c
-+++ b/drivers/base/regmap/regmap-irq.c
-@@ -41,30 +41,12 @@ struct regmap_irq_chip_data {
+diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+index c778f2f87a17..f6407aa0bcfc 100644
+--- a/drivers/mfd/qcom-pm8008.c
++++ b/drivers/mfd/qcom-pm8008.c
+@@ -44,16 +44,6 @@ enum {
+ #define PM8008_GPIO1_ADDR	PM8008_PERIPH_2_BASE
+ #define PM8008_GPIO2_ADDR	PM8008_PERIPH_3_BASE
  
- 	unsigned int irq_reg_stride;
- 
-+	unsigned int (*get_irq_reg)(struct regmap_irq_chip_data *data,
-+				    unsigned int base, int index);
-+
- 	bool clear_status:1;
+-#define PM8008_STATUS_BASE	(PM8008_PERIPH_0_BASE | INT_LATCHED_STS_OFFSET)
+-#define PM8008_MASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_CLR_OFFSET)
+-#define PM8008_UNMASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_SET_OFFSET)
+-#define PM8008_TYPE_BASE	(PM8008_PERIPH_0_BASE | INT_SET_TYPE_OFFSET)
+-#define PM8008_ACK_BASE		(PM8008_PERIPH_0_BASE | INT_LATCHED_CLR_OFFSET)
+-#define PM8008_POLARITY_HI_BASE	(PM8008_PERIPH_0_BASE | INT_POL_HIGH_OFFSET)
+-#define PM8008_POLARITY_LO_BASE	(PM8008_PERIPH_0_BASE | INT_POL_LOW_OFFSET)
+-
+-#define PM8008_PERIPH_OFFSET(paddr)	(paddr - PM8008_PERIPH_0_BASE)
+-
+ struct pm8008_data {
+ 	struct device *dev;
+ 	struct regmap *regmap;
+@@ -61,22 +51,10 @@ struct pm8008_data {
+ 	struct regmap_irq_chip_data *irq_data;
  };
  
--static int sub_irq_reg(struct regmap_irq_chip_data *data,
--		       unsigned int base_reg, int i)
--{
--	const struct regmap_irq_chip *chip = data->chip;
--	struct regmap *map = data->map;
--	struct regmap_irq_sub_irq_map *subreg;
--	unsigned int offset;
--	int reg = 0;
+-static unsigned int p0_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_0_BASE)};
+-static unsigned int p1_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_1_BASE)};
+-static unsigned int p2_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_2_BASE)};
+-static unsigned int p3_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_3_BASE)};
 -
--	if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
--		/* Assume linear mapping */
--		reg = base_reg + (i * map->reg_stride * data->irq_reg_stride);
--	} else {
--		subreg = &chip->sub_reg_offsets[i];
--		offset = subreg->offset[0];
--		reg = base_reg + offset;
--	}
+-static struct regmap_irq_sub_irq_map pm8008_sub_reg_offsets[] = {
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p0_offs),
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p1_offs),
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p2_offs),
+-	REGMAP_IRQ_MAIN_REG_OFFSET(p3_offs),
+-};
 -
--	return reg;
--}
--
- static inline const
- struct regmap_irq *irq_to_regmap_irq(struct regmap_irq_chip_data *data,
- 				     int irq)
-@@ -76,8 +58,14 @@ static bool regmap_irq_can_bulk_read_status(struct regmap_irq_chip_data *data)
- {
- 	struct regmap *map = data->map;
- 
-+	/*
-+	 * While possible that a user-defined get_irq_reg callback might be
-+	 * linear enough to support bulk reads, most of the time it won't.
-+	 * Therefore only allow them if the default callback is being used.
-+	 */
- 	return !map->use_single_read && map->reg_stride == 1 &&
--		data->irq_reg_stride == 1;
-+		data->irq_reg_stride == 1 &&
-+		data->get_irq_reg == regmap_irq_get_irq_reg_linear;
- }
- 
- static void regmap_irq_lock(struct irq_data *data)
-@@ -114,7 +102,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 
- 	if (d->clear_status) {
- 		for (i = 0; i < d->chip->num_regs; i++) {
--			reg = sub_irq_reg(d, d->chip->status_base, i);
-+			reg = d->get_irq_reg(d, d->chip->status_base, i);
- 
- 			ret = regmap_read(map, reg, &val);
- 			if (ret)
-@@ -132,7 +120,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 	 */
- 	for (i = 0; i < d->chip->num_regs; i++) {
- 		if (d->chip->mask_base) {
--			reg = sub_irq_reg(d, d->chip->mask_base, i);
-+			reg = d->get_irq_reg(d, d->chip->mask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], d->mask_buf[i]);
- 			if (ret != 0)
-@@ -141,7 +129,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 		}
- 
- 		if (d->chip->unmask_base) {
--			reg = sub_irq_reg(d, d->chip->unmask_base, i);
-+			reg = d->get_irq_reg(d, d->chip->unmask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], ~d->mask_buf[i]);
- 			if (ret != 0)
-@@ -149,7 +137,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 					reg);
- 		}
- 
--		reg = sub_irq_reg(d, d->chip->wake_base, i);
-+		reg = d->get_irq_reg(d, d->chip->wake_base, i);
- 		if (d->wake_buf) {
- 			if (d->chip->wake_invert)
- 				ret = regmap_update_bits(d->map, reg,
-@@ -173,7 +161,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 		 * it'll be ignored in irq handler, then may introduce irq storm
- 		 */
- 		if (d->mask_buf[i] && (d->chip->ack_base || d->chip->use_ack)) {
--			reg = sub_irq_reg(d, d->chip->ack_base, i);
-+			reg = d->get_irq_reg(d, d->chip->ack_base, i);
- 
- 			/* some chips ack by write 0 */
- 			if (d->chip->ack_invert)
-@@ -194,7 +182,7 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 
- 	for (i = 0; i < d->chip->num_config_bases; i++) {
- 		for (j = 0; j < d->chip->num_config_regs; j++) {
--			reg = sub_irq_reg(d, d->chip->config_base[i], j);
-+			reg = d->get_irq_reg(d, d->chip->config_base[i], j);
- 			ret = regmap_write(map, reg, d->config_buf[i][j]);
- 			if (ret != 0)
- 				dev_err(d->map->dev,
-@@ -316,14 +304,17 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
- 	const struct regmap_irq_chip *chip = data->chip;
- 	struct regmap *map = data->map;
- 	struct regmap_irq_sub_irq_map *subreg;
-+	unsigned int reg;
- 	int i, ret = 0;
- 
- 	if (!chip->sub_reg_offsets) {
--		/* Assume linear mapping */
--		ret = regmap_read(map, chip->status_base +
--				  (b * map->reg_stride * data->irq_reg_stride),
--				   &data->status_buf[b]);
-+		reg = data->get_irq_reg(data, chip->status_base, b);
-+		ret = regmap_read(map, reg, &data->status_buf[b]);
- 	} else {
-+		/*
-+		 * Note we can't use get_irq_reg() here because the offsets
-+		 * in 'subreg' are *not* interchangeable with indices.
-+		 */
- 		subreg = &chip->sub_reg_offsets[b];
- 		for (i = 0; i < subreg->num_regs; i++) {
- 			unsigned int offset = subreg->offset[i];
-@@ -389,10 +380,19 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
- 		 * sake of simplicity. and add bulk reads only if needed
- 		 */
- 		for (i = 0; i < chip->num_main_regs; i++) {
--			ret = regmap_read(map, chip->main_status +
--				  (i * map->reg_stride
--				   * data->irq_reg_stride),
--				  &data->main_status_buf[i]);
-+			/*
-+			 * For not_fixed_stride, don't use get_irq_reg().
-+			 * It would produce an incorrect result.
-+			 */
-+			if (data->chip->not_fixed_stride)
-+				reg = chip->main_status +
-+					(i * map->reg_stride *
-+					 data->irq_reg_stride);
-+			else
-+				reg = data->get_irq_reg(data,
-+							chip->main_status, i);
-+
-+			ret = regmap_read(map, reg, &data->main_status_buf[i]);
- 			if (ret) {
- 				dev_err(map->dev,
- 					"Failed to read IRQ status %d\n",
-@@ -457,7 +457,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
- 
- 	} else {
- 		for (i = 0; i < data->chip->num_regs; i++) {
--			unsigned int reg = sub_irq_reg(data,
-+			unsigned int reg = data->get_irq_reg(data,
- 					data->chip->status_base, i);
- 			ret = regmap_read(map, reg, &data->status_buf[i]);
- 
-@@ -485,7 +485,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
- 		data->status_buf[i] &= ~data->mask_buf[i];
- 
- 		if (data->status_buf[i] && (chip->ack_base || chip->use_ack)) {
--			reg = sub_irq_reg(data, data->chip->ack_base, i);
-+			reg = data->get_irq_reg(data, data->chip->ack_base, i);
- 
- 			if (chip->ack_invert)
- 				ret = regmap_write(map, reg,
-@@ -545,6 +545,37 @@ static const struct irq_domain_ops regmap_domain_ops = {
- 	.xlate	= irq_domain_xlate_onetwocell,
+ static unsigned int pm8008_config_regs[] = {
+-	PM8008_TYPE_BASE,
+-	PM8008_POLARITY_HI_BASE,
+-	PM8008_POLARITY_LO_BASE,
++	INT_SET_TYPE_OFFSET,
++	INT_POL_HIGH_OFFSET,
++	INT_POL_LOW_OFFSET,
  };
  
-+/**
-+ * regmap_irq_get_irq_reg_linear() - Linear IRQ register mapping callback.
-+ *
-+ * @data: Data for the &struct regmap_irq_chip
-+ * @base: Base register
-+ * @index: Register index
-+ *
-+ * Returns the register address corresponding to the given @base and @index
-+ * by the formula ``base + index * regmap_stride * irq_reg_stride``.
-+ */
-+unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
-+					   unsigned int base, int index)
+ enum {
+@@ -96,6 +74,23 @@ static struct regmap_irq pm8008_irqs[] = {
+ 	REGMAP_IRQ_REG(PM8008_IRQ_GPIO2,	PM8008_GPIO2,	BIT(0)),
+ };
+ 
++static const unsigned int pm8008_periph_base[] = {
++	PM8008_PERIPH_0_BASE,
++	PM8008_PERIPH_1_BASE,
++	PM8008_PERIPH_2_BASE,
++	PM8008_PERIPH_3_BASE,
++};
++
++static unsigned int pm8008_get_irq_reg(struct regmap_irq_chip_data *data,
++				       unsigned int base, int index)
 +{
-+	const struct regmap_irq_chip *chip = data->chip;
-+	struct regmap *map = data->map;
++	/* Simple linear addressing for the main status register */
++	if (base == I2C_INTR_STATUS_BASE)
++		return base + index;
 +
-+	/*
-+	 * NOTE: This is for backward compatibility only and will be removed
-+	 * when not_fixed_stride is dropped (it's only used by qcom-pm8008).
-+	 */
-+	if (chip->not_fixed_stride && chip->sub_reg_offsets) {
-+		struct regmap_irq_sub_irq_map *subreg;
-+
-+		subreg = &chip->sub_reg_offsets[0];
-+		return base + subreg->offset[0];
-+	}
-+
-+	return base + index * (map->reg_stride * chip->irq_reg_stride);
++	return pm8008_periph_base[index] + base;
 +}
-+EXPORT_SYMBOL_GPL(regmap_irq_get_irq_reg_linear);
 +
- /**
-  * regmap_irq_set_type_config_simple() - Simple IRQ type configuration callback.
-  *
-@@ -730,6 +761,11 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	else
- 		d->irq_reg_stride = 1;
- 
-+	if (chip->get_irq_reg)
-+		d->get_irq_reg = chip->get_irq_reg;
-+	else
-+		d->get_irq_reg = regmap_irq_get_irq_reg_linear;
-+
- 	if (regmap_irq_can_bulk_read_status(d)) {
- 		d->status_reg_buf = kmalloc_array(chip->num_regs,
- 						  map->format.val_bytes,
-@@ -749,7 +785,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 		d->mask_buf[i] = d->mask_buf_def[i];
- 
- 		if (d->chip->mask_base) {
--			reg = sub_irq_reg(d, d->chip->mask_base, i);
-+			reg = d->get_irq_reg(d, d->chip->mask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], d->mask_buf[i]);
- 			if (ret != 0) {
-@@ -760,7 +796,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 		}
- 
- 		if (d->chip->unmask_base) {
--			reg = sub_irq_reg(d, d->chip->unmask_base, i);
-+			reg = d->get_irq_reg(d, d->chip->unmask_base, i);
- 			ret = regmap_irq_update_mask_bits(d, reg,
- 					d->mask_buf_def[i], ~d->mask_buf[i]);
- 			if (ret != 0) {
-@@ -774,7 +810,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 			continue;
- 
- 		/* Ack masked but set interrupts */
--		reg = sub_irq_reg(d, d->chip->status_base, i);
-+		reg = d->get_irq_reg(d, d->chip->status_base, i);
- 		ret = regmap_read(map, reg, &d->status_buf[i]);
- 		if (ret != 0) {
- 			dev_err(map->dev, "Failed to read IRQ status: %d\n",
-@@ -786,7 +822,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 			d->status_buf[i] = ~d->status_buf[i];
- 
- 		if (d->status_buf[i] && (chip->ack_base || chip->use_ack)) {
--			reg = sub_irq_reg(d, d->chip->ack_base, i);
-+			reg = d->get_irq_reg(d, d->chip->ack_base, i);
- 			if (chip->ack_invert)
- 				ret = regmap_write(map, reg,
- 					~(d->status_buf[i] & d->mask_buf[i]));
-@@ -811,7 +847,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	if (d->wake_buf) {
- 		for (i = 0; i < chip->num_regs; i++) {
- 			d->wake_buf[i] = d->mask_buf_def[i];
--			reg = sub_irq_reg(d, d->chip->wake_base, i);
-+			reg = d->get_irq_reg(d, d->chip->wake_base, i);
- 
- 			if (chip->wake_invert)
- 				ret = regmap_update_bits(d->map, reg,
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index bb625a1edef9..be51af0a2425 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -1424,6 +1424,8 @@ struct regmap_irq_sub_irq_map {
- 	unsigned int *offset;
+ static int pm8008_set_type_config(unsigned int **buf, unsigned int type,
+ 				  const struct regmap_irq *irq_data, int idx)
+ {
+@@ -136,17 +131,16 @@ static struct regmap_irq_chip pm8008_irq_chip = {
+ 	.irqs			= pm8008_irqs,
+ 	.num_irqs		= ARRAY_SIZE(pm8008_irqs),
+ 	.num_regs		= PM8008_NUM_PERIPHS,
+-	.not_fixed_stride	= true,
+-	.sub_reg_offsets	= pm8008_sub_reg_offsets,
+-	.status_base		= PM8008_STATUS_BASE,
+-	.mask_base		= PM8008_MASK_BASE,
+-	.unmask_base		= PM8008_UNMASK_BASE,
++	.status_base		= INT_LATCHED_STS_OFFSET,
++	.mask_base		= INT_EN_CLR_OFFSET,
++	.unmask_base		= INT_EN_SET_OFFSET,
+ 	.mask_writeonly		= true,
+-	.ack_base		= PM8008_ACK_BASE,
++	.ack_base		= INT_LATCHED_CLR_OFFSET,
+ 	.config_base		= pm8008_config_regs,
+ 	.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),
+ 	.num_config_regs	= PM8008_NUM_PERIPHS,
+ 	.set_type_config	= pm8008_set_type_config,
++	.get_irq_reg		= pm8008_get_irq_reg,
  };
  
-+struct regmap_irq_chip_data;
-+
- /**
-  * struct regmap_irq_chip - Description of a generic regmap irq_chip.
-  *
-@@ -1489,6 +1491,13 @@ struct regmap_irq_sub_irq_map {
-  * @handle_post_irq: Driver specific callback to handle interrupt from device
-  *		     after handling the interrupts in regmap_irq_handler().
-  * @set_type_config: Callback used for configuring irq types.
-+ * @get_irq_reg: Callback for mapping (base register, index) pairs to register
-+ *		 addresses. The base register will be one of @status_base,
-+ *		 @mask_base, etc., @main_status, or any of @config_base.
-+ *		 The index will be in the range [0, num_main_regs[ for the
-+ *		 main status base, [0, num_type_settings[ for any config
-+ *		 register base, and [0, num_regs[ for any other base.
-+ *		 If unspecified then regmap_irq_get_irq_reg_linear() is used.
-  * @irq_drv_data:    Driver specific IRQ data which is passed as parameter when
-  *		     driver specific pre/post interrupt handler is called.
-  *
-@@ -1535,11 +1544,13 @@ struct regmap_irq_chip {
- 	int (*handle_post_irq)(void *irq_drv_data);
- 	int (*set_type_config)(unsigned int **buf, unsigned int type,
- 			       const struct regmap_irq *irq_data, int idx);
-+	unsigned int (*get_irq_reg)(struct regmap_irq_chip_data *data,
-+				    unsigned int base, int index);
- 	void *irq_drv_data;
- };
- 
--struct regmap_irq_chip_data;
--
-+unsigned int regmap_irq_get_irq_reg_linear(struct regmap_irq_chip_data *data,
-+					   unsigned int base, int index);
- int regmap_irq_set_type_config_simple(unsigned int **buf, unsigned int type,
- 				      const struct regmap_irq *irq_data, int idx);
- 
+ static struct regmap_config qcom_mfd_regmap_cfg = {
 -- 
 2.35.1
 

@@ -2,152 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F402550EB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 04:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E88C550EC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbiFTC7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 22:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
+        id S237190AbiFTDAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 23:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiFTC7T (ORCPT
+        with ESMTP id S231308AbiFTDAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 22:59:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E99E25E0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 19:59:16 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LRDq03r7NzkWYp;
-        Mon, 20 Jun 2022 10:58:04 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 20 Jun 2022 10:59:14 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 20 Jun 2022 10:59:12 +0800
-Message-ID: <684f0362-6e58-753d-32e1-112c6ffe6d12@huawei.com>
-Date:   Mon, 20 Jun 2022 10:59:12 +0800
+        Sun, 19 Jun 2022 23:00:51 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945B925E0;
+        Sun, 19 Jun 2022 20:00:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PlHgz9OqHTcUnq091ekKUd7SwsbUNOVldNXJECRWxPtPgJRVTkTQinXhfxhFctKphXQcTg4tYVL0nro2pNV/MuD411Nt/fy8A/+UohrcGg4teFRyf3ZaXHtqYAtjikmSh0zv/102H8NgCJZ7YlKlQas4Jk0JO6LdJE8jw5uzAFLkiMZMexYbfm10wupv2PLhV2Noo4P4SfpUlTF9gFvXjZYoJ/SDHfFk0P+9RsQXWYy/lrOlqzSW1ly9a7LF8atu5VEaRP9uJY8J8dqvG0gFA8taKID3ldewzTlH7xQL5CBxaG4zM55AQBhWQTZEDyOLANSW7PJqHx6hCmMZa0DIYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CNPUk/pK/3CvOADsqC9rUWR68D328XrUxxeYNh9+Pi8=;
+ b=WHIby9WBgFIaQ5B5quW4YFhPw+hnJEZ8LORHqsrKPRyvYaed78zCyK6z+xTU4OwkAKGAWAAjb80emGQ+M7JcWCHdKnjM3mpfMf/nHL9urHxvxdvWIBRDIjHOo1741w/SthGDRn+JSR+3ySgGFR8xGDnJtc0y7LX7R9E1x+8L6o5y/y34CJ9LX0yv8/gennCJ5yMYhrQxTy3ZPl3/Yk82x6jxiF+QeEADLjjsbwwvtyExrohrLZnyF9UWTsZdNTtnpD623MZUMqX8qT6kOuDWUYi9e5/7v/7/ruqVHS5PL0YtCBpI9fP7bfbGFSdXij1308B4xN2AxAH/pJO0P75Wdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CNPUk/pK/3CvOADsqC9rUWR68D328XrUxxeYNh9+Pi8=;
+ b=WJcSYABDi4zgF5FK9GFaWxEwxMx673igP/FEBW1Hs3P2DGKsdHGXCkx0p0V06eH6objplOVBCGV4I7pIFdt3TlVT4ayLBGjCcCzZq8TrU36cNNztzwLey7JsUE83zFDcuyLx+MeSpwh+N0X3uKG5vMf41yb40Pq+/9cZtsyqZ7cq6HUnDWFEoRZ/HiWrMPySzQdg+1fJeAIN+MGaiPwrxDd2wcekimWL+/OTPNd0mUr8ko9qUNFOhG1uMPmm8ARe+sF2NmzdDh91dlDCRrdwXLh1rd2cy2kjddvolw7WoXvc6Goc66kK2+gCcqyPnCgtZrIFm1xjCrMyERbG9WYWfg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BN6PR1201MB0019.namprd12.prod.outlook.com (2603:10b6:405:4d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Mon, 20 Jun
+ 2022 03:00:48 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5353.021; Mon, 20 Jun 2022
+ 03:00:48 +0000
+Date:   Mon, 20 Jun 2022 00:00:46 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, kwankhede@nvidia.com,
+        corbet@lwn.net, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        kevin.tian@intel.com, jchrist@linux.ibm.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFT][PATCH v1 6/6] vfio: Replace phys_pfn with phys_page for
+ vfio_pin_pages()
+Message-ID: <20220620030046.GB5219@nvidia.com>
+References: <20220616235212.15185-1-nicolinc@nvidia.com>
+ <20220616235212.15185-7-nicolinc@nvidia.com>
+ <YqxBLbu8yPJiwK6Z@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqxBLbu8yPJiwK6Z@infradead.org>
+X-ClientProxiedBy: MW4PR03CA0234.namprd03.prod.outlook.com
+ (2603:10b6:303:b9::29) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v5 2/8] arm64: extable: make uaaccess helper use
- extable type EX_TYPE_UACCESS_ERR_ZERO
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220528065056.1034168-1-tongtiangen@huawei.com>
- <20220528065056.1034168-3-tongtiangen@huawei.com>
- <Yqw6TP3MhEqnQ+2o@FVFF77S0Q05N>
- <4371a7c9-8766-9fee-2558-e6f43f06ad19@huawei.com>
- <0da734f3-5743-3df3-3f90-d92e5bd585ce@huawei.com>
- <Yq3HoUyEcnKKk1AY@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yq3HoUyEcnKKk1AY@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2de7e6a-82a8-4a66-969c-08da526913c0
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0019:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB0019D2922F422B39FE3AAB77C2B09@BN6PR1201MB0019.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cvUwHxvJ0d9ZrY6KdLjH1QRNynDD1lmglgs3+36BILUZy2e15LLb698YCE7WBuxinHPcCJDmpqka2qdM3WPV6i/9YYw6qMrewoTdw84+Day9TIPl7y2cVIGHqcDpB4RNnAJomeLl66LjMntifEKBMN9ZWVAIz2QrFaddK0T5dMFbQCWXIwiU3JZtj3Z2aPYU0rczDc/jgv5No0x8P7i1r7rE6Ea6yunO66k45tF2BEGtKWPA/D2O9YB7gy/F+NGlRSjlK+vxAJKomt/AA+Gyi8+LhseQdymiCQ7SEW2rS/WuTI7iO4mmAD8FPUIrOy4f3u7TvasCrbBd0/a5axg3E7GjvyKpDU9/4yQW5gfd+iFTAjBOlE1RbavD4mNTekPK0owMyYXivj2+OFuGp4rqvwNNWr4aZNX3fDRoSPDocoKnQo8zDyVyQSSGbw/WfZNrb/gAzb2W3X8M71MFUmMV3a+lwOc/U8yG7eA5Fg658aOo2lsQuxd7kmI1I7AwImlwMPcoUZP5mZ04kzYFkNsWuoATXN/uLkXvqGDPj3qD9eHpkdx51goX3vkaYrENjFrgr1OJbztCFAP8e3/VWd7UTjXNMZRcSMr19O5L4Yya3RSxKxD/1YnbOVk75xxYVitnUG/HTNM+xLpb0G14b2UPAQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(8936002)(7406005)(86362001)(2906002)(6506007)(7416002)(26005)(5660300002)(6512007)(4744005)(6916009)(6486002)(478600001)(316002)(38100700002)(33656002)(4326008)(66946007)(66556008)(8676002)(66476007)(36756003)(2616005)(1076003)(186003)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6YBtcR622JoiQ6Gly0oCoen9Zg34gBhHxC62H6QXb0rPY5tuv+0V+JR1VEsn?=
+ =?us-ascii?Q?QWzg3mfitlA/rw68Op6EkX8zAd0MI3iHzLevuRPN4ROjxIHDq2zCV2HFDfjQ?=
+ =?us-ascii?Q?uTtM7NSWb6c8yDNR1v1uESrC7D6LXv7eVnNNAb/l2kqFAFCGQ5kMDdVEJfb6?=
+ =?us-ascii?Q?1iDN/toXgltpFlxW8Uvpr2HwJfXjcrTOwi+a/+FwLUzli6RzGcK7lk4iPP/Y?=
+ =?us-ascii?Q?j2P87zgZwiyy6p6MIJMjzA6VzBl3D9q3KcIKpPIW6Fvs/cfCh7wS5nzX+zmS?=
+ =?us-ascii?Q?1Z4RxD1HSIJN0W+F1wpH5eqZDUThWGh5tV+O38c3uc6cDVILP4z0P5enMk2g?=
+ =?us-ascii?Q?KJqOEwjOTXLKOqjU/yXGHT+PQKauf7oxdJvl4aSOtYGd9VTZ/cC+8r/kvwFj?=
+ =?us-ascii?Q?BtJg8R6K4ah7C0v+nRHYxF4woIjBV2DLFsMeybgl1Ui3IiNPwMNhCsNR1ruh?=
+ =?us-ascii?Q?OiijQivuqY5oWhlDOaPQm/TIigsLmZIV8JDOifWZ1XXcxrDGE49zXqtyWsPc?=
+ =?us-ascii?Q?95EmUTVBKa8as/Od5vZSzSzFnzXmQpV/kfigH4VvVejfbGaHr/sjooJkgktR?=
+ =?us-ascii?Q?h8x1xnOB5Xe+/XarXT3Y+oAvzHgzMrCDAS3J0X9na32AsJqgWTAhR/OSXATu?=
+ =?us-ascii?Q?Jky49CgfP2oOGK6TEblCZIvKiHceGOpC0sR0bBpPq7wiXCcFe3uMEHMBMdxV?=
+ =?us-ascii?Q?HZbbdk6N0MlNOn0vK1fTgX7/hRW/on2E0LGQELS0G8FoldzN4UaNsAxqRZHG?=
+ =?us-ascii?Q?vwrjSeU/KvBiXAhqvX3186+WVh+olbXhavsuOweHN8xKMCYixihFq0iLTwdE?=
+ =?us-ascii?Q?T+vhfFpQ3aqczNVCy1QLpBPpQkDeVZdN6HeUEqg14LpCcVEmY7q2VLHXlBm9?=
+ =?us-ascii?Q?T/n3zgn4IC5g+0CfL+6H3ImeFxBlBH2fIKtAdyDGLsbnFJefigDcbeDYcWZL?=
+ =?us-ascii?Q?acblS8O481ewI3rV/3J4zU/k6q+t/TNXmqq8q9JbR/cUxrmevnVdytFq5wtU?=
+ =?us-ascii?Q?i6ff6VoJqgeCIrn9u9K1zmWyIErGfsZ2NNqjxGMkgknxwdGgSxysjxNpeLJ3?=
+ =?us-ascii?Q?xkzSQQJsVA5NDzyDp/SEPTxyYHCXI9c5i4lYIjJ4jScX7QzhFZidX+HdhW+t?=
+ =?us-ascii?Q?le9Hb+FePQMsvHVap/nAyg6yLCLv8xOHrqRwrQnmymDRZtOVGzKU4sTUysuS?=
+ =?us-ascii?Q?235BmaJt8vmTBev7hd5Qv0A5s+dW4yhnXsrTsriiGcmsSpzH7iA1Wn8h7976?=
+ =?us-ascii?Q?tIUGsAJi8LTa2MtUWZEBGSQ8kETEiU5M6s6JLd0Kl4PqX4idou4QIA9qTTPX?=
+ =?us-ascii?Q?LIjGcGA1f0f06+mEoXVGR/DSqgTZsO8nsC+trv0Wmz4VwIXoRN37m8pMfFTT?=
+ =?us-ascii?Q?Mdh3p9QVh2sGNxr2z7o8SmM0Z1gz7/jBmztU62ZXD8O05S/0npfN0YlfiQDs?=
+ =?us-ascii?Q?Ek9/u7ZQoAauuAAXbpb8+OcpqlYlKzyHNZZ6w6XIFQs0H7jAJCZX12n+5Ioq?=
+ =?us-ascii?Q?aabT/T2YElPRaz2Zq034R7pNmuj9IgkV4TobvU4Nv+P6DB4JUFUpl1AV37/G?=
+ =?us-ascii?Q?kY4i7Fn/RAg9i9WMiYZRXk80CUatlvjiYop0dahVbAVbDXlyznsxoWR2XGfp?=
+ =?us-ascii?Q?WMi914cGGs93rS4XbB0zxRarsAqn1ENTGaOZ1tAG0liG5idB2ce75ueuPkuj?=
+ =?us-ascii?Q?PVNcK0ynS0s5NleLOTdjWgjRtwSwGVT2CFv5uoQti8A1DP+4YrB51TB60Yq0?=
+ =?us-ascii?Q?mhjTC752FQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2de7e6a-82a8-4a66-969c-08da526913c0
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 03:00:48.3872
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Jo90rOh9cD8QXgbW+SpJcUxb2VWq+OPTOymBd1eqZuV+Nzuyg3N0shlicuRUgUAY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0019
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 17, 2022 at 01:54:05AM -0700, Christoph Hellwig wrote:
+> There is a bunch of code an comments in the iommu type1 code that
+> suggest we can pin memory that is not page backed.  
 
-
-在 2022/6/18 20:40, Mark Rutland 写道:
-> On Sat, Jun 18, 2022 at 04:42:06PM +0800, Tong Tiangen wrote:
->>>>> diff --git a/arch/arm64/include/asm/asm-extable.h
->>>>> b/arch/arm64/include/asm/asm-extable.h
->>>>> index 56ebe183e78b..9c94ac1f082c 100644
->>>>> --- a/arch/arm64/include/asm/asm-extable.h
->>>>> +++ b/arch/arm64/include/asm/asm-extable.h
->>>>> @@ -28,6 +28,14 @@
->>>>>        __ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
->>>>>        .endm
->>>>> +/*
->>>>> + * Create an exception table entry for uaccess `insn`, which
->>>>> will branch to `fixup`
->>>>> + * when an unhandled fault is taken.
->>>>> + * ex->data = ~0 means both reg_err and reg_zero is set to wzr(x31).
->>>>> + */
->>>>> +    .macro          _asm_extable_uaccess, insn, fixup
->>>>> +    __ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_ERR_ZERO, ~0)
->>>>> +    .endm
->>>>
->>>> I'm not too keen on using `~0` here, since that also sets other bits
->>>> in the
->>>> data field, and its somewhat opaque.
->>>>
->>>> How painful is it to generate the data fields as with the C version
->>>> of this
->>>> macro, so that we can pass in wzr explciitly for the two sub-fields?
->>>>
->>>> Other than that, this looks good to me.
->>>>
->>>> Thanks,
->>>> Mark.
->>>
->>> ok, will fix next version.
->>>
->>> Thanks,
->>> Tong.
->>
->> I tried to using data filelds as with C version, but here assembly code we
->> can not using operator such as << and |, if we use lsl and orr instructions,
->> the gpr will be occupied.
->>
->> So how about using 0x3ff directly here? it means err register and zero
->> register both set to x31.
-> 
-> I had a go at implementing this, and it seems simple enough. Please see:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/extable/asm-uaccess
-> 
-
-I made the following modifications, and the other parts are based on 
-your implementation:
-
-arch/arm64/include/asm/asm-extable.h
-[...]
-.macro          _asm_extable_uaccess, insn, fixup
-_ASM_EXTABLE_UACCESS(\insn, \fixup)
-.endm
-[...]
-
-
-The following errors are reported during compilation:
-[...]
-arch/arm64/lib/clear_user.S:45: Error: invalid operands (*ABS* and *UND* 
-sections) for `<<'
-[...]
-
-"<<" is invalid operands in assembly, is there something wrong with me?
+AFAIK you can.. The whole follow_pte() mechanism allows raw PFNs to be
+loaded into the type1 maps and the pin API will happily return
+them. This happens in almost every qemu scenario because PCI MMIO BAR
+memory ends up routed down this path.
 
 Thanks,
-Tong.
-> Mark.
-> 
-> .
+Jason

@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BC3551589
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E5255158C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240679AbiFTKNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S241161AbiFTKOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236474AbiFTKNE (ORCPT
+        with ESMTP id S241073AbiFTKNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:13:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB5912A92
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655719982; x=1687255982;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=Fzmu7C7+l4xuTEjVvRkgXFZwD/Iy08cHcIwmXQAaB/8=;
-  b=jLUORwFHswBlsZvcBddegdD8/3IknzXMCcklaMzDotZICkSG/+HpLLJ3
-   HFMWkx+kkZPIWpcAbkde7MUyuuiD5VvRfo7gopgIkghCbdlfUM9HXm7dJ
-   TYBoLjAIQYfJg0X+yi96qE7fmb4CRK1uyHnBIjpog7tGHnvExxzUulIx4
-   /HW0A8HnGlyrROC4FWq1ICgUSgbyUPHiTilvqy4exIn0vMj4sI3RA9MS/
-   IFdYwG5bjD5QRoPW87uUnDALsA7njRo5ET+0GCIBmIhjHBkiYqqLBnA/j
-   OY5OMveDU2M1H3KRjUdl10nScvMR99eGrw+5cmRG9ECJCTldavVmnLnBe
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341539931"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341539931"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:13:01 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="643048954"
-Received: from hkanchar-mobl.gar.corp.intel.com (HELO localhost) ([10.252.36.6])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:12:57 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     zys.zljxml@gmail.com, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     bob.beckett@collabora.com, matthew.auld@intel.com,
-        thomas.hellstrom@linux.intel.com, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>
-Subject: Re: [PATCH] drm/i915/gem: remove unused assignments
-In-Reply-To: <20220620100216.1791284-1-zys.zljxml@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220620100216.1791284-1-zys.zljxml@gmail.com>
-Date:   Mon, 20 Jun 2022 13:12:55 +0300
-Message-ID: <878rprtzh4.fsf@intel.com>
+        Mon, 20 Jun 2022 06:13:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CB113DEC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:13:42 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso9882029pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Z21gJDBz+/e/yL0nifaa2vwAc9o2edhVlm8S1yTu95I=;
+        b=kcHTLg7RgJMawzs3S7C4B4EqaDwaQPnG43f+MF/r3Nbvp4D0tiyEPbITC3ta7I7o9I
+         9NXbOU7Jlqk7NbGLQzM/l/NcYVMP+0rwY2NVWafT/iY6aA7aONkwq/azSUiX//OGFCK7
+         Bdd/Elkc+sBGiWwFtChg5zS1k84HCK3HOurBw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Z21gJDBz+/e/yL0nifaa2vwAc9o2edhVlm8S1yTu95I=;
+        b=T6u/UiUA3S3HzQpv1l+8FRFgvSicrzciUnVl0Fed7Z1f65WiOcfpIrN6ym+UDo6BNw
+         CbJuImZyj+lrFt7WKaBRJkYqwSA7dBOnAFtJCCD2VwSZT3IkQeJLTKiJdvp/GTL08m6B
+         6/spwQZU+A+qYqKe3Ir3k5fwfadjL7ftyA/3QcHwPNzWkF+aXn4oeCTz0ySUIvpezJj1
+         SIvg9+5AyGSlZaheGc1qN9ZY0Tk2JBrBzVam/d45n7pBs3eFS6iPplejvByadyePnsrK
+         bDdalJkkFgVL1q9ZWdJG2KnTYpYtDDtKofREnBwIwcHXN7AKbCUkoyYRw1tfQz/YTozu
+         ertQ==
+X-Gm-Message-State: AJIora/lLGuGdnR+45rHOwH05CQByrdWItdpuCHptHgOChDYnlsaX1aR
+        jnA4dB1JShYY9mJUL5zMW8WYoQ==
+X-Google-Smtp-Source: AGRyM1vCJHuC2W4v8uRR42/q9Ryt22IoRnv4kwt7mVdSaglOa1POvPq65FmX0P0an779Z6e44wtZeg==
+X-Received: by 2002:a17:90b:33d2:b0:1ea:b599:9e89 with SMTP id lk18-20020a17090b33d200b001eab5999e89mr25913130pjb.88.1655720022020;
+        Mon, 20 Jun 2022 03:13:42 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:7080:f919:392f:bc5c])
+        by smtp.gmail.com with ESMTPSA id h4-20020a170902680400b001640aad2f71sm8294955plk.180.2022.06.20.03.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 03:13:41 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 19:13:37 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Boot stall regression from "printk for 5.19" merge
+Message-ID: <YrBIURn7lxykWghw@google.com>
+References: <20220619204949.50d9154d@thinkpad>
+ <YrAEUM20n3Rc4aOn@google.com>
+ <20220620120234.5a65ac97@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220620120234.5a65ac97@thinkpad>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022, zys.zljxml@gmail.com wrote:
-> From: katrinzhou <katrinzhou@tencent.com>
->
-> The variable ret is reassigned and the value EINVAL is never used.
-> Thus, remove the unused assignments.
+On (22/06/20 12:02), Marek Behún wrote:
+> > On (22/06/19 20:49), Marek Behún wrote:
+> > [..]
+> > > causes a regression on arm64 (Marvell CN9130-CRB board) where the
+> > > system boot freezes in most cases (and is unusable until restarted by
+> > > watchdog), or, in some cases boots, but the console output gets mangled
+> > > for a while (the serial console spits garbage characters).  
+> > 
+> > Can you please try disabling console kthreads and see how the boot
+> > process goes? Just `return 0` from printk_activate_kthreads() (I think
+> > this should do the trick).
+> 
+> This indeed makes the problem go away...
 
-It's obviously a bug, but it's not obvious just throwing the code away
-is the fix. Maybe there's a missing "else" instead.
+Oh... OK. Didn't expect that :)
 
-BR,
-Jani.
+> > > The garbage example:
+> > > 
+> > >   ...
+> > >   [    0.920951] raid6: using neon recovery algorithm
+> > >   [    0.921228] iommu: Default domain type: Translated
+> > >   %
+> > > 
+> > >           gb@k+cFL/[    4.954974] DSA: tree 0 setup
+> > >   [    4.955286] cfg80211: Loading compiled-in X.509 certificates for regulatory database  
+> > 
+> > This is pretty suspicious. I don't see how console kthreads would
+> > corrupt the output. I suspect that something else is going on, some
+> > memory corruption, etc.
+> 
+> Maybe multiple threads are writing to serial registers, or something...
 
-
->
-> Addresses-Coverity: ("Unused value")
-> Fixes: d4433c7600f7 ("drm/i915/gem: Use the proto-context to handle create parameters (v5)")
-> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
-> ---
->  drivers/gpu/drm/i915/gem/i915_gem_context.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> index ab4c5ab28e4d..d5ef5243673a 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> @@ -931,8 +931,6 @@ static int set_proto_ctx_param(struct drm_i915_file_private *fpriv,
->  		break;
->  
->  	case I915_CONTEXT_PARAM_PERSISTENCE:
-> -		if (args->size)
-> -			ret = -EINVAL;
->  		ret = proto_context_set_persistence(fpriv->dev_priv, pc,
->  						    args->value);
->  		break;
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+That's possible. Console drivers usually should grab port->lock for
+write(), but maybe something is missing in the driver you use. What
+console driver are you using?

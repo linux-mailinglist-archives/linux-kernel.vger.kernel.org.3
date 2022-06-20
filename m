@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479785526EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FF45526E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243856AbiFTWU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S233126AbiFTWVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238367AbiFTWUl (ORCPT
+        with ESMTP id S244759AbiFTWUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:20:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12331B7A2;
-        Mon, 20 Jun 2022 15:20:35 -0700 (PDT)
+        Mon, 20 Jun 2022 18:20:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7191BE82;
+        Mon, 20 Jun 2022 15:20:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9658612EE;
-        Mon, 20 Jun 2022 22:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C923C341C7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ABB7B8164E;
+        Mon, 20 Jun 2022 22:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8C3C341CF;
         Mon, 20 Jun 2022 22:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1655763634;
-        bh=n7HI6sinDisynSHP103tNG9aSbp5KKiDzOeA9d+Lwk4=;
+        bh=lyNCAIvYhX/+kHwlAad/y9gHMFmiZO/u932Jluyi4aA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X+EiZMQ2CeLc0OCOiNDByl4SFY431IAMQJzhF/GJ2gNmNv/wfnStYi7UnI+G7tOU6
-         1tFl6lUMNtgwg68VXBg30JR7ivyYSmyPvoTaF1YLS8p5amUaomjhUNbMNZgYxxl2IL
-         W11PuCcOE3+rE8ULVCXAtX3RQslQr9Zl+CFt/Frfuc6aA2TQ3e4uzS15y4f7MfoU9R
-         zH3ROWCcidwKZDNkEX+3HTpQT71CDWTa9FME4T1/QLlJ8lwjKiljfyMWMnFWvP0DRz
-         tckubD8SOGb3UQSFmOnN1AbOEruX9LLhXJ9gV8Q+onlz93n+2TSxAF7FvUC74OSlAu
-         VzL6Ay5T9J7uw==
+        b=AjIFk5YxhEODc2yYfvgjOXXFHf3Ik38rQd+LeQZ+Oek9uUtSZ38cy8J4RZ5+l8XFm
+         VaGTwCO0bXakKzgxFSgEVtK9UY2il7+RWQB5d4UhfLFHZ2CpRVi2ae9cVhnm/gQNbF
+         G5UKOuoFendHYd+tezPrBS6rqLpFqaoU6c3BWoiKv1sdt223xkCpQ2ukK7mY8z8HRq
+         HPvGFZRgHmnCv3Vov0EbAtgGgrnE168NzYsNNwSbZgpVYDQypzNhn5ntHLf1DbaWcW
+         pbOaB5ccgWHX/Mce4mAr+4kwdYKKRkZSymeKTQzMnIij7QUwx+cTX/X/h0vEZAC9Ji
+         ugsXHrG/y59Tg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 05AF35C0ADC; Mon, 20 Jun 2022 15:20:34 -0700 (PDT)
+        id 078495C0B06; Mon, 20 Jun 2022 15:20:34 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 05/12] rcu: Forbid RCU_STRICT_GRACE_PERIOD in TINY_RCU kernels
-Date:   Mon, 20 Jun 2022 15:20:25 -0700
-Message-Id: <20220620222032.3839547-5-paulmck@kernel.org>
+        rostedt@goodmis.org, Chen Zhongjin <chenzhongjin@huawei.com>,
+        stable@vger.kernel.org, Chen jingwen <chenjingwen6@huawei.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 06/12] locking/csd_lock: Change csdlock_debug from early_param to __setup
+Date:   Mon, 20 Jun 2022 15:20:26 -0700
+Message-Id: <20220620222032.3839547-6-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
 References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
@@ -56,28 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RCU_STRICT_GRACE_PERIOD Kconfig option does nothing in kernels
-built with CONFIG_TINY_RCU=y, so this commit adjusts the dependencies
-to disallow this combination.
+From: Chen Zhongjin <chenzhongjin@huawei.com>
 
+The csdlock_debug kernel-boot parameter is parsed by the
+early_param() function csdlock_debug().  If set, csdlock_debug()
+invokes static_branch_enable() to enable csd_lock_wait feature, which
+triggers a panic on arm64 for kernels built with CONFIG_SPARSEMEM=y and
+CONFIG_SPARSEMEM_VMEMMAP=n.
+
+With CONFIG_SPARSEMEM_VMEMMAP=n, __nr_to_section is called in
+static_key_enable() and returns NULL, resulting in a NULL dereference
+because mem_section is initialized only later in sparse_init().
+
+This is also a problem for powerpc because early_param() functions
+are invoked earlier than jump_label_init(), also resulting in
+static_key_enable() failures.  These failures cause the warning "static
+key 'xxx' used before call to jump_label_init()".
+
+Thus, early_param is too early for csd_lock_wait to run
+static_branch_enable(), so changes it to __setup to fix these.
+
+Fixes: 8d0968cc6b8f ("locking/csd_lock: Add boot parameter for controlling CSD lock debugging")
+Cc: stable@vger.kernel.org
+Reported-by: Chen jingwen <chenjingwen6@huawei.com>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/Kconfig.debug | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/smp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-index 9b64e55d4f615..4da05beb13d79 100644
---- a/kernel/rcu/Kconfig.debug
-+++ b/kernel/rcu/Kconfig.debug
-@@ -121,7 +121,7 @@ config RCU_EQS_DEBUG
+diff --git a/kernel/smp.c b/kernel/smp.c
+index dd215f4394264..650810a6f29b3 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -174,9 +174,9 @@ static int __init csdlock_debug(char *str)
+ 	if (val)
+ 		static_branch_enable(&csdlock_debug_enabled);
  
- config RCU_STRICT_GRACE_PERIOD
- 	bool "Provide debug RCU implementation with short grace periods"
--	depends on DEBUG_KERNEL && RCU_EXPERT && NR_CPUS <= 4
-+	depends on DEBUG_KERNEL && RCU_EXPERT && NR_CPUS <= 4 && !TINY_RCU
- 	default n
- 	select PREEMPT_COUNT if PREEMPT=n
- 	help
+-	return 0;
++	return 1;
+ }
+-early_param("csdlock_debug", csdlock_debug);
++__setup("csdlock_debug=", csdlock_debug);
+ 
+ static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
+ static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
 -- 
 2.31.1.189.g2e36527f23
 

@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E466B55187D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B256655188D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242465AbiFTMLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S242228AbiFTMNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242212AbiFTMKn (ORCPT
+        with ESMTP id S242540AbiFTMMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:10:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95B2183BF;
-        Mon, 20 Jun 2022 05:10:41 -0700 (PDT)
-X-UUID: 149b2f7f0e0e4b7eb0e746f6d63ee9ce-20220620
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:48a02300-3528-45e5-b8ad-aa22053b6c2c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:7f2703ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 149b2f7f0e0e4b7eb0e746f6d63ee9ce-20220620
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1882312587; Mon, 20 Jun 2022 20:10:32 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 20 Jun 2022 20:10:31 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Mon, 20 Jun 2022 20:10:31 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v12 14/14] drm/mediatek: dpi: Add matrix_sel helper
-Date:   Mon, 20 Jun 2022 20:10:28 +0800
-Message-ID: <20220620121028.29234-15-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+        Mon, 20 Jun 2022 08:12:38 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E030C19000
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:12:19 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f39so1307849lfv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:12:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Uab/2HO4VZKS1xT506icMdtE4fNwoDlTTwoN0m1b7PY=;
+        b=ey0kfhCEuOTLZdukxlfLw+Ij23qOFjvay6zcA4VgG0LK9+f5awx4v7C9VlCJHHRmff
+         lBc164wfYx7L0R8ofjF1dNEQlPk83qSSTLKt6FjsAEfI+eCETWwTlpTxlynkdIC1vZB4
+         39/WCMsqUvT3rdlJ61p6oNURhAyVl9DrD+9qCWslTaYzSuPcqQB/83DmVrZbK1gRFqwB
+         eKRTsQHEHHIlLrB9xf47kqMxkllUv7q/ol//3V3b8+E7WR/pavpV7ErnRmxFqd4ckpaS
+         rN8cKeNZ4B9vwGTMvgFIggrsb5OJrTvr0+KZLMrNI/ItCGiZqQ0Pq6BshfbiZ5Pn35QQ
+         hDvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Uab/2HO4VZKS1xT506icMdtE4fNwoDlTTwoN0m1b7PY=;
+        b=mSx8R8+cYDlO3UgWafIHlxhWCy5PbJmxIK9XSGIKDCWXJBa/cq5QTThzx1tqhtgqDZ
+         Dd3DhZIC0nE4iVzru+h3Ea7rD7UHKPUpLDXqAKn9wMLo/ob4WNVMM9djQfhxv4G55pep
+         YsXaQhBfQXq/Dt5YolQolSUFJu6HJVsbJEdx+Iq5B44NS7nlqrIweHLevTtX29wOg19N
+         o2bcslk7SmI1XCPdQSKry9NLKzKUfSQBJAtrShdZAGI1xUrGvdYNJIlNSfrVIPLEtpru
+         DQGvo0FSWdPxO5PzeqARuVB1mDmT0UUevZvEidNaGFMB8vYiNv6IaXPS658/60AJYbTX
+         83rw==
+X-Gm-Message-State: AJIora9Gh4VCVGv+ihzxuUe+FG80/3Dvd0cbroJpahpm6AazDv9/jp+7
+        MWWnhMIU8iaUrQMXKP34AjswQIcEIe2HPA==
+X-Google-Smtp-Source: AGRyM1tBYuf4F4p5cA9ECpQSeqMK+UoNTzDgMsHfYvx/ecuvA836+ueq/saRrTHwBRN3ZPPxa7mbCw==
+X-Received: by 2002:ac2:442d:0:b0:478:ed89:927f with SMTP id w13-20020ac2442d000000b00478ed89927fmr13898482lfl.545.1655727128462;
+        Mon, 20 Jun 2022 05:12:08 -0700 (PDT)
+Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
+        by smtp.gmail.com with ESMTPSA id v13-20020a05651203ad00b00478f3ecd062sm1745074lfp.167.2022.06.20.05.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 05:12:07 -0700 (PDT)
+From:   Marcin Wojtas <mw@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        jirislaby@kernel.org, miquel.raynal@bootlin.com, mw@semihalf.com,
+        jaz@semihalf.com, upstream@semihalf.com,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v2] serial: 8250: dw: enable using pdata with ACPI
+Date:   Mon, 20 Jun 2022 14:10:46 +0200
+Message-Id: <20220620121046.1307412-1-mw@semihalf.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,99 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Ranquet <granquet@baylibre.com>
+Commit ffd381445eac ("serial: 8250: dw: Move the USR register to pdata")
+caused NULL-pointer dereference when booting with ACPI by unconditional
+usage of the recently added pdata.
 
-Matrix selection is a new feature for both dpi and dpintf of MT8195.
-Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
-register depending on the color format.
+In order to fix that and prevent similar issues in future, hook the
+default version of this structure in dw8250_acpi_match table.
+While at it, sort all entries alphabetically.
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Fixes: ffd381445eac ("serial: 8250: dw: Move the USR register to pdata")
+Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c      | 29 +++++++++++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
- 2 files changed, 32 insertions(+)
+Changelog v1->v2
+* Sort all dw8250_acpi_match entries alphabetically,
+* fix commit id in the log,
+* Add R-B of Ilpo and Andy
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 220e9b18e2cd..8a9151cb1622 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -135,6 +135,7 @@ struct mtk_dpi_conf {
- 	u32 channel_swap_shift;
- 	u32 yuv422_en_bit;
- 	u32 csc_enable_bit;
-+	bool matrx_sel_support;
+
+ drivers/tty/serial/8250/8250_dw.c | 24 ++++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index f57bbd32ef11..b1ab088fbe6e 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -773,18 +773,18 @@ static const struct of_device_id dw8250_of_match[] = {
+ MODULE_DEVICE_TABLE(of, dw8250_of_match);
+ 
+ static const struct acpi_device_id dw8250_acpi_match[] = {
+-	{ "INT33C4", 0 },
+-	{ "INT33C5", 0 },
+-	{ "INT3434", 0 },
+-	{ "INT3435", 0 },
+-	{ "80860F0A", 0 },
+-	{ "8086228A", 0 },
+-	{ "APMC0D08", 0},
+-	{ "AMD0020", 0 },
+-	{ "AMDI0020", 0 },
+-	{ "AMDI0022", 0 },
+-	{ "BRCM2032", 0 },
+-	{ "HISI0031", 0 },
++	{ "80860F0A", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "8086228A", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "AMD0020", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "AMDI0020", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "AMDI0022", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "APMC0D08", (kernel_ulong_t)&dw8250_dw_apb},
++	{ "BRCM2032", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "HISI0031", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "INT33C4", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "INT33C5", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "INT3434", (kernel_ulong_t)&dw8250_dw_apb },
++	{ "INT3435", (kernel_ulong_t)&dw8250_dw_apb },
+ 	{ },
  };
- 
- static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
-@@ -398,6 +399,31 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
- 		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0, EDGE_SEL_EN);
- }
- 
-+static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
-+			       enum mtk_dpi_out_color_format format)
-+{
-+	u32 matrix_sel = 0;
-+
-+	if (!dpi->conf->matrx_sel_support) {
-+		dev_info(dpi->dev, "matrix_sel is not supported.\n");
-+		return;
-+	}
-+
-+	switch (format) {
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
-+	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
-+	case MTK_DPI_COLOR_FORMAT_XV_YCC:
-+		if (dpi->mode.hdisplay <= 720)
-+			matrix_sel = 0x2;
-+		break;
-+	default:
-+		break;
-+	}
-+	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel, INT_MATRIX_SEL_MASK);
-+}
-+
- static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 					enum mtk_dpi_out_color_format format)
- {
-@@ -405,6 +431,7 @@ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
- 		mtk_dpi_config_yuv422_enable(dpi, false);
- 		mtk_dpi_config_csc_enable(dpi, true);
-+		mtk_dpi_matrix_sel(dpi, format);
- 		if (dpi->conf->swap_input_support)
- 			mtk_dpi_config_swap_input(dpi, false);
- 		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-@@ -412,6 +439,7 @@ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
- 		mtk_dpi_config_yuv422_enable(dpi, true);
- 		mtk_dpi_config_csc_enable(dpi, true);
-+		mtk_dpi_matrix_sel(dpi, format);
- 		if (dpi->conf->swap_input_support)
- 			mtk_dpi_config_swap_input(dpi, true);
- 		else
-@@ -951,6 +979,7 @@ static const struct mtk_dpi_conf mt8195_dpintf_conf = {
- 	.channel_swap_shift = DPINTF_CH_SWAP,
- 	.yuv422_en_bit = DPINTF_YUV422_EN,
- 	.csc_enable_bit = DPINTF_CSC_ENABLE,
-+	.matrx_sel_support = true,
- };
- 
- static int mtk_dpi_probe(struct platform_device *pdev)
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-index f7f0272dbd6a..96c117202d0d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-@@ -230,4 +230,7 @@
- #define EDGE_SEL_EN			BIT(5)
- #define H_FRE_2N			BIT(25)
- 
-+#define DPI_MATRIX_SET		0xB4
-+#define INT_MATRIX_SEL_MASK	(0x1F << 0)
-+
- #endif /* __MTK_DPI_REGS_H */
+ MODULE_DEVICE_TABLE(acpi, dw8250_acpi_match);
 -- 
-2.18.0
+2.29.0
 

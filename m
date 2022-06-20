@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69926550E2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344A6550E0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238534AbiFTApK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S238561AbiFTApN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238415AbiFTAnu (ORCPT
+        with ESMTP id S238418AbiFTAnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:43:50 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FBAC3C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:44 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 88so10493708qva.9
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:44 -0700 (PDT)
+        Sun, 19 Jun 2022 20:43:51 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8949325F
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:47 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id c83so6889035qke.3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:43:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fhCWzyYhHQUfgLaJoA4/luR9p1DQeXQQcw2AdhNu860=;
-        b=LNOtI32q4WsSf62+lp4sxFsq0bvgPEpDH7tubWopigkHyJasJcMXtxp6uhe/k056YK
-         mHTCf4zl7jPsNE7ZDlNYCWbiEDRe7d2d6hBWTTvbyfN8QNhTuGyfoiOgpVBh5jbwxYNb
-         wN4IEHaZ5JKnXGFqcxJcgQ356aOF+2/EiAu4mYPbQ0G9LRzp2dF14oqFlIfb+GgMCboF
-         /svbE10GemkPJ/8PCTtYi25sf4XvEi7xd2lfrcq3Sikn1ZC55Ns7T+T4SJUvkWF/Xl6a
-         pBoPIuzg4YVajlJR0+oHaAKlw9vN0nVxPk56KJucHUH+c7dt8C7G5JCpd/2Psqi2xQZ3
-         7pBA==
+        bh=X/vHm1f3WoFXRt6JUj3SilR7opGdtbcYgwZ9r1atlS8=;
+        b=merDOSNMLYB6urSNHfDzTPlO9cTnNP2/a+Co95AIL+tp45UY1ESEm0GqSiRzYXGjPq
+         lKJyO17f8asxDNlFx3YoHH74RPB12Y1OXa3miHqcxl3nepJtQLBUO9Vv5UHdySoFPh8K
+         PGKEHVHhgt9ZYBn4DvdxjpTQB5GqGkaI+LQAnRZWVQ8SX7TbDJNlwW2CW67lMlBrQaqM
+         fHJMTDRHSDe1GvdIBQNm34YtHj7FhTmUjvYWB9DPu2p8WHbZTwICJGdaIzqbiHLk2tuN
+         ZC81jsJMxRKZ1U5KcvigCc/Eahf5rQRytJ7Y04hPgHNB3cyrUwmXC8gLtHcpNZqCkTdj
+         ugFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fhCWzyYhHQUfgLaJoA4/luR9p1DQeXQQcw2AdhNu860=;
-        b=z96r/GoEqttVBg+D2vPEmJNY2HAKK7gvszh9TtNcksD3b3rGedcnUprBDdt7rePmHt
-         pEB52qvzKvCt2OeanmObN9B7/AeIzZ1IwHL8oCudNCFeH5iFmM/KrqVeCPUerUMI8R0S
-         kHpK+kgGHBvLg0tDuz/NmedaO6mX3Pz0FjRg13fIfxTH4yeIFaqwskNStqrHTkFTKr9J
-         qxSwXWy+UYZBZ/WHEwgh8SwKuQ7MXmS5f0jYoXPIlFqgcknT+1FFP0gyb+3Zy/BoyNNN
-         m9Fqkro0zRHpG63Lil8B/qxZeGfRKWZHbcfo6yF/Je9nm/U2rgM+CxFHP/kLTP+lT00c
-         e6Nw==
-X-Gm-Message-State: AJIora+oujuytRowK/3NeG+bkRnVS2DJa5HAFjde09O9L3T75BC4QZtH
-        4faD/d5fEfvtHt7vG/Ir2CTzLpGXEaEKW0I=
-X-Google-Smtp-Source: AGRyM1uK4SE0R2rC8ICXr/1qyDRW063L27/c5mYvQJDhXdbWpPTz/vsIaae7XwlBInXy3JqUohNKFQ==
-X-Received: by 2002:a05:6214:23c8:b0:45f:b582:346e with SMTP id hr8-20020a05621423c800b0045fb582346emr17516453qvb.109.1655685823664;
-        Sun, 19 Jun 2022 17:43:43 -0700 (PDT)
+        bh=X/vHm1f3WoFXRt6JUj3SilR7opGdtbcYgwZ9r1atlS8=;
+        b=RNpibXciZBe1JI2iQu6GRfQih+FQnTZir4KnBSwwf0XK/EptASStvZ9mWFD6EY35Mv
+         6Ld5Wx3S5b6lYCf2lnt8SDUzgCzjVXQBbqMEi7iLlCT8xk5gwF0MCSVpaemnc+za+JQ0
+         HhsglhcWB0/zVVSYFfXeeXM09tCVceReNY8maWT2HTzyCci8Efa5b6ycH9k64oBCNA0N
+         T7qUIxQNJ9Bs3o5wVf9D6WqpJPGzIQaPVau1Ko47VPzKL/Sfn/vG4L9D+YBi+OyFfCg4
+         //37bewFjBRXrmQDvPPpJnMM4hNTKePNLrTMyByOfBa5hYvaQUG8h1ov7J3KuoezzYRK
+         wMQQ==
+X-Gm-Message-State: AJIora81UwKzHr5tR0n857GjpEXxMw7tHF4Tsh2W1aOSYbvsrZ0m/ZcW
+        oWXc4pavf4X5FS9k7GbSQO9U43e6bVkj+Hk=
+X-Google-Smtp-Source: AGRyM1shE4oiEAmMw5aoUvXut3DE6PwvQ/fgFRcao0IJAPOeGEA0eOkJ0l5lxSyNWcz00L20yvlfpg==
+X-Received: by 2002:a05:620a:2720:b0:6a7:c28:3afa with SMTP id b32-20020a05620a272000b006a70c283afamr14575088qkp.438.1655685825745;
+        Sun, 19 Jun 2022 17:43:45 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id b198-20020a3767cf000000b0069fc13ce1f3sm10580202qkc.36.2022.06.19.17.43.41
+        by smtp.gmail.com with ESMTPSA id bq38-20020a05620a46a600b006a785ba0c25sm10096007qkb.77.2022.06.19.17.43.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:43:42 -0700 (PDT)
+        Sun, 19 Jun 2022 17:43:44 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        willy@infradead.org, Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH v4 30/34] tracing: trace_events_synth: Convert to printbuf
-Date:   Sun, 19 Jun 2022 20:42:29 -0400
-Message-Id: <20220620004233.3805-31-kent.overstreet@gmail.com>
+        willy@infradead.org
+Subject: [PATCH v4 31/34] d_path: prt_path()
+Date:   Sun, 19 Jun 2022 20:42:30 -0400
+Message-Id: <20220620004233.3805-32-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,87 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts from seq_buf to printbuf
+This implements a new printbuf version of d_path()/mangle_path(), which
+will replace the seq_buf version.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
 ---
- kernel/trace/trace_events_synth.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ fs/d_path.c            | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/dcache.h |  1 +
+ 2 files changed, 36 insertions(+)
 
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 5e8c07aef0..627e0e45f0 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -5,13 +5,14 @@
-  * Copyright (C) 2015, 2020 Tom Zanussi <tom.zanussi@linux.intel.com>
-  */
- 
--#include <linux/module.h>
- #include <linux/kallsyms.h>
--#include <linux/security.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/printbuf.h>
-+#include <linux/rculist.h>
-+#include <linux/security.h>
+diff --git a/fs/d_path.c b/fs/d_path.c
+index e4e0ebad1f..1bd9e85f2f 100644
+--- a/fs/d_path.c
++++ b/fs/d_path.c
+@@ -5,6 +5,7 @@
+ #include <linux/fs_struct.h>
+ #include <linux/fs.h>
  #include <linux/slab.h>
- #include <linux/stacktrace.h>
--#include <linux/rculist.h>
- #include <linux/tracefs.h>
++#include <linux/printbuf.h>
+ #include <linux/prefetch.h>
+ #include "mount.h"
  
- /* for gfp flag names */
-@@ -611,7 +612,7 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
- 	const char *prefix = NULL, *field_type = argv[0], *field_name, *array;
- 	struct synth_field *field;
- 	int len, ret = -ENOMEM;
--	struct seq_buf s;
-+	struct printbuf s;
- 	ssize_t size;
+@@ -294,6 +295,40 @@ char *d_path(const struct path *path, char *buf, int buflen)
+ }
+ EXPORT_SYMBOL(d_path);
  
- 	if (!strcmp(field_type, "unsigned")) {
-@@ -666,17 +667,15 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
- 	if (!field->type)
- 		goto free;
++/**
++ * prt_path - format a path for output
++ * @out: printbuf to output to
++ * @path: path to write into the sequence buffer.
++ * @esc: set of characters to escape in the output
++ *
++ * Write a path name into the sequence buffer.
++ *
++ * Returns 0 on success, or error code from d_path
++ */
++int prt_path(struct printbuf *out, const struct path *path, const char *esc)
++{
++	char *p, *buf;
++	size_t size;
++again:
++	buf = out->buf + out->pos;
++	size = printbuf_remaining_size(out);
++
++	p = d_path(path, buf, size);
++	if (IS_ERR(p)) {
++		printbuf_make_room(out, max_t(size_t, 64, size * 2));
++		if (printbuf_remaining_size(out) > size)
++			goto again;
++
++		return PTR_ERR(p);
++	}
++
++	p = mangle_path(buf, p, esc);
++	if (p)
++		out->pos += p - buf;
++	return 0;
++}
++EXPORT_SYMBOL(prt_path);
++
+ /*
+  * Helper function for dentry_operations.d_dname() members
+  */
+diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+index f5bba51480..2181144f9f 100644
+--- a/include/linux/dcache.h
++++ b/include/linux/dcache.h
+@@ -293,6 +293,7 @@ extern char *d_absolute_path(const struct path *, char *, int);
+ extern char *d_path(const struct path *, char *, int);
+ extern char *dentry_path_raw(const struct dentry *, char *, int);
+ extern char *dentry_path(const struct dentry *, char *, int);
++extern int prt_path(struct printbuf *, const struct path *, const char *);
  
--	seq_buf_init(&s, field->type, len);
-+	s = PRINTBUF_EXTERN(field->type, len);
- 	if (prefix)
--		seq_buf_puts(&s, prefix);
--	seq_buf_puts(&s, field_type);
-+		prt_str(&s, prefix);
-+	prt_str(&s, field_type);
- 	if (array)
--		seq_buf_puts(&s, array);
--	if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
-+		prt_str(&s, array);
-+	if (WARN_ON_ONCE(!printbuf_remaining(&s)))
- 		goto free;
+ /* Allocation counts.. */
  
--	s.buffer[s.len] = '\0';
--
- 	size = synth_field_size(field->type);
- 	if (size < 0) {
- 		if (array)
-@@ -694,13 +693,12 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
- 			if (!type)
- 				goto free;
- 
--			seq_buf_init(&s, type, len);
--			seq_buf_puts(&s, "__data_loc ");
--			seq_buf_puts(&s, field->type);
-+			s = PRINTBUF_EXTERN(type, len);
-+			prt_str(&s, "__data_loc ");
-+			prt_str(&s, field->type);
- 
--			if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
-+			if (WARN_ON_ONCE(!printbuf_remaining(&s)))
- 				goto free;
--			s.buffer[s.len] = '\0';
- 
- 			kfree(field->type);
- 			field->type = type;
 -- 
 2.36.1
 

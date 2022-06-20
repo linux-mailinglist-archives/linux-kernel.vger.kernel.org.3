@@ -2,355 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED271552147
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860A8552157
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235672AbiFTPjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S242211AbiFTPkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiFTPjR (ORCPT
+        with ESMTP id S235125AbiFTPkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:39:17 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD4A17046
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:39:13 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 0ACF23CBBD2;
-        Mon, 20 Jun 2022 11:39:12 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id y-VUrG4DhxVR; Mon, 20 Jun 2022 11:39:11 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 33B6A3CBA6F;
-        Mon, 20 Jun 2022 11:39:11 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 33B6A3CBA6F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1655739551;
-        bh=9zRuohSGAoSGZb82tVtY7ZR/RFIPydsV5XjODOWEVSs=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=qzbhBjCyCNQ6d8uEIN3SaBwtAK5QqAr1SR2WgWX/pmdsDMnnEHr/RLRYg9GWP3G8s
-         bUi1iWvjYiQl9zuNT66VAzwwSxcPMUQW5E8q+fV9LkcoVxppc8UFkGtpds3qGnwGYf
-         mOMJAxh87kvUpLf0zauSeni5i0jmqMpkTaB+DSkp4kt5QxVavq+hVMWrO6Pivk9ke2
-         JRfOBV1+7P+rcAAXSePKokXW5zyggbgRDiG6wlvqsKb0vQMM/+4wPeGjlU8zR906Fb
-         vOJ3Pfxy6aSvE9WjQQNQAOGHKBTu+Q6SM756excIufWLi/OE0++Lq3mAAY4HTT4bGy
-         kXJzdjUjobFKg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DegIBfWkNydh; Mon, 20 Jun 2022 11:39:11 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id F14E03CBC35;
-        Mon, 20 Jun 2022 11:39:10 -0400 (EDT)
-Date:   Mon, 20 Jun 2022 11:39:10 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Bui Quang Minh <minhquangbui99@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Brian Gerst <brgerst@gmail.com>
-Message-ID: <258546133.12151.1655739550814.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220618182515.95831-1-minhquangbui99@gmail.com>
-References: <20220618182515.95831-1-minhquangbui99@gmail.com>
-Subject: Re: [PATCH] rseq: x86: Fix rseq_cs get cleared when returning from
- signal handler
+        Mon, 20 Jun 2022 11:40:03 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452C19038;
+        Mon, 20 Jun 2022 08:40:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nFkw6ujbqsMmplRRN7CPmTwo+lXUr7z8vS9rAdIitPmc/3jRDbFyBWEieiVEzzx+/2x6TWOU9LuKy/+7Bx2N77iYV6pSVvnS3jxsDmvas5e1yCFAobuzfvLYW4VNz8/uIsott2kWALHhvwshKf9XPfJkizj9o1qUru9tdHDxWYsQC0oEgezAtyizy0GoiUpG/l9jzU7JesKp5y10RmxEyZITEWaNcsX8mX1B+7OcGjekG8ImJgGElHzVKkQ2iawzwZbHM4EY3fzxLphFmVEzeu3TVYuM0w9Cw6BHIe5+K/IgysL2XieOQkxPEB0629Cx5ykw60RVY+PAQ4/uE0IiAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nlN0ECtgKqc9UPB2Mw1zDNRx3uQQ6vHbqj8pAhUgp80=;
+ b=Sh/Gj5waDKWKLAYfBPooRasTD+YdwqSGDj4W6SvAwkoBD9X87d7ogRuRu8fw1LD4yH9S1CUa8mobWPFfyW+ShVu4GG07ITYhKbFr/hfhARjjs65Hj/SHl+/OdwjTD24l2KSRdXYy1uArJ8Ooa9mM2260QfYjqMX4/aFis5TYQfAm/BLaIK3RPDu8FQETMNmku9/gqeeIenZ4b9R4xGWYecMZZedo1ZjOQRLxmkULTaCTxvv3TlD/xCcxg+KHazS4khmTwC9A0VkoEjsZpPl9+7MemDOP3wB7OgD+aqSsp6CvoNFq+Frufog30SW3WH61IFID1sb2GPEFKUJ7td1v3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nlN0ECtgKqc9UPB2Mw1zDNRx3uQQ6vHbqj8pAhUgp80=;
+ b=Ly9VsLJaYcD3c+5L9/eSe00YYA2YFCyDkru91LAmgISrQJKHb1TzXOCZZV6uOtYdnqa1GMTxXKBu08TNDElJp/MNBEu9koh27GwYZV9YiAqZF4+C1qX8wJlAn/GZFJc0qNCQM+as7kkIPe2XH8GFlnItFk2zrcRfkgbfr3n3vmef8xoqA2rxwicMvYw2VN7P7eVF4Q9CzmqHGG9bNCFG2Ap9SK6K1ydllMFB1FbA2pnAUBZBCbVOaGOMFBuY7K9WFr693sysEd1WvzcLQMJqh/l8NBxhJJT2iTxzpItqW2W+5iVSO5Mv51UuEZNS6QzrCxcVOmTp7K6YQZBR9jKQQQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MWHPR12MB1438.namprd12.prod.outlook.com (2603:10b6:300:14::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.19; Mon, 20 Jun
+ 2022 15:39:59 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
+ 15:39:59 +0000
+Date:   Mon, 20 Jun 2022 12:39:56 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, kwankhede@nvidia.com,
+        corbet@lwn.net, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        kevin.tian@intel.com, jchrist@linux.ibm.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFT][PATCH v1 5/6] vfio/ccw: Add kmap_local_page() for memcpy
+Message-ID: <20220620153956.GB5502@nvidia.com>
+References: <20220616235212.15185-1-nicolinc@nvidia.com>
+ <20220616235212.15185-6-nicolinc@nvidia.com>
+ <Yqw+7gM3Lz96UFdz@infradead.org>
+ <20220620025726.GA5219@nvidia.com>
+ <YrAUZ7hXy2FcZcjl@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrAUZ7hXy2FcZcjl@infradead.org>
+X-ClientProxiedBy: MW4PR04CA0290.namprd04.prod.outlook.com
+ (2603:10b6:303:89::25) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
-Thread-Topic: rseq: x86: Fix rseq_cs get cleared when returning from signal handler
-Thread-Index: 8p1JK5A0xnZJfmVeYTcnSEil4LXgzg==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6fd6a13e-7a08-40fd-bef5-08da52d32203
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1438:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB143881D7476AEB391A9CCDC6C2B09@MWHPR12MB1438.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r2pus2Ue9T65ZRSnnC3dET066yVpFWrdfBz9Pdy/X/eQ1SFKMR5ANK7rUlpDStsZvsfSQVBZm53ApFk8ohA2Iv6qyVAffWyOPhGteQbvRihPFby63pHxN8p32NALvG8Ld7OFh9fuXGgx3hcwIgMG+M3yTC53ubxLwE2TVqbMpJQX+iFdl1vxEX1akMqN8p6Flu7XfOAiRF3BQt7nq+mjlK3V8H1oEP8bBZzxOmnva4gaBB9Gyjrkbkx86soKG00r0+d7Ulh0J9iSgue1Uo5bm5yLNljRI1XVu7cPCddofRr67m7iMD2NQ74+fZ9fe61TUYCriP5lvrMZ9ansapDFR7s04JScrrXBNRlgFVeLVkzugggMnJvCLEvBNXIQftaa/sZf2oK7qcl0Vxm+5rq2pJc7vgjBdmDbA3xI+84BOacWw9g24hwJyH0h5JkMr6cD5SjD6+OHSYEyqJ+v0Z12PhT96Aa6ttEoo33QhooUj3a0K3Rz4pKfR8KLQ84jnaP4qy0pimo0svKAWoU/rx5pG7v51WHOHnJBvP6LJ7jtBbu2cSV6TNA/1JQv6Abn1B1P++2PwzDzi049GOyrW4iWpvllhxW8MOVBTpq+jMPEsQZPrz4/5nIJHKWySTk//HNNUkI1+fwMveVo2ttqpz9k3A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(33656002)(38100700002)(86362001)(6486002)(5660300002)(7416002)(498600001)(8936002)(7406005)(2906002)(4744005)(316002)(6916009)(66946007)(8676002)(66556008)(186003)(6666004)(4326008)(66476007)(1076003)(83380400001)(6506007)(2616005)(6512007)(26005)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1bAV/LX1Q6td4b/COvDCMcTzQUO0nh8Tjv+Ndpm7eyM7zlZp1vzuT98YF4zR?=
+ =?us-ascii?Q?K7V0WoGwIalBR2a8sPJC0MjGy2euJCqQgenskAkg+hdhWo5dTsdUeOwO+bvG?=
+ =?us-ascii?Q?ohEkE26BnmehXvXVmWyHIj13XEOoYGJvoqPYK5hEfoXbPFE5UclIWK2kHOYL?=
+ =?us-ascii?Q?EPLEhG/RW8VNBSBmpnudiMYODo3x1Lor8UhNRu7sJ2TfhOBw4S7a0qTodmi4?=
+ =?us-ascii?Q?GQVHrTzvKUZ6lUP8oLTF+SEY9SAa89NKcejvHuiDijuHKonwjL53MDwgMuyj?=
+ =?us-ascii?Q?YxLkhrV0hCJvQsx+Bv7sQTimAbZ+qNpFlgBVNVRkA0ttcqau9C5YFy5MTwZB?=
+ =?us-ascii?Q?LHjxHDxpGiMqUdoxk//kApZhCAakcvrG/54JismLy04WFOujjbvs81sXTjYU?=
+ =?us-ascii?Q?ZuaffpPZLnsbldlfFNIFS0UYlej3O5y7zoiAcbSosEjuE0Nhym+W4dTqHQme?=
+ =?us-ascii?Q?IvmRMU6FcOwUXgDl0aEz9JBywBfhMu2HG+jVunVxOR++JAZKC9JZHNz/kQDX?=
+ =?us-ascii?Q?B7439OjguoQ9vsSA0pLL+1s3PwQjvXloiQC9nxUg2tMknNU3xsVx079i8a6b?=
+ =?us-ascii?Q?hMeDWHIQVHkZwkWq4Eh/wtYiL5F2yLnulMJRjN3OhftP5/Umm8rS2XRPEhuT?=
+ =?us-ascii?Q?pK6alLYQgWmSFxksnmICyBmocCb1wT0R6DlhVaAjycDsqjDqrokjovmURtXj?=
+ =?us-ascii?Q?bswc5ET7ro7Q2rHZgbXz+mEPb9nUEuw88kbL/RhIndhDnT6W53fBQpXYC8Hq?=
+ =?us-ascii?Q?EPa7HRTNy0jKYM7k0PXcT8hPGzeQtvNeWd4dLNp1I5uq529r65uQ/qirD0NG?=
+ =?us-ascii?Q?u8x0WSmQJex4NH1prtwQBj9hJ2Yd1yd4boSitIGxrgPqHpe8na7x9yHYbGtk?=
+ =?us-ascii?Q?R36ZzE8rjHvvU7tAJGG5qBEKMiYcjgS19WTJMqlAWKCrnEXSkx22vh2rH7/j?=
+ =?us-ascii?Q?QJNlQLZuAP8IZQxS0oEeIVV+HWB0vsctj36zKNbeqBxCS8cMADzAiW9uuWpO?=
+ =?us-ascii?Q?zP6ZU72pG+Q6NJ1fho56TRs8B1ySCb28L1/3i8h7oiZGvkSQolxPMHzlHzH9?=
+ =?us-ascii?Q?6ALVHljSydKRAXtl91qqQelZZXvSPuEtcm0HZf3CD8fly8WIYb1AJkKLq/Ep?=
+ =?us-ascii?Q?6rOmjBxI0KpsSFaAGXvnK3Btfpb/4Iivt5ejcWEmDN+vwh6PmNTozLCZF+ri?=
+ =?us-ascii?Q?B0r6RYjO4jRmFS+p664cQLeDpWlgs8tjEibh4qwfdEa5A2fa+rfB0/ku03fo?=
+ =?us-ascii?Q?g5BFutFM4oE3JtyR3YJacSt5cIOMb15Ou9+SjFBl2zUly5tFFQNZjtT8vD9S?=
+ =?us-ascii?Q?5KZUvjlEdAk0lEq612VtVpx7fZVPEGMbSpgT071rO5Qe2TSLfUmIfvRmMZdp?=
+ =?us-ascii?Q?PB744YBl/p5+y//mPre9jNuse0Aj8gJssji/bqlWTcN83CaXLE4e8SIT6GSf?=
+ =?us-ascii?Q?HskkfcRsJ/XJD0s0v45Gy1OzlYXTxfyp5uVyA3+NgLporGV4z8rUrkA8PPG5?=
+ =?us-ascii?Q?AnfxZUrRvPtsbYRzV0xY5/bX+uo0uEmyGS8T+Gru9qsy+jp7URPr6qqFD1hg?=
+ =?us-ascii?Q?qW/GhqAx9pIE2FD0wjb5S4YiVhLqHwD+u7CxiwyUTs/DSjlrSWzotzhWAwAL?=
+ =?us-ascii?Q?E8Hjq8pIZNH+PegoKTujLR3YEihaQwLXLxx/jEU1lkjirmQQkv7Uwa5/LJI+?=
+ =?us-ascii?Q?mWitMAC00nMkL5+VgHyQnzp0bqgWhFrY1Y1swtvUE87mjNR8pv2nIoS6WGu8?=
+ =?us-ascii?Q?wDIQRuYxHQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fd6a13e-7a08-40fd-bef5-08da52d32203
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 15:39:59.0938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ypkdjmQKYzu99BoR8eEEDGyyqZyTcXpU+sMTbeHaZ9OuYig3xUdm2XVUO21vSEo4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1438
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Jun 18, 2022, at 2:25 PM, Bui Quang Minh minhquangbui99@gmail.com wrote:
+On Sun, Jun 19, 2022 at 11:32:07PM -0700, Christoph Hellwig wrote:
 
-> rseq.rseq_cs is not expected to be cleared when we are still in critical
-> section. When using rseq with RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL, if the
-> signal is delivered, we don't restart to the abort ip but go to signal
-> handler then return and continue the critical section execution. While in
-> signal handler, if a preemption, migration or another signal is delivered,
-> we will fall into rseq_ip_fixup again. At that moment, the IP is in signal
-> handler not in critical section so the rseq.rseq_cs is cleared. Later, when
-> we return back to critical section from signal handlers, we get the
-> rseq.rseq_cs incorrectly cleared.
+> > This helps because we now block io memory from ever getting into these
+> > call paths. I'm pretty sure this is a serious security bug, but would
+> > let the IBM folks remark as I don't know it all that well..
 > 
-> Another scenario is when a preemption or migration happens, then a signal
-> is delivered. When preparing to return to user mode, in
-> exit_to_user_mode_loop, we first handle the signal and set return IP to
-> signal handler. After that, rseq_handle_notify_resume is called to handle
-> the preemption/migration, sees the IP is the address of signal handler not
-> in critical section and clear rseq.rseq_cs.
-> 
-> To handle this case, a RSEQ_CS_FLAG_IN_SIGNAL_HANDLER is added. This flag
-> is set in rseq.flags (it is easier to read and update rseq.flags than
-> rseq.rseq_cs.flags) by the kernel when rseq does not restart on signal.
-> When this flag is set, we don't clear rseq.rseq_cs when the IP is outside
-> of critical section. The flag is unset in sigreturn path when the last
-> signal handler returns back to the critical section.
+> Prevent as in crash when trying to convert it to a page?
 
-Hi,
+That or when calling memcpy() on an IO memory PFN that the guest
+passed into the dma s/g list the ccw driver is processing.
 
-You raise valid points.
-
-May I first ask what is your use-case for RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL ?
-
-Considering the added per-arch complexity, I think we should consider whether
-it's worthwhile to keep supporting this flag, and whether there are actual users
-of it out there, or if we should handle this by deprecating this flag.
-
-Thanks,
-
-Mathieu
-
-> 
-> Reviewed-by: Alexander Mikhalitsyn <alexander@mihalicyn.com>
-> Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
-> ---
-> arch/x86/kernel/signal.c  |  7 ++++
-> include/linux/sched.h     |  5 +++
-> include/uapi/linux/rseq.h |  8 +++-
-> kernel/rseq.c             | 80 ++++++++++++++++++++++++++++++++++++---
-> 4 files changed, 94 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-> index 9c7265b524c7..7aadf69d6849 100644
-> --- a/arch/x86/kernel/signal.c
-> +++ b/arch/x86/kernel/signal.c
-> @@ -646,6 +646,10 @@ SYSCALL_DEFINE0(sigreturn)
-> 	 */
-> 	if (!restore_sigcontext(regs, &frame->sc, 0))
-> 		goto badframe;
-> +
-> +	if (rseq_sigreturn(regs))
-> +		goto badframe;
-> +
-> 	return regs->ax;
-> 
-> badframe:
-> @@ -678,6 +682,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
-> 	if (restore_altstack(&frame->uc.uc_stack))
-> 		goto badframe;
-> 
-> +	if (rseq_sigreturn(regs))
-> +		goto badframe;
-> +
-> 	return regs->ax;
-> 
-> badframe:
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index c46f3a63b758..656b03232d0a 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -2340,6 +2340,8 @@ static inline void rseq_execve(struct task_struct *t)
-> 	t->rseq_event_mask = 0;
-> }
-> 
-> +int rseq_sigreturn(struct pt_regs *regs);
-> +
-> #else
-> 
-> static inline void rseq_set_notify_resume(struct task_struct *t)
-> @@ -2365,6 +2367,9 @@ static inline void rseq_fork(struct task_struct *t,
-> unsigned long clone_flags)
-> static inline void rseq_execve(struct task_struct *t)
-> {
-> }
-> +static inline int rseq_sigreturn(struct pt_regs *regs)
-> +{
-> +}
-> 
-> #endif
-> 
-> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-> index 77ee207623a9..f946af8e21e6 100644
-> --- a/include/uapi/linux/rseq.h
-> +++ b/include/uapi/linux/rseq.h
-> @@ -26,6 +26,7 @@ enum rseq_cs_flags_bit {
-> 	RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT	= 0,
-> 	RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT	= 1,
-> 	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT	= 2,
-> +	RSEQ_CS_FLAG_IN_SIGNAL_HANDLER_BIT	= 3,
-> };
-> 
-> enum rseq_cs_flags {
-> @@ -35,6 +36,8 @@ enum rseq_cs_flags {
-> 		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
-> 	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE	=
-> 		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
-> +	RSEQ_CS_FLAG_IN_SIGNAL_HANDLER		=
-> +		(1U << RSEQ_CS_FLAG_IN_SIGNAL_HANDLER_BIT),
-> };
-> 
-> /*
-> @@ -115,7 +118,7 @@ struct rseq {
-> 	 * Restartable sequences flags field.
-> 	 *
-> 	 * This field should only be updated by the thread which
-> -	 * registered this data structure. Read by the kernel.
-> +	 * registered this data structure. Read and set by the kernel.
-> 	 * Mainly used for single-stepping through rseq critical sections
-> 	 * with debuggers.
-> 	 *
-> @@ -128,6 +131,9 @@ struct rseq {
-> 	 * - RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE
-> 	 *     Inhibit instruction sequence block restart on migration for
-> 	 *     this thread.
-> +	 * - RSEQ_CS_FLAG_IN_SIGNAL_HANDLER
-> +	 *     Mark that this thread is in critical section but currently in
-> +	 *     signal handlers, so don't clear the rseq_cs field.
-> 	 */
-> 	__u32 flags;
-> } __attribute__((aligned(4 * sizeof(__u64))));
-> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> index 97ac20b4f738..a4aca612724b 100644
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -172,14 +172,16 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct
-> rseq_cs *rseq_cs)
-> 
-> static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
-> {
-> -	u32 flags, event_mask;
-> +	u32 old_flags, flags, event_mask;
-> 	int ret;
-> 
-> 	/* Get thread flags. */
-> -	ret = get_user(flags, &t->rseq->flags);
-> +	ret = get_user(old_flags, &t->rseq->flags);
-> 	if (ret)
-> 		return ret;
-> 
-> +	flags = old_flags;
-> +
-> 	/* Take critical section flags into account. */
-> 	flags |= cs_flags;
-> 
-> @@ -203,6 +205,21 @@ static int rseq_need_restart(struct task_struct *t, u32
-> cs_flags)
-> 	t->rseq_event_mask = 0;
-> 	preempt_enable();
-> 
-> +	/*
-> +	 * If we don't restart on signal event, set the
-> +	 * RSEQ_CS_FLAG_IN_SIGNAL_HANDLER flag so that later rseq_ip_fixup
-> +	 * doesn't clear rseq_cs pointer as the IP is outside of critical
-> +	 * section.
-> +	 */
-> +	if ((flags & RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL) &&
-> +	    (event_mask & RSEQ_EVENT_SIGNAL) &&
-> +	    !(old_flags & RSEQ_CS_FLAG_IN_SIGNAL_HANDLER)) {
-> +		old_flags |= RSEQ_CS_FLAG_IN_SIGNAL_HANDLER;
-> +		ret = put_user(old_flags, &t->rseq->flags);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> 	return !!(event_mask & ~flags);
-> }
-> 
-> @@ -248,10 +265,23 @@ static int rseq_ip_fixup(struct pt_regs *regs)
-> 	/*
-> 	 * Handle potentially not being within a critical section.
-> 	 * If not nested over a rseq critical section, restart is useless.
-> -	 * Clear the rseq_cs pointer and return.
-> +	 * In case the RSEQ_CS_FLAG_IN_SIGNAL_HANDLER is set, we are in
-> +	 * signal handlers and later return to critical section so don't
-> +	 * clear rseq_cs pointer.
-> +	 * Otherwise, clear the rseq_cs pointer and return.
-> 	 */
-> -	if (!in_rseq_cs(ip, &rseq_cs))
-> -		return clear_rseq_cs(t);
-> +	if (!in_rseq_cs(ip, &rseq_cs)) {
-> +		u32 flags;
-> +
-> +		ret = get_user(flags, &t->rseq->flags);
-> +		if (ret)
-> +			return ret;
-> +		if (flags & RSEQ_CS_FLAG_IN_SIGNAL_HANDLER)
-> +			return 0;
-> +		else
-> +			return clear_rseq_cs(t);
-> +	}
-> +
-> 	ret = rseq_need_restart(t, rseq_cs.flags);
-> 	if (ret <= 0)
-> 		return ret;
-> @@ -322,6 +352,46 @@ void rseq_syscall(struct pt_regs *regs)
-> 
-> #endif
-> 
-> +#ifdef CONFIG_RSEQ
-> +
-> +int rseq_sigreturn(struct pt_regs *regs)
-> +{
-> +	int ret;
-> +	struct rseq_cs rseq_cs;
-> +	struct task_struct *t = current;
-> +
-> +	if (t->rseq) {
-> +		u32 flags;
-> +
-> +		ret = get_user(flags, &t->rseq->flags);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (flags & RSEQ_CS_FLAG_IN_SIGNAL_HANDLER) {
-> +			ret = rseq_get_rseq_cs(t, &rseq_cs);
-> +			if (ret)
-> +				return ret;
-> +
-> +			/*
-> +			 * If the returned IP is in critical section, it
-> +			 * means we handle all the possible nested signal,
-> +			 * so unset the RSEQ_CS_FLAG_IN_SIGNAL_HANDLER.
-> +			 */
-> +			if (in_rseq_cs(regs->ip, &rseq_cs)) {
-> +				flags &= ~RSEQ_CS_FLAG_IN_SIGNAL_HANDLER;
-> +
-> +				ret = put_user(flags, &t->rseq->flags);
-> +				if (ret)
-> +					return ret;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +#endif
-> +
-> /*
->  * sys_rseq - setup restartable sequences for caller thread.
->  */
-> --
-> 2.25.1
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Jason

@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9868F551F79
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1425551F8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbiFTO5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S240101AbiFTO7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiFTO4b (ORCPT
+        with ESMTP id S241961AbiFTO5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 10:56:31 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3100F3F8B5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:15:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so10439000pjz.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 07:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DmB//D/LSYNMnH2xgULemxOw5o9iappAp34jQZEddSs=;
-        b=o8egWsj4lRXnkeqxXw5VHRYIVps5VdNa+CzcHJyE0Pb4iMGV1/XbJaRtH4lr2qAu8v
-         xtPrFYbZ10e2h6/ilbEdyDpSY1GPoh7VhivaCg7xX0nut2tSuk2ULYxiL/2rg4/vfmH5
-         LCv1wbpSeTpoE4Gj/TDg9AB4Vf1pEFWUrb7tYba9ABbn28uWDjxMrH3EuooTEZAQaNjV
-         ZSujm5/hY4PLGGhvTSRf8LVuI2j6RihtdMgattmCrta5AI2lhFRx/aUpBdKUPV+6M7lW
-         NmcPC4CRHfdznRLNYKEI8h0KHJIgyfeCsLLsXjjpYvfZYP3r08UJulZyjyWs+rSrmLJK
-         bkkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DmB//D/LSYNMnH2xgULemxOw5o9iappAp34jQZEddSs=;
-        b=FxtL9KnVCJ9m80Vse3LVgcR0iMHuDXqOaQE4MBx97c4mpR1EuPsZ+8wD5orBbD4y+A
-         ErYj+uSKIErL8IO+cvbOhTsJNL6B4pJ9c+BLRFM7bQiigYm2cT5Ltyf0stzu56a97+OI
-         SU2bogl3eme4Jj2G4AJ0keVQghBrNSgwoxP4gKxy1anCbswVZpSqP4vsIrQQTmZiAkzo
-         Cm1YirQc4+g70ziuQmknlnF+oAe1r7cIPjj9iojPKIqI2Jf9lFofqo4NZ4pxu+0qBhMU
-         dtU6ReD8mqNV1jlA2S4I8Lvv3RN2Jc4Wft+AsXe4fN0a8heaMvPwbDCwAuquO7S41vG3
-         z+cA==
-X-Gm-Message-State: AJIora9mS+J4NRnG2I2AKA6ih6seGwL7SoGAgnZLpDUqQTlrjOFGER+u
-        zxDIsdPvrkmSpmJqTj4FahL2Gg==
-X-Google-Smtp-Source: AGRyM1ugU+bQTMidOzp4N2Fc4lbEHGZc7loK2/xuGSo+EKAp7FqeMBjuC/KX7MpamF+73pMUL1RIUA==
-X-Received: by 2002:a17:902:6941:b0:168:b5f7:4bce with SMTP id k1-20020a170902694100b00168b5f74bcemr24176394plt.104.1655734520698;
-        Mon, 20 Jun 2022 07:15:20 -0700 (PDT)
-Received: from localhost ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id o12-20020a62f90c000000b0051be16492basm9202042pfh.195.2022.06.20.07.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 07:15:20 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 22:15:16 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
-        mike.kravetz@oracle.com, paulmck@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v5 2/2] mm: memory_hotplug: make hugetlb_optimize_vmemmap
- compatible with memmap_on_memory
-Message-ID: <YrCA9JIet7RulSPo@FVFYT0MHHV2J.usts.net>
-References: <20220620110616.12056-1-songmuchun@bytedance.com>
- <20220620110616.12056-3-songmuchun@bytedance.com>
- <YrBz5dBpb3XTZm5c@localhost.localdomain>
+        Mon, 20 Jun 2022 10:57:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF70117AA9;
+        Mon, 20 Jun 2022 07:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655734832; x=1687270832;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=j5dmRBX11KpQ0doZYX6GRPhSnkODpaL7Hahti3PPX3U=;
+  b=KPAoYHU/m5CdBpYQZk5adX3KdDSMzWSrHRplWbhQRpS+VED981e9orUF
+   pYzaQkQInSxXRmqQW9xrvlcjfcYBce5sP1YyVZ/OnHUKN9RAyht8xSdIX
+   xyo3iV8qsg/ZuCNvJfPVTLr642cJ3v1qYqYiOpoZ/IS27PQ2XLkGLQsHr
+   J3T9Y5hASV/BwW2RocCaSAOCABADnGl3bJ48UOWggD1lCP916Ue0mSCCw
+   rinKuNTj/gEzhg5JxQts4mefQLTCEx+jMsljqMA8Cfl0bSkjSgSBIPw+A
+   wJ/wfOKXfyNz+J6l+OXOp/3bZzNtNpoFa2hBKbfCdMBeS3S4jMgfpKCGG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268626429"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="268626429"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 07:20:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="584914017"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga007.jf.intel.com with ESMTP; 20 Jun 2022 07:20:09 -0700
+Date:   Mon, 20 Jun 2022 22:16:47 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        kirill.shutemov@linux.intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
+Message-ID: <20220620141647.GC2016793@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-7-chao.p.peng@linux.intel.com>
+ <YqzyjZnflCMPo8b/@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrBz5dBpb3XTZm5c@localhost.localdomain>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <YqzyjZnflCMPo8b/@google.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +90,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 03:19:33PM +0200, Oscar Salvador wrote:
-> On Mon, Jun 20, 2022 at 07:06:16PM +0800, Muchun Song wrote:
-> > +		/*
-> > +		 * The READ_ONCE() is used to stabilize *pmdp in a register or
-> > +		 * on the stack so that it will stop changing under the code.
-> > +		 * The only concurrent operation where it can be changed is
-> > +		 * split_vmemmap_huge_pmd() (*pmdp will be stable after this
-> > +		 * operation).
-> > +		 */
-> > +		pmd = READ_ONCE(*pmdp);
-> > +		if (pmd_leaf(pmd))
-> > +			vmemmap_page = pmd_page(pmd) + pte_index(vaddr);
-> > +		else
-> > +			vmemmap_page = pte_page(*pte_offset_kernel(pmdp, vaddr));
+On Fri, Jun 17, 2022 at 09:30:53PM +0000, Sean Christopherson wrote:
+> On Thu, May 19, 2022, Chao Peng wrote:
+> > @@ -4028,8 +4081,11 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+> >  	if (!sp && kvm_test_request(KVM_REQ_MMU_FREE_OBSOLETE_ROOTS, vcpu))
+> >  		return true;
+> >  
+> > -	return fault->slot &&
+> > -	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> > +	if (fault->is_private)
+> > +		return mmu_notifier_retry(vcpu->kvm, mmu_seq);
 > 
-> I was about to suggest to get rid of the else branch because on x86_64
-> we can only allocate PMD_SIZE chunks when using an alternative allocator,
-> meaning that anything which is not a pmd_leaf can't be a PageVmemmapSelfHosted.
->
-
-You are right. However, I think relaying on this condition is fragile and
-not straightforward compared to the check of PageVmemmapSelfHosted(). And
-the else branch is not in a hot path. So I'd like to stay with it. Does
-this make sense for you?
- 
-> But then I went to check the other platform that supports memmap_on_memory (arm64),
-> and in there I can see that we fallback to populate basepages with altmap should
-> we fail to allocate a PMD_SIZE chunk.
+> Hmm, this is somewhat undesirable, because faulting in private pfns will be blocked
+> by unrelated mmu_notifier updates.  The issue is mitigated to some degree by bumping
+> the sequence count if and only if overlap with a memslot is detected, e.g. mapping
+> changes that affects only userspace won't block the guest.
 > 
+> It probably won't be an issue, but at the same time it's easy to solve, and I don't
+> like piggybacking mmu_notifier_seq as private mappings shouldn't be subject to the
+> mmu_notifier.
+> 
+> That would also fix a theoretical bug in this patch where mmu_notifier_retry()
+> wouldn't be defined if CONFIG_MEMFILE_NOTIFIER=y && CONFIG_MMU_NOTIFIER=n.a
 
-I think it cannot be fail for memmap_on_memory case.
+Agreed, Thanks.
 
-Thanks.
+> 
+> ---
+>  arch/x86/kvm/mmu/mmu.c   | 11 ++++++-----
+>  include/linux/kvm_host.h | 16 +++++++++++-----
+>  virt/kvm/kvm_main.c      |  2 +-
+>  3 files changed, 18 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 0b455c16ec64..a4cbd29433e7 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4100,10 +4100,10 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+>  		return true;
+> 
+>  	if (fault->is_private)
+> -		return mmu_notifier_retry(vcpu->kvm, mmu_seq);
+> -	else
+> -		return fault->slot &&
+> -			mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> +		return memfile_notifier_retry(vcpu->kvm, mmu_seq);
+> +
+> +	return fault->slot &&
+> +	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+>  }
+> 
+>  static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> @@ -4127,7 +4127,8 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	if (r)
+>  		return r;
+> 
+> -	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+> +	mmu_seq = fault->is_private ? vcpu->kvm->memfile_notifier_seq :
+> +				      vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+> 
+>  	r = kvm_faultin_pfn(vcpu, fault);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 92afa5bddbc5..31f704c83099 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -773,16 +773,15 @@ struct kvm {
+>  	struct hlist_head irq_ack_notifier_list;
+>  #endif
+> 
+> -#if (defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)) ||\
+> -	defined(CONFIG_MEMFILE_NOTIFIER)
+> +#if (defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER))
+>  	unsigned long mmu_notifier_seq;
+> -#endif
+> -
+> -#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+>  	struct mmu_notifier mmu_notifier;
+>  	long mmu_notifier_count;
+>  	unsigned long mmu_notifier_range_start;
+>  	unsigned long mmu_notifier_range_end;
+> +#endif
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +	unsigned long memfile_notifier_seq;
+>  #endif
+>  	struct list_head devices;
+>  	u64 manual_dirty_log_protect;
+> @@ -1964,6 +1963,13 @@ static inline int mmu_notifier_retry_hva(struct kvm *kvm,
+>  }
+>  #endif
+> 
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +static inline bool memfile_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
+> +{
+> +	return kvm->memfile_notifier_seq != mmu_seq;
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
+> 
+>  #define KVM_MAX_IRQ_ROUTES 4096 /* might need extension/rework in the future */
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 2b416d3bd60e..e6d34c964d51 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -898,7 +898,7 @@ static void kvm_private_mem_notifier_handler(struct memfile_notifier *notifier,
+>  	KVM_MMU_LOCK(kvm);
+>  	if (kvm_unmap_gfn_range(kvm, &gfn_range))
+>  		kvm_flush_remote_tlbs(kvm);
+> -	kvm->mmu_notifier_seq++;
+> +	kvm->memfile_notifier_seq++;
+>  	KVM_MMU_UNLOCK(kvm);
+>  	srcu_read_unlock(&kvm->srcu, idx);
+>  }
+> 
+> base-commit: 333ef501c7f6c6d4ef2b7678905cad0f8ef3e271
+> --
+> 
+> > +	else
+> > +		return fault->slot &&
+> > +			mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> >  }
+> >  
+> >  static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> > @@ -4088,7 +4144,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  		read_unlock(&vcpu->kvm->mmu_lock);
+> >  	else
+> >  		write_unlock(&vcpu->kvm->mmu_lock);
+> > -	kvm_release_pfn_clean(fault->pfn);
+> > +
+> > +	if (fault->is_private)
+> > +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
+> 
+> Why does the shmem path lock the page, and then unlock it here?
 
+Initially this is to prevent race between SLPT population and
+truncate/punch on the fd. Without this, a gfn may become stale before
+the page is populated in SLPT. However, with memfile_notifier_retry
+mechanism, this sounds not needed.
+
+> 
+> Same question for why this path marks it dirty?  The guest has the page mapped
+> so the dirty flag is immediately stale.
+
+I believe so.
+
+> 
+> In other words, why does KVM need to do something different for private pfns?
+
+These two are inherited from Kirill's previous code. See if he has any
+comment.
+
+> 
+> > +	else
+> > +		kvm_release_pfn_clean(fault->pfn);
+> > +
+> >  	return r;
+> >  }
+> >  
+> 
+> ...
+> 
+> > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> > index 7f8f1c8dbed2..1d857919a947 100644
+> > --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> > @@ -878,7 +878,10 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  
+> >  out_unlock:
+> >  	write_unlock(&vcpu->kvm->mmu_lock);
+> > -	kvm_release_pfn_clean(fault->pfn);
+> > +	if (fault->is_private)
+> 
+> Indirect MMUs can't support private faults, i.e. this is unnecessary.
+
+Okay.
+
+> 
+> > +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
+> > +	else
+> > +		kvm_release_pfn_clean(fault->pfn);
+> >  	return r;
+> >  }
+> >  
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 3fd168972ecd..b0a7910505ed 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -2241,4 +2241,26 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+> >  /* Max number of entries allowed for each kvm dirty ring */
+> >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> >  
+> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > +static inline int kvm_private_mem_get_pfn(struct kvm_memory_slot *slot,
+> > +					  gfn_t gfn, kvm_pfn_t *pfn, int *order)
+> > +{
+> > +	int ret;
+> > +	pfn_t pfnt;
+> > +	pgoff_t index = gfn - slot->base_gfn +
+> > +			(slot->private_offset >> PAGE_SHIFT);
+> > +
+> > +	ret = slot->notifier.bs->get_lock_pfn(slot->private_file, index, &pfnt,
+> > +						order);
+> > +	*pfn = pfn_t_to_pfn(pfnt);
+> > +	return ret;
+> > +}
+> > +
+> > +static inline void kvm_private_mem_put_pfn(struct kvm_memory_slot *slot,
+> > +					   kvm_pfn_t pfn)
+> > +{
+> > +	slot->notifier.bs->put_unlock_pfn(pfn_to_pfn_t(pfn));
+> > +}
+> > +#endif /* CONFIG_HAVE_KVM_PRIVATE_MEM */
+> > +
+> >  #endif
+> > -- 
+> > 2.25.1
+> > 

@@ -2,136 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F44551534
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73356551544
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbiFTKFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S240118AbiFTKFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240933AbiFTKFE (ORCPT
+        with ESMTP id S240911AbiFTKFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:05:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BC213F78;
-        Mon, 20 Jun 2022 03:04:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46652B8100B;
-        Mon, 20 Jun 2022 10:04:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4FAEC3411B;
-        Mon, 20 Jun 2022 10:04:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655719449;
-        bh=nuyOjq3kbA0oH9KqhQl7VyXBnSZxp250qorZIvLiOlY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H15poN1qc4ilJQOU84gJjgdy+DdVZRlnKeazbyRvGKYb5NF+kRIUD07Fxm+dXcTVd
-         dr5BDbo2X1dbuseZ58Fic+fVMLmArmb/vvD/8CE1bMJlmWo0Rdtg6mzkHTAt2f8MpG
-         ZnL/LXJlS+oM2zBRWl0zn9ixQc3ANQXBzKNyyepP9Ht72HHps41tsrXb7kC8Sq9z2T
-         eFU8bHGn34LIqawEVtWsLqGig9D6V6EriOjcxkCsjoT83soo0c3TwDytt028O9TLFm
-         6dYad40PrejJJRLAS/2M4562WIUJ+lv4NRnIlybVvl2CuhUqDu0qkO/nhhneXtFLjL
-         QiiQoQVxUTb4Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3EGL-0008Eu-31; Mon, 20 Jun 2022 12:04:05 +0200
-Date:   Mon, 20 Jun 2022 12:04:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Frank Zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the
- CH341
-Message-ID: <YrBGFZwLENLigWMV@hovoldconsulting.com>
-References: <20220401023306.79532-1-frank@zago.net>
- <20220401023306.79532-3-frank@zago.net>
- <YouzaO6ogxYj40Bp@hovoldconsulting.com>
- <9b5b8cb4-7c05-b3cf-ca68-85d334a7f0b0@zago.net>
+        Mon, 20 Jun 2022 06:05:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06068219F;
+        Mon, 20 Jun 2022 03:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655719517; x=1687255517;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oz6TzpkDj4Hcqoo/VECwOw1zx2El8r2YwZrlkCQ5uLI=;
+  b=h+yjmBQRL9NsxUdx2vi7PiVfsHRewBwP6qpePVoJ/ypMM58BdlBBzqmR
+   97ueLj0j6kYYJ1FNT71WOZ8qBHCa0Un+a0iD5Pe7jxelDXlO5h83IvOhq
+   N2Qpl/fd9kvXPjoQP382KPuzAXRxCXMZmF0eobGxInYehNR1yiA5DAesq
+   8mA51w/n2XljLR3wwX3Ko3737RTv2Lw+SvIC9HhqQl4VcnNKRPCvOMu9j
+   mM514DoEMHEfloO8bY8p0ddKVYW7bn4G/XFqJ0LAwI5kjbIVZa1GddELU
+   Y5Mfqe5tp1z4vukIiOed8YNopDbSeE9ZtPjcGgODj0xYxEYNX1KW1wTSq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="366180865"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="366180865"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:05:16 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="537612111"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:05:10 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3EHK-000h58-E1;
+        Mon, 20 Jun 2022 13:05:06 +0300
+Date:   Mon, 20 Jun 2022 13:05:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <YrBGUqfS7r9m0eAf@smile.fi.intel.com>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+ <20220617144031.2549432-7-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9b5b8cb4-7c05-b3cf-ca68-85d334a7f0b0@zago.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220617144031.2549432-7-alexandr.lobakin@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 08:29:31PM -0500, Frank Zago wrote:
-> On 5/23/22 11:16, Johan Hovold wrote:
-
-> >> +static void ch341_gpio_irq_enable(struct irq_data *data)
-> >> +{
-> >> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
-> >> +	int rc;
-> >> +
-> >> +	/*
-> >> +	 * The URB might have just been unlinked in
-> >> +	 * ch341_gpio_irq_disable, but the completion handler hasn't
-> >> +	 * been called yet.
-> >> +	 */
-> >> +	if (!usb_wait_anchor_empty_timeout(&dev->irq_urb_out, 5000))
-> >> +		usb_kill_anchored_urbs(&dev->irq_urb_out);
-> >> +
-> >> +	usb_anchor_urb(dev->irq_urb, &dev->irq_urb_out);
-> >> +	rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
-> >> +	if (rc)
-> >> +		usb_unanchor_urb(dev->irq_urb);
-> > 
-> > This looks confused and broken.
-> > 
-> > usb_kill_anchored_urbs() can sleep so either calling it is broken or
-> > using GFP_ATOMIC is unnecessary.
+On Fri, Jun 17, 2022 at 04:40:30PM +0200, Alexander Lobakin wrote:
+> Currently, many architecture-specific non-atomic bitop
+> implementations use inline asm or other hacks which are faster or
+> more robust when working with "real" variables (i.e. fields from
+> the structures etc.), but the compilers have no clue how to optimize
+> them out when called on compile-time constants. That said, the
+> following code:
 > 
-> Right, that function can sleep. I changed GFP_ATOMIC to GFP_KERNEL.
-
-These callbacks can be called in atomic context so that's not an option,
-I'm afraid.
-
-> > And isn't this function called multiple times when enabling more than
-> > one irq?!
+> 	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
+> 	unsigned long bar = BIT(BAR_BIT);
+> 	unsigned long baz = 0;
 > 
-> There's only one IRQ, so only one URB will be posted at a time. It
-> is reposted as soon as it comes back unless the IRQ is disabled or
-> the device stops.
-
-AFAICT you have up to 16 (CH341_GPIO_NUM_PINS) interrupts, not one. So I
-still say this is broken.
-
-> >> +}
-> >> +
-> >> +static void ch341_gpio_irq_disable(struct irq_data *data)
-> >> +{
-> >> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
-> >> +
-> >> +	usb_unlink_urb(dev->irq_urb);
-> > 
-> > Same here...
-
-> >> +}
-> >> +
-> >> +static int ch341_gpio_remove(struct platform_device *pdev)
-> >> +{
-> >> +	struct ch341_gpio *dev = platform_get_drvdata(pdev);
-> >> +
-> >> +	usb_kill_anchored_urbs(&dev->irq_urb_out);
-> > 
-> > You only have one URB...
-> > 
-> > And what prevents it from being resubmitted here?
+> 	__set_bit(FOO_BIT, foo);
+> 	baz |= BIT(BAZ_BIT);
 > 
-> I don't see what would resubmit it here. The gpio is being released.
+> 	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
+> 	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
+> 	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> 
+> triggers the first assertion on x86_64, which means that the
+> compiler is unable to evaluate it to a compile-time initializer
+> when the architecture-specific bitop is used even if it's obvious.
+> In order to let the compiler optimize out such cases, expand the
+> bitop() macro to use the "constant" C non-atomic bitop
+> implementations when all of the arguments passed are compile-time
+> constants, which means that the result will be a compile-time
+> constant as well, so that it produces more efficient and simple
+> code in 100% cases, comparing to the architecture-specific
+> counterparts.
+> 
+> The savings are architecture, compiler and compiler flags dependent,
+> for example, on x86_64 -O2:
+> 
+> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> 
+> and ARM64 (courtesy of Mark):
+> 
+> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
 
-Your implementation needs to handle racing requests. The gpio chip is
-still registered here.
+...
 
-Johan
+> +/*
+> + * Many architecture-specific non-atomic bitops contain inline asm code and due
+> + * to that the compiler can't optimize them to compile-time expressions or
+> + * constants. In contrary, gen_*() helpers are defined in pure C and compilers
+
+generic_*() ?
+
+> + * optimize them just well.
+> + * Therefore, to make `unsigned long foo = 0; __set_bit(BAR, &foo)` effectively
+> + * equal to `unsigned long foo = BIT(BAR)`, pick the generic C alternative when
+> + * the arguments can be resolved at compile time. That expression itself is a
+> + * constant and doesn't bring any functional changes to the rest of cases.
+> + * The casts to `uintptr_t` are needed to mitigate `-Waddress` warnings when
+> + * passing a bitmap from .bss or .data (-> `!!addr` is always true).
+> + */
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

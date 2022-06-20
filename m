@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DF455108B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96B5551091
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238779AbiFTGlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S238805AbiFTGlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238746AbiFTGlK (ORCPT
+        with ESMTP id S238647AbiFTGlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:41:10 -0400
+        Mon, 20 Jun 2022 02:41:11 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A3BDF40;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42CBDF45;
         Sun, 19 Jun 2022 23:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1655707270; x=1687243270;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Pg8HfHQVzm2IEUjcc48JaOFotrDQ52w9kSRF6zutRGQ=;
-  b=Rk1nGBAH2yy+Fvl56jR/164jqOJ26cHTV4h9bCQ5pFZ1E9JicSYs4f+h
-   2GTBa8ZDT5mqJ1q6VKNQl8mG5xp5IWjigOVQcU/26T374YJmShnM/SWE3
-   H/BiCvbZI/o/5UQXrdzNt5EqZ+gI5gWHaA8OPM9U9vDyGqOtMT3l9N0jD
-   DfbpNlGAKJ+lfOIYr8bc1486oIuo3xIZ8UmtezGdP4xSQ96lnglyEbfID
-   vd8f/OXdU0pPgvquaGg5HiAgkoS9WS0qMu6HlfFb/D4+D+8nRZdwRtQV2
-   MOYv4zoE4W6L4IX4g14jI5YrtxeyJr3Zqbr24hHaGHCUWKDP8PUz1mMpQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277365673"
+  bh=bwi2Vvc2+30PyuZPEbysx8z3V6ygkFBP38WvAgtFQPk=;
+  b=kSqzbVu6HuJa6MO4BrzEn0OEHG8PJ8c30v5XlInom87ySY1gx6yJgBsH
+   toq+Ol0XBEqZyfURtHbHhOR+fXZhb3qHI/D9vVMgcJSWMSfrj0eVs8GJ+
+   IjF8McGg8fXK9ha0cDE63JmNvjdPPxtoD9/duLP9PWpj0hdNy1Nw2NSxy
+   ue0DNW7wlCtCZmsRiCcmzpHWuCaG3UlTkkb70fp9o+8uVYld4+hd8VaUJ
+   qvuAJt7I0Tl/Obxg2HHHDH/gejjq1Am4iGI1miR+kZWkkenUjX8lxXZem
+   mqbOlSYtG5rUK4y7EcEqZatQPg6hsaiNsfdx/kGeZq1gFPggiaAIM6KxL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277365684"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="277365673"
+   d="scan'208";a="277365684"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:40:55 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:40:59 -0700
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642967717"
+   d="scan'208";a="642967729"
 Received: from lspinell-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.215.169])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:40:52 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:40:56 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Lukas Wunner <lukas@wunner.de>,
         <u.kleine-koenig@pengutronix.de>,
         Lino Sanfilippo <LinoSanfilippo@gmx.de>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v8 2/6] serial: 8250: create lsr_save_mask
-Date:   Mon, 20 Jun 2022 09:40:26 +0300
-Message-Id: <20220620064030.7938-3-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v8 3/6] serial: 8250_lpss: Use 32-bit reads
+Date:   Mon, 20 Jun 2022 09:40:27 +0300
+Message-Id: <20220620064030.7938-4-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
 References: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
@@ -66,77 +66,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow drivers to alter LSR save mask.
+Use 32-bit reads in order to not lose higher bits of DW UART regs. This
+change does not fix any known issue as the high bits are not used for
+anything related to 8250 driver (dw8250_readl_ext and dw8250_writel_ext
+used within the dwlib are already doing
+readl/writel/ioread32be/iowrite32be anyway).
+
+This change is necessary to enables 9th bit address mode. DW UART
+reports address frames with BIT(8) of LSR.
 
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250.h      | 2 +-
- drivers/tty/serial/8250/8250_core.c | 4 ++++
- drivers/tty/serial/8250/8250_dw.c   | 2 +-
- include/linux/serial_8250.h         | 1 +
- 4 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_lpss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-index 0ff5688ba90c..5cc967fe3b59 100644
---- a/drivers/tty/serial/8250/8250.h
-+++ b/drivers/tty/serial/8250/8250.h
-@@ -138,7 +138,7 @@ static inline u16 serial_lsr_in(struct uart_8250_port *up)
- 	u16 lsr = up->lsr_saved_flags;
- 
- 	lsr |= serial_in(up, UART_LSR);
--	up->lsr_saved_flags = lsr & LSR_SAVE_FLAGS;
-+	up->lsr_saved_flags = lsr & up->lsr_save_mask;
- 
- 	return lsr;
- }
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 90ddc8924811..57e86133af4f 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -1007,6 +1007,7 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
- 		uart->port.rs485	= up->port.rs485;
- 		uart->rs485_start_tx	= up->rs485_start_tx;
- 		uart->rs485_stop_tx	= up->rs485_stop_tx;
-+		uart->lsr_save_mask	= up->lsr_save_mask;
- 		uart->dma		= up->dma;
- 
- 		/* Take tx_loadsz from fifosize if it wasn't set separately */
-@@ -1094,6 +1095,9 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
- 			ret = 0;
- 		}
- 
-+		if (!uart->lsr_save_mask)
-+			uart->lsr_save_mask = LSR_SAVE_FLAGS;	/* Use default LSR mask */
-+
- 		/* Initialise interrupt backoff work if required */
- 		if (up->overrun_backoff_time_ms > 0) {
- 			uart->overrun_backoff_time_ms =
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 4cc69bb612ab..167a691c7b19 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -129,7 +129,7 @@ static void dw8250_tx_wait_empty(struct uart_port *p)
- 
- 	while (tries--) {
- 		lsr = readb (p->membase + (UART_LSR << p->regshift));
--		up->lsr_saved_flags |= lsr & LSR_SAVE_FLAGS;
-+		up->lsr_saved_flags |= lsr & up->lsr_save_mask;
- 
- 		if (lsr & UART_LSR_TEMT)
- 			break;
-diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
-index 4565f25ba9a2..8c7b793aa4d7 100644
---- a/include/linux/serial_8250.h
-+++ b/include/linux/serial_8250.h
-@@ -120,6 +120,7 @@ struct uart_8250_port {
- 	 */
- #define LSR_SAVE_FLAGS UART_LSR_BRK_ERROR_BITS
- 	u16			lsr_saved_flags;
-+	u16			lsr_save_mask;
- #define MSR_SAVE_FLAGS UART_MSR_ANY_DELTA
- 	unsigned char		msr_saved_flags;
- 
+diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+index 0f5af061e0b4..4ba43bef9933 100644
+--- a/drivers/tty/serial/8250/8250_lpss.c
++++ b/drivers/tty/serial/8250/8250_lpss.c
+@@ -330,7 +330,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	uart.port.irq = pci_irq_vector(pdev, 0);
+ 	uart.port.private_data = &lpss->data;
+ 	uart.port.type = PORT_16550A;
+-	uart.port.iotype = UPIO_MEM;
++	uart.port.iotype = UPIO_MEM32;
+ 	uart.port.regshift = 2;
+ 	uart.port.uartclk = lpss->board->base_baud * 16;
+ 	uart.port.flags = UPF_SHARE_IRQ | UPF_FIXED_PORT | UPF_FIXED_TYPE;
 -- 
 2.30.2
 

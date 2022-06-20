@@ -2,58 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D309551E13
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5401551D9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347597AbiFTOMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
+        id S1346447AbiFTOPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351295AbiFTOJN (ORCPT
+        with ESMTP id S1351178AbiFTOMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 10:09:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E05233EA98
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:27:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B1A6D6E;
-        Mon, 20 Jun 2022 06:27:45 -0700 (PDT)
-Received: from [192.168.178.35] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 671113F792;
-        Mon, 20 Jun 2022 06:27:43 -0700 (PDT)
-Message-ID: <e7d65b22-67a2-b21a-86e5-a9a1606be4d6@arm.com>
-Date:   Mon, 20 Jun 2022 15:27:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
- core/thread from /cpu-map
+        Mon, 20 Jun 2022 10:12:35 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60061.outbound.protection.outlook.com [40.107.6.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E9D245A7;
+        Mon, 20 Jun 2022 06:29:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DkZkYJkItPdpYrwbm/FgLdL/gS2JQG2Cw6UjTNzNc8Hs96SlHullBIv490CRtn46I5g70PvjtEtBn1aiEbjfPBCddy/aoLrj/ZwgSo9wBLdX7vF/EFYE5qd1ssxCUwRW3f7YJdzuqHyBIIDN/tniTIhYmpKxiQGWiFQ7qwdg07R7pxOlWK+YflsKGcW3zIeYSMLcX9uQBHWFK6f9kCfaf/mK5qYMgZHvd+LTz5Va92Nmf7SyU2VwDS5pFBOHoodbZ1Zc3CDs79hBYRxdSmnhrBnJeUvIwKmQv0UErFgc3yPOAxytiwxfuxvYnXiA5SPfs/OAd9VsjxS2QHnERFBozQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q4q70N6QG+ETmSXEE9aDGHuHEyYLoO9ZWp9NO25a1QA=;
+ b=iT/RtK/+g7Sl0V6/GpAu3Un18f58PTTdZNAS66TeZIxI+znF1qXvxTwcMxXkL14aT9dW9jiotpZgEg0vYCYLXBIPjOAzp/i71Ow6B6rQXLT84FxqxksEdcxs2ieOjfUMrJKOqUQSFoCHXpeAp2bD/7f2MoKTqQIleOxre+0mMsCsXhRW3xX1JUsFaph8Lu2qEo19IszxM4Qo6/wk3LUG4gF0KDcc/t0bQ/SF2NeyanqtDILo6wpNao4L908eTIee/SfGFwi9daRmHfb5zr/nzC8joQaE4ZBOdjql2UXBcfxknXyvCGh2cqZwP6AgLviXWC2FrcniaYVlwBrS17MgTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=variscite.com; dmarc=pass action=none
+ header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q4q70N6QG+ETmSXEE9aDGHuHEyYLoO9ZWp9NO25a1QA=;
+ b=jLKHDQL/aAEdGClIZZl9cYV8fk3DO/hbWTXF88zOT2fSRqzaIMdUBDwOb0iBARno+ohD/xIW7dOxm5dVVmA8IeZLxe68ddW8mKAXCmreJ508MnFpQ28f6eDYSuQg3X+Qa/pAiKMrzfq0bkwBtSP2Oqwd9/lZMHNkje4G7w1j7V0AtCl1hBSJ1mlY3ihJMTSzXDTIExcxZUn+bAjddcnrAbMOgQZC/lC7SHluCedbTxvBwCGB7+JLLJcvYFc9mknUdlE3PbpRCFf98X+AKar0ZKSu7NAnblVcY6lqopS/JvIzzGeIyluPmbu8U+guWjZMJ3ZdfzEuFFgirncqkLlgLg==
+Received: from AM6PR08MB4376.eurprd08.prod.outlook.com (2603:10a6:20b:bb::21)
+ by AM6PR08MB3304.eurprd08.prod.outlook.com (2603:10a6:209:49::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Mon, 20 Jun
+ 2022 13:29:30 +0000
+Received: from AM6PR08MB4376.eurprd08.prod.outlook.com
+ ([fe80::3d45:c206:59e3:6539]) by AM6PR08MB4376.eurprd08.prod.outlook.com
+ ([fe80::3d45:c206:59e3:6539%5]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
+ 13:29:30 +0000
+From:   Pierluigi Passaro <pierluigi.p@variscite.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+CC:     Alifer Willians de Moraes <alifer.m@variscite.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Eran Matityahu <eran.m@variscite.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        gaopan <b54642@freescale.com>,
+        Fugang Duan <B38611@freescale.com>,
+        Vipul Kumar <vipul_kumar@mentor.com>
+Subject: Re: [PATCH] i2c: imx: add irqf_no_suspend
+Thread-Topic: [PATCH] i2c: imx: add irqf_no_suspend
+Thread-Index: AQHYhKbNy8DyxLOJYkqA++Q1ekhxAQ==
+Date:   Mon, 20 Jun 2022 13:29:30 +0000
+Message-ID: <AM6PR08MB4376A823A9B433B68D9F8423FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-References: <20220525081416.3306043-14-sudeep.holla@arm.com>
- <20220525081416.3306043-15-sudeep.holla@arm.com>
- <20220525081416.3306043-16-sudeep.holla@arm.com>
- <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
- <20220606102159.dduxmvq4m2fm6gks@bogus>
- <CAKfTPtB8iPzEXipsJqNtd9-aJMKx-FAaiGMzOg58HgRQuo39iA@mail.gmail.com>
- <20220610102753.virkx47uyfsojol6@bogus>
- <af7d6f49-09c5-6e60-988c-51c3c7c04d96@arm.com>
- <20220613111743.3od6a5dyyogad4ay@bogus>
- <73574a8f-5c72-8f7e-3dc4-42493131681e@arm.com>
- <20220617111647.62hsqbpl3bk7xb2y@bogus>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220617111647.62hsqbpl3bk7xb2y@bogus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: 2f282c2b-8f97-c351-3048-b42deac5e9c5
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=variscite.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3ef4146f-bcae-4391-4373-08da52c0e7db
+x-ms-traffictypediagnostic: AM6PR08MB3304:EE_
+x-microsoft-antispam-prvs: <AM6PR08MB3304E42C2325432781C7F0F1FFB09@AM6PR08MB3304.eurprd08.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rbsmNmMYtYM6l9yAf6gDg2ufZ5ZdOGmIC0fGx8tBIbhSpRulXBn8MiuoVmwoeq0bop9sruFvTVQMlJ5nLPM3p3A1/M2+du22Vqqcaui0lSV1wlzAq9eA2KMp8oy5UeoyuwB7J/eTIBDsz7If7k7TRiKspIgvblHB0vanDhgFm/sdqKRwoqy/w9sp4K8aJfJzJgMyPSejr4PHfdv0OhAoMxm/FTvqjdl1G9NOTrmAHUwqYgXSy1JE5mrT21XtMJCAC8t0Ycs6hVhd3M92f+AtblEWKfWtc9E4wDKACIgkuPHNq6aMII+rlCNOU1z0bSdlTSYqbT5oxzU1NcldTBtjxyxWMji6WQsRN41YC2ISwq1Zs/uSQWM55ZzXPbmHSVzvGNyyOF6fWKSg8mMCe4/EL6tEKjrJZf3+wuXL0TmRU6Xl2MN0H8fBxPNylO1lluXNAocc+sDHTYv8Irq/FgLtSlPvdYvsiMyKeEqwcRMAsoyF7Zn3oUQKq679H5CHUTf/7Bfaz+F1f6biGgZcNMYIwdXb4mR2h3zE7ZM3jsAL+woJpzOkzVMz/8a4xeOeUTBfAx4z2DLN6bp4zErbF2ZUY4U17xOCUr9r2JWwu4pGtVUU7KGch4dU8Mv0LQstC5ypEQaFAkWGRVivrQ2zhqZrOfU30H84ln0h0NHSwfmrU6I793pHvQongCLXMKGWk3Psd4W0aJ6/4djdKbg50Sgn2Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB4376.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39850400004)(396003)(366004)(136003)(346002)(66476007)(52536014)(71200400001)(66946007)(4326008)(8936002)(66446008)(64756008)(76116006)(66556008)(91956017)(316002)(110136005)(54906003)(8676002)(86362001)(33656002)(38070700005)(122000001)(38100700002)(41300700001)(6506007)(26005)(9686003)(7696005)(478600001)(55016003)(5660300002)(7416002)(83380400001)(186003)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?5wDyPvvAYgI6TbfwR9Bhs/ClDvPQQvS+aH3CQX0zE/kolWJMNK7ZjgBsT5?=
+ =?iso-8859-1?Q?HuicxzdTtYVESuCTipv4gV3M95FI95FDjVi3fcqZc93NlfeXUJW5W3+Kz0?=
+ =?iso-8859-1?Q?FOPbpWl3t9CTydGsj0Db76AniEFPThp7ovr5VsWBgAl7yXdq5v50xOOroY?=
+ =?iso-8859-1?Q?8WZxasbJxNaU+dwTqutO8yURmNhMq+3c2jrDPxymFU4iqXYCjhGxFAh+jG?=
+ =?iso-8859-1?Q?BRqTGYJUws0xySPlCseUh/MVqUDsxIQOgyAPhhOZOEhU1v7nB9lNSn49vB?=
+ =?iso-8859-1?Q?sJ9nyB2O1lWnG+BAeOjE/vB3UrxaAw/mQ2kt9k05ndZvle67putI1ilSkr?=
+ =?iso-8859-1?Q?taPAuml4sTeZlhOF1wAS7rU9wUkBHYFPKR1Dn/lGtbTCEP3tVGeGE1HBdl?=
+ =?iso-8859-1?Q?5ImhyotkWpCgQL4WbadIMWS8po65h72wTaqGAiUWHnDXqjDt9DE90Yjj/A?=
+ =?iso-8859-1?Q?j70Vbs+CU0vnvvQkpSQULXL6IKJ/nlZETV5oIx999DNihWh+QCyNWa6E6/?=
+ =?iso-8859-1?Q?5gvXM+qNZ5hnVhWgiA751IqZDRLH6KNjza5MVoh9Etgaa5OZgb1ZqVL1A/?=
+ =?iso-8859-1?Q?JDobCJ9SciQvh8sYfKx+gkbMMWU1kQ6K4aVpZMKESE79cPgnW4XUK9+0bP?=
+ =?iso-8859-1?Q?IlbqbsYXDrLbCIsYOY12Qe4byZKvjtq9Gb6GaXZdkYRaS9icPrJ2wJ8Y7o?=
+ =?iso-8859-1?Q?+o7klh1BAPitbCJX2vlu5Tb767hYXvhbeqN5Xbm1G/kJq0hHY3iFDOFYpr?=
+ =?iso-8859-1?Q?qeSRhL4SIbVJwXrTirvvH/LiHLz46aaFh5GSbMlKUkenTK9SsiStj7F3Pj?=
+ =?iso-8859-1?Q?PtVumd/I6UcKGUdxn+ylHM5t07tYkiSEphoPtLg3/flwUKMxoqZLg0yBur?=
+ =?iso-8859-1?Q?JaqkAJZq19j9X1AqHoOIPUMWjmY46xoCIU9/jDd3YUmEn7GC/9bsFF7dFi?=
+ =?iso-8859-1?Q?iLbI5+11f8sp4+nGx14RVBQCFv7axYTCGeIyKwRSRoNpX3jcMIYv3IaVGO?=
+ =?iso-8859-1?Q?nZrypcVH9ZOY8mmuezCAbwX5Gvwgk8WqQuHqKLrX8Df6aBxmz77G0KjvKk?=
+ =?iso-8859-1?Q?N96kJJ5DG0w4Y/MYMnUANN3miBSRXTCbfmvf9gEPvVPtkgoUQY0m0sW0D2?=
+ =?iso-8859-1?Q?yMVExPZitF+B3OYZHjc6LaSyPqFizp0YbzygtcyNeC/lFVSAJ/zM+yfGxq?=
+ =?iso-8859-1?Q?iu5ncVjV1PY25I1MuN/4H/tp3v5dYVvBWU+7YZHUUr+rLk1mceddKxbamJ?=
+ =?iso-8859-1?Q?4G5a16K6W0s2SHJlxo4xEJUx2z3fmfNKif4Wcg0BRwYIHNVvHZAEYrl2fl?=
+ =?iso-8859-1?Q?p7VC0tfHK2jgNalPIPsAFzc21uiUXQ5aVt60K/TkS8b+TzCIMExsG3Avvs?=
+ =?iso-8859-1?Q?C8q6XyyDm/lwRO4/7ytH33/3/18PRmbruU9gQKUDzAYHASG0g4+T9grCT+?=
+ =?iso-8859-1?Q?25SfZdHsgYpbmjmZ3+VazDzpYie8YjA1YxwCTHMNMJ5He9UqPzPXkIlMCI?=
+ =?iso-8859-1?Q?kQlxT03MMZQX9OB03hh+HwjHEIzqZ8+bk/Cam+CnPAolH4Qoa345g8PjVU?=
+ =?iso-8859-1?Q?Wy9Q21GQYT7cfV/IJSlaZymCXdplXrfBlW+afhNCLX3Xk5Wnn/2ZR8uNSu?=
+ =?iso-8859-1?Q?yH9qfMrkNISc5mwJB8UitJsr0j2k2uhov7GgXs/8Lu1v8LUi42hF+MS8MU?=
+ =?iso-8859-1?Q?Kd1toDy0P02KS8u9orAzTBCy0fdExnQWW3A3b3TehgmYCcZyKEWCUwsULU?=
+ =?iso-8859-1?Q?Cvjrzr/6TwWmzV1vkw9LZ2DpSpmBWi1qWidWbw778N+T4Qff59X2q2wYAp?=
+ =?iso-8859-1?Q?4kuRFMFcgg=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: variscite.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB4376.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ef4146f-bcae-4391-4373-08da52c0e7db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 13:29:30.2826
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7Py4qMLKSJgIulrO3Z8rSc/Z//TU4sHFv7MsRoJ9EPWiaZ5b02qSwh8AvEWGlCC4FVrgVvlBdE4YurbgLfdrfB+4/1epdireWKKlBwvNxaE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB3304
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,206 +134,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2022 13:16, Sudeep Holla wrote:
-> On Thu, Jun 16, 2022 at 05:02:28PM +0100, Dietmar Eggemann wrote:
->> On 13/06/2022 12:17, Sudeep Holla wrote:
->>> On Mon, Jun 13, 2022 at 11:19:36AM +0200, Dietmar Eggemann wrote:
->>>> On 10/06/2022 12:27, Sudeep Holla wrote:
->>>>> On Fri, Jun 10, 2022 at 12:08:44PM +0200, Vincent Guittot wrote:
->>>>>> On Mon, 6 Jun 2022 at 12:22, Sudeep Holla <sudeep.holla@arm.com> wrote:
-
-[...]
-
->>> What are you referring as 'glue them together'. As I said this series just
->>> address the hardware topology and if there is any impact on sched domains
->>> then it is do with alignment with ACPI and DT platform behaviour. I am not
->>> adding anything more to glue topology and info needed for sched domains.
->>
->> You can fix (1) without (2) parsing 1. level cluster nodes as
->> cluster_siblings.
->>
-> 
-> Technically yes, but I see no point in delaying it as it is considered as
-> broken with respect to the moment ACPI exposed the correct value and at the
-> same time resulted in exposing incorrect value in case of DT. I am referring
-> to the same change that introduced SCHED_CLUSTER. The damage is done and it
-> needs repairing ASAP.
-
-OK, then lets `/sys/.../topology/cluster_cpus` refer to pure
-topology-based cluster information. This can be DT cluster-node
-information or ACPI L3-tag information e.g. for KP920.
-
->>> Indeed. But I don't get what you mean by 2 level here. ACPI puts 1st level
->>
->> cpu_map {
->>   socket0 {
->>     cluster0 {    <-- 1. level cluster
->>       cluster0 {  <-- 2. level cluster (3 -->)
-> 
-> Oh I had misunderstood this level nomenclature, I refer it as leaf cluster
-> node which is 2. level cluster in this DT snippet.
-> 
->>         core0 {
->>
->>         };
->>         core1 {
->>
->>         };
->>       cluster1 {
->>   ...
->>
->> Armv9 L2 complexes: e.g. QC SM8450:
->>
->>       .---------------.
->> CPU   |0 1 2 3 4 5 6 7|
->>       +---------------+
->> uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
->>       +---------------+
->>   L2  |   |   | | | | | <-- 2. level cluster, Armv9 L2 complexes (<-- 3)
-> 
-> Again before I assume, what exactly <--3 here and in above snippet mean ?
-
-I wanted to show that we could encode `2. level cluster` as `Armv9 L2
-complexes`. But since we agreed (after the email was sent) not to
-support `nested cluster-nodes`, this idea does not hold anymore.
-
->>       +---------------+
->>   L3  |<--         -->|
->>       +---------------+
->>       |<-- cluster -->|
-> 
-> I think this is 2 level cluster or only cluster in this system w.r.t hardware.
-> So lets not confuse with multi-level if not necessary.
-
-No need, we said no `nested cluster-node` support in DT.
-
->>       +---------------+
->>       |<--   DSU   -->|
->>       '---------------'
->>
->> Only if we map (i) into cluster_sibling, we get the same hardware
->> representation (for the task scheduler) for ACPI (4) and DT (5) systems.
->>
-> 
-> What is (i) above ?
-
-Sorry, (i) was meant to be `3 -->`.
-
->> (4) examples:
->>
->> Kunpeng920 - 24 CPUs sharing LLC (cpu_coregroup_mask()), 4 CPUs sharing
->> L3-tag (cpu_clustergroup_mask()).
->>
-> 
-> Again decouple cache info and cluster info from h/w, you have all the info.
-> You can couple them together if that helps when you feed sched_domains.
-
-OK, this is what we finally agreed.
-
->> X86 Jacobsville - 24 CPUs sharing LLC (L3), 4 CPUs sharing L2
->>
->> Armv9 L2 complexes: e.g. QC SM8450 - 8 CPUs sharing LLC (L3), (for A510
->> (little CPUs)) 2 CPUs sharing L2
-> 
-> [...]
-> 
->>> And yes lstopo doesn't read cluster IDs. But we expose them in ACPI system
->>> and not on DT which was my main point.
-
-OK, no further discussion needed here. `/sys/.../topology/cluster_cpus`
-shows L2 (LLC) on Juno, L3-tag an KP920 or L2 on X86 Jacobsville. The
-cpu_xxx_mask()s of (e.g.) default_topology[] have to make sure that the
-scheduler sees the correct information (the hierarchy of cpumasks).
-
->> Understood. But a Kunpeng920 `cluster_cpus_list` file would contain
->> logically different information than a Juno `cluster_cpus_list` file.
->>
-> And why is that ?
-
-If we see it from the angle of the definition of SCHED_CONFIG_CLUSTER
-(`... the level of topology above CPUs ...` then I can see that both
-definitions are the same. (CPUS should be rather `cores` here, I guess?).
-
-[...]
-
->>> As pointed out earlier, have you checked ACPI on Juno and with 
->>> CONFIG_SCHED_CLUSTER ? If the behaviour with my series on DT and ACPI
->>> differs, then it is an issue. But AFAIU, it doesn't and that is my main
->>> argument. You are just assuming what we have on Juno with DT is correct
->>> which may be w.r.t to scheduler but definitely not with respect to the
->>> hardware topology exposed to the users. So my aim is to get that fixed.
->>
->> I never run Juno w/ ACPI. Are you saying that
->> find_acpi_cpu_topology_cluster() returns cpu_topology[cpu].cluster_id's
->> which match the `1. level cluster nodes`?
->>
-> 
-> Again I am totally confused as why this is now 1.level cluster where as above
-> SDM was 2.level cluster. Both SoCs have only 1 level of cluster. While SDM
-> has 1 DSU cluster, Juno has 2 clusters.
-
-No need in agreeing what level (could) stand(s) here for. We said `no
-nested cluster-node`.
-
->> The function header of find_acpi_cpu_topology_cluster() says that `...
->> the cluster, if present is the level of topology above CPUs. ...`.
->>
-> 
-> Exactly and that's how sysfs is also defined and we can't go back and change
-> that now. I don't see any issue TBH.
-
-OK.
-
->> From this perspective I can see your point. But this is then still
->> clearly poorly designed.
-> 
-> Not really as per the definition.
-
-Not from the viewpoint of topology and cacheinfo. But from the scheduler
-and the whole thing gets activated by a scheduler CONFIG option.
-
->> How would we ever support CONFIG_SCHED_CLUSTER
->> in DT when it really (potentially) would bring a benefit (i.e. in the
->> Armv9 L2-complex case) and not only create trouble for the task
->> scheduler to setup its domains correctly?
-> 
-> Indeed, that is the next problem once we get all these aligned across
-> DT and ACPI. They have diverged and I prefer not to allow that anymore
-> by adding more divergence e.g. to support Armv9 L2-complex case. Please
-> consider that on top of these, I am not addressing that at the moment.
-> In fact I am not addressing any sched_domain topics or issues. I have made
-> that clear 😉.
-
-If I recall the content of our discussion correctly, `Armv9 L2
-complexes` support could come from L2 (probably `LLC - 1` ?) detection
-from cacheinfo. But this is not part of this patch-set.
-
->> Also in case we stick to
->> setting CONFIG_SCHED_CLUSTER=1 by default, CLS should be the default LLC
->> sched domain and MC the exceptional one. Just to respect the way how the
->> task scheduler removes not useful domains today.
-> 
-> Fix the cpu_clustergroup_mask or any other cpu_*group_mask as per your
-> taste. The topology masks are just inputs to these and will not be changed
-> or diverged for these reasons. Sorry if that is not helpful, but that is the
-> reality with sysfs exposed to the user-space.
-
-Agreed. We don't have to rely on the task scheduler to build the right
-sched domain hierarchy out of every cpu_xxx_mask() functions. We can
-tweak cpu_xxx_mask() to get this done.
-
->>> If you are not happy with that, then how can be be happy with what is the
->>> current behaviour on ACPI + and - CONFIG_SCHED_CLUSTER. I haven't got
->>> your opinion yet on that matter.
->>
->> I guess it's clear now that ACPI + CONFIG_SCHED_CLUSTER with ``the level
->> of topology above CPUs` is congruent with LLC` creates trouble to the
->> scheduler. So I don't see why we should replicate this for DT. Let's
->> discuss further tomorrow in person.
-> 
-> I see it differently. If that creates a trouble, fix that and you will not
-> have any issues with DT too.
-
-OK, I think we (arm64) found a way to support a default
-CONFIG_SCHED_CLUSTER and fixing the `Juno lstopo` issue with a possible
-way to include `Armv9 L2 complexes` support via cacheinfo later.
+Hi All,=0A=
+=0A=
+> Hi everyone,=0A=
+=0A=
+> > > The i2c irq is masked when pcie starts a i2c transfer process=0A=
+> > > during noirq suspend stage. As a result, i2c transfer fails.=0A=
+> > > To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.=0A=
+> > > =0A=
+> > > Signed-off-by: Gao Pan <b54642@freescale.com>=0A=
+> > > Signed-off-by: Fugang Duan <B38611@freescale.com>=0A=
+> > > Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>=0A=
+=0A=
+> The SoB from Alifer Moraes is missing, too.=0A=
+=0A=
+> > > goto rpm_disable;=0A=
+> > > =0A=
+> > >=A0=A0=A0=A0=A0 /* Request IRQ */=0A=
+> > > -=A0=A0 ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHA=
+RED,=0A=
+> > > +=A0=A0 ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL,=0A=
+> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0 IRQF_SHARED | IRQF_NO_SUSPEND,=0A=
+> > >=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0 pdev->name, i2c_imx);=0A=
+> > >=A0=A0=A0=A0=A0 if (ret) {=0A=
+> > >=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dev_err(&pdev->dev, "can't cla=
+im irq %d\n", irq);=0A=
+> > =0A=
+> > =0A=
+> > I stumbled across Documentation/power/suspend-and-interrupts.rst which =
+states:=0A=
+> > > For this reason, using IRQF_NO_SUSPEND and IRQF_SHARED at the=0A=
+> > > same time should be avoided.=0A=
+> > Given this IMHO at least a comment should be inserted why this is fine.=
+ I dont =0A=
+> > have a full picture about the situation, but to me it seems there is a =
+=0A=
+> > reference missing, or why/how does some PCIe start some I2C transfer wh=
+en the=0A=
+> > controller is suspended already? Do I miss something?=0A=
+=0A=
+This patch has been introduced to fix the following behavior.=0A=
+HW conditions=0A=
+- Variscite DART-MX8M on DT8MCustomBoard v2.x or higher.=0A=
+- The PCIe connector uses a reset pin coming from a GPIO expander connected=
+ to the I2C bus.=0A=
+SW behavior=0A=
+- Upon wake-up, the PCIe try toggling the reset pins, but the GPIO expander=
+ / I2C bus are still suspended, leading to a PCIe wake-up failure.=0A=
+From our investigation, we can't identify a way to postpone PCIe wake-up af=
+ter I2C wake-up.=0A=
+This patch is still present in latest NXP kernel 5.15, but please let me kn=
+ow if you think this should be approached / fixed in a different way.=0A=
+=0A=
+Thanks=0A=
+Regards=0A=
+Pier=0A=
+=0A=
+=0A=
+> Thank you for this comment, Alexander. I second you, this needs=0A=
+> explanation.=0A=
+=0A=
+> Happy hacking,=0A=
+>   Wolfram=0A=

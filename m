@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157B4552412
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD227552411
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245670AbiFTSgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S245681AbiFTSgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245616AbiFTSgr (ORCPT
+        with ESMTP id S245637AbiFTSgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 14:36:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF871EEE5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:36:44 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so6405913pjg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:36:44 -0700 (PDT)
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089E31F61D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:36:46 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p5so5148859pjt.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 11:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anholt-net.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r8NdoW5AddDmipkvsjih16CXPQjsU0eZxi3OxKkBmN8=;
-        b=H+lKfc53MfoKWbnqFT89h/mhsoe7NhhEKrckelerE5pE/432Z3iaw7F1SU5lSMGrqJ
-         FnKa6NPxdxUeaC+s00glxACfjiGk/WGnMJlbQIH6u00gpgD9cckUxtxVCnf1jyvOPQoU
-         +fOslEDBVTSL1Gy7THBQtu2BMSdTLxqQeFir4ZRti+VfxfwhPYYzcwujuor+6XA5+K6l
-         MO5/6PRdBvYtwVWe+/26N26yUtMeZgxY8fqyDx3J3uqp8zTy0Cu2L3YwStQF9WTEZpAb
-         DWpePaBt/jlMP9L50HQ27nqGppXu167xQ65N079vLwRk9Ybn982GujmmWrz52Kjfdw0x
-         84xA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dYnEPoGZqfZYJAuPegqx++UzPWjcPYHxQtwczgOEqOY=;
+        b=j27uV95QDHmh28z29YzfPn3mYVjgQeD4AjLpoagSqW19OAWVkRFOHjYUOCslMxwhqS
+         8lw/4ul9kFOZw8r+4NfjnLyke4Ov1rf8JPUzzFfx2oPJU1GcZHlLopjosMj5XGo3nvUu
+         ep4bc9OllPhyOPJ/95NZh5DTjYq3MXOjlURHmycUaCYajuixGmRxiCia5GFA3yo3JMuk
+         3WFrf8GZ2yGDYglM9CNwrlf0gkpbcAVQ/hlVXD7L0hBLUFBsrDcrbDz+wnEK/0ixHu8L
+         h2pPMd3Jhe4fy/M+xWzMzstO7ugktrNpSJCtX9eZUIdySavMl3jHcZy7PJt+Mgcqu5ec
+         Efgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r8NdoW5AddDmipkvsjih16CXPQjsU0eZxi3OxKkBmN8=;
-        b=45HOJf2kgxV1FTygAQ/lNCE5whfxFD1FtcVznl5OA1XkYNmlZMLVO5/S6GLRqJbPQ9
-         WKWJBGZYh4XKRQriPvXwC2QBRCQS9aZONU1hyXOFo1hVRw5EOrSNYznv2hQxFLITo6T9
-         VD92RIEs7dYGfIKWTkfvP2MohL4pbxWH2guFbrpRXffFKbDMtvZxAE4LFa+pgJZmKhwK
-         pE57QBjthtBg/pAmBsUVUXcSj3VnNwPjntFC7SchfbTc9Vi9q4tz7v0nXv1FvSbDxSfW
-         WX8a3yDNv4+uCARzGfhlh9YPvdJxXDIKKTRncxHNoe5mq4ha1ZIAPZUWm/n9bqMmkjcT
-         az+w==
-X-Gm-Message-State: AJIora83rTNmAORBX9aaJErCvhnq3nUoOnslon5d/XXOpQFO8J8HvfNW
-        fS6EnnlqQALsoHMDN+k6ySR6OQ==
-X-Google-Smtp-Source: AGRyM1uQfz7pZ9DWLMJTwN2MFiyDfq/jBEgrSB5FWoXIJh1Yc8zL8k5KuFSfqFGI+JOH70LUpG/riQ==
-X-Received: by 2002:a17:902:d718:b0:168:d9df:4f1c with SMTP id w24-20020a170902d71800b00168d9df4f1cmr25205344ply.41.1655750204246;
-        Mon, 20 Jun 2022 11:36:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dYnEPoGZqfZYJAuPegqx++UzPWjcPYHxQtwczgOEqOY=;
+        b=rtqZeBOKtG171BZFCg70ZMPfLHqP0id+XAKLdA/A6FBRxZTuqW7XTrkV4wA//JXJDp
+         7ufs3sftixFNk3XtCgySHEVMTRCjlKOFEMA8k8ArB32ADP/MlDnosSGGip5YW2kWx1e0
+         cg9iZMPCdxHjCYjWyYnnsqQs9fU1r9PuqmirgJQyyluQEMFEaPIJ36um1BNY3sQjWjkk
+         HuvDknlo8AnejDGM46mO+U+8m9i5O9yLM+D76Jq/+AM8spru3ti2pUOPo44T6sGg7EnK
+         41pI3rAmJemUx9jokcDEjGWWeh+Q1g5u6GQrIuhk890rG3taxlBr59xfclJazTVtm55t
+         5MCA==
+X-Gm-Message-State: AJIora8s8/M01XzRwjhfjwax7ojD7YEbLiJG8Z+MNUIzIq6dsd2i25Pd
+        S5wMjmM52xMWqhZ14Lml5Cxypg==
+X-Google-Smtp-Source: AGRyM1uz/6Ko3AqqWsTQqB/KJYqsG9FJzSMzyl3BFf9B5wef0b4KsUd6G43yzj9L9DvutkGyCDta0A==
+X-Received: by 2002:a17:90b:3b8a:b0:1e2:ee1e:6340 with SMTP id pc10-20020a17090b3b8a00b001e2ee1e6340mr28501640pjb.38.1655750205525;
+        Mon, 20 Jun 2022 11:36:45 -0700 (PDT)
 Received: from wildbow.anholt.net ([97.115.187.17])
-        by smtp.gmail.com with ESMTPSA id ds12-20020a17090b08cc00b001e0c1044ceasm8500041pjb.43.2022.06.20.11.36.43
+        by smtp.gmail.com with ESMTPSA id ds12-20020a17090b08cc00b001e0c1044ceasm8500041pjb.43.2022.06.20.11.36.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 11:36:43 -0700 (PDT)
+        Mon, 20 Jun 2022 11:36:44 -0700 (PDT)
 From:   Emma Anholt <emma@anholt.net>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
@@ -59,11 +59,16 @@ To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Robin Murphy <robin.murphy@arm.com>,
         Joerg Roedel <joro@8bytes.org>
 Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, Emma Anholt <emma@anholt.net>
-Subject: [PATCH v2 0/2] per-process page tables for qcom 8250
-Date:   Mon, 20 Jun 2022 11:36:31 -0700
-Message-Id: <20220620183633.1131760-1-emma@anholt.net>
+        linux-arm-kernel@lists.infradead.org,
+        Emma Anholt <emma@anholt.net>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 1/2] iommu: arm-smmu-impl: Add 8250 display compatible to the client list.
+Date:   Mon, 20 Jun 2022 11:36:32 -0700
+Message-Id: <20220620183633.1131760-2-emma@anholt.net>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220620183633.1131760-1-emma@anholt.net>
+References: <20220620183633.1131760-1-emma@anholt.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,19 +81,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enable per-process page tables on the Qualcomm RB5 boards I'm
-setting up for Mesa CI.  Has survived a full deqp-vk run.
+Required for turning on per-process page tables for the GPU.
 
-v2: moved qcom,adreno-smmu compatible earlier
-
-Emma Anholt (2):
-  iommu: arm-smmu-impl: Add 8250 display compatible to the client list.
-  arm64: dts: qcom: sm8250: Enable per-process page tables.
-
- arch/arm64/boot/dts/qcom/sm8250.dtsi       | 2 +-
+Signed-off-by: Emma Anholt <emma@anholt.net>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+index d8e1ef83c01b..bb9220937068 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+@@ -233,6 +233,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
+ 	{ .compatible = "qcom,sc7280-mdss" },
+ 	{ .compatible = "qcom,sc7280-mss-pil" },
+ 	{ .compatible = "qcom,sc8180x-mdss" },
++	{ .compatible = "qcom,sm8250-mdss" },
+ 	{ .compatible = "qcom,sdm845-mdss" },
+ 	{ .compatible = "qcom,sdm845-mss-pil" },
+ 	{ }
 -- 
 2.36.1
 

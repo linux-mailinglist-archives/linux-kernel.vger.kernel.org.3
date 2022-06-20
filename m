@@ -2,400 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F4F551901
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075E455190E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242709AbiFTMfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S242387AbiFTMhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242818AbiFTMd2 (ORCPT
+        with ESMTP id S240242AbiFTMh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:33:28 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131986241
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655728407; x=1687264407;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=3a6jq5mf9EwgiHcZ3krQN7yO/1tAKGrsF7+BtxkTz+s=;
-  b=HeldLkmunQ6hGQ1YqV+PuUJ6RIBPS2QU0NntjiGR3qkk1ib1qGlwyqhH
-   OlI9QnFmxYexWgF7sD9mjiJb7bSusn9IHiaiYu5SWIYoe1DdgdLPR2stj
-   kpOOOLD/5IyMWwYcVdXm/OD8sxsgXrCtzEYs18JRg/6YcAFvBJtRkWSDh
-   1GuC/Ldf0DQJOWMtNCauw5bCu73/x0zDQWtar6qlLs0pHzhdgYcMGeg53
-   jNp4Lzh4jvPlIk6IIUayG4aUNHZ8awOd9/qVMjhRApAJXvYMSR5TPVhxd
-   5ZrVwxbZJQOoVKgybvUxknoqam2JmITJ4AkjrVcVV5FccrPKe7KqRBdME
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341565363"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341565363"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 05:33:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="913642512"
-Received: from dkburrow-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.191.162])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 05:33:22 -0700
-Message-ID: <78873cc1db47ba00a4c01f38290521c1a6072820.camel@intel.com>
-Subject: Re: [PATCH v8 2/5] x86/tdx: Add TDX Guest event notify interrupt
- support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 21 Jun 2022 00:33:20 +1200
-In-Reply-To: <20220609025220.2615197-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220609025220.2615197-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 20 Jun 2022 08:37:27 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2047.outbound.protection.outlook.com [40.107.22.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9BE15FE7;
+        Mon, 20 Jun 2022 05:37:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g/gdmcRJz4G0YX3Z+vt3cM70FXLbqpD7UwDKq/stc59A11qBr4xnr2Xx++qoKYCoqwTYedAaJQk8BciuNmV5FGkkA685nnE3Mmr4UIqBlagnuWfVgW91A90IF1fk8GF1WGhRQMGqTnoaNdFBgp0w7TmS9eGwuu99pqWsHNnpR6RcTJKj3STkzSdK9VKnmgURBkGmER3mwnWiOJu+lIT5SRzFHx3uBMYZc6KiyGDbyc9OCNfE4+cWumL1QdjtBv0Z3Z4Tcnif7ALEUGk3RewvMfsqR0YpRG0t2/CTXZW2hRPnea0EQq+UDPO1qYunhSARTl2ZYC5p7Sig7OVSKvsuAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sgl9RWdY5LtKlMnFWjuiAyHcdPQjqJGiWztZ70QOmOc=;
+ b=Im57NWxwN6md8qW7O8k4ZFsrrpZj1i9gn1XdKW5bT1Ne4hcYRc4SzGzoJMZq3nIFdPY2Mwt/H8DLBMuLf2wLDnkwCho0QtXqtupYh8alzm+l1TWXDNPPNKIQOMEBQS9VdcJKNV8J6bEEEnz7mQtYk1/1xTNH48Ia0/YAV+fcdJ39z6GcmNrQ37WDKr9xECGxvgrCaKLY88zTEMiL52eaiQITI0hG8twzZPtkYbLwYoUAOPZyhdWaEerzoCdLKzSID/uycx6qdX5ZVu59Soi1Jf4Idh05mdzosNV1YUteFQQHU8rYfeKagmyHXLVENrJIF/wjHqagt4aKGr2g9x6igw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sgl9RWdY5LtKlMnFWjuiAyHcdPQjqJGiWztZ70QOmOc=;
+ b=SlUPn1lox8yhOK9nYVc8SHppnrFyNcQCFN0MRva9meKx3RD4uIPg2CEkAlRUh9EpzTsxYGC2I3b4fITNhhNtRwayh0xjjT+vCklDbULZhe2rZMNOD1x+Hirvh2E0fBWKPMdELwYohrRbtOxtBs+kW5Mk0cFmONSQ6OPJKTuTqgQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM8PR04MB7873.eurprd04.prod.outlook.com (2603:10a6:20b:247::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.22; Mon, 20 Jun
+ 2022 12:37:24 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::3c82:f63b:711a:502]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::3c82:f63b:711a:502%6]) with mapi id 15.20.5353.021; Mon, 20 Jun 2022
+ 12:37:24 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kishon@ti.com, vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, krzysztof.kozlowski@linaro.org
+Subject: [PATCH v3 0/3] phy: freescale: Add i.MX8qm Mixel LVDS PHY support
+Date:   Mon, 20 Jun 2022 20:38:51 +0800
+Message-Id: <20220620123854.1138028-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0219.apcprd06.prod.outlook.com
+ (2603:1096:4:68::27) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6448ec73-2f0e-4cd4-5c2a-08da52b9a06e
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7873:EE_
+X-Microsoft-Antispam-PRVS: <AM8PR04MB7873FBF212B0EEC019F4789D98B09@AM8PR04MB7873.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zRTQvvbLU86czsP2MMQ0fNBVR2haMvwjhowiwIVuW2HHfexZZx9RKOioWq4TPwIu+moROwn2mCxbPD0jhcaoyYo2c8V1AECnkXD9cxq/JELDhWwYSzc9G7RA9t7Ks2pDFgKVabD+orfyanrjAtRZT4e8AD54VCSt5WLfr66/3uIRvs6T8/tWBU9FAIE9JIURJ/zvRu3IRaeN6iSsbup/pBN/r3YLPF/MJ0RI5Hg2X8ICL3X2H3+//w7vB6HVM8oMIYfShaTOHsPKgKRd8jKyX9CpXl21OhQGXYa+98haEkjPVA0ICDHg5Shr7zBxCb9VumKDevGJYx1AJ7ivr6/WrFANueO8YCdRQLeGunY7VGKCRyt+e3iG/2MoSqzwWlJxPVJi5kMC50wkC5o+vJH5qSHBHimszLMPMXaptRS74eGHkXKEYKmw70eKsbpxlCsAYMsFVBFcykQIuAvJBWnmCcoVN2a7q/wr1gCb8zduVPOW1lMUWUYl8XpyVGcMIqhwLIQp0ok0VS6xyJXSaDmJ9Z4IFJdd1pp7EyazVle0DzJOXfmdOgGVQmYVnlm5c9Oa0jyzxTZumGhcabvX3wbXdgsw7MY6AlRKdJVD1TA5cqVNgyvifO2iYx+NyAeSgTd8nz3qhH73CJCXBckSGdo2vc/CVFva7pING//FlXiSwbJHMDlKhMfljMCsiCMy+ZUcNBeFP0yDZYjj9ya62d0SUQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(66556008)(66946007)(36756003)(8676002)(4326008)(66476007)(6486002)(83380400001)(316002)(186003)(1076003)(478600001)(8936002)(2616005)(5660300002)(41300700001)(38100700002)(7416002)(6512007)(26005)(38350700002)(52116002)(6666004)(6506007)(86362001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zPYl1Hfijd5BHIYfBD28Qrd3ZCUSW60S1gHxWIVkJMu8/QlRdePfrhe4ioG/?=
+ =?us-ascii?Q?ITPJfLsgc4//5FCcIpyhcll9Ayu3zAqKtnVvb6ObF17RdnUb690jQkEvHxcY?=
+ =?us-ascii?Q?iZXVjsCeDIZrITCQwpExpztXGjbstZlBTiRqD1cVcWDMVBjg7iUO1Whf9RAA?=
+ =?us-ascii?Q?tcOg9pGsiQahbQUI8VHySQe2sYCP5E3+pAYEXvQ6YSUgdcQfDq8xFmWe4gzb?=
+ =?us-ascii?Q?NEvxdAXINO+pmYf8Ff6EkgwF9o4hsgZW46eWoxOC3c97u1Btls4yYAKea8nl?=
+ =?us-ascii?Q?7rA18H16XJe5z6yDWQBFhtft9x14YyUBEL3bN1vwYdgT65yrncLeRbBgMket?=
+ =?us-ascii?Q?ng+nu3WhrjBQrE/JZ4VsVxX5KnSysIjMsgIo3zNplV9ZjU5CNVFRZd1TCFYo?=
+ =?us-ascii?Q?t4ImUTVt7TW99b4Ufj0ys1+YLzgo6xgTgC7YjorpHl2cwH4aEoW+g7AoOdsS?=
+ =?us-ascii?Q?pax7Eivt4kHmb4HJG0NWNbF/qOlHRSJOHB+PY0yh0u+r6tYF/ntEeLGLOP6q?=
+ =?us-ascii?Q?RrcuGYRKyljKwi7e32ziAmyGBSbtcgOMYeWBNK6Ari1lRYRcUxbHkBzvTb+B?=
+ =?us-ascii?Q?0/EMQ/GIR7jlRuFoGS5c1AAETm2iSI5kEimN2n+BNWQ/Vv0QsVp10nu+yBnH?=
+ =?us-ascii?Q?P/ZyFbibMc2756Jh06qsqLJibFN255ym8MQIsdBk4vaHJgyn+9tpky+8Se2m?=
+ =?us-ascii?Q?Sq8caoR8GHG3rSHn5Nu76y7lg1UcOj3aF9cotNwwdEUv6YuKIVE+Y6sBaXkY?=
+ =?us-ascii?Q?DSVXVZ7UuAnTY8EKofalwTbr29BgV6xEOQ0Sj/eCwhdMmj7z9o/pr1uEFZCj?=
+ =?us-ascii?Q?SNnGiGj8QgKIYbh9qcR+PUYXRGN8HM9P3KtGXWmM9iDo8FLGRSrtNfSojh3r?=
+ =?us-ascii?Q?LMqYdncpUTDn9VghbmUXj+dH0J1vS99VCiRLUlRQGOib9+zjNE0LAs2x5o1q?=
+ =?us-ascii?Q?oge9l95x5C+Xnd2P0WdnCFjv3r+6ZCEn1EzYbxyFrb2kYt0fMMVDuWrIX0gr?=
+ =?us-ascii?Q?WDpZHxHGgO7H8e4IFGDANpf6LiJ00eMySj908Vt69VRCQm3VH5cRZ3SfEqPn?=
+ =?us-ascii?Q?2KyCE7aGwnlSo0MCnuToEqYV2JTvbmHmYHNCSqCsDgmq+Ozy/Dc8exJ/swyn?=
+ =?us-ascii?Q?KUnjG67dQNeYBVb3NQvZXrXqoILXRFIK3+t5zV9XEoxf/ScpTCniGyxu1Vj2?=
+ =?us-ascii?Q?+mHMaqVQRGyV2OsKd/CnuCjxiA74j4uHU24IaeKPkr+5qHwdhn1lxdTh1fGC?=
+ =?us-ascii?Q?dKuHYMCON7FgChPTNw6anmJ92/GEd4rPTrq6IJBNp9ixUe14g2iJrxh1BUIF?=
+ =?us-ascii?Q?aTB401PpbjhahuHvES4hGTsu0N+0T6lh760msuJFPXlN9bq+E3l6BfwYtaXI?=
+ =?us-ascii?Q?3tjYz6A/0YjyFzNwbvQ6LtsQwwfKOcr+puw7w0Ayk2npldgnC1qIoN07HUyD?=
+ =?us-ascii?Q?UeMUxRkKYrSpzZHPz2dp1yPeukz80LaMDwWjgS9qJiwrlbAwrOYC5w7YUV9H?=
+ =?us-ascii?Q?gdIYpO2+QFyi8+a1KImnb/SUmT+P59XaVGsJCvtXKxkPQ8YVmElTKkggtVQX?=
+ =?us-ascii?Q?TpLiNRH5vngqC9jm87KSWAdaPBZ4bsI8K8gRhJhfSbUyHEYdPbRiOXB51bzO?=
+ =?us-ascii?Q?zLWuUgZVkFSt9NH9Jr/zd9C+saiouzhfs+IWLGDXzPtuX2WQk0ZFtzpLbpUO?=
+ =?us-ascii?Q?5d8S5nBY2PCP/rMa9PnKcMyWqSdx9otz938OCIHsDH2YXWosjg6OUwQ/bGgL?=
+ =?us-ascii?Q?CZPzkDdX1Q=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6448ec73-2f0e-4cd4-5c2a-08da52b9a06e
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 12:37:24.3016
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HdHdK3Lwo5gy3ezOyG0wdOD3cnpjzfbWA3Cmi+R1w6ZSX+W+s7KEQcweeFyA0rLvtbYZZnoB46cQI79L6+ViBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7873
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-08 at 19:52 -0700, Kuppuswamy Sathyanarayanan wrote:
-> Host-guest event notification via configured interrupt vector is useful
-> in cases where a guest makes an asynchronous request and needs a
-> callback from the host to indicate the completion or to let the host
-> notify the guest about events like device removal. One usage example is,
-> callback requirement of GetQuote asynchronous hypercall.
+Hi,
 
-Although this paragraph is from GHCI spec, IMHO it is not very helpful.  In
-fact, I think this paragraph is not that right and should be removed from G=
-HCI.
-The reason is such event notification from VMM in cases like "device remova=
-l" is
-too vague.  There's no _specification_ in GHCI around which "device removal=
-"
-should VMM inject such event.  For instance, I _think_ the Qemu enumerated =
-ACPI-
-based hotplug should continue to work in TD.
+This series aims to add Freescale i.MX8qm LVDS PHY driver and dt-binding
+support.
 
-That being said, if a TD has multiple devices, it cannot know whether the V=
-MM
-will inject the removal event via the vector set by SetupEventNotifyInterru=
-pt.=20
-And for the same device in the same TD, different VMMs may use different wa=
-y to
-notify its removal.
+The PHY IP is from Mixel, Inc.
+The PHY IP supports two LVDS PHYs, thus two LVDS channels.
 
-It seems GetQuote is the only user of SetupEventNotifyInterrupt.  Maybe we
-should just declare it is for GetQuote.
+Each LVDS PHY may work by itself to support a LVDS display device.
 
-Isaku, what do you think?  Does this make sense?
+When two LVDS PHYs are enabled simultaneously, PHY configurations and reference
+clock rate have to be the same since there is only one set of PHY registers.
+In this case, the two LVDS PHYs are usually used to support a dual LVDS link
+display device, one as master PHY and the other as slave PHY.
 
->=20
-> In TDX guest, SetupEventNotifyInterrupt hypercall can be used by the
-> guest to specify which interrupt vector to use as an event-notify
-> vector to the VMM. Details about the SetupEventNotifyInterrupt
-> hypercall can be found in TDX Guest-Host Communication Interface
-> (GHCI) Specification, sec 3.5 "VP.VMCALL<SetupEventNotifyInterrupt>".
-> Add a tdx_hcall_set_notify_intr() helper function to implement the
-> SetupEventNotifyInterrupt hypercall.
+Patch 1/3 adds vendor prefix for the PHY IP vendor 'Mixel, Inc.'.
+Patch 2/3 adds dt-binding for the PHY IP.
+Patch 3/3 adds PHY driver support.
 
-As you also used "can" above, the GHCI only says the VMM _CAN_ inject the v=
-ector
-set by SetupEventNotifyInterrupt, but not must (3.3 TDG.VP.VMCALL<GetQuote>=
-).=20
-This means theoretically TD should implement pooling mode in case VMM doesn=
-'t
-support injecting event via vector done by SetupEventNotifyInterrupt?
+v2->v3:
+* Add Krzysztof's A-b tag on patch 1/3.
+* Change compatible string from 'mixel,lvds-phy' to
+  'mixel,28fdsoi-lvds-1250-8ch-tx-pll' in patch 1/3. (Krzysztof)
+* Rename dt-binding file to 'fsl,imx8qm-lvds-phy.yaml'. (Krzysztof)
 
-Perhaps we should update the GHCI spec to use must..
+v1->v2:
+* Document vendor prefix for the PHY IP vendor 'Mixel, Inc.'. (Krzysztof)
+* Set fsl,imx8qm-lvds-phy' and 'mixel,lvds-phy' as compatible's enum. (Krzysztof)
+* Skip 'clock-names' property. (Krzysztof)
+* Drop 'This patch' from commit messages. (Krzysztof)
+* Make dev_err_probe() function calls as one-liners. (Krzysztof)
+* Drop unnecessary debug messages. (Krzysztof)
 
->=20
-> Reserve 0xec IRQ vector address for TDX guest to receive the event
-> completion notification from VMM. Also add related IDT handler to
-> process the notification event.
+Liu Ying (3):
+  dt-bindings: vendor-prefixes: Add prefix for Mixel, Inc.
+  dt-bindings: phy: Add Freescale i.MX8qm Mixel LVDS PHY binding
+  phy: freescale: Add i.MX8qm Mixel LVDS PHY support
 
-Here lacks why we need to choose to reserve a system vector.  For instance,=
- why
-we cannot choose to use device IRQ way which only requires one vector on on=
-e
-cpu.  As you can see reserving a system vector isn't ideal especially for
-attestation as it is not a frequent operation.  It is wasteful of using IRQ
-resource especially on server systems with a lot of CPUs.
+ .../bindings/phy/fsl,imx8qm-lvds-phy.yaml     |  61 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ drivers/phy/freescale/Kconfig                 |   9 +
+ drivers/phy/freescale/Makefile                |   1 +
+ .../phy/freescale/phy-fsl-imx8qm-lvds-phy.c   | 440 ++++++++++++++++++
+ 5 files changed, 513 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/fsl,imx8qm-lvds-phy.yaml
+ create mode 100644 drivers/phy/freescale/phy-fsl-imx8qm-lvds-phy.c
 
-The reason is SetupEventNotifyInterrupt TDVMCALL only has one argument, whi=
-ch is
-vector, but cannot specify which CPU that the VMM should inject the event t=
-o.=20
-The GHCI spec doesn't say which CPU the VMM should inject to (i.e. must inj=
-ect
-to the CPU on which SetupEventNotifyInterrupt is called), so we can only as=
-sume
-VMM can inject to any CPU.
-
-Btw, x86 maintainers,
-
-I'd like to check with you to see whether we should improve the existing
-SetupEventNotifyInterrupt so we can choose to use request_irq() style for
-attestation.  Using request_irq() means we don't need to reserve a system
-vector, but can allocate a vector dynamically when needed.
-
-Assuming we update SetupEventNotifyInterrupt to also allow TD to specify wh=
-ich
-CPU (i.e. via APICID) to inject (along with the vector), my understanding i=
-s we
-can use below way (idea only) to dynamically allocate a vector on one CPU w=
-hen
-attestation is needed:
-
-
-	int cpu, vector;
-	int irq;
-
-	// request an IRQ, and prevent it from being migrated
-	irq =3D __irq_domain_alloc_irqs(x86_vector_domain, 0, 1, ...);
-	request_irq(irq, ...);
-=09
-	// get vector, cpu from irq
-
-	TDVMCALL<SetupEventNotifyInterrupt>(vector,=C2=A0
-		apic->cpu_present_to_apidid(cpu));
-=09
-Is this reasonable? If yes, is it worth to do?
-
---=20
-Thanks,
--Kai
-
-
->=20
-> Add support to track the notification event status via
-> /proc/interrupts.
->=20
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Acked-by: Wander Lairson Costa <wander@redhat.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@lin=
-ux.intel.com>
-> ---
->  arch/x86/coco/tdx/tdx.c            | 71 ++++++++++++++++++++++++++++++
->  arch/x86/include/asm/hardirq.h     |  3 ++
->  arch/x86/include/asm/idtentry.h    |  4 ++
->  arch/x86/include/asm/irq_vectors.h |  7 ++-
->  arch/x86/include/asm/tdx.h         |  4 ++
->  arch/x86/kernel/irq.c              |  7 +++
->  6 files changed, 95 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 03deb4d6920d..94542876f26a 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -11,6 +11,10 @@
->  #include <asm/insn.h>
->  #include <asm/insn-eval.h>
->  #include <asm/pgtable.h>
-> +#include <asm/apic.h>
-> +#include <asm/idtentry.h>
-> +#include <asm/irq_regs.h>
-> +#include <asm/desc.h>
-> =20
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
-> @@ -19,6 +23,7 @@
-> =20
->  /* TDX hypercall Leaf IDs */
->  #define TDVMCALL_MAP_GPA		0x10001
-> +#define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
-> =20
->  /* MMIO direction */
->  #define EPT_READ	0
-> @@ -34,6 +39,26 @@
->  #define VE_GET_PORT_NUM(e)	((e) >> 16)
->  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
-> =20
-> +/*
-> + * Handler used to report notifications about
-> + * TDX_GUEST_EVENT_NOTIFY_VECTOR IRQ. Currently it will be
-> + * used only by the attestation driver. So, race condition
-> + * with read/write operation is not considered.
-> + */
-> +static void (*tdx_event_notify_handler)(void);
-> +
-> +/* Helper function to register tdx_event_notify_handler */
-> +void tdx_setup_ev_notify_handler(void (*handler)(void))
-> +{
-> +	tdx_event_notify_handler =3D handler;
-> +}
-> +
-> +/* Helper function to unregister tdx_event_notify_handler */
-> +void tdx_remove_ev_notify_handler(void)
-> +{
-> +	tdx_event_notify_handler =3D NULL;
-> +}
-> +
->  /*
->   * Wrapper for standard use of __tdx_hypercall with no output aside from
->   * return code.
-> @@ -98,6 +123,46 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u=
-64 rdx, u64 r8, u64 r9,
->  		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
->  }
-> =20
-> +/* TDX guest event notification handler */
-> +DEFINE_IDTENTRY_SYSVEC(sysvec_tdx_event_notify)
-> +{
-> +	struct pt_regs *old_regs =3D set_irq_regs(regs);
-> +
-> +	inc_irq_stat(irq_tdx_event_notify_count);
-> +
-> +	if (tdx_event_notify_handler)
-> +		tdx_event_notify_handler();
-> +
-> +	ack_APIC_irq();
-> +
-> +	set_irq_regs(old_regs);
-> +}
-> +
-> +/*
-> + * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
-> + *
-> + * @vector: Vector address to be used for notification.
-> + *
-> + * return 0 on success or failure error number.
-> + */
-> +static long tdx_hcall_set_notify_intr(u8 vector)
-> +{
-> +	/* Minimum vector value allowed is 32 */
-> +	if (vector < 32)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Register callback vector address with VMM. More details
-> +	 * about the ABI can be found in TDX Guest-Host-Communication
-> +	 * Interface (GHCI), sec titled
-> +	 * "TDG.VP.VMCALL<SetupEventNotifyInterrupt>".
-> +	 */
-> +	if (_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
->  static u64 get_cc_mask(void)
->  {
->  	struct tdx_module_output out;
-> @@ -688,5 +753,11 @@ void __init tdx_early_init(void)
->  	x86_platform.guest.enc_tlb_flush_required   =3D tdx_tlb_flush_required;
->  	x86_platform.guest.enc_status_change_finish =3D tdx_enc_status_changed;
-> =20
-> +	alloc_intr_gate(TDX_GUEST_EVENT_NOTIFY_VECTOR,
-> +			asm_sysvec_tdx_event_notify);
-> +
-> +	if (tdx_hcall_set_notify_intr(TDX_GUEST_EVENT_NOTIFY_VECTOR))
-> +		pr_warn("Setting event notification interrupt failed\n");
-> +
->  	pr_info("Guest detected\n");
->  }
-> diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardir=
-q.h
-> index 275e7fd20310..582deff56210 100644
-> --- a/arch/x86/include/asm/hardirq.h
-> +++ b/arch/x86/include/asm/hardirq.h
-> @@ -44,6 +44,9 @@ typedef struct {
->  	unsigned int irq_hv_reenlightenment_count;
->  	unsigned int hyperv_stimer0_count;
->  #endif
-> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-> +	unsigned int irq_tdx_event_notify_count;
-> +#endif
->  } ____cacheline_aligned irq_cpustat_t;
-> =20
->  DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idten=
-try.h
-> index 72184b0b2219..655086dd940e 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -700,6 +700,10 @@ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	=
-sysvec_xen_hvm_callback);
->  DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_kvm_asyncpf_i=
-nterrupt);
->  #endif
-> =20
-> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-> +DECLARE_IDTENTRY_SYSVEC(TDX_GUEST_EVENT_NOTIFY_VECTOR,	sysvec_tdx_event_=
-notify);
-> +#endif
-> +
->  #undef X86_TRAP_OTHER
-> =20
->  #endif
-> diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/ir=
-q_vectors.h
-> index 43dcb9284208..82ac0c0a34b1 100644
-> --- a/arch/x86/include/asm/irq_vectors.h
-> +++ b/arch/x86/include/asm/irq_vectors.h
-> @@ -104,7 +104,12 @@
->  #define HYPERV_STIMER0_VECTOR		0xed
->  #endif
-> =20
-> -#define LOCAL_TIMER_VECTOR		0xec
-> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-> +/* Vector on which TDX Guest event notification is delivered */
-> +#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
-> +#endif
-> +
-> +#define LOCAL_TIMER_VECTOR		0xeb
-> =20
->  #define NR_VECTORS			 256
-> =20
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 020c81a7c729..eb4db837cc44 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -67,6 +67,10 @@ void tdx_safe_halt(void);
-> =20
->  bool tdx_early_handle_ve(struct pt_regs *regs);
-> =20
-> +void tdx_setup_ev_notify_handler(void (*handler)(void));
-> +
-> +void tdx_remove_ev_notify_handler(void);
-> +
->  #else
-> =20
->  static inline void tdx_early_init(void) { };
-> diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-> index 766ffe3ba313..a96ecd866723 100644
-> --- a/arch/x86/kernel/irq.c
-> +++ b/arch/x86/kernel/irq.c
-> @@ -181,6 +181,13 @@ int arch_show_interrupts(struct seq_file *p, int pre=
-c)
->  		seq_printf(p, "%10u ",
->  			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
->  	seq_puts(p, "  Posted-interrupt wakeup event\n");
-> +#endif
-> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-> +	seq_printf(p, "%*s: ", prec, "TGN");
-> +	for_each_online_cpu(j)
-> +		seq_printf(p, "%10u ",
-> +			   irq_stats(j)->irq_tdx_event_notify_count);
-> +	seq_puts(p, "  TDX Guest event notification\n");
->  #endif
->  	return 0;
->  }
-
+-- 
+2.25.1
 

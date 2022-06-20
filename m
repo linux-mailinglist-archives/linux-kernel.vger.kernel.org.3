@@ -2,154 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2865855217D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562C455218F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241024AbiFTPrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S237029AbiFTPtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiFTPrJ (ORCPT
+        with ESMTP id S244332AbiFTPsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:47:09 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50075.outbound.protection.outlook.com [40.107.5.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492981ADB5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:47:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TcGv718ykbA+37i6YgO/+8t+QIxSuWfbAYxzTLXoWfHRLI1ug9lhfsaYNOMoadPx/z1dQ/Tu6jZgzEuz8rGoHOb/I3LwxbT6kA30s+OyUKWhM6S5PHgpKqzUlD3UY4tjxEZuqaEjS1Ba+3GUKkHXO/2f9m+9L6TlpEt+ebxkc7keS4qHdPZSztxGLTH54Mz/3zgm4cXGX2HTSBWME5QxFzeOKcT6DjQFDubhLaJrwoXdQ7hcYPYsKrDd7wEyXqv6KKgMt2zdeKqS4vpuxjUAsXgWK7NF9L5LvjmZnEaqOlF9mlGqzMEXrDtzOWaHcAfv7YNxZxObq+RIaRSytKwvKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EjCqTZGqDaJPoL+Ln1xfgV/OwPvjRuvNv10P6jtYOZI=;
- b=ClOF0N3UFsN5ZelGQZBkCoLXSfLwv07DECiu6FB4mSJ+uITQE8Ii1idLyf1dR8LNlORRsYchRN1sqZKdeILbosCTGqZSAwxqX5TUNm26dLvxvz2H8h/eCjMa1uCyPO4vCuStPh/9zhdJTQ8IRuBjBplr4htL37RJXWvMhtHtWn7Jp6IN7erlvjqjfnSTvbCiXh8/yfTBDLk9b84VrYyA1xyJpEXe7V9lE3bOT3Lciqi33j1suubEwGCki7qKxXhTgGPrSpXL6h8YZXVB/nfI2Jb1kgTc4m96raza4FlaSIKTzvOb5QpCpYszpUPPloz25tKoI6cYY14L1vzTV/2P5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EjCqTZGqDaJPoL+Ln1xfgV/OwPvjRuvNv10P6jtYOZI=;
- b=TFQWP4P+MefeF9e/MmuV/wSF+ZmumuC9e3S/2khlfw6mlzgb2XcpAB6pigja8ZF/J0DDE9PqZEhskyVkhbZYualcW3MZnRVDWwGRm2DWWAJPP6+X4Ml74LlnNoaJ/EDUW/0nkwwke+2BXjlzeCwCNKZwXXsWh+3eK1IQcisNtqk=
-Received: from DB9PR04MB8477.eurprd04.prod.outlook.com (2603:10a6:10:2c3::11)
- by DBBPR04MB8041.eurprd04.prod.outlook.com (2603:10a6:10:1e2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.22; Mon, 20 Jun
- 2022 15:47:05 +0000
-Received: from DB9PR04MB8477.eurprd04.prod.outlook.com
- ([fe80::1942:6123:5468:bf72]) by DB9PR04MB8477.eurprd04.prod.outlook.com
- ([fe80::1942:6123:5468:bf72%7]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
- 15:47:05 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dongas86@gmail.com" <dongas86@gmail.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Subject: RE: [PATCH RFC 1/2] regmap: add option to disable debugfs
-Thread-Topic: [PATCH RFC 1/2] regmap: add option to disable debugfs
-Thread-Index: AQHYhKwihmmQwo9gZ0uCTra8XCwz/61YZSEAgAAK2aA=
-Date:   Mon, 20 Jun 2022 15:47:05 +0000
-Message-ID: <DB9PR04MB84779EF2842D789FA66094C380B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
-References: <20220620134758.1286480-1-aisheng.dong@nxp.com>
- <20220620134758.1286480-2-aisheng.dong@nxp.com>
- <YrCM0reni+x/KWsG@sirena.org.uk>
-In-Reply-To: <YrCM0reni+x/KWsG@sirena.org.uk>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f7dcdce2-7585-46f3-57ce-08da52d42036
-x-ms-traffictypediagnostic: DBBPR04MB8041:EE_
-x-microsoft-antispam-prvs: <DBBPR04MB80414A835C51F94566A4B0D780B09@DBBPR04MB8041.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gwDG5qEIX9i1IL/99nXr6l2w5LYhBzpU8CPUhGFBqJbbS2MfzeaXPiAwLsQbWoijbefggPphkywYCsry4HwTiGJI1bhuQI6h2uf6urFw2ZqhWPng4eeoe7St2u6oCxM7lyZY549TiHAhiDc3bt4XKvZnKyDV3V8tIerUy9RDFp3FCzcdTwTIeDJJPAMIQz40NWkCefb/rYaTr1WOvUuKzAfrQjt/H8ZdS2DSGLwWgArK7yI+8WA08XE8gkJwXqqPcWHTvrGRL9ypip3fj0OuC0MEf9JqA8N/OiYu2r2A3O8fq2bltWf4CAkekrTaP7Hb75ql7sVFVL7sCzQSdEpo62MgVNDufd4iiwR5T7HYNLxC6/T40iQzLJtHHwrILLVjxviFaHJ4Z9m053oab0buk/BOZA3zQx6ZCADjU4LTROYZGsftjPZ71IjAgGnC8bgobPo/IAt7FqIzA02kmWnipYsFZrxss87phdXpN2gq4WYEA+deD3a+bIQ+j8Sjv/FTGfDy8Eyke/JfQ2OiilIMwcN7Yp/n8HhnSdS48wGCzDSneywTzQ1b2/SH5l8a8YuiU9vYi+hhgRAfGFOWswDc6BTBjIP2desVbofmJcXX0Ega+1aEJu9Nm5eOsLRX079fl60vyAPL7Ge/Pl/3wOnPE0N/DFtTqDf29kxeTaLZpS83XP2MmPQXksUIQfJDCq4hQQma8x0CCzH2/ToZgPHG83GKqih/7S/wjXeNkLTR6SycWY7TxwMkw7wClYVRMtM9JVThKfEh4WPEYKxpfdLZ8nEk3DNz/sZ3c4Eh8i709DA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(366004)(39860400002)(396003)(136003)(38070700005)(186003)(2906002)(55016003)(4326008)(8676002)(9686003)(33656002)(64756008)(66556008)(66476007)(5660300002)(52536014)(76116006)(66446008)(6506007)(7696005)(54906003)(26005)(44832011)(66946007)(38100700002)(122000001)(86362001)(71200400001)(41300700001)(83380400001)(6916009)(8936002)(316002)(966005)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFkySTdiMWVnMitBUW1ROWRSbFl0ditRV25uVXRnMGZ6UHNHL0lReVl6VUJr?=
- =?utf-8?B?VzRuUVdkV1Q0VWpoZVprbXF2ZHBscFhZemtWN0Y1WEh1ZGsycHliU05JVmo5?=
- =?utf-8?B?NjlVM1FtZytSWldzVUY2dTRGOEcwRmVlWnpSNCtvaTZtYklyaVFOZzhrbDAr?=
- =?utf-8?B?UDVWYUVjaGFTRFdKaTR1L0JvVUhoNFFHOUZzNkluQXlRbWZtTzJDMVpBMWFr?=
- =?utf-8?B?NWE2eS83OXdjK2hGTWlGRVREKzcrVFF1ODhveldWT0JDSk5YNzVkdHVtZDI1?=
- =?utf-8?B?VVUycnhyODAybDRuNmQrV0t5NURCbE1JNm1nQks3Ui8zQmRRdS8wNkhlQmhk?=
- =?utf-8?B?Y1Q5YWdIcU1weS9ER2laMThZTTB0YWVPNGZnYXdPbVhlVmZkMEUzTGVkUTBQ?=
- =?utf-8?B?ZmhFL3RaZGVIdVJoYnV4QzZtaE9SS3hRVE1CcVRLaHp5NlBNS1lXNEtTQmJC?=
- =?utf-8?B?RVhZNEZEeFZDVUdVdEdLeHZtUFBBQ1NZbklLOUlLdTExcURVUWRLYUdOK09U?=
- =?utf-8?B?N3JZZHNrOEpCaThKUDZ2Vy8zMDV0a3NKYTJMWHA5MjRkQkFMUit0OHBXQlAw?=
- =?utf-8?B?ZGFxb2l3R2hwczM5cFR2b2wzdWNCejIvTWpETTNOUUE5TEtOeGt4RzZuc2xT?=
- =?utf-8?B?M3VSK2lhbTVBcnN2a2k3VWEwQ3J6UHB4ejJHTmt1UjlLMXlqWXgvNmtXWGt5?=
- =?utf-8?B?U3M2OEMrbkllU1BSbHEzRHRFNU5oN3Jrc0VBMzhUQkIyOXIxRXhDZllEQnh6?=
- =?utf-8?B?ZUFVZ3NjRDZ6ZGdHUHpNbU82R0J3Zm1ucDQrOVU2RWxRcEVHVVdZSjlSVXQy?=
- =?utf-8?B?cy91endUNVJCUWhFZGtqekkxOTZxZnMxSGt1YnRFQ294enhkMU9kYUt2Vmwz?=
- =?utf-8?B?UkdvTnBGREpFWG1lR21YRWc4N0tQdE5YNExwajNCVGVuTkZ4YzdzOUQ3V0s0?=
- =?utf-8?B?aVpQQXZTMWVaZHJoT3RjbWI3WEdnZDZEUk5FalJ0SmRVWE1KZXplZUp3WHdi?=
- =?utf-8?B?Z3hFVzJ5NzJVRS9xSksyZzJhRnYxekYxeG9iVy96TWV1SGlXNlVyRXZKaUN4?=
- =?utf-8?B?d2x4OUlibGJCWlEvdkY4V0FBVmp6bXRsQk9KKzNOenJwNUFjeXE4alMxYUgy?=
- =?utf-8?B?Qjc3dmdHN3RrM3J1NSs4YXdjMkFjbEw3b3FDUTNHQ25GQ2h6dExLaGdRVFR3?=
- =?utf-8?B?QTE3Mk1hT3ZiN2FFS045NE5INTI2Nlk5SGZnM25QczNpOVRCWEdBL0tiODFl?=
- =?utf-8?B?NnJtWHNkckdxMGNFQmsxSGp4Wi9nWVhrVGxVUWF2eEU3bmFzQkVWZFR0Q2tl?=
- =?utf-8?B?ZmhQTEpkMnRTWi82elJwNngvM1lFdkEzUjd1VDh1VmRFQjd0R282cFIzNjY1?=
- =?utf-8?B?NTlsekZINFBLZVVLYU1vL2dPVllBUTVEc0dlMkQ0cHJGYUZuMnNvV3hleWpU?=
- =?utf-8?B?MHhEOXRxbDRiS0V5TWdWenFMYmo2akpQMTBJcXk4NVZYNGFvZTJRTXQ5Q2JH?=
- =?utf-8?B?YXJBaC9jUENRUnFocHV0dTZpMHJkNW55a1QyOUFsWG1BRU1mZFhIUWFYRys0?=
- =?utf-8?B?UDgwQW1aZDlFZlAyZUMxVGRqVHFwUUQxcjFTN3U0NVlnQW9VSWg4UVEyZ3BR?=
- =?utf-8?B?NDN1TXN6a1dhMHNUTUVzL1ltK05HZzBmOG1EYmh4ZVhYSDhaKzlzYXp4aTVU?=
- =?utf-8?B?STlDeVcxVWFkOUJCN0d6Q2kyc0Vrem1BWGRNVHp6L0VUZVBocFBKZnA4L0h5?=
- =?utf-8?B?WThZK2tVS0xzZTRHQ25lUUhPK0lhS2NYOW1pclBJN2gyQ1ljMjBCUjBNSVRZ?=
- =?utf-8?B?RGR4RnpnaitpNEh2dGVlMUFQSTNJbGFUd1k1KzlmRTJHQ1BibllOS1lxQjF3?=
- =?utf-8?B?Z2hBZ3FuRzA3M25HUml5aG1wUjNHRWVrak94QTh4Q2loM2VwNGRlZjFoUThM?=
- =?utf-8?B?N2QwbFBQNkJiNmIvVHZFdEo3WTN5bFQ2MEg0VDlGQ01aVDQ0bFJ6b0UvREh2?=
- =?utf-8?B?Umxwc1RWK1pFaElESUVobUZpeXJmTXdNVHBoQzRmQnNsYW1tWEFyWlZiVnQ0?=
- =?utf-8?B?NlE4VlFpRGVuMVFybTFnZFYrd0p3K3A0QTNFU1EyMDZ3SVNySi9IRXJGcHpD?=
- =?utf-8?B?Z1ZPdm12MU9QVjNUOHJ5L254UWZmNkJMLy9SUUxnSDZBZmo5VVNzZmQrdjZP?=
- =?utf-8?B?U3V0ckRtNkZpT2E5bEU3S2FINTRPbEZmWGM3bEM5S3dLbnFWbHV2ZXpkdTZW?=
- =?utf-8?B?ckkycjlja2hqS2RiL3ZQV1VxWXFLM2w0ZHErczFiaXVteHAwS3ZySmdBbCtS?=
- =?utf-8?B?ZnVKa21mQjRBSnZKWE55dFFFT2JSTVZtaEozRXhkaExTSU1mRW1PUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 20 Jun 2022 11:48:40 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC451B786;
+        Mon, 20 Jun 2022 08:48:39 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25KEiC4t002735;
+        Mon, 20 Jun 2022 17:48:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=Xzx/tv6bJhRXsHs2EJ2uFBylLwfelibhKq16XkROMIU=;
+ b=E/35fsXZ4RjYXbP8T40Q9onMSyQ6nQ4Mf2K/j56UtyXf1ihPaBxVigkBACgVgiXe5rWW
+ DxtOgkeSznwxUY4dkb/CMLSlPkHvFu4KeeRy/8ys5/T6j6NR6t8QKEGQJXgAgjKQtj7J
+ iguMLXsBUPKeSnI7iRnfSRdkVMkQ/zmMJZQVX/YHRs9v52V8TFAisTpRq9KCGgbk2oYG
+ DFoNsWZZv7BeD/eU+FW01jSeZboudjHAmwALNMYZj/DIBgY+dSIBERAb3bTwTToi8gmK
+ Ei4KIOA9NmuUdKQiQbwbjmPGg1NfsofubVTzpyNg82csj256TrIbiaLOLF5nMWzZNrdg 7A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gs71tmch6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Jun 2022 17:48:13 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7F23910002A;
+        Mon, 20 Jun 2022 17:48:12 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 622E122ECEF;
+        Mon, 20 Jun 2022 17:48:12 +0200 (CEST)
+Received: from localhost (10.75.127.117) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 20 Jun
+ 2022 17:48:12 +0200
+From:   Olivier Moysan <olivier.moysan@foss.st.com>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wan Jiabing <wanjiabing@vivo.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH 0/2] iio: adc: stm32-adc: add checks on adc state
+Date:   Mon, 20 Jun 2022 17:47:36 +0200
+Message-ID: <20220620154738.801706-1-olivier.moysan@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8477.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7dcdce2-7585-46f3-57ce-08da52d42036
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 15:47:05.3010
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4ZSz7h5OKI8q6C8zy9twTSvx/f8d0Lf7+rQj7lXGyspFczvbxbqrNMyhEI47i5EyeI+wu8nMozID9PT1wzQSwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8041
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.117]
+X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-20_05,2022-06-17_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBNYXJrIEJyb3duIDxicm9vbmllQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IE1vbmRheSwg
-SnVuZSAyMCwgMjAyMiAxMTowNiBQTQ0KPiANCj4gT24gTW9uLCBKdW4gMjAsIDIwMjIgYXQgMDk6
-NDc6NTdQTSArMDgwMCwgRG9uZyBBaXNoZW5nIHdyb3RlOg0KPiA+IFRoZSByZWdtYXAgY29yZSB3
-aWxsIGNyZWF0ZSBkZWJ1Z2ZzIGJ5IGRlZmF1bHQgZm9yIGVhY2ggaW5zdGFuY2UuDQo+ID4gSG93
-ZXZlciwgaXQncyBmYWlybHkgcG9zc2libGUgdGhhdCBzb21lIGRldmljZXMgbWF5IG5vdCB3b3Jr
-IHByb3Blcmx5DQo+ID4gd2l0aCByZWdtYXAgcmVnaXN0ZXJzIGR1bXAgdmlhIGRlYnVnZnMgZHVl
-IHRvIGl0IG1heSBiZSBpbiBzdXNwZW5kDQo+ID4gc3RhdGUgKGUuZy4gUG93ZXIgZG9tYWluIGlz
-IG9mZikuDQo+ID4NCj4gPiBDdXJyZW50IHJlZ21hcCBjb3JlIGRvZXMgbm90IHN1cHBvcnQgcnVu
-dGltZSBwbSBmb3IgTU1JTyBidXMuDQo+ID4gQWx0aG91Z2ggdGhlcmUgaGF2ZSBiZWVuIHNldmVy
-YWwgcmV0cmllcyBbMV0gaW4gY29tbXVuaXR5IGJ1dCBmaW5hbGx5DQo+ID4gZGlkbid0IGdldCBh
-Y2NlcHRlZC4NCj4gPg0KPiA+IFRoaXMgcGF0Y2ggYWRkcyBhbiBvcHRpb24gdG8gYWxsb3cgZHJp
-dmVycyB0byBjbGFpbSBubyBkZWJ1Z2ZzIHN1cHBvcnQNCj4gPiBkdWUgdG8gcG9zc2libGUgcGxh
-dGZvcm0gbGltaXRhdGlvbnMuDQo+ID4NCj4gPiAxLiBMaW5rOiBodHRwczovL2xrbWwuaXUuZWR1
-L2h5cGVybWFpbC9saW51eC9rZXJuZWwvMTIwNC4wLzAxNjQ2Lmh0bWwNCj4gDQo+IEFzIGluZGlj
-YXRlZCBpbiB0aGUgbWVzc2FnZSB5b3UncmUgbGlua2luZyB0byBoZXJlIGlmIHRoZSBkZXZpY2Ug
-Y2FuJ3QgYmUNCj4gYWNjZXNzZWQgaXQgc2hvdWxkIGJlIGJlaW5nIHB1dCBpbiBjYWNoZSBvbmx5
-IG1vZGUgd2hpY2ggd2lsbCBlbnN1cmUgdGhhdA0KPiBub3RoaW5nIGNhbiBkbyBhbnkgcGh5c2lj
-YWwgYWNjZXNzZXMuDQoNCkkgd29uZGVyIHRoYXQncyBub3QgYSBzdGFibGUgc29sdXRpb24gYXNz
-dW1pbmcgdGhlcmUncmUgcG9zc2libGUgdm9sYXRpbGUgcmVnaXN0ZXJzLg0KSXNuJ3QgdGhhdD8N
-Cg0KUmVnYXJkcw0KQWlzaGVuZw0K
+On ADC startup a calibration is launched.
+A prerequisite for ADC calibration is to have ADC in disabled state.
+After kernel boot, the ADC state may be unknown as the ADC may have been left enabled by boot stage.
+
+Call ADC disable routine systematically before launching calibration.
+Adapt ADC disable routine to perform disabling sequence according to current ADC state.
+
+Olivier Moysan (2):
+  iio: adc: stm32-adc: make safe adc disable
+  iio: adc: stm32-adc: disable adc before calibration
+
+ drivers/iio/adc/stm32-adc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+-- 
+2.25.1
+

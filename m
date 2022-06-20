@@ -2,93 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CFB5523E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A435523EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245461AbiFTSbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S245501AbiFTScQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243854AbiFTSbs (ORCPT
+        with ESMTP id S242530AbiFTScO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:31:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304D81CFE9;
-        Mon, 20 Jun 2022 11:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ifeyTcl/AzgtaNQGujckbdAaI1u6Oc+W0eR30MKVMt0=; b=NeG2GYlsioxK7lRBX58s9G3eZ5
-        yRo26XRbGPTm2TRZ2ypskU8cAk6ATuCX9XeqIcL6q99nZISK4o4XKlgw3duF9qGzI4q//E4v9IyHM
-        uI9GHFz1MTLikBAaaGAdcq+ppIHdEA40bVnCvB/PyU5mNHz7qzL67FSm+mkBhjnc7Ld677b3x+4iS
-        QwDaEjsesc1GyR6RsQJ2TmelieatvC6ScmDqfRY3wkiGd2vDbnLpByP2enuIgEOUVaWUZxeP6soEN
-        BKy2DScdJ4jusJezIR9VsYU15GAZlqJcX6Ym4UiN+Tiu3r3CK7euoC6F7tGBiQlaw/3yWiNh+mqi2
-        vrGmko9w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o3MBX-001rrj-Fc; Mon, 20 Jun 2022 18:31:39 +0000
-Date:   Mon, 20 Jun 2022 11:31:39 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Lu <aaron.lu@intel.com>, Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-mm@kvack.org, ast@kernel.org,
-        daniel@iogearbox.net, peterz@infradead.org,
-        torvalds@linux-foundation.org, rick.p.edgecombe@intel.com,
-        kernel-team@fb.com
-Subject: Re: [PATCH v4 bpf-next 0/8] bpf_prog_pack followup
-Message-ID: <YrC9CyOPamPneUOT@bombadil.infradead.org>
-References: <20220520235758.1858153-1-song@kernel.org>
- <YrBV8darrlmUnrHR@ziqianlu-Dell-Optiplex7000>
+        Mon, 20 Jun 2022 14:32:14 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290AC1D0EE;
+        Mon, 20 Jun 2022 11:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Cv/O7zb/kXAuRbf7PPZy0zV7UOelG4vjvn/esylaMkU=; b=TLIYEbwtyvNALjQ8rED/+y6w59
+        EjWAw4TXs1Lve9iUwCeKeDAsB7brqozjt80fRoVY72M5QL8zQXWIJ/tNeQxVjTK2JKFgfddLcG3VG
+        jCnoSI8RJAb1mgq1BF9CbYcYEGzu2tGaO0AZYvY3dEbvdf4GBQeMC1Ur8aK3amZuUOEw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o3MC2-007dlK-PF; Mon, 20 Jun 2022 20:32:10 +0200
+Date:   Mon, 20 Jun 2022 20:32:10 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@linux.intel.com, lenb@kernel.org,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, hkallweit1@gmail.com,
+        gjb@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
+        Samer.El-Haj-Mahmoud@arm.com, upstream@semihalf.com
+Subject: Re: [net-next: PATCH 10/12] net: dsa: add ACPI support
+Message-ID: <YrC9KpEuYCgHv14l@lunn.ch>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-11-mw@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YrBV8darrlmUnrHR@ziqianlu-Dell-Optiplex7000>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220620150225.1307946-11-mw@semihalf.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 07:11:45PM +0800, Aaron Lu wrote:
-> Hi Song,
-> 
-> On Fri, May 20, 2022 at 04:57:50PM -0700, Song Liu wrote:
-> 
-> ... ...
-> 
-> > The primary goal of bpf_prog_pack is to reduce iTLB miss rate and reduce
-> > direct memory mapping fragmentation. This leads to non-trivial performance
-> > improvements.
-> >
-> > For our web service production benchmark, bpf_prog_pack on 4kB pages
-> > gives 0.5% to 0.7% more throughput than not using bpf_prog_pack.
-> > bpf_prog_pack on 2MB pages 0.6% to 0.9% more throughput than not using
-> > bpf_prog_pack. Note that 0.5% is a huge improvement for our fleet. I
-> > believe this is also significant for other companies with many thousand
-> > servers.
-> >
-> 
-> I'm evaluationg performance impact due to direct memory mapping
-> fragmentation 
+>  static int dsa_port_parse_dsa(struct dsa_port *dp)
+>  {
+> +	/* Cascade switch connection is not supported in ACPI world. */
+> +	if (is_acpi_node(dp->fwnode)) {
+> +		dev_warn(dp->ds->dev,
+> +			 "DSA type is not supported with ACPI, disable port #%d\n",
+> +			 dp->index);
+> +		dp->type = DSA_PORT_TYPE_UNUSED;
+> +		return 0;
+> +	}
+> +
 
-BTW how exactly are you doing this?
+Did you try this? I'm not sure it will work correctly. When a switch
+registers with the DSA core, the core will poke around in DT and fill
+in various bits of information, including the DSA links. Once that has
+completed, the core will look at all the switches registered so far
+and try to determine if it has a complete set, i.e, it has both ends
+of all DSA links. If it does have a complete set, it then calls the
+setup methods on each switch, and gets them configured. If it finds it
+does not have a complete setup, it does nothing, waiting for the next
+switch to register.
 
-  Luis
+So if somebody passed an ACPI description with multiple switches, it
+is likely to call the setup methods as soon as the first switch is
+registered. And it might call those same setup methods a second time,
+when the second switch registers, on both switches. And when the third
+switch registers, it will probably call the setup methods yet again on
+all the switches....
 
-> and seeing the above, I wonder: is the performance improve
-> mostly due to prog pack and hugepage instead of less direct mapping
-> fragmentation?
-> 
-> I can understand that when progs are packed together, iTLB miss rate will
-> be reduced and thus, performance can be improved. But I don't see
-> immediately how direct mapping fragmentation can impact performance since
-> the bpf code are running from the module alias addresses, not the direct
-> mapping addresses IIUC?
-> 
-> I appreciate it if you can shed some light on performance impact direct
-> mapping fragmentation can cause, thanks.
+You will have a much safer system if you return -EINVAL if you find a
+DSA link in ACPI. That should abort the switch probe.
+
+    Andrew

@@ -2,100 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628565521D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0E75521DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244130AbiFTQFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S243312AbiFTQGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiFTQFD (ORCPT
+        with ESMTP id S230345AbiFTQGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:05:03 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F741FCFE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:05:00 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id e2so4828956edv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:05:00 -0700 (PDT)
+        Mon, 20 Jun 2022 12:06:49 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FED2019D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:06:48 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id k22so8886210wrd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PiyaNO6pa1UECbQmSjR1WNenD8YkEf0ERGJt4gH8P0Q=;
-        b=gQcSn4MdkPpkFw9VUNku8D6x6KLxjeo/MkCT25gPhzhY2lob+o/AW/NtLLHzpiyEgl
-         YaTWvpFBUVdbZq9gIr0kkt4PjUcdpsouBzZouKRxcyLG6PH+7qBRpx7iUdKljoK0CyEa
-         pBEh+bzEL97/mTjwOx4lVmlJYxYIopKqa5eKahId/vYDvGr98qeMFTrTZ3Ctf6NJo/wM
-         MRnXdPGYJyb3Vmxc9Kl+rrqd3mY+ch9uyApqGGLfKzojaOB8TRdcWZVexlcTKoVuYvlB
-         +c2j3qsO6o5XRiOpyhKeT1hOS2xFeBSzXaexXVgZ/G2zK0CFajtUrxWc/qbpaMvO2zOB
-         TSIw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lg3ipiFQfydsWyAiWbeBt+zNJSN4+YJgCL2RNA61+gA=;
+        b=gid0i80f9EvBzSgeZqk4RJxFFKLu1jA+LglKxOnYvBD82Q20hpZ8eRlhP0pv4Md/bg
+         pseQrJxdoYJ4aikuzaDclk6NEt7B9j8EXka0anuCG5I0PrwhRFUE//bu/ijEtJmXZ7Wy
+         ncEwL+a/0RkFqAgO5tEQo0v7dJLUC5+40KaCW6t7bPmzQjcInldQYDmMF5yLNLaFuaOu
+         +4ev3iHQSdVelpHl1/MtpcQGFt79MR1qxCrwSgbvZ/Q7QmTYroqqka/zgh3Ry2hWcFFA
+         0dJaaig2x4IJImS7QIChXxiHaOXw0sqErBVoi0IgOtFcsIQCri73lEpHmr5xK1QzJh0c
+         tk6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=PiyaNO6pa1UECbQmSjR1WNenD8YkEf0ERGJt4gH8P0Q=;
-        b=vyjP8vvE0xFl5DEan6t5QMBDYlgW8G7tnwNbsMbyarxWVB+ZTc9Lnn44LD3JPwKmmX
-         lcMwXJKeVC7njcmHdslkUrEywTUUW9vfaQrOIzmbraB/ybmos0p9Jt9Krlhcd/KClODh
-         D2mTIZVe/I7HK2VbWuwHftwH/yKYjJvoliA7webZ5B8rubAsN+/hGNK6PyuMXlKvglCl
-         pMUuOhQTwdARGAdSwdzAySJAW6qWBpbzVczfIu6Cw59chZB8bHWwlUwwirnAUrT67mT6
-         3cnUwIe41+PLvI6ciws1JQgHQOkkC/8lG2U890Li5bYZRUPt1T+U3g8Sc3GD+M0HPL55
-         rx5g==
-X-Gm-Message-State: AJIora/hlP7fC7jxAugdnl4smBVo0dM6A+kCCRDNsNOS8POzudGqlyUJ
-        vXp7QPDySBUEVYkEpwUxM9/DKw==
-X-Google-Smtp-Source: AGRyM1vjJkbpsGZpShi0xdylQhTb+8pCE4v7toIA2SYqutENem+JoaXD18e44Vl4hAvCa9V8XXLOeg==
-X-Received: by 2002:a05:6402:5212:b0:42e:2fa:41a7 with SMTP id s18-20020a056402521200b0042e02fa41a7mr30186493edd.22.1655741098882;
-        Mon, 20 Jun 2022 09:04:58 -0700 (PDT)
-Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id r17-20020a1709061bb100b00711d88ae162sm6216949ejg.24.2022.06.20.09.04.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 09:04:58 -0700 (PDT)
-Message-ID: <1e71759b-32a1-3f35-6c08-b9ea4611e361@linaro.org>
-Date:   Mon, 20 Jun 2022 18:04:57 +0200
+        bh=lg3ipiFQfydsWyAiWbeBt+zNJSN4+YJgCL2RNA61+gA=;
+        b=B7ztND2VqJfN5cBpc6jyVpDYmYetum4mARuKM0ODUhyraxyj7BfmSxhxJUqskV96qA
+         qtOymFB6MMmebRESXz5BCoJclK2zN2KTMJ9yMyLFvlC38P/2AMSee1eysO6E8+sZIdq+
+         Pxil7+Bn0SmLhwp6xvL/mOUBlBFPsgr8L52xrUkhIvvZny4yFrG3j8ydG4lQGzXF3ZPA
+         cE/kOtx7WflKVW2jlyDv5OhlsyznqUp+IHiDxJPcAKltTcpeeedq/C90Ew1aWyNym14g
+         fytXM9yYY/TQTAM+RE6aIe1dRmTPJhHjxyqsbBRdhE124gedWx19ysMVEm8ebMENqaQj
+         wsZQ==
+X-Gm-Message-State: AJIora8gG/aAZDzo8QgcGyg0fvdQ7ejAlAfDf1g1SnG/tzSGqa7jk/0m
+        yHKq2ouQ50B7elc4FbZIkJA=
+X-Google-Smtp-Source: AGRyM1tzn+SF6ChwEcxH3JHDBmTgOCpsJFCyvsaq1Ad8QH684/qCuoBFyH3Ljhl2le4AnKJSmHlduA==
+X-Received: by 2002:a5d:4243:0:b0:21b:8483:31d with SMTP id s3-20020a5d4243000000b0021b8483031dmr13943734wrr.691.1655741204157;
+        Mon, 20 Jun 2022 09:06:44 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d430e000000b0021b90cc66a1sm2986096wrq.2.2022.06.20.09.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 09:06:43 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     javierm@redhat.com
+Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, jani.nikula@linux.intel.com,
+        maira.canal@usp.br, isabbasso@riseup.net, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v4 0/3] KUnit tests for drm_format_helper
+Date:   Mon, 20 Jun 2022 18:06:37 +0200
+Message-Id: <20220620160640.3790-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: leds: lp50xx: correct reg/unit
- addresses in example
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dan Murphy <dmurphy@ti.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>, Kyle Swenson <kyle.swenson@est.tech>
-References: <20220607075247.58048-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220607075247.58048-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 09:52, Krzysztof Kozlowski wrote:
-> The multi-led node defined address/size cells, so it is intended to have
-> children with unit addresses.
-> 
-> The second multi-led's reg property defined three LED indexes within one
-> reg item, which is not correct - these are three separate items.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> ---
+Hello everyone,
 
-Pavel, Jacek,
+Following the style used in the selftest to KUnit series [1] and the AMD
+series [2], the tests were moved to the "tests" folder.
+In addition, to be consistent naming functions, I renamed the
+kunit_suite and the test cases to use underscores as suggested in [3].
 
-Any comments on these two patches?
+It is not clear yet whether we want to have one or multiple Kconfig
+symbols and select which test should be built. However, refactoring from
+one approach to the other is quite simple, so I think we should be fine
+choosing the simpler option now and refactoring if required.
 
+Thanks a lot,
+José Expósito
 
-Best regards,
-Krzysztof
+[1] https://lore.kernel.org/dri-devel/20220615135824.15522-1-maira.canal@usp.br/T/
+[2] https://lore.kernel.org/dri-devel/20220608010709.272962-1-maira.canal@usp.br/
+[3] https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html
+
+RFC -> v1: https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89@gmail.com/T/
+
+ - Add .kunitconfig (Maxime Ripard)
+ - Fix memory leak (Daniel Latypov)
+ - Make config option generic (Javier Martinez Canillas):
+   DRM_FORMAR_HELPER_TEST -> DRM_KUNIT_TEST
+ - Remove DISABLE_STRUCTLEAK_PLUGIN (Daniel Latypov)
+
+v1 -> v2: https://lore.kernel.org/dri-devel/20220606095516.938934-1-jose.exposito89@gmail.com/T/
+
+ Thomas Zimmermann:
+ - Add DRM_RECT_INIT() macro
+ - Move tests to drivers/gpu/drm/kunit
+ - Improve test documentation
+
+v2 -> v3: https://lore.kernel.org/dri-devel/20220612161248.271590-1-jose.exposito89@gmail.com/T/
+
+ - Use designated initializer in DRM_RECT_INIT (Jani Nikula)
+ - Simplify the "conversion_buf_size" helper
+
+v3 -> v4: https://lore.kernel.org/dri-devel/20220616183852.GA12343@elementary/T/
+
+ - Move the source to the "tests" folder
+ - Use "_" in kunit_suite and cases:
+   https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html
+ - Reviewed-by and Acked-by tags
+
+José Expósito (3):
+  drm/rect: Add DRM_RECT_INIT() macro
+  drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
+  drm/doc: Add KUnit documentation
+
+ Documentation/gpu/drm-internals.rst           |  32 ++++
+ drivers/gpu/drm/Kconfig                       |  16 ++
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/tests/.kunitconfig            |   3 +
+ drivers/gpu/drm/tests/Makefile                |   3 +
+ .../gpu/drm/tests/drm_format_helper_test.c    | 161 ++++++++++++++++++
+ include/drm/drm_rect.h                        |  16 ++
+ 7 files changed, 232 insertions(+)
+ create mode 100644 drivers/gpu/drm/tests/.kunitconfig
+ create mode 100644 drivers/gpu/drm/tests/Makefile
+ create mode 100644 drivers/gpu/drm/tests/drm_format_helper_test.c
+
+-- 
+2.25.1
+

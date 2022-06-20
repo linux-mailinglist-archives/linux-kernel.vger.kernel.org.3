@@ -2,164 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BC755152D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F44551534
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241032AbiFTKEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S238875AbiFTKFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240836AbiFTKDe (ORCPT
+        with ESMTP id S240933AbiFTKFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:03:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C314113F6A;
-        Mon, 20 Jun 2022 03:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655719399; x=1687255399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zzztM5Ztw2pX+OG+K1EH92bRdh0HXV7pnoB7w/qVhi0=;
-  b=HUGZvDZjbfPv0H9q+FWFnaIar/OHwp82sBUKIMJMQUR3IwPFiP+EmYdi
-   iRQjJrl8/2J6QsQO0UNXclgWd+sm6VVWgUzQBaM7E505LXVCcEG4hxuUg
-   7dRpW8YN8xsgSOF/x/0cAVvQEZULmanDX7XyoOCc3g1HpSIqsaWH9i5Je
-   3RLmj3BApkBQKB2Jvc+6nAD1LEhZmOsnFT8sQ2kZPvt6GxUgYLTxgZTaZ
-   DC95N0yVj9dHByAvXsWT3QXx/eLdVftfpEiVmDZ9lWirYF6LPZDzARqL9
-   yf7Dkt3ZWKBUmx/aESNDSTW+YJfir9f5N9iUsaWdjL2dUz9h0hWqd3EJH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262890999"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="262890999"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:03:18 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="584833961"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:03:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3EFP-000h50-US;
-        Mon, 20 Jun 2022 13:03:07 +0300
-Date:   Mon, 20 Jun 2022 13:03:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/7] bitops: define const_*() versions of the
- non-atomics
-Message-ID: <YrBF28+iADFHygss@smile.fi.intel.com>
-References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
- <20220617144031.2549432-5-alexandr.lobakin@intel.com>
+        Mon, 20 Jun 2022 06:05:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BC213F78;
+        Mon, 20 Jun 2022 03:04:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46652B8100B;
+        Mon, 20 Jun 2022 10:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4FAEC3411B;
+        Mon, 20 Jun 2022 10:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655719449;
+        bh=nuyOjq3kbA0oH9KqhQl7VyXBnSZxp250qorZIvLiOlY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H15poN1qc4ilJQOU84gJjgdy+DdVZRlnKeazbyRvGKYb5NF+kRIUD07Fxm+dXcTVd
+         dr5BDbo2X1dbuseZ58Fic+fVMLmArmb/vvD/8CE1bMJlmWo0Rdtg6mzkHTAt2f8MpG
+         ZnL/LXJlS+oM2zBRWl0zn9ixQc3ANQXBzKNyyepP9Ht72HHps41tsrXb7kC8Sq9z2T
+         eFU8bHGn34LIqawEVtWsLqGig9D6V6EriOjcxkCsjoT83soo0c3TwDytt028O9TLFm
+         6dYad40PrejJJRLAS/2M4562WIUJ+lv4NRnIlybVvl2CuhUqDu0qkO/nhhneXtFLjL
+         QiiQoQVxUTb4Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3EGL-0008Eu-31; Mon, 20 Jun 2022 12:04:05 +0200
+Date:   Mon, 20 Jun 2022 12:04:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Frank Zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the
+ CH341
+Message-ID: <YrBGFZwLENLigWMV@hovoldconsulting.com>
+References: <20220401023306.79532-1-frank@zago.net>
+ <20220401023306.79532-3-frank@zago.net>
+ <YouzaO6ogxYj40Bp@hovoldconsulting.com>
+ <9b5b8cb4-7c05-b3cf-ca68-85d334a7f0b0@zago.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617144031.2549432-5-alexandr.lobakin@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9b5b8cb4-7c05-b3cf-ca68-85d334a7f0b0@zago.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 04:40:28PM +0200, Alexander Lobakin wrote:
-> Define const_*() variants of the non-atomic bitops to be used when
-> the input arguments are compile-time constants, so that the compiler
-> will be always able to resolve those to compile-time constants as
-> well. Those are mostly direct aliases for generic_*() with one
-> exception for const_test_bit(): the original one is declared
-> atomic-safe and thus doesn't discard the `volatile` qualifier, so
-> in order to let optimize code, define it separately disregarding
-> the qualifier.
-> Add them to the compile-time type checks as well just in case.
+On Wed, Jun 15, 2022 at 08:29:31PM -0500, Frank Zago wrote:
+> On 5/23/22 11:16, Johan Hovold wrote:
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  .../asm-generic/bitops/generic-non-atomic.h   | 31 +++++++++++++++++++
->  include/linux/bitops.h                        |  1 +
->  2 files changed, 32 insertions(+)
+> >> +static void ch341_gpio_irq_enable(struct irq_data *data)
+> >> +{
+> >> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
+> >> +	int rc;
+> >> +
+> >> +	/*
+> >> +	 * The URB might have just been unlinked in
+> >> +	 * ch341_gpio_irq_disable, but the completion handler hasn't
+> >> +	 * been called yet.
+> >> +	 */
+> >> +	if (!usb_wait_anchor_empty_timeout(&dev->irq_urb_out, 5000))
+> >> +		usb_kill_anchored_urbs(&dev->irq_urb_out);
+> >> +
+> >> +	usb_anchor_urb(dev->irq_urb, &dev->irq_urb_out);
+> >> +	rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
+> >> +	if (rc)
+> >> +		usb_unanchor_urb(dev->irq_urb);
+> > 
+> > This looks confused and broken.
+> > 
+> > usb_kill_anchored_urbs() can sleep so either calling it is broken or
+> > using GFP_ATOMIC is unnecessary.
 > 
-> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
-> index b85b8a2ac239..3d5ebd24652b 100644
-> --- a/include/asm-generic/bitops/generic-non-atomic.h
-> +++ b/include/asm-generic/bitops/generic-non-atomic.h
-> @@ -127,4 +127,35 @@ generic_test_bit(unsigned long nr, const volatile unsigned long *addr)
->  	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
->  }
->  
-> +/*
-> + * const_*() definitions provide good compile-time optimizations when
-> + * the passed arguments can be resolved at compile time.
-> + */
-> +#define const___set_bit			generic___set_bit
-> +#define const___clear_bit		generic___clear_bit
-> +#define const___change_bit		generic___change_bit
-> +#define const___test_and_set_bit	generic___test_and_set_bit
-> +#define const___test_and_clear_bit	generic___test_and_clear_bit
-> +#define const___test_and_change_bit	generic___test_and_change_bit
-> +
-> +/**
-> + * const_test_bit - Determine whether a bit is set
-> + * @nr: bit number to test
-> + * @addr: Address to start counting from
-> + *
-> + * A version of generic_test_bit() which discards the `volatile` qualifier to
-> + * allow a compiler to optimize code harder. Non-atomic and to be called only
-> + * for testing compile-time constants, e.g. by the corresponding macros, not
-> + * directly from "regular" code.
-> + */
-> +static __always_inline bool
-> +const_test_bit(unsigned long nr, const volatile unsigned long *addr)
-> +{
-> +	const unsigned long *p = (const unsigned long *)addr + BIT_WORD(nr);
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long val = *p;
-> +
-> +	return !!(val & mask);
-> +}
-> +
->  #endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 87087454a288..d393297287d5 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -37,6 +37,7 @@ extern unsigned long __sw_hweight64(__u64 w);
->  /* Check that the bitops prototypes are sane */
->  #define __check_bitop_pr(name)						\
->  	static_assert(__same_type(arch_##name, generic_##name) &&	\
-> +		      __same_type(const_##name, generic_##name) &&	\
->  		      __same_type(name, generic_##name))
->  
->  __check_bitop_pr(__set_bit);
-> -- 
-> 2.36.1
+> Right, that function can sleep. I changed GFP_ATOMIC to GFP_KERNEL.
+
+These callbacks can be called in atomic context so that's not an option,
+I'm afraid.
+
+> > And isn't this function called multiple times when enabling more than
+> > one irq?!
 > 
+> There's only one IRQ, so only one URB will be posted at a time. It
+> is reposted as soon as it comes back unless the IRQ is disabled or
+> the device stops.
 
--- 
-With Best Regards,
-Andy Shevchenko
+AFAICT you have up to 16 (CH341_GPIO_NUM_PINS) interrupts, not one. So I
+still say this is broken.
 
+> >> +}
+> >> +
+> >> +static void ch341_gpio_irq_disable(struct irq_data *data)
+> >> +{
+> >> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
+> >> +
+> >> +	usb_unlink_urb(dev->irq_urb);
+> > 
+> > Same here...
 
+> >> +}
+> >> +
+> >> +static int ch341_gpio_remove(struct platform_device *pdev)
+> >> +{
+> >> +	struct ch341_gpio *dev = platform_get_drvdata(pdev);
+> >> +
+> >> +	usb_kill_anchored_urbs(&dev->irq_urb_out);
+> > 
+> > You only have one URB...
+> > 
+> > And what prevents it from being resubmitted here?
+> 
+> I don't see what would resubmit it here. The gpio is being released.
+
+Your implementation needs to handle racing requests. The gpio chip is
+still registered here.
+
+Johan

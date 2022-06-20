@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C46551822
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADBB55182A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242215AbiFTMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S242373AbiFTMFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242242AbiFTMCw (ORCPT
+        with ESMTP id S241165AbiFTME6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:02:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1231B18B23
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:02:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 74E301F45E;
-        Mon, 20 Jun 2022 12:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655726565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=trD6oDP/oU8K8dJxIz+dxuUeJsrMnku6W+1r4BQpCf0=;
-        b=ZorN7QgrzXhLExwAn218fgIC5FfaeIv6TReRRI7xdSxJkf1e/5k649P79PRZZMLqoQfC7s
-        UUudXPlwKJB+3aJTfvO/fdaXQolnKaIuCWFbzXhhvp73npz3H0lPrvXns+EQ0Vq2x6/dht
-        K8XYjTgDd6IXG9K7pf/yMoTuR8FUaT4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655726565;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=trD6oDP/oU8K8dJxIz+dxuUeJsrMnku6W+1r4BQpCf0=;
-        b=ZSvL4DqDEL0UObQafmOG7pduvvvPOkc9D9tk704KMNDH+CCia7xbgahqmlsA5GRSBEgJYq
-        wWRifN2kVyvq31Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4CF85134CA;
-        Mon, 20 Jun 2022 12:02:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xhEnEuVhsGLoFAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 20 Jun 2022 12:02:45 +0000
-Message-ID: <a8082f00-3e00-f781-f5f0-20b4853b3335@suse.cz>
-Date:   Mon, 20 Jun 2022 14:02:45 +0200
+        Mon, 20 Jun 2022 08:04:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74B5919F93
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655726647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3fWG6f9+wPyZUdKpzq6SUM1FvIBmD72g2Gxfy7zPec8=;
+        b=dRwY5VDDBDHsFGzABSg0ZHQJQf/0K6G89yufHd/cc6ecWuwrkSmKOtbQZtw2ooojbH8+Z6
+        Okriva/0xWYGqosNB4QvPhZQxGFPdSjqEqXhlynEwxxNh+hyLzyoN8XvmUuyQgeoJ3IVCW
+        P0FOGIfyUBbwe8fJwonIyioPZDuPlWI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-502-lfj4OG9EOiSSHml7vZxSLA-1; Mon, 20 Jun 2022 08:04:06 -0400
+X-MC-Unique: lfj4OG9EOiSSHml7vZxSLA-1
+Received: by mail-ed1-f71.google.com with SMTP id f9-20020a056402354900b0042ded146259so8575752edd.20
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:04:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3fWG6f9+wPyZUdKpzq6SUM1FvIBmD72g2Gxfy7zPec8=;
+        b=5wmkilZdnbHeAjQVPUi7YeA3WBXMvDiKUZfilJMrKVQGN1NRZLlYe9cHHmoqG6XQRx
+         EwWWssqUu9kMHQxigo6TMMve9CvieX2KhPCcAJQGcSUTJ+6y9SICnEFLthIekxbPJdcd
+         PC7kIB/qwmyrCc5npwE1Ju9l54VD7BUAMK7t2h4yYYQ3avYzDeoCtS3OZWs/RI/RVnvv
+         /3htXC/mrQ3MXPrWlPzuhy+HqYeq/G8T7LXeextUeRrjedZ/otK7PTDFxBKq8fpxw78a
+         YBoZhGYuougcb5JTeq9l1BPNA22KPdLlppMOhFTYmOCE4WzgHOzKqECJH/FhYL8FPWaD
+         I8wg==
+X-Gm-Message-State: AJIora/OaYPzqRsValH5t7cN0PIcUI6/kvjzZOhy8SvcPu93n26AVpGn
+        rxj42VcqYiMIw8Bur1ske6dKJeSRxcp4cuacLMlp46xugidMGo4CO5OCkO8GBlOchx8jqpuiLkU
+        1og/d6xptFOofDlDH+7rBqJnI
+X-Received: by 2002:a05:6402:11:b0:431:680c:cca1 with SMTP id d17-20020a056402001100b00431680ccca1mr29443288edu.420.1655726645154;
+        Mon, 20 Jun 2022 05:04:05 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u9VhJ+ObuyZNUvGoEylbYK2DQSNd9ckf8bXsZN3l2pKVlgkfhq7FwfxpWwysL4rM30ugQ6lg==
+X-Received: by 2002:a05:6402:11:b0:431:680c:cca1 with SMTP id d17-20020a056402001100b00431680ccca1mr29443254edu.420.1655726644932;
+        Mon, 20 Jun 2022 05:04:04 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id u20-20020a17090657d400b00712134a676asm5894961ejr.93.2022.06.20.05.03.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 05:04:01 -0700 (PDT)
+Message-ID: <19bba1a0-8fb7-2aae-a65a-1111e29b92d3@redhat.com>
+Date:   Mon, 20 Jun 2022 14:03:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: [GIT PULL] slab fixes for 5.19
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: Re: [PATCH 0/3] KVM: selftests: Consolidate ucall code
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Colton Lewis <coltonlewis@google.com>,
+        Andrew Jones <drjones@redhat.com>
+References: <20220618001618.1840806-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220618001618.1840806-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus
+On 6/18/22 02:16, Sean Christopherson wrote:
+> Consolidate the code for making and getting ucalls.  All architectures pass
+> the ucall struct via memory, so filling and copying the struct is 100%
+> generic.  The only per-arch code is sending and receiving the address of
+> said struct.
+> 
+> Tested on x86 and arm, compile tested on s390 and RISC-V.
 
-please pull the slab fixes for 5.19 from
+I'm not sure about doing this yet.  The SEV tests added multiple 
+implementations of the ucalls in one architecture.  I have rebased those 
+recently (not the SEV part) to get more familiar with the new kvm_vcpu 
+API for selftests, and was going to look at your old review next...
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.19-fixup
+Paolo
 
-======================================
-
-- A slub fix for PREEMPT_RT locking semantics from Sebastian.
-
-- A slub fix for state corruption due to a possible race scenario from Jann.
-
-Thanks,
-Vlastimil
-
-----------------------------------------------------------------
-Jann Horn (1):
-      mm/slub: add missing TID updates on slab deactivation
-
-Sebastian Andrzej Siewior (1):
-      mm/slub: Move the stackdepot related allocation out of IRQ-off section.
-
- mm/slub.c | 43 ++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 36 insertions(+), 7 deletions(-)

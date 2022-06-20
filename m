@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED235515A4
+	by mail.lfdr.de (Postfix) with ESMTP id CAB405515A5
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240275AbiFTKUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S239833AbiFTKUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241007AbiFTKTj (ORCPT
+        with ESMTP id S238905AbiFTKTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:19:39 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD22114007
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:19:31 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cf14so4664017edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dneg.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U65sD1RO6KC9zIHsaAh+EyaFvAgiKc478ZRVl8k3cjY=;
-        b=Q4EL2dBDKjIQpmszEmwyr9zsU80bYo7tPUUVyg7LFHcX8CI6Ol5fdwnL51WfByAyP+
-         gvH9i0ArcbOcP8Qow1FE8Ribb6qtMBFSduCpjQT8ZPItgMo6NEpG/BBdC0CMSz+ymPwq
-         1wMpqcXfRXXoPsZtjOXXaOMIg6+YuPx97RqhzdzNMxjBE33zRkJGL3Fvs6PkFGtZNeq3
-         SfnkL8UzQUaK1c9t4gEySW50dto5z6WJXsD5ygBg+GhobiuTOl1uUv8gvuJsADH2k9MC
-         vQuberct3P4NV3+24n+FnRdNaDY6xiCoFe9FIWbwFXHmL8P1exV9Bz+RPSALOpHLZ97K
-         +y4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U65sD1RO6KC9zIHsaAh+EyaFvAgiKc478ZRVl8k3cjY=;
-        b=3z01vfQRgaJig/RXg+EKB+eSLCiKpuk1u6NCpPRAVfWuH5pitY4OtWTIEZxYxIDdx7
-         i/f4uMQJmweQ+v34yxLb8TgqfDg7YHP76K05jpcWsaG7gPAabxgqR9nUrKtuCkjW8gIW
-         XI1XZ8BAuIAkYrpy1sVZmLjnkICcuCb4uIjJKe1lBqgo4udjXm4IFwR96IcbHZakpc2/
-         r8GT0NUDEytMRYV70202BPGTB6OLzkqIvoLcbXjOLN1VcJyLVNozdAyNCPrys7k7yU7B
-         einAjJ7MTAtFQ/6zME2LD51fvvo6DGAblp3kWNm7uc0DG0rXm+j+a4EinqnVF5Xgumqj
-         +AAg==
-X-Gm-Message-State: AJIora8Zoa7tuiqiRZL29c/CEzuW9TNgoxoqkOn5592mtIM0zi6u6TyS
-        8bb90kOn8EIP5J4qtaftP+k78XQHuoTAHFX104aH7g==
-X-Google-Smtp-Source: AGRyM1v3loEzZn5lCQNqmOyLVmDEpgbjQ28MHr2qrJ0Tw5WoguppyU5q5kmkj9+DYNYOI2kZiD6bH1OO306e/es4Hr8=
-X-Received: by 2002:a05:6402:25c2:b0:431:932e:eb6f with SMTP id
- x2-20020a05640225c200b00431932eeb6fmr13332620edb.296.1655720370201; Mon, 20
- Jun 2022 03:19:30 -0700 (PDT)
+        Mon, 20 Jun 2022 06:19:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4B313F85;
+        Mon, 20 Jun 2022 03:19:53 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 12:19:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1655720391;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+gOFJVRzxcO7qZkVW4n1+mq7b+cmJCRjJw0+qfAQR04=;
+        b=jkej/6jbYDD+i0FdkqiDtrKRBeBfLjCBx30wGELUP6jIOrSdhMJH+QzRM+d/tTNISq5uJK
+        a/IUz/OHK5tB+d8YbyA9SvR57+PrONE+MZ6IyFZJuTqnLhr045BqbvF1l+kIIuKeKQbJa+
+        +LIWBJYkVR7lIER7wnZ98zNObi18kt8P6sqGBywAH1sMbscNih5JJErk10jGfRhPn2MRyF
+        7i2scfCi7Npk4x/KWzu9yOikB3aVShV9zm9dS+TBaUrG6rkYtDn3bsSRF4tSlqlUec7OGD
+        SfWlEfgh0cavN9rUogj56wYBxzjXVaGQdYtaMMxwFd+ZbfeT92Igx4ELcBevfA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1655720391;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+gOFJVRzxcO7qZkVW4n1+mq7b+cmJCRjJw0+qfAQR04=;
+        b=LwUL2esLEgCBtMngnNlmv0aq9kVTLuPdvBF6fdd33HIrNIsSHykXPFffbw7FvK0v6pstTr
+        jE0jd94D7hK2/gDQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     syzbot <syzbot+b577bc624afda52c78de@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, brauner@kernel.org, daniel@iogearbox.net,
+        david@redhat.com, ebiederm@xmission.com, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, yhs@fb.com,
+        linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ __vmalloc_node_range
+Message-ID: <YrBJxrbq8Yvrpshj@linutronix.de>
+References: <000000000000e57c2b05e1c03426@google.com>
 MIME-Version: 1.0
-References: <165516173293.21248.14587048046993234326.stgit@noble.brown>
- <CAPt2mGNjWXad6e7nSUTu=0ez1qU1wBNegrntgHKm5hOeBs5gQA@mail.gmail.com>
- <165534094600.26404.4349155093299535793@noble.neil.brown.name>
- <CAPt2mGOw_PS-5KY-9WFzGOT=ax6PFhVYSTQG-dpXzV5MeGieYg@mail.gmail.com>
- <165544498126.26404.7712330810213588882@noble.neil.brown.name> <CAPt2mGNJYJ=pTmRRseJdeyvTDw9am6uNUaiZysDvU2bNcNJLQw@mail.gmail.com>
-In-Reply-To: <CAPt2mGNJYJ=pTmRRseJdeyvTDw9am6uNUaiZysDvU2bNcNJLQw@mail.gmail.com>
-From:   Daire Byrne <daire@dneg.com>
-Date:   Mon, 20 Jun 2022 11:18:54 +0100
-Message-ID: <CAPt2mGOmcmJsDBZ1BN0G==u=OSMd91bicFk+-05g44CGbi1PLQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/12] Allow concurrent directory updates.
-To:     NeilBrown <neilb@suse.de>
-Cc:     Anna Schumaker <schumaker.anna@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <000000000000e57c2b05e1c03426@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 at 16:27, Daire Byrne <daire@dneg.com> wrote:
-> This patch does the job for me - no more stack traces and things have
-> been stable all day. I'm going to run some production loads over the
-> weekend and then I'll do some more artificial scale testing next week.
->
-> Thanks again for this work! Improving the parallelism anywhere we can
-> for single clients and then nfsd is great for reexport servers
-> (especially once you add some "cloud" latency).
->
-> Cheers,
->
-> Daire
+#syz fix: mm/page_alloc: protect PCP lists with a spinlock
+#syz dup: BUG: sleeping function called from invalid context in relay_open_=
+buf
 
-The patch ran without incident with our production re-export workloads
-over the weekend (which also helps audit v5.19-rc2).
+The version of the patch above in next-20220614 is buggy leading to the
+report below. The version in next-20220620 is fine. Not sure how to tell
+syz bot this=E2=80=A6
 
-I ran a couple more synthetic tests and got up to 100 clients of a
-re-export server and ~113 creates/s aggregate to a single directory
-with 200ms latency to the originating server. This compares well with
-the ~121 create/s when using 100 threads on a single patched client
-direct to the remote NFS server.
+On 2022-06-18 15:15:20 [-0700], syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    35d872b9ea5b Add linux-next specific files for 20220614
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D155b0d10080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd7bf2236c6bb2=
+403
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Db577bc624afda52=
+c78de
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+>=20
+> Unfortunately, I don't have any reproducer for this issue yet.
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+b577bc624afda52c78de@syzkaller.appspotmail.com
+>=20
+> BUG: sleeping function called from invalid context at mm/vmalloc.c:2980
+=E2=80=A6
+> Preemption disabled at:
+> [<ffffffff81bc76f5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> [<ffffffff81bc76f5>] rmqueue mm/page_alloc.c:3858 [inline]
+> [<ffffffff81bc76f5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:=
+4293
 
-In other words, the NFSD portion of this patch is delivering almost
-the same performance as the underlying VFS NFS client performance when
-re-exporting that path to hundreds of clients.
-
-Again, without this patch we can only sustain just under 3 create/s in
-both cases (VFS/NFSD) with 200ms latency.
-
-This is a great improvement for our batch workloads with varying
-amounts of latency >10ms (cloud networking).
-
-Tested-by: Daire Byrne <daire@dneg.com>
-
-Daire
+Sebastian

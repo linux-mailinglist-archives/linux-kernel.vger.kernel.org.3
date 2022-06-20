@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D243551B7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECDB551D2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346661AbiFTNfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S1348276AbiFTNrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346989AbiFTNdy (ORCPT
+        with ESMTP id S1348621AbiFTNrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:33:54 -0400
+        Mon, 20 Jun 2022 09:47:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F061D32A;
-        Mon, 20 Jun 2022 06:13:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72BD2E6A4;
+        Mon, 20 Jun 2022 06:17:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 072C7B811A6;
-        Mon, 20 Jun 2022 13:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3452C3411B;
-        Mon, 20 Jun 2022 13:01:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ED96B811A0;
+        Mon, 20 Jun 2022 13:06:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5ADC3411B;
+        Mon, 20 Jun 2022 13:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730115;
-        bh=YIs9ShMGN2GvWoBBYcpdcEv1M9la4CQJGFzqf7sJSWc=;
+        s=korg; t=1655730360;
+        bh=EwoD3EBUTWMcZKTaDFWmwe7rbaU+vmxyU8ePWDHD1CU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kqWjt75h6NpjmA2ZbuEY4CVejFyLroxqcFvEbazD4rBvmEubP/oeVXt9YYvqTxW0J
-         2Cb/a1vqaj7WOxo3wEI3hMP1w9/Nu86ER5xriRGcc12AIpP1O8BcKjjKPrypDeu4q9
-         G/P7Cvrv/cUyBw7+XPOSfxq0OhgoneoVwBBBUgP0=
+        b=KDEamVydPj91O2oOhYgy9KJ90PrqdSZniv6LtLb8+7w9PhYkkzTdQcwAExfSyJlDO
+         WdMVQ405tsI/kH4gFsA9178NU4U2q3FS5rSO1fNw7c2flLZdUMQaMS7tROq/0yk+qe
+         Ehw4XKX7MjyVd0TfECq45pn3zyftgcPvjBwsIqCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
         Chengguang Xu <cgxu519@mykernel.net>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 24/84] scsi: pmcraid: Fix missing resource cleanup in error case
+Subject: [PATCH 5.15 028/106] scsi: ipr: Fix missing/incorrect resource cleanup in error case
 Date:   Mon, 20 Jun 2022 14:50:47 +0200
-Message-Id: <20220620124721.611055919@linuxfoundation.org>
+Message-Id: <20220620124725.219036940@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
+References: <20220620124724.380838401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,33 +59,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chengguang Xu <cgxu519@mykernel.net>
 
-[ Upstream commit ec1e8adcbdf661c57c395bca342945f4f815add7 ]
+[ Upstream commit d64c491911322af1dcada98e5b9ee0d87e8c8fee ]
 
 Fix missing resource cleanup (when '(--i) == 0') for error case in
-pmcraid_register_interrupt_handler().
+ipr_alloc_mem() and skip incorrect resource cleanup (when '(--i) == 0') for
+error case in ipr_request_other_msi_irqs() because variable i started from
+1.
 
-Link: https://lore.kernel.org/r/20220529153456.4183738-6-cgxu519@mykernel.net
+Link: https://lore.kernel.org/r/20220529153456.4183738-4-cgxu519@mykernel.net
 Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Brian King <brking@linux.vnet.ibm.com>
 Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pmcraid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ipr.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index cbe5fab793eb..ce10d680c56c 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -4528,7 +4528,7 @@ pmcraid_register_interrupt_handler(struct pmcraid_instance *pinstance)
- 	return 0;
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 5d78f7e939a3..56b8a2d6ffe4 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -9791,7 +9791,7 @@ static int ipr_alloc_mem(struct ipr_ioa_cfg *ioa_cfg)
+ 					GFP_KERNEL);
  
- out_unwind:
--	while (--i > 0)
-+	while (--i >= 0)
- 		free_irq(pci_irq_vector(pdev, i), &pinstance->hrrq_vector[i]);
- 	pci_free_irq_vectors(pdev);
- 	return rc;
+ 		if (!ioa_cfg->hrrq[i].host_rrq)  {
+-			while (--i > 0)
++			while (--i >= 0)
+ 				dma_free_coherent(&pdev->dev,
+ 					sizeof(u32) * ioa_cfg->hrrq[i].size,
+ 					ioa_cfg->hrrq[i].host_rrq,
+@@ -10064,7 +10064,7 @@ static int ipr_request_other_msi_irqs(struct ipr_ioa_cfg *ioa_cfg,
+ 			ioa_cfg->vectors_info[i].desc,
+ 			&ioa_cfg->hrrq[i]);
+ 		if (rc) {
+-			while (--i >= 0)
++			while (--i > 0)
+ 				free_irq(pci_irq_vector(pdev, i),
+ 					&ioa_cfg->hrrq[i]);
+ 			return rc;
 -- 
 2.35.1
 

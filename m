@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA773551AA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AEA551B09
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245047AbiFTNIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S244617AbiFTNNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244088AbiFTNEe (ORCPT
+        with ESMTP id S1343773AbiFTNJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:04:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEAB18B19;
-        Mon, 20 Jun 2022 05:59:57 -0700 (PDT)
+        Mon, 20 Jun 2022 09:09:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2122918E33;
+        Mon, 20 Jun 2022 06:04:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5935761535;
-        Mon, 20 Jun 2022 12:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DEEAC3411C;
-        Mon, 20 Jun 2022 12:59:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93CB46157C;
+        Mon, 20 Jun 2022 13:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02DCC3411C;
+        Mon, 20 Jun 2022 13:03:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729996;
-        bh=PsuOK2C3uBGTYKptXUHyYaVSHfOkcCwrXcBW4kjkI2w=;
+        s=korg; t=1655730207;
+        bh=GIiPyNlf1hqKd/SxVZ63zAuQT1d8ca2jgkCXe8pRiQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fS+lE5XzoFMRysFFZ0sJ1JgxapY+B4VeZgPhvgtf7GeofSKovjXBh4RciU3nbsU2Z
-         0UQ56J81M8OjhIMINA8gABMu4octCkd4ZgPzbWaj7woQjU/NdAcw9SpRO3MzdgnXGN
-         +11WNEwJCCwTizz+iGfD4F/2UKGW+XrvKJQD445s=
+        b=ONM45szG9aEvi/V6IC7sqsq0OGj+x2fhv5FWuCWVywK0+mcg9smTq/DfNYpYsx0WV
+         0dsi+l6z4Faw9Yl6vWjntICTdwZiLmqsWjD6LBvhoEkntz5qC8W+uoE0nF/XN2QjD/
+         wrjiyR/HOh1//5RQVwjr7ihfZ4PeEV5hz5g2WCCk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH 5.18 141/141] clk: imx8mp: fix usb_root_clk parent
-Date:   Mon, 20 Jun 2022 14:51:19 +0200
-Message-Id: <20220620124733.726338011@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 57/84] irqchip/gic-v3: Fix error handling in gic_populate_ppi_partitions
+Date:   Mon, 20 Jun 2022 14:51:20 +0200
+Message-Id: <20220620124722.578637812@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit cf7f3f4fa9e57b8e9f594823e77e6cbb0ce2b254 upstream.
+[ Upstream commit ec8401a429ffee34ccf38cebf3443f8d5ae6cb0d ]
 
-According to reference mannual CCGR77(usb) sources from hsio_axi, fix
-it.
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+When kcalloc fails, it missing of_node_put() and results in refcount
+leak. Fix this by goto out_put_node label.
 
-Fixes: 9c140d9926761 ("clk: imx: Add support for i.MX8MP clock driver")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-Link: https://lore.kernel.org/r/20220507125430.793287-1-peng.fan@oss.nxp.com
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 52085d3f2028 ("irqchip/gic-v3: Dynamically allocate PPI partition descriptors")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220601080930.31005-5-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/imx/clk-imx8mp.c |    2 +-
+ drivers/irqchip/irq-gic-v3.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -659,7 +659,7 @@ static int imx8mp_clocks_probe(struct pl
- 	hws[IMX8MP_CLK_UART2_ROOT] = imx_clk_hw_gate4("uart2_root_clk", "uart2", ccm_base + 0x44a0, 0);
- 	hws[IMX8MP_CLK_UART3_ROOT] = imx_clk_hw_gate4("uart3_root_clk", "uart3", ccm_base + 0x44b0, 0);
- 	hws[IMX8MP_CLK_UART4_ROOT] = imx_clk_hw_gate4("uart4_root_clk", "uart4", ccm_base + 0x44c0, 0);
--	hws[IMX8MP_CLK_USB_ROOT] = imx_clk_hw_gate4("usb_root_clk", "osc_32k", ccm_base + 0x44d0, 0);
-+	hws[IMX8MP_CLK_USB_ROOT] = imx_clk_hw_gate4("usb_root_clk", "hsio_axi", ccm_base + 0x44d0, 0);
- 	hws[IMX8MP_CLK_USB_PHY_ROOT] = imx_clk_hw_gate4("usb_phy_root_clk", "usb_phy_ref", ccm_base + 0x44f0, 0);
- 	hws[IMX8MP_CLK_USDHC1_ROOT] = imx_clk_hw_gate4("usdhc1_root_clk", "usdhc1", ccm_base + 0x4510, 0);
- 	hws[IMX8MP_CLK_USDHC2_ROOT] = imx_clk_hw_gate4("usdhc2_root_clk", "usdhc2", ccm_base + 0x4520, 0);
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index e5e3fd6b9554..8d62028a0e04 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -1831,7 +1831,7 @@ static void __init gic_populate_ppi_partitions(struct device_node *gic_node)
+ 
+ 	gic_data.ppi_descs = kcalloc(gic_data.ppi_nr, sizeof(*gic_data.ppi_descs), GFP_KERNEL);
+ 	if (!gic_data.ppi_descs)
+-		return;
++		goto out_put_node;
+ 
+ 	nr_parts = of_get_child_count(parts_node);
+ 
+-- 
+2.35.1
+
 
 

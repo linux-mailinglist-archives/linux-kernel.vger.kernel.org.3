@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B408F552562
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3842E55256F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344459AbiFTUJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S242118AbiFTUJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344468AbiFTUI0 (ORCPT
+        with ESMTP id S1344671AbiFTUIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:08:26 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CAA1E3EA;
-        Mon, 20 Jun 2022 13:07:16 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so6194766wml.2;
-        Mon, 20 Jun 2022 13:07:16 -0700 (PDT)
+        Mon, 20 Jun 2022 16:08:38 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A821B2181A;
+        Mon, 20 Jun 2022 13:07:25 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id w17so16066166wrg.7;
+        Mon, 20 Jun 2022 13:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4twauV1jKrSap9S7bWtY2G6jDd+AwgeAtPmARMXtVJs=;
-        b=HAVLNiSG1Db+lrcRkQRn8OxHpInOCKVObpVGiV2a54L1CQgeoGOooL330nzmb1IrII
-         a3+TudV6Bx14k7cwx4iQj2dXFhyD/5OkarV2X1AcQ8112qn1+A6sYLyb7gP/k60vWcpp
-         QlXmznoiGFzV+kfuaH3NwBCvN7xAfZ6eQWiXmrgD9jVR+QP4E0pwxB386bRkdp7qjh4v
-         RRefsra95ego+spLsfQaC4Onjyy0W/nUDl+zsdYC0d5hRcphjIZcJd2yOdzoQBdmrOLN
-         oGvMMVKLgN9yHbyQ2rgqGCUc73aP/jM/TLKGsXmkumYZuLKeHNvCzWm6gGOK0EhOiQTm
-         KNOA==
+        bh=NcUaD1/hetXoR1Hr3zOaIrV5ibqb80WKTQCzVE8bVrc=;
+        b=JYv78xaECQZTaj29SjmNHnhs4gfEEratnCgfJZagJJiK+EVif7vCkcuTP1QF0wfouK
+         JhOxz5Q0vETS+bhO7JLSkwPttvHYnqkEyX3HWyCMGYjjskRlAQvkUsr5XtoBlAJVGwhM
+         Gw+0xCBp9YPW230YKLPHGegCcK1UoKqqxF+q0NM7n1ss/f9b2tA03ELnh9lj8wNVqRiD
+         p3oWRBH9z/0ejlWRohZ3vCWr/VL+wIvmrnrFxL5IVwRiWT8mfm+mPnriC/8/NBkGAEQT
+         cw5lNfhGyRNeY0VAdg2EvhXglVeSK8bk4eq65rFbOML/1pGcXaRo+6lWO3/nbDyuiy/y
+         5z2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4twauV1jKrSap9S7bWtY2G6jDd+AwgeAtPmARMXtVJs=;
-        b=n1I/l4btfN554ORe4LL40EcbWTZPBkOrJqJjzodPE8RcdXS6h1+e/nlE33qYNBb/Uj
-         NS2oBMY2oFOyQoI48pDTNpLL68WueOsefTdDbazXhUH18ho0TSjHMc2Bppo+xGwmBNju
-         QD837PJUKP7IftU6E8mgFx0zIHs1EdXiSxumUKWtcq+1uE9hwHcFRNlz830t6Mm2DbIn
-         fRCpr7WEzy2gmN6/rjL8bqBG7FIj1MWQ+GLRh7dcN2TCpeRiKZ55pl5EJUo+i7vsx1yI
-         ZZ+/pu+YELKTYgbYi6RZDNowp3VAWR1CwdlpMn900e019yxxrGPvBXakeBCFSNRB3XgA
-         Gm9g==
-X-Gm-Message-State: AJIora+8WJnTuvqraG5ZlM/KUNaUck8QkZq3ZT6a2K4h4gCd3NALJmvB
-        vfdvtH0InAxtmPBKvXF3pas=
-X-Google-Smtp-Source: AGRyM1vZj7DM/aKfxxiAy6DKWUA3/0+uS2K9N2/ZQZ6xqLKDO+9vKTvK3AWaJgypH2v81OQNNU2jMg==
-X-Received: by 2002:a05:600c:4787:b0:39c:8576:8f55 with SMTP id k7-20020a05600c478700b0039c85768f55mr25382417wmo.1.1655755635917;
-        Mon, 20 Jun 2022 13:07:15 -0700 (PDT)
+        bh=NcUaD1/hetXoR1Hr3zOaIrV5ibqb80WKTQCzVE8bVrc=;
+        b=ReXB9y16Hv53gBhRAuyxlS3PRomiA6egr3YS5G/IR5zeJr8KzcD7/z0DGcW3mo19rk
+         N9Xa3XRCdA/tcp1zAVo/dfAVfoJBfa8eBaBPg+uMcEO9Vv8Nf+q93JjnTliO/rMhOhJq
+         6tmAI2B+cx2ZEfzM7vTHlMlyJjPxGGABv68U8K+aTFL9YPf83nilST5s7o/+XD4JfkTm
+         C0X7eGhTRFLw88cYFkHK7jljafFqG3Au/P57rYrgC0S184BO8I9wh0/HzB31MKTSapr+
+         IHjn/QcmmkPPnO/9nTGWobKvEnNS75LFYg6BVPBXvIVaTZMsoZZ+S8PggFwI3LcKCz7E
+         U67g==
+X-Gm-Message-State: AJIora+WVbdn2Dryxo+FfPGUICXpCwcYur32r2udU4+7i3tq4TykVKN2
+        bEJhtC2HieESD5kWKPgFpQ4=
+X-Google-Smtp-Source: AGRyM1t6EjGq1Ksd7MyVDLpDLClD84TIjP3RmrRekqAiittfXcb8Cp1PUoN9E0quIHfglyDXxzFsVA==
+X-Received: by 2002:a5d:4601:0:b0:21b:9035:d295 with SMTP id t1-20020a5d4601000000b0021b9035d295mr6103622wrq.63.1655755637616;
+        Mon, 20 Jun 2022 13:07:17 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id n37-20020a05600c502500b0039c5cecf206sm16544192wmr.4.2022.06.20.13.07.15
+        by smtp.gmail.com with ESMTPSA id m42-20020a05600c3b2a00b003973435c517sm16572141wms.0.2022.06.20.13.07.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:15 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:17 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 38/49] irqchip: sl28cpld: replace irqchip mask_invert with unmask_base
-Date:   Mon, 20 Jun 2022 21:06:33 +0100
-Message-Id: <20220620200644.1961936-39-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 39/49] gpio: sl28cpld: replace irqchip mask_invert with unmask_base
+Date:   Mon, 20 Jun 2022 21:06:34 +0100
+Message-Id: <20220620200644.1961936-40-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -89,23 +89,23 @@ as an unmask register.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/irqchip/irq-sl28cpld.c | 3 +--
+ drivers/gpio/gpio-sl28cpld.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-sl28cpld.c b/drivers/irqchip/irq-sl28cpld.c
-index fbb354413ffa..f2172240172c 100644
---- a/drivers/irqchip/irq-sl28cpld.c
-+++ b/drivers/irqchip/irq-sl28cpld.c
-@@ -65,8 +65,7 @@ static int sl28cpld_intc_probe(struct platform_device *pdev)
- 	irqchip->chip.num_irqs = ARRAY_SIZE(sl28cpld_irqs);
- 	irqchip->chip.num_regs = 1;
- 	irqchip->chip.status_base = base + INTC_IP;
--	irqchip->chip.mask_base = base + INTC_IE;
--	irqchip->chip.mask_invert = true;
-+	irqchip->chip.unmask_base = base + INTC_IE;
- 	irqchip->chip.ack_base = base + INTC_IP;
+diff --git a/drivers/gpio/gpio-sl28cpld.c b/drivers/gpio/gpio-sl28cpld.c
+index 52404736ac86..2195f88c2048 100644
+--- a/drivers/gpio/gpio-sl28cpld.c
++++ b/drivers/gpio/gpio-sl28cpld.c
+@@ -70,8 +70,7 @@ static int sl28cpld_gpio_irq_init(struct platform_device *pdev,
+ 	irq_chip->num_irqs = ARRAY_SIZE(sl28cpld_gpio_irqs);
+ 	irq_chip->num_regs = 1;
+ 	irq_chip->status_base = base + GPIO_REG_IP;
+-	irq_chip->mask_base = base + GPIO_REG_IE;
+-	irq_chip->mask_invert = true;
++	irq_chip->unmask_base = base + GPIO_REG_IE;
+ 	irq_chip->ack_base = base + GPIO_REG_IP;
  
- 	return devm_regmap_add_irq_chip_fwnode(dev, dev_fwnode(dev),
+ 	ret = devm_regmap_add_irq_chip_fwnode(dev, dev_fwnode(dev),
 -- 
 2.35.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879F2551B47
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E89551A95
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244491AbiFTNUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S244789AbiFTNHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345718AbiFTNOr (ORCPT
+        with ESMTP id S244054AbiFTNEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:14:47 -0400
+        Mon, 20 Jun 2022 09:04:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69CF201A1;
-        Mon, 20 Jun 2022 06:07:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4EC18B14;
+        Mon, 20 Jun 2022 05:59:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8814C60A52;
-        Mon, 20 Jun 2022 13:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E66BC3411B;
-        Mon, 20 Jun 2022 13:07:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3832061541;
+        Mon, 20 Jun 2022 12:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333A7C341C4;
+        Mon, 20 Jun 2022 12:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730452;
-        bh=6fAGBMVAci6ChGWdt3zDZTuNGDC6oQZF0j1O+kb+FLs=;
+        s=korg; t=1655729987;
+        bh=qndDqOAs9+3WFGICbDRUpXG2O5z0sRvlr66TBVrcpZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WLnqae1mFvryRqLpxllRPkaCBYjUur++NqiE/YcYs+1XsgLDgS9DjLi1oscMZeTpo
-         JjV7SPHcy6rmDhIDuv1Z13FkYP+0UuRZAKufy5kjrXH1riSsdxVycbqqO54Dn1gWH7
-         9KbnUXbn1cdJFhB5uT3aAxwErgJXw5phc1RSZzk8=
+        b=GygTjxk4MuPa9voJGXgNJ3p7jjKc3HLxxePuKalL4tyVSR+QGp2oOHL7z33rLrCsA
+         KvhCEmRZF3CnhHLBBiNW7zsain2tKo0fpYAt3+yJowWEC+ihVqfVHlbPF3gdHUVlq+
+         fmW3a8H+dJKC7524xzhrsgu/w0Y8AlLK6ioXITjw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        van fantasy <g1042620637@gmail.com>
-Subject: [PATCH 5.15 057/106] io_uring: fix races with file table unregister
+        stable@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 5.18 138/141] dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
 Date:   Mon, 20 Jun 2022 14:51:16 +0200
-Message-Id: <20220620124726.091379885@linuxfoundation.org>
+Message-Id: <20220620124733.638428436@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-References: <20220620124724.380838401@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-[ Upstream commit b0380bf6dad4601d92025841e2b7a135d566c6e3 ]
+commit e0b5c5984d4810733b7c24a3d16c904fffc086d2 upstream.
 
-Fixed file table quiesce might unlock ->uring_lock, potentially letting
-new requests to be submitted, don't allow those requests to use the
-table as they will race with unregistration.
+Changeset 983b62975e90 ("dt-bindings: mfd: bd9571mwv: Convert to json-schema")
+renamed: Documentation/devicetree/bindings/mfd/bd9571mwv.txt
+to: Documentation/devicetree/bindings/mfd/rohm,bd9571mwv.yaml.
 
-Reported-and-tested-by: van fantasy <g1042620637@gmail.com>
-Fixes: 05f3fb3c53975 ("io_uring: avoid ring quiesce for fixed file set unregister and update")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Update its cross-reference accordingly.
+
+Fixes: 983b62975e90 ("dt-bindings: mfd: bd9571mwv: Convert to json-schema")
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/1906a4d935eab57c10ce09358eae02175ce4abb7.1654529011.git.mchehab@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/ABI/testing/sysfs-driver-bd9571mwv-regulator | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index b8e6398d9430..5f111a660fff 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -7933,11 +7933,19 @@ static void __io_sqe_files_unregister(struct io_ring_ctx *ctx)
+diff --git a/Documentation/ABI/testing/sysfs-driver-bd9571mwv-regulator b/Documentation/ABI/testing/sysfs-driver-bd9571mwv-regulator
+index 42214b4ff14a..90596d8bb51c 100644
+--- a/Documentation/ABI/testing/sysfs-driver-bd9571mwv-regulator
++++ b/Documentation/ABI/testing/sysfs-driver-bd9571mwv-regulator
+@@ -26,6 +26,6 @@ Description:	Read/write the current state of DDR Backup Mode, which controls
+ 		     DDR Backup Mode must be explicitly enabled by the user,
+ 		     to invoke step 1.
  
- static int io_sqe_files_unregister(struct io_ring_ctx *ctx)
- {
-+	unsigned nr = ctx->nr_user_files;
- 	int ret;
- 
- 	if (!ctx->file_data)
- 		return -ENXIO;
-+
-+	/*
-+	 * Quiesce may unlock ->uring_lock, and while it's not held
-+	 * prevent new requests using the table.
-+	 */
-+	ctx->nr_user_files = 0;
- 	ret = io_rsrc_ref_quiesce(ctx->file_data, ctx);
-+	ctx->nr_user_files = nr;
- 	if (!ret)
- 		__io_sqe_files_unregister(ctx);
- 	return ret;
+-		See also Documentation/devicetree/bindings/mfd/bd9571mwv.txt.
++		See also Documentation/devicetree/bindings/mfd/rohm,bd9571mwv.yaml.
+ Users:		User space applications for embedded boards equipped with a
+ 		BD9571MWV PMIC.
 -- 
-2.35.1
+2.36.1
 
 
 

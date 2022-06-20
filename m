@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4068F551C72
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D86551C58
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344406AbiFTNNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
+        id S1345626AbiFTNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343925AbiFTNJs (ORCPT
+        with ESMTP id S1344215AbiFTNKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:09:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4E11AF15
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:04:57 -0700 (PDT)
+        Mon, 20 Jun 2022 09:10:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8511C913
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:05:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26478B811A2
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD16161585
         for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD1DC3411B;
-        Mon, 20 Jun 2022 13:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66743C3411C;
+        Mon, 20 Jun 2022 13:04:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655730286;
-        bh=DwXafDeIgu51boCgcI30lD+RCbzk47DPP8hGZLfeELE=;
+        s=k20201202; t=1655730288;
+        bh=DQ0T25vKkcmro9h8yx7UFxooO1yM3WIBu6PbXpNRccg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZOx9c8yEXhk80Yc+vPPt2rrp9YdlPzzFbVoWMXnbhJu82XBmyuijMcA78Uzhu83jf
-         2HvyLaTq+5twAXrXqXioPADYKGlp7MT1+yXGvNn+yO/CO6AfWETT9qjmycul/DeC0M
-         JWKOg32+xS8Kbwx+d35v0EzUN/9iFH4u9TI7UuGVM2qmrNiwkEmT3iGdQN+xAxyBsZ
-         erDYdEp0+pn0Mdgm7KYp/lFxh8gYh6L7yaBzcfVTPANn1iC4QAVW0ql2MAF4FpUjJb
-         ZWtZYlyGkX7YC/J8tH6LJQ5viRgTT2PgNauWPgeRK5SWxxlN7PlsXo+iNiz6Bs3FTa
-         uTWeYVCYWXsZw==
+        b=r6FrsOUz58RPF3bIjB897iCF+E6ieQa2HkYdK/9ZBcSbTHlTjTR+O1qx8fPuUTOfa
+         VLQC2PYFvkI0VUtQpCxqKdu+CMJc2zjgyUWghfQPA44hQaBqdMLddjR6NuQNhTydx8
+         0dWZEVr5wcQmnn7vrvI5CtVx6ihy272kDb54cz0OMEDoHNXi9vZfr5DYVs0uTDg3+a
+         05NbPBR0jP1zNy2jZ5DVFqp+9b4XqyDM70yiZHZBy10Jb8s2MgqF4KsPPmYiDMRtpw
+         sTaO0OMEVDgK3Bf56hDoPbdccOoMBfMSpvcdsdo1J7Fb6+6kAoNM3QdxR85YJk3mkF
+         MoGKmZGs2HBrw==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Koby Elbaz <kelbaz@habana.ai>
-Subject: [PATCH 07/17] habanalabs/gaudi: fix incorrect MME offset calculation
-Date:   Mon, 20 Jun 2022 16:04:22 +0300
-Message-Id: <20220620130432.1180451-7-ogabbay@kernel.org>
+Cc:     farah kassabri <fkassabri@habana.ai>
+Subject: [PATCH 08/17] habanalabs: add validity check for cq counter offset
+Date:   Mon, 20 Jun 2022 16:04:23 +0300
+Message-Id: <20220620130432.1180451-8-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220620130432.1180451-1-ogabbay@kernel.org>
 References: <20220620130432.1180451-1-ogabbay@kernel.org>
@@ -53,56 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Koby Elbaz <kelbaz@habana.ai>
+From: farah kassabri <fkassabri@habana.ai>
 
-Once FW raised an event following a MME2 QMAN error, the driver should
-have gone to the corresponding status registers, trying to gather more
-info on the error, yet it was accidentally accessing MME1 QMAN address
-space.
+Driver performs no validity check for the user cq counter offset
+used in both wait_for_interrupt and register_for_timestamp APIs.
 
-Generally, we have x4 MMEs, while 0 & 2 are marked MASTER, and
-1 & 3 are marked SLAVE. The former can be addressed, yet addressing
-the latter is considered an access violation, and will result in a
-hung system, which is what unintentionally happened above.
-Note that this cannot happen in a secured system, since these registers
-are protected with range registers.
-
-Signed-off-by: Koby Elbaz <kelbaz@habana.ai>
+Signed-off-by: farah kassabri <fkassabri@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/misc/habanalabs/common/command_submission.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index b7460c30aa51..8b9ff7fa51ea 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -454,7 +454,7 @@ static const int gaudi_queue_id_to_engine_id[] = {
- 	[GAUDI_QUEUE_ID_DMA_6_0...GAUDI_QUEUE_ID_DMA_6_3] = GAUDI_ENGINE_ID_DMA_6,
- 	[GAUDI_QUEUE_ID_DMA_7_0...GAUDI_QUEUE_ID_DMA_7_3] = GAUDI_ENGINE_ID_DMA_7,
- 	[GAUDI_QUEUE_ID_MME_0_0...GAUDI_QUEUE_ID_MME_0_3] = GAUDI_ENGINE_ID_MME_0,
--	[GAUDI_QUEUE_ID_MME_1_0...GAUDI_QUEUE_ID_MME_1_3] = GAUDI_ENGINE_ID_MME_1,
-+	[GAUDI_QUEUE_ID_MME_1_0...GAUDI_QUEUE_ID_MME_1_3] = GAUDI_ENGINE_ID_MME_2,
- 	[GAUDI_QUEUE_ID_TPC_0_0...GAUDI_QUEUE_ID_TPC_0_3] = GAUDI_ENGINE_ID_TPC_0,
- 	[GAUDI_QUEUE_ID_TPC_1_0...GAUDI_QUEUE_ID_TPC_1_3] = GAUDI_ENGINE_ID_TPC_1,
- 	[GAUDI_QUEUE_ID_TPC_2_0...GAUDI_QUEUE_ID_TPC_2_3] = GAUDI_ENGINE_ID_TPC_2,
-@@ -7383,8 +7383,13 @@ static void gaudi_handle_qman_err(struct hl_device *hdev, u16 event_type, u64 *e
- 		snprintf(desc, ARRAY_SIZE(desc), "%s%d", "TPC_QM", index);
- 		break;
- 	case GAUDI_EVENT_MME0_QM ... GAUDI_EVENT_MME2_QM:
--		index = event_type - GAUDI_EVENT_MME0_QM;
--		qid_base = GAUDI_QUEUE_ID_MME_0_0 + index * QMAN_STREAMS;
-+		if (event_type == GAUDI_EVENT_MME0_QM) {
-+			index = 0;
-+			qid_base = GAUDI_QUEUE_ID_MME_0_0;
-+		} else if (event_type == GAUDI_EVENT_MME2_QM) {
-+			index = 2;
-+			qid_base = GAUDI_QUEUE_ID_MME_1_0;
-+		}
- 		qman_base = mmMME0_QM_BASE + index * MME_QMAN_OFFSET;
- 		snprintf(desc, ARRAY_SIZE(desc), "%s%d", "MME_QM", index);
- 		break;
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index cbb7c29966ff..72a557b83a7d 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -2979,7 +2979,7 @@ static int ts_buff_get_kernel_ts_record(struct hl_mmap_mem_buf *buf,
+ 	u64 current_cq_counter;
+ 
+ 	/* Validate ts_offset not exceeding last max */
+-	if (requested_offset_record > cb_last) {
++	if (requested_offset_record >= cb_last) {
+ 		dev_err(buf->mmg->dev, "Ts offset exceeds max CB offset(0x%llx)\n",
+ 								(u64)(uintptr_t)cb_last);
+ 		return -EINVAL;
+@@ -3064,6 +3064,13 @@ static int _hl_interrupt_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+ 		goto put_ctx;
+ 	}
+ 
++	/* Validate the cq offset */
++	if (((u64 *) cq_cb->kernel_address + cq_counters_offset) >=
++			((u64 *) cq_cb->kernel_address + (cq_cb->size / sizeof(u64)))) {
++		rc = -EINVAL;
++		goto put_cq_cb;
++	}
++
+ 	if (register_ts_record) {
+ 		dev_dbg(hdev->dev, "Timestamp registration: interrupt id: %u, ts offset: %llu, cq_offset: %llu\n",
+ 					interrupt->interrupt_id, ts_offset, cq_counters_offset);
 -- 
 2.25.1
 

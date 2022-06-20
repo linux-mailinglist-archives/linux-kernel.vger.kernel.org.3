@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97275552579
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DEF55255C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343804AbiFTUJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S1344128AbiFTUI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344514AbiFTUI1 (ORCPT
+        with ESMTP id S1344405AbiFTUIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:08:27 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE6E1EC4E;
-        Mon, 20 Jun 2022 13:07:19 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id w17so16065859wrg.7;
-        Mon, 20 Jun 2022 13:07:19 -0700 (PDT)
+        Mon, 20 Jun 2022 16:08:24 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EFA21254;
+        Mon, 20 Jun 2022 13:07:13 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id q9so16080258wrd.8;
+        Mon, 20 Jun 2022 13:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EO+iuOKogLq1gEhCZXsb9WMdWtj7M6TVjC1w+kM7coQ=;
-        b=YUDmW8ZJsJxu9mf+AG0DiMhcJc31kRVZ4ADkdSPk8W6VHXXqo4OhpTn+ltak91umjD
-         t2+KAswtChyR/y4NqqTx+RmQR/8HLN00XtsNQ0e4xwfKxuZBByicexl2a5x5LBn3I0pk
-         x8JO5FxRZt/KDQOCVtNQIKgDYlK/FvLijeVz2EHn2mzjXxfDjOvMwunXb8JB3OkGfefD
-         6GNtm5l9fhoIdmSS9kdw/3MIBC2aqx27mxgbqN6E4qbJINN1Ul/S8xgw8SLML3o/B/QQ
-         Kk8/5xYVjIsLkrwsviBZMNweB6p+q9qY5xoEECUP5iygiuGIb6cd2pLwlh4Zo+v28+Ho
-         aKgg==
+        bh=y97fwLubKQPhfVzVr/BJ8A0OiHWSUnBqrgJCFHiEuQo=;
+        b=N5XPG9OplADmbLH0pHfxycXOk0ogBS6as/63+9NbBIR+tpKjwFF8jaDqvXytgN7eFN
+         iCIGHlH+jU+vvt27pchv5bzTabl6azkQzKY7vFkafPwH50QQyWfkBzOGOCCVxQXhvncE
+         YaWxNzKfmxeTvJUbcVoUMVUAWlE3JvZZ4lB+5+QyyAHS3e43yyMBrnmUQcQabmJqyNxu
+         yz5S4TVH2O8DPD2Rf80CaJq7lQH+C0gh4FsLbgYgRXSmVebkFxyjrNjhCPP76XpsYQIa
+         zUI7t6/WnGNbz1TtlV3gFxQsN1aO4fpmL8EGt0pWJOiQvv0pEELOjmzyWY2VXTtrFst3
+         zOhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EO+iuOKogLq1gEhCZXsb9WMdWtj7M6TVjC1w+kM7coQ=;
-        b=b5efWzYIvgmKxnk4lgReOX3+iov96eloTlWfUcR5E6clj98+vRh7i+/ogWakqO4qmF
-         0DD1BUC2DiHaFpgkF4XsN6Om8N4YFu573++4ikNJa4vN9yeTauOHqtd+whPlQaDcpQIn
-         E9V1HjD/hdg4//mDWtwFcCc03SWgBt6zreQNg3Sel5Nj/1ykhgrsXcr30vdUIgTTgNmi
-         I0VLh0QLRn6yGeKOLTtVr2FUtEoOkMwA3QO90XZ9z9GMHVIY703BHn6Xv3TBrmUnfdSi
-         fQuDPOifwx0R1XHS9rxfl4Y3MWxlnNqCJ4xJf5chzPgVEXmh8fOPstpLh5+F1vhtQZel
-         wFDA==
-X-Gm-Message-State: AJIora/zNVuXG9ljtiIsOl1N6Q7jdRX1xIkEv/w2vivFMLB0D5MB0gNy
-        /qAdd9rewE+XSw+CpJA0Krs=
-X-Google-Smtp-Source: AGRyM1uQnJZI6JTSn/IXnIpbA1+48K9Xd0eSzXtkoL8kKSucoVse7cEUTXPmpKK2qI8vGS5EmgHfHA==
-X-Received: by 2002:a5d:6a01:0:b0:21a:338c:4862 with SMTP id m1-20020a5d6a01000000b0021a338c4862mr23039009wru.631.1655755631108;
-        Mon, 20 Jun 2022 13:07:11 -0700 (PDT)
+        bh=y97fwLubKQPhfVzVr/BJ8A0OiHWSUnBqrgJCFHiEuQo=;
+        b=pvaQNWQbCF0hYiRJwWD7wx3gQ+KUwBy6gWtHDqD9XVuVZQzZWet1Pc8yA6MT+sptQ2
+         oOErs4UaXp7tyDnLjQFkAuqJXx9H8bfy4A9CgdEPS1qtxFLD1qUCUYb1izUKRjt1dCHj
+         lAo9tshFRXEwwqhu9yiOaN12cEr5VXgftJr3x1Q+I+6NnxJJyNiIRAtLExcijBrdIkgZ
+         LYGMrB1UCMVchISHk/KFyfuoWW19Aqq4dsJJg5xIrdZ5S+5Evl16gEQVdSJKCAERT49y
+         polIfWoL8KQcWQvutNK2SX/J39EkGibq9aalYK18s7jF/XWrPSGyQkq3ArJ/WkoLBL+h
+         4k6w==
+X-Gm-Message-State: AJIora8d8MhcGsFeBU4v2JPMc3KgpYkt/PKAdX5HTe/wWjKx9Zpz6lZa
+        HR6BKgru7OFN+ODZeDuZiCk=
+X-Google-Smtp-Source: AGRyM1snTNRqPq+iZgzXYj3YO4MyMbr+ecuPp+zCi4PLi5xytxdvLNbc3QFI/5y6NXWpWtWF0rRckQ==
+X-Received: by 2002:a5d:5e92:0:b0:21a:278c:b901 with SMTP id ck18-20020a5d5e92000000b0021a278cb901mr24824370wrb.461.1655755632740;
+        Mon, 20 Jun 2022 13:07:12 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id m6-20020a05600c3b0600b00397402ae674sm20063059wms.11.2022.06.20.13.07.10
+        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b0039c4ba160absm33779394wmq.2.2022.06.20.13.07.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:10 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:12 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 35/49] extcon: max77843: replace irqchip mask_invert with unmask_base
-Date:   Mon, 20 Jun 2022 21:06:30 +0100
-Message-Id: <20220620200644.1961936-36-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 36/49] extcon: sm5502: drop useless mask_invert flag on irqchip
+Date:   Mon, 20 Jun 2022 21:06:31 +0100
+Message-Id: <20220620200644.1961936-37-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,28 +84,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An inverted mask register can be described more directly
-as an unmask register.
+There's no need to set the flag explicitly to false, since that
+is the default value from zero initialization.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/extcon/extcon-max77843.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/extcon/extcon-sm5502.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/extcon/extcon-max77843.c b/drivers/extcon/extcon-max77843.c
-index 8e6e97ec65a8..1bc0426ce3f1 100644
---- a/drivers/extcon/extcon-max77843.c
-+++ b/drivers/extcon/extcon-max77843.c
-@@ -189,8 +189,7 @@ static const struct regmap_irq max77843_muic_irq[] = {
- static const struct regmap_irq_chip max77843_muic_irq_chip = {
- 	.name           = "max77843-muic",
- 	.status_base    = MAX77843_MUIC_REG_INT1,
--	.mask_base      = MAX77843_MUIC_REG_INTMASK1,
--	.mask_invert    = true,
-+	.unmask_base    = MAX77843_MUIC_REG_INTMASK1,
- 	.num_regs       = 3,
- 	.irqs           = max77843_muic_irq,
- 	.num_irqs       = ARRAY_SIZE(max77843_muic_irq),
+diff --git a/drivers/extcon/extcon-sm5502.c b/drivers/extcon/extcon-sm5502.c
+index f706f5288257..8401e8b27788 100644
+--- a/drivers/extcon/extcon-sm5502.c
++++ b/drivers/extcon/extcon-sm5502.c
+@@ -227,7 +227,6 @@ static const struct regmap_irq_chip sm5502_muic_irq_chip = {
+ 	.name			= "sm5502",
+ 	.status_base		= SM5502_REG_INT1,
+ 	.mask_base		= SM5502_REG_INTMASK1,
+-	.mask_invert		= false,
+ 	.num_regs		= 2,
+ 	.irqs			= sm5502_irqs,
+ 	.num_irqs		= ARRAY_SIZE(sm5502_irqs),
+@@ -276,7 +275,6 @@ static const struct regmap_irq_chip sm5504_muic_irq_chip = {
+ 	.name			= "sm5504",
+ 	.status_base		= SM5502_REG_INT1,
+ 	.mask_base		= SM5502_REG_INTMASK1,
+-	.mask_invert		= false,
+ 	.num_regs		= 2,
+ 	.irqs			= sm5504_irqs,
+ 	.num_irqs		= ARRAY_SIZE(sm5504_irqs),
 -- 
 2.35.1
 

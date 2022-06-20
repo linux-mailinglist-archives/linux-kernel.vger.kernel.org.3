@@ -2,211 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43845524DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160305524E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237198AbiFTT4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S239052AbiFTT5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiFTT4f (ORCPT
+        with ESMTP id S229866AbiFTT5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:56:35 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63681CFD0;
-        Mon, 20 Jun 2022 12:56:34 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id q15so6362632wmj.2;
-        Mon, 20 Jun 2022 12:56:34 -0700 (PDT)
+        Mon, 20 Jun 2022 15:57:09 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042B41CFE0;
+        Mon, 20 Jun 2022 12:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8JXpksGN8on+hs1kw2vF/ANqrZgfrCyZJ79yotiZS7o=;
-        b=Jxj0yKO8OaskheKCkkfQI5jMOBb26izi/IghJ+NTGUFIzOOsB0CmFD4RPNwUNtaLof
-         /C3hAXGVclJM0vR6lh8CDHU4GMMT9xyh7RiksMHIaBii/MzeZK68bgHz+LcafyrE+gMc
-         mMfCsWH9mQASrfIFkwr05Wrot/6BG81EdYq7EXv40E5YmGAMSUXSS3w0ZBtBKg6LYTZ3
-         HtU+cy5glXehl52TcQI/z1P1oNg9rBXNQ87Dxw7DoGIEGaj2SKzjVcwdP+nKFoP63sGx
-         0f4eyLLsx9Sux8ZhyLxge2I8edbegqFVWISeEpE8uHp9q2Ea9hY+homqRtUzV/v2T3mA
-         gwew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8JXpksGN8on+hs1kw2vF/ANqrZgfrCyZJ79yotiZS7o=;
-        b=0WsX1I1ni6kGGmT9RPQIQf9HUTMp1+KoDu6MTR2zyioa/ppNgPylZpno66g23t6zqS
-         2DNzfgtVsi+mzaveAjK6VrFnTvp7yOuHmDeOH8eKhATPEVc5gCM+USZcDqNm/NWv4b+r
-         RAxW9A13Y75HOD0HP7ofQtcC3PaA7GW98TtIvw8ccFrvaa5Xpyse5pw+POwk2e8rWPSW
-         zn7kYLvwIoHUEvlrMBczQkMS+c8cZEuk51l+CPmKJd/koqcstpPddOco5y9k9nNZqcbM
-         /mXGlNcYuLCfjTA8U6O5sFGPI1k8Ci4g+qpCFkqTXYbpAw3DJFSTcScinM6oAP/Dgh6g
-         i9gQ==
-X-Gm-Message-State: AJIora8U6PQF+rb4tl8zMXN4yjcPte6ejoGGG0fb5vKTC2KparCXu0yk
-        VSSwyrNaXH/o2h6pNtEyI4HS6GiiCfL1IA==
-X-Google-Smtp-Source: AGRyM1tt9bsEk8NgI/kpR3VLu38LafWZxQsfbYJmfVaV9kJuFMh9wfpKKuSUoIKnZ9fjpDuLI2I8ZQ==
-X-Received: by 2002:a1c:7206:0:b0:39c:4d16:683f with SMTP id n6-20020a1c7206000000b0039c4d16683fmr25813689wmc.197.1655754993183;
-        Mon, 20 Jun 2022 12:56:33 -0700 (PDT)
-Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id t9-20020adfe109000000b0021018642ff8sm14293461wrz.76.2022.06.20.12.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 12:56:32 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v9 00/17] Move HEVC stateless controls out of staging
-Date:   Mon, 20 Jun 2022 21:56:30 +0200
-Message-ID: <5830902.lOV4Wx5bFT@jernej-laptop>
-In-Reply-To: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
-References: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655755028; x=1687291028;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=nVkMDtelBSqwtUPvbeoUxnRHGUYm0P0IpqSZEn/Amv8=;
+  b=rcx6VCKq3Rle7fK8pXctneZkX05SbpJIwBaqR7BSJGmlC5d+9QWKsDjG
+   xy4ihlozYsL1sHFZTgbeQ2wKGhWbXGYHSGkctbKPWTuC9EEoLV2MIByGc
+   aZforBPhfLDHQNVKWnS2ITIVEmdr9OJ6pjJP/eHNO5gW8pI0x4BH5r6eQ
+   M=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 12:57:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 12:57:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 20 Jun 2022 12:57:07 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
+ 2022 12:57:06 -0700
+Message-ID: <c93aa921-b327-fdf4-adae-f0dd77e8789e@quicinc.com>
+Date:   Mon, 20 Jun 2022 13:57:05 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
+ power down
+Content-Language: en-US
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>,
+        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
+ <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
+In-Reply-To: <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 17. junij 2022 ob 10:35:28 CEST je Benjamin Gaignard napisal(a):
-> This series aims to make HEVC uapi stable and usable for hardware
-> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
-> and 2 out of the tree drivers (rkvdec and RPI).
+On 6/9/2022 7:54 AM, Jeffrey Hugo wrote:
+> On 6/9/2022 7:43 AM, Qiang Yu wrote:
+>> EP tends to read MSI address/data once and cache them after BME is set.
+>> So host should avoid changing MSI address/data after BME is set.
+>>
+>> In pci reset function, host invokes free_irq(), which also clears MSI
+>> address/data in EP's PCIe config space. If the invalid address/data
+>> are cached and used by EP, MSI triggered by EP wouldn't be received by
+>> host, because an invalid MSI data is sent to an invalid MSI address.
+>>
+>> To fix this issue, after host runs request_irq() successfully during
+>> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
+>> request_irq()/free_irq() when we want to power on and power down MHI.
+>> Meanwhile, Host should invoke free_irq() when mhi host driver is
+>> removed.
+> 
+> I don't think this works for hotplug, nor cases where there are multiple 
+> MHI devices on the system.
+> 
+> The EP shouldn't be caching this information for multiple reasons. 
+> Masking the MSIs, disabling the MSIs, changing the address when the 
+> affinity changes, etc.
+> 
+> It really feels like we are solving the problem in the wrong place.
+> 
+> Right now, this gets a NACK from me.
+> 
+>>
+>> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+>> ---
+>>   drivers/bus/mhi/host/init.c        | 31 +++++++++++++++++++++++++++++++
+>>   drivers/bus/mhi/host/pci_generic.c |  2 ++
+>>   drivers/bus/mhi/host/pm.c          |  4 ++--
+>>   3 files changed, 35 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+>> index cbb86b2..48cb093 100644
+>> --- a/drivers/bus/mhi/host/init.c
+>> +++ b/drivers/bus/mhi/host/init.c
+>> @@ -18,6 +18,7 @@
+>>   #include <linux/slab.h>
+>>   #include <linux/vmalloc.h>
+>>   #include <linux/wait.h>
+>> +#include <linux/irq.h>
+> 
+> Should be in alphabetical order
+> 
+>>   #include "internal.h"
+>>   static DEFINE_IDA(mhi_controller_ida);
+>> @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct mhi_controller 
+>> *mhi_cntrl)
+>>       unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
+>>       int i, ret;
+>> +    /*
+>> +     * if irq[0] has action, it represents all MSI IRQs have been
+>> +     * requested, so we just need to enable them.
+>> +     */
+> 
+> This seems like an assumption about how the interrupts are allocated and 
+> assigned that may not hold true for all devices.
 
-Whole series is:
-Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
+Ah, I see.  This goes to the assumption that the BHI interrupt is always 
+line 0, even though as far as I am aware, the spec doesn't require that. 
+  The comment could be clearer I think.
 
 > 
-> version 9:
-> - Reword some commit message
-> - Use fls()
-> - Remove useless padding at the end of hevc structures
-> - Reword all _minus* field description
-> - change CVS to codec video sequence
-> - Fix various typo
-> - Fix undefined label: v4l2-ctrl-flag-dynamic-array warning
-> - fix the waring reported by 'scripts/kernel-doc -none
->   include/uapi/linux/v4l2-controls.h'
-> 
-> This version has been tested with these branches:
-> - GStreamer:
-> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_ali
-> gned_with_kernel_5.15 - Linux:
-> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAP
-> I_V9
-> 
-> With patches to decode 10-bits bitstream and produce P010 frames the Fluster
-> score which was 77/147 before, is now 141/147.
-> The 10-bits series will comes after this because of it dependency to
-> uAPI change. If you are curious you can find the WIP branch here:
-> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HE
-> VC_UAPI_V9
-> 
-> The 6 failing tests are:
-> - PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro
-> hardware. - WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually
-> ok but some difference exist on 5 decoded frames. Some pixels values are no
-> the same the very end of few lines.
-> 
-> version 8:
-> - Same than v7 but rebased on media_stage/master
-> 
-> version 7:
-> - Apply Jernej patches for Cedrus about bit offset definition and
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
-> - Based on media_tree/master
-> 
-> version 6:
-> - Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
->   in v4l2_ctrl_hevc_decode_params structure.
-> - Change slice_pic_order_cnt type to s32 to match with PoC type.
-> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
-> - Add a define for max slices count
-> - Stop using Hantro dedicated control.
-> 
-> version 5:
-> - Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
->   hevc_dpb_entry structure
-> - Add defines for SEI pic_struct values (patch 4)
-> - Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
-> - Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
->   documentation (patch 8)
-> - Rebased on v5-18-rc1
-> 
-> Version 4:
-> - Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
-> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
-> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
-> - Fix space/tab issue in kernel-doc
-> - Add patch to change data_bit_offset definition
-> - Fix hantro-media SPDX license
-> - put controls under stateless section in v4l2-ctrls-defs.c
-> 
-> Benjamin Gaignard (14):
->   media: uapi: HEVC: Add missing fields in HEVC controls
->   media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
->     prefix
->   media: uapi: HEVC: Change pic_order_cnt definition in
->     v4l2_hevc_dpb_entry
->   media: uapi: HEVC: Add SEI pic struct flags
->   media: uapi: HEVC: Add documentation to uAPI structure
->   media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
->     dynamic array
->   media: uapi: Move parsed HEVC pixel format out of staging
->   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
->   media: uapi: Move the HEVC stateless control type out of staging
->   media: controls: Log HEVC stateless control in .std_log
->   media: hantro: Stop using Hantro dedicated control
->   media: uapi: HEVC: fix padding in v4l2 control structures
->   media: uapi: Change data_bit_offset definition
->   media: uapi: move HEVC stateless controls out of staging
-> 
-> Hans Verkuil (3):
->   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->   v4l2-ctrls: add support for dynamically allocated arrays.
->   vivid: add dynamic array test control
-> 
->  .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
->  .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
->  .../media/v4l/pixfmt-compressed.rst           |   7 +-
->  .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
->  .../media/v4l/vidioc-queryctrl.rst            |   8 +
->  .../media/videodev2.h.rst.exceptions          |   6 +
->  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
->  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 212 ++++-
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
->  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->  drivers/staging/media/hantro/hantro_drv.c     |  62 +-
->  .../staging/media/hantro/hantro_g2_hevc_dec.c |  44 +-
->  drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
->  drivers/staging/media/hantro/hantro_hw.h      |   4 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  26 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
->  .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
->  include/media/hevc-ctrls.h                    | 250 -----
->  include/media/v4l2-ctrls.h                    |  48 +-
->  include/uapi/linux/v4l2-controls.h            | 459 +++++++++
->  include/uapi/linux/videodev2.h                |  13 +
->  24 files changed, 1826 insertions(+), 1226 deletions(-)
->  delete mode 100644 include/media/hevc-ctrls.h
+>> +    if (irq_has_action(mhi_cntrl->irq[0])) {
+>> +        enable_irq(mhi_cntrl->irq[0]);
+>> +
+>> +        for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>> +            if (mhi_event->offload_ev)
+>> +                continue;
+>> +
+>> +            enable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>> +        }
+>> +        return 0;
+>> +    }
 
+Please no.  This overloads the function to have two different behaviors, 
+and it doesn't match the inline disables.
 
+Since you have inline disables, I would prefer inline enables so that 
+the code is "balanced".
 
+>> +
+>>       /* if controller driver has set irq_flags, use it */
+>>       if (mhi_cntrl->irq_flags)
+>>           irq_flags = mhi_cntrl->irq_flags;
+>> @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct mhi_controller 
+>> *mhi_cntrl)
+>>                      "bhi", mhi_cntrl);
+>>       if (ret)
+>>           return ret;
+>> +    /*
+>> +     * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
+>> +     * so disable it explicitly.
+>> +     */
+>> +    disable_irq(mhi_cntrl->irq[0]);
+>>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>>           if (mhi_event->offload_ev)
+>> @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct mhi_controller 
+>> *mhi_cntrl)
+>>                   mhi_cntrl->irq[mhi_event->irq], i);
+>>               goto error_request;
+>>           }
+>> +
+>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>       }
+>>       return 0;
+>> @@ -1003,8 +1027,14 @@ int mhi_register_controller(struct 
+>> mhi_controller *mhi_cntrl,
+>>       mhi_create_debugfs(mhi_cntrl);
+>> +    ret = mhi_init_irq_setup(mhi_cntrl);
+>> +    if (ret)
+>> +        goto error_setup_irq;
+>> +
+>>       return 0;
+>> +error_setup_irq:
+>> +    mhi_destroy_debugfs(mhi_cntrl);
+>>   err_release_dev:
+>>       put_device(&mhi_dev->dev);
+>>   err_ida_free:
+>> @@ -1027,6 +1057,7 @@ void mhi_unregister_controller(struct 
+>> mhi_controller *mhi_cntrl)
+>>       struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+>>       unsigned int i;
+>> +    mhi_deinit_free_irq(mhi_cntrl);
+>>       mhi_destroy_debugfs(mhi_cntrl);
+>>       destroy_workqueue(mhi_cntrl->hiprio_wq);
+>> diff --git a/drivers/bus/mhi/host/pci_generic.c 
+>> b/drivers/bus/mhi/host/pci_generic.c
+>> index 6fbc591..60020d0 100644
+>> --- a/drivers/bus/mhi/host/pci_generic.c
+>> +++ b/drivers/bus/mhi/host/pci_generic.c
+>> @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
+>>       mhi_unregister_controller(mhi_cntrl);
+>>       pci_disable_pcie_error_reporting(pdev);
+>> +
+>> +    pci_free_irq_vectors(pdev);
+
+This seems like a random change that should be in a different patch. 
+Why is it included here?
+
+>>   }
+>>   static void mhi_pci_shutdown(struct pci_dev *pdev)
+>> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+>> index dc2e8ff..190231c 100644
+>> --- a/drivers/bus/mhi/host/pm.c
+>> +++ b/drivers/bus/mhi/host/pm.c
+>> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct 
+>> mhi_controller *mhi_cntrl)
+>>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>>           if (mhi_event->offload_ev)
+>>               continue;
+>> -        free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
+>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>           tasklet_kill(&mhi_event->task);
+>>       }
+>> @@ -1182,7 +1182,7 @@ void mhi_power_down(struct mhi_controller 
+>> *mhi_cntrl, bool graceful)
+>>       /* Wait for shutdown to complete */
+>>       flush_work(&mhi_cntrl->st_worker);
+>> -    free_irq(mhi_cntrl->irq[0], mhi_cntrl);
+>> +    disable_irq(mhi_cntrl->irq[0]);
+>>   }
+>>   EXPORT_SYMBOL_GPL(mhi_power_down);
+> 
+> 
 

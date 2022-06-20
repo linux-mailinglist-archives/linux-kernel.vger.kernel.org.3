@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBE7552543
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777D2552529
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343746AbiFTUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S1344014AbiFTUHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343673AbiFTUGm (ORCPT
+        with ESMTP id S1343676AbiFTUGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 16:06:42 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA84F1D31C;
-        Mon, 20 Jun 2022 13:06:33 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id g27so9431885wrb.10;
-        Mon, 20 Jun 2022 13:06:33 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8841CB34;
+        Mon, 20 Jun 2022 13:06:35 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e25so12215512wrc.13;
+        Mon, 20 Jun 2022 13:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DxJmWv+hNttTbxmMnV8/0ynx/LV1OsxaVUXYP15PQh0=;
-        b=BTO8A9HSWQnGNlJMXGdjduAwCNw3J11bxtii/kElmojKXpaQs9JJN+nB/Z11ecJ4+t
-         aPcLjAvZTskP0Yy6Kx/uIv0Pq4VWXkpkS0ydzCVOuqbhT6f6VQizjp7Sw04Q9ffxbkhH
-         csmvkrDN8vedL9apF4hjml4cDaHMUEENPeOpI+nc8qXBzi0Wj2VwJTYkHME9zb913aEV
-         IKyBbkfVxi5GJtK2kKrwaqqf8HvGUo/7yih/Vli27G+00xxOpMWmGXBttaJ/eXDOS/2E
-         m+aHlEaTYXuUuMTbUBmdEYfc5z0kBqJKMG9awNzXrPF6DsLmWYoGVOaU8py71drMcwzH
-         ZOxg==
+        bh=ygggAhOijcuCf3qt1rizt96GNeoo90FsvWvR8LV1nyI=;
+        b=T/UvuXuobHYQjUmOyYbANq63UlOF39LoQ9F0gifyzekhcyCOQUypCEyXG/OKpb2La8
+         Q6xZerE2gogPQTVjnWE4wmzodDreHkzH5Hob1Yofhw+6nVU3v+x19k/F+1fzWd07Nhyx
+         t3dlqulqzXj03B/a7eof6RPLvdFSbbKgQ0qPPyyfUc0DvtgH5rSWtXFv/QKk3GFNsmgf
+         ba5ere/Jpb7EyG3rOfQF0QhkkW/aBY4cYS4Nq+Vs12xBWeLC+F11zEPyoGk+7XAQtopt
+         0onYAtqYMepxk8EG5VyJd6DPsfXoBs96h/qfy/t4bsS9pyheZRo3qyXWG31pXvk7VX4q
+         +KwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DxJmWv+hNttTbxmMnV8/0ynx/LV1OsxaVUXYP15PQh0=;
-        b=UyZsaEZSpgFfT6f12tiMwbsRsHphhQNCaUSprZ2YvJ5sd1oL0FFN4q/XksdcgfYh1k
-         7sqlqe5GvMc16oLX0379qPhu8XtlBOgbOK90Fzcz6Vn21lloxB194KDpZDrJA6EkVPff
-         D8a3yP4PrCZ1z66gQi3hc6/f8PRl0beRqA/uE0pGgLUnVHBzspUFu63+N9JKYRuYWLxF
-         Xa3I2E2fipvH9HrwaqioOSRPMAJ+Gj3aLkni06et//MNqxMQ7lrTvPx4ReiQUvf2KYnM
-         Af5khjtr5SjdLX0YTj5IO5ovnWEU8czMUZ/Sj0oAOcLksliH7weX4nNOQAGpUgTWIOIO
-         cQtg==
-X-Gm-Message-State: AJIora8ncE9dHfDLAqJwxBetmA0Az99EyWsERocoS3VRJlzNy+A2G2Cp
-        VJrWlKdOzSXfvvZzkPJQIMI=
-X-Google-Smtp-Source: AGRyM1u9FwilnQ/YSzQ7+AkLyasXeK9euw6s745o8xH3ioUxds4vNSlLHDgKFQb8ki5d0K5hJNGaTg==
-X-Received: by 2002:adf:a35a:0:b0:21a:3431:fcc with SMTP id d26-20020adfa35a000000b0021a34310fccmr22166494wrb.241.1655755592351;
-        Mon, 20 Jun 2022 13:06:32 -0700 (PDT)
+        bh=ygggAhOijcuCf3qt1rizt96GNeoo90FsvWvR8LV1nyI=;
+        b=w2T+aWxjx6v3xximQzIXNjApU8RxRVb8aLcnU0lCxR2hSrYBoDuoJn1ugbnYt5uUvi
+         QuZglYsg7Yu5UIafaYTb+R/8/Ux3Z7qN5XKvwef9fWKcJBl0VE3RMtdQxOAS2CzSRnPU
+         EA7bsLcjgZd1aXQ75ru6r0SuDXBY3E/VzTVAHJ2CWCpUQrZ9eSubyF/h2ucmS8EFL1G5
+         As5Bb2eiypl/BYVnzt7i7Q0626fC8qjYEUN4StSj3LcVQrv3f8aKOqUf5lBHtdHVcMEH
+         gm+MPLZW7n+4syllERXEcq1Fl7t/2Tq2Eb18U+gfZahdx9WsaI/KYzpFyHAkq0jiCug7
+         DX6w==
+X-Gm-Message-State: AJIora8ak51DZVUUunTpQNpK7j6hFl+sICbigqmw3rSiOH8lEpz+NY/U
+        GGyAdXyW3Z0S6oHcIW0yUbM=
+X-Google-Smtp-Source: AGRyM1solEebsJ8aWFaYBBFyec3sD94nnN3uwK9ZwQuWOqy8ZNWOPbTCC9XYFknZ9HYg3JgppifEhQ==
+X-Received: by 2002:adf:ef42:0:b0:21b:8e58:f24b with SMTP id c2-20020adfef42000000b0021b8e58f24bmr7538227wrp.257.1655755593841;
+        Mon, 20 Jun 2022 13:06:33 -0700 (PDT)
 Received: from localhost (92.40.169.68.threembb.co.uk. [92.40.169.68])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056000101100b00213465d202esm14269010wrx.46.2022.06.20.13.06.31
+        by smtp.gmail.com with ESMTPSA id a17-20020adffad1000000b0021b8749728dsm8178248wrs.73.2022.06.20.13.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:06:31 -0700 (PDT)
+        Mon, 20 Jun 2022 13:06:33 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 11/49] regmap-irq: Remove old type register support, refactor
-Date:   Mon, 20 Jun 2022 21:06:06 +0100
-Message-Id: <20220620200644.1961936-12-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 12/49] regmap-irq: Remove unused type_reg_stride field
+Date:   Mon, 20 Jun 2022 21:06:07 +0100
+Message-Id: <20220620200644.1961936-13-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,234 +84,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all users have been converted to use config registers
-for setting IRQ types, the old type register handling code can
-be removed. Also refactor the parts related to type_in_mask.
+It appears that no chip ever required a nonzero type_reg_stride
+and commit 1066cfbdfa3f ("regmap-irq: Extend sub-irq to support
+non-fixed reg strides") broke support. Just remove the field.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c | 102 +++++--------------------------
- include/linux/regmap.h           |   4 --
- 2 files changed, 14 insertions(+), 92 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 6 ------
+ include/linux/regmap.h           | 3 ---
+ 2 files changed, 9 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 5a3e255816fd..85d7fd4e07d7 100644
+index 85d7fd4e07d7..b24818ad36e6 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -36,8 +36,7 @@ struct regmap_irq_chip_data {
- 	unsigned int *mask_buf;
- 	unsigned int *mask_buf_def;
- 	unsigned int *wake_buf;
--	unsigned int *type_buf;
--	unsigned int *type_buf_def;
-+	unsigned int *mask_type_buf;
+@@ -40,7 +40,6 @@ struct regmap_irq_chip_data {
  	unsigned int **config_buf;
  
  	unsigned int irq_reg_stride;
-@@ -199,24 +198,6 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 		}
- 	}
+-	unsigned int type_reg_stride;
  
--	/* Don't update the type bits if we're using mask bits for irq type. */
--	if (!d->chip->type_in_mask) {
--		for (i = 0; i < d->chip->num_type_reg; i++) {
--			if (!d->type_buf_def[i])
--				continue;
--			reg = sub_irq_reg(d, d->chip->type_base, i);
--			if (d->chip->type_invert)
--				ret = regmap_irq_update_bits(d, reg,
--					d->type_buf_def[i], ~d->type_buf[i]);
--			else
--				ret = regmap_irq_update_bits(d, reg,
--					d->type_buf_def[i], d->type_buf[i]);
--			if (ret != 0)
--				dev_err(d->map->dev, "Failed to sync type in %x\n",
--					reg);
--		}
--	}
--
- 	for (i = 0; i < d->chip->num_config_bases; i++) {
- 		for (j = 0; j < d->chip->num_config_regs; j++) {
- 			reg = sub_irq_reg(d, d->chip->config_base[i], j);
-@@ -259,11 +240,11 @@ static void regmap_irq_enable(struct irq_data *data)
- 	 *
- 	 * If the interrupt we're enabling defines any supported types
- 	 * then instead of using the regular mask bits for this interrupt,
--	 * use the value previously written to the type buffer at the
-+	 * use the value previously written to the mask_type buffer at the
- 	 * corresponding offset in regmap_irq_set_type().
- 	 */
- 	if (d->chip->type_in_mask && irq_data->type.types_supported)
--		mask = d->type_buf[reg] & irq_data->mask;
-+		mask = d->mask_type_buf[reg] & irq_data->mask;
+ 	bool clear_status:1;
+ };
+@@ -738,11 +737,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
  	else
- 		mask = irq_data->mask;
+ 		d->irq_reg_stride = 1;
  
-@@ -287,50 +268,21 @@ static int regmap_irq_set_type(struct irq_data *data, unsigned int type)
- 	struct regmap_irq_chip_data *d = irq_data_get_irq_chip_data(data);
- 	struct regmap *map = d->map;
- 	const struct regmap_irq *irq_data = irq_to_regmap_irq(d, data->hwirq);
--	int reg;
- 	const struct regmap_irq_type *t = &irq_data->type;
-+	unsigned int reg;
- 
--	if ((t->types_supported & type) != type)
-+	if ((irq_data->type.types_supported & type) != type)
- 		return 0;
- 
- 	reg = t->type_reg_offset / map->reg_stride;
- 
-+	if (d->chip->type_in_mask)
-+		return regmap_irq_set_type_config_simple(&d->mask_type_buf,
-+							 type, irq_data, reg);
- 	if (d->chip->set_type_config)
- 		return d->chip->set_type_config(d->config_buf, type,
- 						irq_data, reg);
- 
--	if (t->type_reg_mask)
--		d->type_buf[reg] &= ~t->type_reg_mask;
+-	if (chip->type_reg_stride)
+-		d->type_reg_stride = chip->type_reg_stride;
 -	else
--		d->type_buf[reg] &= ~(t->type_falling_val |
--				      t->type_rising_val |
--				      t->type_level_low_val |
--				      t->type_level_high_val);
--	switch (type) {
--	case IRQ_TYPE_EDGE_FALLING:
--		d->type_buf[reg] |= t->type_falling_val;
--		break;
+-		d->type_reg_stride = 1;
 -
--	case IRQ_TYPE_EDGE_RISING:
--		d->type_buf[reg] |= t->type_rising_val;
--		break;
--
--	case IRQ_TYPE_EDGE_BOTH:
--		d->type_buf[reg] |= (t->type_falling_val |
--					t->type_rising_val);
--		break;
--
--	case IRQ_TYPE_LEVEL_HIGH:
--		d->type_buf[reg] |= t->type_level_high_val;
--		break;
--
--	case IRQ_TYPE_LEVEL_LOW:
--		d->type_buf[reg] |= t->type_level_low_val;
--		break;
--	default:
--		return -EINVAL;
--	}
--
- 	return 0;
- }
- 
-@@ -682,7 +634,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	struct regmap_irq_chip_data *d;
- 	int i;
- 	int ret = -ENOMEM;
--	int num_type_reg;
- 	u32 reg;
- 	u32 unmask_offset;
- 
-@@ -750,16 +701,10 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 			goto err_alloc;
- 	}
- 
--	num_type_reg = chip->type_in_mask ? chip->num_regs : chip->num_type_reg;
--	if (num_type_reg) {
--		d->type_buf_def = kcalloc(num_type_reg,
--					  sizeof(unsigned int), GFP_KERNEL);
--		if (!d->type_buf_def)
--			goto err_alloc;
--
--		d->type_buf = kcalloc(num_type_reg, sizeof(unsigned int),
--				      GFP_KERNEL);
--		if (!d->type_buf)
-+	if (chip->type_in_mask) {
-+		d->mask_type_buf = kcalloc(chip->num_regs,
-+					   sizeof(unsigned int), GFP_KERNEL);
-+		if (!d->mask_type_buf)
- 			goto err_alloc;
- 	}
- 
-@@ -899,23 +844,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 		}
- 	}
- 
--	if (chip->num_type_reg && !chip->type_in_mask) {
--		for (i = 0; i < chip->num_type_reg; ++i) {
--			reg = sub_irq_reg(d, d->chip->type_base, i);
--
--			ret = regmap_read(map, reg, &d->type_buf_def[i]);
--
--			if (d->chip->type_invert)
--				d->type_buf_def[i] = ~d->type_buf_def[i];
--
--			if (ret) {
--				dev_err(map->dev, "Failed to get type defaults at 0x%x: %d\n",
--					reg, ret);
--				goto err_alloc;
--			}
--		}
--	}
--
- 	if (irq_base)
- 		d->domain = irq_domain_create_legacy(fwnode, chip->num_irqs,
- 						     irq_base, 0,
-@@ -945,8 +873,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- err_domain:
- 	/* Should really dispose of the domain but... */
- err_alloc:
--	kfree(d->type_buf);
--	kfree(d->type_buf_def);
-+	kfree(d->mask_type_buf);
- 	kfree(d->wake_buf);
- 	kfree(d->mask_buf_def);
- 	kfree(d->mask_buf);
-@@ -1020,8 +947,7 @@ void regmap_del_irq_chip(int irq, struct regmap_irq_chip_data *d)
- 	}
- 
- 	irq_domain_remove(d->domain);
--	kfree(d->type_buf);
--	kfree(d->type_buf_def);
-+	kfree(d->mask_type_buf);
- 	kfree(d->wake_buf);
- 	kfree(d->mask_buf_def);
- 	kfree(d->mask_buf);
+ 	if (!map->use_single_read && map->reg_stride == 1 &&
+ 	    d->irq_reg_stride == 1) {
+ 		d->status_reg_buf = kmalloc_array(chip->num_regs,
 diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index bb8c89a83b51..879afdc81526 100644
+index 879afdc81526..1966ad4d0fa5 100644
 --- a/include/linux/regmap.h
 +++ b/include/linux/regmap.h
-@@ -1458,7 +1458,6 @@ struct regmap_irq_sub_irq_map {
-  * @ack_base:    Base ack address. If zero then the chip is clear on read.
-  *               Using zero value is possible with @use_ack bit.
-  * @wake_base:   Base address for wake enables.  If zero unsupported.
-- * @type_base:   Base address for irq type.  If zero unsupported.
-  * @config_base: Base address for IRQ type config regs. If null unsupported.
-  * @irq_reg_stride:  Stride to use for chips where registers are not contiguous.
-  * @init_ack_masked: Ack all masked interrupts once during initalization.
-@@ -1484,7 +1483,6 @@ struct regmap_irq_sub_irq_map {
+@@ -1483,8 +1483,6 @@ struct regmap_irq_sub_irq_map {
   * @irqs:        Descriptors for individual IRQs.  Interrupt numbers are
   *               assigned based on the index in the array of the interrupt.
   * @num_irqs:    Number of descriptors.
-- * @num_type_reg:    Number of type registers.
-  * @type_reg_stride: Stride to use for chips where type registers are not
-  *			contiguous.
+- * @type_reg_stride: Stride to use for chips where type registers are not
+- *			contiguous.
   * @num_config_bases:	Number of config base registers.
-@@ -1514,7 +1512,6 @@ struct regmap_irq_chip {
- 	unsigned int unmask_base;
- 	unsigned int ack_base;
- 	unsigned int wake_base;
--	unsigned int type_base;
- 	const unsigned int *config_base;
- 	unsigned int irq_reg_stride;
- 	bool mask_writeonly:1;
-@@ -1536,7 +1533,6 @@ struct regmap_irq_chip {
- 	const struct regmap_irq *irqs;
- 	int num_irqs;
+  * @num_config_regs:	Number of config registers for each config base register.
+  * @handle_pre_irq:  Driver specific callback to handle interrupt from device
+@@ -1535,7 +1533,6 @@ struct regmap_irq_chip {
  
--	int num_type_reg;
  	int num_config_bases;
  	int num_config_regs;
- 	unsigned int type_reg_stride;
+-	unsigned int type_reg_stride;
+ 
+ 	int (*handle_pre_irq)(void *irq_drv_data);
+ 	int (*handle_post_irq)(void *irq_drv_data);
 -- 
 2.35.1
 

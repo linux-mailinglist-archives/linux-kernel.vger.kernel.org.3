@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEAD551F96
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462DE551F81
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242043AbiFTPBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S240505AbiFTO6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241755AbiFTPB1 (ORCPT
+        with ESMTP id S232579AbiFTO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:01:27 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD51A33E82;
-        Mon, 20 Jun 2022 07:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655735252; x=1687271252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WsS4aKTNsBEfsxzyCelSOGWceTw88jDLbhP2Gba4nWQ=;
-  b=iqG69QHZ2uVM+QEuQPaizoPWUNIGADlwPmOLy6rVZ2rxPMdAsR47dmOD
-   WVG/67BFwkyB3x/PdsSIo56GI6Rcvvb52IBmfXvRUGkh/j+WioAtYK2H/
-   jhVdIFx/HALAdH7vpSozrJt7fUD9qoiXTOZLLpaL/8UBMVIP4pOHhWW+v
-   cRQAIz3TnIS3cF4X1nxa8nvLFfkMCkndolHsS+qyVJFPsogCjesmN+3vj
-   kkfoRXNnTXQv+rT3RaghvJ6BlcCUxXry36AYtMhYLFVpTFwE+d5KLzzRX
-   gepUaGrYXkB+c2SE2aQukDUBQl8JBPUOdHusfIQ0qpV/grWNMycrxyNmZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260341636"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260341636"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 07:27:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="689487163"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jun 2022 07:27:26 -0700
-Date:   Mon, 20 Jun 2022 22:19:19 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tianfei Zhang <tianfei.zhang@intel.com>
-Cc:     lee.jones@linaro.org, hao.wu@intel.com, trix@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com
-Subject: Re: [PATCH v2 4/4] mfd: intel-m10-bmc: support multiple register
- layouts
-Message-ID: <20220620141919.GA1417169@yilunxu-OptiPlex-7050>
-References: <20220617020405.128352-1-tianfei.zhang@intel.com>
- <20220617020405.128352-5-tianfei.zhang@intel.com>
+        Mon, 20 Jun 2022 10:57:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C928102C;
+        Mon, 20 Jun 2022 07:19:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C859113E;
+        Mon, 20 Jun 2022 07:19:55 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.70.167])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43E8E3F534;
+        Mon, 20 Jun 2022 07:19:51 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 15:19:42 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <YrCB/rz3RM6TCjij@FVFF77S0Q05N>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617020405.128352-5-tianfei.zhang@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,176 +60,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 10:04:05PM -0400, Tianfei Zhang wrote:
-> There are different base addresses for the MAX10 CSR register.
+On Fri, Jun 17, 2022 at 04:40:24PM +0200, Alexander Lobakin wrote:
+> So, in order to let the compiler optimize out such cases, expand the
+> test_bit() and __*_bit() definitions with a compile-time condition
+> check, so that they will pick the generic C non-atomic bitop
+> implementations when all of the arguments passed are compile-time
+> constants, which means that the result will be a compile-time
+> constant as well and the compiler will produce more efficient and
+> simple code in 100% cases (no changes when there's at least one
+> non-compile-time-constant argument).
 
-Actually I see differences for each register, not only the register
-base...
+> The savings are architecture, compiler and compiler flags dependent,
+> for example, on x86_64 -O2:
+> 
+> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> 
+> and ARM64 (courtesy of Mark[0]):
+> 
+> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
 
-> Introducing a new data structure m10bmc_csr for the register
-> definition of MAX10 CSR. Embedded m10bmc_csr into struct
-> intel_m10bmc to support multiple register layouts.
+Hmm... with *this version* of the series, I'm not getting results nearly as
+good as that when building defconfig atop v5.19-rc3:
 
-Since the new BMC has different connections to host, different register
-layouts, different sub devices. Actually I can hardly find anything to
-share between them, so how about we just create a new driver for your
-new BMC?
+  GCC 8.5.0:   add/remove: 83/49 grow/shrink: 973/1147 up/down: 32020/-47824 (-15804)
+  GCC 9.3.0:   add/remove: 68/51 grow/shrink: 1167/592 up/down: 30720/-31352 (-632)
+  GCC 10.3.0:  add/remove: 84/37 grow/shrink: 1711/1003 up/down: 45392/-41844 (3548)
+  GCC 11.1.0:  add/remove: 88/31 grow/shrink: 1635/963 up/down: 51540/-46096 (5444)
+  GCC 11.3.0:  add/remove: 89/32 grow/shrink: 1629/966 up/down: 51456/-46056 (5400)
+  GCC 12.1.0:  add/remove: 84/31 grow/shrink: 1540/829 up/down: 48772/-43164 (5608)
+
+  LLVM 12.0.1: add/remove: 118/58 grow/shrink: 437/381 up/down: 45312/-65668 (-20356)
+  LLVM 13.0.1: add/remove: 35/19 grow/shrink: 416/243 up/down: 14408/-22200 (-7792)
+  LLVM 14.0.0: add/remove: 42/16 grow/shrink: 415/234 up/down: 15296/-21008 (-5712)
+
+... and that now seems to be regressing codegen with recent versions of GCC as
+much as it improves it LLVM.
+
+I'm not sure if we've improved some other code and removed the benefit between
+v5.19-rc1 and v5.19-rc3, or whether something else it at play, but this doesn't
+look as compelling as it did.
+
+Overall that's mostly hidden in the Image size, due to 64K alignment and
+padding requirements:
+
+  Toolchain      Before      After       Difference
+
+  GCC 8.5.0      36178432    36178432    0
+  GCC 9.3.0      36112896    36112896    0
+  GCC 10.3.0     36442624    36377088    -65536
+  GCC 11.1.0     36311552    36377088    +65536
+  GCC 11.3.0     36311552    36311552    0
+  GCC 12.1.0     36377088    36377088    0
+
+  LLVM 12.0.1    31418880    31418880    0
+  LLVM 13.0.1    31418880    31418880    0
+  LLVM 14.0.0    31218176    31218176    0
+
+... so aside from the blip around GCC 10.3.0 and 11.1.0, there's not a massive
+change overall (due to 64KiB alignment restrictions for portions of the kernel
+Image).
 
 Thanks,
-Yilun
-
-> 
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
->  drivers/mfd/intel-m10-bmc-core.c  | 30 +++++++++++++++++++++++++-----
->  include/linux/mfd/intel-m10-bmc.h | 20 +++++++++++++++++++-
->  2 files changed, 44 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-> index c6a1a4c28357..f85f8e2aa9a1 100644
-> --- a/drivers/mfd/intel-m10-bmc-core.c
-> +++ b/drivers/mfd/intel-m10-bmc-core.c
-> @@ -10,6 +10,22 @@
->  #include <linux/mfd/intel-m10-bmc.h>
->  #include <linux/module.h>
->  
-> +static const struct m10bmc_csr m10bmc_pmci_csr = {
-> +	.base = M10BMC_PMCI_SYS_BASE,
-> +	.build_version = M10BMC_PMCI_BUILD_VER,
-> +	.fw_version = NIOS2_PMCI_FW_VERSION,
-> +	.mac_low = M10BMC_PMCI_MAC_LOW,
-> +	.mac_high = M10BMC_PMCI_MAC_HIGH,
-> +};
-> +
-> +static const struct m10bmc_csr m10bmc_spi_csr = {
-> +	.base = M10BMC_SYS_BASE,
-> +	.build_version = M10BMC_BUILD_VER,
-> +	.fw_version = NIOS2_FW_VERSION,
-> +	.mac_low = M10BMC_MAC_LOW,
-> +	.mac_high = M10BMC_MAC_HIGH,
-> +};
-> +
->  static struct mfd_cell m10bmc_n6000_bmc_subdevs[] = {
->  	{ .name = "n6000bmc-hwmon" },
->  	{ .name = "n6000bmc-sec-update" }
-> @@ -36,7 +52,7 @@ static ssize_t bmc_version_show(struct device *dev,
->  	unsigned int val;
->  	int ret;
->  
-> -	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
-> +	ret = m10bmc_sys_read(ddata, ddata->csr->build_version, &val);
->  	if (ret)
->  		return ret;
->  
-> @@ -51,7 +67,7 @@ static ssize_t bmcfw_version_show(struct device *dev,
->  	unsigned int val;
->  	int ret;
->  
-> -	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
-> +	ret = m10bmc_sys_read(ddata, ddata->csr->fw_version, &val);
->  	if (ret)
->  		return ret;
->  
-> @@ -66,11 +82,11 @@ static ssize_t mac_address_show(struct device *dev,
->  	unsigned int macaddr_low, macaddr_high;
->  	int ret;
->  
-> -	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
-> +	ret = m10bmc_sys_read(ddata, ddata->csr->mac_low, &macaddr_low);
->  	if (ret)
->  		return ret;
->  
-> -	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
-> +	ret = m10bmc_sys_read(ddata, ddata->csr->mac_high, &macaddr_high);
->  	if (ret)
->  		return ret;
->  
-> @@ -91,7 +107,7 @@ static ssize_t mac_count_show(struct device *dev,
->  	unsigned int macaddr_high;
->  	int ret;
->  
-> -	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
-> +	ret = m10bmc_sys_read(ddata, ddata->csr->mac_high, &macaddr_high);
->  	if (ret)
->  		return ret;
->  
-> @@ -163,18 +179,22 @@ int m10bmc_dev_init(struct intel_m10bmc *m10bmc)
->  	case M10_N3000:
->  		cells = m10bmc_pacn3000_subdevs;
->  		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
-> +		m10bmc->csr = &m10bmc_spi_csr;
->  		break;
->  	case M10_D5005:
->  		cells = m10bmc_d5005_subdevs;
->  		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> +		m10bmc->csr = &m10bmc_spi_csr;
->  		break;
->  	case M10_N5010:
->  		cells = m10bmc_n5010_subdevs;
->  		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
-> +		m10bmc->csr = &m10bmc_spi_csr;
->  		break;
->  	case M10_N6000:
->  		cells = m10bmc_n6000_bmc_subdevs;
->  		n_cell = ARRAY_SIZE(m10bmc_n6000_bmc_subdevs);
-> +		m10bmc->csr = &m10bmc_pmci_csr;
->  		break;
->  	default:
->  		return -ENODEV;
-> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> index 83c4d3993dcb..3a4fdab2acbd 100644
-> --- a/include/linux/mfd/intel-m10-bmc.h
-> +++ b/include/linux/mfd/intel-m10-bmc.h
-> @@ -125,6 +125,11 @@
->  #define M10BMC_PMCI_TELEM_START		0x400
->  #define M10BMC_PMCI_TELEM_END		0x78c
->  
-> +#define M10BMC_PMCI_BUILD_VER   0x0
-> +#define NIOS2_PMCI_FW_VERSION   0x4
-> +#define M10BMC_PMCI_MAC_LOW    0x20
-> +#define M10BMC_PMCI_MAC_HIGH    0x24
-> +
->  /* Supported MAX10 BMC types */
->  enum m10bmc_type {
->  	M10_N3000,
-> @@ -133,16 +138,29 @@ enum m10bmc_type {
->  	M10_N6000
->  };
->  
-> +/**
-> + * struct m10bmc_csr - Intel MAX 10 BMC CSR register
-> + */
-> +struct m10bmc_csr {
-> +	unsigned int base;
-> +	unsigned int build_version;
-> +	unsigned int fw_version;
-> +	unsigned int mac_low;
-> +	unsigned int mac_high;
-> +};
-> +
->  /**
->   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
->   * @dev: this device
->   * @regmap: the regmap used to access registers by m10bmc itself
->   * @type: the type of MAX10 BMC
-> + * @csr: the register definition of MAX10 BMC
->   */
->  struct intel_m10bmc {
->  	struct device *dev;
->  	struct regmap *regmap;
->  	enum m10bmc_type type;
-> +	const struct m10bmc_csr *csr;
->  };
->  
->  /*
-> @@ -174,7 +192,7 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
->   * M10BMC_SYS_BASE accordingly.
->   */
->  #define m10bmc_sys_read(m10bmc, offset, val) \
-> -	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
-> +	m10bmc_raw_read(m10bmc, m10bmc->csr->base + (offset), val)
->  
->  /*
->   * MAX10 BMC Core support
-> -- 
-> 2.26.2
+Mark.

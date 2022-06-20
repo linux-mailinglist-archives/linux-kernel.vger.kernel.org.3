@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BBB551E95
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537E7551DD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349438AbiFTNvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S237108AbiFTOBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348819AbiFTNrL (ORCPT
+        with ESMTP id S1350210AbiFTNxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:47:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEAE2E9D4;
-        Mon, 20 Jun 2022 06:17:28 -0700 (PDT)
+        Mon, 20 Jun 2022 09:53:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A549261D;
+        Mon, 20 Jun 2022 06:19:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCD2EB811D5;
-        Mon, 20 Jun 2022 13:17:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28560C3411B;
-        Mon, 20 Jun 2022 13:17:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC942614B0;
+        Mon, 20 Jun 2022 13:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A033EC3411B;
+        Mon, 20 Jun 2022 13:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731026;
-        bh=9peonJ0+z8RcmYnm5XSbbaEivH1c0xcB7jk9cS6OWwE=;
+        s=korg; t=1655730075;
+        bh=M/PmLiYH0Ua9Bu5eF2irbzC7kPy33zqk/fv4eFKMCWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DOjxuyTrzFMrBNqLa01sh+4St984YHKF+ff+gZ9ND7wz+Qfua6G6k5xrUIyxi/W3H
-         yv2Gk1zfYSixMJegsBdHWk9tNQYdB7p1RIK4ypjg3ueBet+uNbMUehHvYP20EX9nVi
-         IDpPnrxz+fWpdUxS0n+cXQLl39wqOFfZtu+UNxbY=
+        b=o1bB8bTwso4Hs/DQ0ARt46QS3JnusV+h1NZ334qGitJ2VuN5Jn0QjlrQE28MPb5xV
+         vCM1QJCS7B30JonAntiq6xtHuJxyzHueTp3izbCiAXj+WSFmxFvOdLDxcHnkGvcgRC
+         1sqba2NLnfPHDjCkOV0RjeGjfHYeYrHEMsRHuvG4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Stafford Horne <shorne@gmail.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 130/240] init: call time_init() before rand_initialize()
+        stable@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 08/84] ASoC: cs42l52: Fix TLV scales for mixer controls
 Date:   Mon, 20 Jun 2022 14:50:31 +0200
-Message-Id: <20220620124742.778536366@linuxfoundation.org>
+Message-Id: <20220620124721.136317869@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-commit fe222a6ca2d53c38433cba5d3be62a39099e708e upstream.
+[ Upstream commit 8bf5aabf524eec61013e506f764a0b2652dc5665 ]
 
-Currently time_init() is called after rand_initialize(), but
-rand_initialize() makes use of the timer on various platforms, and
-sometimes this timer needs to be initialized by time_init() first. In
-order for random_get_entropy() to not return zero during early boot when
-it's potentially used as an entropy source, reverse the order of these
-two calls. The block doing random initialization was right before
-time_init() before, so changing the order shouldn't have any complicated
-effects.
+The datasheet specifies the range of the mixer volumes as between
+-51.5dB and 12dB with a 0.5dB step. Update the TLVs for this.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Stafford Horne <shorne@gmail.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220602162119.3393857-2-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- init/main.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/soc/codecs/cs42l52.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/init/main.c
-+++ b/init/main.c
-@@ -680,11 +680,13 @@ asmlinkage __visible void __init start_k
- 	hrtimers_init();
- 	softirq_init();
- 	timekeeping_init();
-+	time_init();
+diff --git a/sound/soc/codecs/cs42l52.c b/sound/soc/codecs/cs42l52.c
+index f772628f233e..750e6c923512 100644
+--- a/sound/soc/codecs/cs42l52.c
++++ b/sound/soc/codecs/cs42l52.c
+@@ -137,7 +137,7 @@ static DECLARE_TLV_DB_SCALE(mic_tlv, 1600, 100, 0);
  
- 	/*
- 	 * For best initial stack canary entropy, prepare it after:
- 	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
- 	 * - timekeeping_init() for ktime entropy used in rand_initialize()
-+	 * - time_init() for making random_get_entropy() work on some platforms
- 	 * - rand_initialize() to get any arch-specific entropy like RDRAND
- 	 * - add_latent_entropy() to get any latent entropy
- 	 * - adding command line entropy
-@@ -694,7 +696,6 @@ asmlinkage __visible void __init start_k
- 	add_device_randomness(command_line, strlen(command_line));
- 	boot_init_stack_canary();
+ static DECLARE_TLV_DB_SCALE(pga_tlv, -600, 50, 0);
  
--	time_init();
- 	perf_event_init();
- 	profile_init();
- 	call_function_init();
+-static DECLARE_TLV_DB_SCALE(mix_tlv, -50, 50, 0);
++static DECLARE_TLV_DB_SCALE(mix_tlv, -5150, 50, 0);
+ 
+ static DECLARE_TLV_DB_SCALE(beep_tlv, -56, 200, 0);
+ 
+@@ -364,7 +364,7 @@ static const struct snd_kcontrol_new cs42l52_snd_controls[] = {
+ 			      CS42L52_ADCB_VOL, 0, 0xA0, 0x78, ipd_tlv),
+ 	SOC_DOUBLE_R_SX_TLV("ADC Mixer Volume",
+ 			     CS42L52_ADCA_MIXER_VOL, CS42L52_ADCB_MIXER_VOL,
+-				0, 0x19, 0x7F, ipd_tlv),
++				0, 0x19, 0x7F, mix_tlv),
+ 
+ 	SOC_DOUBLE("ADC Switch", CS42L52_ADC_MISC_CTL, 0, 1, 1, 0),
+ 
+-- 
+2.35.1
+
 
 

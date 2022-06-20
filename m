@@ -2,146 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F77555239A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEAA55239F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237952AbiFTSL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S245077AbiFTSND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238101AbiFTSL0 (ORCPT
+        with ESMTP id S238101AbiFTSM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:11:26 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52DD1903C;
-        Mon, 20 Jun 2022 11:11:22 -0700 (PDT)
-Received: from [88.128.92.94] (helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1o3Lrg-0006lF-Jd; Mon, 20 Jun 2022 20:11:08 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Anup Patel <anup@brainfault.org>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 1/4] of: also handle dma-noncoherent in of_dma_is_coherent()
-Date:   Mon, 20 Jun 2022 20:11:06 +0200
-Message-ID: <5907887.LM0AJKV5NW@phil>
-In-Reply-To: <CAOnJCUJC3dk21cYXXDOsamvwFDHsukoBx7HEYwqHM+MN5fLRpA@mail.gmail.com>
-References: <20220619203212.3604485-1-heiko@sntech.de> <20220619203212.3604485-2-heiko@sntech.de> <CAOnJCUJC3dk21cYXXDOsamvwFDHsukoBx7HEYwqHM+MN5fLRpA@mail.gmail.com>
+        Mon, 20 Jun 2022 14:12:59 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B0B11144;
+        Mon, 20 Jun 2022 11:12:57 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d5so10408934plo.12;
+        Mon, 20 Jun 2022 11:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CSA1neGl1yWAqzoVOGSuwz9l3taXUFKutaljg0W34Zw=;
+        b=cnZyhFbX3iADt+U3YBT893xE9wsNVxuzzyEsAV5fxbptGPFTkmU5bCy78EuQTrfylQ
+         izissxtwsjVFYUtN7ELeUjhqTo8svG4VMh7xYv31WBGtwokT4iQ7M80NofqVE/s07CuB
+         UOZgVnwuKpER2NIAckbBMFx40PmPAPgD5x7Eo0cNJc8FLQ+AqTFoF82T/Hg7I286sx0T
+         xxKSrWE4AwkfabPu/QrgqAraLyr4fBsVHHfYD6ucgwKup/HajMqQB6PzpZil5Zs1XV1/
+         dgflHEfd7voSyP4bhvdJxrFzZ8UtmEaqZ90eq+Cz4Wg8Qp10LHSC0DVZcT4uVty6wHRp
+         OE/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CSA1neGl1yWAqzoVOGSuwz9l3taXUFKutaljg0W34Zw=;
+        b=LpE5ule7Rt+ovBlnughP/gb39ziiGj50wfRjxoB5AAHTQjnAC+/GdhK7DbizCAR5z3
+         +fNgXUvM5cXgLPyJY2p/mdGVPfsBegiDhRXXgcpCGwgA6fpSEDl/XqPkiew2xGHYahvO
+         3IEVVUiDTNnt5e0PgeCwaRaqtd0jZ+oy/n0c6dqd1cJ3o1bNvY8ZtoAr0vtzrasB2FY2
+         5iiyLj31nsEskVl6UrNh0fS0ZhnZ959Kz60IhpBB3xAV2DJpJ6dzyOWjNW0ErV9E78A6
+         G+0PNEZtBcfI5DZGrdLQTbVHII1Q3Bid6TsavGw26AYlBUlDNW4Mb5I08V1vV35v4SqB
+         p+cA==
+X-Gm-Message-State: AJIora/UoeorJ5QELDXwqHaYHmaIpmpK9mZg0IDBLFIHTvTka/vdimXf
+        JOKDsI5GplMDKGDUxQpqsjs=
+X-Google-Smtp-Source: AGRyM1sAqIpUgblQZh2HnbkD4nzFe/8dTkr78CKUcc44nMPmxZmwpfGfvpEU2lWNfbbPbOyE2Kegbg==
+X-Received: by 2002:a17:902:8691:b0:16a:17c6:3602 with SMTP id g17-20020a170902869100b0016a17c63602mr10619871plo.24.1655748777265;
+        Mon, 20 Jun 2022 11:12:57 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id q3-20020a170902edc300b0016370e1af6bsm9036050plk.128.2022.06.20.11.12.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 11:12:56 -0700 (PDT)
+Message-ID: <6c979b21-b523-7d92-a869-a2103eb2f586@gmail.com>
+Date:   Mon, 20 Jun 2022 11:12:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.18 000/141] 5.18.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220620124729.509745706@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Atish,
-
-Am Montag, 20. Juni 2022, 18:33:09 CEST schrieb Atish Patra:
-> On Sun, Jun 19, 2022 at 1:32 PM Heiko Stuebner <heiko@sntech.de> wrote:
-> >
-> > of_dma_is_coherent() currently expects the architecture to be
-> > non-coherent and some devices being coherent getting marked
-> > as such with the dma-coherent devicetree property.
-> >
-> > For PowerPC CONFIG_OF_DMA_DEFAULT_COHERENT was added which currently
-> > makes of_dma_is_coherent() always return true but doesn't handle
-> > the case of the architecture being coherent but some devices not.
-> >
-> > So modify the function to also check for dma-noncoherent and
-> > set a suitable default return value. If CONFIG_OF_DMA_DEFAULT_COHERENT
-> > is set the value starts with true and finding dma-noncoherent will
-> > set it to false and without CONFIG_OF_DMA_DEFAULT_COHERENT, the
-> > behaviour is reversed.
-> >
-> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > ---
-> >  drivers/of/address.c | 16 +++++++++++-----
-> >  1 file changed, 11 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/of/address.c b/drivers/of/address.c
-> > index 94f017d808c4..1c362d09983d 100644
-> > --- a/drivers/of/address.c
-> > +++ b/drivers/of/address.c
-> > @@ -1045,26 +1045,32 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
-> >   *
-> >   * It returns true if "dma-coherent" property was found
-> >   * for this device in the DT, or if DMA is coherent by
-> > - * default for OF devices on the current platform.
-> > + * default for OF devices on the current platform and no
-> > + * "dma-noncoherent" property was found for this device.
+On 6/20/22 05:48, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.6 release.
+> There are 141 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> "dma-noncoherent" is not a standard DT property. I couldn't find any
-> references to
-> it in the kernel as well. If we are introducing a new DT property for
-> non-coherent devices,
-> it should be added in DT bindings as well ?
-
-The dma-coherent is part of the core devicetree-spec,
-so I sent a patch adding dma-noncoherent [0]
-to the devicetree-spec mailing list yesterday as well.
-
-[0] https://www.spinics.net/lists/devicetree-spec/msg01053.html
-
-
+> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
+> Anything received after that time might be too late.
 > 
-> >   */
-> >  bool of_dma_is_coherent(struct device_node *np)
-> >  {
-> >         struct device_node *node;
-> > +       bool ret = false;
-> >
-> >         if (IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT))
-> > -               return true;
-> > +               ret = true;
-> >
-> >         node = of_node_get(np);
-> >
-> >         while (node) {
-> >                 if (of_property_read_bool(node, "dma-coherent")) {
-> > -                       of_node_put(node);
-> > -                       return true;
-> > +                       ret = true;
-> > +                       break;
-> > +               }
-> > +               if (of_property_read_bool(node, "dma-noncoherent")) {
-> > +                       ret = false;
-> > +                       break;
-> >                 }
-> >                 node = of_get_next_dma_parent(node);
-> >         }
-> >         of_node_put(node);
-> > -       return false;
-> > +       return ret;
-> >  }
-> >  EXPORT_SYMBOL_GPL(of_dma_is_coherent);
-> >
-> > --
-> > 2.35.1
-> >
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 > 
+> thanks,
 > 
-> 
+> greg k-h
 
+On ARCH_BCMSTB using 32-bit and 64-bit ARM kernels:
 
-
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730E5551B4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D29551B59
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245651AbiFTNRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S1344736AbiFTNW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344592AbiFTNKW (ORCPT
+        with ESMTP id S242548AbiFTNUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:10:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B011CFF7;
-        Mon, 20 Jun 2022 06:05:33 -0700 (PDT)
+        Mon, 20 Jun 2022 09:20:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856651B7B0;
+        Mon, 20 Jun 2022 06:08:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6151FB811CB;
-        Mon, 20 Jun 2022 13:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CA5C3411B;
-        Mon, 20 Jun 2022 13:02:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 493AA61546;
+        Mon, 20 Jun 2022 13:06:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A54EC3411C;
+        Mon, 20 Jun 2022 13:06:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730163;
-        bh=K76a5TvFGJUF2CBEP0W6kloGTiafSGkY5l+yzkmeFvY=;
+        s=korg; t=1655730411;
+        bh=IZenuG6VcAy/vwb5NTPWmJ0UMfDIybVEzJVA13pGHcs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XAc0ooHYzSCwV02GoACsU0hzVcxkhF5ay8owDTRnJEH02WzkYVNN4e6RW6qoAEZ+p
-         O058OmMpzHoI4OtaSGBLZKj4kLIjgOW45QOnM7/tUBcEhlTaYODW2jF30PlJiF3eOX
-         Xa19oHkqFDSgjYsCkMwSfB51Eo+AK+rVvEFO0dWM=
+        b=Q+calw3JlOjTrLYyKwP0xBrxPFrcAfRzJt4KIuv4DzK6/2bXU5bDQiTwaQkS9vc/P
+         Nqh+5xtWZSuARlZJr/P6Y/gopKMBeVmrgQr/glh7HLNJxIQlaS7BUe1Qjg4/b3oS1w
+         ZUhW/uCmkoyVR41myuoYUjqihqJnUYPuO8vtpQOA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 41/84] Drivers: hv: vmbus: Release cpu lock in error case
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 045/106] staging: r8188eu: Use zeroing allocator in wpa_set_encryption()
 Date:   Mon, 20 Jun 2022 14:51:04 +0200
-Message-Id: <20220620124722.107170698@linuxfoundation.org>
+Message-Id: <20220620124725.721015507@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
+References: <20220620124724.380838401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-[ Upstream commit 656c5ba50b7172a0ea25dc1b37606bd51d01fe8d ]
+[ Upstream commit c82462f124df06a0a34793f1a1dafe5c146a2a6f ]
 
-In case of invalid sub channel, release cpu lock before returning.
+Use zeroing allocator rather than allocator followed by memset with 0.
 
-Fixes: a949e86c0d780 ("Drivers: hv: vmbus: Resolve race between init_vp_index() and CPU hotplug")
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/1654794996-13244-1-git-send-email-ssengar@linux.microsoft.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+This issue was detected with the help of Coccinelle.
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/r/20211012024624.GA1062447@embeddedor
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/channel_mgmt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 5dbb949b1afd..10188b1a6a08 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -606,6 +606,7 @@ static void vmbus_process_offer(struct vmbus_channel *newchannel)
- 		 */
- 		if (newchannel->offermsg.offer.sub_channel_index == 0) {
- 			mutex_unlock(&vmbus_connection.channel_mutex);
-+			cpus_read_unlock();
- 			/*
- 			 * Don't call free_channel(), because newchannel->kobj
- 			 * is not initialized yet.
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index fbfce4481ffe..3e9325d89afc 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -466,11 +466,10 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param,
+ 		if (wep_key_len > 0) {
+ 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
+ 			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
+-			pwep = kmalloc(wep_total_len, GFP_KERNEL);
++			pwep = kzalloc(wep_total_len, GFP_KERNEL);
+ 			if (!pwep)
+ 				goto exit;
+ 
+-			memset(pwep, 0, wep_total_len);
+ 			pwep->KeyLength = wep_key_len;
+ 			pwep->Length = wep_total_len;
+ 			if (wep_key_len == 13) {
 -- 
 2.35.1
 

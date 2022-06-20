@@ -2,90 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165A255174E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F049551755
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241341AbiFTLYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S241555AbiFTLYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiFTLYG (ORCPT
+        with ESMTP id S232170AbiFTLYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:24:06 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C2715830
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:05 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id v8so11533512ljj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:05 -0700 (PDT)
+        Mon, 20 Jun 2022 07:24:34 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B78015A2F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:32 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id a10so10750778ioe.9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:24:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6Yt7N7lIt6rrL+t7Ro4DPilPiH3bCntuNreRubvS7Kc=;
-        b=P86niLyEltitD6qcrewvCIeD/Op6qsjJFYmoGU6u+gtc6fVIqmPbQhGFZEkDLgI6OI
-         BXArQyWCEe/Cyz8l5OJ3nYOh+qih2Kxxycb2IrB1x91kOt1hBtAcm8Ms7plCV9r3Sw02
-         BDdJBwuF5+ZhxP8OIygE9OSGlfvj1YA8GBERqjBNiHmTHtPc002LYYI/WdFffSmVbFp7
-         ss5zm6nJOmHMP5dnB8lYHWM97VavfT7DzMnxXQ6bP5emyjiGDGqPvQkfKWXHTzLppgpl
-         vmz0e+IzsOKiUPE8lJjv/rRI2sxRvUDpLWNXXZ00Tvx0CTMU593HWGFbs/WjimSaAeo7
-         98BA==
+         :cc:content-transfer-encoding;
+        bh=FUqDMG0XOCjNk9u7JfOrzADWcMXkkEdMVjWM9dkWZMQ=;
+        b=WQ9xZ9gfWTvp12lEg+DR7D7oAGFhChWC+apop6OnhiGM8Q1gH82QZLi2gm/tHTTNrv
+         MCEfPX9ttbYvMITJuGo26cUnWmHevohbkKdg97ipxrIsNFYNeJ324dFcdnX2U6BsfA/Q
+         FvU1sdllB+7hvg/MZ+VwxQZSfHfGiQs+oL7tgEwcLCj4HBXZf/ZlZuwscCRivchwRamy
+         7fxn7bWAgOSCYNQeVK9/66cIFj+uT399h3wl302bDl1MZr5nOfXwHJWIaQo6K50MhV4n
+         DKhtH0yqA4d8lGdC7kQc+OEv1MowPWcc18ns0w889MnRB1+2RTxFHR+6Hk7Ds2RAEfUA
+         CqrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6Yt7N7lIt6rrL+t7Ro4DPilPiH3bCntuNreRubvS7Kc=;
-        b=3ZxDXQ92oDJaMzNGhzwoQPbYH07zLk6GtwDWlzjZH3HS9Dyd/M34SvHg5XAID+ClNj
-         PWXCH+ircUsuxlXtoXWIWAlW0Vj+etNqJVLaXzYH8C9vK4Y952jyKz6y2EJVqGAfcRPZ
-         KVVEFIOyAOrrvcH08EJd6VFGFeVuMlIikNkyHq835QOF4NFCnu/LxPIG8EnOOrvYmYSb
-         Z+A34toZnbQ7cei6n20YQHnCbc5OMweYV76C21ov7utcKTOM5Rf9ZrMCKg61lH0cXTWP
-         EIqFyDDJsJ5FaWFxUpNxFJzOWnhdJZjvp7nRs97mVAxbrEezfifXhMOVNj8JCGTNX5Nr
-         oBtw==
-X-Gm-Message-State: AJIora9AwTQagzrnrfTOHjsFfjIdkftQDaV4Q21Vu9UWXnM50h0T8Vaw
-        EZ5Mv/VVt0BGHc2lk+3G/jEIyQlXnx1kmhmHZIA=
-X-Google-Smtp-Source: AGRyM1tkovQ3GhgpyWicWNL/SBpHcmpj4RpsJcHMRz54/hlnlFAbPCTQ0AcppAB5v0FJLJ4PjVP8MQEzCRBA39J1FiI=
-X-Received: by 2002:a2e:7d17:0:b0:25a:6ccd:ab6 with SMTP id
- y23-20020a2e7d17000000b0025a6ccd0ab6mr3048176ljc.114.1655724244209; Mon, 20
- Jun 2022 04:24:04 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FUqDMG0XOCjNk9u7JfOrzADWcMXkkEdMVjWM9dkWZMQ=;
+        b=TbTgKyZP2kxKPJw2tI/n03WJkZO9DkyTAT/bi7/3XHHLl2CalKP8qIUzLOMGvNNDj/
+         qrKhNF5j8DYxUnArXpujDSoxBiXcdfhU+o3pkuFSXxQ1hHL64pVR7ZZMPYFzc/n1Z4nI
+         itpVLWszSp95DeaqmfLz+mq7BqSgE8nRGK2JzpHrY+AIMe8iRNNrAD4OQl1OGwSaN1i+
+         Kw+jOwpy+ELwv8pfVXuyexnWpCPTg1hS0gunaElD2B5D+twH7HkCCU/r1KufKKY5JdzE
+         ier5DYA+YimOMKO2/8c/lvx5bYo5fFXBSWyi+tQ0/MzsJNj6sINSVmdj3fjDO5p8ZZxx
+         +JjQ==
+X-Gm-Message-State: AJIora8gN3PYea71Wtgo5g2Dukh8vVzwfElSNpt2yih9O3fORntEr65Z
+        9ySfZHy6iPtRNutjLuLiRPWyFsjX701QWyydzWDukA==
+X-Google-Smtp-Source: AGRyM1uAApzSsJL6vFFVTOlh+TYoym0VhJDEk+1tEoaCqlkbpyH6Wr0UzGyoXr4xmejJIEEcOMmz7t4KGhFDM4CCTLc=
+X-Received: by 2002:a05:6638:2486:b0:331:f9b9:a8ef with SMTP id
+ x6-20020a056638248600b00331f9b9a8efmr12526984jat.139.1655724271369; Mon, 20
+ Jun 2022 04:24:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <1653447164-15017-1-git-send-email-zhaoyang.huang@unisoc.com>
- <CAB8ipk9cAoP6yV_-Gn8bwbn5ezCZujLeMpioa0TiNU5=akBaug@mail.gmail.com>
- <Yq+PMWlARgDhv8uL@pc638.lan> <CAGWkznHPdk_yqn2GWPDJaT32+4MnFLnRjdjBkaFv9BLMh4yM=g@mail.gmail.com>
- <CA+KHdyXpdow7SYsbq_7F0zDd5-nYGi6db7R11R3--g3gUu-59w@mail.gmail.com>
-In-Reply-To: <CA+KHdyXpdow7SYsbq_7F0zDd5-nYGi6db7R11R3--g3gUu-59w@mail.gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Mon, 20 Jun 2022 19:23:34 +0800
-Message-ID: <CAGWkznE5cFfdtmQ2j57goWtpfPGYPsd5Oi3pvb9vcfifodR9OQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: fix racing of vb->va when kasan enabled
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+References: <000000000000e57c2b05e1c03426@google.com> <YrBJxrbq8Yvrpshj@linutronix.de>
+In-Reply-To: <YrBJxrbq8Yvrpshj@linutronix.de>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 20 Jun 2022 13:24:20 +0200
+Message-ID: <CANp29Y54ygc45-RX+HAXExLsOQgKqbrJ_7CDt6-kRsUwFdNp_Q@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in __vmalloc_node_range
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     syzbot <syzbot+b577bc624afda52c78de@syzkaller.appspotmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        brauner@kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        david@redhat.com, ebiederm@xmission.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>, Christoph Hellwig <hch@lst.de>
+        netdev <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        "'Aleksandr Nogikh' via syzkaller-bugs" 
+        <syzkaller-bugs@googlegroups.com>, tglx@linutronix.de,
+        Yonghong Song <yhs@fb.com>, linux-mm@kvack.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 6:44 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+Hi Sebastian,
+
+Syzbot has noted the new fixing commit -- "mm/page_alloc: protect PCP
+lists with a spinlock", but it's not really happy with two commands in
+one email.
+
+Let's try it one more time in this separate email:
+
+#syz dup: BUG: sleeping function called from invalid context in relay_open_=
+buf
+
+--
+Best Regards,
+Aleksandr
+
+On Mon, Jun 20, 2022 at 12:19 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
 >
-> > > >
-> > > Is it easy to reproduce? If so could you please describe the steps? As i see
-> > > the freeing of the "vb" is RCU safe whereas vb->va is not. But from the first
-> > > glance i do not see how it can accessed twice. Hm..
-> > It was raised from a monkey test on A13_k515 system and got 1/20 pcs
-> > failed. IMO, vb->va which out of vmap_purge_lock protection could race
-> > with a concurrent ra freeing within __purge_vmap_area_lazy.
+> #syz fix: mm/page_alloc: protect PCP lists with a spinlock
+> #syz dup: BUG: sleeping function called from invalid context in relay_ope=
+n_buf
+>
+> The version of the patch above in next-20220614 is buggy leading to the
+> report below. The version in next-20220620 is fine. Not sure how to tell
+> syz bot this=E2=80=A6
+>
+> On 2022-06-18 15:15:20 [-0700], syzbot wrote:
+> > Hello,
 > >
-> Do you have exact steps how you run "monkey" test?
-There are about 30+ kos inserted during startup which could be a
-specific criteria for reproduction. Do you have doubts about the test
-result or the solution?
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    35d872b9ea5b Add linux-next specific files for 20220614
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D155b0d10080=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd7bf2236c6b=
+b2403
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Db577bc624afda=
+52c78de
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
+tils for Debian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+b577bc624afda52c78de@syzkaller.appspotmail.com
+> >
+> > BUG: sleeping function called from invalid context at mm/vmalloc.c:2980
+> =E2=80=A6
+> > Preemption disabled at:
+> > [<ffffffff81bc76f5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc76f5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc76f5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.=
+c:4293
+>
+> Sebastian
 >
 > --
-> Uladzislau Rezki
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/YrBJxrbq8Yvrpshj%40linutronix.de.

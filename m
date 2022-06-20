@@ -2,47 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398AB552156
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F0D552164
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243427AbiFTPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S243957AbiFTPms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiFTPkI (ORCPT
+        with ESMTP id S235125AbiFTPmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:40:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1811903C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:40:07 -0700 (PDT)
+        Mon, 20 Jun 2022 11:42:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C9619286;
+        Mon, 20 Jun 2022 08:42:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B672361447
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8100C3411B;
-        Mon, 20 Jun 2022 15:40:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10BD3B8120C;
+        Mon, 20 Jun 2022 15:42:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C57C3411B;
+        Mon, 20 Jun 2022 15:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655739605;
-        bh=IfpTbZcrYLCExUtg/dND25Q4OR9cRe4Q9s5GvT76wp0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=lX7uQ2rvaPOkNMStXI6+HbWrHlgcx27iDcjnTiTjBIjnM0HasK5aotOtbaFOOWM11
-         RCVeIhbef1y2siIVb72DvtbPEcyY2PVcE79tub0zsVp0rjS7PmTeGvyI+KF1qsS/HL
-         bk34Va7iPk34Mm+3ZPW286JfdzryX7Zn5zF6ITnJ55k7jBhIHDscz7HQgU30+CbdKV
-         Hq0OBiKDi35QKwu5KqHuiEP3ib5HK3o5LRVcbdkraB+FXdQ6tQGtHd81JZDN8qy1Gk
-         Kmvdk1EYHWqmzSNalc2kY/DSAh+dvkUqrU5CExZhmm5LwHvlYpv7q+OdO0+36iiGdB
-         LHl6O8DVCp1Tg==
-From:   Mark Brown <broonie@kernel.org>
-To:     javierm@redhat.com, linux-kernel@vger.kernel.org
-Cc:     marex@denx.de, rafael@kernel.org, gregkh@linuxfoundation.org
-In-Reply-To: <20220616073435.1988219-1-javierm@redhat.com>
-References: <20220616073435.1988219-1-javierm@redhat.com>
-Subject: Re: [PATCH 0/3] remap: Some fixes for bulk read/write callbacks in regmap_config support
-Message-Id: <165573960454.716174.18343851467533184828.b4-ty@kernel.org>
-Date:   Mon, 20 Jun 2022 16:40:04 +0100
+        s=k20201202; t=1655739763;
+        bh=DjTm5z1TckD7/FnLfGxter2Pb89zCQ7bxMD/6sv1abI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fbD9HC4D4MyLUdpxq/CvkBrVrQijnYDnvpn3aPHs8mZMw5at8hflfNeEYMNMnQnrv
+         y9cUViFT8x189DDaoHMvKOYgaCWLBk8f3tGU31GS2Iz7065eDNVOO4E2WtKizJphlU
+         +RlL0VB+hpZS4I1z3mdgd5laOqISUFywqHfvh7Fs1hHO4qFhJHErA7yfJf3iW+gskG
+         OIz2EaIcnBDE952t6PvDDbsh/Dmu9+m4c0kubHjb38ckztMRgBz7tqr9T6WiCF8NcD
+         vegvHd+caOxvnPAOVoj4dwZq94emOFROERCMVWofMvBWpeOoSdXUy33mMzhjSrJciH
+         TSYxtYJofFsqA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3JXy-0003Fo-LH; Mon, 20 Jun 2022 17:42:39 +0200
+Date:   Mon, 20 Jun 2022 17:42:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Drop unused post-init callbacks
+Message-ID: <YrCVbhXXEzDAdZm1@hovoldconsulting.com>
+References: <20220620150759.11507-1-johan+linaro@kernel.org>
+ <CAA8EJpr02CGRLyafkVV6V=0mchbfQga2=YiE_MkhuLE9veUj3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpr02CGRLyafkVV6V=0mchbfQga2=YiE_MkhuLE9veUj3w@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,47 +66,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 09:34:32 +0200, Javier Martinez Canillas wrote:
-> This series contains fixes for a few issues found while testing the recent
-> support for drivers to define bulk read/write callbacks in regmap_config.
+On Mon, Jun 20, 2022 at 06:29:17PM +0300, Dmitry Baryshkov wrote:
+> On Mon, 20 Jun 2022 at 18:19, Johan Hovold <johan+linaro@kernel.org> wrote:
+> >
+> > Drop the unused post_init and post_deinit callbacks that were added for
+> > the now removed pipe clock handling.
 > 
-> I tested this with drivers/gpu/drm/solomon/ssd130x-spi.c, by converting it
-> to use this new API instead of defining its own regmap bus for bulk write.
+> I think the IPQ60xx PCIe support is intended to use post_init
+> callback. See [1]. That is the reason why I left the post_init in
+> place, while reworking the pipe clocks handling.
 > 
-> Patch #1 and patch #2 are fixes for regresions introduced by that commit
-> and patch #3 adds regmap_config provided bulk write support to functions
-> regmap_noinc_write() and regmap_bulk_write(), that were missed.
-> 
-> [...]
+> [1] https://lore.kernel.org/linux-arm-msm/a470b27a642d21e7b3e64d0f3287c0c3521bd182.1655028401.git.baruch@tkos.co.il/
 
-Applied to
+Ah, ok. Let's keep them then.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/3] regmap: Re-introduce bulk read support check in regmap_bulk_read()
-      commit: 5ac01e023a1b0492e159ad2f6734e0a350c1b6b6
-[2/3] regmap: Make regmap_noinc_read() return -ENOTSUPP if map->read isn't set
-      commit: f6e5c3850d1174bf3ca53457d64e6665f48c9041
-[3/3] regmap: Wire up regmap_config provided bulk write in missed functions
-      commit: 1db43c8ad90ce07311a3ef9af7ace758d79224f9
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Johan

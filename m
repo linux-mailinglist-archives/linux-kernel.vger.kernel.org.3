@@ -2,126 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04BB550EED
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB8F550EF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237865AbiFTD2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 23:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S237897AbiFTD3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 23:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237972AbiFTD2l (ORCPT
+        with ESMTP id S237878AbiFTD3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 23:28:41 -0400
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247C6264;
-        Sun, 19 Jun 2022 20:28:40 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id n185so5062190wmn.4;
-        Sun, 19 Jun 2022 20:28:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Lp0cIeW3O0ymq9CtYc8A4N1S2P3eOd0h5WBe4BhITFc=;
-        b=HfkIsEfGKjqopSbd5pR96d277+R3D2XrSFcDrPHOer2ztjG1vEPMWJGpV93MlyCF9e
-         HOR5QphEXJcfaJ34ivtyf8YC8ellAAk3WPBboBR3WB2PZk8j1KfnoKo2NzqU0UwnJFVE
-         UTftXUkFPZOR3rAGmyt8ErfvoIeFQ4XtnnF74CK0+cY3LNNJJ2CnCufo+mVioedXoR2d
-         d9a4gpv81xjvmRl2zAtcEs8punY8YBNxoMyxczlD6s1Kb4abuMWi2boPCTOqKcxhgqFI
-         CMtk+xtWACeYNtZSFhTnvG/eFv9PN2TnG5Hu3sofkQYxsIJSKzO+0CY81MZnoHUipZDa
-         KVAw==
-X-Gm-Message-State: AOAM5304P/gS+aKsHzu1hU/v3ErDF2l6cyS+el/zruPE1GTWGNXGXhGK
-        u2DxotWHyqQVw69G8Zw+XX4rMnLcKmCLH2borfa63j+FgC6PSg==
-X-Google-Smtp-Source: ABdhPJxMtmL8WqaR7zHP+AxfvLQpyo/MbytBkpI2np+af/8B30066gF0wLmcRxzJ6loTWjhPzXutTizdituzUUJjpd4=
-X-Received: by 2002:a7b:c413:0:b0:39c:37cc:b0fe with SMTP id
- k19-20020a7bc413000000b0039c37ccb0femr32346614wmi.11.1655695718478; Sun, 19
- Jun 2022 20:28:38 -0700 (PDT)
-MIME-Version: 1.0
-From:   Ilia Mirkin <imirkin@alum.mit.edu>
-Date:   Sun, 19 Jun 2022 23:28:27 -0400
-Message-ID: <CAKb7UviXhWc4yxvGGCJQ=Pyvc9HUUbYDcnc3E6gVqrJePdEYCw@mail.gmail.com>
-Subject: Deadlock in rfcomm_sk_state_change
-To:     linux-bluetooth@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+        Sun, 19 Jun 2022 23:29:39 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D876249;
+        Sun, 19 Jun 2022 20:29:37 -0700 (PDT)
+X-UUID: 6044d4ae9b2a415eade352b1ed265ef6-20220620
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:8e2cf951-ce8b-47aa-b497-87933e53de16,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:8e2cf951-ce8b-47aa-b497-87933e53de16,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:6939f5e9-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:3cc8a5dd8204,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 6044d4ae9b2a415eade352b1ed265ef6-20220620
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1014500687; Mon, 20 Jun 2022 11:29:27 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 20 Jun 2022 11:29:26 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 20 Jun 2022 11:29:26 +0800
+Message-ID: <94b03604c81794ea811e106802a03b888ceb57c3.camel@mediatek.com>
+Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 20 Jun 2022 11:29:25 +0800
+In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
+References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
+         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi, Rex:
 
-It appears that this deadlock has been reported a few times before:
+On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-BZ here: https://bugzilla.kernel.org/show_bug.cgi?id=215746
-Patch here: https://lore.kernel.org/all/20211004180734.434511-1-desmondcheongzx@gmail.com/
+[snip]
 
-A Google search turns up a few other instances too.
+> +
+> +static void mtk_dp_set_color_depth(struct mtk_dp *mtk_dp, u32
+> color_depth)
 
-This is the deadlock I ran into, on a ThinkPad T420s with kernel
-v5.18.5. I never ran into this with the kernel I previously had on
-here, v5.7.8.
+In the whole driver, the color_depth would only be DP_MSA_MISC_8_BPC,
+so remove the parameter color_depth and fix the color depth to
+DP_MSA_MISC_8_BPC in this function.
 
-[ 1513.564806] task:krfcommd        state:D stack:14824 pid:  571
-ppid:     2 flags:0x00004000
-[ 1513.564833] Call Trace:
-[ 1513.564838]  <TASK>
-[ 1513.564843]  __schedule+0x27a/0x1050
-[ 1513.564861]  schedule+0x46/0xb0
-[ 1513.564867]  schedule_preempt_disabled+0xc/0x20
-[ 1513.564875]  __mutex_lock.constprop.0+0x284/0x4b0
-[ 1513.564884]  rfcomm_run+0x14d/0x1340
-[ 1513.564895]  ? swake_up_all+0xe0/0xe0
-[ 1513.564908]  ? rfcomm_check_accept+0xd0/0xd0
-[ 1513.564919]  kthread+0xd4/0x100
-[ 1513.564930]  ? kthread_complete_and_exit+0x20/0x20
-[ 1513.564940]  ret_from_fork+0x22/0x30
-[ 1513.564955]  </TASK>
-[ 1513.564968] task:bluetoothd      state:D stack:13248 pid: 4917
-ppid:     1 flags:0x00000004
-[ 1513.564987] Call Trace:
-[ 1513.564990]  <TASK>
-[ 1513.564994]  __schedule+0x27a/0x1050
-[ 1513.565004]  ? eventfd_read+0xda/0x280
-[ 1513.565020]  schedule+0x46/0xb0
-[ 1513.565028]  __lock_sock+0x74/0xc0
-[ 1513.565042]  ? destroy_sched_domains_rcu+0x30/0x30
-[ 1513.565055]  lock_sock_nested+0x3f/0x50
-[ 1513.565065]  rfcomm_sk_state_change+0x20/0x100
-[ 1513.565078]  __rfcomm_dlc_close+0x8d/0x1a0
-[ 1513.565088]  rfcomm_dlc_close+0x66/0x90
-[ 1513.565098]  __rfcomm_sock_close+0x30/0xf0
-[ 1513.565109]  rfcomm_sock_shutdown+0x4a/0x80
-[ 1513.565122]  rfcomm_sock_release+0x22/0x90
-[ 1513.565133]  __sock_release+0x38/0xb0
-[ 1513.565146]  sock_close+0xc/0x20
-[ 1513.565157]  __fput+0x87/0x240
-[ 1513.565172]  task_work_run+0x57/0x90
-[ 1513.565190]  exit_to_user_mode_prepare+0x108/0x110
-[ 1513.565206]  syscall_exit_to_user_mode+0x1d/0x50
-[ 1513.565224]  ? __x64_sys_close+0x8/0x40
-[ 1513.565239]  do_syscall_64+0x69/0xc0
-[ 1513.565253]  ? __x64_sys_close+0x8/0x40
-[ 1513.565271]  ? do_syscall_64+0x69/0xc0
-[ 1513.565276]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[ 1513.565283] RIP: 0033:0x7f818c753883
-[ 1513.565287] RSP: 002b:00007ffd9222fe78 EFLAGS: 00000246 ORIG_RAX:
-0000000000000003
-[ 1513.565292] RAX: 0000000000000000 RBX: 000056007127afd0 RCX: 00007f818c753883
-[ 1513.565295] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000016
-[ 1513.565297] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-[ 1513.565299] R10: 0000000000000026 R11: 0000000000000246 R12: 0000000000000000
-[ 1513.565302] R13: 0000000000000001 R14: 000056007125af84 R15: 000056007125af9c
-[ 1513.565306]  </TASK>
+Regards,
+CK
 
-However it doesn't look like the patch has been applied (at least in
-Linus's current tree), nor does there appear to be any motion on the
-BZ-filed issue. Happy to provide any additional information, just let
-me know what you need.
+> +{
+> +	u32 val;
+> +
+> +	mtk_dp->info.depth = color_depth;
+> +
+> +	/* Update MISC0 */
+> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
+> +			   color_depth, DP_TEST_BIT_DEPTH_MASK);
+> +
+> +	switch (color_depth) {
+> +	case DP_MSA_MISC_6_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_6BIT;
+> +		break;
+> +	case DP_MSA_MISC_8_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT;
+> +		break;
+> +	case DP_MSA_MISC_10_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_10BIT;
+> +		break;
+> +	case DP_MSA_MISC_12_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_12BIT;
+> +		break;
+> +	case DP_MSA_MISC_16_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_16BIT;
+> +		break;
+> +	default:
+> +		drm_warn(mtk_dp->drm_dev, "Unsupported color depth
+> %d\n",
+> +			 color_depth);
+> +		return;
+> +	}
+> +
+> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
+> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
+> +}
+> +
 
-Cheers,
-
-Ilia Mirkin
-imirkin@alum.mit.edu

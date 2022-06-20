@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9345551A6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3414551CB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242696AbiFTNCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S1348371AbiFTNl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243505AbiFTM5s (ORCPT
+        with ESMTP id S1349276AbiFTNji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:57:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7A71AF1E;
-        Mon, 20 Jun 2022 05:55:37 -0700 (PDT)
+        Mon, 20 Jun 2022 09:39:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C410C2A25E;
+        Mon, 20 Jun 2022 06:14:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 663E6B811A5;
-        Mon, 20 Jun 2022 12:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C72C3411B;
-        Mon, 20 Jun 2022 12:55:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2161160ABE;
+        Mon, 20 Jun 2022 13:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECC8C3411C;
+        Mon, 20 Jun 2022 13:14:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729717;
-        bh=3xskMTnqAoA7ji7EWzaiuRyYBc2XRfwajg78zpssRZg=;
+        s=korg; t=1655730898;
+        bh=Fhh0+KeC4hJGdWsxqip2sdxqu4dNb3LZg3P2An9/C3o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TXGbXBko07XMOj+SQ2I2RI35PWtHfjqelH4nZnJzFj95IP6rV/wT1/wkz4dyxS1D7
-         FiYziR1GY5U7crCgOyfj30sb2+pEeBRDhqx22v+jmmCd7xxe5eFyi4wkBYAu19QecW
-         K89A6BgbjxFUrXHjcI3OoKUXefrqIG7yDWOQ1wBI=
+        b=KZJ/gKHWvU3ko9h55ObgGAzePw7wy4+hf0YbsESwns0/oIcJJRKVvJVqXlwi66+Qf
+         nHKw1pLPRdSlg1KhwaMreRw7WsSXq4Xd/W1wruFsnJr0lgHB8WD5z9mh7e5eMiYQZs
+         qWvagWycTuQY1O0JYqPSGTWkXPMpmRpQXMWXDnZQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phillip Potter <phil@philpotter.co.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 052/141] staging: r8188eu: fix rtw_alloc_hwxmits error detection for now
-Date:   Mon, 20 Jun 2022 14:49:50 +0200
-Message-Id: <20220620124731.073717226@linuxfoundation.org>
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 090/240] random: introduce drain_entropy() helper to declutter crng_reseed()
+Date:   Mon, 20 Jun 2022 14:49:51 +0200
+Message-Id: <20220620124741.621354299@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phillip Potter <phil@philpotter.co.uk>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit 5b7419ae1d208cab1e2826d473d8dab045aa75c7 ]
+commit 246c03dd899164d0186b6d685d6387f228c28d93 upstream.
 
-In _rtw_init_xmit_priv, we use the res variable to store the error
-return from the newly converted rtw_alloc_hwxmits function. Sadly, the
-calling function interprets res using _SUCCESS and _FAIL still, meaning
-we change the semantics of the variable, even in the success case.
+In preparation for separating responsibilities, break out the entropy
+count management part of crng_reseed() into its own function.
 
-This leads to the following on boot:
-r8188eu 1-2:1.0: _rtw_init_xmit_priv failed
+No functional changes.
 
-In the long term, we should reverse these semantics, but for now, this
-fixes the driver. Also, inside rtw_alloc_hwxmits remove the if blocks,
-as HWXMIT_ENTRY is always 4.
-
-Fixes: f94b47c6bde6 ("staging: r8188eu: add check for kzalloc")
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-Link: https://lore.kernel.org/r/20220521204741.921-1-phil@philpotter.co.uk
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/core/rtw_xmit.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+ drivers/char/random.c |   36 +++++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 2ee92bbe66a0..ea5c88904961 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -178,8 +178,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -260,6 +260,7 @@ static struct {
+ };
  
- 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
+ static void extract_entropy(void *buf, size_t nbytes);
++static bool drain_entropy(void *buf, size_t nbytes);
  
--	res = rtw_alloc_hwxmits(padapter);
--	if (res) {
-+	if (rtw_alloc_hwxmits(padapter)) {
- 		res = _FAIL;
- 		goto exit;
- 	}
-@@ -1492,19 +1491,10 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
+ static void crng_reseed(void);
  
- 	hwxmits = pxmitpriv->hwxmits;
+@@ -454,23 +455,13 @@ static void crng_slow_load(const void *c
+ static void crng_reseed(void)
+ {
+ 	unsigned long flags;
+-	int entropy_count;
+ 	unsigned long next_gen;
+ 	u8 key[CHACHA_KEY_SIZE];
+ 	bool finalize_init = false;
  
--	if (pxmitpriv->hwxmit_entry == 5) {
--		hwxmits[0] .sta_queue = &pxmitpriv->bm_pending;
--		hwxmits[1] .sta_queue = &pxmitpriv->vo_pending;
--		hwxmits[2] .sta_queue = &pxmitpriv->vi_pending;
--		hwxmits[3] .sta_queue = &pxmitpriv->bk_pending;
--		hwxmits[4] .sta_queue = &pxmitpriv->be_pending;
--	} else if (pxmitpriv->hwxmit_entry == 4) {
--		hwxmits[0] .sta_queue = &pxmitpriv->vo_pending;
--		hwxmits[1] .sta_queue = &pxmitpriv->vi_pending;
--		hwxmits[2] .sta_queue = &pxmitpriv->be_pending;
--		hwxmits[3] .sta_queue = &pxmitpriv->bk_pending;
--	} else {
--	}
-+	hwxmits[0].sta_queue = &pxmitpriv->vo_pending;
-+	hwxmits[1].sta_queue = &pxmitpriv->vi_pending;
-+	hwxmits[2].sta_queue = &pxmitpriv->be_pending;
-+	hwxmits[3].sta_queue = &pxmitpriv->bk_pending;
+-	/*
+-	 * First we make sure we have POOL_MIN_BITS of entropy in the pool,
+-	 * and then we drain all of it. Only then can we extract a new key.
+-	 */
+-	do {
+-		entropy_count = READ_ONCE(input_pool.entropy_count);
+-		if (entropy_count < POOL_MIN_BITS)
+-			return;
+-	} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
+-	extract_entropy(key, sizeof(key));
+-	wake_up_interruptible(&random_write_wait);
+-	kill_fasync(&fasync, SIGIO, POLL_OUT);
++	/* Only reseed if we can, to prevent brute forcing a small amount of new bits. */
++	if (!drain_entropy(key, sizeof(key)))
++		return;
  
- 	return 0;
+ 	/*
+ 	 * We copy the new key into the base_crng, overwriting the old one,
+@@ -898,6 +889,25 @@ static void extract_entropy(void *buf, s
+ 	memzero_explicit(&block, sizeof(block));
  }
--- 
-2.35.1
-
+ 
++/*
++ * First we make sure we have POOL_MIN_BITS of entropy in the pool, and then we
++ * set the entropy count to zero (but don't actually touch any data). Only then
++ * can we extract a new key with extract_entropy().
++ */
++static bool drain_entropy(void *buf, size_t nbytes)
++{
++	unsigned int entropy_count;
++	do {
++		entropy_count = READ_ONCE(input_pool.entropy_count);
++		if (entropy_count < POOL_MIN_BITS)
++			return false;
++	} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
++	extract_entropy(buf, nbytes);
++	wake_up_interruptible(&random_write_wait);
++	kill_fasync(&fasync, SIGIO, POLL_OUT);
++	return true;
++}
++
+ #define warn_unseeded_randomness(previous) \
+ 	_warn_unseeded_randomness(__func__, (void *)_RET_IP_, (previous))
+ 
 
 

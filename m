@@ -2,275 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87EF550F30
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3392550F31
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbiFTETl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 00:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S237000AbiFTEWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 00:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiFTETi (ORCPT
+        with ESMTP id S229833AbiFTEWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 00:19:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22CC295BB
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:19:36 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-143-xc5O7tanPo2ikZ1Vp4r_Kw-1; Mon, 20 Jun 2022 05:19:34 +0100
-X-MC-Unique: xc5O7tanPo2ikZ1Vp4r_Kw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 20 Jun 2022 05:19:31 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 20 Jun 2022 05:19:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kent Overstreet' <kent.overstreet@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pmladek@suse.com" <pmladek@suse.com>
-CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "willy@infradead.org" <willy@infradead.org>
-Subject: RE: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-Thread-Topic: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-Thread-Index: AQHYhD6oUJ9HZdIC7US1XHhH4yp3Qa1XsEIg
-Date:   Mon, 20 Jun 2022 04:19:31 +0000
-Message-ID: <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 20 Jun 2022 00:22:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4C47665;
+        Sun, 19 Jun 2022 21:22:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36DCC6100D;
+        Mon, 20 Jun 2022 04:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 620E7C3411B;
+        Mon, 20 Jun 2022 04:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655698927;
+        bh=43ZzRl4vSvG7C1xd9vN3G+UqhhkVeLob3m67YbtyVbQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ON4PNMCbAB1lci1WY9T+sB1LU0aMRZROFIhB10P0ykfanYPEaIEjZkMZjWVFkdyWF
+         DeqcglU1tuwdvHFFCAXgfeppWZDAuh4uiVACJBko8C8zeyxFQv4p7PcQqtQxB5A7/Y
+         79aAsRMjCq1Ji9YmJvvjMltudy+mOzu55aY6KJtB1ssiCMZU2en31VdLuFjHMxpVwr
+         o/N6Kxn4iHn0QCEyfb0kDVM+WksKrcNPwqRvSZmUti1lxpa0TNGfn8kZtRivex2myL
+         KCAlvZ1iPQgEKDZZ2P7N4XmQGT746GfaWi8Jh/iy9ElbWKBmmtmd+152kCSrfrJPYY
+         iH7MuqR+QzVxw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 318A34096F; Mon, 20 Jun 2022 01:22:04 -0300 (-03)
+Date:   Mon, 20 Jun 2022 01:22:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Ali Saidi <alisaidi@amazon.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [GIT PULL] perf tools fixes for v5.19: 1st batch
+Message-ID: <Yq/17Lv3SS9VAXst@kernel.org>
+References: <20220619193240.802856-1-acme@kernel.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619193240.802856-1-acme@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kent Overstreet
-> Sent: 20 June 2022 01:42
-> 
-> Previous discussions:
-> https://lore.kernel.org/all/20220419203202.2670193-1-kent.overstreet@gmail.com/
-> https://lore.kernel.org/all/20220519172421.162394-1-kent.overstreet@gmail.com/
-> https://lore.kernel.org/all/20220604193042.1674951-1-kent.overstreet@gmail.com/
-> 
-> Git repo:
-> https://evilpiepirate.org/git/bcachefs.git/log/?h=printbuf_v4
-> 
-> Changes since v3:
->   Bugfixes and performance improvements, the latest iteration of this patch
->   series has been baking in the bcachefs tree and that shook out some bugs.
-> 
->   Rasmus pointed out that -fno-strict-aliasing is going to cause gcc to generate
->   nasty code, and indeed it unfortunately does but according to worst case
->   scenario microbenchmarks it's not a problem for actual performance.
+Sigh,
 
-Just copy some of the structure members to local variables
-and, if necessary, write them back at the end.
+	Used the wrong pull request send shell script, "smi" instead of
+"sml" :-\ This must be affecting my brain more than just a headache,
+sorry, please consider this for rc4 then.
 
-> Using
->   memcpy() and memset() in the printbuf helpers _was_ a problem for performance,
->   so that's been fixed.
-> 
-> -----------
-> 
-> Core idea: Wouldn't it be nice if we had a common data structure and calling
-> convention for outputting strings?
-> 
-> The core concept this patch series is aimed at cleaning up and standardizing is
-> that of a "pretty-printer", which is now a function like prt_foo() or
-> foo_to_text():
-> 
->     void foo_to_text(struct printbuf *out, struct foo)
-> 
-> What this patch series does or enables:
-> 
->  - It becomes quite a bit easier to write composable pretty printers! This is
->    huge.
-> 
->  - A ton of code that works in terms of raw char * pointers and lengths
->    (snprintf style, and many weird variations) gets cleaned up, with error prone
->    raw pointers arithmetic replaced by proper helpers
-> 
->  - A ton of code that emits either directly via printk() or to other places
->    (sysfs, debugfs) can now output to printbufs, and becomes more reusable and
->    composable
-> 
->  - Countesy of Matthew Wilcox, the new and very cool %pf() format string, which
->    allows passing a pretty printer function and its arguments to sprintf() and
->    family. This means we can now call type specific pretty-printers without
->    adding them to lib/vsprintf.c and writing a bunch of crazy
->    parsing-and-dispatch code. For example,
-> 
->      printk("%pd", dentry);
-> 
->    becomes
-> 
->      printk("%pf(%p)", prt_dentry, dentry);
-> 
->    My OOM debugging & reporting patch series that builds off of this uses this
->    to solve a very real problem that Michal Hocko brought up at LSF - with this
->    we write shrinkers_to_text(), slab_to_text() which can _also_ now be used for
->    reporting in debugfs (which Roman has been working on), as well as in the
->    show_mem() report - the "%pf()" syntax lets us print the output of those
->    functions without allocating (and having to preallocate) a separate buffer.
+Thanks,
 
-I really think that is a bad idea.
-printk() already uses a lot of stack, anything doing a recursive
-call is just making that worse.
-Especially since these calls can often be in error paths
-which are not often tested and can already be on deep stacks.
+- Arnaldo
 
-	David
+Em Sun, Jun 19, 2022 at 04:32:40PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Hi Linus,
+> 
+> 	Please consider pulling, there are some more header sync
+> activity for next week, still recovering the french no-mask bonanza and
+> the brazilian omicron crash (maybe related?) (yeah, me+wife+kid
+> infected), sigh.
+> 
+> Best regards,
+> 
+> - Arnaldo
+> 
+> The following changes since commit 354c6e071be986a44b956f7b57f1884244431048:
+> 
+>   Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4 (2022-06-18 21:51:12 -0500)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.19-2022-06-19
+> 
+> for you to fetch changes up to 140cd9ec8fdddc0e2d1684e6b69bcd05efbc9549:
+> 
+>   tools headers UAPI: Sync linux/prctl.h with the kernel sources (2022-06-19 11:42:25 -0300)
+> 
+> ----------------------------------------------------------------
+> perf tool fixes for v5.19, 1st batch:
+> 
+> - Don't set data source if it's not a memory operation in ARM SPE (Statistical
+>   Profiling Extensions).
+> 
+> - Fix handling of exponent floating point values in perf stat expressions.
+> 
+> - Don't leak fd on failure on libperf open.
+> 
+> - Fix 'perf test' CPU topology test for PPC guest systems.
+> 
+> - Fix undefined behaviour on breakpoint account 'perf test' entry.
+> 
+> - Record only user callchains on the "Check ARM64 callgraphs are complete in FP
+>   mode" 'perf test' entry.
+> 
+> - Fix "perf stat CSV output linter" test on s390.
+> 
+> - Sync batch of kernel headers with tools/perf/.
+> 
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> 
+> ----------------------------------------------------------------
+> Arnaldo Carvalho de Melo (4):
+>       perf beauty: Update copy of linux/socket.h with the kernel sources
+>       tools headers UAPI: Sync x86's asm/kvm.h with the kernel sources
+>       tools headers arm64: Sync arm64's cputype.h with the kernel sources
+>       tools headers UAPI: Sync linux/prctl.h with the kernel sources
+> 
+> Athira Rajeev (1):
+>       perf test topology: Use !strncmp(right platform) to fix guest PPC comparision check
+> 
+> Ian Rogers (5):
+>       perf unwind: Fix uninitialized variable
+>       libperf evsel: Open shouldn't leak fd on failure
+>       perf test: Fix variable length array undefined behavior in bp_account
+>       perf expr: Allow exponents on floating point values
+>       perf metrics: Ensure at least 1 id per metric
+> 
+> Leo Yan (1):
+>       perf arm-spe: Don't set data source if it's not a memory operation
+> 
+> Michael Petlan (1):
+>       perf test: Record only user callchains on the "Check Arm64 callgraphs are complete in fp mode" test
+> 
+> Thomas Richter (1):
+>       perf test: Fix "perf stat CSV output linter" test on s390
+> 
+>  tools/arch/arm64/include/asm/cputype.h             | 12 +++-
+>  tools/arch/x86/include/uapi/asm/kvm.h              | 11 ++--
+>  tools/include/uapi/linux/prctl.h                   |  9 +++
+>  tools/lib/perf/evsel.c                             | 17 ++++--
+>  tools/perf/tests/bp_account.c                      | 16 ++++-
+>  tools/perf/tests/expr.c                            |  2 +
+>  tools/perf/tests/shell/lib/perf_csv_output_lint.py | 48 ---------------
+>  tools/perf/tests/shell/stat+csv_output.sh          | 69 ++++++++++++++--------
+>  tools/perf/tests/shell/test_arm_callgraph_fp.sh    |  2 +-
+>  tools/perf/tests/topology.c                        |  2 +-
+>  tools/perf/trace/beauty/include/linux/socket.h     |  7 ++-
+>  tools/perf/util/arm-spe.c                          | 22 +++----
+>  tools/perf/util/expr.l                             |  2 +-
+>  tools/perf/util/metricgroup.c                      |  9 +++
+>  tools/perf/util/unwind-libunwind-local.c           |  2 +-
+>  15 files changed, 125 insertions(+), 105 deletions(-)
+>  delete mode 100644 tools/perf/tests/shell/lib/perf_csv_output_lint.py
 
-> 
->  - Some new formatting helpers:
-> 
->    Nicely aligned text is much easier to read, and something that we want a
->    _lot, but outputting nicely aligned text with printf() is a pain in the ass.
->    Printbufs add tabstops, which can be used for right or left justification -
->    simple, easy. prt_tab() emits spaces up to the next tabstop, prt_tab_rjust()
->    advances to the next tabstop right justifying text since the previous
->    tabstop.
-> 
->    Printbufs also add an indent level, obeyed by prt_newline() which can be very
->    useful for multi line output.
-> 
->    In the future, \n and \t in format strings may learn to obey these as well.
-> 
->  - Optional heap allocation - no need to statically allocate buffers on the
->    stack and guess at the output size.
-> 
->  - Lots of consolidating and refactoring
-> 
->    This series replaces seq_buf, which does basically what an earlier version of
->    printbufs did.
-> 
->    A good chunk of lib/string_helpers.c, as well as lib/hexdump.c are converted
->    (and simplified!).
-> 
->    Pretty printers in lib/vsprintf.c previously outputted to buffers on the
->    stack and then copied _that_ to the actual output buffer, that's all gone
->    (replaced by proper helpers for outputting chars and strings), and they also
->    used printf_spec for argument passing in ad-hoc ways. This patch series does
->    a lot towards converting them to more standard pretty printers that can be
->    called via %pf() instead of having to live in lib/vsprintf.c. Still to do:
->    format string decoding for argument passing is a mess that's scattered all
->    over the place.
-> 
-> In the course of working on this patch series, I've spotted a _lot_ more
-> consolidation and refactoring that needs to be done - we've got a ton of API
-> fragmentation leading to lots of code duplication.
-> 
-> But I'm already really excited about what this patch series enables.
-> 
-> Cheers!
-> 
-> Kent Overstreet (34):
->   lib/printbuf: New data structure for printing strings
->   lib/string_helpers: Convert string_escape_mem() to printbuf
->   vsprintf: Convert to printbuf
->   lib/hexdump: Convert to printbuf
->   vsprintf: %pf(%p)
->   lib/string_helpers: string_get_size() now returns characters wrote
->   lib/printbuf: Heap allocation
->   lib/printbuf: Tabstops, indenting
->   lib/printbuf: Unit specifiers
->   lib/pretty-printers: prt_string_option(), prt_bitflags()
->   vsprintf: Improve number()
->   vsprintf: prt_u64_minwidth(), prt_u64()
->   test_printf: Drop requirement that sprintf not write past nul
->   vsprintf: Start consolidating printf_spec handling
->   vsprintf: Refactor resource_string()
->   vsprintf: Refactor fourcc_string()
->   vsprintf: Refactor ip_addr_string()
->   vsprintf: Refactor mac_address_string()
->   vsprintf: time_and_date() no longer takes printf_spec
->   vsprintf: flags_string() no longer takes printf_spec
->   vsprintf: Refactor device_node_string, fwnode_string
->   vsprintf: Refactor hex_string, bitmap_string_list, bitmap_string
->   Input/joystick/analog: Convert from seq_buf -> printbuf
->   mm/memcontrol.c: Convert to printbuf
->   clk: tegra: bpmp: Convert to printbuf
->   tools/testing/nvdimm: Convert to printbuf
->   powerpc: Convert to printbuf
->   x86/resctrl: Convert to printbuf
->   PCI/P2PDMA: Convert to printbuf
->   tracing: trace_events_synth: Convert to printbuf
->   d_path: prt_path()
->   ACPI/APEI: Add missing include
->   tracing: Convert to printbuf
->   Delete seq_buf
-> 
->  Documentation/core-api/printk-formats.rst |   22 +
->  arch/powerpc/kernel/process.c             |   16 +-
->  arch/powerpc/kernel/security.c            |   75 +-
->  arch/powerpc/platforms/pseries/papr_scm.c |   34 +-
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c    |   16 +-
->  drivers/acpi/apei/erst-dbg.c              |    1 +
->  drivers/clk/tegra/clk-bpmp.c              |   21 +-
->  drivers/input/joystick/analog.c           |   23 +-
->  drivers/pci/p2pdma.c                      |   21 +-
->  fs/d_path.c                               |   35 +
->  include/linux/dcache.h                    |    1 +
->  include/linux/kernel.h                    |   12 +
->  include/linux/pretty-printers.h           |   10 +
->  include/linux/printbuf.h                  |  253 +++
->  include/linux/seq_buf.h                   |  162 --
->  include/linux/string.h                    |    5 +
->  include/linux/string_helpers.h            |    8 +-
->  include/linux/trace_events.h              |    2 +-
->  include/linux/trace_seq.h                 |   17 +-
->  kernel/trace/trace.c                      |   45 +-
->  kernel/trace/trace_dynevent.c             |   34 +-
->  kernel/trace/trace_events_filter.c        |    2 +-
->  kernel/trace/trace_events_synth.c         |   32 +-
->  kernel/trace/trace_functions_graph.c      |    6 +-
->  kernel/trace/trace_kprobe.c               |    2 +-
->  kernel/trace/trace_seq.c                  |  111 +-
->  lib/Makefile                              |    4 +-
->  lib/hexdump.c                             |  246 +--
->  lib/pretty-printers.c                     |   60 +
->  lib/printbuf.c                            |  253 +++
->  lib/seq_buf.c                             |  397 -----
->  lib/string_helpers.c                      |  224 +--
->  lib/test_hexdump.c                        |   30 +-
->  lib/test_printf.c                         |   33 +-
->  lib/vsprintf.c                            | 1723 ++++++++++-----------
->  mm/memcontrol.c                           |   68 +-
->  tools/testing/nvdimm/test/ndtest.c        |   22 +-
->  37 files changed, 2050 insertions(+), 1976 deletions(-)
->  create mode 100644 include/linux/pretty-printers.h
->  create mode 100644 include/linux/printbuf.h
->  delete mode 100644 include/linux/seq_buf.h
->  create mode 100644 lib/pretty-printers.c
->  create mode 100644 lib/printbuf.c
->  delete mode 100644 lib/seq_buf.c
-> 
-> --
-> 2.36.1
+-- 
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+- Arnaldo

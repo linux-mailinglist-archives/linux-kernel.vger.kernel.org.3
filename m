@@ -2,52 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA5155198A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AD8551C78
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244201AbiFTNDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S1343496AbiFTNP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243914AbiFTNB3 (ORCPT
+        with ESMTP id S245091AbiFTNI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:01:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622171A3A3;
-        Mon, 20 Jun 2022 05:57:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E74161532;
-        Mon, 20 Jun 2022 12:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3921C3411B;
-        Mon, 20 Jun 2022 12:57:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655729837;
-        bh=sJ5+Jcxwc7SiAwuU77kJgyMCbVcppibpF6wc4udVHtE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LsnjkRRPzxd2GVdXDEfgdjFL4LoqrN2LUXLE62wNw1BbXBx2RKQgLEJWJhF0NX0/b
-         Dm37wso8lNIwZpOQrcShG7CnsDA4sTmFoL60ZpePXKho4ffLgCJBrF9XeIUN2Dck17
-         VPHb8MKeq9ZJ9HIxoZINcqeOT7IF0JbYocaSu0z2zqzmBMPITTzHgK3iTTwRxekpL8
-         p+z6aA4R0xigVUJC4BH8bgUuWgky+vFRfIgkSia7g6SmNVbvkv7zKNjLJpS5kGegO+
-         lCiGBQGMQOgiL/O1xmyBk3wHpG9HC1qW5z7cTkPO8luTlqHTWqAZga+qEe1ukbfDDV
-         JSKjrCzZeBFVg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3Gxt-0000tD-O1; Mon, 20 Jun 2022 14:57:14 +0200
-Date:   Mon, 20 Jun 2022 14:57:13 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Yonglin Tan <yonglin.tan@outlook.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel EM05-G modem
-Message-ID: <YrBuqTQObu7/vAf0@hovoldconsulting.com>
-References: <MEYP282MB23740858061FFA19E97E5C0FFDB09@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+        Mon, 20 Jun 2022 09:08:29 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD9B1B7BB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:01:41 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z7so14986355edm.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tD9uUNT9XCLl71rBYEKigze1XhG3eLZdC6YZqfLDvzg=;
+        b=BvQEWTHa4Iq1YBPiEICVFQd0aeeB3tGkxFn5lPUPTgkgrceHSOYPrAROHOGWWdMPEi
+         13VnmLoqusC3tD5yt4+1soGwUSzQWMpXWkWwHx17Rbj0+oa5tS2QuzISc65MiuUiKpDG
+         qRSI2LJmI26nGTax3/hqjzIHGdO0XA4kS+mqHo0EWdMpdMTdcjSWn55OASJQtHABhWFX
+         W6qjXtJ86BDGDVTW1RU59sxBdIxoMbwxcfXRlvW4+UT0aJuHNNKGscmdBCmta/uk8WSy
+         DIgEGVRpzaRvswyyG2+LfH6ILLd0o/PZZcOL5RCLncEj0ircT7NnEC7Xn8Rc8aI+PN37
+         6Gew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tD9uUNT9XCLl71rBYEKigze1XhG3eLZdC6YZqfLDvzg=;
+        b=vxrTNfLCdq0iSCxDqouuQ8gHgriF4Pnh1Kf/o8kkWv8pmEoIFF3HV4K5i7Acxap5oD
+         9Ot/kLfkq/evQtnxVuXvtTCIvaWTFyCmvhZ4dRNgpDeiv5i2kh7wVZpLrkAvyeGwcTEV
+         WkKMqgErJ4VGVBNzdY03Z3keMAuDBAfZZ+LHniwZ/joPFhug8+MY2EXN9/+ZW0TgbaR3
+         gL+hm7zgZoQqUxnV+hDNc7LBSfwR8bo8jmnAI1DtdHW9Q4Jy7oeUHvISpRx6nxsYklDh
+         1VBcx25UOozV0pztDN6iLlm2Qn3S5+E1ASBvbo97yqpW/f8HwT+dB8jUt6EJE6g3+tvr
+         jK3g==
+X-Gm-Message-State: AJIora+CC2VEFU/cvCZaQVCDumlXkVdHwo0vcJbfrL7Qnt0k71kaREE+
+        36Rcs+DB3PrsoqQQwiu9H3YCjw==
+X-Google-Smtp-Source: AGRyM1vW7T57TBehlpf2WN2b4z/6wROnJLNiUnGKA0BTpa7yikjOhmQJWvX3z5Qxz3LJ5QMdIe3mLQ==
+X-Received: by 2002:a05:6402:3329:b0:435:8136:cb70 with SMTP id e41-20020a056402332900b004358136cb70mr5587757eda.106.1655730050702;
+        Mon, 20 Jun 2022 06:00:50 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e27-20020a170906315b00b0071d3b6ed4eesm4758720eje.160.2022.06.20.06.00.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 06:00:50 -0700 (PDT)
+Message-ID: <eac223c5-a3d4-65e5-3753-1bd4033513f2@linaro.org>
+Date:   Mon, 20 Jun 2022 15:00:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MEYP282MB23740858061FFA19E97E5C0FFDB09@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 07/15] dt-bindings: reset: amd,pensando-elbasr-reset:
+ Add AMD Pensando SR Reset Controller bindings
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-8-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613195658.5607-8-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,75 +87,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 08:16:53PM +0800, Yonglin Tan wrote:
-> Add a device-id entry for the Quectel EM05-G module.
+On 13/06/2022 21:56, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
 > 
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=030a Rev= 3.18
-> S:  Manufacturer=Quectel
-> S:  Product=Quectel EM05-G
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Are there any further configurations for this device that you need to
-consider?
-
-You reserve interface 6 below which doesn't even exist in the above
-configuration.
-
-Can you say something more about what the individual interfaces are used
-for, for example, as was done here:
-
-	https://lore.kernel.org/all/TYZPR06MB4270D3394B8E3E0301738F6B86D09@TYZPR06MB4270.apcprd06.prod.outlook.com/
-
-> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+> Document bindings for AMD Pensando Elba SR Reset Controller
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 > ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
->  mode change 100644 => 100755 drivers/usb/serial/option.c
+>  .../reset/amd,pensando-elbasr-reset.yaml      | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> old mode 100644
-> new mode 100755
-> index ed1e50d..05fc322
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1147,6 +1147,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = ZLP },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x030a, 0xff),
-> +	  .driver_info = RSVD(6) | ZLP }, /* EM05-G */
+> diff --git a/Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml b/Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+> new file mode 100644
+> index 000000000000..03bb86ebcfd3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/amd,pensando-elbasr-reset.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/amd,pensando-elbasr-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMD Pensando Elba SoC Reset Controller Device Tree Bindings
 
-As mentioned above RSVD(6) looks wrong here.
+Here and in all other patches:
+s/Device Tree Bindings//
 
-Please move the comment to the first line of the entry, and move the
-entry to the other Quectel entries using numerical PIDs (i.e. before
-EM160R-GL).
-  
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+> +
+> +maintainers:
+> +  - Brad Larson <blarson@amd.com>
+> +
+> +description: |
+> +  AMD Pensando Elba SoC reset controller driver which supports a resource
+> +  controller connected to the Elba SoC over a SPI bus.  The Elba reset
+> +  controller must be defined as a child node of the Elba SPI bus
+> +  chip-select 0 node.
+> +
+> +  See also:
+> +  - dt-bindings/reset/amd,pensando-elba-reset.h
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^reset-controller@[0-9a-f]+$"
 
-Johan
+Skip the pattern. No particular need for it and unit address part is not
+correct (const: 0).
+
+> +
+> +  compatible:
+> +    const: amd,pensando-elbasr-reset
+> +
+> +  reg:
+> +    const: 0
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#reset-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/amd,pensando-elba-reset.h>
+
+Missing file:
+ls: cannot access 'include/dt-bindings/reset/amd,pensando-elba-reset.h':
+No such file or directory
+
+
+Send complete bindings, not parts of it. Did you test it? I am pretty
+sure that this did not happen. :(
+
+> +    spi0 {
+
+spi
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        num-cs = <4>;
+> +
+> +        spi@0 {
+> +          reg = <0>;
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          rstc: reset-controller@0 {
+> +            compatible = "amd,pensando-elbasr-reset";
+> +            reg = <0>;
+> +            #reset-cells = <1>;
+> +          };
+> +        };
+> +    };
+> +
+> +...
+
+
+Best regards,
+Krzysztof

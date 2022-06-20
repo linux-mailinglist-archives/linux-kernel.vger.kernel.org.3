@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B256655188D
+	by mail.lfdr.de (Postfix) with ESMTP id 65C7D55188C
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242228AbiFTMNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S242190AbiFTMNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242540AbiFTMMi (ORCPT
+        with ESMTP id S242384AbiFTMNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:12:38 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E030C19000
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:12:19 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f39so1307849lfv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Uab/2HO4VZKS1xT506icMdtE4fNwoDlTTwoN0m1b7PY=;
-        b=ey0kfhCEuOTLZdukxlfLw+Ij23qOFjvay6zcA4VgG0LK9+f5awx4v7C9VlCJHHRmff
-         lBc164wfYx7L0R8ofjF1dNEQlPk83qSSTLKt6FjsAEfI+eCETWwTlpTxlynkdIC1vZB4
-         39/WCMsqUvT3rdlJ61p6oNURhAyVl9DrD+9qCWslTaYzSuPcqQB/83DmVrZbK1gRFqwB
-         eKRTsQHEHHIlLrB9xf47kqMxkllUv7q/ol//3V3b8+E7WR/pavpV7ErnRmxFqd4ckpaS
-         rN8cKeNZ4B9vwGTMvgFIggrsb5OJrTvr0+KZLMrNI/ItCGiZqQ0Pq6BshfbiZ5Pn35QQ
-         hDvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Uab/2HO4VZKS1xT506icMdtE4fNwoDlTTwoN0m1b7PY=;
-        b=mSx8R8+cYDlO3UgWafIHlxhWCy5PbJmxIK9XSGIKDCWXJBa/cq5QTThzx1tqhtgqDZ
-         Dd3DhZIC0nE4iVzru+h3Ea7rD7UHKPUpLDXqAKn9wMLo/ob4WNVMM9djQfhxv4G55pep
-         YsXaQhBfQXq/Dt5YolQolSUFJu6HJVsbJEdx+Iq5B44NS7nlqrIweHLevTtX29wOg19N
-         o2bcslk7SmI1XCPdQSKry9NLKzKUfSQBJAtrShdZAGI1xUrGvdYNJIlNSfrVIPLEtpru
-         DQGvo0FSWdPxO5PzeqARuVB1mDmT0UUevZvEidNaGFMB8vYiNv6IaXPS658/60AJYbTX
-         83rw==
-X-Gm-Message-State: AJIora9Gh4VCVGv+ihzxuUe+FG80/3Dvd0cbroJpahpm6AazDv9/jp+7
-        MWWnhMIU8iaUrQMXKP34AjswQIcEIe2HPA==
-X-Google-Smtp-Source: AGRyM1tBYuf4F4p5cA9ECpQSeqMK+UoNTzDgMsHfYvx/ecuvA836+ueq/saRrTHwBRN3ZPPxa7mbCw==
-X-Received: by 2002:ac2:442d:0:b0:478:ed89:927f with SMTP id w13-20020ac2442d000000b00478ed89927fmr13898482lfl.545.1655727128462;
-        Mon, 20 Jun 2022 05:12:08 -0700 (PDT)
-Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05651203ad00b00478f3ecd062sm1745074lfp.167.2022.06.20.05.12.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 05:12:07 -0700 (PDT)
-From:   Marcin Wojtas <mw@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        jirislaby@kernel.org, miquel.raynal@bootlin.com, mw@semihalf.com,
-        jaz@semihalf.com, upstream@semihalf.com,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2] serial: 8250: dw: enable using pdata with ACPI
-Date:   Mon, 20 Jun 2022 14:10:46 +0200
-Message-Id: <20220620121046.1307412-1-mw@semihalf.com>
-X-Mailer: git-send-email 2.29.0
+        Mon, 20 Jun 2022 08:13:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC6419F96
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:12:36 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LRT4H20CHzhYZh;
+        Mon, 20 Jun 2022 20:10:23 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 20 Jun 2022 20:12:27 +0800
+Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
+ work as expected
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+ <20220608144031.829-2-linmiaohe@huawei.com>
+ <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com>
+Date:   Mon, 20 Jun 2022 20:12:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ffd381445eac ("serial: 8250: dw: Move the USR register to pdata")
-caused NULL-pointer dereference when booting with ACPI by unconditional
-usage of the recently added pdata.
+On 2022/6/20 15:31, Huang, Ying wrote:
+> Miaohe Lin <linmiaohe@huawei.com> writes:
+> 
+>> security_vm_enough_memory_mm() checks whether a process has enough memory
+>> to allocate a new virtual mapping. And total_swap_pages is considered as
+>> available memory while swapoff tries to make sure there's enough memory
+>> that can hold the swapped out memory. But total_swap_pages contains the
+>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
+>> success even if there's no memory to hold the swapped out memory because
+>> total_swap_pages always greater than or equal to p->pages.
+> 
+> Per my understanding, swapoff will not allocate virtual mapping by
+> itself.  But after swapoff, the overcommit limit could be exceeded.
+> security_vm_enough_memory_mm() is used to check that.  For example, in a
+> system with 4GB memory and 8GB swap, and 10GB is in use,
+> 
+> CommitLimit:    4+8 = 12GB
+> Committed_AS:   10GB
+> 
+> security_vm_enough_memory_mm() in swapoff() will fail because
+> 10+8 = 18 > 12.  This is expected because after swapoff, the overcommit
+> limit will be exceeded.
+> 
+> If 3GB is in use,
+> 
+> CommitLimit:    4+8 = 12GB
+> Committed_AS:   3GB
+> 
+> security_vm_enough_memory_mm() in swapoff() will succeed because
+> 3+8 = 11 < 12.  This is expected because after swapoff, the overcommit
+> limit will not be exceeded.
 
-In order to fix that and prevent similar issues in future, hook the
-default version of this structure in dw8250_acpi_match table.
-While at it, sort all entries alphabetically.
+In OVERCOMMIT_NEVER scene, I think you're right.
 
-Fixes: ffd381445eac ("serial: 8250: dw: Move the USR register to pdata")
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
-Changelog v1->v2
-* Sort all dw8250_acpi_match entries alphabetically,
-* fix commit id in the log,
-* Add R-B of Ilpo and Andy
+> 
+> So, what's the real problem of the original implementation?  Can you
+> show it with an example as above?
 
+In OVERCOMMIT_GUESS scene, in a system with 4GB memory and 8GB swap, and 10GB is in use,
+pages below is 8GB, totalram_pages() + total_swap_pages is 12GB, so swapoff() will succeed
+instead of expected failure because 8 < 12. The overcommit limit is always *ignored* in the
+below case.
 
- drivers/tty/serial/8250/8250_dw.c | 24 ++++++++++----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+	if (sysctl_overcommit_memory == OVERCOMMIT_GUESS) {
+		if (pages > totalram_pages() + total_swap_pages)
+			goto error;
+		return 0;
+	}
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index f57bbd32ef11..b1ab088fbe6e 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -773,18 +773,18 @@ static const struct of_device_id dw8250_of_match[] = {
- MODULE_DEVICE_TABLE(of, dw8250_of_match);
- 
- static const struct acpi_device_id dw8250_acpi_match[] = {
--	{ "INT33C4", 0 },
--	{ "INT33C5", 0 },
--	{ "INT3434", 0 },
--	{ "INT3435", 0 },
--	{ "80860F0A", 0 },
--	{ "8086228A", 0 },
--	{ "APMC0D08", 0},
--	{ "AMD0020", 0 },
--	{ "AMDI0020", 0 },
--	{ "AMDI0022", 0 },
--	{ "BRCM2032", 0 },
--	{ "HISI0031", 0 },
-+	{ "80860F0A", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "8086228A", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "AMD0020", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "AMDI0020", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "AMDI0022", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "APMC0D08", (kernel_ulong_t)&dw8250_dw_apb},
-+	{ "BRCM2032", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "HISI0031", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "INT33C4", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "INT33C5", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "INT3434", (kernel_ulong_t)&dw8250_dw_apb },
-+	{ "INT3435", (kernel_ulong_t)&dw8250_dw_apb },
- 	{ },
- };
- MODULE_DEVICE_TABLE(acpi, dw8250_acpi_match);
--- 
-2.29.0
+Or am I miss something?
+
+> 
+> Best Regards,
+> Huang, Ying
+
+Thanks!
+
+> 
+>> In order to fix it, p->pages should be retracted from total_swap_pages
+>> first and then check whether there's enough memory for inuse swap pages.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> [snip]
+> 
+> .
+> 
 

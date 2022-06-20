@@ -2,191 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA2C5524CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23145524D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245156AbiFTTrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S245455AbiFTTso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240882AbiFTTrh (ORCPT
+        with ESMTP id S1343659AbiFTTsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:47:37 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140801CFF5;
-        Mon, 20 Jun 2022 12:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=vlTtblH9D41r6dqll6MyR6DASss9XlNO9zQiEWLxQgk=; b=Rlh3jiZ/GWkhoGj+xIEMzvjrbV
-        JJmnXj2GBV31a0Umz6JQ9JwtOLxwgGHkrp4KU9NMZC0mpl3RuGMjyhDQrlckcZsawQocjem+psG/u
-        7aaO8KWpOIfMjj60vheC/N+nflnSBBT7cdS2aE0zjBckJmc2/X2W6gOBWxqfzMs9Tu+I=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o3NMx-007eEK-RN; Mon, 20 Jun 2022 21:47:31 +0200
-Date:   Mon, 20 Jun 2022 21:47:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, rafael@kernel.org,
-        andriy.shevchenko@linux.intel.com, lenb@kernel.org,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk, hkallweit1@gmail.com,
-        gjb@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
-        Samer.El-Haj-Mahmoud@arm.com, upstream@semihalf.com
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
- description
-Message-ID: <YrDO05TMK8SVgnBP@lunn.ch>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-10-mw@semihalf.com>
+        Mon, 20 Jun 2022 15:48:38 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1F219017;
+        Mon, 20 Jun 2022 12:48:37 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id n20so16339572ejz.10;
+        Mon, 20 Jun 2022 12:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s5KulNPMeo7HI8Wh3XOzXN/pOGB2fVu2iIF6zPeqNoQ=;
+        b=HCUgciW1F5vOG395wRxz+cu181/EMw+laM6S+0jZOffpN8a69qw7Xdt7vOIFDLAcQR
+         Zoa2D3OLxtjtUfIXb3+5IpGiDiXbNYbTW1lu7HgORiTCtl5fMl7KsuCWHRroLmwsUx4h
+         ftBZdKHik4Z4LrvGFmU8zeKa9cVEKksz3L8rrJwykvPwsbxlGmMmovysK6ksrloclT3f
+         VPtW+N6YqIdzoAX733KTfX3lX1ULjWM0vWN6Lm9rH6yquLxURdcC9h0OFh0oAtsAGNAC
+         2LEVUt8L96fz8vmWUzcnvRe49NkP1ZJu+s1KBDMvoBepKrjf8JxZlLTfv0BfPt4++L20
+         XMdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s5KulNPMeo7HI8Wh3XOzXN/pOGB2fVu2iIF6zPeqNoQ=;
+        b=wJqu5oq/fUBqUElxo1xb4XMW0w5cEHoAQZzAL3GdbZRK3Lx7xK2TO7Vi3JBpdUhfFa
+         dTgTJzoiYb+qcCN0fsFG9M1PYrG5Q2G+G71X/upWL4L7CIVt7t1jBTddIND47H5tWfjK
+         UKJ6RnsLsGS6C4Z8kGGCqL4nOIcphtxixJ9r5YoxRiblMmFeuazUuoUluX8xSnaOFLOL
+         OSGR/k+s4ZscN1SIUlQ/OTe+H39v0pFDckpPYfBNsh3z2if4vazINZj2etxIMlwDTUgC
+         xzS/M8VC4VGKf+32cMD2yCrwovgqz1GvWXvRbbv+YFgPTvcHYKnJeL40yhJM+aAmPKgh
+         HV5Q==
+X-Gm-Message-State: AJIora+DS1HTNQGttlYQ7yob5tSz+E+vZY9wlzIP5pCzKNUgFAcaMWFl
+        Iio2UxSrmLylRV6a2KIDKsoFsYVw3LWquqJ3UXE=
+X-Google-Smtp-Source: AGRyM1ta4B0jrT2K8Pn5nSnr2kzekIbKZsWJOBQOjPnQ3zKyEuRnqnZV7sJFu08rjWc7xIIIkj1oLe8LyAtycTl5v64=
+X-Received: by 2002:a17:906:a202:b0:711:29a:c96c with SMTP id
+ r2-20020a170906a20200b00711029ac96cmr23096630ejy.407.1655754516062; Mon, 20
+ Jun 2022 12:48:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620150225.1307946-10-mw@semihalf.com>
+References: <20220501103428.111286-1-krzysztof.kozlowski@linaro.org>
+ <20220501103428.111286-2-krzysztof.kozlowski@linaro.org> <DU0PR04MB9417AFDAFE3F06B3F9274E1888C49@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <09e8c5cf-12fc-a10e-dacd-338b7e271202@linaro.org>
+In-Reply-To: <09e8c5cf-12fc-a10e-dacd-338b7e271202@linaro.org>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Mon, 20 Jun 2022 14:48:24 -0500
+Message-ID: <CABb+yY25-668ara-rjBD1LqJu=VRP=dwQp9vMw8kjxmpSvC+8g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mailbox: imx: fix duplicated initializer
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Tushar Khandelwal <Tushar.Khandelwal@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +In DSDT/SSDT the scope of switch device is extended by the front-panel
-> +and one or more so called 'CPU' switch ports. Additionally
-> +subsequent MDIO busses with attached PHYs can be described.
-
-Humm, dsa.yaml says nothing about MDIO busses with attached PHYs.
-That is up to each individual DSA drivers binding.
-
-Please spilt this into a generic DSA binding, similar to dsa.yaml, and
-a Marvell specific binding, similar to marvell.txt. It might be you
-also need a generic MDIO binding, since the marvell device is just an
-MDIO device, and inherits some of its properties from MDIO.
-
-> +
-> +This document presents the switch description with the required subnodes
-> +and _DSD properties.
-> +
-> +These properties are defined in accordance with the "Device
-> +Properties UUID For _DSD" [dsd-guide] document and the
-> +daffd814-6eba-4d8c-8a91-bc9bbf4aa301 UUID must be used in the Device
-> +Data Descriptors containing them.
-> +
-> +Switch device
-> +=============
-> +
-> +The switch device is represented as a child node of the MDIO bus.
-> +It must comprise the _HID (and optionally _CID) field, so to allow matching
-> +with appropriate driver via ACPI ID. The other obligatory field is
-> +_ADR with the device address on the MDIO bus [adr]. Below example
-> +shows 'SWI0' switch device at address 0x4 on the 'SMI0' bus.
+On Mon, Jun 20, 2022 at 1:39 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> +.. code-block:: none
-> +
-> +    Scope (\_SB.SMI0)
-> +    {
-> +        Name (_HID, "MRVL0100")
-> +        Name (_UID, 0x00)
-> +        Method (_STA)
-> +        {
-> +            Return (0xF)
-> +        }
-> +        Name (_CRS, ResourceTemplate ()
-> +        {
-> +            Memory32Fixed (ReadWrite,
-> +                0xf212a200,
-> +                0x00000010,
+> On 07/05/2022 08:52, Peng Fan wrote:
+> >> Subject: [PATCH 2/2] mailbox: imx: fix duplicated initializer
+> >>
+> >> rxdb field is being initialized twice:
+> >>
+> >>   drivers/mailbox/imx-mailbox.c:889:19: error: initialized field overwritten [-
+> >> Werror=override-init]
+> >>     889 |         .rxdb   = imx_mu_generic_rxdb,
+> >>
+> >> Fixes: 315d2e562418 ("mailbox: imx: introduce rxdb callback")
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >
+> > Reviewed-by: Peng Fan <peng.fan@nxp.com>
+>
+> Thanks for the review. This was a month ago... Anyone willing to pick it up?
+>
+There was a predated fix, which was picked.
 
-What do these magic numbers mean?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/mailbox?id=262190a8ca2b1e1ec75b8a4f1c7f07e585facd6f
 
-> +                )
-> +        })
-> +        Device (SWI0)
-> +        {
-> +            Name (_HID, "MRVL0120")
-> +            Name (_UID, 0x00)
-> +            Name (_ADR, 0x4)
-> +            <...>
-> +        }
-
-I guess it is not normal for ACPI, but could you add some comments
-which explain this. In DT we have
-
-    properties:
-      reg:
-        minimum: 0
-        maximum: 31
-        description:
-          The ID number for the device.
-
-which i guess what this _ADR property is, but it would be nice if it
-actually described what it is supposed to mean. You have a lot of
-undocumented properties here.
-
-
-> +label
-> +-----
-> +A property with a string value describing port's name in the OS. In case the
-> +port is connected to the MAC ('CPU' port), its value should be set to "cpu".
-
-Each port is a MAC, so "is connected to the MAC" is a bit
-meaningless. "CPU Port" is well defined in DSA, and is a DSA concept,
-not a DT concept, so you might as well just use it here.
-
-> +
-> +phy-handle
-> +----------
-> +For each MAC node, a device property "phy-handle" is used to reference
-> +the PHY that is registered on an MDIO bus. This is mandatory for
-> +network interfaces that have PHYs connected to MAC via MDIO bus.
-
-It is not mandatory. The DSA core will assume that port 0 has a PHY
-using address 0, port 1 has a PHY using address 1, etc. You only need
-a phy-handle when this assumption does not work.
-
-> +See [phy] for more details.
-> +
-> +ethernet
-> +--------
-> +A property valid for the so called 'CPU' port and should comprise a reference
-> +to the MAC object declared in the DSDT/SSDT.
-
-Is "MAC" an ACPI term? Because this does not seem very descriptive to
-me. DT says:
-
-      Should be a phandle to a valid Ethernet device node.  This host
-      device is what the switch port is connected to
-
-> +
-> +fixed-link
-> +----------
-> +The 'fixed-link' is described by a data-only subnode of the
-> +port, which is linked in the _DSD package via
-> +hierarchical data extension (UUID dbb8e3e6-5886-4ba6-8795-1319f52a966b
-> +in accordance with [dsd-guide] "_DSD Implementation Guide" document).
-> +The subnode should comprise a required property ("speed") and
-> +possibly the optional ones - complete list of parameters and
-> +their values are specified in [ethernet-controller].
-
-You appear to be cut/pasting
-Documentation/firmware-guide/acpi/dsd/phy.txt. Please just reference
-it.
-
-> +Below example comprises MDIO bus ('SMI0') with a PHY at address 0x0 ('PHY0')
-> +and a switch ('SWI0') at 0x4. The so called 'CPU' port ('PRT5') is connected to
-> +the SoC's MAC (\_SB.PP20.ETH2). 'PRT2' port is configured as 1G fixed-link.
-
-This is ACPI, so it is less likely to be a SoC. The hosts CPU port
-could well be an external PCIe device for example. Yes, there are AMD
-devices with built in MACs, but in the ACPI world, they don't happen
-so often.
-
-I assume you have 3 different 'compatible' strings for the nv88e6xxx
-driver? You should document them somewhere and say how they map to
-different marvell switches,
-
-	Andrew
+Thanks.
